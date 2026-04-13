@@ -1,0 +1,80 @@
+## .NET
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio
+.vs/
+*.rsuser
+*.psess
+*.vsp
+*.vspx
+*.sap
+*.e2e
+$tf/
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+
+## ROMs (user-provided, never committed)
+**/Roms/
+!**/Roms/.gitkeep
+
+## Nuke
+.nuke/temp/
+
+## Misc
+.cache/
+*.tmp
+*.bak
+*.swp
+*~.nib
+Thumbs.db
+.DS_Store
+
+## MCP Server
+.mcpServer/
+mcp.db
+docs/todo.yaml
+
+## Claude Code
+.claude/
+
+## Nuke auto-generated
+.nuke/build.schema.json

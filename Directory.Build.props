@@ -1,0 +1,26 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>13</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <IsAotCompatible>true</IsAotCompatible>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>ViceSharp.$(MSBuildProjectName.Replace('ViceSharp.',''))</RootNamespace>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Sharp Ninja</Authors>
+    <Company>ViceSharp</Company>
+    <Copyright>Copyright (c) 2026 ViceSharp Contributors. Licensed under GPL-2.0-or-later.</Copyright>
+    <Description>ViceSharp - C# port of VICE (Versatile Commodore Emulator)</Description>
+    <RepositoryUrl>https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>
