@@ -352,6 +352,26 @@ partial class Mos6502
             case 0x6E: _bus.Write(Absolute(), ROR(_bus.Read(Absolute()))); break;
             case 0x7E: _bus.Write(AbsoluteX(), ROR(_bus.Read(AbsoluteX()))); break;
 
+            // ADC - Add with Carry
+            case 0x69: ADC(_bus.Read(Immediate())); break;
+            case 0x65: ADC(_bus.Read(ZeroPage())); break;
+            case 0x75: ADC(_bus.Read(ZeroPageX())); break;
+            case 0x6D: ADC(_bus.Read(Absolute())); break;
+            case 0x7D: ADC(_bus.Read(AbsoluteX())); break;
+            case 0x79: ADC(_bus.Read(AbsoluteY())); break;
+            case 0x61: ADC(_bus.Read(IndirectX())); break;
+            case 0x71: ADC(_bus.Read(IndirectY())); break;
+
+            // SBC - Subtract with Carry
+            case 0xE9: SBC(_bus.Read(Immediate())); break;
+            case 0xE5: SBC(_bus.Read(ZeroPage())); break;
+            case 0xF5: SBC(_bus.Read(ZeroPageX())); break;
+            case 0xED: SBC(_bus.Read(Absolute())); break;
+            case 0xFD: SBC(_bus.Read(AbsoluteX())); break;
+            case 0xF9: SBC(_bus.Read(AbsoluteY())); break;
+            case 0xE1: SBC(_bus.Read(IndirectX())); break;
+            case 0xF1: SBC(_bus.Read(IndirectY())); break;
+
             default:
                 // Unimplemented opcode
                 break;
@@ -467,5 +487,47 @@ partial class Mos6502
         value = (byte)((value >> 1) | carry);
         UpdateNZ(value);
         return value;
+    }
+
+    private void ADC(byte value)
+    {
+        int carry = (P & 0x01);
+        int result = A + value + carry;
+
+        // Overflow flag
+        if (((A ^ result) & (value ^ result) & 0x80) != 0)
+            P |= 0x40;
+        else
+            P &= 0xBF;
+
+        // Carry flag
+        if (result > 0xFF)
+            P |= 0x01;
+        else
+            P &= 0xFE;
+
+        A = (byte)result;
+        UpdateNZ(A);
+    }
+
+    private void SBC(byte value)
+    {
+        int carry = (P & 0x01) ^ 0x01;
+        int result = A - value - carry;
+
+        // Overflow flag
+        if (((A ^ result) & (~value ^ result) & 0x80) != 0)
+            P |= 0x40;
+        else
+            P &= 0xBF;
+
+        // Carry flag
+        if (result >= 0)
+            P |= 0x01;
+        else
+            P &= 0xFE;
+
+        A = (byte)result;
+        UpdateNZ(A);
     }
 }
