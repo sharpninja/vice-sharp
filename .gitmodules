@@ -1,0 +1,3 @@
+[submodule "native/vice"]
+	path = native/vice
+	url = https://github.com/VICE-Team/svn-mirror.git
