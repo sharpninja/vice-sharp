@@ -35,9 +35,33 @@ public sealed partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         _bus = bus;
     }
 
+    private byte _opcode;
+    private int _cycle;
+    private ushort _effectiveAddress;
+    private byte _fetched;
+
     public void Tick()
     {
-        // Execution cycle will be implemented here
+        if (_cycle == 0)
+        {
+            _opcode = Read(PC++);
+            _cycle = GetCycleCount(_opcode);
+            _effectiveAddress = 0;
+            _fetched = 0;
+            
+            AddressingMode mode = GetAddressingMode(_opcode);
+            bool pageCrossed = ExecuteAddressing(mode);
+            
+            if (pageCrossed && IsPageBoundaryCycleRequired(_opcode))
+                _cycle++;
+        }
+
+        _cycle--;
+
+        if (_cycle == 0)
+        {
+            ExecuteOpcode(_opcode);
+        }
     }
 
     public void Reset()
@@ -54,5 +78,27 @@ public sealed partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     public byte Read(ushort address) => _bus.Read(address);
     public void Write(ushort address, byte value) => _bus.Write(address, value);
     public byte Peek(ushort address) => _bus.Peek(address);
+    private enum AddressingMode
+    {
+        Implied,
+        Immediate,
+        ZeroPage,
+        ZeroPageX,
+        ZeroPageY,
+        Absolute,
+        AbsoluteX,
+        AbsoluteY,
+        Indirect,
+        IndirectX,
+        IndirectY,
+        Relative
+    }
+
+    private partial int GetCycleCount(byte opcode);
+    private partial AddressingMode GetAddressingMode(byte opcode);
+    private partial bool ExecuteAddressing(AddressingMode mode);
+    private partial bool IsPageBoundaryCycleRequired(byte opcode);
+    private partial void ExecuteOpcode(byte opcode);
+
     public bool HandlesAddress(ushort address) => false;
 }

@@ -44,7 +44,95 @@ partial class Mos6502
         return cycles;
     }
 
-    private void ExecuteOpcode(byte opcode)
+    private partial int GetCycleCount(byte opcode) => OpCycleCounts[opcode];
+    
+    private partial AddressingMode GetAddressingMode(byte opcode)
+    {
+        // Addressing mode lookup table implementation
+        return (opcode & 0x03) switch
+        {
+            0 => (opcode & 0x18) switch
+            {
+                0x00 => AddressingMode.Immediate,
+                0x08 => AddressingMode.ZeroPage,
+                0x10 => AddressingMode.Absolute,
+                0x18 => AddressingMode.Indirect,
+                _ => AddressingMode.Implied
+            },
+            1 => (opcode & 0x10) switch
+            {
+                0x00 => AddressingMode.ZeroPageX,
+                0x10 => AddressingMode.AbsoluteX,
+                _ => AddressingMode.Implied
+            },
+            2 => (opcode & 0x10) switch
+            {
+                0x00 => AddressingMode.ZeroPageY,
+                0x10 => AddressingMode.AbsoluteY,
+                _ => AddressingMode.Implied
+            },
+            _ => AddressingMode.Implied
+        };
+    }
+
+    private partial bool ExecuteAddressing(AddressingMode mode)
+    {
+        bool pageCrossed = false;
+        
+        switch (mode)
+        {
+            case AddressingMode.Immediate:
+                _effectiveAddress = PC++;
+                break;
+            case AddressingMode.ZeroPage:
+                _effectiveAddress = Fetch();
+                break;
+            case AddressingMode.ZeroPageX:
+                _effectiveAddress = (byte)(Fetch() + X);
+                break;
+            case AddressingMode.ZeroPageY:
+                _effectiveAddress = (byte)(Fetch() + Y);
+                break;
+            case AddressingMode.Absolute:
+                _effectiveAddress = FetchWord();
+                break;
+            case AddressingMode.AbsoluteX:
+                ushort baseAddr = FetchWord();
+                _effectiveAddress = (ushort)(baseAddr + X);
+                pageCrossed = (baseAddr & 0xFF00) != (_effectiveAddress & 0xFF00);
+                break;
+            case AddressingMode.AbsoluteY:
+                baseAddr = FetchWord();
+                _effectiveAddress = (ushort)(baseAddr + Y);
+                pageCrossed = (baseAddr & 0xFF00) != (_effectiveAddress & 0xFF00);
+                break;
+            case AddressingMode.IndirectX:
+                byte zpAddr = (byte)(Fetch() + X);
+                _effectiveAddress = (ushort)(_bus.Read(zpAddr) | (_bus.Read((byte)(zpAddr + 1)) << 8));
+                break;
+            case AddressingMode.IndirectY:
+                zpAddr = Fetch();
+                baseAddr = (ushort)(_bus.Read(zpAddr) | (_bus.Read((byte)(zpAddr + 1)) << 8));
+                _effectiveAddress = (ushort)(baseAddr + Y);
+                pageCrossed = (baseAddr & 0xFF00) != (_effectiveAddress & 0xFF00);
+                break;
+            case AddressingMode.Relative:
+                sbyte offset = (sbyte)Fetch();
+                _effectiveAddress = (ushort)(PC + offset);
+                break;
+        }
+
+        _fetched = _bus.Read(_effectiveAddress);
+        return pageCrossed;
+    }
+
+    private partial bool IsPageBoundaryCycleRequired(byte opcode)
+    {
+        // Opcodes that require extra cycle on page boundary
+        return (opcode & 0x0F) is 0x19 or 0x1D or 0x1E or 0x39 or 0x3D or 0x3E or 0x59 or 0x5D or 0x5E or 0x79 or 0x7D or 0x7E or 0xB1 or 0xB9 or 0xBD or 0xD1 or 0xD9 or 0xDD or 0xF1 or 0xF9 or 0xFD;
+    }
+
+    private partial void ExecuteOpcode(byte opcode)
     {
         switch (opcode)
         {
