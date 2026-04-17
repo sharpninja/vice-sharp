@@ -14,4 +14,7 @@ public interface IRomProvider
 
     /// <summary>Base search path for ROM files.</summary>
     string RomBasePath { get; }
+
+    /// <summary>Downloads and verifies a ROM from official archive sources.</summary>
+    Task<ReadOnlyMemory<byte>> DownloadRom(string romName, string architecture, CancellationToken cancellationToken);
 }
