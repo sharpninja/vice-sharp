@@ -1,4 +1,5 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Core;
 using ViceSharp.Chips.Cpu;
 using ViceSharp.Chips.Video;
 using ViceSharp.Chips.Interface;
@@ -8,13 +9,15 @@ namespace ViceSharp.Architectures.C64;
 
 public sealed class Commodore64 : IMachine
 {
-    public MachineId Id => new MachineId(0x0001);
-    public string Name => "Commodore 64";
-    public uint SystemClock => 985248;
+    public IBus Bus => _bus;
+    public IClock Clock => _clock;
+    public IDeviceRegistry Devices { get; } = null!;
+    public IArchitectureDescriptor Architecture { get; } = null!;
 
     private readonly IBus _bus;
     private readonly IClock _clock;
-    private readonly IInterruptController _interruptController;
+    private readonly IInterruptLine _irqLine;
+    private readonly IInterruptLine _nmiLine;
 
     // C64 Chips
     private readonly Mos6502 _cpu;
@@ -30,17 +33,18 @@ public sealed class Commodore64 : IMachine
     private readonly byte[] _romKernal = new byte[0x2000];
     private readonly byte[] _romChar = new byte[0x1000];
 
-    public Commodore64(IBus bus, IClock clock, IInterruptController interruptController)
+    public Commodore64(IBus bus, IClock clock, IInterruptLine irqLine, IInterruptLine nmiLine)
     {
         _bus = bus;
         _clock = clock;
-        _interruptController = interruptController;
+        _irqLine = irqLine;
+        _nmiLine = nmiLine;
 
         // Initialize chips
         _cpu = new Mos6502(bus);
-        _vic = new VicII(bus, null);
-        _cia1 = new Cia6526(bus, interruptController.IrqLine);
-        _cia2 = new Cia6526(bus, interruptController.NmiLine);
+        _vic = new VicII(bus, null!);
+        _cia1 = new Cia6526(bus, irqLine);
+        _cia2 = new Cia6526(bus, nmiLine);
         _sid = new Sid6581(bus);
 
         // Register devices on bus
@@ -50,19 +54,23 @@ public sealed class Commodore64 : IMachine
         _bus.RegisterDevice(_cia2);
         _bus.RegisterDevice(_sid);
 
-        // Map system memory
-        _bus.MapMemory(0x0000, 0xFFFF, _ram, MemoryAccess.ReadWrite);
-        _bus.MapMemory(0xD800, 0xDBFF, _colorRam, MemoryAccess.ReadWrite);
-        _bus.MapMemory(0xA000, 0xBFFF, _romBasic, MemoryAccess.ReadOnly);
-        _bus.MapMemory(0xE000, 0xFFFF, _romKernal, MemoryAccess.ReadOnly);
-        _bus.MapMemory(0xD000, 0xDFFF, _romChar, MemoryAccess.ReadOnly);
+        // System RAM
+        _bus.RegisterDevice(new RamDevice(0x0000, 0xFFFF, _ram));
+        
+        // Color RAM
+        _bus.RegisterDevice(new RamDevice(0xD800, 0xDBFF, _colorRam));
+        
+        // ROMs
+        _bus.RegisterDevice(new RomDevice(0xA000, 0xBFFF, _romBasic));
+        _bus.RegisterDevice(new RomDevice(0xE000, 0xFFFF, _romKernal));
+        _bus.RegisterDevice(new RomDevice(0xD000, 0xDFFF, _romChar));
 
         // Register clock devices
-        _clock.RegisterDevice(_cpu);
-        _clock.RegisterDevice(_vic);
-        _clock.RegisterDevice(_cia1);
-        _clock.RegisterDevice(_cia2);
-        _clock.RegisterDevice(_sid);
+        _clock.Register(_cpu);
+        _clock.Register(_vic);
+        _clock.Register(_cia1);
+        _clock.Register(_cia2);
+        _clock.Register(_sid);
     }
 
     public void Reset()
@@ -74,14 +82,23 @@ public sealed class Commodore64 : IMachine
         _sid.Reset();
     }
 
-    public void Run()
+    public void RunFrame()
     {
-        _clock.Run();
+        // Run exactly one PAL frame (312 lines × 63 cycles = 19656 cycles)
+        _clock.Step(19656);
     }
 
-    public void Step()
+    public void StepInstruction()
     {
-        _clock.Tick();
+        // Execute single CPU instruction
+        while (true)
+        {
+            _clock.Step();
+            
+            // Step completed when PC advances to next instruction
+            // Implementation pending proper public API
+            break;
+        }
     }
 
     public void LoadRom(string path, ushort address)
@@ -92,5 +109,22 @@ public sealed class Commodore64 : IMachine
     public IReadOnlyList<IDevice> GetDevices()
     {
         return new IDevice[] { _cpu, _vic, _cia1, _cia2, _sid };
+    }
+
+    /// <summary>
+    /// Get current full machine state snapshot
+    /// </summary>
+    public MachineState GetState()
+    {
+        return new MachineState
+        {
+            A = _cpu.A,
+            X = _cpu.X,
+            Y = _cpu.Y,
+            S = _cpu.S,
+            P = _cpu.P,
+            PC = _cpu.PC,
+            Cycle = _clock.TotalCycles
+        };
     }
 }

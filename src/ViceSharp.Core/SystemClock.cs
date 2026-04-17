@@ -2,19 +2,15 @@ using ViceSharp.Abstractions;
 
 namespace ViceSharp.Core;
 
-public sealed class SystemClock
+public sealed class SystemClock : IClock
 {
     private readonly List<IClockedDevice> _devices = new();
-    private ulong _cycle;
+    private long _cycle;
 
-    public ulong CurrentCycle => _cycle;
+    public long TotalCycles => _cycle;
+    public long FrequencyHz { get; } = 985248;
 
-    public void RegisterDevice(IClockedDevice device)
-    {
-        _devices.Add(device);
-    }
-
-    public void Tick()
+    public void Step()
     {
         _cycle++;
 
@@ -25,6 +21,24 @@ public sealed class SystemClock
                 device.Tick();
             }
         }
+    }
+
+    public void Step(long cycles)
+    {
+        for (long i = 0; i < cycles; i++)
+        {
+            Step();
+        }
+    }
+
+    public void Register(IClockedDevice device)
+    {
+        _devices.Add(device);
+    }
+
+    public void Unregister(IClockedDevice device)
+    {
+        _devices.Remove(device);
     }
 
     public void Reset()
