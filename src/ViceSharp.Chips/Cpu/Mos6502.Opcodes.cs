@@ -156,6 +156,27 @@ partial class Mos6502
             // DEY - Decrement Y Register
             case 0x88: Y--; UpdateNZ(Y); break;
 
+            // CLC - Clear Carry Flag
+            case 0x18: P &= 0xFE; break;
+
+            // SEC - Set Carry Flag
+            case 0x38: P |= 0x01; break;
+
+            // CLI - Clear Interrupt Disable
+            case 0x58: P &= 0xFB; break;
+
+            // SEI - Set Interrupt Disable
+            case 0x78: P |= 0x04; break;
+
+            // CLV - Clear Overflow Flag
+            case 0xB8: P &= 0xBF; break;
+
+            // SED - Set Decimal Flag
+            case 0xF8: P |= 0x08; break;
+
+            // CLD - Clear Decimal Flag
+            case 0xD8: P &= 0xF7; break;
+
             default:
                 // Unimplemented opcode
                 break;
