@@ -189,6 +189,29 @@ partial class Mos6502
             // PLP - Pull Processor Status
             case 0x28: P = (byte)((Pop() & ~0x10) | (P & 0x10)); break;
 
+            // BIT - Bit Test
+            case 0x24:
+                byte value = _bus.Read(ZeroPage());
+                P &= 0x3D;
+                P |= (byte)(value & 0xC0);
+                if ((A & value) == 0) P |= 0x02;
+                break;
+            case 0x2C:
+                value = _bus.Read(Absolute());
+                P &= 0x3D;
+                P |= (byte)(value & 0xC0);
+                if ((A & value) == 0) P |= 0x02;
+                break;
+
+            // NOP undocumented variants
+            case 0x1A:
+            case 0x3A:
+            case 0x5A:
+            case 0x7A:
+            case 0xDA:
+            case 0xFA:
+                break;
+
             default:
                 // Unimplemented opcode
                 break;
