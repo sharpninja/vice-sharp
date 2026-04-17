@@ -284,6 +284,16 @@ partial class Mos6502
             case 0xC4: Compare(Y, ZeroPage()); break;
             case 0xCC: Compare(Y, Absolute()); break;
 
+            // Branch Instructions
+            case 0x10: if ((P & 0x80) == 0) BranchRelative(); break; // BPL
+            case 0x30: if ((P & 0x80) != 0) BranchRelative(); break; // BMI
+            case 0x50: if ((P & 0x40) == 0) BranchRelative(); break; // BVC
+            case 0x70: if ((P & 0x40) != 0) BranchRelative(); break; // BVS
+            case 0x90: if ((P & 0x01) == 0) BranchRelative(); break; // BCC
+            case 0xB0: if ((P & 0x01) != 0) BranchRelative(); break; // BCS
+            case 0xD0: if ((P & 0x02) == 0) BranchRelative(); break; // BNE
+            case 0xF0: if ((P & 0x02) != 0) BranchRelative(); break; // BEQ
+
             default:
                 // Unimplemented opcode
                 break;
@@ -341,5 +351,11 @@ partial class Mos6502
             P &= 0xFE;
 
         UpdateNZ((byte)result);
+    }
+
+    private void BranchRelative()
+    {
+        sbyte offset = (sbyte)Fetch();
+        PC = (ushort)(PC + offset);
     }
 }
