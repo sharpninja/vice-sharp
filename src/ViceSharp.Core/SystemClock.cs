@@ -8,7 +8,22 @@ public sealed class SystemClock : IClock
     private long _cycle;
 
     public long TotalCycles => _cycle;
-    public long FrequencyHz { get; } = 985248;
+    public long FrequencyHz { get; }
+
+    /// <summary>
+    /// Creates a new SystemClock with default C64 PAL frequency (985248 Hz).
+    /// </summary>
+    public SystemClock() : this(985248)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new SystemClock with the specified frequency.
+    /// </summary>
+    public SystemClock(long frequencyHz)
+    {
+        FrequencyHz = frequencyHz;
+    }
 
     public void Step()
     {

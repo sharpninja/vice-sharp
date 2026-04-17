@@ -1,35 +1,39 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Core;
-using ViceSharp.Architectures.C64;
+using ViceSharp.Architectures.EmptyMachine;
 
-Console.WriteLine("ViceSharp - Commodore 64 Emulator");
-Console.WriteLine("=================================");
+Console.WriteLine("ViceSharp - Commodore Emulator");
+Console.WriteLine("==============================");
 
-// Create system components
-var bus = new BasicBus();
-var clock = new SystemClock();
-var irqLine = new InterruptLine(InterruptType.Irq);
-var nmiLine = new InterruptLine(InterruptType.Nmi);
+// Test Architecture Builder with Empty Machine
+Console.WriteLine("Testing Architecture Builder...");
 
-// Create and initialize C64 machine
-var c64 = new Commodore64(bus, clock, irqLine, nmiLine);
+var builder = new ArchitectureBuilder();
+var descriptor = new EmptyMachineDescriptor();
+var machine = builder.Build(descriptor);
 
-Console.WriteLine("System initialized.");
-Console.WriteLine("Starting emulation...");
+Console.WriteLine($"✓ Successfully built machine: {machine.Architecture.MachineName}");
+Console.WriteLine($"✓ Bus initialized");
+Console.WriteLine($"✓ Clock initialized @ {machine.Clock.FrequencyHz} Hz");
+Console.WriteLine($"✓ Device registry contains {machine.Devices.Count} devices");
 
-c64.Reset();
+Console.WriteLine();
+Console.WriteLine("Running empty machine test...");
 
-// Run for 1 million cycles
+// Step clock
 for (int i = 0; i < 1000000; i++)
 {
-    c64.StepInstruction();
+    machine.Clock.Step();
     
-    if (i % 100000 == 0)
+    if (i % 200000 == 0)
     {
         Console.WriteLine($"Executed {i} cycles");
     }
 }
 
-Console.WriteLine("Emulation completed successfully.");
+Console.WriteLine();
+Console.WriteLine("✅ Emulation completed successfully");
+Console.WriteLine($"Total cycles: {machine.Clock.TotalCycles}");
+Console.WriteLine();
 Console.WriteLine("Press any key to exit.");
 Console.ReadKey();
