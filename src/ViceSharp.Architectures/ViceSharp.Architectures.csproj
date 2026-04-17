@@ -4,19 +4,15 @@
     <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" />
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
     <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" />
-    <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PublishAot>true</PublishAot>
     <TrimMode>full</TrimMode>
     <TrimmerDefaultAction>link</TrimmerDefaultAction>
-    <DebuggerSupport>false</DebuggerSupport>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
 </Project>
