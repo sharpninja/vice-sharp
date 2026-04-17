@@ -107,6 +107,25 @@ partial class Mos6502
                 PC = addr;
                 break;
 
+            // STA - Store Accumulator
+            case 0x85: _bus.Write(ZeroPage(), A); break;
+            case 0x95: _bus.Write(ZeroPageX(), A); break;
+            case 0x8D: _bus.Write(Absolute(), A); break;
+            case 0x9D: _bus.Write(AbsoluteX(), A); break;
+            case 0x99: _bus.Write(AbsoluteY(), A); break;
+            case 0x81: _bus.Write(IndirectX(), A); break;
+            case 0x91: _bus.Write(IndirectY(), A); break;
+
+            // STX - Store X Register
+            case 0x86: _bus.Write(ZeroPage(), X); break;
+            case 0x96: _bus.Write(ZeroPageY(), X); break;
+            case 0x8E: _bus.Write(Absolute(), X); break;
+
+            // STY - Store Y Register
+            case 0x84: _bus.Write(ZeroPage(), Y); break;
+            case 0x94: _bus.Write(ZeroPageX(), Y); break;
+            case 0x8C: _bus.Write(Absolute(), Y); break;
+
             default:
                 // Unimplemented opcode
                 break;
