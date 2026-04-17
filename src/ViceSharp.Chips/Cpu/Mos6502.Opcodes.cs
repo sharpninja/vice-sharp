@@ -294,6 +294,36 @@ partial class Mos6502
             case 0xD0: if ((P & 0x02) == 0) BranchRelative(); break; // BNE
             case 0xF0: if ((P & 0x02) != 0) BranchRelative(); break; // BEQ
 
+            // Logical AND
+            case 0x29: A &= _bus.Read(Immediate()); UpdateNZ(A); break;
+            case 0x25: A &= _bus.Read(ZeroPage()); UpdateNZ(A); break;
+            case 0x35: A &= _bus.Read(ZeroPageX()); UpdateNZ(A); break;
+            case 0x2D: A &= _bus.Read(Absolute()); UpdateNZ(A); break;
+            case 0x3D: A &= _bus.Read(AbsoluteX()); UpdateNZ(A); break;
+            case 0x39: A &= _bus.Read(AbsoluteY()); UpdateNZ(A); break;
+            case 0x21: A &= _bus.Read(IndirectX()); UpdateNZ(A); break;
+            case 0x31: A &= _bus.Read(IndirectY()); UpdateNZ(A); break;
+
+            // Logical OR
+            case 0x09: A |= _bus.Read(Immediate()); UpdateNZ(A); break;
+            case 0x05: A |= _bus.Read(ZeroPage()); UpdateNZ(A); break;
+            case 0x15: A |= _bus.Read(ZeroPageX()); UpdateNZ(A); break;
+            case 0x0D: A |= _bus.Read(Absolute()); UpdateNZ(A); break;
+            case 0x1D: A |= _bus.Read(AbsoluteX()); UpdateNZ(A); break;
+            case 0x19: A |= _bus.Read(AbsoluteY()); UpdateNZ(A); break;
+            case 0x01: A |= _bus.Read(IndirectX()); UpdateNZ(A); break;
+            case 0x11: A |= _bus.Read(IndirectY()); UpdateNZ(A); break;
+
+            // Logical Exclusive OR
+            case 0x49: A ^= _bus.Read(Immediate()); UpdateNZ(A); break;
+            case 0x45: A ^= _bus.Read(ZeroPage()); UpdateNZ(A); break;
+            case 0x55: A ^= _bus.Read(ZeroPageX()); UpdateNZ(A); break;
+            case 0x4D: A ^= _bus.Read(Absolute()); UpdateNZ(A); break;
+            case 0x5D: A ^= _bus.Read(AbsoluteX()); UpdateNZ(A); break;
+            case 0x59: A ^= _bus.Read(AbsoluteY()); UpdateNZ(A); break;
+            case 0x41: A ^= _bus.Read(IndirectX()); UpdateNZ(A); break;
+            case 0x51: A ^= _bus.Read(IndirectY()); UpdateNZ(A); break;
+
             default:
                 // Unimplemented opcode
                 break;
