@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj" />
+    <Project Path="src/ViceSharp.Console/ViceSharp.Console.csproj" />
+    <Project Path="src/ViceSharp.Core/ViceSharp.Core.csproj" />
   </Folder>
 </Solution>
