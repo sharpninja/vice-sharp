@@ -1,27 +1,14 @@
 namespace ViceSharp.Abstractions;
 
 /// <summary>
-/// A device that can raise interrupt requests (IRQ) or non-maskable interrupts (NMI).
+/// Identifies a device that can raise interrupts. Used by IInterruptLine
+/// to track assertion state per source.
 /// </summary>
 public interface IInterruptSource : IDevice
 {
-    /// <summary>
-    /// Current IRQ line state.
-    /// </summary>
-    bool IrqActive { get; }
+    /// <summary>Unique identifier for this interrupt source.</summary>
+    DeviceId SourceId { get; }
 
-    /// <summary>
-    /// Current NMI line state.
-    /// </summary>
-    bool NmiActive { get; }
-
-    /// <summary>
-    /// Raised when IRQ line state changes.
-    /// </summary>
-    event Action<bool> IrqChanged;
-
-    /// <summary>
-    /// Raised when NMI line state changes.
-    /// </summary>
-    event Action<bool> NmiChanged;
+    /// <summary>The interrupt line(s) this source is connected to.</summary>
+    IReadOnlyList<IInterruptLine> ConnectedLines { get; }
 }

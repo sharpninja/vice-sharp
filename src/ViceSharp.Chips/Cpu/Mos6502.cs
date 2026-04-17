@@ -7,6 +7,7 @@ public sealed partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     public DeviceId Id => new DeviceId(0x0001);
     public string Name => "MOS 6502 CPU";
     public uint ClockDivisor => 1;
+    public ClockPhase Phase => ClockPhase.Phi2;
 
     // Registers
     public byte A;

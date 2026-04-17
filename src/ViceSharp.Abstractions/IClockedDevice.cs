@@ -21,4 +21,7 @@ public interface IClockedDevice : IDevice
     /// </summary>
     /// <value>1 = full speed, 2 = half speed, etc.</value>
     uint ClockDivisor { get; }
+
+    /// <summary>The clock phase this device operates on (phi1 or phi2).</summary>
+    ClockPhase Phase { get; }
 }
