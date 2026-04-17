@@ -126,6 +126,36 @@ partial class Mos6502
             case 0x94: _bus.Write(ZeroPageX(), Y); break;
             case 0x8C: _bus.Write(Absolute(), Y); break;
 
+            // TAX - Transfer Accumulator to X
+            case 0xAA: X = A; UpdateNZ(X); break;
+
+            // TAY - Transfer Accumulator to Y
+            case 0xA8: Y = A; UpdateNZ(Y); break;
+
+            // TXA - Transfer X to Accumulator
+            case 0x8A: A = X; UpdateNZ(A); break;
+
+            // TYA - Transfer Y to Accumulator
+            case 0x98: A = Y; UpdateNZ(A); break;
+
+            // TXS - Transfer X to Stack Pointer
+            case 0x9A: S = X; break;
+
+            // TSX - Transfer Stack Pointer to X
+            case 0xBA: X = S; UpdateNZ(X); break;
+
+            // INX - Increment X Register
+            case 0xE8: X++; UpdateNZ(X); break;
+
+            // INY - Increment Y Register
+            case 0xC8: Y++; UpdateNZ(Y); break;
+
+            // DEX - Decrement X Register
+            case 0xCA: X--; UpdateNZ(X); break;
+
+            // DEY - Decrement Y Register
+            case 0x88: Y--; UpdateNZ(Y); break;
+
             default:
                 // Unimplemented opcode
                 break;
