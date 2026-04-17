@@ -177,6 +177,18 @@ partial class Mos6502
             // CLD - Clear Decimal Flag
             case 0xD8: P &= 0xF7; break;
 
+            // PHA - Push Accumulator
+            case 0x48: Push(A); break;
+
+            // PHP - Push Processor Status
+            case 0x08: Push((byte)(P | 0x10)); break;
+
+            // PLA - Pull Accumulator
+            case 0x68: A = Pop(); UpdateNZ(A); break;
+
+            // PLP - Pull Processor Status
+            case 0x28: P = (byte)((Pop() & ~0x10) | (P & 0x10)); break;
+
             default:
                 // Unimplemented opcode
                 break;
