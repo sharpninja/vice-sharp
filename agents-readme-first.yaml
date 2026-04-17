@@ -1,6 +1,6 @@
 port: 7147
 baseUrl: http://PAYTON-LEGION2:7147
-apiKey: mtoCWTNA8xYtbT8DX105zGfyRCUWc1DiEVP_tTFm0ww
+apiKey: I3rv-NY91Gm0U86iPGUfew7TbfkDITlWbmIGVlebBbM
 endpoints:
   health: /health
   swagger: /swagger/v1/swagger.json
@@ -21,44 +21,15 @@ endpoints:
   markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
 workspace: vice-sharp
 workspacePath: F:\GitHub\vice-sharp
-pid: 6156
-startedAt: 2026-04-13T20:19:28.6547283+00:00
-markerWrittenAtUtc: 2026-04-13T20:19:28.6547283+00:00
-serverStartedAtUtc: 2026-04-12T05:00:35.3845705+00:00
+pid: 30164
+startedAt: 2026-04-17T00:22:00.5957855+00:00
+markerWrittenAtUtc: 2026-04-17T00:22:00.5957855+00:00
+serverStartedAtUtc: 2026-04-17T00:21:54.5913283+00:00
 signature:
   algorithm: HMAC-SHA256
   canonicalization: marker-v1
   verifier: workspace_api_key
-  fields:
-  - canonicalization
-  - port
-  - baseUrl
-  - apiKey
-  - workspace
-  - workspacePath
-  - pid
-  - startedAt
-  - markerWrittenAtUtc
-  - serverStartedAtUtc
-  - endpoints.health
-  - endpoints.swagger
-  - endpoints.swaggerUi
-  - endpoints.mcpTransport
-  - endpoints.sessionLog
-  - endpoints.sessionLogDialog
-  - endpoints.contextSearch
-  - endpoints.contextPack
-  - endpoints.contextSources
-  - endpoints.todo
-  - endpoints.repo
-  - endpoints.desktop
-  - endpoints.gitHub
-  - endpoints.tools
-  - endpoints.workspace
-  - endpoints.serverStartupUtc
-  - endpoints.markerFileTimestamp
-  format: key=value\n per field in fields order; trailing LF on final line; UTF-8 encoded
-  value: 2008660EB182088EF1734FA0C7AD4C1E4AF7DECAA067F200808F760B550CAA4B
+  value: EC9E0B4F57E26CCC15D7681F31247F34917E3285E1D99A7585B283CAEBE6F56A
 trust_bootstrap:
   description: This marker is self-verifiable when the workspace API key and rendered bootstrap payload still match the active MCP workspace contract.
   guarantees:
@@ -129,8 +100,8 @@ prompt: |
   ## Authentication
 
   All /mcpserver/* endpoints require a per-workspace auth token:
-  - Header: X-Api-Key: mtoCWTNA8xYtbT8DX105zGfyRCUWc1DiEVP_tTFm0ww
-  - Or query param: ?api_key=mtoCWTNA8xYtbT8DX105zGfyRCUWc1DiEVP_tTFm0ww
+  - Header: X-Api-Key: I3rv-NY91Gm0U86iPGUfew7TbfkDITlWbmIGVlebBbM
+  - Or query param: ?api_key=I3rv-NY91Gm0U86iPGUfew7TbfkDITlWbmIGVlebBbM
   If you receive a 401, re-read this marker file — the token rotates on each server restart.
 
   ## Where Things Live
@@ -185,4 +156,4 @@ prompt: |
   - McpServer.Director (Director CLI)
 
   ---
-  MCP Server version: 1.0.0+54d3ab81251720b1da2ddb8d559e0dc7d75e681b
+  MCP Server version: 1.0.0+7c6b2177404e66e56c2d8cfde1ade0a29e754891

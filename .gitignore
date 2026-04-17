@@ -78,3 +78,5 @@ docs/todo.yaml
 
 ## Nuke auto-generated
 .nuke/build.schema.json
+
+AGENTS-README-FIRST.yaml

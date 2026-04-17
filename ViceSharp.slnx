@@ -1,2 +1,5 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj" />
+  </Folder>
 </Solution>
