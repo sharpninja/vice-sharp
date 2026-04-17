@@ -4,6 +4,8 @@
     <Project Path="src/ViceSharp.Chips/ViceSharp.Chips.csproj" />
     <Project Path="src/ViceSharp.Console/ViceSharp.Console.csproj" />
     <Project Path="src/ViceSharp.Core/ViceSharp.Core.csproj" />
+    <Project Path="src/ViceSharp.Monitor/ViceSharp.Monitor.csproj" />
+    <Project Path="src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj" />
     <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj" />
   </Folder>
 </Solution>
