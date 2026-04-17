@@ -96,6 +96,17 @@ partial class Mos6502
                 PC++;
                 break;
 
+            // JMP - Jump
+            case 0x4C: PC = Absolute(); break;
+            case 0x6C: PC = Indirect(); break;
+
+            // JSR - Jump to Subroutine
+            case 0x20:
+                ushort addr = Absolute();
+                PushWord((ushort)(PC - 1));
+                PC = addr;
+                break;
+
             default:
                 // Unimplemented opcode
                 break;
