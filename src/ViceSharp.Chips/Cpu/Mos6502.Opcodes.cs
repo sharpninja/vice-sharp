@@ -324,6 +324,34 @@ partial class Mos6502
             case 0x41: A ^= _bus.Read(IndirectX()); UpdateNZ(A); break;
             case 0x51: A ^= _bus.Read(IndirectY()); UpdateNZ(A); break;
 
+            // Arithmetic Shift Left
+            case 0x0A: A = ASL(A); break;
+            case 0x06: _bus.Write(ZeroPage(), ASL(_bus.Read(ZeroPage()))); break;
+            case 0x16: _bus.Write(ZeroPageX(), ASL(_bus.Read(ZeroPageX()))); break;
+            case 0x0E: _bus.Write(Absolute(), ASL(_bus.Read(Absolute()))); break;
+            case 0x1E: _bus.Write(AbsoluteX(), ASL(_bus.Read(AbsoluteX()))); break;
+
+            // Logical Shift Right
+            case 0x4A: A = LSR(A); break;
+            case 0x46: _bus.Write(ZeroPage(), LSR(_bus.Read(ZeroPage()))); break;
+            case 0x56: _bus.Write(ZeroPageX(), LSR(_bus.Read(ZeroPageX()))); break;
+            case 0x4E: _bus.Write(Absolute(), LSR(_bus.Read(Absolute()))); break;
+            case 0x5E: _bus.Write(AbsoluteX(), LSR(_bus.Read(AbsoluteX()))); break;
+
+            // Rotate Left
+            case 0x2A: A = ROL(A); break;
+            case 0x26: _bus.Write(ZeroPage(), ROL(_bus.Read(ZeroPage()))); break;
+            case 0x36: _bus.Write(ZeroPageX(), ROL(_bus.Read(ZeroPageX()))); break;
+            case 0x2E: _bus.Write(Absolute(), ROL(_bus.Read(Absolute()))); break;
+            case 0x3E: _bus.Write(AbsoluteX(), ROL(_bus.Read(AbsoluteX()))); break;
+
+            // Rotate Right
+            case 0x6A: A = ROR(A); break;
+            case 0x66: _bus.Write(ZeroPage(), ROR(_bus.Read(ZeroPage()))); break;
+            case 0x76: _bus.Write(ZeroPageX(), ROR(_bus.Read(ZeroPageX()))); break;
+            case 0x6E: _bus.Write(Absolute(), ROR(_bus.Read(Absolute()))); break;
+            case 0x7E: _bus.Write(AbsoluteX(), ROR(_bus.Read(AbsoluteX()))); break;
+
             default:
                 // Unimplemented opcode
                 break;
@@ -387,5 +415,57 @@ partial class Mos6502
     {
         sbyte offset = (sbyte)Fetch();
         PC = (ushort)(PC + offset);
+    }
+
+    private byte ASL(byte value)
+    {
+        if ((value & 0x80) != 0)
+            P |= 0x01;
+        else
+            P &= 0xFE;
+
+        value <<= 1;
+        UpdateNZ(value);
+        return value;
+    }
+
+    private byte LSR(byte value)
+    {
+        if ((value & 0x01) != 0)
+            P |= 0x01;
+        else
+            P &= 0xFE;
+
+        value >>= 1;
+        UpdateNZ(value);
+        return value;
+    }
+
+    private byte ROL(byte value)
+    {
+        byte carry = (byte)(P & 0x01);
+
+        if ((value & 0x80) != 0)
+            P |= 0x01;
+        else
+            P &= 0xFE;
+
+        value = (byte)((value << 1) | carry);
+        UpdateNZ(value);
+        return value;
+    }
+
+    private byte ROR(byte value)
+    {
+        byte carry = (byte)((P & 0x01) << 7);
+
+        if ((value & 0x01) != 0)
+            P |= 0x01;
+        else
+            P &= 0xFE;
+
+        value = (byte)((value >> 1) | carry);
+        UpdateNZ(value);
+        return value;
     }
 }
