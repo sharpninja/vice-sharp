@@ -212,6 +212,78 @@ partial class Mos6502
             case 0xFA:
                 break;
 
+            // INC - Increment Memory
+            case 0xE6:
+                value = _bus.Read(ZeroPage());
+                value++;
+                _bus.Write(ZeroPage(), value);
+                UpdateNZ(value);
+                break;
+            case 0xF6:
+                value = _bus.Read(ZeroPageX());
+                value++;
+                _bus.Write(ZeroPageX(), value);
+                UpdateNZ(value);
+                break;
+            case 0xEE:
+                value = _bus.Read(Absolute());
+                value++;
+                _bus.Write(Absolute(), value);
+                UpdateNZ(value);
+                break;
+            case 0xFE:
+                value = _bus.Read(AbsoluteX());
+                value++;
+                _bus.Write(AbsoluteX(), value);
+                UpdateNZ(value);
+                break;
+
+            // DEC - Decrement Memory
+            case 0xC6:
+                value = _bus.Read(ZeroPage());
+                value--;
+                _bus.Write(ZeroPage(), value);
+                UpdateNZ(value);
+                break;
+            case 0xD6:
+                value = _bus.Read(ZeroPageX());
+                value--;
+                _bus.Write(ZeroPageX(), value);
+                UpdateNZ(value);
+                break;
+            case 0xCE:
+                value = _bus.Read(Absolute());
+                value--;
+                _bus.Write(Absolute(), value);
+                UpdateNZ(value);
+                break;
+            case 0xDE:
+                value = _bus.Read(AbsoluteX());
+                value--;
+                _bus.Write(AbsoluteX(), value);
+                UpdateNZ(value);
+                break;
+
+            // CMP - Compare Accumulator
+            case 0xC9: Compare(A, Immediate()); break;
+            case 0xC5: Compare(A, ZeroPage()); break;
+            case 0xD5: Compare(A, ZeroPageX()); break;
+            case 0xCD: Compare(A, Absolute()); break;
+            case 0xDD: Compare(A, AbsoluteX()); break;
+            case 0xD9: Compare(A, AbsoluteY()); break;
+            case 0xC1: Compare(A, IndirectX()); break;
+            case 0xD1: Compare(A, IndirectY()); break;
+
+            // CPX - Compare X Register
+            case 0xE0: Compare(X, Immediate()); break;
+            case 0xE4: Compare(X, ZeroPage()); break;
+            case 0xEC: Compare(X, Absolute()); break;
+
+            // CPY - Compare Y Register
+            case 0xC0: Compare(Y, Immediate()); break;
+            case 0xC4: Compare(Y, ZeroPage()); break;
+            case 0xCC: Compare(Y, Absolute()); break;
+
             default:
                 // Unimplemented opcode
                 break;
@@ -256,5 +328,18 @@ partial class Mos6502
         byte lo = Pop();
         byte hi = Pop();
         return (ushort)(lo | (hi << 8));
+    }
+
+    private void Compare(byte register, ushort address)
+    {
+        byte value = _bus.Read(address);
+        ushort result = (ushort)(register - value);
+
+        if (register >= value)
+            P |= 0x01;
+        else
+            P &= 0xFE;
+
+        UpdateNZ((byte)result);
     }
 }
