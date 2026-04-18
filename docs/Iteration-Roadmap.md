@@ -1,6 +1,6 @@
 # ViceSharp Iteration Roadmap
 
-## Iteration 0 — Foundations (current)
+## Iteration 0 — Foundations ✅ COMPLETED
 
 **Goal:** Runnable scaffolding with zero emulation.
 
