@@ -1,0 +1,30 @@
+# Disable automatic line ending conversion
+* -text
+
+# Explicitly set line endings for known text file types
+*.cs      text eol=lf
+*.cshtml  text eol=lf
+*.csproj  text eol=lf
+*.props   text eol=lf
+*.targets text eol=lf
+*.sln     text eol=lf
+*.json    text eol=lf
+*.md      text eol=lf
+*.xml     text eol=lf
+*.config  text eol=lf
+*.cmd     text eol=crlf
+*.bat     text eol=crlf
+*.ps1     text eol=crlf
+*.sh      text eol=lf
+
+# Binary files - never modify
+*.png     binary
+*.jpg     binary
+*.gif     binary
+*.ico     binary
+*.rom     binary
+*.bin     binary
+*.dll     binary
+*.exe     binary
+*.so      binary
+*.dylib   binary
