@@ -63,6 +63,12 @@ internal sealed class Machine : IMachine
         // Step single CPU instruction (placeholder implementation)
         // Will be properly implemented when CPU core is added
     }
+
+    /// <inheritdoc />
+    public MachineState GetState()
+    {
+        return default;
+    }
 }
 
 /// <summary>
