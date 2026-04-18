@@ -1,8 +1,8 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Core;
 using ViceSharp.Chips.Cpu;
-using ViceSharp.Chips.Video;
-using ViceSharp.Chips.Interface;
+using ViceSharp.Chips.VicIi;
+using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Audio;
 
 namespace ViceSharp.Architectures.C64;
@@ -21,9 +21,9 @@ public sealed class Commodore64 : IMachine
 
     // C64 Chips
     private readonly Mos6502 _cpu;
-    private readonly VicII _vic;
-    private readonly Cia6526 _cia1;
-    private readonly Cia6526 _cia2;
+    private readonly Mos6569 _vic;
+    private readonly Mos6526 _cia1;
+    private readonly Mos6526 _cia2;
     private readonly Sid6581 _sid;
 
     // System RAM
@@ -42,9 +42,9 @@ public sealed class Commodore64 : IMachine
 
         // Initialize chips
         _cpu = new Mos6502(bus);
-        _vic = new VicII(bus, null!);
-        _cia1 = new Cia6526(bus, irqLine);
-        _cia2 = new Cia6526(bus, nmiLine);
+        _vic = new Mos6569(bus, irqLine);
+        _cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
+        _cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
         _sid = new Sid6581(bus);
 
         // Register devices on bus

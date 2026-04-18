@@ -33,5 +33,6 @@
   <ItemGroup Label="Media Capture">
     <PackageVersion Include="FFmpeg.AutoGen" Version="8.0.0.1" />
     <PackageVersion Include="SkiaSharp" Version="3.119.2" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.1" />
   </ItemGroup>
 </Project>
