@@ -4,7 +4,13 @@ A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emula
 
 ## Status
 
-**Iteration 0 (Foundations)** — scaffolding, interfaces, source generator, and CI/CD. No emulation yet.
+✅ **Iteration 0 (Foundations)** — Complete. All core primitives implemented, lock-free and zero allocation.
+⏳ **Iteration 1 (C64 Bringup)** — In progress. Working chip layer implementations:
+  - `Mos6510` CPU (opcodes + core)
+  - `Mos6569` VIC-II
+  - `Mos6526` CIA
+  - `Mos6581` SID
+  - Folders for Cpu/Cia/Sid/VicIi
 
 ## Supported Machines (planned)
 
