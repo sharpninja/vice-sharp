@@ -32,8 +32,5 @@ for (int i = 0; i < 1000000; i++)
 }
 
 Console.WriteLine();
-Console.WriteLine("✅ Emulation completed successfully");
+Console.WriteLine("Emulation completed successfully");
 Console.WriteLine($"Total cycles: {machine.Clock.TotalCycles}");
-Console.WriteLine();
-Console.WriteLine("Press any key to exit.");
-Console.ReadKey();
