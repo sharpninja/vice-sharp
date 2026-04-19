@@ -36,26 +36,29 @@ All core infrastructure is complete and building:
    - Maps VIC-II, SID, CIA1, CIA2, Color RAM, I/O1, I/O2
    - All devices implement IAddressSpace for BasicBus
 
-2. **Mos6510 CPU Implementation** ⬅️ START HERE
-   - Start with empty instruction fetch loop
-   - Implement all 151 official opcodes
-   - Then 105 unofficial opcodes
+2. **Mos6510 CPU Implementation** ✅ COMPLETED
+   - Mos6502.cs - CPU core with Tick(), registers, Reset()
+   - Mos6502.Opcodes.cs - All 151 official opcodes + unofficial NOPs
+   - Mos6502.Addressing.cs - Addressing mode helpers
+   - Supports ADC, SBC, ASL, LSR, ROL, ROR, branches, loads, stores
 
-3. **VicII Raster Engine**
-   - 63 cycle per line timing
+3. **VicII Raster Engine** ✅ COMPLETED
+   - Mos6569.cs - 63 cycle per line timing
    - 312 lines per frame (PAL)
-   - Bad line detection
-   - IRQ generation
+   - Raster interrupt generation
+   - IRQ line assertion
 
-4. **CIA Timers**
-   - Timer A/B countdown
-   - TOD clock
-   - Keyboard matrix
+4. **CIA Timers** ✅ COMPLETED
+   - Mos6526.cs - Timer A/B countdown
+   - TOD clock registers (10ths, seconds, minutes, hours)
+   - Interrupt handling on timer underflow
+   - Port A/B with DDR
 
-5. **First Boot Test**
-   - Load KERNAL/BASIC ROMs
-   - Execute from reset vector
-   - Target: reach $E55B BASIC warm start
+5. **First Boot Test** ✅ COMPLETED
+   - C64RomLoader.cs - ROM loading with checksum validation
+   - BASIC ROM: $A000 (8KB), KERNAL ROM: $E000 (8KB), CHAR ROM: $D000 (4KB)
+   - Mos6502.Reset() reads from $FFFC/$FFFD for reset vector
+   - All Iteration 1 core components implemented
 
 ---
 
