@@ -69,6 +69,19 @@ internal sealed class Machine : IMachine
     {
         return default;
     }
+
+    /// <inheritdoc />
+    public void Reset()
+    {
+        // Reset all devices in the registry
+        foreach (var device in Devices.All)
+        {
+            device.Reset();
+        }
+        
+        // Reset clock
+        Clock.Reset();
+    }
 }
 
 /// <summary>

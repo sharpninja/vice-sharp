@@ -27,4 +27,7 @@ public interface IMachine
 
     /// <summary>Gets the current full machine state snapshot.</summary>
     MachineState GetState();
+
+    /// <summary>Resets the machine to initial power-on state.</summary>
+    void Reset();
 }

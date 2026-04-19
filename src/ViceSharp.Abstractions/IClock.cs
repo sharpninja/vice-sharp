@@ -24,6 +24,9 @@ public interface IClock
 
     /// <summary>Unregisters a device from clock tick distribution.</summary>
     void Unregister(IClockedDevice device);
+
+    /// <summary>Resets the clock to initial state.</summary>
+    void Reset();
 }
 
 /// <summary>
