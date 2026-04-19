@@ -20,6 +20,10 @@ public sealed class C64KeyboardMatrix : IInputSource
     // 8 rows × 8 columns
     private readonly bool[,] _matrix = new bool[8, 8];
     private byte _columnMask;
+    
+    // VICE-style: RESTORE key is special (NMI trigger)
+    private bool _restoreKeyPressed;
+    private bool _stopKeyPressed;
 
     public C64KeyboardMatrix()
     {
@@ -39,7 +43,7 @@ public sealed class C64KeyboardMatrix : IInputSource
     }
 
     /// <summary>
-    /// Set key press state for C64 keycode
+    /// Set key press state for C64 keycode with VICE-style handling
     /// </summary>
     public void SetKey(byte keyCode, bool pressed)
     {
@@ -48,9 +52,29 @@ public sealed class C64KeyboardMatrix : IInputSource
 
         if (row < 8 && col < 8)
         {
+            // VICE-style: RUN/STOP is row 7, col 7 (0x3F)
+            if (keyCode == 0x3F) _stopKeyPressed = pressed;
+            // RESTORE is row 3, col 1 (0x31) - triggers NMI
+            if (keyCode == 0x31) _restoreKeyPressed = pressed;
+            
             _matrix[row, col] = pressed;
         }
     }
+    
+    /// <summary>
+    /// Check if RESTORE key is pressed (triggers NMI in VICE)
+    /// </summary>
+    public bool IsRestorePressed => _restoreKeyPressed;
+    
+    /// <summary>
+    /// Check if RUN/STOP key is pressed
+    /// </summary>
+    public bool IsStopPressed => _stopKeyPressed;
+    
+    /// <summary>
+    /// VICE-style: Check for SHIFT + C= combo for PETSCII
+    /// </summary>
+    public bool IsShiftCbmPressed => _matrix[0x0F >> 3, 0x0F & 0x07] && _matrix[0x3D >> 3, 0x3D & 0x07];
 
     /// <summary>
     /// Select column mask for CIA port B
