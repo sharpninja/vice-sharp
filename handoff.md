@@ -127,4 +127,14 @@ src/
 
 **Iteration 1 Status: ALL CORE COMPONENTS COMPLETE**
 
-Next: Run ValidationRunner to generate traces and validate cycle accuracy
+## NEXT PHASE: Iteration 2 - ROM Integration & UI
+
+1. ROM Integration
+   - Wire C64RomLoader to machine
+   - Load BASIC/KERNAL/CHAR ROMs
+   - Boot to BASIC prompt
+
+2. Avalonia UI
+   - Update MainWindow to use ArchitectureBuilder
+   - Wire video surface to VIC-II
+   - Keyboard input handling
