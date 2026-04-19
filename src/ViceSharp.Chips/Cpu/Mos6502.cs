@@ -2,7 +2,7 @@ using ViceSharp.Abstractions;
 
 namespace ViceSharp.Chips.Cpu;
 
-public sealed partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
+public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
 {
     public DeviceId Id => new DeviceId(0x0001);
     public string Name => "MOS 6502 CPU";
@@ -75,8 +75,8 @@ public sealed partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         PC |= (ushort)(_bus.Read(0xFFFD) << 8);
     }
 
-    public byte Read(ushort address) => _bus.Read(address);
-    public void Write(ushort address, byte value) => _bus.Write(address, value);
+    public virtual byte Read(ushort address) => _bus.Read(address);
+    public virtual void Write(ushort address, byte value) => _bus.Write(address, value);
     public byte Peek(ushort address) => _bus.Peek(address);
     private enum AddressingMode
     {
