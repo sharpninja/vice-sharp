@@ -29,6 +29,42 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
 
     public byte RasterX;
     public uint CycleCounter;
+    
+    // VICE-style: Sprite state
+    private readonly SpriteState[] _sprites = new SpriteState[8];
+    
+    private struct SpriteState
+    {
+        public ushort X;
+        public byte Y;
+        public byte Control;
+        public ushort DataPtr;
+        public byte Color;
+        public bool IsExpandedX;
+        public bool IsExpandedY;
+        public bool IsMulticolor;
+        public bool IsPriority;
+    }
+    
+    /// <summary>
+    /// Get sprite X position (11-bit, VICE-style)
+    /// </summary>
+    public ushort GetSpriteX(int spriteNum) => _sprites[spriteNum].X;
+    
+    /// <summary>
+    /// Get sprite Y position
+    /// </summary>
+    public byte GetSpriteY(int spriteNum) => _sprites[spriteNum].Y;
+    
+    /// <summary>
+    /// Check if sprite is visible at current raster position
+    /// </summary>
+    public bool IsSpriteVisible(int spriteNum)
+    {
+        ref SpriteState s = ref _sprites[spriteNum];
+        return RasterX >= s.X && RasterX < s.X + (s.IsExpandedX ? 48u : 24u) &&
+               CurrentRasterLine >= s.Y && CurrentRasterLine < s.Y + (s.IsExpandedY ? 42 : 21);
+    }
 
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
@@ -130,6 +166,49 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         }
 
         _registers[offset] = value;
+        
+        // VICE-style: Update sprite registers
+        UpdateSpriteRegisters(offset, value);
+    }
+    
+    private void UpdateSpriteRegisters(ushort offset, byte value)
+    {
+        // Sprite X position low (0x00-0x0F)
+        if (offset < 0x10)
+        {
+            int sprite = offset / 2;
+            if ((offset & 0x01) == 0)
+                _sprites[sprite].X = (ushort)((_sprites[sprite].X & 0xFF00) | value);
+            else
+                _sprites[sprite].X = (ushort)((_sprites[sprite].X & 0x00FF) | ((value & 0x07) << 8));
+        }
+        // Sprite Y position (0x01, 0x03, ..., 0x0F)
+        else if (offset >= 0x01 && offset < 0x10 && (offset & 0x01) != 0)
+        {
+            int sprite = (offset - 1) / 2;
+            _sprites[sprite].Y = value;
+        }
+        // Sprite X MSB (0x10)
+        else if (offset == 0x10)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                if ((value & (1 << i)) != 0)
+                    _sprites[i].X |= 0x100;
+                else
+                    _sprites[i].X &= 0xFF;
+            }
+        }
+        // Sprite control (0x1C, 0x1D, 0x1E, 0x1F)
+        else if (offset >= 0x1C && offset <= 0x1F)
+        {
+            int sprite = offset - 0x1C;
+            ref SpriteState s = ref _sprites[sprite];
+            s.IsExpandedX = (value & 0x08) != 0;
+            s.IsExpandedY = (value & 0x04) != 0;
+            s.IsMulticolor = (value & 0x02) != 0;
+            s.IsPriority = (value & 0x01) == 0;
+        }
     }
 
     /// <inheritdoc />
