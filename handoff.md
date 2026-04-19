@@ -130,11 +130,14 @@ src/
 ## NEXT PHASE: Iteration 2 - ROM Integration & UI
 
 1. ROM Integration
-   - Wire C64RomLoader to machine
-   - Load BASIC/KERNAL/CHAR ROMs
-   - Boot to BASIC prompt
+   - C64RomLoader exists but not wired to machine
+   - ArchitectureBuilder needs RomProvider injection
 
-2. Avalonia UI
-   - Update MainWindow to use ArchitectureBuilder
-   - Wire video surface to VIC-II
-   - Keyboard input handling
+2. Avalonia UI ✅
+   - MainWindow uses ArchitectureBuilder/C64Descriptor
+   - VideoSurface renders test pattern
+
+## PROGRESS (2026-04-19)
+- Added IMachine.Reset() to interface
+- Added IClock.Reset() to interface
+- Build: 0 errors
