@@ -2,7 +2,9 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Git;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.Git.GitTasks;
 
 sealed partial class Build : NukeBuild
 {
@@ -40,6 +42,14 @@ sealed partial class Build : NukeBuild
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .SetNoRestore(true));
+        });
+
+    Target Commit => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            Git("add -A");
+            Git("commit -m \"wip: $(Get-Date -Format 'yyyy-MM-dd HH:mm')\"");
         });
 
     Target Test => _ => _
