@@ -97,6 +97,74 @@ public sealed class Mos6526
 
     /// <summary>Interrupt enable mask</summary>
     public byte IrqEnabled;
+    
+    // VICE-style: Keyboard matrix reference for port A
+    private ViceSharp.Chips.Input.C64KeyboardMatrix? _keyboardMatrix;
+    
+    /// <summary>
+    /// Wire keyboard matrix for VICE-style keyboard scanning on port A
+    /// </summary>
+    public void WireKeyboard(ViceSharp.Chips.Input.C64KeyboardMatrix keyboard)
+    {
+        _keyboardMatrix = keyboard;
+    }
+    
+    /// <summary>
+    /// Read port A with VICE-style keyboard matrix handling
+    /// </summary>
+    public byte ReadPortA()
+    {
+        byte value = Registers[PRA];
+        byte ddra = Registers[DDRA];
+        
+        // If port A is in input mode (DDR=0), read from keyboard
+        if (ddra == 0 && _keyboardMatrix != null)
+        {
+            // Keyboard columns are selected via port B
+            return _keyboardMatrix.ReadRowState();
+        }
+        
+        return value;
+    }
+    
+    /// <summary>
+    /// Write to port A (keyboard column selection via DDR)
+    /// </summary>
+    public void WritePortA(byte value)
+    {
+        Registers[PRA] = value;
+    }
+    
+    /// <summary>
+    /// Read port B with VICE-style keyboard handling
+    /// </summary>
+    public byte ReadPortB()
+    {
+        byte value = Registers[PRB];
+        byte ddrb = Registers[DDRB];
+        
+        // Port B selects keyboard columns
+        if (_keyboardMatrix != null)
+        {
+            // In input mode, port B reads column state
+            byte colMask = ddrb == 0 ? (byte)0xFF : Registers[PRB];
+            _keyboardMatrix.SetColumnMask(colMask);
+        }
+        
+        return value;
+    }
+    
+    /// <summary>
+    /// Write to port B (keyboard column selection)
+    /// </summary>
+    public void WritePortB(byte value)
+    {
+        Registers[PRB] = value;
+        if (_keyboardMatrix != null)
+        {
+            _keyboardMatrix.SetColumnMask(value);
+        }
+    }
 
     /// <summary>Port A data direction</summary>
     public byte PortADirection => Registers[DDRA];
