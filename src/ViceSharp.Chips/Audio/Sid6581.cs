@@ -23,12 +23,13 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     public float GenerateSample()
     {
-        int output = 0;
+        // Generate raw voice outputs
+        int voiceOutputs0 = 0, voiceOutputs1 = 0, voiceOutputs2 = 0;
 
         for (int i = 0; i < 3; i++)
         {
             ref Voice voice = ref _voices[i];
-            byte waveform = (byte)(voice.Control & 0x78); // Check waveform bits
+            byte waveform = (byte)(voice.Control & 0x78);
             
             int sample = 0;
             uint phase = voice.WaveformAccumulator >> 24;
@@ -36,37 +37,98 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             
             if ((waveform & TRIANGLE) != 0)
             {
-                // Triangle wave - symmetric
                 uint tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
                 sample = (int)tri;
             }
             else if ((waveform & SAWTOOTH) != 0)
             {
-                // Sawtooth - ramp up
                 sample = (int)(phase << 1);
             }
             else if ((waveform & PULSE) != 0)
             {
-                // Pulse wave - duty cycle
                 sample = phase < (pulseWidth >> 24) ? 255 : 0;
             }
             else if ((waveform & NOISE) != 0)
             {
-                // Noise - LFSR
                 if ((_noiseLfsr & 1) != 0) sample = 255;
             }
             else
             {
-                // Test mode or no waveform
                 sample = (int)(voice.Envelope);
             }
             
-            // Apply envelope
-            output += (sample * voice.Envelope) >> 8;
+            int envelopeAdjusted = (sample * voice.Envelope) >> 8;
+            
+            if (i == 0) voiceOutputs0 = envelopeAdjusted;
+            else if (i == 1) voiceOutputs1 = envelopeAdjusted;
+            else voiceOutputs2 = envelopeAdjusted;
         }
 
-        // Apply filter (simplified)
-        return (output / 3) * (_volume / 15.0f) / 255.0f;
+        // Apply filter - classic VICE-style multi-mode filter
+        int filteredOutput = ApplyFilter(voiceOutputs0, voiceOutputs1, voiceOutputs2);
+
+        return (filteredOutput / 3) * (_volume / 15.0f) / 255.0f;
+    }
+
+    // Filter state for VICE-style resonant filter
+    private double _filterV0, _filterV1, _filterV2, _filterV3;
+    
+    private int ApplyFilter(int voice0, int voice1, int voice2)
+    {
+        // Check which voices are routed through filter
+        bool voice0Filtered = (_filterControl & 0x01) != 0;
+        bool voice1Filtered = (_filterControl & 0x02) != 0;
+        bool voice2Filtered = (_filterControl & 0x04) != 0;
+        bool voice3Filtered = (_filterControl & 0x08) != 0; // External input
+
+        int input = 0;
+        if (!voice0Filtered) input += voice0;
+        if (!voice1Filtered) input += voice1;
+        if (!voice2Filtered) input += voice2;
+        // Voice3/external = 0 for now
+
+        // Get filter type settings
+        bool lp = (_filterControl & 0x10) != 0;
+        bool bp = (_filterControl & 0x20) != 0;
+        bool hp = (_filterControl & 0x40) != 0;
+
+        // Cutoff frequency (10-bit)
+        double cutoff = _filterCutoff / 2047.0;
+        
+        // Resonance (0-15, VICE-style)
+        double resonance = _filterResonance / 15.0;
+
+        // VICE-style state variable filter
+        if (lp || bp || hp)
+        {
+            // Cutoff must be in valid range
+            cutoff = Math.Clamp(cutoff, 0.0, 1.0);
+            
+            // Update filter
+            _filterV0 += cutoff * _filterV1;
+            _filterV3 = input - _filterV0 - resonance * _filterV1;
+            _filterV1 += cutoff * _filterV3;
+            _filterV2 += cutoff * _filterV0;
+            
+            int output = 0;
+            
+            if (lp) output += (int)_filterV2;
+            if (bp) output += (int)_filterV1;
+            if (hp) output += (int)_filterV3;
+            
+            // Mix filtered voices
+            int filtered = 0;
+            if (voice0Filtered) filtered += voice0;
+            if (voice1Filtered) filtered += voice1;
+            if (voice2Filtered) filtered += voice2;
+            
+            return output + filtered;
+        }
+        else
+        {
+            // No filter - mix all voices
+            return voice0 + voice1 + voice2;
+        }
     }
 
     private readonly IBus _bus;
