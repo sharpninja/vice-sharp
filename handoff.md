@@ -31,12 +31,12 @@ All core infrastructure is complete and building:
 
 ### 📋 NEXT STEPS (execute in order, one topic per commit)
 
-1. **Memory Map Layout** ⬅️ START HERE
-   - Define exact $0000-$FFFF region definitions
-   - RAM/ROM/IO/PLA regions with priority ordering
-   - Wire to BasicBus via IAddressSpace implementations
+1. **Memory Map Layout** ✅ COMPLETED
+   - IoDevice.cs implemented for $D000-$DFFF I/O region
+   - Maps VIC-II, SID, CIA1, CIA2, Color RAM, I/O1, I/O2
+   - All devices implement IAddressSpace for BasicBus
 
-2. **Mos6510 CPU Implementation**
+2. **Mos6510 CPU Implementation** ⬅️ START HERE
    - Start with empty instruction fetch loop
    - Implement all 151 official opcodes
    - Then 105 unofficial opcodes
