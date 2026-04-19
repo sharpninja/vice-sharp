@@ -21,12 +21,42 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     private readonly byte[] _registers = new byte[64];
 
     public ushort CurrentRasterLine { get; private set; }
-    public int CyclesPerLine => 63;
-    public int VisibleLines => 200;
-    public int TotalLines => 312;
+    
+    // VICE-style: PAL timing (6567/6569)
+    public const int PalCyclesPerLine = 63;
+    public const int PalVisibleLines = 312;
+    public const int PalTotalLines = 312;
+    public const int NtscCyclesPerLine = 64;
+    public const int NtscVisibleLines = 262;
+    public const int NtscTotalLines = 263;
+    
+    public int CyclesPerLine => IsPal ? PalCyclesPerLine : NtscCyclesPerLine;
+    public int VisibleLines => IsPal ? PalVisibleLines : NtscVisibleLines;
+    public int TotalLines => IsPal ? PalTotalLines : NtscTotalLines;
+    
+    /// <summary>
+    /// Is this PAL machine (6569) vs NTSC (6567)
+    /// </summary>
+    public bool IsPal { get; private set; } = true;
+    
     public bool IsVBlank => CurrentRasterLine >= VisibleLines;
     public bool IsBadLine => CurrentRasterLine >= 30 && CurrentRasterLine < 50;
-
+    
+    /// <summary>
+    /// VICE-style: Get current cycle within line (0-62 for PAL)
+    /// </summary>
+    public byte CurrentCycle => (byte)(RasterX % CyclesPerLine);
+    
+    /// <summary>
+    /// VICE-style: Is this a badline (raster line 30-49)
+    /// </summary>
+    public bool IsCurrentLineBad => CurrentRasterLine >= 30 && CurrentRasterLine <= 49;
+    
+    /// <summary>
+    /// VICE-style: Frame rate based on timing
+    /// </summary>
+    public double FrameRate => IsPal ? 50.0 : 60.0;
+    
     public byte RasterX;
     public uint CycleCounter;
     
