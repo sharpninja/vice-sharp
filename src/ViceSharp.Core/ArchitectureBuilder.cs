@@ -1,4 +1,5 @@
 using ViceSharp.Abstractions;
+using ViceSharp.RomFetch;
 
 namespace ViceSharp.Core;
 
@@ -8,6 +9,15 @@ namespace ViceSharp.Core;
 /// </summary>
 public sealed class ArchitectureBuilder : IArchitectureBuilder
 {
+    private readonly IRomProvider? _romProvider;
+
+    public ArchitectureBuilder() { }
+
+    public ArchitectureBuilder(IRomProvider romProvider)
+    {
+        _romProvider = romProvider;
+    }
+
     /// <inheritdoc />
     public IMachine Build(IArchitectureDescriptor descriptor)
     {
@@ -16,8 +26,24 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var clock = new SystemClock(descriptor.MasterClockHz);
         var deviceRegistry = new DeviceRegistry();
         
-        // Create and return machine instance
-        return new Machine(descriptor, bus, clock, deviceRegistry);
+        // Create machine instance
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry);
+
+        // Load ROMs if provider is available
+        if (_romProvider != null)
+        {
+            var loader = new C64RomLoader(bus);
+            try
+            {
+                var basic = _romProvider.LoadRom("basic", "C64");
+                var kernal = _romProvider.LoadRom("kernal", "C64");
+                var character = _romProvider.LoadRom("characters", "C64");
+                loader.LoadAllRoms(basic.Span, kernal.Span, character.Span);
+            }
+            catch { /* ROM loading failed - continue without ROMs */ }
+        }
+
+        return machine;
     }
 }
 

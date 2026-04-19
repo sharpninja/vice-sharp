@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
+    <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
