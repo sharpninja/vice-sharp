@@ -1,4 +1,5 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Audio;
 using ViceSharp.RomFetch;
 
 namespace ViceSharp.Core;
@@ -25,6 +26,11 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var bus = new BasicBus();
         var clock = new SystemClock(descriptor.MasterClockHz);
         var deviceRegistry = new DeviceRegistry();
+        
+        // Create and wire SID audio chip at 0xD400
+        var sid = new Sid6581(bus);
+        bus.RegisterDevice(sid);
+        deviceRegistry.Add(sid);
         
         // Create machine instance
         var machine = new Machine(descriptor, bus, clock, deviceRegistry);
