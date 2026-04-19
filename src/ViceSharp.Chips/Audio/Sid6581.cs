@@ -2,7 +2,7 @@ using ViceSharp.Abstractions;
 
 namespace ViceSharp.Chips.Audio;
 
-public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
+public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 {
     public DeviceId Id => new DeviceId(0x0004);
     public string Name => "MOS 6581 SID";
@@ -96,7 +96,10 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // Filter state for VICE-style resonant filter
     private double _filterV0, _filterV1, _filterV2, _filterV3;
     
-    private int ApplyFilter(int voice0, int voice1, int voice2)
+    /// <summary>
+    /// Virtual filter method for SID variant overrides
+    /// </summary>
+    protected virtual int ApplyFilter(int voice0, int voice1, int voice2)
     {
         // Check which voices are routed through filter
         bool voice0Filtered = (_filterControl & 0x01) != 0;
@@ -163,10 +166,10 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private Voice[] _voices = new Voice[3];
 
     // Filter state
-    private int _filterCutoff;
-    private byte _filterResonance;
-    private byte _filterControl;
-    private byte _volume;
+    protected int _filterCutoff;
+    protected byte _filterResonance;
+    protected byte _filterControl;
+    protected byte _volume;
 
     private struct Voice
     {
@@ -195,9 +198,19 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private const byte ENV_SUSTAIN = 3;
     private const byte ENV_RELEASE = 4;
 
-    // ADSR rate tables (cycles per level)
-    private static readonly ushort[] AttackRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
-    private static readonly ushort[] DecayReleaseRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
+    // ADSR rate tables (cycles per level) - virtual for override
+    protected static readonly ushort[] AttackRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
+    protected static readonly ushort[] DecayReleaseRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
+    
+    /// <summary>
+    /// Virtual method to get attack rates (override in subclass)
+    /// </summary>
+    protected virtual ushort[] GetAttackRates() => AttackRates;
+    
+    /// <summary>
+    /// Virtual method to get decay/release rates (override in subclass)
+    /// </summary>
+    protected virtual ushort[] GetDecayReleaseRates() => DecayReleaseRates;
 
     public void Tick()
     {
@@ -223,9 +236,9 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         }
 
         byte targetLevel = (byte)((voice.SustainRelease >> 4) * 17); // Sustain level (0-15 -> 0-255)
-        int attackRate = AttackRates[voice.AttackDecay >> 4];
-        int decayRate = DecayReleaseRates[voice.AttackDecay & 0x0F];
-        int releaseRate = DecayReleaseRates[voice.SustainRelease & 0x0F];
+        int attackRate = GetAttackRates()[voice.AttackDecay >> 4];
+        int decayRate = GetDecayReleaseRates()[voice.AttackDecay & 0x0F];
+        int releaseRate = GetDecayReleaseRates()[voice.SustainRelease & 0x0F];
 
         switch (voice.EnvelopeState)
         {
