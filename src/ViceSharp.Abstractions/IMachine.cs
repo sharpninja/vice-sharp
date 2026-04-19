@@ -24,4 +24,7 @@ public interface IMachine
 
     /// <summary>Executes a single CPU instruction (variable cycle count).</summary>
     void StepInstruction();
+
+    /// <summary>Gets the current full machine state snapshot.</summary>
+    MachineState GetState();
 }

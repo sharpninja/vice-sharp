@@ -1,62 +1,53 @@
-using ViceSharp.Chips;
+// This file is part of ViceSharp.
+// Copyright (C) 2026 ViceSharp Contributors
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+using ViceSharp.Abstractions;
 using ViceSharp.Core;
 
 namespace ViceSharp.Architectures;
 
 /// <summary>
-/// Complete Commodore 64 Machine
+/// C64 Architecture descriptor providing machine configuration.
 /// </summary>
-public sealed class C64Machine
+public sealed class C64Descriptor : IArchitectureDescriptor
 {
-    public ulong Cycles { get; private set; }
-    public bool IsRunning { get; private set; }
+    /// <inheritdoc />
+    public string MachineName { get; } = "Commodore 64 PAL";
 
-    public SystemBus Bus { get; } = new SystemBus();
-    public Mos6510 CPU { get; } = new Mos6510();
-    public VicII VIC { get; } = new VicII();
-    public Mos6526 CIA1 { get; } = new Mos6526();
-    public Mos6526 CIA2 { get; } = new Mos6526();
-    public Mos6581 SID { get; } = new Mos6581();
+    /// <inheritdoc />
+    public long MasterClockHz { get; } = 985248;
 
-    public byte[] ScreenBuffer => VIC.ScreenBuffer;
+    /// <inheritdoc />
+    public VideoStandard VideoStandard { get; } = VideoStandard.Pal;
+}
 
-    public C64Machine()
-    {
-        Reset();
-    }
+/// <summary>
+/// C64 Architecture descriptor for NTSC variant.
+/// </summary>
+public sealed class C64NtscDescriptor : IArchitectureDescriptor
+{
+    /// <inheritdoc />
+    public string MachineName { get; } = "Commodore 64 NTSC";
 
-    public void Reset()
-    {
-        Cycles = 0;
-        IsRunning = false;
+    /// <inheritdoc />
+    public long MasterClockHz { get; } = 1022727;
 
-        Bus.Reset();
-        CPU.Reset();
-        VIC.Reset();
-        CIA1.Reset();
-        CIA2.Reset();
-        SID.Reset();
-    }
-
-    public void Step()
-    {
-        Cycles++;
-
-        CPU.Step();
-        VIC.Step();
-        CIA1.Step();
-        CIA2.Step();
-        SID.Step();
-    }
-
-    public void RunFrame()
-    {
-        // 63 cycles per line * 312 lines = 19656 cycles per PAL frame
-        for (int i = 0; i < 19656; i++)
-        {
-            Step();
-        }
-    }
+    /// <inheritdoc />
+    public VideoStandard VideoStandard { get; } = VideoStandard.Ntsc;
 }
 
 /// <summary>
