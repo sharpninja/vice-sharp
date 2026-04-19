@@ -100,6 +100,39 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// </summary>
     public byte AuxiliaryColor => _registers[0x22];
     
+    // VICE-style: Video mode configuration
+    public enum VideoMode { StandardText, MulticolorText, Bitmap, ExtendedBackground }
+    
+    /// <summary>
+    /// Get current video mode from register $11 bit 4-6
+    /// </summary>
+    public VideoMode GetVideoMode() => (VideoMode)((_registers[0x11] >> 4) & 0x07);
+    
+    /// <summary>
+    /// Get character/color data pointer base (bits 0-3 of register $18)
+    /// </summary>
+    public ushort GetCharacterPointerBase() => (ushort)((_registers[0x18] & 0x0F) << 10);
+    
+    /// <summary>
+    /// Get bitmap pointer base (bit 3 of register $18)
+    /// </summary>
+    public ushort GetBitmapPointerBase() => (ushort)((_registers[0x18] & 0x08) << 10);
+    
+    /// <summary>
+    /// Is 40-column mode (vs 38)
+    /// </summary>
+    public bool Is40ColumnMode => (_registers[0x16] & 0x08) != 0;
+    
+    /// <summary>
+    /// Is multicolor mode
+    /// </summary>
+    public bool IsMulticolorMode => (_registers[0x16] & 0x10) != 0;
+    
+    /// <summary>
+    /// Get screen memory address (10-bit from registers)
+    /// </summary>
+    public ushort GetScreenMemoryAddress() => (ushort)(((int)_registers[0x18] << 6) | (((int)_registers[0x11] & 0x0F) << 10));
+    
     // VICE-style: Sprite state
     private readonly SpriteState[] _sprites = new SpriteState[8];
     
