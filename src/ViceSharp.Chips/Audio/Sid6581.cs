@@ -23,21 +23,43 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     public float GenerateSample()
     {
-        // Generate raw voice outputs
+        // Generate raw voice outputs with sync/ring modulation
         int voiceOutputs0 = 0, voiceOutputs1 = 0, voiceOutputs2 = 0;
+        int prevOutput = 0; // For sync/ring modulation
 
         for (int i = 0; i < 3; i++)
         {
             ref Voice voice = ref _voices[i];
             byte waveform = (byte)(voice.Control & 0x78);
+            bool sync = (voice.Control & 0x02) != 0;
+            bool ringMod = (voice.Control & 0x04) != 0;
             
             int sample = 0;
             uint phase = voice.WaveformAccumulator >> 24;
             uint pulseWidth = (uint)voice.PulseWidth << 16;
             
+            // VICE-style sync: check if previous voice wraps (24-bit accumulator)
+            uint prevPhase = prevOutput > 0 ? 0xFFFFFFu : 0;
+            if (sync && i > 0 && prevPhase == 0)
+            {
+                voice.WaveformAccumulator = 0;
+                phase = 0;
+            }
+            
             if ((waveform & TRIANGLE) != 0)
             {
-                uint tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
+                uint tri;
+                if (ringMod && i > 0)
+                {
+                    // Ring modulation: triangle becomes difference waveform
+                    int modulation = prevOutput;
+                    int triVal = (int)(phase < 128 ? (phase << 1) : ((255 - phase) << 1));
+                    tri = (uint)((triVal - 128 + modulation) & 0xFF);
+                }
+                else
+                {
+                    tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
+                }
                 sample = (int)tri;
             }
             else if ((waveform & SAWTOOTH) != 0)
@@ -57,6 +79,7 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 sample = (int)(voice.Envelope);
             }
             
+            prevOutput = sample;
             int envelopeAdjusted = (sample * voice.Envelope) >> 8;
             
             if (i == 0) voiceOutputs0 = envelopeAdjusted;
