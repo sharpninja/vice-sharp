@@ -129,9 +129,9 @@ src/
 
 ## NEXT PHASE: Iteration 2 - ROM Integration & UI
 
-1. ROM Integration
-   - C64RomLoader exists but not wired to machine
-   - ArchitectureBuilder needs RomProvider injection
+1. ROM Integration ✅
+   - Commodore64.cs has full implementation with Reset(), RunFrame(), StepInstruction()
+   - ArchitectureBuilder wires IRomProvider to C64RomLoader
 
 2. Avalonia UI ✅
    - MainWindow uses ArchitectureBuilder/C64Descriptor
