@@ -10,56 +10,49 @@ ViceSharp is a C# port of VICE (Versatile Commodore Emulator) targeting .NET 10 
 
 ---
 
-## CURRENT STATUS: 2026-04-18
+## CURRENT STATUS: 2026-04-18 (Updated)
 
 ### ✅ COMPLETED: Iteration 0 (Foundations)
 All core infrastructure is complete and building:
 - LockFreePubSub.cs - truly lock-free publish with zero allocations
-- DoubleBufferedMutationQueue.cs - bounded capacity, back pressure
+- LockFreeMutationQueue.cs - bounded capacity, back pressure
 - BasicBus.cs - atomic snapshots, no race conditions
+- ArchitectureBuilder - constructs IMachine from IArchitectureDescriptor
 - IMachine.GetState() implemented
+- DeterministicTraceLogger - VICE-compatible trace output
 - README and roadmap updated
+
+### ✅ COMPLETED: Iteration 1 Fixes (2026-04-18)
+- C64Machine.cs → replaced with C64Descriptor/C64NtscDescriptor (proper IArchitectureDescriptor)
+- DeterministicTraceLogger.cs → removed unused _charBufferIndex field
+- Build passes: 0 errors, 2 warnings (NETSDK1210 SourceGen framework issue)
 
 ### 🚧 IN PROGRESS: Iteration 1 (C64 Bringup)
 
-### ⚠️ BLOCKERS
-The following files have compilation errors that must be fixed:
-1. `src/ViceSharp.Monitor/DeterministicTraceLogger.cs` - Missing GetState() usage
-2. `src/ViceSharp.Architectures/C64Machine.cs` - Interface implementation issues
-
 ### 📋 NEXT STEPS (execute in order, one topic per commit)
 
-1. **Fix C64Machine IMachine interface**
-   - C64Machine must implement IMachine fully
-   - Fix missing interface members: Reset(), RunFrame(), StepInstruction(), GetState()
-   - Use actual BasicBus, DeviceRegistry implementations from Core
-
-2. **Fix DeterministicTraceLogger**
-   - Remove GetState() call or implement properly
-   - Fix unused field warning
-
-3. **Memory Map Layout**
+1. **Memory Map Layout** ⬅️ START HERE
    - Define exact $0000-$FFFF region definitions
    - RAM/ROM/IO/PLA regions with priority ordering
-   - Wire to BasicBus
+   - Wire to BasicBus via IAddressSpace implementations
 
-4. **Mos6510 CPU Implementation**
+2. **Mos6510 CPU Implementation**
    - Start with empty instruction fetch loop
    - Implement all 151 official opcodes
    - Then 105 unofficial opcodes
 
-5. **VicII Raster Engine**
+3. **VicII Raster Engine**
    - 63 cycle per line timing
    - 312 lines per frame (PAL)
    - Bad line detection
    - IRQ generation
 
-6. **CIA Timers**
+4. **CIA Timers**
    - Timer A/B countdown
    - TOD clock
    - Keyboard matrix
 
-7. **First Boot Test**
+5. **First Boot Test**
    - Load KERNAL/BASIC ROMs
    - Execute from reset vector
    - Target: reach $E55B BASIC warm start
