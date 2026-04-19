@@ -42,14 +42,64 @@ public sealed class C64JoystickPort : IInputSource
     }
 
     /// <summary>
-    /// Read joystick state for CIA port
+    /// Read joystick state for CIA port (active low, VICE-style)
     /// </summary>
     public byte ReadPortState()
     {
         // C64 joystick is active low: 0 = pressed
         return (byte)((byte)~(byte)State & 0x1F);
     }
-
+    
+    // VICE-style: POT X/Y for paddles (255 = not pressed)
+    private byte _potX = 255;
+    private byte _potY = 255;
+    
+    /// <summary>
+    /// Read POT X value (paddle 1, VICE-style)
+    /// </summary>
+    public byte ReadPotX() => _potX;
+    
+    /// <summary>
+    /// Read POT Y value (paddle 2, VICE-style)
+    /// </summary>
+    public byte ReadPotY() => _potY;
+    
+    /// <summary>
+    /// Set POT X value (0-255, VICE-style)
+    /// </summary>
+    public void SetPotX(byte value) => _potX = value;
+    
+    /// <summary>
+    /// Set POT Y value (0-255, VICE-style)
+    /// </summary>
+    public void SetPotY(byte value) => _potY = value;
+    
+    // VICE-style: Automatic fire mode
+    private int _autoFireCounter;
+    private bool _autoFireEnabled;
+    
+    /// <summary>
+    /// Enable VICE-style automatic fire
+    /// </summary>
+    public void SetAutoFire(bool enabled) => _autoFireEnabled = enabled;
+    
+    /// <summary>
+    /// Update auto fire counter (call each frame)
+    /// </summary>
+    public void UpdateAutoFire()
+    {
+        if (_autoFireEnabled)
+        {
+            _autoFireCounter++;
+            // Toggle fire every 10 frames (~6 Hz)
+            if (_autoFireCounter >= 10)
+            {
+                _autoFireCounter = 0;
+                State ^= JoystickButtons.Fire;
+            }
+        }
+    }
+    
     public bool Up => (State & JoystickButtons.Up) != 0;
     public bool Down => (State & JoystickButtons.Down) != 0;
     public bool Left => (State & JoystickButtons.Left) != 0;
