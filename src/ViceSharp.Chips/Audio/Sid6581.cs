@@ -290,7 +290,20 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     public byte Read(ushort address)
     {
         int register = address & 0x1F;
-        return _registers[register];
+        
+        // VICE-style: Read back current values (not just registers)
+        switch (register)
+        {
+            // Voice oscillator read (for voice 3 or combined)
+            case 0x19: // Voice 3 frequency low / OSC3
+                return (byte)(_voices[2].WaveformAccumulator >> 24);
+            case 0x1A: // Voice 3 frequency high
+                return (byte)((_voices[2].WaveformAccumulator >> 16) & 0xFF);
+            case 0x1B: // Voice 3 envelope
+                return _voices[2].Envelope;
+            default:
+                return _registers[register];
+        }
     }
 
     public void Write(ushort address, byte value)
