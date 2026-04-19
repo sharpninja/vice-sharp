@@ -103,6 +103,17 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         _bus = bus;
     }
 
+    // ADSR state machine
+    private const byte ENV_IDLE = 0;
+    private const byte ENV_ATTACK = 1;
+    private const byte ENV_DECAY = 2;
+    private const byte ENV_SUSTAIN = 3;
+    private const byte ENV_RELEASE = 4;
+
+    // ADSR rate tables (cycles per level)
+    private static readonly ushort[] AttackRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
+    private static readonly ushort[] DecayReleaseRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
+
     public void Tick()
     {
         for (int i = 0; i < 3; i++)
@@ -112,20 +123,72 @@ public sealed partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // Waveform generation
             voice.WaveformAccumulator += voice.Frequency;
 
-            // Envelope generation
-            if (voice.Gate)
-            {
-                // Attack phase
-                if (voice.Envelope < 0xFF)
+            // ADSR envelope generation
+            ProcessEnvelope(ref voice);
+        }
+    }
+
+    private void ProcessEnvelope(ref Voice voice)
+    {
+        // Gate on: start attack or resume
+        if (voice.Gate && voice.EnvelopeState == ENV_IDLE)
+        {
+            voice.EnvelopeState = ENV_ATTACK;
+            voice.Envelope = 0;
+        }
+
+        byte targetLevel = (byte)((voice.SustainRelease >> 4) * 17); // Sustain level (0-15 -> 0-255)
+        int attackRate = AttackRates[voice.AttackDecay >> 4];
+        int decayRate = DecayReleaseRates[voice.AttackDecay & 0x0F];
+        int releaseRate = DecayReleaseRates[voice.SustainRelease & 0x0F];
+
+        switch (voice.EnvelopeState)
+        {
+            case ENV_ATTACK:
+                if (voice.Envelope < 255)
                 {
-                    voice.Envelope += (byte)(voice.AttackDecay >> 4);
+                    voice.Envelope += (byte)Math.Min(255, (256 * 256) / attackRate);
+                    if (voice.Envelope >= 255)
+                    {
+                        voice.Envelope = 255;
+                        voice.EnvelopeState = ENV_DECAY;
+                    }
                 }
-            }
-            else
-            {
-                // Release phase
-                voice.Envelope -= (byte)(voice.SustainRelease & 0x0F);
-            }
+                break;
+
+            case ENV_DECAY:
+                if (voice.Envelope > targetLevel)
+                {
+                    voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / decayRate);
+                    if (voice.Envelope <= targetLevel)
+                    {
+                        voice.Envelope = targetLevel;
+                        voice.EnvelopeState = ENV_SUSTAIN;
+                    }
+                }
+                break;
+
+            case ENV_SUSTAIN:
+                // Sustain holds level until gate off
+                break;
+
+            case ENV_RELEASE:
+                if (voice.Envelope > 0)
+                {
+                    voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / releaseRate);
+                    if (voice.Envelope <= 0)
+                    {
+                        voice.Envelope = 0;
+                        voice.EnvelopeState = ENV_IDLE;
+                    }
+                }
+                break;
+        }
+
+        // Gate off: start release
+        if (!voice.Gate && voice.EnvelopeState != ENV_IDLE && voice.EnvelopeState != ENV_RELEASE)
+        {
+            voice.EnvelopeState = ENV_RELEASE;
         }
     }
 
