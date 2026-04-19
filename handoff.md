@@ -140,4 +140,6 @@ src/
 ## PROGRESS (2026-04-19)
 - Added IMachine.Reset() to interface
 - Added IClock.Reset() to interface
+- Added IRomProvider interface
+- ArchitectureBuilder wires IRomProvider to C64RomLoader
 - Build: 0 errors
