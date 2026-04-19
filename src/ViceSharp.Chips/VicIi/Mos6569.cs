@@ -30,6 +30,46 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public byte RasterX;
     public uint CycleCounter;
     
+    // VICE-style: Border configuration
+    public enum BorderSide { None, Normal, Extended }
+    
+    /// <summary>
+    /// Check if current position is in border area (VICE-style)
+    /// </summary>
+    public BorderSide GetHorizontalBorder()
+    {
+        // VICE-style: 40-column mode boundaries
+        if (RasterX < 24 || RasterX >= 56 + 40) return BorderSide.Extended;
+        if (RasterX < 31 || RasterX >= 56 + 31) return BorderSide.Normal;
+        return BorderSide.None;
+    }
+    
+    /// <summary>
+    /// Check if current position is in vertical border area
+    /// </summary>
+    public BorderSide GetVerticalBorder()
+    {
+        // VICE-style: 25-row mode boundaries
+        if (CurrentRasterLine < 51 || CurrentRasterLine >= 251) return BorderSide.Extended;
+        if (CurrentRasterLine < 55 || CurrentRasterLine >= 247) return BorderSide.Normal;
+        return BorderSide.None;
+    }
+    
+    /// <summary>
+    /// Get border color from register $20
+    /// </summary>
+    public byte BorderColor => _registers[0x20];
+    
+    /// <summary>
+    /// Get background color from register $21
+    /// </summary>
+    public byte BackgroundColor => _registers[0x21];
+    
+    /// <summary>
+    /// Get auxiliary color from register $22
+    /// </summary>
+    public byte AuxiliaryColor => _registers[0x22];
+    
     // VICE-style: Sprite state
     private readonly SpriteState[] _sprites = new SpriteState[8];
     
