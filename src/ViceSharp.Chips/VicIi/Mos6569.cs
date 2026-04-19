@@ -25,6 +25,7 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public int VisibleLines => 200;
     public int TotalLines => 312;
     public bool IsVBlank => CurrentRasterLine >= VisibleLines;
+    public bool IsBadLine => CurrentRasterLine >= 30 && CurrentRasterLine < 50;
 
     public byte RasterX;
     public uint CycleCounter;
@@ -46,6 +47,18 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         CycleCounter++;
         RasterX++;
 
+        // VICE-style raster interrupt (at cycle 58 of line)
+        if (RasterX == 58)
+        {
+            ushort rasterIrq = (ushort)(((_registers[0x11] & 0x80) << 1) | _registers[0x12]);
+            if (CurrentRasterLine == rasterIrq && (_registers[0x1A] & 0x01) != 0)
+            {
+                _registers[0x19] |= 0x01;
+                if ((_registers[0x1A] & 0x80) != 0)
+                    _irqLine.Assert(this);
+            }
+        }
+
         if (RasterX >= CyclesPerLine)
         {
             RasterX = 0;
@@ -54,14 +67,6 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
             if (CurrentRasterLine >= TotalLines)
             {
                 CurrentRasterLine = 0;
-            }
-
-            // Raster interrupt compare
-            ushort rasterIrq = (ushort)(((_registers[0x11] & 0x80) << 1) | _registers[0x12]);
-            if (CurrentRasterLine == rasterIrq && (_registers[0x1A] & 0x01) != 0)
-            {
-                _registers[0x19] |= 0x01;
-                _irqLine.Assert(this);
             }
         }
 
