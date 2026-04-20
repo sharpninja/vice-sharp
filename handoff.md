@@ -8,7 +8,10 @@
 - ROM loading: Direct to RAM
 - Tests: 4 CPU interrupt tests passing
 
-### Recent Commits
+### Build: 0 errors, 0 warnings
+### Tests: 28 passed, 8 skipped (VICE-dependent)
+
+### Commits
 ```
 78b5db6 test: add CpuInterruptTests for Irq/Nmi validation
 a9a87aa feat(core): connect CPU IRQ to SystemClock interrupt handling
@@ -17,14 +20,9 @@ a9a87aa feat(core): connect CPU IRQ to SystemClock interrupt handling
 5437fe0 fix(core): initialize screen RAM to spaces
 ```
 
-### Build: 0 errors, 0 warnings
-### Tests: 4 passed, 0 failed
-
-### Push Status
-- origin: Synced
-- github: Synced
+### Push Status: Synced to origin and github
 
 ### Next Steps
-1. Test C64 boot to see BASIC prompt
+1. Verify BASIC "READY." appears on boot
 2. Add more chip validation tests
 3. Implement CIA keyboard scanning
