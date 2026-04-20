@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Threading;
 using ViceSharp.Abstractions;
 
 namespace ViceSharp.Avalonia;
@@ -27,6 +26,23 @@ public sealed class VideoSurface : Control
             new Vector(96, 96),
             PixelFormat.Bgra8888,
             AlphaFormat.Opaque);
+        
+        // Fill with blue initially so we can see something
+        FillWithBlue();
+    }
+
+    private void FillWithBlue()
+    {
+        using var fb = _bitmap.Lock();
+        unsafe
+        {
+            var dst = (uint*)fb.Address;
+            var count = 384 * 272;
+            for (int i = 0; i < count; i++)
+            {
+                dst[i] = 0xFF808000; // Blue in BGRA format (0xFF, B=128, G=128, R=0)
+            }
+        }
     }
 
     private void OnFrameCompleted(object? sender, EventArgs e)
@@ -40,7 +56,7 @@ public sealed class VideoSurface : Control
             {
                 var src = _vic.FrameBuffer;
                 var dst = (byte*)fb.Address;
-                var size = _bitmap.PixelSize.Width * _bitmap.PixelSize.Height * 4;
+                var size = 384 * 272 * 4;
 
                 if (src.Length >= size)
                 {
