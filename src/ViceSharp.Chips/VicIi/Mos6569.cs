@@ -30,20 +30,26 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public const int NtscVisibleLines = 262;
     public const int NtscTotalLines = 263;
     
-    public int CyclesPerLine => IsPal ? PalCyclesPerLine : NtscCyclesPerLine;
-    public int VisibleLines => IsPal ? PalVisibleLines : NtscVisibleLines;
-    public int TotalLines => IsPal ? PalTotalLines : NtscTotalLines;
+    /// <summary>
+    /// TV system type for VIC-II timing
+    /// </summary>
+    public enum TvSystem { PAL, NTSC, PALN, SECAM }
+    
+    /// <summary>
+    /// Current TV system
+    /// </summary>
+    public virtual TvSystem System { get; protected set; } = TvSystem.PAL;
     
     /// <summary>
     /// Is this PAL machine (6569) vs NTSC (6567)
     /// </summary>
-    public virtual bool IsPal { get; protected set; } = true;
+    public bool IsPal => System == TvSystem.PAL;
     
     public bool IsVBlank => CurrentRasterLine >= VisibleLines;
     public bool IsBadLine => CurrentRasterLine >= 30 && CurrentRasterLine < 50;
     
     /// <summary>
-    /// VICE-style: Get current cycle within line (0-62 for PAL)
+    /// VICE-style: Get current cycle within line
     /// </summary>
     public byte CurrentCycle => (byte)(RasterX % CyclesPerLine);
     
@@ -53,9 +59,45 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public bool IsCurrentLineBad => CurrentRasterLine >= 30 && CurrentRasterLine <= 49;
     
     /// <summary>
-    /// VICE-style: Frame rate based on timing
+    /// VICE-style: Frame rate based on TV system
     /// </summary>
-    public double FrameRate => IsPal ? 50.0 : 60.0;
+    public double FrameRate => System switch
+    {
+        TvSystem.PAL => 50.0,
+        TvSystem.NTSC => 60.0,
+        TvSystem.PALN => 50.0,
+        _ => 50.0
+    };
+    
+    /// <summary>
+    /// VICE-style: Cycles per line based on TV system
+    /// </summary>
+    public int CyclesPerLine => System switch
+    {
+        TvSystem.PAL or TvSystem.PALN => PalCyclesPerLine,
+        TvSystem.NTSC => NtscCyclesPerLine,
+        _ => PalCyclesPerLine
+    };
+    
+    /// <summary>
+    /// VICE-style: Visible lines based on TV system
+    /// </summary>
+    public int VisibleLines => System switch
+    {
+        TvSystem.PAL or TvSystem.PALN => PalVisibleLines,
+        TvSystem.NTSC => NtscVisibleLines,
+        _ => PalVisibleLines
+    };
+    
+    /// <summary>
+    /// VICE-style: Total lines based on TV system
+    /// </summary>
+    public int TotalLines => System switch
+    {
+        TvSystem.PAL or TvSystem.PALN => PalTotalLines,
+        TvSystem.NTSC => NtscTotalLines,
+        _ => PalTotalLines
+    };
     
     public byte RasterX;
     public uint CycleCounter;
