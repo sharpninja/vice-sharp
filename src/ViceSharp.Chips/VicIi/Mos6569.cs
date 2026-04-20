@@ -64,6 +64,32 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public bool IsVerticalBlankArea => CurrentRasterLine < 51 || CurrentRasterLine >= 251;
     
     /// <summary>
+    /// VICE-style: DMA stealing state
+    /// On badlines, VIC-II steals 40-63 cycles during display window for character data fetch
+    /// </summary>
+    public bool IsDmaStealing => IsBadLine && !IsVerticalBlankArea && RasterX >= 40 && RasterX < CyclesPerLine;
+    
+    /// <summary>
+    /// Check if VIC-II is currently accessing video matrix (cycle 14-54 of badline)
+    /// </summary>
+    public bool IsVideoMatrixAccess => IsBadLine && RasterX >= 14 && RasterX < 54;
+    
+    /// <summary>
+    /// Check if VIC-II is currently accessing character generator (cycle 54-64 of badline)
+    /// </summary>
+    public bool IsCharacterAccess => IsBadLine && RasterX >= 54 && RasterX < CyclesPerLine;
+    
+    /// <summary>
+    /// VICE-style: Screen memory address from registers
+    /// </summary>
+    public ushort ScreenMemoryBase => (ushort)(((int)_registers[0x18] << 6) | (((int)_registers[0x11] & 0x0F) << 10));
+    
+    /// <summary>
+    /// VICE-style: Character generator base address
+    /// </summary>
+    public ushort CharacterBase => (ushort)((_registers[0x18] & 0x0E) << 10);
+    
+    /// <summary>
     /// VICE-style: Get current cycle within line
     /// </summary>
     public byte CurrentCycle => (byte)(RasterX % CyclesPerLine);
