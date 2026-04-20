@@ -460,8 +460,15 @@ partial class Mos6502
             case 0xE1: SBC(_bus.Read(IndirectX())); break;
             case 0xF1: SBC(_bus.Read(IndirectY())); break;
 
+            // KIL (CPU freeze)
+            case 0x02: case 0x12: case 0x22: case 0x32: case 0x42: case 0x52: case 0x62: case 0x72:
+            case 0x92: case 0xB2: case 0xD2: case 0xF2: break;
+            
+            // LAX (load A and X)
+            case 0xAB: A = X = _bus.Read(Immediate()); UpdateNZ(A); break;
+            
             default:
-                // Unimplemented opcode
+                // Unimplemented opcode - read to consume cycle
                 break;
         }
     }
