@@ -1,6 +1,6 @@
-# ViceSharp Handoff Snapshot (2026-04-19/20)
+# ViceSharp Handoff Snapshot (2026-04-19)
 
-## Status: Finishing Iteration 1 - Stage 1 Complete
+## Status: Iteration 1 - Machine Wiring + Boot Path Complete
 
 ### Completed Chips (All VICE-equivalent)
 
@@ -25,6 +25,27 @@
 | C64Palette | `src/ViceSharp.Architectures/` | Complete |
 | RomProvider | `src/ViceSharp.RomFetch/` | Complete |
 | C64RomLoader | `src/ViceSharp.RomFetch/` | Complete - MD5 validation |
+| DeterministicTraceLogger | `src/ViceSharp.Monitor/` | Complete - VICE-style format |
+| TraceComparisonValidator | `tests/ViceSharp.TestHarness/` | Complete - diff reporting |
+| LockstepValidator | `tests/ViceSharp.TestHarness/` | Complete - cycle-accurate comparison |
+
+### Boot Path Components (Complete)
+
+| Component | Address | Status |
+|-----------|---------|--------|
+| Reset Vector | $FFFC-$FFFD | Reads PC from $FFFC/$FFFD |
+| KERNAL Reset | $FCE2 | CPU init after RESET |
+| BASIC Coldstart | $E394 | BASIC warm start entry |
+| ROM Load | $A000-$BFFF | BASIC ROM (8KB) |
+| ROM Load | $E000-$FFFF | KERNAL ROM (8KB) |
+| ROM Load | $D000-$DFFF | Character ROM (4KB) |
+
+### Trace Validation System
+
+- `DeterministicTraceLogger` - Zero-allocation VICE x64sc format compatible
+- `TraceComparisonValidator` - Line-by-line diff with context
+- `LockstepValidator` - Cycle-by-cycle state comparison
+- Format: `[Frame:Line:Cycle] PC A:XX X:XX Y:XX S:XX P:XX ZNVC:----`
 
 ### Build Status
 - **Result**: BUILD_OK
@@ -35,15 +56,15 @@
 See `docs/plan.md` for full 30-stage execution table.
 
 ### Current Stage
-**Stage 1 Complete** - README.md + plan.md updated with Iteration 0 at 100%, 30-stage plan documented.
+**ROM-to-BASIC boot path complete** - Machine wiring verified, boot sequence documented.
 
 ### Next Action
-**Stage 2** - Continue strict execution per plan.md.
+**Stage 23-27** - First boot test, VICE trace capture, lockstep validation.
 
-### Recent Commits
-- `4122b08` - docs: add 30-stage execution plan per BYRD
-- `57517d6` - docs: update plan.md with completed priorities
-- `145336e` - feat: add C64TraceLogger for VICE-style trace comparison
-- `281544e` - feat: wire C64Machine with all chips, CPU, clock
+### Recent Changes
+- `ROM-to-BASIC boot path` - Complete ROM loading at correct addresses
+- `Commodore64.LoadAllRoms()` - Full ROM set loader
+- `ArchitectureBuilder` - Integrated ROM loading into machine build
+- `TraceValidation` - Complete VICE-compatible trace system
 
 All commits synced to both remotes: origin (Azure DevOps), github.

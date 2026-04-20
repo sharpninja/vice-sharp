@@ -72,9 +72,9 @@ public class RomProvider : IRomProvider
 
     private static readonly Dictionary<string, RomEntry> RomDatabase = new()
     {
-        ["basic.901226-01.bin"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/basic.901226-01.bin", Convert.FromHexString("57AF4E93E79D32E1A74E2D7E2B1F4733A8C1D7E69C3B7E38E6C7E0A90F5B4A21")),
-        ["kernal.901227-03.bin"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/kernal.901227-03.bin", Convert.FromHexString("1D503D283A7F6C6E3E8A2D5B2E9F9A7B3C5D7E9F1A2B3C4D5E6F7A8B9C0D1E2F")),
-        ["characters.901225-01.bin"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/characters.901225-01.bin", Convert.FromHexString("F32CA8C7E5D1B2A63F7E2D5C1B0A9F8E7D6C5B4A39281706F5E4D3C2B1A0F9E8")),
+        ["basic"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/basic.901226-01.bin", Convert.FromHexString("57AF4E93E79D32E1A74E2D7E2B1F4733A8C1D7E69C3B7E38E6C7E0A90F5B4A21")),
+        ["kernal"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/kernal.901227-03.bin", Convert.FromHexString("1D503D283A7F6C6E3E8A2D5B2E9F9A7B3C5D7E9F1A2B3C4D5E6F7A8B9C0D1E2F")),
+        ["characters"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/characters.901225-01.bin", Convert.FromHexString("F32CA8C7E5D1B2A63F7E2D5C1B0A9F8E7D6C5B4A39281706F5E4D3C2B1A0F9E8")),
     };
 
     private sealed record RomEntry(string Url, byte[] Sha256);

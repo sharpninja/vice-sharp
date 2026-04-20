@@ -101,9 +101,79 @@ public sealed class Commodore64 : IMachine
         }
     }
 
-    public void LoadRom(string path, ushort address)
+    /// <summary>
+    /// Loads a ROM file into memory at the specified address.
+    /// </summary>
+    /// <param name="path">Path to the ROM file</param>
+    /// <param name="address">Target address in memory</param>
+    /// <returns>True if ROM was loaded successfully</returns>
+    public bool LoadRom(string path, ushort address)
     {
-        // ROM loading implementation
+        if (!File.Exists(path))
+            return false;
+
+        var data = File.ReadAllBytes(path);
+        for (int i = 0; i < data.Length; i++)
+        {
+            _bus.Write((ushort)(address + i), data[i]);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Loads BASIC ROM at $A000 (8KB)
+    /// </summary>
+    public bool LoadBasicRom(ReadOnlySpan<byte> data)
+    {
+        if (data.Length != 0x2000) return false;
+        data.CopyTo(_romBasic);
+        for (int i = 0; i < 0x2000; i++)
+        {
+            _bus.Write((ushort)(0xA000 + i), _romBasic[i]);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Loads KERNAL ROM at $E000 (8KB)
+    /// </summary>
+    public bool LoadKernalRom(ReadOnlySpan<byte> data)
+    {
+        if (data.Length != 0x2000) return false;
+        data.CopyTo(_romKernal);
+        for (int i = 0; i < 0x2000; i++)
+        {
+            _bus.Write((ushort)(0xE000 + i), _romKernal[i]);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Loads Character ROM at $D000 (4KB)
+    /// </summary>
+    public bool LoadCharacterRom(ReadOnlySpan<byte> data)
+    {
+        if (data.Length != 0x1000) return false;
+        data.CopyTo(_romChar);
+        for (int i = 0; i < 0x1000; i++)
+        {
+            _bus.Write((ushort)(0xD000 + i), _romChar[i]);
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Loads all C64 ROMs at once.
+    /// Standard C64 memory layout after ROM load:
+    /// - $0000-$9FFF: RAM (64KB)
+    /// - $A000-$BFFF: BASIC ROM (8KB)
+    /// - $C000-$CFFF: RAM (4KB upper expansion)
+    /// - $D000-$DFFF: I/O or Character ROM (4KB)
+    /// - $E000-$FFFF: KERNAL ROM (8KB)
+    /// </summary>
+    public bool LoadAllRoms(ReadOnlySpan<byte> basic, ReadOnlySpan<byte> kernal, ReadOnlySpan<byte> character)
+    {
+        return LoadBasicRom(basic) && LoadKernalRom(kernal) && LoadCharacterRom(character);
     }
 
     public IReadOnlyList<IDevice> GetDevices()

@@ -15,7 +15,23 @@ public interface IArchitectureDescriptor
 
     /// <summary>Video standard (PAL or NTSC).</summary>
     VideoStandard VideoStandard { get; }
+    
+    /// <summary>Device descriptors for this architecture.</summary>
+    IReadOnlyList<DeviceDescriptor> Devices { get; }
+    
+    /// <summary>Required ROM set for this architecture.</summary>
+    IRomSet? RequiredRoms { get; }
 }
+
+/// <summary>
+/// Describes a device required by an architecture.
+/// </summary>
+public readonly record struct DeviceDescriptor(
+    string Name,
+    DeviceId Id,
+    DeviceRole Role,
+    ushort BaseAddress,
+    int Size);
 
 /// <summary>
 /// Video output standard.
