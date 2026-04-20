@@ -21,24 +21,24 @@ public sealed class VideoRenderer
     private int _currentLine;
     private int _cycleInLine;
 
-    // C64 palette in BGRA format
+    // C64 palette in BGRA format (byte order: B, G, R, A)
     private static readonly uint[] Palette = new uint[16]
     {
         0xFF000000, // 0: Black
-        0xFFFFFFFF, // 1: White
-        0xFF2B2BD5, // 2: Red
-        0xFFE8CED8, // 3: Cyan
-        0xFFBE3C8E, // 4: Purple
-        0xFF2BAC4D, // 5: Green
-        0xFFC82C28, // 6: Blue
-        0xFF71F12E, // 7: Yellow
-        0xFF298E4B, // 8: Orange
-        0xFF006B6B, // 9: Brown
-        0xFFCD6B6B, // 10: Light Red
+        0xFFFFFFFF, // 1: White  
+        0xFFD52B2B, // 2: Red
+        0xFFD8CEE8, // 3: Cyan
+        0xFF8E3CBE, // 4: Purple
+        0xFF4DAC2B, // 5: Green
+        0xFF282CC8, // 6: Blue
+        0xFF2EF171, // 7: Yellow
+        0xFF4B8E29, // 8: Orange
+        0xFF6B6B00, // 9: Brown
+        0xFF6B6BCD, // 10: Light Red
         0xFF4B4B4B, // 11: Dark Gray
         0xFF6B6B6B, // 12: Medium Gray
         0xFF5FD85F, // 13: Light Green
-        0xFF6B5FD8, // 14: Light Blue
+        0xFFD85F6B, // 14: Light Blue
         0xFF9A9A9A, // 15: Light Gray
     };
 
