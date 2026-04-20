@@ -463,7 +463,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     {
         _bus = bus;
         _irqLine = irqLine;
-        _renderer = new VideoRenderer(this);
+        _renderer = new VideoRenderer(this, _bus);
     }
 
     /// <inheritdoc />

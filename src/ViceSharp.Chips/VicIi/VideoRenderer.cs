@@ -17,12 +17,35 @@ public sealed class VideoRenderer
     public readonly byte[] FrameBuffer = new byte[ScreenWidth * ScreenHeight * 4];
 
     private readonly Mos6569 _vic;
+    private readonly IBus _bus;
     private int _currentLine;
     private int _cycleInLine;
 
-    public VideoRenderer(Mos6569 vic)
+    // C64 palette in BGRA format
+    private static readonly uint[] Palette = new uint[16]
+    {
+        0xFF000000, // 0: Black
+        0xFFFFFFFF, // 1: White
+        0xFF2B2BD5, // 2: Red
+        0xFFE8CED8, // 3: Cyan
+        0xFFBE3C8E, // 4: Purple
+        0xFF2BAC4D, // 5: Green
+        0xFFC82C28, // 6: Blue
+        0xFF71F12E, // 7: Yellow
+        0xFF298E4B, // 8: Orange
+        0xFF006B6B, // 9: Brown
+        0xFFCD6B6B, // 10: Light Red
+        0xFF4B4B4B, // 11: Dark Gray
+        0xFF6B6B6B, // 12: Medium Gray
+        0xFF5FD85F, // 13: Light Green
+        0xFF6B5FD8, // 14: Light Blue
+        0xFF9A9A9A, // 15: Light Gray
+    };
+
+    public VideoRenderer(Mos6569 vic, IBus bus)
     {
         _vic = vic;
+        _bus = bus;
     }
 
     /// <summary>
@@ -50,7 +73,6 @@ public sealed class VideoRenderer
     {
         if (_currentLine < PalVisibleLines)
         {
-            // Render single scanline
             int y = _currentLine;
             Span<byte> line = FrameBuffer.AsSpan(y * ScreenWidth * 4, ScreenWidth * 4);
             RenderLine(line, y);
@@ -59,15 +81,91 @@ public sealed class VideoRenderer
 
     private void RenderLine(Span<byte> lineBuffer, int lineNumber)
     {
-        // Border color
-        byte borderColor = 6;
+        // Get border and background colors from VIC registers
+        byte borderColor = _vic.BorderColor;
+        byte backgroundColor = _vic.BackgroundColor;
+        
+        uint borderPixel = Palette[borderColor & 0x0F];
+        uint bgPixel = Palette[backgroundColor & 0x0F];
+
+        // Calculate which raster line within a character cell (0-7)
+        int charRow = lineNumber % 8;
+        
+        // Calculate if we're in visible vertical area (lines 51-250 are visible)
+        int visLine = lineNumber - 51;
+        if (visLine < 0 || visLine >= 200)
+        {
+            // Outside visible area - draw border
+            for (int x = 0; x < ScreenWidth; x++)
+            {
+                int offset = x * 4;
+                lineBuffer[offset] = (byte)(borderPixel >> 0);
+                lineBuffer[offset + 1] = (byte)(borderPixel >> 8);
+                lineBuffer[offset + 2] = (byte)(borderPixel >> 16);
+                lineBuffer[offset + 3] = 0xFF;
+            }
+            return;
+        }
 
         for (int x = 0; x < ScreenWidth; x++)
         {
             int offset = x * 4;
-            lineBuffer[offset + 0] = C64Palette.Rgb[borderColor, 2];
-            lineBuffer[offset + 1] = C64Palette.Rgb[borderColor, 1];
-            lineBuffer[offset + 2] = C64Palette.Rgb[borderColor, 0];
+            uint pixel;
+            
+            // Check if we're in the side border (left 24 pixels, right 24 pixels)
+            if (x < 24 || x >= 360)
+            {
+                // Side border
+                pixel = borderPixel;
+            }
+            else
+            {
+                // Inside the screen area (320 pixels wide)
+                int screenX = x - 24;
+                
+                // Check if in main screen area (40 chars * 8 pixels)
+                if (screenX < 320)
+                {
+                    // Main screen area - render characters
+                    int col = screenX / 8;
+                    int charX = screenX % 8;
+                    
+                    // Get screen memory index (40 chars per row)
+                    int screenIndex = visLine / 8 * 40 + col;
+                    
+                    // Read character code from screen RAM at $0400
+                    ushort screenAddr = (ushort)(0x0400 + screenIndex);
+                    byte charCode = _bus.Read(screenAddr);
+                    
+                    // Read color from color RAM at $D800
+                    ushort colorAddr = (ushort)(0xD800 + screenIndex);
+                    byte colorCode = _bus.Read(colorAddr);
+                    
+                    // Character generator base is at $D000, each char is 8 bytes
+                    ushort charAddr = (ushort)(0xD000 + charCode * 8 + charRow);
+                    byte charData = _bus.Read(charAddr);
+                    
+                    // Get bit position (bit 7 is leftmost pixel)
+                    int bitPos = 7 - charX;
+                    byte bit = (byte)((charData >> bitPos) & 0x01);
+                    
+                    // Foreground color (4-bit, convert to 0-15)
+                    byte fgColor = (byte)(colorCode & 0x0F);
+                    
+                    // Select pixel: foreground or background
+                    uint fgPixel = Palette[fgColor];
+                    pixel = bit != 0 ? fgPixel : bgPixel;
+                }
+                else
+                {
+                    // Right extended border
+                    pixel = borderPixel;
+                }
+            }
+            
+            lineBuffer[offset] = (byte)(pixel >> 0);
+            lineBuffer[offset + 1] = (byte)(pixel >> 8);
+            lineBuffer[offset + 2] = (byte)(pixel >> 16);
             lineBuffer[offset + 3] = 0xFF;
         }
     }
@@ -80,31 +178,4 @@ public sealed class VideoRenderer
         _cycleInLine = 0;
         Array.Clear(FrameBuffer);
     }
-}
-
-/// <summary>
-/// Standard VIC-II color palette
-/// </summary>
-public static class C64Palette
-{
-    // Index, Red, Green, Blue
-    public static readonly byte[,] Rgb = new byte[16, 3]
-    {
-        { 0x00, 0x00, 0x00 }, // 0: Black
-        { 0xFF, 0xFF, 0xFF }, // 1: White
-        { 0x81, 0x33, 0x38 }, // 2: Red
-        { 0x75, 0xCE, 0xC8 }, // 3: Cyan
-        { 0x8E, 0x3C, 0x97 }, // 4: Purple
-        { 0x56, 0xAC, 0x4D }, // 5: Green
-        { 0x2E, 0x2C, 0x9B }, // 6: Blue
-        { 0xED, 0xF1, 0x71 }, // 7: Yellow
-        { 0x8E, 0x50, 0x29 }, // 8: Orange
-        { 0x55, 0x38, 0x00 }, // 9: Brown
-        { 0xC4, 0x6C, 0x71 }, // A: Light Red
-        { 0x4A, 0x4A, 0x4A }, // B: Dark Grey
-        { 0x7B, 0x7B, 0x7B }, // C: Medium Grey
-        { 0xA9, 0xFF, 0x9F }, // D: Light Green
-        { 0x70, 0x6D, 0xEB }, // E: Light Blue
-        { 0xB2, 0xB2, 0xB2 }  // F: Light Grey
-    };
 }
