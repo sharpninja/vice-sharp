@@ -56,4 +56,16 @@ public sealed class SimpleRam : IAddressSpace
         _memory[0xFFFC] = 0xE2;
         _memory[0xFFFD] = 0xFC;
     }
+
+    /// <summary>
+    /// Load ROM data directly into memory at specified address.
+    /// Used for loading BASIC, KERNAL, and character ROMs.
+    /// </summary>
+    public void LoadRom(ushort startAddress, ReadOnlySpan<byte> data)
+    {
+        for (int i = 0; i < data.Length; i++)
+        {
+            _memory[startAddress + i] = data[i];
+        }
+    }
 }

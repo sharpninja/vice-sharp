@@ -73,28 +73,23 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         {
             try
             {
+                // Load ROMs directly into RAM memory (bypass bus to avoid I/O conflicts)
+                // ROM data is stored in RAM and paged in by the PLA when needed
+
                 var basic = _romProvider.LoadRom("basic", "C64");
-                for (int i = 0; i < basic.Length; i++)
-                {
-                    bus.Write((ushort)(0xA000 + i), basic.Span[i]);
-                }
+                ram.LoadRom(0xA000, basic.Span);
 
                 var kernal = _romProvider.LoadRom("kernal", "C64");
-                for (int i = 0; i < kernal.Length; i++)
-                {
-                    bus.Write((ushort)(0xE000 + i), kernal.Span[i]);
-                }
+                ram.LoadRom(0xE000, kernal.Span);
 
                 var character = _romProvider.LoadRom("characters", "C64");
-                for (int i = 0; i < character.Length; i++)
-                {
-                    bus.Write((ushort)(0xD000 + i), character.Span[i]);
-                }
+                ram.LoadRom(0xD000, character.Span);
 
                 // Initialize color RAM $D800 with default color (light blue for chars)
+                // This goes through the bus since it's not I/O space
                 for (int i = 0; i < 1000; i++)
                 {
-                    bus.Write((ushort)(0xD800 + i), 14); // Color index 14 = light blue
+                    ram.Write((ushort)(0xD800 + i), 14); // Color index 14 = light blue
                 }
             }
             catch { /* ROM loading failed */ }
