@@ -21,25 +21,26 @@ public sealed class VideoRenderer
     private int _currentLine;
     private int _cycleInLine;
 
-    // C64 palette in BGRA format (byte order: B, G, R, A)
+    // C64 palette in BGRA format (0xAARRGGBB stored as bytes [B, G, R, A])
+    // Pixel format is BGRA8888 - Blue first, then Green, then Red
     private static readonly uint[] Palette = new uint[16]
     {
-        0xFF000000, // 0: Black
-        0xFFFFFFFF, // 1: White  
-        0xFFD52B2B, // 2: Red
-        0xFFD8CEE8, // 3: Cyan
-        0xFF8E3CBE, // 4: Purple
-        0xFF4DAC2B, // 5: Green
-        0xFF282CC8, // 6: Blue
-        0xFF2EF171, // 7: Yellow
-        0xFF4B8E29, // 8: Orange
-        0xFF6B6B00, // 9: Brown
-        0xFF6B6BCD, // 10: Light Red
-        0xFF4B4B4B, // 11: Dark Gray
-        0xFF6B6B6B, // 12: Medium Gray
-        0xFF5FD85F, // 13: Light Green
-        0xFFD85F6B, // 14: Light Blue
-        0xFF9A9A9A, // 15: Light Gray
+        0xFF000000, // 0: Black (B=0, G=0, R=0)
+        0xFFFFFFFF, // 1: White (B=255, G=255, R=255)
+        0xFF2B2BD5, // 2: Red (B=0x2B=43, G=0x2B=43, R=0xD5=213)
+        0xFFD8CEE8, // 3: Cyan (B=0xD8=216, G=0xCE=206, R=0xE8=232)
+        0xFF8E3CBE, // 4: Purple (B=0x8E=142, G=0x3C=60, R=0xBE=190)
+        0xFF4DAC2B, // 5: Green (B=0x4D=77, G=0xAC=172, R=0x2B=43)
+        0xFFA41A00, // 6: Blue (B=0xA4=164, G=0x1A=26, R=0x00=0)
+        0xFF2EF171, // 7: Yellow (B=0x2E=46, G=0xF1=241, R=0x71=113)
+        0xFF4B8E29, // 8: Orange (B=0x4B=75, G=0x8E=142, R=0x29=41)
+        0xFF6B6B00, // 9: Brown (B=0x6B=107, G=0x6B=107, R=0x00=0)
+        0xFFCD6B6B, // 10: Light Red (B=0xCD=205, G=0x6B=107, R=0x6B=107)
+        0xFF4B4B4B, // 11: Dark Gray (B=0x4B=75, G=0x4B=75, R=0x4B=75)
+        0xFF6B6B6B, // 12: Medium Gray (B=0x6B=107, G=0x6B=107, R=0x6B=107)
+        0xFF5FD85F, // 13: Light Green (B=0x5F=95, G=0xD8=216, R=0x5F=95)
+        0xFF6B5FD8, // 14: Light Blue (B=0x6B=107, G=0x5F=95, R=0xD8=216)
+        0xFF9A9A9A, // 15: Light Gray (B=0x9A=154, G=0x9A=154, R=0x9A=154)
     };
 
     public VideoRenderer(Mos6569 vic, IBus bus)
