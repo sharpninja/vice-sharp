@@ -282,6 +282,38 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// </summary>
     public byte SpriteBackgroundCollision => _registers[0x1F];
     
+    // VICE-style: Interrupt sources
+    public enum InterruptSource { None, Raster, SpriteSprite, SpriteBackground, LightPen, Timer }
+    
+    /// <summary>
+    /// Get interrupt flags from register $19
+    /// </summary>
+    public byte InterruptFlags => _registers[0x19];
+    
+    /// <summary>
+    /// Get interrupt mask from register $1A
+    /// </summary>
+    public byte InterruptMask => _registers[0x1A];
+    
+    /// <summary>
+    /// Check if raster interrupt is enabled
+    /// </summary>
+    public bool IsRasterInterruptEnabled => (_registers[0x1A] & 0x01) != 0;
+    
+    /// <summary>
+    /// Get current raster IRQ line
+    /// </summary>
+    public ushort RasterIrqLine => (ushort)(((_registers[0x11] & 0x80) << 1) | _registers[0x12]);
+    
+    /// <summary>
+    /// Set raster IRQ line
+    /// </summary>
+    public void SetRasterIrqLine(ushort line)
+    {
+        _registers[0x12] = (byte)line;
+        _registers[0x11] = (byte)((_registers[0x11] & 0x7F) | ((line >> 1) & 0x80));
+    }
+    
     /// <summary>
     /// Clear sprite collision flags
     /// </summary>
