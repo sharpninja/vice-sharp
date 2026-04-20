@@ -1,12 +1,12 @@
 # ViceSharp Development Handoff
 
-## Current Status (2026-04-19)
+## Current Status (2026-04-19 Evening)
 
 ### Completed Chips (All VICE-equivalent)
 
 | Chip | Location | Status |
 |------|----------|--------|
-| MOS6510 CPU | `src/ViceSharp.Chips/Cpu/` | Complete - all 56 opcodes, I/O port |
+| MOS6510 CPU | `src/ViceSharp.Chips/Cpu/` | Complete - all 56 opcodes + KIL/LAX/SAX illegal |
 | MOS6569 VIC-II | `src/ViceSharp.Chips/VicIi/` | Complete - raster, sprites, DMA, rendering |
 | MOS6581 SID | `src/ViceSharp.Chips/Sid/` | Complete - 3-voice synthesis |
 | MOS6526 CIA | `src/ViceSharp.Chips/Cia/` | Complete - timers, TOD, interrupts |
@@ -18,7 +18,7 @@
 
 ### Architecture Components
 
-- **ArchitectureBuilder**: Wires BasicBus + SID
+- **ArchitectureBuilder**: Wires BasicBus + VIC + CIA + PLA + SID (a1f1394)
 - **C64Descriptor/C64NtscDescriptor**: Machine configs (PAL/NTSC)
 - **C64Palette**: 16-color VIC-II palette
 - **RomProvider**: VICE ROM download + SHA256 verification
@@ -29,23 +29,23 @@
 - **Errors**: 0
 - **Warnings**: 2 (NETSDK1210 - IsAotCompatible)
 
-### Recent Commits (Last Session)
-- `9c792f6` - docs: add session log for 2026-04-19 development
-- `18b6ae4` - feat: add debug monitor help to console
-- `aa0c821` - feat: implement IEC drive with D64 sector support
-- `95c8deb` - feat: add ROM hash validation and file loading
-- `b76a163` - feat: complete SID, CIA, PLA chips
-- `00aba45` - feat: complete VIC-II chip
-- `7a50fa9` - docs: add chip organization rules
+### Recent Commits (This Session)
+- `8c0a7f2` - docs: add late evening session log
+- `664def0` - feat: add LAX and SAX illegal opcodes
+- `e8fd19d` - feat: add KIL and LAX illegal opcodes
+- `f50c5bd` - refactor: remove partial C64Machine
+- `8aed926` - docs: add evening session log
+- `a1f1394` - feat: wire VIC-II, CIA, PLA, SID in ArchitectureBuilder
 
 All commits synced to origin (Azure DevOps) and github.
 
 ## Next Steps
 
-1. **Complete opcode table**: Add all 151 opcodes (with VICE duplicate handling)
-2. **Wire C64Machine**: Full chip wiring + ROM loader
-3. **First boot test**: VICE x64sc trace comparison
-4. **Avalonia UI**: Build VideoSurface with pixel rendering
+1. **Complete opcode table**: Add DCP/ISC/RLA/RRA/SLO/SRE (need type fixes)
+   - Compare() needs overload accepting byte for zero page
+   - Absolute/AbsoluteX/AbsoluteY addressing need byte return
+2. **First boot test**: VICE x64sc trace comparison
+3. **Avalonia UI**: Build VideoSurface with pixel rendering
 
 ## Project Rules (.clinerules)
 
@@ -57,4 +57,6 @@ All commits synced to origin (Azure DevOps) and github.
 - FR-* specs required for all chips
 
 ## Session Logs
-- `docs/session-logs/session-2026-04-19-001.md` - Latest session log
+- `docs/session-logs/session-2026-04-19-001.md` - Morning session
+- `docs/session-logs/session-2026-04-19-002.md` - Evening session
+- `docs/session-logs/session-2026-04-19-003.md` - Late evening session
