@@ -552,8 +552,36 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         if (y >= 200 || x >= 160)
             return BackgroundColor;
         
-        // TODO: Implement actual character/bitmap rendering based on DisplayMode
-        return BackgroundColor;
+        // Calculate character cell position
+        int col = x / 8;
+        int row = y / 8;
+        int charOffset = row * 40 + col;
+        
+        // Get character from screen memory
+        byte charCode = _bus.Read((ushort)(ScreenMemoryBase + charOffset));
+        
+        // Get bitmap data based on display mode
+        switch (DisplayMode)
+        {
+            case VideoMode.StandardText:
+            case VideoMode.MulticolorText:
+                // Fetch character line from ROM
+                byte charLine = _bus.Read((ushort)(CharacterBase + charCode * 8 + (y % 8)));
+                // Get bit within byte (x % 8, leftmost bit at position 7)
+                int bitPos = 7 - (x % 8);
+                byte colorIndex = (byte)((charLine >> bitPos) & 0x01);
+                return colorIndex != 0 ? (byte)0x0E : BackgroundColor; // White or background
+                
+            case VideoMode.Bitmap:
+                // Direct bitmap mode
+                int bitmapOffset = charCode * 64 + (y % 8) * 8 + (x % 8);
+                byte bitmapByte = _bus.Read((ushort)(BitmapPointerBase + bitmapOffset));
+                return (byte)(bitmapByte & 0x0F);
+                
+            case VideoMode.ExtendedBackground:
+            default:
+                return BackgroundColor;
+        }
     }
     
     /// <summary>
