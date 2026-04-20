@@ -5,11 +5,11 @@ namespace ViceSharp.Chips.VicIi;
 /// <summary>
 /// MOS 6569 VIC-II Video Interface Controller implementation.
 /// </summary>
-public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
+public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
 {
-    public DeviceId Id => new DeviceId(0x0003);
+    public virtual DeviceId Id => new DeviceId(0x0003);
     public DeviceId SourceId => Id;
-    public string Name => "MOS 6569 VIC-II";
+    public virtual string Name => "MOS 6569 VIC-II";
     public uint ClockDivisor => 1;
     public ClockPhase Phase => ClockPhase.Phi1;
 
@@ -37,7 +37,7 @@ public sealed class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>
     /// Is this PAL machine (6569) vs NTSC (6567)
     /// </summary>
-    public bool IsPal { get; private set; } = true;
+    public virtual bool IsPal { get; protected set; } = true;
     
     public bool IsVBlank => CurrentRasterLine >= VisibleLines;
     public bool IsBadLine => CurrentRasterLine >= 30 && CurrentRasterLine < 50;
