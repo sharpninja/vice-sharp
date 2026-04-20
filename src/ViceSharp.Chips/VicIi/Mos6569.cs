@@ -146,34 +146,67 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public enum VideoMode { StandardText, MulticolorText, Bitmap, ExtendedBackground }
     
     /// <summary>
+    /// Column mode (40 columns vs 38 columns)
+    /// </summary>
+    public enum ColumnMode { Normal38, Wide40 }
+    
+    /// <summary>
+    /// Color mode (single or multicolor)
+    /// </summary>
+    public enum ColorMode { Single, Multi }
+    
+    /// <summary>
+    /// Sprite expansion mode (normal or double)
+    /// </summary>
+    public enum SpriteExpansion { Normal, Double }
+    
+    /// <summary>
+    /// Sprite display mode (normal or multicolor)
+    /// </summary>
+    public enum SpriteColorMode { Normal, Multi }
+    
+    /// <summary>
+    /// Sprite priority relative to background
+    /// </summary>
+    public enum SpritePriority { InFront, Behind }
+    
+    /// <summary>
     /// Get current video mode from register $11 bit 4-6
     /// </summary>
-    public VideoMode GetVideoMode() => (VideoMode)((_registers[0x11] >> 4) & 0x07);
+    public VideoMode DisplayMode => (VideoMode)((_registers[0x11] >> 4) & 0x07);
     
     /// <summary>
     /// Get character/color data pointer base (bits 0-3 of register $18)
     /// </summary>
-    public ushort GetCharacterPointerBase() => (ushort)((_registers[0x18] & 0x0F) << 10);
+    public ushort CharacterPointerBase => (ushort)((_registers[0x18] & 0x0F) << 10);
     
     /// <summary>
     /// Get bitmap pointer base (bit 3 of register $18)
     /// </summary>
-    public ushort GetBitmapPointerBase() => (ushort)((_registers[0x18] & 0x08) << 10);
+    public ushort BitmapPointerBase => (ushort)((_registers[0x18] & 0x08) << 10);
     
     /// <summary>
-    /// Is 40-column mode (vs 38)
+    /// Column mode (40 columns vs 38 columns)
     /// </summary>
-    public bool Is40ColumnMode => (_registers[0x16] & 0x08) != 0;
+    public ColumnMode Columns => (_registers[0x16] & 0x08) switch
+    {
+        0 => ColumnMode.Normal38,
+        _ => ColumnMode.Wide40
+    };
     
     /// <summary>
-    /// Is multicolor mode
+    /// Color mode (single or multicolor)
     /// </summary>
-    public bool IsMulticolorMode => (_registers[0x16] & 0x10) != 0;
+    public ColorMode Color => (_registers[0x16] & 0x10) switch
+    {
+        0 => ColorMode.Single,
+        _ => ColorMode.Multi
+    };
     
     /// <summary>
     /// Get screen memory address (10-bit from registers)
     /// </summary>
-    public ushort GetScreenMemoryAddress() => (ushort)(((int)_registers[0x18] << 6) | (((int)_registers[0x11] & 0x0F) << 10));
+    public ushort ScreenMemoryAddress => (ushort)(((int)_registers[0x18] << 6) | (((int)_registers[0x11] & 0x0F) << 10));
     
     // VICE-style: Sprite state
     private readonly SpriteState[] _sprites = new SpriteState[8];
@@ -202,13 +235,48 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public byte GetSpriteY(int spriteNum) => _sprites[spriteNum].Y;
     
     /// <summary>
+    /// Get sprite X expansion mode
+    /// </summary>
+    public SpriteExpansion GetSpriteExpansionX(int spriteNum) => _sprites[spriteNum].IsExpandedX 
+        ? SpriteExpansion.Double 
+        : SpriteExpansion.Normal;
+    
+    /// <summary>
+    /// Get sprite Y expansion mode
+    /// </summary>
+    public SpriteExpansion GetSpriteExpansionY(int spriteNum) => _sprites[spriteNum].IsExpandedY 
+        ? SpriteExpansion.Double 
+        : SpriteExpansion.Normal;
+    
+    /// <summary>
+    /// Get sprite color mode
+    /// </summary>
+    public SpriteColorMode GetSpriteColorMode(int spriteNum) => _sprites[spriteNum].IsMulticolor 
+        ? SpriteColorMode.Multi 
+        : SpriteColorMode.Normal;
+    
+    /// <summary>
+    /// Get sprite priority
+    /// </summary>
+    public SpritePriority GetSpritePriority(int spriteNum) => _sprites[spriteNum].IsPriority 
+        ? SpritePriority.Behind 
+        : SpritePriority.InFront;
+    
+    /// <summary>
+    /// Get sprite color
+    /// </summary>
+    public byte GetSpriteColor(int spriteNum) => _sprites[spriteNum].Color;
+    
+    /// <summary>
     /// Check if sprite is visible at current raster position
     /// </summary>
     public bool IsSpriteVisible(int spriteNum)
     {
         ref SpriteState s = ref _sprites[spriteNum];
-        return RasterX >= s.X && RasterX < s.X + (s.IsExpandedX ? 48u : 24u) &&
-               CurrentRasterLine >= s.Y && CurrentRasterLine < s.Y + (s.IsExpandedY ? 42 : 21);
+        uint width = s.IsExpandedX ? 48u : 24u;
+        uint height = s.IsExpandedY ? 42u : 21u;
+        return RasterX >= s.X && RasterX < s.X + width &&
+               CurrentRasterLine >= s.Y && CurrentRasterLine < s.Y + height;
     }
 
     private readonly IBus _bus;
