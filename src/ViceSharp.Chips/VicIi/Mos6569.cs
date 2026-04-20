@@ -538,4 +538,38 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     {
         return address >= BaseAddress && address < BaseAddress + Size;
     }
+    
+    /// <summary>
+    /// VICE-style: Get pixel color at given raster position
+    /// </summary>
+    public byte GetPixelColor(byte x, byte y)
+    {
+        // Border takes priority
+        if (GetHorizontalBorder() != BorderSide.None || GetVerticalBorder() != BorderSide.None)
+            return BorderColor;
+        
+        // Outside visible area returns background
+        if (y >= 200 || x >= 160)
+            return BackgroundColor;
+        
+        // TODO: Implement actual character/bitmap rendering based on DisplayMode
+        return BackgroundColor;
+    }
+    
+    /// <summary>
+    /// VICE-style: Generate a complete frame of pixel data (320x200 visible area)
+    /// </summary>
+    public void GenerateFrame(Span<byte> frameBuffer)
+    {
+        if (frameBuffer.Length < 320 * 200)
+            return;
+        
+        for (int y = 0; y < 200; y++)
+        {
+            for (int x = 0; x < 320; x++)
+            {
+                frameBuffer[y * 320 + x] = GetPixelColor((byte)x, (byte)y);
+            }
+        }
+    }
 }
