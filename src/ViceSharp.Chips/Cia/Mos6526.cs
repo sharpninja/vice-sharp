@@ -29,7 +29,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     public enum TodMode { Hours12, Hours24, Alarm12, Alarm24 }
     
     // Interrupt sources
-    public enum InterruptSource { None, UnderflowA, UnderflowB, Alarm, Serial, Flag }
+    public enum IrqSource { None, UnderflowA, UnderflowB, Alarm, Serial, Flag }
 
     // Timer A state
     private TimerState _timerA = new();
@@ -50,6 +50,16 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     private byte _portADir;
     private byte _portBDir;
     
+    // TOD (Time of Day) clock - VICE-style
+    private byte _todTenths;
+    private byte _todSeconds;
+    private byte _todMinutes;
+    private byte _todHours;
+    private byte _todAlarmTenths;
+    private byte _todAlarmSeconds;
+    private byte _todAlarmMinutes;
+    private byte _todAlarmHours;
+    
     // Interrupt state
     private byte _interruptMask;
     private byte _interruptFlags;
@@ -65,6 +75,37 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     {
         _bus = bus;
         _irqLine = irqLine;
+    }
+
+    /// <summary>
+    /// TOD is clocked by Timer B output when in 24-hour mode (VICE-style)
+    /// </summary>
+    public void ClockTod()
+    {
+        _todTenths = (byte)((_todTenths + 1) % 10);
+        if (_todTenths == 0)
+        {
+            _todSeconds = (byte)((_todSeconds + 1) % 60);
+            if (_todSeconds == 0)
+            {
+                _todMinutes = (byte)((_todMinutes + 1) % 60);
+                if (_todMinutes == 0)
+                {
+                    _todHours = (byte)((_todHours + 1) % 24);
+                }
+            }
+        }
+        
+        // Check alarm match
+        if (_todTenths == _todAlarmTenths && 
+            _todSeconds == _todAlarmSeconds && 
+            _todMinutes == _todAlarmMinutes && 
+            _todHours == _todAlarmHours)
+        {
+            _interruptFlags |= 0x04;
+            if ((_interruptMask & 0x04) != 0)
+                _irqLine.Assert(this);
+        }
     }
 
     public void Tick()
@@ -115,6 +156,10 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         _portB = 0;
         _portADir = 0;
         _portBDir = 0;
+        _todTenths = 0;
+        _todSeconds = 0;
+        _todMinutes = 0;
+        _todHours = 0;
         _interruptMask = 0;
         _interruptFlags = 0;
     }
@@ -173,6 +218,10 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                     _timerB.Counter = _timerB.Latch;
                 _timerB.Divider = _timerB.Latch > 0 ? _timerB.Latch : 0x10000;
                 break;
+            case 0x0B: _todAlarmHours = value; break;
+            case 0x0A: _todAlarmMinutes = value; break;
+            case 0x09: _todAlarmSeconds = value; break;
+            case 0x08: _todAlarmTenths = value; break;
                 
             // Ports
             case 0x00: _portA = value; break;
