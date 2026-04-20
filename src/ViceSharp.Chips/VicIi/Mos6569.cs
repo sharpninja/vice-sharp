@@ -268,6 +268,42 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public byte GetSpriteColor(int spriteNum) => _sprites[spriteNum].Color;
     
     /// <summary>
+    /// Sprite collision types (VICE-style)
+    /// </summary>
+    public enum SpriteCollisionType { None, SpriteSprite, SpriteBackground }
+    
+    /// <summary>
+    /// Get sprite-sprite collision mask from register $1E
+    /// </summary>
+    public byte SpriteSpriteCollision => _registers[0x1E];
+    
+    /// <summary>
+    /// Get sprite-background collision mask from register $1F
+    /// </summary>
+    public byte SpriteBackgroundCollision => _registers[0x1F];
+    
+    /// <summary>
+    /// Clear sprite collision flags
+    /// </summary>
+    public void ClearCollisionFlags()
+    {
+        _registers[0x1E] = 0;
+        _registers[0x1F] = 0;
+    }
+    
+    /// <summary>
+    /// Check if two sprites collide (VICE-style detection)
+    /// </summary>
+    public bool CheckSpriteCollision(int sprite1, int sprite2) => 
+        (_registers[0x1E] & (1 << sprite1)) != 0 && (_registers[0x1E] & (1 << sprite2)) != 0;
+    
+    /// <summary>
+    /// Check if sprite collides with background data
+    /// </summary>
+    public bool CheckSpriteBackgroundCollision(int spriteNum) => 
+        (_registers[0x1F] & (1 << spriteNum)) != 0;
+    
+    /// <summary>
     /// Check if sprite is visible at current raster position
     /// </summary>
     public bool IsSpriteVisible(int spriteNum)
