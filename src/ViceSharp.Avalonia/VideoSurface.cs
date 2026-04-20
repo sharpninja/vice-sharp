@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using ViceSharp.Abstractions;
 
 namespace ViceSharp.Avalonia;
@@ -11,7 +12,6 @@ public sealed class VideoSurface : Control
 {
     private readonly WriteableBitmap _bitmap;
     private readonly IVideoChip? _vic;
-    private readonly object _lock = new();
 
     public VideoSurface(IMachine machine)
     {
@@ -40,7 +40,7 @@ public sealed class VideoSurface : Control
             {
                 var src = _vic.FrameBuffer;
                 var dst = (byte*)fb.Address;
-                var size = fb.Size.Bytes;
+                var size = _bitmap.PixelSize.Width * _bitmap.PixelSize.Height * 4;
 
                 if (src.Length >= size)
                 {
@@ -51,7 +51,7 @@ public sealed class VideoSurface : Control
                 }
             }
 
-            Dispatcher.UIThread.Post(InvalidateVisual);
+            this.InvalidateVisual();
         }
         catch
         {
