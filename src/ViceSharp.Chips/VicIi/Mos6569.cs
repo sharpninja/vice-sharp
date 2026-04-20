@@ -387,6 +387,54 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         return RasterX >= s.X && RasterX < s.X + width &&
                CurrentRasterLine >= s.Y && CurrentRasterLine < s.Y + height;
     }
+    
+    // VICE-style: RSEL/CSEL for border control
+    private bool Rsel => (_registers[0x11] & 0x08) != 0;  // Row select (25 vs 24 rows)
+    private bool Csel => (_registers[0x16] & 0x08) != 0;  // Column select (40 vs 38 cols)
+    
+    /// <summary>
+    /// VICE-style: Upper border start line
+    /// </summary>
+    public int UpperBorderStart => Rsel ? 51 : 55;
+    
+    /// <summary>
+    /// VICE-style: Lower border start line
+    /// </summary>
+    public int LowerBorderStart => Rsel ? 251 : 247;
+    
+    /// <summary>
+    /// VICE-style: Left border pixel position
+    /// </summary>
+    public int LeftBorderPixel => Csel ? 24 : 31;
+    
+    /// <summary>
+    /// VICE-style: Right border end pixel position
+    /// </summary>
+    public int RightBorderEndPixel => Csel ? 344 : 335;
+    
+    /// <summary>
+    /// VICE-style: Y scroll value (bits 0-2 of $D011)
+    /// </summary>
+    public byte YScroll => (byte)(_registers[0x11] & 0x07);
+    
+    /// <summary>
+    /// VICE-style: Is this a forced badline (FLI support)
+    /// </summary>
+    public bool IsForcedBadline => (CurrentRasterLine & 7) == YScroll;
+    
+    /// <summary>
+    /// VICE-style: Get VIC bank from CIA2 port A (bank selection)
+    /// </summary>
+    public int VicBank { get; set; } = 3;  // Default bank 3 ($C000-$FFFF)
+    
+    /// <summary>
+    /// VICE-style: Translate VIC address to system address
+    /// </summary>
+    public ushort TranslateVicAddress(ushort vicAddr)
+    {
+        // VIC addresses 14 bits, translate to 16-bit with bank
+        return (ushort)((VicBank << 14) | (vicAddr & 0x3FFF));
+    }
 
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
