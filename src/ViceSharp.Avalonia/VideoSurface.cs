@@ -86,31 +86,36 @@ public sealed class VideoSurface : Control
     public override void Render(DrawingContext context)
     {
         // VICE-style aspect ratio handling
-        // C64 display is 4:3, but window may be any size
-        // Calculate centered rect maintaining 4:3 aspect ratio
-        
-        double targetAspect = 4.0 / 3.0;  // C64 standard aspect ratio
+        // Each VIC chip has different pixel aspect ratios based on video standard
         double windowWidth = Bounds.Width;
         double windowHeight = Bounds.Height;
         
-        if (windowWidth <= 0 || windowHeight <= 0)
+        if (windowWidth <= 0 || windowHeight <= 0 || _vic == null)
             return;
-            
+        
+        // Get pixel aspect from VIC's TV system (matches VICE implementation)
+        float pixelAspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(_vic.System);
+        
+        // Calculate display aspect ratio: source aspect * pixel aspect
+        // For PAL: (384/272) * 0.93650794 ≈ 1.32 (close to 4:3)
+        // For NTSC: (384/272) * 0.75 ≈ 1.06 (much wider/taller pixels)
+        double displayAspect = (double)SourceWidth / SourceHeight / pixelAspect;
+        
         double windowAspect = windowWidth / windowHeight;
         
         double drawWidth, drawHeight;
         
-        if (windowAspect > targetAspect)
+        if (windowAspect > displayAspect)
         {
-            // Window is wider than 4:3, fit to height
+            // Window is wider than display, fit to height
             drawHeight = windowHeight;
-            drawWidth = windowHeight * targetAspect;
+            drawWidth = windowHeight * displayAspect;
         }
         else
         {
-            // Window is taller than 4:3, fit to width
+            // Window is taller than display, fit to width
             drawWidth = windowWidth;
-            drawHeight = windowWidth / targetAspect;
+            drawHeight = windowWidth / displayAspect;
         }
         
         double x = (windowWidth - drawWidth) / 2;

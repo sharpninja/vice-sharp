@@ -13,6 +13,18 @@ public sealed class VideoRenderer
     public const int PalCyclesPerLine = 63;
     public const int PalTotalLines = 312;
     public const int PalVisibleLines = 272;
+    
+    /// <summary>
+    /// Pixel aspect ratios by video standard (from VICE)
+    /// These are the horizontal stretch factors - multiply width to get correct display aspect
+    /// </summary>
+    public static float GetPixelAspectRatio(Mos6569.TvSystem system) => system switch
+    {
+        Mos6569.TvSystem.PAL => 0.93650794f,   // PAL pixels are slightly taller
+        Mos6569.TvSystem.PALN => 0.90769231f, // PAL-N pixels are taller
+        Mos6569.TvSystem.NTSC => 0.75000000f,  // NTSC pixels are much taller
+        _ => 1.0f
+    };
 
     public readonly byte[] FrameBuffer = new byte[ScreenWidth * ScreenHeight * 4];
 
