@@ -2,6 +2,7 @@ using ViceSharp.Abstractions;
 using ViceSharp.Chips.Audio;
 using ViceSharp.Chips.VicIi;
 using ViceSharp.Chips.Cia;
+using ViceSharp.Chips.Cpu;
 using ViceSharp.Chips.Pla;
 using ViceSharp.RomFetch;
 
@@ -30,33 +31,47 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var clock = new SystemClock(descriptor.MasterClockHz);
         var deviceRegistry = new DeviceRegistry();
         
-        // Create shared interrupt line
+        // Create interrupt lines
         var irqLine = new InterruptLine(InterruptType.Irq);
+        var nmiLine = new InterruptLine(InterruptType.Nmi);
+        
+        // Create CPU
+        var cpu = new Mos6502(bus);
+        bus.RegisterDevice(cpu);
+        clock.Register(cpu);
+        deviceRegistry.Add(cpu);
         
         // Create VIC-II at 0xD000
         var vic = new Mos6569(bus, irqLine);
         bus.RegisterDevice(vic);
+        clock.Register(vic);
         deviceRegistry.Add(vic);
         
-        // Create CIA #1 at 0xDC00
-        var cia1 = new Mos6526(bus, irqLine);
+        // Create CIA #1 at 0xDC00 (IRQ)
+        var cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
+        bus.RegisterDevice(cia1);
+        clock.Register(cia1);
         deviceRegistry.Add(cia1);
         
-        // Create CIA #2 at 0xDD00
-        var cia2 = new Mos6526(bus, irqLine);
+        // Create CIA #2 at 0xDD00 (NMI)
+        var cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
+        bus.RegisterDevice(cia2);
+        clock.Register(cia2);
         deviceRegistry.Add(cia2);
         
         // Create PLA for memory banking
         var pla = new Mos906114(bus);
+        bus.RegisterDevice(pla);
         deviceRegistry.Add(pla);
         
         // Create SID at 0xD400
         var sid = new Sid6581(bus);
         bus.RegisterDevice(sid);
+        clock.Register(sid);
         deviceRegistry.Add(sid);
         
         // Create machine instance
-        var machine = new Machine(descriptor, bus, clock, deviceRegistry);
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, irqLine);
 
         // Load ROMs if provider is available
         if (_romProvider != null)
@@ -93,36 +108,50 @@ internal sealed class Machine : IMachine
     /// <inheritdoc />
     public IArchitectureDescriptor Architecture { get; }
 
+    private readonly Mos6502 _cpu;
+
     public Machine(
         IArchitectureDescriptor architecture,
         IBus bus,
         IClock clock,
-        IDeviceRegistry deviceRegistry)
+        IDeviceRegistry deviceRegistry,
+        Mos6502 cpu,
+        IInterruptLine irqLine)
     {
         Architecture = architecture;
         Bus = bus;
         Clock = clock;
         Devices = deviceRegistry;
+        _cpu = cpu;
     }
 
     /// <inheritdoc />
     public void RunFrame()
     {
-        // Execute one full frame of cycles (placeholder implementation)
-        // Will be properly implemented when video timing is defined
+        // Execute one full PAL frame (312 lines × 63 cycles = 19656 cycles)
+        Clock.Step(19656);
     }
 
     /// <inheritdoc />
     public void StepInstruction()
     {
-        // Step single CPU instruction (placeholder implementation)
-        // Will be properly implemented when CPU core is added
+        // Step single CPU instruction
+        Clock.Step();
     }
 
     /// <inheritdoc />
     public MachineState GetState()
     {
-        return default;
+        return new MachineState
+        {
+            A = _cpu.A,
+            X = _cpu.X,
+            Y = _cpu.Y,
+            S = _cpu.S,
+            P = _cpu.P,
+            PC = _cpu.PC,
+            Cycle = Clock.TotalCycles
+        };
     }
 
     /// <inheritdoc />
@@ -136,6 +165,7 @@ internal sealed class Machine : IMachine
         // 5. SID reset
         
         Clock.Reset();
+        _cpu.Reset();
         
         // Reset all devices in order
         foreach (var device in Devices.All)
