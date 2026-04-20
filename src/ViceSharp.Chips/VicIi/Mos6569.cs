@@ -46,7 +46,22 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public bool IsPal => System == TvSystem.PAL;
     
     public bool IsVBlank => CurrentRasterLine >= VisibleLines;
-    public bool IsBadLine => CurrentRasterLine >= 30 && CurrentRasterLine < 50;
+    
+    /// <summary>
+    /// VICE-style: Check if current raster line is a badline.
+    /// Badlines occur on raster lines 30-49 when display is enabled (DEN bit in $11).
+    /// </summary>
+    public bool IsBadLine => CurrentRasterLine >= 30 && CurrentRasterLine <= 49 && IsDisplayEnabled;
+    
+    /// <summary>
+    /// Check if display is enabled (DEN bit in register $11)
+    /// </summary>
+    public bool IsDisplayEnabled => (_registers[0x11] & 0x10) != 0;
+    
+    /// <summary>
+    /// Check if current position is in vertical blank area
+    /// </summary>
+    public bool IsVerticalBlankArea => CurrentRasterLine < 51 || CurrentRasterLine >= 251;
     
     /// <summary>
     /// VICE-style: Get current cycle within line
