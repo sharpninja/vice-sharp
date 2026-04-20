@@ -94,7 +94,8 @@ public sealed class VideoSurface : Control
             return;
         
         // Get pixel aspect from VIC's TV system (matches VICE implementation)
-        float pixelAspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(_vic.System);
+        float pixelAspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(
+            _vic is ViceSharp.Chips.VicIi.Mos6569 mos6569 ? mos6569.System : ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL);
         
         // Calculate display aspect ratio: source aspect * pixel aspect
         // For PAL: (384/272) * 0.93650794 ≈ 1.32 (close to 4:3)
