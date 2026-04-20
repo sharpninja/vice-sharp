@@ -12,10 +12,14 @@
     <IsAotCompatible>false</IsAotCompatible>
     <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
     <IsPackable>false</IsPackable>
+    <NukeTelemetryVersion>1</NukeTelemetryVersion>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" />
+    <PackageReference Include="Nuke.Common" Version="10.1.0" />
+    <PackageReference Include="NuGet.Packaging" Version="7.3.1" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
   </ItemGroup>
 
 </Project>

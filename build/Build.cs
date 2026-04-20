@@ -44,7 +44,7 @@ sealed partial class Build : NukeBuild
                 .SetNoRestore(true));
         });
 
-    Target Commit => _ => _
+    Target GitCommit => _ => _
         .DependsOn(Compile)
         .Executes(() =>
         {
