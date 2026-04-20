@@ -105,14 +105,20 @@ internal sealed class Machine : IMachine
     /// <inheritdoc />
     public void Reset()
     {
-        // Reset all devices in the registry
+        // VICE-style reset sequence (per C64 original hw):
+        // 1. Reset clock first
+        // 2. CPU reset ($FCE2)
+        // 3. CIA reset
+        // 4. VIC reset
+        // 5. SID reset
+        
+        Clock.Reset();
+        
+        // Reset all devices in order
         foreach (var device in Devices.All)
         {
             device.Reset();
         }
-        
-        // Reset clock
-        Clock.Reset();
     }
 }
 
