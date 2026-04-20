@@ -44,7 +44,7 @@ All commits synced to origin (Azure DevOps) and github.
 1. **Complete opcode table**: Add DCP/ISC/RLA/RRA/SLO/SRE (need type fixes)
    - Compare() needs overload accepting byte for zero page
    - Absolute/AbsoluteX/AbsoluteY addressing need byte return
-2. **First boot test**: VICE x64sc trace comparison
+2. **BasicBootTest**: Added (0c22549) - validates CPU reset vector
 3. **Avalonia UI**: Build VideoSurface with pixel rendering
 
 ## Project Rules (.clinerules)
