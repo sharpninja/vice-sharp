@@ -466,6 +466,18 @@ partial class Mos6502
             
             // LAX (load A and X)
             case 0xAB: A = X = _bus.Read(Immediate()); UpdateNZ(A); break;
+            case 0xA7: A = X = _bus.Read(ZeroPage()); UpdateNZ(A); break;
+            case 0xB7: A = X = _bus.Read(ZeroPageY()); UpdateNZ(A); break;
+            case 0xAF: A = X = _bus.Read(Absolute()); UpdateNZ(A); break;
+            case 0xBF: A = X = _bus.Read(AbsoluteY()); UpdateNZ(A); break;
+            case 0xA3: A = X = _bus.Read(IndirectX()); UpdateNZ(A); break;
+            case 0xB3: A = X = _bus.Read(IndirectY()); UpdateNZ(A); break;
+            
+            // SAX (store A AND X)
+            case 0x87: _bus.Write(ZeroPage(), (byte)(A & X)); break;
+            case 0x97: _bus.Write(ZeroPageY(), (byte)(A & X)); break;
+            case 0x8F: _bus.Write(Absolute(), (byte)(A & X)); break;
+            case 0x83: _bus.Write(IndirectX(), (byte)(A & X)); break;
             
             default:
                 // Unimplemented opcode - read to consume cycle
