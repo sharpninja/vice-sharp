@@ -11,7 +11,12 @@ public sealed class VideoSurface : Control
 {
     private readonly WriteableBitmap _bitmap;
     private readonly IVideoChip? _vic;
-
+    private readonly byte[] _scaledBuffer;
+    
+    // VICE PAL dimensions: 384x272 visible area, 4:3 aspect ratio
+    public const int SourceWidth = 384;
+    public const int SourceHeight = 272;
+    
     public VideoSurface(IMachine machine)
     {
         _vic = machine.Devices.GetByRole(DeviceRole.VideoChip) as IVideoChip;
@@ -21,13 +26,16 @@ public sealed class VideoSurface : Control
             _vic.FrameCompleted += OnFrameCompleted;
         }
 
+        // VICE-style: Use VICE's pixel density (96 DPI = 384 pixels / 4 inches)
         _bitmap = new WriteableBitmap(
-            new PixelSize(384, 272),
-            new Vector(96, 96),
+            new PixelSize(SourceWidth, SourceHeight),
+            new Vector(96, 96),  // VICE uses square-ish pixels at 96 DPI
             PixelFormat.Bgra8888,
             AlphaFormat.Opaque);
         
-        // Fill with blue initially
+        _scaledBuffer = new byte[SourceWidth * SourceHeight * 4];
+        
+        // Fill with blue initially (border color)
         FillWithBlue();
     }
 
@@ -37,10 +45,10 @@ public sealed class VideoSurface : Control
         unsafe
         {
             var dst = (uint*)fb.Address;
-            var count = 384 * 272;
+            var count = SourceWidth * SourceHeight;
             for (int i = 0; i < count; i++)
             {
-                dst[i] = 0xFFFF0000; // Initial fill color (blue-ish, will be replaced by actual frame)
+                dst[i] = 0xFFFF0000; // Blue in BGRA
             }
         }
     }
@@ -56,11 +64,10 @@ public sealed class VideoSurface : Control
             {
                 var src = _vic.FrameBuffer;
                 var dst = (byte*)fb.Address;
-                var size = 384 * 272 * 4;
+                var size = SourceWidth * SourceHeight * 4;
 
                 if (src.Length >= size)
                 {
-                    // Copy the framebuffer directly
                     fixed (byte* pSrc = src)
                     {
                         Buffer.MemoryCopy(pSrc, dst, size, size);
@@ -78,7 +85,39 @@ public sealed class VideoSurface : Control
 
     public override void Render(DrawingContext context)
     {
-        // Always draw - if no content yet, shows blue from initial fill
-        context.DrawImage(_bitmap, new Rect(Bounds.Size));
+        // VICE-style aspect ratio handling
+        // C64 display is 4:3, but window may be any size
+        // Calculate centered rect maintaining 4:3 aspect ratio
+        
+        double targetAspect = 4.0 / 3.0;  // C64 standard aspect ratio
+        double windowWidth = Bounds.Width;
+        double windowHeight = Bounds.Height;
+        
+        if (windowWidth <= 0 || windowHeight <= 0)
+            return;
+            
+        double windowAspect = windowWidth / windowHeight;
+        
+        double drawWidth, drawHeight;
+        
+        if (windowAspect > targetAspect)
+        {
+            // Window is wider than 4:3, fit to height
+            drawHeight = windowHeight;
+            drawWidth = windowHeight * targetAspect;
+        }
+        else
+        {
+            // Window is taller than 4:3, fit to width
+            drawWidth = windowWidth;
+            drawHeight = windowWidth / targetAspect;
+        }
+        
+        double x = (windowWidth - drawWidth) / 2;
+        double y = (windowHeight - drawHeight) / 2;
+        
+        var destRect = new Rect(x, y, drawWidth, drawHeight);
+        
+        context.DrawImage(_bitmap, new Rect(0, 0, SourceWidth, SourceHeight), destRect);
     }
 }

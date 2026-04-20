@@ -1,33 +1,30 @@
 # ViceSharp Handoff (2026-04-20)
 
-## Status: Iteration 01 Video Complete
+## Status: Iteration 01 Video - ROM Loading Fixed
 
-### Original Gaps Resolved
-| Gap | Status |
-|-----|--------|
-| Full machine wiring | ✅ |
-| ROM-to-BASIC boot path | ✅ |
-| Trace validation | ✅ |
+### Session Summary
+Fixed critical issue causing C64 to display garbage instead of proper boot.
 
-### Video Pipeline Implemented
-- **VideoRenderer** - Text mode rendering with character ROM
-- **Mos6569** - VideoRenderer integration
-- **VideoSurface** - Avalonia WriteableBitmap
-- **FrameCompleted** - Event-driven frame updates
+### Critical Bug Found and Fixed
+**ROM writes intercepted by VIC device**: When loading ROMs through the bus, VIC-II (at $D000-$D03F) intercepted writes meant for RAM at $D000-$DFFF (character ROM area).
+
+**Solution**: Load ROMs directly into RAM using new `SimpleRam.LoadRom()` method instead of going through the bus.
+
+### Changes Made
+1. `SimpleRam.cs` - Added `LoadRom(ushort startAddress, ReadOnlySpan<byte> data)` method
+2. `ArchitectureBuilder.cs` - Changed ROM loading to use `ram.LoadRom()` instead of `bus.Write()`
 
 ### Build: 0 errors, 0 warnings
 
-### Bug Fixed This Session
-**Missing ROMs**: MainWindow was not loading ROMs because ArchitectureBuilder was created without a RomProvider.
-- Added RomProvider to MainWindow.axaml.cs
-- Added roms folder copy to output directory via csproj
+### Commits
+```
+5b29515 fix(core): load ROMs directly into RAM to avoid I/O conflicts
+80c1fbe fix(avalonia): add ROM provider to load C64 BASIC/KERNAL/character ROMs
+```
 
-### Files Modified
-- `src/ViceSharp.Avalonia/MainWindow.axaml.cs` - Added RomProvider initialization
-- `src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj` - Added RomFetch reference + ROM copy
-- `src/ViceSharp.Avalonia/VideoSurface.cs` - Removed unused field
-
-### Next Steps
-1. Run Avalonia app to verify blue border + text display
-2. Check if BASIC "READY." prompt appears
-3. Verify character ROM glyphs render correctly
+### Next Steps (Remaining Issues)
+1. CPU cycle-exact timing may need verification against VICE
+2. MOS6569 VIC-II implementation needs full audit
+3. PLA (Mos906114) memory mapping needs verification
+4. CIA timer/I/O not yet implemented
+5. Test BASIC "READY." prompt appears
