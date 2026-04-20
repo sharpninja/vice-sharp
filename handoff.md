@@ -1,6 +1,6 @@
 # ViceSharp Handoff (2026-04-20)
 
-## Status: Iteration 1 Complete
+## Status: Iteration 01 Video Complete
 
 ### Original Gaps Resolved
 | Gap | Status |
@@ -9,15 +9,25 @@
 | ROM-to-BASIC boot path | ✅ |
 | Trace validation | ✅ |
 
+### Video Pipeline Implemented
+- **VideoRenderer** - Text mode rendering with character ROM
+- **Mos6569** - VideoRenderer integration
+- **VideoSurface** - Avalonia WriteableBitmap
+- **FrameCompleted** - Event-driven frame updates
+
 ### Build: 0 errors, 0 warnings
 
-### Commits (synced)
-- dc9ee60 fix(vic): call VideoRenderer.Tick() in Mos6569
-- 2ee7af9 fix(avalonia): fix VideoSurface dispatcher call
-- 85b808b feat(vic): integrate VideoRenderer into Mos6569
+### Commits (synced to origin + github)
+```
+c0ca2c5 fix(vic): corrected BGRA palette byte order
+69a7dd9 feat(vic): initialize VIC registers
+02d26dc feat(vic): text mode rendering
+```
 
-### Verification
-```
-[00000:000:001] FCE3 A:00 X:00 Y:00 S:FD P:24 ZNVC:----
-```
-PC=$FCE3 = KERNAL ROM executing after reset.
+### Known Issue
+**Palette**: Window shows yellow - BGRA byte order needs verification
+
+### Next Steps
+1. Debug palette byte order
+2. Verify blue border renders
+3. Verify character ROM text
