@@ -1,5 +1,8 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Audio;
+using ViceSharp.Chips.VicIi;
+using ViceSharp.Chips.Cia;
+using ViceSharp.Chips.Pla;
 using ViceSharp.RomFetch;
 
 namespace ViceSharp.Core;
@@ -27,7 +30,27 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var clock = new SystemClock(descriptor.MasterClockHz);
         var deviceRegistry = new DeviceRegistry();
         
-        // Create and wire SID audio chip at 0xD400
+        // Create shared interrupt line
+        var irqLine = new InterruptLine(InterruptType.Irq);
+        
+        // Create VIC-II at 0xD000
+        var vic = new Mos6569(bus, irqLine);
+        bus.RegisterDevice(vic);
+        deviceRegistry.Add(vic);
+        
+        // Create CIA #1 at 0xDC00
+        var cia1 = new Mos6526(bus, irqLine);
+        deviceRegistry.Add(cia1);
+        
+        // Create CIA #2 at 0xDD00
+        var cia2 = new Mos6526(bus, irqLine);
+        deviceRegistry.Add(cia2);
+        
+        // Create PLA for memory banking
+        var pla = new Mos906114(bus);
+        deviceRegistry.Add(pla);
+        
+        // Create SID at 0xD400
         var sid = new Sid6581(bus);
         bus.RegisterDevice(sid);
         deviceRegistry.Add(sid);
