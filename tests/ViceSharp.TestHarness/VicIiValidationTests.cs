@@ -23,7 +23,7 @@ public sealed class VicIiValidationTests : LockstepTestRunner<VicII>, IAsyncLife
         return ValueTask.CompletedTask;
     }
 
-    [Fact]
+    [Fact(Skip = "Requires native VICE DLL")]
     public void Reset_StateMatchesVICE()
     {
         Chip.Reset();
@@ -36,7 +36,7 @@ public sealed class VicIiValidationTests : LockstepTestRunner<VicII>, IAsyncLife
         Assert.True(result.Passed, FormatDifferences(result.Differences));
     }
 
-    [Fact]
+    [Fact(Skip = "Requires native VICE DLL")]
     public void RasterLine_IncrementMatchesVICE()
     {
         for (int line = 0; line < 312; line++)

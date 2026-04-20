@@ -95,4 +95,24 @@ sealed partial class Build : NukeBuild
         {
             Serilog.Log.Information("Pack target — reserved for future NuGet packaging");
         });
+
+    Target RunConsole => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetRun(s => s
+                .SetProjectFile(RootDirectory / "src" / "ViceSharp.Console" / "ViceSharp.Console.csproj")
+                .SetConfiguration(Configuration)
+                .SetNoBuild(true));
+        });
+
+    Target RunAvalonia => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetRun(s => s
+                .SetProjectFile(RootDirectory / "src" / "ViceSharp.Avalonia" / "ViceSharp.Avalonia.csproj")
+                .SetConfiguration(Configuration)
+                .SetNoBuild(true));
+        });
 }

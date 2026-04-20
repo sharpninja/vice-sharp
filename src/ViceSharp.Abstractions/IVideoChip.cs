@@ -21,7 +21,7 @@ public interface IVideoChip : IClockedDevice
     bool IsVBlank { get; }
 
     /// <summary>
-    /// RGBA framebuffer from last completed frame.
+    /// BGRA framebuffer from last completed frame.
     /// Format: 32-bit BGRA (same as Windows/Avalonia PixelFormat.Bgra8888).
     /// </summary>
     byte[] FrameBuffer { get; }

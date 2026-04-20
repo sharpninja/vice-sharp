@@ -27,7 +27,7 @@ public sealed class VideoSurface : Control
             PixelFormat.Bgra8888,
             AlphaFormat.Opaque);
         
-        // Fill with blue initially so we can see something
+        // Fill with blue initially
         FillWithBlue();
     }
 
@@ -40,7 +40,7 @@ public sealed class VideoSurface : Control
             var count = 384 * 272;
             for (int i = 0; i < count; i++)
             {
-                dst[i] = 0xFF808000; // Blue in BGRA format (0xFF, B=128, G=128, R=0)
+                dst[i] = 0xFFFF0000; // Initial fill color (blue-ish, will be replaced by actual frame)
             }
         }
     }
@@ -60,6 +60,7 @@ public sealed class VideoSurface : Control
 
                 if (src.Length >= size)
                 {
+                    // Copy the framebuffer directly
                     fixed (byte* pSrc = src)
                     {
                         Buffer.MemoryCopy(pSrc, dst, size, size);
@@ -71,12 +72,13 @@ public sealed class VideoSurface : Control
         }
         catch
         {
-            // Ignore errors during frame copy
+            // Ignore errors
         }
     }
 
     public override void Render(DrawingContext context)
     {
+        // Always draw - if no content yet, shows blue from initial fill
         context.DrawImage(_bitmap, new Rect(Bounds.Size));
     }
 }

@@ -18,30 +18,24 @@ public sealed class VideoRenderer
 
     private readonly Mos6569 _vic;
     private readonly IBus _bus;
-    private int _currentLine;
-    private int _cycleInLine;
+    private int _currentFrame;
 
-    // C64 palette in BGRA format (0xAARRGGBB stored as bytes [B, G, R, A])
-    // Pixel format is BGRA8888 - Blue first, then Green, then Red
-    private static readonly uint[] Palette = new uint[16]
+    // C64 palette in BGRA format - built from VicPalette colors
+    // Format: 0xAABBGGRR (Alpha, Blue, Green, Red)
+    private static readonly uint[] Palette = new uint[16];
+
+    static VideoRenderer()
     {
-        0xFF000000, // 0: Black (B=0, G=0, R=0)
-        0xFFFFFFFF, // 1: White (B=255, G=255, R=255)
-        0xFF2B2BD5, // 2: Red (B=0x2B=43, G=0x2B=43, R=0xD5=213)
-        0xFFD8CEE8, // 3: Cyan (B=0xD8=216, G=0xCE=206, R=0xE8=232)
-        0xFF8E3CBE, // 4: Purple (B=0x8E=142, G=0x3C=60, R=0xBE=190)
-        0xFF4DAC2B, // 5: Green (B=0x4D=77, G=0xAC=172, R=0x2B=43)
-        0xFFA41A00, // 6: Blue (B=0xA4=164, G=0x1A=26, R=0x00=0)
-        0xFF2EF171, // 7: Yellow (B=0x2E=46, G=0xF1=241, R=0x71=113)
-        0xFF4B8E29, // 8: Orange (B=0x4B=75, G=0x8E=142, R=0x29=41)
-        0xFF6B6B00, // 9: Brown (B=0x6B=107, G=0x6B=107, R=0x00=0)
-        0xFFCD6B6B, // 10: Light Red (B=0xCD=205, G=0x6B=107, R=0x6B=107)
-        0xFF4B4B4B, // 11: Dark Gray (B=0x4B=75, G=0x4B=75, R=0x4B=75)
-        0xFF6B6B6B, // 12: Medium Gray (B=0x6B=107, G=0x6B=107, R=0x6B=107)
-        0xFF5FD85F, // 13: Light Green (B=0x5F=95, G=0xD8=216, R=0x5F=95)
-        0xFF6B5FD8, // 14: Light Blue (B=0x6B=107, G=0x5F=95, R=0xD8=216)
-        0xFF9A9A9A, // 15: Light Gray (B=0x9A=154, G=0x9A=154, R=0x9A=154)
-    };
+        // Initialize palette from VicPalette to BGRA format
+        // FrameBuffer stores pixels as BGRA: [offset 0=B, offset 1=G, offset 2=R, offset 3=A]
+        // BitConverter.ToUInt32 reads bytes as: [0]=bits0-7, [1]=bits8-15, [2]=bits16-23, [3]=bits24-31
+        // So we need: B at bits0-7, G at bits8-15, R at bits16-23, A at bits24-31
+        for (int i = 0; i < 16; i++)
+        {
+            var c = VicPalette.Colors[i];
+            Palette[i] = 0xFF000000u | ((uint)c.B) | ((uint)c.G << 8) | ((uint)c.R << 16);
+        }
+    }
 
     public VideoRenderer(Mos6569 vic, IBus bus)
     {
@@ -50,38 +44,33 @@ public sealed class VideoRenderer
     }
 
     /// <summary>
-    /// Step video pipeline one cycle
+    /// Step video pipeline one cycle - called from VIC Tick()
+    /// Renders a full scanline when cycle hits end of line
     /// </summary>
     public void Tick()
     {
-        _cycleInLine++;
-
-        if (_cycleInLine >= PalCyclesPerLine)
+        // Check if we've completed a line (63 cycles for PAL)
+        if (_vic.RasterX == 0 && _vic.CurrentRasterLine > 0)
         {
-            _cycleInLine = 0;
-            RenderScanline();
-            _currentLine++;
-
-            if (_currentLine >= PalTotalLines)
-            {
-                _currentLine = 0;
-                FrameCompleted?.Invoke(this, EventArgs.Empty);
-            }
+            RenderScanline(_vic.CurrentRasterLine - 1);
         }
+
+        // Check for frame complete
+        if (_vic.CurrentRasterLine == 0 && _currentFrame > 0)
+        {
+            FrameCompleted?.Invoke(this, EventArgs.Empty);
+        }
+        _currentFrame++;
     }
 
-    private void RenderScanline()
+    private void RenderScanline(int lineNumber)
     {
-        if (_currentLine < PalVisibleLines)
-        {
-            int y = _currentLine;
-            Span<byte> line = FrameBuffer.AsSpan(y * ScreenWidth * 4, ScreenWidth * 4);
-            RenderLine(line, y);
-        }
-    }
+        if (lineNumber < 0 || lineNumber >= PalVisibleLines)
+            return;
 
-    private void RenderLine(Span<byte> lineBuffer, int lineNumber)
-    {
+        int y = lineNumber;
+        Span<byte> line = FrameBuffer.AsSpan(y * ScreenWidth * 4, ScreenWidth * 4);
+        
         // Get border and background colors from VIC registers
         byte borderColor = _vic.BorderColor;
         byte backgroundColor = _vic.BackgroundColor;
@@ -97,14 +86,7 @@ public sealed class VideoRenderer
         if (visLine < 0 || visLine >= 200)
         {
             // Outside visible area - draw border
-            for (int x = 0; x < ScreenWidth; x++)
-            {
-                int offset = x * 4;
-                lineBuffer[offset] = (byte)(borderPixel >> 0);
-                lineBuffer[offset + 1] = (byte)(borderPixel >> 8);
-                lineBuffer[offset + 2] = (byte)(borderPixel >> 16);
-                lineBuffer[offset + 3] = 0xFF;
-            }
+            DrawBorder(line, borderPixel);
             return;
         }
 
@@ -164,10 +146,33 @@ public sealed class VideoRenderer
                 }
             }
             
-            lineBuffer[offset] = (byte)(pixel >> 0);
-            lineBuffer[offset + 1] = (byte)(pixel >> 8);
-            lineBuffer[offset + 2] = (byte)(pixel >> 16);
-            lineBuffer[offset + 3] = 0xFF;
+            line[offset] = (byte)(pixel >> 0);
+            line[offset + 1] = (byte)(pixel >> 8);
+            line[offset + 2] = (byte)(pixel >> 16);
+            line[offset + 3] = 0xFF;
+        }
+    }
+
+    private void DrawBorder(Span<byte> line, uint borderPixel)
+    {
+        for (int x = 0; x < ScreenWidth; x++)
+        {
+            int offset = x * 4;
+            line[offset] = (byte)(borderPixel >> 0);
+            line[offset + 1] = (byte)(borderPixel >> 8);
+            line[offset + 2] = (byte)(borderPixel >> 16);
+            line[offset + 3] = 0xFF;
+        }
+    }
+
+    /// <summary>
+    /// Force a full frame render (for initial display)
+    /// </summary>
+    public void RenderFullFrame()
+    {
+        for (int y = 0; y < PalVisibleLines; y++)
+        {
+            RenderScanline(y);
         }
     }
 
@@ -175,8 +180,7 @@ public sealed class VideoRenderer
 
     public void Reset()
     {
-        _currentLine = 0;
-        _cycleInLine = 0;
+        _currentFrame = 0;
         Array.Clear(FrameBuffer);
     }
 }

@@ -17,17 +17,17 @@
 
 ### Build: 0 errors, 0 warnings
 
-### Commits (synced to origin + github)
-```
-c0ca2c5 fix(vic): corrected BGRA palette byte order
-69a7dd9 feat(vic): initialize VIC registers
-02d26dc feat(vic): text mode rendering
-```
+### Bug Fixed This Session
+**Missing ROMs**: MainWindow was not loading ROMs because ArchitectureBuilder was created without a RomProvider.
+- Added RomProvider to MainWindow.axaml.cs
+- Added roms folder copy to output directory via csproj
 
-### Known Issue
-**Palette**: Window shows yellow - BGRA byte order needs verification
+### Files Modified
+- `src/ViceSharp.Avalonia/MainWindow.axaml.cs` - Added RomProvider initialization
+- `src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj` - Added RomFetch reference + ROM copy
+- `src/ViceSharp.Avalonia/VideoSurface.cs` - Removed unused field
 
 ### Next Steps
-1. Debug palette byte order
-2. Verify blue border renders
-3. Verify character ROM text
+1. Run Avalonia app to verify blue border + text display
+2. Check if BASIC "READY." prompt appears
+3. Verify character ROM glyphs render correctly

@@ -10,6 +10,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
+
   <PropertyGroup>
     <RootNamespace>ViceSharp.$(MSBuildProjectName.Replace('ViceSharp.',''))</RootNamespace>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>

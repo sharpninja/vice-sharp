@@ -19,7 +19,7 @@ public static class VicPalette
         new Color(0x5B, 0xD6, 0xC1), // 3: Cyan
         new Color(0x9B, 0x27, 0xB1), // 4: Purple
         new Color(0x5C, 0xB5, 0x32), // 5: Green
-        new Color(0x21, 0x1B, 0x8E), // 6: Blue
+        new Color(0x1B, 0x1B, 0x8E), // 6: Blue (low red, low green, high blue)
         new Color(0xDF, 0xE5, 0x6C), // 7: Yellow
         new Color(0x9B, 0x52, 0x1C), // 8: Orange
         new Color(0x5A, 0x33, 0x00), // 9: Brown

@@ -1,6 +1,6 @@
 port: 7147
 baseUrl: http://PAYTON-LEGION2:7147
-apiKey: I3rv-NY91Gm0U86iPGUfew7TbfkDITlWbmIGVlebBbM
+apiKey: rqGGnEjJ-HlA-SKrlH2vEP7Qm8kOPQbVKL7y0cyqI68
 endpoints:
   health: /health
   swagger: /swagger/v1/swagger.json
@@ -21,15 +21,15 @@ endpoints:
   markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
 workspace: vice-sharp
 workspacePath: F:\GitHub\vice-sharp
-pid: 30164
-startedAt: 2026-04-17T00:22:00.5957855+00:00
-markerWrittenAtUtc: 2026-04-17T00:22:00.5957855+00:00
-serverStartedAtUtc: 2026-04-17T00:21:54.5913283+00:00
+pid: 6472
+startedAt: 2026-04-20T14:36:52.5332093+00:00
+markerWrittenAtUtc: 2026-04-20T14:36:52.5332093+00:00
+serverStartedAtUtc: 2026-04-20T14:36:44.9129087+00:00
 signature:
   algorithm: HMAC-SHA256
   canonicalization: marker-v1
   verifier: workspace_api_key
-  value: EC9E0B4F57E26CCC15D7681F31247F34917E3285E1D99A7585B283CAEBE6F56A
+  value: 4E6C033A055EC281FD76EEA65FFE3489A4F7A979A51BA48FACBC7370C04CA3C2
 trust_bootstrap:
   description: This marker is self-verifiable when the workspace API key and rendered bootstrap payload still match the active MCP workspace contract.
   guarantees:
@@ -100,8 +100,8 @@ prompt: |
   ## Authentication
 
   All /mcpserver/* endpoints require a per-workspace auth token:
-  - Header: X-Api-Key: I3rv-NY91Gm0U86iPGUfew7TbfkDITlWbmIGVlebBbM
-  - Or query param: ?api_key=I3rv-NY91Gm0U86iPGUfew7TbfkDITlWbmIGVlebBbM
+  - Header: X-Api-Key: rqGGnEjJ-HlA-SKrlH2vEP7Qm8kOPQbVKL7y0cyqI68
+  - Or query param: ?api_key=rqGGnEjJ-HlA-SKrlH2vEP7Qm8kOPQbVKL7y0cyqI68
   If you receive a 401, re-read this marker file — the token rotates on each server restart.
 
   ## Where Things Live

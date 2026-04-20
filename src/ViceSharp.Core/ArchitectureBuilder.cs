@@ -29,43 +29,44 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var bus = new BasicBus();
         var clock = new SystemClock(descriptor.MasterClockHz);
         var deviceRegistry = new DeviceRegistry();
-        
+
         var ram = new SimpleRam();
         ram.InitializeC64();
         bus.RegisterDevice(ram);
         deviceRegistry.Add(ram);
-        
+
         var irqLine = new InterruptLine(InterruptType.Irq);
         var nmiLine = new InterruptLine(InterruptType.Nmi);
-        
+
         var cpu = new Mos6502(bus);
         clock.Register(cpu);
         deviceRegistry.Add(cpu);
-        
+
         var vic = new Mos6569(bus, irqLine);
+        vic.Reset(); // Initialize VIC registers
         bus.RegisterDevice(vic);
         clock.Register(vic);
         deviceRegistry.Add(vic);
-        
+
         var cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
         bus.RegisterDevice(cia1);
         clock.Register(cia1);
         deviceRegistry.Add(cia1);
-        
+
         var cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
         bus.RegisterDevice(cia2);
         clock.Register(cia2);
         deviceRegistry.Add(cia2);
-        
+
         var pla = new Mos906114(bus);
         bus.RegisterDevice(pla);
         deviceRegistry.Add(pla);
-        
+
         var sid = new Sid6581(bus);
         bus.RegisterDevice(sid);
         clock.Register(sid);
         deviceRegistry.Add(sid);
-        
+
         var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, irqLine);
 
         if (_romProvider != null)
@@ -77,19 +78,19 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
                 {
                     bus.Write((ushort)(0xA000 + i), basic.Span[i]);
                 }
-                
+
                 var kernal = _romProvider.LoadRom("kernal", "C64");
                 for (int i = 0; i < kernal.Length; i++)
                 {
                     bus.Write((ushort)(0xE000 + i), kernal.Span[i]);
                 }
-                
+
                 var character = _romProvider.LoadRom("characters", "C64");
                 for (int i = 0; i < character.Length; i++)
                 {
                     bus.Write((ushort)(0xD000 + i), character.Span[i]);
                 }
-                
+
                 // Initialize color RAM $D800 with default color (light blue for chars)
                 for (int i = 0; i < 1000; i++)
                 {
@@ -170,6 +171,7 @@ internal sealed class DeviceRegistry : IDeviceRegistry
     private readonly List<IDevice> _devices = new();
     private readonly Dictionary<DeviceId, IDevice> _byId = new();
     private readonly Dictionary<DeviceRole, IDevice> _byRole = new();
+    private int _ciaIndex;
 
     public IDevice? GetById(DeviceId id) => _byId.TryGetValue(id, out var device) ? device : null;
     public IReadOnlyList<T> GetAll<T>() where T : IDevice => _devices.OfType<T>().ToList().AsReadOnly();
@@ -181,5 +183,19 @@ internal sealed class DeviceRegistry : IDeviceRegistry
     {
         _devices.Add(device);
         _byId[device.Id] = device;
+
+        // Register devices by their role for lookup
+        if (device is IVideoChip)
+            _byRole[DeviceRole.VideoChip] = device;
+        else if (device is IAudioChip)
+            _byRole[DeviceRole.AudioChip] = device;
+        else if (device is ICpu)
+            _byRole[DeviceRole.Cpu] = device;
+        else if (device is ICiaChip)
+        {
+            // Register CIA chips in order (CIA1 first, then CIA2)
+            _byRole[_ciaIndex == 0 ? DeviceRole.Cia1 : DeviceRole.Cia2] = device;
+            _ciaIndex++;
+        }
     }
 }

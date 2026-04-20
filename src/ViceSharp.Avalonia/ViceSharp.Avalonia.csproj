@@ -17,5 +17,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
+    <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\roms\**\*" Link="roms\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
