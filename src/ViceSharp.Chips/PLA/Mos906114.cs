@@ -81,10 +81,53 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     }
 
     /// <summary>
-    /// Resolve mapped device for given address
+    /// VICE-style: Memory configuration from control register
     /// </summary>
-    public DeviceId MapAddress(ushort address)
+    public MemoryConfig GetMemoryConfig()
     {
-        return new DeviceId(0);
+        bool loram = Loram;
+        bool hiram = Hiram;
+        bool charen = Charen;
+        
+        return (loram, hiram, charen) switch
+        {
+            (false, false, false) => MemoryConfig.RamRamRam,
+            (false, false, true) => MemoryConfig.RamRamChar,
+            (false, true, false) => MemoryConfig.RamKernalRam,
+            (false, true, true) => MemoryConfig.RamKernalChar,
+            (true, false, false) => MemoryConfig.RamRamRam,
+            (true, false, true) => MemoryConfig.BasicRamChar,
+            (true, true, false) => MemoryConfig.RamKernalRam,
+            (true, true, true) => MemoryConfig.BasicKernalChar,
+        };
+    }
+    
+    /// <summary>
+    /// Check if VIC-II has access to character ROM
+    /// </summary>
+    public bool VicHasCharacterRom => Loram && Charen;
+    
+    /// <summary>
+    /// Check if BASIC ROM is visible
+    /// </summary>
+    public bool BasicRomVisible => Loram && Hiram;
+    
+    /// <summary>
+    /// Check if KERNAL ROM is visible
+    /// </summary>
+    public bool KernalRomVisible => Hiram;
+    
+    /// <summary>
+    /// Memory banking configuration (VICE-style)
+    /// </summary>
+    public enum MemoryConfig
+    {
+        RamRamRam,
+        RamRamChar,
+        RamKernalRam,
+        RamKernalChar,
+        BasicRamChar,
+        RamKernalRam2,
+        BasicKernalChar
     }
 }
