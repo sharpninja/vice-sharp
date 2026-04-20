@@ -240,53 +240,33 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             voice.Envelope = 0;
         }
 
-        byte targetLevel = (byte)((voice.SustainRelease >> 4) * 17); // Sustain level (0-15 -> 0-255)
+        byte targetLevel = (byte)((voice.SustainRelease >> 4) * 17);
         int attackRate = GetAttackRates()[voice.AttackDecay >> 4];
         int decayRate = GetDecayReleaseRates()[voice.AttackDecay & 0x0F];
         int releaseRate = GetDecayReleaseRates()[voice.SustainRelease & 0x0F];
 
-        switch (voice.State)
+        voice.State = voice.State switch
         {
-            case EnvelopeState.Attack:
-                if (voice.Envelope < 255)
-                {
-                    voice.Envelope += (byte)Math.Min(255, (256 * 256) / attackRate);
-                    if (voice.Envelope >= 255)
-                    {
-                        voice.Envelope = 255;
-                        voice.State = EnvelopeState.Decay;
-                    }
-                }
-                break;
-
-            case EnvelopeState.Decay:
-                if (voice.Envelope > targetLevel)
-                {
-                    voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / decayRate);
-                    if (voice.Envelope <= targetLevel)
-                    {
-                        voice.Envelope = targetLevel;
-                        voice.State = EnvelopeState.Sustain;
-                    }
-                }
-                break;
-
-            case EnvelopeState.Sustain:
-                // Sustain holds level until gate off
-                break;
-
-            case EnvelopeState.Release:
-                if (voice.Envelope > 0)
-                {
-                    voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / releaseRate);
-                    if (voice.Envelope <= 0)
-                    {
-                        voice.Envelope = 0;
-                        voice.State = EnvelopeState.Idle;
-                    }
-                }
-                break;
-        }
+            EnvelopeState.Attack when voice.Envelope < 255 => 
+                (voice.Envelope += (byte)Math.Min(255, (256 * 256) / attackRate)) >= 255 
+                    ? EnvelopeState.Decay 
+                    : EnvelopeState.Attack,
+            EnvelopeState.Attack => EnvelopeState.Decay,
+            
+            EnvelopeState.Decay when voice.Envelope > targetLevel => 
+                (voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / decayRate)) <= targetLevel 
+                    ? EnvelopeState.Sustain 
+                    : EnvelopeState.Decay,
+            EnvelopeState.Decay => EnvelopeState.Sustain,
+            
+            EnvelopeState.Release when voice.Envelope > 0 => 
+                (voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / releaseRate)) <= 0 
+                    ? EnvelopeState.Idle 
+                    : EnvelopeState.Release,
+            EnvelopeState.Release => EnvelopeState.Idle,
+            
+            _ => voice.State
+        };
 
         // Gate off: start release
         if (!voice.Gate && voice.State != EnvelopeState.Idle && voice.State != EnvelopeState.Release)
