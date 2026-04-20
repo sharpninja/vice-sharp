@@ -3,12 +3,13 @@ using ViceSharp.Core;
 using ViceSharp.Architectures.EmptyMachine;
 using ViceSharp.Monitor;
 
-Console.WriteLine("ViceSharp - Commodore Emulator");
-Console.WriteLine("==============================");
+Console.WriteLine("ViceSharp - Commodore 64 Debug Monitor");
+Console.WriteLine("=====================================");
 Console.WriteLine();
 
 // Parse command line args
 bool runValidation = args.Contains("--validate");
+bool showHelp = args.Contains("--help");
 int cycles = 1000000;
 
 for (int i = 0; i < args.Length; i++)
@@ -17,6 +18,23 @@ for (int i = 0; i < args.Length; i++)
     {
         cycles = int.Parse(args[++i]);
     }
+}
+
+if (showHelp)
+{
+    Console.WriteLine("Usage: ViceSharp.Console [options]");
+    Console.WriteLine("  --validate    Run validation trace");
+    Console.WriteLine("  --cycles N     Number of cycles to execute");
+    Console.WriteLine("  --memory      Dump memory on exit");
+    Console.WriteLine("  --break ADDR   Set breakpoint at address");
+    Console.WriteLine();
+    Console.WriteLine("Debug commands:");
+    Console.WriteLine("  regs       Show CPU registers");
+    Console.WriteLine("  mem ADDR   Dump memory from address");
+    Console.WriteLine("  step      Step one instruction");
+    Console.WriteLine("  run       Run until breakpoint");
+    Console.WriteLine("  reset     Reset machine");
+    return;
 }
 
 // Test Architecture Builder with Empty Machine
