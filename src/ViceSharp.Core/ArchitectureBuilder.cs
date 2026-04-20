@@ -89,6 +89,12 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
                 {
                     bus.Write((ushort)(0xD000 + i), character.Span[i]);
                 }
+                
+                // Initialize color RAM $D800 with default color (light blue for chars)
+                for (int i = 0; i < 1000; i++)
+                {
+                    bus.Write((ushort)(0xD800 + i), 14); // Color index 14 = light blue
+                }
             }
             catch { /* ROM loading failed */ }
         }

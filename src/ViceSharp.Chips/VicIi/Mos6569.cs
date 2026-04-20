@@ -518,6 +518,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public void Reset()
     {
         Array.Clear(_registers, 0, _registers.Length);
+        // Initialize default VIC registers for C64
+        _registers[0x20] = 6;  // Border color = blue (index 6)
+        _registers[0x21] = 11; // Background color = dark gray
+        _registers[0x22] = 0;  // Auxiliary color
+        _registers[0x11] = 0x1B; // Default video mode (text, 25 rows)
+        _registers[0x16] = 0xC8; // Default column mode (40 columns)
+        _registers[0x18] = 0x15; // Default screen memory config
+        
         CurrentRasterLine = 0;
         RasterX = 0;
         CycleCounter = 0;
