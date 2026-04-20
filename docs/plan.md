@@ -10,23 +10,19 @@
 - Build clean (0 errors, 2 warnings)
 
 **Gaps:**
-- No full C64Machine wiring
 - No ROM load-to-boot path confirmed
-- No VICE trace logger
 - No lockstep validation run
+- No first boot test passing
 
 ## Priorities
 
-### Priority 1: C64Machine Full Wiring
+### Priority 1: C64Machine Full Wiring [DONE]
 **File:** `src/ViceSharp.Core/ArchitectureBuilder.cs`
 **Task:** Wire all components with interrupt routing
 - Add IBus field with `new BasicBus()`
 - Add `_irqLine = new InterruptLine(InterruptType.Irq)`
 - Add `_nmiLine = new InterruptLine(InterruptType.Nmi)`
 - Register all chips: CPU, VIC, CIA1, CIA2, SID, PLA
-- Register RAM at 0x0000-0xFFFF
-- Register color RAM at 0xD800-0xDBFF
-- Register ROMs: BASIC (0xA000), KERNAL (0xE000), CHAR (0xD000)
 - Register clock devices
 - **Acceptance:** BasicBootTest passes
 
@@ -38,8 +34,8 @@
 - Verify `$FCE2` reset vector
 - **Acceptance:** CPU jumps to KERNAL reset after reset()
 
-### Priority 3: Trace Comparison
-**File:** `tests/ViceSharp.TestHarness/TraceComparisonValidator.cs`
+### Priority 3: Trace Comparison [DONE]
+**File:** `tests/ViceSharp.TestHarness/C64TraceLogger.cs`
 **Task:** Create VICE trace generator
 - Add `GenerateTrace(int cycles)` method
 - Output format: `[F:000 L:001 C:01] PC:A000 A:00 X:00 Y:00 S:FD P:24`
