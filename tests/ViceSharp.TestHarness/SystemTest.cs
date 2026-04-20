@@ -1,4 +1,5 @@
 using ViceSharp.Architectures;
+using ViceSharp.Core;
 
 namespace ViceSharp.TestHarness;
 
@@ -8,11 +9,12 @@ namespace ViceSharp.TestHarness;
 public static class SystemTest
 {
     /// <summary>
-    /// Run system boot test
+    /// Run system boot test using ArchitectureBuilder
     /// </summary>
     public static void RunBootTest()
     {
-        var c64 = new C64Machine();
+        var builder = new ArchitectureBuilder();
+        var c64 = builder.Build(new C64NtscDescriptor());
         c64.Reset();
 
         // Run 10 frames
@@ -21,6 +23,8 @@ public static class SystemTest
             c64.RunFrame();
         }
 
+        var state = c64.GetState();
+        Console.WriteLine($"After 10 frames: PC=${state.PC:X4}, A=${state.A:X2}, X=${state.X:X2}");
         Console.WriteLine("System test completed successfully");
     }
 }
