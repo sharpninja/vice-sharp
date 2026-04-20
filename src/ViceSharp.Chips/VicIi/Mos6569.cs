@@ -496,6 +496,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         }
 
         // Update raster register
+        _renderer.Tick();
         _registers[0x12] = (byte)CurrentRasterLine;
         if ((CurrentRasterLine & 0x100) != 0)
         {
