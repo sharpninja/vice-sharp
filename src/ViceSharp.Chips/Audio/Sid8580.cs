@@ -6,7 +6,7 @@ namespace ViceSharp.Chips.Audio;
 /// MOS 8580 SID emulator - inherits from 6581, overrides filter differences.
 /// Based on VICE sid8580.c logic.
 /// </summary>
-public sealed class Sid8580 : Sid6581
+public partial class Sid8580 : Sid6581
 {
     public Sid8580(IBus bus) : base(bus) { }
 
