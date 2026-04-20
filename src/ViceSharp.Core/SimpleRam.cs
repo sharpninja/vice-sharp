@@ -47,9 +47,17 @@ public sealed class SimpleRam : IAddressSpace
         
         // Page 2 (stack) already zeroed
         
-        // $0200-$FFFB = 0xFF (empty RAM, typical after power-on)
-        // Length = 0xFFFC - 0x0200 = 0xFDFC
-        Array.Fill(_memory, (byte)0xFF, 0x0200, 0xFDFC);
+        // $0200-$03FF = 0 (reserved for system)
+        // $0400-$07FF = Screen RAM (40x25 = 1000 chars) - initialize to spaces (0x20)
+        Array.Fill(_memory, (byte)0x20, 0x0400, 0x0400); // 1KB screen RAM
+        
+        // $0800-$9FFF = 0xFF (empty RAM, typical after power-on)
+        Array.Fill(_memory, (byte)0xFF, 0x0800, 0x9800);
+        
+        // $A000-$BFFF = BASIC ROM (loaded separately)
+        // $C000-$CFFF = 0xFF
+        // $D000-$DFFF = Character ROM (loaded separately)
+        // $E000-$FFFB = KERNAL ROM (loaded separately)
         
         // Set reset vector at $FFFC-$FFFD to point to KERNAL reset
         // Real C64: $FCE2
