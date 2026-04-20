@@ -20,12 +20,26 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
 
     public void Irq()
     {
-        // IRQ implementation pending
+        // IRQ implementation - push PC and P to stack, set I flag, jump to IRQ vector
+        // Only if I flag is clear
+        if ((P & 0x04) == 0)
+        {
+            PushWord(PC);
+            Push((byte)(P & ~0x10)); // Push P with B flag clear
+            P |= 0x04; // Set I flag
+            PC = Read(0xFFFE);
+            PC |= (ushort)(Read(0xFFFF) << 8);
+        }
     }
 
     public void Nmi()
     {
-        // NMI implementation pending
+        // NMI implementation - push PC and P to stack, clear I flag, jump to NMI vector
+        PushWord(PC);
+        Push((byte)(P & ~0x10)); // Push P with B flag clear
+        P |= 0x04; // Set I flag (IRQs disabled during NMI)
+        PC = Read(0xFFFA);
+        PC |= (ushort)(Read(0xFFFB) << 8);
     }
 
     private readonly IBus _bus;
