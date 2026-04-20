@@ -14,7 +14,15 @@ public sealed partial class VicII : IClockedDevice, IAddressSpace, IVideoChip
     public int VisibleLines => 200;
     public int TotalLines => 312;
     public bool IsVBlank => _rasterY >= 0xF8;
-
+    
+    // Framebuffer (placeholder - full implementation would render actual video)
+    private readonly byte[] _frameBuffer = new byte[384 * 272 * 4];
+    
+    public byte[] FrameBuffer => _frameBuffer;
+    public int FrameWidth => 384;
+    public int FrameHeight => 272;
+    public event EventHandler? FrameCompleted;
+    
     private readonly IBus _bus;
     private readonly IFrameSink _frameSink;
 
@@ -125,6 +133,7 @@ public sealed partial class VicII : IClockedDevice, IAddressSpace, IVideoChip
         Span<byte> frameBuffer = stackalloc byte[320 * 200 * 4];
         _frameSink.PresentFrame(frameBuffer);
         _badLineCounter = 0;
+        FrameCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     public void Reset()

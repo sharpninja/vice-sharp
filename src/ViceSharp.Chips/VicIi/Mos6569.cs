@@ -22,6 +22,24 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
 
     public ushort CurrentRasterLine { get; private set; }
     
+    private readonly VideoRenderer _renderer;
+    
+    /// <inheritdoc />
+    public byte[] FrameBuffer => _renderer.FrameBuffer;
+    
+    /// <inheritdoc />
+    public int FrameWidth => VideoRenderer.ScreenWidth;
+    
+    /// <inheritdoc />
+    public int FrameHeight => VideoRenderer.ScreenHeight;
+    
+    /// <inheritdoc />
+    public event EventHandler? FrameCompleted
+    {
+        add => _renderer.FrameCompleted += value;
+        remove => _renderer.FrameCompleted -= value;
+    }
+    
     // VICE-style: PAL timing (6567/6569)
     public const int PalCyclesPerLine = 63;
     public const int PalVisibleLines = 312;
@@ -95,7 +113,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public byte CurrentCycle => (byte)(RasterX % CyclesPerLine);
     
     /// <summary>
-    /// VICE-style: Is this a badline (raster line 30-49)
+    /// VICE-style: Check if this a badline (raster line 30-49)
     /// </summary>
     public bool IsCurrentLineBad => CurrentRasterLine >= 30 && CurrentRasterLine <= 49;
     
@@ -445,6 +463,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     {
         _bus = bus;
         _irqLine = irqLine;
+        _renderer = new VideoRenderer(this);
     }
 
     /// <inheritdoc />
