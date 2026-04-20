@@ -1,10 +1,13 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Cpu;
 
 namespace ViceSharp.Core;
 
 public sealed class SystemClock : IClock
 {
     private readonly List<IClockedDevice> _devices = new();
+    private readonly Mos6502? _cpu;
+    private readonly IInterruptLine? _irqLine;
     private long _cycle;
 
     public long TotalCycles => _cycle;
@@ -24,6 +27,16 @@ public sealed class SystemClock : IClock
     {
         FrequencyHz = frequencyHz;
     }
+    
+    /// <summary>
+    /// Creates a new SystemClock with CPU and IRQ line for interrupt handling.
+    /// </summary>
+    public SystemClock(long frequencyHz, Mos6502 cpu, IInterruptLine irqLine)
+    {
+        FrequencyHz = frequencyHz;
+        _cpu = cpu;
+        _irqLine = irqLine;
+    }
 
     public void Step()
     {
@@ -35,6 +48,13 @@ public sealed class SystemClock : IClock
             {
                 device.Tick();
             }
+        }
+        
+        // Check for pending interrupts after all devices have ticked
+        // This allows CIA/VIC to assert IRQ lines during their Tick()
+        if (_cpu != null && _irqLine != null && _irqLine.IsAsserted)
+        {
+            _cpu.Irq();
         }
     }
 
@@ -63,5 +83,7 @@ public sealed class SystemClock : IClock
         {
             device.Reset();
         }
+        if (_irqLine is InterruptLine irq)
+            irq.Clear();
     }
 }

@@ -27,7 +27,6 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
     public IMachine Build(IArchitectureDescriptor descriptor)
     {
         var bus = new BasicBus();
-        var clock = new SystemClock(descriptor.MasterClockHz);
         var deviceRegistry = new DeviceRegistry();
 
         var ram = new SimpleRam();
@@ -39,6 +38,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var nmiLine = new InterruptLine(InterruptType.Nmi);
 
         var cpu = new Mos6502(bus);
+        var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine);
         clock.Register(cpu);
         deviceRegistry.Add(cpu);
 
