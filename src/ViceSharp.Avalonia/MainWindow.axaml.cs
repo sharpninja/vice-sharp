@@ -12,7 +12,6 @@ public partial class MainWindow : Window
 {
     private readonly IMachine _machine;
     private readonly VideoSurface _video;
-    private readonly DispatcherTimer _renderTimer;
 
     public MainWindow()
     {
@@ -28,15 +27,11 @@ public partial class MainWindow : Window
         Content = _video;
 
         // 50 FPS frame rendering
-        _renderTimer = new DispatcherTimer(
+        var renderTimer = new DispatcherTimer(
             TimeSpan.FromSeconds(1.0 / 50.0),
             DispatcherPriority.Render,
-            (s, e) =>
-            {
-                _machine.RunFrame();
-                _video.InvalidateVisual();
-            });
+            (s, e) => _machine.RunFrame());
 
-        _renderTimer.Start();
+        renderTimer.Start();
     }
 }
