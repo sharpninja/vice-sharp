@@ -43,12 +43,19 @@ public sealed class C64RomLoader
     }
 
     /// <summary>
-    /// Load ROM image into memory
+    /// Load ROM image into memory with checksum validation
     /// </summary>
-    public bool LoadRom(ReadOnlySpan<byte> data, RomDescriptor descriptor)
+    public bool LoadRom(ReadOnlySpan<byte> data, RomDescriptor descriptor, bool validateHash = true)
     {
         if (data.Length != descriptor.Size)
             return false;
+
+        if (validateHash && !string.IsNullOrEmpty(descriptor.Md5Hash))
+        {
+            var hash = ComputeMd5(data);
+            if (!string.Equals(hash, descriptor.Md5Hash, StringComparison.OrdinalIgnoreCase))
+                return false;
+        }
 
         for (int i = 0; i < descriptor.Size; i++)
         {
@@ -56,6 +63,25 @@ public sealed class C64RomLoader
         }
 
         return true;
+    }
+    
+    /// <summary>
+    /// Load ROM from file path
+    /// </summary>
+    public bool LoadRomFromFile(string path, RomDescriptor descriptor)
+    {
+        if (!File.Exists(path))
+            return false;
+        
+        var data = File.ReadAllBytes(path);
+        return LoadRom(data, descriptor);
+    }
+    
+    private static string ComputeMd5(ReadOnlySpan<byte> data)
+    {
+        using var md5 = System.Security.Cryptography.MD5.Create();
+        var hash = md5.ComputeHash(data.ToArray());
+        return Convert.ToHexString(hash).ToLowerInvariant();
     }
 
     /// <summary>
