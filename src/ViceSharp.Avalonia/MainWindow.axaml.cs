@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures;
-using ViceSharp.Architectures.EmptyMachine;
+using ViceSharp.Architectures.C64;
 using ViceSharp.Core;
 
 namespace ViceSharp.Avalonia;
@@ -20,7 +20,7 @@ public partial class MainWindow : Window
 
         // Build C64 machine using ArchitectureBuilder
         var builder = new ArchitectureBuilder();
-        var descriptor = new EmptyMachineDescriptor();
+        var descriptor = new C64Descriptor();
         _machine = builder.Build(descriptor);
 
         // Create video surface connected to machine
