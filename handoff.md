@@ -42,10 +42,10 @@ All commits synced to origin (Azure DevOps) and github.
 
 ## Next Steps
 
-1. **Wire ArchitectureBuilder**: Add references to Chips project, wire all chips (CPU, VIC, CIA, PLA)
-2. **Avalonia UI**: Build VideoSurface with pixel rendering
-3. **Test Harness**: Create basic test for MOS6510/VIC-II
-4. **State Snapshots**: Implement IMachine.GetState()/Restore()
+1. **Complete opcode table**: Add all 151 opcodes (with VICE duplicate handling)
+2. **Wire C64Machine**: Full chip wiring + ROM loader
+3. **First boot test**: VICE x64sc trace comparison
+4. **Avalonia UI**: Build VideoSurface with pixel rendering
 
 ## Project Rules (.clinerules)
 
