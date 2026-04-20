@@ -76,4 +76,24 @@ public sealed class D64Image
     }
 
     public byte[] ToArray() => _diskData.ToArray();
+    
+    /// <summary>
+    /// VICE-style: Read sector into buffer
+    /// </summary>
+    public bool ReadSector(int track, int sector, byte[] buffer)
+    {
+        if (buffer.Length < 256) return false;
+        GetSector(track, sector).CopyTo(buffer);
+        return true;
+    }
+    
+    /// <summary>
+    /// VICE-style: Write sector from buffer
+    /// </summary>
+    public bool WriteSector(int track, int sector, byte[] buffer)
+    {
+        if (buffer.Length < 256) return false;
+        buffer.AsSpan(0, 256).CopyTo(GetSector(track, sector));
+        return true;
+    }
 }
