@@ -14,10 +14,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     public byte MasterVolume { get => _volume; set => _volume = value; }
 
     // Waveform types
-    private const byte TRIANGLE = 0x04;
-    private const byte SAWTOOTH = 0x08;
-    private const byte PULSE = 0x40;
-    private const byte NOISE = 0x80;
+    public enum Waveform { Triangle = 0x04, Sawtooth = 0x08, Pulse = 0x40, Noise = 0x80, None = 0x00 }
+    
+    // Voice modulation modes
+    public enum VoiceModulation { None, Sync, Ring }
+    
+    // Filter types
+    public enum FilterType { None, LowPass, BandPass, HighPass, Notch }
+    
+    // ADSR envelope states
+    public enum EnvelopeState { Idle, Attack, Decay, Sustain, Release }
 
     private uint _noiseLfsr = 0x7FFFFFFF;
 
@@ -25,7 +31,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         // Generate raw voice outputs with sync/ring modulation
         int voiceOutputs0 = 0, voiceOutputs1 = 0, voiceOutputs2 = 0;
-        int prevOutput = 0; // For sync/ring modulation
+        int prevOutput = 0;
 
         for (int i = 0; i < 3; i++)
         {
@@ -46,7 +52,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 phase = 0;
             }
             
-            if ((waveform & TRIANGLE) != 0)
+            // Use waveform enum for cleaner code
+            Waveform wf = (Waveform)(waveform & (byte)Waveform.Noise);
+            bool hasTriangle = (waveform & (byte)Waveform.Triangle) != 0;
+            bool hasSawtooth = (waveform & (byte)Waveform.Sawtooth) != 0;
+            bool hasPulse = (waveform & (byte)Waveform.Pulse) != 0;
+            
+            if (hasTriangle)
             {
                 uint tri;
                 if (ringMod && i > 0)
@@ -62,15 +74,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 }
                 sample = (int)tri;
             }
-            else if ((waveform & SAWTOOTH) != 0)
+            else if (hasSawtooth)
             {
                 sample = (int)(phase << 1);
             }
-            else if ((waveform & PULSE) != 0)
+            else if (hasPulse)
             {
                 sample = phase < (pulseWidth >> 24) ? 255 : 0;
             }
-            else if ((waveform & NOISE) != 0)
+            else if (wf == Waveform.Noise)
             {
                 if ((_noiseLfsr & 1) != 0) sample = 255;
             }
@@ -181,7 +193,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public uint WaveformAccumulator;
         public uint PulseAccumulator;
         public byte Envelope;
-        public byte EnvelopeState; // 0=Idle, 1=Attack, 2=Decay, 3=Sustain, 4=Release
+        public EnvelopeState State;
         public bool Gate;
         public bool Reset;
     }
@@ -190,13 +202,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         _bus = bus;
     }
-
-    // ADSR state machine
-    private const byte ENV_IDLE = 0;
-    private const byte ENV_ATTACK = 1;
-    private const byte ENV_DECAY = 2;
-    private const byte ENV_SUSTAIN = 3;
-    private const byte ENV_RELEASE = 4;
 
     // ADSR rate tables (cycles per level) - virtual for override
     protected static readonly ushort[] AttackRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
@@ -229,9 +234,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private void ProcessEnvelope(ref Voice voice)
     {
         // Gate on: start attack or resume
-        if (voice.Gate && voice.EnvelopeState == ENV_IDLE)
+        if (voice.Gate && voice.State == EnvelopeState.Idle)
         {
-            voice.EnvelopeState = ENV_ATTACK;
+            voice.State = EnvelopeState.Attack;
             voice.Envelope = 0;
         }
 
@@ -240,53 +245,53 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         int decayRate = GetDecayReleaseRates()[voice.AttackDecay & 0x0F];
         int releaseRate = GetDecayReleaseRates()[voice.SustainRelease & 0x0F];
 
-        switch (voice.EnvelopeState)
+        switch (voice.State)
         {
-            case ENV_ATTACK:
+            case EnvelopeState.Attack:
                 if (voice.Envelope < 255)
                 {
                     voice.Envelope += (byte)Math.Min(255, (256 * 256) / attackRate);
                     if (voice.Envelope >= 255)
                     {
                         voice.Envelope = 255;
-                        voice.EnvelopeState = ENV_DECAY;
+                        voice.State = EnvelopeState.Decay;
                     }
                 }
                 break;
 
-            case ENV_DECAY:
+            case EnvelopeState.Decay:
                 if (voice.Envelope > targetLevel)
                 {
                     voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / decayRate);
                     if (voice.Envelope <= targetLevel)
                     {
                         voice.Envelope = targetLevel;
-                        voice.EnvelopeState = ENV_SUSTAIN;
+                        voice.State = EnvelopeState.Sustain;
                     }
                 }
                 break;
 
-            case ENV_SUSTAIN:
+            case EnvelopeState.Sustain:
                 // Sustain holds level until gate off
                 break;
 
-            case ENV_RELEASE:
+            case EnvelopeState.Release:
                 if (voice.Envelope > 0)
                 {
                     voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / releaseRate);
                     if (voice.Envelope <= 0)
                     {
                         voice.Envelope = 0;
-                        voice.EnvelopeState = ENV_IDLE;
+                        voice.State = EnvelopeState.Idle;
                     }
                 }
                 break;
         }
 
         // Gate off: start release
-        if (!voice.Gate && voice.EnvelopeState != ENV_IDLE && voice.EnvelopeState != ENV_RELEASE)
+        if (!voice.Gate && voice.State != EnvelopeState.Idle && voice.State != EnvelopeState.Release)
         {
-            voice.EnvelopeState = ENV_RELEASE;
+            voice.State = EnvelopeState.Release;
         }
     }
 
