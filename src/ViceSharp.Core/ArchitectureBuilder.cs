@@ -26,76 +26,89 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
     /// <inheritdoc />
     public IMachine Build(IArchitectureDescriptor descriptor)
     {
+        if (IsC64Machine(descriptor))
+            return BuildC64Machine(descriptor);
+
+        return BuildMinimalMachine(descriptor);
+    }
+
+    private IMachine BuildMinimalMachine(IArchitectureDescriptor descriptor)
+    {
         var bus = new BasicBus();
         var deviceRegistry = new DeviceRegistry();
-
         var ram = new SimpleRam();
-        ram.InitializeC64();
-        bus.RegisterDevice(ram);
-        deviceRegistry.Add(ram);
-
         var irqLine = new InterruptLine(InterruptType.Irq);
-        var nmiLine = new InterruptLine(InterruptType.Nmi);
-
         var cpu = new Mos6502(bus);
         var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine);
+
+        ram.InitializeC64();
+        bus.RegisterDevice(ram);
         clock.Register(cpu);
-        deviceRegistry.Add(cpu);
+        deviceRegistry.Add(ram, DeviceRole.SystemRam);
+        deviceRegistry.Add(cpu, DeviceRole.Cpu);
 
-        var vic = new Mos6569(bus, irqLine);
-        vic.Reset(); // Initialize VIC registers
-        bus.RegisterDevice(vic);
-        clock.Register(vic);
-        deviceRegistry.Add(vic);
-
-        var cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
-        bus.RegisterDevice(cia1);
-        clock.Register(cia1);
-        deviceRegistry.Add(cia1);
-
-        var cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
-        bus.RegisterDevice(cia2);
-        clock.Register(cia2);
-        deviceRegistry.Add(cia2);
-
-        var pla = new Mos906114(bus);
-        bus.RegisterDevice(pla);
-        deviceRegistry.Add(pla);
-
-        var sid = new Sid6581(bus);
-        bus.RegisterDevice(sid);
-        clock.Register(sid);
-        deviceRegistry.Add(sid);
-
-        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, irqLine);
-
-        if (_romProvider != null)
-        {
-            try
-            {
-                // Load ROMs directly into RAM memory (bypass bus to avoid I/O conflicts)
-                // ROM data is stored in RAM and paged in by the PLA when needed
-
-                var basic = _romProvider.LoadRom("basic", "C64");
-                ram.LoadRom(0xA000, basic.Span);
-
-                var kernal = _romProvider.LoadRom("kernal", "C64");
-                ram.LoadRom(0xE000, kernal.Span);
-
-                var character = _romProvider.LoadRom("characters", "C64");
-                ram.LoadRom(0xD000, character.Span);
-
-                // Initialize color RAM $D800 with default color (light blue for chars)
-                // This goes through the bus since it's not I/O space
-                for (int i = 0; i < 1000; i++)
-                {
-                    ram.Write((ushort)(0xD800 + i), 14); // Color index 14 = light blue
-                }
-            }
-            catch { /* ROM loading failed */ }
-        }
-
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
+        machine.Reset();
         return machine;
+    }
+
+    private IMachine BuildC64Machine(IArchitectureDescriptor descriptor)
+    {
+        if (_romProvider is null)
+            throw new InvalidOperationException($"{descriptor.MachineName} requires an IRomProvider.");
+
+        if (descriptor.RequiredRoms is not null && !descriptor.RequiredRoms.IsComplete(_romProvider))
+            throw new InvalidOperationException($"Required ROM set for {descriptor.MachineName} is missing or invalid.");
+
+        var bus = new BasicBus();
+        var deviceRegistry = new DeviceRegistry();
+        var irqLine = new InterruptLine(InterruptType.Irq);
+        var nmiLine = new InterruptLine(InterruptType.Nmi);
+        var cpu = new Mos6502(bus);
+        var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine);
+        var vic = descriptor.VideoStandard == VideoStandard.Ntsc
+            ? new Mos6567(bus, irqLine)
+            : new Mos6569(bus, irqLine);
+        var cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
+        var cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
+        var pla = new Mos906114(bus);
+        var sid = new Sid6581(bus);
+        var memory = new C64MemoryMap(vic, sid, cia1, cia2, pla);
+
+        memory.LoadBasicRom(_romProvider.LoadRom("basic", "C64").Span);
+        memory.LoadKernalRom(_romProvider.LoadRom("kernal", "C64").Span);
+        memory.LoadCharacterRom(_romProvider.LoadRom("characters", "C64").Span);
+
+        bus.RegisterDevice(memory);
+
+        clock.Register(cpu);
+        clock.Register(vic);
+        clock.Register(cia1);
+        clock.Register(cia2);
+        clock.Register(sid);
+        clock.Register(pla);
+
+        deviceRegistry.Add(memory, DeviceRole.SystemRam);
+        deviceRegistry.Add(cpu, DeviceRole.Cpu);
+        deviceRegistry.Add(vic, DeviceRole.VideoChip);
+        deviceRegistry.Add(cia1, DeviceRole.Cia1);
+        deviceRegistry.Add(cia2, DeviceRole.Cia2);
+        deviceRegistry.Add(pla, DeviceRole.Pla);
+        deviceRegistry.Add(sid, DeviceRole.AudioChip);
+
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
+        machine.Reset();
+        return machine;
+    }
+
+    private static bool IsC64Machine(IArchitectureDescriptor descriptor)
+    {
+        var roles = descriptor.Devices.Select(x => x.Role).ToHashSet();
+        return roles.Contains(DeviceRole.VideoChip)
+            || roles.Contains(DeviceRole.Cia1)
+            || roles.Contains(DeviceRole.Cia2)
+            || roles.Contains(DeviceRole.Pla)
+            || roles.Contains(DeviceRole.AudioChip);
     }
 }
 
@@ -109,20 +122,21 @@ internal sealed class Machine : IMachine
     private readonly IDeviceRegistry _devices;
     private readonly IArchitectureDescriptor _architecture;
     private readonly Mos6502 _cpu;
+    private readonly int _frameCycles;
 
     public Machine(
         IArchitectureDescriptor architecture,
         IBus bus,
         IClock clock,
         IDeviceRegistry deviceRegistry,
-        Mos6502 cpu,
-        IInterruptLine irqLine)
+        Mos6502 cpu)
     {
         _architecture = architecture;
         _bus = bus;
         _clock = clock;
         _devices = deviceRegistry;
         _cpu = cpu;
+        _frameCycles = architecture.VideoStandard == VideoStandard.Ntsc ? 263 * 64 : 312 * 63;
     }
 
     public IBus Bus => _bus;
@@ -130,8 +144,16 @@ internal sealed class Machine : IMachine
     public IDeviceRegistry Devices => _devices;
     public IArchitectureDescriptor Architecture => _architecture;
 
-    public void RunFrame() => _clock.Step(19656);
-    public void StepInstruction() => _clock.Step();
+    public void RunFrame() => _clock.Step(_frameCycles);
+
+    public void StepInstruction()
+    {
+        do
+        {
+            _clock.Step();
+        }
+        while (!_cpu.IsInstructionBoundary);
+    }
 
     public MachineState GetState()
     {
@@ -150,11 +172,11 @@ internal sealed class Machine : IMachine
     public void Reset()
     {
         _clock.Reset();
-        _cpu.Reset();
-        foreach (var device in _devices.All)
+        foreach (var device in _devices.All.Where(device => device is not IClockedDevice))
         {
             device.Reset();
         }
+        _cpu.Reset();
     }
 }
 
@@ -174,10 +196,18 @@ internal sealed class DeviceRegistry : IDeviceRegistry
     public IDevice? GetByRole(DeviceRole role) => _byRole.TryGetValue(role, out var device) ? device : null;
     public int Count => _devices.Count;
 
-    public void Add(IDevice device)
+    public void Add(IDevice device, params DeviceRole[] roles)
     {
         _devices.Add(device);
         _byId[device.Id] = device;
+
+        foreach (var role in roles)
+        {
+            _byRole[role] = device;
+        }
+
+        if (roles.Length != 0)
+            return;
 
         // Register devices by their role for lookup
         if (device is IVideoChip)
@@ -186,6 +216,8 @@ internal sealed class DeviceRegistry : IDeviceRegistry
             _byRole[DeviceRole.AudioChip] = device;
         else if (device is ICpu)
             _byRole[DeviceRole.Cpu] = device;
+        else if (device is Mos906114)
+            _byRole[DeviceRole.Pla] = device;
         else if (device is ICiaChip)
         {
             // Register CIA chips in order (CIA1 first, then CIA2)

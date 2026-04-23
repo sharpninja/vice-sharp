@@ -49,6 +49,11 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     private byte _portB;
     private byte _portADir;
     private byte _portBDir;
+
+    public Func<byte>? PortAInput { get; set; }
+    public Func<byte>? PortBInput { get; set; }
+    public Action<byte>? PortAOutputChanged { get; set; }
+    public Action<byte>? PortBOutputChanged { get; set; }
     
     // TOD (Time of Day) clock - VICE-style
     private byte _todTenths;
@@ -168,15 +173,21 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
 
     public byte Read(ushort address)
     {
-        int register = address & 0x0F;
+        int register = (address - BaseAddress) & 0x0F;
         return register switch
         {
+            0x00 => ReadPortValue(_portA, _portADir, PortAInput),
+            0x01 => ReadPortValue(_portB, _portBDir, PortBInput),
+            0x02 => _portADir,
+            0x03 => _portBDir,
             0x04 => (byte)_timerA.Counter,
             0x05 => (byte)(_timerA.Counter >> 8),
             0x06 => (byte)_timerB.Counter,
             0x07 => (byte)(_timerB.Counter >> 8),
-            0x08 => _portA,
-            0x09 => _portB,
+            0x08 => _todTenths,
+            0x09 => _todSeconds,
+            0x0A => _todMinutes,
+            0x0B => _todHours,
             0x0D => _interruptFlags,
             _ => _registers[register]
         };
@@ -184,7 +195,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
 
     public void Write(ushort address, byte value)
     {
-        int register = address & 0x0F;
+        int register = (address - BaseAddress) & 0x0F;
         _registers[register] = value;
         
         switch (register)
@@ -224,9 +235,15 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0x08: _todAlarmTenths = value; break;
                 
             // Ports
-            case 0x00: _portA = value; break;
+            case 0x00:
+                _portA = value;
+                PortAOutputChanged?.Invoke(value);
+                break;
             case 0x02: _portADir = value; break;
-            case 0x01: _portB = value; break;
+            case 0x01:
+                _portB = value;
+                PortBOutputChanged?.Invoke(value);
+                break;
             case 0x03: _portBDir = value; break;
             
             // Interrupt mask
@@ -240,5 +257,11 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         }
     }
 
-    public bool HandlesAddress(ushort address) => address >= 0xDC00 && address < 0xDE00;
+    public bool HandlesAddress(ushort address) => address >= BaseAddress && address < BaseAddress + 0x0100;
+
+    private static byte ReadPortValue(byte outputLatch, byte dataDirection, Func<byte>? inputReader)
+    {
+        byte input = inputReader?.Invoke() ?? (byte)0xFF;
+        return (byte)((outputLatch & dataDirection) | (input & ~dataDirection));
+    }
 }

@@ -3,23 +3,29 @@
 
 #include <stdint.h>
 
+#ifdef _WIN32
+#define VICE_SHIM_API __declspec(dllexport)
+#else
+#define VICE_SHIM_API
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Machine lifecycle
-void* vice_machine_create();
-void vice_machine_destroy(void* machine);
-void vice_machine_reset(void* machine);
-void vice_machine_step_cycle(void* machine);
+VICE_SHIM_API void* vice_machine_create();
+VICE_SHIM_API void vice_machine_destroy(void* machine);
+VICE_SHIM_API void vice_machine_reset(void* machine);
+VICE_SHIM_API void vice_machine_step_cycle(void* machine);
 
 // CPU State
-uint8_t vice_cpu_get_a(void* machine);
-uint8_t vice_cpu_get_x(void* machine);
-uint8_t vice_cpu_get_y(void* machine);
-uint8_t vice_cpu_get_p(void* machine);
-uint8_t vice_cpu_get_sp(void* machine);
-uint16_t vice_cpu_get_pc(void* machine);
+VICE_SHIM_API uint8_t vice_cpu_get_a(void* machine);
+VICE_SHIM_API uint8_t vice_cpu_get_x(void* machine);
+VICE_SHIM_API uint8_t vice_cpu_get_y(void* machine);
+VICE_SHIM_API uint8_t vice_cpu_get_p(void* machine);
+VICE_SHIM_API uint8_t vice_cpu_get_sp(void* machine);
+VICE_SHIM_API uint16_t vice_cpu_get_pc(void* machine);
 
 // VIC-II State
 struct vice_vic_state {
@@ -32,7 +38,7 @@ struct vice_vic_state {
     uint8_t registers[64];
 };
 
-void vice_vic_get_state(void* machine, struct vice_vic_state* state);
+VICE_SHIM_API void vice_vic_get_state(void* machine, struct vice_vic_state* state);
 
 // CIA State
 struct vice_cia_state {
@@ -48,7 +54,7 @@ struct vice_cia_state {
     uint8_t interrupt_flag;
 };
 
-void vice_cia_get_state(void* machine, int cia_index, struct vice_cia_state* state);
+VICE_SHIM_API void vice_cia_get_state(void* machine, int cia_index, struct vice_cia_state* state);
 
 // SID State
 struct vice_sid_state {
@@ -58,7 +64,7 @@ struct vice_sid_state {
     uint32_t filter_state;
 };
 
-void vice_sid_get_state(void* machine, struct vice_sid_state* state);
+VICE_SHIM_API void vice_sid_get_state(void* machine, struct vice_sid_state* state);
 
 #ifdef __cplusplus
 }

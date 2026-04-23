@@ -18,7 +18,11 @@ public sealed class EmptyMachineDescriptor : IArchitectureDescriptor
     public VideoStandard VideoStandard => VideoStandard.Ntsc;
     
     /// <inheritdoc />
-    public IReadOnlyList<DeviceDescriptor> Devices { get; } = Array.Empty<DeviceDescriptor>();
+    public IReadOnlyList<DeviceDescriptor> Devices { get; } =
+    [
+        new("6502 CPU", new DeviceId(0x0001), DeviceRole.Cpu, 0x0000, 0),
+        new("System RAM", new DeviceId(0x0100), DeviceRole.SystemRam, 0x0000, 0x10000),
+    ];
     
     /// <inheritdoc />
     public IRomSet? RequiredRoms => null;

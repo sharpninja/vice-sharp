@@ -1,36 +1,63 @@
+using ViceSharp.Core;
+
 namespace ViceSharp.TestHarness;
 
-using System.Runtime.InteropServices;
-
 /// <summary>
-/// Native bridge to original VICE emulator for golden reference state
+/// Test-local convenience wrapper around the shared VICE native interop.
 /// </summary>
 public static class ViceNativeBridge
 {
-    private const string ViceLibName = "vice_x64";
+    public static bool IsAvailable => ViceNative.IsAvailable;
+    public static string AvailabilityMessage => ViceNative.AvailabilityMessage;
 
-    [DllImport(ViceLibName, EntryPoint = "vice_machine_create")]
-    public static extern IntPtr CreateMachine();
+    public static IntPtr CreateMachine() => ViceNative.Create();
+    public static void DestroyMachine(IntPtr machine) => ViceNative.Destroy(machine);
+    public static void ResetMachine(IntPtr machine) => ViceNative.ResetNative(machine);
+    public static void StepCycle(IntPtr machine) => ViceNative.StepNative(machine);
+    public static byte GetCpuRegister(IntPtr machine, int registerId) => ViceNative.GetCpuRegister(machine, registerId);
 
-    [DllImport(ViceLibName, EntryPoint = "vice_machine_reset")]
-    public static extern void ResetMachine(IntPtr machine);
+    public static void GetVicState(IntPtr machine, ref ViceVicState state)
+    {
+        var nativeState = new ViceNative.ViceVicState();
+        ViceNative.GetVicState(machine, ref nativeState);
 
-    [DllImport(ViceLibName, EntryPoint = "vice_machine_step_cycle")]
-    public static extern void StepCycle(IntPtr machine);
+        state.Cycle = nativeState.Cycle;
+        state.RasterLine = nativeState.RasterLine;
+        state.RasterCycle = nativeState.RasterCycle;
+        state.BadLine = nativeState.BadLine;
+        state.DisplayState = nativeState.DisplayState;
+        state.SpriteDma = nativeState.SpriteDma;
+        state.Registers = nativeState.GetRegisters();
+    }
 
-    [DllImport(ViceLibName, EntryPoint = "vice_cpu_get_register")]
-    public static extern byte GetCpuRegister(IntPtr machine, int registerId);
+    public static void GetCiaState(IntPtr machine, int ciaIndex, ref ViceCiaState state)
+    {
+        var nativeState = new ViceNative.ViceCiaState();
+        ViceNative.GetCiaState(machine, ciaIndex, ref nativeState);
 
-    [DllImport(ViceLibName, EntryPoint = "vic_get_state")]
-    public static extern void GetVicState(IntPtr machine, ref ViceVicState state);
+        state.PortA = nativeState.PortA;
+        state.PortB = nativeState.PortB;
+        state.DdrA = nativeState.DdrA;
+        state.DdrB = nativeState.DdrB;
+        state.TimerA = nativeState.TimerA;
+        state.TimerB = nativeState.TimerB;
+        state.Icr = nativeState.Icr;
+        state.Cra = nativeState.Cra;
+        state.Crb = nativeState.Crb;
+        state.InterruptFlag = nativeState.InterruptFlag;
+    }
 
-    [DllImport(ViceLibName, EntryPoint = "cia_get_state")]
-    public static extern void GetCiaState(IntPtr machine, int ciaIndex, ref ViceCiaState state);
+    public static void GetSidState(IntPtr machine, ref ViceSidState state)
+    {
+        var nativeState = new ViceNative.ViceSidState();
+        ViceNative.GetSidState(machine, ref nativeState);
 
-    [DllImport(ViceLibName, EntryPoint = "sid_get_state")]
-    public static extern void GetSidState(IntPtr machine, ref ViceSidState state);
+        state.Registers = nativeState.GetRegisters();
+        state.Accumulators = nativeState.GetAccumulators();
+        state.Envelopes = nativeState.GetEnvelopes();
+        state.FilterState = nativeState.FilterState;
+    }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ViceVicState
     {
         public uint Cycle;
@@ -39,11 +66,9 @@ public static class ViceNativeBridge
         public byte BadLine;
         public byte DisplayState;
         public byte SpriteDma;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
         public byte[] Registers;
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ViceCiaState
     {
         public byte PortA;
@@ -58,16 +83,10 @@ public static class ViceNativeBridge
         public byte InterruptFlag;
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ViceSidState
     {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x20)]
         public byte[] Registers;
-
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public uint[] Accumulators;
-
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public byte[] Envelopes;
         public uint FilterState;
     }

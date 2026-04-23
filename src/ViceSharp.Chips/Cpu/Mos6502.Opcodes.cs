@@ -302,53 +302,61 @@ partial class Mos6502
 
             // INC - Increment Memory
             case 0xE6:
-                value = _bus.Read(ZeroPage());
+                _effectiveAddress = ZeroPage();
+                value = _bus.Read(_effectiveAddress);
                 value++;
-                _bus.Write(ZeroPage(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
             case 0xF6:
-                value = _bus.Read(ZeroPageX());
+                _effectiveAddress = ZeroPageX();
+                value = _bus.Read(_effectiveAddress);
                 value++;
-                _bus.Write(ZeroPageX(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
             case 0xEE:
-                value = _bus.Read(Absolute());
+                _effectiveAddress = Absolute();
+                value = _bus.Read(_effectiveAddress);
                 value++;
-                _bus.Write(Absolute(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
             case 0xFE:
-                value = _bus.Read(AbsoluteX());
+                _effectiveAddress = AbsoluteX();
+                value = _bus.Read(_effectiveAddress);
                 value++;
-                _bus.Write(AbsoluteX(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
 
             // DEC - Decrement Memory
             case 0xC6:
-                value = _bus.Read(ZeroPage());
+                _effectiveAddress = ZeroPage();
+                value = _bus.Read(_effectiveAddress);
                 value--;
-                _bus.Write(ZeroPage(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
             case 0xD6:
-                value = _bus.Read(ZeroPageX());
+                _effectiveAddress = ZeroPageX();
+                value = _bus.Read(_effectiveAddress);
                 value--;
-                _bus.Write(ZeroPageX(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
             case 0xCE:
-                value = _bus.Read(Absolute());
+                _effectiveAddress = Absolute();
+                value = _bus.Read(_effectiveAddress);
                 value--;
-                _bus.Write(Absolute(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
             case 0xDE:
-                value = _bus.Read(AbsoluteX());
+                _effectiveAddress = AbsoluteX();
+                value = _bus.Read(_effectiveAddress);
                 value--;
-                _bus.Write(AbsoluteX(), value);
+                _bus.Write(_effectiveAddress, value);
                 UpdateNZ(value);
                 break;
 
@@ -373,14 +381,14 @@ partial class Mos6502
             case 0xCC: Compare(Y, Absolute()); break;
 
             // Branch Instructions
-            case 0x10: if ((P & 0x80) == 0) BranchRelative(); break; // BPL
-            case 0x30: if ((P & 0x80) != 0) BranchRelative(); break; // BMI
-            case 0x50: if ((P & 0x40) == 0) BranchRelative(); break; // BVC
-            case 0x70: if ((P & 0x40) != 0) BranchRelative(); break; // BVS
-            case 0x90: if ((P & 0x01) == 0) BranchRelative(); break; // BCC
-            case 0xB0: if ((P & 0x01) != 0) BranchRelative(); break; // BCS
-            case 0xD0: if ((P & 0x02) == 0) BranchRelative(); break; // BNE
-            case 0xF0: if ((P & 0x02) != 0) BranchRelative(); break; // BEQ
+            case 0x10: BranchRelative((P & 0x80) == 0); break; // BPL
+            case 0x30: BranchRelative((P & 0x80) != 0); break; // BMI
+            case 0x50: BranchRelative((P & 0x40) == 0); break; // BVC
+            case 0x70: BranchRelative((P & 0x40) != 0); break; // BVS
+            case 0x90: BranchRelative((P & 0x01) == 0); break; // BCC
+            case 0xB0: BranchRelative((P & 0x01) != 0); break; // BCS
+            case 0xD0: BranchRelative((P & 0x02) == 0); break; // BNE
+            case 0xF0: BranchRelative((P & 0x02) != 0); break; // BEQ
 
             // Logical AND
             case 0x29: A &= _bus.Read(Immediate()); UpdateNZ(A); break;
@@ -414,31 +422,79 @@ partial class Mos6502
 
             // Arithmetic Shift Left
             case 0x0A: A = ASL(A); break;
-            case 0x06: _bus.Write(ZeroPage(), ASL(_bus.Read(ZeroPage()))); break;
-            case 0x16: _bus.Write(ZeroPageX(), ASL(_bus.Read(ZeroPageX()))); break;
-            case 0x0E: _bus.Write(Absolute(), ASL(_bus.Read(Absolute()))); break;
-            case 0x1E: _bus.Write(AbsoluteX(), ASL(_bus.Read(AbsoluteX()))); break;
+            case 0x06:
+                _effectiveAddress = ZeroPage();
+                _bus.Write(_effectiveAddress, ASL(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x16:
+                _effectiveAddress = ZeroPageX();
+                _bus.Write(_effectiveAddress, ASL(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x0E:
+                _effectiveAddress = Absolute();
+                _bus.Write(_effectiveAddress, ASL(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x1E:
+                _effectiveAddress = AbsoluteX();
+                _bus.Write(_effectiveAddress, ASL(_bus.Read(_effectiveAddress)));
+                break;
 
             // Logical Shift Right
             case 0x4A: A = LSR(A); break;
-            case 0x46: _bus.Write(ZeroPage(), LSR(_bus.Read(ZeroPage()))); break;
-            case 0x56: _bus.Write(ZeroPageX(), LSR(_bus.Read(ZeroPageX()))); break;
-            case 0x4E: _bus.Write(Absolute(), LSR(_bus.Read(Absolute()))); break;
-            case 0x5E: _bus.Write(AbsoluteX(), LSR(_bus.Read(AbsoluteX()))); break;
+            case 0x46:
+                _effectiveAddress = ZeroPage();
+                _bus.Write(_effectiveAddress, LSR(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x56:
+                _effectiveAddress = ZeroPageX();
+                _bus.Write(_effectiveAddress, LSR(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x4E:
+                _effectiveAddress = Absolute();
+                _bus.Write(_effectiveAddress, LSR(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x5E:
+                _effectiveAddress = AbsoluteX();
+                _bus.Write(_effectiveAddress, LSR(_bus.Read(_effectiveAddress)));
+                break;
 
             // Rotate Left
             case 0x2A: A = ROL(A); break;
-            case 0x26: _bus.Write(ZeroPage(), ROL(_bus.Read(ZeroPage()))); break;
-            case 0x36: _bus.Write(ZeroPageX(), ROL(_bus.Read(ZeroPageX()))); break;
-            case 0x2E: _bus.Write(Absolute(), ROL(_bus.Read(Absolute()))); break;
-            case 0x3E: _bus.Write(AbsoluteX(), ROL(_bus.Read(AbsoluteX()))); break;
+            case 0x26:
+                _effectiveAddress = ZeroPage();
+                _bus.Write(_effectiveAddress, ROL(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x36:
+                _effectiveAddress = ZeroPageX();
+                _bus.Write(_effectiveAddress, ROL(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x2E:
+                _effectiveAddress = Absolute();
+                _bus.Write(_effectiveAddress, ROL(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x3E:
+                _effectiveAddress = AbsoluteX();
+                _bus.Write(_effectiveAddress, ROL(_bus.Read(_effectiveAddress)));
+                break;
 
             // Rotate Right
             case 0x6A: A = ROR(A); break;
-            case 0x66: _bus.Write(ZeroPage(), ROR(_bus.Read(ZeroPage()))); break;
-            case 0x76: _bus.Write(ZeroPageX(), ROR(_bus.Read(ZeroPageX()))); break;
-            case 0x6E: _bus.Write(Absolute(), ROR(_bus.Read(Absolute()))); break;
-            case 0x7E: _bus.Write(AbsoluteX(), ROR(_bus.Read(AbsoluteX()))); break;
+            case 0x66:
+                _effectiveAddress = ZeroPage();
+                _bus.Write(_effectiveAddress, ROR(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x76:
+                _effectiveAddress = ZeroPageX();
+                _bus.Write(_effectiveAddress, ROR(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x6E:
+                _effectiveAddress = Absolute();
+                _bus.Write(_effectiveAddress, ROR(_bus.Read(_effectiveAddress)));
+                break;
+            case 0x7E:
+                _effectiveAddress = AbsoluteX();
+                _bus.Write(_effectiveAddress, ROR(_bus.Read(_effectiveAddress)));
+                break;
 
             // ADC - Add with Carry
             case 0x69: ADC(_bus.Read(Immediate())); break;
@@ -538,10 +594,11 @@ partial class Mos6502
         UpdateNZ((byte)result);
     }
 
-    private void BranchRelative()
+    private void BranchRelative(bool shouldBranch)
     {
         sbyte offset = (sbyte)Fetch();
-        PC = (ushort)(PC + offset);
+        if (shouldBranch)
+            PC = (ushort)(PC + offset);
     }
 
     private byte ASL(byte value)

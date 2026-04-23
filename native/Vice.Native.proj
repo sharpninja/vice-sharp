@@ -2,17 +2,36 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <NativeLibs>$(OutDir)native</NativeLibs>
+    <BuildNativeCommand Condition="'$(OS)' == 'Windows_NT'">powershell -ExecutionPolicy Bypass -File .\build-vice-shim.ps1</BuildNativeCommand>
+    <BuildNativeCommand Condition="'$(OS)' != 'Windows_NT'">bash ./build-vice-shim.sh</BuildNativeCommand>
   </PropertyGroup>
+
+  <ItemGroup>
+    <NativeBuildInputs Include="vice-shim.c" />
+    <NativeBuildInputs Include="vice-shim.h" />
+    <NativeBuildInputs Include="build-vice-shim.sh" />
+    <NativeBuildInputs Include="build-vice-shim.ps1" />
+    <NativeBuildInputs Include="patches\**\*.patch" />
+    <NativeBuildInputs Include="vice\vice\src\**\*.*" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="vice-shim.c" />
     <None Include="vice-shim.h" />
-    <None Include="vice/src/**/*.*" />
+    <None Include="build-vice-shim.sh" />
+    <None Include="build-vice-shim.ps1" />
+    <None Include="patches\**\*.patch" />
+    <None Include="patches\**\*.md" />
+    <None Include="vice\vice\src\**\*.*" />
   </ItemGroup>
 
-  <Target Name="BuildNative" BeforeTargets="Build">
+  <Target Name="BuildNative"
+          BeforeTargets="Build"
+          Inputs="@(NativeBuildInputs)"
+          Outputs="$(MSBuildProjectDirectory)\vice_x64.dll"
+          Condition="'$(DesignTimeBuild)' != 'true'">
     <Message Text="Building VICE native library" Importance="high" />
-    <Exec Command="cl /LD /Fe:vice_x64.dll vice-shim.c vice/src/*.c /I vice/src /I ." WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Exec Command="$(BuildNativeCommand)" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
 
 </Project>

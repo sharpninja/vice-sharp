@@ -29,7 +29,6 @@ public sealed class VideoRenderer
     public readonly byte[] FrameBuffer = new byte[ScreenWidth * ScreenHeight * 4];
 
     private readonly Mos6569 _vic;
-    private readonly IBus _bus;
     private int _currentFrame;
 
     // C64 palette in BGRA format - built from VicPalette colors
@@ -49,10 +48,14 @@ public sealed class VideoRenderer
         }
     }
 
-    public VideoRenderer(Mos6569 vic, IBus bus)
+    public VideoRenderer(Mos6569 vic)
     {
         _vic = vic;
-        _bus = bus;
+    }
+
+    public VideoRenderer(Mos6569 vic, IBus _)
+        : this(vic)
+    {
     }
 
     /// <summary>
@@ -130,15 +133,15 @@ public sealed class VideoRenderer
                     
                     // Read character code from screen RAM at $0400
                     ushort screenAddr = (ushort)(0x0400 + screenIndex);
-                    byte charCode = _bus.Read(screenAddr);
+                    byte charCode = _vic.ReadVideoMemory(screenAddr);
                     
                     // Read color from color RAM at $D800
                     ushort colorAddr = (ushort)(0xD800 + screenIndex);
-                    byte colorCode = _bus.Read(colorAddr);
+                    byte colorCode = _vic.ReadVideoMemory(colorAddr);
                     
                     // Character generator base is at $D000, each char is 8 bytes
                     ushort charAddr = (ushort)(0xD000 + charCode * 8 + charRow);
-                    byte charData = _bus.Read(charAddr);
+                    byte charData = _vic.ReadVideoMemory(charAddr);
                     
                     // Get bit position (bit 7 is leftmost pixel)
                     int bitPos = 7 - charX;

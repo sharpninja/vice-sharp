@@ -1,0 +1,206 @@
+diff --git a/vice/src/c64/c64cpusc.c b/vice/src/c64/c64cpusc.c
+index 5971a3c9d3..d7723c968b 100644
+--- a/vice/src/c64/c64cpusc.c
++++ b/vice/src/c64/c64cpusc.c
+@@ -14,58 +14,78 @@
+  *
+  *  This program is distributed in the hope that it will be useful,
+  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  *  GNU General Public License for more details.
+  *
+  *  You should have received a copy of the GNU General Public License
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+  *  02111-1307  USA.
+  *
+  */
+ 
+ #include "vice.h"
+ 
+ #include <stdio.h>
+ 
+ #include "cpmcart.h"
+ #include "monitor.h"
+ #include "vicii-cycle.h"
++#ifdef VICE_SHIM_HOSTED
++#include "../vice-shim-runtime.h"
++#endif
+ 
+ /* ------------------------------------------------------------------------- */
+ 
+ /* Global clock counter.  */
+ CLOCK maincpu_clk = 0L;
+ /* if != 0, exit when this many cycles have been executed */
+ CLOCK maincpu_clk_limit = 0L;
+ 
+ #define REWIND_FETCH_OPCODE(clock) /*clock-=2*/
+ 
+ /* Mask: BA low */
+ int maincpu_ba_low_flags = 0;
+ 
+-#define CLK_INC()                                  \
+-    interrupt_delay();                             \
+-    maincpu_clk++;                                 \
+-    maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII; \
+-    maincpu_ba_low_flags |= vicii_cycle()
++#ifdef VICE_SHIM_HOSTED
++#define CLK_INC()                                               \
++    do {                                                        \
++        interrupt_delay();                                      \
++        maincpu_clk++;                                          \
++        maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII;          \
++        maincpu_ba_low_flags |= vicii_cycle();                  \
++        EXPORT_REGISTERS();                                     \
++        if (vice_shim_cycle_checkpoint()) {                     \
++            return;                                             \
++        }                                                       \
++        IMPORT_REGISTERS();                                     \
++    } while (0)
++#else
++#define CLK_INC()                                               \
++    do {                                                        \
++        interrupt_delay();                                      \
++        maincpu_clk++;                                          \
++        maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII;          \
++        maincpu_ba_low_flags |= vicii_cycle();                  \
++    } while (0)
++#endif
+ 
+ 
+ /* Skip cycle implementation */
+ 
+ #define SKIP_CYCLE 0
+ 
+ /* Opcode info updated in FETCH_OPCODE.
+    Needed for CLI/SEI detection in vicii_steal_cycles. */
+ #define OPCODE_UPDATE_IN_FETCH
+ 
+ 
+ /* opcode_t etc */
+ 
+ #if !defined WORDS_BIGENDIAN && defined ALLOW_UNALIGNED_ACCESS
+ 
+ #define opcode_t uint32_t
+ 
+ #define p0 (opcode & 0xff)
+ #define p1 ((opcode >> 8) & 0xff)
+ #define p2 (opcode >> 8)
+diff --git a/vice/src/mainc64cpu.c b/vice/src/mainc64cpu.c
+index 357b27452b..4901d15f69 100644
+--- a/vice/src/mainc64cpu.c
++++ b/vice/src/mainc64cpu.c
+@@ -38,40 +38,43 @@
+ #ifdef FEATURE_CPUMEMHISTORY
+ #include "c64pla.h"
+ #endif
+ 
+ #include "debug.h"
+ #include "cmdline.h"
+ #include "interrupt.h"
+ #include "log.h"
+ #include "machine.h"
+ #include "mainc64cpu.h"
+ #include "maincpu.h"
+ #include "mainlock.h"
+ #include "mem.h"
+ #include "monitor.h"
+ #include "mos6510.h"
+ #include "reu.h"
+ #include "resources.h"
+ #include "snapshot.h"
+ #include "traps.h"
+ #include "types.h"
++#ifdef VICE_SHIM_HOSTED
++#include "vice-shim-runtime.h"
++#endif
+ 
+ #ifndef EXIT_FAILURE
+ #define EXIT_FAILURE 1
+ #endif
+ 
+ log_t maincpu_log = LOG_DEFAULT;
+ 
+ /* MACHINE_STUFF should define/undef
+ 
+  - NEED_REG_PC
+ 
+ */
+ 
+ /* ------------------------------------------------------------------------- */
+ #if defined (DEBUG) || defined (FEATURE_CPUMEMHISTORY)
+ CLOCK debug_clk;
+ #endif
+ 
+ CLOCK stolen_cycles;
+ 
+@@ -735,41 +738,55 @@ void maincpu_mainloop(void)
+        least, on gcc 2.7.2.x).  */
+     uint8_t reg_a = 0;
+     uint8_t reg_x = 0;
+     uint8_t reg_y = 0;
+     uint8_t reg_p = 0;
+     uint8_t reg_sp = 0;
+     uint8_t flag_n = 0;
+     uint8_t flag_z = 0;
+ #ifndef NEED_REG_PC
+     /* FIXME: this should really be uint16_t, but it breaks things (eg trap17.prg) */
+     unsigned int reg_pc;
+ #endif
+ 
+     /*
+      * Enable maincpu_resync_limits functionality .. in the old code
+      * this is where the local stack var had its address copied to
+      * the global.
+      */
+     bank_base_ready = true;
+ 
+-    machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++#ifdef VICE_SHIM_HOSTED
++    if (vice_shim_take_bootstrap_maincpu()) {
++        IMPORT_REGISTERS();
++        maincpu_jammed = 0;
++        last_opcode_info = 0;
++        last_opcode_addr = reg_pc;
++        stolen_cycles = 0;
++        check_ba_low = 0;
++        reu_dma_triggered = 0;
++        maincpu_rmw_flag = 0;
++    } else
++#endif
++    {
++        machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++    }
+ 
+     while (1) {
+ #define CPU_LOG_ID maincpu_log
+ #define ANE_LOG_LEVEL ane_log_level
+ #define LXA_LOG_LEVEL lxa_log_level
+ #define CPU_IS_JAMMED maincpu_jammed
+ #define CLK maincpu_clk
+ #define RMW_FLAG maincpu_rmw_flag
+ #define LAST_OPCODE_INFO last_opcode_info
+ #define LAST_OPCODE_ADDR last_opcode_addr
+ #define TRACEFLG debug.maincpu_traceflg
+ 
+ #define CPU_INT_STATUS maincpu_int_status
+ 
+ #define ALARM_CONTEXT maincpu_alarm_context
+ 
+ #define CHECK_PENDING_ALARM() (clk >= next_alarm_clk(maincpu_int_status))
+ 
+ #define CHECK_PENDING_INTERRUPT() check_pending_interrupt(maincpu_int_status)
+ 
+diff --git a/vice/src/vice-shim-runtime.h b/vice/src/vice-shim-runtime.h
+new file mode 100644
+index 0000000..4fdf78c
+--- /dev/null
++++ b/vice/src/vice-shim-runtime.h
+@@ -0,0 +1,7 @@
++#ifndef VICE_SHIM_RUNTIME_H
++#define VICE_SHIM_RUNTIME_H
++
++int vice_shim_cycle_checkpoint(void);
++int vice_shim_take_bootstrap_maincpu(void);
++
++#endif

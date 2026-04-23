@@ -160,6 +160,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     
     public byte RasterX;
     public uint CycleCounter;
+    public Func<ushort, byte>? VideoMemoryReader { get; set; }
     
     // VICE-style: Border configuration
     public enum BorderSide { None, Normal, Extended }
@@ -463,7 +464,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     {
         _bus = bus;
         _irqLine = irqLine;
-        _renderer = new VideoRenderer(this, _bus);
+        _renderer = new VideoRenderer(this);
     }
 
     /// <inheritdoc />
@@ -534,39 +535,40 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <inheritdoc />
     public byte Peek(ushort offset)
     {
-        return Read(offset);
+        int register = (offset - BaseAddress) & 0x3F;
+        return _registers[register];
     }
 
     /// <inheritdoc />
     public byte Read(ushort offset)
     {
-        if (offset >= Size) return 0xFF;
+        int register = (offset - BaseAddress) & 0x3F;
 
-        if (offset == 0x19)
+        if (register == 0x19)
         {
             byte value = _registers[0x19];
             _registers[0x19] &= 0x7F;
             return value;
         }
 
-        return _registers[offset];
+        return _registers[register];
     }
 
     /// <inheritdoc />
     public void Write(ushort offset, byte value)
     {
-        if (offset >= Size) return;
+        int register = (offset - BaseAddress) & 0x3F;
 
-        if (offset == 0x19)
+        if (register == 0x19)
         {
-            _registers[offset] &= (byte)~value;
+            _registers[register] &= (byte)~value;
             return;
         }
 
-        _registers[offset] = value;
+        _registers[register] = value;
         
         // VICE-style: Update sprite registers
-        UpdateSpriteRegisters(offset, value);
+        UpdateSpriteRegisters((ushort)register, value);
     }
     
     private void UpdateSpriteRegisters(ushort offset, byte value)
@@ -612,7 +614,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <inheritdoc />
     public bool HandlesAddress(ushort address)
     {
-        return address >= BaseAddress && address < BaseAddress + Size;
+        return address >= BaseAddress && address < BaseAddress + 0x0400;
+    }
+
+    public byte ReadVideoMemory(ushort address)
+    {
+        return VideoMemoryReader?.Invoke(address) ?? _bus.Read(address);
     }
     
     /// <summary>
@@ -634,7 +641,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         int charOffset = row * 40 + col;
         
         // Get character from screen memory
-        byte charCode = _bus.Read((ushort)(ScreenMemoryBase + charOffset));
+        byte charCode = ReadVideoMemory((ushort)(ScreenMemoryBase + charOffset));
         
         // Get bitmap data based on display mode
         switch (DisplayMode)
@@ -642,7 +649,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
             case VideoMode.StandardText:
             case VideoMode.MulticolorText:
                 // Fetch character line from ROM
-                byte charLine = _bus.Read((ushort)(CharacterBase + charCode * 8 + (y % 8)));
+                byte charLine = ReadVideoMemory((ushort)(CharacterBase + charCode * 8 + (y % 8)));
                 // Get bit within byte (x % 8, leftmost bit at position 7)
                 int bitPos = 7 - (x % 8);
                 byte colorIndex = (byte)((charLine >> bitPos) & 0x01);
@@ -651,7 +658,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
             case VideoMode.Bitmap:
                 // Direct bitmap mode
                 int bitmapOffset = charCode * 64 + (y % 8) * 8 + (x % 8);
-                byte bitmapByte = _bus.Read((ushort)(BitmapPointerBase + bitmapOffset));
+                byte bitmapByte = ReadVideoMemory((ushort)(BitmapPointerBase + bitmapOffset));
                 return (byte)(bitmapByte & 0x0F);
                 
             case VideoMode.ExtendedBackground:

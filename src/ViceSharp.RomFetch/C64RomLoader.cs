@@ -13,8 +13,8 @@ public sealed class C64RomLoader
         Name = "BASIC ROM",
         Address = 0xA000,
         Size = 8192,
-        Md5Hash = "57af4ae21d4b705c2991d98e55e65057",
-        Sha1Hash = "790153939283a7080421f8c910206e6040f4a687"
+        Md5Hash = "57af4ae21d4b705c2991d98ed5c1f7b8",
+        Sha1Hash = "79015323128650c742a3694c9429aa91f355905e"
     };
 
     public static readonly RomDescriptor KernalRom = new RomDescriptor
@@ -22,8 +22,8 @@ public sealed class C64RomLoader
         Name = "KERNAL ROM",
         Address = 0xE000,
         Size = 8192,
-        Md5Hash = "39065497630802346bce175ab5387a5e",
-        Sha1Hash = "1d5036ae56b4749a6c3618685863cc378dd500d8"
+        Md5Hash = "39065497630802346bce17963f13c092",
+        Sha1Hash = "1d503e56df85a62fee696e7618dc5b4e781df1bb"
     };
 
     public static readonly RomDescriptor CharacterRom = new RomDescriptor
@@ -31,8 +31,8 @@ public sealed class C64RomLoader
         Name = "CHARACTER ROM",
         Address = 0xD000,
         Size = 4096,
-        Md5Hash = "12a41f0341afca68a79056340ddc8840",
-        Sha1Hash = "f32e04c649814e3f182450a1797b14d778106c99"
+        Md5Hash = "12a4202f5331d45af846af6c58fba946",
+        Sha1Hash = "adc7c31e18c7c7413d54802ef2f4193da14711aa"
     };
 
     private readonly IBus _bus;

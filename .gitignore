@@ -25,6 +25,8 @@ x86/
 bld/
 [Ll]og/
 [Ll]ogs/
+native/*.dll
+native/*.o
 
 ## Visual Studio
 .vs/
@@ -61,6 +63,9 @@ $tf/
 
 ## Misc
 .cache/
+.dotnet-cli/
+*.trace.log
+todo-bootstrap.marker
 *.tmp
 *.bak
 *.swp

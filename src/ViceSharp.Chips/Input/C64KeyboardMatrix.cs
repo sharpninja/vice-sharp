@@ -20,6 +20,7 @@ public sealed class C64KeyboardMatrix : IInputSource
     // 8 rows × 8 columns
     private readonly bool[,] _matrix = new bool[8, 8];
     private byte _columnMask;
+    private byte _rowMask;
     
     // VICE-style: RESTORE key is special (NMI trigger)
     private bool _restoreKeyPressed;
@@ -40,6 +41,7 @@ public sealed class C64KeyboardMatrix : IInputSource
     {
         Array.Clear(_matrix);
         _columnMask = 0xFF;
+        _rowMask = 0xFF;
     }
 
     /// <summary>
@@ -85,6 +87,14 @@ public sealed class C64KeyboardMatrix : IInputSource
     }
 
     /// <summary>
+    /// Select row mask for CIA port A.
+    /// </summary>
+    public void SetRowMask(byte mask)
+    {
+        _rowMask = mask;
+    }
+
+    /// <summary>
     /// Read row state for CIA port A
     /// </summary>
     public byte ReadRowState()
@@ -98,6 +108,27 @@ public sealed class C64KeyboardMatrix : IInputSource
                 if ((_columnMask & (1 << col)) == 0 && _matrix[row, col])
                 {
                     result &= (byte)~(1 << row);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Read column state for CIA port B.
+    /// </summary>
+    public byte ReadColumnState()
+    {
+        byte result = 0xFF;
+
+        for (int row = 0; row < 8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                if ((_rowMask & (1 << row)) == 0 && _matrix[row, col])
+                {
+                    result &= (byte)~(1 << col);
                 }
             }
         }

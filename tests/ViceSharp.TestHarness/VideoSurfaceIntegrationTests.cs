@@ -2,17 +2,13 @@ namespace ViceSharp.TestHarness;
 
 using Xunit;
 using ViceSharp.Abstractions;
-using ViceSharp.Core;
 
 public sealed class VideoSurfaceIntegrationTests
 {
     [Fact]
     public void Machine_Has_VideoChip_Device()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         
         // Act - Get the video chip by role
         var videoChip = machine.Devices.GetByRole(DeviceRole.VideoChip);
@@ -25,10 +21,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void VideoChip_FrameBuffer_Is_Allocated()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act
@@ -42,10 +35,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void VideoChip_Has_FrameCompleted_Event()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act & Assert - Event should be subscribable (not null)
@@ -57,10 +47,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void Machine_RunFrame_Triggers_FrameCompleted()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         int frameCount = 0;
@@ -76,10 +63,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void VideoChip_FrameBuffer_Has_Content_After_RunFrame()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act
@@ -105,10 +89,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void Machine_RunFrame_Produces_Blue_Border_Color()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act - Run a frame and get the framebuffer
@@ -126,10 +107,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void Border_Pixels_Are_All_Same_Color()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act - Run a frame
@@ -155,10 +133,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void FrameBuffer_Has_Expected_Size_For_384x272()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act
@@ -172,10 +147,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void Architecture_Has_All_Required_Devices()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         
         // Act - Check all required device roles exist
         var videoChip = machine.Devices.GetByRole(DeviceRole.VideoChip);
@@ -190,10 +162,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void VideoChip_Reset_Sets_RasterLine_To_Zero()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act - Run some frames to advance raster
@@ -211,10 +180,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void VideoChip_FrameBuffer_Can_Be_Copied_To_External_Buffer()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         machine.RunFrame();
@@ -241,10 +207,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void VideoChip_ScreenDimensions_Are_Correct()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Assert - Video chip should report correct dimensions
@@ -255,10 +218,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void VideoChip_Is_Addressable_At_D000()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act - Check if video chip handles $D000 address
@@ -272,10 +232,7 @@ public sealed class VideoSurfaceIntegrationTests
     [Fact]
     public void Rendered_Frame_Image_Is_Blue_Border_Frame()
     {
-        // Arrange
-        var builder = new ArchitectureBuilder();
-        var descriptor = new Architectures.C64.C64Descriptor();
-        var machine = builder.Build(descriptor);
+        var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
         // Act - Run a frame

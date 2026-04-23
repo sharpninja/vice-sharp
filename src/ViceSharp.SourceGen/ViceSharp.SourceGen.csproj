@@ -6,6 +6,8 @@
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <IsAotCompatible>false</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

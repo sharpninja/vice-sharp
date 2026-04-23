@@ -17,6 +17,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     public ushort PC { get; set; }
     public byte Flags { get => P; set => P = value; }
     public byte P;
+    public bool IsInstructionBoundary => _cycle == 0;
 
     public void Irq()
     {
@@ -62,12 +63,6 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
             _cycle = GetCycleCount(_opcode);
             _effectiveAddress = 0;
             _fetched = 0;
-            
-            AddressingMode mode = GetAddressingMode(_opcode);
-            bool pageCrossed = ExecuteAddressing(mode);
-            
-            if (pageCrossed && IsPageBoundaryCycleRequired(_opcode))
-                _cycle++;
         }
 
         _cycle--;

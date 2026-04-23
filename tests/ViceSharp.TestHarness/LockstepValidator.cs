@@ -1,6 +1,5 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Core;
-using ViceSharp.Architectures.C64;
 
 namespace ViceSharp.TestHarness;
 
@@ -9,18 +8,13 @@ namespace ViceSharp.TestHarness;
 /// </summary>
 public sealed class LockstepValidator : IDisposable
 {
-    private readonly Commodore64 _machine;
+    private readonly IMachine _machine;
     private readonly IViceNative _native;
     private long _cycleCount;
 
     public LockstepValidator()
     {
-        IBus bus = new BasicBus();
-        IClock clock = new SystemClock();
-        IInterruptLine irqLine = new InterruptLine(InterruptType.Irq);
-        IInterruptLine nmiLine = new InterruptLine(InterruptType.Nmi);
-        
-        _machine = new Commodore64(bus, clock, irqLine, nmiLine);
+        _machine = MachineTestFactory.CreateC64Machine();
         _native = ViceNative.CreateInstance();
     }
 
@@ -31,7 +25,10 @@ public sealed class LockstepValidator : IDisposable
     {
         _machine.Reset();
         _native.Reset();
-        
+
+        if (!ValidateState())
+            return ValidationReport.Fail(0, 0, GetStateDiff());
+
         for (_cycleCount = 0; _cycleCount < maxCycles; _cycleCount++)
         {
             _machine.Clock.Step();
@@ -39,11 +36,12 @@ public sealed class LockstepValidator : IDisposable
 
             if (!ValidateState())
             {
-                return ValidationReport.Fail(_cycleCount, _cycleCount, GetStateDiff());
+                var mismatchCycle = _cycleCount + 1;
+                return ValidationReport.Fail(mismatchCycle, mismatchCycle, GetStateDiff());
             }
         }
 
-        return ValidationReport.Pass(_cycleCount);
+        return ValidationReport.Pass(maxCycles);
     }
 
     private bool ValidateState()
@@ -62,7 +60,12 @@ public sealed class LockstepValidator : IDisposable
 
     private StateDiff GetStateDiff()
     {
-        return new StateDiff();
+        return new StateDiff
+        {
+            Cycle = _cycleCount,
+            Expected = _native.GetState(),
+            Actual = _machine.GetState()
+        };
     }
 
     public void Dispose()
@@ -70,6 +73,5 @@ public sealed class LockstepValidator : IDisposable
         _native.Dispose();
     }
 }
-
 
 

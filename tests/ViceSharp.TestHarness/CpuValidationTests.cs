@@ -1,93 +1,71 @@
-namespace ViceSharp.TestHarness;
-
-using Xunit;
-using ViceSharp.Chips.Cpu;
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Cpu;
+using Xunit;
+
+namespace ViceSharp.TestHarness;
 
 public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLifetime
 {
-    private IntPtr _viceMachine;
+    private readonly ViceMachineValidationFixture _fixture = new();
 
     public CpuValidationTests()
-        : base(new Mos6502(null!))
     {
+        InitializeChip((_fixture.ManagedMachine.Devices.GetByRole(DeviceRole.Cpu) as Mos6502)
+            ?? throw new InvalidOperationException("Managed C64 machine did not expose a MOS 6502 CPU."));
     }
 
-    public async ValueTask InitializeAsync()
-    {
-        // Initialize VICE reference instance
-        _viceMachine = ViceNativeBridge.CreateMachine();
-        ViceNativeBridge.ResetMachine(_viceMachine);
-    }
+    public ValueTask InitializeAsync() => _fixture.InitializeAsync();
+    public ValueTask DisposeAsync() => _fixture.DisposeAsync();
 
-    public ValueTask DisposeAsync()
-    {
-        // Cleanup native resources
-        return ValueTask.CompletedTask;
-    }
-
-    [Fact(Skip = "Requires native VICE DLL")]
+    [ViceFact]
     public void Reset_StateMatchesVICE()
     {
-        Chip.Reset();
+        _fixture.ResetBoth();
 
-        var actualState = CaptureState(Chip);
-        var expectedState = GetCpuStateFromVICE();
-
-        var result = CompareStates(actualState, expectedState);
-
+        var result = CompareStates(GetActualState(), GetExpectedState());
         Assert.True(result.Passed, FormatDifferences(result.Differences));
     }
 
-    [Fact(Skip = "Requires native VICE DLL")]
-    public void SingleCycle_ExecuteMatchesVICE()
+    [ViceFact]
+    public void First64Cycles_MatchVICE()
     {
-        // Write NOP opcode
-        Chip.Write(0xFFFC, 0xEA);
-        Chip.Write(0xFFFD, 0xFF);
+        _fixture.ResetBoth();
 
-        for (int cycle = 0; cycle < 2; cycle++)
+        for (var cycle = 0; cycle < 64; cycle++)
         {
-            ViceNativeBridge.StepCycle(_viceMachine);
+            _fixture.StepNative();
             var result = StepAndCompare();
-
-            Assert.True(result.Passed, $"Cycle {cycle}: {FormatDifferences(result.Differences)}");
+            Assert.True(result.Passed, $"Cycle {cycle + 1}: {FormatDifferences(result.Differences)}");
         }
     }
 
-    [Fact(Skip = "Requires native VICE DLL")]
-    public void FullInstructionSet_AllOpcodesMatchVICE()
+    protected override void StepManaged() => _fixture.StepManaged();
+
+    protected override Dictionary<string, object?> GetActualState()
     {
-        // Test all 256 opcodes
-        for (byte opcode = 0; opcode < 0xFF; opcode++)
+        return new Dictionary<string, object?>
         {
-            Chip.Write(0xFFFC, opcode);
-            Chip.Write(0xFFFD, 0xFF);
-
-            for (int cycle = 0; cycle < 7; cycle++)
-            {
-                ViceNativeBridge.StepCycle(_viceMachine);
-                var result = StepAndCompare();
-
-                Assert.True(result.Passed, $"Opcode 0x{opcode:X2} Cycle {cycle}: {FormatDifferences(result.Differences)}");
-            }
-        }
-    }
-
-    protected override Dictionary<string, object> GetExpectedState()
-    {
-        return new Dictionary<string, object>
-        {
-            ["_a"] = ViceNativeBridge.GetCpuRegister(_viceMachine, 0),
-            ["_x"] = ViceNativeBridge.GetCpuRegister(_viceMachine, 1),
-            ["_y"] = ViceNativeBridge.GetCpuRegister(_viceMachine, 2),
-            ["_p"] = ViceNativeBridge.GetCpuRegister(_viceMachine, 3),
-            ["_sp"] = ViceNativeBridge.GetCpuRegister(_viceMachine, 4),
-            ["_pc"] = (ushort)(ViceNativeBridge.GetCpuRegister(_viceMachine, 5) | (ViceNativeBridge.GetCpuRegister(_viceMachine, 6) << 8))
+            ["A"] = Chip.A,
+            ["X"] = Chip.X,
+            ["Y"] = Chip.Y,
+            ["P"] = Chip.P,
+            ["S"] = Chip.S,
+            ["PC"] = Chip.PC
         };
     }
 
-    private Dictionary<string, object> GetCpuStateFromVICE() => GetExpectedState();
+    protected override Dictionary<string, object?> GetExpectedState()
+    {
+        return new Dictionary<string, object?>
+        {
+            ["A"] = ViceNativeBridge.GetCpuRegister(_fixture.NativeMachine, 0),
+            ["X"] = ViceNativeBridge.GetCpuRegister(_fixture.NativeMachine, 1),
+            ["Y"] = ViceNativeBridge.GetCpuRegister(_fixture.NativeMachine, 2),
+            ["P"] = ViceNativeBridge.GetCpuRegister(_fixture.NativeMachine, 3),
+            ["S"] = ViceNativeBridge.GetCpuRegister(_fixture.NativeMachine, 4),
+            ["PC"] = (ushort)(ViceNativeBridge.GetCpuRegister(_fixture.NativeMachine, 5) | (ViceNativeBridge.GetCpuRegister(_fixture.NativeMachine, 6) << 8))
+        };
+    }
 
     private static string FormatDifferences(IReadOnlyList<StateDifference> differences)
     {

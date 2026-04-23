@@ -1,70 +1,83 @@
+using ViceSharp.Abstractions;
+using ViceSharp.Chips.VicIi;
+using Xunit;
+
 namespace ViceSharp.TestHarness;
 
-using Xunit;
-using ViceSharp.Chips.Video;
-
-public sealed class VicIiValidationTests : LockstepTestRunner<VicII>, IAsyncLifetime
+public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLifetime
 {
-    private IntPtr _viceMachine;
+    private readonly ViceMachineValidationFixture _fixture = new();
 
     public VicIiValidationTests()
-        : base(new VicII(null!, null!))
     {
+        InitializeChip((_fixture.ManagedMachine.Devices.GetByRole(DeviceRole.VideoChip) as Mos6569)
+            ?? throw new InvalidOperationException("Managed C64 machine did not expose a PAL VIC-II."));
     }
 
-    public async ValueTask InitializeAsync()
-    {
-        _viceMachine = ViceNativeBridge.CreateMachine();
-        ViceNativeBridge.ResetMachine(_viceMachine);
-    }
+    public ValueTask InitializeAsync() => _fixture.InitializeAsync();
+    public ValueTask DisposeAsync() => _fixture.DisposeAsync();
 
-    public ValueTask DisposeAsync()
-    {
-        return ValueTask.CompletedTask;
-    }
-
-    [Fact(Skip = "Requires native VICE DLL")]
+    [ViceFact]
     public void Reset_StateMatchesVICE()
     {
-        Chip.Reset();
+        _fixture.ResetBoth();
 
-        var actualState = CaptureState(Chip);
-        var expectedState = GetExpectedState();
-
-        var result = CompareStates(actualState, expectedState);
-
+        var result = CompareStates(GetActualState(), GetExpectedState());
         Assert.True(result.Passed, FormatDifferences(result.Differences));
     }
 
-    [Fact(Skip = "Requires native VICE DLL")]
-    public void RasterLine_IncrementMatchesVICE()
+    [ViceFact]
+    public void FirstTwoScanlines_MatchVICE()
     {
-        for (int line = 0; line < 312; line++)
-        {
-            for (int cycle = 0; cycle < 63; cycle++)
-            {
-                ViceNativeBridge.StepCycle(_viceMachine);
-                var result = StepAndCompare();
+        _fixture.ResetBoth();
+        var cyclesToCompare = 63 * 2;
 
-                Assert.True(result.Passed, $"Line {line} Cycle {cycle}: {FormatDifferences(result.Differences)}");
-            }
+        for (var cycle = 0; cycle < cyclesToCompare; cycle++)
+        {
+            _fixture.StepNative();
+            var result = StepAndCompare();
+            Assert.True(result.Passed, $"Cycle {cycle + 1}: {FormatDifferences(result.Differences)}");
         }
     }
 
-    protected override Dictionary<string, object> GetExpectedState()
+    protected override void StepManaged() => _fixture.StepManaged();
+
+    protected override Dictionary<string, object?> GetActualState()
+    {
+        return new Dictionary<string, object?>
+        {
+            ["Cycle"] = Chip.CycleCounter,
+            ["RasterLine"] = Chip.CurrentRasterLine,
+            ["RasterCycle"] = Chip.CurrentCycle,
+            ["BadLine"] = Chip.IsBadLine,
+            ["Registers"] = ReadManagedRegisters()
+        };
+    }
+
+    protected override Dictionary<string, object?> GetExpectedState()
     {
         var viceState = new ViceNativeBridge.ViceVicState();
-        ViceNativeBridge.GetVicState(_viceMachine, ref viceState);
+        ViceNativeBridge.GetVicState(_fixture.NativeMachine, ref viceState);
 
-        return new Dictionary<string, object>
+        return new Dictionary<string, object?>
         {
-            ["_cycle"] = viceState.Cycle,
-            ["_rasterLine"] = viceState.RasterLine,
-            ["_rasterCycle"] = viceState.RasterCycle,
-            ["_badLine"] = viceState.BadLine != 0,
-            ["_displayState"] = viceState.DisplayState,
-            ["_spriteDma"] = viceState.SpriteDma
+            ["Cycle"] = viceState.Cycle,
+            ["RasterLine"] = viceState.RasterLine,
+            ["RasterCycle"] = viceState.RasterCycle,
+            ["BadLine"] = viceState.BadLine != 0,
+            ["Registers"] = viceState.Registers
         };
+    }
+
+    private byte[] ReadManagedRegisters()
+    {
+        var registers = new byte[0x40];
+        for (var i = 0; i < registers.Length; i++)
+        {
+            registers[i] = Chip.Peek((ushort)(Chip.BaseAddress + i));
+        }
+
+        return registers;
     }
 
     private static string FormatDifferences(IReadOnlyList<StateDifference> differences)

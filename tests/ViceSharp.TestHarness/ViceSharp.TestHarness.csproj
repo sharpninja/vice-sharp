@@ -7,6 +7,7 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ViceNativeProject>$(MSBuildThisFileDirectory)..\..\native\Vice.Native.proj</ViceNativeProject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,5 +23,11 @@
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="FluentAssertions" />
   </ItemGroup>
+
+  <Target Name="BuildViceNative"
+          BeforeTargets="Build"
+          Condition="'$(DesignTimeBuild)' != 'true' and Exists('$(ViceNativeProject)')">
+    <MSBuild Projects="$(ViceNativeProject)" Targets="BuildNative" />
+  </Target>
 
 </Project>

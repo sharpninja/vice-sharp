@@ -90,15 +90,11 @@ public sealed class Commodore64 : IMachine
 
     public void StepInstruction()
     {
-        // Execute single CPU instruction
-        while (true)
+        do
         {
             _clock.Step();
-            
-            // Step completed when PC advances to next instruction
-            // Implementation pending proper public API
-            break;
         }
+        while (!_cpu.IsInstructionBoundary);
     }
 
     /// <summary>

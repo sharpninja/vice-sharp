@@ -6,47 +6,45 @@ using ViceSharp.Abstractions;
 /// <summary>
 /// Cycle accurate lockstep test runner that compares chip state after every cycle
 /// </summary>
-public abstract class LockstepTestRunner<TChip> where TChip : IClockedDevice
+public abstract class LockstepTestRunner<TChip> where TChip : class, IClockedDevice
 {
-    protected readonly TChip Chip;
-
-    protected LockstepTestRunner(TChip chip)
-    {
-        Chip = chip;
-    }
+    protected TChip Chip { get; private set; } = null!;
 
     /// <summary>
     /// Execute single cycle and compare state
     /// </summary>
     public TestResult StepAndCompare()
     {
-        // Capture pre-state
-        var beforeState = CaptureState(Chip);
-
-        // Execute cycle
-        Chip.Tick();
-
-        // Capture post-state
-        var afterState = CaptureState(Chip);
-
-        // Get expected state from golden reference
-        var expectedState = GetExpectedState();
-
-        // Compare all fields
-        return CompareStates(afterState, expectedState);
+        EnsureInitialized();
+        StepManaged();
+        return CompareStates(GetActualState(), GetExpectedState());
     }
+
+    protected void InitializeChip(TChip chip)
+    {
+        Chip = chip ?? throw new ArgumentNullException(nameof(chip));
+    }
+
+    protected virtual void StepManaged() => Chip.Tick();
+
+    protected virtual Dictionary<string, object?> GetActualState() => CaptureState(Chip);
 
     /// <summary>
     /// Reflection based state capture for all public and private fields
     /// </summary>
-    protected Dictionary<string, object> CaptureState(object instance)
+    protected Dictionary<string, object?> CaptureState(object instance)
     {
-        var state = new Dictionary<string, object>();
+        var state = new Dictionary<string, object?>();
         var type = instance.GetType();
 
-        foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+        while (type is not null)
         {
-            state[field.Name] = field.GetValue(instance)!;
+            foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+            {
+                state.TryAdd(field.Name, field.GetValue(instance));
+            }
+
+            type = type.BaseType;
         }
 
         return state;
@@ -55,7 +53,7 @@ public abstract class LockstepTestRunner<TChip> where TChip : IClockedDevice
     /// <summary>
     /// Bitwise state comparison with exact matching
     /// </summary>
-    protected TestResult CompareStates(Dictionary<string, object> actual, Dictionary<string, object> expected)
+    protected TestResult CompareStates(Dictionary<string, object?> actual, Dictionary<string, object?> expected)
     {
         var differences = new List<StateDifference>();
 
@@ -67,7 +65,7 @@ public abstract class LockstepTestRunner<TChip> where TChip : IClockedDevice
                 continue;
             }
 
-            if (!Equals(actualValue, expected[key]))
+            if (!ValuesEqual(actualValue, expected[key]))
             {
                 differences.Add(new StateDifference(key, actualValue, expected[key]));
             }
@@ -78,7 +76,38 @@ public abstract class LockstepTestRunner<TChip> where TChip : IClockedDevice
             : TestResult.Fail(differences);
     }
 
-    protected abstract Dictionary<string, object> GetExpectedState();
+    protected abstract Dictionary<string, object?> GetExpectedState();
+
+    private void EnsureInitialized()
+    {
+        if (Chip is null)
+            throw new InvalidOperationException($"{GetType().Name} must call {nameof(InitializeChip)} before use.");
+    }
+
+    private static bool ValuesEqual(object? actual, object? expected)
+    {
+        if (ReferenceEquals(actual, expected))
+            return true;
+
+        if (actual is null || expected is null)
+            return false;
+
+        if (actual is Array actualArray && expected is Array expectedArray)
+        {
+            if (actualArray.Length != expectedArray.Length)
+                return false;
+
+            for (var i = 0; i < actualArray.Length; i++)
+            {
+                if (!ValuesEqual(actualArray.GetValue(i), expectedArray.GetValue(i)))
+                    return false;
+            }
+
+            return true;
+        }
+
+        return Equals(actual, expected);
+    }
 }
 
 public readonly struct TestResult
@@ -99,10 +128,10 @@ public readonly struct TestResult
 public readonly struct StateDifference
 {
     public string FieldName { get; }
-    public object Actual { get; }
-    public object Expected { get; }
+    public object? Actual { get; }
+    public object? Expected { get; }
 
-    public StateDifference(string fieldName, object actual, object expected)
+    public StateDifference(string fieldName, object? actual, object? expected)
     {
         FieldName = fieldName;
         Actual = actual;
