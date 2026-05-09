@@ -34,3 +34,9 @@
   - Native shim build succeeds.
   - Focused lockstep/boot-path runtime runs are still failing (hang/mismatch remains in cycle-0/first-100 path); no new successful `First100CyclesMatch` execution during this wrap-up turn.
 - Good handoff/session continuity path is active through `workflow.sessionlog` and `docs/requirements/requirements-wiki-documents.zip` was regenerated.
+- Wrap-up completion:
+  - Commit: `6ad07d9`
+  - Push: `origin main` (`846a97e` → `6ad07d9`)
+  - `git diff --check -- native/vice-shim.c` is clean (EOF normalized to LF and no trailing whitespace).
+  - `docs/requirements/requirements-wiki-documents.zip` is committed as part of wrap-up.
+  - Remaining workspace noise intentionally excluded from commit: pre-existing tracked changes in `docs/plan.md`, `native/build-vice-shim.sh`, `src/ViceSharp.Chips/Cpu/Mos6502.cs`, `src/ViceSharp.Core/*`, `tests/ViceSharp.TestHarness/*`, plus many `tmp-*` and artifact untracked files from prior runtime attempts.
