@@ -65,4 +65,4 @@
 
 ## Iteration Status
 - **Iteration 0 (Foundations)** — Complete (100%)
-- **Iteration 1 (C64 Bringup)** — In progress (Stage 1 of 30)
+ - **Iteration 1 (C64 Bringup)** — In progress (Stage 27 of 30)

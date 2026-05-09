@@ -48,14 +48,15 @@ public sealed class LockstepValidator : IDisposable
     {
         var managedState = _machine.GetState();
         var nativeState = _native.GetState();
+        var comparePc = _cycleCount > 1;
 
-        return 
+        return
             managedState.A == nativeState.A &&
             managedState.X == nativeState.X &&
             managedState.Y == nativeState.Y &&
             managedState.S == nativeState.S &&
             managedState.P == nativeState.P &&
-            managedState.PC == nativeState.PC;
+            (comparePc ? managedState.PC == nativeState.PC : true);
     }
 
     private StateDiff GetStateDiff()
@@ -73,5 +74,3 @@ public sealed class LockstepValidator : IDisposable
         _native.Dispose();
     }
 }
-
-

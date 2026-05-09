@@ -3,6 +3,7 @@ using FluentAssertions;
 
 namespace ViceSharp.TestHarness;
 
+[Collection("NativeVice")]
 public sealed class LockstepValidationTests : IDisposable
 {
     private readonly LockstepValidator _validator;
@@ -54,6 +55,9 @@ public sealed class LockstepValidationTests : IDisposable
         if (report.Success || report.Mismatch is null)
             return "No mismatch captured.";
 
-        return $"Mismatch at cycle {report.FirstMismatchCycle}: actual PC=${report.Mismatch.Value.Actual.PC:X4} expected PC=${report.Mismatch.Value.Expected.PC:X4}, actual A=${report.Mismatch.Value.Actual.A:X2} expected A=${report.Mismatch.Value.Expected.A:X2}.";
+        return
+            $"Mismatch at cycle {report.FirstMismatchCycle}: " +
+            $"actual [A=${report.Mismatch.Value.Actual.A:X2}, X=${report.Mismatch.Value.Actual.X:X2}, Y=${report.Mismatch.Value.Actual.Y:X2}, S=${report.Mismatch.Value.Actual.S:X2}, P=${report.Mismatch.Value.Actual.P:X2}, PC=${report.Mismatch.Value.Actual.PC:X4}] " +
+            $"expected [A=${report.Mismatch.Value.Expected.A:X2}, X=${report.Mismatch.Value.Expected.X:X2}, Y=${report.Mismatch.Value.Expected.Y:X2}, S=${report.Mismatch.Value.Expected.S:X2}, P=${report.Mismatch.Value.Expected.P:X2}, PC=${report.Mismatch.Value.Expected.PC:X4}].";
     }
 }

@@ -4,6 +4,8 @@ namespace ViceSharp.Chips.Cpu;
 
 public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
 {
+    private const int ResetCycleDelay = 3;
+
     public DeviceId Id => new DeviceId(0x0001);
     public string Name => "MOS 6502 CPU";
     public uint ClockDivisor => 1;
@@ -17,7 +19,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     public ushort PC { get; set; }
     public byte Flags { get => P; set => P = value; }
     public byte P;
-    public bool IsInstructionBoundary => _cycle == 0;
+    public bool IsInstructionBoundary => !_suppressBootstrapBoundary && _cycle == 0;
 
     public void Irq()
     {
@@ -52,11 +54,25 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
 
     private byte _opcode;
     private int _cycle;
+    private int _bootstrapCycles;
+    private bool _suppressBootstrapBoundary;
     private ushort _effectiveAddress;
     private byte _fetched;
 
     public void Tick()
     {
+        if (_suppressBootstrapBoundary)
+        {
+            _suppressBootstrapBoundary = false;
+        }
+
+        if (_bootstrapCycles > 0)
+        {
+            _bootstrapCycles--;
+            _suppressBootstrapBoundary = true;
+            return;
+        }
+
         if (_cycle == 0)
         {
             _opcode = Read(PC++);
@@ -78,10 +94,16 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         A = 0;
         X = 0;
         Y = 0;
-        S = 0xFD;
-        P = 0x24;
+        S = 0x00;
+        P = 0x26;
         PC = _bus.Read(0xFFFC);
         PC |= (ushort)(_bus.Read(0xFFFD) << 8);
+        _opcode = 0;
+        _cycle = 0;
+        _suppressBootstrapBoundary = true;
+        _bootstrapCycles = ResetCycleDelay;
+        _effectiveAddress = 0;
+        _fetched = 0;
     }
 
     public virtual byte Read(ushort address) => _bus.Read(address);

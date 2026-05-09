@@ -2,7 +2,9 @@ namespace ViceSharp.TestHarness;
 
 using ViceSharp.Architectures.C64;
 using ViceSharp.Architectures.EmptyMachine;
+using ViceSharp.Abstractions;
 using ViceSharp.Core;
+using System.Text;
 using Xunit;
 
 public sealed class C64MachineTests
@@ -23,6 +25,15 @@ public sealed class C64MachineTests
         var ex = Assert.Throws<InvalidOperationException>(() => new ArchitectureBuilder().Build(new C64Descriptor()));
 
         Assert.Contains("requires an IRomProvider", ex.Message);
+    }
+
+    [Fact]
+    public void C64Descriptor_WithBadRomChecksums_ThrowsClearError()
+    {
+        var badRomProvider = new CorruptLengthAndHashRomProvider();
+        var ex = Assert.Throws<InvalidOperationException>(() => new ArchitectureBuilder(badRomProvider).Build(new C64Descriptor()));
+
+        Assert.Contains("ROM set is invalid or missing expected checksum entries", ex.Message);
     }
 
     [Fact]
@@ -79,5 +90,22 @@ public sealed class C64MachineTests
         var after = machine.GetState();
         Assert.True(after.Cycle - before.Cycle > 1, $"Expected >1 cycle, got {after.Cycle - before.Cycle}");
         Assert.NotEqual(before.PC, after.PC);
+    }
+
+    private sealed class CorruptLengthAndHashRomProvider : IRomProvider
+    {
+        private readonly Dictionary<string, byte[]> _romData = new()
+        {
+            ["basic"] = CreateBytes(8192),
+            ["kernal"] = CreateBytes(8192),
+            ["characters"] = CreateBytes(4096),
+        };
+
+        private static byte[] CreateBytes(int count) => Encoding.UTF8.GetBytes(new string('A', count));
+
+        public ReadOnlyMemory<byte> LoadRom(string romName, string architecture)
+            => _romData[romName];
+
+        public bool IsAvailable(string romName, string architecture) => true;
     }
 }

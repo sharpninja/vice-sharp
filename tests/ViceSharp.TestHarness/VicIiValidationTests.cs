@@ -4,6 +4,7 @@ using Xunit;
 
 namespace ViceSharp.TestHarness;
 
+[Collection("NativeVice")]
 public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLifetime
 {
     private readonly ViceMachineValidationFixture _fixture = new();

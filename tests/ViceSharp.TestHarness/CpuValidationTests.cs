@@ -4,6 +4,7 @@ using Xunit;
 
 namespace ViceSharp.TestHarness;
 
+[Collection("NativeVice")]
 public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLifetime
 {
     private readonly ViceMachineValidationFixture _fixture = new();
@@ -39,6 +40,41 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
         }
     }
 
+    [Fact]
+    public void BootstrapTrace_First12Cycles()
+    {
+        _fixture.ResetBoth();
+        var lines = new List<string>();
+        var failures = new List<string>();
+
+        for (var cycle = 0; cycle < 64; cycle++)
+        {
+            var beforeManaged = GetActualState();
+            var beforeNative = GetExpectedState();
+
+            _fixture.StepNative();
+            var native = GetExpectedState();
+
+            var managed = StepAndCompare().Differences; // capture for inline check
+            var managedAfterState = GetActualState();
+
+            lines.Add($"Cycle {cycle + 1}:");
+            lines.Add($"  Before managed = {FormatState(beforeManaged)}");
+            lines.Add($"  Before native = {FormatState(beforeNative)}");
+            lines.Add($"  After managed = {FormatState(managedAfterState)}");
+            lines.Add($"  After native = {FormatState(native)}");
+            if (managed.Count > 0)
+            {
+                failures.Add($"Cycle {cycle + 1}: {string.Join(Environment.NewLine, managed.Select(d => d.ToString()))}");
+            }
+        }
+
+        if (failures.Count > 0)
+        {
+            throw new Xunit.Sdk.XunitException(string.Join(Environment.NewLine, lines.Concat(failures)));
+        }
+    }
+
     protected override void StepManaged() => _fixture.StepManaged();
 
     protected override Dictionary<string, object?> GetActualState()
@@ -71,4 +107,18 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     {
         return string.Join(Environment.NewLine, differences.Select(d => d.ToString()));
     }
+
+    private static string FormatState(IReadOnlyDictionary<string, object?> state)
+    {
+        return string.Join(
+            ", ",
+            state
+                .Where(entry => entry.Key is "A" or "X" or "Y" or "S" or "P" or "PC")
+                .OrderBy(entry => entry.Key)
+                .Select(entry => $"{entry.Key}={FormatRegisterValue(entry.Value)}"));
+    }
+
+    private static string FormatRegisterValue(object? value)
+        => value is ushort value16 ? $"0x{value16:X4}" : value is byte value8 ? $"0x{value8:X2}" : $"{value}";
+
 }

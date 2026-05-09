@@ -11,6 +11,7 @@ vice_prompt="$script_dir/patches/vice-shim-runtime.prompt.md"
 mingw_bin=$(dirname "$(command -v gcc)")
 tmp_makefile=$(mktemp)
 vice_shim_include_flags="-I. -I$vice_shim_root -I$vice_src -I$vice_src/sid"
+linenoise_dir="$vice_src/lib/linenoise-ng"
 
 cleanup() {
   rm -f "$tmp_makefile"
@@ -70,7 +71,13 @@ if [[ ! -f "$vice_src/config.h" ]]; then
     --without-png
 fi
 
-make -C "$vice_src/lib/linenoise-ng"
+# Clean potentially malformed dependency maps that can be produced by previous
+# Windows-prefixed build artifacts and break dependency includes in this environment.
+if [[ -d "$linenoise_dir/.deps" ]]; then
+  rm -f "$linenoise_dir/.deps"/*.Po
+fi
+
+make -C "$linenoise_dir"
 # Use the automake-generated phony target; plain "x64sc" is not emitted.
 make -C "$vice_src" -j4 x64sc-program
 

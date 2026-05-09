@@ -74,12 +74,25 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var pla = new Mos906114(bus);
         var sid = new Sid6581(bus);
         var memory = new C64MemoryMap(vic, sid, cia1, cia2, pla);
-
-        memory.LoadBasicRom(_romProvider.LoadRom("basic", "C64").Span);
-        memory.LoadKernalRom(_romProvider.LoadRom("kernal", "C64").Span);
-        memory.LoadCharacterRom(_romProvider.LoadRom("characters", "C64").Span);
-
         bus.RegisterDevice(memory);
+
+        var romLoader = new C64RomLoader(bus);
+        var basic = _romProvider.LoadRom("basic", "C64").Span;
+        var kernal = _romProvider.LoadRom("kernal", "C64").Span;
+        var character = _romProvider.LoadRom("characters", "C64").Span;
+
+        memory.BeginRomLoad();
+        try
+        {
+            if (!romLoader.LoadAllRoms(basic, kernal, character))
+            {
+                throw new InvalidOperationException($"{descriptor.MachineName} ROM set is invalid or missing expected checksum entries.");
+            }
+        }
+        finally
+        {
+            memory.EndRomLoad();
+        }
 
         clock.Register(cpu);
         clock.Register(vic);

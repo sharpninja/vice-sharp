@@ -33,6 +33,7 @@ internal sealed class C64MemoryMap : IAddressSpace
     private readonly Mos906114 _pla;
     private readonly C64KeyboardMatrix _keyboard;
     private readonly C64JoystickPort _joystickPort2;
+    private bool _loadingRoms;
 
     public C64MemoryMap(
         Mos6569 vic,
@@ -78,6 +79,16 @@ internal sealed class C64MemoryMap : IAddressSpace
         _keyboard.Reset();
         _joystickPort2.Reset();
         _vic.VicBank = 3;
+    }
+
+    public void BeginRomLoad()
+    {
+        _loadingRoms = true;
+    }
+
+    public void EndRomLoad()
+    {
+        _loadingRoms = false;
     }
 
     public void LoadBasicRom(ReadOnlySpan<byte> data)
@@ -152,6 +163,27 @@ internal sealed class C64MemoryMap : IAddressSpace
 
     public void Write(ushort address, byte value)
     {
+        if (_loadingRoms)
+        {
+            if (address is >= BasicStart and < 0xC000)
+            {
+                _basicRom[address - BasicStart] = value;
+                return;
+            }
+
+            if (address is >= KernalStart and <= 0xFFFF)
+            {
+                _kernalRom[address - KernalStart] = value;
+                return;
+            }
+
+            if (address is >= CharStart and <= IoEnd)
+            {
+                _charRom[address - CharStart] = value;
+                return;
+            }
+        }
+
         if (address == 0x0001)
         {
             _ram[address] = value;
