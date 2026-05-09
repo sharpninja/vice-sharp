@@ -60,6 +60,13 @@ static int g_bootstrap_pending;
 static int g_stop_requested;
 static unsigned int g_granted_cycles;
 static int g_cycle_paused;
+static unsigned int g_debug_step_calls;
+static unsigned int g_debug_checkpoint_calls;
+static unsigned int g_debug_create_calls;
+static unsigned int g_debug_reset_calls;
+#define VICE_SHIM_CREATE_TIMEOUT_MS 5000u
+#define VICE_SHIM_STEP_TIMEOUT_MS 5000u
+#define VICE_SHIM_STOP_TIMEOUT_MS 2000u
 
 extern CLOCK stolen_cycles;
 extern int check_ba_low;
@@ -88,6 +95,11 @@ static int vice_shim_is_active_machine(const void *machine)
     return instance != NULL
         && instance->magic == VICE_MACHINE_MAGIC
         && instance == g_active_machine;
+}
+
+static int vice_shim_wait_for_signal_with_timeout(unsigned int timeout_ms)
+{
+    return SleepConditionVariableCS(&g_state_cv, &g_state_lock, (DWORD)timeout_ms) != WAIT_TIMEOUT;
 }
 
 static int vice_shim_get_module_directory(char *buffer, size_t buffer_size)
@@ -226,7 +238,14 @@ static void vice_shim_stop_worker(void *machine)
     worker = g_worker_thread;
     LeaveCriticalSection(&g_state_lock);
 
-    WaitForSingleObject(worker, INFINITE);
+    if (WaitForSingleObject(worker, VICE_SHIM_STOP_TIMEOUT_MS) != WAIT_OBJECT_0) {
+        // If shutdown takes too long, treat it as non-fatal and continue.
+        // The worker should eventually terminate on its own.
+        g_worker_running = 0;
+        g_cycle_paused = 1;
+        g_stop_requested = 0;
+        g_granted_cycles = 0;
+    }
     CloseHandle(worker);
 
     EnterCriticalSection(&g_state_lock);
@@ -266,6 +285,11 @@ static void vice_shim_reset_cpu_state_locked(void)
 
 VICE_SHIM_API void *vice_machine_create(void)
 {
+    if (g_debug_create_calls < 8) {
+        fprintf(stderr, "vice_machine_create call=%u\\n", ++g_debug_create_calls);
+        fflush(stderr);
+    }
+
     vice_machine_t *machine;
 
     vice_shim_ensure_sync_primitives();
@@ -280,13 +304,17 @@ VICE_SHIM_API void *vice_machine_create(void)
         return NULL;
     }
 
-    machine = (vice_machine_t *)calloc(1, sizeof(*machine));
-    if (machine == NULL) {
-        LeaveCriticalSection(&g_state_lock);
-        return NULL;
-    }
+        machine = (vice_machine_t *)calloc(1, sizeof(*machine));
+        if (machine == NULL) {
+            LeaveCriticalSection(&g_state_lock);
+            return NULL;
+        }
 
-    machine->magic = VICE_MACHINE_MAGIC;
+        machine->magic = VICE_MACHINE_MAGIC;
+    if (g_debug_create_calls < 8) {
+        fprintf(stderr, "vice_machine_create returns=%p\\n", (void *)machine);
+        fflush(stderr);
+    }
     g_active_machine = machine;
     LeaveCriticalSection(&g_state_lock);
 
@@ -295,6 +323,11 @@ VICE_SHIM_API void *vice_machine_create(void)
 
 VICE_SHIM_API void vice_machine_destroy(void *machine)
 {
+    if (g_debug_reset_calls < 8) {
+        fprintf(stderr, "vice_machine_destroy machine=%p\\n", machine);
+        fflush(stderr);
+    }
+
     vice_machine_t *instance = (vice_machine_t *)machine;
 
     if (instance == NULL) {
@@ -319,6 +352,11 @@ VICE_SHIM_API void vice_machine_destroy(void *machine)
 
 VICE_SHIM_API void vice_machine_reset(void *machine)
 {
+    if (g_debug_reset_calls < 8) {
+        fprintf(stderr, "vice_machine_reset call=%u machine=%p\\n", ++g_debug_reset_calls, machine);
+        fflush(stderr);
+    }
+
     vice_shim_stop_worker(machine);
 
     vice_shim_ensure_sync_primitives();
@@ -336,6 +374,11 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
 
 VICE_SHIM_API void vice_machine_step_cycle(void *machine)
 {
+    if (g_debug_step_calls < 16) {
+        fprintf(stderr, "vice_machine_step_cycle call=%u machine=%p\\n", ++g_debug_step_calls, machine);
+        fflush(stderr);
+    }
+
     vice_shim_ensure_sync_primitives();
 
     EnterCriticalSection(&g_state_lock);
@@ -344,7 +387,16 @@ VICE_SHIM_API void vice_machine_step_cycle(void *machine)
         return;
     }
 
-    if (g_worker_thread == NULL) {
+    if (g_worker_thread == NULL || !g_worker_running) {
+        if (g_worker_thread != NULL) {
+            CloseHandle(g_worker_thread);
+            g_worker_thread = NULL;
+            g_worker_running = 0;
+            g_cycle_paused = 1;
+            g_stop_requested = 0;
+            g_granted_cycles = 0;
+        }
+
         uintptr_t worker_handle;
 
         g_stop_requested = 0;
@@ -368,7 +420,13 @@ VICE_SHIM_API void vice_machine_step_cycle(void *machine)
     }
 
     while (g_worker_running && !g_cycle_paused) {
-        SleepConditionVariableCS(&g_state_cv, &g_state_lock, INFINITE);
+        if (!vice_shim_wait_for_signal_with_timeout(VICE_SHIM_STEP_TIMEOUT_MS)) {
+            g_stop_requested = 1;
+            g_granted_cycles = 0;
+            g_cycle_paused = 1;
+            WakeAllConditionVariable(&g_state_cv);
+            break;
+        }
     }
     LeaveCriticalSection(&g_state_lock);
 }
@@ -376,6 +434,13 @@ VICE_SHIM_API void vice_machine_step_cycle(void *machine)
 int vice_shim_cycle_checkpoint(void)
 {
     int should_stop;
+
+    if (g_debug_checkpoint_calls < 16) {
+        fprintf(stderr, "cycle_checkpoint: granted=%u running=%d paused=%d stop=%d\\n",
+                g_granted_cycles, g_worker_running, g_cycle_paused, g_stop_requested);
+        fflush(stderr);
+        ++g_debug_checkpoint_calls;
+    }
 
     vice_shim_ensure_sync_primitives();
 
@@ -388,7 +453,13 @@ int vice_shim_cycle_checkpoint(void)
         g_cycle_paused = 1;
         WakeAllConditionVariable(&g_state_cv);
         while (!g_stop_requested && g_granted_cycles == 0) {
-            SleepConditionVariableCS(&g_state_cv, &g_state_lock, INFINITE);
+            if (!vice_shim_wait_for_signal_with_timeout(VICE_SHIM_STEP_TIMEOUT_MS)) {
+                g_stop_requested = 1;
+                g_granted_cycles = 0;
+                g_cycle_paused = 1;
+                WakeAllConditionVariable(&g_state_cv);
+                break;
+            }
         }
     }
 

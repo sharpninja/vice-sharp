@@ -1,4 +1,3 @@
-using System.Buffers;
 using ViceSharp.Abstractions;
 
 namespace ViceSharp.Chips.VicIi;
@@ -93,46 +92,54 @@ public sealed class VideoRenderer
         uint borderPixel = Palette[borderColor & 0x0F];
         uint bgPixel = Palette[backgroundColor & 0x0F];
 
-        // Calculate which raster line within a character cell (0-7)
-        int charRow = lineNumber % 8;
-        
         // Calculate if we're in visible vertical area (lines 51-250 are visible)
-        int visLine = lineNumber - 51;
-        if (visLine < 0 || visLine >= 200)
+        int upperBorder = _vic.UpperBorderStart;
+        int lowerBorder = _vic.LowerBorderStart;
+        int visLine = lineNumber - upperBorder;
+
+        if (lineNumber < upperBorder || lineNumber >= lowerBorder)
         {
             // Outside visible area - draw border
             DrawBorder(line, borderPixel);
             return;
         }
 
+        int leftBorderPixel = _vic.LeftBorderPixel;
+        int rightBorderPixel = _vic.RightBorderEndPixel;
+        int columns = _vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        int screenWidth = columns * 8;
+        int screenLine = visLine + _vic.YScroll;
+        int screenRowCount = Math.Max((lowerBorder - upperBorder) / 8, 1);
+        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int charRow = screenLine & 7;
+
         for (int x = 0; x < ScreenWidth; x++)
         {
             int offset = x * 4;
             uint pixel;
             
-            // Check if we're in the side border (left 24 pixels, right 24 pixels)
-            if (x < 24 || x >= 360)
+            // Check if we're in the side border (based on VIC CSEL setting)
+            if (x < leftBorderPixel || x >= rightBorderPixel)
             {
                 // Side border
                 pixel = borderPixel;
             }
             else
             {
-                // Inside the screen area (320 pixels wide)
-                int screenX = x - 24;
+                int screenX = x - leftBorderPixel;
                 
-                // Check if in main screen area (40 chars * 8 pixels)
-                if (screenX < 320)
+                // Check if in main screen area
+                if (screenX < screenWidth)
                 {
                     // Main screen area - render characters
                     int col = screenX / 8;
                     int charX = screenX % 8;
                     
-                    // Get screen memory index (40 chars per row)
-                    int screenIndex = visLine / 8 * 40 + col;
+                    // Use VIC row/column configuration instead of PAL defaults
+                    int screenIndex = screenRow * columns + col;
                     
-                    // Read character code from screen RAM at $0400
-                    ushort screenAddr = (ushort)(0x0400 + screenIndex);
+                    // Read character code from screen RAM
+                    ushort screenAddr = (ushort)(_vic.ScreenMemoryBase + screenIndex);
                     byte charCode = _vic.ReadVideoMemory(screenAddr);
                     
                     // Read color from color RAM at $D800
@@ -140,7 +147,7 @@ public sealed class VideoRenderer
                     byte colorCode = _vic.ReadVideoMemory(colorAddr);
                     
                     // Character generator base is at $D000, each char is 8 bytes
-                    ushort charAddr = (ushort)(0xD000 + charCode * 8 + charRow);
+                    ushort charAddr = (ushort)(_vic.CharacterBase + charCode * 8 + charRow);
                     byte charData = _vic.ReadVideoMemory(charAddr);
                     
                     // Get bit position (bit 7 is leftmost pixel)

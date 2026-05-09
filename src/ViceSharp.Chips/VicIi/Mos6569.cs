@@ -627,18 +627,32 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// </summary>
     public byte GetPixelColor(byte x, byte y)
     {
-        // Border takes priority
-        if (GetHorizontalBorder() != BorderSide.None || GetVerticalBorder() != BorderSide.None)
+        int xPos = x;
+        int yPos = y;
+        int leftBorderPixel = LeftBorderPixel;
+        int rightBorderEndPixel = RightBorderEndPixel;
+        int upperBorder = UpperBorderStart;
+        int lowerBorder = LowerBorderStart;
+
+        if (yPos < upperBorder || yPos >= lowerBorder)
             return BorderColor;
-        
-        // Outside visible area returns background
-        if (y >= 200 || x >= 160)
-            return BackgroundColor;
-        
-        // Calculate character cell position
-        int col = x / 8;
-        int row = y / 8;
-        int charOffset = row * 40 + col;
+
+        if (xPos < leftBorderPixel || xPos >= rightBorderEndPixel || xPos >= 320)
+            return BorderColor;
+
+        int columns = Columns == ColumnMode.Wide40 ? 40 : 38;
+        int visibleLine = yPos - upperBorder;
+        int screenLine = visibleLine + YScroll;
+        int rowCount = Math.Max((lowerBorder - upperBorder) / 8, 1);
+        int row = Math.Max((screenLine / 8) % rowCount, 0);
+
+        int screenX = x - leftBorderPixel;
+        if (screenX >= columns * 8)
+            return BorderColor;
+
+        int col = screenX / 8;
+        int charX = screenX % 8;
+        int charOffset = row * columns + col;
         
         // Get character from screen memory
         byte charCode = ReadVideoMemory((ushort)(ScreenMemoryBase + charOffset));
@@ -649,15 +663,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
             case VideoMode.StandardText:
             case VideoMode.MulticolorText:
                 // Fetch character line from ROM
-                byte charLine = ReadVideoMemory((ushort)(CharacterBase + charCode * 8 + (y % 8)));
+                byte charLine = ReadVideoMemory((ushort)(CharacterBase + charCode * 8 + (screenLine & 0x07)));
                 // Get bit within byte (x % 8, leftmost bit at position 7)
-                int bitPos = 7 - (x % 8);
+                int bitPos = 7 - charX;
                 byte colorIndex = (byte)((charLine >> bitPos) & 0x01);
                 return colorIndex != 0 ? (byte)0x0E : BackgroundColor; // White or background
                 
             case VideoMode.Bitmap:
                 // Direct bitmap mode
-                int bitmapOffset = charCode * 64 + (y % 8) * 8 + (x % 8);
+                int bitmapOffset = charCode * 64 + (screenLine & 0x07) * 8 + charX;
                 byte bitmapByte = ReadVideoMemory((ushort)(BitmapPointerBase + bitmapOffset));
                 return (byte)(bitmapByte & 0x0F);
                 
