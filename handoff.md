@@ -40,3 +40,11 @@
   - `git diff --check -- native/vice-shim.c` is clean (EOF normalized to LF and no trailing whitespace).
   - `docs/requirements/requirements-wiki-documents.zip` is committed as part of wrap-up.
   - Remaining workspace noise intentionally excluded from commit: pre-existing tracked changes in `docs/plan.md`, `native/build-vice-shim.sh`, `src/ViceSharp.Chips/Cpu/Mos6502.cs`, `src/ViceSharp.Core/*`, `tests/ViceSharp.TestHarness/*`, plus many `tmp-*` and artifact untracked files from prior runtime attempts.
+- Handoff/continuity continuation update:
+  - I removed workspace temp/log/stale artifacts and kept only meaningful pending edits.
+  - Current uncommitted edits remain:
+    - Modified tracked: `docs/plan.md`, `native/build-vice-shim.sh`, `src/ViceSharp.Chips/Cpu/Mos6502.cs`, `src/ViceSharp.Core/ArchitectureBuilder.cs`, `src/ViceSharp.Core/C64MemoryMap.cs`, `tests/ViceSharp.TestHarness/C64MachineTests.cs`, `tests/ViceSharp.TestHarness/CpuValidationTests.cs`, `tests/ViceSharp.TestHarness/LockstepValidationTests.cs`, `tests/ViceSharp.TestHarness/LockstepValidator.cs`, `tests/ViceSharp.TestHarness/VicIiValidationTests.cs`
+    - Deleted tracked: `native/patches/vice-shim-runtime.patch`
+  - I did not include those 10 files in the prior wrap-up commit set because they pre-exist this checkpoint and are outside the shim/VIC alignment scope.
+  - Current HEAD remains `43e7584` on `main`.
+  - Pending validation remains: lockstep/boot-path (`First100CyclesMatch`) still blocked by remaining native boot-VIC drift.
