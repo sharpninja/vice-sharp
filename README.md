@@ -5,12 +5,19 @@ A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emula
 ## Status
 
 ✅ **Iteration 0 (Foundations)** — Complete. All core primitives implemented, lock-free and zero allocation.
-⏳ **Iteration 1 (C64 Bringup)** — In progress. Working chip layer implementations:
+⏳ **Iteration 1 (C64 Bringup)** — In progress with the current boot and lockstep validation baseline green:
+  - BASIC `READY.` boot proof is covered by the test harness
+  - VICE-backed lockstep validation reaches the 100,000-cycle regression gate
+  - `dotnet test .\ViceSharp.slnx --nologo` currently passes `49/49`
+
+Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
   - `Mos6569` VIC-II
   - `Mos6526` CIA
   - `Mos6581` SID
   - Folders for Cpu/Cia/Sid/VicIi
+
+Open runtime validation slices remain for 1541 drive emulation, datasette, cartridges, snapshots, and capture/export. These are tracked as bounded MCP TODOs and should be implemented one slice at a time.
 
 ## Supported Machines (planned)
 

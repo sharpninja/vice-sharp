@@ -1,50 +1,47 @@
-# ViceSharp Handoff (2026-05-09)
+# ViceSharp Handoff (2026-05-12)
 
-## Iteration 01 Wrap-Up
+## Current Baseline
 
-### Current Baseline
-- Test baseline is `28 passed, 8 skipped`
-- C64 builder now requires a real ROM provider and validates ROM availability
-- C64 builder now routes ROM loading through `C64RomLoader` and loads ROM banks via `C64MemoryMap` ROM-load mode during initialization
-- VICE lockstep validation remains enabled but blocked by native boot/VIC state drift after shim hardening.
-- Native shim has bounded-timeout checkpoint stepping and explicit stop handling to prevent indefinite hangs in lockstep/boot-path flows.
-- Debug monitor command surface exists: `r/z/n/m/d/b/ub/bl/cycles/reset`
+- HEAD: `29d6dd6` (`test: extend c64 lockstep replay`) on `main`.
+- Workspace was clean before this continuity-doc refresh.
+- Validation rerun in this turn: `dotnet test .\ViceSharp.slnx --nologo` passes `49/49`.
+- C64 ROM wiring and BASIC boot proof are green; `BasicBootProofTests.C64_Boot_Reaches_Ready_Prompt` remains part of the harness.
+- VICE-backed lockstep validation is green through `LockstepValidationTests.First100000CyclesMatch`.
+- `ARCH-LOCKSTEP-001` and `ARCH-ROM-001` are done in MCP TODO with validation evidence.
+- Runtime feature gaps are now tracked as bounded MCP TODOs instead of stale prose-only follow-up items.
 
-### Monitor Commands (r z n m d b ub bl cycles reset)
-- r: Registers with NV-BDIZC flags
-- z [n]: Step n instructions
-- n: Step over JSR
-- m [addr]: Memory dump
-- d [addr [n]]: Disassemble
-- b/ub/bl: Breakpoint management
-- cycles: Cycle counter
+## Runtime Gap TODOs
 
-### Next Steps
-1. Verify BASIC `READY.` boot path end-to-end
-2. Re-enable VICE-backed CPU/VIC/CIA validation instead of skipping it
-3. Fix remaining cycle-zero VIC row indexing and CPU status alignment so `First100CyclesMatch` and full lockstep can complete.
-4. Finish remaining Iteration 1 features still missing from runtime scope: 1541, datasette, cartridges, snapshots, capture/export
+Open MCP TODOs as of 2026-05-12:
 
-### Current Turn (2026-05-09)
-- Completed final shim and VIC-row consistency fixes for the requested path:
-  - `native/vice-shim.c`: recover stale worker state and recover from checkpoint waits with bounded timeout/stop signals to prevent lockstep hangs.
-  - `src/ViceSharp.Chips/VicIi/Mos6569.cs`: `GetPixelColor` row wrapping now uses modulo row mapping.
-  - `src/ViceSharp.Chips/VicIi/VideoRenderer.cs`: `RenderScanline` row wrapping now uses modulo row mapping.
-- Validation status at wrap-up:
-  - Native shim build succeeds.
-  - Focused lockstep/boot-path runtime runs are still failing (hang/mismatch remains in cycle-0/first-100 path); no new successful `First100CyclesMatch` execution during this wrap-up turn.
-- Good handoff/session continuity path is active through `workflow.sessionlog` and `docs/requirements/requirements-wiki-documents.zip` was regenerated.
-- Wrap-up completion:
-  - Commit: `6ad07d9`
-  - Push: `origin main` (`846a97e` → `6ad07d9`)
-  - `git diff --check -- native/vice-shim.c` is clean (EOF normalized to LF and no trailing whitespace).
-  - `docs/requirements/requirements-wiki-documents.zip` is committed as part of wrap-up.
-  - Remaining workspace noise intentionally excluded from commit: pre-existing tracked changes in `docs/plan.md`, `native/build-vice-shim.sh`, `src/ViceSharp.Chips/Cpu/Mos6502.cs`, `src/ViceSharp.Core/*`, `tests/ViceSharp.TestHarness/*`, plus many `tmp-*` and artifact untracked files from prior runtime attempts.
-- Handoff/continuity continuation update:
-  - I removed workspace temp/log/stale artifacts and kept only meaningful pending edits.
-  - Current uncommitted edits remain:
-    - Modified tracked: `docs/plan.md`, `native/build-vice-shim.sh`, `src/ViceSharp.Chips/Cpu/Mos6502.cs`, `src/ViceSharp.Core/ArchitectureBuilder.cs`, `src/ViceSharp.Core/C64MemoryMap.cs`, `tests/ViceSharp.TestHarness/C64MachineTests.cs`, `tests/ViceSharp.TestHarness/CpuValidationTests.cs`, `tests/ViceSharp.TestHarness/LockstepValidationTests.cs`, `tests/ViceSharp.TestHarness/LockstepValidator.cs`, `tests/ViceSharp.TestHarness/VicIiValidationTests.cs`
-    - Deleted tracked: `native/patches/vice-shim-runtime.patch`
-  - I did not include those 10 files in the prior wrap-up commit set because they pre-exist this checkpoint and are outside the shim/VIC alignment scope.
-  - Current HEAD remains `43e7584` on `main`.
-  - Pending validation remains: lockstep/boot-path (`First100CyclesMatch`) still blocked by remaining native boot-VIC drift.
+1. `RUNTIME-1541-001` - bounded 1541 drive emulation validation slice.
+2. `RUNTIME-TAPE-001` - bounded datasette runtime validation slice.
+3. `RUNTIME-CART-001` - bounded cartridge mapping validation slice.
+4. `RUNTIME-SNAPSHOT-001` - bounded snapshot save/load validation slice.
+5. `RUNTIME-CAPTURE-001` - bounded capture/export validation slice.
+
+## Recommended Next Slice
+
+Start with `RUNTIME-1541-001` unless the user redirects. Keep it as a validation-first slice:
+
+1. Identify the smallest existing 1541/IEC surface that can be validated without broad disk-drive implementation.
+2. Add a focused test that captures the current missing behavior or the first deterministic attach/read gate.
+3. Implement only enough code to pass that gate.
+4. Preserve the current boot and lockstep regression gates, especially `First100000CyclesMatch`.
+5. Update MCP TODO/session state before broadening into datasette, cartridge, snapshot, or capture work.
+
+## Validation Commands
+
+Use these as the minimum regression gates for the next code slice:
+
+```powershell
+dotnet test .\ViceSharp.slnx --nologo
+```
+
+When changing runtime or lockstep behavior, also run focused tests around the touched area and preserve the 100k lockstep gate.
+
+## Notes
+
+- `docs/plan.md` is the consolidated plan artifact.
+- Do not directly edit `docs/todo.yaml`; use the MCP TODO path through `mcpserver-codex-plugin`.
+- Do not mark Iteration 1 fully complete until the open runtime gap TODOs are either implemented or explicitly moved out of the iteration scope.
