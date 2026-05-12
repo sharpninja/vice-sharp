@@ -2,33 +2,33 @@
 
 ## Current Baseline
 
-- HEAD: `29d6dd6` (`test: extend c64 lockstep replay`) on `main`.
-- Workspace was clean before this continuity-doc refresh.
-- Validation rerun in this turn: `dotnet test .\ViceSharp.slnx --nologo` passes `49/49`.
+- HEAD before this runtime slice: `f2dbb29` (`docs: refresh vice-sharp handoff baseline`) on `main`.
+- Workspace was clean before implementing the runtime TODO set.
+- Validation rerun in this turn: `dotnet test .\ViceSharp.slnx --nologo` passes `62/62`.
 - C64 ROM wiring and BASIC boot proof are green; `BasicBootProofTests.C64_Boot_Reaches_Ready_Prompt` remains part of the harness.
 - VICE-backed lockstep validation is green through `LockstepValidationTests.First100000CyclesMatch`.
 - `ARCH-LOCKSTEP-001` and `ARCH-ROM-001` are done in MCP TODO with validation evidence.
-- Runtime feature gaps are now tracked as bounded MCP TODOs instead of stale prose-only follow-up items.
+- Bounded runtime feature gaps are implemented and covered by focused tests.
 
-## Runtime Gap TODOs
+## Runtime TODO Results
 
-Open MCP TODOs as of 2026-05-12:
+Implemented MCP TODOs as of 2026-05-12:
 
-1. `RUNTIME-1541-001` - bounded 1541 drive emulation validation slice.
-2. `RUNTIME-TAPE-001` - bounded datasette runtime validation slice.
-3. `RUNTIME-CART-001` - bounded cartridge mapping validation slice.
-4. `RUNTIME-SNAPSHOT-001` - bounded snapshot save/load validation slice.
-5. `RUNTIME-CAPTURE-001` - bounded capture/export validation slice.
+1. `RUNTIME-1541-001` - `IecD64Attachment` validates a 35-track D64 image and reads deterministic sectors through the IEC drive buffer.
+2. `RUNTIME-TAPE-001` - `TapImage`, `TapPulseReader`, and `Datasette` validate TAP attach and gated pulse reads.
+3. `RUNTIME-CART-001` - `StandardCartridgeImage` validates raw 8K/16K ROML/ROMH mapping and read-only behavior.
+4. `RUNTIME-SNAPSHOT-001` - `RuntimeSnapshotStore` captures, saves, loads, and restores a deterministic 64K runtime snapshot with public CPU state.
+5. `RUNTIME-CAPTURE-001` - `FrameCapture`, `RecordingFrameSink`, and `BmpFrameArtifactWriter` write deterministic BMP frame artifacts from BGRA buffers.
 
 ## Recommended Next Slice
 
-Start with `RUNTIME-1541-001` unless the user redirects. Keep it as a validation-first slice:
+The next runtime slice should deepen one implemented gate instead of widening all of them at once. Recommended order:
 
-1. Identify the smallest existing 1541/IEC surface that can be validated without broad disk-drive implementation.
-2. Add a focused test that captures the current missing behavior or the first deterministic attach/read gate.
-3. Implement only enough code to pass that gate.
-4. Preserve the current boot and lockstep regression gates, especially `First100000CyclesMatch`.
-5. Update MCP TODO/session state before broadening into datasette, cartridge, snapshot, or capture work.
+1. Extend `RUNTIME-1541-001` into real drive command or IEC protocol behavior.
+2. Add TAP motor/spin-up timing against the datasette gate.
+3. Integrate standard cartridge mapping into the C64 memory map.
+4. Expand snapshots beyond public CPU state and 64K bus-visible memory.
+5. Add PNG or configurable capture formats after the BMP artifact gate.
 
 ## Validation Commands
 
@@ -44,4 +44,4 @@ When changing runtime or lockstep behavior, also run focused tests around the to
 
 - `docs/plan.md` is the consolidated plan artifact.
 - Do not directly edit `docs/todo.yaml`; use the MCP TODO path through `mcpserver-codex-plugin`.
-- Do not mark Iteration 1 fully complete until the open runtime gap TODOs are either implemented or explicitly moved out of the iteration scope.
+- Full subsystem parity for 1541, datasette, cartridges, snapshots, and capture/export is still broader future work; this slice closes the bounded MCP TODO gates only.
