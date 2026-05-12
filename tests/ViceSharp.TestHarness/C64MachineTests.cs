@@ -80,6 +80,28 @@ public sealed class C64MachineTests
     }
 
     [Fact]
+    public void C64Ram_UsesVicePowerOnPattern()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+
+        Assert.Equal(0x00, machine.Bus.Read(0x0400));
+        Assert.Equal(0x00, machine.Bus.Read(0x0401));
+        Assert.Equal(0xFF, machine.Bus.Read(0x0402));
+        Assert.Equal(0xFF, machine.Bus.Read(0x0403));
+    }
+
+    [Fact]
+    public void Cia2PortA_ReadsIdleSerialInputWithBit7Low()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+
+        machine.Bus.Write(0xDD00, 0x07);
+        machine.Bus.Write(0xDD02, 0x3F);
+
+        Assert.Equal(0x47, machine.Bus.Read(0xDD00));
+    }
+
+    [Fact]
     public void StepInstruction_AdvancesPastSingleMasterCycle()
     {
         var machine = MachineTestFactory.CreateC64Machine();

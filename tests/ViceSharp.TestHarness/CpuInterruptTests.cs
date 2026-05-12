@@ -25,8 +25,8 @@ public sealed class CpuInterruptTests
 
         // Assert
         Assert.Equal(0x1234, cpu.PC);
-        Assert.Equal(0xFD, cpu.S);
-        Assert.Equal(0x24, cpu.P);
+        Assert.Equal(0x00, cpu.S);
+        Assert.Equal(0x26, cpu.P);
     }
 
     [Fact]

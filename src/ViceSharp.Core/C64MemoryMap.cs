@@ -54,6 +54,7 @@ internal sealed class C64MemoryMap : IAddressSpace
         _cia1.PortBInput = ReadCia1PortB;
         _cia1.PortAOutputChanged = value => _keyboard.SetRowMask(value);
         _cia1.PortBOutputChanged = value => _keyboard.SetColumnMask(value);
+        _cia2.PortAInput = ReadCia2PortA;
         _cia2.PortAOutputChanged = value => _vic.VicBank = 3 - (value & 0x03);
 
         _vic.VideoMemoryReader = ReadVideoMemory;
@@ -66,9 +67,7 @@ internal sealed class C64MemoryMap : IAddressSpace
 
     public void Reset()
     {
-        Array.Clear(_ram);
-        Array.Fill(_ram, (byte)0xFF, 0x0800, 0x10000 - 0x0800);
-        Array.Fill(_ram, (byte)0x20, 0x0400, 0x0400);
+        InitializeRam();
         Array.Fill(_colorRam, (byte)0x0E);
 
         _ram[0xFFFC] = 0xE2;
@@ -79,6 +78,20 @@ internal sealed class C64MemoryMap : IAddressSpace
         _keyboard.Reset();
         _joystickPort2.Reset();
         _vic.VicBank = 3;
+    }
+
+    private void InitializeRam()
+    {
+        for (var address = 0; address < _ram.Length; address++)
+        {
+            var value = (((address + 2) / 4) & 1) != 0 ? 0xFF : 0x00;
+            if (address >= 0x4000 && address < 0x8000)
+            {
+                value ^= 0xFF;
+            }
+
+            _ram[address] = (byte)value;
+        }
     }
 
     public void BeginRomLoad()
@@ -231,6 +244,11 @@ internal sealed class C64MemoryMap : IAddressSpace
     private byte ReadCia1PortB()
     {
         return _keyboard.ReadColumnState();
+    }
+
+    private static byte ReadCia2PortA()
+    {
+        return 0x7F;
     }
 
     private byte ReadIo(ushort address, bool peek)

@@ -1,5 +1,32 @@
 # ViceSharp 30-Stage Execution Plan
 
+## Current Consolidated State (2026-05-12)
+- Live workspace is dirty on `main...origin/main`; active slice is `ARCH-LOCKSTEP-001` plus the existing native shim/cache consolidation changes.
+- Current validation is green: focused boot/lockstep/C64 machine gate passes 8/8, focused VIC/reset render gate passes 3/3, `LockstepValidationTests.First100000CyclesMatch` passes 1/1, and `dotnet test .\ViceSharp.slnx --no-build --nologo` passes 49/49.
+- C64 ROM wiring is implemented through `C64RomLoader` and `C64MemoryMap` ROM-load mode; `BasicBootProofTests.C64_Boot_Reaches_Ready_Prompt` is green in the full harness.
+- VICE-backed lockstep validation now clears `ResetStateMatches`, `First100CyclesMatch`, `First10000CyclesMatch`, and `First100000CyclesMatch`.
+- Native shim reset determinism was tightened for hosted validation: RAM random-init chance is forced to zero and VIC-II registers are cleared through VICE's register reset path before each shim reset.
+- CIA2 port-A idle input remains aligned with VICE for the KERNAL setup (`DD00=$07`, `DD02=$3F`, readback `$47`).
+- MCP TODO cleanup completed for the active items: `ARCH-LOCKSTEP-001` and `ARCH-ROM-001` were marked done through the plugin with current validation evidence.
+- Creating new runtime-gap TODOs for 1541, datasette, cartridges, snapshots, and capture/export is blocked by the plugin create path returning `Authentication required: no credential is configured on this client` for `Todo.CreateAsync`; do not hand-edit `docs/todo.yaml`.
+
+## Open Work Queue
+
+| Order | ID / Source | Scope | Current Status | Required Gate |
+|-------|-------------|-------|----------------|---------------|
+| 1 | `ARCH-LOCKSTEP-001` | Align managed lockstep reset/native bootstrap semantics. Normalize reset/bootstrap PC visibility, CPU side-effect timing, branch/stack timing, C64 RAM reset assumptions, and native reset determinism before widening to full lockstep. | Done through MCP TODO update; 100k lockstep and full harness are green. | Preserve `First100000CyclesMatch` as the regression gate. |
+| 2 | `ARCH-ROM-001` | Keep ROM wiring current and verify real boot path. ROM load plumbing is done; remaining work is status cleanup. | Done through MCP TODO update; BASIC `READY.` proof is green in `BasicBootProofTests`. | Preserve boot proof and ROM-load coverage in the suite. |
+| 3 | Stage 28 | Determinism replay after 10k lockstep gate. | Complete in working tree; `First100000CyclesMatch` passes. | Keep the 100k gate in the suite and preserve the validation evidence in TODO/session/handoff. |
+| 4 | Handoff runtime gaps | 1541, datasette, cartridges, snapshots, capture/export. | Next planning slice; TODO creation is blocked by plugin `Todo.CreateAsync` auth until the create path is repaired. | Create bounded TODOs through MCP before implementation; each gets its own validation slice. |
+| 5 | Stage 29 | Final handoff update. | Blocked on runtime-gap TODO split. | Handoff includes boot proof, 100k lockstep evidence, and intentionally excluded scope. |
+| 6 | Stage 30 | README final. | Blocked on runtime-gap TODO split. | README can truthfully mark Iteration 1 complete and link validation results. |
+
+## Next Execution Slice
+1. Repair or work around the plugin `workflow.todo.create` auth/request path without hand-editing `docs/todo.yaml`.
+2. Create bounded runtime-gap TODOs for 1541, datasette, cartridges, snapshots, and capture/export through MCP.
+3. Refresh handoff/README from the new validation baseline.
+4. Keep `First100000CyclesMatch` in the normal validation path and treat any future mismatch as a regression with exact cycle/register evidence.
+
 ## BYRD Adherence
 - One change per commit
 - Build+test after every commit
@@ -65,4 +92,6 @@
 
 ## Iteration Status
 - **Iteration 0 (Foundations)** — Complete (100%)
- - **Iteration 1 (C64 Bringup)** — In progress (Stage 27 of 30)
+- **Iteration 1 (C64 Bringup)** — In progress (Stage 28 of 30 complete in working tree)
+- **Active blocker** — MCP `workflow.todo.create` auth/request path blocks bounded runtime-gap TODO split
+- **Open TODO cleanup** — `ARCH-LOCKSTEP-001` and `ARCH-ROM-001` are done in MCP TODO; runtime-gap TODO creation remains blocked

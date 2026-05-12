@@ -207,7 +207,11 @@ partial class Mos6502
             // STX - Store X Register
             case 0x86: _bus.Write(ZeroPage(), X); break;
             case 0x96: _bus.Write(ZeroPageY(), X); break;
-            case 0x8E: _bus.Write(Absolute(), X); break;
+            case 0x8E:
+                var stxAddress = Absolute();
+                _bus.Write(stxAddress, X);
+                DelayNextFetchAfterMappedIoWrite(stxAddress);
+                break;
 
             // STY - Store Y Register
             case 0x84: _bus.Write(ZeroPage(), Y); break;

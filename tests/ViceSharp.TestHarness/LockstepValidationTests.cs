@@ -45,6 +45,17 @@ public sealed class LockstepValidationTests : IDisposable
         report.TotalCyclesExecuted.Should().Be(10000);
     }
 
+    [ViceFact]
+    public void First100000CyclesMatch()
+    {
+        // Act
+        var report = _validator.Run(100000);
+
+        // Assert
+        report.Success.Should().BeTrue(FormatReport(report));
+        report.TotalCyclesExecuted.Should().Be(100000);
+    }
+
     public void Dispose()
     {
         _validator.Dispose();

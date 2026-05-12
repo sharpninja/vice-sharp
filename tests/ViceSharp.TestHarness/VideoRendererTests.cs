@@ -52,25 +52,23 @@ public sealed class VideoRendererTests
     }
 
     [Fact]
-    public void FrameBuffer_Contains_Blue_For_Border()
+    public void FrameBuffer_Contains_Black_For_ResetBorder()
     {
         // Arrange
         var (bus, _, irq) = CreateTestMachine();
         var vic = new Mos6569(bus, irq);
         vic.Reset();
         
-        // Blue in BGRA format from VicPalette - Blue index 6 = RGB(0x1B, 0x1B, 0x8E)
-        // BGRA: 0xFF1B1B8E (Alpha=FF, B=0x8E, G=0x1B, R=0x1B)
         var renderer = new VideoRenderer(vic, bus);
         
         // Act - Render full frame with border
         renderer.RenderFullFrame();
         
-        // Assert - Check first pixel is blue
+        // Assert - reset border color is index 0 until the C64 boot path programs it.
         uint firstPixel = BitConverter.ToUInt32(renderer.FrameBuffer, 0);
-        uint expectedBlue = 0xFF1B1B8E;
+        uint expectedBlack = 0xFF000000;
         
-        Assert.Equal(expectedBlue, firstPixel);
+        Assert.Equal(expectedBlack, firstPixel);
     }
 
     [Fact]
@@ -118,27 +116,25 @@ public sealed class VideoRendererTests
     }
 
     [Fact]
-    public void BorderColor_Is_Blue_After_Reset()
+    public void BorderColor_Is_Black_After_Reset()
     {
         // Arrange
         var (bus, _, irq) = CreateTestMachine();
         var vic = new Mos6569(bus, irq);
         vic.Reset();
         
-        // Assert - Default border color is index 6 (blue)
-        Assert.Equal(6, vic.BorderColor);
+        Assert.Equal(0, vic.BorderColor);
     }
 
     [Fact]
-    public void BackgroundColor_Is_DarkGray_After_Reset()
+    public void BackgroundColor_Is_Black_After_Reset()
     {
         // Arrange
         var (bus, _, irq) = CreateTestMachine();
         var vic = new Mos6569(bus, irq);
         vic.Reset();
         
-        // Assert - Default background color is index 11 (dark gray)
-        Assert.Equal(11, vic.BackgroundColor);
+        Assert.Equal(0, vic.BackgroundColor);
     }
 
     [Fact]

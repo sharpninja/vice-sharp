@@ -87,7 +87,7 @@ public sealed class VideoSurfaceIntegrationTests
     }
 
     [Fact]
-    public void Machine_RunFrame_Produces_Blue_Border_Color()
+    public void Machine_RunFrame_Uses_Reset_Border_Color()
     {
         var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
@@ -95,13 +95,11 @@ public sealed class VideoSurfaceIntegrationTests
         // Act - Run a frame and get the framebuffer
         machine.RunFrame();
         
-        // Assert - The first pixel should be blue (border color)
-        // Blue index 6 = VicPalette.Colors[6] = RGB(0x1B, 0x1B, 0x8E)
-        // In BGRA format: 0xFF1B1B8E (Alpha=FF, B=0x8E, G=0x1B, R=0x1B)
+        // Assert - reset border color is index 0 until the boot path programs it.
         var frameBuffer = videoChip.FrameBuffer;
         uint firstPixel = BitConverter.ToUInt32(frameBuffer, 0);
         
-        Assert.Equal(0xFF1B1B8Eu, firstPixel);
+        Assert.Equal(0xFF000000u, firstPixel);
     }
 
     [Fact]

@@ -34,6 +34,7 @@
 #include "uiapi.h"
 #include "video.h"
 #include "c64/c64.h"
+#include "vicii.h"
 #include "vice-shim-runtime.h"
 #include "viciisc/viciitypes.h"
 
@@ -99,7 +100,7 @@ static int vice_shim_is_active_machine(const void *machine)
 
 static int vice_shim_wait_for_signal_with_timeout(unsigned int timeout_ms)
 {
-    return SleepConditionVariableCS(&g_state_cv, &g_state_lock, (DWORD)timeout_ms) != WAIT_TIMEOUT;
+    return SleepConditionVariableCS(&g_state_cv, &g_state_lock, (DWORD)timeout_ms) != 0;
 }
 
 static int vice_shim_get_module_directory(char *buffer, size_t buffer_size)
@@ -194,6 +195,7 @@ static int vice_shim_initialize_runtime_locked(void)
         || gfxoutput_cmdline_options_init() < 0
         || screenshot_cmdline_options_init() < 0
         || resources_set_defaults() < 0
+        || resources_set_int("RAMInitRandomChance", 0) < 0
         || resources_set_string("Directory", data_directory) < 0
         || log_init() < 0
         || video_init() < 0
@@ -367,6 +369,7 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
         return;
     }
 
+    vicii_reset_registers();
     maincpu_reset();
     vice_shim_reset_cpu_state_locked();
     LeaveCriticalSection(&g_state_lock);
