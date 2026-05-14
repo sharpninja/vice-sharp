@@ -94,6 +94,29 @@ public sealed class VideoRendererTests
     }
 
     [Fact]
+    public void RenderFullFrame_CropsPalRasterSoActiveScreenIsVerticallyCentered()
+    {
+        var (bus, _, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        vic.Write(0xD011, 0x1B);
+        vic.Write(0xD016, 0x08);
+        vic.Write(0xD020, 0x0E);
+        vic.Write(0xD021, 0x06);
+
+        renderer.RenderFullFrame();
+
+        var border = ToBgra(0x0E);
+        var background = ToBgra(0x06);
+
+        Assert.Equal(border, ReadPixel(renderer.FrameBuffer, 24, 35));
+        Assert.Equal(background, ReadPixel(renderer.FrameBuffer, 24, 36));
+        Assert.Equal(background, ReadPixel(renderer.FrameBuffer, 343, 235));
+        Assert.Equal(border, ReadPixel(renderer.FrameBuffer, 343, 236));
+    }
+
+    [Fact]
     public void PAL_Timing_Is_Correct()
     {
         // Assert PAL timing values
@@ -138,6 +161,28 @@ public sealed class VideoRendererTests
     }
 
     [Fact]
+    public void RegisterPointers_UseD018ForScreenAndCharacterBases()
+    {
+        var (bus, _, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+
+        vic.Write(0xD011, 0x1B);
+        vic.Write(0xD016, 0x08);
+        vic.Write(0xD018, 0x15);
+
+        Assert.Equal(0x0400, vic.ScreenMemoryBase);
+        Assert.Equal(0x0400, vic.ScreenMemoryAddress);
+        Assert.Equal(0x1000, vic.CharacterBase);
+        Assert.Equal(Mos6569.VideoMode.StandardText, vic.DisplayMode);
+
+        vic.Write(0xD016, 0x18);
+        Assert.Equal(Mos6569.VideoMode.MulticolorText, vic.DisplayMode);
+
+        vic.Write(0xD011, 0x3B);
+        Assert.Equal(Mos6569.VideoMode.Bitmap, vic.DisplayMode);
+    }
+
+    [Fact]
     public void VIC_Raster_Position_Is_Zero_After_Reset()
     {
         // Arrange
@@ -148,5 +193,17 @@ public sealed class VideoRendererTests
         // Assert
         Assert.Equal(0, vic.CurrentRasterLine);
         Assert.Equal(0, vic.RasterX);
+    }
+
+    private static uint ReadPixel(byte[] frameBuffer, int x, int y)
+    {
+        var offset = ((y * VideoRenderer.ScreenWidth) + x) * 4;
+        return BitConverter.ToUInt32(frameBuffer, offset);
+    }
+
+    private static uint ToBgra(int paletteIndex)
+    {
+        var color = VicPalette.Colors[paletteIndex & 0x0F];
+        return 0xFF000000u | color.B | ((uint)color.G << 8) | ((uint)color.R << 16);
     }
 }

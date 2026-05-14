@@ -2,6 +2,7 @@ namespace ViceSharp.TestHarness;
 
 using Xunit;
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.VicIi;
 
 public sealed class VideoSurfaceIntegrationTests
 {
@@ -261,6 +262,87 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.True(analysis.UniqueColors > 1, "Frame should have multiple colors");
     }
 
+    [Fact]
+    public void BootReadyPrompt_FrameBufferMatchesCharacterRomGlyphs()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+        var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
+        var vic = Assert.IsType<Mos6569>(videoChip);
+
+        var readyOffset = RunUntilReadyPrompt(machine);
+        machine.RunFrame();
+        WriteFrameToPng(videoChip.FrameBuffer, 384, 272, Path.Combine(Path.GetTempPath(), "vicesharp_ready_frame.bmp"));
+
+        var characterRom = MachineTestFactory.LoadC64Rom("characters").Span;
+        var screenCodes = ReadScreenCodes(machine);
+
+        for (var i = 0; i < 5; i++)
+        {
+            var screenOffset = readyOffset + i;
+            var screenCode = screenCodes[screenOffset];
+            var foreground = ToBgra(machine.Bus.Peek((ushort)(0xD800 + screenOffset)) & 0x0F);
+            var background = ToBgra(vic.BackgroundColor);
+            var row = screenOffset / 40;
+            var column = screenOffset % 40;
+
+            for (var charRow = 0; charRow < 8; charRow++)
+            {
+                var glyph = characterRom[(screenCode * 8) + charRow];
+                var rasterLine = vic.UpperBorderStart + (row * 8) - vic.YScroll + charRow;
+                var y = VideoRenderer.RasterLineToFrameY(rasterLine);
+
+                for (var charColumn = 0; charColumn < 8; charColumn++)
+                {
+                    var x = vic.LeftBorderPixel + (column * 8) + charColumn;
+                    var bit = (glyph >> (7 - charColumn)) & 0x01;
+                    var expected = bit == 0 ? background : foreground;
+                    var actual = ReadPixel(videoChip.FrameBuffer, x, y);
+
+                    Assert.Equal(expected, actual);
+                }
+            }
+        }
+    }
+
+    [Fact]
+    public void BootReadyPrompt_ShowsBlinkingBasicInputCursor()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+        var readyOffset = RunUntilReadyPrompt(machine);
+        var cursorOffset = (((readyOffset / 40) + 1) * 40) + (readyOffset % 40);
+        var sawBlank = false;
+        var sawReverseBlank = false;
+
+        for (var frame = 0; frame < 120; frame++)
+        {
+            machine.RunFrame();
+            var cursorCell = machine.Bus.Peek((ushort)(0x0400 + cursorOffset));
+            sawBlank |= cursorCell == 0x20;
+            sawReverseBlank |= cursorCell == 0xA0;
+
+            if (sawBlank && sawReverseBlank)
+                return;
+        }
+
+        Assert.Fail($"BASIC cursor at screen offset {cursorOffset} did not blink between blank and reverse blank.");
+    }
+
+    [Fact]
+    public void VideoFrame_CropsPalRasterToCenterTextAreaVertically()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+        var vic = Assert.IsType<Mos6569>(machine.Devices.GetByRole(DeviceRole.VideoChip));
+
+        vic.Write(0xD011, 0x1B);
+
+        var upperTextArea = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        var lowerTextArea = VideoRenderer.RasterLineToFrameY(vic.LowerBorderStart);
+
+        Assert.Equal(36, upperTextArea);
+        Assert.Equal(236, lowerTextArea);
+        Assert.Equal(36, VideoRenderer.ScreenHeight - lowerTextArea);
+    }
+
     private static void WriteFrameToPng(byte[] frameBuffer, int width, int height, string outputPath)
     {
         // Create a simple BMP file (easier than PNG without additional dependencies)
@@ -342,6 +424,49 @@ public sealed class VideoSurfaceIntegrationTests
         
         analysis.UniqueColors = seenColors.Count;
         return analysis;
+    }
+
+    private static int RunUntilReadyPrompt(IMachine machine)
+    {
+        for (var frame = 0; frame < 400; frame++)
+        {
+            machine.RunFrame();
+            var offset = FindReadyPrompt(ReadScreenCodes(machine));
+            if (offset >= 0)
+                return offset;
+        }
+
+        Assert.Fail("READY prompt was not found in screen memory after 400 frames.");
+        return -1;
+    }
+
+    private static int FindReadyPrompt(byte[] screenCodes)
+    {
+        ReadOnlySpan<byte> ready = [18, 5, 1, 4, 25];
+        return screenCodes.AsSpan().IndexOf(ready);
+    }
+
+    private static byte[] ReadScreenCodes(IMachine machine)
+    {
+        var screenCodes = new byte[1000];
+        for (var i = 0; i < screenCodes.Length; i++)
+        {
+            screenCodes[i] = machine.Bus.Peek((ushort)(0x0400 + i));
+        }
+
+        return screenCodes;
+    }
+
+    private static uint ReadPixel(byte[] frameBuffer, int x, int y)
+    {
+        var offset = ((y * VideoRenderer.ScreenWidth) + x) * 4;
+        return BitConverter.ToUInt32(frameBuffer, offset);
+    }
+
+    private static uint ToBgra(int paletteIndex)
+    {
+        var color = VicPalette.Colors[paletteIndex & 0x0F];
+        return 0xFF000000u | color.B | ((uint)color.G << 8) | ((uint)color.R << 16);
     }
 
     private class FrameAnalysis

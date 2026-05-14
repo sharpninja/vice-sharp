@@ -4,9 +4,9 @@ namespace ViceSharp.Core;
 
 public sealed class InterruptLine : IInterruptLine
 {
-    private int _assertCount;
+    private readonly HashSet<DeviceId> _sources = new();
 
-    public bool IsAsserted => _assertCount > 0;
+    public bool IsAsserted => _sources.Count > 0;
     public InterruptType Type { get; }
 
     public InterruptLine(InterruptType type)
@@ -14,7 +14,7 @@ public sealed class InterruptLine : IInterruptLine
         Type = type;
     }
 
-    public void Assert(IInterruptSource source) => _assertCount++;
-    public void Release(IInterruptSource source) => _assertCount = Math.Max(0, _assertCount - 1);
-    public void Clear() => _assertCount = 0;
+    public void Assert(IInterruptSource source) => _sources.Add(source.SourceId);
+    public void Release(IInterruptSource source) => _sources.Remove(source.SourceId);
+    public void Clear() => _sources.Clear();
 }

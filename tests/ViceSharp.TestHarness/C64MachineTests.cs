@@ -83,11 +83,15 @@ public sealed class C64MachineTests
     public void C64Ram_UsesVicePowerOnPattern()
     {
         var machine = MachineTestFactory.CreateC64Machine();
+        var ram = Assert.IsAssignableFrom<IMemory>(machine.Devices.GetByRole(DeviceRole.SystemRam));
 
         Assert.Equal(0x00, machine.Bus.Read(0x0400));
         Assert.Equal(0x00, machine.Bus.Read(0x0401));
         Assert.Equal(0xFF, machine.Bus.Read(0x0402));
         Assert.Equal(0xFF, machine.Bus.Read(0x0403));
+        Assert.Equal(0xFF, machine.Bus.Read(0xC000));
+        Assert.Equal(0x00, ram.Span[0xFFFC]);
+        Assert.Equal(0x00, ram.Span[0xFFFD]);
     }
 
     [Fact]
@@ -99,6 +103,17 @@ public sealed class C64MachineTests
         machine.Bus.Write(0xDD02, 0x3F);
 
         Assert.Equal(0x47, machine.Bus.Read(0xDD00));
+    }
+
+    [Fact]
+    public void C64GsCia2PortA_ReadsDisconnectedSerialInputWithBits6And7Low()
+    {
+        var machine = MachineTestFactory.CreateC64Machine("c64gs");
+
+        machine.Bus.Write(0xDD00, 0x07);
+        machine.Bus.Write(0xDD02, 0x3F);
+
+        Assert.Equal(0x07, machine.Bus.Read(0xDD00));
     }
 
     [Fact]
@@ -119,8 +134,11 @@ public sealed class C64MachineTests
         private readonly Dictionary<string, byte[]> _romData = new()
         {
             ["basic"] = CreateBytes(8192),
+            [C64ViceRomNames.Basic] = CreateBytes(8192),
             ["kernal"] = CreateBytes(8192),
+            [C64ViceRomNames.KernalRev3] = CreateBytes(8192),
             ["characters"] = CreateBytes(4096),
+            [C64ViceRomNames.Character] = CreateBytes(4096),
         };
 
         private static byte[] CreateBytes(int count) => Encoding.UTF8.GetBytes(new string('A', count));

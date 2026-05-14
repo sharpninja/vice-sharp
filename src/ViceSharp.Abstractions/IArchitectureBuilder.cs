@@ -2,7 +2,7 @@ namespace ViceSharp.Abstractions;
 
 /// <summary>
 /// Constructs a running IMachine from an IArchitectureDescriptor.
-/// Instantiates devices, wires address spaces, connects interrupts,
+/// Selects the system core, instantiates chips, wires address spaces, connects interrupts,
 /// configures clocks, and runs validation.
 /// </summary>
 public interface IArchitectureBuilder

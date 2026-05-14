@@ -16,6 +16,16 @@ public interface IViceNative : IDisposable
     void Step();
 
     /// <summary>
+    /// Attach a raw cartridge image to the native emulator instance.
+    /// </summary>
+    void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode);
+
+    /// <summary>
+    /// Read a byte from native physical C64 RAM without bus side effects.
+    /// </summary>
+    byte PeekRam(ushort address);
+
+    /// <summary>
     /// Get current full machine state
     /// </summary>
     MachineState GetState();

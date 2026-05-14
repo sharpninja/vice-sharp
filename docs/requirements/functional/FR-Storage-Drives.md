@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Storage / Disk Drives          |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -33,9 +33,15 @@ The 1541 floppy disk drive shall be emulated as a complete subsystem with its ow
 8. Head stepping delay (approximately 8ms per half-track) is modeled.
 9. The drive can be attached/detached at runtime via `IDiskDrive.Mount()`/`IDiskDrive.Eject()`.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk drive emulation, drive resources, supported disk formats, autostart, and file-system device behavior.
+- `native/vice/vice/doc/iec-bus.txt`: IEC bus topology and drive interaction overview.
+
 ### Traceability
 
 - **Interfaces:** `IDiskDrive`, `IClockedDevice`
+- **Boundary:** FR-HOST-002 exposes drive mount/eject/status through the host service.
 - **Test Suite:** `Drive1541Tests`, `D64ImageTests`, `G64ImageTests`, `DriveTimingTests`
 
 ---
@@ -60,6 +66,11 @@ The 1571 is a double-sided version of the 1541, used primarily with the C128. It
 5. MFM encoding is available for CP/M mode on both sides.
 6. Burst transfer mode enables faster serial bus communication.
 7. The 1571 can operate in 1541-compatibility mode (single-sided, GCR only).
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk drive emulation, drive resources, supported disk formats, autostart, and file-system device behavior.
+- `native/vice/vice/doc/iec-bus.txt`: IEC bus topology and drive interaction overview.
 
 ### Traceability
 
@@ -88,6 +99,11 @@ The 1581 is a 3.5-inch disk drive using MFM encoding with 80 tracks, double-side
 5. The IEC serial bus interface operates at the higher transfer rates supported by the 1581.
 6. The drive can be mounted/ejected at runtime.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk drive emulation, drive resources, supported disk formats, autostart, and file-system device behavior.
+- `native/vice/vice/doc/iec-bus.txt`: IEC bus topology and drive interaction overview.
+
 ### Traceability
 
 - **Interfaces:** `IDiskDrive`
@@ -115,6 +131,11 @@ The 1541 and 1571 drives use Group Code Recording (GCR) to encode data on disk. 
 5. The 4 speed zones (tracks 1-17: 3.25 speed, 18-24: 3.50, 25-30: 3.75, 31-35: 4.00) determine bits per track.
 6. Decoding GCR data back to binary is bit-accurate.
 7. Invalid GCR patterns (not in the standard table) are detectable for copy protection analysis.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk drive emulation, drive resources, supported disk formats, autostart, and file-system device behavior.
+- `native/vice/vice/doc/iec-bus.txt`: IEC bus topology and drive interaction overview.
 
 ### Traceability
 
@@ -146,6 +167,11 @@ The IEC (IEEE-488 derived) serial bus connects the C64 to disk drives, printers,
 8. Bus turnaround (switching from computer-transmit to device-transmit after TALK) follows correct timing.
 9. Multiple devices on the bus (up to device #30) are supported simultaneously.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk drive emulation, drive resources, supported disk formats, autostart, and file-system device behavior.
+- `native/vice/vice/doc/iec-bus.txt`: IEC bus topology and drive interaction overview.
+
 ### Traceability
 
 - **Interfaces:** `ISerialBus`, `IDiskDrive`
@@ -172,6 +198,11 @@ Many C64 programs use custom fast loader routines that replace the slow standard
 4. The drive CPU and main CPU clocks are synchronized (not free-running) to prevent drift.
 5. Parallel port connection for DolphinDOS and SpeedDOS is emulated when configured.
 6. Custom transfer protocols that use CIA timer-based handshaking are supported.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk drive emulation, drive resources, supported disk formats, autostart, and file-system device behavior.
+- `native/vice/vice/doc/iec-bus.txt`: IEC bus topology and drive interaction overview.
 
 ### Traceability
 

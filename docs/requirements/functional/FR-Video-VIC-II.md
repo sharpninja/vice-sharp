@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Video (MOS 6569 VIC-II)        |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -30,6 +30,10 @@ The VIC-II raster engine shall generate video output with cycle-accurate timing 
 5. The raster interrupt triggers at cycle 0 of the matching line (PAL) with a 1-cycle acknowledge latency.
 6. The display window begins at line 51 (PAL) and ends at line 250.
 7. Display/idle state transitions occur at the correct cycles within each line.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
 
 ### Traceability
 
@@ -58,6 +62,10 @@ The VIC-II shall support all three character display modes: Standard Character M
 5. Screen matrix base and character generator base are controlled by $D018.
 6. Character data fetch timing (c-access and g-access) occurs at the correct cycles per line.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+
 ### Traceability
 
 - **Interfaces:** `IVideoChip`
@@ -84,6 +92,10 @@ The VIC-II shall support Standard Bitmap Mode and Multicolor Bitmap Mode. In bit
 4. BMM + ECM combination is invalid and produces a black screen.
 5. BMM + MCM + ECM combination is invalid and produces a black screen.
 6. Bitmap data fetch timing matches hardware (g-access reads bitmap data instead of character generator).
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
 
 ### Traceability
 
@@ -113,6 +125,10 @@ The VIC-II shall emulate all 8 hardware sprites with correct positioning, priori
 6. Sprite-to-background priority is controlled by $D01B per sprite.
 7. Sprite display priority follows the rule: lower-numbered sprites appear in front of higher-numbered sprites.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `ISpriteUnit`
@@ -141,6 +157,10 @@ The VIC-II shall detect sprite-to-sprite and sprite-to-background collisions and
 6. In multicolor mode, the "transparent" color (bit pattern %00) does not trigger collisions.
 7. Expanded sprites use the expanded pixel area for collision detection.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `ISpriteUnit`
@@ -167,6 +187,10 @@ A "badline" occurs when the lower 3 bits of the raster counter match the Y-scrol
 4. Sprite DMA stealing occurs independently: each enabled sprite steals 2 cycles per line (p-access + s-access pattern).
 5. Sprite and badline DMA can overlap, with sprite DMA taking priority.
 6. The cycle at which the CPU is first halted for a badline is deterministic and occurs at cycle 15 of the raster line.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
 
 ### Traceability
 
@@ -196,6 +220,10 @@ The VIC-II border unit shall accurately emulate both the main border (top/bottom
 6. Opening the side borders: toggling CSEL at the correct cycle prevents the horizontal border flip-flop from being set.
 7. Border color is set by $D020; background color by $D021.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+
 ### Traceability
 
 - **Interfaces:** `IVideoChip`
@@ -221,6 +249,10 @@ The emulator shall support Flexible Line Interpretation (FLI) and Advanced FLI (
 3. Changing $D018 (VIC memory pointers) during specific cycles of a raster line takes effect for subsequent fetches on that line.
 4. AFLI mode (combining FLI with bitmap mode) is supported.
 5. The CPU cycle-accurate timing of the bank switch and pointer changes matches VICE x64sc behavior.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
 
 ### Traceability
 
@@ -248,6 +280,10 @@ The VIC-II address generation shall correctly translate 14-bit VIC addresses (0-
 4. Sprite data fetches respect the active bank.
 5. Bitmap data fetches respect the active bank.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `IVicBankSelector`
@@ -274,6 +310,10 @@ The VIC-II sprite DMA shall be emulated with sub-cycle accuracy to support sprit
 4. Disabling a sprite (clearing its bit in $D015) at the correct cycle prevents its DMA from occurring.
 5. Re-enabling a sprite and setting its Y-position to match the current raster line triggers DMA on the next line.
 6. The exact cycle positions for each sprite's DMA match the VICE x64sc reference.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
 
 ### Traceability
 

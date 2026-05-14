@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | CPU                            |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -28,6 +28,10 @@ The CPU emulation shall implement the complete MOS 6502/6510 instruction set, in
 3. The BCD flag affects ADC/SBC results correctly when the decimal flag is set (6502 mode) and is a no-op on the 6510 in CMOS variants.
 4. All addressing modes are implemented: Immediate, Zero Page, Zero Page X/Y, Absolute, Absolute X/Y, Indirect, (Indirect,X), (Indirect),Y, Relative, Implied, Accumulator.
 5. JAM/KIL opcodes halt the CPU and raise a diagnostic event on `ICpu.Jammed`.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: emulator feature sections for C64/C128/SCPU64 CPU compatibility and monitor-visible execution behavior.
 
 ### Traceability
 
@@ -55,6 +59,10 @@ Each instruction shall consume the exact number of clock cycles as the real MOS 
 4. Taken branches add one cycle; taken branches crossing a page boundary add two cycles.
 5. The `IClockedDevice.Tick()` method is invoked once per clock phase, and CPU sub-cycle state is observable via `ICpu.Phase`.
 6. The CIA/VIC-II timing interleave passes the VICE timing test suite.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: emulator feature sections for C64/C128/SCPU64 CPU compatibility and monitor-visible execution behavior.
 
 ### Traceability
 
@@ -84,6 +92,10 @@ The CPU shall correctly handle hardware interrupts (IRQ, NMI) and the software B
 6. The `IInterruptController` interface allows external devices to assert/deassert IRQ and NMI lines independently.
 7. Passes the Lorenz CIA interrupt timing tests.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: emulator feature sections for C64/C128/SCPU64 CPU compatibility and monitor-visible execution behavior.
+
 ### Traceability
 
 - **Interfaces:** `ICpu`, `IInterruptController`
@@ -112,6 +124,10 @@ The MOS 6510 processor's built-in I/O port at addresses $0000 (data direction re
 6. When a bit transitions from output to input, the capacitive discharge timing (approximately 350 microseconds to decay) is modeled.
 7. The `IMemoryMappedDevice` interface exposes the port to the address decoder.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: emulator feature sections for C64/C128/SCPU64 CPU compatibility and monitor-visible execution behavior.
+
 ### Traceability
 
 - **Interfaces:** `ICpu`, `IMemoryMappedDevice`
@@ -138,6 +154,10 @@ For C128 machine profile support, the CPU shall implement the MOS 8502 processor
 4. I/O chip access (CIAs, SID, VIC-II registers) forces the clock back to 1MHz for the duration of the access.
 5. The `IClockController` interface exposes the current clock rate and allows mode transitions.
 6. CIA timers and SID continue to operate at their expected rates relative to the system clock.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: emulator feature sections for C64/C128/SCPU64 CPU compatibility and monitor-visible execution behavior.
 
 ### Traceability
 

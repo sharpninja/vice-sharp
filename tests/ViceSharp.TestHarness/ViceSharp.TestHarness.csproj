@@ -15,10 +15,15 @@
     <ProjectReference Include="../../src/ViceSharp.Core/ViceSharp.Core.csproj" />
     <ProjectReference Include="../../src/ViceSharp.Chips/ViceSharp.Chips.csproj" />
     <ProjectReference Include="../../src/ViceSharp.Architectures/ViceSharp.Architectures.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.Host/ViceSharp.Host.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.Protocol/ViceSharp.Protocol.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Grpc.Net.Client" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="FluentAssertions" />

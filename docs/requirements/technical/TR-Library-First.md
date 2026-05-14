@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Architecture / Reuse           |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13                     |
 
 ---
 
@@ -42,6 +42,9 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 7. **Input Injection:**
    - The host injects input events via `IKeyboardMatrix`, `IJoystickPort`, `IMousePort`.
    - Events are queued and consumed at the correct emulation time.
+8. **Host Boundary:**
+   - Out-of-process UI shells communicate with `ViceSharp.Hosting` through TR-GRPC-BOUNDARY-001.
+   - The core remains embeddable and does not know whether its host is local, headless, or serving a UI client.
 
 ### Acceptance Criteria
 
@@ -51,6 +54,7 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 4. The `IEmulator` API is sufficient to build a complete UI (demonstrated by at least one working UI shell).
 5. The core library NuGet package size is under 5MB (excluding ROMs and test data).
 6. The core library has zero transitive dependencies beyond the .NET BCL and `ViceSharp.Abstractions`.
+7. A gRPC-hosted UI scenario can run without adding UI or transport dependencies to `ViceSharp.Core`.
 
 ### Verification Method
 
@@ -63,9 +67,11 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 - TR-PLAT-001 (Platform-agnostic core enables cross-platform UI shells)
 - TR-AOT-001 (NativeAOT publishing of the library)
 - TR-MVVM-001 (UI shells use MVVM pattern on top of the library)
+- TR-GRPC-BOUNDARY-001 (Host/UI process boundary preserves core library ownership)
 
 ### Design Decisions
 
 - The core library does not implement a "run loop" -- the host application calls `RunFrame()` at the appropriate cadence (vsync, timer, or free-running).
 - The core library exposes synchronous APIs only; the host is responsible for threading and async patterns.
 - ROM images are not bundled with the library; the host provides ROM data via `IEmulator.LoadRom()`.
+- `ViceSharp.Hosting` may expose the core through gRPC, but that transport remains outside the core library.

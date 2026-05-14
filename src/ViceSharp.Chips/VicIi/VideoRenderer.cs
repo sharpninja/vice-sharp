@@ -12,6 +12,7 @@ public sealed class VideoRenderer
     public const int PalCyclesPerLine = 63;
     public const int PalTotalLines = 312;
     public const int PalVisibleLines = 272;
+    public const int PalFirstVisibleRasterLine = 15;
     
     /// <summary>
     /// Pixel aspect ratios by video standard (from VICE)
@@ -66,7 +67,7 @@ public sealed class VideoRenderer
         // Check if we've completed a line (63 cycles for PAL)
         if (_vic.RasterX == 0 && _vic.CurrentRasterLine > 0)
         {
-            RenderScanline(_vic.CurrentRasterLine - 1);
+            RenderRasterLine(_vic.CurrentRasterLine - 1);
         }
 
         // Check for frame complete
@@ -77,12 +78,11 @@ public sealed class VideoRenderer
         _currentFrame++;
     }
 
-    private void RenderScanline(int lineNumber)
+    private void RenderRasterLine(int lineNumber)
     {
-        if (lineNumber < 0 || lineNumber >= PalVisibleLines)
+        if (!TryMapRasterLineToFrameY(lineNumber, out var y))
             return;
 
-        int y = lineNumber;
         Span<byte> line = FrameBuffer.AsSpan(y * ScreenWidth * 4, ScreenWidth * 4);
         
         // Get border and background colors from VIC registers
@@ -192,11 +192,19 @@ public sealed class VideoRenderer
     /// </summary>
     public void RenderFullFrame()
     {
-        for (int y = 0; y < PalVisibleLines; y++)
+        for (int y = 0; y < PalTotalLines; y++)
         {
-            RenderScanline(y);
+            RenderRasterLine(y);
         }
     }
+
+    public static bool TryMapRasterLineToFrameY(int rasterLine, out int y)
+    {
+        y = rasterLine - PalFirstVisibleRasterLine;
+        return y >= 0 && y < ScreenHeight;
+    }
+
+    public static int RasterLineToFrameY(int rasterLine) => rasterLine - PalFirstVisibleRasterLine;
 
     public event EventHandler? FrameCompleted;
 

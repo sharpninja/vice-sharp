@@ -41,7 +41,6 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         public ushort Counter;
         public byte Control;
         public bool Running;
-        public int Divider;
     }
 
     // I/O Ports
@@ -68,6 +67,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     // Interrupt state
     private byte _interruptMask;
     private byte _interruptFlags;
+    private bool _irqAsserted;
     
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
@@ -87,16 +87,16 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     /// </summary>
     public void ClockTod()
     {
-        _todTenths = (byte)((_todTenths + 1) % 10);
-        if (_todTenths == 0)
+        _todTenths = IncrementBcd(_todTenths, 0x09);
+        if (_todTenths == 0x00)
         {
-            _todSeconds = (byte)((_todSeconds + 1) % 60);
-            if (_todSeconds == 0)
+            _todSeconds = IncrementBcd(_todSeconds, 0x59);
+            if (_todSeconds == 0x00)
             {
-                _todMinutes = (byte)((_todMinutes + 1) % 60);
-                if (_todMinutes == 0)
+                _todMinutes = IncrementBcd(_todMinutes, 0x59);
+                if (_todMinutes == 0x00)
                 {
-                    _todHours = (byte)((_todHours + 1) % 24);
+                    _todHours = IncrementBcd(_todHours, 0x23);
                 }
             }
         }
@@ -115,40 +115,25 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
 
     public void Tick()
     {
-        // Timer A
+        var timerAUnderflowed = false;
+
         if (_timerA.Running)
         {
-            _timerA.Divider--;
-            if (_timerA.Divider <= 0)
+            _timerA.Counter--;
+            if (_timerA.Counter == 0xFFFF)
             {
-                _timerA.Divider = _timerA.Latch > 0 ? _timerA.Latch : 0x10000;
-                _timerA.Counter--;
-                if (_timerA.Counter == 0xFFFF)
-                {
-                    _timerA.Counter = _timerA.Latch;
-                    _interruptFlags |= 0x01;
-                    if ((_interruptMask & 0x01) != 0)
-                        _irqLine.Assert(this);
-                }
+                UnderflowTimerA();
+                timerAUnderflowed = true;
             }
         }
         
-        // Timer B
-        if (_timerB.Running)
+        if (_timerB.Running && TimerBCountsPhi2())
         {
-            _timerB.Divider--;
-            if (_timerB.Divider <= 0)
-            {
-                _timerB.Divider = _timerB.Latch > 0 ? _timerB.Latch : 0x10000;
-                _timerB.Counter--;
-                if (_timerB.Counter == 0xFFFF)
-                {
-                    _timerB.Counter = _timerB.Latch;
-                    _interruptFlags |= 0x02;
-                    if ((_interruptMask & 0x02) != 0)
-                        _irqLine.Assert(this);
-                }
-            }
+            TickTimerB();
+        }
+        else if (_timerB.Running && timerAUnderflowed && TimerBCountsTimerAUnderflow())
+        {
+            TickTimerB();
         }
     }
 
@@ -167,6 +152,8 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         _todHours = 0;
         _interruptMask = 0;
         _interruptFlags = 0;
+        _irqAsserted = false;
+        _irqLine.Release(this);
     }
 
     public byte Peek(ushort address) => Read(address);
@@ -188,7 +175,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             0x09 => _todSeconds,
             0x0A => _todMinutes,
             0x0B => _todHours,
-            0x0D => _interruptFlags,
+            0x0D => ReadInterruptControlRegister(),
             _ => _registers[register]
         };
     }
@@ -212,7 +199,6 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                 _timerA.Running = (value & 0x01) != 0;
                 if ((value & 0x10) != 0)
                     _timerA.Counter = _timerA.Latch;
-                _timerA.Divider = _timerA.Latch > 0 ? _timerA.Latch : 0x10000;
                 break;
                 
             // Timer B
@@ -227,12 +213,11 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                 _timerB.Running = (value & 0x01) != 0;
                 if ((value & 0x10) != 0)
                     _timerB.Counter = _timerB.Latch;
-                _timerB.Divider = _timerB.Latch > 0 ? _timerB.Latch : 0x10000;
                 break;
-            case 0x0B: _todAlarmHours = value; break;
-            case 0x0A: _todAlarmMinutes = value; break;
-            case 0x09: _todAlarmSeconds = value; break;
-            case 0x08: _todAlarmTenths = value; break;
+            case 0x0B: WriteTodOrAlarm(ref _todHours, ref _todAlarmHours, value); break;
+            case 0x0A: WriteTodOrAlarm(ref _todMinutes, ref _todAlarmMinutes, value); break;
+            case 0x09: WriteTodOrAlarm(ref _todSeconds, ref _todAlarmSeconds, value); break;
+            case 0x08: WriteTodOrAlarm(ref _todTenths, ref _todAlarmTenths, value); break;
                 
             // Ports
             case 0x00:
@@ -252,7 +237,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                     _interruptMask |= (byte)(value & 0x7F);
                 else
                     _interruptMask &= (byte)(~value & 0x7F);
-                _interruptFlags &= (byte)(~value & 0x7F);
+                RefreshIrqLine();
                 break;
         }
     }
@@ -263,5 +248,87 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     {
         byte input = inputReader?.Invoke() ?? (byte)0xFF;
         return (byte)((outputLatch & dataDirection) | (input & ~dataDirection));
+    }
+
+    private void UnderflowTimerA()
+    {
+        _timerA.Counter = _timerA.Latch;
+        if ((_timerA.Control & 0x08) != 0)
+            _timerA.Running = false;
+
+        SetInterruptFlag(0x01);
+    }
+
+    private void TickTimerB()
+    {
+        _timerB.Counter--;
+        if (_timerB.Counter == 0xFFFF)
+            UnderflowTimerB();
+    }
+
+    private void UnderflowTimerB()
+    {
+        _timerB.Counter = _timerB.Latch;
+        if ((_timerB.Control & 0x08) != 0)
+            _timerB.Running = false;
+
+        SetInterruptFlag(0x02);
+    }
+
+    private bool TimerBCountsPhi2() => (_timerB.Control & 0x60) == 0x00;
+
+    private bool TimerBCountsTimerAUnderflow() => (_timerB.Control & 0x40) != 0;
+
+    private void WriteTodOrAlarm(ref byte clockRegister, ref byte alarmRegister, byte value)
+    {
+        if ((_timerB.Control & 0x80) != 0)
+        {
+            alarmRegister = value;
+        }
+        else
+        {
+            clockRegister = value;
+        }
+    }
+
+    private static byte IncrementBcd(byte value, byte max)
+    {
+        if (value >= max)
+            return 0x00;
+
+        var low = (value + 1) & 0x0F;
+        var high = value & 0xF0;
+
+        if (low <= 0x09)
+            return (byte)(high | low);
+
+        return (byte)(((high + 0x10) & 0xF0) | 0x00);
+    }
+
+    private void SetInterruptFlag(byte flag)
+    {
+        _interruptFlags |= flag;
+        RefreshIrqLine();
+    }
+
+    private byte ReadInterruptControlRegister()
+    {
+        var result = (byte)(_interruptFlags | (((_interruptFlags & _interruptMask) != 0) ? 0x80 : 0x00));
+        _interruptFlags = 0;
+        RefreshIrqLine();
+        return result;
+    }
+
+    private void RefreshIrqLine()
+    {
+        var shouldAssert = (_interruptFlags & _interruptMask) != 0;
+        if (shouldAssert == _irqAsserted)
+            return;
+
+        _irqAsserted = shouldAssert;
+        if (shouldAssert)
+            _irqLine.Assert(this);
+        else
+            _irqLine.Release(this);
     }
 }

@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Memory / Address Space         |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -28,6 +28,10 @@ The memory subsystem shall implement the C64 PLA (Programmable Logic Array) addr
 3. Banking changes take effect on the cycle following the write to $0001.
 4. The `IBankController` publishes a `BankConfigChanged` event when the active configuration changes.
 5. The address decoder is stateless relative to its inputs -- the same 5-bit input always produces the same mapping.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: machine-specific memory, cartridge, ROM, and RAM initialization settings.
 
 ### Traceability
 
@@ -54,6 +58,10 @@ The CPU shall be able to write to RAM underlying any ROM region, and read from R
 3. Writes to addresses $D000-$DFFF when Character ROM is banked in store to underlying RAM.
 4. Reading from a RAM-under-ROM address when ROM is banked out returns the previously written RAM value.
 5. The VIC-II always reads from the "VIC view" of memory (it sees character ROM at $1000-$1FFF and $9000-$9FFF in the VIC address space, not RAM).
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: machine-specific memory, cartridge, ROM, and RAM initialization settings.
 
 ### Traceability
 
@@ -83,6 +91,10 @@ When the GAME line is asserted (active) and EXROM is deasserted (active), the sy
 6. Reads from unmapped regions ($1000-$7FFF, $A000-$CFFF) return open-bus values.
 7. The VIC-II can access cartridge ROM in Ultimax mode.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: machine-specific memory, cartridge, ROM, and RAM initialization settings.
+
 ### Traceability
 
 - **Interfaces:** `IAddressSpace`, `ICartridgePort`
@@ -108,6 +120,10 @@ The VIC-II chip views a 16KB window of the 64KB address space, selectable by bit
 3. In Banks 0 and 2, addresses $1000-$1FFF within the bank read from Character ROM instead of RAM.
 4. Bank switching takes effect immediately for subsequent VIC-II accesses.
 5. The `IVicBankSelector` interface reports the currently active bank and base address.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: machine-specific memory, cartridge, ROM, and RAM initialization settings.
 
 ### Traceability
 
@@ -135,6 +151,10 @@ The 1K nybble-wide Color RAM at $D800-$DBFF shall be emulated. Color RAM is a se
 4. Color RAM is preserved across banking changes.
 5. Both the CPU and VIC-II can access Color RAM (VIC-II reads it during character fetch).
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: machine-specific memory, cartridge, ROM, and RAM initialization settings.
+
 ### Traceability
 
 - **Interfaces:** `IAddressSpace`
@@ -161,6 +181,10 @@ The zero page ($0000-$00FF) and stack page ($0100-$01FF) shall behave as fast-ac
 4. JSR pushes PC+2 (high byte first, then low byte).
 5. RTS pulls low byte first, then high byte, and adds 1 to the result.
 6. Stack underflow/overflow wraps without generating an exception.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: machine-specific memory, cartridge, ROM, and RAM initialization settings.
 
 ### Traceability
 

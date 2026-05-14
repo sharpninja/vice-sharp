@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Machine Monitor / Debugger     |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -30,6 +30,10 @@ The monitor shall provide a disassembly view that decodes 6502/6510 machine code
 5. Undocumented opcodes display with their commonly used mnemonics (LAX, SAX, DCP, ISC, etc.) and are visually distinguished from official opcodes.
 6. The `IDisassembler` interface accepts an address and returns structured disassembly data (address, bytes, mnemonic, operand, size).
 7. Labels and symbols can be optionally applied to addresses.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: monitor settings, monitor command-line options, debugging, disassembly, memory, register, breakpoint, and watch behavior.
 
 ### Traceability
 
@@ -58,6 +62,10 @@ The monitor shall display memory contents in a combined hex/ASCII view, showing 
 5. Memory contents reflect the current banking configuration (the same address can show different values depending on which bank is selected).
 6. Modified bytes (since last refresh) can be visually highlighted.
 7. The display updates in real-time when the emulation is paused and memory is edited.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: monitor settings, monitor command-line options, debugging, disassembly, memory, register, breakpoint, and watch behavior.
 
 ### Traceability
 
@@ -88,6 +96,10 @@ The monitor shall support execution breakpoints, read/write watchpoints, and con
 7. Temporary breakpoints (auto-removed after first hit) are supported for step-over and run-to-cursor.
 8. The `IBreakpointManager` interface provides CRUD operations and hit-count tracking for each breakpoint.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: monitor settings, monitor command-line options, debugging, disassembly, memory, register, breakpoint, and watch behavior.
+
 ### Traceability
 
 - **Interfaces:** `IMonitor`, `IBreakpointManager`
@@ -115,6 +127,10 @@ The monitor shall display and allow modification of all CPU registers (A, X, Y, 
 5. Setting SP adjusts the effective stack pointer (addresses $0100+SP).
 6. Register display includes both hexadecimal and decimal/binary representations.
 7. The `ICpu` interface exposes `GetRegisters()` and `SetRegisters()` for programmatic access.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: monitor settings, monitor command-line options, debugging, disassembly, memory, register, breakpoint, and watch behavior.
 
 ### Traceability
 
@@ -144,6 +160,10 @@ The monitor shall allow the user to select which memory "bank" or view is displa
 6. Bank selection is independent of the actual PLA banking state.
 7. Editing memory in a specific bank view writes to that specific target (e.g., editing RAM view writes to RAM even if ROM is currently banked in).
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: monitor settings, monitor command-line options, debugging, disassembly, memory, register, breakpoint, and watch behavior.
+
 ### Traceability
 
 - **Interfaces:** `IMonitor`, `IAddressSpace`
@@ -172,6 +192,10 @@ The monitor shall support watch expressions that continuously evaluate and displ
 6. Watches can be added, removed, and reordered.
 7. A watch that reads a side-effect register (like SID OSC3 at $D41B) is marked as potentially disruptive.
 8. The watch list persists across monitor open/close within a session.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: monitor settings, monitor command-line options, debugging, disassembly, memory, register, breakpoint, and watch behavior.
 
 ### Traceability
 

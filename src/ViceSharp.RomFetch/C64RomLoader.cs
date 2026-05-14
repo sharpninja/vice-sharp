@@ -8,6 +8,8 @@ namespace ViceSharp.RomFetch;
 /// </summary>
 public sealed class C64RomLoader
 {
+    private const string KernalNoneRomName = "kernal-none.bin";
+
     public static readonly RomDescriptor BasicRom = new RomDescriptor
     {
         Name = "BASIC ROM",
@@ -26,6 +28,48 @@ public sealed class C64RomLoader
         Sha1Hash = "1d503e56df85a62fee696e7618dc5b4e781df1bb"
     };
 
+    public static readonly RomDescriptor KernalRev1Rom = KernalRom with
+    {
+        Name = "KERNAL ROM 901227-01",
+        Md5Hash = "1ae0ea224f2b291dafa2c20b990bb7d4",
+        Sha1Hash = "87cc04d61fc748b82df09856847bb5c2754a2033"
+    };
+
+    public static readonly RomDescriptor KernalRev2Rom = KernalRom with
+    {
+        Name = "KERNAL ROM 901227-02",
+        Md5Hash = "7360b296d64e18b88f6cf52289fd99a1",
+        Sha1Hash = "0e2e4ee3f2d41f00bed72f9ab588b83e306fdb13"
+    };
+
+    public static readonly RomDescriptor KernalSx64Rom = KernalRom with
+    {
+        Name = "SX-64 KERNAL ROM 251104-04",
+        Md5Hash = "187b8c713b51931e070872bd390b472a",
+        Sha1Hash = "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98"
+    };
+
+    public static readonly RomDescriptor KernalPet64Rom = KernalRom with
+    {
+        Name = "PET64 KERNAL ROM 901246-01",
+        Md5Hash = "da92801e3a03b005b746a4dd0b639c7c",
+        Sha1Hash = "6c4fa9465f6091b174df27dfe679499df447503c"
+    };
+
+    public static readonly RomDescriptor KernalJapaneseRom = KernalRom with
+    {
+        Name = "Japanese C64 KERNAL ROM 906145-02",
+        Md5Hash = "479553fd53346ec84054f0b1c6237397",
+        Sha1Hash = "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d"
+    };
+
+    public static readonly RomDescriptor KernalGsRom = KernalRom with
+    {
+        Name = "C64GS KERNAL ROM 390852-01",
+        Md5Hash = "ddee89b0fed19572da5245ea68ff11b5",
+        Sha1Hash = "3ad6cc1837c679a11f551ad1cf1a32dd84ace719"
+    };
+
     public static readonly RomDescriptor CharacterRom = new RomDescriptor
     {
         Name = "CHARACTER ROM",
@@ -34,6 +78,41 @@ public sealed class C64RomLoader
         Md5Hash = "12a4202f5331d45af846af6c58fba946",
         Sha1Hash = "adc7c31e18c7c7413d54802ef2f4193da14711aa"
     };
+
+    public static readonly RomDescriptor CharacterJapaneseRom = CharacterRom with
+    {
+        Name = "Japanese C64 character ROM 906143-02",
+        Md5Hash = "cf32a93c0a693ed359a4f483ef6db53d",
+        Sha1Hash = string.Empty
+    };
+
+    private static readonly IReadOnlyDictionary<string, RomDescriptor> BasicDescriptors =
+        new Dictionary<string, RomDescriptor>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["basic"] = BasicRom,
+            ["basic-901226-01.bin"] = BasicRom
+        };
+
+    private static readonly IReadOnlyDictionary<string, RomDescriptor> KernalDescriptors =
+        new Dictionary<string, RomDescriptor>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["kernal"] = KernalRom,
+            ["kernal-901227-03.bin"] = KernalRom,
+            ["kernal-901227-02.bin"] = KernalRev2Rom,
+            ["kernal-901227-01.bin"] = KernalRev1Rom,
+            ["kernal-251104-04.bin"] = KernalSx64Rom,
+            ["kernal-901246-01.bin"] = KernalPet64Rom,
+            ["kernal-906145-02.bin"] = KernalJapaneseRom,
+            ["kernal-390852-01.bin"] = KernalGsRom
+        };
+
+    private static readonly IReadOnlyDictionary<string, RomDescriptor> CharacterDescriptors =
+        new Dictionary<string, RomDescriptor>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["characters"] = CharacterRom,
+            ["chargen-901225-01.bin"] = CharacterRom,
+            ["chargen-906143-02.bin"] = CharacterJapaneseRom
+        };
 
     private readonly IBus _bus;
 
@@ -89,9 +168,44 @@ public sealed class C64RomLoader
     /// </summary>
     public bool LoadAllRoms(ReadOnlySpan<byte> basic, ReadOnlySpan<byte> kernal, ReadOnlySpan<byte> character)
     {
-        return LoadRom(basic, BasicRom)
-            && LoadRom(kernal, KernalRom)
-            && LoadRom(character, CharacterRom);
+        return LoadAllRoms(basic, kernal, character, "basic", "kernal", "characters");
+    }
+
+    /// <summary>
+    /// Load a profile-selected C64 ROM set.
+    /// </summary>
+    public bool LoadAllRoms(
+        ReadOnlySpan<byte> basic,
+        ReadOnlySpan<byte> kernal,
+        ReadOnlySpan<byte> character,
+        string basicRomName,
+        string kernalRomName,
+        string characterRomName)
+    {
+        return LoadRom(basic, ResolveDescriptor(BasicDescriptors, basicRomName, BasicRom))
+            && (IsKernalRomRequired(kernalRomName)
+                ? LoadRom(kernal, ResolveDescriptor(KernalDescriptors, kernalRomName, KernalRom))
+                : true)
+            && LoadRom(character, ResolveDescriptor(CharacterDescriptors, characterRomName, CharacterRom));
+    }
+
+    private static bool IsKernalRomRequired(string kernalRomName)
+        => !string.Equals(kernalRomName, KernalNoneRomName, StringComparison.OrdinalIgnoreCase);
+
+    private static RomDescriptor ResolveDescriptor(
+        IReadOnlyDictionary<string, RomDescriptor> descriptors,
+        string romName,
+        RomDescriptor fallback)
+    {
+        if (descriptors.TryGetValue(romName, out var descriptor))
+            return descriptor;
+
+        return fallback with
+        {
+            Name = romName,
+            Md5Hash = string.Empty,
+            Sha1Hash = string.Empty
+        };
     }
 }
 

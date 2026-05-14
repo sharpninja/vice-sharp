@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Architecture / UI Separation   |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13                     |
 
 ---
 
@@ -49,6 +49,12 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
    - `ViceSharp.UI.Avalonia` (View) -> `ViceSharp.ViewModels`, `ViceSharp.Abstractions`, Avalonia
    - `ViceSharp.UI.Avalonia` does NOT reference `ViceSharp.Core` (only the host/composition root does)
 
+5. **Remote Host Client:**
+   - ViewModels consume abstraction-level host client facades for TR-GRPC-BOUNDARY-001 scenarios.
+   - Generated gRPC clients and transport concerns stay in infrastructure adapters or the composition root.
+   - ViewModels expose UI state and commands without mutating emulator core objects directly.
+   - In-process Avalonia frame presentation may use a host-owned direct render surface, but ViewModels do not reference that local emulator/frame source or any runtime internals.
+
 ### Acceptance Criteria
 
 1. `ViceSharp.ViewModels` compiles with zero references to any UI framework (verified by dependency analysis).
@@ -57,6 +63,8 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
 4. View code-behind files contain fewer than 20 lines of code each (excluding auto-generated code).
 5. An architecture test (using a tool like NetArchTest or ArchUnitNET) enforces the dependency rules and fails the build on violations.
 6. Swapping the UI framework (e.g., replacing Avalonia views with MAUI views) requires changes only in the View assembly.
+7. A remote host UI can be tested with mocked host client facades and without starting `ViceSharp.Core`.
+8. The local Avalonia render surface can be tested as a host/composition concern without adding core, chip, or architecture references to ViewModels.
 
 ### Verification Method
 
@@ -69,9 +77,11 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
 
 - TR-LIB-001 (Library-first design provides the Model layer)
 - TR-PLAT-001 (MVVM enables per-platform View implementations)
+- TR-GRPC-BOUNDARY-001 (UI control clients consume the host through generated contracts and adapters; local rendering remains host-owned)
 
 ### Design Decisions
 
 - The composition root (application entry point) is the only place where `ViceSharp.Core` and `ViceSharp.ViewModels` meet; it registers concrete implementations against abstraction interfaces in the DI container.
 - ReactiveUI or CommunityToolkit.Mvvm is used for `INotifyPropertyChanged` and `ICommand` infrastructure.
-- The ViewModel for the main emulator display exposes a `WriteableBitmap`-like abstraction (defined in Abstractions as `IFrameBuffer`) that the View layer wraps in its platform-specific bitmap type.
+- The ViewModel for the main emulator display exposes display state and commands through abstractions only. The in-process Avalonia render surface may bind directly to a local frame source, but that binding is owned by the host/composition layer rather than the ViewModel.
+- gRPC generated clients are adapted behind ViewModel-facing interfaces so transport code does not leak into ViewModels.

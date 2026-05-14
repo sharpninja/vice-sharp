@@ -27,6 +27,9 @@ public interface IDeviceRegistry
 /// </summary>
 public enum DeviceRole
 {
+    /// <summary>Board-level system core policy</summary>
+    SystemCore,
+
     /// <summary>Main system CPU</summary>
     Cpu,
     
@@ -55,5 +58,8 @@ public enum DeviceRole
     BasicRom,
     
     /// <summary>Character Generator ROM</summary>
-    ChargenRom
+    ChargenRom,
+
+    /// <summary>Expansion cartridge port</summary>
+    CartridgePort
 }

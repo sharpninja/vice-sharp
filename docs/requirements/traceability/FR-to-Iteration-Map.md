@@ -2,168 +2,151 @@
 
 ## Document Information
 
-| Field          | Value                          |
-|----------------|--------------------------------|
-| Project        | ViceSharp                      |
-| Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Field | Value |
+|-------|-------|
+| Project | ViceSharp |
+| Version | 0.1.0-draft |
+| Last Updated | 2026-05-13 |
 
 ## Purpose
 
-This document maps each Functional Requirement to its target implementation iteration. Iterations are numbered from 0 (foundations) through 4 (extended machine support).
+This map groups Functional Requirements by planned implementation iteration.
 
 ---
 
-## Iteration 0 -- Foundations (CPU Core, Address Space)
+## Iteration 0
 
-Core infrastructure upon which all other features depend.
-
-| FR ID       | FR Title                          | Subsystem    |
-|-------------|-----------------------------------|--------------|
-| FR-CPU-001  | Full 6502/6510 instruction set    | CPU          |
-| FR-CPU-002  | Cycle-accurate execution          | CPU          |
-| FR-CPU-003  | Interrupt handling                | CPU          |
-| FR-CPU-004  | 6510 I/O port                     | CPU          |
-| FR-MEM-001  | Address decoding & PLA banking    | Memory       |
-| FR-MEM-002  | RAM under ROM access              | Memory       |
-| FR-MEM-006  | Zero page / stack behavior        | Memory       |
-
-**Exit Criteria:** CPU passes Lorenz test suite (basic instruction tests). Address space correctly decodes all 32 PLA configurations.
-
+| FR ID | Title | Subsystem |
+|-------|-------|-----------|
+| FR-CPU-001 | Full 6502/6510 Instruction Set Including Undocumented Opcodes | CPU |
+| FR-CPU-002 | Cycle-Accurate Execution Timing | CPU |
+| FR-CPU-003 | Interrupt Handling with Correct Timing | CPU |
+| FR-CPU-004 | 6510 I/O Port at Addresses $0000/$0001 | CPU |
+| FR-MEM-001 | Address Decoding and PLA Banking Configuration | Memory |
+| FR-MEM-002 | RAM Under ROM Access | Memory |
+| FR-MEM-006 | Zero Page and Stack Page Behavior | Memory |
 ---
 
-## Iteration 1 -- C64 MVP (Video, Audio, I/O, Input, Basic Tools)
+## Iteration 1
 
-Minimum viable C64 emulation: boot to BASIC prompt, run simple programs, display graphics, produce sound.
-
-| FR ID       | FR Title                          | Subsystem    |
-|-------------|-----------------------------------|--------------|
-| FR-MEM-004  | VIC bank switching                | Memory       |
-| FR-MEM-005  | Color RAM                         | Memory       |
-| FR-VIC-001  | Raster engine & timing            | Video        |
-| FR-VIC-002  | Character display modes           | Video        |
-| FR-VIC-003  | Bitmap display modes              | Video        |
-| FR-VIC-004  | Sprite engine                     | Video        |
-| FR-VIC-005  | Sprite collision detection        | Video        |
-| FR-VIC-006  | Badline handling & DMA stealing   | Video        |
-| FR-VIC-009  | VIC-II bank switching             | Video        |
-| FR-SID-001  | Three-voice oscillator            | Audio        |
-| FR-SID-002  | Waveform generation               | Audio        |
-| FR-SID-004  | Filter (6581 variant)             | Audio        |
-| FR-SID-006  | ADSR envelope                     | Audio        |
-| FR-SID-009  | Noise LFSR                        | Audio        |
-| FR-CIA-001  | Timer A/B with cascading          | I/O          |
-| FR-CIA-002  | TOD clock                         | I/O          |
-| FR-CIA-003  | Keyboard matrix scanning          | I/O          |
-| FR-CIA-004  | Joystick reading                  | I/O          |
-| FR-CIA-006  | NMI generation (CIA2)             | I/O          |
-| FR-CIA-007  | IRQ generation (CIA1)             | I/O          |
-| FR-INP-001  | Keyboard matrix emulation         | Input        |
-| FR-INP-002  | Joystick port 1 & 2              | Input        |
-| FR-MED-001  | Screenshot capture                | Media        |
-| FR-MON-001  | Disassembly view                  | Monitor      |
-| FR-MON-002  | Memory hex/ASCII display          | Monitor      |
-| FR-MON-003  | Breakpoint management             | Monitor      |
-| FR-MON-004  | Register inspection/manipulation  | Monitor      |
-| FR-SNP-001  | Save machine state                | Snapshot     |
-| FR-SNP-002  | Load machine state                | Snapshot     |
-| FR-PRF-001  | C64 (NMOS) profile                | Profiles     |
-
-**Exit Criteria:** C64 boots to BASIC ready prompt. Simple BASIC programs run. Common games load and are playable. Audio is recognizable. Screenshots can be captured.
-
+| FR ID | Title | Subsystem |
+|-------|-------|-----------|
+| FR-CFG-002 | ROM and Romset Selection | Configuration / Resources |
+| FR-CFG-008 | Performance Limiter Configuration | Configuration / Resources |
+| FR-CIA-001 | CIA Timer A and Timer B with Cascade Mode | I/O (CIA 6526) |
+| FR-CIA-002 | Time-of-Day Clock | I/O (CIA 6526) |
+| FR-CIA-003 | Keyboard Matrix Scanning via CIA1 | I/O (CIA 6526) |
+| FR-CIA-004 | Joystick Port Reading via CIA1 | I/O (CIA 6526) |
+| FR-CIA-006 | NMI Generation from CIA2 | I/O (CIA 6526) |
+| FR-CIA-007 | IRQ Generation from CIA1 | I/O (CIA 6526) |
+| FR-HOST-001 | Host-Owned Emulator Session Lifecycle | Host / UI Boundary |
+| FR-HOST-003 | Host-Streamed Video Frames for Remote UI Clients | Host / UI Boundary |
+| FR-HOST-004 | Host-Normalized Keyboard, Joystick, and Machine Control | Host / UI Boundary |
+| FR-HOST-005 | Host-Owned Snapshot, Screenshot, and Diagnostic Operations | Host / UI Boundary |
+| FR-HOST-006 | Host Runtime Status and Control Telemetry | Host / UI Boundary |
+| FR-INP-001 | Keyboard Matrix Emulation | Input Devices |
+| FR-INP-002 | Joystick Port 1 and Port 2 Emulation | Input Devices |
+| FR-INP-006 | VICE VKM Keymap Selection and Real-Time Keyboard Translation | Input Devices |
+| FR-MED-001 | Screenshot Capture (PNG/BMP) | Media Capture |
+| FR-MEM-004 | VIC-II Bank Switching via CIA2 | Memory |
+| FR-MEM-005 | Color RAM ($D800-$DBFF) | Memory |
+| FR-MON-001 | Real-Time Disassembly View | Machine Monitor |
+| FR-MON-002 | Memory Hex and ASCII Display | Machine Monitor |
+| FR-MON-003 | Breakpoint Management | Machine Monitor |
+| FR-MON-004 | CPU Register Inspection and Manipulation | Machine Monitor |
+| FR-PRF-001 | Commodore 64 (Original NMOS) Machine Profile | Machine Profiles |
+| FR-SID-001 | Three Independent Voice Oscillators | Audio (SID) |
+| FR-SID-002 | Waveform Generation (Triangle, Sawtooth, Pulse, Noise) | Audio (SID) |
+| FR-SID-004 | 6581 SID Filter Emulation | Audio (SID) |
+| FR-SID-006 | ADSR Envelope Generator | Audio (SID) |
+| FR-SID-009 | Noise Waveform Linear Feedback Shift Register | Audio (SID) |
+| FR-SNP-001 | Save Complete Machine State to Snapshot | Snapshot / Replay |
+| FR-SNP-002 | Load Machine State from Snapshot | Snapshot / Replay |
+| FR-UI-001 | Dockable Host UI Control Client | Host / UI Boundary |
+| FR-UI-002 | Emulator Status and Machine Control Bar | Host / UI Boundary |
+| FR-UI-003 | Collapsible Tabbed Emulator Sidebar | Host / UI Boundary |
+| FR-UI-004 | Docked and Pop-Out Monitor Control | Host / UI Boundary |
+| FR-VIC-001 | Raster Engine with PAL/NTSC Timing | Video (VIC-II) |
+| FR-VIC-002 | Character Display Modes (Standard, Multicolor, ECM) | Video (VIC-II) |
+| FR-VIC-003 | Bitmap Display Modes (Standard, Multicolor) | Video (VIC-II) |
+| FR-VIC-004 | Sprite Engine (8 Hardware Sprites) | Video (VIC-II) |
+| FR-VIC-005 | Sprite Collision Detection | Video (VIC-II) |
+| FR-VIC-006 | Badline Handling and CPU DMA Cycle Stealing | Video (VIC-II) |
+| FR-VIC-009 | VIC-II Bank Switching (See also FR-MEM-004) | Video (VIC-II) |
 ---
 
-## Iteration 2 -- Advanced Features, Drives, Cartridges
+## Iteration 2
 
-Cycle-exact tricks, disk drive emulation, tape, cartridges, advanced SID features. Enables demo scene content and most commercial software.
-
-| FR ID       | FR Title                          | Subsystem    |
-|-------------|-----------------------------------|--------------|
-| FR-MEM-003  | Ultimax mode                      | Memory       |
-| FR-VIC-007  | Border behavior & open borders    | Video        |
-| FR-VIC-008  | FLI / AFLI support                | Video        |
-| FR-VIC-010  | Sprite multiplexing DMA timing    | Video        |
-| FR-SID-003  | Combined waveforms                | Audio        |
-| FR-SID-005  | Filter (8580 variant)             | Audio        |
-| FR-SID-007  | Ring modulation                   | Audio        |
-| FR-SID-008  | Hard sync                         | Audio        |
-| FR-SID-010  | Digi playback ($D418)             | Audio        |
-| FR-CIA-005  | Serial port shift register        | I/O          |
-| FR-DRV-001  | 1541 drive emulation              | Drives       |
-| FR-DRV-004  | GCR encoding/decoding             | Drives       |
-| FR-DRV-005  | IEC bus protocol                  | Drives       |
-| FR-TAP-001  | Datasette motor control           | Tape         |
-| FR-TAP-002  | TAP format support                | Tape         |
-| FR-TAP-003  | Tape read timing                  | Tape         |
-| FR-CRT-001  | Standard 8K/16K cartridges        | Cartridges   |
-| FR-CRT-002  | Ocean Type 1 cartridge            | Cartridges   |
-| FR-INP-003  | Mouse 1351 proportional           | Input        |
-| FR-MED-002  | Video recording                   | Media        |
-| FR-MED-003  | Audio recording                   | Media        |
-| FR-MED-004  | Synchronized A/V capture          | Media        |
-| FR-MED-005  | Format selection                  | Media        |
-| FR-MON-005  | Memory bank view selection        | Monitor      |
-| FR-MON-006  | Watch expressions                 | Monitor      |
-| FR-SNP-003  | Deterministic replay              | Snapshot     |
-| FR-PRF-002  | C64C (new CMOS) profile           | Profiles     |
-| FR-PRF-003  | SX-64 profile                     | Profiles     |
-
-**Exit Criteria:** Demo scene productions (Crest, Oxyron, Booze Design) display correctly. 1541 drive loads software. Tape loading works. Standard cartridges function.
-
+| FR ID | Title | Subsystem |
+|-------|-------|-----------|
+| FR-CFG-001 | Resource File and Command-Line Configuration | Configuration / Resources |
+| FR-CFG-003 | Palette Selection and Color Resource Handling | Configuration / Resources |
+| FR-CFG-004 | Hotkey Configuration and Action Dispatch | Configuration / Resources |
+| FR-CFG-005 | Autostart and Program Launch Handling | Configuration / Resources |
+| FR-CIA-005 | CIA Serial Port Shift Register | I/O (CIA 6526) |
+| FR-CRT-001 | Standard 8K and 16K Cartridge Support | Cartridges |
+| FR-CRT-002 | Ocean Type 1 Bank-Switching Cartridge | Cartridges |
+| FR-DRV-001 | Commodore 1541 Single Floppy Disk Drive Emulation | Disk Drives |
+| FR-DRV-004 | Group Code Recording Encoding and Decoding | Disk Drives |
+| FR-DRV-005 | IEC Serial Bus Protocol | Disk Drives |
+| FR-HOST-002 | Host-Mediated Disk, Tape, and Cartridge Attachment | Host / UI Boundary |
+| FR-INP-003 | Commodore 1351 Proportional Mouse Emulation | Input Devices |
+| FR-MED-002 | Video Recording (MP4 via FFmpeg) | Media Capture |
+| FR-MED-003 | Audio Recording (WAV/FLAC) | Media Capture |
+| FR-MED-004 | Synchronized Audio/Video Capture | Media Capture |
+| FR-MED-005 | Output Format Selection and Configuration | Media Capture |
+| FR-MEM-003 | Ultimax Cartridge Mode | Memory |
+| FR-MON-005 | Memory Bank View Selection | Machine Monitor |
+| FR-MON-006 | Watch Expressions | Machine Monitor |
+| FR-PRF-002 | Commodore 64C Machine Profile | Machine Profiles |
+| FR-PRF-003 | Commodore SX-64 Machine Profile | Machine Profiles |
+| FR-SID-003 | Combined Waveform Output | Audio (SID) |
+| FR-SID-005 | 8580 SID Filter Emulation | Audio (SID) |
+| FR-SID-007 | Ring Modulation | Audio (SID) |
+| FR-SID-008 | Hard Sync (Oscillator Synchronization) | Audio (SID) |
+| FR-SID-010 | Direct Digital Sample Playback via Volume Register | Audio (SID) |
+| FR-SNP-003 | Deterministic Input Replay | Snapshot / Replay |
+| FR-TAP-001 | Datasette Motor Control | Tape / Datasette |
+| FR-TAP-002 | TAP File Format Support (v0 and v1) | Tape / Datasette |
+| FR-TAP-003 | Cycle-Accurate Tape Read Timing | Tape / Datasette |
+| FR-VIC-007 | Border Behavior Including Open Border Tricks | Video (VIC-II) |
+| FR-VIC-008 | Flexible Line Interpretation (FLI) Support | Video (VIC-II) |
+| FR-VIC-010 | Sprite Multiplexing DMA Timing | Video (VIC-II) |
 ---
 
-## Iteration 3 -- Additional Machines and Peripherals
+## Iteration 3
 
-C128, VIC-20, advanced drives, advanced cartridges, and additional input devices.
-
-| FR ID       | FR Title                          | Subsystem    |
-|-------------|-----------------------------------|--------------|
-| FR-CPU-005  | 8502 2MHz mode (C128)             | CPU          |
-| FR-VIA-001  | VIA 6522 timer operation          | I/O          |
-| FR-VIA-002  | Shift register                    | I/O          |
-| FR-VIA-003  | Port A/B handshake modes          | I/O          |
-| FR-VIA-004  | VIC-20 VIA integration            | I/O          |
-| FR-VIA-005  | Disk drive VIA integration        | I/O          |
-| FR-DRV-002  | 1571 drive emulation              | Drives       |
-| FR-DRV-003  | 1581 drive emulation              | Drives       |
-| FR-DRV-006  | Fast loader support               | Drives       |
-| FR-TAP-004  | Tape write support                | Tape         |
-| FR-TAP-005  | Turbo loader compatibility        | Tape         |
-| FR-CRT-003  | EasyFlash cartridge               | Cartridges   |
-| FR-CRT-004  | Action Replay / Retro Replay      | Cartridges   |
-| FR-CRT-005  | Final Cartridge III               | Cartridges   |
-| FR-SID-011  | External audio input              | Audio        |
-| FR-SID-012  | Dual-SID configuration            | Audio        |
-| FR-INP-004  | Lightpen input                    | Input        |
-| FR-INP-005  | Paddle controllers                | Input        |
-| FR-SNP-004  | Snapshot comparison / diff        | Snapshot     |
-| FR-PRF-004  | C128 profile                      | Profiles     |
-| FR-PRF-005  | VIC-20 profile                    | Profiles     |
-
-**Exit Criteria:** C128 boots to both C64 and C128 modes. VIC-20 boots and runs software. Advanced cartridges (EasyFlash, AR) function.
-
+| FR ID | Title | Subsystem |
+|-------|-------|-----------|
+| FR-CFG-006 | Host-Backed Peripheral Resource Configuration | Configuration / Resources |
+| FR-CFG-007 | RAM Initialization and Debug Resource Behavior | Configuration / Resources |
+| FR-CPU-005 | 8502 2MHz Mode Support for C128 | CPU |
+| FR-CRT-003 | EasyFlash Cartridge with Flash Memory | Cartridges |
+| FR-CRT-004 | Action Replay and Retro Replay Cartridge | Cartridges |
+| FR-CRT-005 | Final Cartridge III (FC3) | Cartridges |
+| FR-DRV-002 | Commodore 1571 Double-Sided Floppy Disk Drive Emulation | Disk Drives |
+| FR-DRV-003 | Commodore 1581 3.5" Floppy Disk Drive Emulation | Disk Drives |
+| FR-DRV-006 | Fast Loader Compatibility | Disk Drives |
+| FR-INP-004 | Lightpen Input | Input Devices |
+| FR-INP-005 | Paddle Controller Input | Input Devices |
+| FR-PRF-004 | Commodore 128 Machine Profile | Machine Profiles |
+| FR-PRF-005 | Commodore VIC-20 Machine Profile | Machine Profiles |
+| FR-SID-011 | External Audio Input | Audio (SID) |
+| FR-SID-012 | Dual-SID (Stereo SID) Configuration | Audio (SID) |
+| FR-SNP-004 | Snapshot Comparison and State Diffing | Snapshot / Replay |
+| FR-TAP-004 | Tape Write Support | Tape / Datasette |
+| FR-TAP-005 | Turbo Tape Loader Compatibility | Tape / Datasette |
+| FR-VIA-001 | VIA 6522 Timer A and Timer B Operation | I/O (VIA 6522) |
+| FR-VIA-002 | VIA Shift Register | I/O (VIA 6522) |
+| FR-VIA-003 | VIA Port A and Port B with Handshake Protocols | I/O (VIA 6522) |
+| FR-VIA-004 | VIC-20 VIA Integration (VIA1 and VIA2) | I/O (VIA 6522) |
+| FR-VIA-005 | Disk Drive VIA Integration (1541/1571) | I/O (VIA 6522) |
 ---
 
-## Iteration 4 -- PET, Plus/4, C16
+## Iteration 4
 
-Legacy Commodore machines with distinct architectures.
-
-| FR ID       | FR Title                          | Subsystem    |
-|-------------|-----------------------------------|--------------|
-| FR-PRF-006  | PET profile                       | Profiles     |
-| FR-PRF-007  | Plus/4 profile                    | Profiles     |
-| FR-PRF-008  | C16 profile                       | Profiles     |
-
-**Exit Criteria:** PET, Plus/4, and C16 boot to BASIC. Basic programs run on each platform.
-
----
-
-## Summary by Iteration
-
-| Iteration | Description                     | FR Count | Cumulative |
-|-----------|---------------------------------|----------|------------|
-| 0         | Foundations                     | 7        | 7          |
-| 1         | C64 MVP                        | 30       | 37         |
-| 2         | Advanced + Drives + Cartridges  | 27       | 64         |
-| 3         | Additional Machines             | 21       | 85         |
-| 4         | PET / Plus/4 / C16             | 3        | 88         |
+| FR ID | Title | Subsystem |
+|-------|-------|-----------|
+| FR-PRF-006 | Commodore PET Machine Profile | Machine Profiles |
+| FR-PRF-007 | Commodore Plus/4 Machine Profile | Machine Profiles |
+| FR-PRF-008 | Commodore C16 Machine Profile | Machine Profiles |

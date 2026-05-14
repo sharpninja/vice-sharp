@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Media Capture                  |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -32,9 +32,14 @@ The emulator shall capture the current video frame as a still image in PNG or BM
 7. Integer scaling options (1x, 2x, 3x, 4x) are available.
 8. Palette selection (VICE default, Pepto, CCS64, Community Colors) is configurable.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
+
 ### Traceability
 
 - **Interfaces:** `IMediaCapture`
+- **Boundary:** FR-HOST-005 exposes screenshot commands and artifact metadata through the host service.
 - **Test Suite:** `ScreenshotCaptureTests`, `PngFormatTests`, `PaletteTests`
 
 ---
@@ -59,6 +64,10 @@ The emulator shall record video output to MP4 (H.264) format using FFmpeg librar
 5. The encoding does not drop frames during real-time recording on the reference hardware (a modern desktop CPU).
 6. Quality presets (low/medium/high) are configurable, mapping to CRF values.
 7. The recording pipeline uses zero managed allocations per frame on the hot path.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
 
 ### Traceability
 
@@ -88,6 +97,10 @@ The emulator shall record audio output to WAV (uncompressed PCM) or FLAC (lossle
 6. Audio samples are buffered to prevent gaps during recording.
 7. The recording includes digi playback ($D418) output at full fidelity.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
+
 ### Traceability
 
 - **Interfaces:** `IMediaCapture`, `IAudioEncoder`
@@ -116,6 +129,10 @@ The emulator shall support recording audio and video simultaneously with correct
 6. The `IMuxer` interface handles timestamp generation and stream interleaving.
 7. Audio sample count per video frame is correctly calculated to avoid drift (PAL: 882.17 samples/frame at 44100Hz).
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
+
 ### Traceability
 
 - **Interfaces:** `IMediaCapture`, `IMuxer`
@@ -143,6 +160,10 @@ The media capture system shall support multiple output formats with configurable
 5. Format availability is reported by `IMediaCapture.GetSupportedFormats()`.
 6. Unavailable formats (e.g., if FFmpeg libraries are not present) are gracefully reported as unsupported without crashing.
 7. The default format for each capture type is configurable via `IMediaCapture.SetDefaultFormat()`.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: screenshot, media output, sound/video recording, and format-selection behavior exposed to users.
 
 ### Traceability
 

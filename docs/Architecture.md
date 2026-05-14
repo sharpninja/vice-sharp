@@ -11,6 +11,7 @@ ViceSharp is a **library-first** emulator: the emulation engine is a set of comp
 3. **Deterministic** — Given identical initial state and input sequence, execution is bit-exact reproducible. This enables snapshot comparison, replay, and regression testing.
 4. **NativeAOT compatible** — No reflection on the hot path. Source generators replace runtime discovery. All emulation assemblies pass trim analysis cleanly.
 5. **MVVM** — ViewModels reference only `ViceSharp.Abstractions`. Views contain zero logic. The emulation engine has no UI dependencies.
+6. **Host/UI boundary** — UI control, media, session, input, snapshot, capture, and diagnostic operations communicate with `ViceSharp.Hosting` through versioned gRPC services or narrow gRPC-backed client abstractions. The host owns emulator sessions, devices, media, snapshots, diagnostics, and local render-source composition.
 
 ## Assembly Structure
 
@@ -27,7 +28,9 @@ ViceSharp.Abstractions     33+ interfaces, value types, attributes
     |
     +-- ViceSharp.Monitor      Debugger/monitor engine
     |
-    +-- ViceSharp.Hosting      Generic host integration, service registration
+    +-- ViceSharp.Hosting      Generic host integration, service registration, gRPC host boundary
+    |
+    +-- ViceSharp.Protocol     gRPC/protobuf contracts and generated client/server types
     |
     +-- ViceSharp.Console      NativeAOT reference shell
     |
@@ -35,6 +38,21 @@ ViceSharp.Abstractions     33+ interfaces, value types, attributes
     |
     +-- ViceSharp.RomFetch     ROM download/validation tool
 ```
+
+## Host/UI gRPC Boundary
+
+`ViceSharp.Hosting` is the composition boundary for UI-facing emulator sessions. It creates machines from architecture descriptors, owns media and state services, and exposes control, remote output, input, media, snapshot, capture, and diagnostic operations through TR-GRPC-BOUNDARY-001.
+
+UI control clients consume the host contract:
+- Lifecycle commands use `HostControlService`.
+- Remote video/audio and host events stream through `HostOutputService`.
+- Keyboard and joystick events are normalized through `HostInputService`.
+- Disk, tape, and cartridge attach/eject operations use `HostMediaService`.
+- Snapshot, screenshot, and diagnostics commands use `HostStateService`.
+
+The in-process Avalonia renderer is a narrow host-owned exception for frame presentation: it may bind directly to a local emulator/frame source so local rendering does not have to route frame buffers through gRPC. That binding belongs in the host/composition or render-surface layer, not in ViewModels, and it does not allow UI code to mutate emulator devices.
+
+External or remote UIs use the gRPC video service/stream APIs where direct in-process rendering is unavailable. The UI control layer does not hold direct references to live core devices. Generated gRPC clients are adapted behind ViewModel-facing abstractions so TR-MVVM-001 remains enforceable.
 
 ## Device Model
 
@@ -112,12 +130,12 @@ For the C64:
 
 ## Architecture Registration
 
-Architectures are defined as `IArchitectureDescriptor` implementations. The `IArchitectureBuilder` constructs a running `IMachine` from a descriptor:
+Architectures are defined as `IArchitectureDescriptor` implementations. The `IArchitectureBuilder` is the assembly boundary between the selected system core and concrete chip instances. It constructs a running `IMachine` from a descriptor:
 
-1. Instantiate devices listed in the descriptor
-2. Wire address spaces to the bus per the descriptor's memory map
-3. Connect interrupt lines
-4. Set clock divisors
+1. Select the machine profile's system-core definition
+2. Instantiate devices listed in the descriptor
+3. Wire chips, address spaces, buses, interrupt lines, clocks, ROM, and peripherals according to that system-core policy
+4. Register the system core and chips in the machine device registry
 5. Validate (no overlapping address ranges, required devices present)
 
 The `IArchitectureValidator` catches configuration errors at build time, not runtime.

@@ -72,15 +72,24 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     private bool _delayNextFetch;
     private bool _stagedNzUpdate;
     private byte _stagedNzValue;
+    private bool _stagedCarryUpdate;
+    private bool _stagedCarryValue;
     private bool _branchTargetFetchPending;
+    private bool _callTargetFetchPending;
     private bool _deferImmediateLoadAfterBranch;
+    private bool _deferImpliedRegisterCompletionAfterBranch;
+    private bool _deferAbsoluteXLoadCompletionAfterBranch;
+    private bool _deferAbsoluteYLoadCompletionAfterBranch;
+    private bool _deferJsrPushAfterBranch;
     private bool _deferIndirectYLoadCompletionAfterBranch;
     private bool _deferZeroPageRmwPcAdvanceAfterBranch;
     private bool _deferNextIndirectYLoadAfterBranchRmw;
     private bool _deferIndexedStorePcAdvanceAfterBranch;
+    private bool _deferZeroPageIndexedStorePcAdvanceAfterBranch;
     private bool _indexedStorePcAdvanceWasDeferred;
     private bool _pendingDeferredNzUpdateAfterBranch;
     private bool _pendingDeferredImmediateLoad;
+    private bool _pendingDeferredImpliedRegisterCompletion;
     private ushort _stagedReturnAddress;
     private ushort _effectiveAddress;
     private byte _fetched;
@@ -88,10 +97,13 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     public void Tick()
     {
         var fetchingBranchTarget = false;
+        var fetchingCallTarget = false;
         if (_suppressBootstrapBoundary)
         {
             fetchingBranchTarget = _branchTargetFetchPending;
+            fetchingCallTarget = _callTargetFetchPending;
             _branchTargetFetchPending = false;
+            _callTargetFetchPending = false;
             _suppressBootstrapBoundary = false;
         }
 
@@ -122,6 +134,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
             return;
         }
 
+        if (_pendingDeferredImpliedRegisterCompletion)
+        {
+            CompleteDeferredImpliedRegisterCompletion();
+            return;
+        }
+
         if (_cycle == 0)
         {
             _instructionPC = _pc;
@@ -132,13 +150,21 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
             _delayNextFetch = false;
             _stagedNzUpdate = false;
             _stagedNzValue = 0;
+            _stagedCarryUpdate = false;
+            _stagedCarryValue = false;
             var deferIndirectYLoadAfterBranchRmw = _deferNextIndirectYLoadAfterBranchRmw && IsIndirectYLoadOpcode(_opcode);
             _deferNextIndirectYLoadAfterBranchRmw = false;
             _deferImmediateLoadAfterBranch = fetchingBranchTarget && IsImmediateLoadOpcode(_opcode);
+            _deferImpliedRegisterCompletionAfterBranch = fetchingBranchTarget && IsImpliedRegisterOrFlagOpcode(_opcode);
+            _deferJsrPushAfterBranch = fetchingBranchTarget && _opcode == 0x20;
+            var fetchingIndexedLoadControlTarget = fetchingBranchTarget || fetchingCallTarget;
+            _deferAbsoluteXLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteXLoadOpcode(_opcode);
+            _deferAbsoluteYLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteYLoadOpcode(_opcode);
             _deferIndirectYLoadCompletionAfterBranch = (fetchingBranchTarget && IsIndirectYLoadOpcode(_opcode))
                 || deferIndirectYLoadAfterBranchRmw;
             _deferZeroPageRmwPcAdvanceAfterBranch = fetchingBranchTarget && IsZeroPageIncrementDecrementOpcode(_opcode);
             _deferIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && IsIndexedAbsoluteStoreOpcode(_opcode);
+            _deferZeroPageIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && IsZeroPageIndexedStoreOpcode(_opcode);
             _pendingDeferredImmediateLoad = false;
             _stagedReturnAddress = 0;
             _effectiveAddress = 0;
@@ -148,6 +174,11 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         _cycle--;
 
         if (TryExecuteCycleStagedOpcode())
+        {
+            return;
+        }
+
+        if (TryDeferImpliedRegisterCompletionAfterBranch())
         {
             return;
         }
@@ -168,6 +199,15 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         switch (_cycle)
         {
             case 3:
+                if (_deferJsrPushAfterBranch)
+                {
+                    _deferJsrPushAfterBranch = false;
+                    _cycle = 4;
+                    _visiblePC = _instructionPC;
+                    _suppressBootstrapBoundary = true;
+                    return true;
+                }
+
                 _pc = (ushort)(_instructionPC + 2);
                 _visiblePC = _pc;
                 Push((byte)(_pc >> 8));
@@ -179,6 +219,8 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 var lo = Read((ushort)(_instructionPC + 1));
                 var hi = Read(_pc);
                 PC = (ushort)(lo | (hi << 8));
+                _callTargetFetchPending = true;
+                _suppressBootstrapBoundary = true;
                 return true;
             default:
                 return false;
@@ -199,6 +241,26 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
 
         if (_stagedMemoryReadCompleted)
         {
+            if (_deferAbsoluteXLoadCompletionAfterBranch)
+            {
+                A = _stagedNzValue;
+                _deferAbsoluteXLoadCompletionAfterBranch = false;
+                _pendingDeferredNzUpdateAfterBranch = true;
+                _stagedMemoryReadCompleted = false;
+                _suppressBootstrapBoundary = true;
+                return true;
+            }
+
+            if (_deferAbsoluteYLoadCompletionAfterBranch)
+            {
+                A = _stagedNzValue;
+                _deferAbsoluteYLoadCompletionAfterBranch = false;
+                _pendingDeferredNzUpdateAfterBranch = true;
+                _stagedMemoryReadCompleted = false;
+                _suppressBootstrapBoundary = true;
+                return true;
+            }
+
             if (_deferIndirectYLoadCompletionAfterBranch)
             {
                 A = _stagedNzValue;
@@ -207,6 +269,16 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 _stagedMemoryReadCompleted = false;
                 _suppressBootstrapBoundary = true;
                 return true;
+            }
+
+            if (_stagedCarryUpdate)
+            {
+                if (_stagedCarryValue)
+                    P |= 0x01;
+                else
+                    P &= 0xFE;
+
+                _stagedCarryUpdate = false;
             }
 
             if (_stagedNzUpdate)
@@ -262,6 +334,19 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
             return true;
         }
 
+        if (_cycle == 2 && IsZeroPageIndexedStoreOpcode(_opcode))
+        {
+            if (_deferZeroPageIndexedStorePcAdvanceAfterBranch)
+            {
+                _deferZeroPageIndexedStorePcAdvanceAfterBranch = false;
+                _indexedStorePcAdvanceWasDeferred = true;
+                return false;
+            }
+
+            AdvanceVisiblePc(2);
+            return true;
+        }
+
         if (_cycle != 1)
         {
             return false;
@@ -269,6 +354,30 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
 
         switch (_opcode)
         {
+            case 0xA5:
+                A = Read(ReadZeroPageOperand());
+                FinishStagedMemoryRead(2, A);
+                return true;
+            case 0xA6:
+                X = Read(ReadZeroPageOperand());
+                FinishStagedMemoryRead(2, X);
+                return true;
+            case 0xA4:
+                Y = Read(ReadZeroPageOperand());
+                FinishStagedMemoryRead(2, Y);
+                return true;
+            case 0xB5:
+                A = Read((byte)(ReadZeroPageOperand() + X));
+                FinishStagedMemoryRead(2, A);
+                return true;
+            case 0xB6:
+                X = Read((byte)(ReadZeroPageOperand() + Y));
+                FinishStagedMemoryRead(2, X);
+                return true;
+            case 0xB4:
+                Y = Read((byte)(ReadZeroPageOperand() + X));
+                FinishStagedMemoryRead(2, Y);
+                return true;
             case 0x85:
                 _bus.Write(ReadZeroPageOperand(), A);
                 FinishStagedMemoryWrite(2);
@@ -277,9 +386,24 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 _bus.Write(ReadZeroPageOperand(), X);
                 FinishStagedMemoryWrite(2);
                 return true;
+            case 0x96:
+                _bus.Write((byte)(ReadZeroPageOperand() + Y), X);
+                FinishStagedMemoryWrite(2);
+                DelayNextFetchAfterDeferredIndexedStorePcAdvance();
+                return true;
             case 0x84:
                 _bus.Write(ReadZeroPageOperand(), Y);
                 FinishStagedMemoryWrite(2);
+                return true;
+            case 0x95:
+                _bus.Write((byte)(ReadZeroPageOperand() + X), A);
+                FinishStagedMemoryWrite(2);
+                DelayNextFetchAfterDeferredIndexedStorePcAdvance();
+                return true;
+            case 0x94:
+                _bus.Write((byte)(ReadZeroPageOperand() + X), Y);
+                FinishStagedMemoryWrite(2);
+                DelayNextFetchAfterDeferredIndexedStorePcAdvance();
                 return true;
             case 0xAD:
                 A = Read(ReadAbsoluteOperand());
@@ -307,6 +431,10 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 _bus.Write(stxAddress, X);
                 FinishStagedMemoryWrite(3);
                 return true;
+            case 0x8C:
+                _bus.Write(ReadAbsoluteOperand(), Y);
+                FinishStagedMemoryWrite(3);
+                return true;
             case 0x9D:
                 _bus.Write((ushort)(ReadAbsoluteOperand() + X), A);
                 FinishStagedMemoryWrite(3);
@@ -324,8 +452,22 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 IncrementStagedMemory(ReadZeroPageOperand(), 2);
                 return true;
             case 0xBD:
-                A = Read((ushort)(ReadAbsoluteOperand() + X));
-                FinishStagedMemoryRead(3, A);
+                var absoluteXValue = Read((ushort)(ReadAbsoluteOperand() + X));
+                if (!_deferAbsoluteXLoadCompletionAfterBranch)
+                {
+                    A = absoluteXValue;
+                }
+
+                FinishStagedMemoryRead(3, absoluteXValue);
+                return true;
+            case 0xB9:
+                var absoluteYValue = Read((ushort)(ReadAbsoluteOperand() + Y));
+                if (!_deferAbsoluteYLoadCompletionAfterBranch)
+                {
+                    A = absoluteYValue;
+                }
+
+                FinishStagedMemoryRead(3, absoluteYValue);
                 return true;
             case 0xB1:
                 var indirectYValue = Read(ReadIndirectYOperand());
@@ -335,6 +477,9 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 }
 
                 FinishStagedMemoryRead(2, indirectYValue);
+                return true;
+            case 0xD1:
+                CompareStagedMemory(ReadIndirectYOperand(), 2);
                 return true;
             case 0x91:
                 _bus.Write(ReadIndirectYOperand(), A);
@@ -373,12 +518,23 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
 
     private bool TryExecuteCycleStagedBranchOpcode()
     {
-        if (_cycle != 0 || !IsBranchOpcode(_opcode) || !IsBranchTaken(_opcode))
+        if (_cycle != 0 || !IsBranchOpcode(_opcode))
         {
             return false;
         }
 
         var fallThrough = (ushort)(_instructionPC + 2);
+        if (!IsBranchTaken(_opcode))
+        {
+            if (Peek(fallThrough) == 0x60)
+            {
+                PrefetchOpcodeAt(fallThrough);
+                return true;
+            }
+
+            return false;
+        }
+
         var target = (ushort)(fallThrough + (sbyte)Read((ushort)(_instructionPC + 1)));
         _pc = target;
         _visiblePC = fallThrough;
@@ -408,6 +564,38 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         };
     }
 
+    private void PrefetchOpcodeAt(ushort address)
+    {
+        _instructionPC = address;
+        _visiblePC = address;
+        _pc = address;
+        _opcode = Read(_pc++);
+        _cycle = Math.Max(0, GetCycleCount(_opcode) - 1);
+        _stagedMemoryReadCompleted = false;
+        _delayNextFetch = false;
+        _stagedNzUpdate = false;
+        _stagedNzValue = 0;
+        _stagedCarryUpdate = false;
+        _stagedCarryValue = false;
+        _callTargetFetchPending = false;
+        _deferImmediateLoadAfterBranch = false;
+        _deferImpliedRegisterCompletionAfterBranch = false;
+        _deferAbsoluteXLoadCompletionAfterBranch = false;
+        _deferAbsoluteYLoadCompletionAfterBranch = false;
+        _deferJsrPushAfterBranch = false;
+        _deferIndirectYLoadCompletionAfterBranch = false;
+        _deferZeroPageRmwPcAdvanceAfterBranch = false;
+        _deferNextIndirectYLoadAfterBranchRmw = false;
+        _deferIndexedStorePcAdvanceAfterBranch = false;
+        _deferZeroPageIndexedStorePcAdvanceAfterBranch = false;
+        _indexedStorePcAdvanceWasDeferred = false;
+        _pendingDeferredImmediateLoad = false;
+        _pendingDeferredImpliedRegisterCompletion = false;
+        _stagedReturnAddress = 0;
+        _effectiveAddress = 0;
+        _fetched = 0;
+    }
+
     private ushort ReadZeroPageOperand()
     {
         return Read((ushort)(_instructionPC + 1));
@@ -418,9 +606,46 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         return opcode is 0xA0 or 0xA2 or 0xA9;
     }
 
+    private static bool IsImpliedRegisterOrFlagOpcode(byte opcode)
+    {
+        return opcode is
+            0x18 or // CLC
+            0x38 or // SEC
+            0x58 or // CLI
+            0x78 or // SEI
+            0x88 or // DEY
+            0x8A or // TXA
+            0x98 or // TYA
+            0x9A or // TXS
+            0xA8 or // TAY
+            0xAA or // TAX
+            0xB8 or // CLV
+            0xBA or // TSX
+            0xC8 or // INY
+            0xCA or // DEX
+            0xD8 or // CLD
+            0xE8 or // INX
+            0xF8;   // SED
+    }
+
+    private static bool IsAbsoluteXLoadOpcode(byte opcode)
+    {
+        return opcode is 0xBD;
+    }
+
+    private static bool IsAbsoluteYLoadOpcode(byte opcode)
+    {
+        return opcode is 0xB9;
+    }
+
     private static bool IsIndexedAbsoluteStoreOpcode(byte opcode)
     {
         return opcode is 0x99 or 0x9D;
+    }
+
+    private static bool IsZeroPageIndexedStoreOpcode(byte opcode)
+    {
+        return opcode is 0x94 or 0x95 or 0x96;
     }
 
     private static bool IsZeroPageIncrementDecrementOpcode(byte opcode)
@@ -460,6 +685,18 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         FinishStagedMemoryWrite(instructionLength);
     }
 
+    private void CompareStagedMemory(ushort address, int instructionLength)
+    {
+        var value = Read(address);
+        _pc = (ushort)(_instructionPC + instructionLength);
+        _visiblePC = _instructionPC;
+        _stagedMemoryReadCompleted = true;
+        _stagedCarryUpdate = true;
+        _stagedCarryValue = A >= value;
+        _stagedNzUpdate = true;
+        _stagedNzValue = (byte)(A - value);
+    }
+
     private void CompleteDeferredImmediateLoad()
     {
         var value = Read((ushort)(_instructionPC + 1));
@@ -482,8 +719,38 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         _pendingDeferredImmediateLoad = false;
     }
 
+    private void CompleteDeferredImpliedRegisterCompletion()
+    {
+        ExecuteOpcode(_opcode);
+        _instructionPC = _pc;
+        _visiblePC = _pc;
+        _pendingDeferredImpliedRegisterCompletion = false;
+    }
+
+    private bool TryDeferImpliedRegisterCompletionAfterBranch()
+    {
+        if (!_deferImpliedRegisterCompletionAfterBranch || _cycle != 0)
+            return false;
+
+        _deferImpliedRegisterCompletionAfterBranch = false;
+        _pendingDeferredImpliedRegisterCompletion = true;
+        _visiblePC = _instructionPC;
+        _suppressBootstrapBoundary = true;
+        return true;
+    }
+
     private void CompleteDeferredNzUpdateAfterBranch()
     {
+        if (_stagedCarryUpdate)
+        {
+            if (_stagedCarryValue)
+                P |= 0x01;
+            else
+                P &= 0xFE;
+
+            _stagedCarryUpdate = false;
+        }
+
         if (_stagedNzUpdate)
         {
             UpdateNZ(_stagedNzValue);
@@ -569,15 +836,24 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         _delayNextFetch = false;
         _stagedNzUpdate = false;
         _stagedNzValue = 0;
+        _stagedCarryUpdate = false;
+        _stagedCarryValue = false;
         _branchTargetFetchPending = false;
+        _callTargetFetchPending = false;
         _deferImmediateLoadAfterBranch = false;
+        _deferImpliedRegisterCompletionAfterBranch = false;
+        _deferAbsoluteXLoadCompletionAfterBranch = false;
+        _deferAbsoluteYLoadCompletionAfterBranch = false;
+        _deferJsrPushAfterBranch = false;
         _deferIndirectYLoadCompletionAfterBranch = false;
         _deferZeroPageRmwPcAdvanceAfterBranch = false;
         _deferNextIndirectYLoadAfterBranchRmw = false;
         _deferIndexedStorePcAdvanceAfterBranch = false;
+        _deferZeroPageIndexedStorePcAdvanceAfterBranch = false;
         _indexedStorePcAdvanceWasDeferred = false;
         _pendingDeferredNzUpdateAfterBranch = false;
         _pendingDeferredImmediateLoad = false;
+        _pendingDeferredImpliedRegisterCompletion = false;
         _stagedReturnAddress = 0;
         _effectiveAddress = 0;
         _fetched = 0;

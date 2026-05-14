@@ -6,53 +6,62 @@
 |----------------|--------------------------------------------|
 | Project        | ViceSharp                                  |
 | Version        | 0.1.0-draft                                |
-| Last Updated   | 2026-04-13                                 |
+| Last Updated   | 2026-05-13                                 |
 | Status         | Draft                                      |
 
 ## Purpose
 
-This document serves as the master index for all ViceSharp Technical Requirements (TRs). Each TR defines a non-functional quality attribute, architectural constraint, or engineering standard that the system must meet. TRs are distinct from FRs in that they describe *how well* the system performs rather than *what* it does.
+This document indexes ViceSharp Technical Requirements (TRs). TRs define architecture constraints and non-functional qualities derived from Vice-Sharp architecture, not from classic VICE implementation choices.
 
 ## TR Document Index
 
-| Document                    | Quality Attribute         | TR Range                |
-|-----------------------------|---------------------------|-------------------------|
-| TR-Cycle-Accuracy.md        | Accuracy / Fidelity       | TR-CYCLE-001            |
-| TR-AoT-Compilation.md       | Deployment / Startup      | TR-AOT-001              |
-| TR-Zero-Allocation.md       | Performance / GC          | TR-ALLOC-001            |
-| TR-SIMD-Intrinsics.md       | Performance / Throughput  | TR-SIMD-001             |
-| TR-Determinism.md           | Correctness / Replay      | TR-DET-001              |
-| TR-State-Management.md      | Reliability / Consistency | TR-STATE-001            |
-| TR-PubSub-Performance.md    | Performance / Messaging   | TR-PUBSUB-001           |
-| TR-Platform-Support.md      | Portability               | TR-PLAT-001             |
-| TR-Library-First.md         | Architecture / Reuse      | TR-LIB-001              |
-| TR-MVVM.md                  | Architecture / UI         | TR-MVVM-001             |
-| TR-Media-Encoding.md        | Integration / AoT         | TR-MEDIA-001            |
-| TR-Build-System.md          | CI/CD / Build             | TR-BUILD-001            |
+| Document | Quality Attribute | TR ID(s) |
+|----------|-------------------|----------|
+| TR-AoT-Compilation.md | Deployment / Startup | TR-AOT-001 |
+| TR-Build-System.md | CI/CD / Build | TR-BUILD-001 |
+| TR-Cycle-Accuracy.md | Accuracy / Fidelity | TR-CYCLE-001 |
+| TR-Determinism.md | Correctness / Replay | TR-DET-001 |
+| TR-GRPC-Boundary.md | Architecture / Boundary | TR-GRPC-BOUNDARY-001 |
+| TR-Host-Status.md | Runtime Telemetry | TR-HOST-STATUS-001 |
+| TR-Input-VKM.md | Input Translation | TR-INPUT-VKM-001 |
+| TR-Library-First.md | Architecture / Reuse | TR-LIB-001 |
+| TR-MVVM.md | Architecture / UI | TR-MVVM-001 |
+| TR-Media-Encoding.md | Integration / AoT | TR-MEDIA-001 |
+| TR-Platform-Support.md | Portability | TR-PLAT-001 |
+| TR-PubSub-Performance.md | Performance / Messaging | TR-PUBSUB-001 |
+| TR-SIMD-Intrinsics.md | Performance / Throughput | TR-SIMD-001 |
+| TR-State-Management.md | Reliability / Consistency | TR-STATE-001 |
+| TR-System-Core.md | Architecture / Machine Definition | TR-SYSTEM-CORE-001 |
+| TR-UI-Shell.md | UI Architecture | TR-UI-SHELL-001 |
+| TR-Zero-Allocation.md | Performance / GC | TR-ALLOC-001 |
 
 ## Quality Attribute Summary
 
-| Quality Attribute          | Key Metric                                          | TR ID         |
-|----------------------------|-----------------------------------------------------|---------------|
-| Cycle Accuracy             | Sub-cycle bus-phase accuracy matching VICE x64sc     | TR-CYCLE-001  |
-| AoT Compatibility          | All assemblies pass `dotnet publish -r` trim analysis | TR-AOT-001    |
-| Memory Efficiency          | 0 managed allocations per emulation cycle (hot path) | TR-ALLOC-001  |
-| Compute Throughput         | SIMD-accelerated rendering and audio mixing          | TR-SIMD-001   |
-| Determinism                | Bit-exact output for same input + initial state      | TR-DET-001    |
-| State Reliability          | ACID transactions for state mutation                 | TR-STATE-001  |
-| Messaging Latency          | <50ns publish, <100ns deliver, 0 allocs/frame        | TR-PUBSUB-001 |
-| Portability                | Win/Linux/macOS, x64/ARM64, .NET 10                  | TR-PLAT-001   |
-| Modularity                 | Core emulator as library, UI shells as consumers     | TR-LIB-001    |
-| UI Separation              | ViewModels reference Abstractions only               | TR-MVVM-001   |
-| Media Integration          | FFmpeg via P/Invoke, AoT compatible                  | TR-MEDIA-001  |
-| Build Automation           | Nuke build, dual CI/CD pipelines                     | TR-BUILD-001  |
+| TR ID | Title | Quality Attribute |
+|-------|-------|-------------------|
+| TR-ALLOC-001 | Zero Managed Allocations Per Emulation Cycle on Hot Path | Performance / GC |
+| TR-AOT-001 | Full NativeAOT Compatibility with Zero Reflection on Hot Path | Deployment / Startup |
+| TR-BUILD-001 | Nuke Build System with Dual CI/CD Pipelines | CI/CD / Build |
+| TR-CYCLE-001 | Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior | Accuracy / Fidelity |
+| TR-DET-001 | Bit-Exact Reproducibility Given Same Initial State and Inputs | Correctness / Replay |
+| TR-GRPC-BOUNDARY-001 | Versioned gRPC Boundary Between Emulator Host and UI Clients | Architecture / Boundary |
+| TR-HOST-STATUS-001 | Measured Emulator Runtime Telemetry | Runtime Telemetry |
+| TR-INPUT-VKM-001 | VICE VKM Parser and Selected Map Resolver | Input Translation |
+| TR-LIB-001 | Emulator Core as a Reusable Library with UI Shells as Thin Consumers | Architecture / Reuse |
+| TR-MEDIA-001 | FFmpeg Integration via P/Invoke with NativeAOT Compatibility | Integration / AoT |
+| TR-MVVM-001 | Strict MVVM Separation -- ViewModels Reference Abstractions Only, Views Contain Zero Logic | Architecture / UI |
+| TR-PLAT-001 | Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64 | Portability |
+| TR-PUBSUB-001 | <50ns Publish, <100ns Deliver, 0 Allocations Per Frame | Performance / Messaging |
+| TR-SIMD-001 | SIMD-Accelerated Rendering and Audio with Generic Specialization for CPU Core | Performance / Throughput |
+| TR-STATE-001 | Mutation Queue with ACID State Transactions and Configurable State Window | Reliability / Consistency |
+| TR-SYSTEM-CORE-001 | Definable System Core for Machine-Specific Bus Behavior | Architecture / Machine Definition |
+| TR-UI-SHELL-001 | Avalonia Emulator Control Shell | UI Architecture |
 
 ## Architectural Constraints
 
-The following constraints apply globally and are referenced by multiple TRs:
-
-1. **Target Runtime:** .NET 10 with NativeAOT publication profile.
-2. **No Reflection on Hot Path:** Generic specialization and source generators replace reflection-based dispatch.
-3. **Struct-First Design:** Value types preferred over reference types in the emulation core to minimize GC pressure.
-4. **Interface Segregation:** All cross-layer dependencies flow through interfaces defined in the `.Abstractions` assembly.
-5. **Unsafe Code Budget:** `unsafe` code is permitted only in clearly bounded hot-path methods with documented invariants.
+1. Target runtime: .NET 10 with NativeAOT publication profile.
+2. Emulator core remains library-first and UI-independent.
+3. UI control, media, input, state, capture, diagnostics, and monitor operations cross the host boundary through gRPC-backed abstractions.
+4. The local Avalonia renderer may use only a host-owned direct frame surface for in-process presentation; ViewModels must not access runtime internals.
+5. Hot-path emulation remains deterministic, low-allocation, and testable against reference traces.
+6. Machine-specific bus behavior, programmable logic, and chip interconnect policy belong in a definable system core selected by the machine profile; `ArchitectureBuilder` remains the glue that instantiates chips and connects them to that core.

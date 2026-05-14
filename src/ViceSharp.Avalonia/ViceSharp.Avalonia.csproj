@@ -9,18 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
+    <PackageReference Include="Grpc.Net.Client" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
-    <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\roms\**\*" Link="roms\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <ProjectReference Include="..\ViceSharp.Host\ViceSharp.Host.csproj" />
+    <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
   </ItemGroup>
 </Project>

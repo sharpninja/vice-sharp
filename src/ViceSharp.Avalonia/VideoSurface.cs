@@ -1,30 +1,24 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using ViceSharp.Abstractions;
+using ViceSharp.Protocol;
 
 namespace ViceSharp.Avalonia;
 
 public sealed class VideoSurface : Control
 {
     private readonly WriteableBitmap _bitmap;
-    private readonly IVideoChip? _vic;
-    private readonly byte[] _scaledBuffer;
-    
+
     // VICE PAL dimensions: 384x272 visible area, 4:3 aspect ratio
     public const int SourceWidth = 384;
     public const int SourceHeight = 272;
-    
-    public VideoSurface(IMachine machine)
-    {
-        _vic = machine.Devices.GetByRole(DeviceRole.VideoChip) as IVideoChip;
 
-        if (_vic != null)
-        {
-            _vic.FrameCompleted += OnFrameCompleted;
-        }
+    public VideoSurface()
+    {
+        Focusable = true;
 
         // VICE-style: Use VICE's pixel density (96 DPI = 384 pixels / 4 inches)
         _bitmap = new WriteableBitmap(
@@ -32,14 +26,17 @@ public sealed class VideoSurface : Control
             new Vector(96, 96),  // VICE uses square-ish pixels at 96 DPI
             PixelFormat.Bgra8888,
             AlphaFormat.Opaque);
-        
-        _scaledBuffer = new byte[SourceWidth * SourceHeight * 4];
-        
-        // Fill with blue initially (border color)
-        FillWithBlue();
+
+        FillWithBlank();
     }
 
-    private void FillWithBlue()
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        Focus();
+        base.OnPointerPressed(e);
+    }
+
+    private void FillWithBlank()
     {
         using var fb = _bitmap.Lock();
         unsafe
@@ -48,30 +45,32 @@ public sealed class VideoSurface : Control
             var count = SourceWidth * SourceHeight;
             for (int i = 0; i < count; i++)
             {
-                dst[i] = 0xFFFF0000; // Blue in BGRA
+                dst[i] = 0xFF000000;
             }
         }
     }
 
-    private void OnFrameCompleted(object? sender, EventArgs e)
+    public void SetFrame(VideoFrameDto? frame)
     {
-        if (_vic == null) return;
+        if (frame is null ||
+            frame.Width != SourceWidth ||
+            frame.Height != SourceHeight ||
+            frame.Bgra.Length < SourceWidth * SourceHeight * 4)
+        {
+            return;
+        }
 
         try
         {
             using var fb = _bitmap.Lock();
             unsafe
             {
-                var src = _vic.FrameBuffer;
                 var dst = (byte*)fb.Address;
                 var size = SourceWidth * SourceHeight * 4;
 
-                if (src.Length >= size)
+                fixed (byte* pSrc = frame.Bgra)
                 {
-                    fixed (byte* pSrc = src)
-                    {
-                        Buffer.MemoryCopy(pSrc, dst, size, size);
-                    }
+                    Buffer.MemoryCopy(pSrc, dst, size, size);
                 }
             }
 
@@ -90,17 +89,10 @@ public sealed class VideoSurface : Control
         double windowWidth = Bounds.Width;
         double windowHeight = Bounds.Height;
         
-        if (windowWidth <= 0 || windowHeight <= 0 || _vic == null)
+        if (windowWidth <= 0 || windowHeight <= 0)
             return;
-        
-        // Get pixel aspect from VIC's TV system (matches VICE implementation)
-        float pixelAspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(
-            _vic is ViceSharp.Chips.VicIi.Mos6569 mos6569 ? mos6569.System : ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL);
-        
-        // Calculate display aspect ratio: source aspect * pixel aspect
-        // For PAL: (384/272) * 0.93650794 ≈ 1.32 (close to 4:3)
-        // For NTSC: (384/272) * 0.75 ≈ 1.06 (much wider/taller pixels)
-        double displayAspect = (double)SourceWidth / SourceHeight / pixelAspect;
+
+        double displayAspect = (double)SourceWidth / SourceHeight;
         
         double windowAspect = windowWidth / windowHeight;
         

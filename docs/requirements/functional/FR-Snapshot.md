@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Snapshot / State Management    |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -33,9 +33,14 @@ The emulator shall capture the complete machine state at any point during execut
 8. Snapshot files use a versioned binary format with integrity checksums.
 9. The `ISnapshotManager.Save()` method returns a snapshot handle or writes to a specified path.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
+
 ### Traceability
 
 - **Interfaces:** `ISnapshotManager`
+- **Boundary:** FR-HOST-005 exposes snapshot save commands and artifact metadata through the host service.
 - **Test Suite:** `SnapshotSaveTests`, `SnapshotCompletenessTests`, `SnapshotFormatTests`
 
 ---
@@ -64,9 +69,14 @@ The emulator shall restore a complete machine state from a previously saved snap
 9. Loading a snapshot does not leak memory (previous state is fully released).
 10. The `ISnapshotManager.Load()` method accepts a snapshot handle or file path.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
+
 ### Traceability
 
 - **Interfaces:** `ISnapshotManager`
+- **Boundary:** FR-HOST-005 exposes snapshot load commands and validation errors through the host service.
 - **Test Suite:** `SnapshotLoadTests`, `SnapshotRoundtripTests`, `SnapshotVersionTests`, `CorruptSnapshotTests`
 
 ---
@@ -92,6 +102,10 @@ The emulator shall support recording input events (keyboard, joystick, timing) f
 6. The `IReplayEngine` interface provides record/playback/seek operations.
 7. Replay files are compact (only input events are stored, not full state per frame).
 8. Seeking to an arbitrary frame is supported via periodic auto-snapshots during recording.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
 
 ### Traceability
 
@@ -121,6 +135,10 @@ The emulator shall support comparing two snapshots and reporting the differences
 6. A detailed mode reports every individual change.
 7. Unchanged state is not included in the diff output (only deltas).
 8. The diff can be serialized to a human-readable format for inspection.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: snapshot, history, recording, and state persistence behavior exposed by emulator commands.
 
 ### Traceability
 

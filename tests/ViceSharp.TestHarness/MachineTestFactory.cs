@@ -7,14 +7,21 @@ using ViceSharp.RomFetch;
 internal static class MachineTestFactory
 {
     public static IMachine CreateC64Machine()
+        => CreateC64Machine(new Architectures.C64.C64Descriptor());
+
+    public static IMachine CreateC64Machine(string modelSelector)
+        => CreateC64Machine(new Architectures.C64.C64Descriptor(modelSelector));
+
+    public static IMachine CreateC64Machine(Architectures.C64.C64Descriptor descriptor)
     {
         var builder = new ArchitectureBuilder(CreateC64RomProvider());
-        return builder.Build(new Architectures.C64.C64Descriptor());
+        return builder.Build(descriptor);
     }
 
     public static IRomProvider CreateC64RomProvider()
     {
-        return new RomProvider(FindRomBasePath());
+        var romBasePath = FindRomBasePath();
+        return new RomProvider(romBasePath, FindNativeViceRomFallbacks(romBasePath));
     }
 
     public static ReadOnlyMemory<byte> LoadC64Rom(string romName)
@@ -37,5 +44,18 @@ internal static class MachineTestFactory
         }
 
         throw new DirectoryNotFoundException("Could not locate repo roms/C64 directory for test run.");
+    }
+
+    private static IEnumerable<string> FindNativeViceRomFallbacks(string romBasePath)
+    {
+        var dir = new DirectoryInfo(romBasePath);
+        while (dir is not null)
+        {
+            var candidate = Path.Combine(dir.FullName, "native", "vice", "vice", "data");
+            if (Directory.Exists(Path.Combine(candidate, "C64")))
+                yield return candidate;
+
+            dir = dir.Parent;
+        }
     }
 }

@@ -65,26 +65,41 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var irqLine = new InterruptLine(InterruptType.Irq);
         var nmiLine = new InterruptLine(InterruptType.Nmi);
         var cpu = new Mos6502(bus);
-        var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine);
-        var vic = descriptor.VideoStandard == VideoStandard.Ntsc
-            ? new Mos6567(bus, irqLine)
-            : new Mos6569(bus, irqLine);
+        var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine, nmiLine);
+        var profile = (descriptor as IProfiledArchitectureDescriptor)?.MachineProfile;
+        var systemCore = profile is null ? null : new SystemCore(profile.SystemCore);
+        var vic = CreateVicII(bus, irqLine, descriptor, profile);
         var cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
         var cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
         var pla = new Mos906114(bus);
-        var sid = new Sid6581(bus);
-        var memory = new C64MemoryMap(vic, sid, cia1, cia2, pla);
+        var sid = CreateSid(bus, profile);
+        var defaultCartridgeMappingMode = ResolveDefaultCartridgeMappingMode(profile);
+        var cia2PortAInputMask = ResolveCia2PortAInputMask(profile);
+        var memory = new C64MemoryMap(
+            vic,
+            sid,
+            cia1,
+            cia2,
+            pla,
+            profile?.KeyboardEnabled ?? true,
+            cia2PortAInputMask: cia2PortAInputMask,
+            defaultCartridgeMappingMode: defaultCartridgeMappingMode);
         bus.RegisterDevice(memory);
 
         var romLoader = new C64RomLoader(bus);
-        var basic = _romProvider.LoadRom("basic", "C64").Span;
-        var kernal = _romProvider.LoadRom("kernal", "C64").Span;
-        var character = _romProvider.LoadRom("characters", "C64").Span;
+        var basicRomName = profile?.BasicRomName ?? "basic";
+        var kernalRomName = profile?.KernalRomName ?? "kernal";
+        var characterRomName = profile?.CharacterRomName ?? "characters";
+        var basic = _romProvider.LoadRom(basicRomName, "C64").Span;
+        var kernal = IsKernalRomRequired(kernalRomName)
+            ? _romProvider.LoadRom(kernalRomName, "C64").Span
+            : ReadOnlySpan<byte>.Empty;
+        var character = _romProvider.LoadRom(characterRomName, "C64").Span;
 
         memory.BeginRomLoad();
         try
         {
-            if (!romLoader.LoadAllRoms(basic, kernal, character))
+            if (!romLoader.LoadAllRoms(basic, kernal, character, basicRomName, kernalRomName, characterRomName))
             {
                 throw new InvalidOperationException($"{descriptor.MachineName} ROM set is invalid or missing expected checksum entries.");
             }
@@ -101,7 +116,10 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         clock.Register(sid);
         clock.Register(pla);
 
-        deviceRegistry.Add(memory, DeviceRole.SystemRam);
+        if (systemCore is not null)
+            deviceRegistry.Add(systemCore, DeviceRole.SystemCore);
+
+        deviceRegistry.Add(memory, DeviceRole.SystemRam, DeviceRole.CartridgePort);
         deviceRegistry.Add(cpu, DeviceRole.Cpu);
         deviceRegistry.Add(vic, DeviceRole.VideoChip);
         deviceRegistry.Add(cia1, DeviceRole.Cia1);
@@ -122,6 +140,86 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             || roles.Contains(DeviceRole.Cia2)
             || roles.Contains(DeviceRole.Pla)
             || roles.Contains(DeviceRole.AudioChip);
+    }
+
+    private static bool IsKernalRomRequired(string kernalRomName)
+        => !string.Equals(kernalRomName, "kernal-none.bin", StringComparison.OrdinalIgnoreCase);
+
+    private static CartridgeMappingMode ResolveDefaultCartridgeMappingMode(IMachineProfile? profile)
+    {
+        if (profile is null)
+            return CartridgeMappingMode.Auto;
+
+        if (string.Equals(profile.SystemCore.AddressDecoderPolicy, "Ultimax", StringComparison.OrdinalIgnoreCase))
+            return CartridgeMappingMode.Ultimax;
+
+        if (string.Equals(profile.BoardModel, "C64GS", StringComparison.OrdinalIgnoreCase))
+            return CartridgeMappingMode.GameSystem;
+
+        return CartridgeMappingMode.Auto;
+    }
+
+    private static byte ResolveCia2PortAInputMask(IMachineProfile? profile)
+    {
+        if (profile is null)
+            return 0x7F;
+
+        return profile.SystemCore.BusPolicy switch
+        {
+            "GameSystem" or "Max" => 0x3F,
+            _ => 0x7F
+        };
+    }
+
+    private static Mos6569 CreateVicII(
+        IBus bus,
+        IInterruptLine irqLine,
+        IArchitectureDescriptor descriptor,
+        IMachineProfile? profile)
+    {
+        var vic = profile?.VicIIModel switch
+        {
+            "Mos6569R1" => new Mos6569R1(bus, irqLine),
+            "Mos6567R56A" => new Mos6567R56A(bus, irqLine),
+            "Mos6567R8" => new Mos6567(bus, irqLine),
+            "Mos6572" => new Mos6572(bus, irqLine),
+            "Mos8562" => new Mos8562(bus, irqLine),
+            "Mos8565" => new Mos8565(bus, irqLine),
+            _ => descriptor.VideoStandard == VideoStandard.Ntsc
+                ? new Mos6567(bus, irqLine)
+                : new Mos6569(bus, irqLine)
+        };
+
+        if (profile is null)
+            return vic;
+
+        var system = profile.VideoStandard == VideoStandard.Ntsc
+            ? Mos6569.TvSystem.NTSC
+            : string.Equals(profile.VicIIModel, "Mos6572", StringComparison.OrdinalIgnoreCase)
+                ? Mos6569.TvSystem.PALN
+                : Mos6569.TvSystem.PAL;
+
+        var visibleLines = profile.VideoStandard == VideoStandard.Ntsc
+            ? Mos6569.NtscVisibleLines
+            : Mos6569.PalVisibleLines;
+        vic.ConfigureTiming(
+            system,
+            profile.CyclesPerLine,
+            visibleLines,
+            profile.RasterLines,
+            profile.RefreshRateHz);
+        return vic;
+    }
+
+    private static Sid6581 CreateSid(IBus bus, IMachineProfile? profile)
+    {
+        if (profile is not null &&
+            profile.SidModel.Contains("8580", StringComparison.OrdinalIgnoreCase))
+        {
+            return new Sid8580(bus);
+        }
+
+        return new Sid6581(bus);
     }
 }
 
@@ -149,7 +247,9 @@ internal sealed class Machine : IMachine
         _clock = clock;
         _devices = deviceRegistry;
         _cpu = cpu;
-        _frameCycles = architecture.VideoStandard == VideoStandard.Ntsc ? 263 * 64 : 312 * 63;
+        _frameCycles = architecture is IProfiledArchitectureDescriptor profiled
+            ? profiled.MachineProfile.CyclesPerLine * profiled.MachineProfile.RasterLines
+            : architecture.VideoStandard == VideoStandard.Ntsc ? 263 * 65 : 312 * 63;
     }
 
     public IBus Bus => _bus;
@@ -231,6 +331,8 @@ internal sealed class DeviceRegistry : IDeviceRegistry
             _byRole[DeviceRole.Cpu] = device;
         else if (device is Mos906114)
             _byRole[DeviceRole.Pla] = device;
+        else if (device is ICartridgePort)
+            _byRole[DeviceRole.CartridgePort] = device;
         else if (device is ICiaChip)
         {
             // Register CIA chips in order (CIA1 first, then CIA2)

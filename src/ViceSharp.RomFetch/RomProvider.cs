@@ -5,21 +5,32 @@ namespace ViceSharp.RomFetch;
 
 public class RomProvider : IRomProvider
 {
+    private readonly IReadOnlyList<string> _romBasePaths;
+
     public string RomBasePath { get; }
 
     public RomProvider(string romBasePath)
+        : this(romBasePath, [])
+    {
+    }
+
+    public RomProvider(string romBasePath, IEnumerable<string> fallbackRomBasePaths)
     {
         RomBasePath = romBasePath;
         Directory.CreateDirectory(RomBasePath);
+        _romBasePaths = new[] { RomBasePath }
+            .Concat(fallbackRomBasePaths.Where(path => !string.IsNullOrWhiteSpace(path)))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
     }
 
     public ReadOnlyMemory<byte> LoadRom(string romName, string architecture)
     {
-        var path = Path.Combine(RomBasePath, architecture, romName);
-        
-        if (!File.Exists(path))
+        if (!TryResolvePath(romName, architecture, out var path))
         {
-            throw new FileNotFoundException($"ROM not found: {romName} for {architecture}", path);
+            throw new FileNotFoundException(
+                $"ROM not found: {romName} for {architecture}",
+                Path.Combine(RomBasePath, architecture, romName));
         }
 
         return File.ReadAllBytes(path);
@@ -27,8 +38,7 @@ public class RomProvider : IRomProvider
 
     public bool IsAvailable(string romName, string architecture)
     {
-        var path = Path.Combine(RomBasePath, architecture, romName);
-        return File.Exists(path) && VerifyHash(path, romName);
+        return TryResolvePath(romName, architecture, out var path) && VerifyHash(path, romName);
     }
 
     public async Task<ReadOnlyMemory<byte>> DownloadRom(string romName, string architecture, CancellationToken cancellationToken)
@@ -68,6 +78,22 @@ public class RomProvider : IRomProvider
         
         var data = File.ReadAllBytes(path);
         return SHA256.HashData(data).AsSpan().SequenceEqual(entry.Sha256);
+    }
+
+    private bool TryResolvePath(string romName, string architecture, out string path)
+    {
+        foreach (var basePath in _romBasePaths)
+        {
+            var candidate = Path.Combine(basePath, architecture, romName);
+            if (File.Exists(candidate))
+            {
+                path = candidate;
+                return true;
+            }
+        }
+
+        path = string.Empty;
+        return false;
     }
 
     private static readonly Dictionary<string, RomEntry> RomDatabase = new()

@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | I/O (MOS 6522 VIA)             |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -31,6 +31,11 @@ The 6522 VIA has two 16-bit timers with different capabilities than the CIA time
 6. A latch value of N results in an interrupt after N+1 clock cycles (unlike the CIA which is N+1 only when force-loaded).
 7. Writing to the Timer 1 low-byte latch does not start the timer; writing the high byte starts it.
 8. Writing Timer 2 high byte starts the timer and clears the T2 interrupt flag.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: VIC-20, PET/CBM-II, and disk-drive I/O feature sections.
+- `native/vice/vice/doc/coding-guidelines.txt`: source layout only; no FR text derived from coding policy.
 
 ### Traceability
 
@@ -60,6 +65,11 @@ The 6522 VIA has an 8-bit bidirectional shift register that can be clocked by Ti
 6. The CB1 pin provides the clock and CB2 provides the data for shift register operations.
 7. Data is shifted MSB first.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: VIC-20, PET/CBM-II, and disk-drive I/O feature sections.
+- `native/vice/vice/doc/coding-guidelines.txt`: source layout only; no FR text derived from coding policy.
+
 ### Traceability
 
 - **Interfaces:** `IVia`
@@ -87,6 +97,11 @@ The VIA's two 8-bit I/O ports (Port A and Port B) support handshaking protocols 
 5. CB1/CB2 control operates identically to CA1/CA2 with PCR bits 4-7.
 6. Reading Port A (ORA) or Port B (ORB) clears the corresponding CA1/CB1 interrupt flags.
 7. Latching mode (ACR bits 0-1) can latch port input data on the active CA1/CB1 edge.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: VIC-20, PET/CBM-II, and disk-drive I/O feature sections.
+- `native/vice/vice/doc/coding-guidelines.txt`: source layout only; no FR text derived from coding policy.
 
 ### Traceability
 
@@ -116,6 +131,11 @@ The VIC-20 uses two VIA 6522 chips. VIA1 ($9110-$911F) handles the keyboard matr
 6. VIA2 CA1 is connected to the cassette READ line.
 7. VIA1 generates IRQ; VIA2 generates NMI via its interrupt output.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: VIC-20, PET/CBM-II, and disk-drive I/O feature sections.
+- `native/vice/vice/doc/coding-guidelines.txt`: source layout only; no FR text derived from coding policy.
+
 ### Traceability
 
 - **Interfaces:** `IVia`, `IAddressSpace`
@@ -142,6 +162,11 @@ The 1541 and 1571 disk drives each contain two VIA 6522 chips. VIA1 ($1800-$180F
 4. Drive VIA2 Timer 1 is used for byte-ready timing in the GCR read pipeline.
 5. BYTE READY signal (VIA2 CA1) triggers when a complete byte has been shifted in from the disk.
 6. Both VIAs generate interrupts to the drive's own CPU (6502 in the 1541).
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: VIC-20, PET/CBM-II, and disk-drive I/O feature sections.
+- `native/vice/vice/doc/coding-guidelines.txt`: source layout only; no FR text derived from coding policy.
 
 ### Traceability
 

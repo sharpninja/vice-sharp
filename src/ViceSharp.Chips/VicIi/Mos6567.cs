@@ -10,7 +10,12 @@ public sealed class Mos6567 : Mos6569
 {
     public Mos6567(IBus bus, IInterruptLine irqLine) : base(bus, irqLine)
     {
-        System = TvSystem.NTSC;
+        ConfigureTiming(
+            TvSystem.NTSC,
+            NtscCyclesPerLine,
+            NtscVisibleLines,
+            NtscTotalLines,
+            1_022_730d / (NtscCyclesPerLine * NtscTotalLines));
     }
 
     public override string Name => "MOS 6567 VIC-II (NTSC)";

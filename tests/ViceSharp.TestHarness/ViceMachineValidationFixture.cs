@@ -4,12 +4,20 @@ namespace ViceSharp.TestHarness;
 
 internal sealed class ViceMachineValidationFixture : IAsyncDisposable
 {
-    public IMachine ManagedMachine { get; } = MachineTestFactory.CreateC64Machine();
+    private readonly string _modelSelector;
+
+    public ViceMachineValidationFixture(string modelSelector = "c64")
+    {
+        _modelSelector = modelSelector;
+        ManagedMachine = MachineTestFactory.CreateC64Machine(modelSelector);
+    }
+
+    public IMachine ManagedMachine { get; }
     public IntPtr NativeMachine { get; private set; }
 
     public ValueTask InitializeAsync()
     {
-        NativeMachine = ViceNativeBridge.CreateMachine();
+        NativeMachine = ViceNativeBridge.CreateMachine(_modelSelector);
         ViceNativeBridge.ResetMachine(NativeMachine);
         return ValueTask.CompletedTask;
     }

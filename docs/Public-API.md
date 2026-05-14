@@ -416,12 +416,12 @@ public interface IArchitectureDescriptor
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Constructs a running `IMachine` from an `IArchitectureDescriptor`. Performs the wiring sequence: instantiate devices, map address spaces, connect interrupts, configure clocks, and validate.
+Constructs a running `IMachine` from an `IArchitectureDescriptor`. Performs the assembly sequence: select the profile's system core, instantiate chips, map address spaces, connect interrupts, configure clocks, and validate. The builder is the glue between system-core policy and concrete chip instances.
 
 ```csharp
 /// <summary>
 /// Constructs a running IMachine from an IArchitectureDescriptor.
-/// Instantiates devices, wires address spaces, connects interrupts,
+/// Selects the system core, instantiates chips, wires address spaces, connects interrupts,
 /// configures clocks, and runs validation.
 /// </summary>
 public interface IArchitectureBuilder

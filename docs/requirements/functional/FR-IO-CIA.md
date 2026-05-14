@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | I/O (MOS 6526 CIA)             |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -32,6 +32,11 @@ Each CIA chip has two 16-bit countdown timers (Timer A and Timer B). Timers can 
 7. Force-load (strobe bit 4) immediately copies the latch to the counter.
 8. Timer underflow toggles the PB6 (Timer A) or PB7 (Timer B) output pin when configured.
 9. The 1-cycle delay between timer reaching zero and the interrupt being asserted is modeled.
+
+### Source References
+
+- `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
+- `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
 
 ### Traceability
 
@@ -61,6 +66,11 @@ Each CIA has a Time-of-Day clock that counts in BCD format with tenths-of-second
 6. When the TOD matches the alarm value, the TOD interrupt bit is set in the ICR.
 7. Hours register bit 7 indicates AM (0) or PM (1).
 
+### Source References
+
+- `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
+- `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
+
 ### Traceability
 
 - **Interfaces:** `ICia`, `ITodClock`
@@ -87,6 +97,11 @@ CIA1 Port A and Port B are connected to the C64 keyboard matrix (8x8 matrix yiel
 4. Key ghosting behavior matches hardware (pressing 3 keys in an L-shape can ghost a 4th).
 5. The RESTORE key is not part of the matrix; it directly triggers NMI via CIA2.
 6. The `IKeyboardMatrix` interface allows host-side key press/release events to set matrix state.
+
+### Source References
+
+- `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
+- `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
 
 ### Traceability
 
@@ -115,6 +130,11 @@ Joystick port 2 shares CIA1 Port A with the keyboard columns, and joystick port 
 5. The `IJoystickPort` interface allows the host to set joystick state (direction + fire).
 6. Simultaneous joystick and keyboard reading conflicts are handled as on real hardware.
 
+### Source References
+
+- `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
+- `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
+
 ### Traceability
 
 - **Interfaces:** `ICia`, `IJoystickPort`
@@ -141,6 +161,11 @@ Each CIA has an 8-bit serial shift register that can transmit or receive data bi
 4. In output mode, data written to the SDR register is loaded into the shift register on the next Timer A underflow.
 5. In input mode, incoming bits are shifted in on each external clock edge.
 6. The serial data appears on the SP pin and the clock on the CNT pin.
+
+### Source References
+
+- `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
+- `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
 
 ### Traceability
 
@@ -169,6 +194,11 @@ CIA2 generates Non-Maskable Interrupts (NMI) to the CPU. NMI sources include Tim
 5. The FLAG pin (directly from IEC ATN) can trigger NMI when enabled.
 6. Multiple NMI sources can be pending simultaneously; reading ICR reveals which sources fired.
 
+### Source References
+
+- `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
+- `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
+
 ### Traceability
 
 - **Interfaces:** `ICia`, `IInterruptController`
@@ -195,6 +225,11 @@ CIA1 generates Interrupt Requests (IRQ) to the CPU. IRQ sources mirror those of 
 4. Reading CIA1 ICR ($DC0D) clears all interrupt flags and deasserts the IRQ line (if no other sources remain).
 5. The IRQ mask register ($DC0D write) selects which sources can generate IRQ (bit 7 = set/clear control).
 6. Timer A, Timer B, TOD alarm, SDR complete, and FLAG are all independently maskable.
+
+### Source References
+
+- `native/vice/vice/doc/CIA-README.txt`: CIA timer/alarm behavior.
+- `native/vice/vice/doc/vice.texi`: keyboard, joystick, IEC, and machine-feature behavior involving CIA ports.
 
 ### Traceability
 

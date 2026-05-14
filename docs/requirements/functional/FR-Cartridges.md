@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Cartridges / Expansion Port    |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -31,9 +31,14 @@ The emulator shall support standard 8KB and 16KB cartridge images. An 8K cartrid
 6. Cartridges can be inserted and removed at runtime via `ICartridgePort.Insert()`/`ICartridgePort.Remove()`.
 7. Removing a cartridge restores the default banking configuration.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: C64 cartridge settings, supported cartridge formats, and machine-specific cartridge behavior.
+
 ### Traceability
 
 - **Interfaces:** `ICartridgePort`, `IAddressSpace`
+- **Boundary:** FR-HOST-002 exposes cartridge insert/remove/status through the host service.
 - **Test Suite:** `StandardCartridgeTests`, `CrtFileParserTests`, `CartridgeAutostartTests`
 
 ---
@@ -57,6 +62,10 @@ The Ocean Type 1 cartridge uses bank switching to map up to 512KB of ROM into th
 4. Maximum size is 512KB (64 x 8KB banks).
 5. The EXROM/GAME line configuration follows the Ocean Type 1 specification.
 6. The cartridge CRT file chip packets correctly identify bank numbers.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: C64 cartridge settings, supported cartridge formats, and machine-specific cartridge behavior.
 
 ### Traceability
 
@@ -87,6 +96,10 @@ The EasyFlash is a modern cartridge with 1MB of flash memory (2 x 512KB banks fo
 7. EasyFlash CRT images are loaded with correct bank and chip assignments.
 8. Modified flash contents can be saved back to the CRT file via `IFlashMemory.Save()`.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: C64 cartridge settings, supported cartridge formats, and machine-specific cartridge behavior.
+
 ### Traceability
 
 - **Interfaces:** `ICartridgePort`, `IFlashMemory`
@@ -115,6 +128,10 @@ The Action Replay (and its modern successor Retro Replay) is a utility cartridge
 6. REU (RAM Expansion Unit) passthrough is supported on Retro Replay.
 7. The cartridge CRT format for Action Replay and Retro Replay is correctly parsed.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: C64 cartridge settings, supported cartridge formats, and machine-specific cartridge behavior.
+
 ### Traceability
 
 - **Interfaces:** `ICartridgePort`
@@ -142,6 +159,10 @@ The Final Cartridge III is a utility cartridge with 64KB of ROM in 4 banks, prov
 5. The desktop environment (GUI) launches on cold start when configured.
 6. The FC3 can be disabled by writing the appropriate value to $DFFF (setting GAME=1, EXROM=1).
 7. The CRT file format for FC3 is correctly parsed with all 4 bank chips.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: C64 cartridge settings, supported cartridge formats, and machine-specific cartridge behavior.
 
 ### Traceability
 

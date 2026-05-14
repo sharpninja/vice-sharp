@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Input Devices                  |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -32,9 +32,16 @@ The C64 keyboard is an 8x8 matrix scanned through CIA1 Port A (column select, ac
 7. The SHIFT LOCK key toggles and holds the left SHIFT matrix position.
 8. The `IKeyboardMatrix` interface accepts key-down and key-up events with C64 matrix coordinates.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, joystick emulation, joymap files, control-port resources, mouse/lightpen/paddle behavior.
+- `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage.
+- `native/vice/vice/doc/joystick.md`: joystick API and host-driver behavior.
+
 ### Traceability
 
 - **Interfaces:** `IKeyboardMatrix`
+- **Boundary:** FR-HOST-004 normalizes remote UI key events before injection.
 - **Test Suite:** `KeyboardMatrixTests`, `SymbolicMappingTests`, `PositionalMappingTests`, `KeyGhostingTests`
 
 ---
@@ -60,9 +67,16 @@ The C64 has two DE-9 joystick ports. Each port reads 5 digital signals: up, down
 6. Autofire functionality is available with configurable rate (in frames between toggles).
 7. Both ports can be active simultaneously with independent mappings.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, joystick emulation, joymap files, control-port resources, mouse/lightpen/paddle behavior.
+- `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage.
+- `native/vice/vice/doc/joystick.md`: joystick API and host-driver behavior.
+
 ### Traceability
 
 - **Interfaces:** `IJoystickPort`
+- **Boundary:** FR-HOST-004 normalizes remote UI joystick state before injection.
 - **Test Suite:** `JoystickPortTests`, `JoystickMappingTests`, `AutofireTests`
 
 ---
@@ -87,6 +101,12 @@ The 1351 mouse uses the SID's potentiometer inputs (POT X, POT Y) to report prop
 5. Right mouse button is mapped to a secondary control line (typically UP direction on joystick port).
 6. Host mouse movement is scaled and mapped to the 1351 proportional output.
 7. The `IMousePort` interface accepts delta-X and delta-Y from the host pointing device.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, joystick emulation, joymap files, control-port resources, mouse/lightpen/paddle behavior.
+- `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage.
+- `native/vice/vice/doc/joystick.md`: joystick API and host-driver behavior.
 
 ### Traceability
 
@@ -116,6 +136,12 @@ The VIC-II supports a lightpen input on the LP pin (directly on the joystick por
 6. Host mouse position can be translated to lightpen position relative to the visible display area.
 7. The `ILightpenPort` interface accepts screen coordinates and triggers the latch.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, joystick emulation, joymap files, control-port resources, mouse/lightpen/paddle behavior.
+- `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage.
+- `native/vice/vice/doc/joystick.md`: joystick API and host-driver behavior.
+
 ### Traceability
 
 - **Interfaces:** `ILightpenPort`, `IVideoChip`
@@ -144,7 +170,49 @@ Paddle controllers connect to the joystick port and use the SID's potentiometer 
 6. Two paddles per port (four paddles total) can be active simultaneously.
 7. The `IPaddlePort` interface accepts analog position values (0.0-1.0) for each paddle.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, joystick emulation, joymap files, control-port resources, mouse/lightpen/paddle behavior.
+- `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage.
+- `native/vice/vice/doc/joystick.md`: joystick API and host-driver behavior.
+
 ### Traceability
 
 - **Interfaces:** `IPaddlePort`
 - **Test Suite:** `PaddleControllerTests`, `PotScanTimingTests`, `DualPaddleTests`
+
+---
+
+## FR-INP-006: VICE Keymap Selection and Translation
+
+**ID:** FR-INP-006
+**Title:** VICE VKM Keymap Selection and Real-Time Keyboard Translation
+**Priority:** P0 -- Critical
+**Iteration:** 1
+
+### Description
+
+The emulator shall use VICE keymap files to translate host keyboard events into machine-specific keyboard matrix state. Built-in maps and uploaded custom maps are selected per emulator session and applied by the host-owned machine keyboard input handler.
+
+### Acceptance Criteria
+
+1. Built-in VICE keymaps are discoverable by machine and map style.
+2. A selected keymap is retained per emulator session until changed or the session ends.
+3. Custom keymaps can be uploaded by content and metadata without requiring shared file paths between UI and host.
+4. The parser supports VICE keymap comments, `!CLEAR`, `!INCLUDE`, `!UNDEF`, modifier directives, row/column entries, and shift flags needed for SHIFT, C=, and CTRL behavior.
+5. Includes resolve relative to the current keymap file or uploaded bundle context.
+6. Invalid custom maps report diagnostics and do not replace the active map.
+7. Real-time key down/up events update the C64 keyboard matrix through the selected map without constructing UI-local emulator devices.
+8. Machine-specific keyboard translators can be registered for future non-C64 profiles.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: keyboard emulation, keymap files, symbolic and positional mapping, keymap control commands, key mappings, special rows, and modifier flags.
+- `native/vice/vice/doc/html/images/keymaps.txt`: documented keymap coverage for C64, C128, PET, Plus/4, and CBM-II.
+
+### Traceability
+
+- **Interfaces:** `IKeyboardInputMap`, `IKeyboardInputMapSelection`, `IKeyboardMatrix`, `IMachineKeyboardInput`, `HostInputService`
+- **Related FRs:** FR-INP-001, FR-HOST-004, FR-UI-001
+- **Technical Requirement:** TR-INPUT-VKM-001
+- **Test Suite:** `C64VkmKeyboardTests`, `HostInputServiceTests`, `GrpcInputMappingTests`

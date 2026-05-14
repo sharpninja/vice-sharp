@@ -47,7 +47,7 @@ public sealed class C64JoystickPort : IInputSource
     public byte ReadPortState()
     {
         // C64 joystick is active low: 0 = pressed
-        return (byte)((byte)~(byte)State & 0x1F);
+        return (byte)(0xE0 | ((byte)~(byte)State & 0x1F));
     }
     
     // VICE-style: POT X/Y for paddles (255 = not pressed)

@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Storage / Datasette            |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-05-13 |
 
 ---
 
@@ -29,6 +29,10 @@ The Commodore Datasette tape drive motor is controlled by bit 3 of the 6510 I/O 
 4. The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.
 5. Motor state changes are reflected in the `ITapeUnit.MotorState` property.
 6. Audio output from the tape (when connected to SID EXT IN) is modeled.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk/tape image handling, tape settings, tape resources, and TAP file behavior.
 
 ### Traceability
 
@@ -58,9 +62,14 @@ The TAP file format stores raw tape pulse timing data. TAP v0 stores pulse lengt
 6. Writing to TAP format captures the pulse timing from emulated writes.
 7. The platform byte in the header distinguishes C64, VIC-20, and C16/Plus4 tapes.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk/tape image handling, tape settings, tape resources, and TAP file behavior.
+
 ### Traceability
 
 - **Interfaces:** `ITapeUnit`, `ITapCodec`
+- **Boundary:** FR-HOST-002 exposes TAP mount/eject/status through the host service.
 - **Test Suite:** `TapV0ReadTests`, `TapV1ReadTests`, `TapWriteTests`, `TapHeaderValidationTests`
 
 ---
@@ -84,6 +93,10 @@ Tape reading relies on the CIA1 Timer A or the FLAG pin to measure the time betw
 4. The standard Commodore tape header (FOUND marker), data blocks, and checksums are readable.
 5. Tape reading at normal speed produces identical results to real hardware.
 6. The timing accuracy supports both PAL and NTSC system clock rates.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk/tape image handling, tape settings, tape resources, and TAP file behavior.
 
 ### Traceability
 
@@ -111,6 +124,10 @@ The emulator shall support writing data to tape images via the datasette write l
 4. Writes can be appended to existing TAP files or written to new files.
 5. The record interlock (RECORD + PLAY buttons) must be engaged for writes.
 
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk/tape image handling, tape settings, tape resources, and TAP file behavior.
+
 ### Traceability
 
 - **Interfaces:** `ITapeUnit`
@@ -137,6 +154,10 @@ Many commercial C64 programs used turbo tape loaders that employ faster pulse en
 4. The CIA FLAG input timing is accurate to 1 system clock cycle.
 5. Half-wave and full-wave detection methods both work correctly.
 6. Multi-speed loaders (that change pulse rates mid-load) are supported.
+
+### Source References
+
+- `native/vice/vice/doc/vice.texi`: disk/tape image handling, tape settings, tape resources, and TAP file behavior.
 
 ### Traceability
 

@@ -10,7 +10,17 @@ public static class ViceNativeBridge
     public static bool IsAvailable => ViceNative.IsAvailable;
     public static string AvailabilityMessage => ViceNative.AvailabilityMessage;
 
-    public static IntPtr CreateMachine() => ViceNative.Create();
+    public static IntPtr CreateMachine(string? modelSelector = null)
+    {
+        var machine = string.IsNullOrWhiteSpace(modelSelector)
+            ? ViceNative.Create()
+            : ViceNative.CreateModel(modelSelector);
+
+        if (machine == IntPtr.Zero)
+            throw new InvalidOperationException($"Native VICE failed to create a machine for model '{modelSelector ?? "default"}'.");
+
+        return machine;
+    }
     public static void DestroyMachine(IntPtr machine) => ViceNative.Destroy(machine);
     public static void ResetMachine(IntPtr machine) => ViceNative.ResetNative(machine);
     public static void StepCycle(IntPtr machine) => ViceNative.StepNative(machine);
@@ -58,6 +68,18 @@ public static class ViceNativeBridge
         state.FilterState = nativeState.FilterState;
     }
 
+    public static void GetInterruptState(IntPtr machine, ref ViceInterruptState state)
+    {
+        var nativeState = new ViceNative.ViceInterruptState();
+        ViceNative.GetInterruptState(machine, ref nativeState);
+
+        state.IrqAsserted = nativeState.IrqAsserted;
+        state.NmiAsserted = nativeState.NmiAsserted;
+        state.GlobalPending = nativeState.GlobalPending;
+        state.IrqSourceCount = nativeState.IrqSourceCount;
+        state.NmiSourceCount = nativeState.NmiSourceCount;
+    }
+
     public struct ViceVicState
     {
         public uint Cycle;
@@ -89,5 +111,14 @@ public static class ViceNativeBridge
         public uint[] Accumulators;
         public byte[] Envelopes;
         public uint FilterState;
+    }
+
+    public struct ViceInterruptState
+    {
+        public byte IrqAsserted;
+        public byte NmiAsserted;
+        public byte GlobalPending;
+        public byte IrqSourceCount;
+        public byte NmiSourceCount;
     }
 }

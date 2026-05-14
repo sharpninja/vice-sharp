@@ -19,6 +19,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
 
     // VIC-II registers
     private readonly byte[] _registers = new byte[64];
+    private const byte InterruptSourceMask = 0x0F;
+    private ushort _rasterIrqLine;
 
     public ushort CurrentRasterLine { get; private set; }
     
@@ -44,9 +46,16 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public const int PalCyclesPerLine = 63;
     public const int PalVisibleLines = 312;
     public const int PalTotalLines = 312;
-    public const int NtscCyclesPerLine = 64;
+    public const int NtscCyclesPerLine = 65;
+    public const int NtscOldCyclesPerLine = 64;
     public const int NtscVisibleLines = 262;
     public const int NtscTotalLines = 263;
+    public const int NtscOldTotalLines = 262;
+
+    private int _cyclesPerLine = PalCyclesPerLine;
+    private int _visibleLines = PalVisibleLines;
+    private int _totalLines = PalTotalLines;
+    private double _frameRate = 50.0;
     
     /// <summary>
     /// TV system type for VIC-II timing
@@ -67,9 +76,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     
     /// <summary>
     /// VICE-style: Check if current raster line is a badline.
-    /// Badlines occur on raster lines 30-49 when display is enabled (DEN bit in $11).
+    /// Badlines occur on raster lines $30-$F7 when DEN is set and the raster low bits match YSCROLL.
     /// </summary>
-    public bool IsBadLine => CurrentRasterLine >= 30 && CurrentRasterLine <= 49 && IsDisplayEnabled;
+    public bool IsBadLine => IsBadLineRaster(CurrentRasterLine);
     
     /// <summary>
     /// Check if display is enabled (DEN bit in register $11)
@@ -85,7 +94,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// VICE-style: DMA stealing state
     /// On badlines, VIC-II steals 40-63 cycles during display window for character data fetch
     /// </summary>
-    public bool IsDmaStealing => IsBadLine && !IsVerticalBlankArea && RasterX >= 40 && RasterX < CyclesPerLine;
+    public bool IsDmaStealing => IsBadLine && RasterX >= 14 && RasterX < 54;
     
     /// <summary>
     /// Check if VIC-II is currently accessing video matrix (cycle 14-54 of badline)
@@ -100,7 +109,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>
     /// VICE-style: Screen memory address from registers
     /// </summary>
-    public ushort ScreenMemoryBase => (ushort)(((int)_registers[0x18] << 6) | (((int)_registers[0x11] & 0x0F) << 10));
+    public ushort ScreenMemoryBase => (ushort)((_registers[0x18] & 0xF0) << 6);
     
     /// <summary>
     /// VICE-style: Character generator base address
@@ -115,48 +124,27 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>
     /// VICE-style: Check if this a badline (raster line 30-49)
     /// </summary>
-    public bool IsCurrentLineBad => CurrentRasterLine >= 30 && CurrentRasterLine <= 49;
+    public bool IsCurrentLineBad => IsBadLine;
     
     /// <summary>
     /// VICE-style: Frame rate based on TV system
     /// </summary>
-    public double FrameRate => System switch
-    {
-        TvSystem.PAL => 50.0,
-        TvSystem.NTSC => 60.0,
-        TvSystem.PALN => 50.0,
-        _ => 50.0
-    };
+    public double FrameRate => _frameRate;
     
     /// <summary>
     /// VICE-style: Cycles per line based on TV system
     /// </summary>
-    public int CyclesPerLine => System switch
-    {
-        TvSystem.PAL or TvSystem.PALN => PalCyclesPerLine,
-        TvSystem.NTSC => NtscCyclesPerLine,
-        _ => PalCyclesPerLine
-    };
+    public int CyclesPerLine => _cyclesPerLine;
     
     /// <summary>
     /// VICE-style: Visible lines based on TV system
     /// </summary>
-    public int VisibleLines => System switch
-    {
-        TvSystem.PAL or TvSystem.PALN => PalVisibleLines,
-        TvSystem.NTSC => NtscVisibleLines,
-        _ => PalVisibleLines
-    };
+    public int VisibleLines => _visibleLines;
     
     /// <summary>
     /// VICE-style: Total lines based on TV system
     /// </summary>
-    public int TotalLines => System switch
-    {
-        TvSystem.PAL or TvSystem.PALN => PalTotalLines,
-        TvSystem.NTSC => NtscTotalLines,
-        _ => PalTotalLines
-    };
+    public int TotalLines => _totalLines;
     
     public byte RasterX;
     public uint CycleCounter;
@@ -233,7 +221,24 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>
     /// Get current video mode from register $11 bit 4-6
     /// </summary>
-    public VideoMode DisplayMode => (VideoMode)((_registers[0x11] >> 4) & 0x07);
+    public VideoMode DisplayMode
+    {
+        get
+        {
+            var extendedBackground = (_registers[0x11] & 0x40) != 0;
+            var bitmap = (_registers[0x11] & 0x20) != 0;
+            var multicolor = (_registers[0x16] & 0x10) != 0;
+
+            return (extendedBackground, bitmap, multicolor) switch
+            {
+                (false, false, false) => VideoMode.StandardText,
+                (false, false, true) => VideoMode.MulticolorText,
+                (false, true, _) => VideoMode.Bitmap,
+                (true, false, false) => VideoMode.ExtendedBackground,
+                _ => VideoMode.StandardText
+            };
+        }
+    }
     
     /// <summary>
     /// Get character/color data pointer base (bits 0-3 of register $18)
@@ -266,7 +271,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>
     /// Get screen memory address (10-bit from registers)
     /// </summary>
-    public ushort ScreenMemoryAddress => (ushort)(((int)_registers[0x18] << 6) | (((int)_registers[0x11] & 0x0F) << 10));
+    public ushort ScreenMemoryAddress => ScreenMemoryBase;
     
     // VICE-style: Sprite state
     private readonly SpriteState[] _sprites = new SpriteState[8];
@@ -363,15 +368,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>
     /// Get current raster IRQ line
     /// </summary>
-    public ushort RasterIrqLine => (ushort)(((_registers[0x11] & 0x80) << 1) | _registers[0x12]);
+    public ushort RasterIrqLine => _rasterIrqLine;
     
     /// <summary>
     /// Set raster IRQ line
     /// </summary>
     public void SetRasterIrqLine(ushort line)
     {
-        _registers[0x12] = (byte)line;
-        _registers[0x11] = (byte)((_registers[0x11] & 0x7F) | ((line >> 1) & 0x80));
+        _rasterIrqLine = (ushort)(line & 0x01FF);
     }
     
     /// <summary>
@@ -439,7 +443,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>
     /// VICE-style: Is this a forced badline (FLI support)
     /// </summary>
-    public bool IsForcedBadline => (CurrentRasterLine & 7) == YScroll;
+    public bool IsForcedBadline => IsDisplayEnabled && (CurrentRasterLine & 7) == YScroll;
     
     /// <summary>
     /// VICE-style: Get VIC bank from CIA2 port A (bank selection)
@@ -467,6 +471,24 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         _renderer = new VideoRenderer(this);
     }
 
+    public void ConfigureTiming(TvSystem system, int cyclesPerLine, int visibleLines, int totalLines, double frameRate)
+    {
+        if (cyclesPerLine <= 0)
+            throw new ArgumentOutOfRangeException(nameof(cyclesPerLine));
+        if (visibleLines <= 0)
+            throw new ArgumentOutOfRangeException(nameof(visibleLines));
+        if (totalLines < visibleLines)
+            throw new ArgumentOutOfRangeException(nameof(totalLines));
+        if (!double.IsFinite(frameRate) || frameRate <= 0)
+            throw new ArgumentOutOfRangeException(nameof(frameRate));
+
+        System = system;
+        _cyclesPerLine = cyclesPerLine;
+        _visibleLines = visibleLines;
+        _totalLines = totalLines;
+        _frameRate = frameRate;
+    }
+
     /// <inheritdoc />
     public void Tick()
     {
@@ -476,12 +498,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         // VICE-style raster interrupt (at cycle 58 of line)
         if (RasterX == 58)
         {
-            ushort rasterIrq = (ushort)(((_registers[0x11] & 0x80) << 1) | _registers[0x12]);
-            if (CurrentRasterLine == rasterIrq && (_registers[0x1A] & 0x01) != 0)
+            if (CurrentRasterLine == _rasterIrqLine && (_registers[0x1A] & 0x01) != 0)
             {
                 _registers[0x19] |= 0x01;
-                if ((_registers[0x1A] & 0x80) != 0)
-                    _irqLine.Assert(this);
+                RefreshInterruptLine();
             }
         }
 
@@ -522,6 +542,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         CurrentRasterLine = 0;
         RasterX = 0;
         CycleCounter = 0;
+        _rasterIrqLine = 0;
     }
 
     /// <inheritdoc />
@@ -538,9 +559,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
 
         if (register == 0x19)
         {
-            byte value = _registers[0x19];
-            _registers[0x19] &= 0x7F;
-            return value;
+            return _registers[0x19];
         }
 
         return _registers[register];
@@ -553,7 +572,28 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
 
         if (register == 0x19)
         {
-            _registers[register] &= (byte)~value;
+            _registers[register] &= (byte)~(value & InterruptSourceMask);
+            RefreshInterruptLine();
+            return;
+        }
+
+        if (register == 0x12)
+        {
+            _rasterIrqLine = (ushort)((_rasterIrqLine & 0x100) | value);
+            return;
+        }
+
+        if (register == 0x11)
+        {
+            _rasterIrqLine = (ushort)((_rasterIrqLine & 0x0FF) | ((value & 0x80) << 1));
+            _registers[register] = value;
+            return;
+        }
+
+        if (register == 0x1A)
+        {
+            _registers[register] = (byte)(value & InterruptSourceMask);
+            RefreshInterruptLine();
             return;
         }
 
@@ -612,6 +652,29 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public byte ReadVideoMemory(ushort address)
     {
         return VideoMemoryReader?.Invoke(address) ?? _bus.Read(address);
+    }
+
+    private bool IsBadLineRaster(ushort rasterLine)
+    {
+        return IsDisplayEnabled
+            && rasterLine >= 0x30
+            && rasterLine <= 0xF7
+            && (rasterLine & 0x07) == YScroll;
+    }
+
+    private void RefreshInterruptLine()
+    {
+        var activeEnabled = (_registers[0x19] & _registers[0x1A] & InterruptSourceMask) != 0;
+        if (activeEnabled)
+        {
+            _registers[0x19] |= 0x80;
+            _irqLine.Assert(this);
+        }
+        else
+        {
+            _registers[0x19] &= 0x7F;
+            _irqLine.Release(this);
+        }
     }
     
     /// <summary>

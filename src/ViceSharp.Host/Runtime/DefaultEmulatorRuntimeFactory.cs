@@ -1,0 +1,137 @@
+using ViceSharp.Abstractions;
+using ViceSharp.Architectures.C64;
+using ViceSharp.Core;
+using ViceSharp.Protocol;
+using ViceSharp.RomFetch;
+
+namespace ViceSharp.Host.Runtime;
+
+public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
+{
+    private readonly IArchitectureBuilder _architectureBuilder;
+    private readonly IReadOnlyDictionary<string, IArchitectureDescriptor> _descriptors;
+    private readonly string _defaultArchitectureId;
+
+    public DefaultEmulatorRuntimeFactory()
+        : this(CreateDefaultArchitectureBuilder(), CreateDefaultDescriptors(), CreateDefaultArchitectureId())
+    {
+    }
+
+    public DefaultEmulatorRuntimeFactory(
+        IArchitectureBuilder architectureBuilder,
+        IEnumerable<IArchitectureDescriptor> descriptors)
+        : this(architectureBuilder, descriptors, MinimalHostArchitectureDescriptor.ArchitectureId)
+    {
+    }
+
+    public DefaultEmulatorRuntimeFactory(
+        IArchitectureBuilder architectureBuilder,
+        IEnumerable<IArchitectureDescriptor> descriptors,
+        string defaultArchitectureId)
+    {
+        ArgumentNullException.ThrowIfNull(architectureBuilder);
+        ArgumentNullException.ThrowIfNull(descriptors);
+        ArgumentException.ThrowIfNullOrWhiteSpace(defaultArchitectureId);
+
+        _architectureBuilder = architectureBuilder;
+        _defaultArchitectureId = defaultArchitectureId;
+        _descriptors = descriptors
+            .SelectMany(CreateDescriptorKeys)
+            .GroupBy(pair => pair.Key, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.First().Descriptor, StringComparer.OrdinalIgnoreCase);
+    }
+
+    public EmulatorRuntimeSession Create(CreateEmulatorSessionRequest request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var architectureId = string.IsNullOrWhiteSpace(request.ArchitectureId) ? _defaultArchitectureId : request.ArchitectureId;
+
+        if (!_descriptors.TryGetValue(architectureId, out var descriptor))
+            throw new InvalidOperationException($"Architecture '{architectureId}' is not registered.");
+
+        var machine = _architectureBuilder.Build(descriptor);
+        var sessionId = $"emulator-{Guid.NewGuid():N}";
+        return new EmulatorRuntimeSession(sessionId, descriptor, machine);
+    }
+
+    private static IEnumerable<(string Key, IArchitectureDescriptor Descriptor)> CreateDescriptorKeys(
+        IArchitectureDescriptor descriptor)
+    {
+        yield return (descriptor.MachineName, descriptor);
+
+        if (ReferenceEquals(descriptor, MinimalHostArchitectureDescriptor.Instance))
+            yield return (MinimalHostArchitectureDescriptor.ArchitectureId, descriptor);
+
+        if (descriptor is C64Descriptor c64Descriptor)
+        {
+            yield return (c64Descriptor.Profile.Id, descriptor);
+            foreach (var alias in c64Descriptor.Profile.Aliases)
+                yield return (alias, descriptor);
+        }
+    }
+
+    private static IArchitectureBuilder CreateDefaultArchitectureBuilder()
+    {
+        return TryFindC64RomBasePath(out var romBasePath)
+            ? new ArchitectureBuilder(CreateC64RomProvider(romBasePath))
+            : new ArchitectureBuilder();
+    }
+
+    private static IEnumerable<IArchitectureDescriptor> CreateDefaultDescriptors()
+    {
+        yield return MinimalHostArchitectureDescriptor.Instance;
+
+        if (TryFindC64RomBasePath(out _))
+        {
+            foreach (var profile in C64MachineProfiles.All)
+                yield return new C64Descriptor(profile);
+        }
+    }
+
+    private static string CreateDefaultArchitectureId()
+    {
+        return TryFindC64RomBasePath(out _) ? "c64" : MinimalHostArchitectureDescriptor.ArchitectureId;
+    }
+
+    private static bool TryFindC64RomBasePath(out string romBasePath)
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            var candidate = Path.Combine(directory.FullName, "roms");
+            if (Directory.Exists(Path.Combine(candidate, "C64")))
+            {
+                var provider = CreateC64RomProvider(candidate);
+                if (new C64RomSet().IsComplete(provider))
+                {
+                    romBasePath = candidate;
+                    return true;
+                }
+            }
+
+            directory = directory.Parent;
+        }
+
+        romBasePath = string.Empty;
+        return false;
+    }
+
+    private static RomProvider CreateC64RomProvider(string romBasePath)
+    {
+        return new RomProvider(romBasePath, FindNativeViceRomFallbacks(romBasePath));
+    }
+
+    private static IEnumerable<string> FindNativeViceRomFallbacks(string romBasePath)
+    {
+        var directory = new DirectoryInfo(romBasePath);
+        while (directory is not null)
+        {
+            var candidate = Path.Combine(directory.FullName, "native", "vice", "vice", "data");
+            if (Directory.Exists(Path.Combine(candidate, "C64")))
+                yield return candidate;
+
+            directory = directory.Parent;
+        }
+    }
+}

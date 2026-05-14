@@ -36,6 +36,9 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_create")]
     public static partial IntPtr Create();
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_create_model", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial IntPtr CreateModel(string modelSelector);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_destroy")]
     public static partial void Destroy(IntPtr instance);
 
@@ -44,6 +47,12 @@ public static unsafe partial class ViceNative
 
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_step_cycle")]
     public static partial void StepNative(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_cartridge")]
+    private static partial int AttachCartridgeNative(IntPtr instance, byte* image, int length, int mappingMode);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_peek_ram")]
+    private static partial byte PeekRamNative(IntPtr instance, ushort address);
 
     [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_a")]
     public static partial byte GetA(IntPtr instance);
@@ -72,12 +81,22 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_sid_get_state")]
     public static partial void GetSidState(IntPtr instance, ref ViceSidState state);
 
-    public static IViceNative CreateInstance()
+    [LibraryImport(LibraryName, EntryPoint = "vice_interrupt_get_state")]
+    public static partial void GetInterruptState(IntPtr instance, ref ViceInterruptState state);
+
+    public static IViceNative CreateInstance(string? modelSelector = null)
     {
         if (!IsAvailable)
             throw new DllNotFoundException(AvailabilityMessage);
 
-        return new ViceNativeInstance(Create());
+        var handle = string.IsNullOrWhiteSpace(modelSelector)
+            ? Create()
+            : CreateModel(modelSelector);
+
+        if (handle == IntPtr.Zero)
+            throw new InvalidOperationException($"Native VICE failed to create a machine for model '{modelSelector ?? "default"}'.");
+
+        return new ViceNativeInstance(handle);
     }
 
     public static byte GetCpuRegister(IntPtr instance, int registerId)
@@ -164,6 +183,16 @@ public static unsafe partial class ViceNative
         }
     }
 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ViceInterruptState
+    {
+        public byte IrqAsserted;
+        public byte NmiAsserted;
+        public byte GlobalPending;
+        public byte IrqSourceCount;
+        public byte NmiSourceCount;
+    }
+
     private static IntPtr ResolveLibrary(string libraryName, Assembly _, DllImportSearchPath? __)
     {
         if (!string.Equals(libraryName, LibraryName, StringComparison.Ordinal))
@@ -227,14 +256,37 @@ public static unsafe partial class ViceNative
     private sealed class ViceNativeInstance : IViceNative
     {
         private readonly IntPtr _instance;
+        private long _cycleBaseline;
 
         public ViceNativeInstance(IntPtr instance)
         {
             _instance = instance;
         }
 
-        public void Reset() => ResetNative(_instance);
+        public void Reset()
+        {
+            ResetNative(_instance);
+            _cycleBaseline = ReadNativeCycle();
+        }
+
         public void Step() => StepNative(_instance);
+
+        public void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
+        {
+            if (image.IsEmpty)
+                throw new ArgumentException("Cartridge image must not be empty.", nameof(image));
+
+            var imageBytes = image.ToArray();
+            fixed (byte* imagePointer = imageBytes)
+            {
+                var result = AttachCartridgeNative(_instance, imagePointer, imageBytes.Length, (int)mappingMode);
+                if (result != 0)
+                    throw new InvalidOperationException($"Native VICE failed to attach cartridge image. Error code: {result}.");
+            }
+        }
+
+        public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
+
         public MachineState GetState()
         {
             return new MachineState
@@ -244,13 +296,21 @@ public static unsafe partial class ViceNative
                 Y = GetY(_instance),
                 S = GetS(_instance),
                 P = GetP(_instance),
-                PC = GetPC(_instance)
+                PC = GetPC(_instance),
+                Cycle = Math.Max(0, ReadNativeCycle() - _cycleBaseline)
             };
         }
 
         public void Dispose()
         {
             Destroy(_instance);
+        }
+
+        private long ReadNativeCycle()
+        {
+            var state = new ViceVicState();
+            GetVicState(_instance, ref state);
+            return state.Cycle;
         }
     }
 }

@@ -15,9 +15,12 @@ extern "C" {
 
 // Machine lifecycle
 VICE_SHIM_API void* vice_machine_create();
+VICE_SHIM_API void* vice_machine_create_model(const char* model);
 VICE_SHIM_API void vice_machine_destroy(void* machine);
 VICE_SHIM_API void vice_machine_reset(void* machine);
 VICE_SHIM_API void vice_machine_step_cycle(void* machine);
+VICE_SHIM_API int vice_machine_attach_cartridge(void* machine, const uint8_t* image, int length, int mapping_mode);
+VICE_SHIM_API uint8_t vice_machine_peek_ram(void* machine, uint16_t address);
 
 // CPU State
 VICE_SHIM_API uint8_t vice_cpu_get_a(void* machine);
@@ -65,6 +68,16 @@ struct vice_sid_state {
 };
 
 VICE_SHIM_API void vice_sid_get_state(void* machine, struct vice_sid_state* state);
+
+struct vice_interrupt_state {
+    uint8_t irq_asserted;
+    uint8_t nmi_asserted;
+    uint8_t global_pending;
+    uint8_t irq_source_count;
+    uint8_t nmi_source_count;
+};
+
+VICE_SHIM_API void vice_interrupt_get_state(void* machine, struct vice_interrupt_state* state);
 
 #ifdef __cplusplus
 }

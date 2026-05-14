@@ -6,12 +6,14 @@ namespace ViceSharp.Core;
 /// Simple RAM device that handles all memory addresses.
 /// Provides 64KB of addressable memory.
 /// </summary>
-public sealed class SimpleRam : IAddressSpace
+public sealed class SimpleRam : IMemory
 {
     public DeviceId Id => new DeviceId(0x0100);
     public string Name => "64KB RAM";
     
     private readonly byte[] _memory = new byte[65536];
+
+    public Span<byte> Span => _memory;
 
     public bool HandlesAddress(ushort address) => true;
     

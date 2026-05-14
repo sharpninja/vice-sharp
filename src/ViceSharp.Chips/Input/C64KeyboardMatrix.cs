@@ -5,7 +5,7 @@ namespace ViceSharp.Chips.Input;
 /// <summary>
 /// C64 8×8 Keyboard Matrix implementation.
 /// </summary>
-public sealed class C64KeyboardMatrix : IInputSource
+public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix
 {
     public DeviceId Id => new DeviceId(0x0008);
     public string Name => "C64 Keyboard Matrix";
@@ -39,9 +39,16 @@ public sealed class C64KeyboardMatrix : IInputSource
     /// <inheritdoc />
     public void Reset()
     {
-        Array.Clear(_matrix);
+        ClearKeys();
         _columnMask = 0xFF;
         _rowMask = 0xFF;
+    }
+
+    public void ClearKeys()
+    {
+        Array.Clear(_matrix);
+        _restoreKeyPressed = false;
+        _stopKeyPressed = false;
     }
 
     /// <summary>
