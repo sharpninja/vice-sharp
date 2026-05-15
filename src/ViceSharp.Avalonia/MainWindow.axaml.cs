@@ -360,12 +360,31 @@ public partial class MainWindow : Window
 
         try
         {
-            await _hostClient.SetKeyStateAsync(key, isPressed).ConfigureAwait(true);
+            await _hostClient.SetKeyStateAsync(
+                key,
+                isPressed,
+                physicalKey: e.Key.ToString(),
+                text: ToHostText(e, key),
+                modifiers: (int)e.KeyModifiers).ConfigureAwait(true);
         }
         catch
         {
             // Host connectivity failures are reflected by the attach/status panel.
         }
+    }
+
+    private static string ToHostText(KeyEventArgs e, string key)
+    {
+        if (key.Length == 1)
+            return key;
+
+        return e.Key switch
+        {
+            Key.Space => " ",
+            Key.Return or Key.Enter => "\r",
+            Key.Tab => "\t",
+            _ => string.Empty
+        };
     }
 
     private static string? ToHostKeyName(KeyEventArgs e)

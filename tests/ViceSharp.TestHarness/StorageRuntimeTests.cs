@@ -33,6 +33,65 @@ public sealed class StorageRuntimeTests
     }
 
     [Fact]
+    public void D64_FirstProgram_ReadsDirectoryEntryAndPrgPayload()
+    {
+        var programBytes = CreateBasicProgramPrg();
+        var imageData = CreateD64WithFirstProgram("BOOT", programBytes);
+        var image = new D64Image(imageData);
+
+        Assert.True(image.TryReadFirstProgram(out var program, out var error), error);
+        Assert.NotNull(program);
+        Assert.Equal("BOOT", program!.FileName);
+        Assert.Equal(0x0801, program.LoadAddress);
+        Assert.Equal(programBytes[2..], program.Payload);
+        Assert.Equal((ushort)(0x0801 + program.Payload.Length), program.EndAddress);
+    }
+
+    [Fact]
+    public void D64_FirstProgram_ReportsMissingPrg()
+    {
+        var image = new D64Image(new byte[D64Image.DiskSize35Track]);
+
+        Assert.False(image.TryReadFirstProgram(out var program, out var error));
+        Assert.Null(program);
+        Assert.Contains("PRG", error, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void D64_FirstProgram_ReadsMultiSectorPrgChain()
+    {
+        var payload = Enumerable.Range(0, 400).Select(index => (byte)(index & 0xFF)).ToArray();
+        var programBytes = new byte[payload.Length + 2];
+        programBytes[0] = 0x01;
+        programBytes[1] = 0x08;
+        payload.CopyTo(programBytes.AsSpan(2));
+        var image = new D64Image(CreateD64WithFirstProgram("CHAIN", programBytes));
+
+        Assert.True(image.TryReadFirstProgram(out var program, out var error), error);
+        Assert.NotNull(program);
+        Assert.Equal("CHAIN", program!.FileName);
+        Assert.Equal(0x0801, program.LoadAddress);
+        Assert.Equal(payload, program.Payload);
+    }
+
+    [Fact]
+    public void D64_FirstProgram_ReportsLoopedPrgChain()
+    {
+        var payload = Enumerable.Range(0, 400).Select(index => (byte)(index & 0xFF)).ToArray();
+        var programBytes = new byte[payload.Length + 2];
+        programBytes[0] = 0x01;
+        programBytes[1] = 0x08;
+        payload.CopyTo(programBytes.AsSpan(2));
+        var image = new D64Image(CreateD64WithFirstProgram("LOOP", programBytes));
+        image.WriteSectorByte(17, 1, 0, 17);
+        image.WriteSectorByte(17, 1, 1, 1);
+
+        Assert.False(image.TryReadFirstProgram(out var program, out var error));
+        Assert.Null(program);
+        Assert.Contains("loop", error, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public void Tap_Attach_And_Datasette_ReadPulse_Requires_Motor_And_Play()
     {
         var tap = CreateTapImage(1, [10, 0, 0x40, 0x1F, 0x00]);
@@ -102,5 +161,61 @@ public sealed class StorageRuntimeTests
         }
 
         return offset + 256;
+    }
+
+    private static byte[] CreateD64WithFirstProgram(string fileName, byte[] programBytes)
+    {
+        ReadOnlySpan<(int Track, int Sector)> sectors = [(17, 0), (17, 1), (17, 2)];
+        if (programBytes.Length > sectors.Length * 254)
+            throw new ArgumentOutOfRangeException(nameof(programBytes), "Test PRG exceeds the helper's sector chain.");
+
+        var image = new D64Image();
+        image.Format();
+
+        const int directoryEntryOffset = 2;
+        image.WriteSectorByte(18, 1, directoryEntryOffset, 0x82);
+        image.WriteSectorByte(18, 1, directoryEntryOffset + 1, 17);
+        image.WriteSectorByte(18, 1, directoryEntryOffset + 2, 0);
+
+        for (var index = 0; index < 16; index++)
+        {
+            var value = index < fileName.Length
+                ? (byte)char.ToUpperInvariant(fileName[index])
+                : (byte)0xA0;
+            image.WriteSectorByte(18, 1, directoryEntryOffset + 3 + index, value);
+        }
+
+        var written = 0;
+        for (var sectorIndex = 0; written < programBytes.Length; sectorIndex++)
+        {
+            var (track, sector) = sectors[sectorIndex];
+            var remaining = programBytes.Length - written;
+            var chunkLength = Math.Min(254, remaining);
+            var last = written + chunkLength >= programBytes.Length;
+            var next = last ? default : sectors[sectorIndex + 1];
+
+            image.WriteSectorByte(track, sector, 0, last ? (byte)0 : (byte)next.Track);
+            image.WriteSectorByte(track, sector, 1, last ? (byte)(chunkLength + 1) : (byte)next.Sector);
+            for (var offset = 0; offset < chunkLength; offset++)
+                image.WriteSectorByte(track, sector, 2 + offset, programBytes[written + offset]);
+
+            written += chunkLength;
+        }
+
+        return image.ToArray();
+    }
+
+    private static byte[] CreateBasicProgramPrg()
+    {
+        return
+        [
+            0x01, 0x08,
+            0x0B, 0x08,
+            0x0A, 0x00,
+            0x99,
+            0x22, (byte)'O', (byte)'K', 0x22,
+            0x00,
+            0x00, 0x00
+        ];
     }
 }

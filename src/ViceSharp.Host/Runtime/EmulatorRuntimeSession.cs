@@ -45,7 +45,19 @@ public sealed class EmulatorRuntimeSession
 
     public Dictionary<string, CaptureSessionDto> CaptureSessions { get; } = new(StringComparer.OrdinalIgnoreCase);
 
+    public SortedSet<ushort> Breakpoints { get; } = new();
+
     public double LimiterRatePercent { get; set; } = 100;
+
+    public bool LimiterEnabled { get; set; } = true;
+
+    public DisplaySettingsDto DisplaySettings { get; set; } = new();
+
+    public InputSettingsDto InputSettings { get; set; } = new();
+
+    public AudioSettingsDto AudioSettings { get; set; } = new();
+
+    public ResourceSettingsDto ResourceSettings { get; set; } = new();
 
     public long FrameCount { get; private set; }
 
@@ -56,6 +68,38 @@ public sealed class EmulatorRuntimeSession
     public string SelectedKeyboardMapId { get; set; } = "c64:gtk3_pos";
 
     public KeyboardMapDto? SelectedKeyboardMap { get; set; }
+
+    public HostKeyboardAutomation? HostKeyboardAutomation { get; private set; }
+
+    public string? LastHostAutomationError { get; private set; }
+
+    public void StartHostKeyboardAutomation(HostKeyboardAutomation automation)
+    {
+        ArgumentNullException.ThrowIfNull(automation);
+
+        HostKeyboardAutomation = automation;
+        LastHostAutomationError = null;
+    }
+
+    public void ClearHostKeyboardAutomation()
+    {
+        HostKeyboardAutomation = null;
+        LastHostAutomationError = null;
+    }
+
+    public void AdvanceHostAutomationFrame()
+    {
+        var automation = HostKeyboardAutomation;
+        if (automation is null)
+            return;
+
+        automation.AdvanceFrame(Machine);
+        if (!automation.IsActive)
+        {
+            LastHostAutomationError = automation.LastError;
+            HostKeyboardAutomation = null;
+        }
+    }
 
     public void RecordFrame()
     {

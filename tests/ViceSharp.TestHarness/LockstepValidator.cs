@@ -1,4 +1,6 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Cpu;
+using ViceSharp.Chips.VicIi;
 using ViceSharp.Core;
 
 namespace ViceSharp.TestHarness;
@@ -10,6 +12,7 @@ public sealed class LockstepValidator : IDisposable
 {
     private readonly IMachine _machine;
     private readonly IViceNative _native;
+    private readonly Queue<string> _recentTrace = new();
     private long _cycleCount;
 
     public LockstepValidator(
@@ -37,6 +40,8 @@ public sealed class LockstepValidator : IDisposable
     {
         _machine.Reset();
         _native.Reset();
+        _recentTrace.Clear();
+        RecordTrace(0);
 
         if (!ValidateState())
             return ValidationReport.Fail(0, 0, GetStateDiff());
@@ -45,6 +50,7 @@ public sealed class LockstepValidator : IDisposable
         {
             _machine.Clock.Step();
             _native.Step();
+            RecordTrace(_cycleCount + 1);
 
             if (!ValidateState())
             {
@@ -74,6 +80,13 @@ public sealed class LockstepValidator : IDisposable
             $"EA=${nativePointer:X4}, RAM=${_native.PeekRam(nativePointer):X2}.";
     }
 
+    public string FormatRecentTrace()
+    {
+        return _recentTrace.Count == 0
+            ? "No recent trace captured."
+            : string.Join(Environment.NewLine, _recentTrace);
+    }
+
     private bool ValidateState()
     {
         var managedState = _machine.GetState();
@@ -87,7 +100,7 @@ public sealed class LockstepValidator : IDisposable
             managedState.S == nativeState.S &&
             managedState.P == nativeState.P &&
             managedState.Cycle == nativeState.Cycle &&
-            (comparePc ? managedState.PC == nativeState.PC : true);
+            (!comparePc || managedState.PC == nativeState.PC);
     }
 
     private StateDiff GetStateDiff()
@@ -103,6 +116,39 @@ public sealed class LockstepValidator : IDisposable
     public void Dispose()
     {
         _native.Dispose();
+    }
+
+    private void RecordTrace(long cycle)
+    {
+        var managedState = _machine.GetState();
+        var nativeState = _native.GetState();
+        var vicTrace = FormatVicTrace();
+        var cpuTrace = FormatCpuTrace();
+        if (_recentTrace.Count == 16)
+            _recentTrace.Dequeue();
+
+        _recentTrace.Enqueue(
+            $"cycle {cycle}: managed PC=${managedState.PC:X4} A=${managedState.A:X2} X=${managedState.X:X2} Y=${managedState.Y:X2} S=${managedState.S:X2} P=${managedState.P:X2}; " +
+            $"native PC=${nativeState.PC:X4} A=${nativeState.A:X2} X=${nativeState.X:X2} Y=${nativeState.Y:X2} S=${nativeState.S:X2} P=${nativeState.P:X2}; " +
+            $"{vicTrace}; {cpuTrace}");
+    }
+
+    private string FormatVicTrace()
+    {
+        if (_machine.Devices.GetByRole(DeviceRole.VideoChip) is not Mos6569 vic)
+            return "managed VIC unavailable";
+
+        var nativeVic = _native.GetVicState();
+        return
+            $"managed VIC line=${vic.CurrentRasterLine:X3} x={vic.RasterX} bad={vic.IsBadLine} hold={vic.IsCpuCycleStolen}; " +
+            $"native VIC line=${nativeVic.RasterLine:X3} x={nativeVic.RasterCycle} bad={nativeVic.BadLine != 0} spriteDma=${nativeVic.SpriteDma:X2}";
+    }
+
+    private string FormatCpuTrace()
+    {
+        return _machine.Devices.GetByRole(DeviceRole.Cpu) is Mos6502 cpu
+            ? $"cpuStealEligible={cpu.CanStealCurrentCycle} cpuCycle={cpu.DebugCycle} opcode=${cpu.DebugOpcode:X2} delay={cpu.DebugDelayNextFetch}"
+            : "cpuStealEligible=unavailable";
     }
 
     private static ushort ReadPointer(byte lo, byte hi, byte y)

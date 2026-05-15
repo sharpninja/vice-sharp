@@ -1,34 +1,62 @@
+using ViceSharp.Abstractions;
+
 namespace ViceSharp.Chips.Tape;
 
-public sealed class Datasette
+public sealed class Datasette : ITapeDevice
 {
     private TapImage? _image;
     private TapPulseReader? _reader;
 
+    public DeviceId Id => new(0x0020);
+
+    public string Name => "C2N Datasette";
+
     public bool HasTape => _image is not null;
+
+    public bool IsAttached { get; private set; } = true;
 
     public bool MotorEnabled { get; set; }
 
     public bool PlayPressed { get; set; }
 
+    public void Reset()
+    {
+        MotorEnabled = false;
+        PlayPressed = false;
+        _reader = _image?.CreatePulseReader();
+    }
+
+    public void Attach() => IsAttached = true;
+
+    public void Detach() => IsAttached = false;
+
+    public void InsertTape(ReadOnlySpan<byte> tapeImage)
+    {
+        if (!TapImage.TryAttach(tapeImage, out var image))
+            throw new ArgumentException("Tape image must be a supported TAP image.", nameof(tapeImage));
+
+        Attach(image!);
+    }
+
+    public void EjectTape()
+    {
+        _image = null;
+        _reader = null;
+    }
+
     public bool Attach(TapImage image)
     {
         _image = image;
         _reader = image.CreatePulseReader();
+        IsAttached = true;
         return true;
-    }
-
-    public void Detach()
-    {
-        _image = null;
-        _reader = null;
     }
 
     public bool TryReadNextPulse(out int cycles)
     {
         cycles = 0;
 
-        if (!MotorEnabled || !PlayPressed || _reader is null)
+        if (!IsAttached || !MotorEnabled || !PlayPressed || _reader is null)
         {
             return false;
         }

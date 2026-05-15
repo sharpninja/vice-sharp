@@ -1,4 +1,5 @@
 using ViceSharp.Core;
+using ViceSharp.Abstractions;
 
 namespace ViceSharp.TestHarness;
 
@@ -24,7 +25,23 @@ public static class ViceNativeBridge
     public static void DestroyMachine(IntPtr machine) => ViceNative.Destroy(machine);
     public static void ResetMachine(IntPtr machine) => ViceNative.ResetNative(machine);
     public static void StepCycle(IntPtr machine) => ViceNative.StepNative(machine);
+    public static int GetModel(IntPtr machine) => ViceNative.GetModel(machine);
     public static byte GetCpuRegister(IntPtr machine, int registerId) => ViceNative.GetCpuRegister(machine, registerId);
+    public static byte ReadMemory(IntPtr machine, ushort address) => ViceNative.ReadMemory(machine, address);
+    public static byte PeekRam(IntPtr machine, ushort address) => ViceNative.PeekRam(machine, address);
+    public static void WriteMemory(IntPtr machine, ushort address, byte value) => ViceNative.WriteMemory(machine, address, value);
+    public static void AttachCartridge(IntPtr machine, ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
+        => ViceNative.AttachCartridge(machine, image, mappingMode);
+    public static void AttachDisk(IntPtr machine, uint unit, uint drive, string path)
+        => ViceNative.AttachDisk(machine, unit, drive, path);
+    public static void DetachDisk(IntPtr machine, uint unit, uint drive)
+        => ViceNative.DetachDisk(machine, unit, drive);
+    public static void SetKeyboardMatrixKey(IntPtr machine, int row, int column, bool pressed)
+        => ViceNative.SetKeyboardMatrixKey(machine, row, column, pressed);
+    public static void StoreCia1Register(IntPtr machine, byte registerIndex, byte value)
+        => ViceNative.StoreCia1Register(machine, registerIndex, value);
+    public static byte ReadCia1Register(IntPtr machine, byte registerIndex)
+        => ViceNative.ReadCia1Register(machine, registerIndex);
 
     public static void GetVicState(IntPtr machine, ref ViceVicState state)
     {

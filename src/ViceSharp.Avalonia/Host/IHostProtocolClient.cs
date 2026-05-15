@@ -30,12 +30,32 @@ public interface IHostProtocolClient
 
     ValueTask<EmulatorCommandResponse> SetLimiterRateAsync(double ratePercent, CancellationToken cancellationToken = default);
 
+    ValueTask<ListSettingsProfilesResponse> ListSettingsProfilesAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<GetSettingsResponse> GetSettingsAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<UpdateSettingsResponse> UpdateSettingsAsync(
+        UpdateSettingsRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<ValidateSettingsResourcesResponse> ValidateSettingsResourcesAsync(
+        ValidateSettingsResourcesRequest request,
+        CancellationToken cancellationToken = default);
+
     ValueTask<ListMediaResponse> ListMediaAsync(CancellationToken cancellationToken = default);
 
     ValueTask<AttachMediaResponse> AttachMediaAsync(
         MediaSlot slot,
         string filePath,
         bool isReadOnly,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<AttachMediaResponse> AttachMediaAsync(
+        MediaSlot slot,
+        string filePath,
+        bool isReadOnly,
+        byte[] payload,
+        string displayName,
         CancellationToken cancellationToken = default);
 
     ValueTask<DetachMediaResponse> DetachMediaAsync(
@@ -45,6 +65,9 @@ public interface IHostProtocolClient
     ValueTask<InputCommandResponse> SetKeyStateAsync(
         string key,
         bool isPressed,
+        string physicalKey = "",
+        string text = "",
+        int modifiers = 0,
         CancellationToken cancellationToken = default);
 
     ValueTask<ListKeyboardMapsResponse> ListKeyboardMapsAsync(CancellationToken cancellationToken = default);

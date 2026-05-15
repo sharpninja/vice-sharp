@@ -34,6 +34,7 @@ public sealed class LocalVideoFrameSource : ILocalVideoFrameSource
             {
                 session.Machine.RunFrame();
                 session.RecordFrame();
+                session.AdvanceHostAutomationFrame();
             }
 
             var videoChip = session.Machine.Devices.GetByRole(DeviceRole.VideoChip) as IVideoChip;

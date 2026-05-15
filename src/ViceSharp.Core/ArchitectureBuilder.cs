@@ -4,6 +4,8 @@ using ViceSharp.Chips.VicIi;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Cpu;
 using ViceSharp.Chips.Pla;
+using ViceSharp.Chips.IEC;
+using ViceSharp.Chips.Tape;
 using ViceSharp.RomFetch;
 
 namespace ViceSharp.Core;
@@ -70,7 +72,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var systemCore = profile is null ? null : new SystemCore(profile.SystemCore);
         var vic = CreateVicII(bus, irqLine, descriptor, profile);
         var cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
-        var cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
+        var cia2Connected = profile?.SystemCore.Cia2Connected ?? true;
+        var cia2 = cia2Connected ? new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 } : null;
         var pla = new Mos906114(bus);
         var sid = CreateSid(bus, profile);
         var defaultCartridgeMappingMode = ResolveDefaultCartridgeMappingMode(profile);
@@ -83,7 +86,12 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             pla,
             profile?.KeyboardEnabled ?? true,
             cia2PortAInputMask: cia2PortAInputMask,
+            cia2Connected: cia2Connected,
             defaultCartridgeMappingMode: defaultCartridgeMappingMode);
+        var iecBusConnected = profile?.SystemCore.IecBusConnected ?? true;
+        var drive8 = iecBusConnected ? new IecDrive(8) : null;
+        var drive9 = iecBusConnected ? new IecDrive(9) : null;
+        var datasette = profile?.SystemCore.TapePortConnected == false ? null : new Datasette();
         bus.RegisterDevice(memory);
 
         var romLoader = new C64RomLoader(bus);
@@ -112,9 +120,14 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         clock.Register(cpu);
         clock.Register(vic);
         clock.Register(cia1);
-        clock.Register(cia2);
+        if (cia2 is not null)
+            clock.Register(cia2);
         clock.Register(sid);
         clock.Register(pla);
+        if (drive8 is not null)
+            clock.Register(drive8);
+        if (drive9 is not null)
+            clock.Register(drive9);
 
         if (systemCore is not null)
             deviceRegistry.Add(systemCore, DeviceRole.SystemCore);
@@ -123,9 +136,16 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         deviceRegistry.Add(cpu, DeviceRole.Cpu);
         deviceRegistry.Add(vic, DeviceRole.VideoChip);
         deviceRegistry.Add(cia1, DeviceRole.Cia1);
-        deviceRegistry.Add(cia2, DeviceRole.Cia2);
+        if (cia2 is not null)
+            deviceRegistry.Add(cia2, DeviceRole.Cia2);
         deviceRegistry.Add(pla, DeviceRole.Pla);
         deviceRegistry.Add(sid, DeviceRole.AudioChip);
+        if (drive8 is not null)
+            deviceRegistry.Add(drive8);
+        if (drive9 is not null)
+            deviceRegistry.Add(drive9);
+        if (datasette is not null)
+            deviceRegistry.Add(datasette);
 
         var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
         machine.Reset();

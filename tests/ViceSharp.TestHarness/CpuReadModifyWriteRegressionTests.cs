@@ -53,4 +53,5 @@ public sealed class CpuReadModifyWriteRegressionTests
         Assert.Equal((ushort)0x8002, cpu.PC);
         Assert.Equal((byte)0x00, cpu.X);
     }
+
 }

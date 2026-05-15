@@ -58,7 +58,8 @@ public enum InputPort
 {
     Joystick1 = 0,
     Joystick2 = 1,
-    Keyboard = 2
+    Keyboard = 2,
+    PrimaryJoystick = 3
 }
 
 public enum CaptureKind
@@ -73,6 +74,21 @@ public enum ResetKind
     Warm = 0,
     Cold = 1,
     ResetAndAutostartDrive8 = 2
+}
+
+public enum SettingApplyScope
+{
+    Live = 0,
+    RestartRequired = 1
+}
+
+public enum SettingsResourceKind
+{
+    Display = 0,
+    Input = 1,
+    File = 2,
+    Audio = 3,
+    Resource = 4
 }
 
 public sealed record MachineStateDto(byte A, byte X, byte Y, byte S, byte P, ushort Pc, long Cycle);
@@ -91,7 +107,10 @@ public sealed record EmulatorStatusDto(
     double EffectiveClockHz = 0,
     double EffectiveClockPercent = 0,
     ushort Pc = 0,
-    string ModelId = "")
+    string ModelId = "",
+    string HostAutomationDescription = "",
+    bool HostAutomationActive = false,
+    string LastHostAutomationError = "")
 {
     public double MeasuredFramesPerSecond => MeasuredFps;
 }
@@ -214,6 +233,120 @@ public sealed record EmulatorCommandResponse(
     RpcStatus Status,
     EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
 
+public static class SettingsService
+{
+    public const string ServiceName = "vice_sharp.v1.SettingsService";
+    public const string ListProfiles = "ListProfiles";
+    public const string GetSettings = "GetSettings";
+    public const string UpdateSettings = "UpdateSettings";
+    public const string ValidateResources = "ValidateResources";
+}
+
+public interface ISettingsService
+{
+    ValueTask<ListSettingsProfilesResponse> ListProfilesAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<GetSettingsResponse> GetSettingsAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<UpdateSettingsResponse> UpdateSettingsAsync(
+        UpdateSettingsRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<ValidateSettingsResourcesResponse> ValidateResourcesAsync(
+        ValidateSettingsResourcesRequest request,
+        CancellationToken cancellationToken = default);
+}
+
+public sealed record SettingsProfileDto(
+    string Id,
+    string DisplayName,
+    string Machine,
+    bool IsCurrent,
+    bool IsAvailable,
+    string Description = "");
+
+public sealed record LimiterSettingsDto(double RatePercent = 100, bool IsEnabled = true);
+
+public sealed record DisplaySettingsDto(
+    string Renderer = "host",
+    string Palette = "default",
+    bool ShowBorder = true,
+    bool MaintainAspectRatio = true,
+    string Scale = "2x",
+    string CropMode = "visible-area",
+    string AspectMode = "vice-pixel-aspect");
+
+public sealed record InputSettingsDto(
+    string KeyboardMapId = "c64:gtk3_pos",
+    InputPort PrimaryJoystickPort = InputPort.Joystick2,
+    bool SwapJoystickPorts = false,
+    string Mode = "keyboard-joystick");
+
+public sealed record AudioSettingsDto(string Mode = "enabled");
+
+public sealed record ResourceSettingsDto(string Mode = "auto-detect");
+
+public sealed record SessionSettingsDto(
+    string ProfileId,
+    LimiterSettingsDto Limiter,
+    DisplaySettingsDto Display,
+    InputSettingsDto Input,
+    AudioSettingsDto? Audio = null,
+    ResourceSettingsDto? Resources = null);
+
+public sealed record SettingApplyDiagnosticDto(
+    string Setting,
+    SettingApplyScope Scope,
+    bool AppliedLive,
+    bool RestartRequired,
+    string Message);
+
+public sealed record SettingsResourceValidationDto(
+    string ResourceKey,
+    SettingsResourceKind Kind,
+    bool IsValid,
+    bool RestartRequired,
+    string Message);
+
+public sealed record UpdateSettingsRequest(
+    string SessionId,
+    LimiterSettingsDto? Limiter = null,
+    DisplaySettingsDto? Display = null,
+    InputSettingsDto? Input = null,
+    string ProfileId = "",
+    bool RestartSession = false,
+    AudioSettingsDto? Audio = null,
+    ResourceSettingsDto? Resources = null);
+
+public sealed record ValidateSettingsResourcesRequest(
+    string SessionId,
+    LimiterSettingsDto? Limiter = null,
+    DisplaySettingsDto? Display = null,
+    InputSettingsDto? Input = null,
+    AudioSettingsDto? Audio = null,
+    ResourceSettingsDto? Resources = null);
+
+public sealed record ListSettingsProfilesResponse(
+    RpcStatus Status,
+    IReadOnlyList<SettingsProfileDto> Profiles) : IRpcResponse;
+
+public sealed record GetSettingsResponse(
+    RpcStatus Status,
+    SessionSettingsDto? Settings) : IRpcResponse;
+
+public sealed record UpdateSettingsResponse(
+    RpcStatus Status,
+    SessionSettingsDto? Settings,
+    IReadOnlyList<SettingApplyDiagnosticDto> Diagnostics) : IRpcResponse;
+
+public sealed record ValidateSettingsResourcesResponse(
+    RpcStatus Status,
+    IReadOnlyList<SettingsResourceValidationDto> Resources) : IRpcResponse;
+
 public static class MediaService
 {
     public const string ServiceName = "vice_sharp.v1.MediaService";
@@ -331,7 +464,13 @@ public interface IInputService
         CancellationToken cancellationToken = default);
 }
 
-public sealed record KeyStateDto(string Key, bool IsPressed, bool AppliedToRuntime);
+public sealed record KeyStateDto(
+    string Key,
+    bool IsPressed,
+    bool AppliedToRuntime,
+    string PhysicalKey = "",
+    string Text = "",
+    int Modifiers = 0);
 
 public sealed record JoystickStateDto(byte DirectionMask, bool FireButton, bool AppliedToRuntime);
 
@@ -394,6 +533,13 @@ public static class MonitorService
 {
     public const string ServiceName = "vice_sharp.v1.MonitorService";
     public const string ExecuteCommand = "ExecuteCommand";
+    public const string ReadRegisters = "ReadRegisters";
+    public const string Disassemble = "Disassemble";
+    public const string ListBreakpoints = "ListBreakpoints";
+    public const string AddBreakpoint = "AddBreakpoint";
+    public const string RemoveBreakpoint = "RemoveBreakpoint";
+    public const string ReadMemory = "ReadMemory";
+    public const string WriteMemory = "WriteMemory";
 }
 
 public interface IMonitorService
@@ -401,13 +547,85 @@ public interface IMonitorService
     ValueTask<MonitorCommandResponse> ExecuteCommandAsync(
         ExecuteMonitorCommandRequest request,
         CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorRegistersResponse> ReadRegistersAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorDisassemblyResponse> DisassembleAsync(
+        MonitorDisassemblyRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorBreakpointsResponse> ListBreakpointsAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorBreakpointsResponse> AddBreakpointAsync(
+        MonitorBreakpointRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorBreakpointsResponse> RemoveBreakpointAsync(
+        MonitorBreakpointRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorMemoryResponse> ReadMemoryAsync(
+        MonitorReadMemoryRequest request,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorMemoryWriteResponse> WriteMemoryAsync(
+        MonitorWriteMemoryRequest request,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed record ExecuteMonitorCommandRequest(string SessionId, string Command);
 
+public sealed record MonitorReadMemoryRequest(string SessionId, int Address, int Length);
+
+public sealed record MonitorWriteMemoryRequest(string SessionId, int Address, byte[] Data);
+
+public sealed record MonitorDisassemblyRequest(string SessionId, int Address, int Count);
+
+public sealed record MonitorBreakpointRequest(string SessionId, int Address);
+
 public sealed record MonitorCommandResponse(
     RpcStatus Status,
     string Output,
+    EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
+
+public sealed record MonitorRegistersResponse(
+    RpcStatus Status,
+    MachineStateDto? Registers,
+    EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
+
+public sealed record MonitorDisassemblyLineDto(
+    int Address,
+    byte[] Bytes,
+    string Text,
+    int Length,
+    int NextAddress);
+
+public sealed record MonitorDisassemblyResponse(
+    RpcStatus Status,
+    IReadOnlyList<MonitorDisassemblyLineDto> Lines,
+    EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
+
+public sealed record MonitorBreakpointDto(int Address, bool IsEnabled);
+
+public sealed record MonitorBreakpointsResponse(
+    RpcStatus Status,
+    IReadOnlyList<MonitorBreakpointDto> Breakpoints,
+    EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
+
+public sealed record MonitorMemoryResponse(
+    RpcStatus Status,
+    int Address,
+    byte[] Data,
+    EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
+
+public sealed record MonitorMemoryWriteResponse(
+    RpcStatus Status,
+    int Address,
+    int BytesWritten,
     EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
 
 public static class SnapshotService

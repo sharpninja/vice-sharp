@@ -41,6 +41,34 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
 
     public ValueTask<EmulatorCommandResponse> SetLimiterRateAsync(double ratePercent, CancellationToken cancellationToken = default) => CommandAsync(cancellationToken);
 
+    public ValueTask<ListSettingsProfilesResponse> ListSettingsProfilesAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new ListSettingsProfilesResponse(_disconnectedStatus, Array.Empty<SettingsProfileDto>()));
+    }
+
+    public ValueTask<GetSettingsResponse> GetSettingsAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new GetSettingsResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<UpdateSettingsResponse> UpdateSettingsAsync(
+        UpdateSettingsRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new UpdateSettingsResponse(_disconnectedStatus, null, Array.Empty<SettingApplyDiagnosticDto>()));
+    }
+
+    public ValueTask<ValidateSettingsResourcesResponse> ValidateSettingsResourcesAsync(
+        ValidateSettingsResourcesRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new ValidateSettingsResourcesResponse(_disconnectedStatus, Array.Empty<SettingsResourceValidationDto>()));
+    }
+
     public ValueTask<ListMediaResponse> ListMediaAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -51,6 +79,18 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
         MediaSlot slot,
         string filePath,
         bool isReadOnly,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new AttachMediaResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<AttachMediaResponse> AttachMediaAsync(
+        MediaSlot slot,
+        string filePath,
+        bool isReadOnly,
+        byte[] payload,
+        string displayName,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -68,6 +108,9 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
     public ValueTask<InputCommandResponse> SetKeyStateAsync(
         string key,
         bool isPressed,
+        string physicalKey = "",
+        string text = "",
+        int modifiers = 0,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

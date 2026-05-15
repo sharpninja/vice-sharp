@@ -30,7 +30,13 @@ public sealed class InputServiceHost : IInputService
         lock (session.SyncRoot)
         {
             var appliedToRuntime = ApplyKeyStateToRuntime(session, request.Key, request.IsPressed);
-            session.KeyStates[request.Key] = new KeyStateDto(request.Key, request.IsPressed, appliedToRuntime);
+            session.KeyStates[request.Key] = new KeyStateDto(
+                request.Key,
+                request.IsPressed,
+                appliedToRuntime,
+                request.PhysicalKey,
+                request.Text,
+                request.Modifiers);
             return ValueTask.FromResult(new InputCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToInputStateDto(session)));
         }
     }
@@ -44,12 +50,13 @@ public sealed class InputServiceHost : IInputService
         if (!_registry.TryGet(request.SessionId, out var session))
             return ValueTask.FromResult(new InputCommandResponse(HostProtocolMapper.MissingSessionStatus(request.SessionId), null));
 
-        if (request.Port == InputPort.Keyboard)
+        if (!IsJoystickInputPort(request.Port))
             return ValueTask.FromResult(new InputCommandResponse(RpcStatus.InvalidArgument("Keyboard is not a joystick port."), null));
 
         lock (session.SyncRoot)
         {
-            session.JoystickStates[request.Port] = new JoystickStateDto(request.DirectionMask, request.FireButton, false);
+            var appliedToRuntime = ApplyJoystickStateToRuntime(session, request.Port, request.DirectionMask, request.FireButton);
+            session.JoystickStates[request.Port] = new JoystickStateDto(request.DirectionMask, request.FireButton, appliedToRuntime);
             return ValueTask.FromResult(new InputCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToInputStateDto(session)));
         }
     }
@@ -143,6 +150,51 @@ public sealed class InputServiceHost : IInputService
             return true;
 
         return keyboardInput.SetKeyState(key, isPressed);
+    }
+
+    private static bool ApplyJoystickStateToRuntime(
+        EmulatorRuntimeSession session,
+        InputPort port,
+        byte directionMask,
+        bool fireButton)
+    {
+        var joystickInput = session.Machine.Devices.All.OfType<IMachineJoystickInput>().FirstOrDefault();
+        if (joystickInput is null)
+            return false;
+
+        var controlPort = ToRuntimeControlPort(ResolveRuntimeJoystickPort(session, port));
+        return controlPort != 0 && joystickInput.SetJoystickState(controlPort, directionMask, fireButton);
+    }
+
+    private static bool IsJoystickInputPort(InputPort port)
+        => port is InputPort.Joystick1 or InputPort.Joystick2 or InputPort.PrimaryJoystick;
+
+    private static InputPort ResolveRuntimeJoystickPort(EmulatorRuntimeSession session, InputPort requestedPort)
+    {
+        if (requestedPort != InputPort.PrimaryJoystick)
+            return requestedPort;
+
+        return session.InputSettings.SwapJoystickPorts
+            ? SwapJoystickPort(session.InputSettings.PrimaryJoystickPort)
+            : session.InputSettings.PrimaryJoystickPort;
+    }
+
+    private static InputPort SwapJoystickPort(InputPort port)
+        => port switch
+        {
+            InputPort.Joystick1 => InputPort.Joystick2,
+            InputPort.Joystick2 => InputPort.Joystick1,
+            _ => port
+        };
+
+    private static int ToRuntimeControlPort(InputPort port)
+    {
+        return port switch
+        {
+            InputPort.Joystick1 => 1,
+            InputPort.Joystick2 => 2,
+            _ => 0
+        };
     }
 
     private static KeyboardMapApplyResult ApplyKeyboardMapToRuntime(

@@ -2,7 +2,7 @@ using ViceSharp.Abstractions;
 
 namespace ViceSharp.Chips.Cpu;
 
-public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
+public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleStealTarget
 {
     private const int ResetCycleDelay = 1;
 
@@ -32,6 +32,54 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     public byte Flags { get => P; set => P = value; }
     public byte P;
     public bool IsInstructionBoundary => !_suppressBootstrapBoundary && _cycle == 0;
+    public int DebugCycle => _cycle;
+    public byte DebugOpcode => _opcode;
+    public bool DebugDelayNextFetch => _delayNextFetch;
+    public bool CanStealCurrentCycle
+    {
+        get
+        {
+            if (_pendingDeferredNzUpdateAfterBranch ||
+                _bootstrapCycles > 0 ||
+                _pendingDeferredImmediateLoad ||
+                _pendingDeferredImpliedRegisterCompletion)
+            {
+                return false;
+            }
+
+            if (_cycle == 0)
+                return true;
+
+            var nextCycle = _cycle - 1;
+            if (_opcode == 0x20)
+                return nextCycle is not 2 and not 3;
+
+            if (nextCycle == 1 && IsStoreOpcode(_opcode))
+                return false;
+
+            return IsReadSensitiveOpcode(_opcode);
+        }
+    }
+
+    public bool CanForceStealCurrentCycle
+    {
+        get
+        {
+            if (_pendingDeferredNzUpdateAfterBranch ||
+                _bootstrapCycles > 0 ||
+                _pendingDeferredImmediateLoad ||
+                _pendingDeferredImpliedRegisterCompletion)
+            {
+                return false;
+            }
+
+            if (_cycle == 0)
+                return _branchTargetFetchPending || _callTargetFetchPending;
+
+            var nextCycle = _cycle - 1;
+            return _opcode == 0x20 && nextCycle == 3;
+        }
+    }
 
     public void Irq()
     {
@@ -87,6 +135,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     private bool _deferIndexedStorePcAdvanceAfterBranch;
     private bool _deferZeroPageIndexedStorePcAdvanceAfterBranch;
     private bool _indexedStorePcAdvanceWasDeferred;
+    private bool _indexedLoadPageCrossDelayConsumed;
     private bool _pendingDeferredNzUpdateAfterBranch;
     private bool _pendingDeferredImmediateLoad;
     private bool _pendingDeferredImpliedRegisterCompletion;
@@ -157,7 +206,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
             _deferImmediateLoadAfterBranch = fetchingBranchTarget && IsImmediateLoadOpcode(_opcode);
             _deferImpliedRegisterCompletionAfterBranch = fetchingBranchTarget && IsImpliedRegisterOrFlagOpcode(_opcode);
             _deferJsrPushAfterBranch = fetchingBranchTarget && _opcode == 0x20;
-            var fetchingIndexedLoadControlTarget = fetchingBranchTarget || fetchingCallTarget;
+            var fetchingIndexedLoadControlTarget = fetchingBranchTarget;
             _deferAbsoluteXLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteXLoadOpcode(_opcode);
             _deferAbsoluteYLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteYLoadOpcode(_opcode);
             _deferIndirectYLoadCompletionAfterBranch = (fetchingBranchTarget && IsIndirectYLoadOpcode(_opcode))
@@ -166,6 +215,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
             _deferIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && IsIndexedAbsoluteStoreOpcode(_opcode);
             _deferZeroPageIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && IsZeroPageIndexedStoreOpcode(_opcode);
             _pendingDeferredImmediateLoad = false;
+            _indexedLoadPageCrossDelayConsumed = false;
             _stagedReturnAddress = 0;
             _effectiveAddress = 0;
             _fetched = 0;
@@ -452,7 +502,13 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 IncrementStagedMemory(ReadZeroPageOperand(), 2);
                 return true;
             case 0xBD:
-                var absoluteXValue = Read((ushort)(ReadAbsoluteOperand() + X));
+                var absoluteXBase = ReadAbsoluteOperand();
+                if (TryDelayIndexedLoadPageCross(absoluteXBase, X))
+                {
+                    return true;
+                }
+
+                var absoluteXValue = Read((ushort)(absoluteXBase + X));
                 if (!_deferAbsoluteXLoadCompletionAfterBranch)
                 {
                     A = absoluteXValue;
@@ -461,7 +517,13 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
                 FinishStagedMemoryRead(3, absoluteXValue);
                 return true;
             case 0xB9:
-                var absoluteYValue = Read((ushort)(ReadAbsoluteOperand() + Y));
+                var absoluteYBase = ReadAbsoluteOperand();
+                if (TryDelayIndexedLoadPageCross(absoluteYBase, Y))
+                {
+                    return true;
+                }
+
+                var absoluteYValue = Read((ushort)(absoluteYBase + Y));
                 if (!_deferAbsoluteYLoadCompletionAfterBranch)
                 {
                     A = absoluteYValue;
@@ -589,6 +651,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         _deferIndexedStorePcAdvanceAfterBranch = false;
         _deferZeroPageIndexedStorePcAdvanceAfterBranch = false;
         _indexedStorePcAdvanceWasDeferred = false;
+        _indexedLoadPageCrossDelayConsumed = false;
         _pendingDeferredImmediateLoad = false;
         _pendingDeferredImpliedRegisterCompletion = false;
         _stagedReturnAddress = 0;
@@ -767,6 +830,25 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         return (ushort)(lo | (hi << 8));
     }
 
+    private bool TryDelayIndexedLoadPageCross(ushort baseAddress, byte index)
+    {
+        if (_indexedLoadPageCrossDelayConsumed)
+        {
+            _indexedLoadPageCrossDelayConsumed = false;
+            return false;
+        }
+
+        var effectiveAddress = (ushort)(baseAddress + index);
+        if ((baseAddress & 0xFF00) == (effectiveAddress & 0xFF00))
+        {
+            return false;
+        }
+
+        _indexedLoadPageCrossDelayConsumed = true;
+        _cycle = 2;
+        return true;
+    }
+
     private ushort ReadIndirectYOperand()
     {
         var ptr = Read((ushort)(_instructionPC + 1));
@@ -851,6 +933,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
         _deferIndexedStorePcAdvanceAfterBranch = false;
         _deferZeroPageIndexedStorePcAdvanceAfterBranch = false;
         _indexedStorePcAdvanceWasDeferred = false;
+        _indexedLoadPageCrossDelayConsumed = false;
         _pendingDeferredNzUpdateAfterBranch = false;
         _pendingDeferredImmediateLoad = false;
         _pendingDeferredImpliedRegisterCompletion = false;
@@ -862,6 +945,52 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu
     public virtual byte Read(ushort address) => _bus.Read(address);
     public virtual void Write(ushort address, byte value) => _bus.Write(address, value);
     public byte Peek(ushort address) => _bus.Peek(address);
+
+    private static bool IsReadSensitiveOpcode(byte opcode)
+    {
+        return opcode switch
+        {
+            0xA9 or 0xA5 or 0xB5 or 0xAD or 0xBD or 0xB9 or 0xA1 or 0xB1 or
+            0xA2 or 0xA6 or 0xB6 or 0xAE or 0xBE or
+            0xA0 or 0xA4 or 0xB4 or 0xAC or 0xBC or
+            0x24 or 0x2C or
+            0xC9 or 0xC5 or 0xD5 or 0xCD or 0xDD or 0xD9 or 0xC1 or 0xD1 or
+            0xE0 or 0xE4 or 0xEC or
+            0xC0 or 0xC4 or 0xCC or
+            0x29 or 0x25 or 0x35 or 0x2D or 0x3D or 0x39 or 0x21 or 0x31 or
+            0x09 or 0x05 or 0x15 or 0x0D or 0x1D or 0x19 or 0x01 or 0x11 or
+            0x49 or 0x45 or 0x55 or 0x4D or 0x5D or 0x59 or 0x41 or 0x51 or
+            0x69 or 0x65 or 0x75 or 0x6D or 0x7D or 0x79 or 0x61 or 0x71 or
+            0xE9 or 0xE5 or 0xF5 or 0xED or 0xFD or 0xF9 or 0xE1 or 0xF1 or
+            0xE6 or 0xF6 or 0xEE or 0xFE or
+            0xC6 or 0xD6 or 0xCE or 0xDE or
+            0x06 or 0x16 or 0x0E or 0x1E or
+            0x46 or 0x56 or 0x4E or 0x5E or
+            0x26 or 0x36 or 0x2E or 0x3E or
+            0x66 or 0x76 or 0x6E or 0x7E or
+            0xA7 or 0xB7 or 0xAF or 0xBF or 0xA3 or 0xB3 or 0xAB or
+            0x10 or 0x30 or 0x50 or 0x70 or 0x90 or 0xB0 or 0xD0 or 0xF0 or
+            0x20 or 0x60 or
+            0x85 or 0x95 or 0x8D or 0x9D or 0x99 or 0x81 or 0x91 or
+            0x86 or 0x96 or 0x8E or
+            0x84 or 0x94 or 0x8C or
+            0x87 or 0x97 or 0x8F or 0x83 => true,
+            _ => false
+        };
+    }
+
+    private static bool IsStoreOpcode(byte opcode)
+    {
+        return opcode switch
+        {
+            0x85 or 0x95 or 0x8D or 0x9D or 0x99 or 0x81 or 0x91 or
+            0x86 or 0x96 or 0x8E or
+            0x84 or 0x94 or 0x8C or
+            0x87 or 0x97 or 0x8F or 0x83 => true,
+            _ => false
+        };
+    }
+
     private enum AddressingMode
     {
         Implied,

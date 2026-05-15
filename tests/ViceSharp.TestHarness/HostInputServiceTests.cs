@@ -15,6 +15,7 @@ public sealed class HostInputServiceTests
 
         Assert.Single(machine.Devices.All.OfType<IKeyboardMatrix>());
         Assert.Single(machine.Devices.All.OfType<IMachineKeyboardInput>());
+        Assert.Single(machine.Devices.All.OfType<IMachineJoystickInput>());
     }
 
     [Fact]
@@ -24,7 +25,7 @@ public sealed class HostInputServiceTests
         var service = CreateServiceWithKeyboardInput(keyboard);
 
         var down = await service.SetKeyStateAsync(
-            new SetKeyStateRequest("test-session", "Space", true),
+            new SetKeyStateRequest("test-session", "Space", true, "Space", " ", 1),
             TestContext.Current.CancellationToken);
         var repeat = await service.SetKeyStateAsync(
             new SetKeyStateRequest("test-session", "Space", true),
@@ -36,7 +37,13 @@ public sealed class HostInputServiceTests
         Assert.Equal(RpcStatusCode.Ok, down.Status.Code);
         Assert.Equal(RpcStatusCode.Ok, repeat.Status.Code);
         Assert.Equal(RpcStatusCode.Ok, up.Status.Code);
-        Assert.Contains(down.InputState!.Keys, key => key.Key == "Space" && key.IsPressed && key.AppliedToRuntime);
+        Assert.Contains(down.InputState!.Keys, key =>
+            key.Key == "Space" &&
+            key.IsPressed &&
+            key.AppliedToRuntime &&
+            key.PhysicalKey == "Space" &&
+            key.Text == " " &&
+            key.Modifiers == 1);
         Assert.Contains(up.InputState!.Keys, key => key.Key == "Space" && !key.IsPressed && key.AppliedToRuntime);
         Assert.Equal(
             [new KeyTransition("Space", true), new KeyTransition("Space", false)],
@@ -99,6 +106,131 @@ public sealed class HostInputServiceTests
 
         machine.Bus.Write(0xDC01, 0x7F);
         Assert.Equal(0x02, machine.Bus.Read(0xDC00) & 0x02);
+    }
+
+    [Fact]
+    public async Task SetJoystickState_UsesC64Joystick2ToDriveCia1PortA()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var machine = MachineTestFactory.CreateC64Machine();
+        registry.Add(new EmulatorRuntimeSession(
+            "test-session",
+            MinimalHostArchitectureDescriptor.Instance,
+            machine));
+        var service = new InputServiceHost(registry);
+
+        var pressed = await service.SetJoystickStateAsync(
+            new SetJoystickStateRequest("test-session", InputPort.Joystick2, 0x01, true),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, pressed.Status.Code);
+        Assert.Contains(pressed.InputState!.Joysticks, state =>
+            state.Port == InputPort.Joystick2 &&
+            state.State.DirectionMask == 0x01 &&
+            state.State.FireButton &&
+            state.State.AppliedToRuntime);
+        Assert.Equal(0, machine.Bus.Read(0xDC00) & 0x11);
+
+        var released = await service.SetJoystickStateAsync(
+            new SetJoystickStateRequest("test-session", InputPort.Joystick2, 0x00, false),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, released.Status.Code);
+        Assert.Equal(0x11, machine.Bus.Read(0xDC00) & 0x11);
+    }
+
+    [Fact]
+    public async Task SetJoystickState_UsesC64Joystick1ToDriveCia1PortB()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var machine = MachineTestFactory.CreateC64Machine();
+        registry.Add(new EmulatorRuntimeSession(
+            "test-session",
+            MinimalHostArchitectureDescriptor.Instance,
+            machine));
+        var service = new InputServiceHost(registry);
+
+        var pressed = await service.SetJoystickStateAsync(
+            new SetJoystickStateRequest("test-session", InputPort.Joystick1, 0x02, true),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, pressed.Status.Code);
+        Assert.Contains(pressed.InputState!.Joysticks, state =>
+            state.Port == InputPort.Joystick1 &&
+            state.State.DirectionMask == 0x02 &&
+            state.State.FireButton &&
+            state.State.AppliedToRuntime);
+        Assert.Equal(0, machine.Bus.Read(0xDC01) & 0x12);
+
+        var released = await service.SetJoystickStateAsync(
+            new SetJoystickStateRequest("test-session", InputPort.Joystick1, 0x00, false),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, released.Status.Code);
+        Assert.Equal(0x12, machine.Bus.Read(0xDC01) & 0x12);
+    }
+
+    [Fact]
+    public async Task SetJoystickState_UsesPrimaryJoystickSettingToSelectRuntimeControlPort()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var machine = MachineTestFactory.CreateC64Machine();
+        registry.Add(new EmulatorRuntimeSession(
+            "test-session",
+            MinimalHostArchitectureDescriptor.Instance,
+            machine)
+        {
+            InputSettings = new InputSettingsDto("c64:gtk3_pos", InputPort.Joystick1, false)
+        });
+        var service = new InputServiceHost(registry);
+
+        var pressed = await service.SetJoystickStateAsync(
+            new SetJoystickStateRequest("test-session", InputPort.PrimaryJoystick, 0x02, true),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, pressed.Status.Code);
+        Assert.Contains(pressed.InputState!.Joysticks, state =>
+            state.Port == InputPort.PrimaryJoystick &&
+            state.State.DirectionMask == 0x02 &&
+            state.State.FireButton &&
+            state.State.AppliedToRuntime);
+        Assert.Equal(0, machine.Bus.Read(0xDC01) & 0x12);
+        Assert.Equal(0x12, machine.Bus.Read(0xDC00) & 0x12);
+    }
+
+    [Fact]
+    public async Task SetJoystickState_KeepsExplicitJoystickPortsPhysicalWhenSwapEnabled()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var machine = MachineTestFactory.CreateC64Machine();
+        registry.Add(new EmulatorRuntimeSession(
+            "test-session",
+            MinimalHostArchitectureDescriptor.Instance,
+            machine)
+        {
+            InputSettings = new InputSettingsDto("c64:gtk3_pos", InputPort.Joystick2, true)
+        });
+        var service = new InputServiceHost(registry);
+
+        var pressed = await service.SetJoystickStateAsync(
+            new SetJoystickStateRequest("test-session", InputPort.Joystick2, 0x01, true),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, pressed.Status.Code);
+        Assert.Contains(pressed.InputState!.Joysticks, state =>
+            state.Port == InputPort.Joystick2 &&
+            state.State.DirectionMask == 0x01 &&
+            state.State.FireButton &&
+            state.State.AppliedToRuntime);
+        Assert.Equal(0, machine.Bus.Read(0xDC00) & 0x11);
+        Assert.Equal(0x11, machine.Bus.Read(0xDC01) & 0x11);
+
+        var released = await service.SetJoystickStateAsync(
+            new SetJoystickStateRequest("test-session", InputPort.Joystick2, 0x00, false),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, released.Status.Code);
+        Assert.Equal(0x11, machine.Bus.Read(0xDC00) & 0x11);
     }
 
     private static InputServiceHost CreateServiceWithKeyboardInput(IMachineKeyboardInput keyboard)

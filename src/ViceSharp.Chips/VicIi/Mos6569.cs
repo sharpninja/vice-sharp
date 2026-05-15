@@ -5,7 +5,7 @@ namespace ViceSharp.Chips.VicIi;
 /// <summary>
 /// MOS 6569 VIC-II Video Interface Controller implementation.
 /// </summary>
-public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
+public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpuCycleStealer
 {
     public virtual DeviceId Id => new DeviceId(0x0003);
     public DeviceId SourceId => Id;
@@ -51,11 +51,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public const int NtscVisibleLines = 262;
     public const int NtscTotalLines = 263;
     public const int NtscOldTotalLines = 262;
+    public const byte ResetRasterCycle = 6;
+    private const ushort FirstDmaLine = 0x30;
+    private const ushort LastDmaLine = 0xF7;
 
     private int _cyclesPerLine = PalCyclesPerLine;
     private int _visibleLines = PalVisibleLines;
     private int _totalLines = PalTotalLines;
     private double _frameRate = 50.0;
+    private bool _allowBadLines;
+    private byte _refreshCounter;
+    private readonly byte[] _videoBuffer = new byte[40];
+    private ushort _videoCounter;
+    private byte _rowCounter;
+    private int _videoMatrixLineIndex;
+    private bool _idleState;
     
     /// <summary>
     /// TV system type for VIC-II timing
@@ -78,7 +88,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// VICE-style: Check if current raster line is a badline.
     /// Badlines occur on raster lines $30-$F7 when DEN is set and the raster low bits match YSCROLL.
     /// </summary>
-    public bool IsBadLine => IsBadLineRaster(CurrentRasterLine);
+    public bool IsBadLine => _allowBadLines && IsBadLineRaster(CurrentRasterLine);
     
     /// <summary>
     /// Check if display is enabled (DEN bit in register $11)
@@ -95,6 +105,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     /// On badlines, VIC-II steals 40-63 cycles during display window for character data fetch
     /// </summary>
     public bool IsDmaStealing => IsBadLine && RasterX >= 14 && RasterX < 54;
+
+    public bool IsCpuCycleStolen => IsBadLine && RasterX >= 12 && RasterX < 55;
+
+    public bool IsCpuCycleStealMandatory => IsBadLine && RasterX >= 13 && RasterX < 56;
     
     /// <summary>
     /// Check if VIC-II is currently accessing video matrix (cycle 14-54 of badline)
@@ -149,6 +163,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     public byte RasterX;
     public uint CycleCounter;
     public Func<ushort, byte>? VideoMemoryReader { get; set; }
+    public Func<byte, byte>? Phi1MemoryReader { get; set; }
+    public byte LastReadPhi1 { get; private set; }
     
     // VICE-style: Border configuration
     public enum BorderSide { None, Normal, Extended }
@@ -513,20 +529,18 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
             if (CurrentRasterLine >= TotalLines)
             {
                 CurrentRasterLine = 0;
+                _refreshCounter = 0xFF;
+                _allowBadLines = false;
             }
+
+            UpdateBadLineLatchForStartOfLine();
         }
+
+        LastReadPhi1 = Phi1MemoryReader?.Invoke(CurrentCycle) ?? 0;
 
         // Update raster register
         _renderer.Tick();
         _registers[0x12] = (byte)CurrentRasterLine;
-        if ((CurrentRasterLine & 0x100) != 0)
-        {
-            _registers[0x11] |= 0x80;
-        }
-        else
-        {
-            _registers[0x11] &= 0x7F;
-        }
     }
 
     /// <inheritdoc />
@@ -540,10 +554,51 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
     {
         Array.Clear(_registers, 0, _registers.Length);
         CurrentRasterLine = 0;
-        RasterX = 0;
+        RasterX = ResetRasterCycle;
         CycleCounter = 0;
         _rasterIrqLine = 0;
+        _allowBadLines = false;
+        _refreshCounter = 0;
+        Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
+        _videoCounter = 0;
+        _rowCounter = 0;
+        _videoMatrixLineIndex = 0;
+        _idleState = false;
+        LastReadPhi1 = 0;
     }
+
+    public byte ConsumeRefreshCounter()
+    {
+        var value = _refreshCounter;
+        _refreshCounter--;
+        return value;
+    }
+
+    public ushort ConsumeGraphicsFetchAddress()
+    {
+        ushort address;
+
+        if ((_registers[0x11] & 0x20) != 0)
+        {
+            address = (ushort)((_videoCounter << 3) | _rowCounter);
+            address |= (ushort)((_registers[0x18] & 0x08) << 10);
+        }
+        else
+        {
+            var character = _videoBuffer[_videoMatrixLineIndex % _videoBuffer.Length];
+            address = (ushort)((character << 3) | _rowCounter);
+            address |= (ushort)((_registers[0x18] & 0x0E) << 10);
+        }
+
+        if ((_registers[0x11] & 0x40) != 0)
+            address &= 0x39FF;
+
+        _videoMatrixLineIndex = (_videoMatrixLineIndex + 1) % _videoBuffer.Length;
+        _videoCounter = (ushort)((_videoCounter + 1) & 0x03FF);
+        return address;
+    }
+
+    public bool IsGraphicsIdle => _idleState;
 
     /// <inheritdoc />
     public byte Peek(ushort offset)
@@ -560,6 +615,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
         if (register == 0x19)
         {
             return _registers[0x19];
+        }
+
+        if (register == 0x11)
+        {
+            return (byte)((_registers[0x11] & 0x7F) | ((CurrentRasterLine & 0x100) >> 1));
         }
 
         return _registers[register];
@@ -656,10 +716,18 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource
 
     private bool IsBadLineRaster(ushort rasterLine)
     {
-        return IsDisplayEnabled
-            && rasterLine >= 0x30
-            && rasterLine <= 0xF7
+        return rasterLine >= FirstDmaLine
+            && rasterLine <= LastDmaLine
             && (rasterLine & 0x07) == YScroll;
+    }
+
+    private void UpdateBadLineLatchForStartOfLine()
+    {
+        if (CurrentRasterLine == FirstDmaLine && !_allowBadLines && IsDisplayEnabled)
+            _allowBadLines = true;
+
+        if (CurrentRasterLine > LastDmaLine)
+            _allowBadLines = false;
     }
 
     private void RefreshInterruptLine()

@@ -63,15 +63,13 @@ public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLi
         var viceState = new ViceNativeBridge.ViceVicState();
         ViceNativeBridge.GetVicState(_fixture.NativeMachine, ref viceState);
         var relativeCycle = GetRelativeCycle(viceState);
-        var rasterLine = (ushort)((relativeCycle / Chip.CyclesPerLine) % Chip.TotalLines);
-        var rasterCycle = (byte)(relativeCycle % Chip.CyclesPerLine);
-        var registers = NormalizeRasterRegisters(viceState.Registers, rasterLine);
+        var registers = NormalizeRasterRegisters(viceState.Registers, viceState.RasterLine);
 
         return new Dictionary<string, object?>
         {
             ["Cycle"] = relativeCycle,
-            ["RasterLine"] = rasterLine,
-            ["RasterCycle"] = rasterCycle,
+            ["RasterLine"] = viceState.RasterLine,
+            ["RasterCycle"] = viceState.RasterCycle,
             ["BadLine"] = viceState.BadLine != 0,
             ["Registers"] = registers
         };

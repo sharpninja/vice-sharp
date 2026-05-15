@@ -228,18 +228,84 @@ public sealed class AttachPanelView : UserControl
             Spacing = 10
         };
 
+        stack.Children.Add(CreateProfileSection());
+        stack.Children.Add(CreateLimiterSection());
+        stack.Children.Add(CreateDisplaySection());
+        stack.Children.Add(CreateStatusSection());
+        stack.Children.Add(CreateSettingsActionRow());
+        stack.Children.Add(CreateSettingsValidationPanel());
+
+        var status = new TextBlock
+        {
+            Text = ViewModel.SettingsStatusText,
+            FontSize = 12,
+            Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
+            TextWrapping = TextWrapping.Wrap
+        };
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(AttachPanelViewModel.SettingsStatusText))
+                status.Text = ViewModel.SettingsStatusText;
+        };
+        stack.Children.Add(status);
+
+        return new ScrollViewer { Content = stack };
+    }
+
+    private Control CreateProfileSection()
+    {
+        var stack = CreateSection("Machine");
+        var selector = new ComboBox
+        {
+            ItemsSource = ViewModel.MachineProfiles,
+            SelectedItem = ViewModel.SelectedMachineProfile,
+            MinHeight = 30,
+            ItemTemplate = new FuncDataTemplate<MachineProfileOption>((profile, _) => new TextBlock
+            {
+                Text = profile?.DisplayName ?? string.Empty
+            })
+        };
+        selector.SelectionChanged += (_, _) =>
+        {
+            if (selector.SelectedItem is MachineProfileOption profile)
+                ViewModel.SelectedMachineProfile = profile;
+        };
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(AttachPanelViewModel.SelectedMachineProfile))
+                selector.SelectedItem = ViewModel.SelectedMachineProfile;
+        };
+        stack.Children.Add(selector);
+        var status = new TextBlock
+        {
+            Text = ViewModel.SelectedMachineProfile.StatusText,
+            FontSize = 12,
+            Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
+            TextWrapping = TextWrapping.Wrap
+        };
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(AttachPanelViewModel.SelectedMachineProfile))
+                status.Text = ViewModel.SelectedMachineProfile.StatusText;
+        };
+        stack.Children.Add(status);
+        return stack;
+    }
+
+    private Control CreateLimiterSection()
+    {
+        var stack = CreateSection("Limiter");
         var limiter = new TextBlock
         {
-            Text = $"Limiter {ViewModel.LimiterRatePercent:0}%",
+            Text = $"Target {ViewModel.LimiterRatePercent:0}% ({AttachPanelViewModel.LimiterMinimumPercent:0}-{AttachPanelViewModel.LimiterMaximumPercent:0}%)",
             FontSize = 13,
             FontWeight = FontWeight.SemiBold
         };
         stack.Children.Add(limiter);
-
         var slider = new Slider
         {
-            Minimum = 10,
-            Maximum = 400,
+            Minimum = AttachPanelViewModel.LimiterMinimumPercent,
+            Maximum = AttachPanelViewModel.LimiterMaximumPercent,
             Value = ViewModel.LimiterRatePercent,
             TickFrequency = 10,
             IsSnapToTickEnabled = true
@@ -249,28 +315,266 @@ public sealed class AttachPanelView : UserControl
             if (args.Property == RangeBase.ValueProperty)
             {
                 ViewModel.LimiterRatePercent = slider.Value;
-                limiter.Text = $"Limiter {ViewModel.LimiterRatePercent:0}%";
+                limiter.Text = $"Target {ViewModel.LimiterRatePercent:0}% ({AttachPanelViewModel.LimiterMinimumPercent:0}-{AttachPanelViewModel.LimiterMaximumPercent:0}%)";
+            }
+        };
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(AttachPanelViewModel.LimiterRatePercent))
+            {
+                slider.Value = ViewModel.LimiterRatePercent;
+                limiter.Text = $"Target {ViewModel.LimiterRatePercent:0}% ({AttachPanelViewModel.LimiterMinimumPercent:0}-{AttachPanelViewModel.LimiterMaximumPercent:0}%)";
             }
         };
         stack.Children.Add(slider);
+        stack.Children.Add(CreateBooleanRow(
+            "Enabled",
+            () => ViewModel.LimiterEnabled,
+            value => ViewModel.LimiterEnabled = value,
+            nameof(AttachPanelViewModel.LimiterEnabled)));
+        return stack;
+    }
 
-        var apply = new Button
+    private Control CreateDisplaySection()
+    {
+        var stack = CreateSection("Display");
+        stack.Children.Add(CreateComboRow(
+            "Renderer",
+            ViewModel.RendererModes,
+            () => ViewModel.SelectedRenderer,
+            value => ViewModel.SelectedRenderer = value,
+            nameof(AttachPanelViewModel.SelectedRenderer)));
+        stack.Children.Add(CreateComboRow(
+            "Scale",
+            ViewModel.DisplayScales,
+            () => ViewModel.SelectedDisplayScale,
+            value => ViewModel.SelectedDisplayScale = value,
+            nameof(AttachPanelViewModel.SelectedDisplayScale)));
+        stack.Children.Add(CreateComboRow(
+            "Crop",
+            ViewModel.CropModes,
+            () => ViewModel.SelectedCropMode,
+            value => ViewModel.SelectedCropMode = value,
+            nameof(AttachPanelViewModel.SelectedCropMode)));
+        stack.Children.Add(CreateComboRow(
+            "Aspect",
+            ViewModel.AspectModes,
+            () => ViewModel.SelectedAspectMode,
+            value => ViewModel.SelectedAspectMode = value,
+            nameof(AttachPanelViewModel.SelectedAspectMode)));
+        stack.Children.Add(CreateComboRow(
+            "Palette",
+            ViewModel.PaletteModes,
+            () => ViewModel.SelectedPalette,
+            value => ViewModel.SelectedPalette = value,
+            nameof(AttachPanelViewModel.SelectedPalette)));
+        return stack;
+    }
+
+    private Control CreateStatusSection()
+    {
+        var stack = CreateSection("Audio / Input / Resources");
+        stack.Children.Add(CreateComboRow(
+            "Audio",
+            ViewModel.AudioModes,
+            () => ViewModel.SelectedAudioMode,
+            value => ViewModel.SelectedAudioMode = value,
+            nameof(AttachPanelViewModel.SelectedAudioMode)));
+        stack.Children.Add(CreateComboRow(
+            "Input",
+            ViewModel.InputModes,
+            () => ViewModel.SelectedInputMode,
+            value => ViewModel.SelectedInputMode = value,
+            nameof(AttachPanelViewModel.SelectedInputMode)));
+        stack.Children.Add(CreateComboRow(
+            "Primary",
+            ViewModel.PrimaryJoystickPorts,
+            () => ViewModel.SelectedPrimaryJoystickPort,
+            value => ViewModel.SelectedPrimaryJoystickPort = value,
+            nameof(AttachPanelViewModel.SelectedPrimaryJoystickPort)));
+        stack.Children.Add(CreateBooleanRow(
+            "Swap ports",
+            () => ViewModel.SwapJoystickPorts,
+            value => ViewModel.SwapJoystickPorts = value,
+            nameof(AttachPanelViewModel.SwapJoystickPorts)));
+        stack.Children.Add(CreateComboRow(
+            "Resources",
+            ViewModel.ResourceModes,
+            () => ViewModel.SelectedResourceMode,
+            value => ViewModel.SelectedResourceMode = value,
+            nameof(AttachPanelViewModel.SelectedResourceMode)));
+        return stack;
+    }
+
+    private Control CreateSettingsActionRow()
+    {
+        var buttons = new StackPanel
         {
-            Content = "Apply",
-            Padding = new Thickness(10, 5)
+            Orientation = Orientation.Horizontal,
+            Spacing = 6
         };
-        apply.Click += async (_, _) => await ViewModel.ApplyLimiterAsync().ConfigureAwait(true);
-        stack.Children.Add(apply);
 
+        var apply = CreateSettingsButton("Apply", async () => await ViewModel.ApplySettingsAsync(restartRequired: false).ConfigureAwait(true));
+        var validate = CreateSettingsButton("Validate", async () => await ViewModel.ValidateSettingsAsync().ConfigureAwait(true));
+        var revert = CreateSettingsButton("Revert", () =>
+        {
+            ViewModel.RevertSettings();
+            return Task.CompletedTask;
+        });
+        var restart = CreateSettingsButton("Apply + Restart", async () => await ViewModel.ApplySettingsAsync(restartRequired: true).ConfigureAwait(true));
+
+        void RefreshEnabled()
+        {
+            apply.IsEnabled = ViewModel.HasPendingSettingsChanges;
+            revert.IsEnabled = ViewModel.HasPendingSettingsChanges;
+            restart.IsEnabled = ViewModel.HasPendingSettingsChanges || ViewModel.RequiresRestart;
+        }
+
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName is nameof(AttachPanelViewModel.HasPendingSettingsChanges) or nameof(AttachPanelViewModel.RequiresRestart))
+                RefreshEnabled();
+        };
+        RefreshEnabled();
+
+        buttons.Children.Add(validate);
+        buttons.Children.Add(apply);
+        buttons.Children.Add(revert);
+        buttons.Children.Add(restart);
+        return buttons;
+    }
+
+    private Control CreateSettingsValidationPanel()
+    {
+        var stack = new StackPanel { Spacing = 5 };
+        var header = new TextBlock
+        {
+            Text = "Validation",
+            FontSize = 13,
+            FontWeight = FontWeight.SemiBold,
+            IsVisible = ViewModel.HasSettingsValidationResults
+        };
+        stack.Children.Add(header);
+
+        var results = new ItemsControl
+        {
+            ItemsSource = ViewModel.SettingsValidationResults,
+            IsVisible = ViewModel.HasSettingsValidationResults,
+            ItemTemplate = new FuncDataTemplate<SettingsResourceValidationDto>((resource, _) =>
+            {
+                var brush = resource is { IsValid: false }
+                    ? ErrorBrush
+                    : new SolidColorBrush(Color.FromRgb(124, 183, 136));
+                return new TextBlock
+                {
+                    Text = resource is null
+                        ? string.Empty
+                        : $"{resource.ResourceKey}: {resource.Message}",
+                    Foreground = brush,
+                    FontSize = 12,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(0, 1)
+                };
+            })
+        };
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(AttachPanelViewModel.HasSettingsValidationResults))
+            {
+                header.IsVisible = ViewModel.HasSettingsValidationResults;
+                results.IsVisible = ViewModel.HasSettingsValidationResults;
+            }
+        };
+        stack.Children.Add(results);
+        return stack;
+    }
+
+    private Button CreateSettingsButton(string label, Func<Task> action)
+    {
+        var button = new Button
+        {
+            Content = label,
+            Padding = new Thickness(9, 5),
+            HorizontalContentAlignment = HorizontalAlignment.Center
+        };
+        button.Click += async (_, _) => await action().ConfigureAwait(true);
+        return button;
+    }
+
+    private StackPanel CreateSection(string title)
+    {
+        var stack = new StackPanel
+        {
+            Spacing = 7,
+            Margin = new Thickness(0, 0, 0, 2)
+        };
         stack.Children.Add(new TextBlock
         {
-            Text = "Display crop and scale controls will use this tab.",
-            FontSize = 12,
-            Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
-            TextWrapping = TextWrapping.Wrap
+            Text = title,
+            FontSize = 14,
+            FontWeight = FontWeight.SemiBold
         });
-
         return stack;
+    }
+
+    private Control CreateComboRow(
+        string label,
+        IEnumerable<string> items,
+        Func<string> getValue,
+        Action<string> setValue,
+        string propertyName)
+    {
+        var row = new DockPanel { LastChildFill = true };
+        var text = new TextBlock
+        {
+            Text = label,
+            Width = 78,
+            VerticalAlignment = VerticalAlignment.Center,
+            FontSize = 12
+        };
+        DockPanel.SetDock(text, Dock.Left);
+        row.Children.Add(text);
+
+        var combo = new ComboBox
+        {
+            ItemsSource = items,
+            SelectedItem = getValue(),
+            MinHeight = 30,
+            FontSize = 12
+        };
+        combo.SelectionChanged += (_, _) =>
+        {
+            if (combo.SelectedItem is string value)
+                setValue(value);
+        };
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == propertyName)
+                combo.SelectedItem = getValue();
+        };
+        row.Children.Add(combo);
+        return row;
+    }
+
+    private Control CreateBooleanRow(
+        string label,
+        Func<bool> getValue,
+        Action<bool> setValue,
+        string propertyName)
+    {
+        var checkBox = new CheckBox
+        {
+            Content = label,
+            IsChecked = getValue(),
+            FontSize = 12
+        };
+        checkBox.Click += (_, _) => setValue(checkBox.IsChecked == true);
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == propertyName)
+                checkBox.IsChecked = getValue();
+        };
+        return checkBox;
     }
 
     public Control CreateMonitorPanel(bool includePopOut)

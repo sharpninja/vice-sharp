@@ -2,13 +2,18 @@ using FluentAssertions;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Chips.Audio;
+using ViceSharp.Chips.Cartridges;
+using ViceSharp.Chips.Cia;
+using ViceSharp.Chips.Tape;
 using ViceSharp.Chips.VicIi;
+using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 using Xunit;
 
 namespace ViceSharp.TestHarness;
 
+[Collection("NativeVice")]
 public sealed class C64MachineProfileTests
 {
     public static TheoryData<string> RequiredProfileSelectors
@@ -24,22 +29,38 @@ public sealed class C64MachineProfileTests
         }
     }
 
-    public static TheoryData<string, string, long, int, int, VideoStandard, C64SidModel, bool, bool> RequiredProfiles => new()
+    public static TheoryData<string, string> RequiredProfileAliases
     {
-        { "c64", "Commodore 64 PAL", 985_248, 63, 312, VideoStandard.Pal, C64SidModel.Mos6581, true, false },
-        { "c64c", "Commodore 64C PAL", 985_248, 63, 312, VideoStandard.Pal, C64SidModel.Mos8580, true, false },
-        { "c64old", "Commodore 64 old PAL", 985_248, 63, 312, VideoStandard.Pal, C64SidModel.Mos6581, true, false },
-        { "ntsc", "Commodore 64 NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64SidModel.Mos6581, true, false },
-        { "newntsc", "Commodore 64C NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64SidModel.Mos8580, true, false },
-        { "oldntsc", "Commodore 64 old NTSC", 1_022_730, 64, 262, VideoStandard.Ntsc, C64SidModel.Mos6581, true, false },
-        { "paln", "Commodore 64 PAL-N / Drean", 1_023_440, 65, 312, VideoStandard.Pal, C64SidModel.Mos6581, true, false },
-        { "sx64pal", "Commodore SX-64 PAL", 985_248, 63, 312, VideoStandard.Pal, C64SidModel.Mos6581, true, false },
-        { "sx64ntsc", "Commodore SX-64 NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64SidModel.Mos6581, true, false },
-        { "pet64pal", "Commodore PET64 PAL", 985_248, 63, 312, VideoStandard.Pal, C64SidModel.Mos6581, true, false },
-        { "pet64ntsc", "Commodore PET64 NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64SidModel.Mos6581, true, false },
-        { "ultimax", "Commodore MAX / Ultimax", 1_022_730, 65, 263, VideoStandard.Ntsc, C64SidModel.Mos6581, true, true },
-        { "c64gs", "Commodore 64 Games System", 985_248, 63, 312, VideoStandard.Pal, C64SidModel.Mos8580, false, true },
-        { "c64jap", "Commodore 64 Japanese", 1_022_730, 65, 263, VideoStandard.Ntsc, C64SidModel.Mos6581, true, false }
+        get
+        {
+            var data = new TheoryData<string, string>();
+
+            foreach (var profile in C64MachineProfiles.All)
+            {
+                foreach (var alias in profile.Aliases.Append(profile.Id).Distinct(StringComparer.OrdinalIgnoreCase))
+                    data.Add(alias, profile.Id);
+            }
+
+            return data;
+        }
+    }
+
+    public static TheoryData<string, string, long, int, int, VideoStandard, C64VicIIModel, C64SidModel, C64BoardModel, bool, bool> RequiredProfiles => new()
+    {
+        { "c64", "Commodore 64 PAL", 985_248, 63, 312, VideoStandard.Pal, C64VicIIModel.Mos6569, C64SidModel.Mos6581, C64BoardModel.Breadbox, true, false },
+        { "c64c", "Commodore 64C PAL", 985_248, 63, 312, VideoStandard.Pal, C64VicIIModel.Mos8565, C64SidModel.Mos8580, C64BoardModel.C64C, true, false },
+        { "c64old", "Commodore 64 old PAL", 985_248, 63, 312, VideoStandard.Pal, C64VicIIModel.Mos6569R1, C64SidModel.Mos6581, C64BoardModel.BreadboxOld, true, false },
+        { "ntsc", "Commodore 64 NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64VicIIModel.Mos6567R8, C64SidModel.Mos6581, C64BoardModel.Breadbox, true, false },
+        { "newntsc", "Commodore 64C NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64VicIIModel.Mos8562, C64SidModel.Mos8580, C64BoardModel.C64C, true, false },
+        { "oldntsc", "Commodore 64 old NTSC", 1_022_730, 64, 262, VideoStandard.Ntsc, C64VicIIModel.Mos6567R56A, C64SidModel.Mos6581, C64BoardModel.BreadboxOld, true, false },
+        { "paln", "Commodore 64 PAL-N / Drean", 1_023_440, 65, 312, VideoStandard.Pal, C64VicIIModel.Mos6572, C64SidModel.Mos6581, C64BoardModel.Drean, true, false },
+        { "sx64pal", "Commodore SX-64 PAL", 985_248, 63, 312, VideoStandard.Pal, C64VicIIModel.Mos6569, C64SidModel.Mos6581, C64BoardModel.SX64, true, false },
+        { "sx64ntsc", "Commodore SX-64 NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64VicIIModel.Mos6567R8, C64SidModel.Mos6581, C64BoardModel.SX64, true, false },
+        { "pet64pal", "Commodore PET64 PAL", 985_248, 63, 312, VideoStandard.Pal, C64VicIIModel.Mos6569, C64SidModel.Mos6581, C64BoardModel.PET64, true, false },
+        { "pet64ntsc", "Commodore PET64 NTSC", 1_022_730, 65, 263, VideoStandard.Ntsc, C64VicIIModel.Mos6567R8, C64SidModel.Mos6581, C64BoardModel.PET64, true, false },
+        { "ultimax", "Commodore MAX / Ultimax", 1_022_730, 65, 263, VideoStandard.Ntsc, C64VicIIModel.Mos6567R8, C64SidModel.Mos6581, C64BoardModel.Ultimax, true, true },
+        { "c64gs", "Commodore 64 Games System", 985_248, 63, 312, VideoStandard.Pal, C64VicIIModel.Mos8565, C64SidModel.Mos8580, C64BoardModel.C64GS, false, true },
+        { "c64jap", "Commodore 64 Japanese", 1_022_730, 65, 263, VideoStandard.Ntsc, C64VicIIModel.Mos6567R8, C64SidModel.Mos6581, C64BoardModel.Japanese, true, false }
     };
 
     [Theory]
@@ -51,7 +72,9 @@ public sealed class C64MachineProfileTests
         int cyclesPerLine,
         int rasterLines,
         VideoStandard videoStandard,
+        C64VicIIModel vicModel,
         C64SidModel sidModel,
+        C64BoardModel boardModel,
         bool keyboardEnabled,
         bool cartridgeBootExpected)
     {
@@ -64,7 +87,11 @@ public sealed class C64MachineProfileTests
         profile.CyclesPerLine.Should().Be(cyclesPerLine);
         profile.RasterLines.Should().Be(rasterLines);
         profile.VideoStandard.Should().Be(videoStandard);
+        profile.VicII.Should().Be(vicModel);
+        profile.VicIIModel.Should().Be(vicModel.ToString());
         profile.Sid.Should().Be(sidModel);
+        profile.Board.Should().Be(boardModel);
+        profile.BoardModel.Should().Be(boardModel.ToString());
         profile.KeyboardEnabled.Should().Be(keyboardEnabled);
         profile.CartridgeBootExpected.Should().Be(cartridgeBootExpected);
         profile.Family.Should().Be("x64sc");
@@ -72,6 +99,7 @@ public sealed class C64MachineProfileTests
         profile.SystemCore.KeyboardMatrixConnected.Should().Be(keyboardEnabled);
         profile.SystemCore.CartridgeBootExpected.Should().Be(cartridgeBootExpected);
         profile.SystemCore.BoardPolicy.Should().Be(profile.BoardModel);
+        profile.SystemCore.Traits.Should().ContainKey("tapePort");
         descriptor.MachineName.Should().Be(displayName);
         descriptor.MasterClockHz.Should().Be(nominalClockHz);
         descriptor.VideoStandard.Should().Be(videoStandard);
@@ -100,6 +128,18 @@ public sealed class C64MachineProfileTests
         C64MachineProfiles.C64GS.SystemCore.AddressDecoderPolicy.Should().Be(C64PlaPolicy.CartridgeRequired.ToString());
         C64MachineProfiles.Ultimax.SystemCore.BusPolicy.Should().Be(C64BusPolicy.Max.ToString());
         C64MachineProfiles.Ultimax.SystemCore.AddressDecoderPolicy.Should().Be(C64PlaPolicy.Ultimax.ToString());
+        C64MachineProfiles.C64Pal.SystemCore.TapePortConnected.Should().BeTrue();
+        C64MachineProfiles.SX64Pal.SystemCore.TapePortConnected.Should().BeFalse();
+        C64MachineProfiles.SX64Ntsc.SystemCore.TapePortConnected.Should().BeFalse();
+        C64MachineProfiles.C64GS.SystemCore.TapePortConnected.Should().BeFalse();
+        C64MachineProfiles.Ultimax.SystemCore.IecBusConnected.Should().BeFalse();
+        C64MachineProfiles.C64GS.SystemCore.IecBusConnected.Should().BeFalse();
+        C64MachineProfiles.C64Pal.SystemCore.Cia2Connected.Should().BeTrue();
+        C64MachineProfiles.C64GS.SystemCore.Cia2Connected.Should().BeTrue();
+        C64MachineProfiles.Ultimax.SystemCore.Cia2Connected.Should().BeFalse();
+        C64MachineProfiles.Ultimax.SystemCore.Traits.Should().ContainKey("iecBus").WhoseValue.Should().Be("absent");
+        C64MachineProfiles.C64GS.SystemCore.Traits.Should().ContainKey("iecBus").WhoseValue.Should().Be("absent");
+        C64MachineProfiles.Ultimax.SystemCore.Traits.Should().ContainKey("cia2").WhoseValue.Should().Be("absent");
     }
 
     [Theory]
@@ -163,6 +203,26 @@ public sealed class C64MachineProfileTests
     }
 
     [Fact]
+    public void C64GsCartridgeRomLowFollowsPlaVisibilityDuringRamTest()
+    {
+        var machine = MachineTestFactory.CreateC64Machine("c64gs");
+        var memory = machine.Devices.GetByRole(DeviceRole.SystemRam) as IMemory
+            ?? throw new InvalidOperationException("C64GS did not expose system RAM.");
+        var cartridgePort = machine.Devices.GetAll<ICartridgePort>().Single();
+        var cartridge = new byte[StandardCartridgeImage.GameSystemRomSize];
+        cartridge[0] = 0xA5;
+        memory.Span[0x8000] = 0x5A;
+
+        cartridgePort.AttachCartridge(cartridge, CartridgeMappingMode.GameSystem);
+
+        machine.Bus.Read(0x8000).Should().Be(0xA5, "ROML should be visible in the reset PLA configuration");
+
+        machine.Bus.Write(0x0001, 0x34);
+
+        machine.Bus.Read(0x8000).Should().Be(0x5A, "ROML should disappear when LORAM/HIRAM are both deasserted during RAMTAS");
+    }
+
+    [Fact]
     public async Task C64GsSystemCore_DisablesKeyboardMatrixEvenThoughHostInputSurfaceExists()
     {
         var registry = new EmulatorRuntimeRegistry();
@@ -181,6 +241,26 @@ public sealed class C64MachineProfileTests
         response.InputState!.Keys.Should().Contain(key => key.Key == "Space" && key.IsPressed && !key.AppliedToRuntime);
         machine.Bus.Write(0xDC01, 0xEF);
         (machine.Bus.Read(0xDC00) & 0x80).Should().Be(0x80);
+    }
+
+    [Theory]
+    [MemberData(nameof(RequiredProfileSelectors))]
+    public void ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant(string selector)
+    {
+        var machine = MachineTestFactory.CreateC64Machine(selector);
+        var joystick = machine.Devices.GetAll<IMachineJoystickInput>().Single();
+
+        joystick.SetJoystickState(2, 0x01, fireButton: true).Should().BeTrue();
+        joystick.SetJoystickState(1, 0x02, fireButton: true).Should().BeTrue();
+
+        (machine.Bus.Read(0xDC00) & 0x11).Should().Be(0, $"{selector} control port 2 should drive CIA1 port A");
+        (machine.Bus.Read(0xDC01) & 0x12).Should().Be(0, $"{selector} control port 1 should drive CIA1 port B");
+
+        joystick.SetJoystickState(2, 0x00, fireButton: false).Should().BeTrue();
+        joystick.SetJoystickState(1, 0x00, fireButton: false).Should().BeTrue();
+
+        (machine.Bus.Read(0xDC00) & 0x11).Should().Be(0x11, $"{selector} control port 2 should release CIA1 port A lines");
+        (machine.Bus.Read(0xDC01) & 0x12).Should().Be(0x12, $"{selector} control port 1 should release CIA1 port B lines");
     }
 
     [Theory]
@@ -203,23 +283,131 @@ public sealed class C64MachineProfileTests
     }
 
     [Theory]
-    [InlineData("breadbox", "c64")]
-    [InlineData("pal", "c64")]
-    [InlineData("c64new", "c64c")]
-    [InlineData("newpal", "c64c")]
-    [InlineData("c64ntsc", "ntsc")]
-    [InlineData("c64cntsc", "newntsc")]
-    [InlineData("c64newntsc", "newntsc")]
-    [InlineData("c64oldntsc", "oldntsc")]
-    [InlineData("drean", "paln")]
-    [InlineData("sx64", "sx64pal")]
-    [InlineData("pet64", "pet64pal")]
-    [InlineData("max", "ultimax")]
-    [InlineData("gs", "c64gs")]
-    [InlineData("jap", "c64jap")]
+    [InlineData("c64", true)]
+    [InlineData("sx64pal", false)]
+    [InlineData("sx64ntsc", false)]
+    [InlineData("c64gs", false)]
+    public void ArchitectureBuilder_RegistersDatasetteOnlyWhenProfileConnectsTapePort(
+        string selector,
+        bool expectedTapePort)
+    {
+        var machine = MachineTestFactory.CreateC64Machine(selector);
+
+        machine.Devices.All.OfType<ITapeDevice>().Any().Should().Be(expectedTapePort);
+    }
+
+    [Theory]
+    [InlineData("c64", 8, 9)]
+    [InlineData("sx64pal", 8, 9)]
+    [InlineData("sx64ntsc", 8, 9)]
+    [InlineData("c64gs")]
+    [InlineData("ultimax")]
+    public void ArchitectureBuilder_RegistersIecDrivesOnlyWhenProfileConnectsIecBus(
+        string selector,
+        params int[] expectedDriveNumbers)
+    {
+        var machine = MachineTestFactory.CreateC64Machine(selector);
+
+        machine.Devices.GetAll<IFloppyDrive>()
+            .Select(drive => (int)drive.DriveNumber)
+            .Should()
+            .BeEquivalentTo(expectedDriveNumbers);
+    }
+
+    [Theory]
+    [InlineData("c64", true)]
+    [InlineData("c64gs", true)]
+    [InlineData("ultimax", false)]
+    public void ArchitectureBuilder_RegistersCia2OnlyWhenProfileConnectsCia2(
+        string selector,
+        bool expectedCia2)
+    {
+        var machine = MachineTestFactory.CreateC64Machine(selector);
+
+        machine.Architecture.Devices.Any(device => device.Role == DeviceRole.Cia2).Should().Be(expectedCia2);
+        (machine.Devices.GetByRole(DeviceRole.Cia2) is not null).Should().Be(expectedCia2);
+        machine.Devices.GetAll<Mos6526>()
+            .Count(cia => cia.BaseAddress == 0xDD00)
+            .Should()
+            .Be(expectedCia2 ? 1 : 0);
+    }
+
+    [Fact]
+    public void Ultimax_Dd00IoRegionReadsOpenBusAndIgnoresWritesWhenCia2IsAbsent()
+    {
+        var machine = MachineTestFactory.CreateC64Machine("ultimax");
+        var memory = machine.Devices.GetByRole(DeviceRole.SystemRam) as IMemory
+            ?? throw new InvalidOperationException("Ultimax did not expose system RAM.");
+
+        memory.Span[0x03FF] = 0xA7;
+        memory.Span[0xDD00] = 0x5A;
+        machine.Bus.Write(0x0001, 0x37);
+
+        machine.Bus.Write(0xDD00, 0xA5);
+        machine.Clock.Step();
+
+        memory.Span[0xDD00].Should().Be(0x5A);
+        machine.Bus.Read(0xDD00).Should().Be(0xA7);
+    }
+
+    [Fact]
+    public void C64_Dd00IoRegionRoutesToCia2WhenCia2IsConnected()
+    {
+        var machine = MachineTestFactory.CreateC64Machine("c64");
+        var memory = machine.Devices.GetByRole(DeviceRole.SystemRam) as IMemory
+            ?? throw new InvalidOperationException("C64 did not expose system RAM.");
+
+        memory.Span[0xDD00] = 0x5A;
+        machine.Bus.Write(0x0001, 0x37);
+
+        machine.Bus.Write(0xDD00, 0xA5);
+
+        memory.Span[0xDD00].Should().Be(0x5A);
+    }
+
+    [Theory]
+    [MemberData(nameof(RequiredProfileAliases))]
     public void X64ScProfiles_ResolveViceAliases(string alias, string expectedId)
     {
         C64MachineProfiles.Resolve(alias).Id.Should().Be(expectedId);
+    }
+
+    [ViceTheory]
+    [MemberData(nameof(RequiredProfileAliases))]
+    public void NativeVice_CreatesAndResetsEveryManagedX64ScAlias(string alias, string expectedId)
+    {
+        var native = ViceNative.CreateModel(alias);
+        var expectedNativeModel = ExpectedNativeModel(expectedId);
+
+        native.Should().NotBe(IntPtr.Zero, $"{alias} should resolve to native x64sc model {expectedId}");
+        try
+        {
+            ViceNative.GetModel(native).Should().Be(expectedNativeModel, $"{alias} should select native x64sc model enum for {expectedId}");
+            ViceNative.ResetNative(native);
+            ViceNative.GetModel(native).Should().Be(expectedNativeModel, $"{alias} should preserve native x64sc model enum for {expectedId} after reset");
+        }
+        finally
+        {
+            ViceNative.Destroy(native);
+        }
+    }
+
+    [ViceFact]
+    public void NativeVice_DefaultCreateSelectsPalBreadboxModel()
+    {
+        var native = ViceNative.Create();
+
+        native.Should().NotBe(IntPtr.Zero);
+        try
+        {
+            ViceNative.GetModel(native).Should().Be(ExpectedNativeModel("c64"));
+            ViceNative.ResetNative(native);
+            ViceNative.GetModel(native).Should().Be(ExpectedNativeModel("c64"));
+        }
+        finally
+        {
+            ViceNative.Destroy(native);
+        }
     }
 
     [Theory]
@@ -230,7 +418,13 @@ public sealed class C64MachineProfileTests
     [InlineData("newntsc", 65 * 263, typeof(Mos8562), typeof(Sid8580))]
     [InlineData("oldntsc", 64 * 262, typeof(Mos6567R56A), typeof(Sid6581))]
     [InlineData("paln", 65 * 312, typeof(Mos6572), typeof(Sid6581))]
+    [InlineData("sx64pal", 63 * 312, typeof(Mos6569), typeof(Sid6581))]
+    [InlineData("sx64ntsc", 65 * 263, typeof(Mos6567), typeof(Sid6581))]
+    [InlineData("pet64pal", 63 * 312, typeof(Mos6569), typeof(Sid6581))]
+    [InlineData("pet64ntsc", 65 * 263, typeof(Mos6567), typeof(Sid6581))]
+    [InlineData("ultimax", 65 * 263, typeof(Mos6567), typeof(Sid6581))]
     [InlineData("c64gs", 63 * 312, typeof(Mos8565), typeof(Sid8580))]
+    [InlineData("c64jap", 65 * 263, typeof(Mos6567), typeof(Sid6581))]
     public void ArchitectureBuilder_UsesProfileTimingAndChipDefaults(
         string selector,
         int expectedFrameCycles,
@@ -269,5 +463,27 @@ public sealed class C64MachineProfileTests
 
         session.Architecture.Should().BeAssignableTo<IProfiledArchitectureDescriptor>();
         ((IProfiledArchitectureDescriptor)session.Architecture).MachineProfile.Id.Should().Be(selector);
+    }
+
+    private static int ExpectedNativeModel(string profileId)
+    {
+        return profileId switch
+        {
+            "c64" => 0,
+            "c64c" => 1,
+            "c64old" => 2,
+            "ntsc" => 3,
+            "newntsc" => 4,
+            "oldntsc" => 5,
+            "paln" => 6,
+            "sx64pal" => 7,
+            "sx64ntsc" => 8,
+            "c64jap" => 9,
+            "c64gs" => 10,
+            "pet64pal" => 11,
+            "pet64ntsc" => 12,
+            "ultimax" => 13,
+            _ => throw new ArgumentOutOfRangeException(nameof(profileId), profileId, "Unknown x64sc profile id.")
+        };
     }
 }

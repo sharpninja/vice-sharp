@@ -21,6 +21,16 @@ public interface IViceNative : IDisposable
     void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode);
 
     /// <summary>
+    /// Attach a disk image path to the native emulator drive.
+    /// </summary>
+    void AttachDisk(uint unit, uint drive, string path);
+
+    /// <summary>
+    /// Detach the disk image from the native emulator drive.
+    /// </summary>
+    void DetachDisk(uint unit, uint drive);
+
+    /// <summary>
     /// Read a byte from native physical C64 RAM without bus side effects.
     /// </summary>
     byte PeekRam(ushort address);
@@ -29,6 +39,11 @@ public interface IViceNative : IDisposable
     /// Get current full machine state
     /// </summary>
     MachineState GetState();
+
+    /// <summary>
+    /// Get current native VIC-II timing state for lockstep diagnostics.
+    /// </summary>
+    NativeVicState GetVicState();
 }
 
 /// <summary>
@@ -46,4 +61,14 @@ public readonly struct MachineState
 
     // Cycle counter
     public long Cycle { get; init; }
+}
+
+public readonly struct NativeVicState
+{
+    public uint Cycle { get; init; }
+    public ushort RasterLine { get; init; }
+    public byte RasterCycle { get; init; }
+    public byte BadLine { get; init; }
+    public byte DisplayState { get; init; }
+    public byte SpriteDma { get; init; }
 }

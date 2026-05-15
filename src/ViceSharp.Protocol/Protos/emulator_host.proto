@@ -22,6 +22,13 @@ service EmulatorHost {
   rpc Shutdown(SessionRequest) returns (EmulatorCommandResponse);
 }
 
+service SettingsService {
+  rpc ListProfiles(SessionRequest) returns (ListSettingsProfilesResponse);
+  rpc GetSettings(SessionRequest) returns (GetSettingsResponse);
+  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse);
+  rpc ValidateResources(ValidateSettingsResourcesRequest) returns (ValidateSettingsResourcesResponse);
+}
+
 service MediaService {
   rpc ListMedia(SessionRequest) returns (ListMediaResponse);
   rpc AttachMedia(AttachMediaRequest) returns (AttachMediaResponse);
@@ -45,6 +52,13 @@ service InputService {
 
 service MonitorService {
   rpc ExecuteCommand(ExecuteMonitorCommandRequest) returns (MonitorCommandResponse);
+  rpc ReadRegisters(SessionRequest) returns (MonitorRegistersResponse);
+  rpc Disassemble(MonitorDisassemblyRequest) returns (MonitorDisassemblyResponse);
+  rpc ListBreakpoints(SessionRequest) returns (MonitorBreakpointsResponse);
+  rpc AddBreakpoint(MonitorBreakpointRequest) returns (MonitorBreakpointsResponse);
+  rpc RemoveBreakpoint(MonitorBreakpointRequest) returns (MonitorBreakpointsResponse);
+  rpc ReadMemory(MonitorReadMemoryRequest) returns (MonitorMemoryResponse);
+  rpc WriteMemory(MonitorWriteMemoryRequest) returns (MonitorMemoryWriteResponse);
 }
 
 service SnapshotService {
@@ -90,12 +104,26 @@ enum InputPort {
   INPUT_PORT_JOYSTICK1 = 0;
   INPUT_PORT_JOYSTICK2 = 1;
   INPUT_PORT_KEYBOARD = 2;
+  INPUT_PORT_PRIMARY_JOYSTICK = 3;
 }
 
 enum CaptureKind {
   CAPTURE_KIND_SCREENSHOT = 0;
   CAPTURE_KIND_VIDEO = 1;
   CAPTURE_KIND_AUDIO = 2;
+}
+
+enum SettingApplyScope {
+  SETTING_APPLY_SCOPE_LIVE = 0;
+  SETTING_APPLY_SCOPE_RESTART_REQUIRED = 1;
+}
+
+enum SettingsResourceKind {
+  SETTINGS_RESOURCE_KIND_DISPLAY = 0;
+  SETTINGS_RESOURCE_KIND_INPUT = 1;
+  SETTINGS_RESOURCE_KIND_FILE = 2;
+  SETTINGS_RESOURCE_KIND_AUDIO = 3;
+  SETTINGS_RESOURCE_KIND_RESOURCE = 4;
 }
 
 message MachineStateDto {
@@ -123,6 +151,9 @@ message EmulatorStatusDto {
   double effective_clock_percent = 12;
   uint32 pc = 13;
   string model_id = 14;
+  string host_automation_description = 15;
+  bool host_automation_active = 16;
+  string last_host_automation_error = 17;
 }
 
 message CreateEmulatorSessionRequest {
@@ -177,6 +208,111 @@ message GetEmulatorStatusResponse {
 message EmulatorCommandResponse {
   RpcStatus status = 1;
   EmulatorStatusDto emulator_status = 2;
+}
+
+message SettingsProfileDto {
+  string id = 1;
+  string display_name = 2;
+  string machine = 3;
+  bool is_current = 4;
+  bool is_available = 5;
+  string description = 6;
+}
+
+message LimiterSettingsDto {
+  double rate_percent = 1;
+  bool is_enabled = 2;
+}
+
+message DisplaySettingsDto {
+  string renderer = 1;
+  string palette = 2;
+  bool show_border = 3;
+  bool maintain_aspect_ratio = 4;
+  string scale = 5;
+  string crop_mode = 6;
+  string aspect_mode = 7;
+}
+
+message InputSettingsDto {
+  string keyboard_map_id = 1;
+  InputPort primary_joystick_port = 2;
+  bool swap_joystick_ports = 3;
+  string mode = 4;
+}
+
+message AudioSettingsDto {
+  string mode = 1;
+}
+
+message ResourceSettingsDto {
+  string mode = 1;
+}
+
+message SessionSettingsDto {
+  string profile_id = 1;
+  LimiterSettingsDto limiter = 2;
+  DisplaySettingsDto display = 3;
+  InputSettingsDto input = 4;
+  AudioSettingsDto audio = 5;
+  ResourceSettingsDto resources = 6;
+}
+
+message SettingApplyDiagnosticDto {
+  string setting = 1;
+  SettingApplyScope scope = 2;
+  bool applied_live = 3;
+  bool restart_required = 4;
+  string message = 5;
+}
+
+message SettingsResourceValidationDto {
+  string resource_key = 1;
+  SettingsResourceKind kind = 2;
+  bool is_valid = 3;
+  bool restart_required = 4;
+  string message = 5;
+}
+
+message UpdateSettingsRequest {
+  string session_id = 1;
+  LimiterSettingsDto limiter = 2;
+  DisplaySettingsDto display = 3;
+  InputSettingsDto input = 4;
+  string profile_id = 5;
+  bool restart_session = 6;
+  AudioSettingsDto audio = 7;
+  ResourceSettingsDto resources = 8;
+}
+
+message ValidateSettingsResourcesRequest {
+  string session_id = 1;
+  DisplaySettingsDto display = 2;
+  InputSettingsDto input = 3;
+  LimiterSettingsDto limiter = 4;
+  AudioSettingsDto audio = 5;
+  ResourceSettingsDto resources = 6;
+}
+
+message ListSettingsProfilesResponse {
+  RpcStatus status = 1;
+  repeated SettingsProfileDto profiles = 2;
+}
+
+message GetSettingsResponse {
+  RpcStatus status = 1;
+  SessionSettingsDto settings = 2;
+}
+
+message UpdateSettingsResponse {
+  RpcStatus status = 1;
+  SessionSettingsDto settings = 2;
+  repeated SettingApplyDiagnosticDto diagnostics = 3;
+}
+
+message ValidateSettingsResourcesResponse {
+  RpcStatus status = 1;
+  repeated SettingsResourceValidationDto resources = 2;
 }
 
 message MediaAttachmentDto {
@@ -250,6 +386,9 @@ message KeyStateDto {
   string key = 1;
   bool is_pressed = 2;
   bool applied_to_runtime = 3;
+  string physical_key = 4;
+  string text = 5;
+  int32 modifiers = 6;
 }
 
 message JoystickStateDto {
@@ -330,10 +469,78 @@ message ExecuteMonitorCommandRequest {
   string command = 2;
 }
 
+message MonitorReadMemoryRequest {
+  string session_id = 1;
+  uint32 address = 2;
+  uint32 length = 3;
+}
+
+message MonitorWriteMemoryRequest {
+  string session_id = 1;
+  uint32 address = 2;
+  bytes data = 3;
+}
+
+message MonitorDisassemblyRequest {
+  string session_id = 1;
+  uint32 address = 2;
+  uint32 count = 3;
+}
+
+message MonitorBreakpointRequest {
+  string session_id = 1;
+  uint32 address = 2;
+}
+
 message MonitorCommandResponse {
   RpcStatus status = 1;
   string output = 2;
   EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorRegistersResponse {
+  RpcStatus status = 1;
+  MachineStateDto registers = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorDisassemblyLineDto {
+  uint32 address = 1;
+  bytes instruction_bytes = 2;
+  string text = 3;
+  uint32 length = 4;
+  uint32 next_address = 5;
+}
+
+message MonitorDisassemblyResponse {
+  RpcStatus status = 1;
+  repeated MonitorDisassemblyLineDto lines = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorBreakpointDto {
+  uint32 address = 1;
+  bool is_enabled = 2;
+}
+
+message MonitorBreakpointsResponse {
+  RpcStatus status = 1;
+  repeated MonitorBreakpointDto breakpoints = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorMemoryResponse {
+  RpcStatus status = 1;
+  uint32 address = 2;
+  bytes data = 3;
+  EmulatorStatusDto emulator_status = 4;
+}
+
+message MonitorMemoryWriteResponse {
+  RpcStatus status = 1;
+  uint32 address = 2;
+  uint32 bytes_written = 3;
+  EmulatorStatusDto emulator_status = 4;
 }
 
 message SnapshotDto {

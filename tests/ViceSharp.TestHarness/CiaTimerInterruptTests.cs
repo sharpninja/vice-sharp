@@ -20,8 +20,9 @@ public sealed class CiaTimerInterruptTests
         cia.Write(0xDC0D, 0x81);
         cia.Write(0xDC0E, 0x11);
 
-        cia.Tick();
-        cia.Tick();
+        for (var cycle = 0; cycle < 4; cycle++)
+            cia.Tick();
+
         Assert.False(irq.IsAsserted);
 
         cia.Tick();
@@ -42,7 +43,12 @@ public sealed class CiaTimerInterruptTests
         cia.Write(0xDC05, 0x00);
         cia.Write(0xDC0E, 0x11);
 
-        cia.Tick();
+        for (var cycle = 0; cycle < 3; cycle++)
+            cia.Tick();
+
+        Assert.False(irq.IsAsserted);
+        Assert.Equal(0x00, cia.Read(0xDC0D));
+
         cia.Tick();
 
         Assert.False(irq.IsAsserted);
@@ -72,12 +78,13 @@ public sealed class CiaTimerInterruptTests
 
         cia.Write(0xDC0E, 0x11);
 
-        cia.Tick();
-        cia.Tick();
+        for (var cycle = 0; cycle < 9; cycle++)
+            cia.Tick();
+
         Assert.False(irq.IsAsserted);
 
         cia.Tick();
-        cia.Tick();
+
         Assert.True(irq.IsAsserted);
         Assert.Equal(0x83, cia.Read(0xDC0D));
     }
@@ -133,7 +140,7 @@ public sealed class CiaTimerInterruptTests
         cia2.Write(0xDD0D, 0x81);
         cia2.Write(0xDD0E, 0x11);
 
-        clock.Step();
+        clock.Step(3);
         Assert.Equal(0x0400, cpu.PC);
 
         clock.Step();
@@ -166,7 +173,7 @@ public sealed class CiaTimerInterruptTests
         cia2.Write(0xDD0D, 0x81);
         cia2.Write(0xDD0E, 0x11);
 
-        clock.Step(2);
+        clock.Step(4);
         var stackAfterFirstNmi = cpu.S;
 
         clock.Step(4);

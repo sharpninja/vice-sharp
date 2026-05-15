@@ -12,6 +12,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     private readonly GrpcContracts.MediaService.MediaServiceClient _mediaClient;
     private readonly GrpcContracts.VideoService.VideoServiceClient _videoClient;
     private readonly GrpcContracts.InputService.InputServiceClient _inputClient;
+    private readonly GrpcContracts.SettingsService.SettingsServiceClient _settingsClient;
     private readonly GrpcContracts.MonitorService.MonitorServiceClient _monitorClient;
     private string _sessionId;
 
@@ -23,6 +24,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         _mediaClient = new GrpcContracts.MediaService.MediaServiceClient(_channel);
         _videoClient = new GrpcContracts.VideoService.VideoServiceClient(_channel);
         _inputClient = new GrpcContracts.InputService.InputServiceClient(_channel);
+        _settingsClient = new GrpcContracts.SettingsService.SettingsServiceClient(_channel);
         _monitorClient = new GrpcContracts.MonitorService.MonitorServiceClient(_channel);
         _sessionId = sessionId;
     }
@@ -109,6 +111,75 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         return MapCommand(response);
     }
 
+    public async ValueTask<ListSettingsProfilesResponse> ListSettingsProfilesAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _settingsClient.ListProfilesAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new ListSettingsProfilesResponse(
+            MapStatus(response.Status),
+            response.Profiles.Select(MapSettingsProfile).ToArray());
+    }
+
+    public async ValueTask<GetSettingsResponse> GetSettingsAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _settingsClient.GetSettingsAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new GetSettingsResponse(MapStatus(response.Status), response.Settings is null ? null : MapSessionSettings(response.Settings));
+    }
+
+    public async ValueTask<UpdateSettingsResponse> UpdateSettingsAsync(
+        UpdateSettingsRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _settingsClient.UpdateSettingsAsync(
+            new GrpcContracts.UpdateSettingsRequest
+            {
+                SessionId = sessionId,
+                Limiter = request.Limiter is null ? null : MapLimiter(request.Limiter),
+                Display = request.Display is null ? null : MapDisplay(request.Display),
+                Input = request.Input is null ? null : MapInput(request.Input),
+                Audio = request.Audio is null ? null : MapAudio(request.Audio),
+                Resources = request.Resources is null ? null : MapResources(request.Resources),
+                ProfileId = request.ProfileId,
+                RestartSession = request.RestartSession
+            },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new UpdateSettingsResponse(
+            MapStatus(response.Status),
+            response.Settings is null ? null : MapSessionSettings(response.Settings),
+            response.Diagnostics.Select(MapSettingDiagnostic).ToArray());
+    }
+
+    public async ValueTask<ValidateSettingsResourcesResponse> ValidateSettingsResourcesAsync(
+        ValidateSettingsResourcesRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _settingsClient.ValidateResourcesAsync(
+            new GrpcContracts.ValidateSettingsResourcesRequest
+            {
+                SessionId = sessionId,
+                Limiter = request.Limiter is null ? null : MapLimiter(request.Limiter),
+                Display = request.Display is null ? null : MapDisplay(request.Display),
+                Input = request.Input is null ? null : MapInput(request.Input),
+                Audio = request.Audio is null ? null : MapAudio(request.Audio),
+                Resources = request.Resources is null ? null : MapResources(request.Resources)
+            },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new ValidateSettingsResourcesResponse(
+            MapStatus(response.Status),
+            response.Resources.Select(MapResourceValidation).ToArray());
+    }
+
     public async ValueTask<ListMediaResponse> ListMediaAsync(CancellationToken cancellationToken = default)
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
@@ -126,18 +197,41 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         string filePath,
         bool isReadOnly,
         CancellationToken cancellationToken = default)
+        => await AttachMediaCoreAsync(slot, filePath, isReadOnly, null, string.Empty, cancellationToken)
+            .ConfigureAwait(false);
+
+    public async ValueTask<AttachMediaResponse> AttachMediaAsync(
+        MediaSlot slot,
+        string filePath,
+        bool isReadOnly,
+        byte[] payload,
+        string displayName,
+        CancellationToken cancellationToken = default)
+        => await AttachMediaCoreAsync(slot, filePath, isReadOnly, payload, displayName, cancellationToken)
+            .ConfigureAwait(false);
+
+    private async ValueTask<AttachMediaResponse> AttachMediaCoreAsync(
+        MediaSlot slot,
+        string filePath,
+        bool isReadOnly,
+        byte[]? payload,
+        string displayName,
+        CancellationToken cancellationToken)
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
-        var response = await _mediaClient.AttachMediaAsync(
-            new GrpcContracts.AttachMediaRequest
-            {
-                SessionId = sessionId,
-                Slot = MapSlot(slot),
-                FilePath = filePath,
-                DisplayName = Path.GetFileName(filePath),
-                IsReadOnly = isReadOnly
-            },
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+        var request = new GrpcContracts.AttachMediaRequest
+        {
+            SessionId = sessionId,
+            Slot = MapSlot(slot),
+            FilePath = payload is { Length: > 0 } ? string.Empty : filePath,
+            DisplayName = string.IsNullOrWhiteSpace(displayName) ? Path.GetFileName(filePath) : displayName,
+            IsReadOnly = isReadOnly
+        };
+        if (payload is { Length: > 0 })
+            request.Payload = ByteString.CopyFrom(payload);
+
+        var response = await _mediaClient.AttachMediaAsync(request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         return new AttachMediaResponse(MapStatus(response.Status), response.Attachment is null ? null : MapAttachment(response.Attachment));
     }
@@ -157,6 +251,9 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     public async ValueTask<InputCommandResponse> SetKeyStateAsync(
         string key,
         bool isPressed,
+        string physicalKey = "",
+        string text = "",
+        int modifiers = 0,
         CancellationToken cancellationToken = default)
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
@@ -165,7 +262,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             {
                 SessionId = sessionId,
                 Key = key,
-                IsPressed = isPressed
+                IsPressed = isPressed,
+                PhysicalKey = physicalKey,
+                Text = text,
+                Modifiers = modifiers
             },
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
@@ -370,7 +470,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             value.EffectiveClockHz,
             value.EffectiveClockPercent,
             (ushort)value.Pc,
-            value.ModelId);
+            value.ModelId,
+            value.HostAutomationDescription,
+            value.HostAutomationActive,
+            value.LastHostAutomationError);
     }
 
     private static InputStateDto? MapInputState(GrpcContracts.InputStateDto? inputState)
@@ -379,7 +482,13 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             return null;
 
         var keys = inputState.Keys
-            .Select(key => new KeyStateDto(key.Key, key.IsPressed, key.AppliedToRuntime))
+            .Select(key => new KeyStateDto(
+                key.Key,
+                key.IsPressed,
+                key.AppliedToRuntime,
+                key.PhysicalKey,
+                key.Text,
+                key.Modifiers))
             .ToArray();
         var joysticks = inputState.Joysticks
             .Select(joystick => new JoystickPortStateDto(
@@ -401,5 +510,130 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             map.IsSelected,
             map.IsBuiltin,
             map.Error);
+    }
+
+    private static SettingsProfileDto MapSettingsProfile(GrpcContracts.SettingsProfileDto profile)
+    {
+        return new SettingsProfileDto(
+            profile.Id,
+            profile.DisplayName,
+            profile.Machine,
+            profile.IsCurrent,
+            profile.IsAvailable,
+            profile.Description);
+    }
+
+    private static SessionSettingsDto MapSessionSettings(GrpcContracts.SessionSettingsDto settings)
+    {
+        return new SessionSettingsDto(
+            settings.ProfileId,
+            settings.Limiter is null ? new LimiterSettingsDto() : MapLimiter(settings.Limiter),
+            settings.Display is null ? new DisplaySettingsDto() : MapDisplay(settings.Display),
+            settings.Input is null ? new InputSettingsDto() : MapInput(settings.Input),
+            settings.Audio is null ? new AudioSettingsDto() : MapAudio(settings.Audio),
+            settings.Resources is null ? new ResourceSettingsDto() : MapResources(settings.Resources));
+    }
+
+    private static LimiterSettingsDto MapLimiter(GrpcContracts.LimiterSettingsDto limiter)
+    {
+        return new LimiterSettingsDto(limiter.RatePercent, limiter.IsEnabled);
+    }
+
+    private static DisplaySettingsDto MapDisplay(GrpcContracts.DisplaySettingsDto display)
+    {
+        var defaults = new DisplaySettingsDto();
+        return new DisplaySettingsDto(
+            DefaultIfBlank(display.Renderer, defaults.Renderer),
+            DefaultIfBlank(display.Palette, defaults.Palette),
+            display.ShowBorder,
+            display.MaintainAspectRatio,
+            DefaultIfBlank(display.Scale, defaults.Scale),
+            DefaultIfBlank(display.CropMode, defaults.CropMode),
+            DefaultIfBlank(display.AspectMode, defaults.AspectMode));
+    }
+
+    private static InputSettingsDto MapInput(GrpcContracts.InputSettingsDto input)
+    {
+        var defaults = new InputSettingsDto();
+        return new InputSettingsDto(
+            DefaultIfBlank(input.KeyboardMapId, defaults.KeyboardMapId),
+            (InputPort)(int)input.PrimaryJoystickPort,
+            input.SwapJoystickPorts,
+            DefaultIfBlank(input.Mode, defaults.Mode));
+    }
+
+    private static AudioSettingsDto MapAudio(GrpcContracts.AudioSettingsDto audio)
+    {
+        return new AudioSettingsDto(DefaultIfBlank(audio.Mode, new AudioSettingsDto().Mode));
+    }
+
+    private static ResourceSettingsDto MapResources(GrpcContracts.ResourceSettingsDto resources)
+    {
+        return new ResourceSettingsDto(DefaultIfBlank(resources.Mode, new ResourceSettingsDto().Mode));
+    }
+
+    private static SettingApplyDiagnosticDto MapSettingDiagnostic(GrpcContracts.SettingApplyDiagnosticDto diagnostic)
+    {
+        return new SettingApplyDiagnosticDto(
+            diagnostic.Setting,
+            (SettingApplyScope)(int)diagnostic.Scope,
+            diagnostic.AppliedLive,
+            diagnostic.RestartRequired,
+            diagnostic.Message);
+    }
+
+    private static SettingsResourceValidationDto MapResourceValidation(GrpcContracts.SettingsResourceValidationDto validation)
+    {
+        return new SettingsResourceValidationDto(
+            validation.ResourceKey,
+            (SettingsResourceKind)(int)validation.Kind,
+            validation.IsValid,
+            validation.RestartRequired,
+            validation.Message);
+    }
+
+    private static GrpcContracts.LimiterSettingsDto MapLimiter(LimiterSettingsDto limiter)
+    {
+        return new GrpcContracts.LimiterSettingsDto { RatePercent = limiter.RatePercent, IsEnabled = limiter.IsEnabled };
+    }
+
+    private static GrpcContracts.DisplaySettingsDto MapDisplay(DisplaySettingsDto display)
+    {
+        return new GrpcContracts.DisplaySettingsDto
+        {
+            Renderer = display.Renderer,
+            Palette = display.Palette,
+            ShowBorder = display.ShowBorder,
+            MaintainAspectRatio = display.MaintainAspectRatio,
+            Scale = display.Scale,
+            CropMode = display.CropMode,
+            AspectMode = display.AspectMode
+        };
+    }
+
+    private static GrpcContracts.InputSettingsDto MapInput(InputSettingsDto input)
+    {
+        return new GrpcContracts.InputSettingsDto
+        {
+            KeyboardMapId = input.KeyboardMapId,
+            PrimaryJoystickPort = (GrpcContracts.InputPort)(int)input.PrimaryJoystickPort,
+            SwapJoystickPorts = input.SwapJoystickPorts,
+            Mode = input.Mode
+        };
+    }
+
+    private static GrpcContracts.AudioSettingsDto MapAudio(AudioSettingsDto audio)
+    {
+        return new GrpcContracts.AudioSettingsDto { Mode = audio.Mode };
+    }
+
+    private static GrpcContracts.ResourceSettingsDto MapResources(ResourceSettingsDto resources)
+    {
+        return new GrpcContracts.ResourceSettingsDto { Mode = resources.Mode };
+    }
+
+    private static string DefaultIfBlank(string value, string fallback)
+    {
+        return string.IsNullOrWhiteSpace(value) ? fallback : value;
     }
 }

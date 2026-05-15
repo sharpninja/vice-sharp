@@ -41,4 +41,14 @@ public sealed class EmulatorRuntimeRegistry
             return _sessions.Remove(sessionId);
         }
     }
+
+    public void Replace(EmulatorRuntimeSession session)
+    {
+        ArgumentNullException.ThrowIfNull(session);
+
+        lock (_syncRoot)
+        {
+            _sessions[session.SessionId] = session;
+        }
+    }
 }

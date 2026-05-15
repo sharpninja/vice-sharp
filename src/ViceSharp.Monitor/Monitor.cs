@@ -64,7 +64,11 @@ public sealed class Monitor : IMonitor
             _machine.StepInstruction();
             var s = _machine.GetState();
             if (_breakpoints.Contains(s.PC)) { results.Add($"BREAK ${s.PC:X4}"); IsPaused = true; break; }
-            if (count <= 4) results.Add($"{s.PC:X4}  {_machine.Bus.Read(s.PC):X2} {Disasm(s.PC, _machine.Bus.Read(s.PC))}");
+            if (count <= 4)
+            {
+                var op = _machine.Bus.Peek(s.PC);
+                results.Add($"{s.PC:X4}  {op:X2} {Disasm(s.PC, op)}");
+            }
         }
         var f = _machine.GetState();
         results.Add($"PC: {f.PC:X4} A: {f.A:X2} X: {f.X:X2} Y: {f.Y:X2}");
@@ -105,15 +109,32 @@ public sealed class Monitor : IMonitor
         ushort addr = _machine.GetState().PC;
         if (parts.Length > 1) ushort.TryParse(parts[1], System.Globalization.NumberStyles.HexNumber, null, out addr);
         int count = parts.Length > 2 && int.TryParse(parts[2], out var c) ? c : 8;
-        var lines = new List<string>();
+        var lines = Disassemble(addr, count)
+            .Select(entry => $"{entry.Address:X4}  {BitConverter.ToString(entry.Bytes).Replace("-", " ")} {entry.Text}");
+        return string.Join("\n", lines);
+    }
+
+    public IReadOnlyList<DisassemblyEntry> Disassemble(ushort address, int count)
+    {
+        if (count <= 0)
+            return [];
+
+        var entries = new List<DisassemblyEntry>(count);
         for (int i = 0; i < count; i++)
         {
-            var pc = addr;
-            var op = _machine.Bus.Read(pc);
-            lines.Add($"{pc:X4}  {op:X2} {Disasm(pc, op)}");
-            addr = (ushort)(pc + OpLen(op));
+            var pc = address;
+            var op = _machine.Bus.Peek(pc);
+            var length = (byte)OpLen(op);
+            var bytes = new byte[length];
+            for (var offset = 0; offset < length; offset++)
+                bytes[offset] = _machine.Bus.Peek((ushort)(pc + offset));
+
+            var nextAddress = (ushort)(pc + length);
+            entries.Add(new DisassemblyEntry(pc, bytes, Disasm(pc, op), length, nextAddress));
+            address = nextAddress;
         }
-        return string.Join("\n", lines);
+
+        return entries;
     }
 
     private static int OpLen(byte op) => op switch
@@ -126,8 +147,8 @@ public sealed class Monitor : IMonitor
     private string Disasm(ushort pc, byte op)
     {
         var b = _machine.Bus;
-        var b1 = b.Read((ushort)(pc + 1));
-        var b2 = b.Read((ushort)(pc + 2));
+        var b1 = b.Peek((ushort)(pc + 1));
+        var b2 = b.Peek((ushort)(pc + 2));
         return op switch
         {
             0x00 => "BRK", 0x08 => "PHP", 0x0A => "ASL A", 0x18 => "CLC", 0x28 => "PLP",
@@ -224,4 +245,6 @@ public sealed class Monitor : IMonitor
         var s = _machine.GetState();
         return new RegisterSnapshot { A = s.A, X = s.X, Y = s.Y, S = s.S, P = s.P, PC = s.PC };
     }
+
+    IReadOnlyList<DisassemblyEntry> IMonitor.Disassemble(ushort address, int count) => Disassemble(address, count);
 }

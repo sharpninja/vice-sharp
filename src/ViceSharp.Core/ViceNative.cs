@@ -51,8 +51,32 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_cartridge")]
     private static partial int AttachCartridgeNative(IntPtr instance, byte* image, int length, int mappingMode);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_disk", StringMarshalling = StringMarshalling.Utf8)]
+    private static partial int AttachDiskNative(IntPtr instance, uint unit, uint drive, string path);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_detach_disk")]
+    private static partial int DetachDiskNative(IntPtr instance, uint unit, uint drive);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_peek_ram")]
     private static partial byte PeekRamNative(IntPtr instance, ushort address);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_read")]
+    public static partial byte ReadMemory(IntPtr instance, ushort address);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_write")]
+    public static partial void WriteMemory(IntPtr instance, ushort address, byte value);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_get_model")]
+    public static partial int GetModel(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_set_keyboard_matrix_key")]
+    private static partial int SetKeyboardMatrixKeyNative(IntPtr instance, int row, int column, int pressed);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_cia1_store")]
+    public static partial void StoreCia1Register(IntPtr instance, byte registerIndex, byte value);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_cia1_read")]
+    public static partial byte ReadCia1Register(IntPtr instance, byte registerIndex);
 
     [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_a")]
     public static partial byte GetA(IntPtr instance);
@@ -112,6 +136,46 @@ public static unsafe partial class ViceNative
             6 => (byte)(GetPC(instance) >> 8),
             _ => throw new ArgumentOutOfRangeException(nameof(registerId), registerId, "Expected CPU register id 0-6.")
         };
+    }
+
+    public static void AttachCartridge(IntPtr instance, ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
+    {
+        if (image.IsEmpty)
+            throw new ArgumentException("Cartridge image must not be empty.", nameof(image));
+
+        var imageBytes = image.ToArray();
+        fixed (byte* imagePointer = imageBytes)
+        {
+            var result = AttachCartridgeNative(instance, imagePointer, imageBytes.Length, (int)mappingMode);
+            if (result != 0)
+                throw new InvalidOperationException($"Native VICE failed to attach cartridge image. Error code: {result}.");
+        }
+    }
+
+    public static byte PeekRam(IntPtr instance, ushort address) => PeekRamNative(instance, address);
+
+    public static void AttachDisk(IntPtr instance, uint unit, uint drive, string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            throw new ArgumentException("Disk path is required.", nameof(path));
+
+        var result = AttachDiskNative(instance, unit, drive, path);
+        if (result != 0)
+            throw new InvalidOperationException($"Native VICE failed to attach disk unit {unit}, drive {drive}, path '{path}'. Error code: {result}.");
+    }
+
+    public static void DetachDisk(IntPtr instance, uint unit, uint drive)
+    {
+        var result = DetachDiskNative(instance, unit, drive);
+        if (result != 0)
+            throw new InvalidOperationException($"Native VICE failed to detach disk unit {unit}, drive {drive}. Error code: {result}.");
+    }
+
+    public static void SetKeyboardMatrixKey(IntPtr instance, int row, int column, bool pressed)
+    {
+        var result = SetKeyboardMatrixKeyNative(instance, row, column, pressed ? 1 : 0);
+        if (result != 0)
+            throw new InvalidOperationException($"Native VICE failed to set keyboard matrix key row {row}, column {column}. Error code: {result}.");
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -273,16 +337,17 @@ public static unsafe partial class ViceNative
 
         public void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
         {
-            if (image.IsEmpty)
-                throw new ArgumentException("Cartridge image must not be empty.", nameof(image));
+            ViceNative.AttachCartridge(_instance, image, mappingMode);
+        }
 
-            var imageBytes = image.ToArray();
-            fixed (byte* imagePointer = imageBytes)
-            {
-                var result = AttachCartridgeNative(_instance, imagePointer, imageBytes.Length, (int)mappingMode);
-                if (result != 0)
-                    throw new InvalidOperationException($"Native VICE failed to attach cartridge image. Error code: {result}.");
-            }
+        public void AttachDisk(uint unit, uint drive, string path)
+        {
+            ViceNative.AttachDisk(_instance, unit, drive, path);
+        }
+
+        public void DetachDisk(uint unit, uint drive)
+        {
+            ViceNative.DetachDisk(_instance, unit, drive);
         }
 
         public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
@@ -301,6 +366,22 @@ public static unsafe partial class ViceNative
             };
         }
 
+        public NativeVicState GetVicState()
+        {
+            var state = new ViceVicState();
+            global::ViceSharp.Core.ViceNative.GetVicState(_instance, ref state);
+
+            return new NativeVicState
+            {
+                Cycle = state.Cycle,
+                RasterLine = state.RasterLine,
+                RasterCycle = state.RasterCycle,
+                BadLine = state.BadLine,
+                DisplayState = state.DisplayState,
+                SpriteDma = state.SpriteDma
+            };
+        }
+
         public void Dispose()
         {
             Destroy(_instance);
@@ -309,7 +390,7 @@ public static unsafe partial class ViceNative
         private long ReadNativeCycle()
         {
             var state = new ViceVicState();
-            GetVicState(_instance, ref state);
+            global::ViceSharp.Core.ViceNative.GetVicState(_instance, ref state);
             return state.Cycle;
         }
     }

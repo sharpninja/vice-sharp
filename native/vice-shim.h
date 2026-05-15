@@ -20,7 +20,15 @@ VICE_SHIM_API void vice_machine_destroy(void* machine);
 VICE_SHIM_API void vice_machine_reset(void* machine);
 VICE_SHIM_API void vice_machine_step_cycle(void* machine);
 VICE_SHIM_API int vice_machine_attach_cartridge(void* machine, const uint8_t* image, int length, int mapping_mode);
+VICE_SHIM_API int vice_machine_attach_disk(void* machine, unsigned int unit, unsigned int drive, const char* path);
+VICE_SHIM_API int vice_machine_detach_disk(void* machine, unsigned int unit, unsigned int drive);
 VICE_SHIM_API uint8_t vice_machine_peek_ram(void* machine, uint16_t address);
+VICE_SHIM_API uint8_t vice_machine_read(void* machine, uint16_t address);
+VICE_SHIM_API void vice_machine_write(void* machine, uint16_t address, uint8_t value);
+VICE_SHIM_API int vice_machine_get_model(void* machine);
+VICE_SHIM_API int vice_machine_set_keyboard_matrix_key(void* machine, int row, int column, int pressed);
+VICE_SHIM_API void vice_machine_cia1_store(void* machine, uint8_t register_index, uint8_t value);
+VICE_SHIM_API uint8_t vice_machine_cia1_read(void* machine, uint8_t register_index);
 
 // CPU State
 VICE_SHIM_API uint8_t vice_cpu_get_a(void* machine);

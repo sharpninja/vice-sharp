@@ -192,7 +192,7 @@ public sealed class VideoRendererTests
         
         // Assert
         Assert.Equal(0, vic.CurrentRasterLine);
-        Assert.Equal(0, vic.RasterX);
+        Assert.Equal(Mos6569.ResetRasterCycle, vic.RasterX);
     }
 
     private static uint ReadPixel(byte[] frameBuffer, int x, int y)

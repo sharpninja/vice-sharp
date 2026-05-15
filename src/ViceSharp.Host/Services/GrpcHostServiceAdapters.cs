@@ -23,6 +23,7 @@ public static class GrpcHostServiceAdapters
         services.AddSingleton<MediaServiceHost>();
         services.AddSingleton<VideoServiceHost>();
         services.AddSingleton<InputServiceHost>();
+        services.AddSingleton<SettingsServiceHost>();
         services.AddSingleton<MonitorServiceHost>();
         services.AddSingleton<SnapshotServiceHost>();
         services.AddSingleton<CaptureServiceHost>();
@@ -31,6 +32,7 @@ public static class GrpcHostServiceAdapters
         services.AddSingleton<IMediaService>(provider => provider.GetRequiredService<MediaServiceHost>());
         services.AddSingleton<IVideoService>(provider => provider.GetRequiredService<VideoServiceHost>());
         services.AddSingleton<IInputService>(provider => provider.GetRequiredService<InputServiceHost>());
+        services.AddSingleton<ISettingsService>(provider => provider.GetRequiredService<SettingsServiceHost>());
         services.AddSingleton<IMonitorService>(provider => provider.GetRequiredService<MonitorServiceHost>());
         services.AddSingleton<ISnapshotService>(provider => provider.GetRequiredService<SnapshotServiceHost>());
         services.AddSingleton<ICaptureService>(provider => provider.GetRequiredService<CaptureServiceHost>());
@@ -45,6 +47,7 @@ public static class GrpcHostServiceAdapters
         endpoints.MapGrpcService<GrpcMediaServiceHost>();
         endpoints.MapGrpcService<GrpcVideoServiceHost>();
         endpoints.MapGrpcService<GrpcInputServiceHost>();
+        endpoints.MapGrpcService<GrpcSettingsServiceHost>();
         endpoints.MapGrpcService<GrpcMonitorServiceHost>();
         endpoints.MapGrpcService<GrpcSnapshotServiceHost>();
         endpoints.MapGrpcService<GrpcCaptureServiceHost>();
@@ -366,6 +369,84 @@ public sealed class GrpcInputServiceHost : GrpcContracts.InputService.InputServi
     }
 }
 
+public sealed class GrpcSettingsServiceHost : GrpcContracts.SettingsService.SettingsServiceBase
+{
+    private readonly ISettingsService _inner;
+
+    public GrpcSettingsServiceHost(ISettingsService inner)
+    {
+        _inner = inner;
+    }
+
+    public override async Task<GrpcContracts.ListSettingsProfilesResponse> ListProfiles(
+        GrpcContracts.SessionRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.ListProfilesAsync(new SessionRequest(request.SessionId), context.CancellationToken)
+            .ConfigureAwait(false);
+        var result = new GrpcContracts.ListSettingsProfilesResponse { Status = HostMap.Map(response.Status) };
+        result.Profiles.AddRange(response.Profiles.Select(HostMap.Map));
+        return result;
+    }
+
+    public override async Task<GrpcContracts.GetSettingsResponse> GetSettings(
+        GrpcContracts.SessionRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.GetSettingsAsync(new SessionRequest(request.SessionId), context.CancellationToken)
+            .ConfigureAwait(false);
+        return new GrpcContracts.GetSettingsResponse
+        {
+            Status = HostMap.Map(response.Status),
+            Settings = HostMap.Map(response.Settings)
+        };
+    }
+
+    public override async Task<GrpcContracts.UpdateSettingsResponse> UpdateSettings(
+        GrpcContracts.UpdateSettingsRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.UpdateSettingsAsync(
+            new UpdateSettingsRequest(
+                request.SessionId,
+                request.Limiter is null ? null : HostMap.Map(request.Limiter),
+                request.Display is null ? null : HostMap.Map(request.Display),
+                request.Input is null ? null : HostMap.Map(request.Input),
+                request.ProfileId,
+                request.RestartSession,
+                request.Audio is null ? null : HostMap.Map(request.Audio),
+                request.Resources is null ? null : HostMap.Map(request.Resources)),
+            context.CancellationToken).ConfigureAwait(false);
+
+        var result = new GrpcContracts.UpdateSettingsResponse
+        {
+            Status = HostMap.Map(response.Status),
+            Settings = HostMap.Map(response.Settings)
+        };
+        result.Diagnostics.AddRange(response.Diagnostics.Select(HostMap.Map));
+        return result;
+    }
+
+    public override async Task<GrpcContracts.ValidateSettingsResourcesResponse> ValidateResources(
+        GrpcContracts.ValidateSettingsResourcesRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.ValidateResourcesAsync(
+            new ValidateSettingsResourcesRequest(
+                request.SessionId,
+                request.Limiter is null ? null : HostMap.Map(request.Limiter),
+                request.Display is null ? null : HostMap.Map(request.Display),
+                request.Input is null ? null : HostMap.Map(request.Input),
+                request.Audio is null ? null : HostMap.Map(request.Audio),
+                request.Resources is null ? null : HostMap.Map(request.Resources)),
+            context.CancellationToken).ConfigureAwait(false);
+
+        var result = new GrpcContracts.ValidateSettingsResourcesResponse { Status = HostMap.Map(response.Status) };
+        result.Resources.AddRange(response.Resources.Select(HostMap.Map));
+        return result;
+    }
+}
+
 public sealed class GrpcMonitorServiceHost : GrpcContracts.MonitorService.MonitorServiceBase
 {
     private readonly IMonitorService _inner;
@@ -389,6 +470,100 @@ public sealed class GrpcMonitorServiceHost : GrpcContracts.MonitorService.Monito
             Output = response.Output,
             EmulatorStatus = HostMap.Map(response.EmulatorStatus)
         };
+    }
+
+    public override async Task<GrpcContracts.MonitorRegistersResponse> ReadRegisters(
+        GrpcContracts.SessionRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.ReadRegistersAsync(
+            new SessionRequest(request.SessionId),
+            context.CancellationToken).ConfigureAwait(false);
+
+        return new GrpcContracts.MonitorRegistersResponse
+        {
+            Status = HostMap.Map(response.Status),
+            Registers = HostMap.Map(response.Registers),
+            EmulatorStatus = HostMap.Map(response.EmulatorStatus)
+        };
+    }
+
+    public override async Task<GrpcContracts.MonitorDisassemblyResponse> Disassemble(
+        GrpcContracts.MonitorDisassemblyRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.DisassembleAsync(
+            new MonitorDisassemblyRequest(request.SessionId, (int)request.Address, (int)request.Count),
+            context.CancellationToken).ConfigureAwait(false);
+
+        var result = new GrpcContracts.MonitorDisassemblyResponse
+        {
+            Status = HostMap.Map(response.Status),
+            EmulatorStatus = HostMap.Map(response.EmulatorStatus)
+        };
+        result.Lines.AddRange(response.Lines.Select(HostMap.Map));
+        return result;
+    }
+
+    public override Task<GrpcContracts.MonitorBreakpointsResponse> ListBreakpoints(
+        GrpcContracts.SessionRequest request,
+        ServerCallContext context)
+        => MapBreakpointsAsync(_inner.ListBreakpointsAsync(new SessionRequest(request.SessionId), context.CancellationToken));
+
+    public override Task<GrpcContracts.MonitorBreakpointsResponse> AddBreakpoint(
+        GrpcContracts.MonitorBreakpointRequest request,
+        ServerCallContext context)
+        => MapBreakpointsAsync(_inner.AddBreakpointAsync(new MonitorBreakpointRequest(request.SessionId, (int)request.Address), context.CancellationToken));
+
+    public override Task<GrpcContracts.MonitorBreakpointsResponse> RemoveBreakpoint(
+        GrpcContracts.MonitorBreakpointRequest request,
+        ServerCallContext context)
+        => MapBreakpointsAsync(_inner.RemoveBreakpointAsync(new MonitorBreakpointRequest(request.SessionId, (int)request.Address), context.CancellationToken));
+
+    public override async Task<GrpcContracts.MonitorMemoryResponse> ReadMemory(
+        GrpcContracts.MonitorReadMemoryRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.ReadMemoryAsync(
+            new MonitorReadMemoryRequest(request.SessionId, (int)request.Address, (int)request.Length),
+            context.CancellationToken).ConfigureAwait(false);
+
+        return new GrpcContracts.MonitorMemoryResponse
+        {
+            Status = HostMap.Map(response.Status),
+            Address = (uint)Math.Max(0, response.Address),
+            Data = ByteString.CopyFrom(response.Data),
+            EmulatorStatus = HostMap.Map(response.EmulatorStatus)
+        };
+    }
+
+    public override async Task<GrpcContracts.MonitorMemoryWriteResponse> WriteMemory(
+        GrpcContracts.MonitorWriteMemoryRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.WriteMemoryAsync(
+            new MonitorWriteMemoryRequest(request.SessionId, (int)request.Address, request.Data.ToByteArray()),
+            context.CancellationToken).ConfigureAwait(false);
+
+        return new GrpcContracts.MonitorMemoryWriteResponse
+        {
+            Status = HostMap.Map(response.Status),
+            Address = (uint)Math.Max(0, response.Address),
+            BytesWritten = (uint)Math.Max(0, response.BytesWritten),
+            EmulatorStatus = HostMap.Map(response.EmulatorStatus)
+        };
+    }
+
+    private static async Task<GrpcContracts.MonitorBreakpointsResponse> MapBreakpointsAsync(ValueTask<MonitorBreakpointsResponse> task)
+    {
+        var response = await task.ConfigureAwait(false);
+        var result = new GrpcContracts.MonitorBreakpointsResponse
+        {
+            Status = HostMap.Map(response.Status),
+            EmulatorStatus = HostMap.Map(response.EmulatorStatus)
+        };
+        result.Breakpoints.AddRange(response.Breakpoints.Select(HostMap.Map));
+        return result;
     }
 }
 
@@ -502,6 +677,40 @@ internal static class GrpcHostMapping
     public static GrpcContracts.RpcStatus Map(RpcStatus status)
         => new() { Code = (GrpcContracts.RpcStatusCode)(int)status.Code, Message = status.Message };
 
+    public static GrpcContracts.MachineStateDto? Map(MachineStateDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.MachineStateDto
+        {
+            A = value.A,
+            X = value.X,
+            Y = value.Y,
+            S = value.S,
+            P = value.P,
+            Pc = value.Pc,
+            Cycle = value.Cycle
+        };
+    }
+
+    public static GrpcContracts.MonitorDisassemblyLineDto Map(MonitorDisassemblyLineDto value)
+        => new()
+        {
+            Address = (uint)Math.Max(0, value.Address),
+            InstructionBytes = ByteString.CopyFrom(value.Bytes),
+            Text = value.Text,
+            Length = (uint)Math.Max(0, value.Length),
+            NextAddress = (uint)Math.Max(0, value.NextAddress)
+        };
+
+    public static GrpcContracts.MonitorBreakpointDto Map(MonitorBreakpointDto value)
+        => new()
+        {
+            Address = (uint)Math.Max(0, value.Address),
+            IsEnabled = value.IsEnabled
+        };
+
     public static GrpcContracts.EmulatorStatusDto? Map(EmulatorStatusDto? value)
     {
         if (value is null)
@@ -531,7 +740,10 @@ internal static class GrpcHostMapping
             EffectiveClockHz = value.EffectiveClockHz,
             EffectiveClockPercent = value.EffectiveClockPercent,
             Pc = value.Pc,
-            ModelId = value.ModelId
+            ModelId = value.ModelId,
+            HostAutomationDescription = value.HostAutomationDescription,
+            HostAutomationActive = value.HostAutomationActive,
+            LastHostAutomationError = value.LastHostAutomationError
         };
     }
 
@@ -562,7 +774,10 @@ internal static class GrpcHostMapping
         {
             Key = key.Key,
             IsPressed = key.IsPressed,
-            AppliedToRuntime = key.AppliedToRuntime
+            AppliedToRuntime = key.AppliedToRuntime,
+            PhysicalKey = key.PhysicalKey,
+            Text = key.Text,
+            Modifiers = key.Modifiers
         }));
         result.Joysticks.AddRange(value.Joysticks.Select(joystick => new GrpcContracts.JoystickPortStateDto
         {
@@ -595,6 +810,118 @@ internal static class GrpcHostMapping
             Error = value.Error
         };
     }
+
+    public static GrpcContracts.SettingsProfileDto Map(SettingsProfileDto value)
+        => new()
+        {
+            Id = value.Id,
+            DisplayName = value.DisplayName,
+            Machine = value.Machine,
+            IsCurrent = value.IsCurrent,
+            IsAvailable = value.IsAvailable,
+            Description = value.Description
+        };
+
+    public static GrpcContracts.SessionSettingsDto? Map(SessionSettingsDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.SessionSettingsDto
+        {
+            ProfileId = value.ProfileId,
+            Limiter = Map(value.Limiter),
+            Display = Map(value.Display),
+            Input = Map(value.Input),
+            Audio = Map(value.Audio ?? new AudioSettingsDto()),
+            Resources = Map(value.Resources ?? new ResourceSettingsDto())
+        };
+    }
+
+    public static GrpcContracts.LimiterSettingsDto Map(LimiterSettingsDto value)
+        => new() { RatePercent = value.RatePercent, IsEnabled = value.IsEnabled };
+
+    public static GrpcContracts.DisplaySettingsDto Map(DisplaySettingsDto value)
+        => new()
+        {
+            Renderer = value.Renderer,
+            Palette = value.Palette,
+            ShowBorder = value.ShowBorder,
+            MaintainAspectRatio = value.MaintainAspectRatio,
+            Scale = value.Scale,
+            CropMode = value.CropMode,
+            AspectMode = value.AspectMode
+        };
+
+    public static GrpcContracts.InputSettingsDto Map(InputSettingsDto value)
+        => new()
+        {
+            KeyboardMapId = value.KeyboardMapId,
+            PrimaryJoystickPort = (GrpcContracts.InputPort)(int)value.PrimaryJoystickPort,
+            SwapJoystickPorts = value.SwapJoystickPorts,
+            Mode = value.Mode
+        };
+
+    public static GrpcContracts.AudioSettingsDto Map(AudioSettingsDto value)
+        => new() { Mode = value.Mode };
+
+    public static GrpcContracts.ResourceSettingsDto Map(ResourceSettingsDto value)
+        => new() { Mode = value.Mode };
+
+    public static GrpcContracts.SettingApplyDiagnosticDto Map(SettingApplyDiagnosticDto value)
+        => new()
+        {
+            Setting = value.Setting,
+            Scope = (GrpcContracts.SettingApplyScope)(int)value.Scope,
+            AppliedLive = value.AppliedLive,
+            RestartRequired = value.RestartRequired,
+            Message = value.Message
+        };
+
+    public static GrpcContracts.SettingsResourceValidationDto Map(SettingsResourceValidationDto value)
+        => new()
+        {
+            ResourceKey = value.ResourceKey,
+            Kind = (GrpcContracts.SettingsResourceKind)(int)value.Kind,
+            IsValid = value.IsValid,
+            RestartRequired = value.RestartRequired,
+            Message = value.Message
+        };
+
+    public static LimiterSettingsDto Map(GrpcContracts.LimiterSettingsDto value)
+        => new(value.RatePercent, value.IsEnabled);
+
+    public static DisplaySettingsDto Map(GrpcContracts.DisplaySettingsDto value)
+    {
+        var defaults = new DisplaySettingsDto();
+        return new DisplaySettingsDto(
+            DefaultIfBlank(value.Renderer, defaults.Renderer),
+            DefaultIfBlank(value.Palette, defaults.Palette),
+            value.ShowBorder,
+            value.MaintainAspectRatio,
+            DefaultIfBlank(value.Scale, defaults.Scale),
+            DefaultIfBlank(value.CropMode, defaults.CropMode),
+            DefaultIfBlank(value.AspectMode, defaults.AspectMode));
+    }
+
+    public static InputSettingsDto Map(GrpcContracts.InputSettingsDto value)
+    {
+        var defaults = new InputSettingsDto();
+        return new InputSettingsDto(
+            DefaultIfBlank(value.KeyboardMapId, defaults.KeyboardMapId),
+            (InputPort)(int)value.PrimaryJoystickPort,
+            value.SwapJoystickPorts,
+            DefaultIfBlank(value.Mode, defaults.Mode));
+    }
+
+    public static AudioSettingsDto Map(GrpcContracts.AudioSettingsDto value)
+        => new(DefaultIfBlank(value.Mode, new AudioSettingsDto().Mode));
+
+    public static ResourceSettingsDto Map(GrpcContracts.ResourceSettingsDto value)
+        => new(DefaultIfBlank(value.Mode, new ResourceSettingsDto().Mode));
+
+    private static string DefaultIfBlank(string value, string fallback)
+        => string.IsNullOrWhiteSpace(value) ? fallback : value;
 
     public static MediaSlot Map(GrpcContracts.MediaSlot slot) => slot switch
     {

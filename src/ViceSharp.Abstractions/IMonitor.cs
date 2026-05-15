@@ -12,6 +12,9 @@ public interface IMonitor
     /// <summary>Gets the current CPU register state.</summary>
     RegisterSnapshot GetRegisters();
 
+    /// <summary>Disassembles instructions without mutating machine state.</summary>
+    IReadOnlyList<DisassemblyEntry> Disassemble(ushort address, int count);
+
     /// <summary>True if execution is currently paused at a breakpoint.</summary>
     bool IsPaused { get; }
 }
@@ -39,3 +42,13 @@ public readonly struct RegisterSnapshot
     /// <summary>Program counter</summary>
     public ushort PC { get; init; }
 }
+
+/// <summary>
+/// One decoded instruction in monitor disassembly output.
+/// </summary>
+public sealed record DisassemblyEntry(
+    ushort Address,
+    byte[] Bytes,
+    string Text,
+    byte Length,
+    ushort NextAddress);

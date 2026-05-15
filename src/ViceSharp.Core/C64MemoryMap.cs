@@ -10,7 +10,7 @@ namespace ViceSharp.Core;
 /// <summary>
 /// CPU-visible C64 memory map with PLA-controlled ROM and I/O banking.
 /// </summary>
-internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardInput, IKeyboardInputMapSelection, ICartridgePort
+internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardInput, IKeyboardInputMapSelection, IMachineJoystickInput, ICartridgePort
 {
     private const int CartridgeBankSize = 0x2000;
     private const int GameSystemCartridgeSize = CartridgeBankSize * 64;
@@ -39,51 +39,69 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private readonly Mos6569 _vic;
     private readonly Sid6581 _sid;
     private readonly Mos6526 _cia1;
-    private readonly Mos6526 _cia2;
+    private readonly Mos6526? _cia2;
     private readonly Mos906114 _pla;
     private readonly C64KeyboardMatrix _keyboard;
     private readonly Dictionary<byte, int> _keyboardKeyPressCounts = new();
+    private readonly C64JoystickPort _joystickPort1;
     private readonly C64JoystickPort _joystickPort2;
     private readonly bool _keyboardEnabled;
     private readonly byte _cia2PortAInputMask;
+    private readonly bool _cia2Connected;
     private readonly CartridgeMappingMode _defaultCartridgeMappingMode;
     private IKeyboardInputMap _keyboardMap;
     private byte[]? _cartridgeImage;
     private CartridgeMappingMode? _attachedCartridgeMappingMode;
     private int _gameSystemCartridgeBank;
+    private int _vicPhi1Bank;
     private bool _loadingRoms;
 
     public C64MemoryMap(
         Mos6569 vic,
         Sid6581 sid,
         Mos6526 cia1,
-        Mos6526 cia2,
+        Mos6526? cia2,
         Mos906114 pla,
         bool keyboardEnabled = true,
         IKeyboardInputMap? keyboardMap = null,
         byte cia2PortAInputMask = 0x7F,
+        bool cia2Connected = true,
         CartridgeMappingMode defaultCartridgeMappingMode = CartridgeMappingMode.Auto)
     {
         _vic = vic;
         _sid = sid;
         _cia1 = cia1;
-        _cia2 = cia2;
+        _cia2 = cia2Connected
+            ? cia2 ?? throw new ArgumentNullException(nameof(cia2))
+            : null;
         _pla = pla;
         _keyboardEnabled = keyboardEnabled;
         _cia2PortAInputMask = cia2PortAInputMask;
+        _cia2Connected = cia2Connected;
         _defaultCartridgeMappingMode = defaultCartridgeMappingMode;
         _keyboard = new C64KeyboardMatrix();
         _keyboardMap = keyboardMap ?? C64HostKeyboardMapper.DefaultFallbackMap;
+        _joystickPort1 = new C64JoystickPort();
         _joystickPort2 = new C64JoystickPort();
 
         _cia1.PortAInput = ReadCia1PortA;
         _cia1.PortBInput = ReadCia1PortB;
         _cia1.PortAOutputChanged = value => _keyboard.SetRowMask(value);
         _cia1.PortBOutputChanged = value => _keyboard.SetColumnMask(value);
-        _cia2.PortAInput = ReadCia2PortA;
-        _cia2.PortAOutputChanged = value => _vic.VicBank = 3 - (value & 0x03);
+        if (_cia2Connected)
+        {
+            _cia2!.PortAInput = ReadCia2PortA;
+            _cia2.PortAExternalInputMask = 0xC0;
+            _cia2.PortAOutputChanged = value =>
+            {
+                var bank = 3 - (value & 0x03);
+                _vic.VicBank = bank;
+                _vicPhi1Bank = bank;
+            };
+        }
 
         _vic.VideoMemoryReader = ReadVideoMemory;
+        _vic.Phi1MemoryReader = ReadVicPhi1OpenBus;
 
         Reset();
     }
@@ -108,8 +126,10 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         _keyboard.Reset();
         _keyboardKeyPressCounts.Clear();
+        _joystickPort1.Reset();
         _joystickPort2.Reset();
         _vic.VicBank = 3;
+        _vicPhi1Bank = 0;
         if (_attachedCartridgeMappingMode == CartridgeMappingMode.GameSystem)
             _gameSystemCartridgeBank = 0;
     }
@@ -300,6 +320,26 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         return true;
     }
 
+    public bool SetJoystickState(int controlPort, byte directionMask, bool fireButton)
+    {
+        var port = controlPort switch
+        {
+            1 => _joystickPort1,
+            2 => _joystickPort2,
+            _ => null
+        };
+
+        if (port is null)
+            return false;
+
+        var pressed = (C64JoystickPort.JoystickButtons)(directionMask & 0x0F);
+        if (fireButton)
+            pressed |= C64JoystickPort.JoystickButtons.Fire;
+
+        port.State = pressed;
+        return true;
+    }
+
     public void SelectKeyboardMap(IKeyboardInputMap keyboardMap)
     {
         ArgumentNullException.ThrowIfNull(keyboardMap);
@@ -323,6 +363,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             return _colorRam[address - ColorRamStart];
 
         var vicAddress = (ushort)(address & 0x3FFF);
+        if (TryReadUltimaxVideoMemory(vicAddress, out var cartridgeValue))
+            return cartridgeValue;
+
         if (vicAddress is >= 0x1000 and < 0x2000 && (_vic.VicBank is 0 or 2))
             return _charRom[vicAddress - 0x1000];
 
@@ -340,7 +383,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     private byte ReadCia1PortB()
     {
-        return _keyboard.ReadColumnState();
+        return (byte)(_keyboard.ReadColumnState() & _joystickPort1.ReadPortState());
     }
 
     private byte ReadCia2PortA()
@@ -366,9 +409,126 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             return peek ? _cia1.Peek(address) : _cia1.Read(address);
 
         if (address < 0xDE00)
-            return peek ? _cia2.Peek(address) : _cia2.Read(address);
+            return _cia2 is null ? _vic.LastReadPhi1 : peek ? _cia2.Peek(address) : _cia2.Read(address);
 
         return _ram[address];
+    }
+
+    private byte ReadVicPhi1OpenBus(byte cycle)
+    {
+        return _vic.CyclesPerLine switch
+        {
+            Mos6569.PalCyclesPerLine => ReadVicPhi1Pal(cycle),
+            Mos6569.NtscOldCyclesPerLine => ReadVicPhi1NtscOld(cycle),
+            Mos6569.NtscCyclesPerLine => ReadVicPhi1Ntsc(cycle),
+            _ => ReadVicGfxDataOrIdle(cycle)
+        };
+    }
+
+    private byte ReadVicPhi1Pal(byte cycle) => cycle switch
+    {
+        0 => ReadVicSpritePointer(3),
+        1 => ReadVicIdleGap(),
+        2 => ReadVicSpritePointer(4),
+        3 => ReadVicIdleGap(),
+        4 => ReadVicSpritePointer(5),
+        5 => ReadVicIdleGap(),
+        6 => ReadVicSpritePointer(6),
+        7 => ReadVicIdleGap(),
+        8 => ReadVicSpritePointer(7),
+        9 => ReadVicIdleGap(),
+        >= 10 and <= 14 => ReadVicRefreshCounter(),
+        55 or 56 => ReadVicIdleGap(),
+        57 => ReadVicSpritePointer(0),
+        58 => ReadVicIdleGap(),
+        59 => ReadVicSpritePointer(1),
+        60 => ReadVicIdleGap(),
+        61 => ReadVicSpritePointer(2),
+        62 => ReadVicIdleGap(),
+        _ => ReadVicGfxDataOrIdle((byte)(cycle - 15))
+    };
+
+    private byte ReadVicPhi1NtscOld(byte cycle) => cycle switch
+    {
+        0 => ReadVicSpritePointer(3),
+        1 => ReadVicIdleGap(),
+        2 => ReadVicSpritePointer(4),
+        3 => ReadVicIdleGap(),
+        4 => ReadVicSpritePointer(5),
+        5 => ReadVicIdleGap(),
+        6 => ReadVicSpritePointer(6),
+        7 => ReadVicIdleGap(),
+        8 => ReadVicSpritePointer(7),
+        9 => ReadVicIdleGap(),
+        >= 10 and <= 14 => ReadVicRefreshCounter(),
+        55 or 56 or 57 => ReadVicIdleGap(),
+        58 => ReadVicSpritePointer(0),
+        59 => ReadVicIdleGap(),
+        60 => ReadVicSpritePointer(1),
+        61 => ReadVicIdleGap(),
+        62 => ReadVicSpritePointer(2),
+        63 => ReadVicIdleGap(),
+        _ => ReadVicGfxDataOrIdle((byte)(cycle - 15))
+    };
+
+    private byte ReadVicPhi1Ntsc(byte cycle) => cycle switch
+    {
+        0 => ReadVicIdleGap(),
+        1 => ReadVicSpritePointer(4),
+        2 => ReadVicIdleGap(),
+        3 => ReadVicSpritePointer(5),
+        4 => ReadVicIdleGap(),
+        5 => ReadVicSpritePointer(6),
+        6 => ReadVicIdleGap(),
+        7 => ReadVicSpritePointer(7),
+        8 => ReadVicIdleGap(),
+        9 => ReadVicIdleGap(),
+        >= 10 and <= 14 => ReadVicRefreshCounter(),
+        55 or 56 or 57 => ReadVicIdleGap(),
+        58 => ReadVicSpritePointer(0),
+        59 => ReadVicIdleGap(),
+        60 => ReadVicSpritePointer(1),
+        61 => ReadVicIdleGap(),
+        62 => ReadVicSpritePointer(2),
+        63 => ReadVicIdleGap(),
+        64 => ReadVicSpritePointer(3),
+        _ => ReadVicGfxDataOrIdle((byte)(cycle - 15))
+    };
+
+    private byte ReadVicSpritePointer(byte sprite)
+    {
+        var pointerBase = (ushort)((_vic.Peek(0xD018) & 0xF0) << 6);
+        return ReadVicPhi1Ram((ushort)(pointerBase + 0x03F8 + sprite));
+    }
+
+    private byte ReadVicRefreshCounter()
+    {
+        var offset = _vic.ConsumeRefreshCounter();
+        return ReadVicPhi1Ram((ushort)(0x3F00 + offset));
+    }
+
+    private byte ReadVicGfxDataOrIdle(byte _) =>
+        _vic.IsGraphicsIdle ? ReadVicIdleGap() : ReadVicPhi1Ram(_vic.ConsumeGraphicsFetchAddress());
+
+    private byte ReadVicIdleGap() => ReadVicPhi1Ram(0x3FFF);
+
+    private byte ReadVicPhi1Ram(ushort vicAddress)
+    {
+        var normalizedAddress = (ushort)(vicAddress & 0x3FFF);
+        var effectiveAddress = TranslateVicPhi1Address(normalizedAddress);
+
+        if (TryReadUltimaxPhi1Memory(effectiveAddress, out var cartridgeValue))
+            return cartridgeValue;
+
+        if (normalizedAddress is >= 0x1000 and < 0x2000 && (_vicPhi1Bank is 0 or 2))
+            return _charRom[effectiveAddress & 0x0FFF];
+
+        return _ram[effectiveAddress];
+    }
+
+    private ushort TranslateVicPhi1Address(ushort vicAddress)
+    {
+        return (ushort)((_vicPhi1Bank << 14) | (vicAddress & 0x3FFF));
     }
 
     private void WriteIo(ushort address, byte value)
@@ -402,7 +562,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         if (address < 0xDE00)
         {
-            _cia2.Write(address, value);
+            if (_cia2 is not null)
+                _cia2.Write(address, value);
+
             return;
         }
 
@@ -462,6 +624,51 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         return true;
     }
 
+    private bool TryReadUltimaxVideoMemory(ushort vicAddress, out byte value)
+    {
+        value = 0;
+
+        if (_cartridgeImage is null || _attachedCartridgeMappingMode != CartridgeMappingMode.Ultimax)
+            return false;
+
+        if (vicAddress <= 0x0FFF)
+            return false;
+
+        var offset = vicAddress >= CartridgeBankSize
+            ? _cartridgeImage.Length == CartridgeBankSize
+                ? vicAddress - CartridgeBankSize
+                : CartridgeBankSize + vicAddress - CartridgeBankSize
+            : vicAddress - 0x1000;
+
+        if (offset < 0 || offset >= _cartridgeImage.Length)
+            return false;
+
+        value = _cartridgeImage[offset];
+        return true;
+    }
+
+    private bool TryReadUltimaxPhi1Memory(ushort effectiveAddress, out byte value)
+    {
+        value = 0;
+
+        if (_cartridgeImage is null ||
+            _attachedCartridgeMappingMode != CartridgeMappingMode.Ultimax ||
+            (effectiveAddress & 0x3FFF) < 0x3000)
+        {
+            return false;
+        }
+
+        var offset = _cartridgeImage.Length == CartridgeBankSize
+            ? 0x1000 + (effectiveAddress & 0x0FFF)
+            : 0x3000 + (effectiveAddress & 0x0FFF);
+
+        if (offset < 0 || offset >= _cartridgeImage.Length)
+            return false;
+
+        value = _cartridgeImage[offset];
+        return true;
+    }
+
     private CartridgeMappingMode ResolveMappingMode(int imageLength, CartridgeMappingMode requestedMappingMode)
     {
         if (requestedMappingMode != CartridgeMappingMode.Auto)
@@ -506,6 +713,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         if (address is >= CartridgeRomLowStart and <= CartridgeRomLowEnd)
         {
+            if (!IsRomLowVisible(mappingMode))
+                return false;
+
             if (mappingMode == CartridgeMappingMode.Ultimax && imageLength == CartridgeBankSize)
                 return false;
 
@@ -518,6 +728,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (mappingMode == CartridgeMappingMode.Standard16K &&
             address is >= CartridgeStandardRomHighStart and <= CartridgeStandardRomHighEnd)
         {
+            if (!IsRomHighVisible(mappingMode))
+                return false;
+
             offset = CartridgeBankSize + address - CartridgeStandardRomHighStart;
             return true;
         }
@@ -531,5 +744,26 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         }
 
         return false;
+    }
+
+    private bool IsRomLowVisible(CartridgeMappingMode mappingMode)
+    {
+        return mappingMode switch
+        {
+            CartridgeMappingMode.Ultimax => true,
+            CartridgeMappingMode.Standard8K or CartridgeMappingMode.Standard16K or CartridgeMappingMode.GameSystem
+                => _pla.Loram && _pla.Hiram,
+            _ => false
+        };
+    }
+
+    private bool IsRomHighVisible(CartridgeMappingMode mappingMode)
+    {
+        return mappingMode switch
+        {
+            CartridgeMappingMode.Ultimax => true,
+            CartridgeMappingMode.Standard16K => _pla.Hiram,
+            _ => false
+        };
     }
 }

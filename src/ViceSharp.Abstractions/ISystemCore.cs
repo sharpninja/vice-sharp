@@ -26,6 +26,15 @@ public interface ISystemCoreDefinition
     /// <summary>True when the core connects the normal keyboard matrix to machine I/O.</summary>
     bool KeyboardMatrixConnected { get; }
 
+    /// <summary>True when the core connects a datasette cassette port to machine I/O.</summary>
+    bool TapePortConnected { get; }
+
+    /// <summary>True when the core connects the IEC serial bus to machine I/O.</summary>
+    bool IecBusConnected { get; }
+
+    /// <summary>True when the core connects the second CIA to machine I/O.</summary>
+    bool Cia2Connected { get; }
+
     /// <summary>True when the model normally requires cartridge boot wiring.</summary>
     bool CartridgeBootExpected { get; }
 

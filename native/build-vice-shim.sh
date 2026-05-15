@@ -86,6 +86,7 @@ VICE_SHIM_ROOT := $vice_shim_root
 VICE_SHIM_INCLUDE_FLAGS := $vice_shim_include_flags
 VICE_SHIM_OBJ := \$(VICE_SHIM_ROOT)/vice-shim-hosted.o
 VICE_SHIM_MAINCPU_OBJ := \$(VICE_SHIM_ROOT)/mainc64cpu-hosted.o
+VICE_SHIM_VICII_CYCLE_OBJ := \$(VICE_SHIM_ROOT)/vicii-cycle-hosted.o
 VICE_SHIM_DLL := \$(VICE_SHIM_ROOT)/vice_x64.dll
 
 \$(VICE_SHIM_OBJ): \$(VICE_SHIM_ROOT)/vice-shim.c \$(VICE_SHIM_ROOT)/vice-shim.h
@@ -94,8 +95,11 @@ VICE_SHIM_DLL := \$(VICE_SHIM_ROOT)/vice_x64.dll
 \$(VICE_SHIM_MAINCPU_OBJ): c64/c64cpusc.c mainc64cpu.c vice-shim-runtime.h
 	\$(CC) \$(DEFS) \$(DEFAULT_INCLUDES) \$(INCLUDES) \$(AM_CPPFLAGS) \$(CPPFLAGS) \$(AM_CFLAGS) \$(CFLAGS) \$(VICE_SHIM_INCLUDE_FLAGS) -DVICE_SHIM_HOSTED -c -o \$@ c64/c64cpusc.c
 
-\$(VICE_SHIM_DLL): \$(VICE_SHIM_OBJ) \$(VICE_SHIM_MAINCPU_OBJ) \$(x64sc_OBJECTS) \$(x64sc_DEPENDENCIES)
-	\$(CCLD) \$(AM_CFLAGS) \$(CFLAGS) \$(x64sc_LDFLAGS) \$(LDFLAGS) -shared -static-libgcc -o \$@ \$(VICE_SHIM_OBJ) \$(VICE_SHIM_MAINCPU_OBJ) \$(x64sc_OBJECTS) \$(x64sc_LDADD) \$(LIBS)
+\$(VICE_SHIM_VICII_CYCLE_OBJ): viciisc/vicii-cycle.c viciisc/vicii-cycle.h vice-shim-runtime.h
+	\$(CC) \$(DEFS) \$(DEFAULT_INCLUDES) \$(INCLUDES) \$(AM_CPPFLAGS) \$(CPPFLAGS) \$(AM_CFLAGS) \$(CFLAGS) \$(VICE_SHIM_INCLUDE_FLAGS) -DVICE_SHIM_HOSTED -c -o \$@ viciisc/vicii-cycle.c
+
+\$(VICE_SHIM_DLL): \$(VICE_SHIM_OBJ) \$(VICE_SHIM_MAINCPU_OBJ) \$(VICE_SHIM_VICII_CYCLE_OBJ) \$(x64sc_OBJECTS) \$(x64sc_DEPENDENCIES)
+	\$(CCLD) \$(AM_CFLAGS) \$(CFLAGS) \$(x64sc_LDFLAGS) \$(LDFLAGS) -shared -static-libgcc -o \$@ \$(VICE_SHIM_OBJ) \$(VICE_SHIM_MAINCPU_OBJ) \$(VICE_SHIM_VICII_CYCLE_OBJ) \$(x64sc_OBJECTS) \$(x64sc_LDADD) \$(LIBS)
 EOF
 
 make -C "$vice_src" -s -f Makefile -f "$tmp_makefile" "$shim_dll"

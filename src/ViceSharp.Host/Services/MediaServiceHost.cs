@@ -37,13 +37,13 @@ public sealed class MediaServiceHost : IMediaService
             return ValueTask.FromResult(new AttachMediaResponse(RpcStatus.NotFound($"Media file '{mediaPath}' was not found."), null));
 
         var payload = File.ReadAllBytes(mediaPath);
-        var validationError = ValidateMedia(request.Slot, payload);
-        if (!string.IsNullOrEmpty(validationError))
-            return ValueTask.FromResult(new AttachMediaResponse(RpcStatus.InvalidArgument(validationError), null));
-
         lock (session.SyncRoot)
         {
-            var appliedToRuntime = TryApplyMediaToRuntime(session, request.Slot, payload, out var applyError);
+            var validationError = ValidateMedia(session, request.Slot, payload, out var runtimePayload);
+            if (!string.IsNullOrEmpty(validationError))
+                return ValueTask.FromResult(new AttachMediaResponse(RpcStatus.InvalidArgument(validationError), null));
+
+            var appliedToRuntime = TryApplyMediaToRuntime(session, request.Slot, runtimePayload, out var applyError);
             var displayName = string.IsNullOrWhiteSpace(request.DisplayName)
                 ? Path.GetFileName(mediaPath)
                 : request.DisplayName;
@@ -111,8 +111,13 @@ public sealed class MediaServiceHost : IMediaService
         return filePath;
     }
 
-    private static string? ValidateMedia(MediaSlot slot, byte[] payload)
+    private static string? ValidateMedia(
+        EmulatorRuntimeSession session,
+        MediaSlot slot,
+        byte[] payload,
+        out byte[] runtimePayload)
     {
+        runtimePayload = payload;
         return slot switch
         {
             MediaSlot.Drive8 => IecD64Attachment.TryAttach(8, payload, out _)
@@ -124,22 +129,41 @@ public sealed class MediaServiceHost : IMediaService
             MediaSlot.Tape => TapImage.TryAttach(payload, out _)
                 ? null
                 : "Tape media must be a supported TAP image.",
-            MediaSlot.Cartridge => TryValidateCartridge(payload),
+            MediaSlot.Cartridge => TryValidateCartridge(session, payload, out runtimePayload),
             _ => $"Media slot '{slot}' is not supported."
         };
     }
 
-    private static string? TryValidateCartridge(byte[] payload)
+    private static string? TryValidateCartridge(
+        EmulatorRuntimeSession session,
+        byte[] payload,
+        out byte[] runtimePayload)
     {
         try
         {
-            _ = StandardCartridgeImage.FromBytes(payload);
+            runtimePayload = StandardCartridgeImage.FromBytes(payload).ToArray();
             return null;
         }
         catch (ArgumentException ex)
         {
-            return $"Cartridge media must be a supported raw 8K or 16K image. {ex.Message}";
+            if (IsGameSystemCartridgePayload(session, payload))
+            {
+                runtimePayload = payload;
+                return null;
+            }
+
+            runtimePayload = payload;
+            return $"Cartridge media must be a supported generic CRT, raw 8K, raw 16K, or profile-compatible C64GS image. {ex.Message}";
         }
+    }
+
+    private static bool IsGameSystemCartridgePayload(EmulatorRuntimeSession session, byte[] payload)
+    {
+        if (payload.Length != StandardCartridgeImage.GameSystemRomSize)
+            return false;
+
+        var cartridgePort = session.Machine.Devices.GetAll<ICartridgePort>().SingleOrDefault();
+        return cartridgePort?.DefaultMappingMode == CartridgeMappingMode.GameSystem;
     }
 
     private static bool TryApplyMediaToRuntime(
@@ -149,6 +173,12 @@ public sealed class MediaServiceHost : IMediaService
         out string error)
     {
         error = string.Empty;
+
+        if (slot is MediaSlot.Drive8 or MediaSlot.Drive9)
+            return TryApplyDiskToRuntime(session, slot, payload, out error);
+
+        if (slot == MediaSlot.Tape)
+            return TryApplyTapeToRuntime(session, payload, out error);
 
         if (slot != MediaSlot.Cartridge)
             return false;
@@ -174,6 +204,12 @@ public sealed class MediaServiceHost : IMediaService
 
     private static bool TryDetachMediaFromRuntime(EmulatorRuntimeSession session, MediaSlot slot)
     {
+        if (slot is MediaSlot.Drive8 or MediaSlot.Drive9)
+            return TryDetachDiskFromRuntime(session, slot);
+
+        if (slot == MediaSlot.Tape)
+            return TryDetachTapeFromRuntime(session);
+
         if (slot != MediaSlot.Cartridge)
             return false;
 
@@ -184,4 +220,90 @@ public sealed class MediaServiceHost : IMediaService
         cartridgePort.EjectCartridge();
         return true;
     }
+
+    private static bool TryApplyDiskToRuntime(
+        EmulatorRuntimeSession session,
+        MediaSlot slot,
+        byte[] payload,
+        out string error)
+    {
+        var driveNumber = ToDriveNumber(slot);
+        var drive = session.Machine.Devices.All
+            .OfType<IFloppyDrive>()
+            .FirstOrDefault(candidate => candidate.DriveNumber == driveNumber);
+
+        if (drive is null)
+        {
+            error = $"Runtime has no IEC drive {driveNumber}.";
+            return false;
+        }
+
+        try
+        {
+            drive.InsertDisk(payload);
+            error = string.Empty;
+            return true;
+        }
+        catch (ArgumentException ex)
+        {
+            error = ex.Message;
+            return false;
+        }
+    }
+
+    private static bool TryDetachDiskFromRuntime(EmulatorRuntimeSession session, MediaSlot slot)
+    {
+        var driveNumber = ToDriveNumber(slot);
+        var drive = session.Machine.Devices.All
+            .OfType<IFloppyDrive>()
+            .FirstOrDefault(candidate => candidate.DriveNumber == driveNumber);
+        if (drive is null)
+            return false;
+
+        drive.EjectDisk();
+        return true;
+    }
+
+    private static bool TryApplyTapeToRuntime(
+        EmulatorRuntimeSession session,
+        byte[] payload,
+        out string error)
+    {
+        var tape = session.Machine.Devices.All
+            .OfType<ITapeDevice>()
+            .SingleOrDefault();
+
+        if (tape is null)
+        {
+            error = "Runtime has no tape device.";
+            return false;
+        }
+
+        try
+        {
+            tape.InsertTape(payload);
+            error = string.Empty;
+            return true;
+        }
+        catch (ArgumentException ex)
+        {
+            error = ex.Message;
+            return false;
+        }
+    }
+
+    private static bool TryDetachTapeFromRuntime(EmulatorRuntimeSession session)
+    {
+        var tape = session.Machine.Devices.All
+            .OfType<ITapeDevice>()
+            .SingleOrDefault();
+        if (tape is null)
+            return false;
+
+        tape.EjectTape();
+        return true;
+    }
+
+    private static byte ToDriveNumber(MediaSlot slot)
+        => slot == MediaSlot.Drive9 ? (byte)9 : (byte)8;
 }

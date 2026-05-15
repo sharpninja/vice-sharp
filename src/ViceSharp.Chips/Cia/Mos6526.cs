@@ -41,6 +41,8 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         public ushort Counter;
         public byte Control;
         public bool Running;
+        public int LoadDelay;
+        public int CountDelay;
     }
 
     // I/O Ports
@@ -51,6 +53,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
 
     public Func<byte>? PortAInput { get; set; }
     public Func<byte>? PortBInput { get; set; }
+    public byte PortAExternalInputMask { get; set; }
     public Action<byte>? PortAOutputChanged { get; set; }
     public Action<byte>? PortBOutputChanged { get; set; }
     
@@ -115,33 +118,27 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
 
     public void Tick()
     {
-        var timerAUnderflowed = false;
-
-        if (_timerA.Running)
-        {
-            _timerA.Counter--;
-            if (_timerA.Counter == 0xFFFF)
-            {
-                UnderflowTimerA();
-                timerAUnderflowed = true;
-            }
-        }
+        var timerAUnderflowed = TickTimer(ref _timerA);
+        if (timerAUnderflowed)
+            UnderflowTimerA();
         
         if (_timerB.Running && TimerBCountsPhi2())
         {
-            TickTimerB();
+            if (TickTimer(ref _timerB))
+                UnderflowTimerB();
         }
         else if (_timerB.Running && timerAUnderflowed && TimerBCountsTimerAUnderflow())
         {
-            TickTimerB();
+            if (TickTimer(ref _timerB))
+                UnderflowTimerB();
         }
     }
 
     public void Reset()
     {
         Array.Clear(_registers);
-        _timerA = new();
-        _timerB = new();
+        _timerA = CreateResetTimer();
+        _timerB = CreateResetTimer();
         _portA = 0;
         _portB = 0;
         _portADir = 0;
@@ -163,7 +160,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         int register = (address - BaseAddress) & 0x0F;
         return register switch
         {
-            0x00 => ReadPortValue(_portA, _portADir, PortAInput),
+            0x00 => ReadPortValue(_portA, _portADir, PortAInput, PortAExternalInputMask),
             0x01 => ReadPortValue(_portB, _portBDir, PortBInput),
             0x02 => _portADir,
             0x03 => _portBDir,
@@ -195,10 +192,10 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                     _timerA.Counter = _timerA.Latch;
                 break;
             case 0x0E:
-                _timerA.Control = value;
+                _timerA.Control = (byte)(value & 0xEF);
+                _registers[register] = _timerA.Control;
                 _timerA.Running = (value & 0x01) != 0;
-                if ((value & 0x10) != 0)
-                    _timerA.Counter = _timerA.Latch;
+                ScheduleControlPipeline(ref _timerA, value);
                 break;
                 
             // Timer B
@@ -209,10 +206,10 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                     _timerB.Counter = _timerB.Latch;
                 break;
             case 0x0F:
-                _timerB.Control = value;
+                _timerB.Control = (byte)(value & 0xEF);
+                _registers[register] = _timerB.Control;
                 _timerB.Running = (value & 0x01) != 0;
-                if ((value & 0x10) != 0)
-                    _timerB.Counter = _timerB.Latch;
+                ScheduleControlPipeline(ref _timerB, value);
                 break;
             case 0x0B: WriteTodOrAlarm(ref _todHours, ref _todAlarmHours, value); break;
             case 0x0A: WriteTodOrAlarm(ref _todMinutes, ref _todAlarmMinutes, value); break;
@@ -244,33 +241,83 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
 
     public bool HandlesAddress(ushort address) => address >= BaseAddress && address < BaseAddress + 0x0100;
 
-    private static byte ReadPortValue(byte outputLatch, byte dataDirection, Func<byte>? inputReader)
+    private static byte ReadPortValue(byte outputLatch, byte dataDirection, Func<byte>? inputReader, byte externalInputMask = 0)
     {
         byte input = inputReader?.Invoke() ?? (byte)0xFF;
-        return (byte)((outputLatch & dataDirection) | (input & ~dataDirection));
+        var value = (byte)((outputLatch & dataDirection) | (input & ~dataDirection));
+        return (byte)((value & ~externalInputMask) | (input & externalInputMask));
+    }
+
+    private static TimerState CreateResetTimer() => new()
+    {
+        Latch = 0xFFFF,
+        Counter = 0xFFFF
+    };
+
+    private static void ScheduleControlPipeline(ref TimerState timer, byte control)
+    {
+        var forceLoad = (control & 0x10) != 0;
+        if (forceLoad)
+            timer.LoadDelay = 2;
+
+        if (timer.Running)
+            timer.CountDelay = forceLoad ? 3 : 2;
+        else
+            timer.CountDelay = 0;
+    }
+
+    private static bool TickTimer(ref TimerState timer)
+    {
+        if (timer.LoadDelay > 0)
+        {
+            timer.LoadDelay--;
+            if (timer.LoadDelay == 0)
+                timer.Counter = timer.Latch;
+        }
+
+        if (!timer.Running)
+            return false;
+
+        if (timer.CountDelay > 0)
+        {
+            timer.CountDelay--;
+            return false;
+        }
+
+        if (timer.Counter != 0)
+            timer.Counter--;
+
+        return timer.Counter == 0;
     }
 
     private void UnderflowTimerA()
     {
         _timerA.Counter = _timerA.Latch;
         if ((_timerA.Control & 0x08) != 0)
+        {
             _timerA.Running = false;
+            _timerA.CountDelay = 0;
+        }
+        else
+        {
+            _timerA.CountDelay = 1;
+        }
 
         SetInterruptFlag(0x01);
-    }
-
-    private void TickTimerB()
-    {
-        _timerB.Counter--;
-        if (_timerB.Counter == 0xFFFF)
-            UnderflowTimerB();
     }
 
     private void UnderflowTimerB()
     {
         _timerB.Counter = _timerB.Latch;
         if ((_timerB.Control & 0x08) != 0)
+        {
             _timerB.Running = false;
+            _timerB.CountDelay = 0;
+        }
+        else
+        {
+            _timerB.CountDelay = 1;
+        }
 
         SetInterruptFlag(0x02);
     }

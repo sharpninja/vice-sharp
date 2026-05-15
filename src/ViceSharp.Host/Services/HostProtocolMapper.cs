@@ -33,7 +33,10 @@ internal static class HostProtocolMapper
             session.EffectiveClockHz,
             effectiveClockPercent,
             state.PC,
-            modelId);
+            modelId,
+            session.HostKeyboardAutomation?.Description ?? string.Empty,
+            session.HostKeyboardAutomation?.IsActive == true,
+            session.LastHostAutomationError ?? string.Empty);
     }
 
     public static MachineStateDto ToMachineStateDto(MachineState state)
@@ -52,6 +55,21 @@ internal static class HostProtocolMapper
             .ToArray();
 
         return new InputStateDto(keys, joysticks, session.SelectedKeyboardMap);
+    }
+
+    public static SessionSettingsDto ToSettingsDto(EmulatorRuntimeSession session)
+    {
+        var profileId = session.Architecture is IProfiledArchitectureDescriptor profiled
+            ? profiled.MachineProfile.Id
+            : MinimalHostArchitectureDescriptor.ArchitectureId;
+
+        return new SessionSettingsDto(
+            profileId,
+            new LimiterSettingsDto(session.LimiterRatePercent, session.LimiterEnabled),
+            session.DisplaySettings,
+            session.InputSettings,
+            session.AudioSettings,
+            session.ResourceSettings);
     }
 
     public static RpcStatus MissingSessionStatus(string sessionId)

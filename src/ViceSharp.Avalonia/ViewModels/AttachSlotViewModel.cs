@@ -61,19 +61,24 @@ public sealed class AttachSlotViewModel : ObservableObject
         set => SetProperty(ref _isReadOnly, value);
     }
 
-    public void ApplyAttachment(MediaAttachmentDto attachment)
+    public void ApplyAttachment(MediaAttachmentDto attachment, string recentFilePath = "")
     {
         FilePath = attachment.FilePath;
         IsAttached = attachment.IsAttached;
         IsReadOnly = attachment.IsReadOnly;
         ValidationError = attachment.Error;
         StatusText = attachment.IsAttached
-            ? $"{Path.GetFileName(attachment.FilePath)}{(attachment.AppliedToRuntime ? "" : " staged")}"
+            ? $"{CreateDisplayName(attachment)}{(attachment.AppliedToRuntime ? "" : " staged")}"
             : "Empty";
 
         OnPropertyChanged(nameof(HasValidationError));
-        AddRecentFile(attachment.FilePath);
+        AddRecentFile(string.IsNullOrWhiteSpace(recentFilePath) ? attachment.FilePath : recentFilePath);
     }
+
+    private static string CreateDisplayName(MediaAttachmentDto attachment)
+        => string.IsNullOrWhiteSpace(attachment.DisplayName)
+            ? Path.GetFileName(attachment.FilePath)
+            : attachment.DisplayName;
 
     public void MarkEmpty()
     {

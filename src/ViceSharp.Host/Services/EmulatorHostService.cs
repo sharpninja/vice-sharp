@@ -1,3 +1,5 @@
+using ViceSharp.Abstractions;
+using ViceSharp.Chips.IEC;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 
@@ -112,9 +114,7 @@ public sealed class EmulatorHostService : IEmulatorHost
 
         lock (session.SyncRoot)
         {
-            return ValueTask.FromResult(new EmulatorCommandResponse(
-                RpcStatus.NotImplemented("ResetAndAutostartDrive8 requires drive command/autostart support that is not available yet."),
-                HostProtocolMapper.ToStatusDto(session)));
+            return ValueTask.FromResult(ExecuteResetAndAutostartDrive8(session));
         }
     }
 
@@ -131,15 +131,14 @@ public sealed class EmulatorHostService : IEmulatorHost
         {
             if (request.Kind == ResetKind.ResetAndAutostartDrive8)
             {
-                return ValueTask.FromResult(new EmulatorCommandResponse(
-                    RpcStatus.NotImplemented("ResetAndAutostartDrive8 requires drive command/autostart support that is not available yet."),
-                    HostProtocolMapper.ToStatusDto(session)));
+                return ValueTask.FromResult(ExecuteResetAndAutostartDrive8(session));
             }
 
             session.Machine.Reset();
             session.RunState = EmulatorRunState.Stopped;
             session.PowerState = "On";
             session.ResetPerformanceCounters();
+            session.ClearHostKeyboardAutomation();
             return ValueTask.FromResult(new EmulatorCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session)));
         }
     }
@@ -191,6 +190,7 @@ public sealed class EmulatorHostService : IEmulatorHost
             {
                 session.Machine.RunFrame();
                 session.RecordFrame();
+                session.AdvanceHostAutomationFrame();
             }
 
             return ValueTask.FromResult(new EmulatorCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session)));
@@ -305,5 +305,119 @@ public sealed class EmulatorHostService : IEmulatorHost
             session.RunState = runState;
             return ValueTask.FromResult(new EmulatorCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session)));
         }
+    }
+
+    private static EmulatorCommandResponse ExecuteResetAndAutostartDrive8(EmulatorRuntimeSession session)
+    {
+        var drive8 = session.Machine.Devices.All
+            .OfType<IFloppyDrive>()
+            .FirstOrDefault(drive => drive.DriveNumber == 8);
+
+        if (drive8 is null)
+        {
+            return new EmulatorCommandResponse(
+                RpcStatus.FailedPrecondition("ResetAndAutostartDrive8 requires a runtime drive 8 device."),
+                HostProtocolMapper.ToStatusDto(session));
+        }
+
+        var hasDrive8Attachment = session.MediaAttachments.TryGetValue(MediaSlot.Drive8, out var attachment);
+        if (hasDrive8Attachment &&
+            attachment!.IsAttached &&
+            !attachment.AppliedToRuntime)
+        {
+            var reason = string.IsNullOrWhiteSpace(attachment.Error)
+                ? "Drive 8 media is not applied to the runtime."
+                : attachment.Error;
+            return new EmulatorCommandResponse(
+                RpcStatus.FailedPrecondition(reason),
+                HostProtocolMapper.ToStatusDto(session));
+        }
+
+        if (!drive8.HasDisk)
+        {
+            return new EmulatorCommandResponse(
+                RpcStatus.FailedPrecondition("ResetAndAutostartDrive8 requires an attached disk in drive 8."),
+                HostProtocolMapper.ToStatusDto(session));
+        }
+
+        if (!TryReadDrive8AutostartProgram(attachment, out var program, out var programError))
+        {
+            return new EmulatorCommandResponse(
+                RpcStatus.FailedPrecondition(programError),
+                HostProtocolMapper.ToStatusDto(session));
+        }
+
+        if (!session.Machine.Devices.All.OfType<IMachineKeyboardInput>().Any())
+        {
+            return new EmulatorCommandResponse(
+                RpcStatus.FailedPrecondition("ResetAndAutostartDrive8 requires runtime keyboard input to submit BASIC autostart commands."),
+                HostProtocolMapper.ToStatusDto(session));
+        }
+
+        session.Machine.Reset();
+        session.RunState = EmulatorRunState.Running;
+        session.PowerState = "On";
+        session.ResetPerformanceCounters();
+        session.StartHostKeyboardAutomation(HostKeyboardAutomation.CreateC64Drive8Autostart(
+            machine => LoadAutostartProgramIntoBasic(machine, program!)));
+
+        return new EmulatorCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session));
+    }
+
+    private static bool TryReadDrive8AutostartProgram(
+        MediaAttachmentDto? attachment,
+        out D64ProgramFile? program,
+        out string error)
+    {
+        program = null;
+
+        if (attachment is null || !attachment.IsAttached)
+        {
+            error = "ResetAndAutostartDrive8 requires an attached D64 media record in drive 8.";
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(attachment.FilePath) || !File.Exists(attachment.FilePath))
+        {
+            error = "ResetAndAutostartDrive8 requires drive 8 media that is readable by the host.";
+            return false;
+        }
+
+        try
+        {
+            var image = new D64Image(File.ReadAllBytes(attachment.FilePath));
+            if (image.TryReadFirstProgram(out program, out error))
+                return true;
+
+            error = $"ResetAndAutostartDrive8 could not find a runnable PRG in drive 8 media. {error}";
+            return false;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
+        {
+            error = $"ResetAndAutostartDrive8 could not read drive 8 media. {ex.Message}";
+            return false;
+        }
+    }
+
+    private static string? LoadAutostartProgramIntoBasic(IMachine machine, D64ProgramFile program)
+    {
+        var endAddress = program.LoadAddress + program.Payload.Length;
+        if (program.Payload.Length == 0 || endAddress > 0x10000)
+            return $"PRG '{program.FileName}' does not fit in C64 address space.";
+
+        for (var offset = 0; offset < program.Payload.Length; offset++)
+            machine.Bus.Write((ushort)(program.LoadAddress + offset), program.Payload[offset]);
+
+        SetBasicPointer(machine, 0x2B, program.LoadAddress);
+        SetBasicPointer(machine, 0x2D, (ushort)endAddress);
+        SetBasicPointer(machine, 0x2F, (ushort)endAddress);
+        SetBasicPointer(machine, 0x31, (ushort)endAddress);
+        return null;
+    }
+
+    private static void SetBasicPointer(IMachine machine, ushort address, ushort value)
+    {
+        machine.Bus.Write(address, (byte)value);
+        machine.Bus.Write((ushort)(address + 1), (byte)(value >> 8));
     }
 }

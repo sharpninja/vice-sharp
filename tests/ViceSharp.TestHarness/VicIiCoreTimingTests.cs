@@ -1,12 +1,52 @@
 namespace ViceSharp.TestHarness;
 
 using ViceSharp.Chips.VicIi;
+using ViceSharp.Chips.Cpu;
 using ViceSharp.Core;
 using ViceSharp.Abstractions;
 using Xunit;
 
 public sealed class VicIiCoreTimingTests
 {
+    [Fact]
+    public void SystemClock_HoldsCpuDuringVicBadLineDmaButContinuesPhi2Devices()
+    {
+        var irq = new InterruptLine(InterruptType.Irq);
+        var vic = new Mos6569(new BasicBus(), irq);
+        var cpu = new CountingCpu();
+        var peripheral = new CountingPhi2Device();
+        var clock = new SystemClock();
+
+        clock.Register(cpu);
+        clock.Register(vic);
+        clock.Register(peripheral);
+
+        vic.Write(0xD011, 0x10);
+        AdvanceClockTo(clock, vic, 0x30, 12);
+
+        Assert.False(vic.IsDmaStealing);
+        Assert.Equal(clock.TotalCycles - 1, cpu.TickCount);
+        Assert.Equal(clock.TotalCycles, peripheral.TickCount);
+
+        clock.Step(2);
+
+        Assert.True(vic.IsDmaStealing);
+        Assert.Equal(clock.TotalCycles - 3, cpu.TickCount);
+        Assert.Equal(clock.TotalCycles, peripheral.TickCount);
+
+        AdvanceClockTo(clock, vic, 0x30, 55);
+
+        Assert.False(vic.IsCpuCycleStolen);
+        Assert.Equal(clock.TotalCycles - 43, cpu.TickCount);
+        Assert.Equal(clock.TotalCycles, peripheral.TickCount);
+
+        clock.Step();
+
+        Assert.False(vic.IsDmaStealing);
+        Assert.Equal(clock.TotalCycles - 43, cpu.TickCount);
+        Assert.Equal(clock.TotalCycles, peripheral.TickCount);
+    }
+
     [Fact]
     public void RasterIrq_AssertsAtCompareCycleAndClearsByWriteOneToD019()
     {
@@ -57,11 +97,9 @@ public sealed class VicIiCoreTimingTests
     {
         var vic = new Mos6569(new BasicBus(), new InterruptLine(InterruptType.Irq));
 
-        Advance(vic, 0x30 * Mos6569.PalCyclesPerLine);
-        Assert.Equal(0x30, vic.CurrentRasterLine);
-        Assert.False(vic.IsBadLine);
-
         vic.Write(0xD011, 0x10);
+        AdvanceTo(vic, 0x30, 0);
+        Assert.Equal(0x30, vic.CurrentRasterLine);
         Assert.True(vic.IsBadLine);
 
         vic.Write(0xD011, 0x11);
@@ -74,12 +112,30 @@ public sealed class VicIiCoreTimingTests
     }
 
     [Fact]
+    public void BadLine_DenMustBeSetBeforeFirstDmaLineLatch()
+    {
+        var vic = new Mos6569(new BasicBus(), new InterruptLine(InterruptType.Irq));
+
+        AdvanceTo(vic, 0x30, 0);
+        vic.Write(0xD011, 0x10);
+
+        Assert.Equal(0x30, vic.CurrentRasterLine);
+        Assert.False(vic.IsBadLine);
+
+        vic.Tick();
+        AdvanceTo(vic, 0x30, 0);
+
+        Assert.Equal(0x30, vic.CurrentRasterLine);
+        Assert.True(vic.IsBadLine);
+    }
+
+    [Fact]
     public void BadLine_DmaStealingWindowTracksCharacterFetchCycles()
     {
         var vic = new Mos6569(new BasicBus(), new InterruptLine(InterruptType.Irq));
 
         vic.Write(0xD011, 0x10);
-        Advance(vic, 0x30 * Mos6569.PalCyclesPerLine);
+        AdvanceTo(vic, 0x30, 0);
 
         Assert.True(vic.IsBadLine);
         Assert.False(vic.IsDmaStealing);
@@ -95,9 +151,176 @@ public sealed class VicIiCoreTimingTests
         Assert.True(vic.IsCharacterAccess);
     }
 
+    [Fact]
+    public void BadLine_IncludesLastDmaLineWhenYScrollMatches()
+    {
+        var vic = new Mos6569(new BasicBus(), new InterruptLine(InterruptType.Irq));
+
+        vic.Write(0xD011, 0x17);
+        AdvanceTo(vic, 0xF7, 0);
+
+        Assert.True(vic.IsBadLine);
+
+        Advance(vic, 14);
+
+        Assert.Equal(14, vic.RasterX);
+        Assert.True(vic.IsDmaStealing);
+
+        AdvanceTo(vic, 0xF8, 0);
+
+        Assert.False(vic.IsBadLine);
+    }
+
+    [Fact]
+    public void SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu()
+    {
+        var bus = new TestMemoryBus();
+        bus.SetMemory(0x0200, 0xCA);
+        bus.SetMemory(0xFFFE, 0x00);
+        bus.SetMemory(0xFFFF, 0x40);
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cpu = new Mos6502(bus)
+        {
+            PC = 0x0200,
+            X = 0x01,
+            S = 0xFF,
+            P = 0x00
+        };
+        var stealer = new ScriptedCycleStealer(requestOnTick: 2);
+        var irqPulse = new IrqPulseDevice(irq, assertOnTick: 2);
+        var clock = new SystemClock(985_248, cpu, irq);
+
+        clock.Register(cpu);
+        clock.Register(stealer);
+        clock.Register(irqPulse);
+
+        clock.Step();
+        clock.Step();
+
+        Assert.Equal(0x4000, cpu.PC);
+        Assert.Equal(0xFC, cpu.S);
+        Assert.Equal(0x00, cpu.X);
+    }
+
     private static void Advance(Mos6569 vic, int cycles)
     {
         for (var cycle = 0; cycle < cycles; cycle++)
             vic.Tick();
+    }
+
+    private static void AdvanceTo(Mos6569 vic, ushort rasterLine, byte rasterCycle)
+    {
+        var maxCycles = vic.TotalLines * vic.CyclesPerLine * 2;
+        for (var cycle = 0; cycle < maxCycles; cycle++)
+        {
+            if (vic.CurrentRasterLine == rasterLine && vic.RasterX == rasterCycle)
+                return;
+
+            vic.Tick();
+        }
+
+        throw new InvalidOperationException($"VIC did not reach line ${rasterLine:X3}, cycle {rasterCycle}.");
+    }
+
+    private static void AdvanceClockTo(SystemClock clock, Mos6569 vic, ushort rasterLine, byte rasterCycle)
+    {
+        var maxCycles = vic.TotalLines * vic.CyclesPerLine * 2;
+        for (var cycle = 0; cycle < maxCycles; cycle++)
+        {
+            if (vic.CurrentRasterLine == rasterLine && vic.RasterX == rasterCycle)
+                return;
+
+            clock.Step();
+        }
+
+        throw new InvalidOperationException($"Clock did not reach VIC line ${rasterLine:X3}, cycle {rasterCycle}.");
+    }
+
+    private sealed class CountingCpu : ICpu, ICpuCycleStealTarget
+    {
+        public DeviceId Id => new(0x9001);
+        public string Name => "Counting CPU";
+        public uint ClockDivisor => 1;
+        public ClockPhase Phase => ClockPhase.Phi2;
+        public ushort PC { get; set; }
+        public byte Flags { get; set; }
+        public long TickCount { get; private set; }
+        public bool CanStealCurrentCycle => true;
+        public bool CanForceStealCurrentCycle => false;
+
+        public void Tick() => TickCount++;
+        public void Reset() => TickCount = 0;
+        public void Initialize() { }
+        public int ExecuteInstruction() => 0;
+        public void Irq() { }
+        public void Nmi() { }
+    }
+
+    private sealed class CountingPhi2Device : IClockedDevice
+    {
+        public DeviceId Id => new(0x9002);
+        public string Name => "Counting Phi2";
+        public uint ClockDivisor => 1;
+        public ClockPhase Phase => ClockPhase.Phi2;
+        public long TickCount { get; private set; }
+
+        public void Tick() => TickCount++;
+        public void Reset() => TickCount = 0;
+        public void Initialize() { }
+    }
+
+    private sealed class ScriptedCycleStealer(int requestOnTick) : IClockedDevice, ICpuCycleStealer
+    {
+        private int _ticks;
+
+        public DeviceId Id => new(0x9003);
+        public string Name => "Scripted cycle stealer";
+        public uint ClockDivisor => 1;
+        public ClockPhase Phase => ClockPhase.Phi1;
+        public bool IsCpuCycleStolen => _ticks == requestOnTick;
+        public bool IsCpuCycleStealMandatory => false;
+
+        public void Tick() => _ticks++;
+        public void Reset() => _ticks = 0;
+        public void Initialize() { }
+    }
+
+    private sealed class IrqPulseDevice(IInterruptLine irq, int assertOnTick) : IClockedDevice, IInterruptSource
+    {
+        private int _ticks;
+
+        public DeviceId Id => SourceId;
+        public string Name => "IRQ pulse";
+        public uint ClockDivisor => 1;
+        public ClockPhase Phase => ClockPhase.Phi2;
+        public DeviceId SourceId => new(0x9004);
+        public IReadOnlyList<IInterruptLine> ConnectedLines { get; } = [irq];
+
+        public void Tick()
+        {
+            _ticks++;
+            if (_ticks == assertOnTick)
+                irq.Assert(this);
+        }
+
+        public void Reset()
+        {
+            _ticks = 0;
+            irq.Release(this);
+        }
+
+        public void Initialize() { }
+    }
+
+    private sealed class TestMemoryBus : IBus
+    {
+        private readonly byte[] _memory = new byte[65536];
+
+        public void SetMemory(int address, byte value) => _memory[address & 0xFFFF] = value;
+        public byte Read(ushort address) => _memory[address];
+        public void Write(ushort address, byte value) => _memory[address] = value;
+        public byte Peek(ushort address) => _memory[address];
+        public void RegisterDevice(IAddressSpace device) { }
+        public void UnregisterDevice(IAddressSpace device) { }
     }
 }

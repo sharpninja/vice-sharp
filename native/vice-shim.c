@@ -16,7 +16,9 @@
 #include "archdep_set_openmp_wait_policy.h"
 #include "archdep_startup_log_error.h"
 #include "archdep_tick.h"
+#include "attach.h"
 #include "cia.h"
+#include "core/ciatimer.h"
 #include "drive.h"
 #include "gfxoutput.h"
 #include "init.h"
@@ -36,8 +38,10 @@
 #include "uiapi.h"
 #include "video.h"
 #include "c64/c64.h"
+#include "c64/c64cia.h"
 #include "c64/c64model.h"
 #include "cartridge.h"
+#include "keyboard.h"
 #include "vicii.h"
 #include "vice-shim-runtime.h"
 #include "viciisc/viciitypes.h"
@@ -94,10 +98,12 @@ extern vicii_t vicii;
 
 static int vice_shim_model_from_selector(const char *selector);
 static int vice_shim_selector_equals(const char *left, const char *right);
+static int vice_shim_valid_disk_slot(unsigned int unit, unsigned int drive);
 static int vice_shim_apply_cartridge_locked(const vice_machine_t *instance);
 static int vice_shim_cartridge_type_for(const vice_machine_t *instance, int length, int mapping_mode);
 static void vice_shim_detach_cartridge_locked(void);
 static int vice_shim_write_temp_file(const uint8_t *data, int length, char *path, size_t path_size);
+static uint16_t vice_shim_read_cia_timer(cia_context_t *cia, ciat_t *timer);
 
 static BOOL CALLBACK vice_shim_initialize_sync(PINIT_ONCE init_once, PVOID parameter, PVOID *context)
 {
@@ -121,6 +127,19 @@ static int vice_shim_is_active_machine(const void *machine)
     return instance != NULL
         && instance->magic == VICE_MACHINE_MAGIC
         && instance == g_active_machine;
+}
+
+static uint16_t vice_shim_read_cia_timer(cia_context_t *cia, ciat_t *timer)
+{
+    CLOCK cclk;
+
+    if (cia == NULL || timer == NULL) {
+        return 0;
+    }
+
+    cclk = cia->clk_ptr != NULL ? *(cia->clk_ptr) : maincpu_clk;
+    ciat_update(timer, cclk);
+    return ciat_read_timer(timer, cclk);
 }
 
 static int vice_shim_wait_for_signal_with_timeout(unsigned int timeout_ms)
@@ -248,7 +267,7 @@ static unsigned __stdcall vice_shim_worker_main(void *parameter)
     return 0;
 }
 
-static void vice_shim_stop_worker(void *machine)
+static int vice_shim_stop_worker(void *machine)
 {
     HANDLE worker = NULL;
 
@@ -257,7 +276,7 @@ static void vice_shim_stop_worker(void *machine)
     EnterCriticalSection(&g_state_lock);
     if (!vice_shim_is_active_machine(machine) || g_worker_thread == NULL) {
         LeaveCriticalSection(&g_state_lock);
-        return;
+        return 1;
     }
 
     g_stop_requested = 1;
@@ -266,12 +285,7 @@ static void vice_shim_stop_worker(void *machine)
     LeaveCriticalSection(&g_state_lock);
 
     if (WaitForSingleObject(worker, VICE_SHIM_STOP_TIMEOUT_MS) != WAIT_OBJECT_0) {
-        // If shutdown takes too long, treat it as non-fatal and continue.
-        // The worker should eventually terminate on its own.
-        g_worker_running = 0;
-        g_cycle_paused = 1;
-        g_stop_requested = 0;
-        g_granted_cycles = 0;
+        return 0;
     }
     CloseHandle(worker);
 
@@ -284,6 +298,8 @@ static void vice_shim_stop_worker(void *machine)
     g_granted_cycles = 0;
     g_cycle_paused = 0;
     LeaveCriticalSection(&g_state_lock);
+
+    return 1;
 }
 
 static void vice_shim_reset_cpu_state_locked(void)
@@ -347,6 +363,7 @@ VICE_SHIM_API void *vice_machine_create_model(const char *model_selector)
 
     c64model_set(model);
     vice_shim_detach_cartridge_locked();
+    file_system_detach_disk_all();
 
     machine = (vice_machine_t *)calloc(1, sizeof(*machine));
     if (machine == NULL) {
@@ -368,51 +385,72 @@ VICE_SHIM_API void *vice_machine_create_model(const char *model_selector)
 
 static int vice_shim_model_from_selector(const char *selector)
 {
-    if (selector == NULL || selector[0] == '\0' || vice_shim_selector_equals(selector, "c64")) {
+    if (selector == NULL || selector[0] == '\0'
+        || vice_shim_selector_equals(selector, "c64")
+        || vice_shim_selector_equals(selector, "breadbox")
+        || vice_shim_selector_equals(selector, "pal")
+        || vice_shim_selector_equals(selector, "c64-pal")
+        || vice_shim_selector_equals(selector, "commodore64")) {
         return C64MODEL_C64_PAL;
     }
 
     if (vice_shim_selector_equals(selector, "c64c")
         || vice_shim_selector_equals(selector, "newpal")
-        || vice_shim_selector_equals(selector, "c64new")) {
+        || vice_shim_selector_equals(selector, "c64new")
+        || vice_shim_selector_equals(selector, "c64c-pal")) {
         return C64MODEL_C64C_PAL;
     }
 
-    if (vice_shim_selector_equals(selector, "c64old") || vice_shim_selector_equals(selector, "oldpal")) {
+    if (vice_shim_selector_equals(selector, "c64old")
+        || vice_shim_selector_equals(selector, "oldpal")
+        || vice_shim_selector_equals(selector, "c64old-pal")) {
         return C64MODEL_C64_OLD_PAL;
     }
 
-    if (vice_shim_selector_equals(selector, "ntsc") || vice_shim_selector_equals(selector, "c64ntsc")) {
+    if (vice_shim_selector_equals(selector, "ntsc")
+        || vice_shim_selector_equals(selector, "c64ntsc")
+        || vice_shim_selector_equals(selector, "c64-ntsc")) {
         return C64MODEL_C64_NTSC;
     }
 
     if (vice_shim_selector_equals(selector, "newntsc")
         || vice_shim_selector_equals(selector, "c64cntsc")
-        || vice_shim_selector_equals(selector, "c64newntsc")) {
+        || vice_shim_selector_equals(selector, "c64newntsc")
+        || vice_shim_selector_equals(selector, "c64c-ntsc")) {
         return C64MODEL_C64C_NTSC;
     }
 
-    if (vice_shim_selector_equals(selector, "oldntsc") || vice_shim_selector_equals(selector, "c64oldntsc")) {
+    if (vice_shim_selector_equals(selector, "oldntsc")
+        || vice_shim_selector_equals(selector, "c64oldntsc")
+        || vice_shim_selector_equals(selector, "c64old-ntsc")) {
         return C64MODEL_C64_OLD_NTSC;
     }
 
-    if (vice_shim_selector_equals(selector, "paln") || vice_shim_selector_equals(selector, "drean")) {
+    if (vice_shim_selector_equals(selector, "paln")
+        || vice_shim_selector_equals(selector, "drean")
+        || vice_shim_selector_equals(selector, "c64-paln")) {
         return C64MODEL_C64_PAL_N;
     }
 
-    if (vice_shim_selector_equals(selector, "sx64pal") || vice_shim_selector_equals(selector, "sx64")) {
+    if (vice_shim_selector_equals(selector, "sx64pal")
+        || vice_shim_selector_equals(selector, "sx64")
+        || vice_shim_selector_equals(selector, "sx64-pal")) {
         return C64MODEL_C64SX_PAL;
     }
 
-    if (vice_shim_selector_equals(selector, "sx64ntsc")) {
+    if (vice_shim_selector_equals(selector, "sx64ntsc")
+        || vice_shim_selector_equals(selector, "sx64-ntsc")) {
         return C64MODEL_C64SX_NTSC;
     }
 
-    if (vice_shim_selector_equals(selector, "pet64pal") || vice_shim_selector_equals(selector, "pet64")) {
+    if (vice_shim_selector_equals(selector, "pet64pal")
+        || vice_shim_selector_equals(selector, "pet64")
+        || vice_shim_selector_equals(selector, "pet64-pal")) {
         return C64MODEL_PET64_PAL;
     }
 
-    if (vice_shim_selector_equals(selector, "pet64ntsc")) {
+    if (vice_shim_selector_equals(selector, "pet64ntsc")
+        || vice_shim_selector_equals(selector, "pet64-ntsc")) {
         return C64MODEL_PET64_NTSC;
     }
 
@@ -469,6 +507,7 @@ VICE_SHIM_API void vice_machine_destroy(void *machine)
     EnterCriticalSection(&g_state_lock);
     if (g_active_machine == instance) {
         vice_shim_detach_cartridge_locked();
+        file_system_detach_disk_all();
         g_active_machine = NULL;
         g_bootstrap_pending = 0;
         WakeAllConditionVariable(&g_state_cv);
@@ -498,6 +537,10 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
     }
 
     c64model_set(instance->c64_model);
+    if (!instance->cartridge_attached) {
+        vice_shim_detach_cartridge_locked();
+    }
+
     machine_powerup();
     mem_powerup();
     if (instance->cartridge_attached) {
@@ -544,6 +587,58 @@ VICE_SHIM_API int vice_machine_attach_cartridge(void *machine, const uint8_t *im
     return result;
 }
 
+VICE_SHIM_API int vice_machine_attach_disk(void *machine, unsigned int unit, unsigned int drive, const char *path)
+{
+    int result;
+
+    if (path == NULL || path[0] == '\0') {
+        return -1;
+    }
+
+    if (!vice_shim_valid_disk_slot(unit, drive)) {
+        return -3;
+    }
+
+    if (!vice_shim_stop_worker(machine)) {
+        return -4;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    result = file_system_attach_disk(unit, drive, path);
+    LeaveCriticalSection(&g_state_lock);
+    return result;
+}
+
+VICE_SHIM_API int vice_machine_detach_disk(void *machine, unsigned int unit, unsigned int drive)
+{
+    if (!vice_shim_valid_disk_slot(unit, drive)) {
+        return -3;
+    }
+
+    if (!vice_shim_stop_worker(machine)) {
+        return -4;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    file_system_detach_disk(unit, drive);
+    LeaveCriticalSection(&g_state_lock);
+    return 0;
+}
+
 VICE_SHIM_API uint8_t vice_machine_peek_ram(void *machine, uint16_t address)
 {
     uint8_t value = 0;
@@ -553,6 +648,92 @@ VICE_SHIM_API uint8_t vice_machine_peek_ram(void *machine, uint16_t address)
     EnterCriticalSection(&g_state_lock);
     if (vice_shim_is_active_machine(machine)) {
         value = mem_ram[address];
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API uint8_t vice_machine_read(void *machine, uint16_t address)
+{
+    uint8_t value = 0xff;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        value = mem_read(address);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API void vice_machine_write(void *machine, uint16_t address, uint8_t value)
+{
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        mem_store(address, value);
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API int vice_machine_get_model(void *machine)
+{
+    int model = C64MODEL_UNKNOWN;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        model = c64model_get();
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return model;
+}
+
+VICE_SHIM_API int vice_machine_set_keyboard_matrix_key(void *machine, int row, int column, int pressed)
+{
+    if (row < 0 || row >= 8 || column < 0 || column >= 8) {
+        return -1;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    keyboard_set_keyarr(row, column, pressed ? 1 : 0);
+    LeaveCriticalSection(&g_state_lock);
+    return 0;
+}
+
+VICE_SHIM_API void vice_machine_cia1_store(void *machine, uint8_t register_index, uint8_t value)
+{
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        cia1_store(register_index & 0x0f, value);
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API uint8_t vice_machine_cia1_read(void *machine, uint8_t register_index)
+{
+    uint8_t value = 0xff;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        value = cia1_read(register_index & 0x0f);
     }
     LeaveCriticalSection(&g_state_lock);
 
@@ -634,6 +815,13 @@ static void vice_shim_detach_cartridge_locked(void)
     cartridge_detach_image(CARTRIDGE_GENERIC_8KB);
     cartridge_detach_image(CARTRIDGE_GENERIC_16KB);
     cartridge_detach_image(CARTRIDGE_GS);
+}
+
+static int vice_shim_valid_disk_slot(unsigned int unit, unsigned int drive)
+{
+    return unit >= DRIVE_UNIT_MIN
+        && unit <= DRIVE_UNIT_MAX
+        && drive <= DRIVE_NUMBER_MAX;
 }
 
 static int vice_shim_write_temp_file(const uint8_t *data, int length, char *path, size_t path_size)
@@ -919,8 +1107,8 @@ VICE_SHIM_API void vice_cia_get_state(void *machine, int cia_index, struct vice_
             state->port_b = cia->c_cia[CIA_PRB];
             state->ddr_a = cia->c_cia[CIA_DDRA];
             state->ddr_b = cia->c_cia[CIA_DDRB];
-            state->timer_a = (uint16_t)(cia->c_cia[CIA_TAL] | (cia->c_cia[CIA_TAH] << 8));
-            state->timer_b = (uint16_t)(cia->c_cia[CIA_TBL] | (cia->c_cia[CIA_TBH] << 8));
+            state->timer_a = vice_shim_read_cia_timer(cia, cia->ta);
+            state->timer_b = vice_shim_read_cia_timer(cia, cia->tb);
             state->icr = cia->c_cia[CIA_ICR];
             state->cra = cia->c_cia[CIA_CRA];
             state->crb = cia->c_cia[CIA_CRB];

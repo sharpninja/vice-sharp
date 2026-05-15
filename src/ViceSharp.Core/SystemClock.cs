@@ -6,6 +6,7 @@ namespace ViceSharp.Core;
 public sealed class SystemClock : IClock
 {
     private readonly List<IClockedDevice> _devices = new();
+    private readonly List<ICpuCycleStealer> _cycleStealers = new();
     private readonly Mos6502? _cpu;
     private readonly IInterruptLine? _irqLine;
     private readonly IInterruptLine? _nmiLine;
@@ -53,16 +54,22 @@ public sealed class SystemClock : IClock
     public void Step()
     {
         _cycle++;
+        var cpuCycleStolen = false;
+        var cpuCycleStealConditional = false;
+        var cpuCycleStealMandatory = false;
 
-        foreach (var device in _devices)
-        {
-            if (_cycle % device.ClockDivisor == 0)
-            {
-                device.Tick();
-            }
-        }
+        TickPhase(ClockPhase.Phi1, skipCpu: false);
+        cpuCycleStolen = IsCpuCycleStolen(out cpuCycleStealConditional, out cpuCycleStealMandatory);
+        var cpuSkipped = TickPhase(
+            ClockPhase.Phi2,
+            skipCpu: cpuCycleStolen,
+            conditionalCpuSkip: cpuCycleStealConditional,
+            mandatoryCpuSkip: cpuCycleStealMandatory);
         
         UpdateNmiEdgeLatch();
+
+        if (cpuSkipped)
+            return;
 
         // Check for pending interrupts after all devices have ticked.
         // This allows CIA/VIC to assert interrupt lines during their Tick().
@@ -77,6 +84,57 @@ public sealed class SystemClock : IClock
         }
     }
 
+    private bool TickPhase(
+        ClockPhase phase,
+        bool skipCpu,
+        bool conditionalCpuSkip = false,
+        bool mandatoryCpuSkip = false)
+    {
+        var cpuSkipped = false;
+        foreach (var device in _devices)
+        {
+            if (device.Phase != phase || _cycle % device.ClockDivisor != 0)
+                continue;
+
+            if (skipCpu && CanSkipCpu(device, conditionalCpuSkip, mandatoryCpuSkip))
+            {
+                if (device is ICpu)
+                    cpuSkipped = true;
+                continue;
+            }
+
+            device.Tick();
+        }
+
+        return cpuSkipped;
+    }
+
+    private static bool CanSkipCpu(IClockedDevice device, bool conditionalCpuSkip, bool mandatoryCpuSkip)
+    {
+        return device is ICpu &&
+            (device is ICpuCycleStealTarget target
+                ? (conditionalCpuSkip && target.CanStealCurrentCycle) ||
+                    (mandatoryCpuSkip && target.CanForceStealCurrentCycle)
+                : conditionalCpuSkip || mandatoryCpuSkip);
+    }
+
+    private bool IsCpuCycleStolen(out bool conditional, out bool mandatory)
+    {
+        conditional = false;
+        mandatory = false;
+        foreach (var stealer in _cycleStealers)
+        {
+            if (stealer.IsCpuCycleStolen || stealer.IsCpuCycleStealMandatory)
+            {
+                conditional |= stealer.IsCpuCycleStolen;
+                mandatory |= stealer.IsCpuCycleStealMandatory;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void Step(long cycles)
     {
         for (long i = 0; i < cycles; i++)
@@ -88,11 +146,15 @@ public sealed class SystemClock : IClock
     public void Register(IClockedDevice device)
     {
         _devices.Add(device);
+        if (device is ICpuCycleStealer cycleStealer)
+            _cycleStealers.Add(cycleStealer);
     }
 
     public void Unregister(IClockedDevice device)
     {
         _devices.Remove(device);
+        if (device is ICpuCycleStealer cycleStealer)
+            _cycleStealers.Remove(cycleStealer);
     }
 
     public void Reset()
