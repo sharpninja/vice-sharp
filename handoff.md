@@ -45,3 +45,29 @@ When changing runtime or lockstep behavior, also run focused tests around the to
 - `docs/plan.md` is the consolidated plan artifact.
 - Do not directly edit `docs/todo.yaml`; use the MCP TODO path through `mcpserver-codex-plugin`.
 - Full subsystem parity for 1541, datasette, cartridges, snapshots, and capture/export is still broader future work; this slice closes the bounded MCP TODO gates only.
+
+## Items to add via MCP Todo
+
+- Priority High: Completion Dashboard
+    - Section in root README.md
+    - Tracks complete feature set of VICE to ViceSharp
+        - Per Feature State
+        - Per Feature Completion %
+        - Per Feature Interation
+- Priority High: Benchmarking
+    - Add Benchmark.net based harness to compare performance of VICE and ViceSharp performing predefined sets of work
+    - Individually test CPU, Video, Audio, IEC, Cartridge, Keyboard
+    - Test complete system performance over scripted activities
+- Priority High: Repository Maintenance
+    - Reconcile Chips and remove old, unused definitions
+    - Ensure the requirements imported from VICE documentation are properly imported to the MCP Server
+    - Populate the github wiki
+- Priority High: Ad-Hoc Machine Definition
+    - Abstract machine architecture to a YAML document (create schema)
+    - Add support to the Console project to accept an ad-hoc machine architecture via command line which will assemble and validate the architecture, then start the machine.
+    - Create a helper app (Avalonia 12) to generate a machine architecture using the available chips and other system blocks.
+- Priority Medium: Cross Platform
+    - Create wireframes for UI for each platform
+    - Create UWP Host for Xbox One / Xbox Series
+    - Create Avalonia 12 Mobile Host
+    - Add MacOS Support
