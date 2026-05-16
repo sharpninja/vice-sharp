@@ -48,6 +48,11 @@ When changing runtime or lockstep behavior, also run focused tests around the to
 
 ## Items to add via MCP Todo
 
+- Priority High: XMLDOCS
+    - Required for all unit and integration tests
+        - Must state the FR/TR being tested
+        - Must describe the use case being tested
+        - Must describe the acceptance criteria of the test
 - Priority High: Completion Dashboard
     - Section in root README.md
     - Tracks complete feature set of VICE to ViceSharp
