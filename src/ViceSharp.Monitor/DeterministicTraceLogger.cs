@@ -14,6 +14,7 @@ namespace ViceSharp.Monitor;
 public class DeterministicTraceLogger : IDisposable
 {
     private readonly IMachine _machine;
+    private readonly Monitor _monitor;
     private readonly TextWriter _writer;
     private readonly StringBuilder _lineBuilder;
     private readonly Task _flushTask;
@@ -29,6 +30,7 @@ public class DeterministicTraceLogger : IDisposable
     public DeterministicTraceLogger(IMachine machine, string outputPath)
     {
         _machine = machine ?? throw new ArgumentNullException(nameof(machine));
+        _monitor = new Monitor(_machine);
         
         // Create directory if it doesn't exist
         var dir = Path.GetDirectoryName(outputPath);
@@ -77,9 +79,8 @@ public class DeterministicTraceLogger : IDisposable
         _lineBuilder.Append(state.P.ToString("X2"));
         _lineBuilder.Append(" ZNVC:");
         _lineBuilder.Append(GetFlagString(state.P));
-        
-        // TODO: Add disassembly once opcode decoding is available
-        // _lineBuilder.Append(" OPCODE OP1 OP2  DISASM");
+
+        AppendDisassembly(state.PC);
         
         _lineBuilder.Append('\n');
         
@@ -90,6 +91,25 @@ public class DeterministicTraceLogger : IDisposable
     public void Flush()
     {
         _writer.Flush();
+    }
+
+    private void AppendDisassembly(ushort pc)
+    {
+        var entry = _monitor.Disassemble(pc, 1)[0];
+
+        _lineBuilder.Append("  ");
+        for (var i = 0; i < 3; i++)
+        {
+            if (i < entry.Bytes.Length)
+                _lineBuilder.Append(entry.Bytes[i].ToString("X2"));
+            else
+                _lineBuilder.Append("  ");
+
+            _lineBuilder.Append(' ');
+        }
+
+        _lineBuilder.Append(' ');
+        _lineBuilder.Append(entry.Text);
     }
     
     private void UpdateRasterState()
