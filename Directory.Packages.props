@@ -41,4 +41,7 @@
     <PackageVersion Include="SkiaSharp" Version="3.119.2" />
     <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.1" />
   </ItemGroup>
+  <ItemGroup Label="Serialization">
+    <PackageVersion Include="YamlDotNet" Version="17.1.0" />
+  </ItemGroup>
 </Project>

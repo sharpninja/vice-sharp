@@ -1,0 +1,61 @@
+# Sample ad-hoc machine definition that round-trips
+# the existing src/ViceSharp.Architectures/C64/Commodore64.cs builder.
+schemaVersion: 1
+
+machine:
+  name: "Commodore 64 PAL"
+  videoStandard: Pal
+  masterClockHz: 985248
+  resetVector: 0xFFFC
+
+interruptLines:
+  - id: irq
+    type: Irq
+  - id: nmi
+    type: Nmi
+
+memory:
+  regions:
+    - id: ram-main
+      kind: Ram
+      start: 0x0000
+      end:   0xFFFF
+    - id: ram-color
+      kind: Ram
+      start: 0xD800
+      end:   0xDBFF
+    - id: rom-basic
+      kind: Rom
+      start: 0xA000
+      end:   0xBFFF
+    - id: rom-kernal
+      kind: Rom
+      start: 0xE000
+      end:   0xFFFF
+    - id: rom-chargen
+      kind: Rom
+      start: 0xD000
+      end:   0xDFFF
+
+chips:
+  - id: cpu
+    type: Mos6502
+    role: Cpu
+  - id: vic
+    type: Mos6569
+    role: VideoChip
+    baseAddress: 0xD000
+    irqLine: irq
+  - id: cia1
+    type: Mos6526
+    role: Cia1
+    baseAddress: 0xDC00
+    irqLine: irq
+  - id: cia2
+    type: Mos6526
+    role: Cia2
+    baseAddress: 0xDD00
+    irqLine: nmi
+  - id: sid
+    type: Sid6581
+    role: AudioChip
