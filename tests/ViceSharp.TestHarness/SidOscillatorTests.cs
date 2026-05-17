@@ -5,6 +5,13 @@ using Xunit;
 
 public sealed class SidOscillatorTests
 {
+    /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-SID-NOISE-LFSR.
+    /// Use case: A program selects the noise waveform on a SID voice without
+    /// stepping the oscillator and reads the immediate output value.
+    /// Acceptance: With the LFSR in its reset state (all ones in the tapped
+    /// bits) the noise output reads back as <c>0xFF</c>.
+    /// </summary>
     [Fact]
     public void NoiseWaveform_ProducesNonZeroOutputFromDefaultLfsr()
     {
@@ -16,6 +23,15 @@ public sealed class SidOscillatorTests
         Assert.Equal(0xFF, oscillator.Output());
     }
 
+    /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-SID-NOISE-LFSR.
+    /// Use case: The SID oscillator runs with a known frequency; the noise
+    /// LFSR must only advance on the bit-19 low-to-high transition of the
+    /// 24-bit phase accumulator, matching the MOS 6581 hardware.
+    /// Acceptance: After 15 steps the noise output is unchanged at
+    /// <c>0xFF</c>; the 16th step produces the first LFSR advance and the
+    /// output becomes <c>0xFE</c>.
+    /// </summary>
     [Fact]
     public void NoiseWaveform_ClocksWhenAccumulatorBit19TransitionsHigh()
     {
@@ -35,6 +51,15 @@ public sealed class SidOscillatorTests
         Assert.Equal(0xFE, oscillator.Output());
     }
 
+    /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-SID-NOISE-LFSR.
+    /// Use case: Two independently constructed SID oscillators driven with
+    /// the same frequency and step count must emit identical noise samples
+    /// so that replay traces and lockstep validation are reproducible.
+    /// Acceptance: Two captured sample sequences are byte-for-byte equal
+    /// and contain at least one non-<c>0xFF</c> sample (proving the LFSR
+    /// actually advanced).
+    /// </summary>
     [Fact]
     public void NoiseWaveform_IsDeterministicForSameFrequencyAndClocking()
     {
@@ -45,6 +70,14 @@ public sealed class SidOscillatorTests
         Assert.Contains(first, sample => sample != 0xFF);
     }
 
+    /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-SID-NOISE-LFSR.
+    /// Use case: A program toggles the SID voice TEST bit (waveform
+    /// bit 3) to re-seed the noise LFSR and clear the phase accumulator,
+    /// matching the MOS 6581 test-bit semantics relied upon by many demos.
+    /// Acceptance: After clearing TEST the accumulator is zero and the
+    /// noise output is <c>0xFF</c> (LFSR re-seeded with the reset pattern).
+    /// </summary>
     [Fact]
     public void TestBit_ResetsNoiseLfsrAndAccumulator()
     {

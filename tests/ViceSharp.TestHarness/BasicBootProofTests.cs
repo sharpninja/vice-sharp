@@ -4,6 +4,15 @@ using Xunit;
 
 public sealed class BasicBootProofTests
 {
+    /// <summary>
+    /// FR: FR-C64-Boot, TR: TR-C64-RESET-VECTOR.
+    /// Use case: A freshly-constructed C64 machine starts executing from
+    /// the reset vector; during the first 100,000 instructions the PC must
+    /// stay inside ROM/IO and never land in user RAM (<c>$0400-$9FFF</c>),
+    /// which would indicate a broken PLA mapping or runaway reset.
+    /// Acceptance: No PC sample observed during the boot window falls in
+    /// the low-RAM range; if one does, the failure dumps the last 32 PCs.
+    /// </summary>
     [Fact]
     public void C64_Boot_Does_Not_Fall_Into_Low_Ram_During_Early_Reset()
     {
@@ -28,6 +37,14 @@ public sealed class BasicBootProofTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-C64-Boot, TR: TR-C64-BASIC-READY.
+    /// Use case: End-to-end smoke test that a C64 machine boots through
+    /// the KERNAL/BASIC reset path and renders the <c>READY.</c> prompt
+    /// to screen memory within a bounded number of emulated frames.
+    /// Acceptance: Within 400 frames the screen-code or ASCII pattern for
+    /// <c>READY</c> appears in screen RAM at <c>$0400</c>.
+    /// </summary>
     [Fact]
     public void C64_Boot_Reaches_Ready_Prompt()
     {

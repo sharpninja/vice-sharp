@@ -84,6 +84,14 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-Architectures-C64-x64sc, TR: TR-X64SC-PROFILE-COVERAGE.
+    /// Use case: The x64sc lockstep harness drives every shipped C64
+    /// variant; the master selector set must therefore enumerate every
+    /// profile in <see cref="C64MachineProfiles.All"/> and nothing else.
+    /// Acceptance: Selector list has 14 entries, matches the profile id
+    /// set exactly, and every profile reports family <c>x64sc</c>.
+    /// </summary>
     [Fact]
     public void RequiredModelSelectors_CoverEveryDefinedX64ScProfile()
     {
@@ -92,6 +100,16 @@ public sealed class X64ScVariantLockstepTests
         C64MachineProfiles.All.Should().OnlyContain(profile => profile.Family == "x64sc");
     }
 
+    /// <summary>
+    /// FR: FR-Architectures-C64-x64sc, TR: TR-X64SC-NOCART-BOOT.
+    /// Use case: Variants that require a cartridge image to boot (Ultimax,
+    /// C64GS) must be excluded from the "no-cartridge boot" harness so
+    /// the gate never tries to drive them past the reset vector without
+    /// an image attached.
+    /// Acceptance: The selector list contains 12 variants, omits the
+    /// cartridge-required selectors, and the PLA policies for the omitted
+    /// variants match the documented Ultimax / CartridgeRequired modes.
+    /// </summary>
     [Fact]
     public void NoCartridgeBootSelectors_CoverEveryDeterministicNoCartridgeVariant()
     {

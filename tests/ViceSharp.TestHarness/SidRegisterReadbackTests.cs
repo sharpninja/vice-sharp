@@ -6,6 +6,15 @@ using Xunit;
 
 public sealed class SidRegisterReadbackTests
 {
+    /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-SID-VOICE3-READBACK.
+    /// Use case: A C64 program programs SID voice 3 and reads back the
+    /// OSC3 (<c>$D41B</c>) and ENV3 (<c>$D41C</c>) latches to drive scope
+    /// or vibrato effects, exactly as on the MOS 6581.
+    /// Acceptance: <c>$D41B</c> returns the high byte of the voice 3 phase
+    /// accumulator and <c>$D41C</c> reflects the envelope state, both
+    /// independent of any previous bus write at those addresses.
+    /// </summary>
     [Fact]
     public void Voice3Readback_UsesOsc3AndEnv3Addresses()
     {

@@ -7,6 +7,16 @@ using Xunit;
 
 public sealed class DeterministicTraceLoggerTests
 {
+    /// <summary>
+    /// FR: FR-Monitor-Trace, TR: TR-MONITOR-DISASM-COLUMN.
+    /// Use case: The deterministic trace logger writes one line per CPU
+    /// instruction so the trace can be diffed against the upstream VICE
+    /// monitor trace; each line must show PC, the raw opcode bytes, and a
+    /// human-readable mnemonic for visual diagnosis.
+    /// Acceptance: After logging a single <c>LDA #$01</c> the output file
+    /// contains the PC hex, the bytes <c>A9 01</c>, and the disassembled
+    /// mnemonic <c>LDA #$01</c>.
+    /// </summary>
     [Fact]
     public void LogInstruction_IncludesOpcodeBytesAndDisassembly()
     {

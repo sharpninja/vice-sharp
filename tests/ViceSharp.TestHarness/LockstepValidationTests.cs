@@ -13,6 +13,14 @@ public sealed class LockstepValidationTests : IDisposable
         _validator = new LockstepValidator();
     }
 
+    /// <summary>
+    /// FR: FR-Validation-Lockstep, TR: TR-LOCKSTEP-RESET.
+    /// Use case: After power-on reset, ViceSharp and the upstream VICE
+    /// native build must agree on every observable CPU register before
+    /// either side executes a single instruction.
+    /// Acceptance: <see cref="LockstepValidator"/> reports zero cycles and
+    /// no register mismatch (PC, A, X, Y, S, P) against native VICE.
+    /// </summary>
     [ViceFact]
     public void ResetStateMatches()
     {
@@ -23,6 +31,15 @@ public sealed class LockstepValidationTests : IDisposable
         report.Success.Should().BeTrue(FormatReport(report));
     }
 
+    /// <summary>
+    /// FR: FR-Validation-Lockstep, TR: TR-LOCKSTEP-100.
+    /// Use case: Smallest cycle window that proves the very first opcode
+    /// fetch and dispatch path matches the native VICE reference; cheap
+    /// enough to run on every CI build and the first to fail when the CPU
+    /// front-end regresses.
+    /// Acceptance: 100 cycles execute with no mismatch and the validator
+    /// reports exactly 100 cycles executed.
+    /// </summary>
     [ViceFact]
     public void First100CyclesMatch()
     {
@@ -34,6 +51,15 @@ public sealed class LockstepValidationTests : IDisposable
         report.TotalCyclesExecuted.Should().Be(100);
     }
 
+    /// <summary>
+    /// FR: FR-Validation-Lockstep, TR: TR-LOCKSTEP-10K.
+    /// Use case: Medium-window lockstep gate that exercises the KERNAL
+    /// reset routine end-to-end against native VICE, catching divergences
+    /// in flag math, addressing modes, and CIA/VIC-II side effects that
+    /// only surface after thousands of cycles.
+    /// Acceptance: 10,000 cycles execute with no register mismatch and
+    /// the validator reports exactly 10,000 cycles executed.
+    /// </summary>
     [ViceFact]
     public void First10000CyclesMatch()
     {
@@ -45,6 +71,14 @@ public sealed class LockstepValidationTests : IDisposable
         report.TotalCyclesExecuted.Should().Be(10000);
     }
 
+    /// <summary>
+    /// FR: FR-Validation-Lockstep, TR: TR-LOCKSTEP-100K.
+    /// Use case: Long-window lockstep regression gate that runs the full
+    /// BASIC reset+IDLE loop against native VICE; the deepest CI parity
+    /// signal currently shipped, covering interrupt timing and CIA TOD.
+    /// Acceptance: 100,000 cycles execute with zero register mismatch and
+    /// the validator reports exactly 100,000 cycles executed.
+    /// </summary>
     [ViceFact]
     public void First100000CyclesMatch()
     {
