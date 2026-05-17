@@ -1,5 +1,9 @@
 # Functional Requirements (MCP Server)
 
+## FR-ARCH-001 Ad-hoc machine architecture loading
+
+The emulator shall accept a YAML document describing a machine architecture (chips, memory regions, interrupt lines, master clock, video standard, reset vector) and shall validate the document against a published schema. Validation errors shall report the offending field path. The architecture descriptor produced by the loader shall round-trip equivalent in chip set, base addresses, and memory layout to the hardcoded C64 builder when loaded from docs/samples/c64.machine.yaml. The console host shall accept a --machine-yaml <path> flag that loads, validates, builds, and runs the machine, and shall return exit code 1 with a stderr message when the file is missing or invalid. Default behavior is preserved when the flag is absent.
+
 ## FR-CFG-001 Resource File and Command-Line Configuration
 
 ## FR-CFG-001: Resource File and Command-Line Configuration
@@ -149,7 +153,7 @@ The emulator shall support autostarting programs from disk, tape, cartridge, or 
 2. Autostart attaches required media through host media services.
 3. Autostart injects launch commands through host input/control services at deterministic boundaries.
 4. Autostart failures leave existing media and machine state unchanged unless explicitly committed.
-5. Reset-plus-drive-8 autorun succeeds for a readable drive 8 D64 containing a runnable PRG and reports an explicit failed-precondition status when required host, media, runtime, or keyboard automation prerequisites are missing.
+5. Reset-plus-drive-8 autorun reports unsupported until the host implements the full autostart path.
 
 ### Source References
 
@@ -830,6 +834,10 @@ The Final Cartridge III is a utility cartridge with 64KB of ROM in 4 banks, prov
 - **Interfaces:** `ICartridgePort`
 - **Test Suite:** `FinalCartridge3Tests`, `Fc3BankSwitchTests`, `Fc3FreezerTests`
 
+## FR-DOC-001 Completion Dashboard surfaces VICE-to-ViceSharp parity
+
+The root README shall contain a Completion Dashboard section that lists features grouped by iteration, with state (done / active / bounded / planned), completion percentage, and linked MCP TODO id per row. The dashboard shall be regenerated when subagent slices land and shall cite a date stamp identifying the snapshot. The dashboard data source shall be the MCP TODO store accessible at /mcpserver/todo.
+
 ## FR-DRV-001 Commodore 1541 Single Floppy Disk Drive Emulation
 
 ## FR-DRV-001: 1541 Drive Emulation
@@ -1231,9 +1239,8 @@ The host shall expose runtime telemetry and machine-control state needed by emul
 1. Host status reports power state, run state, limiter target, measured frames per second, frame count, cycle count, program counter, nominal clock, effective clock Hz, and effective clock percent.
 2. Effective clock speed is measured from emulated cycles per real second and remains distinct from the requested limiter target.
 3. Pause, resume, step one cycle, step one frame, cold reset, and warm reset commands are exposed through the host boundary.
-4. Rewind controls return explicit unsupported status until backing host history support exists.
-5. Reset-plus-drive-8 autorun returns `Ok` for supported drive 8 D64/PRG launches and explicit failed-precondition status when backing host or media prerequisites are missing.
-6. Telemetry responses are safe for polling by UI clients and do not mutate emulator state.
+4. Unsupported controls such as rewind and reset-plus-drive-8 autorun return explicit unsupported status until backing host history/autorun support exists.
+5. Telemetry responses are safe for polling by UI clients and do not mutate emulator state.
 
 ### Source References
 
@@ -2033,6 +2040,10 @@ The monitor shall support watch expressions that continuously evaluate and displ
 - **Interfaces:** `IMonitor`
 - **Test Suite:** `WatchExpressionTests`, `WatchArithmeticTests`, `WatchFormatTests`
 
+## FR-PLAT-001 Cross-platform host wireframes and scope
+
+The repository shall contain wireframes describing the host UI on each target platform (Windows desktop, MacOS desktop, mobile portrait, mobile landscape, Xbox/UWP). Each wireframe shall enumerate the canonical screens (machine view, attach panel, monitor, settings, keyboard map, status bar), the navigation flow, and the per-input affordances (mouse, touch, gamepad). The wireframes shall precede host code so platform host implementations have a stable target.
+
 ## FR-PRF-001 Commodore 64 (Original NMOS) Machine Profile
 
 ## FR-PRF-001: C64 (NMOS) Profile
@@ -2306,6 +2317,14 @@ The C16 is essentially a cut-down Plus/4 with 16KB RAM and no built-in software 
 
 - **Interfaces:** `IMachineProfile`
 - **Test Suite:** `C16ProfileTests`, `C16MemoryLimitTests`
+
+## FR-PRF-009 Benchmark harness and parity reporting against native VICE
+
+The repository shall contain a BenchmarkDotNet harness that runs deterministic workloads for CPU, VIC-II, SID, CIA, and full-system boot, registered in ViceSharp.slnx as a non-test project. Each benchmark class shall be smoke-tested in the xUnit harness with one iteration per workload so CI catches benchmark wiring breakage without invoking BenchmarkDotNet itself. A NativeViceBaseline placeholder shall scope the eventual native VICE shim integration and the comparable measurement contract.
+
+## FR-QA-001 Test methods require structured XMLDOCS
+
+Every [Fact], [Theory], [ViceFact], and [ViceTheory] method in the test corpus shall carry an XML doc comment that names the FR-/TR- being tested, describes the use case being tested, and describes the acceptance criteria. A convention test shall enforce this via a ratchet that decreases as the corpus is retrofitted, and an environment switch (VICESHARP_XMLDOCS_ENFORCE=1) shall escalate the convention test to zero-tolerance mode.
 
 ## FR-SID-001 Three Independent Voice Oscillators
 
@@ -3639,3 +3658,4 @@ The VIC-II sprite DMA shall be emulated with sub-cycle accuracy to support sprit
 
 - **Interfaces:** `IVideoChip`, `ISpriteUnit`
 - **Test Suite:** `SpriteDmaTimingTests`, `SpriteMultiplexTests`, `SpriteDmaCycleTests`
+

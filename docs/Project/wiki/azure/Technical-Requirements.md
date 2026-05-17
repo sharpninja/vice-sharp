@@ -1,5 +1,9 @@
 # Technical Requirements (MCP Server)
 
+## TR-ADHOC-YAML-001
+
+**Ad-hoc machine YAML loader (YamlDotNet, AOT-opt-in)** — AdhocMachineYamlLoader shall parse YAML via YamlDotNet 17.x and emit field-path-tagged AdhocMachineValidationException on schema mismatches. The loader is marked RequiresDynamicCode/RequiresUnreferencedCode and is invoked only behind the Console --machine-yaml flag with a scoped UnconditionalSuppressMessage; the AOT-clean default path is untouched. AdhocMachineBlueprint.BuildMachine(IArchitectureBuilder) materialises chips (Mos6502, Mos6526, Mos6569, Sid6581) and RAM/ROM regions on the supplied bus and clock. AdhocMachine implements IMachine.Reset (clocks reset, devices reset) and GetState (default MachineState until a designated CPU role is added to the schema).
+
 ## TR-ALLOC-001
 
 **Zero Managed Allocations Per Emulation Cycle on Hot Path** — ## TR-ALLOC-001: Zero Managed Allocations Per Emulation Cycle on Hot Path
@@ -303,6 +307,10 @@ Determinism is a foundational requirement for: (1) snapshot-based replay (FR-SNP
 - SID filter computation uses fixed-point arithmetic (Q16.16) in the emulation core; float conversion happens only at the audio output boundary.
 - The frame buffer stores raw pixel indices (palette indices), not RGB values, until the output stage.
 - RAM initialization pattern is configurable but defaults to the documented C64 power-on pattern for deterministic cold starts.
+
+## TR-DOC-DASHBOARD-001
+
+**Completion Dashboard markdown structure in root README** — The Completion Dashboard section in README.md uses one table per group (Iteration 0, Iteration 1, Iterations 2-5, Tooling/Ecosystem). Columns: Feature, State (✅/🟢/🟡/⚪), %, Source. Source column links to the live MCP TODO id and to in-repo artifacts where present. The dashboard cites a refresh date and a snapshot link to /mcpserver/todo?done=false.
 
 ## TR-GRPC-BOUNDARY-001
 
@@ -706,6 +714,10 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
 - The ViewModel for the main emulator display exposes display state and commands through abstractions only. The in-process Avalonia render surface may bind directly to a local frame source, but that binding is owned by the host/composition layer rather than the ViewModel.
 - gRPC generated clients are adapted behind ViewModel-facing interfaces so transport code does not leak into ViewModels.
 
+## TR-PERF-HARNESS-001
+
+**BenchmarkDotNet harness wiring under tests/ViceSharp.Benchmarks** — tests/ViceSharp.Benchmarks targets net10.0 with OutputType=Exe and BenchmarkDotNet 0.15.x, ProjectReferences ViceSharp.Architectures, ViceSharp.Chips, and ViceSharp.Core. The project is registered in ViceSharp.slnx under the /tests/ folder with IsTestProject=false so dotnet test does not invoke testhost. tests/ViceSharp.TestHarness/BenchmarksSmokeTests.cs runs one iteration of each benchmark workload through xUnit. dotnet run -c Release --project tests/ViceSharp.Benchmarks enumerates and runs all benchmarks.
+
 ## TR-PLAT-001
 
 **Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64** — ## TR-PLAT-001: Windows/Linux/macOS, x64/ARM64, .NET 10
@@ -772,6 +784,10 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 - Platform-specific audio/video/input implementations are in separate assemblies (e.g., `ViceSharp.Platform.Windows`, `ViceSharp.Platform.Linux`, `ViceSharp.Platform.MacOS`).
 - The platform assembly is selected at application startup via a factory, not compile-time conditionals.
 - ARM64 Windows (Surface Pro X, Snapdragon laptops) is a supported target from the start.
+
+## TR-PLAT-WIRES-001
+
+**Cross-platform wireframes in docs/wireframes/** — docs/wireframes/ contains one markdown file per target (desktop-windows, desktop-macos, mobile-portrait, mobile-landscape, xbox) plus an index README. Each file uses ASCII layout sketches plus prose for screens, navigation flow, and per-input affordances (mouse/touch/gamepad). The Windows wireframe captures the live src/ViceSharp.Avalonia/MainWindow surface as the reference state.
 
 ## TR-PUBSUB-001
 
@@ -842,6 +858,10 @@ At approximately 985,000 CPU cycles per second (PAL), even a 1-microsecond overh
 - Message delivery is synchronous (inline) -- there is no async dispatch or thread marshaling within the emulation loop.
 - Subscribers are sorted by priority at registration time; delivery order is fixed during emulation.
 - The ring buffer uses `Unsafe.As<TFrom, TTo>()` for zero-copy payload reinterpretation between message types.
+
+## TR-QA-XMLDOCS-001
+
+**XMLDOCS convention test with ratchet baseline** — tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs scans test source files via regex for [Fact]|[Theory]|[ViceFact]|[ViceTheory] method declarations and asserts each preceding doc comment contains FR-, TR-, "Use case:", and "Acceptance:" tokens. Violations are sorted; the test fails if the count exceeds ExpectedMaxViolations (current baseline 192). VICESHARP_XMLDOCS_ENFORCE=1 forces zero-tolerance. The constant must only decrease as the corpus is retrofitted.
 
 ## TR-SIMD-001
 
@@ -1033,3 +1053,4 @@ The Avalonia shell shall present emulator controls through ViewModels and host-c
 - FR-UI-002
 - FR-UI-003
 - FR-UI-004
+
