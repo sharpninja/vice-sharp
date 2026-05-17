@@ -74,7 +74,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | BenchmarkDotNet harness vs native VICE | ⚪ | 0% | `PERF-BENCHMARK-001` |
 | Repository maintenance + github wiki | ⚪ | 0% | `REPO-MAINT-001` |
 | Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | ⚪ | 0% | `ARCH-ADHOCMACHINE-001` |
-| Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | ⚪ | 0% | `PLATFORM-CROSS-001` |
+| Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
 Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state.
