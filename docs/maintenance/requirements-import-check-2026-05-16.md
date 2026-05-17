@@ -1,0 +1,103 @@
+# Requirements Import Sanity Check (2026-05-16)
+
+Owner: REPO-MAINT-001 phase 1.
+
+This report compares the requirements visible on the local filesystem (under `docs/requirements/`) against what the MCP Server has ingested into its requirements store (`/mcpserver/requirements/{fr,tr,test}`).
+
+## Method
+
+```
+# Local IDs
+grep -rEoh '\bFR-[A-Z]+-[0-9]{3}\b'   docs/requirements/functional/ | sort -u
+grep -rEoh '\bTR-[A-Z]+-[0-9]{3}\b'   docs/requirements/technical/  | sort -u
+grep -rEoh '\bTEST-[A-Z]+-[0-9]{3}\b' docs/requirements/            | sort -u
+
+# Ingested IDs (workspace API key from AGENTS-README-FIRST.yaml)
+curl -s "$BASE/mcpserver/requirements/fr"   -H "X-Api-Key: $KEY" | jq -r '.[].id' | sort -u
+curl -s "$BASE/mcpserver/requirements/tr"   -H "X-Api-Key: $KEY" | jq -r '.[].id' | sort -u
+curl -s "$BASE/mcpserver/requirements/test" -H "X-Api-Key: $KEY" | jq -r '.[].id' | sort -u
+```
+
+(Used the swagger spec at `/swagger/v1/swagger.json` to confirm the endpoint surface: `/mcpserver/requirements/{fr,tr,test,mapping,generate,ingest}` are the public requirements endpoints.)
+
+## Counts
+
+| Bucket | Local IDs | Ingested IDs | Status |
+|---|---:|---:|---|
+| FR (functional)  | 108 | 108 | EXACT MATCH |
+| TR (technical)   |  13 |  16 | DRIFT (3 ingested-only after rename plus 3 newer canonical IDs)  |
+| TEST (test)      |  18 |  18 | EXACT MATCH |
+| **Total**        | 139 | 142 | 3 server-only TRs |
+
+FR and TEST identifier sets are byte-identical between local docs and the MCP store. No missing imports in those two buckets.
+
+## TR drift detail
+
+Local has one ID the server does not have; the server has four IDs the local files do not have:
+
+```
+$ diff <(local TR IDs) <(server TR IDs)
+6c6,8
+< TR-GRPC-001
+---
+> TR-GRPC-BOUNDARY-001
+> TR-HOST-STATUS-001
+> TR-INPUT-VKM-001
+13a16
+> TR-UI-SHELL-001
+```
+
+### Resolved (no action needed)
+
+- **`TR-GRPC-001` vs `TR-GRPC-BOUNDARY-001`.** Same requirement; the canonical ID was renamed to comply with the MCP requirements-tool ID regex (`TR-AREA-SUBAREA-###`). The local file `docs/requirements/technical/TR-GRPC-Boundary.md` already documents the supersession:
+  > "`TR-GRPC-BOUNDARY-001` is the canonical requirement id. It supersedes the earlier draft label `TR-GRPC-001`; requirements-tool records must use the canonical id because the MCP requirements tool requires TR ids in `TR-AREA-SUBAREA-###` form."
+
+  The draft label `TR-GRPC-001` only survives as a back-reference in that one file. No import gap, just a discoverability quirk of the regex extractor.
+
+### Drift (server has 3 TRs that have no dedicated local Markdown file)
+
+The MCP store contains three additional Technical Requirements whose canonical text does not exist as a standalone `docs/requirements/technical/TR-*.md` file:
+
+1. **`TR-HOST-STATUS-001` -- Measured Emulator Runtime Telemetry** (P0).
+   > "ViceSharp host status shall distinguish requested throttle settings from measured emulation output and measured emulated clock speed."
+2. **`TR-INPUT-VKM-001` -- VICE VKM Parser and Selected Map Resolver** (P0).
+   > "ViceSharp machine keyboard input shall resolve normalized host key events through a selected machine-specific VICE keymap before updating keyboard matrix state."
+3. **`TR-UI-SHELL-001` -- Avalonia Emulator Control Shell** (P1).
+   > "The Avalonia shell shall present emulator controls through ViewModels and host-client abstractions while preserving the host-owned boundary for emulator state and local rendering."
+
+These are valid, fully-bodied TRs already living in the MCP store; the gap is **in the opposite direction** from what was originally suspected. The local Markdown corpus is missing dedicated files for them. They are very likely referenced inline in `docs/Project/Functional-Requirements.md`, `docs/Project/wiki/*/Technical-Requirements.md`, or the design docs that drove their creation (TR-HOST-STATUS-001 maps to runtime gates work; TR-INPUT-VKM-001 to the new VKM parser; TR-UI-SHELL-001 to the recent x64sc host parity work).
+
+### Recommended actions (deferred to a follow-up TODO)
+
+The MCP store is the source of truth and is complete. The gap to close is local-side documentation hygiene:
+
+1. Add three new files under `docs/requirements/technical/` populated from the MCP store body (`GET /mcpserver/requirements/tr/{id}`):
+   - `docs/requirements/technical/TR-Host-Status.md`
+   - `docs/requirements/technical/TR-Input-VKM.md`
+   - `docs/requirements/technical/TR-UI-Shell.md`
+2. Regenerate the per-platform wiki TR pages (see `docs/maintenance/wiki-publish-plan.md`) so the github/azure wiki mirrors include these three TRs.
+3. Update `docs/requirements/traceability/` maps to cite the new TR IDs alongside the FRs they support.
+
+No write-back to the MCP store is required for this slice. Phase 1 does not perform either the file generation or the wiki publish.
+
+## Verification
+
+- Swagger surface for requirements (extracted from `http://PAYTON-LEGION2:7147/swagger/v1/swagger.json`):
+  ```
+  /mcpserver/requirements/fr
+  /mcpserver/requirements/fr/{id}
+  /mcpserver/requirements/generate
+  /mcpserver/requirements/ingest
+  /mcpserver/requirements/mapping
+  /mcpserver/requirements/mapping/{frId}
+  /mcpserver/requirements/test
+  /mcpserver/requirements/test/{id}
+  /mcpserver/requirements/tr
+  /mcpserver/requirements/tr/{id}
+  ```
+- FR/TR/TEST list responses were 163,348 / 63,858 / 7,916 bytes respectively at audit time, well within expected magnitudes.
+- All curl calls authenticated with the rotating `X-Api-Key` from `AGENTS-README-FIRST.yaml`. No 401s observed once the marker was refreshed.
+
+## Conclusion
+
+Requirements ingestion is healthy. No FR or TEST entries are missing on the server. The TR delta is **server-ahead, not server-behind**: three legitimate TRs need to be backfilled into local Markdown files and the wiki mirrors. This is a documentation chore, not a re-ingest task, and is appropriately deferred to phase 2.
