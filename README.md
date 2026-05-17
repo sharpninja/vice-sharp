@@ -71,9 +71,9 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Feature | State | % | Source |
 |---------|:----:|:----:|--------|
 | XMLDOCS test contract (cite FR/TR, use case, acceptance) | ⚪ | 0% | `QA-XMLDOCS-001` |
-| BenchmarkDotNet harness vs native VICE | ⚪ | 0% | `PERF-BENCHMARK-001` |
+| BenchmarkDotNet harness vs native VICE | 🟢 | 30% | `PERF-BENCHMARK-001` (managed harness in [tests/ViceSharp.Benchmarks/](tests/ViceSharp.Benchmarks/), native VICE comparison TODO) |
 | Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
-| Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | ⚪ | 0% | `ARCH-ADHOCMACHINE-001` |
+| Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
