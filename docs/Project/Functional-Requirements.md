@@ -149,7 +149,7 @@ The emulator shall support autostarting programs from disk, tape, cartridge, or 
 2. Autostart attaches required media through host media services.
 3. Autostart injects launch commands through host input/control services at deterministic boundaries.
 4. Autostart failures leave existing media and machine state unchanged unless explicitly committed.
-5. Reset-plus-drive-8 autorun reports unsupported until the host implements the full autostart path.
+5. Reset-plus-drive-8 autorun succeeds for a readable drive 8 D64 containing a runnable PRG and reports an explicit failed-precondition status when required host, media, runtime, or keyboard automation prerequisites are missing.
 
 ### Source References
 
@@ -1231,8 +1231,9 @@ The host shall expose runtime telemetry and machine-control state needed by emul
 1. Host status reports power state, run state, limiter target, measured frames per second, frame count, cycle count, program counter, nominal clock, effective clock Hz, and effective clock percent.
 2. Effective clock speed is measured from emulated cycles per real second and remains distinct from the requested limiter target.
 3. Pause, resume, step one cycle, step one frame, cold reset, and warm reset commands are exposed through the host boundary.
-4. Unsupported controls such as rewind and reset-plus-drive-8 autorun return explicit unsupported status until backing host history/autorun support exists.
-5. Telemetry responses are safe for polling by UI clients and do not mutate emulator state.
+4. Rewind controls return explicit unsupported status until backing host history support exists.
+5. Reset-plus-drive-8 autorun returns `Ok` for supported drive 8 D64/PRG launches and explicit failed-precondition status when backing host or media prerequisites are missing.
+6. Telemetry responses are safe for polling by UI clients and do not mutate emulator state.
 
 ### Source References
 

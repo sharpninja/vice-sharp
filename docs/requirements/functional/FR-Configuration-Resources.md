@@ -149,7 +149,7 @@ The emulator shall support autostarting programs from disk, tape, cartridge, or 
 2. Autostart attaches required media through host media services.
 3. Autostart injects launch commands through host input/control services at deterministic boundaries.
 4. Autostart failures leave existing media and machine state unchanged unless explicitly committed.
-5. Reset-plus-drive-8 autorun reports unsupported until the host implements the full autostart path.
+5. Reset-plus-drive-8 autorun succeeds for a readable drive 8 D64 containing a runnable PRG and reports an explicit failed-precondition status when required host, media, runtime, or keyboard automation prerequisites are missing.
 
 ### Source References
 
