@@ -70,7 +70,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 
 | Feature | State | % | Source |
 |---------|:----:|:----:|--------|
-| XMLDOCS test contract (cite FR/TR, use case, acceptance) | ⚪ | 0% | `QA-XMLDOCS-001` |
+| XMLDOCS test contract (cite FR/TR, use case, acceptance) | 🟢 | 7% | `QA-XMLDOCS-001` (convention test + ratchet baseline 192; 14/206 retrofitted; `VICESHARP_XMLDOCS_ENFORCE=1` flips to zero-tolerance) |
 | BenchmarkDotNet harness vs native VICE | 🟢 | 30% | `PERF-BENCHMARK-001` (managed harness in [tests/ViceSharp.Benchmarks/](tests/ViceSharp.Benchmarks/), native VICE comparison TODO) |
 | Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
 | Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |

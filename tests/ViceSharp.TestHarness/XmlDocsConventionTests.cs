@@ -36,6 +36,8 @@ public sealed class XmlDocsConventionTests
     /// document them, not loosen the ratchet.
     /// </summary>
     private const int ExpectedMaxViolations = 192;
+    // Note: ratchet stays at 192 per QA-XMLDOCS-001 contract. Adhoc + Benchmark
+    // tests retrofitted in this same merge to keep the count from drifting.
 
     private static readonly Regex TestMethodPattern = new(
         @"(?<doc>(?:^[ \t]*///[^\n]*\n)+)?[ \t]*\[(?:Xunit\.)?(?<attr>Fact|Theory|ViceFact|ViceTheory)(?:Attribute)?(?:\([^)]*\))?\][^\n]*\n(?:[ \t]*\[[^\]]+\][^\n]*\n)*[ \t]*public\s+(?:async\s+)?(?:Task|ValueTask|void)\s+(?<name>[A-Za-z_][A-Za-z0-9_]*)\s*\(",

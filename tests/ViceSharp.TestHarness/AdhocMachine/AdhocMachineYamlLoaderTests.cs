@@ -33,6 +33,13 @@ public sealed class AdhocMachineYamlLoaderTests
     private static string SampleC64Path =>
         Path.Combine(SolutionRoot.Find(), "docs", "samples", "c64.machine.yaml");
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-YAML.
+    /// Use case: A user supplies a minimal ad-hoc machine YAML with required
+    /// schema fields only.
+    /// Acceptance: Loader returns a blueprint whose descriptor exposes the
+    /// machine name, master clock, and video standard from the document.
+    /// </summary>
     [Fact]
     public void LoadFromString_ValidYaml_ProducesBlueprintWithDescriptor()
     {
@@ -46,6 +53,15 @@ public sealed class AdhocMachineYamlLoaderTests
         blueprint.Descriptor.VideoStandard.Should().Be(VideoStandard.Ntsc);
     }
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-YAML.
+    /// Use case: The sample c64.machine.yaml is loaded and built; it must
+    /// reconstruct the same chip set, CIA base addresses, and memory regions
+    /// as the hardcoded Commodore64 builder.
+    /// Acceptance: Loaded machine reports Commodore 64 PAL @ 985248 Hz with
+    /// 1 CPU, 1 VIC-II, 2 CIAs at $DC00/$DD00, 1 SID, and registered RAM/ROM
+    /// regions readable through the bus.
+    /// </summary>
     [Fact]
     public void LoadFromFile_SampleC64Yaml_RoundTripsBuilderEquivalentToHardcodedC64()
     {
@@ -82,6 +98,13 @@ public sealed class AdhocMachineYamlLoaderTests
         machine.Bus.Read(0xD800).Should().Be(0x00, "Color RAM is registered");
     }
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-VALIDATION.
+    /// Use case: A user supplies a malformed YAML document.
+    /// Acceptance: Loader throws AdhocMachineValidationException with a
+    /// message that mentions "yaml" rather than crashing with a parser stack
+    /// trace.
+    /// </summary>
     [Fact]
     public void LoadFromString_InvalidYaml_ThrowsValidationError()
     {
@@ -96,6 +119,12 @@ public sealed class AdhocMachineYamlLoaderTests
             .WithMessage("*yaml*");
     }
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-VALIDATION.
+    /// Use case: A user omits a required schema field (machine.videoStandard).
+    /// Acceptance: Loader throws AdhocMachineValidationException whose message
+    /// names the missing field path so the user can fix it.
+    /// </summary>
     [Fact]
     public void LoadFromString_MissingRequiredField_ReportsFieldName()
     {
@@ -124,6 +153,12 @@ public sealed class AdhocMachineYamlLoaderTests
             .WithMessage("*machine.videoStandard*");
     }
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-VALIDATION.
+    /// Use case: A user declares a CIA chip without supplying chips[i].baseAddress.
+    /// Acceptance: Loader throws AdhocMachineValidationException whose message
+    /// names the offending chips[N].baseAddress path.
+    /// </summary>
     [Fact]
     public void LoadFromString_CiaWithoutBaseAddress_ReportsFieldName()
     {
@@ -154,6 +189,13 @@ public sealed class AdhocMachineYamlLoaderTests
             .WithMessage("*chips[1].baseAddress*");
     }
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-VALIDATION.
+    /// Use case: A user supplies a memory region whose declared size disagrees
+    /// with its end - start + 1 footprint.
+    /// Acceptance: Loader throws AdhocMachineValidationException whose message
+    /// names the offending memory.regions[N].size path.
+    /// </summary>
     [Fact]
     public void LoadFromString_RegionSizeMismatch_ReportsFieldName()
     {
@@ -183,6 +225,12 @@ public sealed class AdhocMachineYamlLoaderTests
             .WithMessage("*memory.regions[0].size*");
     }
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-VALIDATION.
+    /// Use case: A user supplies a schemaVersion the loader does not recognise.
+    /// Acceptance: Loader throws AdhocMachineValidationException whose message
+    /// names schemaVersion so the user can downgrade or upgrade the loader.
+    /// </summary>
     [Fact]
     public void LoadFromString_UnsupportedSchemaVersion_Throws()
     {

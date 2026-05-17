@@ -15,6 +15,13 @@ public sealed class ConsoleAdhocCliTests
     private static string SampleC64Path =>
         Path.Combine(SolutionRoot.Find(), "docs", "samples", "c64.machine.yaml");
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-CONSOLE.
+    /// Use case: The Console --machine-yaml flag loads docs/samples/c64.machine.yaml
+    /// and runs the resulting machine through the wired clock.
+    /// Acceptance: 100 Clock.Step() calls run without throwing and Clock.TotalCycles
+    /// equals 100.
+    /// </summary>
     [Fact]
     public void LoadAndBuild_SampleC64_RunsFewClockTicks()
     {
@@ -32,6 +39,12 @@ public sealed class ConsoleAdhocCliTests
         machine.Clock.TotalCycles.Should().Be(100);
     }
 
+    /// <summary>
+    /// FR: FR-ARCH-ADHOC, TR: TR-ARCH-ADHOC-CONSOLE.
+    /// Use case: A user supplies --machine-yaml pointing at a non-existent file.
+    /// Acceptance: Loader surfaces FileNotFoundException so the Console wrapper
+    /// can map it to exit code 1.
+    /// </summary>
     [Fact]
     public void LoadFromFile_MissingPath_ThrowsFileNotFound()
     {
