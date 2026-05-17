@@ -174,6 +174,22 @@ internal sealed class AdhocMachine : IMachine
         // a specific CPU to advance one instruction in a chip-agnostic way.
         Clock.Step();
     }
+
+    public void Reset()
+    {
+        Clock.Reset();
+        foreach (var device in Devices.All)
+        {
+            device.Reset();
+        }
+    }
+
+    public MachineState GetState()
+    {
+        // Ad-hoc machines are chip-agnostic. Surface a default snapshot until
+        // a future schema revision picks a designated CPU role to read from.
+        return default;
+    }
 }
 
 internal sealed class AdhocDeviceRegistry : IDeviceRegistry

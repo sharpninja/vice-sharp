@@ -23,4 +23,10 @@ public sealed class AdhocArchitectureDescriptor : IArchitectureDescriptor
 
     /// <inheritdoc />
     public VideoStandard VideoStandard { get; }
+
+    /// <inheritdoc />
+    public IReadOnlyList<DeviceDescriptor> Devices { get; } = Array.Empty<DeviceDescriptor>();
+
+    /// <inheritdoc />
+    public IRomSet? RequiredRoms => null;
 }
