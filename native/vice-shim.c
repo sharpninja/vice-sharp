@@ -20,6 +20,7 @@
 #include "cia.h"
 #include "core/ciatimer.h"
 #include "drive.h"
+#include "drivetypes.h"
 #include "gfxoutput.h"
 #include "init.h"
 #include "interrupt.h"
@@ -1058,6 +1059,152 @@ VICE_SHIM_API uint16_t vice_cpu_get_pc(void *machine)
     EnterCriticalSection(&g_state_lock);
     if (vice_shim_is_active_machine(machine)) {
         value = (uint16_t)maincpu_regs.pc;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+/*
+ * Drive-CPU state accessors. Each takes a device number (8..11) and
+ * returns the corresponding 1541/1571 drive-CPU register from the
+ * shared diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cpu_regs slot.
+ * Returns 0 when the machine is inactive, the unit is out of range,
+ * or the drive context / CPU pointer is null.
+ */
+
+static int vice_shim_valid_drive_unit_for_cpu(unsigned int unit)
+{
+    if (unit < DRIVE_UNIT_MIN || unit > DRIVE_UNIT_MAX) {
+        return 0;
+    }
+    return diskunit_context[unit - DRIVE_UNIT_MIN] != NULL
+        && diskunit_context[unit - DRIVE_UNIT_MIN]->cpu != NULL;
+}
+
+VICE_SHIM_API uint8_t vice_drivecpu_get_a(void *machine, unsigned int unit)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        value = diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cpu_regs.a;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API uint8_t vice_drivecpu_get_x(void *machine, unsigned int unit)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        value = diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cpu_regs.x;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API uint8_t vice_drivecpu_get_y(void *machine, unsigned int unit)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        value = diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cpu_regs.y;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API uint8_t vice_drivecpu_get_p(void *machine, unsigned int unit)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        value = (uint8_t)MOS6510_REGS_GET_STATUS(&diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cpu_regs);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API uint8_t vice_drivecpu_get_sp(void *machine, unsigned int unit)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        value = diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cpu_regs.sp;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API uint16_t vice_drivecpu_get_pc(void *machine, unsigned int unit)
+{
+    uint16_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        value = (uint16_t)diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cpu_regs.pc;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+/*
+ * Toggle VICE's per-unit true-drive emulation. unit is 8..11. When TDE is
+ * enabled the drive's 6502 runs cycle-by-cycle; when disabled VICE uses
+ * fast-loader traps. Returns 0 on success, non-zero on failure.
+ */
+VICE_SHIM_API int vice_drive_set_true_emulation(void *machine, unsigned int unit, int enabled)
+{
+    int result = -1;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && unit >= DRIVE_UNIT_MIN && unit <= DRIVE_UNIT_MAX) {
+        char resource_name[32];
+        snprintf(resource_name, sizeof(resource_name), "Drive%uTrueEmulation", unit);
+        result = resources_set_int(resource_name, enabled ? 1 : 0);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return result;
+}
+
+VICE_SHIM_API int vice_drive_get_true_emulation(void *machine, unsigned int unit)
+{
+    int value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && unit >= DRIVE_UNIT_MIN && unit <= DRIVE_UNIT_MAX) {
+        char resource_name[32];
+        snprintf(resource_name, sizeof(resource_name), "Drive%uTrueEmulation", unit);
+        resources_get_int(resource_name, &value);
     }
     LeaveCriticalSection(&g_state_lock);
 

@@ -1,0 +1,44 @@
+# Sample multi-system topology: a C64 host + a peer "machine" attached over
+# an IEC-style bus. The peer is a minimal CPU+RAM stub - it stands in for a
+# 1541 drive (or any future peripheral) until the true-drive 1541 builder
+# lands in Phase B (ARCH-TRUEDRIVE-1541-001).
+#
+# Loaded by ViceSharp.Architectures.Multisystem.MultiSystemYamlLoader.
+schemaVersion: 1
+
+coordinator:
+  host:
+    id: c64-host
+    yamlPath: c64.machine.yaml
+    busAttachments:
+      - busId: iec
+        endpointName: c64
+
+  peripherals:
+    - id: peer-drive
+      role: Independent
+      yamlInline: |
+        schemaVersion: 1
+        machine:
+          name: "Peer Drive Stub"
+          videoStandard: Ntsc
+          masterClockHz: 1000000
+        memory:
+          regions:
+            - id: ram-main
+              kind: Ram
+              start: 0x0000
+              end:   0xFFFF
+        chips:
+          - id: cpu
+            type: Mos6502
+            role: Cpu
+      busAttachments:
+        - busId: iec
+          endpointName: drive-8
+
+  cartExtensions: []
+
+  buses:
+    - id: iec
+      signals: [ATN, CLK, DATA]

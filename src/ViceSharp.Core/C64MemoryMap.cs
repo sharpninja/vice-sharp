@@ -55,6 +55,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private int _gameSystemCartridgeBank;
     private int _vicPhi1Bank;
     private bool _loadingRoms;
+    private IBusEndpoint? _cartPortPinSource;
 
     public C64MemoryMap(
         Mos6569 vic,
@@ -296,6 +297,39 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _cartridgeImage = null;
         _attachedCartridgeMappingMode = null;
         _gameSystemCartridgeBank = 0;
+    }
+
+    /// <summary>
+    /// Bind a cart-port InterSystemBus endpoint. When set + a cartridge image
+    /// is attached, the active mapping mode is derived from the live GAME +
+    /// EXROM pin state on the bus instead of the static
+    /// AttachedMappingMode. Pass null to revert to static mapping.
+    ///
+    /// Pin -> mode table (matches the real C64 PLA decode):
+    ///   GAME=1 EXROM=1  no cart (image hidden until pins assert)
+    ///   GAME=1 EXROM=0  Standard 8K
+    ///   GAME=0 EXROM=0  Standard 16K
+    ///   GAME=0 EXROM=1  Ultimax
+    /// </summary>
+    public void SetCartPortPinSource(IBusEndpoint? endpoint)
+    {
+        _cartPortPinSource = endpoint;
+    }
+
+    private CartridgeMappingMode? ResolveActiveMappingMode()
+    {
+        if (_cartridgeImage is null) return null;
+        if (_cartPortPinSource is null) return _attachedCartridgeMappingMode;
+
+        var game = _cartPortPinSource.ReadLine(CartPortInterSystemBus.Game);
+        var exrom = _cartPortPinSource.ReadLine(CartPortInterSystemBus.ExRom);
+        return (game, exrom) switch
+        {
+            (true, true) => null,
+            (true, false) => CartridgeMappingMode.Standard8K,
+            (false, false) => CartridgeMappingMode.Standard16K,
+            (false, true) => CartridgeMappingMode.Ultimax,
+        };
     }
 
     public void SetKey(byte keyCode, bool pressed)
@@ -614,7 +648,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     {
         value = 0;
 
-        if (_cartridgeImage is null || _attachedCartridgeMappingMode is not { } mappingMode)
+        if (_cartridgeImage is null || ResolveActiveMappingMode() is not { } mappingMode)
             return false;
 
         if (!TryGetCartridgeOffset(address, mappingMode, _cartridgeImage.Length, out var offset))
@@ -628,7 +662,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     {
         value = 0;
 
-        if (_cartridgeImage is null || _attachedCartridgeMappingMode != CartridgeMappingMode.Ultimax)
+        if (_cartridgeImage is null || ResolveActiveMappingMode() != CartridgeMappingMode.Ultimax)
             return false;
 
         if (vicAddress <= 0x0FFF)
@@ -652,7 +686,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         value = 0;
 
         if (_cartridgeImage is null ||
-            _attachedCartridgeMappingMode != CartridgeMappingMode.Ultimax ||
+            ResolveActiveMappingMode() != CartridgeMappingMode.Ultimax ||
             (effectiveAddress & 0x3FFF) < 0x3000)
         {
             return false;

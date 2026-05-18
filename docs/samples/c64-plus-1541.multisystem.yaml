@@ -1,0 +1,41 @@
+# Canonical multi-system topology: a C64 host running KERNAL with a true-drive
+# 1541 attached over a cycle-exact IEC InterSystemBus. Load this through the
+# console host:
+#
+#     vsharp --machine-yaml docs/samples/c64-plus-1541.multisystem.yaml --cycles 1000000
+#
+# The MultiSystemYamlLoader dispatches each kind: field to its real architecture
+# descriptor; MultiSystemBlueprint.BuildCoordinatorAuto wires the C64 CIA2 and
+# the 1541 VIA1 to the IEC bus endpoints automatically. No code in the caller
+# beyond pointing at this file.
+schemaVersion: 1
+
+coordinator:
+  host:
+    id: c64-host
+    kind: C64
+    busAttachments:
+      - busId: IEC
+        endpointName: c64
+
+  peripherals:
+    - id: drive-8
+      kind: C1541
+      deviceNumber: 8
+      fidelity: TrueDevice
+      busAttachments:
+        - busId: IEC
+          endpointName: drive-8
+
+    # Add a second drive by uncommenting:
+    # - id: drive-9
+    #   kind: C1541
+    #   deviceNumber: 9
+    #   fidelity: TrueDevice
+    #   busAttachments:
+    #     - busId: IEC
+    #       endpointName: drive-9
+
+  buses:
+    - id: IEC
+      signals: [ATN, CLK, DATA, SRQ]

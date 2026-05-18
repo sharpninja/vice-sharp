@@ -96,6 +96,30 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pc")]
     public static partial ushort GetPC(IntPtr instance);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_drivecpu_get_a")]
+    public static partial byte GetDriveA(IntPtr instance, uint unit);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drivecpu_get_x")]
+    public static partial byte GetDriveX(IntPtr instance, uint unit);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drivecpu_get_y")]
+    public static partial byte GetDriveY(IntPtr instance, uint unit);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drivecpu_get_sp")]
+    public static partial byte GetDriveS(IntPtr instance, uint unit);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drivecpu_get_p")]
+    public static partial byte GetDriveP(IntPtr instance, uint unit);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drivecpu_get_pc")]
+    public static partial ushort GetDrivePC(IntPtr instance, uint unit);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drive_set_true_emulation")]
+    public static partial int SetDriveTrueEmulation(IntPtr instance, uint unit, int enabled);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drive_get_true_emulation")]
+    public static partial int GetDriveTrueEmulation(IntPtr instance, uint unit);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_state")]
     public static partial void GetVicState(IntPtr instance, ref ViceVicState state);
 

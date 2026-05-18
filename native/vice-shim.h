@@ -38,6 +38,18 @@ VICE_SHIM_API uint8_t vice_cpu_get_p(void* machine);
 VICE_SHIM_API uint8_t vice_cpu_get_sp(void* machine);
 VICE_SHIM_API uint16_t vice_cpu_get_pc(void* machine);
 
+// Drive CPU State (1541-family, unit = 8..11 device number)
+VICE_SHIM_API uint8_t vice_drivecpu_get_a(void* machine, unsigned int unit);
+VICE_SHIM_API uint8_t vice_drivecpu_get_x(void* machine, unsigned int unit);
+VICE_SHIM_API uint8_t vice_drivecpu_get_y(void* machine, unsigned int unit);
+VICE_SHIM_API uint8_t vice_drivecpu_get_p(void* machine, unsigned int unit);
+VICE_SHIM_API uint8_t vice_drivecpu_get_sp(void* machine, unsigned int unit);
+VICE_SHIM_API uint16_t vice_drivecpu_get_pc(void* machine, unsigned int unit);
+
+// Per-unit true-drive emulation toggle. Returns 0 on success, non-zero on failure.
+VICE_SHIM_API int vice_drive_set_true_emulation(void* machine, unsigned int unit, int enabled);
+VICE_SHIM_API int vice_drive_get_true_emulation(void* machine, unsigned int unit);
+
 // VIC-II State
 struct vice_vic_state {
     uint32_t cycle;

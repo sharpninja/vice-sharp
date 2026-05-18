@@ -24,6 +24,7 @@
     <ProjectReference Include="../../src/ViceSharp.Architectures/ViceSharp.Architectures.csproj" />
     <ProjectReference Include="../../src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj" />
     <ProjectReference Include="../../src/ViceSharp.Host/ViceSharp.Host.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.Launcher/ViceSharp.Launcher.csproj" />
     <ProjectReference Include="../../src/ViceSharp.Protocol/ViceSharp.Protocol.csproj" />
     <ProjectReference Include="../ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj" />
   </ItemGroup>

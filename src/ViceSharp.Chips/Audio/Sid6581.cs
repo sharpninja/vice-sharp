@@ -43,14 +43,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             int sample = 0;
             uint phase = voice.WaveformAccumulator >> 24;
             uint pulseWidth = (uint)voice.PulseWidth << 16;
-            
-            // VICE-style sync: check if previous voice wraps (24-bit accumulator)
-            uint prevPhase = prevOutput > 0 ? 0xFFFFFFu : 0;
-            if (sync && i > 0 && prevPhase == 0)
-            {
-                voice.WaveformAccumulator = 0;
-                phase = 0;
-            }
+            // Hard sync is handled cycle-accurately in Tick() via MSB-edge
+            // detection; GenerateSample only reads the post-sync state.
+            _ = sync;
             
             // Use waveform enum for cleaner code
             Waveform wf = (Waveform)(waveform & (byte)Waveform.Noise);
@@ -60,17 +55,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             
             if (hasTriangle)
             {
-                uint tri;
-                if (ringMod && i > 0)
+                uint tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
+                if (ringMod)
                 {
-                    // Ring modulation: triangle becomes difference waveform
-                    int modulation = prevOutput;
-                    int triVal = (int)(phase < 128 ? (phase << 1) : ((255 - phase) << 1));
-                    tri = (uint)((triVal - 128 + modulation) & 0xFF);
-                }
-                else
-                {
-                    tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
+                    // Ring modulation: triangle output's "shape" is inverted
+                    // when the sync-source voice's MSB is high. The sync
+                    // source is voice ((i + 2) % 3) (cyclic backward).
+                    var modulatorMsb = (_voices[(i + 2) % 3].WaveformAccumulator & 0x800000u) != 0;
+                    if (modulatorMsb)
+                        tri ^= 0xFF;
                 }
                 sample = (int)tri;
             }
@@ -219,16 +212,38 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     public void Tick()
     {
+        // Capture previous-cycle MSBs to detect 1->0 transitions for hard sync.
+        // Each voice's sync source is voice ((i + 2) % 3) (cyclic backward).
+        var prevMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
+        var prevMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
+        var prevMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
+
         for (int i = 0; i < 3; i++)
         {
             ref Voice voice = ref _voices[i];
-            
-            // Waveform generation
+
             voice.WaveformAccumulator += voice.Frequency;
 
-            // ADSR envelope generation
             ProcessEnvelope(ref voice);
         }
+
+        // Detect MSB 1->0 transitions on each voice and apply hard sync to
+        // the dependent voice when its SYNC control bit is set.
+        var newMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
+        var newMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
+        var newMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
+
+        // Voice 0 syncs from voice 2 (downward edge of voice 2 MSB resets voice 0).
+        if ((_voices[0].Control & 0x02) != 0 && prevMsb2 && !newMsb2)
+            _voices[0].WaveformAccumulator = 0;
+
+        // Voice 1 syncs from voice 0.
+        if ((_voices[1].Control & 0x02) != 0 && prevMsb0 && !newMsb0)
+            _voices[1].WaveformAccumulator = 0;
+
+        // Voice 2 syncs from voice 1.
+        if ((_voices[2].Control & 0x02) != 0 && prevMsb1 && !newMsb1)
+            _voices[2].WaveformAccumulator = 0;
     }
 
     private void ProcessEnvelope(ref Voice voice)

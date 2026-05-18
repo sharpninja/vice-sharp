@@ -61,5 +61,20 @@ public enum DeviceRole
     ChargenRom,
 
     /// <summary>Expansion cartridge port</summary>
-    CartridgePort
+    CartridgePort,
+
+    /// <summary>6502 CPU of an attached drive (1541 family).</summary>
+    DriveCpu,
+
+    /// <summary>VIA 6522 on a 1541-family drive.</summary>
+    DriveVia,
+
+    /// <summary>RAM on a 1541-family drive.</summary>
+    DriveRam,
+
+    /// <summary>DOS ROM on a 1541-family drive.</summary>
+    DriveRom,
+
+    /// <summary>Mounted disk image (D64 / G64 / D81 etc.) on a 1541-family drive.</summary>
+    DriveDisk,
 }

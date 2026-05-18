@@ -28,6 +28,9 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
     /// <inheritdoc />
     public IMachine Build(IArchitectureDescriptor descriptor)
     {
+        if (IsC1541Machine(descriptor))
+            return BuildC1541Machine(descriptor);
+
         if (IsC64Machine(descriptor))
             return BuildC64Machine(descriptor);
 
@@ -161,6 +164,89 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             || roles.Contains(DeviceRole.Pla)
             || roles.Contains(DeviceRole.AudioChip);
     }
+
+    private static bool IsC1541Machine(IArchitectureDescriptor descriptor)
+    {
+        var roles = descriptor.Devices.Select(x => x.Role).ToHashSet();
+        return roles.Contains(DeviceRole.DriveCpu) && roles.Contains(DeviceRole.DriveRom);
+    }
+
+    private IMachine BuildC1541Machine(IArchitectureDescriptor descriptor)
+    {
+        if (_romProvider is null)
+            throw new InvalidOperationException($"{descriptor.MachineName} requires an IRomProvider.");
+
+        if (descriptor.RequiredRoms is not null && !descriptor.RequiredRoms.IsComplete(_romProvider))
+            throw new InvalidOperationException(
+                $"Required ROM set for {descriptor.MachineName} is missing or invalid.");
+
+        var bus = new BasicBus();
+        var deviceRegistry = new DeviceRegistry();
+        var irqLine = new InterruptLine(InterruptType.Irq);
+        var cpu = new Mos6502(bus);
+        var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine);
+
+        // 2KB drive RAM at $0000-$07FF.
+        var ramDescriptor = descriptor.Devices.First(d => d.Role == DeviceRole.DriveRam);
+        var ramBytes = new byte[ramDescriptor.Size];
+        var ram = new RamDevice(
+            ramDescriptor.BaseAddress,
+            (ushort)(ramDescriptor.BaseAddress + ramDescriptor.Size - 1),
+            ramBytes);
+        bus.RegisterDevice(ram);
+        deviceRegistry.Add(ram, DeviceRole.DriveRam);
+
+        // Two VIAs at $1800 and $1C00 (each with 1KB mirror window).
+        var viaDescriptors = descriptor.Devices.Where(d => d.Role == DeviceRole.DriveVia).ToArray();
+        var vias = new List<ViceSharp.Chips.IEC.Via6522>(viaDescriptors.Length);
+        foreach (var v in viaDescriptors)
+        {
+            var via = new ViceSharp.Chips.IEC.Via6522(bus, irqLine)
+            {
+                Id = v.Id,
+                Name = v.Name,
+                SourceId = v.Id,
+                BaseAddress = v.BaseAddress,
+                Size = (ushort)v.Size,
+            };
+            bus.RegisterDevice(via);
+            clock.Register(via);
+            deviceRegistry.Add(via, DeviceRole.DriveVia);
+            vias.Add(via);
+        }
+
+        // 16KB drive DOS ROM at $C000-$FFFF.
+        var romDescriptor = descriptor.Devices.First(d => d.Role == DeviceRole.DriveRom);
+        var dosRomName = ResolveC1541DosRomName(descriptor);
+        var romBytes = _romProvider.LoadRom(
+            dosRomName,
+            descriptor.RequiredRoms?.Architecture ?? "DRIVES").ToArray();
+        var rom = new RomDevice(
+            romDescriptor.BaseAddress,
+            (ushort)(romDescriptor.BaseAddress + romDescriptor.Size - 1),
+            romBytes);
+        bus.RegisterDevice(rom);
+        deviceRegistry.Add(rom, DeviceRole.DriveRom);
+
+        clock.Register(cpu);
+        deviceRegistry.Add(cpu, DeviceRole.DriveCpu);
+
+        // Optional D64 disk image mount.
+        if (descriptor is IDriveArchitectureDescriptor drive && !string.IsNullOrWhiteSpace(drive.DiskImagePath))
+        {
+            var disk = D64DiskImageDevice.LoadFromFile(drive.DiskImagePath!);
+            deviceRegistry.Add(disk, DeviceRole.DriveDisk);
+        }
+
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
+        machine.Reset();
+        return machine;
+    }
+
+    private static string ResolveC1541DosRomName(IArchitectureDescriptor descriptor)
+        => descriptor is IDriveArchitectureDescriptor d && !string.IsNullOrWhiteSpace(d.DosRomName)
+            ? d.DosRomName
+            : "dos1541-325302-01+901229-05.bin";
 
     private static bool IsKernalRomRequired(string kernalRomName)
         => !string.Equals(kernalRomName, "kernal-none.bin", StringComparison.OrdinalIgnoreCase);

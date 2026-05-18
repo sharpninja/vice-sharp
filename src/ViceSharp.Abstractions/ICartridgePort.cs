@@ -19,6 +19,14 @@ public interface ICartridgePort : IDevice
 
     /// <summary>Eject the currently attached cartridge, if any.</summary>
     void EjectCartridge();
+
+    /// <summary>
+    /// Bind a cart-port InterSystemBus endpoint as the live GAME/EXROM pin
+    /// source. When set + a cartridge is attached, the active mapping mode
+    /// is derived from the pin state instead of the static
+    /// <see cref="AttachedMappingMode"/>. Pass null to revert to static.
+    /// </summary>
+    void SetCartPortPinSource(IBusEndpoint? endpoint);
 }
 
 /// <summary>
