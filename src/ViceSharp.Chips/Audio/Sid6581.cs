@@ -36,23 +36,34 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         for (int i = 0; i < 3; i++)
         {
             ref Voice voice = ref _voices[i];
-            byte waveform = (byte)(voice.Control & 0x78);
+            // Waveform-select bits live in CTRL bits 4-7 (Triangle, Sawtooth,
+            // Pulse, Noise). Mask with 0xF0 to isolate them from sync/ring/
+            // test/gate bits.
+            byte waveformBits = (byte)(voice.Control & 0xF0);
             bool sync = (voice.Control & 0x02) != 0;
             bool ringMod = (voice.Control & 0x04) != 0;
-            
+
             int sample = 0;
             uint phase = voice.WaveformAccumulator >> 24;
             uint pulseWidth = (uint)voice.PulseWidth << 16;
             // Hard sync is handled cycle-accurately in Tick() via MSB-edge
             // detection; GenerateSample only reads the post-sync state.
             _ = sync;
-            
-            // Use waveform enum for cleaner code
-            Waveform wf = (Waveform)(waveform & (byte)Waveform.Noise);
-            bool hasTriangle = (waveform & (byte)Waveform.Triangle) != 0;
-            bool hasSawtooth = (waveform & (byte)Waveform.Sawtooth) != 0;
-            bool hasPulse = (waveform & (byte)Waveform.Pulse) != 0;
-            
+
+            bool hasTriangle = (waveformBits & 0x10) != 0;
+            bool hasSawtooth = (waveformBits & 0x20) != 0;
+            bool hasPulse = (waveformBits & 0x40) != 0;
+            bool hasNoise = (waveformBits & 0x80) != 0;
+
+            // FR-SID-003 (combined waveforms): the SID's hardware ANDs the
+            // outputs of every selected waveform together. With a single
+            // waveform selected this collapses to that waveform's value;
+            // with two or more selected the result is the bitwise AND of
+            // their 8-bit outputs (the iconic distorted/attenuated C64
+            // combined-waveform sound). With zero waveform bits selected
+            // the voice is silent.
+            int triValue = 0, sawValue = 0, pulValue = 0, noiseValue = 0;
+
             if (hasTriangle)
             {
                 uint tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
@@ -65,28 +76,54 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                     if (modulatorMsb)
                         tri ^= 0xFF;
                 }
-                sample = (int)tri;
+                triValue = (int)(tri & 0xFF);
             }
-            else if (hasSawtooth)
+            if (hasSawtooth)
             {
-                sample = (int)(phase << 1);
+                sawValue = (int)(phase & 0xFF);
             }
-            else if (hasPulse)
+            if (hasPulse)
             {
-                sample = phase < (pulseWidth >> 24) ? 255 : 0;
+                pulValue = phase < (pulseWidth >> 24) ? 0xFF : 0x00;
             }
-            else if (wf == Waveform.Noise)
+            if (hasNoise)
             {
-                if ((_noiseLfsr & 1) != 0) sample = 255;
+                noiseValue = (_noiseLfsr & 1) != 0 ? 0xFF : 0x00;
+            }
+
+            int selectedCount = (hasTriangle ? 1 : 0) + (hasSawtooth ? 1 : 0)
+                               + (hasPulse ? 1 : 0) + (hasNoise ? 1 : 0);
+
+            if (selectedCount == 0)
+            {
+                // No waveform selected: silence (hardware floats to 0).
+                sample = 0;
+            }
+            else if (selectedCount == 1)
+            {
+                // Single waveform - preserve the existing per-waveform value
+                // verbatim so single-waveform behaviour is unchanged.
+                sample = hasTriangle ? triValue
+                       : hasSawtooth ? sawValue
+                       : hasPulse    ? pulValue
+                       :               noiseValue;
             }
             else
             {
-                sample = (int)(voice.Envelope);
+                // Two or more waveforms selected: AND the 8-bit outputs of
+                // every selected waveform. Unselected waveforms contribute
+                // 0xFF (the AND identity) so they do not affect the result.
+                int combined = 0xFF;
+                if (hasTriangle) combined &= triValue;
+                if (hasSawtooth) combined &= sawValue;
+                if (hasPulse)    combined &= pulValue;
+                if (hasNoise)    combined &= noiseValue;
+                sample = combined;
             }
-            
+
             prevOutput = sample;
             int envelopeAdjusted = (sample * voice.Envelope) >> 8;
-            
+
             if (i == 0) voiceOutputs0 = envelopeAdjusted;
             else if (i == 1) voiceOutputs1 = envelopeAdjusted;
             else voiceOutputs2 = envelopeAdjusted;
