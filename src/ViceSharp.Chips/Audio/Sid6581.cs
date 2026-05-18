@@ -226,6 +226,14 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public EnvelopeState State;
         public bool Gate;
         public bool Reset;
+        // 15-bit envelope-rate prescaler counter (0..32767). Ticks once per
+        // SID cycle. Reaching the per-stage threshold steps the envelope and
+        // resets the counter to 0. Critically, this counter is NEVER reset
+        // when the ATK/DCY/SUS/REL registers are written - that omission is
+        // the source of the famous SID ADSR bug (FR-SID-006): a write that
+        // lowers the threshold below the current counter forces the counter
+        // to wrap all 15 bits before the next step fires (~32k cycles stall).
+        public ushort EnvelopeRateCounter;
     }
 
     private readonly IAudioBackend? _audioBackend;
@@ -318,45 +326,89 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     private void ProcessEnvelope(ref Voice voice)
     {
-        // Gate on: start attack or resume
+        // Gate transitions select the state. Note: register writes to ATK/DCY/
+        // SUS/REL elsewhere in Write() do NOT touch voice.EnvelopeRateCounter
+        // - that omission is exactly the SID ADSR bug (FR-SID-006).
         if (voice.Gate && voice.State == EnvelopeState.Idle)
         {
             voice.State = EnvelopeState.Attack;
             voice.Envelope = 0;
+            // Counter is left alone here too: matches hardware where the
+            // prescaler is a free-running 15-bit counter.
         }
-
-        byte targetLevel = (byte)((voice.SustainRelease >> 4) * 17);
-        int attackRate = GetAttackRates()[voice.AttackDecay >> 4];
-        int decayRate = GetDecayReleaseRates()[voice.AttackDecay & 0x0F];
-        int releaseRate = GetDecayReleaseRates()[voice.SustainRelease & 0x0F];
-
-        voice.State = voice.State switch
-        {
-            EnvelopeState.Attack when voice.Envelope < 255 => 
-                (voice.Envelope += (byte)Math.Min(255, (256 * 256) / attackRate)) >= 255 
-                    ? EnvelopeState.Decay 
-                    : EnvelopeState.Attack,
-            EnvelopeState.Attack => EnvelopeState.Decay,
-            
-            EnvelopeState.Decay when voice.Envelope > targetLevel => 
-                (voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / decayRate)) <= targetLevel 
-                    ? EnvelopeState.Sustain 
-                    : EnvelopeState.Decay,
-            EnvelopeState.Decay => EnvelopeState.Sustain,
-            
-            EnvelopeState.Release when voice.Envelope > 0 => 
-                (voice.Envelope -= (byte)Math.Min(voice.Envelope, (256 * 256) / releaseRate)) <= 0 
-                    ? EnvelopeState.Idle 
-                    : EnvelopeState.Release,
-            EnvelopeState.Release => EnvelopeState.Idle,
-            
-            _ => voice.State
-        };
-
-        // Gate off: start release
         if (!voice.Gate && voice.State != EnvelopeState.Idle && voice.State != EnvelopeState.Release)
         {
             voice.State = EnvelopeState.Release;
+        }
+
+        if (voice.State == EnvelopeState.Idle)
+            return;
+
+        // Select threshold for the current stage.
+        ushort threshold = voice.State switch
+        {
+            EnvelopeState.Attack => GetAttackRates()[voice.AttackDecay >> 4],
+            EnvelopeState.Decay => GetDecayReleaseRates()[voice.AttackDecay & 0x0F],
+            EnvelopeState.Sustain => GetDecayReleaseRates()[voice.AttackDecay & 0x0F],
+            EnvelopeState.Release => GetDecayReleaseRates()[voice.SustainRelease & 0x0F],
+            _ => (ushort)0
+        };
+
+        // Tick the 15-bit prescaler. It wraps at 32768 (0..32767). This counter
+        // is NOT reset on rate-register writes; that is the ADSR bug.
+        voice.EnvelopeRateCounter = (ushort)((voice.EnvelopeRateCounter + 1) & 0x7FFF);
+
+        if (voice.EnvelopeRateCounter != threshold)
+            return;
+
+        // Threshold reached: reset prescaler and step the envelope.
+        voice.EnvelopeRateCounter = 0;
+
+        byte sustainLevel = (byte)((voice.SustainRelease >> 4) * 17);
+
+        switch (voice.State)
+        {
+            case EnvelopeState.Attack:
+                if (voice.Envelope < 255)
+                {
+                    voice.Envelope++;
+                }
+                if (voice.Envelope == 255)
+                {
+                    voice.State = EnvelopeState.Decay;
+                }
+                break;
+
+            case EnvelopeState.Decay:
+                if (voice.Envelope > sustainLevel)
+                {
+                    voice.Envelope--;
+                }
+                if (voice.Envelope <= sustainLevel)
+                {
+                    voice.State = EnvelopeState.Sustain;
+                }
+                break;
+
+            case EnvelopeState.Sustain:
+                // Track sustain-level changes downward; the level register can
+                // be lowered at any time.
+                if (voice.Envelope > sustainLevel)
+                {
+                    voice.Envelope--;
+                }
+                break;
+
+            case EnvelopeState.Release:
+                if (voice.Envelope > 0)
+                {
+                    voice.Envelope--;
+                }
+                if (voice.Envelope == 0)
+                {
+                    voice.State = EnvelopeState.Idle;
+                }
+                break;
         }
     }
 
