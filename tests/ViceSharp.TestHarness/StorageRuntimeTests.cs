@@ -6,6 +6,15 @@ namespace ViceSharp.TestHarness;
 
 public sealed class StorageRuntimeTests
 {
+    /// <summary>
+    /// FR: FR-DRV-001, FR: FR-DRV-004, TR: TR-CYCLE-001.
+    /// Use case: After attaching a 35-track D64 image to drive 8 with a
+    /// known byte pattern at track 18 sector 1, reading that sector back
+    /// must return the exact byte pattern.
+    /// Acceptance: TryAttach succeeds; the 256 bytes read from track 18
+    /// sector 1 match the seeded descending pattern (sector[0]=255,
+    /// sector[127]=128, sector[255]=0).
+    /// </summary>
     [Fact]
     public void D64_Attach_And_ReadSector_Returns_Deterministic_Bytes()
     {
@@ -25,6 +34,13 @@ public sealed class StorageRuntimeTests
         Assert.Equal(0, sector[255]);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, TR: TR-CYCLE-001.
+    /// Use case: A D64 image whose length does not match the canonical
+    /// 35-track size must be rejected by the attach helper.
+    /// Acceptance: TryAttach returns false and the out attachment is
+    /// null when the byte array is one byte shorter than expected.
+    /// </summary>
     [Fact]
     public void D64_Attach_Rejects_Invalid_Size()
     {
@@ -32,6 +48,15 @@ public sealed class StorageRuntimeTests
         Assert.Null(attachment);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, FR: FR-CFG-005, TR: TR-CYCLE-001.
+    /// Use case: Reading the first PRG on a D64 image must locate the
+    /// directory entry, follow the PRG chain, strip the two-byte load
+    /// header, and report the parsed program.
+    /// Acceptance: TryReadFirstProgram succeeds, returns a Program whose
+    /// FileName matches the seeded name, LoadAddress is $0801, Payload
+    /// equals the PRG body, and EndAddress matches Payload.Length.
+    /// </summary>
     [Fact]
     public void D64_FirstProgram_ReadsDirectoryEntryAndPrgPayload()
     {
@@ -47,6 +72,14 @@ public sealed class StorageRuntimeTests
         Assert.Equal((ushort)(0x0801 + program.Payload.Length), program.EndAddress);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, TR: TR-CYCLE-001.
+    /// Use case: An empty D64 image with no directory entries must
+    /// report a clear "no PRG" diagnostic rather than returning a
+    /// bogus program.
+    /// Acceptance: TryReadFirstProgram returns false, Program is null,
+    /// and the error message mentions "PRG".
+    /// </summary>
     [Fact]
     public void D64_FirstProgram_ReportsMissingPrg()
     {
@@ -57,6 +90,15 @@ public sealed class StorageRuntimeTests
         Assert.Contains("PRG", error, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, TR: TR-CYCLE-001.
+    /// Use case: A PRG that exceeds one sector chains across multiple
+    /// (track,sector) pairs; the loader must walk the chain and
+    /// reassemble the full payload.
+    /// Acceptance: TryReadFirstProgram succeeds, FileName/LoadAddress
+    /// match the chain seed, and Payload equals the original
+    /// pre-chunked bytes.
+    /// </summary>
     [Fact]
     public void D64_FirstProgram_ReadsMultiSectorPrgChain()
     {
@@ -74,6 +116,14 @@ public sealed class StorageRuntimeTests
         Assert.Equal(payload, program.Payload);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, TR: TR-CYCLE-001.
+    /// Use case: A corrupt D64 may have a PRG chain that loops back
+    /// onto itself; the loader must detect this rather than read
+    /// forever.
+    /// Acceptance: TryReadFirstProgram returns false, Program is null,
+    /// and the error message mentions "loop".
+    /// </summary>
     [Fact]
     public void D64_FirstProgram_ReportsLoopedPrgChain()
     {
@@ -91,6 +141,16 @@ public sealed class StorageRuntimeTests
         Assert.Contains("loop", error, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// FR: FR-TAP-001, FR: FR-TAP-003, TR: TR-CYCLE-001.
+    /// Use case: Attach a TAP v1 image to the datasette; pulse reads
+    /// must remain blocked until both the motor is enabled and PLAY is
+    /// pressed; then pulses come back in order including a 24-bit
+    /// overflow pulse.
+    /// Acceptance: With motor off, TryReadNextPulse returns false. With
+    /// motor and play asserted, the first pulse equals 80 cycles, the
+    /// next (overflow) returns 8000 cycles, then end-of-tape.
+    /// </summary>
     [Fact]
     public void Tap_Attach_And_Datasette_ReadPulse_Requires_Motor_And_Play()
     {
@@ -116,6 +176,14 @@ public sealed class StorageRuntimeTests
         Assert.False(datasette.TryReadNextPulse(out _));
     }
 
+    /// <summary>
+    /// FR: FR-TAP-002, FR: FR-TAP-003, TR: TR-CYCLE-001.
+    /// Use case: A v0 TAP image uses a 0-byte overflow marker followed
+    /// by a 24-bit cycle count for long pulses; the pulse reader must
+    /// decode it correctly.
+    /// Acceptance: First pulse returns 8000 cycles (matching the 24-bit
+    /// little-endian value $001F40), then end-of-tape.
+    /// </summary>
     [Fact]
     public void Tap_V0_OverflowPulse_Reads_ThreeByteCycleCount()
     {
@@ -129,6 +197,14 @@ public sealed class StorageRuntimeTests
         Assert.False(reader.TryReadNextPulse(out _));
     }
 
+    /// <summary>
+    /// FR: FR-TAP-002, TR: TR-CYCLE-001.
+    /// Use case: A TAP image whose header pulse-data length is larger
+    /// than the actual data must be rejected so the datasette never
+    /// reads past the buffer.
+    /// Acceptance: TryAttach returns false and the out image handle is
+    /// null when the declared length exceeds the supplied pulse bytes.
+    /// </summary>
     [Fact]
     public void Tap_Attach_Rejects_Truncated_Pulse_Data()
     {

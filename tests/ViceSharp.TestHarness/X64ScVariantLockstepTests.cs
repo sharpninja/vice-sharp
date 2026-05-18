@@ -120,6 +120,14 @@ public sealed class X64ScVariantLockstepTests
         C64MachineProfiles.Resolve("c64gs").SystemCore.AddressDecoderPolicy.Should().Be(C64PlaPolicy.CartridgeRequired.ToString());
     }
 
+    /// <summary>
+    /// FR: FR-Architectures-C64-x64sc, TR: TR-X64SC-PROFILE-COVERAGE.
+    /// Use case: The BASIC READY prompt parity gate only applies to
+    /// keyboard-capable variants without a cartridge; the selector set
+    /// must mirror the no-cartridge boot list and exclude ultimax/c64gs.
+    /// Acceptance: 12 selectors, identical to the no-cartridge boot set,
+    /// none of which is "ultimax" or "c64gs".
+    /// </summary>
     [Fact]
     public void BasicReadyPromptSelectors_CoverEveryNoCartridgeKeyboardVariant()
     {
@@ -129,6 +137,13 @@ public sealed class X64ScVariantLockstepTests
         BasicReadyPromptSelectors.Should().NotContain("c64gs");
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: Every required x64sc variant must produce the same
+    /// post-reset state as native VICE x64sc when both are reset.
+    /// Acceptance: <see cref="LockstepValidator.Run"/> reports Success
+    /// after 0 cycles for every variant id.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ResetStateMatches_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -140,6 +155,14 @@ public sealed class X64ScVariantLockstepTests
         report.Success.Should().BeTrue($"{modelSelector}: {FormatReport(report)}");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Drive each no-cartridge x64sc variant cycle-by-cycle for
+    /// one full profile-defined scanline; managed and native state must
+    /// remain identical the whole way.
+    /// Acceptance: <see cref="LockstepValidator.Run"/> reports Success
+    /// and TotalCyclesExecuted equals the profile's CyclesPerLine.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstProfileScanlineMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -153,6 +176,14 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Extend the first-scanline gate to two consecutive scan
+    /// lines so the harness covers the wrap from the last cycle of line
+    /// 0 into the first cycle of line 1 for every variant.
+    /// Acceptance: Success reported after CyclesPerLine*2 cycles and
+    /// TotalCyclesExecuted equals that target.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstTwoProfileScanlinesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -166,6 +197,15 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-CPU-002, TR: TR-CYCLE-001.
+    /// Use case: For each no-cartridge x64sc variant, the lockstep
+    /// validator runs an entire profile-defined PAL/NTSC frame and
+    /// asserts cycle-by-cycle parity with native VICE.
+    /// Acceptance: Validator reports Success after exactly
+    /// CyclesPerLine*RasterLines cycles, with a full trace logged on
+    /// failure.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -180,6 +220,15 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Attach a deterministic D64 image to the managed drive
+    /// and to native VICE's IEC drive, then run a full profile frame to
+    /// prove drive emulation drift does not desynchronise CPU/VIC state.
+    /// Acceptance: After resetting both machines with the disk attached
+    /// and running CyclesPerLine*RasterLines cycles, RAM windows still
+    /// match between managed and native machines.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void D64Attach_FirstProfileFrameMatches_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -220,6 +269,14 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Hold the Space key on both managed and native machines
+    /// for one full frame and verify the keyboard matrix drive does not
+    /// perturb cycle-accurate lockstep.
+    /// Acceptance: RAM windows match between managed and native after
+    /// CyclesPerLine*RasterLines cycles with Space pressed.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
     public void HeldSpace_FirstProfileFrameMatches_ForEveryKeyboardEnabledNoCartridgeX64ScVariant(string modelSelector)
@@ -268,6 +325,14 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-CPU-002, TR: TR-CYCLE-001.
+    /// Use case: Extend frame-level lockstep coverage across two
+    /// consecutive frames to expose any drift accumulated during the
+    /// vertical blank/wrap transitions.
+    /// Acceptance: Validator reports Success after exactly
+    /// CyclesPerLine*RasterLines*2 cycles for every no-cartridge variant.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(NoCartridgeBootModelSelectors))]
     public void FirstTwoProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
@@ -282,6 +347,16 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CPU-001, FR: FR-VIC-002, TR: TR-CYCLE-001.
+    /// Use case: For each basic-capable variant, both managed and native
+    /// machines should display the "READY." prompt at the same frame and
+    /// the same screen offset after boot.
+    /// Acceptance: Within <c>BasicReadyMaxFrames</c> frames, the managed
+    /// BASIC READY offset matches the native offset; if the prompt never
+    /// appears or appears at a different offset the test fails with both
+    /// rendered screens dumped in the message.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
     public void BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant(string modelSelector)
@@ -324,6 +399,15 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, FR: FR-CPU-001, FR: FR-VIC-002, TR: TR-CYCLE-001.
+    /// Use case: Same BASIC READY prompt parity check as the standalone
+    /// variant, but with a deterministic D64 attached to drive 8 to
+    /// surface any drive emulation drift visible on the screen.
+    /// Acceptance: Within <c>BasicReadyMaxFrames</c>, managed and native
+    /// machines display READY at the same offset; otherwise both screen
+    /// dumps are surfaced in the failure message.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(BasicReadyPromptModelSelectors))]
     public void D64Attach_BasicReadyPromptVisibilityMatchesNative_ForEveryNoCartridgeBasicX64ScVariant(string modelSelector)
@@ -383,6 +467,14 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Autostart an 8K or 16K standard cartridge image on each
+    /// cartridge-capable variant; the managed and native frames must
+    /// match cycle-for-cycle across the first profile frame.
+    /// Acceptance: Validator reports Success after one full frame for
+    /// every (selector, mapping mode, size) combination.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(StandardCartridgeAutostartCases))]
     public void FirstProfileFrameMatches_ForStandardCartridgeAutostart(
@@ -401,6 +493,14 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Continue the standard cartridge autostart parity check
+    /// across two consecutive frames to expose drift in cartridge bank
+    /// or memory routing on the frame boundary.
+    /// Acceptance: Validator reports Success after exactly two profile
+    /// frames for every (selector, mapping mode, size) combination.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(StandardCartridgeAutostartCases))]
     public void FirstTwoProfileFramesMatch_ForStandardCartridgeAutostart(
@@ -419,6 +519,14 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-MEM-003, TR: TR-CYCLE-001.
+    /// Use case: Ultimax/max variants depend on the cartridge for ROM
+    /// visibility; with a deterministic Ultimax cartridge attached, the
+    /// first scanline must match native VICE.
+    /// Acceptance: Validator runs CyclesPerLine cycles, reports Success,
+    /// and TotalCyclesExecuted equals CyclesPerLine.
+    /// </summary>
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -434,6 +542,14 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-MEM-003, TR: TR-CYCLE-001.
+    /// Use case: Continue the Ultimax cartridge parity check across two
+    /// scanlines so the wrap from cycle N-1 of line 0 into cycle 0 of
+    /// line 1 stays cycle-accurate.
+    /// Acceptance: Validator reports Success after CyclesPerLine*2
+    /// cycles for both "ultimax" and "max" selectors.
+    /// </summary>
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -449,6 +565,14 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-MEM-003, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Run a full profile frame on the Ultimax variants with
+    /// the deterministic Ultimax cartridge image so both ROMH and ROML
+    /// visibility (the Ultimax PLA policy) stay synchronised.
+    /// Acceptance: Validator reports Success after exactly one full
+    /// profile frame for "ultimax" and "max".
+    /// </summary>
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -465,6 +589,13 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-MEM-003, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Extend the Ultimax cartridge parity check across two
+    /// frames so any drift accumulated across vertical blank is caught.
+    /// Acceptance: Validator reports Success after CyclesPerLine *
+    /// RasterLines * 2 cycles for both "ultimax" and "max".
+    /// </summary>
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -481,6 +612,14 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-PRF-002, TR: TR-CYCLE-001.
+    /// Use case: C64GS variants only boot from a Game System cartridge;
+    /// with a deterministic image attached, the first profile scanline
+    /// must match native x64sc gs.
+    /// Acceptance: Validator reports Success after exactly
+    /// CyclesPerLine cycles for "c64gs" and "gs".
+    /// </summary>
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -496,6 +635,13 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-PRF-002, TR: TR-CYCLE-001.
+    /// Use case: Continue the C64GS Game System cartridge parity check
+    /// across two scanlines to expose line-wrap drift.
+    /// Acceptance: Validator reports Success after CyclesPerLine*2
+    /// cycles for both "c64gs" and "gs".
+    /// </summary>
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -511,6 +657,13 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-PRF-002, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Run a full profile frame on the C64GS variants with the
+    /// deterministic Game System cartridge.
+    /// Acceptance: Validator reports Success after exactly
+    /// CyclesPerLine*RasterLines cycles for "c64gs" and "gs".
+    /// </summary>
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -527,6 +680,13 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-PRF-002, FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Cover two consecutive frames on C64GS variants to catch
+    /// drift accumulated across vertical blank.
+    /// Acceptance: Validator reports Success after CyclesPerLine *
+    /// RasterLines * 2 cycles for both "c64gs" and "gs".
+    /// </summary>
     [ViceTheory]
     [InlineData("c64gs")]
     [InlineData("gs")]
@@ -543,6 +703,14 @@ public sealed class X64ScVariantLockstepTests
         report.TotalCyclesExecuted.Should().Be(cycles);
     }
 
+    /// <summary>
+    /// FR: FR-MEM-001, TR: TR-CYCLE-001.
+    /// Use case: For every required x64sc variant, after one scanline
+    /// the selected RAM windows (zero page, stack, color RAM, etc.)
+    /// must match native VICE byte-for-byte.
+    /// Acceptance: <c>AssertSelectedRamWindowsMatch</c> succeeds after
+    /// reset and again after running CyclesPerLine cycles in lockstep.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void SelectedRamWindowsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -567,6 +735,13 @@ public sealed class X64ScVariantLockstepTests
         AssertSelectedRamWindowsMatch(machine, native, modelSelector, "first scanline");
     }
 
+    /// <summary>
+    /// FR: FR-MEM-001, TR: TR-CYCLE-001.
+    /// Use case: Extend the RAM window parity check to one full profile
+    /// frame for every required variant.
+    /// Acceptance: <c>AssertSelectedRamWindowsMatch</c> succeeds after
+    /// reset and after running CyclesPerLine*RasterLines cycles.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void SelectedRamWindowsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -584,6 +759,14 @@ public sealed class X64ScVariantLockstepTests
         AssertSelectedRamWindowsMatch(machine, native, modelSelector, "first frame");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: The VIC-II raster line/cycle/badline-flag triplet must
+    /// agree with native VICE at every cycle of the first scanline for
+    /// every required variant.
+    /// Acceptance: <c>AssertVicRasterTimingMatches</c> succeeds at reset
+    /// and after CyclesPerLine cycles.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ViciiRasterTimingMatchesNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -616,6 +799,14 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Beyond timing fields, the entire VIC-II register file
+    /// readback after the first scanline must match native VICE for
+    /// every required variant.
+    /// Acceptance: <c>AssertViciiRegistersMatch</c> succeeds after
+    /// running CyclesPerLine cycles in lockstep.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ViciiRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -646,6 +837,13 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-MEM-003, FR: FR-CIA-006, TR: TR-CYCLE-001.
+    /// Use case: Ultimax variants disconnect CIA2; reads to $DD00-$DDFF
+    /// must return open-bus values that match native VICE.
+    /// Acceptance: For each probed CIA2 address, managed read equals
+    /// native read; on mismatch the failure includes a phi1 diagnostic.
+    /// </summary>
     [ViceTheory]
     [InlineData("ultimax")]
     [InlineData("max")]
@@ -679,6 +877,15 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-CIA-006, FR: FR-MEM-001, TR: TR-CYCLE-001.
+    /// Use case: On standard C64 family variants CIA2 is connected; the
+    /// managed memory map must route writes and reads to $DD00-$DDFF to
+    /// the CIA register file exactly as native VICE does.
+    /// Acceptance: After identical writes to $DD02 and $DD00 on both
+    /// machines, every probed CIA2 address reads back the same byte
+    /// from managed and native.
+    /// </summary>
     [ViceTheory]
     [InlineData("c64")]
     [InlineData("c64gs")]
@@ -711,6 +918,13 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: Extend VIC-II raster timing parity to a full profile
+    /// frame for every required variant.
+    /// Acceptance: <c>AssertVicRasterTimingMatches</c> succeeds after
+    /// CyclesPerLine*RasterLines cycles in lockstep.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ViciiRasterTimingMatchesNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -737,6 +951,15 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-CIA-001, FR: FR-SID-001, TR: TR-CYCLE-001.
+    /// Use case: After the first profile scanline, the register state
+    /// of CIA1, CIA2 (when connected) and SID must match native VICE,
+    /// along with the IRQ/NMI dispatcher state.
+    /// Acceptance: All four checkpoint helpers (CIA1, CIA2, SID,
+    /// interrupt state) succeed both at reset and after CyclesPerLine
+    /// cycles of lockstep.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ChipRegisterCheckpointsMatchNative_AfterFirstProfileScanline_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -778,6 +1001,13 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-CIA-001, FR: FR-SID-001, TR: TR-CYCLE-001.
+    /// Use case: Extend the chip register checkpoint suite to one full
+    /// profile frame for every required variant.
+    /// Acceptance: CIA1, CIA2 (if connected), SID, and interrupt-state
+    /// helpers all succeed after CyclesPerLine*RasterLines cycles.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ChipRegisterCheckpointsMatchNative_AfterFirstProfileFrame_ForEveryRequiredX64ScVariant(string modelSelector)
@@ -810,6 +1040,15 @@ public sealed class X64ScVariantLockstepTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-CPU-001, FR: FR-VIC-001, FR: FR-CIA-001, TR: TR-CYCLE-001.
+    /// Use case: Run a full frame of activity, then reset both machines
+    /// and verify all chip-level state (VIC, CIA1, CIA2 if connected,
+    /// SID) and CPU state return to a single, native-matching baseline.
+    /// Acceptance: After running and resetting, every chip checkpoint
+    /// and the CPU register snapshot match native VICE for every
+    /// required variant.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredModelSelectors))]
     public void ResetAfterActivityMatchesNative_ForEveryRequiredX64ScVariant(string modelSelector)

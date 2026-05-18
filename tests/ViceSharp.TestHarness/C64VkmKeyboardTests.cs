@@ -24,6 +24,15 @@ public sealed class C64VkmKeyboardTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-INP-006, TR: TR-INPUT-VKM-001.
+    /// Use case: Load the upstream VICE <c>gtk3_pos.vkm</c> file and verify
+    /// the parser resolves keyboard rows/columns/shift flags for a
+    /// representative set of named keys (Space, D1, Left).
+    /// Acceptance: Parser reports no errors; Space resolves to $3C, D1 to
+    /// $38 and Left to the two-keycode shifted sequence $34,$02; joystick
+    /// or keypad rows produce documented warning diagnostics.
+    /// </summary>
     [Fact]
     public void Load_Gtk3PosVkm_ResolvesRowsColumnsAndShiftFlags()
     {
@@ -43,6 +52,16 @@ public sealed class C64VkmKeyboardTests
                 diagnostic.Message.Contains("KP_7", StringComparison.OrdinalIgnoreCase));
     }
 
+    /// <summary>
+    /// FR: FR-INP-006, TR: TR-INPUT-VKM-001.
+    /// Use case: VKM source files use directives such as <c>!CLEAR</c>,
+    /// <c>!INCLUDE</c>, <c>!UNDEF</c> and inline <c>#</c> comments; the
+    /// parser must apply them in declaration order.
+    /// Acceptance: After processing the directive sequence the resulting
+    /// keyboard map exposes A, B and Left as expected, dropped entries
+    /// (Gone) are not resolvable, and joystick/keypad rows produce a
+    /// warning diagnostic.
+    /// </summary>
     [Fact]
     public void Load_SupportsClearIncludeUndefAndInlineComments()
     {
@@ -93,6 +112,15 @@ public sealed class C64VkmKeyboardTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-INP-006.
+    /// Use case: When no VKM is loaded the built-in fallback host keyboard
+    /// mapper must keep the historically supported mappings for the most
+    /// common keys.
+    /// Acceptance: Left, D1 and Space all resolve via
+    /// <see cref="C64HostKeyboardMapper.TryMap"/> to the expected legacy
+    /// keycode sequences.
+    /// </summary>
     [Fact]
     public void DefaultFallbackMap_PreservesExistingHostKeyMappings()
     {
@@ -104,6 +132,15 @@ public sealed class C64VkmKeyboardTests
         Assert.Equal([0x3C], space);
     }
 
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-INP-006, FR: FR-CIA-003.
+    /// Use case: After selecting a VKM-derived keyboard map, pressing a
+    /// shifted key (Left) must drive the corresponding CIA1 keyboard
+    /// matrix rows when CIA1 scans the columns.
+    /// Acceptance: With "Left" pressed the matching matrix rows read 0
+    /// for the selected column mask, and releasing the key restores the
+    /// rows to 1.
+    /// </summary>
     [Fact]
     public void SelectedVkmMap_AppliesCiaMatrixLines()
     {
@@ -127,6 +164,17 @@ public sealed class C64VkmKeyboardTests
         Assert.Equal(0x40, machine.Bus.Read(0xDC00) & 0x40);
     }
 
+    /// <summary>
+    /// FR: FR-INP-006, FR: FR-CIA-003, TR: TR-INPUT-VKM-001.
+    /// Use case: For each C64 machine profile, pressing a representative
+    /// key (Space, Left) via the VKM-derived map must drive the CIA1
+    /// matrix scan exactly the same way as native VICE running the same
+    /// model.
+    /// Acceptance: For every profile/key pair, the managed CIA1 column
+    /// read of $DC00 matches the native VICE CIA1 register byte for both
+    /// press and release transitions; profiles without keyboards report
+    /// the key as not applied.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(VkmKeyboardParityCases))]
     public void SelectedVkmMap_CiaMatrixScanMatchesNativeX64Sc(string modelSelector, string key)

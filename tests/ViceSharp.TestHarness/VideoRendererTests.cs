@@ -17,6 +17,14 @@ public sealed class VideoRendererTests
         return (bus, ram, irq);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Constructing a VideoRenderer must allocate the BGRA
+    /// frame buffer at the canonical screen dimensions (384x272x4
+    /// bytes).
+    /// Acceptance: <c>renderer.FrameBuffer</c> is non-null and equals
+    /// <c>ScreenWidth * ScreenHeight * 4</c> bytes in length.
+    /// </summary>
     [Fact]
     public void Constructor_CreatesFrameBuffer()
     {
@@ -32,6 +40,13 @@ public sealed class VideoRendererTests
         Assert.Equal(VideoRenderer.ScreenWidth * VideoRenderer.ScreenHeight * 4, renderer.FrameBuffer.Length);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Calling <see cref="VideoRenderer.Reset"/> on a renderer
+    /// must clear the entire frame buffer back to all zero bytes.
+    /// Acceptance: After seeding the frame buffer with $FF and calling
+    /// Reset, every byte in the buffer is 0.
+    /// </summary>
     [Fact]
     public void Reset_ClearsFrameBuffer()
     {
@@ -51,6 +66,14 @@ public sealed class VideoRendererTests
         Assert.All(renderer.FrameBuffer, b => Assert.Equal(0, b));
     }
 
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-CYCLE-001.
+    /// Use case: Rendering a full frame on a reset VIC-II must paint the
+    /// border with palette index 0 (black) at the (0,0) pixel before
+    /// any boot code reprograms the border colour.
+    /// Acceptance: The BGRA value at pixel (0,0) of the rendered frame
+    /// is 0xFF000000 (opaque black).
+    /// </summary>
     [Fact]
     public void FrameBuffer_Contains_Black_For_ResetBorder()
     {
@@ -71,6 +94,13 @@ public sealed class VideoRendererTests
         Assert.Equal(expectedBlack, firstPixel);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Running a full frame on a freshly reset machine must
+    /// complete without throwing.
+    /// Acceptance: <see cref="VideoRenderer.RenderFullFrame"/> returns
+    /// normally (Record.Exception yields null).
+    /// </summary>
     [Fact]
     public void RenderFullFrame_Completes_Without_Error()
     {
@@ -85,6 +115,14 @@ public sealed class VideoRendererTests
         Assert.Null(exception);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: The renderer exposes the canonical C64 overscan screen
+    /// dimensions (384x272) as constants so host code can size buffers
+    /// before constructing a renderer.
+    /// Acceptance: <c>ScreenWidth == 384</c> and
+    /// <c>ScreenHeight == 272</c>.
+    /// </summary>
     [Fact]
     public void ScreenDimensions_Are_Correct()
     {
@@ -93,6 +131,16 @@ public sealed class VideoRendererTests
         Assert.Equal(272, VideoRenderer.ScreenHeight);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-VIC-007, TR: TR-CYCLE-001.
+    /// Use case: With 25-row mode active and the border/background
+    /// colours programmed (Light Blue / Blue), the renderer must crop
+    /// the PAL raster such that the active screen area sits centred in
+    /// the 272-line frame buffer.
+    /// Acceptance: Pixel (24,35) is border colour; pixel (24,36) is the
+    /// background; the lower transition mirrors the upper one at rows
+    /// 235/236, proving symmetrical vertical centring.
+    /// </summary>
     [Fact]
     public void RenderFullFrame_CropsPalRasterSoActiveScreenIsVerticallyCentered()
     {
@@ -116,6 +164,14 @@ public sealed class VideoRendererTests
         Assert.Equal(border, ReadPixel(renderer.FrameBuffer, 343, 236));
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: The renderer's static PAL timing constants must equal
+    /// the documented PAL VIC-II values (63 cycles per line, 312 total
+    /// lines, 272 visible) so callers can compute frame budgets.
+    /// Acceptance: <c>PalCyclesPerLine == 63</c>,
+    /// <c>PalTotalLines == 312</c>, <c>PalVisibleLines == 272</c>.
+    /// </summary>
     [Fact]
     public void PAL_Timing_Is_Correct()
     {
@@ -125,6 +181,14 @@ public sealed class VideoRendererTests
         Assert.Equal(272, VideoRenderer.PalVisibleLines);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: FrameBuffer.Length must be measured in bytes (4 per
+    /// pixel for BGRA), not pixels; a mismatch would cause buffer
+    /// over/underruns in host blit code.
+    /// Acceptance: <c>FrameBuffer.Length</c> equals
+    /// <c>ScreenWidth * ScreenHeight * 4</c>.
+    /// </summary>
     [Fact]
     public void FrameBuffer_Size_Is_Bytes_Not_Pixels()
     {
@@ -138,6 +202,13 @@ public sealed class VideoRendererTests
         Assert.Equal(expectedBytes, renderer.FrameBuffer.Length);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-CYCLE-001.
+    /// Use case: A freshly reset VIC-II's BorderColor register must be
+    /// palette index 0 (black) until the boot ROM writes a different
+    /// value.
+    /// Acceptance: <c>vic.BorderColor == 0</c> after Reset.
+    /// </summary>
     [Fact]
     public void BorderColor_Is_Black_After_Reset()
     {
@@ -149,6 +220,12 @@ public sealed class VideoRendererTests
         Assert.Equal(0, vic.BorderColor);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-002, TR: TR-CYCLE-001.
+    /// Use case: A freshly reset VIC-II's BackgroundColor register must
+    /// also be palette index 0 (black) until configured by the boot ROM.
+    /// Acceptance: <c>vic.BackgroundColor == 0</c> after Reset.
+    /// </summary>
     [Fact]
     public void BackgroundColor_Is_Black_After_Reset()
     {
@@ -160,6 +237,17 @@ public sealed class VideoRendererTests
         Assert.Equal(0, vic.BackgroundColor);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-002, FR: FR-VIC-003, TR: TR-CYCLE-001.
+    /// Use case: $D018 controls the screen memory and character base
+    /// pointers; $D011/$D016 control the display mode. The VIC-II must
+    /// decode these registers to the documented base addresses and
+    /// modes (StandardText, MulticolorText, Bitmap).
+    /// Acceptance: With $D018=$15, screen base resolves to $0400 and
+    /// character base to $1000; setting MCM bit 4 in $D016 transitions
+    /// to MulticolorText; setting BMM bit 5 in $D011 transitions to
+    /// Bitmap.
+    /// </summary>
     [Fact]
     public void RegisterPointers_UseD018ForScreenAndCharacterBases()
     {
@@ -182,6 +270,14 @@ public sealed class VideoRendererTests
         Assert.Equal(Mos6569.VideoMode.Bitmap, vic.DisplayMode);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: After Reset, the VIC-II's externally visible raster
+    /// position must be at line 0, cycle <c>ResetRasterCycle</c> so
+    /// timing-sensitive code starts from a known phase.
+    /// Acceptance: <c>CurrentRasterLine == 0</c> and
+    /// <c>RasterX == ResetRasterCycle</c>.
+    /// </summary>
     [Fact]
     public void VIC_Raster_Position_Is_Zero_After_Reset()
     {

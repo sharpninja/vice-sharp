@@ -63,6 +63,17 @@ public sealed class C64MachineProfileTests
         { "c64jap", "Commodore 64 Japanese", 1_022_730, 65, 263, VideoStandard.Ntsc, C64VicIIModel.Mos6567R8, C64SidModel.Mos6581, C64BoardModel.Japanese, true, false }
     };
 
+    /// <summary>
+    /// FR: FR-PRF-001, FR: FR-PRF-002, FR: FR-PRF-003, TR: TR-CYCLE-001.
+    /// Use case: For every required C64 profile, the public profile
+    /// surface must expose the display name, master clock, raster timing,
+    /// VIC/SID/board defaults and feature flags that the rest of the
+    /// architecture relies on.
+    /// Acceptance: Every field on the resolved profile equals the
+    /// expected value declared in the theory row, and the matching
+    /// descriptor reports the same machine name, clock and video
+    /// standard with the profile reference attached.
+    /// </summary>
     [Theory]
     [MemberData(nameof(RequiredProfiles))]
     public void X64ScProfiles_ExposeExpectedTimingAndDefaults(
@@ -106,6 +117,16 @@ public sealed class C64MachineProfileTests
         descriptor.MachineProfile.Should().BeSameAs(profile);
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: Every shipped C64 profile must resolve to a SystemCore
+    /// definition that the architecture builder can use to glue chips
+    /// together; missing or misnamed entries would break boot.
+    /// Acceptance: For every profile in <c>C64MachineProfiles.All</c>,
+    /// SystemCore.Id starts with "x64sc:", DisplayName is non-empty, the
+    /// board policy mirrors BoardModel, and traits include "pla" and
+    /// "bus" entries.
+    /// </summary>
     [Fact]
     public void X64ScProfiles_SelectSystemCoreDefinitionForEveryVariant()
     {
@@ -119,6 +140,15 @@ public sealed class C64MachineProfileTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-MEM-001, FR: FR-MEM-003, TR: TR-CYCLE-001.
+    /// Use case: The system-core map differentiates standard, Ultimax,
+    /// Game System and SX-64 variants by their bus, PLA, tape, IEC and
+    /// CIA2 connectivity policies.
+    /// Acceptance: For each variant the relevant SystemCore policy
+    /// fields and traits report the documented values (e.g. Ultimax has
+    /// no CIA2, no tape port, no IEC bus, and Max bus policy).
+    /// </summary>
     [Fact]
     public void SystemCoreDefinitions_DifferentiateVariantBusAndPlaPolicies()
     {
@@ -142,6 +172,17 @@ public sealed class C64MachineProfileTests
         C64MachineProfiles.Ultimax.SystemCore.Traits.Should().ContainKey("cia2").WhoseValue.Should().Be("absent");
     }
 
+    /// <summary>
+    /// FR: FR-CFG-002, FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: Every shipped C64 profile must pick the same BASIC,
+    /// KERNAL and character ROM resource names that the corresponding
+    /// VICE x64sc model uses, so that downstream lockstep can find
+    /// matching bytes via the rom provider.
+    /// Acceptance: For each (selector, expected) row, the profile's
+    /// Basic/Kernal/Character ROM names equal the expected values, and
+    /// the assembled ROM set reports complete against the test rom
+    /// provider.
+    /// </summary>
     [Theory]
     [InlineData("c64", C64ViceRomNames.Basic, C64ViceRomNames.KernalRev3, C64ViceRomNames.Character)]
     [InlineData("c64c", C64ViceRomNames.Basic, C64ViceRomNames.KernalRev3, C64ViceRomNames.Character)]
@@ -176,6 +217,15 @@ public sealed class C64MachineProfileTests
         romSet.IsComplete(MachineTestFactory.CreateC64RomProvider()).Should().BeTrue();
     }
 
+    /// <summary>
+    /// FR: FR-CFG-002, FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: For every required profile, the architecture builder
+    /// must successfully load the BASIC/KERNAL/character ROM bytes for
+    /// that profile from the rom provider.
+    /// Acceptance: The built machine exposes ROM regions at the canonical
+    /// $A000/$E000/$D000 addresses with non-empty byte spans for every
+    /// required selector.
+    /// </summary>
     [Theory]
     [MemberData(nameof(RequiredProfileSelectors))]
     public void ArchitectureBuilder_LoadsViceModelRomResourceBytes(string selector)
@@ -202,6 +252,15 @@ public sealed class C64MachineProfileTests
         machine.Bus.Read(0xD000).Should().Be(character[0], $"{selector} should map the profile-selected character ROM");
     }
 
+    /// <summary>
+    /// FR: FR-PRF-002, FR: FR-MEM-001, TR: TR-CYCLE-001.
+    /// Use case: The C64GS PLA only exposes the cartridge ROM-LOW window
+    /// while the cartridge is asserting; during the cartridge's RAM test
+    /// pre-boot stage the same window must visibly toggle.
+    /// Acceptance: After triggering the cartridge RAM test, the bus
+    /// reports ROM-LOW visibility transitions matching the documented
+    /// PLA policy for the C64GS variant.
+    /// </summary>
     [Fact]
     public void C64GsCartridgeRomLowFollowsPlaVisibilityDuringRamTest()
     {
@@ -222,6 +281,15 @@ public sealed class C64MachineProfileTests
         machine.Bus.Read(0x8000).Should().Be(0x5A, "ROML should disappear when LORAM/HIRAM are both deasserted during RAMTAS");
     }
 
+    /// <summary>
+    /// FR: FR-PRF-002, FR: FR-INP-001, TR: TR-CYCLE-001.
+    /// Use case: The C64GS variant has a host input surface (to let
+    /// joystick state still flow) but no physical keyboard, so the
+    /// system core must disable the keyboard matrix translation.
+    /// Acceptance: Setting any keyboard key on the C64GS host input
+    /// service returns false (not applied) and the CIA1 matrix scan
+    /// remains all-ones for the affected row/column.
+    /// </summary>
     [Fact]
     public async Task C64GsSystemCore_DisablesKeyboardMatrixEvenThoughHostInputSurfaceExists()
     {
@@ -243,6 +311,14 @@ public sealed class C64MachineProfileTests
         (machine.Bus.Read(0xDC00) & 0x80).Should().Be(0x80);
     }
 
+    /// <summary>
+    /// FR: FR-INP-002, FR: FR-CIA-004, TR: TR-CYCLE-001.
+    /// Use case: Control port 2 must drive CIA1 port A and control
+    /// port 1 must drive CIA1 port B on every required C64 variant.
+    /// Acceptance: Setting joystick state on port 2 forces $DC00 bits
+    /// 0 and 4 low; setting joystick state on port 1 forces $DC01 bits
+    /// 1 and 4 low; releasing the joystick state restores the lines.
+    /// </summary>
     [Theory]
     [MemberData(nameof(RequiredProfileSelectors))]
     public void ArchitectureBuilder_MapsControlPortsToCia1ForEveryRequiredX64ScVariant(string selector)
@@ -263,6 +339,15 @@ public sealed class C64MachineProfileTests
         (machine.Bus.Read(0xDC01) & 0x12).Should().Be(0x12, $"{selector} control port 1 should release CIA1 port B lines");
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: For every C64 family variant the architecture builder
+    /// must register exactly one system core that glues together the
+    /// profile, the CPU, the video chip and the PLA.
+    /// Acceptance: There is a single ISystemCore device whose Definition
+    /// matches the descriptor's profile, and CPU/VideoChip/Pla devices
+    /// are all resolvable via the device registry.
+    /// </summary>
     [Theory]
     [InlineData("c64")]
     [InlineData("c64c")]
@@ -282,6 +367,15 @@ public sealed class C64MachineProfileTests
         machine.Devices.GetByRole(DeviceRole.Pla).Should().NotBeNull();
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, FR: FR-TAP-001, TR: TR-CYCLE-001.
+    /// Use case: Only variants whose profile reports a connected tape
+    /// port (e.g. standard C64) should expose an ITapeDevice; SX-64 and
+    /// C64GS must not.
+    /// Acceptance: The presence of an ITapeDevice in the machine's
+    /// device set matches the profile's tape-port-connected flag for
+    /// every row.
+    /// </summary>
     [Theory]
     [InlineData("c64", true)]
     [InlineData("sx64pal", false)]
@@ -296,6 +390,14 @@ public sealed class C64MachineProfileTests
         machine.Devices.All.OfType<ITapeDevice>().Any().Should().Be(expectedTapePort);
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, FR: FR-DRV-005, TR: TR-CYCLE-001.
+    /// Use case: IEC drives (8/9) attach only to variants whose profile
+    /// reports an IEC bus; cartridge-only variants (Ultimax, C64GS) must
+    /// not expose any drives.
+    /// Acceptance: The set of registered IFloppyDrive.DriveNumber values
+    /// equals the expected number list for every variant.
+    /// </summary>
     [Theory]
     [InlineData("c64", 8, 9)]
     [InlineData("sx64pal", 8, 9)]
@@ -314,6 +416,14 @@ public sealed class C64MachineProfileTests
             .BeEquivalentTo(expectedDriveNumbers);
     }
 
+    /// <summary>
+    /// FR: FR-CIA-006, FR: FR-MEM-003, TR: TR-CYCLE-001.
+    /// Use case: Standard C64 family and C64GS keep CIA2 connected at
+    /// $DD00; Ultimax disconnects CIA2 entirely so reads return open
+    /// bus instead.
+    /// Acceptance: An ICia2 device is registered exactly when the
+    /// profile says so, and the Mos6526 at base $DD00 count matches.
+    /// </summary>
     [Theory]
     [InlineData("c64", true)]
     [InlineData("c64gs", true)]
@@ -332,6 +442,15 @@ public sealed class C64MachineProfileTests
             .Be(expectedCia2 ? 1 : 0);
     }
 
+    /// <summary>
+    /// FR: FR-MEM-003, FR: FR-CIA-006, TR: TR-CYCLE-001.
+    /// Use case: On Ultimax the $DD00 I/O region has no CIA2 attached;
+    /// writes must be silently dropped and reads must return the
+    /// open-bus byte (the last $03xx phi1 fetch in VIC space).
+    /// Acceptance: After writing $A5 to $DD00 on Ultimax, the underlying
+    /// RAM byte is unchanged ($5A) and bus reads return the phi1
+    /// open-bus value ($A7) instead of the just-written value.
+    /// </summary>
     [Fact]
     public void Ultimax_Dd00IoRegionReadsOpenBusAndIgnoresWritesWhenCia2IsAbsent()
     {
@@ -350,6 +469,14 @@ public sealed class C64MachineProfileTests
         machine.Bus.Read(0xDD00).Should().Be(0xA7);
     }
 
+    /// <summary>
+    /// FR: FR-MEM-001, FR: FR-CIA-006, TR: TR-CYCLE-001.
+    /// Use case: On a standard C64 the $DD00 region routes through CIA2;
+    /// writes to $DD00 must NOT propagate to the underlying RAM byte
+    /// because the PLA decodes the region to the I/O range.
+    /// Acceptance: After writing $A5 to $DD00 on a standard C64, the
+    /// underlying RAM byte at $DD00 remains the seeded value ($5A).
+    /// </summary>
     [Fact]
     public void C64_Dd00IoRegionRoutesToCia2WhenCia2IsConnected()
     {
@@ -365,6 +492,14 @@ public sealed class C64MachineProfileTests
         memory.Span[0xDD00].Should().Be(0x5A);
     }
 
+    /// <summary>
+    /// FR: FR-CFG-001, FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: Many VICE command-line model names are aliases for the
+    /// canonical profile id ("c64-pal" -> "c64", "max" -> "ultimax",
+    /// etc.); the resolver must normalise them.
+    /// Acceptance: For every (alias, expectedId) row, Resolve returns a
+    /// profile whose Id is the expected canonical value.
+    /// </summary>
     [Theory]
     [MemberData(nameof(RequiredProfileAliases))]
     public void X64ScProfiles_ResolveViceAliases(string alias, string expectedId)
@@ -372,6 +507,15 @@ public sealed class C64MachineProfileTests
         C64MachineProfiles.Resolve(alias).Id.Should().Be(expectedId);
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: Every alias that the managed profile resolver accepts
+    /// must also be a valid x64sc model selector for the native VICE
+    /// library used by the lockstep harness.
+    /// Acceptance: ViceNative.CreateModel returns a non-null handle for
+    /// each alias, GetModel reports the expected native model enum, and
+    /// the model enum stays the same after a native reset.
+    /// </summary>
     [ViceTheory]
     [MemberData(nameof(RequiredProfileAliases))]
     public void NativeVice_CreatesAndResetsEveryManagedX64ScAlias(string alias, string expectedId)
@@ -392,6 +536,15 @@ public sealed class C64MachineProfileTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: ViceNative.Create() without arguments must produce the
+    /// canonical PAL breadbox C64 used as the default in the lockstep
+    /// harness.
+    /// Acceptance: The returned native handle is non-null, GetModel
+    /// reports the "c64" native model enum, and the value persists
+    /// across a native reset.
+    /// </summary>
     [ViceFact]
     public void NativeVice_DefaultCreateSelectsPalBreadboxModel()
     {
@@ -410,6 +563,16 @@ public sealed class C64MachineProfileTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, FR: FR-VIC-001, FR: FR-SID-001, TR: TR-CYCLE-001.
+    /// Use case: Every required profile must pick the right VIC-II
+    /// revision, SID revision and timing constants when the architecture
+    /// builder constructs the machine.
+    /// Acceptance: For each variant, frame cycles match the expected
+    /// CyclesPerLine*RasterLines product, the VIC device's runtime type
+    /// matches the expected concrete chip class, and the SID device's
+    /// runtime type matches the expected SID revision.
+    /// </summary>
     [Theory]
     [InlineData("c64", 63 * 312, typeof(Mos6569), typeof(Sid6581))]
     [InlineData("c64c", 63 * 312, typeof(Mos8565), typeof(Sid8580))]
@@ -440,6 +603,15 @@ public sealed class C64MachineProfileTests
         machine.Devices.GetByRole(DeviceRole.AudioChip).Should().BeOfType(expectedSidType);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-001, FR: FR-PRF-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The host's emulator runtime factory must be able to
+    /// construct a working session for every required x64sc variant by
+    /// selector.
+    /// Acceptance: For every selector, the factory returns a session
+    /// whose Architecture is profiled and whose MachineProfile.Id
+    /// matches the selector.
+    /// </summary>
     [Theory]
     [InlineData("c64")]
     [InlineData("c64c")]

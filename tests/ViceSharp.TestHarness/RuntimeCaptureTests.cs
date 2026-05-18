@@ -6,6 +6,15 @@ using Xunit;
 
 public sealed class RuntimeCaptureTests
 {
+    /// <summary>
+    /// FR: FR-MED-001, TR: TR-MEDIA-001.
+    /// Use case: Host code presents a BGRA frame to the recording frame
+    /// sink and then asks the sink to materialise that frame as a BMP file
+    /// for screenshot capture.
+    /// Acceptance: The on-disk file begins with the "BM" magic, the sink
+    /// reports FrameCount == 1, and LastFrame round-trips the originally
+    /// presented bytes.
+    /// </summary>
     [Fact]
     public async Task RecordingFrameSink_WritesBmpArtifact_FromPresentedBgraFrame()
     {
@@ -37,6 +46,15 @@ public sealed class RuntimeCaptureTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-MED-001, TR: TR-MEDIA-001.
+    /// Use case: Host capture pipeline reads the active video chip's frame
+    /// buffer directly (without an external sink) and persists it as a BMP
+    /// artifact suitable for screenshot delivery.
+    /// Acceptance: <see cref="FrameCapture.CaptureAsync"/> writes a file
+    /// beginning with the "BM" magic and contains more than the 54-byte
+    /// BMP header (i.e. pixel data was appended).
+    /// </summary>
     [Fact]
     public async Task FrameCapture_WritesBmpArtifact_FromVideoChipBuffer()
     {

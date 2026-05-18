@@ -9,6 +9,14 @@ using ViceSharp.Abstractions;
 /// </summary>
 public sealed class CpuInterruptTests
 {
+    /// <summary>
+    /// FR: FR-CPU-001, TR: TR-CYCLE-001.
+    /// Use case: A fresh 6502 with reset vector bytes at $FFFC/$FFFD must
+    /// load PC from the vector, clear the stack pointer to $00 and seed P
+    /// with the documented post-reset flag bits.
+    /// Acceptance: After <c>Reset()</c>, PC equals the vector word ($1234),
+    /// S equals $00 and P equals $26 (interrupt-disable plus unused bit).
+    /// </summary>
     [Fact]
     public void Reset_InitializesRegisters()
     {
@@ -29,6 +37,13 @@ public sealed class CpuInterruptTests
         Assert.Equal(0x26, cpu.P);
     }
 
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
+    /// Use case: With the I (interrupt-disable) flag set, asserting an IRQ
+    /// must not divert execution: PC stays put and no stack push occurs.
+    /// Acceptance: After <c>Irq()</c> on a CPU with <c>P=0x04</c>, PC equals
+    /// its pre-call value (no jump performed).
+    /// </summary>
     [Fact]
     public void Irq_WhenInterruptDisabled_DoesNotJump()
     {
@@ -46,6 +61,14 @@ public sealed class CpuInterruptTests
         Assert.Equal(originalPC, cpu.PC);
     }
 
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
+    /// Use case: With the I flag clear, asserting an IRQ must push the
+    /// return PC onto the stack and jump through the $FFFE/$FFFF vector,
+    /// then mask further IRQs by setting I.
+    /// Acceptance: After <c>Irq()</c>, PC equals the vector target ($0800),
+    /// I is set, and the stack contains PCL/PCH at $01FE/$01FF.
+    /// </summary>
     [Fact]
     public void Irq_WhenInterruptEnabled_PushesStateAndJumps()
     {
@@ -74,6 +97,14 @@ public sealed class CpuInterruptTests
         Assert.Equal(0x04, bus.Read(0x01FF)); // PCH = 0x04
     }
 
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
+    /// Use case: An NMI must always push the return PC and jump through the
+    /// $FFFA/$FFFB vector regardless of the I flag, then set I to prevent
+    /// IRQ recursion inside the handler.
+    /// Acceptance: After <c>Nmi()</c>, PC equals the vector target ($0800),
+    /// I is set, and the stack contains PCL/PCH at $01FE/$01FF.
+    /// </summary>
     [Fact]
     public void Nmi_PushesStateAndJumps()
     {

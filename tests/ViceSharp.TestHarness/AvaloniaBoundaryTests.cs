@@ -10,6 +10,16 @@ using Xunit;
 
 public sealed class AvaloniaBoundaryTests
 {
+    /// <summary>
+    /// FR: FR-UI-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The ViceSharp.Avalonia project must only depend on the
+    /// protocol/host composition; if it reached into runtime projects
+    /// directly (Core/Chips/Architectures/RomFetch) the host boundary
+    /// would no longer be enforceable.
+    /// Acceptance: The .csproj references ViceSharp.Protocol and
+    /// ViceSharp.Host but does NOT reference Core, Chips, Architectures
+    /// or RomFetch projects.
+    /// </summary>
     [Fact]
     public void AvaloniaProject_ReferencesProtocolAndHostCompositionButNotRuntimeProjects()
     {
@@ -23,6 +33,17 @@ public sealed class AvaloniaBoundaryTests
         Assert.DoesNotContain("ViceSharp.RomFetch.csproj", project);
     }
 
+    /// <summary>
+    /// FR: FR-UI-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Even if the project references are clean, Avalonia
+    /// source code must not contain string references to runtime
+    /// namespace names or runtime-internal types - a textual usage
+    /// would imply reflection-based coupling.
+    /// Acceptance: Concatenated Avalonia source contains none of
+    /// "ViceSharp.Abstractions", "ViceSharp.Architectures",
+    /// "ViceSharp.Core", "ViceSharp.Chips", "ViceSharp.RomFetch",
+    /// "IMachine", "IVideoChip", or "ArchitectureBuilder".
+    /// </summary>
     [Fact]
     public void AvaloniaSources_DoNotReferenceRuntimeInternals()
     {
@@ -49,6 +70,14 @@ public sealed class AvaloniaBoundaryTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, FR: FR-HOST-002, TR: TR-MVVM-001.
+    /// Use case: The Avalonia attach panel must drive media attach/eject
+    /// through the host client only - never via direct runtime calls.
+    /// Acceptance: After AttachAsync and EjectAsync, the fake host
+    /// client records the slot/path/read-only flag and the slot model
+    /// updates RecentFiles and IsAttached accordingly.
+    /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_AttachesAndEjectsThroughHostClient()
     {
@@ -68,6 +97,16 @@ public sealed class AvaloniaBoundaryTests
         Assert.False(slot.IsAttached);
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, FR: FR-HOST-002, TR: TR-MVVM-001.
+    /// Use case: When the host process is remote, the attach panel must
+    /// send the media payload bytes (not a path) over the protocol; the
+    /// host's returned canonical path replaces the original.
+    /// Acceptance: The host client records the slot, original path,
+    /// display name, and payload; the slot's status text reflects the
+    /// original file name; the host-returned path is not added to
+    /// RecentFiles.
+    /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_SendsLocalMediaPayloadThroughHostClient()
     {
@@ -97,6 +136,13 @@ public sealed class AvaloniaBoundaryTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, TR: TR-MVVM-001.
+    /// Use case: Toggling the attach panel's dock side is a pure
+    /// UI-state change; it must not touch the host client at all.
+    /// Acceptance: DockRight/DockLeft change DockSide accordingly and
+    /// no host client calls are issued.
+    /// </summary>
     [Fact]
     public void AttachPanelViewModel_ChangesDockSideWithoutRuntimeAccess()
     {
@@ -109,6 +155,17 @@ public sealed class AvaloniaBoundaryTests
         Assert.Equal(AttachDockSide.Left, viewModel.DockSide);
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, FR: FR-CFG-008, TR: TR-MVVM-001.
+    /// Use case: When the attach panel refreshes it must call the host
+    /// to load the active settings and profile list and clear any
+    /// pending-changes flags.
+    /// Acceptance: After RefreshAsync, MachineProfiles contains the
+    /// host-returned profile, SelectedMachineProfile equals it,
+    /// limiter/display/audio/input/resource selections track host
+    /// values, HasPendingSettingsChanges is false, and the status text
+    /// reports "Settings loaded from host."
+    /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_RefreshLoadsHostSettingsAndProfiles()
     {
@@ -138,6 +195,16 @@ public sealed class AvaloniaBoundaryTests
         Assert.Equal("Settings loaded from host.", viewModel.SettingsStatusText);
     }
 
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-HOST-004, TR: TR-MVVM-001.
+    /// Use case: Keyboard events sent from Avalonia through the host
+    /// protocol client must carry the original physical key, character
+    /// text and modifier bits so the host can perform accurate input
+    /// translation.
+    /// Acceptance: A SetKeyStateAsync call with physical key "KeyA",
+    /// text "a" and modifiers=1 returns Ok, the client records all four
+    /// fields, and the resulting InputState entry mirrors the metadata.
+    /// </summary>
     [Fact]
     public async Task HostProtocolClientBoundary_PreservesKeyboardPayloadMetadata()
     {
@@ -165,6 +232,17 @@ public sealed class AvaloniaBoundaryTests
             key.Modifiers == 1);
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, FR: FR-CFG-008, TR: TR-MVVM-001.
+    /// Use case: Applying and reverting changes from the attach panel
+    /// settings must route exclusively through the host boundary, with
+    /// the panel clamping out-of-range values (e.g. limiter percent)
+    /// before sending.
+    /// Acceptance: Changing every settings field marks the view-model
+    /// dirty, ApplySettingsAsync forwards the canonical values to the
+    /// host, RestartSession flag is honoured, and RevertSettings rolls
+    /// the dirty changes back to the last applied values.
+    /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_SettingsApplyAndRevertUseHostBoundaryOnly()
     {
@@ -227,6 +305,15 @@ public sealed class AvaloniaBoundaryTests
         Assert.False(viewModel.HasPendingSettingsChanges);
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, FR: FR-CFG-008, TR: TR-MVVM-001.
+    /// Use case: Once the host re-canonicalises a settings update, the
+    /// view-model must adopt those returned values verbatim (e.g.
+    /// limiter clamped from 250 to 80) without leaving a dirty state.
+    /// Acceptance: After ApplySettingsAsync, every settings selection
+    /// matches the host-returned canonical settings DTO and the dirty
+    /// flag is cleared.
+    /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_ApplyReflectsHostReturnedCanonicalSettings()
     {
@@ -266,6 +353,15 @@ public sealed class AvaloniaBoundaryTests
         Assert.False(viewModel.RequiresRestart);
     }
 
+    /// <summary>
+    /// FR: FR-INP-002, FR: FR-CFG-006, TR: TR-MVVM-001.
+    /// Use case: Changing primary joystick port and swap toggle in the
+    /// attach panel must propagate through the host boundary as input
+    /// settings; restart is not required.
+    /// Acceptance: ApplySettingsAsync sends an InputSettings with the
+    /// expected PrimaryJoystickPort and SwapJoystickPorts; RestartSession
+    /// is false; RevertSettings rolls back uncommitted changes.
+    /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_SendsJoystickRoutingSettingsThroughHostBoundary()
     {
@@ -295,6 +391,17 @@ public sealed class AvaloniaBoundaryTests
         Assert.True(viewModel.SwapJoystickPorts);
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, FR: FR-CFG-008, TR: TR-MVVM-001.
+    /// Use case: ValidateSettingsAsync must send the proposed settings
+    /// to the host's validation endpoint without applying them; the
+    /// resulting diagnostics must populate the view-model's validation
+    /// result collection.
+    /// Acceptance: The host records the validation request, no
+    /// LastDisplaySettings/LastResourceSettings are written (proving no
+    /// apply happened), and the view-model surfaces two validation
+    /// results with the documented invalid-resource report.
+    /// </summary>
     [Fact]
     public async Task AttachPanelViewModel_ValidateSettingsUsesHostBoundaryWithoutApplying()
     {
@@ -340,6 +447,15 @@ public sealed class AvaloniaBoundaryTests
         Assert.False(viewModel.HasSettingsValidationResults);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-001, FR: FR-HOST-003, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The in-process gRPC host (used by Avalonia) must let a
+    /// generated client create a session, list media, and read a video
+    /// frame end-to-end.
+    /// Acceptance: CreateSession returns Ok with a non-empty session id,
+    /// ListMedia returns Ok, GetFrame returns Ok with a non-empty BGRA
+    /// payload.
+    /// </summary>
     [Fact]
     public async Task InProcessGrpcHost_GeneratedClientCreatesSessionAndDirectFrameSourceReturnsFrame()
     {
@@ -366,6 +482,17 @@ public sealed class AvaloniaBoundaryTests
         Assert.NotEmpty(frame.Frame.Bgra);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The gRPC host protocol client must be able to attach a
+    /// D64 disk image as a payload (no shared filesystem path) over the
+    /// in-process gRPC host.
+    /// Acceptance: AttachMediaAsync returns Ok; the attachment reports
+    /// drive 8, the chosen display name, read-only=true, and an
+    /// IsAttached=true entry; the returned FilePath is a host-managed
+    /// path (different from the original client path) and exists on
+    /// disk.
+    /// </summary>
     [Fact]
     public async Task GrpcHostProtocolClient_AttachesLocalMediaAsPayloadAcrossHostBoundary()
     {

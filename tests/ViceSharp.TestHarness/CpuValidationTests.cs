@@ -18,6 +18,13 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     public ValueTask InitializeAsync() => _fixture.InitializeAsync();
     public ValueTask DisposeAsync() => _fixture.DisposeAsync();
 
+    /// <summary>
+    /// FR: FR-CPU-001, TR: TR-CYCLE-001.
+    /// Use case: Verify managed 6502 reset state matches the native VICE
+    /// reference after both CPUs are reset from identical machine fixtures.
+    /// Acceptance: Managed register file (A, X, Y, P, S, PC) is bit-for-bit
+    /// equal to the native VICE CPU's register file immediately after reset.
+    /// </summary>
     [ViceFact]
     public void Reset_StateMatchesVICE()
     {
@@ -27,6 +34,14 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
         Assert.True(result.Passed, FormatDifferences(result.Differences));
     }
 
+    /// <summary>
+    /// FR: FR-CPU-002, TR: TR-CYCLE-001.
+    /// Use case: Step the managed and native 6502 lockstep for the first 64
+    /// post-reset cycles and compare register state after each cycle.
+    /// Acceptance: Managed CPU state matches native VICE state at every one
+    /// of the first 64 cycles; any mismatch fails the test with the cycle
+    /// number and offending registers.
+    /// </summary>
     [ViceFact]
     public void First64Cycles_MatchVICE()
     {
@@ -40,6 +55,15 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
         }
     }
 
+    /// <summary>
+    /// FR: FR-CPU-002, TR: TR-DET-001.
+    /// Use case: Capture a deterministic before/after register trace for the
+    /// managed and native CPUs across the first 64 boot cycles so that any
+    /// divergence has a side-by-side cycle log for diagnosis.
+    /// Acceptance: All 64 cycles produce zero managed-vs-native differences;
+    /// when any cycle differs the test throws a combined trace including the
+    /// pre-step, post-step and divergence summary for each failing cycle.
+    /// </summary>
     [Fact]
     public void BootstrapTrace_First12Cycles()
     {

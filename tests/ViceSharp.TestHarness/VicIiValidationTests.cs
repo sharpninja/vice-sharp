@@ -19,6 +19,15 @@ public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLi
     public ValueTask InitializeAsync() => _fixture.InitializeAsync();
     public ValueTask DisposeAsync() => _fixture.DisposeAsync();
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: After both managed and native machines reset, the managed
+    /// PAL VIC-II raster engine state must match the VICE reference VIC-II
+    /// state in cycle counter, raster line/cycle, bad-line flag and the
+    /// full 64-byte register file.
+    /// Acceptance: CompareStates returns Passed; any diverging field or
+    /// register byte fails the test with the field name and offending value.
+    /// </summary>
     [ViceFact]
     public void Reset_StateMatchesVICE()
     {
@@ -29,6 +38,14 @@ public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLi
         Assert.True(result.Passed, FormatDifferences(result.Differences));
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Drive both managed and native VIC-II lockstep across the
+    /// first two PAL scanlines (126 cycles) so badline timing, raster
+    /// counters and register visibility align cycle-by-cycle.
+    /// Acceptance: Every cycle compares equal between managed and native;
+    /// any difference fails with the cycle number and offending state.
+    /// </summary>
     [ViceFact]
     public void FirstTwoScanlines_MatchVICE()
     {

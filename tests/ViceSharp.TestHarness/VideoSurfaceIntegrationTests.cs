@@ -6,6 +6,14 @@ using ViceSharp.Chips.VicIi;
 
 public sealed class VideoSurfaceIntegrationTests
 {
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Every standard C64 machine produced by the factory
+    /// must expose an <see cref="IVideoChip"/> device via the
+    /// VideoChip role.
+    /// Acceptance: Devices.GetByRole(VideoChip) returns a non-null
+    /// object that is assignable to IVideoChip.
+    /// </summary>
     [Fact]
     public void Machine_Has_VideoChip_Device()
     {
@@ -19,6 +27,14 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.IsAssignableFrom<IVideoChip>(videoChip);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-HOST-003, TR: TR-CYCLE-001.
+    /// Use case: The IVideoChip surface must allocate a 384x272 BGRA
+    /// frame buffer at construction time so host clients can rely on
+    /// the backing memory at any point after the machine exists.
+    /// Acceptance: FrameBuffer is non-null and exactly
+    /// 384 * 272 * 4 bytes in length.
+    /// </summary>
     [Fact]
     public void VideoChip_FrameBuffer_Is_Allocated()
     {
@@ -33,6 +49,14 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.Equal(384 * 272 * 4, frameBuffer.Length);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-003, TR: TR-PUBSUB-001.
+    /// Use case: Host clients subscribe to FrameCompleted to know when
+    /// a frame is ready to deliver; the event must be subscribable and
+    /// unsubscribable without error.
+    /// Acceptance: Subscribing and unsubscribing a handler on the
+    /// FrameCompleted event does not throw.
+    /// </summary>
     [Fact]
     public void VideoChip_Has_FrameCompleted_Event()
     {
@@ -45,6 +69,13 @@ public sealed class VideoSurfaceIntegrationTests
         videoChip.FrameCompleted -= handler; // Clean up
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-HOST-003, TR: TR-PUBSUB-001.
+    /// Use case: Running a full frame must raise the VideoChip's
+    /// FrameCompleted event so host clients can present the frame.
+    /// Acceptance: After <c>machine.RunFrame()</c>, FrameCompleted has
+    /// fired at least once.
+    /// </summary>
     [Fact]
     public void Machine_RunFrame_Triggers_FrameCompleted()
     {
@@ -61,6 +92,14 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.True(frameCount >= 1, $"Expected at least 1 frame completed, got {frameCount}");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: After running a frame the VIC-II must have actually
+    /// written pixels (not leave the frame buffer all-zero) so host
+    /// clients see something rendered.
+    /// Acceptance: The frame buffer contains at least one non-zero byte
+    /// after <c>RunFrame()</c>.
+    /// </summary>
     [Fact]
     public void VideoChip_FrameBuffer_Has_Content_After_RunFrame()
     {
@@ -87,6 +126,14 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.True(hasContent, "FrameBuffer should contain non-zero data after running a frame");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-CYCLE-001.
+    /// Use case: At reset the VIC-II border colour register defaults to
+    /// palette index 0; the rendered frame buffer's first pixel must
+    /// reflect that until the boot ROM programs a different colour.
+    /// Acceptance: After a single <c>RunFrame()</c>, the BGRA value at
+    /// pixel (0,0) is 0xFF000000 (opaque black).
+    /// </summary>
     [Fact]
     public void Machine_RunFrame_Uses_Reset_Border_Color()
     {
@@ -103,6 +150,14 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.Equal(0xFF000000u, firstPixel);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-CYCLE-001.
+    /// Use case: Border pixels in a single rendered scanline must all
+    /// share the same colour, since the border register cannot change
+    /// mid-line during normal operation.
+    /// Acceptance: Sampling the first 10 pixels of the rendered frame
+    /// produces 10 identical BGRA values.
+    /// </summary>
     [Fact]
     public void Border_Pixels_Are_All_Same_Color()
     {
@@ -129,6 +184,13 @@ public sealed class VideoSurfaceIntegrationTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-HOST-003, TR: TR-CYCLE-001.
+    /// Use case: After running a frame the FrameBuffer length must still
+    /// be exactly 384*272*4 bytes (it cannot be reallocated to a
+    /// different size at runtime).
+    /// Acceptance: FrameBuffer.Length == 384 * 272 * 4 after RunFrame.
+    /// </summary>
     [Fact]
     public void FrameBuffer_Has_Expected_Size_For_384x272()
     {
@@ -143,6 +205,14 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.Equal(384 * 272 * 4, videoChip.FrameBuffer.Length);
     }
 
+    /// <summary>
+    /// FR: FR-PRF-001, TR: TR-CYCLE-001.
+    /// Use case: A built C64 machine must expose at minimum the
+    /// VideoChip and CPU roles and have at least 5 devices total
+    /// (CPU, VIC-II, two CIAs, SID, etc.).
+    /// Acceptance: Devices.GetByRole(VideoChip) and Cpu are both
+    /// non-null and the total device count is at least 5.
+    /// </summary>
     [Fact]
     public void Architecture_Has_All_Required_Devices()
     {
@@ -158,6 +228,15 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.True(machine.Devices.Count >= 5, $"Expected at least 5 devices, got {machine.Devices.Count}");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: The machine-level Reset must propagate to every chip
+    /// device, including the VIC-II, so the raster engine returns to
+    /// its initial state.
+    /// Acceptance: After running two frames and then resetting, the
+    /// VIC-II device handle is still valid and a future RunFrame will
+    /// produce a frame from the initial raster line.
+    /// </summary>
     [Fact]
     public void VideoChip_Reset_Sets_RasterLine_To_Zero()
     {
@@ -176,6 +255,15 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.NotNull(videoChip);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-HOST-003, TR: TR-CYCLE-001.
+    /// Use case: Host code (e.g. the Avalonia VideoSurface) copies the
+    /// VIC-II frame buffer into its own backing store; the copy must
+    /// preserve every byte.
+    /// Acceptance: <c>Array.Copy</c> from FrameBuffer into a freshly
+    /// allocated array of the same length yields a byte-identical
+    /// destination.
+    /// </summary>
     [Fact]
     public void VideoChip_FrameBuffer_Can_Be_Copied_To_External_Buffer()
     {
@@ -203,6 +291,12 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.True(match, "FrameBuffer copy should preserve all bytes");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: The IVideoChip must report the canonical C64 visible
+    /// frame dimensions: 384 wide, 272 tall.
+    /// Acceptance: FrameWidth == 384 and FrameHeight == 272.
+    /// </summary>
     [Fact]
     public void VideoChip_ScreenDimensions_Are_Correct()
     {
@@ -214,6 +308,14 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.Equal(272, videoChip.FrameHeight);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-MEM-001, TR: TR-CYCLE-001.
+    /// Use case: The VIC-II device must claim the $D000 I/O range via
+    /// the IAddressSpace interface so PLA routing finds it during reads
+    /// and writes to that region.
+    /// Acceptance: The video chip is castable to IAddressSpace and its
+    /// HandlesAddress reports true for $D000.
+    /// </summary>
     [Fact]
     public void VideoChip_Is_Addressable_At_D000()
     {
@@ -228,6 +330,16 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.True(vicAsAddressSpace.HandlesAddress(0xD000));
     }
 
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-CYCLE-001.
+    /// Use case: After the boot ROM programs the blue border and dark
+    /// grey background, the rendered frame must contain at least two
+    /// distinct colours and a non-trivial pixel count for visual
+    /// regression debugging.
+    /// Acceptance: TotalPixels &gt; 0 and UniqueColors &gt; 1 after
+    /// running a single frame; the frame is also dumped to a temp BMP
+    /// for offline inspection.
+    /// </summary>
     [Fact]
     public void Rendered_Frame_Image_Is_Blue_Border_Frame()
     {
@@ -262,6 +374,17 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.True(analysis.UniqueColors > 1, "Frame should have multiple colors");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-002, FR: FR-CPU-001, TR: TR-CYCLE-001.
+    /// Use case: After the BASIC ROM prints READY., every glyph in the
+    /// rendered frame buffer must come from the character ROM at the
+    /// expected screen position with the expected foreground/background
+    /// colours from color RAM and the VIC background register.
+    /// Acceptance: For each of the first 5 cells of the "READY" prompt,
+    /// every one of the 8x8 pixels matches the character ROM glyph row
+    /// rendered with the cell's foreground colour over the global
+    /// background colour.
+    /// </summary>
     [Fact]
     public void BootReadyPrompt_FrameBufferMatchesCharacterRomGlyphs()
     {
@@ -304,6 +427,15 @@ public sealed class VideoSurfaceIntegrationTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-CPU-001, FR: FR-VIC-002, TR: TR-CYCLE-001.
+    /// Use case: After READY., the BASIC input cursor in screen RAM
+    /// must alternate between blank ($20) and reverse blank ($A0) as
+    /// BASIC's cursor blink ISR ticks.
+    /// Acceptance: Within 120 frames after the READY prompt appears,
+    /// the cursor cell is observed as both $20 and $A0 (cursor blinked
+    /// at least once each way).
+    /// </summary>
     [Fact]
     public void BootReadyPrompt_ShowsBlinkingBasicInputCursor()
     {
@@ -327,6 +459,16 @@ public sealed class VideoSurfaceIntegrationTests
         Assert.Fail($"BASIC cursor at screen offset {cursorOffset} did not blink between blank and reverse blank.");
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-VIC-007, TR: TR-CYCLE-001.
+    /// Use case: VideoRenderer must crop the PAL raster (312 lines)
+    /// down to the visible 272-line frame so the 200-line text area
+    /// is vertically centred.
+    /// Acceptance: With DEN and 25-row mode enabled, upper text area
+    /// maps to frame Y 36, lower text area maps to frame Y 236, and
+    /// the bottom margin (ScreenHeight - lower) equals the top margin
+    /// (both 36) - i.e. perfectly centred.
+    /// </summary>
     [Fact]
     public void VideoFrame_CropsPalRasterToCenterTextAreaVertically()
     {

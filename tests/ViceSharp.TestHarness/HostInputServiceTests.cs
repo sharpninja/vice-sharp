@@ -8,6 +8,14 @@ using Xunit;
 
 public sealed class HostInputServiceTests
 {
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-INP-002, TR: TR-CYCLE-001.
+    /// Use case: The standard C64 machine must expose exactly one
+    /// keyboard matrix, one machine keyboard input, and one machine
+    /// joystick input so host services have a single owner per role.
+    /// Acceptance: <c>IKeyboardMatrix</c>, <c>IMachineKeyboardInput</c>
+    /// and <c>IMachineJoystickInput</c> are each present exactly once.
+    /// </summary>
     [Fact]
     public void C64Machine_ExposesKeyboardMatrixToHostInput()
     {
@@ -18,6 +26,15 @@ public sealed class HostInputServiceTests
         Assert.Single(machine.Devices.All.OfType<IMachineJoystickInput>());
     }
 
+    /// <summary>
+    /// FR: FR-HOST-004, FR: FR-INP-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The InputServiceHost must delegate each SetKeyState
+    /// call to the underlying IMachineKeyboardInput, preserving the
+    /// physical-key/text/modifier metadata for diagnostics.
+    /// Acceptance: Down/repeat/up sequences each return Ok; the
+    /// returned input state mirrors the metadata; the recording
+    /// keyboard observes exactly the press-release transition pair.
+    /// </summary>
     [Fact]
     public async Task SetKeyState_DelegatesToMachineKeyboardInput()
     {
@@ -50,6 +67,14 @@ public sealed class HostInputServiceTests
             keyboard.Transitions);
     }
 
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-CIA-003, TR: TR-CYCLE-001.
+    /// Use case: Pressing Space through the InputServiceHost must drive
+    /// the CIA1 keyboard matrix so the standard CIA1 scan reads the
+    /// pressed cell low and reads it high again after release.
+    /// Acceptance: With $DC01=$EF and Space pressed, $DC00 bit 7 reads
+    /// low; after releasing Space, the same scan returns bit 7 high.
+    /// </summary>
     [Fact]
     public async Task SetKeyState_UsesC64KeyboardInputToDriveCiaMatrixScan()
     {
@@ -76,6 +101,16 @@ public sealed class HostInputServiceTests
         Assert.Equal(0x80, machine.Bus.Read(0xDC00) & 0x80);
     }
 
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-INP-006, TR: TR-CYCLE-001.
+    /// Use case: Composite/shifted keys (e.g. Left = Shift + cursor)
+    /// drive both the cursor key cell AND the shift cell; the shift
+    /// must remain pressed until every composite key using it is
+    /// released.
+    /// Acceptance: While LeftShift is held and after Left is released,
+    /// scanning column $7F still reports shift bit 1 low; only after
+    /// LeftShift is released does the same scan return bit 1 high.
+    /// </summary>
     [Fact]
     public async Task SetKeyState_LeavesCompositeShiftPressedUntilAllMappedKeysRelease()
     {
@@ -108,6 +143,15 @@ public sealed class HostInputServiceTests
         Assert.Equal(0x02, machine.Bus.Read(0xDC00) & 0x02);
     }
 
+    /// <summary>
+    /// FR: FR-INP-002, FR: FR-CIA-004, TR: TR-CYCLE-001.
+    /// Use case: Joystick 2 must drive CIA1 port A bits 0 (up) and 4
+    /// (fire); the InputServiceHost forwards the joystick state into
+    /// the runtime where the bus reflects the new lines.
+    /// Acceptance: Pressing direction $01 with fire returns Ok and the
+    /// CIA1 $DC00 read shows bits 0 and 4 cleared; releasing returns
+    /// them to the idle pattern.
+    /// </summary>
     [Fact]
     public async Task SetJoystickState_UsesC64Joystick2ToDriveCia1PortA()
     {

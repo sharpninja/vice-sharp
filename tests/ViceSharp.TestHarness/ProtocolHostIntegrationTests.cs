@@ -21,6 +21,14 @@ using Xunit;
 
 public sealed class ProtocolHostIntegrationTests
 {
+    /// <summary>
+    /// FR: FR-HOST-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: A client asks the EmulatorHost service to create a new
+    /// emulator session and then to step one frame on that session.
+    /// Acceptance: CreateSession returns Ok with a non-empty session id
+    /// and an initial status; StepFrame returns Ok and the post-step
+    /// cycle count is strictly greater than the create-time cycle.
+    /// </summary>
     [Fact]
     public async Task EmulatorHost_CreatesSessionAndStepsFrame()
     {
@@ -42,6 +50,16 @@ public sealed class ProtocolHostIntegrationTests
         Assert.True(stepped.EmulatorStatus.Cycle > created.EmulatorStatus.Cycle);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-006, FR: FR-UI-002, TR: TR-HOST-STATUS-001.
+    /// Use case: A UI client needs the EmulatorStatus payload to carry
+    /// limiter rate, run state, measured FPS, machine state, etc., so the
+    /// control bar can render without polling extra services.
+    /// Acceptance: A freshly created session returns Ok with the expected
+    /// initial UI control fields populated; setting the limiter rate and
+    /// resuming the session are both Ok and surface the new values back
+    /// through the status field.
+    /// </summary>
     [Fact]
     public async Task EmulatorHost_StatusIncludesUiControlFields()
     {
@@ -78,6 +96,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(50, resumed.EmulatorStatus.LimiterRatePercent);
     }
 
+    /// <summary>
+    /// FR: FR-CFG-008, FR: FR-HOST-006, TR: TR-HOST-STATUS-001.
+    /// Use case: Settings service exposes the list of installed machine
+    /// profiles and lets a client adjust the performance limiter without
+    /// restarting the session.
+    /// Acceptance: ListProfiles returns the C64 profile catalog and
+    /// SetLimiterRate updates the live limiter on the active session
+    /// without disrupting the session id.
+    /// </summary>
     [Fact]
     public async Task SettingsService_ListsProfilesAndAppliesLiveLimiter()
     {
@@ -130,6 +157,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(125, status.EmulatorStatus!.LimiterRatePercent);
     }
 
+    /// <summary>
+    /// FR: FR-CFG-008, FR: FR-HOST-001, TR: TR-HOST-STATUS-001.
+    /// Use case: A client picks a different machine profile from the
+    /// SettingsService and asks to restart the session; the session id
+    /// must remain stable so existing clients keep their handle.
+    /// Acceptance: SetActiveProfile with RestartSession=true returns the
+    /// same session id and the new EmulatorStatus reflects the chosen
+    /// profile's clock/timing values.
+    /// </summary>
     [Fact]
     public async Task SettingsService_RestartSessionAppliesProfileAndPreservesSessionId()
     {
@@ -180,6 +216,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.DoesNotContain(updated.Diagnostics, diagnostic => diagnostic.RestartRequired);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-001, FR: FR-HOST-006, TR: TR-HOST-STATUS-001.
+    /// Use case: Each control command (pause, resume, reset, step,
+    /// rewind, autostart) must return an EmulatorStatus narrowed to the
+    /// fields the caller asked for so UI updates remain efficient.
+    /// Acceptance: All control commands return Ok and the returned
+    /// EmulatorStatus reflects the post-command run state.
+    /// </summary>
     [Fact]
     public async Task EmulatorHost_ControlCommandsReturnFocusedStatus()
     {
@@ -226,6 +270,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(EmulatorRunState.Stopped, reset.EmulatorStatus.RunState);
     }
 
+    /// <summary>
+    /// FR: FR-SNP-001, FR: FR-SNP-002, TR: TR-STATE-001.
+    /// Use case: A client uses the SnapshotService to capture a runtime
+    /// snapshot of the active session and then restore it later, even
+    /// after additional cycles have been executed.
+    /// Acceptance: Capture returns Ok with a non-empty snapshot blob;
+    /// Restore returns Ok and the post-restore status reflects the
+    /// snapshot's cycle/PC values.
+    /// </summary>
     [Fact]
     public async Task SnapshotService_CapturesAndRestoresRuntimeSnapshot()
     {
@@ -255,6 +308,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.NotNull(restored.EmulatorStatus);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-004, FR: FR-INP-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Hosts send keyboard and joystick state through the
+    /// InputService; the service records the latest state into the
+    /// active session so the runtime sees it on its next tick.
+    /// Acceptance: After applying a SetKeyState/SetJoystickState pair,
+    /// the InputService reports the same host-side state on Inspect, and
+    /// the runtime side reflects the input on its next step.
+    /// </summary>
     [Fact]
     public async Task InputService_RecordsHostSideState()
     {
@@ -282,6 +344,13 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Contains(key.InputState.Keys, x => x.Key == "Space" && x.IsPressed);
     }
 
+    /// <summary>
+    /// FR: FR-MON-004, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: A debugger client reads CPU registers through the
+    /// MonitorService against an active emulator session.
+    /// Acceptance: ReadRegisters returns Ok and reports A, X, Y, P, S,
+    /// PC values that match the runtime's actual CPU state.
+    /// </summary>
     [Fact]
     public async Task MonitorService_ReadsRegistersThroughHostSession()
     {
@@ -314,6 +383,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Null(missing.Registers);
     }
 
+    /// <summary>
+    /// FR: FR-MON-001, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: A debugger client asks the MonitorService for a range
+    /// of disassembled instructions starting at a given address.
+    /// Acceptance: Disassemble returns Ok with one MonitorDisassemblyLine
+    /// per instruction in the requested range, each carrying the
+    /// instruction bytes and decoded mnemonic.
+    /// </summary>
     [Fact]
     public async Task MonitorService_DisassemblesMemoryThroughHostSession()
     {
@@ -365,6 +442,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(RpcStatusCode.InvalidArgument, invalid.Status.Code);
     }
 
+    /// <summary>
+    /// FR: FR-MON-003, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: A debugger client adds, lists and removes breakpoints
+    /// through the host-owned MonitorService API.
+    /// Acceptance: ListBreakpoints reflects each Add/Remove operation;
+    /// the breakpoint storage is host-owned (not runtime-owned) so it
+    /// survives runtime steps without state loss.
+    /// </summary>
     [Fact]
     public async Task MonitorService_ManagesHostOwnedBreakpointState()
     {
@@ -405,6 +490,13 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(RpcStatusCode.InvalidArgument, invalid.Status.Code);
     }
 
+    /// <summary>
+    /// FR: FR-MON-002, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: A debugger client reads memory windows and writes
+    /// individual bytes through the MonitorService.
+    /// Acceptance: ReadMemory returns the runtime's bus contents and
+    /// WriteMemory mutates them; subsequent reads reflect the write.
+    /// </summary>
     [Fact]
     public async Task MonitorService_ReadsAndWritesMemoryThroughHostSession()
     {
@@ -435,6 +527,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(RpcStatusCode.InvalidArgument, invalid.Status.Code);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-003, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: A minimal host configuration without a video chip must
+    /// still respond to VideoService queries with a graceful "no video"
+    /// status rather than crashing.
+    /// Acceptance: VideoService responses report HasVideoChip=false and
+    /// return a sensible, non-erroring status object.
+    /// </summary>
     [Fact]
     public async Task VideoService_ReportsNoVideoChipForMinimalHost()
     {
@@ -458,6 +558,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(RpcStatusCode.Unavailable, frame.Status.Code);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: An external client uses the generated gRPC EmulatorHost
+    /// client to create, step, pause and resume a session over a real
+    /// in-process gRPC channel.
+    /// Acceptance: Every RPC returns Ok, the session id is stable across
+    /// calls, and run state transitions track the issued commands.
+    /// </summary>
     [Fact]
     public async Task GrpcHost_ControlsSessionThroughGeneratedClient()
     {
@@ -507,6 +615,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(GrpcContracts.RpcStatusCode.Ok, shutdown.Status.Code);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, FR: FR-CFG-005, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: ResetAndAutostartDrive8 must verify a disk is attached
+    /// before initiating the autostart; without a disk the command must
+    /// report a structured failure rather than crashing the host.
+    /// Acceptance: Without an attached disk the RPC returns
+    /// FailedPrecondition; after attaching a D64 to drive 8 the same RPC
+    /// returns Ok and the runtime begins the autostart sequence.
+    /// </summary>
     [Fact]
     public async Task EmulatorHost_ResetAndAutostartDrive8RequiresAttachedRuntimeDisk()
     {
@@ -567,6 +684,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(string.Empty, lastStep.EmulatorStatus.LastHostAutomationError);
     }
 
+    /// <summary>
+    /// FR: FR-CFG-008, FR: FR-HOST-006, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: A client uses the generated gRPC SettingsService client
+    /// to enumerate profiles, apply settings and observe the resulting
+    /// EmulatorStatus changes.
+    /// Acceptance: All settings operations succeed over the generated
+    /// gRPC client and the returned status reflects every change.
+    /// </summary>
     [Fact]
     public async Task GrpcSettingsService_RoundTripsSettingsThroughGeneratedClient()
     {
@@ -625,6 +750,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Contains(updated.Diagnostics, diagnostic => diagnostic.Setting == "profile" && diagnostic.RestartRequired);
     }
 
+    /// <summary>
+    /// FR: FR-CFG-008, FR: FR-HOST-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Same restart-session contract as the in-process test,
+    /// but exercised over the generated gRPC client to verify the wire
+    /// protocol carries the flag and surfaces the rebuilt status.
+    /// Acceptance: Setting a new profile with RestartSession=true keeps
+    /// the session id and returns the new profile's timing values.
+    /// </summary>
     [Fact]
     public async Task GrpcSettingsService_RestartSessionFlagRebuildsProfile()
     {
@@ -682,6 +815,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.DoesNotContain(updated.Diagnostics, diagnostic => diagnostic.RestartRequired);
     }
 
+    /// <summary>
+    /// FR: FR-INP-002, FR: FR-CFG-006, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Settings changes to the primary joystick routing must
+    /// apply live without requiring a restart, even when the change
+    /// arrives via the generated gRPC SettingsService.
+    /// Acceptance: After applying a JoystickRouting setting through the
+    /// generated client, the InputService snapshot reflects the new
+    /// routing on the next state-read RPC.
+    /// </summary>
     [Fact]
     public async Task GrpcInputService_AppliesLivePrimaryJoystickRoutingFromSettings()
     {
@@ -730,6 +872,15 @@ public sealed class ProtocolHostIntegrationTests
         AssertGrpcJoystickStateDrivesCiaPortB(host, created.SessionId);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-002, FR: FR-DRV-001, FR: FR-TAP-001, FR: FR-CRT-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: External clients attach disk, tape and cartridge media
+    /// to the runtime by sending payload bytes (not a shared file path)
+    /// over the generated gRPC MediaService.
+    /// Acceptance: Disk, tape and cartridge attach RPCs each return Ok
+    /// when the variant supports the port, and the runtime exposes the
+    /// attached media on subsequent reads/ticks.
+    /// </summary>
     [Fact]
     public async Task GrpcMediaService_AttachesDiskTapeAndCartridgePayloads()
     {
@@ -801,6 +952,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.False(ejected.Attachment.IsAttached);
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Attach a D64 image to drive 8 and later eject it; the
+    /// runtime's floppy drive must reflect both operations through the
+    /// MediaService.
+    /// Acceptance: AttachDisk returns Ok and the runtime exposes the
+    /// attached image; Eject returns Ok and clears the runtime's drive.
+    /// </summary>
     [Fact]
     public async Task MediaService_AttachesAndEjectsD64ToRuntimeFloppyDrive()
     {
@@ -836,6 +995,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.False(drive8.HasDisk);
     }
 
+    /// <summary>
+    /// FR: FR-TAP-001, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Attach a .tap tape image to the datasette and later
+    /// eject it; the runtime must reflect both operations through the
+    /// MediaService.
+    /// Acceptance: AttachTape returns Ok with the runtime's datasette
+    /// reporting an attached image; Eject returns Ok and clears the
+    /// runtime's datasette state.
+    /// </summary>
     [Fact]
     public async Task MediaService_AttachesAndEjectsTapToRuntimeDatasette()
     {
@@ -870,6 +1038,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.False(datasette.HasTape);
     }
 
+    /// <summary>
+    /// FR: FR-TAP-001, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Some C64 variants lack a tape port; the MediaService
+    /// must refuse to attach a .tap to those variants with a structured
+    /// "not applied" outcome rather than silently succeeding.
+    /// Acceptance: AttachTape on a no-tape variant returns the documented
+    /// NotApplied status and leaves the runtime unchanged.
+    /// </summary>
     [Fact]
     public async Task MediaService_AttachTapReportsNotAppliedWhenVariantHasNoTapePort()
     {
@@ -895,6 +1071,13 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal("Runtime has no tape device.", attached.Attachment.Error);
     }
 
+    /// <summary>
+    /// FR: FR-CRT-001, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Attach a generic .crt (8K/16K standard cartridge) to
+    /// the cartridge port of a standard C64 profile.
+    /// Acceptance: AttachCartridge returns Ok and the runtime exposes
+    /// the cartridge's ROM bytes on the bus at the expected addresses.
+    /// </summary>
     [Fact]
     public async Task MediaService_AttachesGenericCrtToRuntimeCartridgePort()
     {
@@ -933,6 +1116,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.False(cartridgePort.IsCartridgeAttached);
     }
 
+    /// <summary>
+    /// FR: FR-PRF-002, FR: FR-CRT-001, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Raw C64GS Game System cartridge images are only valid
+    /// on a Game System profile; attaching them must succeed on that
+    /// profile.
+    /// Acceptance: AttachCartridge with a raw GS image returns Ok on a
+    /// Game System profile and the runtime exposes the cartridge ROM.
+    /// </summary>
     [Fact]
     public async Task MediaService_AttachesRawC64GsCartridgeOnlyToGameSystemProfile()
     {
@@ -970,6 +1161,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Null(cartridgePort.AttachedMappingMode);
     }
 
+    /// <summary>
+    /// FR: FR-PRF-002, FR: FR-CRT-001, FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Raw C64GS cartridge images must NOT attach to a
+    /// standard C64 profile; the service should report a structured
+    /// rejection rather than silently corrupt the bus.
+    /// Acceptance: AttachCartridge with a raw GS image on a standard
+    /// profile returns the documented rejection status code and the
+    /// runtime's cartridge port stays empty.
+    /// </summary>
     [Fact]
     public async Task MediaService_RejectsRawC64GsCartridgeOnStandardProfile()
     {
@@ -995,6 +1195,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.False(cartridgePort.IsCartridgeAttached);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-002, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The HostProtocolClient must be able to attach media to
+    /// the runtime by sending the file contents inline over gRPC rather
+    /// than relying on a shared filesystem path.
+    /// Acceptance: Attaching media via inline payload returns Ok and the
+    /// host registers the attachment with the runtime.
+    /// </summary>
     [Fact]
     public async Task GrpcHostProtocolClient_AttachesMediaPayloadWithoutSharedFilePath()
     {
@@ -1018,6 +1226,15 @@ public sealed class ProtocolHostIntegrationTests
         Assert.True(File.Exists(response.Attachment.FilePath));
     }
 
+    /// <summary>
+    /// FR: FR-HOST-001, FR: FR-HOST-003, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Walk the generated gRPC clients through Input, Snapshot,
+    /// Video and Capture commands to confirm the entire service surface
+    /// can be driven end-to-end over a single channel.
+    /// Acceptance: Every Input, Snapshot, Video and Capture RPC returns
+    /// Ok over the generated gRPC client and the returned payloads
+    /// match the runtime state.
+    /// </summary>
     [Fact]
     public async Task GrpcServices_RoundTripInputSnapshotVideoAndCaptureCommands()
     {
@@ -1113,6 +1330,13 @@ public sealed class ProtocolHostIntegrationTests
         Assert.False(stopped.Capture.IsActive);
     }
 
+    /// <summary>
+    /// FR: FR-MON-002, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Same memory read/write contract as the in-process test,
+    /// but exercised through the generated MonitorService gRPC client.
+    /// Acceptance: ReadMemory/WriteMemory round-trip bytes through the
+    /// generated client and the runtime state mirrors them.
+    /// </summary>
     [Fact]
     public async Task GrpcMonitorService_ReadsAndWritesMemoryThroughGeneratedClient()
     {
@@ -1151,6 +1375,13 @@ public sealed class ProtocolHostIntegrationTests
         Assert.NotNull(read.EmulatorStatus);
     }
 
+    /// <summary>
+    /// FR: FR-MON-004, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Same CPU register read contract as the in-process test,
+    /// but exercised through the generated MonitorService gRPC client.
+    /// Acceptance: ReadRegisters over the generated client returns Ok
+    /// and reports register values that match runtime state.
+    /// </summary>
     [Fact]
     public async Task GrpcMonitorService_ReadsRegistersThroughGeneratedClient()
     {
@@ -1185,6 +1416,14 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal(status.EmulatorStatus.MachineState.Cycle, registers.Registers.Cycle);
     }
 
+    /// <summary>
+    /// FR: FR-MON-001, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Same disassembly contract as the in-process test, but
+    /// exercised through the generated MonitorService gRPC client.
+    /// Acceptance: Disassemble returns Ok and a non-empty line list
+    /// over the generated client; each line carries instruction bytes
+    /// and the decoded mnemonic.
+    /// </summary>
     [Fact]
     public async Task GrpcMonitorService_DisassemblesMemoryThroughGeneratedClient()
     {
@@ -1244,6 +1483,14 @@ public sealed class ProtocolHostIntegrationTests
             });
     }
 
+    /// <summary>
+    /// FR: FR-MON-003, FR: FR-HOST-005, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: Same breakpoint state-machine contract as the in-process
+    /// test, but exercised through the generated MonitorService gRPC
+    /// client.
+    /// Acceptance: Add/List/Remove breakpoint RPCs round-trip across the
+    /// gRPC channel and the host retains the correct breakpoint set.
+    /// </summary>
     [Fact]
     public async Task GrpcMonitorService_ManagesBreakpointStateThroughGeneratedClient()
     {

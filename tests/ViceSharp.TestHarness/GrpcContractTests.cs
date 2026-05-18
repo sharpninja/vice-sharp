@@ -6,6 +6,15 @@ using Xunit;
 
 public sealed class GrpcContractTests
 {
+    /// <summary>
+    /// FR: FR-HOST-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The ViceSharp.Protocol project must generate gRPC service
+    /// clients for every host service so Avalonia and external clients can
+    /// communicate with the host across the protocol boundary.
+    /// Acceptance: Every required service descriptor (EmulatorHost, Media,
+    /// Video, Input, Settings, Monitor, Snapshot, Capture) carries the
+    /// expected <c>vice_sharp.v1.&lt;Name&gt;</c> fully-qualified name.
+    /// </summary>
     [Fact]
     public void ProtocolProject_GeneratesGrpcServiceClients()
     {
@@ -19,6 +28,15 @@ public sealed class GrpcContractTests
         Assert.Equal("vice_sharp.v1.CaptureService", GrpcContracts.CaptureService.Descriptor.FullName);
     }
 
+    /// <summary>
+    /// FR: FR-HOST-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: The committed protobuf source must continue to declare the
+    /// full set of services, RPCs and message fields that the generated gRPC
+    /// surface relies on - any accidental deletion would silently break
+    /// downstream clients.
+    /// Acceptance: The proto file contains every required service, RPC, and
+    /// field name string used by host/runtime/monitor/video/audio surfaces.
+    /// </summary>
     [Fact]
     public void ProtocolProject_KeepsProtoSourceContract()
     {

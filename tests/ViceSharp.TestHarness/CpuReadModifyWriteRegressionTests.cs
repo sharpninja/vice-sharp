@@ -6,6 +6,14 @@ using Xunit;
 
 public sealed class CpuReadModifyWriteRegressionTests
 {
+    /// <summary>
+    /// FR: FR-CPU-001, TR: TR-CYCLE-001.
+    /// Use case: <c>INC $zp</c> is a read-modify-write opcode; the operand
+    /// address must be fetched once and not re-fetched after the modify
+    /// step (a historical regression here double-incremented PC).
+    /// Acceptance: After executing <c>E6 10</c> at $8000, the zero-page byte
+    /// at $0010 increments by one ($7F -> $80) and PC advances to $8002.
+    /// </summary>
     [Fact]
     public void IncZeroPage_UsesTheFetchedOperandAddressOnce()
     {
@@ -30,6 +38,15 @@ public sealed class CpuReadModifyWriteRegressionTests
         Assert.Equal((byte)0xEA, memory[0x8002]);
     }
 
+    /// <summary>
+    /// FR: FR-CPU-001, TR: TR-CYCLE-001.
+    /// Use case: A non-taken branch (e.g. <c>BNE</c> with Z set) must still
+    /// consume its operand byte so PC advances past both opcode and offset
+    /// without executing the would-be-skipped instruction.
+    /// Acceptance: After running <c>D0 02</c> at $8000 with Z=1, PC ends at
+    /// $8002 and the otherwise-skipped <c>INX</c> at $8002 is not executed
+    /// (X remains $00).
+    /// </summary>
     [Fact]
     public void BranchNotTaken_StillConsumesTheOffsetByte()
     {

@@ -8,6 +8,15 @@ using Xunit;
 
 public sealed class VicIiCoreTimingTests
 {
+    /// <summary>
+    /// FR: FR-VIC-006, FR: FR-CPU-002, TR: TR-CYCLE-001.
+    /// Use case: During a VIC-II bad-line, the system clock must steal
+    /// CPU cycles for the c-access window but keep ticking phi2 side
+    /// devices (CIAs, SID, etc.) without skipping them.
+    /// Acceptance: While IsDmaStealing is true, the CPU's tick count
+    /// stays frozen at the entry value; the phi2 peripheral's tick
+    /// count keeps advancing every cycle.
+    /// </summary>
     [Fact]
     public void SystemClock_HoldsCpuDuringVicBadLineDmaButContinuesPhi2Devices()
     {
@@ -47,6 +56,15 @@ public sealed class VicIiCoreTimingTests
         Assert.Equal(clock.TotalCycles, peripheral.TickCount);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, FR: FR-CIA-007, TR: TR-CYCLE-001.
+    /// Use case: The VIC-II raster IRQ must assert on the configured
+    /// compare line and remain latched in $D019 bit 0 until the
+    /// CPU writes a 1 to that bit to clear it.
+    /// Acceptance: After 57 cycles IRQ is still low; the next tick
+    /// raises IRQ and $D019 reads $81 (raster flag + IR master); writing
+    /// $01 to $D019 deasserts IRQ and clears the flag.
+    /// </summary>
     [Fact]
     public void RasterIrq_AssertsAtCompareCycleAndClearsByWriteOneToD019()
     {
@@ -72,6 +90,15 @@ public sealed class VicIiCoreTimingTests
         Assert.Equal(0x00, vic.Read(0xD019));
     }
 
+    /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: $D012 is a write-to-compare-line register; reading
+    /// $D012 returns the current raster line. The raster-IRQ comparator
+    /// must use the written value, not the live raster line.
+    /// Acceptance: After writing $01 to $D012 (compare line 1), the IRQ
+    /// asserts only after the raster reaches line 1 and the configured
+    /// cycle, not when the live raster is still on line 0.
+    /// </summary>
     [Fact]
     public void RasterIrq_UsesWrittenCompareLineInsteadOfCurrentRasterRegister()
     {
@@ -92,6 +119,16 @@ public sealed class VicIiCoreTimingTests
         Assert.Equal(0x81, vic.Read(0xD019));
     }
 
+    /// <summary>
+    /// FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: A VIC-II bad-line requires DEN, the visible raster
+    /// range, and a YScroll match. Changing YScroll mid-line cancels
+    /// the bad-line on the current scan line but a matching YScroll on
+    /// the following line restores it.
+    /// Acceptance: With DEN/YScroll=$10 on line $30, IsBadLine is true;
+    /// writing YScroll=$11 (no match) clears IsBadLine; advancing to
+    /// line $31 with YScroll=$11 restores IsBadLine.
+    /// </summary>
     [Fact]
     public void BadLine_RequiresDenVisibleRangeAndYScrollMatch()
     {
@@ -111,6 +148,15 @@ public sealed class VicIiCoreTimingTests
         Assert.True(vic.IsBadLine);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: DEN must be set before the first DMA-line latch on the
+    /// line in question; toggling DEN on the same line after the latch
+    /// does not retroactively make it a bad-line.
+    /// Acceptance: Writing $D011=$10 only after AdvanceTo line $30
+    /// leaves IsBadLine false on that line; on the next line, with DEN
+    /// already set in time, IsBadLine becomes true.
+    /// </summary>
     [Fact]
     public void BadLine_DenMustBeSetBeforeFirstDmaLineLatch()
     {
@@ -129,6 +175,15 @@ public sealed class VicIiCoreTimingTests
         Assert.True(vic.IsBadLine);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: On a bad-line, the DMA stealing window covers the
+    /// video-matrix c-access and character g-access cycles; outside
+    /// those cycles the CPU regains the bus.
+    /// Acceptance: At raster cycle 14 IsDmaStealing is true and the
+    /// VIC is performing a video-matrix access; at cycle 54 the c-access
+    /// is over and IsDmaStealing is false (character access continues).
+    /// </summary>
     [Fact]
     public void BadLine_DmaStealingWindowTracksCharacterFetchCycles()
     {
@@ -151,6 +206,14 @@ public sealed class VicIiCoreTimingTests
         Assert.True(vic.IsCharacterAccess);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: The last DMA line of the display (line $F7 with
+    /// YScroll=7) is still a bad-line; line $F8 is past the visible
+    /// range and cannot be a bad-line even with the same YScroll.
+    /// Acceptance: On line $F7 IsBadLine is true and IsDmaStealing
+    /// fires at cycle 14; advancing to line $F8 clears IsBadLine.
+    /// </summary>
     [Fact]
     public void BadLine_IncludesLastDmaLineWhenYScrollMatches()
     {
@@ -171,6 +234,17 @@ public sealed class VicIiCoreTimingTests
         Assert.False(vic.IsBadLine);
     }
 
+    /// <summary>
+    /// FR: FR-CPU-003, FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: A conditional steal request that ultimately does NOT
+    /// skip the CPU must still allow the CPU to honour an IRQ pulse
+    /// from a separate device on the same cycle.
+    /// Acceptance: With a scripted stealer that asks but does not
+    /// preempt, plus an IRQ pulse asserting on tick 2, two clock steps
+    /// drive the CPU into its IRQ vector at $4000 with the correct
+    /// stack state and X register unchanged from the in-flight
+    /// instruction's already-executed effect.
+    /// </summary>
     [Fact]
     public void SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu()
     {

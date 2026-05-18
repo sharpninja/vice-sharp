@@ -5,6 +5,15 @@ using Xunit;
 
 public sealed class RuntimeSnapshotTests
 {
+    /// <summary>
+    /// FR: FR-SNP-001, TR: TR-STATE-001.
+    /// Use case: Capture a runtime snapshot from a running C64 machine,
+    /// persist it to disk, reload it and confirm the round-tripped
+    /// snapshot is byte-identical to the original capture.
+    /// Acceptance: Serialised bytes of original and loaded snapshots match
+    /// exactly; the loaded snapshot still reports the user-poked byte at
+    /// $0801 ($42).
+    /// </summary>
     [Fact]
     public async Task SaveLoad_RoundTrips_DeterministicRuntimeSnapshot()
     {
@@ -36,6 +45,15 @@ public sealed class RuntimeSnapshotTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-SNP-002, TR: TR-STATE-001.
+    /// Use case: Restore a previously captured snapshot on a running C64
+    /// machine; both RAM contents and the public CPU state (PC, P) must
+    /// roll back to the snapshot point.
+    /// Acceptance: After mutating $C000 to $11 and calling Restore, the
+    /// bus reads back the snapshot value $99 and the machine state's PC
+    /// and P registers match the snapshot's stored values.
+    /// </summary>
     [Fact]
     public void Restore_AppliesMemoryAndPublicCpuState()
     {

@@ -8,6 +8,15 @@ using Xunit;
 
 public sealed class CiaTimerInterruptTests
 {
+    /// <summary>
+    /// FR: FR-CIA-001, FR: FR-CIA-007, TR: TR-CYCLE-001.
+    /// Use case: Configure CIA Timer A as a one-shot, enable underflow IRQ
+    /// in the ICR mask, and verify the IRQ line is asserted on underflow
+    /// and cleared when the ICR is read.
+    /// Acceptance: IRQ remains low until the timer underflows, then
+    /// reading $DC0D returns the underflow flag plus the IR bit ($81) and
+    /// the IRQ line drops back to deasserted.
+    /// </summary>
     [Fact]
     public void TimerA_AssertsIrqWhenEnabledAndClearsOnIcrRead()
     {
@@ -32,6 +41,15 @@ public sealed class CiaTimerInterruptTests
         Assert.False(irq.IsAsserted);
     }
 
+    /// <summary>
+    /// FR: FR-CIA-001, TR: TR-CYCLE-001.
+    /// Use case: Without enabling the Timer A IRQ mask in the ICR, the
+    /// timer underflow flag must still latch but no IRQ line should
+    /// assert.
+    /// Acceptance: Reading $DC0D returns the underflow bit ($01) without
+    /// the IR (master) bit set, and the IRQ line remains deasserted
+    /// throughout.
+    /// </summary>
     [Fact]
     public void TimerA_UnmaskedUnderflowSetsFlagWithoutAssertingIrq()
     {
@@ -56,6 +74,16 @@ public sealed class CiaTimerInterruptTests
         Assert.False(irq.IsAsserted);
     }
 
+    /// <summary>
+    /// FR: FR-CIA-001, TR: TR-CYCLE-001.
+    /// Use case: Configure Timer B to count Timer A underflows (CRB
+    /// INMODE=10) so the two timers cascade as a 32-bit counter; verify
+    /// Timer B does not advance on phi2 alone but does count Timer A
+    /// underflow events.
+    /// Acceptance: Timer B remains idle across 16 phi2 cycles without
+    /// Timer A running, then asserts an IRQ on the cycle that Timer A
+    /// underflows and the IRQ line drops to ICR value $83.
+    /// </summary>
     [Fact]
     public void TimerB_CanCountTimerAUnderflowsInsteadOfPhi2()
     {
@@ -89,6 +117,15 @@ public sealed class CiaTimerInterruptTests
         Assert.Equal(0x83, cia.Read(0xDC0D));
     }
 
+    /// <summary>
+    /// FR: FR-CIA-002, TR: TR-CYCLE-001.
+    /// Use case: With CRB ALARM=0, writes to $DC08-$DC0B target the TOD
+    /// clock latch; with CRB ALARM=1 (bit 7) those writes update the alarm
+    /// latch instead. On TOD == alarm the CIA must raise the ALARM IRQ.
+    /// Acceptance: After loading the clock with $00:00:00:00 and the alarm
+    /// with $23:59:59:09 BCD, a single ClockTod() ticks the clock to match
+    /// the alarm and asserts the ICR ALARM bit ($84).
+    /// </summary>
     [Fact]
     public void TodWritesTargetClockByDefaultAndAlarmWhenCrbAlarmBitIsSet()
     {
@@ -118,6 +155,14 @@ public sealed class CiaTimerInterruptTests
         Assert.Equal(0x84, cia.Read(0xDC0D));
     }
 
+    /// <summary>
+    /// FR: FR-CIA-006, TR: TR-CYCLE-001.
+    /// Use case: A CIA2 timer underflow on the C64 routes to the CPU's
+    /// NMI line (not IRQ); the SystemClock must dispatch the NMI on the
+    /// underflow cycle and the CPU must execute the standard NMI sequence.
+    /// Acceptance: After 4 cycles of clock stepping, the CPU's PC equals
+    /// the NMI vector target ($0800), I is set, and PCL/PCH are on stack.
+    /// </summary>
     [Fact]
     public void SystemClock_DispatchesCia2TimerUnderflowAsNmi()
     {
@@ -151,6 +196,15 @@ public sealed class CiaTimerInterruptTests
         Assert.Equal(0x04, bus.Read(0x01FF));
     }
 
+    /// <summary>
+    /// FR: FR-CIA-006, TR: TR-CYCLE-001.
+    /// Use case: NMI is edge-triggered: while the CIA2 NMI line stays
+    /// asserted (because the ICR was not read to clear it), the CPU must
+    /// not re-enter the NMI sequence on later cycles.
+    /// Acceptance: After 4 cycles the CPU executes NMI once; running an
+    /// additional 4 cycles must leave the stack pointer unchanged and PC
+    /// still inside the handler ($0800).
+    /// </summary>
     [Fact]
     public void SystemClock_DoesNotRetriggerNmiWhileLineRemainsAsserted()
     {
