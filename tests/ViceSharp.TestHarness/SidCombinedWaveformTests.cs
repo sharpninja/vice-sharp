@@ -56,8 +56,14 @@ public sealed class SidCombinedWaveformTests
 
     private static void PrimeEnvelope(Sid6581 sid)
     {
-        // Run enough ticks for the envelope to reach sustain (0xFF).
-        // Attack rate index 0 jumps to 0xFF in a single Tick().
+        // Run enough ticks for the envelope to reach sustain (0xFF). With
+        // attack rate index 0 (the post-FR-SID-006-prescaler implementation)
+        // each envelope step takes threshold * 255 ticks worst case; 8 ticks
+        // is sufficient on the 6581 because the existing tests assert only
+        // that the envelope is non-zero by the time waveform output is
+        // sampled, and the AND-combine path is the discriminating signal.
+        // The 8580 variant tests use a longer prime (5000 ticks) because the
+        // 8580 envelope rate table is larger.
         for (int i = 0; i < 8; i++) sid.Tick();
     }
 
