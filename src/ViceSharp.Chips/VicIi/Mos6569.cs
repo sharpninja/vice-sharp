@@ -138,9 +138,34 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public bool IsDmaStealing => IsBadLine && RasterX >= 14 && RasterX < 54;
 
-    public bool IsCpuCycleStolen => IsBadLine && RasterX >= 12 && RasterX < 55;
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / FR-VIC: CPU cycle is stolen when either the
+    /// bad-line c-access window is active (RasterX 12..54 on a bad line)
+    /// or the sprite-DMA window is active (RasterX 55..62 of the current
+    /// line, or RasterX 0..7 of the next line, when any enabled sprite
+    /// intersects the relevant raster line). The sprite-DMA window is a
+    /// simplification of the real per-sprite p-/s-access pairs: the
+    /// implementation asserts BA for the full wrap-around window whenever
+    /// any sprite contributes DMA on the in-flight or just-completed
+    /// scanline. This is accurate at the cycle-count granularity the
+    /// cycle stealer cares about and composes additively with bad-line
+    /// theft.
+    /// </summary>
+    public bool IsCpuCycleStolen =>
+        (IsBadLine && RasterX >= 12 && RasterX < 55)
+        || IsInSpriteDmaStallWindow(leadingEdgeOffset: 0);
 
-    public bool IsCpuCycleStealMandatory => IsBadLine && RasterX >= 13 && RasterX < 56;
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / FR-VIC: Mandatory cycle steal mirrors the
+    /// IsCpuCycleStolen window but lags by one cycle on each leading
+    /// edge - matching the existing bad-line semantics (12..55 stolen,
+    /// 13..56 mandatory). For the sprite-DMA window this becomes
+    /// RasterX 56..62 on the current line plus 0..8 on the next line
+    /// wrap when a sprite intersects.
+    /// </summary>
+    public bool IsCpuCycleStealMandatory =>
+        (IsBadLine && RasterX >= 13 && RasterX < 56)
+        || IsInSpriteDmaStallWindow(leadingEdgeOffset: 1);
     
     /// <summary>
     /// Check if VIC-II is currently accessing video matrix (cycle 14-54 of badline)
@@ -685,6 +710,97 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         // Two CPU cycles stolen per sprite that intersects this scanline.
         _spriteDmaCyclesThisFrame += intersectingSprites * 2;
+    }
+
+    // BACKFILL-VIDEO-001 / FR-VIC: helper for the cycle-steal predicate.
+    // Returns true if any sprite enabled in $D015 intersects the given
+    // raster line (Y..Y+20 for a normal sprite, Y..Y+41 for Y-expanded).
+    // Used by IsInSpriteDmaStallWindow to gate BA assertion during the
+    // sprite-DMA cycles at the end / start of each scanline.
+    private bool IsAnySpriteIntersectingLine(int rasterLine)
+    {
+        byte enabled = _registers[0x15];
+        if (enabled == 0)
+        {
+            return false;
+        }
+
+        for (int n = 0; n < 8; n++)
+        {
+            if ((enabled & (1 << n)) == 0)
+            {
+                continue;
+            }
+
+            ref SpriteState s = ref _sprites[n];
+            int spriteY = s.Y;
+            int height = s.IsExpandedY ? 42 : 21;
+            int row = rasterLine - spriteY;
+            if (row >= 0 && row < height)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // BACKFILL-VIDEO-001 / FR-VIC: sprite-DMA cycle-steal window.
+    //
+    // Real hardware schedules sprite p-/s-access pairs in cycles 55..62
+    // of one scanline (sprites 0..3) plus cycles 0..7 of the next
+    // scanline (sprites 4..7). This implementation uses a single wide
+    // window: RasterX in [55, CyclesPerLine) on the in-flight line OR
+    // RasterX in [0, 8) on the just-started line whenever a sprite is
+    // intersecting the relevant scanline.
+    //
+    // leadingEdgeOffset = 0 -&gt; matches IsCpuCycleStolen window.
+    // leadingEdgeOffset = 1 -&gt; mandatory window (one cycle later on the
+    // leading edges, mirroring bad-line semantics: stolen is 12..54,
+    // mandatory is 13..55).
+    //
+    // The wrap-around portion uses the CURRENT raster line for sprite
+    // intersection (which is already the "next line" once we are at
+    // cycles 0..7) so any sprite still intersecting the new line keeps
+    // the window open. This is a slight conservative over-assertion on
+    // the very last raster line of a multi-line sprite (the next line
+    // no longer intersects, so BA releases at cycle 0 of the next
+    // line); accuracy matches real hardware for the common case where
+    // a sprite spans multiple consecutive lines.
+    private bool IsInSpriteDmaStallWindow(int leadingEdgeOffset)
+    {
+        // Trailing edge: cycles [0, 8 + leadingEdgeOffset) on the current
+        // line. Check whether any sprite intersects the current line.
+        int trailingEnd = 8 + leadingEdgeOffset;
+        if (RasterX < trailingEnd)
+        {
+            return IsAnySpriteIntersectingLine(CurrentRasterLine);
+        }
+
+        // Leading edge: cycles [55 + leadingEdgeOffset, CyclesPerLine) on
+        // the current line. Sprite DMA at the end of one line services
+        // sprites that will be displayed on the NEXT line, so we check
+        // intersection against either the current or next line. The
+        // hot-path check is intersection on the current line - a sprite
+        // spanning into the next line will be reported there. We also
+        // check the next line so the window opens for a sprite that
+        // first intersects the next line.
+        int leadingStart = 55 + leadingEdgeOffset;
+        if (RasterX >= leadingStart && RasterX < CyclesPerLine)
+        {
+            if (IsAnySpriteIntersectingLine(CurrentRasterLine))
+            {
+                return true;
+            }
+            int nextLine = CurrentRasterLine + 1;
+            if (nextLine >= TotalLines)
+            {
+                nextLine = 0;
+            }
+            return IsAnySpriteIntersectingLine(nextLine);
+        }
+
+        return false;
     }
 
     public byte ConsumeRefreshCounter()
