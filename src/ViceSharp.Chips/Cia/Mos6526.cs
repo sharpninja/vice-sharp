@@ -66,6 +66,20 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     private byte _todAlarmSeconds;
     private byte _todAlarmMinutes;
     private byte _todAlarmHours;
+
+    // TOD read latch (HOUR read latches; TENTHS read unlatches).
+    private bool _todLatched;
+    private byte _todLatchedTenths;
+    private byte _todLatchedSeconds;
+    private byte _todLatchedMinutes;
+    private byte _todLatchedHours;
+
+    // Cycle accumulator that converts host phi2 cycles into TOD ticks
+    // (50Hz when CRA bit 7 = 1, 60Hz when CRA bit 7 = 0). At PAL phi2 of
+    // 985_248 Hz, 50Hz -> 19_704 cycles/tick and 60Hz -> 16_420 cycles/tick.
+    private int _todCycleCounter;
+    private const int TodCyclesPer50HzTick = 985_248 / 50;
+    private const int TodCyclesPer60HzTick = 985_248 / 60;
     
     // Interrupt state
     private byte _interruptMask;
@@ -121,7 +135,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         var timerAUnderflowed = TickTimer(ref _timerA);
         if (timerAUnderflowed)
             UnderflowTimerA();
-        
+
         if (_timerB.Running && TimerBCountsPhi2())
         {
             if (TickTimer(ref _timerB))
@@ -132,6 +146,23 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             if (TickTimer(ref _timerB))
                 UnderflowTimerB();
         }
+
+        TickTodFromCycleSource();
+    }
+
+    private void TickTodFromCycleSource()
+    {
+        // CRA bit 7 (1 = 50Hz, 0 = 60Hz) selects the TOD source rate.
+        var cyclesPerTick = (_timerA.Control & 0x80) != 0
+            ? TodCyclesPer50HzTick
+            : TodCyclesPer60HzTick;
+
+        _todCycleCounter++;
+        if (_todCycleCounter < cyclesPerTick)
+            return;
+
+        _todCycleCounter = 0;
+        ClockTod();
     }
 
     public void Reset()
@@ -147,6 +178,16 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         _todSeconds = 0;
         _todMinutes = 0;
         _todHours = 0;
+        _todAlarmTenths = 0;
+        _todAlarmSeconds = 0;
+        _todAlarmMinutes = 0;
+        _todAlarmHours = 0;
+        _todLatched = false;
+        _todLatchedTenths = 0;
+        _todLatchedSeconds = 0;
+        _todLatchedMinutes = 0;
+        _todLatchedHours = 0;
+        _todCycleCounter = 0;
         _interruptMask = 0;
         _interruptFlags = 0;
         _irqAsserted = false;
@@ -168,13 +209,40 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             0x05 => (byte)(_timerA.Counter >> 8),
             0x06 => (byte)_timerB.Counter,
             0x07 => (byte)(_timerB.Counter >> 8),
-            0x08 => _todTenths,
-            0x09 => _todSeconds,
-            0x0A => _todMinutes,
-            0x0B => _todHours,
+            0x08 => ReadTodTenths(),
+            0x09 => _todLatched ? _todLatchedSeconds : _todSeconds,
+            0x0A => _todLatched ? _todLatchedMinutes : _todMinutes,
+            0x0B => ReadTodHours(),
             0x0D => ReadInterruptControlRegister(),
             _ => _registers[register]
         };
+    }
+
+    private byte ReadTodTenths()
+    {
+        if (_todLatched)
+        {
+            // TENTHS read releases the latch (VICE / 6526 spec).
+            var latched = _todLatchedTenths;
+            _todLatched = false;
+            return latched;
+        }
+        return _todTenths;
+    }
+
+    private byte ReadTodHours()
+    {
+        // Reading HOUR latches a snapshot of the current TOD; subsequent
+        // reads of MIN/SEC return the latched values until TENTHS is read.
+        if (!_todLatched)
+        {
+            _todLatchedTenths = _todTenths;
+            _todLatchedSeconds = _todSeconds;
+            _todLatchedMinutes = _todMinutes;
+            _todLatchedHours = _todHours;
+            _todLatched = true;
+        }
+        return _todLatchedHours;
     }
 
     public void Write(ushort address, byte value)
