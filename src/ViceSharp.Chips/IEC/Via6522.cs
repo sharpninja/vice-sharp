@@ -25,12 +25,24 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     private const byte IfrTimer1 = 0x40;
     private const byte IfrTimer2 = 0x20;
     private const byte IfrCb1 = 0x10;
+    private const byte IfrCb2 = 0x08;
     private const byte IfrSr = 0x04;
     private const byte IfrCa1 = 0x02;
     private const byte IfrAny = 0x80;
 
     private const byte PcrCa1ActiveEdgeMask = 0x01; // PCR bit 0: 1 = rising, 0 = falling
     private const byte PcrCb1ActiveEdgeMask = 0x10; // PCR bit 4: 1 = rising, 0 = falling
+    private const byte PcrCb2ModeMask = 0xE0;       // PCR bits 7..5 select CB2 mode
+
+    // CB2 mode encodings (PCR bits 7..5 packed into 0..7)
+    private const int Cb2ModeInputNegEdge = 0b000;
+    private const int Cb2ModeInputNegIndependent = 0b001;
+    private const int Cb2ModeInputPosEdge = 0b010;
+    private const int Cb2ModeInputPosIndependent = 0b011;
+    private const int Cb2ModeHandshakeOut = 0b100;
+    private const int Cb2ModePulseOut = 0b101;
+    private const int Cb2ModeManualLow = 0b110;
+    private const int Cb2ModeManualHigh = 0b111;
 
     private const byte AcrT1ContinuousMask = 0x40;
     private const byte AcrT1Pb7Mask = 0x80; // ACR bit 7: route T1 onto PB7
@@ -72,6 +84,12 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     // _pb7TimerToggle low on T1 start and high on the first underflow. The
     // bit overrides ORB bit 7 in port-B reads while DDRB bit 7 = 1.
     private bool _pb7TimerToggle;
+
+    // CB2 pin state. PCR bits 7..5 select the output mode (manual low/high,
+    // handshake, pulse) or one of four input edge-detect modes that latch
+    // IFR bit 3 via TriggerCb2. Defaults to high so manual-high and unused
+    // configurations idle at the inactive level.
+    private bool _cb2State = true;
 
     public Via6522(IBus bus, IInterruptLine irqLine)
     {
@@ -138,6 +156,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         _srShiftCount = 0;
         _srShifting = false;
         _pb7TimerToggle = false;
+        _cb2State = true;
         if (_irqAsserted)
         {
             _irqLine.Release(this);
@@ -212,6 +231,12 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0x00:
                 _portBOutput = value;
                 PortBOutputChanged?.Invoke((byte)(_portBOutput & _ddrb));
+                // Handshake output mode (PCR bits 7..5 = 100): an ORB write
+                // drives CB2 low; the line stays low until the next CB1
+                // active edge restores it. This is the canonical 6522 write-
+                // handshake protocol used by the IEC fast-serial drivers.
+                if (GetCb2Mode() == Cb2ModeHandshakeOut)
+                    _cb2State = false;
                 break;
             case 0x01:
                 _ifr &= unchecked((byte)~0x03);
@@ -284,7 +309,28 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                     }
                 }
                 break;
-            case 0x0C: _pcr = value; break;
+            case 0x0C:
+                _pcr = value;
+                // Apply CB2 output modes immediately on PCR change. Manual
+                // low/high latch the pin to a static level; handshake and
+                // pulse output modes idle the pin high until the next ORB
+                // write (or external CB1 stimulus) drives the handshake.
+                // Input modes leave _cb2State untouched so any prior level
+                // persists until a TriggerCb2 edge arrives.
+                switch (GetCb2Mode())
+                {
+                    case Cb2ModeManualLow:
+                        _cb2State = false;
+                        break;
+                    case Cb2ModeManualHigh:
+                        _cb2State = true;
+                        break;
+                    case Cb2ModeHandshakeOut:
+                    case Cb2ModePulseOut:
+                        _cb2State = true; // idle high until ORB write triggers the handshake
+                        break;
+                }
+                break;
             case 0x0D:
                 if ((value & IfrAny) == 0)
                 {
@@ -406,6 +452,8 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// Simulates an edge transition on the CB1 input pin. The configured
     /// active edge (PCR bit 4: 1 = rising, 0 = falling) gates whether the
     /// transition latches IFR bit 4; IER bit 4 then gates the IRQ output.
+    /// When CB2 is in handshake output mode (PCR bits 7..5 = 100) an active
+    /// CB1 edge also restores CB2 to high, completing the write handshake.
     /// </summary>
     /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
     public void TriggerCb1(bool rising)
@@ -415,8 +463,49 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         {
             _ifr |= IfrCb1;
             RefreshIrq();
+            if (GetCb2Mode() == Cb2ModeHandshakeOut)
+                _cb2State = true;
         }
     }
+
+    /// <summary>
+    /// Simulates an edge transition on the CB2 input pin. Only valid for CB2
+    /// input modes (PCR bits 7..5 in 000..011). The configured edge direction
+    /// (PCR bit 5: 1 = rising, 0 = falling) gates whether the transition
+    /// latches IFR bit 3; IER bit 3 then gates the IRQ output. Output modes
+    /// ignore the call (the pin is driven by the VIA in those cases).
+    /// </summary>
+    /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
+    public void TriggerCb2(bool rising)
+    {
+        var mode = GetCb2Mode();
+        // Output modes (100..111) ignore externally-driven edges.
+        if (mode >= Cb2ModeHandshakeOut)
+            return;
+        // Edge direction for input modes is encoded in PCR bit 6 (mode bit 1):
+        // 0 = negative/falling active (modes 000/001), 1 = positive/rising
+        // active (modes 010/011). Mode bit 0 (PCR bit 5) selects
+        // active-vs-independent latching, which we treat uniformly here.
+        var activeEdgeIsRising = (mode & 0b010) != 0;
+        if (rising == activeEdgeIsRising)
+        {
+            _ifr |= IfrCb2;
+            RefreshIrq();
+        }
+    }
+
+    /// <summary>
+    /// Current CB2 pin level. In output modes this reflects the VIA-driven
+    /// state (manual low/high, handshake idle/asserted, pulse). In input
+    /// modes it is unaffected by TriggerCb2 (which only latches IFR) and
+    /// retains whatever level was last applied by a prior output mode.
+    /// </summary>
+    public bool Cb2State => _cb2State;
+
+    /// <summary>
+    /// Returns the active CB2 mode from PCR bits 7..5, packed as values 0..7.
+    /// </summary>
+    private int GetCb2Mode() => (_pcr & PcrCb2ModeMask) >> 5;
 
     /// <summary>
     /// Returns the active ACR shift-register mode (ACR bits 4..2 packed into
