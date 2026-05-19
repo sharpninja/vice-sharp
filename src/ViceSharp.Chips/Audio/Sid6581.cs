@@ -118,7 +118,11 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 if (hasSawtooth) combined &= sawValue;
                 if (hasPulse)    combined &= pulValue;
                 if (hasNoise)    combined &= noiseValue;
-                sample = combined;
+                // FR-SID-003 acceptance criterion 2: the 8580 die has
+                // different combined-waveform analog bleed than the 6581.
+                // ApplyCombinedBleed is a no-op on 6581 and applies a
+                // ~0.75 attenuation scalar on the 8580 variant.
+                sample = ApplyCombinedBleed((byte)combined);
             }
 
             prevOutput = sample;
@@ -154,6 +158,18 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// output dominates the mix.
     /// </summary>
     private const float DigiDcOffset = 0.05f;
+
+    /// <summary>
+    /// FR-SID-003 acceptance criterion 2 (BACKFILL-SID-001 / 8580 variant).
+    /// Hook applied to the AND-combine result when two or more waveform
+    /// bits are selected. The 6581 base implementation is a no-op (the
+    /// AND-combined value passes through unchanged); the 8580 override
+    /// applies the ~0.75 attenuation scalar that models the 8580 die's
+    /// reduced combined-waveform analog bleed. Single-waveform output is
+    /// never routed through this hook, so single-waveform behaviour is
+    /// identical across both die revisions.
+    /// </summary>
+    protected virtual byte ApplyCombinedBleed(byte andResult) => andResult;
 
     // Filter state for VICE-style resonant filter
     private double _filterV0, _filterV1, _filterV2, _filterV3;
