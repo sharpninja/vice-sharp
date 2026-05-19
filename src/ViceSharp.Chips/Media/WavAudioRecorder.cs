@@ -18,7 +18,7 @@ using System.Text;
 /// fmt chunk + data chunk) whose data-chunk size matches submitted
 /// sample bytes and whose fmt chunk reflects sample-rate / channels.
 /// </summary>
-public sealed class WavAudioRecorder : IDisposable
+public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
 {
     /// <summary>Canonical RIFF/WAVE header size for a single-fmt + single-data layout.</summary>
     public const int HeaderSize = 44;
