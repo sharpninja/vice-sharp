@@ -128,4 +128,24 @@ public sealed class D64DiskImageDevice : IDevice
         var bytes = File.ReadAllBytes(path);
         return new D64DiskImageDevice(new D64Image(bytes), path);
     }
+
+    /// <summary>
+    /// FR/TR: FR-1541 (RUNTIME-1541-002 D64 stream load).
+    /// Load a D64 image from any readable stream and wrap it as a device.
+    /// Companion to <see cref="CommitToStream"/>: pair them to move an
+    /// image through MemoryStream, network stream, or any other stream
+    /// without staging on disk. The optional <paramref name="sourcePath"/>
+    /// is carried through to <see cref="SourcePath"/> for diagnostics; pass
+    /// null for purely in-memory loads.
+    /// </summary>
+    /// <param name="source">Readable stream that yields at least 174,848 bytes.</param>
+    /// <param name="sourcePath">Optional label surfaced via <see cref="SourcePath"/>.</param>
+    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentException">Stream ended before delivering
+    /// the full 174,848 bytes (i.e. a truncated or empty stream).</exception>
+    public static D64DiskImageDevice LoadFromStream(Stream source, string? sourcePath = null)
+    {
+        var image = D64Image.LoadFromStream(source);
+        return new D64DiskImageDevice(image, sourcePath);
+    }
 }

@@ -95,6 +95,38 @@ public sealed class D64Image
 
     public byte[] ToArray() => _diskData.ToArray();
 
+    /// <summary>
+    /// FR/TR: FR-1541 (RUNTIME-1541-002 D64 stream load).
+    /// Read exactly <see cref="DiskSize35Track"/> bytes from <paramref name="source"/>
+    /// and return a fresh <see cref="D64Image"/> wrapping them. Symmetric
+    /// with <c>D64DiskImageDevice.CommitToStream</c>: lets callers move a
+    /// D64 image through any readable stream (FileStream, MemoryStream,
+    /// network stream) without round-tripping through the filesystem.
+    /// Does not seek or close the stream.
+    /// </summary>
+    /// <param name="source">Readable stream that yields at least 174,848 bytes.</param>
+    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentException">Stream ended before delivering
+    /// the full 174,848 bytes (i.e. a truncated or empty stream).</exception>
+    public static D64Image LoadFromStream(Stream source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        var buffer = new byte[DiskSize35Track];
+        int read = 0;
+        while (read < buffer.Length)
+        {
+            int chunk = source.Read(buffer, read, buffer.Length - read);
+            if (chunk == 0)
+            {
+                throw new ArgumentException(
+                    $"Stream contained {read} bytes; D64 requires {DiskSize35Track}.",
+                    nameof(source));
+            }
+            read += chunk;
+        }
+        return new D64Image(buffer);
+    }
+
     public bool TryReadFirstProgram(out D64ProgramFile? program, out string error)
     {
         program = null;
