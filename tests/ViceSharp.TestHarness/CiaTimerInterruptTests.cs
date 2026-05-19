@@ -118,13 +118,15 @@ public sealed class CiaTimerInterruptTests
     }
 
     /// <summary>
-    /// FR: FR-CIA-002, TR: TR-CYCLE-001.
+    /// FR: FR-CIA-002, FR: FR-CIA-TOD, TR: TR-CYCLE-001.
     /// Use case: With CRB ALARM=0, writes to $DC08-$DC0B target the TOD
     /// clock latch; with CRB ALARM=1 (bit 7) those writes update the alarm
     /// latch instead. On TOD == alarm the CIA must raise the ALARM IRQ.
-    /// Acceptance: After loading the clock with $00:00:00:00 and the alarm
-    /// with $23:59:59:09 BCD, a single ClockTod() ticks the clock to match
-    /// the alarm and asserts the ICR ALARM bit ($84).
+    /// Real 6526 HOUR is 12-hour BCD (1..12) with AM/PM in bit 7; the
+    /// 12 PM -> 1 AM rollover toggles bit 7.
+    /// Acceptance: After loading the clock with $12:59:59:09 PM and the
+    /// alarm with $01:00:00:00 AM, a single ClockTod() ticks the clock to
+    /// match the alarm and asserts the ICR ALARM bit ($84).
     /// </summary>
     [Fact]
     public void TodWritesTargetClockByDefaultAndAlarmWhenCrbAlarmBitIsSet()
@@ -133,16 +135,19 @@ public sealed class CiaTimerInterruptTests
         var irq = new InterruptLine(InterruptType.Irq);
         var cia = new Mos6526(bus, irq);
 
+        // CRB.7 = 0 by default -> writes target live TOD clock.
+        // Load CLOCK = 12:59:59.09 PM (HOUR = 0x92).
         cia.Write(0xDC08, 0x09);
         cia.Write(0xDC09, 0x59);
         cia.Write(0xDC0A, 0x59);
-        cia.Write(0xDC0B, 0x23);
+        cia.Write(0xDC0B, 0x92);
 
+        // CRB.7 = 1 -> writes target ALARM. Load ALARM = 01:00:00.00 AM.
         cia.Write(0xDC0F, 0x80);
         cia.Write(0xDC08, 0x00);
         cia.Write(0xDC09, 0x00);
         cia.Write(0xDC0A, 0x00);
-        cia.Write(0xDC0B, 0x00);
+        cia.Write(0xDC0B, 0x01);
         cia.Write(0xDC0D, 0x84);
 
         cia.ClockTod();
@@ -150,7 +155,7 @@ public sealed class CiaTimerInterruptTests
         Assert.Equal(0x00, cia.Read(0xDC08));
         Assert.Equal(0x00, cia.Read(0xDC09));
         Assert.Equal(0x00, cia.Read(0xDC0A));
-        Assert.Equal(0x00, cia.Read(0xDC0B));
+        Assert.Equal(0x01, cia.Read(0xDC0B));
         Assert.True(irq.IsAsserted);
         Assert.Equal(0x84, cia.Read(0xDC0D));
     }

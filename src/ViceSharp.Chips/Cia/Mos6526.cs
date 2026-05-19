@@ -100,7 +100,9 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     }
 
     /// <summary>
-    /// TOD is clocked by Timer B output when in 24-hour mode (VICE-style)
+    /// TOD is clocked by the configured 50/60Hz source. HOUR follows real
+    /// MOS 6526 semantics: 12-hour BCD ring (0x01..0x12) in the low five
+    /// bits, AM/PM bit 7 toggling on the 12 -> 1 rollover.
     /// </summary>
     public void ClockTod()
     {
@@ -113,7 +115,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                 _todMinutes = IncrementBcd(_todMinutes, 0x59);
                 if (_todMinutes == 0x00)
                 {
-                    _todHours = IncrementBcd(_todHours, 0x23);
+                    _todHours = IncrementTodHourBcd(_todHours);
                 }
             }
         }
@@ -426,6 +428,35 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             return (byte)(high | low);
 
         return (byte)(((high + 0x10) & 0xF0) | 0x00);
+    }
+
+    // FR-CIA-TOD (#45 followup): real 6526 HOUR is 12-hour BCD with AM/PM
+    // in bit 7. Increment cycles 1..12 in the low five bits; the 12 -> 1
+    // boundary toggles bit 7. Bits 5 and 6 are reserved (0) and the low
+    // five bits cover BCD up to 0x12.
+    private static byte IncrementTodHourBcd(byte hour)
+    {
+        var amPm = (byte)(hour & 0x80);
+        var bcd = (byte)(hour & 0x1F);
+
+        byte nextBcd;
+        if (bcd == 0x12)
+        {
+            // 12 -> 1; toggle AM/PM.
+            nextBcd = 0x01;
+            amPm ^= 0x80;
+        }
+        else if ((bcd & 0x0F) == 0x09)
+        {
+            // 09 -> 10; carry into the BCD tens nibble.
+            nextBcd = (byte)((bcd & 0xF0) + 0x10);
+        }
+        else
+        {
+            nextBcd = (byte)(bcd + 1);
+        }
+
+        return (byte)(amPm | (nextBcd & 0x1F));
     }
 
     private void SetInterruptFlag(byte flag)

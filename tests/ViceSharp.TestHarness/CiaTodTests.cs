@@ -209,4 +209,137 @@ public sealed class CiaTodTests
         (icr & 0x04).Should().Be(0x04, "ICR bit 2 (alarm) must be set");
         (icr & 0x80).Should().Be(0x80, "ICR master IR flag (bit 7) must be set when masked source fires");
     }
+
+    /// <summary>
+    /// FR/TR: FR-CIA-TOD (BACKFILL-CIA #45 followup, 12-hour mode).
+    /// Use case: Real 6526 TOD HOUR is 12-hour BCD (01..12) plus AM/PM in
+    /// bit 7. The 11 -> 12 rollover stays within the same half-day and
+    /// must NOT toggle bit 7.
+    /// Acceptance: With TOD = 11:59:59.9 AM (HOUR = 0x11), one ClockTod()
+    /// advances HOUR to 0x12 (12 AM = noon-ish in 6526 convention) with
+    /// bit 7 still clear.
+    /// </summary>
+    [Fact]
+    public void Tod_HourRollover_11To12_DoesNotTogglePm()
+    {
+        var cia = BuildCia();
+        cia.Write(0xDC0F, 0x00); // CRB.7 = 0 -> writes target live TOD
+
+        cia.Write(0xDC0B, 0x11); // HOUR = 11 AM
+        cia.Write(0xDC0A, 0x59); // MIN = 59
+        cia.Write(0xDC09, 0x59); // SEC = 59
+        cia.Write(0xDC08, 0x09); // TENTHS = 9
+
+        cia.ClockTod();
+
+        cia.Read(0xDC0B).Should().Be(0x12, "11 + 1 = 12 within same half-day; AM bit stays clear");
+        cia.Read(0xDC08); // unlatch
+    }
+
+    /// <summary>
+    /// FR/TR: FR-CIA-TOD (BACKFILL-CIA #45 followup, 12-hour mode).
+    /// Use case: The 12 -> 1 rollover toggles AM/PM bit 7 on real 6526
+    /// hardware. Starting from 12:59:59.9 AM (HOUR = 0x12), one tenth
+    /// advances HOUR to 1 PM (0x81).
+    /// Acceptance: HOUR reads 0x81 (1 PM = 0x01 with bit 7 set).
+    /// </summary>
+    [Fact]
+    public void Tod_HourRollover_12AmTo1Pm_TogglesAmPmBit()
+    {
+        var cia = BuildCia();
+        cia.Write(0xDC0F, 0x00);
+
+        cia.Write(0xDC0B, 0x12); // HOUR = 12 AM
+        cia.Write(0xDC0A, 0x59);
+        cia.Write(0xDC09, 0x59);
+        cia.Write(0xDC08, 0x09);
+
+        cia.ClockTod();
+
+        cia.Read(0xDC0B).Should().Be(0x81, "12 AM rolls to 1 PM; bit 7 set, BCD = 0x01");
+        cia.Read(0xDC08); // unlatch
+    }
+
+    /// <summary>
+    /// FR/TR: FR-CIA-TOD (BACKFILL-CIA #45 followup, 12-hour mode).
+    /// Use case: The 12 -> 1 rollover toggles AM/PM in the opposite
+    /// direction too. Starting from 12:59:59.9 PM (HOUR = 0x92), one
+    /// tenth advances HOUR to 1 AM (0x01).
+    /// Acceptance: HOUR reads 0x01 (1 AM = 0x01 with bit 7 clear).
+    /// </summary>
+    [Fact]
+    public void Tod_HourRollover_12PmTo1Am_TogglesAmPmBit()
+    {
+        var cia = BuildCia();
+        cia.Write(0xDC0F, 0x00);
+
+        cia.Write(0xDC0B, 0x92); // HOUR = 12 PM
+        cia.Write(0xDC0A, 0x59);
+        cia.Write(0xDC09, 0x59);
+        cia.Write(0xDC08, 0x09);
+
+        cia.ClockTod();
+
+        cia.Read(0xDC0B).Should().Be(0x01, "12 PM rolls to 1 AM; bit 7 clear, BCD = 0x01");
+        cia.Read(0xDC08); // unlatch
+    }
+
+    /// <summary>
+    /// FR/TR: FR-CIA-TOD (BACKFILL-CIA #45 followup, 12-hour mode).
+    /// Use case: The HOUR BCD ring is 1..12 only; the live HOUR low
+    /// nibble + bit 4 must never read 0x00 or 0x13+ after a rollover.
+    /// Walking 12 hours from 12 AM verifies the full ring.
+    /// Acceptance: After 12 hour-rollovers starting at 11 AM, the BCD
+    /// portion (mask 0x1F) walks 12, 1, 2, ..., 11 staying inside
+    /// [0x01, 0x12].
+    /// </summary>
+    [Fact]
+    public void Tod_HourRollover_StaysInOneToTwelveBcdRing()
+    {
+        var cia = BuildCia();
+        cia.Write(0xDC0F, 0x00);
+
+        // Start at 11:59:59.9 AM so the very next tenth ticks HOUR.
+        cia.Write(0xDC0B, 0x11);
+        cia.Write(0xDC0A, 0x59);
+        cia.Write(0xDC09, 0x59);
+        cia.Write(0xDC08, 0x09);
+
+        byte[] expectedBcd = { 0x12, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11 };
+        foreach (var expected in expectedBcd)
+        {
+            // One tenth ticks the hour because MIN:SEC.TENTHS = 59:59.9.
+            cia.ClockTod();
+            // Force the next iteration to land on another hour rollover.
+            // Reading HOUR latches, so unlatch via TENTHS to keep live.
+            var hour = cia.Read(0xDC0B);
+            cia.Read(0xDC08);
+            (hour & 0x1F).Should().Be(expected, $"BCD ring must stay 1..12; saw {hour:X2}");
+            (hour & 0x1F).Should().BeInRange(0x01, 0x12, "BCD never 0x00 or 0x13+");
+
+            // Reset MIN/SEC/TENTHS to 59:59.9 so the next tick hits another
+            // hour rollover.
+            cia.Write(0xDC0A, 0x59);
+            cia.Write(0xDC09, 0x59);
+            cia.Write(0xDC08, 0x09);
+        }
+    }
+
+    /// <summary>
+    /// FR/TR: FR-CIA-TOD (BACKFILL-CIA #45 followup, 12-hour mode).
+    /// Use case: A write to HOUR must preserve BCD 1..12 in the low five
+    /// bits and the AM/PM bit (bit 7); other bits stay as written so the
+    /// CPU sees what it wrote.
+    /// Acceptance: Writing 0x95 (5 PM) reads back 0x95 unchanged.
+    /// </summary>
+    [Fact]
+    public void Tod_HourWrite_Preserves5PmBcdAndAmPmBit()
+    {
+        var cia = BuildCia();
+        cia.Write(0xDC0F, 0x00);
+
+        cia.Write(0xDC0B, 0x95); // 5 PM = BCD 0x05 + bit 7
+        cia.Read(0xDC0B).Should().Be(0x95, "write/read preserves 5 PM = 0x95");
+        cia.Read(0xDC08); // unlatch
+    }
 }
