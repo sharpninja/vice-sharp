@@ -63,4 +63,27 @@ public sealed class Datasette : ITapeDevice
 
         return _reader.TryReadNextPulse(out cycles);
     }
+
+    /// <summary>
+    /// Rewind the tape to pulse zero. Safe no-op when no tape is inserted.
+    /// </summary>
+    public void Rewind()
+    {
+        _reader?.Rewind();
+    }
+
+    /// <summary>
+    /// Position the tape cursor at the given pulse index. Returns false
+    /// when no tape is inserted, the index is negative, or the index
+    /// exceeds the pulse count; on failure the cursor is left unchanged.
+    /// </summary>
+    public bool SeekTo(int pulseIndex)
+    {
+        if (_reader is null)
+        {
+            return false;
+        }
+
+        return _reader.TrySeekToPulse(pulseIndex);
+    }
 }

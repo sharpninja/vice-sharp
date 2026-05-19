@@ -39,4 +39,40 @@ public sealed class TapPulseReader
         _offset += 3;
         return true;
     }
+
+    /// <summary>
+    /// Reset the pulse cursor to the start of the pulse data, equivalent to
+    /// rewinding the tape to position zero.
+    /// </summary>
+    public void Rewind()
+    {
+        _offset = 0;
+    }
+
+    /// <summary>
+    /// Try to position the cursor at the given pulse index by iterating
+    /// pulses from the start. Returns false if the index is negative or
+    /// exceeds the pulse count; on failure the cursor is left unchanged.
+    /// </summary>
+    public bool TrySeekToPulse(int pulseIndex)
+    {
+        if (pulseIndex < 0)
+        {
+            return false;
+        }
+
+        var saved = _offset;
+        _offset = 0;
+
+        for (var i = 0; i < pulseIndex; i++)
+        {
+            if (!TryReadNextPulse(out _))
+            {
+                _offset = saved;
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
