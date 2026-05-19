@@ -934,6 +934,16 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return value;
         }
 
+        // BACKFILL-VIDEO-001 / FR-VIC: Color registers $D020-$D02E use only the
+        // low 4 bits to encode a 16-color palette index. The upper 4 bits are
+        // unconnected on the chip and float high, so reads always report them
+        // as 1. This matches real-hardware behavior (writing $05 reads back as
+        // $F5).
+        if (register >= 0x20 && register <= 0x2E)
+        {
+            return (byte)(_registers[register] | 0xF0);
+        }
+
         return _registers[register];
     }
 
@@ -969,8 +979,19 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return;
         }
 
+        // BACKFILL-VIDEO-001 / FR-VIC: Color registers $D020-$D02E only latch
+        // the low 4 bits on write. Upper 4 bits are unconnected on the chip
+        // and are ignored on write (and float high on read, applied above).
+        if (register >= 0x20 && register <= 0x2E)
+        {
+            byte masked = (byte)(value & 0x0F);
+            _registers[register] = masked;
+            UpdateSpriteRegisters((ushort)register, masked);
+            return;
+        }
+
         _registers[register] = value;
-        
+
         // VICE-style: Update sprite registers
         UpdateSpriteRegisters((ushort)register, value);
     }
