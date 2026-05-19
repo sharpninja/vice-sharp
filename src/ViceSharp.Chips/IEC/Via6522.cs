@@ -28,11 +28,21 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     private const byte IfrCb2 = 0x08;
     private const byte IfrSr = 0x04;
     private const byte IfrCa1 = 0x02;
+    private const byte IfrCa2 = 0x01;
     private const byte IfrAny = 0x80;
 
     private const byte PcrCa1ActiveEdgeMask = 0x01; // PCR bit 0: 1 = rising, 0 = falling
+    private const byte PcrCa2ModeMask = 0x0E;       // PCR bits 3..1 select CA2 mode
     private const byte PcrCb1ActiveEdgeMask = 0x10; // PCR bit 4: 1 = rising, 0 = falling
     private const byte PcrCb2ModeMask = 0xE0;       // PCR bits 7..5 select CB2 mode
+
+    // CA2 mode encodings (PCR bits 3..1 packed into 0..7). Match the CB2
+    // encoding bit-for-bit; only the four landed modes are named here so
+    // unused constants do not raise warnings.
+    private const int Ca2ModeHandshakeOut = 0b100;
+    private const int Ca2ModePulseOut = 0b101;
+    private const int Ca2ModeManualLow = 0b110;
+    private const int Ca2ModeManualHigh = 0b111;
 
     // CB2 mode encodings (PCR bits 7..5 packed into 0..7)
     private const int Cb2ModeInputNegEdge = 0b000;
@@ -90,6 +100,12 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     // IFR bit 3 via TriggerCb2. Defaults to high so manual-high and unused
     // configurations idle at the inactive level.
     private bool _cb2State = true;
+
+    // CA2 pin state. PCR bits 3..1 select the output mode (manual low/high,
+    // handshake, pulse) or one of four input edge-detect modes that latch
+    // IFR bit 0 via TriggerCa2. Defaults to high so manual-high and unused
+    // configurations idle at the inactive level (symmetric with CB2).
+    private bool _ca2State = true;
 
     public Via6522(IBus bus, IInterruptLine irqLine)
     {
@@ -157,6 +173,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         _srShifting = false;
         _pb7TimerToggle = false;
         _cb2State = true;
+        _ca2State = true;
         if (_irqAsserted)
         {
             _irqLine.Release(this);
@@ -182,6 +199,12 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0x01: // ORA / IRA - clears CA1/CA2 in IFR
                 _ifr &= unchecked((byte)~0x03);
                 RefreshIrq();
+                // Handshake output mode (PCR bits 3..1 = 100): an ORA / IRA
+                // read drives CA2 low; the line stays low until the next CA1
+                // active edge restores it. Symmetric with CB2's ORB-write
+                // handshake.
+                if (GetCa2Mode() == Ca2ModeHandshakeOut)
+                    _ca2State = false;
                 {
                     var input = PortAInput?.Invoke() ?? 0xFF;
                     return (byte)((_portAOutput & _ddra) | (input & (byte)~_ddra));
@@ -330,6 +353,23 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                         _cb2State = true; // idle high until ORB write triggers the handshake
                         break;
                 }
+                // Apply CA2 output modes on the same PCR write (bits 3..1).
+                // Mirrors the CB2 handling: manual low/high latch directly,
+                // handshake / pulse idle high until an ORA read drives the
+                // handshake, and input modes leave _ca2State alone.
+                switch (GetCa2Mode())
+                {
+                    case Ca2ModeManualLow:
+                        _ca2State = false;
+                        break;
+                    case Ca2ModeManualHigh:
+                        _ca2State = true;
+                        break;
+                    case Ca2ModeHandshakeOut:
+                    case Ca2ModePulseOut:
+                        _ca2State = true; // idle high until ORA read triggers the handshake
+                        break;
+                }
                 break;
             case 0x0D:
                 if ((value & IfrAny) == 0)
@@ -435,6 +475,8 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// Simulates an edge transition on the CA1 input pin. The configured
     /// active edge (PCR bit 0: 1 = rising, 0 = falling) gates whether the
     /// transition latches IFR bit 1; IER bit 1 then gates the IRQ output.
+    /// When CA2 is in handshake output mode (PCR bits 3..1 = 100) an active
+    /// CA1 edge also restores CA2 to high, completing the read handshake.
     /// Used by the 1541 to deliver BYTE-READY from the disk controller.
     /// </summary>
     /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
@@ -445,6 +487,8 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         {
             _ifr |= IfrCa1;
             RefreshIrq();
+            if (GetCa2Mode() == Ca2ModeHandshakeOut)
+                _ca2State = true;
         }
     }
 
@@ -503,9 +547,48 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     public bool Cb2State => _cb2State;
 
     /// <summary>
+    /// Simulates an edge transition on the CA2 input pin. Only valid for CA2
+    /// input modes (PCR bits 3..1 in 000..011). The configured edge direction
+    /// (PCR bit 2: 1 = rising, 0 = falling) gates whether the transition
+    /// latches IFR bit 0; IER bit 0 then gates the IRQ output. Output modes
+    /// ignore the call (the pin is driven by the VIA in those cases).
+    /// </summary>
+    /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
+    public void TriggerCa2(bool rising)
+    {
+        var mode = GetCa2Mode();
+        // Output modes (100..111) ignore externally-driven edges.
+        if (mode >= Ca2ModeHandshakeOut)
+            return;
+        // Edge direction for input modes is encoded in PCR bit 2 (mode bit 1):
+        // 0 = negative/falling active (modes 000/001), 1 = positive/rising
+        // active (modes 010/011). Mode bit 0 (PCR bit 1) selects
+        // active-vs-independent latching, which we treat uniformly here.
+        var activeEdgeIsRising = (mode & 0b010) != 0;
+        if (rising == activeEdgeIsRising)
+        {
+            _ifr |= IfrCa2;
+            RefreshIrq();
+        }
+    }
+
+    /// <summary>
+    /// Current CA2 pin level. In output modes this reflects the VIA-driven
+    /// state (manual low/high, handshake idle/asserted, pulse). In input
+    /// modes it is unaffected by TriggerCa2 (which only latches IFR) and
+    /// retains whatever level was last applied by a prior output mode.
+    /// </summary>
+    public bool Ca2State => _ca2State;
+
+    /// <summary>
     /// Returns the active CB2 mode from PCR bits 7..5, packed as values 0..7.
     /// </summary>
     private int GetCb2Mode() => (_pcr & PcrCb2ModeMask) >> 5;
+
+    /// <summary>
+    /// Returns the active CA2 mode from PCR bits 3..1, packed as values 0..7.
+    /// </summary>
+    private int GetCa2Mode() => (_pcr & PcrCa2ModeMask) >> 1;
 
     /// <summary>
     /// Returns the active ACR shift-register mode (ACR bits 4..2 packed into
