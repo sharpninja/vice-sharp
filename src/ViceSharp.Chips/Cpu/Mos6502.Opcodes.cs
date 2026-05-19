@@ -164,9 +164,16 @@ partial class Mos6502
             case 0xEA: break;
 
             // BRK - Force Interrupt
+            // PC was already advanced past the opcode byte during fetch
+            // (now PC = BRK+1). BRK also consumes the following signature
+            // byte even though it is not read, so the stacked return
+            // address is PC+1 (i.e. BRK+2). The pushed status byte has
+            // the B flag (bit 4) set to distinguish BRK from a hardware
+            // IRQ/NMI; the live P register gets the I flag set so the
+            // handler runs with IRQs masked.
             case 0x00:
-                PushWord(PC);
-                Push(P);
+                PushWord((ushort)(PC + 1));
+                Push((byte)(P | 0x10)); // Push P with B flag set (software interrupt)
                 P |= 0x04; // Set Interrupt Disable flag
                 PC = _bus.Read(0xFFFE);
                 PC |= (ushort)(_bus.Read(0xFFFF) << 8);
