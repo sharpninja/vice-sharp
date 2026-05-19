@@ -390,6 +390,14 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         SetInterruptFlag(0x02);
     }
 
+    // Timer B input-source select (CRB bits 5-6, INMODE):
+    //   00 -> phi2 host cycles (default; counts every Tick).
+    //   01 -> CNT pin transitions (NOT IMPLEMENTED; CNT not yet plumbed).
+    //   10 -> Timer A underflow events (chained mode for 32-bit timers).
+    //   11 -> Timer A underflow gated by CNT high (NOT IMPLEMENTED;
+    //         currently behaves like mode 10 because CNT is not plumbed).
+    // FR-CIA-TIMER (BACKFILL-CIA): mode 10 is the demo-relevant chain;
+    // modes 01 + 11 stay deferred until CNT pin plumbing lands.
     private bool TimerBCountsPhi2() => (_timerB.Control & 0x60) == 0x00;
 
     private bool TimerBCountsTimerAUnderflow() => (_timerB.Control & 0x40) != 0;
