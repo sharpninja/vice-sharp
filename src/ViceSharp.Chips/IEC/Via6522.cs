@@ -33,7 +33,9 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     private const byte PcrCb1ActiveEdgeMask = 0x10; // PCR bit 4: 1 = rising, 0 = falling
 
     private const byte AcrT1ContinuousMask = 0x40;
+    private const byte AcrT1Pb7Mask = 0x80; // ACR bit 7: route T1 onto PB7
     private const byte AcrShiftModeMask = 0x1C; // bits 4..2 select shift mode
+    private const byte Pb7Mask = 0x80;
 
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
@@ -62,6 +64,13 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     // disarms on IFR latch and re-arms on the next SR write / mode entry.
     private int _srShiftCount;
     private bool _srShifting;
+
+    // Timer 1 PB7 output state. When ACR bit 7 = 1 the T1 underflow event is
+    // routed onto PB7: ACR bit 6 = 1 (continuous) toggles _pb7TimerToggle on
+    // every underflow (free-run square wave); ACR bit 6 = 0 (one-shot) drives
+    // _pb7TimerToggle low on T1 start and high on the first underflow. The
+    // bit overrides ORB bit 7 in port-B reads while DDRB bit 7 = 1.
+    private bool _pb7TimerToggle;
 
     public Via6522(IBus bus, IInterruptLine irqLine)
     {
@@ -127,6 +136,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         _ier = 0;
         _srShiftCount = 0;
         _srShifting = false;
+        _pb7TimerToggle = false;
         if (_irqAsserted)
         {
             _irqLine.Release(this);
@@ -147,7 +157,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0x00: // ORB / IRB
                 {
                     var input = PortBInput?.Invoke() ?? 0xFF;
-                    return (byte)((_portBOutput & _ddrb) | (input & (byte)~_ddrb));
+                    return ComposePortBRead(input);
                 }
             case 0x01: // ORA / IRA - clears CA1/CA2 in IFR
                 _ifr &= unchecked((byte)~0x03);
@@ -223,6 +233,12 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                 _t1Latch = (ushort)((value << 8) | (_t1Latch & 0x00FF));
                 _t1Counter = _t1Latch;
                 _t1Running = true;
+                // PB7 timer mode init: ACR bit 7 = 1 + bit 6 = 0 (one-shot)
+                // drives PB7 low at T1 start; the bit returns high on the
+                // first underflow. Continuous mode leaves the toggle state
+                // alone (it free-runs from prior underflows).
+                if ((_acr & AcrT1Pb7Mask) != 0 && (_acr & AcrT1ContinuousMask) == 0)
+                    _pb7TimerToggle = false;
                 _ifr &= unchecked((byte)~IfrTimer1);
                 RefreshIrq();
                 break;
@@ -295,7 +311,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         var reg = (byte)((address - BaseAddress) & 0x0F);
         return reg switch
         {
-            0x00 => (byte)((_portBOutput & _ddrb) | ((PortBInput?.Invoke() ?? 0xFF) & (byte)~_ddrb)),
+            0x00 => ComposePortBRead(PortBInput?.Invoke() ?? 0xFF),
             0x01 => (byte)((_portAOutput & _ddra) | ((PortAInput?.Invoke() ?? 0xFF) & (byte)~_ddra)),
             0x02 => _ddrb,
             0x03 => _ddra,
@@ -324,6 +340,17 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             {
                 _ifr |= IfrTimer1;
                 RefreshIrq();
+                // T1 underflow with PB7 routing enabled: continuous mode
+                // (ACR bit 6 = 1) inverts PB7 on every underflow; one-shot
+                // mode (ACR bit 6 = 0) drives PB7 high on the first (and
+                // only) underflow.
+                if ((_acr & AcrT1Pb7Mask) != 0)
+                {
+                    if ((_acr & AcrT1ContinuousMask) != 0)
+                        _pb7TimerToggle = !_pb7TimerToggle;
+                    else
+                        _pb7TimerToggle = true;
+                }
                 if ((_acr & AcrT1ContinuousMask) != 0)
                     _t1Counter = _t1Latch;
                 else
@@ -390,6 +417,27 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// values 0..7).
     /// </summary>
     private int GetShiftMode() => (_acr & AcrShiftModeMask) >> 2;
+
+    /// <summary>
+    /// Composes the port-B read value from output latch, DDR, and external
+    /// input pins. When ACR bit 7 = 1 routes T1 onto PB7 and DDRB bit 7 = 1
+    /// selects PB7 as an output, the timer-driven _pb7TimerToggle replaces
+    /// the ORB bit 7 contribution; other bits follow the standard rule
+    /// (output bits from ORB, input bits from the external input function).
+    /// </summary>
+    private byte ComposePortBRead(byte input)
+    {
+        var outputBits = (byte)(_portBOutput & _ddrb);
+        var inputBits = (byte)(input & (byte)~_ddrb);
+        var combined = (byte)(outputBits | inputBits);
+        if ((_acr & AcrT1Pb7Mask) != 0 && (_ddrb & Pb7Mask) != 0)
+        {
+            combined = (byte)(combined & unchecked((byte)~Pb7Mask));
+            if (_pb7TimerToggle)
+                combined |= Pb7Mask;
+        }
+        return combined;
+    }
 
     /// <summary>
     /// Advances the shift register one phi2 cycle. Implemented modes:
