@@ -85,6 +85,19 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     private byte _interruptMask;
     private byte _interruptFlags;
     private bool _irqAsserted;
+
+    // Serial Data Register ($DC0C / $DD0C) + SP shift state.
+    // CRA bit 6 selects SP direction: 0 = input (CNT-driven, deferred
+    // because CNT is not plumbed), 1 = output. In output mode each
+    // Timer A underflow shifts one bit; after 8 underflows the byte is
+    // fully transmitted and ICR bit 3 (SDR / SP IRQ) latches.
+    // FR-CIA-SDR (BACKFILL-CIA): output-mode only; the shifted bits are
+    // dropped on the floor because the SP pin is not yet wired out to
+    // peripherals.
+    private byte _sdr;
+    private byte _sdrShiftRegister;
+    private int _sdrShiftCount;
+    private bool _sdrTransmitting;
     
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
@@ -193,6 +206,10 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         _interruptMask = 0;
         _interruptFlags = 0;
         _irqAsserted = false;
+        _sdr = 0;
+        _sdrShiftRegister = 0;
+        _sdrShiftCount = 0;
+        _sdrTransmitting = false;
         _irqLine.Release(this);
     }
 
@@ -215,6 +232,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             0x09 => _todLatched ? _todLatchedSeconds : _todSeconds,
             0x0A => _todLatched ? _todLatchedMinutes : _todMinutes,
             0x0B => ReadTodHours(),
+            0x0C => _sdr,
             0x0D => ReadInterruptControlRegister(),
             _ => _registers[register]
         };
@@ -285,6 +303,13 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0x0A: WriteTodOrAlarm(ref _todMinutes, ref _todAlarmMinutes, value); break;
             case 0x09: WriteTodOrAlarm(ref _todSeconds, ref _todAlarmSeconds, value); break;
             case 0x08: WriteTodOrAlarm(ref _todTenths, ref _todAlarmTenths, value); break;
+
+            // SDR ($DC0C): writes update the SDR latch. On a real 6526
+            // writing during an active shift queues the next byte; the
+            // current shift continues to completion. We model that by
+            // always updating _sdr; a fresh shift starts when the next
+            // Timer A underflow finds _sdrShiftCount == 0.
+            case 0x0C: _sdr = value; break;
                 
             // Ports
             case 0x00:
@@ -374,6 +399,40 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         }
 
         SetInterruptFlag(0x01);
+
+        // FR-CIA-SDR: in SP output mode (CRA bit 6 = 1) each Timer A
+        // underflow shifts one bit out. After 8 bits ICR bit 3 latches.
+        // CRA bit 6 = 0 selects input direction; the shift is then
+        // driven by the CNT pin (not plumbed in this slice).
+        if ((_timerA.Control & 0x40) != 0)
+            ShiftSerialDataOutputBit();
+    }
+
+    private void ShiftSerialDataOutputBit()
+    {
+        if (!_sdrTransmitting)
+        {
+            // Latch the SDR contents into the working shift register at
+            // the start of a new byte. Writes to $DC0C during the shift
+            // update _sdr but do not disturb the in-flight byte.
+            _sdrShiftRegister = _sdr;
+            _sdrTransmitting = true;
+            _sdrShiftCount = 0;
+        }
+
+        // Shift one bit out of the working register. Real 6526 outputs
+        // MSB first on the SP pin; we drop the bit on the floor because
+        // SP is not wired to peripherals in this slice.
+        _sdrShiftRegister = (byte)(_sdrShiftRegister << 1);
+        _sdrShiftCount++;
+
+        if (_sdrShiftCount >= 8)
+        {
+            _sdrShiftCount = 0;
+            _sdrTransmitting = false;
+            // ICR bit 3 = SP / SDR interrupt source.
+            SetInterruptFlag(0x08);
+        }
     }
 
     private void UnderflowTimerB()
