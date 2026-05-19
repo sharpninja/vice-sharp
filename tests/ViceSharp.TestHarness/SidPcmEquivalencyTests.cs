@@ -77,8 +77,13 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     public ValueTask DisposeAsync() => _fixture?.DisposeAsync() ?? ValueTask.CompletedTask;
 
     /// <summary>
-    /// FR/TR: BACKFILL-SID-001
-    /// Stimulus: voice 1 triangle, gate on, sustain max.
+    /// FR/TR: BACKFILL-SID-001 (FR-SID-001 / FR-SID-002).
+    /// Use case: voice 1 triangle, gate on, sustain max - the simplest stimulus
+    /// exercising the oscillator + envelope + DAC path on both managed Sid6581
+    /// and native VICE.
+    /// Acceptance: peak amplitude on both sides exceeds the non-silent threshold
+    /// (peak > 0.003 of full scale) under the reference-tolerant gate documented
+    /// in the class XMLDOCS.
     /// </summary>
     [Fact]
     public void Voice1_Triangle_GateOn_AgreesWithNative()
@@ -98,8 +103,11 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// FR/TR: BACKFILL-SID-001
-    /// Stimulus: voice 1 triangle + sawtooth combined (FR-SID-003).
+    /// FR/TR: BACKFILL-SID-001 (FR-SID-003 combined waveforms).
+    /// Use case: voice 1 triangle + sawtooth combined - exercises the
+    /// bitwise-AND combined-waveform path on both implementations.
+    /// Acceptance: peak amplitude non-silent on both sides per the reference-
+    /// tolerant gate.
     /// </summary>
     [Fact]
     public void Voice1_TriangleSaw_AgreesWithNative()
@@ -119,9 +127,11 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// FR/TR: BACKFILL-SID-001
-    /// Stimulus: voice 1 ADSR sweep starting at attack 8 / decay 5 / sustain 8
-    /// (FR-SID-006 exercise).
+    /// FR/TR: BACKFILL-SID-001 (FR-SID-006 ADSR bug + envelope).
+    /// Use case: voice 1 ADSR sweep starting at attack 8 / decay 5 / sustain 8 -
+    /// exercises the envelope-rate prescaler path on both implementations.
+    /// Acceptance: peak amplitude non-silent on both sides per the reference-
+    /// tolerant gate.
     /// </summary>
     [Fact]
     public void Voice1_AdsrSweep_AgreesWithNative()
@@ -141,10 +151,13 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// FR/TR: BACKFILL-SID-001
-    /// Stimulus: voice 1 hard sync from voice 3 (FR-SID-008).
-    /// Voice 3 runs at a higher frequency than voice 1; voice 1 has sync bit
-    /// set so its accumulator is forced to zero whenever voice 3's MSB rises.
+    /// FR/TR: BACKFILL-SID-001 (FR-SID-008 hard sync).
+    /// Use case: voice 1 hard sync from voice 3 - voice 3 runs at higher
+    /// frequency than voice 1; voice 1 has sync bit set so its accumulator is
+    /// forced to zero whenever voice 3's MSB rises, producing the characteristic
+    /// synced-harmonic output on both implementations.
+    /// Acceptance: peak amplitude non-silent on both sides per the reference-
+    /// tolerant gate.
     /// </summary>
     [Fact]
     public void Voice1_HardSync_AgreesWithNative()
@@ -167,8 +180,12 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
     }
 
     /// <summary>
-    /// FR/TR: BACKFILL-SID-001
-    /// Stimulus: $D418 rapid volume writes (FR-SID-010 digi playback).
+    /// FR/TR: BACKFILL-SID-001 (FR-SID-010 digi playback).
+    /// Use case: $D418 rapid volume writes (the "digi" technique) modulate the
+    /// output level on both managed Sid6581 and native VICE; voice 1 sawtooth
+    /// is gated underneath so the level-sweep modulates audible content.
+    /// Acceptance: peak amplitude non-silent on both sides per the reference-
+    /// tolerant gate.
     /// </summary>
     [Fact]
     public void Volume_DigiPlayback_AgreesWithNative()
