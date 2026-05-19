@@ -6,6 +6,7 @@ using ViceSharp.Chips.Cpu;
 using ViceSharp.Chips.Pla;
 using ViceSharp.Chips.IEC;
 using ViceSharp.Chips.Tape;
+using ViceSharp.Core.Wiring;
 using ViceSharp.RomFetch;
 
 namespace ViceSharp.Core;
@@ -95,6 +96,9 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var drive8 = iecBusConnected ? new IecDrive(8) : null;
         var drive9 = iecBusConnected ? new IecDrive(9) : null;
         var datasette = profile?.SystemCore.TapePortConnected == false ? null : new Datasette();
+        var datasetteCia1FlagBinding = datasette is null
+            ? null
+            : new DatasetteCia1FlagBinding(datasette, cia1);
         bus.RegisterDevice(memory);
 
         var romLoader = new C64RomLoader(bus);
@@ -131,6 +135,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             clock.Register(drive8);
         if (drive9 is not null)
             clock.Register(drive9);
+        if (datasetteCia1FlagBinding is not null)
+            clock.Register(datasetteCia1FlagBinding);
 
         if (systemCore is not null)
             deviceRegistry.Add(systemCore, DeviceRole.SystemCore);
@@ -149,6 +155,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             deviceRegistry.Add(drive9);
         if (datasette is not null)
             deviceRegistry.Add(datasette);
+        if (datasetteCia1FlagBinding is not null)
+            deviceRegistry.Add(datasetteCia1FlagBinding);
 
         var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
         machine.Reset();

@@ -1,3 +1,4 @@
+using ViceSharp.Abstractions;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Tape;
 
@@ -22,10 +23,12 @@ namespace ViceSharp.Core.Wiring;
 /// FLAG is never triggered.
 ///
 /// The binding is constructed in the C64 system builder once CIA1 and
-/// the Datasette exist; tests can construct it directly to exercise the
-/// wire shape without spinning up the full machine.
+/// the Datasette exist; the binding itself is an <see cref="IClockedDevice"/>
+/// so the system clock ticks it alongside every other Phi2 device.
+/// Tests can construct it directly to exercise the wire shape without
+/// spinning up the full machine.
 /// </summary>
-public sealed class DatasetteCia1FlagBinding
+public sealed class DatasetteCia1FlagBinding : IClockedDevice
 {
     private readonly Datasette _datasette;
     private readonly Mos6526 _cia1;
@@ -43,6 +46,29 @@ public sealed class DatasetteCia1FlagBinding
     {
         _datasette = datasette ?? throw new ArgumentNullException(nameof(datasette));
         _cia1 = cia1 ?? throw new ArgumentNullException(nameof(cia1));
+    }
+
+    /// <inheritdoc />
+    public DeviceId Id => new(0x0021);
+
+    /// <inheritdoc />
+    public string Name => "Datasette to CIA1 FLAG binding";
+
+    /// <inheritdoc />
+    public uint ClockDivisor => 1;
+
+    /// <inheritdoc />
+    public ClockPhase Phase => ClockPhase.Phi2;
+
+    /// <summary>
+    /// Reset the binding's per-pulse countdown. Does not reset the
+    /// underlying datasette or CIA1; the builder resets those via the
+    /// device registry.
+    /// </summary>
+    public void Reset()
+    {
+        _cyclesUntilNextPulse = 0;
+        _havePendingPulse = false;
     }
 
     /// <summary>
