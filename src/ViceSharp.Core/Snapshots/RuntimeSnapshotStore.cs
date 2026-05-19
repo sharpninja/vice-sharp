@@ -1,4 +1,5 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Cpu;
 
 namespace ViceSharp.Core.Snapshots;
 
@@ -31,6 +32,20 @@ public sealed class RuntimeSnapshotStore : ISnapshotStore
         {
             cpu.PC = runtimeSnapshot.State.PC;
             cpu.Flags = runtimeSnapshot.State.P;
+
+            // RUNTIME-SNAPSHOT-002: ICpu only exposes PC + Flags, so the
+            // accumulator and index registers (A/X/Y/S) need a concrete
+            // type-aware path to round-trip. Today the only ICpu
+            // implementation that participates in a runtime snapshot is
+            // the Mos6502 (and its 6510 derivatives via public fields);
+            // extend this branch when additional CPU types ship.
+            if (cpu is Mos6502 mos6502)
+            {
+                mos6502.A = runtimeSnapshot.State.A;
+                mos6502.X = runtimeSnapshot.State.X;
+                mos6502.Y = runtimeSnapshot.State.Y;
+                mos6502.S = runtimeSnapshot.State.S;
+            }
         }
     }
 
