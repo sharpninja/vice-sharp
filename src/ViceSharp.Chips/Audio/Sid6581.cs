@@ -689,9 +689,32 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         return Read(address);
     }
 
+    /// <summary>
+    /// FR-SID-012 (BACKFILL-SID-001 dual-SID slice, acceptance criteria 1,
+    /// 6). The base address of this SID chip's 32-byte register window.
+    /// The C64's hardware SID at <c>$D400</c> mirrors across the entire
+    /// $D400-$D7FF I/O sub-block, but in a dual-SID or 3SID host that
+    /// mirroring belongs to the memory-map dispatcher, not to the chip
+    /// itself: each chip claims only its native 32-byte window so a
+    /// second instance can coexist at <c>$D420</c> (or any other 32-byte
+    /// boundary) without ambiguity. Default remains <c>$D400</c>, which
+    /// preserves the single-SID baseline; the host's memory map fills
+    /// the surrounding mirrors when no second SID is configured.
+    /// </summary>
+    public ushort BaseAddress { get; init; } = 0xD400;
+
+    /// <summary>
+    /// FR-SID-012 (BACKFILL-SID-001 dual-SID slice, acceptance criterion 6).
+    /// The chip claims only its native 32-byte register window
+    /// (<c>BaseAddress</c> .. <c>BaseAddress + 0x1F</c>). The C64
+    /// memory-map dispatcher is responsible for filling the surrounding
+    /// $D400-$D7FF mirror window in single-SID mode; narrowing the chip's
+    /// own range here is the prerequisite that lets a second SID claim
+    /// <c>$D420</c> without colliding with the primary at <c>$D400</c>.
+    /// </summary>
     public bool HandlesAddress(ushort address)
     {
-        return address >= 0xD400 && address <= 0xD7FF;
+        return address >= BaseAddress && address < (BaseAddress + 0x20);
     }
 
     /// <summary>
