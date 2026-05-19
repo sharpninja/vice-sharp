@@ -276,6 +276,50 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     
     // VICE-style: Video mode configuration
     public enum VideoMode { StandardText, MulticolorText, Bitmap, ExtendedBackground }
+
+    /// <summary>
+    /// FR-VIC (BACKFILL-VIDEO-001 display mode selection).
+    /// Abstract VIC-II display mode encoded by the three selector bits
+    /// $D011 bit 5 (BMM), $D011 bit 6 (ECM), and $D016 bit 4 (MCM).
+    /// Five valid combinations plus a single Invalid bucket for the
+    /// ECM-with-BMM-or-MCM cases that the real chip renders as a
+    /// black screen / garbage. Distinct from VideoMode (which collapses
+    /// hi-res and multicolor bitmap into a single Bitmap entry and has
+    /// no Invalid state): VicIIDisplayMode is the canonical mode for
+    /// downstream pixel-pipeline routing in future slices.
+    /// </summary>
+    public enum VicIIDisplayMode
+    {
+        StandardText,
+        MulticolorText,
+        StandardBitmap,
+        MulticolorBitmap,
+        ExtendedColor,
+        Invalid
+    }
+
+    /// <summary>
+    /// FR-VIC (BACKFILL-VIDEO-001 display mode selection).
+    /// Decode the three selector bits ($D011 bit 5 = BMM, $D011 bit 6
+    /// = ECM, $D016 bit 4 = MCM) into one of the five valid display
+    /// modes or Invalid. Pure register decoding; pixel-rendering effect
+    /// of each mode is a future slice.
+    /// </summary>
+    public VicIIDisplayMode DisplayModeSelection
+    {
+        get
+        {
+            bool ecm = (_registers[0x11] & 0x40) != 0;
+            bool bmm = (_registers[0x11] & 0x20) != 0;
+            bool mcm = (_registers[0x16] & 0x10) != 0;
+            if (ecm && (bmm || mcm)) return VicIIDisplayMode.Invalid;
+            if (ecm) return VicIIDisplayMode.ExtendedColor;
+            if (bmm && mcm) return VicIIDisplayMode.MulticolorBitmap;
+            if (bmm) return VicIIDisplayMode.StandardBitmap;
+            if (mcm) return VicIIDisplayMode.MulticolorText;
+            return VicIIDisplayMode.StandardText;
+        }
+    }
     
     /// <summary>
     /// Column mode (40 columns vs 38 columns)
