@@ -25,7 +25,50 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // ADSR envelope states
     public enum EnvelopeState { Idle, Attack, Decay, Sustain, Release }
 
-    private uint _noiseLfsr = 0x7FFFFFFF;
+    // FR-SID-009 noise LFSR. The hardware LFSR is 23 bits wide (mask
+    // 0x7FFFFF) with feedback taps at bits 17 and 22 (XOR), clocked when
+    // bit 19 of each voice's 24-bit phase accumulator transitions low->high.
+    // Output is derived from bits 0, 2, 5, 9, 11, 14, 18, 20 (one tap per
+    // 8-bit output bit). The reset state is all-ones (0x7FFFFF) and the
+    // test bit in CTRL (bit 3) reseeds the LFSR to that state.
+    private const uint NoiseLfsrMask = 0x007F_FFFF;
+    private const uint NoiseLfsrInitial = NoiseLfsrMask;
+    // Bit 19 of the 24-bit accumulator (the implementation stores the
+    // 24-bit value in a uint; the upper byte is the phase output).
+    private const uint NoiseClockBit = 1u << 19;
+    private uint _noiseLfsr = NoiseLfsrInitial;
+
+    /// <summary>
+    /// FR-SID-009 ac.1: advance the 23-bit noise LFSR one step. The
+    /// feedback polynomial taps bits 22 and 17 (XOR), the result is
+    /// shifted into bit 0, and the LFSR is masked to 23 bits. If the
+    /// LFSR ever lands on zero it is reseeded to the all-ones state
+    /// (the LFSR cannot escape zero with the standard polynomial).
+    /// </summary>
+    private void ClockNoiseLfsr()
+    {
+        var feedback = ((_noiseLfsr >> 22) ^ (_noiseLfsr >> 17)) & 0x01;
+        _noiseLfsr = ((_noiseLfsr << 1) | feedback) & NoiseLfsrMask;
+        if (_noiseLfsr == 0)
+            _noiseLfsr = NoiseLfsrInitial;
+    }
+
+    /// <summary>
+    /// FR-SID-009 ac.3: pack the 8-bit noise output from the 23-bit LFSR
+    /// using the canonical hardware tap map (bits 0, 2, 5, 9, 11, 14, 18,
+    /// 20 contribute one bit each to the 8-bit output). Matches the
+    /// SidOscillator and resid noise output exactly.
+    /// </summary>
+    private static byte NoiseOutput(uint lfsr) =>
+        (byte)(
+            (((lfsr >> 20) & 0x01) << 7) |
+            (((lfsr >> 18) & 0x01) << 6) |
+            (((lfsr >> 14) & 0x01) << 5) |
+            (((lfsr >> 11) & 0x01) << 4) |
+            (((lfsr >> 9) & 0x01) << 3) |
+            (((lfsr >> 5) & 0x01) << 2) |
+            (((lfsr >> 2) & 0x01) << 1) |
+            ((lfsr >> 0) & 0x01));
 
     public float GenerateSample()
     {
@@ -88,7 +131,11 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             }
             if (hasNoise)
             {
-                noiseValue = (_noiseLfsr & 1) != 0 ? 0xFF : 0x00;
+                // FR-SID-009 ac.3: noise output is derived from specific
+                // taps of the 23-bit LFSR (bits 0, 2, 5, 9, 11, 14, 18, 20),
+                // packed into an 8-bit value. Matches the hardware tap map
+                // documented in resid/sid8580.c.
+                noiseValue = NoiseOutput(_noiseLfsr);
             }
 
             int selectedCount = (hasTriangle ? 1 : 0) + (hasSawtooth ? 1 : 0)
@@ -377,14 +424,50 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         var prevMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
         var prevMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
 
+        // FR-SID-009 ac.2: the noise LFSR clocks on bit-19 low->high
+        // transitions of the phase accumulator. Capture each voice's
+        // bit-19 state before the accumulator advances so we can detect
+        // the edge precisely. Real hardware has a per-voice LFSR; this
+        // implementation shares one LFSR across voices (good enough for
+        // mono SFX), and clocks once per edge observed on any noise-
+        // selected voice this cycle.
+        var prevBit19_0 = (_voices[0].WaveformAccumulator & NoiseClockBit) != 0;
+        var prevBit19_1 = (_voices[1].WaveformAccumulator & NoiseClockBit) != 0;
+        var prevBit19_2 = (_voices[2].WaveformAccumulator & NoiseClockBit) != 0;
+
         for (int i = 0; i < 3; i++)
         {
             ref Voice voice = ref _voices[i];
+
+            // FR-SID-009 ac.4: the CTRL test bit (bit 3) forces the LFSR
+            // back to the all-ones seed and pins the phase accumulator
+            // at zero (matches the SidOscillator and resid behaviour).
+            if ((voice.Control & 0x08) != 0)
+            {
+                _noiseLfsr = NoiseLfsrInitial;
+                voice.WaveformAccumulator = 0;
+                ProcessEnvelope(ref voice);
+                continue;
+            }
 
             voice.WaveformAccumulator += voice.Frequency;
 
             ProcessEnvelope(ref voice);
         }
+
+        // FR-SID-009 ac.2: clock the LFSR once for each noise-selected
+        // voice that just transitioned bit 19 low->high. Most noise
+        // patches use a single voice so this is typically a single clock
+        // per cycle.
+        bool hasNoise0 = (_voices[0].Control & 0x80) != 0;
+        bool hasNoise1 = (_voices[1].Control & 0x80) != 0;
+        bool hasNoise2 = (_voices[2].Control & 0x80) != 0;
+        var newBit19_0 = (_voices[0].WaveformAccumulator & NoiseClockBit) != 0;
+        var newBit19_1 = (_voices[1].WaveformAccumulator & NoiseClockBit) != 0;
+        var newBit19_2 = (_voices[2].WaveformAccumulator & NoiseClockBit) != 0;
+        if (hasNoise0 && !prevBit19_0 && newBit19_0) ClockNoiseLfsr();
+        if (hasNoise1 && !prevBit19_1 && newBit19_1) ClockNoiseLfsr();
+        if (hasNoise2 && !prevBit19_2 && newBit19_2) ClockNoiseLfsr();
 
         // Detect MSB 1->0 transitions on each voice and apply hard sync to
         // the dependent voice when its SYNC control bit is set.
