@@ -1349,6 +1349,27 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         _spriteSpriteCollisionLatch |= spriteSpriteAcc;
         _spriteBackgroundCollisionLatch |= spriteBackgroundAcc;
+
+        // BACKFILL-VIDEO-001 / FR-VIC: sprite collision IRQ wiring.
+        // $D019 bit 1 latches a sprite-background collision; bit 2 latches
+        // a sprite-sprite collision. Both bits set unconditionally when the
+        // corresponding latch ($D01F / $D01E) sees a new event; the $D01A
+        // enable mask only gates the IRQ output, not the latch. Same
+        // write-1-to-clear semantics as bit 0 (raster) and bit 3 (LP).
+        byte irqLatchBits = 0;
+        if (spriteBackgroundAcc != 0)
+        {
+            irqLatchBits |= 0x02;
+        }
+        if (spriteSpriteAcc != 0)
+        {
+            irqLatchBits |= 0x04;
+        }
+        if (irqLatchBits != 0)
+        {
+            _registers[0x19] |= irqLatchBits;
+            RefreshInterruptLine();
+        }
     }
 
     // BACKFILL-VIDEO-001: Determine whether the background pixel at the given
