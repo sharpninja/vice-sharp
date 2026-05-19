@@ -81,6 +81,17 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private int _spriteDmaCyclesThisFrame;
     private int _lastSpriteDmaLineCounted = -1;
 
+    // BACKFILL-VIDEO-001 / FR-VIC: Light pen latch state.
+    // On a high-to-low transition of the LP pin the VIC-II latches
+    // RasterX >> 1 into $D013 and the low 8 bits of the current raster
+    // line into $D014, sets $D019 bit 3 (LP IRQ latch), and asserts the
+    // IRQ output if $D01A bit 3 is enabled. The latch fires at most once
+    // per frame; the "already triggered this frame" flag clears at the
+    // frame boundary (raster wrap to line 0).
+    private byte _lightPenLatchedX;
+    private byte _lightPenLatchedY;
+    private bool _lightPenTriggeredThisFrame;
+
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC: count of bad lines that have fired
     /// during the current frame. Reset to zero when the raster wraps back
@@ -606,6 +617,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 // resets on the frame wrap so each frame is independent.
                 _spriteDmaCyclesThisFrame = 0;
                 _lastSpriteDmaLineCounted = -1;
+                // BACKFILL-VIDEO-001 / FR-VIC: clear the LP "already latched
+                // this frame" flag so the next LP trigger can re-arm. The
+                // last latched X/Y values are kept (consistent with reading
+                // $D013/$D014 between frames).
+                _lightPenTriggeredThisFrame = false;
             }
 
             UpdateBadLineLatchForStartOfLine();
@@ -665,6 +681,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // BACKFILL-VIDEO-001: clear per-frame sprite-DMA counter on reset.
         _spriteDmaCyclesThisFrame = 0;
         _lastSpriteDmaLineCounted = -1;
+        // BACKFILL-VIDEO-001 / FR-VIC: clear light-pen latch state on reset.
+        _lightPenLatchedX = 0;
+        _lightPenLatchedY = 0;
+        _lightPenTriggeredThisFrame = false;
     }
 
     // BACKFILL-VIDEO-001 / FR-VIC: sprite DMA cycle accounting.
@@ -852,6 +872,18 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return _spriteBackgroundCollisionLatch;
         }
 
+        // BACKFILL-VIDEO-001 / FR-VIC: Peek $D013 / $D014 returns the LP
+        // latched values rather than the raw _registers backing store.
+        if (register == 0x13)
+        {
+            return _lightPenLatchedX;
+        }
+
+        if (register == 0x14)
+        {
+            return _lightPenLatchedY;
+        }
+
         return _registers[register];
     }
 
@@ -868,6 +900,20 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (register == 0x11)
         {
             return (byte)((_registers[0x11] & 0x7F) | ((CurrentRasterLine & 0x100) >> 1));
+        }
+
+        // BACKFILL-VIDEO-001 / FR-VIC: $D013 returns the latched RasterX >> 1
+        // (or 0 if no LP trigger has fired yet this frame).
+        if (register == 0x13)
+        {
+            return _lightPenLatchedX;
+        }
+
+        // BACKFILL-VIDEO-001 / FR-VIC: $D014 returns the latched raster line
+        // low byte (or 0 if no LP trigger has fired yet this frame).
+        if (register == 0x14)
+        {
+            return _lightPenLatchedY;
         }
 
         // BACKFILL-VIDEO-001: $D01E sprite-sprite collision register.
@@ -1041,6 +1087,30 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             _registers[0x19] &= 0x7F;
             _irqLine.Release(this);
         }
+    }
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / FR-VIC: Simulate a high-to-low transition on the
+    /// VIC-II LP (light pen) pin. On the first trigger of the current frame
+    /// the chip latches the current RasterX shifted right by one into $D013
+    /// and the low 8 bits of the current raster line into $D014, sets the
+    /// LP IRQ latch ($D019 bit 3), and asserts the IRQ output if the LP
+    /// enable bit in $D01A is set. Second and later triggers within the
+    /// same frame are ignored. The latch re-arms when the raster wraps
+    /// back to line 0 (frame boundary).
+    /// </summary>
+    public void TriggerLightPen()
+    {
+        if (_lightPenTriggeredThisFrame)
+        {
+            return;
+        }
+
+        _lightPenTriggeredThisFrame = true;
+        _lightPenLatchedX = (byte)(RasterX >> 1);
+        _lightPenLatchedY = (byte)(CurrentRasterLine & 0xFF);
+        _registers[0x19] |= 0x08;
+        RefreshInterruptLine();
     }
     
     /// <summary>
