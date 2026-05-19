@@ -79,9 +79,10 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Datasette / TAP (pulse reads + CIA1 FLAG integration + builder wiring + rewind/seek) | 🟢 | 80% | `RUNTIME-TAPE-001` + Datasette/CIA1 FLAG + builder integration + seek |
 | Standard cartridge mapping (8K/16K raw, not yet wired to memory map) | 🟡 | 25% | `RUNTIME-CART-001` done · `RUNTIME-CART-002` open |
 | Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + chip-state round-trip) | 🟢 | 60% | `RUNTIME-SNAPSHOT-001` + `-002` (CIA + SID round-trip; VIC/TOD pipeline deferred) |
-| Frame capture (BGRA → BMP artifact) | 🟡 | 25% | `RUNTIME-CAPTURE-001` done · `RUNTIME-CAPTURE-002` open |
+| Frame capture (BGRA → BMP single + multi-frame sequence + WAV audio recording) | 🟢 | 70% | `RUNTIME-CAPTURE-001` + `-002` + FR-MED-003 WAV |
 | Keyboard matrix + control-port parity (12 variants, held keyboard + CIA1 scan tests) | 🟢 | 75% | `BACKFILL-INPUT-001` |
-| Host UI + Monitor control surface (gRPC RPC tests for 7 services: Monitor + Snapshot + Capture + Settings + Video + Input + Media; ~102 tests) | 🟢 | 90% | `BACKFILL-HOSTUI-001` (only Avalonia view model + integration deepening remain) |
+| Host UI + Monitor control surface (10 services + 8 adapters + view model + registry + mapper + frame source + InProcessGrpcHost + 2 clients; ~230 tests) | ✅ | 100% | `BACKFILL-HOSTUI-001` (Avalonia render-loop is integration follow-up) |
+| Core primitives (SystemClock + DoubleBufferedMutationQueue + LockFreePubSub + BasicBus + SimpleRam) | ✅ | 100% | TR-PUBSUB-PERFORMANCE + TR-Cycle-Accuracy + TR-System-Core |
 | x64sc variant lockstep gate (293/293 variants, raster checkpoints) | 🟢 | 50% | `BACKFILL-LOCKSTEP-001` |
 | Upstream VICE testbench integration | ⚪ | 0% | `ARCH-TESTBENCH-001` |
 
@@ -106,7 +107,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~1200+/1200+** chip-level (68 slices landed this session; ~600 ROM-dependent integration tests skip when ROMs absent).
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 late session: **~1400+/1400+** chip-level (84 slices landed this session including BACKFILL-HOSTUI-001 closure + core primitive coverage; ~600 ROM-dependent integration tests skip when ROMs absent). MCP Session log: `ClaudeCode-20260519T211700Z-vicesharp-iter1-marathon`.
 
 ## Supported Machines (planned)
 
