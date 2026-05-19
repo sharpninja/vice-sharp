@@ -67,9 +67,9 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 |---------|:----:|:----:|--------|
 | MOS 6510 CPU (official + illegal opcodes) | ✅ | 100% | `LockstepValidationTests.First100000CyclesMatch` |
 | Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
-| MOS 6569 VIC-II raster core + IRQ + sprites (first-scanline parity) | 🟢 | 70% | `BACKFILL-VIDEO-001` |
-| MOS 6526 CIA1/CIA2 (timers + TOD + ports) | ✅ | 100% | full solution test |
-| MOS 6581 SID (3-voice + ADSR + filter + noise LFSR + OSC3/ENV3 + hard sync + ring mod + combined waveforms + ADSR bug + audio backend) | 🟢 | 80% | `BACKFILL-SID-001` (slices 1-5 done; PCM equivalency in flight) |
+| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + light pen + sprite collision IRQ + color register read mask) | 🟢 | 85% | `BACKFILL-VIDEO-001` (pixel sequencer + sprite priority remain) |
+| MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + ICR) | ✅ | 100% | `BACKFILL-CIA` extended |
+| MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + noise LFSR) | 🟢 | 95% | `BACKFILL-SID-001` (dual-SID + filter 8580 deepening remain) |
 | PLA + Memory map ($0000-$FFFF) | ✅ | 100% | boot proof |
 | Reset sequencing (7-cycle + port init) | ✅ | 100% | reset tests |
 | ROM loader (KERNAL/BASIC/CHARGEN + SHA1) | ✅ | 100% | `BasicBootProofTests` |
@@ -104,7 +104,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-18 EOD: **910/910**.
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~970/970** chip-level (21 slices landed this session; 594 ROM-dependent integration tests skip when ROMs absent).
 
 ## Supported Machines (planned)
 
