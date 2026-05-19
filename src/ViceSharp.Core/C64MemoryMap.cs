@@ -185,8 +185,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public byte Read(ushort address)
     {
-        if (address == 0x0001)
-            return _pla.ControlRegister;
+        if (address <= 0x0001)
+            return _pla.Read(address);
 
         if (TryReadCartridge(address, out var cartridgeValue))
             return cartridgeValue;
@@ -211,8 +211,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public byte Peek(ushort address)
     {
-        if (address == 0x0001)
-            return _pla.ControlRegister;
+        if (address <= 0x0001)
+            return _pla.Peek(address);
 
         if (TryReadCartridge(address, out var cartridgeValue))
             return cartridgeValue;
@@ -258,7 +258,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             }
         }
 
-        if (address == 0x0001)
+        if (address <= 0x0001)
         {
             _ram[address] = value;
             _pla.Write(address, value);

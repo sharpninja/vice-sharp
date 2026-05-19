@@ -17,11 +17,38 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     public ushort Size => 1;
     public bool IsReadOnly => false;
 
-    public byte ControlRegister { get; private set; }
+    /// <summary>
+    /// 6510 processor port DDR ($00). Bits 0-5 select pin direction
+    /// (1 = output, 0 = input); bits 6-7 are unused on the 6510 and
+    /// always read zero.
+    /// </summary>
+    public byte DataDirection { get; private set; }
 
-    public bool Loram => (ControlRegister & 0x01) != 0;
-    public bool Hiram => (ControlRegister & 0x02) != 0;
-    public bool Charen => (ControlRegister & 0x04) != 0;
+    /// <summary>
+    /// 6510 processor port data latch ($01). Reads through
+    /// <see cref="ReadProcessorPort"/> mix this latch with the DDR mask;
+    /// the banking selector exposes the latch directly via
+    /// <see cref="Loram"/>, <see cref="Hiram"/> and <see cref="Charen"/>.
+    /// </summary>
+    public byte DataRegister { get; private set; }
+
+    /// <summary>
+    /// Backwards-compatible alias for <see cref="DataRegister"/>. Existing
+    /// debugger / lockstep paths read the raw latch via this name.
+    /// </summary>
+    public byte ControlRegister => DataRegister;
+
+    /// <summary>
+    /// External pull-up state applied to input bits when the processor
+    /// port is read. The simple model used here returns 0 for every
+    /// unconnected input bit; this can be raised in a future slice to
+    /// emulate tape sense / NMOS capacitor decay.
+    /// </summary>
+    public byte InputPullUp { get; set; } = 0x00;
+
+    public bool Loram => (DataRegister & 0x01) != 0;
+    public bool Hiram => (DataRegister & 0x02) != 0;
+    public bool Charen => (DataRegister & 0x04) != 0;
 
     private readonly IBus _bus;
 
@@ -45,7 +72,10 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     /// <inheritdoc />
     public void Reset()
     {
-        ControlRegister = 0x37; // Default state on power up
+        // C64 power-up: DDR=$2F (bits 0-5 output, bit 4 tape sense input),
+        // data latch=$37 (LORAM+HIRAM+CHAREN+motor on, tape data low).
+        DataDirection = 0x2F;
+        DataRegister = 0x37;
     }
 
     /// <inheritdoc />
@@ -54,15 +84,56 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     /// <inheritdoc />
     public byte Read(ushort offset)
     {
-        return ControlRegister;
+        return (offset & 0x0001) == 0
+            ? DataDirection
+            : ReadProcessorPort();
+    }
+
+    /// <summary>
+    /// Compute the value the CPU sees when it reads $01. Output bits
+    /// (DDR=1) return the latched data; input bits (DDR=0) return the
+    /// external pull-up state, which models the tape sense / unconnected
+    /// bit-6/7 behaviour in the simple no-NMOS-cap model.
+    /// </summary>
+    public byte ReadProcessorPort()
+    {
+        var output = (byte)(DataRegister & DataDirection);
+        var input = (byte)(InputPullUp & (byte)~DataDirection);
+        return (byte)((output | input) & 0x3F);
+    }
+
+    /// <summary>
+    /// Update the 6510 data-direction register. Bits 6-7 are masked off
+    /// since they are not implemented on the chip.
+    /// </summary>
+    public void WriteDataDirection(byte value)
+    {
+        DataDirection = (byte)(value & 0x3F);
+    }
+
+    /// <summary>
+    /// Update the 6510 data latch. Bits 0-2 propagate to the PLA banking
+    /// state (LORAM/HIRAM/CHAREN); other bits are stored for future
+    /// tape / cassette routing slices.
+    /// </summary>
+    public void WriteDataPort(byte value)
+    {
+        DataRegister = (byte)(value & 0x3F);
     }
 
     /// <inheritdoc />
     public void Write(ushort offset, byte value)
     {
-        ControlRegister = value;
+        if ((offset & 0x0001) == 0)
+        {
+            WriteDataDirection(value);
+        }
+        else
+        {
+            WriteDataPort(value);
+        }
 
-        // Memory banking combinations:
+        // Memory banking combinations (data latch bits 0-2 -> ROM map):
         //
         // 000: RAM     RAM     RAM
         // 001: RAM     RAM     CHAR
@@ -77,7 +148,7 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     /// <inheritdoc />
     public bool HandlesAddress(ushort address)
     {
-        return address == 0x0001;
+        return address == 0x0000 || address == 0x0001;
     }
 
     /// <summary>
