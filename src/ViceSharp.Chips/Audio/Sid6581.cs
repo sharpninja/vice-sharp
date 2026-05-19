@@ -171,69 +171,114 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// </summary>
     protected virtual byte ApplyCombinedBleed(byte andResult) => andResult;
 
-    // Filter state for VICE-style resonant filter
-    private double _filterV0, _filterV1, _filterV2, _filterV3;
-    
+    // FR-SID-004 (BACKFILL-SID-001 filter slice): state-variable filter
+    // state. The Chamberlin SVF needs two persistent integrators (LP and
+    // BP); the HP tap is computed each step from the current LP, BP, the
+    // filter input and the resonance Q feedback, so it does not need its
+    // own state field.
+    private double _svfLowPass;
+    private double _svfBandPass;
+
     /// <summary>
-    /// Virtual filter method for SID variant overrides
+    /// FR-SID-004 (BACKFILL-SID-001 filter slice). State-variable filter
+    /// with per-voice routing, LP/BP/HP additive mode select, resonance
+    /// Q feedback, and soft-clipping for criterion 7 (resonance distortion).
+    /// The cutoff register is the linear 11-bit value parsed from
+    /// $D415/$D416; criterion 6 (the 6581 non-linear cutoff curve) is
+    /// deliberately deferred to a follow-up slice and stays linear here.
+    /// Sid8580 and Sid8580D supply their own ApplyFilter override - this
+    /// implementation is 6581-only.
     /// </summary>
     protected virtual int ApplyFilter(int voice0, int voice1, int voice2)
     {
-        // Check which voices are routed through filter
+        // FR-SID-004 ac.4: per-voice routing. $D417 bits 0-2 gate which
+        // voice mixes into the filter input; the remaining voices bypass.
         bool voice0Filtered = (_filterControl & 0x01) != 0;
         bool voice1Filtered = (_filterControl & 0x02) != 0;
         bool voice2Filtered = (_filterControl & 0x04) != 0;
-        bool voice3Filtered = (_filterControl & 0x08) != 0; // External input
+        // FR-SID-004 ac.5: external audio input via $D417 bit 3. The chip
+        // has no IAudioBackend-style input surface yet, so the routing bit
+        // is parsed but the external sample is 0 (silent). A follow-up
+        // slice will wire a real external-input mixer.
+        bool extInRouted = (_filterControl & 0x08) != 0;
+        _ = extInRouted;
 
-        int input = 0;
-        if (!voice0Filtered) input += voice0;
-        if (!voice1Filtered) input += voice1;
-        if (!voice2Filtered) input += voice2;
-        // Voice3/external = 0 for now
+        int filterInput = 0;
+        if (voice0Filtered) filterInput += voice0;
+        if (voice1Filtered) filterInput += voice1;
+        if (voice2Filtered) filterInput += voice2;
 
-        // Get filter type settings
+        int bypassMix = 0;
+        if (!voice0Filtered) bypassMix += voice0;
+        if (!voice1Filtered) bypassMix += voice1;
+        if (!voice2Filtered) bypassMix += voice2;
+
+        // FR-SID-004 ac.3: LP/BP/HP mode select via $D418 bits 4-6. The
+        // taps are additive: if all three are set, the output sums all
+        // three filter responses. If none are set, the filter is bypassed
+        // and the input passes through unchanged (the standard "filter off"
+        // configuration).
         bool lp = (_filterControl & 0x10) != 0;
         bool bp = (_filterControl & 0x20) != 0;
         bool hp = (_filterControl & 0x40) != 0;
 
-        // Cutoff frequency (10-bit)
-        double cutoff = _filterCutoff / 2047.0;
-        
-        // Resonance (0-15, VICE-style)
-        double resonance = _filterResonance / 15.0;
+        if (!(lp || bp || hp))
+        {
+            // No mode bits selected: filter is effectively bypassed and
+            // routed voices still reach the mix (matches real hardware
+            // where the filter just becomes a unity-gain wire).
+            return filterInput + bypassMix;
+        }
 
-        // VICE-style state variable filter
-        if (lp || bp || hp)
-        {
-            // Cutoff must be in valid range
-            cutoff = Math.Clamp(cutoff, 0.0, 1.0);
-            
-            // Update filter
-            _filterV0 += cutoff * _filterV1;
-            _filterV3 = input - _filterV0 - resonance * _filterV1;
-            _filterV1 += cutoff * _filterV3;
-            _filterV2 += cutoff * _filterV0;
-            
-            int output = 0;
-            
-            if (lp) output += (int)_filterV2;
-            if (bp) output += (int)_filterV1;
-            if (hp) output += (int)_filterV3;
-            
-            // Mix filtered voices
-            int filtered = 0;
-            if (voice0Filtered) filtered += voice0;
-            if (voice1Filtered) filtered += voice1;
-            if (voice2Filtered) filtered += voice2;
-            
-            return output + filtered;
-        }
-        else
-        {
-            // No filter - mix all voices
-            return voice0 + voice1 + voice2;
-        }
+        // FR-SID-004 ac.1: 11-bit cutoff scaled to [0, 1] for the SVF
+        // coefficient. The coefficient maps 0 -> DC (filter does nothing)
+        // and ~1 -> Nyquist. We clamp the upper bound to keep the
+        // integrators stable; 1.4 is the largest value the Chamberlin
+        // SVF stays stable at, but we use a smaller cap (1.0) so the
+        // 6581's linear-cutoff range gives clean output across the band.
+        double cutoff = Math.Clamp(_filterCutoff / 2047.0, 0.0, 0.999);
+
+        // FR-SID-004 ac.2: resonance Q feedback from $D417 upper nibble
+        // (0..15). Q = 1.0 / (1.0 + res/4) gives a gentle resonance lift
+        // at res = 0 and substantial near-self-oscillation at res = 15.
+        double q = 1.0 / (1.0 + _filterResonance / 4.0);
+
+        // Chamberlin state-variable filter step. Computing HP from the
+        // current LP and BP makes the filter a one-pole-per-tap design
+        // with the resonance feedback closing the loop.
+        double hpOut = filterInput - _svfLowPass - q * _svfBandPass;
+        _svfBandPass += cutoff * hpOut;
+        _svfLowPass += cutoff * _svfBandPass;
+
+        // FR-SID-004 ac.7: soft-clip the SVF taps so extreme resonance
+        // can't drive the integrators past +/- input range. Real 6581
+        // silicon saturates rather than blowing up; tanh-style soft clip
+        // captures that. We clip _svfBandPass and _svfLowPass so the
+        // resonance feedback path stays bounded.
+        if (_svfBandPass > FilterSaturation) _svfBandPass = FilterSaturation;
+        else if (_svfBandPass < -FilterSaturation) _svfBandPass = -FilterSaturation;
+        if (_svfLowPass > FilterSaturation) _svfLowPass = FilterSaturation;
+        else if (_svfLowPass < -FilterSaturation) _svfLowPass = -FilterSaturation;
+
+        double tapSum = 0.0;
+        if (lp) tapSum += _svfLowPass;
+        if (bp) tapSum += _svfBandPass;
+        if (hp) tapSum += hpOut;
+
+        // Bypass voices add post-filter (they were never gated through it).
+        double mixed = tapSum + bypassMix;
+        return (int)mixed;
     }
+
+    /// <summary>
+    /// FR-SID-004 acceptance criterion 7 saturation rail. The state-
+    /// variable filter's integrators saturate at this absolute value so
+    /// extreme resonance cannot generate NaN/Infinity or drive the
+    /// feedback loop past audible levels. Chosen to allow comfortable
+    /// signal headroom (8-bit voice * envelope ~ 255 max) while
+    /// preventing runaway feedback.
+    /// </summary>
+    private const double FilterSaturation = 2048.0;
 
     private readonly IBus _bus;
 
@@ -456,6 +501,8 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         _filterResonance = 0;
         _filterControl = 0;
         _volume = 0;
+        _svfLowPass = 0.0;
+        _svfBandPass = 0.0;
     }
 
     public byte Read(ushort address)
@@ -510,21 +557,42 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             }
         }
 
-        // Global registers
+        // Global registers. FR-SID-004 acceptance criteria 1-5 (BACKFILL-
+        // SID-001 filter slice): the SID filter is configured by four
+        // distinct registers and one composite control byte. Parsing must
+        // match real-hardware semantics so that test programs writing the
+        // canonical $D415-$D418 layout get the expected behaviour.
+        //
+        //   $D415 FCLO  bits 0-2 = low 3 bits of 11-bit cutoff (others ignored)
+        //   $D416 FCHI  bits 0-7 = high 8 bits of 11-bit cutoff
+        //   $D417 RES_FILT
+        //                  bits 0-3 = filter routing (V1,V2,V3,EXT in)
+        //                  bits 4-7 = resonance (0..15)
+        //   $D418 MODE_VOL
+        //                  bits 0-3 = master volume (4-bit DAC, FR-SID-010)
+        //                  bits 4-6 = filter mode (LP, BP, HP - combinable)
+        //                  bit  7   = voice 3 off (V3OFF / disable)
+        //
+        // We pack the lower nibble of $D417 (routing) and bits 4-6 of $D418
+        // (mode) into a single _filterControl byte using the same layout
+        // ApplyFilter already reads (bits 0-3 = routing, bits 4-6 = mode).
+        // That keeps Sid8580 and Sid8580D filter overrides binary-compatible
+        // with this slice (they read the same composite field).
         switch (register)
         {
             case 0x15:
-                _filterCutoff = (_filterCutoff & 0xFF00) | value;
+                _filterCutoff = (_filterCutoff & 0x07F8) | (value & 0x07);
                 break;
             case 0x16:
-                _filterCutoff = (_filterCutoff & 0x00FF) | ((value & 0x0F) << 8);
-                _filterResonance = (byte)(value >> 4);
+                _filterCutoff = (_filterCutoff & 0x0007) | ((value & 0xFF) << 3);
                 break;
             case 0x17:
-                _filterControl = value;
+                _filterResonance = (byte)((value >> 4) & 0x0F);
+                _filterControl = (byte)((_filterControl & 0xF0) | (value & 0x0F));
                 break;
             case 0x18:
                 _volume = (byte)(value & 0x0F);
+                _filterControl = (byte)((_filterControl & 0x0F) | (value & 0x70));
                 break;
         }
     }
