@@ -24,8 +24,13 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
 
     private const byte IfrTimer1 = 0x40;
     private const byte IfrTimer2 = 0x20;
+    private const byte IfrCb1 = 0x10;
     private const byte IfrSr = 0x04;
+    private const byte IfrCa1 = 0x02;
     private const byte IfrAny = 0x80;
+
+    private const byte PcrCa1ActiveEdgeMask = 0x01; // PCR bit 0: 1 = rising, 0 = falling
+    private const byte PcrCb1ActiveEdgeMask = 0x10; // PCR bit 4: 1 = rising, 0 = falling
 
     private const byte AcrT1ContinuousMask = 0x40;
     private const byte AcrShiftModeMask = 0x1C; // bits 4..2 select shift mode
@@ -345,6 +350,39 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         }
 
         TickShiftRegister();
+    }
+
+    /// <summary>
+    /// Simulates an edge transition on the CA1 input pin. The configured
+    /// active edge (PCR bit 0: 1 = rising, 0 = falling) gates whether the
+    /// transition latches IFR bit 1; IER bit 1 then gates the IRQ output.
+    /// Used by the 1541 to deliver BYTE-READY from the disk controller.
+    /// </summary>
+    /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
+    public void TriggerCa1(bool rising)
+    {
+        var activeEdgeIsRising = (_pcr & PcrCa1ActiveEdgeMask) != 0;
+        if (rising == activeEdgeIsRising)
+        {
+            _ifr |= IfrCa1;
+            RefreshIrq();
+        }
+    }
+
+    /// <summary>
+    /// Simulates an edge transition on the CB1 input pin. The configured
+    /// active edge (PCR bit 4: 1 = rising, 0 = falling) gates whether the
+    /// transition latches IFR bit 4; IER bit 4 then gates the IRQ output.
+    /// </summary>
+    /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
+    public void TriggerCb1(bool rising)
+    {
+        var activeEdgeIsRising = (_pcr & PcrCb1ActiveEdgeMask) != 0;
+        if (rising == activeEdgeIsRising)
+        {
+            _ifr |= IfrCb1;
+            RefreshIrq();
+        }
     }
 
     /// <summary>
