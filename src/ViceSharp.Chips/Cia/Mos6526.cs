@@ -435,6 +435,25 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         }
     }
 
+    /// <summary>
+    /// FR/TR: FR-CIA (BACKFILL-CIA FLAG pin).
+    /// Models a high-to-low transition on the CIA FLAG pin (FLG, pin 24).
+    /// The transition latches ICR bit 4 and recomputes the IRQ output
+    /// via the shared interrupt path; IMR bit 4 gates the IRQ assert.
+    /// On real C64 hardware CIA1 FLAG is wired to the datasette READ
+    /// line and CIA2 FLAG is wired to a user-port pin; this method
+    /// surfaces only the pin-edge contract so callers (peripheral
+    /// substrates) can drive the latch.
+    /// </summary>
+    public void TriggerFlagPin()
+    {
+        // ICR bit 4 = FLG interrupt source. SetInterruptFlag latches the
+        // bit and refreshes the IRQ output using the same path used by
+        // Timer A / B underflows, the SDR shift-complete event, and the
+        // TOD alarm match.
+        SetInterruptFlag(0x10);
+    }
+
     private void UnderflowTimerB()
     {
         _timerB.Counter = _timerB.Latch;
