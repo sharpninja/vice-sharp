@@ -497,10 +497,11 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         }
 
         // T2 phi2 countdown is gated by ACR bit 5: 0 = phi2 ticks decrement T2,
-        // 1 = pulse-count mode counting negative edges on PB6. PB6 input is not
-        // yet plumbed, so pulse-count mode currently sees no stimulus and the
-        // counter holds. T2 is one-shot: after underflow latches IFR bit 5 the
-        // running flag drops, matching the spec that T2 does not auto-reload.
+        // 1 = pulse-count mode counting negative edges on PB6 (driven by
+        // TriggerPb6). In pulse-count mode this Tick path is bypassed entirely
+        // so phi2 cannot advance the counter. T2 is one-shot: after underflow
+        // latches IFR bit 5 the running flag drops, matching the spec that T2
+        // does not auto-reload.
         if (_t2Running && (_acr & AcrT2PulseCountMask) == 0)
         {
             if (_t2Counter == 0)
@@ -516,6 +517,32 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         }
 
         TickShiftRegister();
+    }
+
+    /// <summary>
+    /// Simulates an edge transition on the PB6 input pin. In T2 pulse-count
+    /// mode (ACR bit 5 = 1) each negative (high-to-low) transition decrements
+    /// the T2 counter; underflow latches IFR bit 5 and (gated by IER bit 5)
+    /// asserts the IRQ output. Positive transitions and calls made while
+    /// ACR bit 5 = 0 (phi2 countdown mode) are ignored: the 6522 spec gates
+    /// PB6 counting exclusively on falling edges in pulse-count mode.
+    /// </summary>
+    /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
+    public void TriggerPb6(bool rising)
+    {
+        // Only negative edges count, and only while pulse-count mode is armed.
+        if (rising || (_acr & AcrT2PulseCountMask) == 0)
+            return;
+        if (_t2Counter == 0)
+        {
+            _t2Counter = 0xFFFF;
+            _ifr |= IfrTimer2;
+            RefreshIrq();
+        }
+        else
+        {
+            _t2Counter--;
+        }
     }
 
     /// <summary>
