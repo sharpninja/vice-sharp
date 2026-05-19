@@ -69,7 +69,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
 | MOS 6569 VIC-II raster core + IRQ + sprites (first-scanline parity) | 🟢 | 70% | `BACKFILL-VIDEO-001` |
 | MOS 6526 CIA1/CIA2 (timers + TOD + ports) | ✅ | 100% | full solution test |
-| MOS 6581 SID (3-voice + ADSR + filter + noise LFSR + OSC3/ENV3) | 🟢 | 55% | `BACKFILL-SID-001` |
+| MOS 6581 SID (3-voice + ADSR + filter + noise LFSR + OSC3/ENV3 + hard sync + ring mod + combined waveforms + ADSR bug + audio backend) | 🟢 | 80% | `BACKFILL-SID-001` (slices 1-5 done; PCM equivalency in flight) |
 | PLA + Memory map ($0000-$FFFF) | ✅ | 100% | boot proof |
 | Reset sequencing (7-cycle + port init) | ✅ | 100% | reset tests |
 | ROM loader (KERNAL/BASIC/CHARGEN + SHA1) | ✅ | 100% | `BasicBootProofTests` |
@@ -97,14 +97,14 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 
 | Feature | State | % | Source |
 |---------|:----:|:----:|--------|
-| XMLDOCS test contract (cite FR/TR, use case, acceptance) | 🟢 | 7% | `QA-XMLDOCS-001` (convention test + ratchet baseline 192; 14/206 retrofitted; `VICESHARP_XMLDOCS_ENFORCE=1` flips to zero-tolerance) |
+| XMLDOCS test contract (cite FR/TR, use case, acceptance) | ✅ | 100% | `QA-XMLDOCS-001` CLOSED: ratchet baseline at 0 (full retrofit + `XmlDocsConventionTests.ExpectedMaxViolations=0`) |
 | BenchmarkDotNet harness vs native VICE | 🟢 | 30% | `PERF-BENCHMARK-001` (managed harness in [tests/ViceSharp.Benchmarks/](tests/ViceSharp.Benchmarks/), native VICE comparison TODO) |
 | Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
 | Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state.
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-18 EOD: **910/910**.
 
 ## Supported Machines (planned)
 
