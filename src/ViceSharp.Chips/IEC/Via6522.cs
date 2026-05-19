@@ -34,6 +34,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
 
     private const byte AcrT1ContinuousMask = 0x40;
     private const byte AcrT1Pb7Mask = 0x80; // ACR bit 7: route T1 onto PB7
+    private const byte AcrT2PulseCountMask = 0x20; // ACR bit 5: 0 = phi2 countdown, 1 = count PB6 negative edges
     private const byte AcrShiftModeMask = 0x1C; // bits 4..2 select shift mode
     private const byte Pb7Mask = 0x80;
 
@@ -362,7 +363,12 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             }
         }
 
-        if (_t2Running)
+        // T2 phi2 countdown is gated by ACR bit 5: 0 = phi2 ticks decrement T2,
+        // 1 = pulse-count mode counting negative edges on PB6. PB6 input is not
+        // yet plumbed, so pulse-count mode currently sees no stimulus and the
+        // counter holds. T2 is one-shot: after underflow latches IFR bit 5 the
+        // running flag drops, matching the spec that T2 does not auto-reload.
+        if (_t2Running && (_acr & AcrT2PulseCountMask) == 0)
         {
             if (_t2Counter == 0)
             {
