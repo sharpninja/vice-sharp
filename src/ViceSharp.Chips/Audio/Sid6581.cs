@@ -689,4 +689,31 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         return address >= 0xD400 && address <= 0xD7FF;
     }
+
+    /// <summary>
+    /// FR-SID-004 ac.6: 3-segment piecewise approximation of the 6581's
+    /// non-linear ("kinked") cutoff frequency curve. Real 6581 silicon
+    /// shows a flat low region (~200-300Hz across reg 0-0x200), a steep
+    /// middle (300-12300Hz across 0x200-0x600), and a flatter high
+    /// region (12300-15000Hz across 0x600-0x7FF). Public for tests; the
+    /// filter pipeline can adopt this via a future follow-up wiring slice.
+    /// Source: resid documentation + Bob Yannes interview.
+    /// </summary>
+    public static float MapCutoffRegToFrequency(int reg11)
+    {
+        if (reg11 < 0) reg11 = 0;
+        if (reg11 > 0x7FF) reg11 = 0x7FF;
+
+        if (reg11 < 0x200)
+        {
+            return 200f + (reg11 / 512f) * 100f;
+        }
+
+        if (reg11 < 0x600)
+        {
+            return 300f + ((reg11 - 0x200) / 1024f) * 12000f;
+        }
+
+        return 12300f + ((reg11 - 0x600) / 511f) * 2700f;
+    }
 }
