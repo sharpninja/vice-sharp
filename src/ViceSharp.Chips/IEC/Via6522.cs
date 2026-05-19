@@ -107,6 +107,14 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     // configurations idle at the inactive level (symmetric with CB2).
     private bool _ca2State = true;
 
+    // Remaining phi2 cycles before CA2/CB2 pulse-output (PCR mode 101) lines
+    // return to the idle high level. The mode drives the corresponding pin
+    // low for exactly one cycle on its trigger event (PA read for CA2, ORB
+    // write for CB2). A non-zero counter is decremented in Tick(); when it
+    // hits zero the line is restored to true.
+    private int _ca2PulseRemaining;
+    private int _cb2PulseRemaining;
+
     public Via6522(IBus bus, IInterruptLine irqLine)
     {
         _bus = bus;
@@ -174,6 +182,8 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         _pb7TimerToggle = false;
         _cb2State = true;
         _ca2State = true;
+        _ca2PulseRemaining = 0;
+        _cb2PulseRemaining = 0;
         if (_irqAsserted)
         {
             _irqLine.Release(this);
@@ -205,6 +215,15 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                 // handshake.
                 if (GetCa2Mode() == Ca2ModeHandshakeOut)
                     _ca2State = false;
+                // Pulse output mode (PCR bits 3..1 = 101): an ORA / IRA read
+                // drives CA2 low for exactly one phi2 cycle. The pulse
+                // counter is decremented in Tick(); when it hits zero the
+                // line is automatically restored high.
+                else if (GetCa2Mode() == Ca2ModePulseOut)
+                {
+                    _ca2State = false;
+                    _ca2PulseRemaining = 1;
+                }
                 {
                     var input = PortAInput?.Invoke() ?? 0xFF;
                     return (byte)((_portAOutput & _ddra) | (input & (byte)~_ddra));
@@ -260,6 +279,15 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                 // handshake protocol used by the IEC fast-serial drivers.
                 if (GetCb2Mode() == Cb2ModeHandshakeOut)
                     _cb2State = false;
+                // Pulse output mode (PCR bits 7..5 = 101): an ORB write
+                // drives CB2 low for exactly one phi2 cycle. The pulse
+                // counter is decremented in Tick(); when it hits zero the
+                // line is automatically restored high.
+                else if (GetCb2Mode() == Cb2ModePulseOut)
+                {
+                    _cb2State = false;
+                    _cb2PulseRemaining = 1;
+                }
                 break;
             case 0x01:
                 _ifr &= unchecked((byte)~0x03);
@@ -421,6 +449,25 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// <inheritdoc />
     public void Tick()
     {
+        // CA2/CB2 pulse-output mode 101: each non-zero counter represents one
+        // remaining phi2 cycle that the corresponding line must stay low. The
+        // trigger (ORA read for CA2, ORB write for CB2) sets the counter to 1
+        // and the state to false; this Tick restores the line to high when
+        // the counter reaches zero. Pulse mode without a trigger leaves the
+        // counter at zero, so the line idles high - matching the 6522 spec.
+        if (_ca2PulseRemaining > 0)
+        {
+            _ca2PulseRemaining--;
+            if (_ca2PulseRemaining == 0)
+                _ca2State = true;
+        }
+        if (_cb2PulseRemaining > 0)
+        {
+            _cb2PulseRemaining--;
+            if (_cb2PulseRemaining == 0)
+                _cb2State = true;
+        }
+
         if (_t1Running)
         {
             if (_t1Counter == 0)
