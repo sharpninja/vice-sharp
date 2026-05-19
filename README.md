@@ -81,7 +81,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + chip-state round-trip) | 🟢 | 60% | `RUNTIME-SNAPSHOT-001` + `-002` (CIA + SID round-trip; VIC/TOD pipeline deferred) |
 | Frame capture (BGRA → BMP artifact) | 🟡 | 25% | `RUNTIME-CAPTURE-001` done · `RUNTIME-CAPTURE-002` open |
 | Keyboard matrix + control-port parity (12 variants, held keyboard + CIA1 scan tests) | 🟢 | 75% | `BACKFILL-INPUT-001` |
-| Host UI + Monitor control surface (gRPC + RPC tests for ReadRegistersAsync) | 🟢 | 65% | `BACKFILL-HOSTUI-001` |
+| Host UI + Monitor control surface (gRPC RPC tests for 7 services: Monitor + Snapshot + Capture + Settings + Video + Input + Media; ~102 tests) | 🟢 | 90% | `BACKFILL-HOSTUI-001` (only Avalonia view model + integration deepening remain) |
 | x64sc variant lockstep gate (293/293 variants, raster checkpoints) | 🟢 | 50% | `BACKFILL-LOCKSTEP-001` |
 | Upstream VICE testbench integration | ⚪ | 0% | `ARCH-TESTBENCH-001` |
 
@@ -106,7 +106,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~1100+/1100+** chip-level (50 slices landed this session; ~600 ROM-dependent integration tests skip when ROMs absent).
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~1200+/1200+** chip-level (68 slices landed this session; ~600 ROM-dependent integration tests skip when ROMs absent).
 
 ## Supported Machines (planned)
 
