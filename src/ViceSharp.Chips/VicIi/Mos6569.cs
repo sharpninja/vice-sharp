@@ -73,6 +73,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private int _lastBadLineCounted = -1;
     private int _badLineCountThisFrame;
 
+    // BACKFILL-VIDEO-001: Sprite DMA cycle stealing accounting.
+    // Each enabled sprite that intersects the current raster line steals
+    // two CPU cycles for s-data fetches. _spriteDmaCyclesThisFrame
+    // accumulates across the frame; _lastSpriteDmaLineCounted ensures
+    // each line is counted at most once.
+    private int _spriteDmaCyclesThisFrame;
+    private int _lastSpriteDmaLineCounted = -1;
+
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC: count of bad lines that have fired
     /// during the current frame. Reset to zero when the raster wraps back
@@ -80,6 +88,16 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// tick at which IsBadLine evaluates true for that line.
     /// </summary>
     public int BadLineCountThisFrame => _badLineCountThisFrame;
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / FR-VIC: cumulative count of CPU cycles
+    /// stolen by sprite DMA in the current frame. Each enabled sprite
+    /// intersecting a raster line steals two cycles for s-data fetches.
+    /// Reset when the raster wraps to line 0. Composes additively with
+    /// BadLineCountThisFrame (bad-line cycle theft is a separate
+    /// counter).
+    /// </summary>
+    public int SpriteDmaCyclesThisFrame => _spriteDmaCyclesThisFrame;
     
     /// <summary>
     /// TV system type for VIC-II timing
@@ -559,6 +577,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 // frame boundary (raster wrap back to line 0).
                 _badLineCountThisFrame = 0;
                 _lastBadLineCounted = -1;
+                // BACKFILL-VIDEO-001: per-frame sprite DMA counter also
+                // resets on the frame wrap so each frame is independent.
+                _spriteDmaCyclesThisFrame = 0;
+                _lastSpriteDmaLineCounted = -1;
             }
 
             UpdateBadLineLatchForStartOfLine();
@@ -570,6 +592,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _badLineCountThisFrame++;
                 _lastBadLineCounted = CurrentRasterLine;
             }
+
+            // BACKFILL-VIDEO-001 / FR-VIC: account sprite DMA cycle theft
+            // for this scanline, exactly once per line.
+            AccountSpriteDmaForRasterLine(CurrentRasterLine);
 
             // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
             ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
@@ -611,6 +637,54 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // BACKFILL-VIDEO-001: clear per-frame bad-line counter on reset.
         _badLineCountThisFrame = 0;
         _lastBadLineCounted = -1;
+        // BACKFILL-VIDEO-001: clear per-frame sprite-DMA counter on reset.
+        _spriteDmaCyclesThisFrame = 0;
+        _lastSpriteDmaLineCounted = -1;
+    }
+
+    // BACKFILL-VIDEO-001 / FR-VIC: sprite DMA cycle accounting.
+    // For each enabled sprite n that has its vertical extent intersect
+    // the supplied raster line, the chip steals two CPU cycles on that
+    // line for s-data fetches. A normal sprite spans 21 raster lines
+    // (Y..Y+20); a Y-expanded sprite spans 42 raster lines. This routine
+    // runs exactly once per scanline (gated by _lastSpriteDmaLineCounted)
+    // and accumulates into _spriteDmaCyclesThisFrame. Composes additively
+    // with bad-line cycle theft - the two are tracked independently.
+    private void AccountSpriteDmaForRasterLine(int rasterLine)
+    {
+        if (_lastSpriteDmaLineCounted == rasterLine)
+        {
+            return;
+        }
+        _lastSpriteDmaLineCounted = rasterLine;
+
+        byte enabled = _registers[0x15];
+        if (enabled == 0)
+        {
+            return;
+        }
+
+        int intersectingSprites = 0;
+        for (int n = 0; n < 8; n++)
+        {
+            if ((enabled & (1 << n)) == 0)
+            {
+                continue;
+            }
+
+            ref SpriteState s = ref _sprites[n];
+            int spriteY = s.Y;
+            int height = s.IsExpandedY ? 42 : 21;
+            int row = rasterLine - spriteY;
+            if (row < 0 || row >= height)
+            {
+                continue;
+            }
+            intersectingSprites++;
+        }
+
+        // Two CPU cycles stolen per sprite that intersects this scanline.
+        _spriteDmaCyclesThisFrame += intersectingSprites * 2;
     }
 
     public byte ConsumeRefreshCounter()
