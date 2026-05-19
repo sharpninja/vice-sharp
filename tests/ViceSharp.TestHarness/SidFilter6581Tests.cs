@@ -7,7 +7,7 @@ using Xunit;
 
 /// <summary>
 /// FR/TR: FR-SID-004 (BACKFILL-SID-001 filter slice, acceptance criteria
-/// 1-5 + 7). Use case: the SID's analog filter is configured through
+/// 1-4 + 6 + 7). Use case: the SID's analog filter is configured through
 /// registers $D415 (FCLO low 3 bits of cutoff), $D416 (FCHI high 8 bits
 /// of cutoff: combined as an 11-bit cutoff value), $D417 (upper nibble =
 /// resonance Q, lower nibble = per-voice routing + external-input bit)
@@ -32,10 +32,10 @@ using Xunit;
 /// does cover bit 3 so a future external-input plumbing slice can wire it.
 ///
 /// Acceptance criterion 6 (6581 non-linear cutoff curve, the "kinked"
-/// analog response) is deliberately out of scope - the cutoff mapping
-/// in this slice is linear and matches what resid_fp calls the "ideal"
-/// curve. A follow-up slice will overlay the 6581-specific non-linear
-/// response.
+/// analog response) is wired into ApplyFilter end-to-end and exercised
+/// here via the Cutoff_NonLinearCurveDrivesApplyFilter test. The
+/// mapper itself is unit-tested separately in
+/// <see cref="Sid6581NonLinearCutoffTests" />.
 /// </summary>
 public sealed class SidFilter6581Tests
 {
@@ -97,6 +97,27 @@ public sealed class SidFilter6581Tests
     private static void WarmUpEnvelope(Sid6581 sid)
     {
         for (int t = 0; t < 6000; t++) sid.Tick();
+    }
+
+    /// <summary>
+    /// Run the SID long enough that both the envelope and the SVF
+    /// integrators have settled. The non-linear cutoff curve makes
+    /// register 0 map to ~200Hz (not true 0); at that cutoff the
+    /// Chamberlin SVF integrators take ~1000 samples (16000 ticks)
+    /// to converge on the DC level. This longer warmup is required by
+    /// tests that exercise low-register cutoff values where the LP
+    /// time constant is the dominant settling factor. We also draw
+    /// samples (without observing) so GenerateSample is exercised and
+    /// the filter state advances at the audio-rate stride the live
+    /// measurement loop uses.
+    /// </summary>
+    private static void WarmUpEnvelopeAndFilter(Sid6581 sid)
+    {
+        for (int s = 0; s < 4000; s++)
+        {
+            for (int t = 0; t < 16; t++) sid.Tick();
+            _ = sid.GenerateSample();
+        }
     }
 
     /// <summary>
@@ -209,15 +230,18 @@ public sealed class SidFilter6581Tests
     }
 
     /// <summary>
-    /// FR/TR: FR-SID-004 acceptance criterion 3.
+    /// FR/TR: FR-SID-004 acceptance criterion 3 (with ac.6 active).
     /// Use case: $D418 bits 4 (LP), 5 (BP), 6 (HP) select which filter
-    /// taps mix into the output. With cutoff held near zero, the LP
-    /// integrators never accumulate signal so the LP tap is silent;
-    /// the HP tap still computes input - lp - q*bp, which leaves the
-    /// input passing through essentially unchanged. The LP and HP
-    /// modes must therefore produce materially different AC swings.
-    /// Acceptance: p2p amplitude with HP-only mode at cutoff = 0 is
-    /// strictly greater than p2p with LP-only mode at the same cutoff.
+    /// taps mix into the output. Under the 6581 non-linear cutoff curve
+    /// (ac.6), register 0 maps to ~200Hz - the LP integrator no longer
+    /// "fully stalls" at reg=0 but settles to the input's DC level after
+    /// a few hundred samples. Once settled, LP at 200Hz heavily attenuates
+    /// the 3850Hz sawtooth's AC content (its fundamental and harmonics);
+    /// HP at the same cutoff passes virtually all of the AC. The LP and
+    /// HP modes must therefore produce materially different AC swings.
+    /// Acceptance: p2p amplitude with HP-only mode at cutoff register 0
+    /// (~200Hz) is strictly greater than p2p with LP-only mode at the
+    /// same cutoff, after the SVF integrator has settled.
     /// </summary>
     [Fact]
     public void Modes_LP_HP_DifferAtZeroCutoff()
@@ -228,8 +252,10 @@ public sealed class SidFilter6581Tests
         foreach (var sid in new[] { sidLp, sidHp })
         {
             ConfigureVoice1Saw(sid, 0xFFFF);
-            // Cutoff = 0: LP integrators are stalled (no signal accumulates)
-            // so LP output is ~0; HP equals input - 0 - 0 = input.
+            // Cutoff register = 0: maps to ~200Hz under the 6581 non-linear
+            // curve. LP integrator settles to the input's DC level after
+            // a few hundred samples and then attenuates the 3850Hz sawtooth
+            // AC content; HP passes the AC through (input - settled DC).
             sid.Write(0xD415, 0x00);
             sid.Write(0xD416, 0x00);
             // Route voice 1 through filter, no resonance.
@@ -241,8 +267,10 @@ public sealed class SidFilter6581Tests
         // HP only (bit 6) + volume 15.
         sidHp.Write(0xD418, 0x4F);
 
-        WarmUpEnvelope(sidLp);
-        WarmUpEnvelope(sidHp);
+        // Use the longer warmup so the LP integrator finishes converging
+        // on the input's DC level (~1000 samples at the 200Hz cutoff).
+        WarmUpEnvelopeAndFilter(sidLp);
+        WarmUpEnvelopeAndFilter(sidHp);
 
         // Peak-to-peak captures the AC swing each filter path lets through.
         // A sawtooth has a strong DC bias, so absolute |peak| would be
@@ -252,17 +280,25 @@ public sealed class SidFilter6581Tests
         var p2pHp = RunAndMeasurePeakToPeak(sidHp, 400);
 
         p2pLp.Should().BeLessThan(p2pHp,
-            "at zero cutoff LP is silent, HP passes the voice's AC content");
+            "at ~200Hz cutoff LP attenuates the 3850Hz sawtooth AC; HP passes it");
     }
 
     /// <summary>
-    /// FR/TR: FR-SID-004 acceptance criterion 4.
+    /// FR/TR: FR-SID-004 acceptance criterion 4 (with ac.6 active).
     /// Use case: $D417 bits 0-2 gate per-voice filter routing.
     /// When bit 0 is clear, voice 1 bypasses the filter entirely;
-    /// when it is set, voice 1 is routed through. With cutoff held at
-    /// zero and LP mode selected, the filter is silent (LP integrators
-    /// stalled), so a routed voice is gated out while a bypassed voice
-    /// passes through to the mix unchanged.
+    /// when it is set, voice 1 is routed through. Under the 6581
+    /// non-linear cutoff curve, register 0 maps to ~200Hz. With BP
+    /// (band-pass) mode selected, the routed voice's 3850Hz sawtooth
+    /// is well above the 200Hz center and the BP heavily attenuates
+    /// it (rejects content far from the band center), while the
+    /// bypassed voice retains its full AC swing through the unity
+    /// path. BP mode is used in preference to LP here because the
+    /// Chamberlin SVF's undamped LP integrator at q=1 rings against
+    /// the sawtooth's sharp wraps - producing larger p2p than bypass
+    /// even though the LP is heavily attenuating the fundamental.
+    /// BP, in contrast, cleanly rejects out-of-band content without
+    /// significant ringing at q=1.
     /// Acceptance: routed p2p &lt; bypassed p2p (filter actually gates).
     /// </summary>
     [Fact]
@@ -274,11 +310,12 @@ public sealed class SidFilter6581Tests
         foreach (var sid in new[] { sidBypass, sidRouted })
         {
             ConfigureVoice1Saw(sid, 0xFFFF);
-            // Cutoff = 0 silences the LP integrators, so routed voices
-            // are effectively muted.
+            // Cutoff register = 0 maps to ~200Hz under the non-linear curve;
+            // a 3850Hz voice is far above the BP center band so the BP
+            // rejects most of its content.
             sid.Write(0xD415, 0x00);
             sid.Write(0xD416, 0x00);
-            sid.Write(0xD418, 0x1F); // LP + volume 15
+            sid.Write(0xD418, 0x2F); // BP + volume 15
         }
 
         // Bypass: voice 1 not routed (lower nibble = 0).
@@ -286,14 +323,76 @@ public sealed class SidFilter6581Tests
         // Routed: voice 1 routed (bit 0).
         sidRouted.Write(0xD417, 0x01);
 
-        WarmUpEnvelope(sidBypass);
-        WarmUpEnvelope(sidRouted);
+        // Long warmup lets the SVF integrators settle so the
+        // routed-vs-bypass comparison reflects steady-state attenuation
+        // rather than the integrator's startup ramp.
+        WarmUpEnvelopeAndFilter(sidBypass);
+        WarmUpEnvelopeAndFilter(sidRouted);
 
         var p2pBypass = RunAndMeasurePeakToPeak(sidBypass, 400);
         var p2pRouted = RunAndMeasurePeakToPeak(sidRouted, 400);
 
         p2pRouted.Should().BeLessThan(p2pBypass,
             "routed voice must be filter-gated; bypassed voice AC swing should be larger");
+    }
+
+    /// <summary>
+    /// FR/TR: FR-SID-004 acceptance criterion 6 end-to-end.
+    /// Use case: ApplyFilter must use the non-linear cutoff curve, not the
+    /// old linear mapping. The non-linear curve is flat in the low region
+    /// (0..0x200, ~200-300Hz) and steep in the middle (0x200..0x600,
+    /// 300-12300Hz). With BP mode and a sawtooth voice at 3850Hz, the BP's
+    /// pass-through amplitude depends on where the band centre sits
+    /// relative to the voice fundamental: low register values keep the
+    /// band centre far below the voice (high rejection), mid values move
+    /// the band near or above the voice (more energy passes), and high
+    /// values place the band well above the voice. The non-linear curve
+    /// makes register 0x100 vs 0x400 vs 0x700 land at three quite
+    /// different frequencies (~250Hz vs ~6300Hz vs ~13800Hz), so the
+    /// BP-attenuated amplitudes must differ measurably.
+    /// Acceptance: p2p at reg=0x100 (~250Hz, well below voice) is
+    /// strictly less than p2p at reg=0x400 (~6300Hz, above voice) which
+    /// is strictly less than (or equal to) p2p at reg=0x700 (~13800Hz),
+    /// confirming the non-linear curve actually drives ApplyFilter.
+    /// </summary>
+    [Fact]
+    public void Cutoff_NonLinearCurveDrivesApplyFilter()
+    {
+        var sidLow = BuildSid();
+        var sidMid = BuildSid();
+        var sidHigh = BuildSid();
+
+        foreach (var sid in new[] { sidLow, sidMid, sidHigh })
+        {
+            ConfigureVoice1Saw(sid, 0xFFFF);
+            sid.Write(0xD417, 0x01); // voice 1 routed, no resonance
+            sid.Write(0xD418, 0x2F); // BP + volume 15
+        }
+
+        // sidLow: cutoff register = 0x100 (~250Hz under the non-linear curve).
+        sidLow.Write(0xD415, 0x00);
+        sidLow.Write(0xD416, 0x20);
+
+        // sidMid: cutoff register = 0x400 (~6300Hz under the non-linear curve).
+        sidMid.Write(0xD415, 0x00);
+        sidMid.Write(0xD416, 0x80);
+
+        // sidHigh: cutoff register = 0x700 (~13800Hz under the non-linear curve).
+        sidHigh.Write(0xD415, 0x00);
+        sidHigh.Write(0xD416, 0xE0);
+
+        WarmUpEnvelopeAndFilter(sidLow);
+        WarmUpEnvelopeAndFilter(sidMid);
+        WarmUpEnvelopeAndFilter(sidHigh);
+
+        var p2pLow = RunAndMeasurePeakToPeak(sidLow, 400);
+        var p2pMid = RunAndMeasurePeakToPeak(sidMid, 400);
+        var p2pHigh = RunAndMeasurePeakToPeak(sidHigh, 400);
+
+        p2pLow.Should().BeLessThan(p2pMid,
+            "BP at low cutoff (~250Hz) attenuates the 3850Hz voice more than at mid cutoff (~6300Hz)");
+        p2pMid.Should().BeLessThanOrEqualTo(p2pHigh,
+            "BP at mid cutoff (~6300Hz) attenuates the 3850Hz voice at least as much as at high cutoff (~13800Hz)");
     }
 
     /// <summary>

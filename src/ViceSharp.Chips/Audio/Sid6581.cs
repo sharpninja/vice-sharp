@@ -230,11 +230,11 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// FR-SID-004 (BACKFILL-SID-001 filter slice). State-variable filter
     /// with per-voice routing, LP/BP/HP additive mode select, resonance
     /// Q feedback, and soft-clipping for criterion 7 (resonance distortion).
-    /// The cutoff register is the linear 11-bit value parsed from
-    /// $D415/$D416; criterion 6 (the 6581 non-linear cutoff curve) is
-    /// deliberately deferred to a follow-up slice and stays linear here.
-    /// Sid8580 and Sid8580D supply their own ApplyFilter override - this
-    /// implementation is 6581-only.
+    /// The 11-bit cutoff register from $D415/$D416 is mapped through the
+    /// 6581 non-linear ("kinked") curve (criterion 6) to a frequency in
+    /// Hz, then converted to a Chamberlin SVF coefficient via
+    /// 2*sin(PI*f/Fs). Sid8580 and Sid8580D supply their own ApplyFilter
+    /// override - this implementation is 6581-only.
     /// </summary>
     protected virtual int ApplyFilter(int voice0, int voice1, int voice2)
     {
@@ -277,13 +277,17 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             return filterInput + bypassMix;
         }
 
-        // FR-SID-004 ac.1: 11-bit cutoff scaled to [0, 1] for the SVF
-        // coefficient. The coefficient maps 0 -> DC (filter does nothing)
-        // and ~1 -> Nyquist. We clamp the upper bound to keep the
-        // integrators stable; 1.4 is the largest value the Chamberlin
-        // SVF stays stable at, but we use a smaller cap (1.0) so the
-        // 6581's linear-cutoff range gives clean output across the band.
-        double cutoff = Math.Clamp(_filterCutoff / 2047.0, 0.0, 0.999);
+        // FR-SID-004 ac.1 + ac.6: 11-bit cutoff register mapped to Hz
+        // through the 6581 non-linear ("kinked") curve, then converted to
+        // the Chamberlin SVF coefficient via 2*sin(PI*f/Fs). Note that
+        // reg=0 maps to ~200Hz (not true 0), so the LP integrator no
+        // longer fully stalls at register zero - it accumulates a small
+        // amount of input per sample, matching real 6581 silicon which
+        // never has a zero cutoff. We clamp to 0.999 to keep the
+        // Chamberlin SVF stable up to coefficient ~1.4; anything beyond
+        // pushes the integrators into runaway.
+        double cutoffHz = MapCutoffRegToFrequency(_filterCutoff);
+        double cutoff = Math.Clamp(2.0 * Math.Sin(Math.PI * cutoffHz / SamplingRate), 0.0, 0.999);
 
         // FR-SID-004 ac.2: resonance Q feedback from $D417 upper nibble
         // (0..15). Q = 1.0 / (1.0 + res/4) gives a gentle resonance lift
