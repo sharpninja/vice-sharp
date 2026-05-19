@@ -1,5 +1,7 @@
 # ROM Handling
 
+> Starting fresh? [USER-GUIDE.md](USER-GUIDE.md) is the higher-level entry point: install, first run, CLI launcher, and machine YAML topologies. This file is the deep reference for ROM sourcing and layout.
+
 ## Overview
 
 ViceSharp requires Commodore ROM images to boot emulated machines. ROMs are copyrighted by Commodore/Tulip and are NOT included in the ViceSharp distribution.

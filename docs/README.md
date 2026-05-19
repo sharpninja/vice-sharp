@@ -1,5 +1,11 @@
 # ViceSharp Documentation
 
+## User guides
+
+- [USER-GUIDE.md](USER-GUIDE.md) - install, first run, CLI launcher, machine YAML, disk images, what works today
+- [VICE-MIGRATION.md](VICE-MIGRATION.md) - swap classic VICE for ViceSharp: binary + flag mapping, behaviour caveats, bug compatibility
+- [ROMs.md](ROMs.md) - legal ROM options, environment variable, expected directory layout
+
 ## Architecture and Design
 
 - [Architecture.md](Architecture.md) — POCO model, MVVM, mutation queue, device model, architectures

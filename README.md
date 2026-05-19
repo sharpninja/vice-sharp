@@ -2,6 +2,33 @@
 
 A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10 with NativeAOT support.
 
+## Quick Start
+
+```pwsh
+# 1. Clone and build
+git clone https://github.com/sharpninja/vice-sharp.git vice-sharp
+cd vice-sharp
+dotnet build ViceSharp.slnx
+
+# 2. Point at your ROMs (see docs/ROMs.md)
+$env:VICESHARP_ROM_PATH = "$env:USERPROFILE\.vicesharp\roms"
+
+# 3. Boot a C64 with a true-drive 1541 attached
+dotnet run --project src/ViceSharp.Console -- `
+    --roms $env:VICESHARP_ROM_PATH `
+    --machine-yaml docs/samples/c64-plus-1541.multisystem.yaml `
+    --cycles 1000000
+```
+
+Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64sc`, and `c1541` binaries that accept the usual `-8`, `-9`, `-cart`, `+truedrive` / `-truedrive` flags. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) for the full install and first-run walkthrough, and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) for a side-by-side flag mapping.
+
+## User documentation
+
+- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, what works today
+- [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) - binary + flag mapping, behaviour caveats, performance / accuracy, bug compatibility
+- [docs/ROMs.md](docs/ROMs.md) - legal ROM options, environment variable, directory layout
+- [docs/](docs/README.md) - full documentation index (architecture, public API, iteration plans, diagrams)
+
 ## Status
 
 ✅ **Iteration 0 (Foundations)** — Complete. All core primitives implemented, lock-free and zero allocation.
