@@ -160,31 +160,37 @@ public sealed class SidCombinedWaveformTests
     /// pulse phase is low the AND zeroes everything. The combined output
     /// is therefore strictly less-than-or-equal to the sawtooth-only
     /// output sample-by-sample (and zero whenever pulse is low).
-    /// Acceptance: At a phase where pulse is low the combined sample is
-    /// zero, even though the sawtooth-only sample at that phase is
-    /// non-zero.
+    /// Acceptance: At a phase where pulse is low the combined sample
+    /// equals the $D418-DAC DC baseline (no voice contribution), even
+    /// though the sawtooth-only sample at that phase has a clearly
+    /// larger voice contribution above that baseline. FR-SID-010
+    /// volume-DAC offset is the floor here, not absolute zero.
     /// </summary>
     [Fact]
     public void PulseSawtooth_Combined_IsAndMasked()
     {
         // Pulse width = 0x0800 makes pulse HIGH when phase byte < 0x08.
         // At 16384 ticks (phase = 0x3F) pulse is LOW: the AND of pulse=0x00
-        // and sawtooth=0x3F yields 0x00, so the combined output is silent.
-        // Sawtooth alone at the same phase outputs 0x3F (clearly non-zero).
+        // and sawtooth=0x3F yields 0x00, so the combined voice output is
+        // silent. The mixed sample equals the digi DC baseline (volume DAC).
+        // Sawtooth alone at the same phase outputs 0x3F (clearly non-zero
+        // above baseline).
         const int Ticks = 16384;
 
+        float baseline = SampleAtPhase(0x00, Ticks); // no waveform bits = DAC-only baseline
         float combined = SampleAtPhase((byte)(Pulse | Sawtooth), Ticks);
         float sawOnly = SampleAtPhase(Sawtooth, Ticks);
 
         float.IsNaN(combined).Should().BeFalse();
         float.IsNaN(sawOnly).Should().BeFalse();
 
-        // Pulse is LOW at this phase, so AND yields 0, so combined ~= 0.
-        System.Math.Abs(combined).Should().BeLessThan(1e-5f,
-            "Pulse+Sawtooth at a low-pulse phase ANDs to zero");
-        // Sawtooth alone at that phase is meaningfully non-zero.
-        System.Math.Abs(sawOnly).Should().BeGreaterThan(0.01f,
-            "control case: sawtooth alone at this phase must be clearly non-zero");
+        // Pulse is LOW at this phase, so AND yields 0 voice contribution:
+        // the mixed sample equals the volume-DAC baseline.
+        System.Math.Abs(combined - baseline).Should().BeLessThan(1e-5f,
+            "Pulse+Sawtooth at a low-pulse phase ANDs voice to zero (sample == DAC baseline)");
+        // Sawtooth alone at that phase has a clearly non-zero voice contribution above baseline.
+        System.Math.Abs(sawOnly - baseline).Should().BeGreaterThan(0.01f,
+            "control case: sawtooth alone at this phase must be clearly above DAC baseline");
     }
 
     /// <summary>
@@ -230,10 +236,13 @@ public sealed class SidCombinedWaveformTests
     /// has no waveform output to drive the audio stage. Real SID hardware
     /// outputs a value that decays to zero (the floating waveform value
     /// quickly settles to 0); the emulator must not synthesize spurious
-    /// envelope-only samples when no waveform is selected.
+    /// envelope-only samples when no waveform is selected. The mixed
+    /// output may still carry the $D418 volume-DAC DC offset (FR-SID-010);
+    /// the assertion is that the voice contribution above that baseline
+    /// is silent.
     /// Acceptance: With CTRL = gate only (no waveform bits), after the
-    /// envelope is primed and the accumulator has run, the maximum absolute
-    /// sample across a full phase sweep is at or near zero.
+    /// envelope is primed and the accumulator has run, every sample is
+    /// within float epsilon of the no-waveform DAC baseline.
     /// </summary>
     [Fact]
     public void NoWaveformSelected_OutputIsSilent()
@@ -242,15 +251,21 @@ public sealed class SidCombinedWaveformTests
         sid.Write(V1Ctrl, Gate); // gate only, no waveform bits
         PrimeEnvelope(sid);
 
-        float maxAbs = 0f;
+        // Capture the digi DC baseline using a fresh SID with the same volume.
+        var baselineSid = new Sid6581(new BasicBus());
+        baselineSid.Write(Volume, 0x0F);
+        for (int i = 0; i < 8; i++) baselineSid.Tick();
+        float baseline = baselineSid.GenerateSample();
+
+        float maxAbsAboveBaseline = 0f;
         for (int i = 0; i < FullPhaseSweepTicks; i++)
         {
             sid.Tick();
-            var s = System.Math.Abs(sid.GenerateSample());
-            if (s > maxAbs) maxAbs = s;
+            var s = System.Math.Abs(sid.GenerateSample() - baseline);
+            if (s > maxAbsAboveBaseline) maxAbsAboveBaseline = s;
         }
 
-        maxAbs.Should().BeLessThan(1e-5f,
-            "no waveform bits selected must produce silence regardless of envelope level");
+        maxAbsAboveBaseline.Should().BeLessThan(1e-5f,
+            "no waveform bits selected must produce no voice contribution above the DAC baseline");
     }
 }

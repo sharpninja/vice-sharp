@@ -132,8 +132,28 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // Apply filter - classic VICE-style multi-mode filter
         int filteredOutput = ApplyFilter(voiceOutputs0, voiceOutputs1, voiceOutputs2);
 
-        return (filteredOutput / 3) * (_volume / 15.0f) / 255.0f;
+        // FR-SID-010 digi playback: the 4-bit master-volume DAC ($D418 bits 0-3)
+        // contributes a small DC offset proportional to volume even when no
+        // voices are gated. This is the rail that makes the famous Galway/
+        // Daglish 4-bit PCM technique audible on real C64 hardware: rapid
+        // $D418 writes alone produce hearable PCM through the DAC nonlinearity.
+        // The chosen DC magnitude (DigiDcOffset) is modest enough to leave
+        // normal voice output dominant while still letting per-write volume
+        // changes register as audible amplitude.
+        float volumeFraction = _volume / 15.0f;
+        float voiceMix = (filteredOutput / 3) * volumeFraction / 255.0f;
+        float digiDcOffset = volumeFraction * DigiDcOffset;
+        return voiceMix + digiDcOffset;
     }
+
+    /// <summary>
+    /// Per-step amplitude of the $D418 DAC DC offset used for digi playback
+    /// (FR-SID-010). Scales linearly with the 4-bit master-volume nibble;
+    /// at volume 15 the offset is DigiDcOffset, at volume 0 it is exactly
+    /// zero (silent rail preserved). Chosen small enough that normal voice
+    /// output dominates the mix.
+    /// </summary>
+    private const float DigiDcOffset = 0.05f;
 
     // Filter state for VICE-style resonant filter
     private double _filterV0, _filterV1, _filterV2, _filterV3;
