@@ -280,11 +280,14 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                     _timerA.Counter = _timerA.Latch;
                 break;
             case 0x0E:
-                _timerA.Control = (byte)(value & 0xEF);
-                _registers[register] = _timerA.Control;
-                _timerA.Running = (value & 0x01) != 0;
-                ScheduleControlPipeline(ref _timerA, value);
-                break;
+                {
+                    var wasRunning = _timerA.Running;
+                    _timerA.Control = (byte)(value & 0xEF);
+                    _registers[register] = _timerA.Control;
+                    _timerA.Running = (value & 0x01) != 0;
+                    ScheduleControlPipeline(ref _timerA, value, wasRunning);
+                    break;
+                }
                 
             // Timer B
             case 0x06: _timerB.Latch = (ushort)((_timerB.Latch & 0xFF00) | value); break;
@@ -294,11 +297,14 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
                     _timerB.Counter = _timerB.Latch;
                 break;
             case 0x0F:
-                _timerB.Control = (byte)(value & 0xEF);
-                _registers[register] = _timerB.Control;
-                _timerB.Running = (value & 0x01) != 0;
-                ScheduleControlPipeline(ref _timerB, value);
-                break;
+                {
+                    var wasRunning = _timerB.Running;
+                    _timerB.Control = (byte)(value & 0xEF);
+                    _registers[register] = _timerB.Control;
+                    _timerB.Running = (value & 0x01) != 0;
+                    ScheduleControlPipeline(ref _timerB, value, wasRunning);
+                    break;
+                }
             case 0x0B: WriteTodOrAlarm(ref _todHours, ref _todAlarmHours, value); break;
             case 0x0A: WriteTodOrAlarm(ref _todMinutes, ref _todAlarmMinutes, value); break;
             case 0x09: WriteTodOrAlarm(ref _todSeconds, ref _todAlarmSeconds, value); break;
@@ -349,16 +355,43 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         Counter = 0xFFFF
     };
 
-    private static void ScheduleControlPipeline(ref TimerState timer, byte control)
+    private static void ScheduleControlPipeline(ref TimerState timer, byte control, bool wasRunning)
     {
+        // FR-CIA-TIMER (BACKFILL-CIA): CRA / CRB bit 4 is the FORCE_LOAD
+        // strobe. Real 6526 reloads the counter from the latch on the
+        // cycle the write hits the bus, then the strobe auto-clears
+        // (handled by the & 0xEF mask in the CRA / CRB write path). The
+        // load is immediate so software writing CRA |= 0x10 sees the
+        // reloaded counter without an intervening tick.
         var forceLoad = (control & 0x10) != 0;
         if (forceLoad)
-            timer.LoadDelay = 2;
+        {
+            timer.Counter = timer.Latch;
+            timer.LoadDelay = 0;
+        }
 
+        // Pipeline delay rules:
+        //   * Fresh start (was stopped, now running): 2 cycles of count
+        //     delay before the first decrement; +1 extra when force-load
+        //     is combined with the start because the reload itself burns
+        //     a cycle on real hardware.
+        //   * Already running + force-load only: counter continues
+        //     decrementing on the next phi2 with no extra delay (the
+        //     reload happened on the write cycle, and the running
+        //     pipeline is already primed).
+        //   * Stopped (bit 0 = 0): no count delay matters; the timer is
+        //     idle until the next start.
         if (timer.Running)
-            timer.CountDelay = forceLoad ? 3 : 2;
+        {
+            if (!wasRunning)
+                timer.CountDelay = forceLoad ? 3 : 2;
+            else
+                timer.CountDelay = 0;
+        }
         else
+        {
             timer.CountDelay = 0;
+        }
     }
 
     private static bool TickTimer(ref TimerState timer)
