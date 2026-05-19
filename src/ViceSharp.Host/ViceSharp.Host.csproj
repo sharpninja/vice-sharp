@@ -11,4 +11,8 @@
     <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="ViceSharp.TestHarness" />
+  </ItemGroup>
+
 </Project>
