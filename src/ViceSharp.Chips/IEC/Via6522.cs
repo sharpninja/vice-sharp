@@ -24,9 +24,11 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
 
     private const byte IfrTimer1 = 0x40;
     private const byte IfrTimer2 = 0x20;
+    private const byte IfrSr = 0x04;
     private const byte IfrAny = 0x80;
 
     private const byte AcrT1ContinuousMask = 0x40;
+    private const byte AcrShiftModeMask = 0x1C; // bits 4..2 select shift mode
 
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
@@ -48,6 +50,13 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     private byte _ifr;
     private byte _ier;
     private bool _irqAsserted;
+
+    // Shift register state. _srShiftCount tracks bits shifted in the current
+    // 8-bit transfer; the SR IFR latches when it reaches 8. _srShifting is
+    // armed by SR writes (out modes) and by entering an in mode; it auto-
+    // disarms on IFR latch and re-arms on the next SR write / mode entry.
+    private int _srShiftCount;
+    private bool _srShifting;
 
     public Via6522(IBus bus, IInterruptLine irqLine)
     {
@@ -111,6 +120,8 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         _pcr = 0;
         _ifr = 0;
         _ier = 0;
+        _srShiftCount = 0;
+        _srShifting = false;
         if (_irqAsserted)
         {
             _irqLine.Release(this);
@@ -154,7 +165,15 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                 RefreshIrq();
                 return (byte)(_t2Counter & 0xFF);
             case 0x09: return (byte)(_t2Counter >> 8);
-            case 0x0A: return _sr;
+            case 0x0A:
+                // Reading SR clears the SR IFR flag and rearms an 8-bit shift
+                // transfer for the active mode (common 6522 idiom for chained
+                // shift-in operations).
+                _ifr &= unchecked((byte)~IfrSr);
+                RefreshIrq();
+                _srShiftCount = 0;
+                _srShifting = GetShiftMode() != 0;
+                return _sr;
             case 0x0B: return _acr;
             case 0x0C: return _pcr;
             case 0x0D: return _ifr;
@@ -219,8 +238,30 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                 _ifr &= unchecked((byte)~IfrTimer2);
                 RefreshIrq();
                 break;
-            case 0x0A: _sr = value; break;
-            case 0x0B: _acr = value; break;
+            case 0x0A:
+                _sr = value;
+                // Arm a fresh 8-bit shift transfer. Active phi2 in/out modes
+                // will start shifting on the next Tick; inert modes (000) just
+                // hold the byte.
+                _srShiftCount = 0;
+                _srShifting = GetShiftMode() != 0;
+                _ifr &= unchecked((byte)~IfrSr);
+                RefreshIrq();
+                break;
+            case 0x0B:
+                {
+                    var prevMode = GetShiftMode();
+                    _acr = value;
+                    var newMode = GetShiftMode();
+                    if (newMode != prevMode)
+                    {
+                        // Mode change rearms the shift state machine for the
+                        // new direction (or disables it for mode 000).
+                        _srShiftCount = 0;
+                        _srShifting = newMode != 0;
+                    }
+                }
+                break;
             case 0x0C: _pcr = value; break;
             case 0x0D:
                 if ((value & IfrAny) == 0)
@@ -301,6 +342,77 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             {
                 _t2Counter--;
             }
+        }
+
+        TickShiftRegister();
+    }
+
+    /// <summary>
+    /// Returns the active ACR shift-register mode (ACR bits 4..2 packed into
+    /// values 0..7).
+    /// </summary>
+    private int GetShiftMode() => (_acr & AcrShiftModeMask) >> 2;
+
+    /// <summary>
+    /// Advances the shift register one phi2 cycle. Implemented modes:
+    /// - 010 (shift in under phi2): clocks one bit from CB2 (defaults to 0
+    ///   while CB2 plumbing is pending) into the LSB of SR.
+    /// - 110 (shift out under phi2): rotates SR left, emitting MSB to CB2
+    ///   (sink TBD); the bit also feeds back into the LSB so the byte
+    ///   survives 8 shifts (matches NMOS 6522 wrap-around behaviour).
+    /// After 8 shifts the SR IFR bit latches and shifting halts until SR is
+    /// re-armed via $0A write/read or an ACR mode change.
+    ///
+    /// Modes 001, 011, 100, 101, 111 (T2- and CB1-clocked) are stubs: they
+    /// require T2 underflow events and CB1 pin plumbing that are not yet
+    /// implemented. They currently behave as if the shift clock never ticks,
+    /// matching a powered-on chip with no external CB1 stimulus.
+    /// </summary>
+    private void TickShiftRegister()
+    {
+        if (!_srShifting)
+        {
+            return;
+        }
+
+        var mode = GetShiftMode();
+        switch (mode)
+        {
+            case 0b010: // shift in under phi2
+                {
+                    // CB2 not yet plumbed - sample 0 as a safe default. Real
+                    // CB2 input lands when the IEC fast-serial pins are wired.
+                    var incoming = 0;
+                    _sr = (byte)(((_sr << 1) | (incoming & 0x01)) & 0xFF);
+                    AdvanceShiftCount();
+                    break;
+                }
+            case 0b110: // shift out under phi2
+                {
+                    // Emit MSB to CB2 (sink TBD) and rotate it back into the
+                    // LSB so the source byte survives an 8-bit transfer.
+                    var msb = (byte)((_sr >> 7) & 0x01);
+                    _sr = (byte)(((_sr << 1) | msb) & 0xFF);
+                    AdvanceShiftCount();
+                    break;
+                }
+            default:
+                // Modes 001 / 011 / 100 / 101 / 111: T2- and CB1-clocked
+                // transfers. Stubbed pending T2 underflow event hookup and
+                // CB1 pin plumbing - see class summary for scope.
+                break;
+        }
+    }
+
+    private void AdvanceShiftCount()
+    {
+        _srShiftCount++;
+        if (_srShiftCount >= 8)
+        {
+            _ifr |= IfrSr;
+            _srShifting = false;
+            _srShiftCount = 0;
+            RefreshIrq();
         }
     }
 
