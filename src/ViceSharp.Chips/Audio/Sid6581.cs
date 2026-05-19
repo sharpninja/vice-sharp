@@ -191,9 +191,42 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public bool Reset;
     }
 
-    public Sid6581(IBus bus)
+    private readonly IAudioBackend? _audioBackend;
+    private readonly float[] _sampleBuffer = new float[256];
+    private int _sampleBufferLen;
+
+    public Sid6581(IBus bus) : this(bus, audioBackend: null) { }
+
+    public Sid6581(IBus bus, IAudioBackend? audioBackend)
     {
         _bus = bus;
+        _audioBackend = audioBackend;
+    }
+
+    /// <summary>
+    /// Generate a sample + push it to the configured audio backend (if any).
+    /// Buffers samples internally and flushes in batches of 256 to amortise
+    /// backend overhead. Call once per audio-sample tick (host responsibility).
+    /// </summary>
+    public void GenerateSampleAndOutput()
+    {
+        var sample = GenerateSample();
+        if (_audioBackend is null) return;
+
+        _sampleBuffer[_sampleBufferLen++] = sample;
+        if (_sampleBufferLen >= _sampleBuffer.Length)
+        {
+            _audioBackend.SubmitSamples(_sampleBuffer.AsSpan(0, _sampleBufferLen));
+            _sampleBufferLen = 0;
+        }
+    }
+
+    /// <summary>Flush any partial sample buffer to the audio backend.</summary>
+    public void FlushAudioBuffer()
+    {
+        if (_audioBackend is null || _sampleBufferLen == 0) return;
+        _audioBackend.SubmitSamples(_sampleBuffer.AsSpan(0, _sampleBufferLen));
+        _sampleBufferLen = 0;
     }
 
     // ADSR rate tables (cycles per level) - virtual for override
