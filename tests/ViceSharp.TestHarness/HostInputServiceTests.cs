@@ -183,6 +183,14 @@ public sealed class HostInputServiceTests
         Assert.Equal(0x11, machine.Bus.Read(0xDC00) & 0x11);
     }
 
+    /// <summary>
+    /// FR/TR: FR-INPUT-JOYSTICK-001.
+    /// Use case: A host service request targeting Joystick1 drives the C64's
+    /// CIA1 port B input lines (control port 1) directly.
+    /// Acceptance: After SetJoystickStateAsync(Joystick1, $02, fire=true),
+    /// CIA1 PB reports the asserted directions + fire bit pulled low; after
+    /// release the bits return to idle high.
+    /// </summary>
     [Fact]
     public async Task SetJoystickState_UsesC64Joystick1ToDriveCia1PortB()
     {
@@ -214,6 +222,14 @@ public sealed class HostInputServiceTests
         Assert.Equal(0x12, machine.Bus.Read(0xDC01) & 0x12);
     }
 
+    /// <summary>
+    /// FR/TR: FR-INPUT-JOYSTICK-002.
+    /// Use case: A request targeting PrimaryJoystick routes via the session's
+    /// configured PrimaryJoystickPort to the matching CIA1 register.
+    /// Acceptance: With PrimaryJoystickPort = Joystick1, asserting state on
+    /// PrimaryJoystick drives CIA1 PA (control port 2) and leaves CIA1 PB
+    /// untouched.
+    /// </summary>
     [Fact]
     public async Task SetJoystickState_UsesPrimaryJoystickSettingToSelectRuntimeControlPort()
     {
@@ -242,6 +258,14 @@ public sealed class HostInputServiceTests
         Assert.Equal(0x12, machine.Bus.Read(0xDC00) & 0x12);
     }
 
+    /// <summary>
+    /// FR/TR: FR-INPUT-JOYSTICK-003.
+    /// Use case: When a session has Joystick1/Joystick2 explicit + ports
+    /// swapped, only the PrimaryJoystick alias respects the swap; explicit
+    /// Joystick1 / Joystick2 requests stay on their physical port.
+    /// Acceptance: Asserting Joystick1 still drives CIA1 PB regardless of
+    /// the swap flag.
+    /// </summary>
     [Fact]
     public async Task SetJoystickState_KeepsExplicitJoystickPortsPhysicalWhenSwapEnabled()
     {

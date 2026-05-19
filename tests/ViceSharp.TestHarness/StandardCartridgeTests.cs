@@ -5,6 +5,13 @@ using Xunit;
 
 public sealed class StandardCartridgeTests
 {
+    /// <summary>
+    /// FR/TR: FR-CART-STD8K.
+    /// Use case: A raw 8K cartridge image maps only ROML ($8000-$9FFF);
+    /// $A000+ stays unmapped + reads $FF.
+    /// Acceptance: Size=Rom8K, EXROM asserted + GAME released, HandlesAddress
+    /// true for $8000-$9FFF false at $A000, bytes round-trip.
+    /// </summary>
     [Fact]
     public void FromBytes_Accepts8KImage_AndMapsRomLowOnly()
     {
@@ -25,6 +32,12 @@ public sealed class StandardCartridgeTests
         Assert.Equal(0xFF, cartridge.Read(0xA000));
     }
 
+    /// <summary>
+    /// FR/TR: FR-CART-STD16K.
+    /// Use case: A raw 16K cartridge image maps ROML + ROMH ($8000-$BFFF).
+    /// Acceptance: Size=Rom16K, both EXROM + GAME asserted, HandlesAddress
+    /// covers $8000-$BFFF; $C000 unmapped; bytes round-trip across banks.
+    /// </summary>
     [Fact]
     public void FromBytes_Accepts16KImage_AndMapsRomLowAndRomHigh()
     {
@@ -50,6 +63,12 @@ public sealed class StandardCartridgeTests
         Assert.Equal(0x66, cartridge.Peek(0xBFFF));
     }
 
+    /// <summary>
+    /// FR/TR: FR-CART-STD-SIZE.
+    /// Use case: A cart image that's neither 8K nor 16K is rejected at
+    /// load time with a clear error.
+    /// Acceptance: ArgumentException whose message mentions "8K or 16K".
+    /// </summary>
     [Fact]
     public void FromBytes_RejectsNonStandardLength()
     {
@@ -60,6 +79,13 @@ public sealed class StandardCartridgeTests
         Assert.Contains("8K or 16K", ex.Message);
     }
 
+    /// <summary>
+    /// FR/TR: FR-CART-CRT-8K.
+    /// Use case: A CRT-format 8K cart image (with the standard CRT header
+    /// + CHIP packet) normalises to the same raw 8K ROM payload.
+    /// Acceptance: Loaded cartridge has the original ROM bytes at the
+    /// canonical $8000 + $9FFF positions; ToArray() round-trips the rom.
+    /// </summary>
     [Fact]
     public void FromBytes_AcceptsGeneric8KCrt_AndNormalizesToRawRom()
     {
@@ -77,6 +103,13 @@ public sealed class StandardCartridgeTests
         Assert.Equal(rom, cartridge.ToArray());
     }
 
+    /// <summary>
+    /// FR/TR: FR-CART-CRT-16K.
+    /// Use case: A CRT-format 16K cart image (CHIP packets covering ROML
+    /// + ROMH) maps to a 16K raw ROM with both banks accessible.
+    /// Acceptance: Size=Rom16K, bytes at $8000, $A000, $BFFF read back as
+    /// written into the source ROM image.
+    /// </summary>
     [Fact]
     public void FromBytes_AcceptsGeneric16KCrt_AndMapsRomLowAndHigh()
     {
@@ -95,6 +128,13 @@ public sealed class StandardCartridgeTests
         Assert.Equal(0x30, cartridge.Read(0xBFFF));
     }
 
+    /// <summary>
+    /// FR/TR: FR-CART-READONLY.
+    /// Use case: Cartridge ROM is read-only - writes to mapped addresses
+    /// do not mutate the underlying ROM bytes.
+    /// Acceptance: After Write($8000, $88), Read($8000) returns the original
+    /// byte ($77).
+    /// </summary>
     [Fact]
     public void Write_DoesNotMutateRomContents()
     {

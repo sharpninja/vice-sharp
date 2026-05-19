@@ -35,8 +35,9 @@ public sealed class XmlDocsConventionTests
     /// MUST never be raised: a PR that adds new undocumented tests should
     /// document them, not loosen the ratchet.
     /// </summary>
-    private const int ExpectedMaxViolations = 192;
-    // Note: ratchet stays at 192 per QA-XMLDOCS-001 contract. Adhoc + Benchmark
+    private const int ExpectedMaxViolations = 0;
+    // QA-XMLDOCS-001 closed 2026-05-18 - all top-level TestHarness methods
+    // carry FR/TR + Use case + Acceptance markers. Adhoc + Benchmark
     // tests retrofitted in this same merge to keep the count from drifting.
 
     private static readonly Regex TestMethodPattern = new(
