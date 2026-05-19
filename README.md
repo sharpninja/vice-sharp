@@ -67,14 +67,15 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 |---------|:----:|:----:|--------|
 | MOS 6510 CPU (official + illegal opcodes) | ✅ | 100% | `LockstepValidationTests.First100000CyclesMatch` |
 | Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
-| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + light pen + sprite collision IRQ + color register read mask) | 🟢 | 85% | `BACKFILL-VIDEO-001` (pixel sequencer + sprite priority remain) |
-| MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + ICR) | ✅ | 100% | `BACKFILL-CIA` extended |
-| MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + noise LFSR) | 🟢 | 95% | `BACKFILL-SID-001` (dual-SID + filter 8580 deepening remain) |
+| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + light pen + sprite collision IRQ + color register read mask + $D018/$D016 decoding + display mode selection) | 🟢 | 90% | `BACKFILL-VIDEO-001` (pixel sequencer + sprite priority remain) |
+| MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + ICR) | ✅ | 100% | `BACKFILL-CIA` extended |
+| MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + dual-SID + noise LFSR + determinism) | ✅ | 100% | `BACKFILL-SID-001` closed; 8580 filter deepening is post-MVP |
+| MOS 6522 VIA (timer-1 PB7 + timer-2 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ✅ | 100% | `BACKFILL-VIA` complete |
 | PLA + Memory map ($0000-$FFFF) | ✅ | 100% | boot proof |
 | Reset sequencing (7-cycle + port init) | ✅ | 100% | reset tests |
 | ROM loader (KERNAL/BASIC/CHARGEN + SHA1) | ✅ | 100% | `BasicBootProofTests` |
 | 1541 / IEC / D64 (attach + deterministic sector reads) | 🟡 | 30% | `RUNTIME-1541-001` done · `RUNTIME-1541-002` open |
-| Datasette / TAP (pulse reads, motor gating bounded) | 🟡 | 25% | `RUNTIME-TAPE-001` done · `RUNTIME-TAPE-002` open |
+| Datasette / TAP (pulse reads + CIA1 FLAG integration + builder wiring) | 🟢 | 70% | `RUNTIME-TAPE-001` + Datasette/CIA1 FLAG + builder integration |
 | Standard cartridge mapping (8K/16K raw, not yet wired to memory map) | 🟡 | 25% | `RUNTIME-CART-001` done · `RUNTIME-CART-002` open |
 | Runtime snapshot (64K + public CPU state) | 🟡 | 30% | `RUNTIME-SNAPSHOT-001` done · `RUNTIME-SNAPSHOT-002` open |
 | Frame capture (BGRA → BMP artifact) | 🟡 | 25% | `RUNTIME-CAPTURE-001` done · `RUNTIME-CAPTURE-002` open |
@@ -104,7 +105,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~970/970** chip-level (21 slices landed this session; 594 ROM-dependent integration tests skip when ROMs absent).
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~1050+/1050+** chip-level (39 slices landed this session; ~600 ROM-dependent integration tests skip when ROMs absent).
 
 ## Supported Machines (planned)
 
