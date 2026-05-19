@@ -727,7 +727,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _sprites[sprite].Y = value;
             }
         }
-        // Sprite X MSB (0x10)
+        // Sprite X MSB (0x10): bit n = sprite n high X bit.
         else if (offset == 0x10)
         {
             for (int i = 0; i < 8; i++)
@@ -738,16 +738,48 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                     _sprites[i].X &= 0xFF;
             }
         }
-        // Sprite control (0x1C, 0x1D, 0x1E, 0x1F)
-        else if (offset >= 0x1C && offset <= 0x1F)
+        // $D017 Sprite Y Expansion: bit n = sprite n is Y-expanded.
+        else if (offset == 0x17)
         {
-            int sprite = offset - 0x1C;
-            ref SpriteState s = ref _sprites[sprite];
-            s.IsExpandedX = (value & 0x08) != 0;
-            s.IsExpandedY = (value & 0x04) != 0;
-            s.IsMulticolor = (value & 0x02) != 0;
-            s.IsPriority = (value & 0x01) == 0;
+            for (int i = 0; i < 8; i++)
+            {
+                _sprites[i].IsExpandedY = (value & (1 << i)) != 0;
+            }
         }
+        // $D01B Sprite-data priority (bit n = sprite n behind background data).
+        else if (offset == 0x1B)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                // IsPriority == true means sprite behind background (matches existing
+                // semantic in GetSpritePriority returning SpritePriority.Behind).
+                _sprites[i].IsPriority = (value & (1 << i)) != 0;
+            }
+        }
+        // $D01C Sprite Multicolor: bit n = sprite n in multicolor mode.
+        else if (offset == 0x1C)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                _sprites[i].IsMulticolor = (value & (1 << i)) != 0;
+            }
+        }
+        // $D01D Sprite X Expansion: bit n = sprite n is X-expanded.
+        else if (offset == 0x1D)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                _sprites[i].IsExpandedX = (value & (1 << i)) != 0;
+            }
+        }
+        // Sprite colors $D027-$D02E (per-sprite individual color).
+        else if (offset >= 0x27 && offset <= 0x2E)
+        {
+            int sprite = offset - 0x27;
+            _sprites[sprite].Color = (byte)(value & 0x0F);
+        }
+        // $D01E (sprite-sprite collision) and $D01F (sprite-background collision)
+        // are read-only collision latches; writes do not configure sprite state.
     }
 
     /// <inheritdoc />
