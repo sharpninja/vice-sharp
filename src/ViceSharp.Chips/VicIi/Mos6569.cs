@@ -66,6 +66,20 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private byte _rowCounter;
     private int _videoMatrixLineIndex;
     private bool _idleState;
+
+    // BACKFILL-VIDEO-001: Track which raster line last contributed to the
+    // per-frame bad-line count so each bad line is counted exactly once even
+    // if IsBadLine is sampled multiple times during the line.
+    private int _lastBadLineCounted = -1;
+    private int _badLineCountThisFrame;
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / FR-VIC: count of bad lines that have fired
+    /// during the current frame. Reset to zero when the raster wraps back
+    /// to line 0. Increments at most once per raster line, on the first
+    /// tick at which IsBadLine evaluates true for that line.
+    /// </summary>
+    public int BadLineCountThisFrame => _badLineCountThisFrame;
     
     /// <summary>
     /// TV system type for VIC-II timing
@@ -541,9 +555,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 CurrentRasterLine = 0;
                 _refreshCounter = 0xFF;
                 _allowBadLines = false;
+                // BACKFILL-VIDEO-001: per-frame bad-line counter resets at the
+                // frame boundary (raster wrap back to line 0).
+                _badLineCountThisFrame = 0;
+                _lastBadLineCounted = -1;
             }
 
             UpdateBadLineLatchForStartOfLine();
+
+            // BACKFILL-VIDEO-001 / FR-VIC: count this scanline as a bad line
+            // if it qualifies, exactly once per line.
+            if (IsBadLine && _lastBadLineCounted != CurrentRasterLine)
+            {
+                _badLineCountThisFrame++;
+                _lastBadLineCounted = CurrentRasterLine;
+            }
 
             // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
             ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
@@ -582,6 +608,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _spriteSpriteCollisionLatch = 0;
         _spriteBackgroundCollisionLatch = 0;
         _lastCollisionRasterLine = -1;
+        // BACKFILL-VIDEO-001: clear per-frame bad-line counter on reset.
+        _badLineCountThisFrame = 0;
+        _lastBadLineCounted = -1;
     }
 
     public byte ConsumeRefreshCounter()
