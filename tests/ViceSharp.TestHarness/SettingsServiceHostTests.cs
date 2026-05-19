@@ -1,0 +1,412 @@
+namespace ViceSharp.TestHarness;
+
+using ViceSharp.Core;
+using ViceSharp.Host.Runtime;
+using ViceSharp.Host.Services;
+using ViceSharp.Protocol;
+using Xunit;
+
+/// <summary>
+/// Direct (in-process, no gRPC) unit tests for the
+/// <see cref="SettingsServiceHost"/> RPC surface
+/// (<see cref="ISettingsService.ListProfilesAsync"/> /
+/// <see cref="ISettingsService.GetSettingsAsync"/> /
+/// <see cref="ISettingsService.UpdateSettingsAsync"/> /
+/// <see cref="ISettingsService.ValidateResourcesAsync"/>) against a
+/// minimal in-memory architecture. Complements the chip-layer
+/// emulator coverage by exercising the host-RPC layer that wraps the
+/// session settings store: session resolution, status mapping,
+/// argument validation, round-trip persistence, and cancellation
+/// contracts. Uses <see cref="MinimalHostArchitectureDescriptor"/> so
+/// the tests do not require C64 ROM assets on disk and can run in any
+/// worktree.
+/// </summary>
+public sealed class SettingsServiceHostTests
+{
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls ListProfiles with a session id the host
+    /// runtime registry does not know about.
+    /// Acceptance: The RPC returns the standard missing-session NotFound
+    /// status (carrying the unknown session id) and an empty profile
+    /// collection.
+    /// </summary>
+    [Fact]
+    public async Task ListProfilesAsync_MissingSession_ReturnsMissingSessionStatus()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.ListProfilesAsync(
+            new SessionRequest("does-not-exist"),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);
+        Assert.Contains("does-not-exist", response.Status.Message);
+        Assert.Empty(response.Profiles);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls GetSettings with a session id the host
+    /// runtime registry does not know about.
+    /// Acceptance: The RPC returns the standard missing-session NotFound
+    /// status and a null settings payload.
+    /// </summary>
+    [Fact]
+    public async Task GetSettingsAsync_MissingSession_ReturnsMissingSessionStatus()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.GetSettingsAsync(
+            new SessionRequest("does-not-exist"),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);
+        Assert.Contains("does-not-exist", response.Status.Message);
+        Assert.Null(response.Settings);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls UpdateSettings with a session id the
+    /// host runtime registry does not know about.
+    /// Acceptance: The RPC returns the standard missing-session NotFound
+    /// status, a null settings payload, and an empty diagnostics list,
+    /// without touching any session state.
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_MissingSession_ReturnsMissingSessionStatus()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.UpdateSettingsAsync(
+            new UpdateSettingsRequest("does-not-exist", Limiter: new LimiterSettingsDto(120, true)),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);
+        Assert.Contains("does-not-exist", response.Status.Message);
+        Assert.Null(response.Settings);
+        Assert.Empty(response.Diagnostics);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls ValidateResources with a session id the
+    /// host runtime registry does not know about.
+    /// Acceptance: The RPC returns the standard missing-session NotFound
+    /// status and an empty resource validation collection.
+    /// </summary>
+    [Fact]
+    public async Task ValidateResourcesAsync_MissingSession_ReturnsMissingSessionStatus()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.ValidateResourcesAsync(
+            new ValidateSettingsResourcesRequest("does-not-exist", Limiter: new LimiterSettingsDto(120, true)),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.NotFound, response.Status.Code);
+        Assert.Contains("does-not-exist", response.Status.Message);
+        Assert.Empty(response.Resources);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls ListProfiles against a freshly
+    /// registered session and expects the catalog of machine profiles
+    /// known to the host (at minimum the minimal-host profile).
+    /// Acceptance: Status is Ok, the profile collection is non-empty,
+    /// includes the minimal-host architecture id, and exactly one
+    /// profile is marked current (matching the session's profile id).
+    /// </summary>
+    [Fact]
+    public async Task ListProfilesAsync_ValidSession_ReturnsProfilesWithCurrentMarked()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.ListProfilesAsync(
+            new SessionRequest(session.SessionId),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+        Assert.NotEmpty(response.Profiles);
+        Assert.Contains(response.Profiles, profile =>
+            string.Equals(profile.Id, MinimalHostArchitectureDescriptor.ArchitectureId, System.StringComparison.OrdinalIgnoreCase));
+        Assert.Single(response.Profiles, profile => profile.IsCurrent);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls GetSettings against a freshly
+    /// registered session to retrieve the current limiter, display,
+    /// input, audio, and resource configuration.
+    /// Acceptance: Status is Ok and the returned settings DTO has the
+    /// session's profile id along with non-null limiter, display, and
+    /// input sub-DTOs (the defaults written by the runtime factory).
+    /// </summary>
+    [Fact]
+    public async Task GetSettingsAsync_ValidSession_ReturnsCurrentSettings()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.GetSettingsAsync(
+            new SessionRequest(session.SessionId),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+        Assert.NotNull(response.Settings);
+        Assert.False(string.IsNullOrWhiteSpace(response.Settings.ProfileId));
+        Assert.NotNull(response.Settings.Limiter);
+        Assert.NotNull(response.Settings.Display);
+        Assert.NotNull(response.Settings.Input);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls UpdateSettings with a valid limiter
+    /// change (no restart) and then GetSettings, expecting the new
+    /// limiter rate to round-trip.
+    /// Acceptance: UpdateSettings returns Ok with a diagnostic that the
+    /// limiter rate was applied live; a subsequent GetSettings observes
+    /// the updated rate percent value on the session settings DTO.
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_LimiterRoundTrip_PersistsAndDiagnoses()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        var update = await settingsService.UpdateSettingsAsync(
+            new UpdateSettingsRequest(session.SessionId, Limiter: new LimiterSettingsDto(150, true)),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, update.Status.Code);
+        Assert.NotNull(update.Settings);
+        Assert.Equal(150, update.Settings.Limiter.RatePercent);
+        Assert.Contains(update.Diagnostics, diagnostic =>
+            string.Equals(diagnostic.Setting, "limiter.ratePercent", System.StringComparison.OrdinalIgnoreCase) &&
+            diagnostic.AppliedLive);
+
+        var get = await settingsService.GetSettingsAsync(
+            new SessionRequest(session.SessionId),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, get.Status.Code);
+        Assert.NotNull(get.Settings);
+        Assert.Equal(150, get.Settings.Limiter.RatePercent);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls UpdateSettings with an out-of-range
+    /// limiter rate that violates the host validation policy
+    /// (0 &lt; rate &lt;= 1000).
+    /// Acceptance: UpdateSettings returns InvalidArgument, no settings
+    /// DTO is returned, the diagnostics list is empty, and the
+    /// session's stored limiter rate is unchanged after the call.
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_InvalidLimiterRate_ReturnsInvalidArgument()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+        var originalRate = session.LimiterRatePercent;
+
+        var response = await settingsService.UpdateSettingsAsync(
+            new UpdateSettingsRequest(session.SessionId, Limiter: new LimiterSettingsDto(-5, true)),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);
+        Assert.Null(response.Settings);
+        Assert.Empty(response.Diagnostics);
+        Assert.Equal(originalRate, session.LimiterRatePercent);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls UpdateSettings with a profile id that
+    /// is unknown to the host (neither the minimal-host descriptor nor
+    /// any C64 machine profile).
+    /// Acceptance: UpdateSettings returns InvalidArgument with an
+    /// informative message naming the unknown profile id, and the
+    /// session settings remain unchanged.
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_UnknownProfile_ReturnsInvalidArgument()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.UpdateSettingsAsync(
+            new UpdateSettingsRequest(session.SessionId, ProfileId: "not-a-real-profile"),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);
+        Assert.Contains("not-a-real-profile", response.Status.Message);
+        Assert.Null(response.Settings);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client calls ValidateResources against a valid
+    /// session with a deliberately invalid display renderer to confirm
+    /// the host enumerates per-resource validation results.
+    /// Acceptance: ValidateResources returns Ok, the resource list
+    /// includes a "display.renderer" entry marked invalid (the bad
+    /// renderer), and the validation message identifies the resource
+    /// key.
+    /// </summary>
+    [Fact]
+    public async Task ValidateResourcesAsync_ValidSession_ReportsInvalidRenderer()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.ValidateResourcesAsync(
+            new ValidateSettingsResourcesRequest(
+                session.SessionId,
+                Display: new DisplaySettingsDto(Renderer: "not-a-real-renderer")),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+        Assert.Contains(response.Resources, resource =>
+            string.Equals(resource.ResourceKey, "display.renderer", System.StringComparison.OrdinalIgnoreCase) &&
+            !resource.IsValid);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client cancels a ListProfiles RPC before the host
+    /// has a chance to service it; the host must observe the
+    /// cancellation rather than walking the profile catalog.
+    /// Acceptance: Invoking ListProfilesAsync with an already-cancelled
+    /// <see cref="CancellationToken"/> throws
+    /// <see cref="OperationCanceledException"/> (matching the
+    /// <c>ThrowIfCancellationRequested</c> contract).
+    /// </summary>
+    [Fact]
+    public async Task ListProfilesAsync_CancelledToken_Throws()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await settingsService.ListProfilesAsync(
+                new SessionRequest(session.SessionId),
+                cts.Token));
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client cancels a GetSettings RPC before the host
+    /// has a chance to service it.
+    /// Acceptance: Invoking GetSettingsAsync with an already-cancelled
+    /// <see cref="CancellationToken"/> throws
+    /// <see cref="OperationCanceledException"/> before any session
+    /// lookup occurs.
+    /// </summary>
+    [Fact]
+    public async Task GetSettingsAsync_CancelledToken_Throws()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await settingsService.GetSettingsAsync(
+                new SessionRequest(session.SessionId),
+                cts.Token));
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client cancels an UpdateSettings RPC before the host
+    /// has a chance to service it; the host must observe the
+    /// cancellation rather than mutating session settings or running
+    /// validation.
+    /// Acceptance: Invoking UpdateSettingsAsync with an already-cancelled
+    /// <see cref="CancellationToken"/> throws
+    /// <see cref="OperationCanceledException"/>, and the session's
+    /// limiter rate remains untouched after the throw.
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_CancelledToken_Throws()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+        var originalRate = session.LimiterRatePercent;
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await settingsService.UpdateSettingsAsync(
+                new UpdateSettingsRequest(session.SessionId, Limiter: new LimiterSettingsDto(200, true)),
+                cts.Token));
+        Assert.Equal(originalRate, session.LimiterRatePercent);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: A client cancels a ValidateResources RPC before the
+    /// host has a chance to service it.
+    /// Acceptance: Invoking ValidateResourcesAsync with an
+    /// already-cancelled <see cref="CancellationToken"/> throws
+    /// <see cref="OperationCanceledException"/> before any validation
+    /// work begins.
+    /// </summary>
+    [Fact]
+    public async Task ValidateResourcesAsync_CancelledToken_Throws()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await settingsService.ValidateResourcesAsync(
+                new ValidateSettingsResourcesRequest(session.SessionId),
+                cts.Token));
+    }
+
+    private static EmulatorRuntimeSession CreateMinimalSession()
+    {
+        var factory = new DefaultEmulatorRuntimeFactory(
+            new ArchitectureBuilder(),
+            [MinimalHostArchitectureDescriptor.Instance],
+            MinimalHostArchitectureDescriptor.ArchitectureId);
+        return factory.Create(new CreateEmulatorSessionRequest());
+    }
+}
