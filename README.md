@@ -67,20 +67,21 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 |---------|:----:|:----:|--------|
 | MOS 6510 CPU (official + illegal opcodes) | ✅ | 100% | `LockstepValidationTests.First100000CyclesMatch` |
 | Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
-| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + light pen + sprite collision IRQ + color register read mask + $D018/$D016 decoding + display mode selection) | 🟢 | 90% | `BACKFILL-VIDEO-001` (pixel sequencer + sprite priority remain) |
-| MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + ICR) | ✅ | 100% | `BACKFILL-CIA` extended |
+| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + light pen + color register read mask + $D018/$D016/$D011 decoding + display mode selection + $D015/$D010 sprite registers) | 🟢 | 92% | `BACKFILL-VIDEO-001` (pixel sequencer + sprite priority remain) |
+| MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + keyboard scan + joystick scan + ICR) | ✅ | 100% | `BACKFILL-CIA` + `BACKFILL-INPUT-001` complete |
 | MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + dual-SID + noise LFSR + determinism) | ✅ | 100% | `BACKFILL-SID-001` closed; 8580 filter deepening is post-MVP |
-| MOS 6522 VIA (timer-1 PB7 + timer-2 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ✅ | 100% | `BACKFILL-VIA` complete |
+| MOS 6522 VIA (timer-1 PB7 + timer-2 phi2+PB6 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ✅ | 100% | `BACKFILL-VIA` complete |
+| Mos6510 CPU interrupts (NMI vector + BRK B-flag + IRQ vector) | ✅ | 100% | `BACKFILL-CPU` complete |
 | PLA + Memory map ($0000-$FFFF) | ✅ | 100% | boot proof |
 | Reset sequencing (7-cycle + port init) | ✅ | 100% | reset tests |
 | ROM loader (KERNAL/BASIC/CHARGEN + SHA1) | ✅ | 100% | `BasicBootProofTests` |
 | 1541 / IEC / D64 (attach + deterministic sector reads) | 🟡 | 30% | `RUNTIME-1541-001` done · `RUNTIME-1541-002` open |
-| Datasette / TAP (pulse reads + CIA1 FLAG integration + builder wiring) | 🟢 | 70% | `RUNTIME-TAPE-001` + Datasette/CIA1 FLAG + builder integration |
+| Datasette / TAP (pulse reads + CIA1 FLAG integration + builder wiring + rewind/seek) | 🟢 | 80% | `RUNTIME-TAPE-001` + Datasette/CIA1 FLAG + builder integration + seek |
 | Standard cartridge mapping (8K/16K raw, not yet wired to memory map) | 🟡 | 25% | `RUNTIME-CART-001` done · `RUNTIME-CART-002` open |
-| Runtime snapshot (64K + public CPU state) | 🟡 | 30% | `RUNTIME-SNAPSHOT-001` done · `RUNTIME-SNAPSHOT-002` open |
+| Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + chip-state round-trip) | 🟢 | 60% | `RUNTIME-SNAPSHOT-001` + `-002` (CIA + SID round-trip; VIC/TOD pipeline deferred) |
 | Frame capture (BGRA → BMP artifact) | 🟡 | 25% | `RUNTIME-CAPTURE-001` done · `RUNTIME-CAPTURE-002` open |
-| Keyboard matrix + control-port parity (12 variants, held keyboard) | 🟢 | 60% | `BACKFILL-INPUT-001` |
-| Host UI + Monitor control surface (gRPC, typed RPCs, disassembly trace) | 🟢 | 60% | `BACKFILL-HOSTUI-001` |
+| Keyboard matrix + control-port parity (12 variants, held keyboard + CIA1 scan tests) | 🟢 | 75% | `BACKFILL-INPUT-001` |
+| Host UI + Monitor control surface (gRPC + RPC tests for ReadRegistersAsync) | 🟢 | 65% | `BACKFILL-HOSTUI-001` |
 | x64sc variant lockstep gate (293/293 variants, raster checkpoints) | 🟢 | 50% | `BACKFILL-LOCKSTEP-001` |
 | Upstream VICE testbench integration | ⚪ | 0% | `ARCH-TESTBENCH-001` |
 
@@ -105,7 +106,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~1050+/1050+** chip-level (39 slices landed this session; ~600 ROM-dependent integration tests skip when ROMs absent).
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Suite count as of 2026-05-19 EOD: **~1100+/1100+** chip-level (50 slices landed this session; ~600 ROM-dependent integration tests skip when ROMs absent).
 
 ## Supported Machines (planned)
 
