@@ -533,6 +533,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// VICE-style: Y scroll value (bits 0-2 of $D011)
     /// </summary>
     public byte YScroll => (byte)(_registers[0x11] & 0x07);
+
+    /// <summary>
+    /// FR-VIC (BACKFILL-VIDEO-001 $D016 decoding): X scroll value
+    /// (bits 0-2 of $D016). Consumed by the pixel sequencer to shift
+    /// rendered pixels 0-7 to the right. Pure register decoding here;
+    /// the pixel-sequencer effect is a future slice.
+    /// </summary>
+    public byte XScroll => (byte)(_registers[0x16] & 0x07);
     
     /// <summary>
     /// VICE-style: Is this a forced badline (FLI support)
@@ -942,6 +950,24 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (register >= 0x20 && register <= 0x2E)
         {
             return (byte)(_registers[register] | 0xF0);
+        }
+
+        // BACKFILL-VIDEO-001 / FR-VIC: $D016 control register 2. Bits 7-6 are
+        // unconnected on the real chip and float high; bit 5 is reserved
+        // (RES). Bits 4-0 (MCM, CSEL, XSCROLL2..0) carry real state. Force
+        // bits 7-6 to 1 on read.
+        if (register == 0x16)
+        {
+            return (byte)(_registers[register] | 0xC0);
+        }
+
+        // BACKFILL-VIDEO-001 / FR-VIC: $D018 memory pointers. Bit 0 is
+        // unconnected on the real chip and floats high; bits 7-4 are the
+        // video matrix base (VM13..VM10) and bits 3-1 are the character
+        // bitmap base (CB13..CB11). Force bit 0 to 1 on read.
+        if (register == 0x18)
+        {
+            return (byte)(_registers[register] | 0x01);
         }
 
         return _registers[register];
