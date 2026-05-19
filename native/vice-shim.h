@@ -89,6 +89,14 @@ struct vice_sid_state {
 
 VICE_SHIM_API void vice_sid_get_state(void* machine, struct vice_sid_state* state);
 
+// Render N audio samples from the active SID into buffer. Returns the count
+// actually rendered as signed 16-bit PCM. delta_t_cycles is the host-cycle
+// budget per sample request (e.g. 22 for ~44.1kHz at C64 PAL 985248Hz).
+// The renderer is reference-tolerant: it uses the configured SID engine
+// (fastsid or reSID) with the current siddata register state. It does not
+// require sound_open() to have succeeded.
+VICE_SHIM_API size_t vice_sid_render_samples(void* machine, int16_t* buffer, size_t n, int delta_t_cycles);
+
 struct vice_interrupt_state {
     uint8_t irq_asserted;
     uint8_t nmi_asserted;

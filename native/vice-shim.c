@@ -1314,3 +1314,108 @@ VICE_SHIM_API void vice_interrupt_get_state(void *machine, struct vice_interrupt
     }
     LeaveCriticalSection(&g_state_lock);
 }
+
+/*
+ * Sample-accurate audio rendering accessor.
+ *
+ * VICE's normal audio path runs through sound_open() / snddata which depends
+ * on a registered sound device. The shim is headless and may not have driven
+ * sound_open through to success, so we instead own our own sound_t* via
+ * sid_sound_machine_open(0). The SID register state is always available at
+ * siddata[0] (sid_get_siddata) regardless of whether snddata is initialised;
+ * we resync that register state into our private sound_t before each render
+ * so register writes performed through vice_machine_write still take effect.
+ *
+ * Engine selection follows the configured SidEngine resource. In the build
+ * used by the shim (--without-resid --with-fastsid) the engine is FastSID.
+ * The cycle_based flag therefore is false, so we drive the renderer with a
+ * fixed delta_t per sample request.
+ */
+static sound_t *g_shim_sid_psid = NULL;
+static int g_shim_sid_speed = 0;
+static int g_shim_sid_cycles_per_sec = 0;
+
+static int vice_shim_ensure_sid_renderer_locked(int sample_rate_hz, int cycles_per_sec)
+{
+    if (g_shim_sid_psid != NULL
+        && g_shim_sid_speed == sample_rate_hz
+        && g_shim_sid_cycles_per_sec == cycles_per_sec) {
+        return 1;
+    }
+
+    if (g_shim_sid_psid != NULL) {
+        sid_sound_machine_close(g_shim_sid_psid);
+        g_shim_sid_psid = NULL;
+    }
+
+    g_shim_sid_psid = sid_sound_machine_open(0);
+    if (g_shim_sid_psid == NULL) {
+        return 0;
+    }
+    if (!sid_sound_machine_init(g_shim_sid_psid, sample_rate_hz, cycles_per_sec)) {
+        sid_sound_machine_close(g_shim_sid_psid);
+        g_shim_sid_psid = NULL;
+        return 0;
+    }
+    g_shim_sid_speed = sample_rate_hz;
+    g_shim_sid_cycles_per_sec = cycles_per_sec;
+    return 1;
+}
+
+static void vice_shim_sync_sid_registers_locked(void)
+{
+    uint8_t *regs = sid_get_siddata(0);
+    if (regs == NULL || g_shim_sid_psid == NULL) {
+        return;
+    }
+    /* Push the 25 SID register values into the engine so renderer state
+     * matches whatever was last written via vice_machine_write. */
+    for (int addr = 0; addr <= 0x18; addr++) {
+        sid_sound_machine_store(g_shim_sid_psid, (uint16_t)addr, regs[addr]);
+    }
+}
+
+VICE_SHIM_API size_t vice_sid_render_samples(void *machine, int16_t *buffer, size_t n, int delta_t_cycles)
+{
+    if (machine == NULL || buffer == NULL || n == 0) {
+        return 0;
+    }
+
+    const int sample_rate_hz = 44100;
+    const int cycles_per_sec = 985248; /* C64 PAL */
+    const int delta_per_sample = (delta_t_cycles > 0) ? delta_t_cycles : 22;
+
+    size_t rendered = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        if (vice_shim_ensure_sid_renderer_locked(sample_rate_hz, cycles_per_sec)) {
+            vice_shim_sync_sid_registers_locked();
+
+            /* Render one sample at a time so each call consumes exactly
+             * delta_per_sample CPU cycles, mirroring the managed harness
+             * which ticks the same budget between GenerateSample calls. */
+            for (size_t i = 0; i < n; i++) {
+                CLOCK delta = (CLOCK)delta_per_sample;
+                sound_t *engines[1];
+                engines[0] = g_shim_sid_psid;
+                int got = sid_sound_machine_calculate_samples(
+                    engines,
+                    buffer + i,
+                    1,
+                    1,   /* sound_output_channels */
+                    1,   /* sound_chip_channels */
+                    &delta);
+                if (got <= 0) {
+                    break;
+                }
+                rendered++;
+            }
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return rendered;
+}

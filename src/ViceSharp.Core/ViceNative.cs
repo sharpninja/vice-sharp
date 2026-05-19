@@ -129,6 +129,9 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_sid_get_state")]
     public static partial void GetSidState(IntPtr instance, ref ViceSidState state);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_render_samples")]
+    public static partial nuint RenderSidSamples(IntPtr instance, [Out] short[] buffer, nuint n, int deltaTCycles);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_interrupt_get_state")]
     public static partial void GetInterruptState(IntPtr instance, ref ViceInterruptState state);
 

@@ -85,6 +85,19 @@ public static class ViceNativeBridge
         state.FilterState = nativeState.FilterState;
     }
 
+    /// <summary>
+    /// Render PCM samples from the native SID into the buffer. Returns the
+    /// number of samples actually rendered as signed 16-bit values.
+    /// </summary>
+    /// <param name="machine">Native VICE machine handle.</param>
+    /// <param name="buffer">Sample destination; length determines maximum render count.</param>
+    /// <param name="deltaTCycles">Host-cycle budget per sample (default 22 ~= 44.1kHz at C64 PAL).</param>
+    public static int RenderSidSamples(IntPtr machine, short[] buffer, int deltaTCycles = 22)
+    {
+        var written = ViceNative.RenderSidSamples(machine, buffer, (nuint)buffer.Length, deltaTCycles);
+        return (int)written;
+    }
+
     public static void GetInterruptState(IntPtr machine, ref ViceInterruptState state)
     {
         var nativeState = new ViceNative.ViceInterruptState();
