@@ -521,14 +521,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         CycleCounter++;
         RasterX++;
 
-        // VICE-style raster interrupt (at cycle 58 of line)
-        if (RasterX == 58)
+        // VICE-style raster interrupt (at cycle 58 of line):
+        // the latch in $D019 bit 0 is set unconditionally on compare match;
+        // RefreshInterruptLine then gates the IRQ output by $D01A enable.
+        // BACKFILL-VIDEO-001 / FR-VIC: latch is independent of enable.
+        if (RasterX == 58 && CurrentRasterLine == _rasterIrqLine)
         {
-            if (CurrentRasterLine == _rasterIrqLine && (_registers[0x1A] & 0x01) != 0)
-            {
-                _registers[0x19] |= 0x01;
-                RefreshInterruptLine();
-            }
+            _registers[0x19] |= 0x01;
+            RefreshInterruptLine();
         }
 
         if (RasterX >= CyclesPerLine)
