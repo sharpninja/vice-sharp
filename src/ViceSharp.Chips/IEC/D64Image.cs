@@ -47,6 +47,14 @@ public sealed class D64Image
         return _diskData.AsSpan(position, 256);
     }
 
+    /// <summary>
+    /// Raw image bytes (174,848 for a 35-track D64). Read-only view; the
+    /// underlying buffer is owned by this instance and persists for its
+    /// lifetime. Used by D64DiskImageDevice.CommitToStream + tests that
+    /// need byte-exact image comparison.
+    /// </summary>
+    public ReadOnlySpan<byte> RawData => _diskData;
+
     private static int GetSectorOffset(int track, int sector)
     {
         int offset = 0;

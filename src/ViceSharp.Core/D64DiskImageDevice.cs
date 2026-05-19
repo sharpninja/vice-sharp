@@ -92,6 +92,22 @@ public sealed class D64DiskImageDevice : IDevice
     /// </summary>
     public void ClearDirty() => IsDirty = false;
 
+    /// <summary>
+    /// Write the current in-memory disk image (174,848 bytes for a 35-track
+    /// D64) to the destination stream and clear the dirty flag. Closes the
+    /// write-back persistence loop opened by <see cref="WriteSector"/>;
+    /// callers can flush to a FileStream, MemoryStream, or any other
+    /// writable stream. Does not seek or close the stream.
+    /// </summary>
+    /// <param name="destination">Writable stream that receives the image bytes.</param>
+    /// <exception cref="ArgumentNullException">destination is null.</exception>
+    public void CommitToStream(Stream destination)
+    {
+        ArgumentNullException.ThrowIfNull(destination);
+        destination.Write(Image.RawData);
+        IsDirty = false;
+    }
+
     private static int SectorsPerTrack(int track) => track switch
     {
         >= 1 and <= 17 => 21,
