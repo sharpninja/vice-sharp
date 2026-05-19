@@ -291,7 +291,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     
     // VICE-style: Sprite state
     private readonly SpriteState[] _sprites = new SpriteState[8];
-    
+
+    // BACKFILL-VIDEO-001: Sprite collision latches.
+    // Accumulate per-scanline; cleared on Read of $D01E / $D01F.
+    private byte _spriteSpriteCollisionLatch;
+    private byte _spriteBackgroundCollisionLatch;
+    // Track the last raster line at which we ran the collision raster so we
+    // do it exactly once per scanline (at cycle 0).
+    private int _lastCollisionRasterLine = -1;
+
     private struct SpriteState
     {
         public ushort X;
@@ -354,14 +362,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public enum SpriteCollisionType { None, SpriteSprite, SpriteBackground }
     
     /// <summary>
-    /// Get sprite-sprite collision mask from register $1E
+    /// Get sprite-sprite collision mask from register $1E (non-clearing peek into the latch).
     /// </summary>
-    public byte SpriteSpriteCollision => _registers[0x1E];
-    
+    public byte SpriteSpriteCollision => _spriteSpriteCollisionLatch;
+
     /// <summary>
-    /// Get sprite-background collision mask from register $1F
+    /// Get sprite-background collision mask from register $1F (non-clearing peek into the latch).
     /// </summary>
-    public byte SpriteBackgroundCollision => _registers[0x1F];
+    public byte SpriteBackgroundCollision => _spriteBackgroundCollisionLatch;
     
     // VICE-style: Interrupt sources
     public enum InterruptSource { None, Raster, SpriteSprite, SpriteBackground, LightPen, Timer }
@@ -401,19 +409,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     {
         _registers[0x1E] = 0;
         _registers[0x1F] = 0;
+        _spriteSpriteCollisionLatch = 0;
+        _spriteBackgroundCollisionLatch = 0;
     }
-    
+
     /// <summary>
     /// Check if two sprites collide (VICE-style detection)
     /// </summary>
-    public bool CheckSpriteCollision(int sprite1, int sprite2) => 
-        (_registers[0x1E] & (1 << sprite1)) != 0 && (_registers[0x1E] & (1 << sprite2)) != 0;
-    
+    public bool CheckSpriteCollision(int sprite1, int sprite2) =>
+        (_spriteSpriteCollisionLatch & (1 << sprite1)) != 0 && (_spriteSpriteCollisionLatch & (1 << sprite2)) != 0;
+
     /// <summary>
     /// Check if sprite collides with background data
     /// </summary>
-    public bool CheckSpriteBackgroundCollision(int spriteNum) => 
-        (_registers[0x1F] & (1 << spriteNum)) != 0;
+    public bool CheckSpriteBackgroundCollision(int spriteNum) =>
+        (_spriteBackgroundCollisionLatch & (1 << spriteNum)) != 0;
     
     /// <summary>
     /// Check if sprite is visible at current raster position
@@ -534,6 +544,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             }
 
             UpdateBadLineLatchForStartOfLine();
+
+            // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
+            ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
         }
 
         LastReadPhi1 = Phi1MemoryReader?.Invoke(CurrentCycle) ?? 0;
@@ -565,6 +578,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _videoMatrixLineIndex = 0;
         _idleState = false;
         LastReadPhi1 = 0;
+        // BACKFILL-VIDEO-001: clear collision accumulators on reset.
+        _spriteSpriteCollisionLatch = 0;
+        _spriteBackgroundCollisionLatch = 0;
+        _lastCollisionRasterLine = -1;
     }
 
     public byte ConsumeRefreshCounter()
@@ -604,6 +621,18 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public byte Peek(ushort offset)
     {
         int register = (offset - BaseAddress) & 0x3F;
+
+        // BACKFILL-VIDEO-001: Peek is debug-only; never disturb collision latches.
+        if (register == 0x1E)
+        {
+            return _spriteSpriteCollisionLatch;
+        }
+
+        if (register == 0x1F)
+        {
+            return _spriteBackgroundCollisionLatch;
+        }
+
         return _registers[register];
     }
 
@@ -620,6 +649,24 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (register == 0x11)
         {
             return (byte)((_registers[0x11] & 0x7F) | ((CurrentRasterLine & 0x100) >> 1));
+        }
+
+        // BACKFILL-VIDEO-001: $D01E sprite-sprite collision register.
+        // Read-and-clear semantics: return the accumulated mask, then clear.
+        if (register == 0x1E)
+        {
+            byte value = _spriteSpriteCollisionLatch;
+            _spriteSpriteCollisionLatch = 0;
+            return value;
+        }
+
+        // BACKFILL-VIDEO-001: $D01F sprite-background collision register.
+        // Read-and-clear semantics: return the accumulated mask, then clear.
+        if (register == 0x1F)
+        {
+            byte value = _spriteBackgroundCollisionLatch;
+            _spriteBackgroundCollisionLatch = 0;
+            return value;
         }
 
         return _registers[register];
@@ -665,20 +712,20 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     
     private void UpdateSpriteRegisters(ushort offset, byte value)
     {
-        // Sprite X position low (0x00-0x0F)
+        // Sprite X low / sprite Y pairs (0x00..0x0F):
+        // even offsets ($00, $02, ..., $0E) = sprite X low byte
+        // odd  offsets ($01, $03, ..., $0F) = sprite Y position
         if (offset < 0x10)
         {
             int sprite = offset / 2;
             if ((offset & 0x01) == 0)
+            {
                 _sprites[sprite].X = (ushort)((_sprites[sprite].X & 0xFF00) | value);
+            }
             else
-                _sprites[sprite].X = (ushort)((_sprites[sprite].X & 0x00FF) | ((value & 0x07) << 8));
-        }
-        // Sprite Y position (0x01, 0x03, ..., 0x0F)
-        else if (offset >= 0x01 && offset < 0x10 && (offset & 0x01) != 0)
-        {
-            int sprite = (offset - 1) / 2;
-            _sprites[sprite].Y = value;
+            {
+                _sprites[sprite].Y = value;
+            }
         }
         // Sprite X MSB (0x10)
         else if (offset == 0x10)
@@ -811,13 +858,237 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     {
         if (frameBuffer.Length < 320 * 200)
             return;
-        
+
         for (int y = 0; y < 200; y++)
         {
             for (int x = 0; x < 320; x++)
             {
                 frameBuffer[y * 320 + x] = GetPixelColor((byte)x, (byte)y);
             }
+        }
+    }
+
+    // BACKFILL-VIDEO-001: minimal sprite collision raster.
+    //
+    // Approximation note: production Mos6569 has no per-pixel sprite composition
+    // pipeline yet, so this routine performs a stand-alone per-scanline raster
+    // that builds an 8-sprite opacity mask across the 320-pixel visible main
+    // screen area plus a background foreground mask, then ORs the detected
+    // collisions into the per-frame latches that are returned (and cleared) on
+    // Read of $D01E / $D01F. Multicolor sprites and Y/X expansion are honoured
+    // for the shape mask (each pixel is treated as one source bit; multicolor
+    // pairs are flattened to "opaque if pair != 00"). Sprite-sprite priority
+    // ordering does not affect collision detection (per FR-VIC: any two opaque
+    // sprite pixels at the same coord collide regardless of priority).
+    private void ProcessSpriteCollisionsForRasterLine(int rasterLine)
+    {
+        // Avoid double-processing if Tick is called in unusual orders.
+        if (_lastCollisionRasterLine == rasterLine)
+        {
+            return;
+        }
+        _lastCollisionRasterLine = rasterLine;
+
+        byte enabled = _registers[0x15];
+        // Need at least one sprite enabled for any collision to occur.
+        if (enabled == 0)
+        {
+            return;
+        }
+
+        // Visible screen vertical extent.
+        int upperBorder = UpperBorderStart;
+        int lowerBorder = LowerBorderStart;
+
+        // Per-pixel sprite opacity bitmask across the VIC pixel x range 0..503.
+        // Backed by a stackalloc to keep this allocation-free on the hot path.
+        const int PixelSpan = 504;
+        Span<byte> spriteMask = stackalloc byte[PixelSpan];
+        spriteMask.Clear();
+
+        bool anyHit = false;
+        for (int n = 0; n < 8; n++)
+        {
+            if ((enabled & (1 << n)) == 0)
+            {
+                continue;
+            }
+
+            ref SpriteState s = ref _sprites[n];
+            int height = s.IsExpandedY ? 42 : 21;
+            // Sprite Y is in raster-line coordinates.
+            int spriteY = s.Y;
+            int row = rasterLine - spriteY;
+            if (row < 0 || row >= height)
+            {
+                continue;
+            }
+
+            // Source row inside the 21-row sprite shape after un-expanding.
+            int sourceRow = s.IsExpandedY ? row / 2 : row;
+
+            // Sprite data pointer lives at screen RAM + $03F8 + n.
+            byte ptr = ReadVideoMemory((ushort)(ScreenMemoryBase + 0x03F8 + n));
+            // Sprite data block is ptr * 64; each row is 3 bytes.
+            ushort baseAddr = (ushort)(ptr * 64 + sourceRow * 3);
+            byte b0 = ReadVideoMemory(baseAddr);
+            byte b1 = ReadVideoMemory((ushort)(baseAddr + 1));
+            byte b2 = ReadVideoMemory((ushort)(baseAddr + 2));
+
+            // Sprite X is a 9-bit value in VIC pixel space (24 = leftmost main screen pixel).
+            int spriteX = s.X;
+            int width = s.IsExpandedX ? 48 : 24;
+            byte bit = (byte)(1 << n);
+
+            for (int px = 0; px < width; px++)
+            {
+                int sourceCol = s.IsExpandedX ? px / 2 : px;
+                int byteIdx = sourceCol / 8;
+                int bitIdx = 7 - (sourceCol % 8);
+                byte src = byteIdx switch
+                {
+                    0 => b0,
+                    1 => b1,
+                    _ => b2,
+                };
+
+                bool opaque;
+                if (s.IsMulticolor)
+                {
+                    // Multicolor: pairs of bits encode 4 colors; 00 is transparent.
+                    // Sample the pair anchored at the even source column.
+                    int evenSource = sourceCol & ~1;
+                    int evenByte = evenSource / 8;
+                    int evenBit = 7 - (evenSource % 8);
+                    byte mcSrc = evenByte switch
+                    {
+                        0 => b0,
+                        1 => b1,
+                        _ => b2,
+                    };
+                    int pair = ((mcSrc >> (evenBit - 1)) & 0x03);
+                    opaque = pair != 0;
+                }
+                else
+                {
+                    opaque = ((src >> bitIdx) & 0x01) != 0;
+                }
+
+                if (!opaque)
+                {
+                    continue;
+                }
+
+                int x = spriteX + px;
+                if ((uint)x >= (uint)PixelSpan)
+                {
+                    continue;
+                }
+                spriteMask[x] |= bit;
+                anyHit = true;
+            }
+        }
+
+        if (!anyHit)
+        {
+            return;
+        }
+
+        // Sweep the mask to detect sprite-sprite overlaps and to AND against
+        // the background foreground bitmask for sprite-background collisions.
+        // Only compute the background bitmask for x positions where a sprite
+        // actually contributes opacity (skip when none).
+        byte spriteSpriteAcc = 0;
+        byte spriteBackgroundAcc = 0;
+
+        bool insideVisibleY = rasterLine >= upperBorder && rasterLine < lowerBorder;
+        // The display window in VIC pixel space is [LeftBorderPixel, RightBorderEndPixel).
+        int leftPixel = LeftBorderPixel;
+        int rightPixel = RightBorderEndPixel;
+
+        for (int x = 0; x < PixelSpan; x++)
+        {
+            byte m = spriteMask[x];
+            if (m == 0)
+            {
+                continue;
+            }
+            // Sprite-sprite: any byte with two-or-more bits set means a multi-sprite overlap.
+            if ((m & (m - 1)) != 0)
+            {
+                spriteSpriteAcc |= m;
+            }
+            // Sprite-background: only if we are within the visible character window AND
+            // the underlying character/bitmap pixel is a foreground pixel.
+            if (insideVisibleY && x >= leftPixel && x < rightPixel && IsBackgroundForegroundPixel(x, rasterLine))
+            {
+                spriteBackgroundAcc |= m;
+            }
+        }
+
+        _spriteSpriteCollisionLatch |= spriteSpriteAcc;
+        _spriteBackgroundCollisionLatch |= spriteBackgroundAcc;
+    }
+
+    // BACKFILL-VIDEO-001: Determine whether the background pixel at the given
+    // VIC pixel coordinate is a foreground (non-transparent) pixel for the
+    // purposes of sprite-background collision. Conservative: treats the bit
+    // pattern from character/bitmap mode as foreground when the source bit
+    // is set. Extended-bg / multicolor-text modes use the same simplification
+    // (any set bit counts as foreground); this is a known approximation and
+    // is documented in FR-VIC for the BACKFILL-VIDEO-001 slice.
+    private bool IsBackgroundForegroundPixel(int xVicPixel, int rasterLine)
+    {
+        int leftBorderPixel = LeftBorderPixel;
+        int upperBorder = UpperBorderStart;
+        int lowerBorder = LowerBorderStart;
+
+        if (rasterLine < upperBorder || rasterLine >= lowerBorder)
+        {
+            return false;
+        }
+
+        int screenX = xVicPixel - leftBorderPixel;
+        if (screenX < 0)
+        {
+            return false;
+        }
+        int columns = Columns == ColumnMode.Wide40 ? 40 : 38;
+        if (screenX >= columns * 8)
+        {
+            return false;
+        }
+
+        int visLine = rasterLine - upperBorder;
+        int screenLine = visLine + YScroll;
+        int screenRowCount = Math.Max((lowerBorder - upperBorder) / 8, 1);
+        int row = Math.Max((screenLine / 8) % screenRowCount, 0);
+
+        int col = screenX / 8;
+        int charX = screenX % 8;
+        int charOffset = row * columns + col;
+
+        byte charCode = ReadVideoMemory((ushort)(ScreenMemoryBase + charOffset));
+
+        switch (DisplayMode)
+        {
+            case VideoMode.StandardText:
+            case VideoMode.MulticolorText:
+            case VideoMode.ExtendedBackground:
+            {
+                byte charLine = ReadVideoMemory((ushort)(CharacterBase + charCode * 8 + (screenLine & 0x07)));
+                int bitPos = 7 - charX;
+                return ((charLine >> bitPos) & 0x01) != 0;
+            }
+            case VideoMode.Bitmap:
+            {
+                int bitmapOffset = (row * columns + col) * 8 + (screenLine & 0x07);
+                byte bitmapByte = ReadVideoMemory((ushort)(BitmapPointerBase + bitmapOffset));
+                int bitPos = 7 - charX;
+                return ((bitmapByte >> bitPos) & 0x01) != 0;
+            }
+            default:
+                return false;
         }
     }
 }
