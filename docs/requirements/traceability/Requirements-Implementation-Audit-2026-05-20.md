@@ -13,12 +13,13 @@ issue.
   `tools/port_vice_requirements.py`, and the source manifest records classic
   VICE documentation as the FR corpus.
 - The latest `tools/check_requirement_traceability.ps1` audit after the
-  2026-05-21 edge-TR and side-border work found 163 canonical IDs in
-  `docs/requirements`, with 81 referenced from `src` or `tests`, 82 not
+  2026-05-21 edge-TR, side-border, register-readback, and matrix/idle work
+  found 163 canonical IDs in `docs/requirements`, with 82 referenced from
+  `src` or `tests`, 81 not
   referenced from source/test files, and 53 noncanonical IDs still present in
   source/test files.
-- The FR-only breakdown is 108 canonical FRs, 67 referenced from `src` or
-  `tests`, and 41 not referenced from source/test files.
+- The FR-only breakdown is 108 canonical FRs, 69 referenced from `src` or
+  `tests`, and 39 not referenced from source/test files.
 - Source and tests still contain broad or noncanonical labels such as `FR-VIC`,
   `FR-CIA-TIMER`, and `FR-INPUT-KEYBOARD`. Those labels do not prove that a
   specific imported requirement drove the implementation.
@@ -59,11 +60,13 @@ Every Phase 1 slice must now pass this gate before implementation continues:
 - `docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md` now
   records 19 VICE-source-derived observable edge TRs, and `docs/plan.md`
   integrates those TRs into the Phase 1 slice order.
-- `TR-VIC-EDGE-001`, `TR-VIC-EDGE-002`, and `TR-VIC-EDGE-006` now have
+- `TR-VIC-EDGE-001`, `TR-VIC-EDGE-002`, `TR-VIC-EDGE-005`, and
+  `TR-VIC-EDGE-006` now have
   executable managed coverage for invalid ECM priority/collision behavior,
-  continuous side-border behavior, and VIC-II register readback/collision-latch
-  behavior respectively. Native visible-frame/register checkpoint validation
-  remains open under `BACKFILL-VIDEO-001`.
+  continuous side-border behavior, VIC-II matrix idle/fill behavior, and VIC-II
+  register readback/collision-latch behavior respectively. Native
+  visible-frame/register/matrix checkpoint validation remains open under
+  `BACKFILL-VIDEO-001`.
 
 ## Follow-Up Work
 

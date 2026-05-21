@@ -63,6 +63,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private bool _allowBadLines;
     private byte _refreshCounter;
     private readonly byte[] _videoBuffer = new byte[40];
+    private readonly byte[] _colorBuffer = new byte[40];
     private ushort _videoCounter;
     private byte _rowCounter;
     private int _videoMatrixLineIndex;
@@ -907,6 +908,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _allowBadLines = false;
         _refreshCounter = 0;
         Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
+        Array.Clear(_colorBuffer, 0, _colorBuffer.Length);
         _videoCounter = 0;
         _rowCounter = 0;
         _videoMatrixLineIndex = 0;
@@ -1320,6 +1322,55 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
     public bool IsGraphicsIdle => _idleState;
 
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001:
+    /// VICE viciisc/vicii-fetch.c:vici_fetch_idle_gfx reads $39ff in ECM
+    /// and $3fff otherwise.
+    /// </summary>
+    public ushort IdleGraphicsFetchAddress => (_registers[0x11] & 0x40) != 0
+        ? (ushort)0x39FF
+        : (ushort)0x3FFF;
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001:
+    /// current matrix fetch slot in the 40-column vbuf/cbuf latches.
+    /// </summary>
+    public int CurrentVideoMatrixSlot => _videoMatrixLineIndex % _videoBuffer.Length;
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001:
+    /// current 10-bit VC value used by VICE v_fetch_addr(vc).
+    /// </summary>
+    public ushort CurrentVideoMatrixCounter => (ushort)(_videoCounter & 0x03FF);
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001:
+    /// current video-matrix address before bank translation.
+    /// </summary>
+    public ushort CurrentVideoMatrixFetchAddress => (ushort)(ScreenMemoryBase + CurrentVideoMatrixCounter);
+
+    public bool IsMatrixFetchSlot(byte graphicsFetchSlot) => IsBadLine && graphicsFetchSlot < _videoBuffer.Length;
+
+    public bool IsMatrixPrefetchSlot(byte graphicsFetchSlot) => graphicsFetchSlot < 3;
+
+    public void LatchVideoMatrixFetch(int slot, byte matrixByte, byte colorNibble)
+    {
+        var index = NormalizeVideoMatrixSlot(slot);
+        _videoBuffer[index] = matrixByte;
+        _colorBuffer[index] = (byte)(colorNibble & 0x0F);
+    }
+
+    public void LatchVideoMatrixPrefetch(int slot, byte cpuRamValue)
+    {
+        var index = NormalizeVideoMatrixSlot(slot);
+        _videoBuffer[index] = 0xFF;
+        _colorBuffer[index] = (byte)(cpuRamValue & 0x0F);
+    }
+
+    public byte PeekVideoMatrixLatch(int slot) => _videoBuffer[NormalizeVideoMatrixSlot(slot)];
+
+    public byte PeekColorMatrixLatch(int slot) => _colorBuffer[NormalizeVideoMatrixSlot(slot)];
+
     /// <inheritdoc />
     public byte Peek(ushort offset)
     {
@@ -1599,6 +1650,16 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public byte ReadVideoMemory(ushort address)
     {
         return VideoMemoryReader?.Invoke(address) ?? _bus.Read(address);
+    }
+
+    private int NormalizeVideoMatrixSlot(int slot)
+    {
+        if ((uint)slot >= (uint)_videoBuffer.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(slot), slot, "Video matrix slot must be 0..39.");
+        }
+
+        return slot;
     }
 
     private bool IsBadLineRaster(ushort rasterLine)

@@ -4,8 +4,8 @@
 
 - Workspace: `F:\GitHub\vice-sharp`
 - Branch: `main`
-- Last synchronized project commit before this implementation slice: `417d864aef5f66e1a9a9e9c95de69ee15b957654` (`docs(status): refresh phase 1 progress`)
-- `origin/main` and `github/main` were both verified at `417d864aef5f66e1a9a9e9c95de69ee15b957654` before the register-readback slice.
+- Last synchronized project commit before this implementation slice: `06b080d3f3717b32e4b2b89ea6149f3ff7dc6319` (`feat(vic): add register readback edge coverage`)
+- `origin/main` and `github/main` were both verified at `06b080d3f3717b32e4b2b89ea6149f3ff7dc6319` before the matrix/idle slice.
 - The only intentionally uncommitted local item was `docs/reddit-followup-post.md`.
 - Active plan: `docs/plan.md`, "ViceSharp Phase 1 Completion Plan", updated 2026-05-21.
 - This is a reboot continuity handoff, not a Phase 1 completion claim.
@@ -17,6 +17,10 @@
 - Bootstrap through `workflow.sessionlog.bootstrap` before `workflow.sessionlog.*`, `workflow.todo.*`, or `workflow.requirements.*`.
 - Do not use raw REST or direct `docs/todo.yaml` edits for normal MCP work.
 - If marker signature, health nonce, plugin availability, or MCP auth fails, stop MCP mutation and use the plugin failsafe path.
+- During the 2026-05-21 matrix/idle slice, a subagent reported an MCP health
+  nonce failure after the main agent had opened the turn and queried TODO
+  state. MCP mutation was paused after that report, and local fallback docs
+  were updated instead.
 - MCP STDIO frames on physical blank lines. For multiline markdown payloads, pass compressed JSON or another single-line serialized payload so blank lines do not truncate the request.
 - All subagents must read `AGENTS-README-FIRST.yaml` before work and must report progress to the main agent at least every five minutes.
 
@@ -68,8 +72,8 @@
   `TR-VDC-EDGE-001`.
 - Generated requirements markdown and wiki markdown were refreshed under
   `docs/Project/` and `docs/Project/wiki/`.
-- Current traceability audit output after the register-readback implementation slice: 163 canonical IDs,
-  81 referenced canonical IDs, 82 unreferenced canonical IDs, and 53
+- Current traceability audit output after the matrix/idle implementation slice: 163 canonical IDs,
+  82 referenced canonical IDs, 81 unreferenced canonical IDs, and 53
   noncanonical IDs in `src`/`tests`. The new edge TRs are requirements-only
   anchors and are expected to remain unreferenced until their implementation
   slices add executable coverage.
@@ -93,6 +97,15 @@
   - Writes to unused VIC-II registers and collision registers do not fabricate
     register or latch state.
   - Managed coverage now includes focused register-readback/IRQ/collision validation.
+- `BACKFILL-VIDEO-001` continued with `TR-VIC-EDGE-005` matrix idle/fill
+  behavior:
+  - `Mos6569` now tracks the 40-column matrix/color latches and exposes the
+    VICE idle graphics address rule (`$39ff` in ECM, `$3fff` otherwise).
+  - `C64MemoryMap` latches matrix prefetch `$ff` and color nibbles from raw
+    CPU-program RAM at the visible PC, matching VICE `ram_base_phi2[reg_pc]`.
+  - Managed coverage now includes focused matrix prefetch, real matrix fetch,
+    standard-text graphics latch consumption, and ECM idle graphics address
+    validation.
 - MCP TODOs updated with edge TR links:
   `BACKFILL-VIDEO-001`, `BACKFILL-MEDIA-001`, `ARCH-TRUEDRIVE-1541-002`,
   `RUNTIME-TAPE-002`, and `BACKFILL-LOCKSTEP-001`.
@@ -137,7 +150,7 @@ Recent committed VIC work includes:
 - `1edaf2f` (`feat(vic): open right side border rendering`)
 - `46edda9` (`feat(vic): advance phase 1 parity`)
 - `646b3a1` (`feat(vic): carry opened side borders`)
-- Current implementation slice: `TR-VIC-EDGE-006` managed register readback and collision-latch write behavior.
+- Current implementation slice: `TR-VIC-EDGE-005` managed matrix idle/fill behavior.
 
 The plan records the current `BACKFILL-VIDEO-001` progress:
 
@@ -146,8 +159,8 @@ The plan records the current `BACKFILL-VIDEO-001` progress:
   left-open side-border state when the side border remains open.
 - Sprite visibility and non-sprite background fill now obey opened side-border
   state instead of static border geometry alone.
-- Focused register-readback/IRQ/collision tests were 37/37.
-- The broader VIC/video gate was 174/174.
+- Focused matrix/idle plus adjacent bad-line/core-timing tests were 18/18.
+- The broader VIC/video gate was 179/179.
 
 Continue `BACKFILL-VIDEO-001` from the committed continuous side-border slice. The next useful sub-slices are:
 
@@ -158,10 +171,11 @@ Continue `BACKFILL-VIDEO-001` from the committed continuous side-border slice. T
 - native lockstep checkpoints for multiplexing edge cases
 - visible-frame/checkpoint validation for display-mode pixel effects
 - `TR-VIC-EDGE-001` invalid ECM priority/collision remediation
-- `TR-VIC-EDGE-005` matrix idle/fill behavior
 - native `TR-VIC-EDGE-006` register checkpoints for the managed readback behavior,
   starting with managed-vs-x64sc `$D000-$D03F` readback/write-ignore coverage
   and then collision read-clear timing
+- native `TR-VIC-EDGE-005` matrix/idle checkpoints and the 6569
+  RAM-to-character-ROM fetch-address latch path
 - FLI/AFLI timing depth
 
 Before each code slice, name the canonical `FR-*`, `TR-*`, and `TEST-*` IDs and cite VICE source/docs. If the imported requirement is incomplete or wrong, update the requirement first, then implement.
@@ -169,9 +183,10 @@ Before each code slice, name the canonical `FR-*`, `TR-*`, and `TEST-*` IDs and 
 ## Validation At Wrap-Up
 
 - `git diff --check` passed before this handoff refresh.
-- Focused register-readback/IRQ/collision validation passed `37/37`.
-- Broader VIC/video validation passed `174/174`.
-- Requirements traceability passed with 163 canonical IDs, 81 referenced canonical IDs, 82 unreferenced canonical IDs, and 53 noncanonical references.
+- Focused matrix/idle plus adjacent bad-line/core-timing validation passed `18/18`.
+- Broader VIC/video validation passed `179/179`.
+- Requirements traceability passed with 163 canonical IDs, 82 referenced canonical IDs, 81 unreferenced canonical IDs, and 53 noncanonical references.
+- `dotnet test .\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj --no-build --nologo --filter "FullyQualifiedName~X64ScVariantLockstepTests"` was attempted after this slice and timed out after 240 seconds; the associated test processes were stopped. Do not treat that gate as green for this slice.
 - Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes and was stopped cleanly; it is not a current green full-solution gate.
 - The requirements ZIP was readable and hashed as:
   - `CCE3EC1DC605ACCBF4ED7938B49EB89D18B9C04A074F26B9BCFB01FB5FB07AFD`
@@ -188,8 +203,8 @@ Continue from the ViceSharp reboot handoff in F:\GitHub\vice-sharp.
 Read AGENTS-README-FIRST.yaml first and use F:\GitHub\mcpserver-codex-plugin for MCP TODO/session-log/requirements operations. Bootstrap the plugin before MCP calls. All subagents must read AGENTS-README-FIRST.yaml and report progress to the main agent at least every five minutes.
 
 Current verified state before reboot:
-- main had the docs/status refresh through 417d864aef5f66e1a9a9e9c95de69ee15b957654 before the current register-readback slice.
-- origin/main and github/main were both synchronized to 417d864aef5f66e1a9a9e9c95de69ee15b957654 before the current register-readback slice.
+- main had the register-readback slice through 06b080d3f3717b32e4b2b89ea6149f3ff7dc6319 before the current matrix/idle slice.
+- origin/main and github/main were both synchronized to 06b080d3f3717b32e4b2b89ea6149f3ff7dc6319 before the current matrix/idle slice.
 - GitHub wiki was published to https://github.com/sharpninja/vice-sharp/wiki at wiki commit 608c0e2c21a354182bcd2396e5d3bbda27077c0c.
 - Only local dirty item intentionally left out: docs/reddit-followup-post.md.
 - Requirements refreshed in MCP and generated docs for FR-VIC-001, FR-VIC-007, FR-VIC-010, and TEST-VIC-001; mappings for FR-VIC-001/007/010 include TR-CYCLE-001 and TEST-VIC-001.
@@ -197,5 +212,5 @@ Current verified state before reboot:
 - If publishing wiki docs again, push docs/Project/wiki/github to https://github.com/sharpninja/vice-sharp.wiki.git; do not stop at ZIP-only export.
 
 Next work:
-Continue Phase 1 implementation with appropriate subagents under docs/plan.md. Start from the remaining BACKFILL-VIDEO-001 work after the managed register-readback slice: native x64sc side-border and register checkpoints, model-aware visible-frame validation, non-PAL per-model sprite DMA tables, sprite data-fetch side effects, native validation for TR-VIC-EDGE-001 invalid ECM priority/collision, TR-VIC-EDGE-005 matrix idle/fill behavior, display-mode pixel-effect checkpoints, and FLI/AFLI timing depth. For TR-VIC-EDGE-006, begin native coverage with managed-vs-x64sc $D000-$D03F readback/write-ignore checkpoints, then collision read-clear timing. Before code changes, name canonical FR/TR/TEST IDs and cite VICE source/docs; update requirements first if source shows the requirement is incomplete or wrong. Run tools/check_requirement_traceability.ps1 and focused tests for the touched slice, update MCP session/TODO state, then commit and push coherent green slices.
+Continue Phase 1 implementation with appropriate subagents under docs/plan.md. Start from the remaining BACKFILL-VIDEO-001 work after the managed matrix/idle slice: native x64sc side-border, register, matrix/idle, and display-mode checkpoints; model-aware visible-frame validation; non-PAL per-model sprite DMA tables; sprite data-fetch side effects; native validation for TR-VIC-EDGE-001 invalid ECM priority/collision; TR-VIC-EDGE-005 6569 RAM-to-character-ROM fetch-address latch behavior; and FLI/AFLI timing depth. For TR-VIC-EDGE-006, begin native coverage with managed-vs-x64sc $D000-$D03F readback/write-ignore checkpoints, then collision read-clear timing. Before code changes, name canonical FR/TR/TEST IDs and cite VICE source/docs; update requirements first if source shows the requirement is incomplete or wrong. Run tools/check_requirement_traceability.ps1 and focused tests for the touched slice, update MCP session/TODO state when the plugin trust path is healthy, then commit and push coherent green slices.
 ```

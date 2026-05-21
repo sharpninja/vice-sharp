@@ -49,11 +49,13 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private readonly byte _cia2PortAInputMask;
     private readonly bool _cia2Connected;
     private readonly CartridgeMappingMode _defaultCartridgeMappingMode;
+    private readonly Func<ushort>? _cpuPcReader;
     private IKeyboardInputMap _keyboardMap;
     private byte[]? _cartridgeImage;
     private CartridgeMappingMode? _attachedCartridgeMappingMode;
     private int _gameSystemCartridgeBank;
     private int _vicPhi1Bank;
+    private byte _lastCpuBusValue = 0xFF;
     private bool _loadingRoms;
     private IBusEndpoint? _cartPortPinSource;
 
@@ -67,7 +69,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         IKeyboardInputMap? keyboardMap = null,
         byte cia2PortAInputMask = 0x7F,
         bool cia2Connected = true,
-        CartridgeMappingMode defaultCartridgeMappingMode = CartridgeMappingMode.Auto)
+        CartridgeMappingMode defaultCartridgeMappingMode = CartridgeMappingMode.Auto,
+        Func<ushort>? cpuPcReader = null)
     {
         _vic = vic;
         _sid = sid;
@@ -80,6 +83,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _cia2PortAInputMask = cia2PortAInputMask;
         _cia2Connected = cia2Connected;
         _defaultCartridgeMappingMode = defaultCartridgeMappingMode;
+        _cpuPcReader = cpuPcReader;
         _keyboard = new C64KeyboardMatrix();
         _keyboardMap = keyboardMap ?? C64HostKeyboardMapper.DefaultFallbackMap;
         _joystickPort1 = new C64JoystickPort();
@@ -185,28 +189,30 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public byte Read(ushort address)
     {
+        byte value;
         if (address <= 0x0001)
-            return _pla.Read(address);
+            return LatchCpuBusValue(_pla.Read(address));
 
         if (TryReadCartridge(address, out var cartridgeValue))
-            return cartridgeValue;
+            return LatchCpuBusValue(cartridgeValue);
 
         if (address is >= BasicStart and < 0xC000 && _pla.BasicRomVisible)
-            return _basicRom[address - BasicStart];
+            return LatchCpuBusValue(_basicRom[address - BasicStart]);
 
         if (address is >= KernalStart && _pla.KernalRomVisible)
-            return _kernalRom[address - KernalStart];
+            return LatchCpuBusValue(_kernalRom[address - KernalStart]);
 
         if (address is >= IoStart and <= IoEnd)
         {
             if (IsIoVisible)
-                return ReadIo(address, peek: false);
+                return LatchCpuBusValue(ReadIo(address, peek: false));
 
             if (IsCpuCharRomVisible)
-                return _charRom[address - CharStart];
+                return LatchCpuBusValue(_charRom[address - CharStart]);
         }
 
-        return _ram[address];
+        value = _ram[address];
+        return LatchCpuBusValue(value);
     }
 
     public byte Peek(ushort address)
@@ -237,6 +243,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public void Write(ushort address, byte value)
     {
+        _lastCpuBusValue = value;
+
         if (_loadingRoms)
         {
             if (address is >= BasicStart and < 0xC000)
@@ -541,10 +549,44 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         return ReadVicPhi1Ram((ushort)(0x3F00 + offset));
     }
 
-    private byte ReadVicGfxDataOrIdle(byte _) =>
-        _vic.IsGraphicsIdle ? ReadVicIdleGap() : ReadVicPhi1Ram(_vic.ConsumeGraphicsFetchAddress());
+    private byte ReadVicGfxDataOrIdle(byte fetchSlot)
+    {
+        if (_vic.IsGraphicsIdle)
+            return ReadVicPhi1Ram(_vic.IdleGraphicsFetchAddress);
+
+        if (_vic.IsMatrixFetchSlot(fetchSlot))
+        {
+            var slot = _vic.CurrentVideoMatrixSlot;
+            if (_vic.IsMatrixPrefetchSlot(fetchSlot))
+            {
+                _vic.LatchVideoMatrixPrefetch(slot, ReadCpuProgramRamByte());
+            }
+            else
+            {
+                var vc = _vic.CurrentVideoMatrixCounter;
+                var matrixByte = ReadVicPhi1Ram(_vic.CurrentVideoMatrixFetchAddress);
+                _vic.LatchVideoMatrixFetch(slot, matrixByte, _colorRam[vc]);
+            }
+        }
+
+        return ReadVicPhi1Ram(_vic.ConsumeGraphicsFetchAddress());
+    }
 
     private byte ReadVicIdleGap() => ReadVicPhi1Ram(0x3FFF);
+
+    private byte ReadCpuProgramRamByte()
+    {
+        if (_cpuPcReader is null)
+            return _lastCpuBusValue;
+
+        return _ram[_cpuPcReader()];
+    }
+
+    private byte LatchCpuBusValue(byte value)
+    {
+        _lastCpuBusValue = value;
+        return value;
+    }
 
     private byte ReadVicPhi1Ram(ushort vicAddress)
     {

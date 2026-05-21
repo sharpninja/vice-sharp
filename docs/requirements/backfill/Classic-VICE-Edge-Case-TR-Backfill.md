@@ -131,6 +131,8 @@ The repeatable scanner reviewed 812 C/C++/header/inc files under `native/vice/vi
 
 **Traceability:** FR-VIC-001, FR-VIC-006, FR-VIC-008, FR-VIC-009, TEST-VIC-001.
 
+**Current Implementation Evidence:** The 2026-05-21 matrix/idle slice adds managed coverage for VICE `viciisc/vicii-fetch.c` behavior: prefetch slots latch matrix `$ff`, prefetch color nibbles are read from raw CPU-program RAM at the visible PC (`ram_base_phi2[reg_pc]`), real matrix fetches latch screen bytes plus color RAM low nibbles, standard text graphics fetches consume the populated matrix latch, and idle graphics fetches use `$39ff` only when ECM is active. `VicIIMatrixIdleFetchTests` covers these managed latch/address cases; focused matrix/idle plus adjacent bad-line/core-timing validation passed `18/18`, and broader VIC/video validation passed `179/179`. Native x64sc matrix checkpoints and the 6569 RAM-to-character-ROM fetch-address latch path from `viciisc/vicii-fetch.c:234-264` remain under `BACKFILL-VIDEO-001`.
+
 ### TR-VIC-EDGE-006: VIC-II Register Readback and Collision Latch Semantics
 
 **ID:** TR-VIC-EDGE-006

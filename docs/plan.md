@@ -190,7 +190,7 @@ Gate result from 2026-05-21:
   behaviors to canonical `TR-*-EDGE-*` requirements with source references,
   FR/TEST mappings, and deferred/non-Phase-1 notes where appropriate.
   `tools/check_requirement_traceability.ps1` now reports 163 canonical IDs,
-  81 referenced canonical IDs, 82 unreferenced canonical IDs, and 53
+  82 referenced canonical IDs, 81 unreferenced canonical IDs, and 53
   noncanonical IDs in `src`/`tests`; the added edge TRs are requirements-only
   anchors for future implementation slices, so they intentionally increase the
   unreferenced count until those slices add executable coverage.
@@ -342,6 +342,21 @@ backfill:
   gate passed 174/174. The traceability audit now reports 81 referenced
   canonical IDs, including `TR-VIC-EDGE-006`.
 
+2026-05-21 continued Slice 1 with VIC-II matrix idle/fill backfill:
+
+- `TR-VIC-EDGE-005` now has managed coverage for VICE `viciisc/vicii-fetch.c`
+  matrix/idle behavior: bad-line prefetch slots latch matrix `$ff`, prefetch
+  color nibbles come from raw CPU-program RAM at the visible PC, matrix fetches
+  latch screen bytes plus color RAM low nibbles, standard text graphics fetches
+  consume the populated matrix latch, and idle graphics fetches use `$39ff`
+  only when ECM is active.
+- `C64MemoryMap` passes the managed CPU visible PC into the VIC fetch path so
+  prefetch color follows VICE `ram_base_phi2[reg_pc]` rather than a generic
+  open-bus approximation.
+- Focused matrix/idle plus adjacent bad-line/core-timing tests passed 18/18.
+  The broader VIC/video gate passed 179/179. The traceability audit now
+  reports 82 referenced canonical IDs, including `TR-VIC-EDGE-005`.
+
 Remaining Slice 1 work:
 
 - Continue from the Slice 0.5 gate result above. The 2026-05-20 border/sprite
@@ -361,17 +376,11 @@ Remaining Slice 1 work:
 - `TR-VIC-EDGE-003` and `FR-VIC-008`: FLI/AFLI timing depth covers forced
   badlines, the left-edge FLI bug, mid-line `$D018` effects, and AFLI bitmap
   behavior.
-- `TR-VIC-EDGE-005`: matrix idle/fill behavior must be checked before visible
-  parity is called complete, especially where native checkpoints expose
-  observable output differences.
-  - Background-agent inspection found the smallest useful slice: add focused
-    `VicIIMatrixIdleFetchTests` coverage for badline/prefetch matrix `0xff`
-    fill plus RAM-derived color nibbles, idle graphics fetch from `$3fff` or
-    `$39ff` according to ECM/display mode, and non-idle graphics fetch using
-    populated matrix bytes.
-  - Defer the 6569 RAM-to-character-ROM address latch path and native shim
-    expansion for matrix/idle fields until after the managed matrix idle/fill
-    behavior has a focused green gate.
+- `TR-VIC-EDGE-005`: remaining matrix/idle depth is native x64sc checkpoint
+  validation plus the 6569 RAM-to-character-ROM fetch-address latch path from
+  VICE `viciisc/vicii-fetch.c:234-264`; managed matrix fill, CPU-PC RAM color
+  nibbles, standard-text latch consumption, and ECM idle addresses now have a
+  focused green gate.
 - `TR-VIC-EDGE-006`: native x64sc register checkpoints remain for the managed
   readback/collision latch behavior now covered by synthetic tests.
   Background-agent inspection recommends a native-backed

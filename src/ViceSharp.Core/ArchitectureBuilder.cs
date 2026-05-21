@@ -91,7 +91,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             profile?.KeyboardEnabled ?? true,
             cia2PortAInputMask: cia2PortAInputMask,
             cia2Connected: cia2Connected,
-            defaultCartridgeMappingMode: defaultCartridgeMappingMode);
+            defaultCartridgeMappingMode: defaultCartridgeMappingMode,
+            cpuPcReader: () => cpu.PC);
         var iecBusConnected = profile?.SystemCore.IecBusConnected ?? true;
         var drive8 = iecBusConnected ? new IecDrive(8) : null;
         var drive9 = iecBusConnected ? new IecDrive(9) : null;
