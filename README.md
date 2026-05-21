@@ -35,7 +35,9 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
 ⏳ **Iteration 1 (C64 Bringup)** — In progress with the current boot and lockstep validation baseline green:
   - BASIC `READY.` boot proof is covered by the test harness
   - VICE-backed lockstep validation reaches the 100,000-cycle regression gate
-  - `dotnet test .\ViceSharp.slnx --nologo` currently passes `664/664`
+  - Latest committed parity slice: `646b3a1` (`TR-VIC-EDGE-002` managed continuous side-border behavior)
+  - Current verified gates: focused border/renderer `52/52`, broader VIC/video `170/170`, requirements traceability `163` canonical / `80` referenced / `83` unreferenced / `53` noncanonical
+  - Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` was attempted on 2026-05-21 and timed out after five minutes; do not treat it as a green full-solution gate
 
 Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
@@ -48,7 +50,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-19`.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-21`.
 
 **Legend** — State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -67,7 +69,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 |---------|:----:|:----:|--------|
 | MOS 6510 CPU (official + illegal opcodes) | ✅ | 100% | `LockstepValidationTests.First100000CyclesMatch` |
 | Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
-| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color register read mask + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers) | 🟢 | 95% | `BACKFILL-VIDEO-001` (open borders, remaining sprite DMA depth, FLI/AFLI timing, and native visible-frame checkpoints remain) |
+| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color register read mask + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers + managed continuous side-border behavior) | 🟢 | 96% | `BACKFILL-VIDEO-001` (native side-border checkpoints, non-PAL sprite DMA tables, sprite fetch side effects, FLI/AFLI timing, matrix/register edge cases, and native visible-frame checkpoints remain) |
 | MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + keyboard scan + joystick scan + ICR) | ✅ | 100% | `BACKFILL-CIA` + base input scan coverage |
 | MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + dual-SID + noise LFSR + determinism) | ✅ | 100% | `BACKFILL-SID-001` closed; 8580 filter deepening is post-MVP |
 | MOS 6522 VIA (timer-1 PB7 + timer-2 phi2+PB6 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ✅ | 100% | `BACKFILL-VIA` complete |
@@ -101,13 +103,13 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Feature | State | % | Source |
 |---------|:----:|:----:|--------|
 | XMLDOCS test contract (cite FR/TR, use case, acceptance) | ✅ | 100% | `QA-XMLDOCS-001` CLOSED: ratchet baseline at 0 (full retrofit + `XmlDocsConventionTests.ExpectedMaxViolations=0`) |
-| BenchmarkDotNet harness vs native VICE | 🟢 | 30% | `PERF-BENCHMARK-001` (managed harness in [tests/ViceSharp.Benchmarks/](tests/ViceSharp.Benchmarks/), native VICE comparison TODO) |
+| BenchmarkDotNet harness vs native VICE | 🟢 | 30% | `PERF-BENCHMARK-001` + `PERF-TUNING-001` (managed harness in [tests/ViceSharp.Benchmarks/](tests/ViceSharp.Benchmarks/); Phase 1 now requires a first-pass 25% classic VICE performance target) |
 | Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
 | Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Slice 0 validation on 2026-05-19: XMLDOCS 1/1 passed, focused SID 58/58 passed, focused host/gRPC 115/115 passed, StandardCartridge 6/6 passed, and the Avalonia frame smoke now runs when the resolver finds a configured VICE data root or local `x64sc.exe` install. Missing configured VICE data is a blocker for final ROM/native lockstep gates, not a pass. MCP session log: `Codex-20260519T222244Z-process-handoff-and-recent-session-logs`.
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Latest committed validation on 2026-05-21: focused border/renderer `52/52`, broader VIC/video `170/170`, and requirement traceability passed with `163` canonical IDs, `80` referenced canonical IDs, `83` unreferenced canonical IDs, and `53` noncanonical source/test references. Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes and was stopped cleanly, so the current green gate remains focused rather than solution-wide. MCP session turn: `req-20260521T211500Z-update-logs-docs-current-progress`.
 
 ## Supported Machines (planned)
 

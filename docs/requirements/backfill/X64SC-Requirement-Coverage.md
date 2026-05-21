@@ -6,7 +6,7 @@
 |-------|-------|
 | Backfill Plan | Backfill Imported Requirements To x64sc Parity |
 | Target Emulator | x64sc |
-| Last Updated | 2026-05-13 |
+| Last Updated | 2026-05-21 |
 | Owning TODO | BACKFILL-COVERAGE-001 |
 
 ## Classification Rules
@@ -82,7 +82,8 @@ The imported machine profile FRs do not yet assign standalone IDs for old PAL/NT
 - CIA core backfill validation: Timer B can count Timer A underflows instead of Phi2 ticks, TOD writes target clock or alarm according to CRB bit 7, and TOD carry uses BCD-style rollover; `dotnet test tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj --nologo --filter "FullyQualifiedName~CiaTimerInterruptTests"` passed with 6 tests.
 - VICE ROM-resource validation: every x64sc profile now maps to the exact VICE `c64model.c` ROM resources (`basic-901226-01.bin`, profile-selected KERNAL, profile-selected chargen, and `kernal-none.bin` for MAX/Ultimax), and builder tests verify the selected bytes are mapped into the machine; `dotnet test tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj --nologo --filter "FullyQualifiedName~C64MachineProfileTests"` passed with 82 tests.
 - x64sc raster/chip checkpoint validation: `X64ScVariantLockstepTests` now compares native and managed CPU/cycle state, selected physical RAM windows, VIC-II raster line/cycle/badline checkpoints, stable CIA register checkpoints, SID register checkpoints, and IRQ/NMI assertion state after one profile-specific scanline for every required x64sc profile. C64GS is validated with a deterministic 512K GS cartridge and profile-selected GS KERNAL resource; `dotnet test tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj --nologo --filter "FullyQualifiedName~X64ScVariantLockstepTests"` passed with 74 tests.
-- Current full-solution validation: `dotnet test .\ViceSharp.slnx --nologo` passed with 239 tests; `git diff --check` exited 0 with only existing CRLF normalization warnings in requirement docs.
+- Latest VIC-II side-border validation: the committed `TR-VIC-EDGE-002` slice carries opened side-border state through `Mos6569` and `VideoRenderer`; focused border/renderer validation passed `52/52`, broader VIC/video validation passed `170/170`, and `tools\check_requirement_traceability.ps1` passed with 163 canonical IDs, 80 referenced canonical IDs, 83 unreferenced canonical IDs, and 53 noncanonical references.
+- Current full-solution validation: `dotnet test .\ViceSharp.slnx --no-build --nologo` was attempted on 2026-05-21 and timed out after five minutes, then leftover test processes were stopped cleanly. Treat the current green evidence as focused, not solution-wide.
 - MCP TODO epics now exist for coverage, model profiles, core timing, video, input, media, SID, host/UI, and final lockstep.
 
 ## Closure Rule

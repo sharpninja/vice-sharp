@@ -93,7 +93,7 @@ ViceSharp targets cycle-exact parity with native VICE on the C64 host path. The 
 
 What this means in practice:
 - For boot sequences, KERNAL traps, and any code that lives inside the lockstep gate, ViceSharp's CPU output is identical to VICE cycle-for-cycle.
-- For VIC-II pixel-level behaviour, the gate is "first scanline parity"; full pixel sequencer and sprite-collision parity are pending under `BACKFILL-VIDEO-001`. Demo code that depends on raster effects can diverge from VICE.
+- For VIC-II pixel-level behaviour, visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, and managed continuous side-border behavior are implemented, but native display-mode checkpoints, sprite fetch depth, FLI/AFLI timing, matrix idle/fill, and register readback edge cases remain under `BACKFILL-VIDEO-001`. Demo code that depends on deep raster effects can still diverge from VICE.
 - For SID, hard sync, ring modulation, combined waveforms, ADSR behaviour, digi output, and dual-SID coverage are wired and exercised in the focused suite. Further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression.
 
 ## 5. Bug compatibility
@@ -104,8 +104,8 @@ Classic VICE faithfully reproduces several Commodore-era hardware bugs that real
 |-----|--------|
 | 6510 illegal opcodes | Reproduced. Lockstep gate covers them. |
 | 6510 jump-vector page-cross bug (`JMP ($xxFF)`) | Reproduced. |
-| VIC-II "bad line" cycle stealing | Reproduced at the CIA / CPU contention level; pixel-level effects pending under `BACKFILL-VIDEO-001`. |
-| VIC-II sprite-DMA timing | Bounded. Sprite fetch is wired but full collision parity pending. |
+| VIC-II "bad line" cycle stealing | Reproduced at the CIA / CPU contention level; matrix idle/fill and FLI/AFLI effects remain under `BACKFILL-VIDEO-001`. |
+| VIC-II sprite-DMA timing | Bounded. Sprite fetch is wired and side-border visibility is managed, but non-PAL per-model fetch tables and native multiplexing checkpoints remain. |
 | SID ADSR bug | Reproduced in the focused Phase 1 SID suite; further analog deepening is post-MVP. |
 | SID combined waveforms | Reproduced for the Phase 1 SID suite; further analog deepening is post-MVP. |
 | 1541 GCR bit-stream timing | Not yet. Sector-stream fast path is the default; cycle-accurate GCR is future work. |

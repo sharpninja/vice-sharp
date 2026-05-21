@@ -190,7 +190,7 @@ Gate result from 2026-05-21:
   behaviors to canonical `TR-*-EDGE-*` requirements with source references,
   FR/TEST mappings, and deferred/non-Phase-1 notes where appropriate.
   `tools/check_requirement_traceability.ps1` now reports 163 canonical IDs,
-  79 referenced canonical IDs, 84 unreferenced canonical IDs, and 53
+  80 referenced canonical IDs, 83 unreferenced canonical IDs, and 53
   noncanonical IDs in `src`/`tests`; the added edge TRs are requirements-only
   anchors for future implementation slices, so they intentionally increase the
   unreferenced count until those slices add executable coverage.

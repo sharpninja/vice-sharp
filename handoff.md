@@ -4,8 +4,8 @@
 
 - Workspace: `F:\GitHub\vice-sharp`
 - Branch: `main`
-- Last verified project commit before this handoff refresh: `857a69cb6cdb1babb023bf1070cb4b2fb9df19af` (`docs(requirements): refresh wiki export`)
-- `origin/main` and `github/main` were both verified at `857a69c`.
+- Last verified project commit before this handoff refresh: `646b3a13485877de32104e7a2b04bee414d83329` (`feat(vic): carry opened side borders`)
+- `origin/main` and `github/main` were both verified at `646b3a13485877de32104e7a2b04bee414d83329`.
 - The only intentionally uncommitted local item was `docs/reddit-followup-post.md`.
 - Active plan: `docs/plan.md`, "ViceSharp Phase 1 Completion Plan", updated 2026-05-21.
 - This is a reboot continuity handoff, not a Phase 1 completion claim.
@@ -49,8 +49,8 @@
 
 ## Current Classic VICE Edge-Case Backfill
 
-- The requirements-only backfill slice is complete and currently uncommitted in
-  the main repo.
+- The requirements-only backfill slice is complete and committed in the main
+  repo.
 - The slice scanned `native/vice/vice/src` with
   `tools/audit_vice_edge_cases.ps1` and wrote the review inventory to
   `docs/requirements/backfill/Classic-VICE-Edge-Case-Inventory.md`.
@@ -68,8 +68,8 @@
   `TR-VDC-EDGE-001`.
 - Generated requirements markdown and wiki markdown were refreshed under
   `docs/Project/` and `docs/Project/wiki/`.
-- Current traceability audit output after this backfill: 163 canonical IDs,
-  79 referenced canonical IDs, 84 unreferenced canonical IDs, and 53
+- Current traceability audit output after the side-border implementation slice: 163 canonical IDs,
+  80 referenced canonical IDs, 83 unreferenced canonical IDs, and 53
   noncanonical IDs in `src`/`tests`. The new edge TRs are requirements-only
   anchors and are expected to remain unreferenced until their implementation
   slices add executable coverage.
@@ -129,6 +129,7 @@ Recent committed VIC work includes:
 
 - `1edaf2f` (`feat(vic): open right side border rendering`)
 - `46edda9` (`feat(vic): advance phase 1 parity`)
+- `646b3a1` (`feat(vic): carry opened side borders`)
 
 The plan records the current `BACKFILL-VIDEO-001` progress:
 
@@ -140,7 +141,7 @@ The plan records the current `BACKFILL-VIDEO-001` progress:
 - Focused renderer/border tests were 52/52.
 - The broader VIC/video gate was 170/170.
 
-Continue `BACKFILL-VIDEO-001` from the Slice 0.5 traceability gate. The next useful sub-slices are:
+Continue `BACKFILL-VIDEO-001` from the committed continuous side-border slice. The next useful sub-slices are:
 
 - native x64sc side-border checkpoints
 - model-aware visible-frame validation beyond the managed PAL/non-PAL cycle-state tests
@@ -148,6 +149,9 @@ Continue `BACKFILL-VIDEO-001` from the Slice 0.5 traceability gate. The next use
 - sprite data-fetch side effects
 - native lockstep checkpoints for multiplexing edge cases
 - visible-frame/checkpoint validation for display-mode pixel effects
+- `TR-VIC-EDGE-001` invalid ECM priority/collision remediation
+- `TR-VIC-EDGE-005` matrix idle/fill behavior
+- `TR-VIC-EDGE-006` register readback and collision latch edge cases
 - FLI/AFLI timing depth
 
 Before each code slice, name the canonical `FR-*`, `TR-*`, and `TEST-*` IDs and cite VICE source/docs. If the imported requirement is incomplete or wrong, update the requirement first, then implement.
@@ -155,6 +159,10 @@ Before each code slice, name the canonical `FR-*`, `TR-*`, and `TEST-*` IDs and 
 ## Validation At Wrap-Up
 
 - `git diff --check` passed before this handoff refresh.
+- Focused border/renderer validation passed `52/52`.
+- Broader VIC/video validation passed `170/170`.
+- Requirements traceability passed with 163 canonical IDs, 80 referenced canonical IDs, 83 unreferenced canonical IDs, and 53 noncanonical references.
+- Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes and was stopped cleanly; it is not a current green full-solution gate.
 - The requirements ZIP was readable and hashed as:
   - `CCE3EC1DC605ACCBF4ED7938B49EB89D18B9C04A074F26B9BCFB01FB5FB07AFD`
 - GitHub wiki remote was reachable at `refs/heads/master`.
@@ -170,8 +178,8 @@ Continue from the ViceSharp reboot handoff in F:\GitHub\vice-sharp.
 Read AGENTS-README-FIRST.yaml first and use F:\GitHub\mcpserver-codex-plugin for MCP TODO/session-log/requirements operations. Bootstrap the plugin before MCP calls. All subagents must read AGENTS-README-FIRST.yaml and report progress to the main agent at least every five minutes.
 
 Current verified state before reboot:
-- main had the Phase 1 requirements/wiki work through 857a69cb6cdb1babb023bf1070cb4b2fb9df19af, followed by a reboot handoff refresh commit.
-- origin/main and github/main should both be synchronized with local main.
+- main has the continuous side-border implementation through 646b3a13485877de32104e7a2b04bee414d83329 (`feat(vic): carry opened side borders`).
+- origin/main and github/main were both synchronized to 646b3a13485877de32104e7a2b04bee414d83329.
 - GitHub wiki was published to https://github.com/sharpninja/vice-sharp/wiki at wiki commit 608c0e2c21a354182bcd2396e5d3bbda27077c0c.
 - Only local dirty item intentionally left out: docs/reddit-followup-post.md.
 - Requirements refreshed in MCP and generated docs for FR-VIC-001, FR-VIC-007, FR-VIC-010, and TEST-VIC-001; mappings for FR-VIC-001/007/010 include TR-CYCLE-001 and TEST-VIC-001.
@@ -179,5 +187,5 @@ Current verified state before reboot:
 - If publishing wiki docs again, push docs/Project/wiki/github to https://github.com/sharpninja/vice-sharp.wiki.git; do not stop at ZIP-only export.
 
 Next work:
-Continue Phase 1 implementation with appropriate subagents under docs/plan.md. Start from Slice 1 remaining BACKFILL-VIDEO-001 work: left-side/continuous side-border cases, non-PAL border timing, native x64sc checkpoints, non-PAL per-model sprite DMA tables, sprite data-fetch side effects, visible-frame/checkpoint validation for display-mode pixel effects, and FLI/AFLI timing depth. Before code changes, name canonical FR/TR/TEST IDs and cite VICE source/docs; update requirements first if source shows the requirement is incomplete or wrong. Run tools/check_requirement_traceability.ps1 and focused tests for the touched slice, update MCP session/TODO state, then commit and push coherent green slices.
+Continue Phase 1 implementation with appropriate subagents under docs/plan.md. Start from the remaining BACKFILL-VIDEO-001 work after the committed continuous side-border slice: native x64sc side-border checkpoints, model-aware visible-frame validation, non-PAL per-model sprite DMA tables, sprite data-fetch side effects, TR-VIC-EDGE-001 invalid ECM priority/collision remediation, TR-VIC-EDGE-005 matrix idle/fill behavior, TR-VIC-EDGE-006 register readback/collision latch edge cases, display-mode pixel-effect checkpoints, and FLI/AFLI timing depth. Before code changes, name canonical FR/TR/TEST IDs and cite VICE source/docs; update requirements first if source shows the requirement is incomplete or wrong. Run tools/check_requirement_traceability.ps1 and focused tests for the touched slice, update MCP session/TODO state, then commit and push coherent green slices.
 ```

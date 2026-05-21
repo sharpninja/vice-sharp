@@ -12,10 +12,11 @@ issue.
 - VICE requirement import is script-driven through
   `tools/port_vice_requirements.py`, and the source manifest records classic
   VICE documentation as the FR corpus.
-- The live `tools/check_requirement_traceability.ps1` audit found 144
-  canonical IDs in `docs/requirements`, with 77 referenced from `src` or
-  `tests`, 67 not referenced from source/test files, and 54 noncanonical IDs
-  still present in source/test files.
+- The latest `tools/check_requirement_traceability.ps1` audit after the
+  2026-05-21 edge-TR and side-border work found 163 canonical IDs in
+  `docs/requirements`, with 80 referenced from `src` or `tests`, 83 not
+  referenced from source/test files, and 53 noncanonical IDs still present in
+  source/test files.
 - The FR-only breakdown is 108 canonical FRs, 67 referenced from `src` or
   `tests`, and 41 not referenced from source/test files.
 - Source and tests still contain broad or noncanonical labels such as `FR-VIC`,
@@ -55,6 +56,13 @@ Every Phase 1 slice must now pass this gate before implementation continues:
   timing.
 - `docs/plan.md` now includes Slice 0.5 as a mandatory requirements
   traceability gate before further Phase 1 implementation.
+- `docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md` now
+  records 19 VICE-source-derived observable edge TRs, and `docs/plan.md`
+  integrates those TRs into the Phase 1 slice order.
+- `TR-VIC-EDGE-001` and `TR-VIC-EDGE-002` now have executable managed coverage
+  for invalid ECM priority/collision behavior and continuous side-border
+  behavior respectively. Native visible-frame/checkpoint validation remains
+  open under `BACKFILL-VIDEO-001`.
 
 ## Follow-Up Work
 

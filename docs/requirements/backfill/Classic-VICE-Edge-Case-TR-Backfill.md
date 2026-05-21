@@ -8,7 +8,7 @@
 | Inventory | `docs/requirements/backfill/Classic-VICE-Edge-Case-Inventory.md` |
 | Scanner | `tools/audit_vice_edge_cases.ps1` |
 | Generated | 2026-05-21 |
-| Scope | Requirements only; no emulator implementation changes. |
+| Scope | Requirements backfill; implementation status is tracked separately as Phase 1 slices land. |
 
 ## Promotion Rule
 
@@ -41,6 +41,8 @@ The repeatable scanner reviewed 812 C/C++/header/inc files under `native/vice/vi
 
 **Traceability:** FR-VIC-002, FR-VIC-003, FR-VIC-005, TEST-VIC-001.
 
+**Current Implementation Evidence:** The 2026-05-21 invalid ECM slice routes display-mode pixels through a display-mode-aware foreground/priority helper used by both collision processing and framebuffer rendering. Focused synthetic coverage exercises invalid ECM visible color, `$D01B` priority, and `$D01F` sprite-background collision behavior; native visible-frame/checkpoint validation remains open under `BACKFILL-VIDEO-001`.
+
 ### TR-VIC-EDGE-002: VIC-II Border Flip-Flop Cycle Checks
 
 **ID:** TR-VIC-EDGE-002
@@ -62,6 +64,8 @@ The repeatable scanner reviewed 812 C/C++/header/inc files under `native/vice/vi
 **Acceptance Expectation:** Border flip-flop state changes occur on the same model-specific public cycles as x64sc, closed borders mask sprites, and open-border tricks stay visible only when the relevant border check is skipped or cleared.
 
 **Traceability:** FR-VIC-007, FR-VIC-004, FR-VIC-005, TEST-VIC-001.
+
+**Current Implementation Evidence:** Commit `646b3a1` carries opened side-border state through `Mos6569` and `VideoRenderer`. Managed coverage includes right-open, left-carry, continuous carry, cycle-17 blank-line behavior, and PAL/NTSC/PAL-N/old-NTSC/HMOS border cycle invariance. Native x64sc side-border checkpoints and broader visible-frame validation remain open under `BACKFILL-VIDEO-001`.
 
 ### TR-VIC-EDGE-003: VIC-II Badline, Idle-State, and RC Windows
 
