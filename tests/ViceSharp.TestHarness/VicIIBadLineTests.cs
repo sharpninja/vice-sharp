@@ -6,7 +6,7 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC bad-line detection + CPU cycle stealing
+/// FR/TR: FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001 bad-line detection + CPU cycle stealing
 /// (BACKFILL-VIDEO-001 slice: VIC-II bad line + CPU cycle stealing).
 ///
 /// A raster line is a "bad line" when:
@@ -50,7 +50,8 @@ public sealed class VicIIBadLineTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 bad line cycle stealing).
+    /// FR/TR: FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 bad line cycle stealing).
     /// Use case: With $D011 = $1B (DEN=1, YSCROLL=3), bad lines occur on
     /// raster lines whose lower 3 bits equal 3, inside the visible DMA
     /// range [$30, $F7]. The first such line is $33 (0x33 &amp; 7 == 3).
@@ -76,7 +77,8 @@ public sealed class VicIIBadLineTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 bad line cycle stealing).
+    /// FR/TR: FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 bad line cycle stealing).
     /// Use case: DEN ($D011 bit 4) gates the entire bad-line latch. With
     /// $D011 = $03 (DEN=0, YSCROLL=3) the YSCROLL match on line $33 must
     /// NOT raise a bad line because display is not enabled.
@@ -102,7 +104,8 @@ public sealed class VicIIBadLineTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 bad line cycle stealing).
+    /// FR/TR: FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 bad line cycle stealing).
     /// Use case: Bad lines are only valid in the raster range [$30, $F7].
     /// With YSCROLL=0 + DEN=1, every 8th line outside the visible DMA range
     /// (e.g. lines 0x00, 0x08, ..., 0x28 below the window and 0xF8, 0xFF
@@ -134,7 +137,8 @@ public sealed class VicIIBadLineTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 bad line cycle stealing).
+    /// FR/TR: FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 bad line cycle stealing).
     /// Use case: With YSCROLL=0 + DEN=1 a PAL frame produces exactly 25
     /// bad lines: lines $30, $38, $40, ..., $F0 (every 8 lines from $30
     /// through $F0). The per-frame counter must reset at the frame
@@ -165,7 +169,8 @@ public sealed class VicIIBadLineTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 bad line cycle stealing).
+    /// FR/TR: FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 bad line cycle stealing).
     /// Use case: On a bad line the VIC-II asserts the DMA cycle-steal
     /// signal during the c-access window (RasterX 12..54 inclusive of
     /// 12, exclusive of 55). The CPU is expected to honour this through

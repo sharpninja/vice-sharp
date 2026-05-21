@@ -83,6 +83,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // fallback behavior for lines that were never ticked.
     private readonly bool[] _verticalBorderActiveByRasterLine = new bool[512];
     private readonly bool[] _verticalBorderLineCaptured = new bool[512];
+    private readonly bool[] _rightBorderOpenByRasterLine = new bool[512];
+    private readonly bool[] _rightBorderLineCaptured = new bool[512];
     private bool _verticalBorderActive = true;
     private bool _verticalBorderNextActive = true;
     private bool _mainBorderActive = true;
@@ -98,7 +100,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private readonly ushort[] _spriteDmaStartLines = new ushort[8];
     private readonly byte[] _spriteDmaHeights = new byte[8];
 
-    // BACKFILL-VIDEO-001 / FR-VIC: Light pen latch state.
+    // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: Light pen latch state.
     // On a high-to-low transition of the LP pin the VIC-II latches
     // RasterX >> 1 into $D013 and the low 8 bits of the current raster
     // line into $D014, sets $D019 bit 3 (LP IRQ latch), and asserts the
@@ -110,7 +112,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private bool _lightPenTriggeredThisFrame;
 
     /// <summary>
-    /// BACKFILL-VIDEO-001 / FR-VIC: count of bad lines that have fired
+    /// BACKFILL-VIDEO-001 / FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001:
+    /// count of bad lines that have fired
     /// during the current frame. Reset to zero when the raster wraps back
     /// to line 0. Increments at most once per raster line, on the first
     /// tick at which IsBadLine evaluates true for that line.
@@ -118,7 +121,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public int BadLineCountThisFrame => _badLineCountThisFrame;
 
     /// <summary>
-    /// BACKFILL-VIDEO-001 / FR-VIC: cumulative count of CPU cycles
+    /// BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
+    /// TEST-VIC-001: cumulative count of CPU cycles
     /// stolen by sprite DMA in the current frame. Each enabled sprite
     /// intersecting a raster line steals two cycles for s-data fetches.
     /// Reset when the raster wraps to line 0. Composes additively with
@@ -609,6 +613,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     }
 
     /// <summary>
+    /// FR-VIC-007: returns whether the right side border remained open on a
+    /// ticked raster line because the horizontal border set check was skipped.
+    /// </summary>
+    public bool IsRasterLineRightBorderOpen(int rasterLine) =>
+        (uint)rasterLine < (uint)_rightBorderOpenByRasterLine.Length &&
+        _rightBorderLineCaptured[rasterLine] &&
+        _rightBorderOpenByRasterLine[rasterLine];
+
+    /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-004 / FR-VIC-007 / TEST-VIC-001:
     /// returns whether a sprite pixel is visible at the supplied VIC
     /// pixel coordinate once the closed border window is applied.
@@ -620,7 +633,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return false;
         }
 
-        return xVicPixel >= LeftBorderPixel && xVicPixel < RightBorderEndPixel;
+        int rightBorderEndPixel = IsRasterLineRightBorderOpen(rasterLine)
+            ? VideoRenderer.ScreenWidth
+            : RightBorderEndPixel;
+
+        return xVicPixel >= LeftBorderPixel && xVicPixel < rightBorderEndPixel;
     }
     
     /// <summary>
@@ -629,7 +646,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public byte YScroll => (byte)(_registers[0x11] & 0x07);
 
     /// <summary>
-    /// FR-VIC (BACKFILL-VIDEO-001 $D016 decoding): X scroll value
+    /// BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-007 /
+    /// TEST-VIC-001: X scroll value
     /// (bits 0-2 of $D016). Consumed by the pixel sequencer to shift
     /// rendered pixels 0-7 to the right; mode-specific color routing is
     /// covered by VideoRenderer.
@@ -694,7 +712,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // VICE-style raster interrupt (at cycle 58 of line):
         // the latch in $D019 bit 0 is set unconditionally on compare match;
         // RefreshInterruptLine then gates the IRQ output by $D01A enable.
-        // BACKFILL-VIDEO-001 / FR-VIC: latch is independent of enable.
+        // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: latch is independent of enable.
         if (_rasterIrqCompareArmed && RasterX == 58 && CurrentRasterLine == _rasterIrqLine)
         {
             _registers[0x19] |= 0x01;
@@ -703,6 +721,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         if (RasterX >= CyclesPerLine)
         {
+            CaptureHorizontalBorderForCompletedLine(CurrentRasterLine);
             RasterX = 0;
             CurrentRasterLine++;
             _rasterIrqCompareArmed = true;
@@ -723,7 +742,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _spriteDmaActiveMask = 0;
                 Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
                 Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
-                // BACKFILL-VIDEO-001 / FR-VIC: clear the LP "already latched
+                // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: clear the LP "already latched
                 // this frame" flag so the next LP trigger can re-arm. The
                 // last latched X/Y values are kept (consistent with reading
                 // $D013/$D014 between frames).
@@ -733,7 +752,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             UpdateVerticalBorderForLineStart();
             UpdateBadLineLatchForStartOfLine();
 
-            // BACKFILL-VIDEO-001 / FR-VIC: count this scanline as a bad line
+            // BACKFILL-VIDEO-001 / FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001:
+            // count this scanline as a bad line
             // if it qualifies, exactly once per line.
             if (IsBadLine && _lastBadLineCounted != CurrentRasterLine)
             {
@@ -741,7 +761,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _lastBadLineCounted = CurrentRasterLine;
             }
 
-            // BACKFILL-VIDEO-001 / FR-VIC: account sprite DMA cycle theft
+            // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
+            // TEST-VIC-001: account sprite DMA cycle theft
             // for this scanline, exactly once per line.
             AccountSpriteDmaForRasterLine(CurrentRasterLine);
 
@@ -782,6 +803,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _mainBorderActive = true;
         Array.Fill(_verticalBorderActiveByRasterLine, true);
         Array.Clear(_verticalBorderLineCaptured, 0, _verticalBorderLineCaptured.Length);
+        Array.Clear(_rightBorderOpenByRasterLine, 0, _rightBorderOpenByRasterLine.Length);
+        Array.Clear(_rightBorderLineCaptured, 0, _rightBorderLineCaptured.Length);
         CaptureVerticalBorderForCurrentLine();
         _allowBadLines = false;
         _refreshCounter = 0;
@@ -804,13 +827,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _spriteDmaActiveMask = 0;
         Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
         Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
-        // BACKFILL-VIDEO-001 / FR-VIC: clear light-pen latch state on reset.
+        // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: clear light-pen latch state on reset.
         _lightPenLatchedX = 0;
         _lightPenLatchedY = 0;
         _lightPenTriggeredThisFrame = false;
     }
 
-    // BACKFILL-VIDEO-001 / FR-VIC: sprite DMA cycle accounting.
+    // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
+    // TEST-VIC-001: sprite DMA cycle accounting.
     // For each enabled sprite n that has its vertical extent intersect
     // the supplied raster line, the chip steals two CPU cycles on that
     // line for s-data fetches. A normal sprite spans 21 raster lines
@@ -903,6 +927,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         _verticalBorderActiveByRasterLine[CurrentRasterLine] = _verticalBorderActive;
         _verticalBorderLineCaptured[CurrentRasterLine] = true;
+    }
+
+    private void CaptureHorizontalBorderForCompletedLine(int rasterLine)
+    {
+        if ((uint)rasterLine >= (uint)_rightBorderOpenByRasterLine.Length)
+            return;
+
+        _rightBorderOpenByRasterLine[rasterLine] = !_verticalBorderActive && !_mainBorderActive;
+        _rightBorderLineCaptured[rasterLine] = true;
     }
 
     // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
@@ -1192,7 +1225,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return _spriteBackgroundCollisionLatch;
         }
 
-        // BACKFILL-VIDEO-001 / FR-VIC: Peek $D013 / $D014 returns the LP
+        // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: Peek $D013 / $D014 returns the LP
         // latched values rather than the raw _registers backing store.
         if (register == 0x13)
         {
@@ -1222,14 +1255,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return (byte)((_registers[0x11] & 0x7F) | ((CurrentRasterLine & 0x100) >> 1));
         }
 
-        // BACKFILL-VIDEO-001 / FR-VIC: $D013 returns the latched RasterX >> 1
+        // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: $D013 returns the latched RasterX >> 1
         // (or 0 if no LP trigger has fired yet this frame).
         if (register == 0x13)
         {
             return _lightPenLatchedX;
         }
 
-        // BACKFILL-VIDEO-001 / FR-VIC: $D014 returns the latched raster line
+        // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: $D014 returns the latched raster line
         // low byte (or 0 if no LP trigger has fired yet this frame).
         if (register == 0x14)
         {
@@ -1254,7 +1287,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return value;
         }
 
-        // BACKFILL-VIDEO-001 / FR-VIC: Color registers $D020-$D02E use only the
+        // BACKFILL-VIDEO-001 / FR-VIC-004 / FR-VIC-007 / TEST-VIC-001:
+        // Color registers $D020-$D02E use only the
         // low 4 bits to encode a 16-color palette index. The upper 4 bits are
         // unconnected on the chip and float high, so reads always report them
         // as 1. This matches real-hardware behavior (writing $05 reads back as
@@ -1264,7 +1298,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return (byte)(_registers[register] | 0xF0);
         }
 
-        // BACKFILL-VIDEO-001 / FR-VIC: $D016 control register 2. Bits 7-6 are
+        // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-007 /
+        // TEST-VIC-001: $D016 control register 2. Bits 7-6 are
         // unconnected on the real chip and float high; bit 5 is reserved
         // (RES). Bits 4-0 (MCM, CSEL, XSCROLL2..0) carry real state. Force
         // bits 7-6 to 1 on read.
@@ -1273,7 +1308,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return (byte)(_registers[register] | 0xC0);
         }
 
-        // BACKFILL-VIDEO-001 / FR-VIC: $D018 memory pointers. Bit 0 is
+        // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008 /
+        // FR-VIC-009 / TEST-VIC-001: $D018 memory pointers. Bit 0 is
         // unconnected on the real chip and floats high; bits 7-4 are the
         // video matrix base (VM13..VM10) and bits 3-1 are the character
         // bitmap base (CB13..CB11). Force bit 0 to 1 on read.
@@ -1319,7 +1355,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return;
         }
 
-        // BACKFILL-VIDEO-001 / FR-VIC: Color registers $D020-$D02E only latch
+        // BACKFILL-VIDEO-001 / FR-VIC-004 / FR-VIC-007 / TEST-VIC-001:
+        // Color registers $D020-$D02E only latch
         // the low 4 bits on write. Upper 4 bits are unconnected on the chip
         // and are ignored on write (and float high on read, applied above).
         if (register >= 0x20 && register <= 0x2E)
@@ -1451,7 +1488,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     }
 
     /// <summary>
-    /// BACKFILL-VIDEO-001 / FR-VIC: Simulate a high-to-low transition on the
+    /// BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: Simulate a high-to-low transition on the
     /// VIC-II LP (light pen) pin. On the first trigger of the current frame
     /// the chip latches the current RasterX shifted right by one into $D013
     /// and the low 8 bits of the current raster line into $D014, sets the
@@ -1560,7 +1597,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // Read of $D01E / $D01F. Multicolor sprites and Y/X expansion are honoured
     // for the shape mask (each pixel is treated as one source bit; multicolor
     // pairs are flattened to "opaque if pair != 00"). Sprite-sprite priority
-    // ordering does not affect collision detection (per FR-VIC: any two opaque
+    // ordering does not affect collision detection (per FR-VIC-005: any two opaque
     // sprite pixels at the same coord collide regardless of priority).
     private void ProcessSpriteCollisionsForRasterLine(int rasterLine)
     {
@@ -1702,7 +1739,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _spriteSpriteCollisionLatch |= spriteSpriteAcc;
         _spriteBackgroundCollisionLatch |= spriteBackgroundAcc;
 
-        // BACKFILL-VIDEO-001 / FR-VIC: sprite collision IRQ wiring.
+        // BACKFILL-VIDEO-001 / FR-VIC-005 / TEST-VIC-001: sprite collision IRQ wiring.
         // $D019 bit 1 latches a sprite-background collision; bit 2 latches
         // a sprite-sprite collision. Both bits set unconditionally when the
         // corresponding latch ($D01F / $D01E) sees a new event; the $D01A
@@ -1730,7 +1767,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // pattern from character/bitmap mode as foreground when the source bit
     // is set. Extended-bg / multicolor-text modes use the same simplification
     // (any set bit counts as foreground); this is a known approximation and
-    // is documented in FR-VIC for the BACKFILL-VIDEO-001 slice.
+    // remains tracked by FR-VIC-005 for the BACKFILL-VIDEO-001 slice.
     private bool IsBackgroundForegroundPixel(int xVicPixel, int rasterLine)
     {
         int leftBorderPixel = LeftBorderPixel;

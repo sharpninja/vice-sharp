@@ -30,6 +30,9 @@ The VIC-II raster engine shall generate video output with cycle-accurate timing 
 5. The raster interrupt triggers at cycle 0 of the matching line (PAL) with a 1-cycle acknowledge latency.
 6. The display window begins at line 51 (PAL) and ends at line 250.
 7. Display/idle state transitions occur at the correct cycles within each line.
+8. A light-pen high-to-low transition latches the current raster X position and
+   low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch,
+   and re-arms only at the frame boundary.
 
 ### Source References
 
@@ -38,7 +41,7 @@ The VIC-II raster engine shall generate video output with cycle-accurate timing 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `IClockedDevice`
-- **Test Suite:** `RasterTimingTests`, `PalNtscVariantTests`, `RasterInterruptTests`
+- **Test Suite:** `RasterTimingTests`, `PalNtscVariantTests`, `RasterInterruptTests`, `VicIILightPenTests`
 
 ---
 
@@ -218,15 +221,18 @@ The VIC-II border unit shall accurately emulate both the main border (top/bottom
 4. With CSEL=0 (38 columns), side borders are at pixels 31-334.
 5. Opening the top/bottom border: if RSEL is cleared before the border comparison line and set after, the vertical border flip-flop is not set, allowing sprites to display in the border area.
 6. Opening the side borders: toggling CSEL at the correct cycle prevents the horizontal border flip-flop from being set.
-7. Border color is set by $D020; background color by $D021.
-8. Closed vertical or side borders mask sprite output in the border area; sprites are visible in border pixels only when the corresponding border flip-flop is open.
-9. Sprite-background visibility and collision checks treat closed border pixels as border pixels, not as foreground character or bitmap pixels.
+7. On PAL x64sc timing, the horizontal border clear check occurs at cycle 17 when CSEL=1 and cycle 18 when CSEL=0; the horizontal border set check occurs at cycle 57 when CSEL=1 and cycle 56 when CSEL=0.
+8. Changing CSEL from 1 to 0 at cycle 56 skips the right-border set check for that line, leaving the side border open until the next line's border checks.
+9. Border color is set by $D020; background color by $D021.
+10. Closed vertical or side borders mask sprite output in the border area; sprites are visible in border pixels only when the corresponding border flip-flop is open.
+11. Sprite-background visibility and collision checks treat closed border pixels as border pixels, not as foreground character or bitmap pixels.
 
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
 - `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: `colors[]` and `draw_graphics()` define the VICE x64sc display-mode color routing for standard text, multicolor text, extended color, invalid modes, and foreground priority.
 - `native/vice/vice/src/viciisc/vicii-cycle.c`: vertical and horizontal border flip-flop checks.
+- `native/vice/vice/src/viciisc/vicii-chip-model.c`: PAL x64sc `ChkBrdL1`, `ChkBrdL0`, `ChkBrdR0`, and `ChkBrdR1` cycle-table entries.
 - `native/vice/vice/src/vicii/vicii-mem.c`: RSEL/CSEL edge timing behavior around border comparisons.
 
 ### Traceability

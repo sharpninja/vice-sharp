@@ -6,7 +6,8 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 color register access).
+/// FR/TR: FR-VIC-004 / FR-VIC-007 / TEST-VIC-001
+/// (BACKFILL-VIDEO-001 color register access).
 /// VIC-II color registers ($D020 border, $D021-$D024 background 0-3,
 /// $D025-$D026 sprite multicolor 1-2, $D027-$D02E per-sprite color 0-7)
 /// use only the low 4 bits for the C64 16-color palette. On real
@@ -32,7 +33,8 @@ public sealed class VicIIColorRegistersTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 color register access).
+    /// FR/TR: FR-VIC-004 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 color register access).
     /// Use case: $D020 border color register encodes color in low 4
     /// bits only. Real hardware reports upper 4 bits as 1 (unconnected
     /// pins float high), so writing $05 (color 5, green) returns $F5
@@ -54,7 +56,8 @@ public sealed class VicIIColorRegistersTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 color register access).
+    /// FR/TR: FR-VIC-004 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 color register access).
     /// Use case: Background color registers $D021-$D024 follow the
     /// same low-4-bits semantic as $D020. Every value written reads
     /// back with upper nibble == $F.
@@ -77,7 +80,8 @@ public sealed class VicIIColorRegistersTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 color register access).
+    /// FR/TR: FR-VIC-004 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 color register access).
     /// Use case: Sprite multicolor registers $D025 and $D026 use the
     /// same low-4-bits encoding as the other color registers. Upper
     /// bits float high on read.
@@ -97,7 +101,8 @@ public sealed class VicIIColorRegistersTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 color register access).
+    /// FR/TR: FR-VIC-004 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 color register access).
     /// Use case: Per-sprite color registers $D027-$D02E (sprites 0-7)
     /// use the same low-4-bits encoding. Each register reads back with
     /// upper nibble == $F.
@@ -124,7 +129,8 @@ public sealed class VicIIColorRegistersTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 color register access).
+    /// FR/TR: FR-VIC-004 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 color register access).
     /// Use case: Code that reads a color register, mutates it, and
     /// writes it back must observe a stable round-trip. Because writes
     /// ignore the upper 4 bits and reads always force them high, the

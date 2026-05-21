@@ -13,6 +13,7 @@ using Xunit;
 public sealed class VicIIBorderFlipFlopTests
 {
     private const ushort ScreenControl1 = 0xD011;
+    private const ushort ScreenControl2 = 0xD016;
 
     private static Mos6569 BuildVic()
     {
@@ -110,5 +111,34 @@ public sealed class VicIIBorderFlipFlopTests
 
         Assert.False(vic.IsVerticalBorderActive);
         Assert.False(vic.IsRasterLineVerticalBorderActive(251));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001, TODO: BACKFILL-VIDEO-001.
+    /// Use case: VICE x64sc opens the right side border when software
+    /// switches CSEL from 40-column to 38-column mode at PAL cycle 56,
+    /// after the 38-column right-border set check and before the
+    /// 40-column right-border set check.
+    /// Acceptance: The line remains horizontally open past the normal
+    /// right border, so sprite-visible pixels are not masked at x=340.
+    /// </summary>
+    [Fact]
+    public void BorderFlipFlop_CanOpenRightSideBorder_BySwitchingCselAtCycle56()
+    {
+        var vic = BuildVic();
+        vic.Write(ScreenControl1, 0x18);
+        vic.Write(ScreenControl2, 0x08);
+
+        AdvanceTo(vic, 51, 18);
+        Assert.False(vic.IsVerticalBorderActive);
+
+        AdvanceTo(vic, 100, 56);
+        vic.Write(ScreenControl2, 0x00);
+
+        AdvanceTo(vic, 101, 0);
+
+        Assert.False(vic.IsMainBorderActive);
+        Assert.True(vic.IsRasterLineRightBorderOpen(100));
+        Assert.True(vic.CanRenderSpritePixelAt(340, 100));
     }
 }

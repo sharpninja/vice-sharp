@@ -6,7 +6,7 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+/// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
 /// Use case: $D011 bit 7 plus $D012 form the 9-bit raster-compare register.
 /// $D019 latches the per-source IRQ state (bit 0 = raster). $D01A holds the
 /// per-source enable mask. IRQ output is asserted iff (latch &amp; enable) != 0
@@ -43,7 +43,7 @@ public sealed class VicIIRasterIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+    /// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
     /// Use case: Writing $D012 sets the low 8 bits of the 9-bit raster-compare
     /// register without altering the high bit. Reading $D012 returns the
     /// current raster line, not the compare value.
@@ -62,7 +62,7 @@ public sealed class VicIIRasterIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+    /// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
     /// Use case: $D011 bit 7 forms the high bit of the 9-bit raster-compare
     /// register on write. Writing $D011 bit 7 set with $D012 = $42 produces
     /// compare line $142; clearing bit 7 produces $042.
@@ -83,7 +83,7 @@ public sealed class VicIIRasterIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+    /// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
     /// Use case: When the live raster line crosses the compare value with
     /// raster IRQ enabled in $D01A bit 0, $D019 bit 0 must latch and the
     /// IRQ line must assert.
@@ -107,7 +107,7 @@ public sealed class VicIIRasterIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+    /// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
     /// Use case: $D019 is write-1-to-clear per bit. After a raster IRQ fires,
     /// writing $01 to $D019 must clear bit 0 of the latch and (since no other
     /// latches are set) deassert the IRQ output.
@@ -134,7 +134,7 @@ public sealed class VicIIRasterIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+    /// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
     /// Use case: The $D019 latch tracks the source independently of the
     /// $D01A enable mask. When the raster crosses the compare line with
     /// $D01A bit 0 = 0, $D019 bit 0 must still latch but the IRQ output
@@ -160,7 +160,7 @@ public sealed class VicIIRasterIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+    /// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
     /// Use case: Native VICE reset starts on raster line 0 with compare line
     /// 0, but the reset line must not immediately leave a stale raster IRQ
     /// latch after the first scanline.

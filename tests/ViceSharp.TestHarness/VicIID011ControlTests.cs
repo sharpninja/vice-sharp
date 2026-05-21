@@ -6,7 +6,8 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D011 control register).
+/// FR/TR: FR-VIC-001 / FR-VIC-006 / FR-VIC-007 / TEST-VIC-001
+/// (BACKFILL-VIDEO-001 $D011 control register).
 ///
 /// $D011 (control register 1) packs six independent fields into one byte:
 ///   bits 2-0: YSCROLL (vertical fine scroll)
@@ -49,7 +50,8 @@ public sealed class VicIID011ControlTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D011 control register).
+    /// FR/TR: FR-VIC-001 / FR-VIC-006 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D011 control register).
     /// Use case: RSEL ($D011 bit 3) selects 25-row vs 24-row display. The
     /// bit is purely software-controlled state; a write of bit 3 must be
     /// observable in a subsequent read of the same register on any line
@@ -72,7 +74,8 @@ public sealed class VicIID011ControlTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D011 control register).
+    /// FR/TR: FR-VIC-001 / FR-VIC-006 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D011 control register).
     /// Use case: Reset() must restore $D011 to a well-defined power-on
     /// value. Mos6569.Reset() zeroes the entire register backing store,
     /// so RSEL (bit 3), DEN (bit 4), and all other $D011 bits are 0
@@ -92,7 +95,8 @@ public sealed class VicIID011ControlTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D011 control register).
+    /// FR/TR: FR-VIC-001 / FR-VIC-006 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D011 control register).
     /// Use case: The read-side of $D011 bit 7 returns bit 8 of the
     /// CURRENT raster line, not the high bit of the latched raster
     /// compare value. Writing $D011 = $80 latches the raster-compare
@@ -125,7 +129,8 @@ public sealed class VicIID011ControlTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D011 control register).
+    /// FR/TR: FR-VIC-001 / FR-VIC-006 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D011 control register).
     /// Use case: Bits 6..0 of $D011 (ECM, BMM, DEN, RSEL, YSCROLL2..0)
     /// are pure software-controlled latches. A write of a full bit
     /// pattern across those positions must be exactly recoverable on
@@ -147,7 +152,8 @@ public sealed class VicIID011ControlTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D011 control register).
+    /// FR/TR: FR-VIC-001 / FR-VIC-006 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D011 control register).
     /// Use case: Reset() must clear YSCROLL ($D011 bits 0..2) so the
     /// bad-line predicate is well-defined immediately after power-on.
     /// The bad-line detection key is (raster &amp; 7) == YSCROLL; a

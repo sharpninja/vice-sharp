@@ -6,7 +6,7 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision).
+/// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
 /// Use case: $D01E (sprite-sprite) and $D01F (sprite-background) collision
 /// registers accumulate per-frame based on opaque pixel overlap between
 /// enabled sprites or between sprites and non-transparent foreground
@@ -85,7 +85,7 @@ public sealed class SpriteCollisionTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
     /// Use case: Two enabled sprites placed at identical coordinates with
     /// fully opaque shape data must latch bits 0 and 1 in $D01E once their
     /// raster line is processed.
@@ -113,7 +113,7 @@ public sealed class SpriteCollisionTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
     /// Use case: $D01E read-clear semantics: after reading the latch, a
     /// subsequent read must return 0 until new collisions accumulate.
     /// Acceptance: First read returns 0x03; immediate second read returns 0x00.
@@ -136,7 +136,7 @@ public sealed class SpriteCollisionTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
     /// Use case: Non-overlapping enabled sprites must not produce false
     /// collisions; $D01E must remain 0.
     /// Acceptance: With sprite 0 and sprite 1 at well-separated X positions
@@ -162,7 +162,7 @@ public sealed class SpriteCollisionTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
     /// Use case: A single enabled sprite drawn over a region whose
     /// underlying character bitmap has foreground pixels must latch bit 0
     /// of $D01F (sprite-background collision register).
@@ -187,7 +187,7 @@ public sealed class SpriteCollisionTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
     /// Use case: $D01F read-clear semantics: after reading the latch, a
     /// subsequent read must return 0 until new collisions accumulate.
     /// Acceptance: First read returns 0x01; immediate second read returns 0x00.

@@ -466,6 +466,36 @@ public sealed class VideoRendererTests
     }
 
     /// <summary>
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: VICE x64sc keeps the right side border open when CSEL
+    /// changes from 40-column to 38-column mode at PAL cycle 56, so the
+    /// framebuffer compositor must allow sprite pixels in that opened border.
+    /// Acceptance: Sprite 0 at x=340 renders with its sprite colour after
+    /// the cycle-56 CSEL switch instead of remaining masked by border colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsSpriteInOpenedRightSideBorder()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        ConfigureSprite(ram, vic, sprite: 0, x: 340, y: 100, pointer: 0x20, color: 0x02);
+        vic.Write(0xD015, 0x01);
+
+        AdvanceTo(vic, 100, 56);
+        vic.Write(0xD016, 0x00);
+        AdvanceTo(vic, 101, 0);
+
+        renderer.RenderFullFrame();
+
+        Assert.True(vic.IsRasterLineRightBorderOpen(100));
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 340, VideoRenderer.RasterLineToFrameY(100)));
+    }
+
+    /// <summary>
     /// FR: FR-VIC-004, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
     /// Use case: When two opaque sprites overlap, the lower-numbered
     /// sprite has display priority for the visible framebuffer pixel.
@@ -545,6 +575,20 @@ public sealed class VideoRendererTests
         return BitConverter.ToUInt32(frameBuffer, offset);
     }
 
+    private static void AdvanceTo(Mos6569 vic, ushort rasterLine, byte rasterCycle)
+    {
+        var maxCycles = vic.TotalLines * vic.CyclesPerLine * 2;
+        for (var cycle = 0; cycle < maxCycles; cycle++)
+        {
+            if (vic.CurrentRasterLine == rasterLine && vic.RasterX == rasterCycle)
+                return;
+
+            vic.Tick();
+        }
+
+        throw new InvalidOperationException($"VIC did not reach line ${rasterLine:X3}, cycle {rasterCycle}.");
+    }
+
     private static void ConfigureStandardScreen(Mos6569 vic)
     {
         vic.Write(0xD011, 0x1B);
@@ -563,7 +607,7 @@ public sealed class VideoRendererTests
         RamDevice ram,
         Mos6569 vic,
         int sprite,
-        byte x,
+        int x,
         byte y,
         byte pointer,
         byte color,
@@ -573,7 +617,12 @@ public sealed class VideoRendererTests
         ram.Write((ushort)(pointer * 64), firstRowByte);
         ram.Write((ushort)(pointer * 64 + 1), 0x00);
         ram.Write((ushort)(pointer * 64 + 2), 0x00);
-        vic.Write((ushort)(0xD000 + sprite * 2), x);
+        vic.Write((ushort)(0xD000 + sprite * 2), (byte)(x & 0xFF));
+        byte xMsb = vic.Peek(0xD010);
+        xMsb = x >= 0x100
+            ? (byte)(xMsb | (1 << sprite))
+            : (byte)(xMsb & ~(1 << sprite));
+        vic.Write(0xD010, xMsb);
         vic.Write((ushort)(0xD001 + sprite * 2), y);
         vic.Write((ushort)(0xD027 + sprite), color);
     }

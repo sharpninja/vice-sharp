@@ -6,7 +6,8 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D018 / $D016 register decoding).
+/// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-007 / FR-VIC-009 / TEST-VIC-001
+/// (BACKFILL-VIDEO-001 $D018 / $D016 register decoding).
 /// VIC-II $D018 (memory pointers) encodes the video matrix base in bits
 /// 7-4 (VM13..VM10, shifted &lt;&lt; 10) and the character bitmap base in
 /// bits 3-1 (CB13..CB11, shifted &lt;&lt; 11). Bit 0 is unused on the
@@ -27,7 +28,8 @@ public sealed class VicIIMemoryPointerTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D018 decoding).
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-009 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D018 decoding).
     /// Use case: Software writes $D018 to point the video matrix at a
     /// new $0400-aligned page. Bits 7-4 (VM13..VM10) shifted &lt;&lt; 10
     /// give the absolute base inside the current VIC bank.
@@ -47,7 +49,8 @@ public sealed class VicIIMemoryPointerTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D018 decoding).
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-009 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D018 decoding).
     /// Use case: Software writes $D018 to point character/bitmap data
     /// at a new $0800-aligned page. Bits 3-1 (CB13..CB11) shifted
     /// &lt;&lt; 11 give the absolute base inside the current VIC bank.
@@ -68,7 +71,8 @@ public sealed class VicIIMemoryPointerTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D018 decoding).
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-009 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D018 decoding).
     /// Use case: Bit 0 of $D018 is not wired to anything on the real
     /// chip and floats high. Reads always report bit 0 set, regardless
     /// of what was written.
@@ -92,7 +96,8 @@ public sealed class VicIIMemoryPointerTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D016 decoding).
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D016 decoding).
     /// Use case: Bits 2-0 of $D016 are the X scroll value (0..7
     /// pixels) consumed by the pixel sequencer. This test keeps register
     /// decoding separate from the VideoRenderer mode-color coverage.
@@ -116,7 +121,8 @@ public sealed class VicIIMemoryPointerTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D016 decoding).
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D016 decoding).
     /// Use case: Bit 3 of $D016 is CSEL (column select). When set, the
     /// display is 40 columns wide; when clear, the display is 38
     /// columns and the left/right border encroaches one column.
@@ -136,7 +142,8 @@ public sealed class VicIIMemoryPointerTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D016 decoding).
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D016 decoding).
     /// Use case: Bit 4 of $D016 is MCM (multicolor mode). Combined
     /// with $D011 bits, it picks between standard text, multicolor
     /// text, bitmap, and extended-background modes.
@@ -157,7 +164,8 @@ public sealed class VicIIMemoryPointerTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D016 decoding).
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-007 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 $D016 decoding).
     /// Use case: Bits 7-6 of $D016 are unconnected on the real chip
     /// and float high. Reads always report them as 1 regardless of
     /// what was written.

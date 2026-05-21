@@ -6,7 +6,7 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
+/// FR/TR: FR-VIC-004 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
 ///
 /// Backfill register-decode coverage for two VIC-II sprite control
 /// registers not directly exercised by the sprite-collision and
@@ -92,7 +92,7 @@ public sealed class VicIISpriteRegisterTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
+    /// FR/TR: FR-VIC-004 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
     /// Use case: $D015 holds the 8-bit sprite-enable bitmask with no
     /// stuck or floating bits; write/read round-trip must be bit-exact
     /// for the full byte (distinct from $D016 / $D018 which have
@@ -110,7 +110,7 @@ public sealed class VicIISpriteRegisterTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
+    /// FR/TR: FR-VIC-004 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
     /// Use case: A sprite whose enable bit in $D015 is 0 must not
     /// contribute to the sprite-sprite collision latch even when its
     /// X/Y coordinates would overlap another sprite. Regression guard
@@ -141,7 +141,7 @@ public sealed class VicIISpriteRegisterTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
+    /// FR/TR: FR-VIC-004 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
     /// Use case: $D010 bit n is the 9th (high) bit of sprite n's
     /// X coordinate, extending the 8-bit $D000/$D002/... low byte
     /// into a 9-bit value covering 0..511. Setting $D010 bit 0 = 1
@@ -163,7 +163,7 @@ public sealed class VicIISpriteRegisterTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
+    /// FR/TR: FR-VIC-004 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
     /// Use case: $D010 is a plain 8-bit register (no floating-high
     /// upper bits, no shared semantics with neighbouring registers).
     /// Round-trip must be bit-exact.
@@ -180,7 +180,7 @@ public sealed class VicIISpriteRegisterTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
+    /// FR/TR: FR-VIC-004 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite-enable + X-MSB).
     /// Use case: $D010 routes ONLY to the X-coordinate MSB and must
     /// not touch the Y position (odd offsets $D001/$D003/... carry Y).
     /// Toggling $D010 between writes to $D001 must leave sprite 0's

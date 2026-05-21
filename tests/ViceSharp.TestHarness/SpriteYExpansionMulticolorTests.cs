@@ -6,7 +6,8 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
+/// FR/TR: FR-VIC-004 / FR-VIC-005 / TEST-VIC-001
+/// (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
 /// Use case: VIC-II sprite features Y-expansion ($D017 bit n), multicolor
 /// ($D01C bit n), and X-expansion ($D01D bit n) are per-sprite bitmasks
 /// that affect the sprite raster's vertical reach, pixel pair semantics,
@@ -17,7 +18,7 @@ using Xunit;
 /// - X-expansion doubles horizontal extent (24 -> 48 pixels). Pairs in
 ///   multicolor + X-expansion produce 4-pixel pair groups (not single bits doubled).
 /// Acceptance: Tests below assert collision register state matches the
-/// pair-semantic and expansion rules described in FR-VIC.
+/// pair-semantic and expansion rules described in FR-VIC-004 and FR-VIC-005.
 /// </summary>
 public sealed class SpriteYExpansionMulticolorTests
 {
@@ -145,7 +146,8 @@ public sealed class SpriteYExpansionMulticolorTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
+    /// FR/TR: FR-VIC-004 / FR-VIC-005 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
     /// Use case: With sprite 0 at Y=100 (21 rows -> ends row 120) and sprite 1
     /// at Y=125 (21 rows -> 125..145), no Y-expansion = no overlap. Enabling
     /// Y-expansion on sprite 0 ($D017 bit 0 = 1) doubles its reach to rows
@@ -181,7 +183,8 @@ public sealed class SpriteYExpansionMulticolorTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
+    /// FR/TR: FR-VIC-004 / FR-VIC-005 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
     /// Use case: Sprite 0 in multicolor mode ($D01C bit 0 = 1) with first-row
     /// bytes (b0,b1,b2) = (0x40, 0x00, 0x00). In binary that is
     /// 0100 0000 0000 0000 0000 0000 - twelve 2-bit pairs:
@@ -238,7 +241,8 @@ public sealed class SpriteYExpansionMulticolorTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
+    /// FR/TR: FR-VIC-004 / FR-VIC-005 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
     /// Use case: Multicolor sprite over a foreground-filled background must
     /// only register sprite-bg collision when the multicolor pair is non-zero.
     /// Using sprite-0 row bytes (0x40, 0x00, 0x00) only pair-0 is opaque, so
@@ -276,7 +280,8 @@ public sealed class SpriteYExpansionMulticolorTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
+    /// FR/TR: FR-VIC-004 / FR-VIC-005 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
     /// Use case: Y-expansion combined with multicolor. Sprite 0 is Y-expanded
     /// AND multicolor with the same first-row pattern (pair-0 opaque only).
     /// Sprite 1 is a single-pixel non-multicolor sprite placed at the
@@ -318,7 +323,8 @@ public sealed class SpriteYExpansionMulticolorTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
+    /// FR/TR: FR-VIC-004 / FR-VIC-005 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite Y-expansion + multicolor).
     /// Use case: X-expansion + multicolor. Each PAIR doubles to 4 pixels
     /// (not each bit doubled). With multicolor + X-expansion, sprite 0's
     /// first row (0x40, 0x00, 0x00) has pair-0 = 01 (opaque) and pair-1..11 = 00,

@@ -1,8 +1,8 @@
 # ViceSharp Phase 1 Completion Plan
 
-Updated: 2026-05-20
+Updated: 2026-05-21
 Workspace: `F:\GitHub\vice-sharp`
-Baseline: `main` at `c9871f4`, ahead of `origin/main` by 93 commits
+Baseline: `main` at `46edda9` with intended local plan updates pending
 
 This file replaces the stale May 12 30-stage execution snapshot in its
 entirety. Keep this document as the live Phase 1 closeout plan. Do not append
@@ -27,9 +27,11 @@ TODOs from real Phase 1 blockers before new feature work continues.
 
 Phase 1 means Iteration 1 C64 bringup is complete enough to operate the C64 and
 required x64sc profiles through real boot, input, media, capture, snapshot, and
-host-control flows with native-comparable validation. It does not mean every
-future VICE machine, every cartridge mapper, every platform host, or complete
-performance parity is done.
+host-control flows with native-comparable validation. It also includes a first
+performance-tuning pass that reaches at least 25% of classic VICE performance
+on the selected benchmark profile. It does not mean every future VICE machine,
+every cartridge mapper, every platform host, or complete performance parity is
+done.
 
 Phase 1 is complete only when all of these are true:
 
@@ -56,7 +58,11 @@ Phase 1 is complete only when all of these are true:
    blockers, not passes.
 8. A minimal upstream VICE testbench path exists for selected x64sc-compatible
    cases, including debugcart exit handling and process-level smoke validation.
-9. MCP TODO, session log, README dashboard, `handoff.md`, and this file all
+9. `PERF-TUNING-001` is complete: the selected classic VICE comparison profile
+   has a repeatable benchmark, the top measured vice-sharp hotspots have been
+   profiled and remediated, and vice-sharp reaches at least 25% of classic VICE
+   performance on that profile without breaking deterministic validation.
+10. MCP TODO, session log, README dashboard, `handoff.md`, and this file all
    agree on what is done, what is deferred, and what remains post-Phase 1.
 
 ## Byrd Slice Rules
@@ -162,7 +168,27 @@ Current audit result from 2026-05-20:
   not cancel the active DMA window, and enabling after both checks must wait for
   a later matching raster line.
 
-Required gate before more Phase 1 implementation:
+Gate result from 2026-05-21:
+
+- `FR-VIC-007` already states that closed vertical/side borders mask sprite
+  output, opened borders expose sprite pixels, and closed border pixels are not
+  treated as foreground character/bitmap pixels for sprite-background checks.
+- `FR-VIC-010` already states that sprite DMA is table-driven per active
+  VIC-II model, includes the PAL x64sc table-cycle normalization, and captures
+  VICE `check_sprite_dma` / `sprite_dma` latch behavior at PAL public cycles
+  55/56.
+- `TEST-VIC-001` and `X64SC-Requirement-Coverage.md` already include closed
+  border masking, opened-border sprite visibility, sprite priority, and
+  per-model sprite DMA timing.
+- After the 2026-05-21 Slice 0.5 cleanup,
+  `tools/check_requirement_traceability.ps1` reports 144 canonical IDs,
+  79 referenced canonical IDs, 65 unreferenced canonical IDs, and 53
+  noncanonical IDs in `src`/`tests`. The touched VIC-II source/test slice no
+  longer contains the broad `FR-VIC` label. The remaining noncanonical labels
+  are debt outside this slice. New work must not add new broad/noncanonical
+  IDs, and touched files must move toward canonical IDs.
+
+Required gate for each further Phase 1 implementation slice:
 
 1. Name the canonical `FR-*`, `TR-*`, `TEST-*`, and owning `BACKFILL-*` IDs for
    the slice.
@@ -180,7 +206,8 @@ Gate:
   amended to reflect the VICE behavior already found during Slice 1.
 - Active Slice 1 renderer/border code and tests reference canonical VIC-II IDs
   rather than broad `FR-VIC` labels.
-- Further Slice 1 work starts from this gate, not from code-first discovery.
+- Further Slice 1 work starts from canonical requirements, VICE evidence, and
+  focused validation rather than code-first discovery.
 
 ## Slice Order
 
@@ -195,7 +222,8 @@ Gate:
 | 5 | Input parity close | `BACKFILL-INPUT-001` | Joystick/control-port parity, longer keyboard workflows, model-specific keyboard matrix behavior, and host input injection coverage. | Input parity tests, host input protocol tests, full solution test. |
 | 6 | Testbench and launcher shim | `ARCH-TESTBENCH-001`, `CLI-LAUNCHER-001` | Minimal x64sc-compatible runner, debugcart exits, `-limitcycles`, selected VICE-style flags, PRG/SYS autostart, screenshot/monitor smoke. | Selected upstream testbench cases run from process-level smoke tests. |
 | 7 | Final x64sc lockstep | `BACKFILL-LOCKSTEP-001` | Run all required x64sc profile gates with media/input/video/snapshot coverage and no required skips. | Final x64sc lockstep green; blockers must identify missing asset, native shim gap, or exact failing subsystem. |
-| 8 | Phase 1 closeout | docs plus MCP TODO/session state | README dashboard refresh, handoff refresh, MCP TODO/session closure, and explicit post-Phase 1 split list. | Full closeout validation set passes and docs agree. |
+| 8 | Performance first pass | `PERF-TUNING-001` | Profile CPU, VIC/video, memory/bus, scheduler, host UI/frame-source, and allocation hotspots against a selected classic VICE/x64sc comparison profile; remediate the highest-impact bottlenecks. | Repeatable benchmark shows vice-sharp reaches at least 25% of classic VICE performance on the selected profile, with deterministic validation still green. |
+| 9 | Phase 1 closeout | docs plus MCP TODO/session state | README dashboard refresh, handoff refresh, MCP TODO/session closure, and explicit post-Phase 1 split list. | Full closeout validation set passes and docs agree. |
 
 ## Slice 1 Progress - VIC-II Visible Parity
 
@@ -221,13 +249,29 @@ slice:
   VICE `chargen-901225-01.bin` data file, so local VICE data roots work without
   repo-local ROMs.
 
+2026-05-21 continued Slice 1 with a VICE-source-driven border timing slice:
+
+- `FR-VIC-007` and the mirrored Project/wiki requirements now cite the PAL
+  x64sc horizontal border clear/set cycles from VICE
+  `viciisc/vicii-cycle.c` and the cycle-56 CSEL 1-to-0 right-side-border-open
+  behavior from VICE `vicii/vicii-mem.c`.
+- `Mos6569` snapshots whether a completed raster line skipped the right-border
+  set check, and sprite visibility now allows side-border pixels on that line
+  when the horizontal border flip-flop stayed open.
+- `VicIIBorderFlipFlopTests` covers the cycle-56 CSEL 1-to-0 state transition,
+  and `VideoRendererTests` now proves the opened right side border renders a
+  sprite pixel in the BGRA framebuffer at x=340. Focused renderer/border tests
+  passed 28/28; the broader VIC/video gate passed 155/155.
+
 Remaining Slice 1 work:
 
-- Continue only after Slice 0.5 is satisfied. The 2026-05-20 border/sprite
+- Continue from the Slice 0.5 gate result above. The 2026-05-20 border/sprite
   masking work exposed a systemic traceability gap: the VICE behavior was
   discoverable from classic VICE source, but the canonical imported FR did not
-  explicitly drive the design before implementation.
-- Open-border/border flip-flop timing.
+  explicitly drive the design before implementation. The corrected rule is now
+  to update or cite the canonical requirement before broadening a slice.
+- Remaining open-border/border flip-flop depth: left-side/continuous
+  side-border cases, non-PAL model timing, and native x64sc checkpoints.
 - Remaining sprite DMA depth beyond the PAL x64sc BA-mask latch: non-PAL
   per-model tables, sprite data-fetch side effects, and native lockstep
   checkpoints for multiplexing edge cases.
@@ -255,6 +299,9 @@ Treat these as current blockers after Slice 0 reconciliation:
   exposure is formally split as post-Phase 1.
 - `CLI-LAUNCHER-001`: launcher-level flags and process smoke needed for
   drop-in x64sc-style workflows.
+- `PERF-TUNING-001`: profile and remediate first-pass performance hotspots
+  until vice-sharp reaches at least 25% of classic VICE performance on the
+  selected benchmark profile.
 
 ## Slice 0 Validation-Only Closures
 
@@ -278,7 +325,7 @@ Do not pull these into Phase 1 unless the user explicitly changes scope:
   chip catalog metadata.
 - `PLATFORM-CROSS-001`: UWP Xbox, Avalonia mobile, and MacOS host code.
 - `PERF-BENCHMARK-001`: native VICE performance measurement integration beyond
-  benchmark smoke/wiring.
+  the `PERF-TUNING-001` first-pass Phase 1 benchmark/profile target.
 - Further analog SID/8580 filter deepening beyond the current Phase 1 gates.
 - Broad cartridge mapper families beyond standard 8K/16K/CRT behavior needed
   for Phase 1 tests.
@@ -298,14 +345,19 @@ git diff --check
 ```
 
 Add native VICE/testbench commands to this list once `ARCH-TESTBENCH-001` lands.
+Add the selected `PERF-TUNING-001` benchmark/profile command once the first-pass
+performance profile is defined; Phase 1 closeout must include the measured
+classic VICE baseline, vice-sharp result, and percentage.
 If a command is skipped, the closeout note must state the exact reason.
 
 ## Done Statement
 
-Phase 1 can be called complete when Slice 8 is closed and the final handoff says:
+Phase 1 can be called complete when Slice 9 is closed and the final handoff says:
 
 - The repository is on a known commit.
 - The working tree state is intentional.
 - Full validation results are listed with exact commands and counts.
+- `PERF-TUNING-001` is done and the final handoff lists the selected benchmark,
+  classic VICE baseline, vice-sharp result, and percentage.
 - All Phase 1 TODOs are done or explicitly split to later phases.
 - README, MCP TODO, session logs, `handoff.md`, and this plan agree.

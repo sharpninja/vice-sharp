@@ -6,7 +6,7 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision IRQ).
+/// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision IRQ).
 /// Use case: When sprite-sprite or sprite-background collisions are detected
 /// inside the VIC-II raster pipeline, $D019 bits 2 and 1 respectively must
 /// latch (write-1-to-clear). $D01A bits 2 and 1 form the enable mask for
@@ -77,7 +77,7 @@ public sealed class VicIISpriteCollisionIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision IRQ).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision IRQ).
     /// Use case: When two enabled sprites overlap and the sprite-sprite
     /// collision latch ($D01E) accumulates non-zero bits, $D019 bit 2 must
     /// be set. The latch is independent of the $D01A enable mask.
@@ -102,7 +102,7 @@ public sealed class VicIISpriteCollisionIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision IRQ).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision IRQ).
     /// Use case: When a sprite overlaps a foreground-bearing background
     /// character pixel and the sprite-background latch ($D01F) accumulates
     /// non-zero bits, $D019 bit 1 must be set. The latch is independent
@@ -126,7 +126,7 @@ public sealed class VicIISpriteCollisionIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision IRQ).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision IRQ).
     /// Use case: $D01A bit 2 enables the sprite-sprite IRQ. When enabled
     /// and a sprite-sprite collision occurs, the connected IRQ line must
     /// assert and $D019 bit 7 (IR master) must be set. Writing $04 to
@@ -161,7 +161,7 @@ public sealed class VicIISpriteCollisionIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision IRQ).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision IRQ).
     /// Use case: $D01A bit 1 enables the sprite-background IRQ. When
     /// enabled and a sprite-background collision occurs, the IRQ line
     /// must assert and $D019 bit 7 must be set. Writing $02 to $D019
@@ -193,7 +193,7 @@ public sealed class VicIISpriteCollisionIrqTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite collision IRQ).
+    /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision IRQ).
     /// Use case: With both sprite-sprite AND sprite-background collisions
     /// occurring on the same raster pass, $D019 latches bits 1 and 2
     /// together. Enabling either bit in $D01A drives the IRQ output. The
