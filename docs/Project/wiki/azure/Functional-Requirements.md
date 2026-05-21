@@ -3351,7 +3351,9 @@ The VIC-II raster engine shall generate video output with cycle-accurate timing 
 5. The raster interrupt triggers at cycle 0 of the matching line (PAL) with a 1-cycle acknowledge latency.
 6. The display window begins at line 51 (PAL) and ends at line 250.
 7. Display/idle state transitions occur at the correct cycles within each line.
-8. A light-pen high-to-low transition latches the current raster X position and low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch, and re-arms only at the frame boundary.
+8. A light-pen high-to-low transition latches the current raster X position and
+   low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch,
+   and re-arms only at the frame boundary.
 
 ### Source References
 
@@ -3360,7 +3362,7 @@ The VIC-II raster engine shall generate video output with cycle-accurate timing 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `IClockedDevice`
-- **Test Suite:** `RasterTimingTests`, `PalNtscVariantTests`, `RasterInterruptTests`
+- **Test Suite:** `RasterTimingTests`, `PalNtscVariantTests`, `RasterInterruptTests`, `VicIILightPenTests`
 
 ---
 
@@ -3665,9 +3667,16 @@ The VIC-II sprite DMA shall be emulated with sub-cycle accuracy to support sprit
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/viciitypes.h`: `VICII_PAL_CYCLE(c)` maps public PAL cycle numbers to zero-based internal cycles.
+- `native/vice/vice/src/viciisc/vicii-cycle.c`: `check_sprite_dma` samples `$D015` and sprite Y at PAL public cycles 55/56, latches `sprite_dma`, and uses that latch for later BA/data DMA until sprite MC base completion clears it.
+- `native/vice/vice/src/viciisc/vicii-chip-model.c`: per-model sprite DMA fetch tables.
+- `native/vice/vice/src/viciisc/vicii-fetch.c`: sprite pointer/data fetch operations.
 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `ISpriteUnit`
-- **Test Suite:** `SpriteDmaTimingTests`, `SpriteMultiplexTests`, `SpriteDmaCycleTests`
+- **Related FRs:** `FR-VIC-004`, `FR-VIC-006`, `FR-VIC-007`
+- **Technical Requirement:** `TR-CYCLE-001`
+- **Test Requirement:** `TEST-VIC-001`, `TEST-X64SC-LOCKSTEP-001`
+- **Test Suite:** `VicIISpriteDmaTests`, `VicIISpriteDmaStallTests`, `X64ScVariantLockstepTests`, `SpriteDmaTimingTests`, `SpriteMultiplexTests`, `SpriteDmaCycleTests`
 
