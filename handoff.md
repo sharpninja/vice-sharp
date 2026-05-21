@@ -6,6 +6,7 @@
 - Branch: `main`
 - Last synchronized project commit before this implementation slice: `06b080d3f3717b32e4b2b89ea6149f3ff7dc6319` (`feat(vic): add register readback edge coverage`)
 - `origin/main` and `github/main` were both verified at `06b080d3f3717b32e4b2b89ea6149f3ff7dc6319` before the matrix/idle slice.
+- Matrix/idle implementation commit: `243c651805a04d89fcfb1a26073b5de210037519` (`feat(vic): add matrix idle fetch coverage`).
 - The only intentionally uncommitted local item was `docs/reddit-followup-post.md`.
 - Active plan: `docs/plan.md`, "ViceSharp Phase 1 Completion Plan", updated 2026-05-21.
 - This is a reboot continuity handoff, not a Phase 1 completion claim.
@@ -48,7 +49,7 @@
 - The GitHub wiki was also published to the actual wiki repository, not just zipped:
   - URL: `https://github.com/sharpninja/vice-sharp/wiki`
   - Wiki remote: `https://github.com/sharpninja/vice-sharp.wiki.git`
-  - Wiki commit: `608c0e2c21a354182bcd2396e5d3bbda27077c0c` (`Publish edge TR requirements wiki`)
+  - Wiki commit: `28b82e9175757b93be350a10d62eaeb7ae8b40b8` (`docs(wiki): refresh from 243c651`)
 - Future wiki exports should push `docs/Project/wiki/github` to the GitHub wiki remote after generating the ZIP.
 
 ## Current Classic VICE Edge-Case Backfill
@@ -111,7 +112,7 @@
   `RUNTIME-TAPE-002`, and `BACKFILL-LOCKSTEP-001`.
 - GitHub wiki was published from `docs/Project/wiki/github` to
   `https://github.com/sharpninja/vice-sharp/wiki` at wiki commit
-  `608c0e2c21a354182bcd2396e5d3bbda27077c0c`.
+  `28b82e9175757b93be350a10d62eaeb7ae8b40b8`.
 
 ## Current Phase 1 Plan
 
@@ -191,7 +192,8 @@ Before each code slice, name the canonical `FR-*`, `TR-*`, and `TEST-*` IDs and 
 - The requirements ZIP was readable and hashed as:
   - `CCE3EC1DC605ACCBF4ED7938B49EB89D18B9C04A074F26B9BCFB01FB5FB07AFD`
 - GitHub wiki remote was reachable at `refs/heads/master`.
-- GitHub wiki page returned HTTP 200 after publication earlier in this session.
+- GitHub wiki remote was updated to `28b82e9175757b93be350a10d62eaeb7ae8b40b8`
+  after the matrix/idle docs sync.
 
 ## Resume Prompt
 
@@ -205,7 +207,7 @@ Read AGENTS-README-FIRST.yaml first and use F:\GitHub\mcpserver-codex-plugin for
 Current verified state before reboot:
 - main had the register-readback slice through 06b080d3f3717b32e4b2b89ea6149f3ff7dc6319 before the current matrix/idle slice.
 - origin/main and github/main were both synchronized to 06b080d3f3717b32e4b2b89ea6149f3ff7dc6319 before the current matrix/idle slice.
-- GitHub wiki was published to https://github.com/sharpninja/vice-sharp/wiki at wiki commit 608c0e2c21a354182bcd2396e5d3bbda27077c0c.
+- GitHub wiki was published to https://github.com/sharpninja/vice-sharp/wiki at wiki commit 28b82e9175757b93be350a10d62eaeb7ae8b40b8.
 - Only local dirty item intentionally left out: docs/reddit-followup-post.md.
 - Requirements refreshed in MCP and generated docs for FR-VIC-001, FR-VIC-007, FR-VIC-010, and TEST-VIC-001; mappings for FR-VIC-001/007/010 include TR-CYCLE-001 and TEST-VIC-001.
 - Do not treat repo-local ROM absence as a blocker; resolve VICE data from local x64sc.exe/WinVICE root, especially C:\Users\kingd\.choco\lib\winvice-nightly\tools\GTK3VICE-3.8-win64.
