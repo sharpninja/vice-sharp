@@ -38,7 +38,7 @@ Non-x64sc machines imported from the VICE documentation remain outside this back
 
 The current baseline provides a concrete model-profile catalog in `C64MachineProfiles`, exposes selected profile metadata through `IProfiledArchitectureDescriptor`, routes host session creation aliases through `DefaultEmulatorRuntimeFactory`, and applies profile timing, SID, keyboard, cartridge, and ROM-resource defaults in `ArchitectureBuilder`.
 
-`C64RomSet` now resolves exact VICE ROM resource names for every x64sc profile, with the repo-local provider falling back to `native/vice/vice/data` when the workspace `roms` folder only carries compatibility aliases. Ultimax/MAX uses VICE's `kernal-none.bin` policy and takes the reset vector from cartridge ROMH in the deterministic lockstep path.
+`C64RomSet` now resolves exact VICE ROM resource names for every x64sc profile through the configured VICE data root resolver. The workspace checkout is not expected to carry ROMs; local validation discovers the installed WinVICE data root from environment variables or `x64sc.exe`. Ultimax/MAX uses VICE's `kernal-none.bin` policy and takes the reset vector from cartridge ROMH in the deterministic lockstep path.
 
 ## Lockstep Requirement
 

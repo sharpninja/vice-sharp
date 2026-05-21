@@ -13,7 +13,7 @@ Console.WriteLine();
 
 int cycles = 100000;
 string? traceFile = null;
-string romPath = "roms";
+string? romPath = null;
 string? machineYamlPath = null;
 
 for (int i = 0; i < args.Length; i++)
@@ -44,13 +44,16 @@ for (int i = 0; i < args.Length; i++)
 IMachine machine;
 ISystemCoordinator coordinator;
 MultiSystemBuildResult? multiBuild = null;
+var resolvedRomPath = romPath is null
+    ? ViceDataPathResolver.FindDataRoot()
+    : ViceDataPathResolver.NormalizeDataRootOrDefault(romPath);
 
 if (machineYamlPath is not null)
 {
     if (IsMultiSystemYamlSuppressed(machineYamlPath))
     {
         Console.WriteLine($"Loading multi-system topology from: {machineYamlPath}");
-        var (built, errorMulti) = LoadMultiSystemSuppressed(machineYamlPath, romPath);
+        var (built, errorMulti) = LoadMultiSystemSuppressed(machineYamlPath, resolvedRomPath);
         if (built is null)
         {
             Console.Error.WriteLine($"Failed to load multi-system YAML: {errorMulti}");
@@ -77,7 +80,7 @@ if (machineYamlPath is not null)
 else
 {
     Console.WriteLine($"Building C64 emulation...");
-    var romProvider = new RomProvider(romPath);
+    var romProvider = new RomProvider(resolvedRomPath);
     var builder = new ArchitectureBuilder(romProvider);
     var descriptor = new C64Descriptor();
     machine = builder.Build(descriptor);

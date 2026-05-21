@@ -30,16 +30,16 @@ Expect the entire suite to pass. A regression here means your local environment 
 
 ## 2. Get ROMs
 
-ViceSharp does not ship Commodore ROM images. You must supply your own KERNAL, BASIC, CHARGEN, and 1541 DOS ROMs. The full sourcing rules are in [ROMs.md](ROMs.md); the short version:
+ViceSharp does not ship Commodore ROM images. Use the data root from an installed VICE package or another legal source. The full sourcing rules are in [ROMs.md](ROMs.md); the short version:
 
-1. Set `VICESHARP_ROM_PATH` to your ROM directory:
+1. Set `VICESHARP_ROM_PATH` to your VICE data root, or put `x64sc.exe` on `PATH`:
    ```pwsh
-   $env:VICESHARP_ROM_PATH = "$env:USERPROFILE\.vicesharp\roms"
+   $env:VICESHARP_ROM_PATH = "C:\path\to\GTK3VICE-3.8-win64"
    ```
-2. Lay the files out under that directory as `C64/kernal`, `C64/basic`, `C64/chargen`, `C64/1541` (or `DRIVES/1541` for a shared drive set). See [ROMs.md](ROMs.md#rom-directory-structure) for the full tree.
+2. Use the native VICE layout, for example `C64/basic-901226-01.bin`, `C64/kernal-901227-03.bin`, `C64/chargen-901225-01.bin`, and `DRIVES/dos1541-325302-01+901229-05.bin`. See [ROMs.md](ROMs.md#rom-directory-structure) for the full tree.
 3. Validate the layout with `dotnet run --project src/ViceSharp.RomFetch -- --validate --rom-path "$env:VICESHARP_ROM_PATH"`.
 
-If you have classic VICE installed, you can point `VICESHARP_ROM_PATH` straight at its `C64/` directory. If not, `ViceSharp.RomFetch` can import from a VICE install or a user-supplied URL; see [ROMs.md](ROMs.md#vicesharprromfetch-tool) for the exact commands.
+If you have classic VICE installed, the preferred value is the VICE data root that contains `C64/` and `DRIVES/`; pointing directly at `C64/` is normalized to the parent root. If not, `ViceSharp.RomFetch` can import from a VICE install or a user-supplied URL; see [ROMs.md](ROMs.md#vicesharprromfetch-tool) for the exact commands.
 
 ## 3. Run your first machine
 
@@ -56,7 +56,7 @@ Flag-by-flag:
 
 | Flag | Meaning |
 |------|---------|
-| `--roms <dir>` | ROM root. Defaults to `roms/` in the working directory. |
+| `--roms <dir>` | VICE data root. Defaults to automatic resolver behavior when omitted by runtime paths that use `ViceDataPathResolver`. |
 | `--machine-yaml <path>` | Multi-system YAML topology to load (host + peripherals + buses). |
 | `-m <path>` | Short form of `--machine-yaml`. |
 | `--cycles <N>` | Host-cycle budget for this run. Defaults to 100,000. |
@@ -157,7 +157,8 @@ D64 mounts go through `D64DiskImageDevice`. Sector reads are deterministic and e
 
 - Sector-stream fast path is the default. Cycle-accurate GCR bit-stream playback (relevant to copy-protected images and fastloader tricks) is deferred and tracked under future drive work.
 - 1541 head step + motor control are wired (4-phase Gray accumulator on VIA2 PB0/PB1, motor on PB2); seek timing matches the substrate's quarter-track resolution.
-- Writes to the D64 are not persisted to disk in the current build.
+- D64 stream load, sector writes, and commit-to-stream are covered; launcher-level
+  save-as workflows and non-D64 formats are still future work.
 
 ## 7. What works today / what doesn't
 
@@ -166,20 +167,20 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | Area | State | Notes |
 |------|-------|-------|
 | C64 host (MOS 6510 + VIC-II + SID + CIA x2 + PLA + KERNAL boot) | Working | 100k-cycle lockstep parity against native VICE. |
-| Multi-system substrate (YAML topology + auto-binds) | Working | Canonical sample boots C64 + true-drive 1541 with one CLI invocation. |
-| 1541 drive (true-drive: 6502 + VIA1 + VIA2 + IEC) | Working | Cycle-exact IEC handshake; head step + motor + sector reads wired. |
+| Multi-system substrate (YAML topology + auto-binds) | Working | Canonical sample builds C64 + true-drive 1541 with one CLI invocation; ROM-backed boot still requires local ROM assets. |
+| 1541 drive (true-drive: 6502 + VIA1 + VIA2 + IEC) | Bounded | IEC, head step, motor, D64 sector reads/writes, and stream commit are wired; drive-CPU lockstep and full KERNAL load validation remain Phase 1 work. |
 | CIA1 / CIA2 timers, TOD, ports | Working | Full solution test passes. |
 | SID hard sync + ring modulation | Working | Voice i syncs from voice ((i+2) % 3); triangle XOR with sync-source MSB. |
 | SID audio backend wiring | Working (off by default) | `Sid6581(IBus, IAudioBackend?)`; pass an `IAudioBackend` to receive 256-sample batches. |
-| Standard 8K / 16K cartridge mapping (raw + CRT) | Bounded | Image normalised to ROML/ROMH banks; not yet wired into live memory map. |
-| Tape (TAP pulse reads) | Bounded | Pulse stream is deterministic; motor gating is bounded. |
-| Snapshot save/load | Bounded | 64K + public CPU state round-trips. |
-| Frame capture (BGRA -> BMP) | Bounded | Single-frame artifact works; continuous stream pending. |
+| Standard 8K / 16K cartridge mapping (raw + CRT) | Working | Image normalises to ROML/ROMH and drives the live C64 memory map with GAME/EXROM behaviour; broader mapper families are post-MVP. |
+| Tape (TAP pulse reads) | Bounded | TAP pulse stream, CIA1 FLAG integration, builder wiring, rewind, and seek are present; spin-up/spin-down timing and record state remain Phase 1 work. |
+| Snapshot save/load | Bounded | 64K + public CPU state round-trips; full chip, timing, and resume state remain Phase 1 work. |
+| Frame capture (BGRA -> BMP, WAV) | Bounded | Single-frame BMP, multi-frame BMP sequence, and WAV recording work; configurable output formats remain Phase 1 work. |
 | VIC-II pixel sequencer / sprite collisions | Partial | First-scanline parity established; full pixel composition + sprite fetch pending under `BACKFILL-VIDEO-001`. |
-| SID combined waveforms + ADSR-bug accuracy | Partial | Hard sync + ring mod landed; combined waveforms + ADSR bug pending. |
+| SID combined waveforms + ADSR-bug accuracy | Working | Combined waveform, ADSR, digi, filter, PCM-equivalence, and dual-SID coverage are in the focused suite; further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression. |
 | Cartridge ports / user port as live CPU attachment | Substrate ready | `IInterSystemBus` supports `UserPort` and `CartPort` bus kinds; chip-level bindings are in for CIA2 / VIA1 / VIA2 / GAME / EXROM. Cartridge-as-running-CPU sample topology is future work. |
 | C128 / VIC-20 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException`. |
-| Host UI (Avalonia, monitor, gRPC control) | Partial | Wireframes + gRPC contracts landed; full UI pending. |
+| Host UI (Avalonia, monitor, gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Launcher-integrated always-on UI remains separate work. |
 
 ## 8. Troubleshooting
 

@@ -219,15 +219,22 @@ The VIC-II border unit shall accurately emulate both the main border (top/bottom
 5. Opening the top/bottom border: if RSEL is cleared before the border comparison line and set after, the vertical border flip-flop is not set, allowing sprites to display in the border area.
 6. Opening the side borders: toggling CSEL at the correct cycle prevents the horizontal border flip-flop from being set.
 7. Border color is set by $D020; background color by $D021.
+8. Closed vertical or side borders mask sprite output in the border area; sprites are visible in border pixels only when the corresponding border flip-flop is open.
+9. Sprite-background visibility and collision checks treat closed border pixels as border pixels, not as foreground character or bitmap pixels.
 
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: `colors[]` and `draw_graphics()` define the VICE x64sc display-mode color routing for standard text, multicolor text, extended color, invalid modes, and foreground priority.
+- `native/vice/vice/src/viciisc/vicii-cycle.c`: vertical and horizontal border flip-flop checks.
+- `native/vice/vice/src/vicii/vicii-mem.c`: RSEL/CSEL edge timing behavior around border comparisons.
 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`
-- **Test Suite:** `BorderBehaviorTests`, `OpenBorderTrickTests`, `RselCselTimingTests`
+- **Related FRs:** `FR-VIC-004`, `FR-VIC-005`, `FR-VIC-010`
+- **Test Requirement:** `TEST-VIC-001`
+- **Test Suite:** `VicIIBorderFlipFlopTests`, `VideoRendererTests`, `VideoSurfaceIntegrationTests`, `OpenBorderTrickTests`, `RselCselTimingTests`
 
 ---
 
@@ -253,6 +260,7 @@ The emulator shall support Flexible Line Interpretation (FLI) and Advanced FLI (
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: `colors[]` and `draw_graphics()` define standard and multicolor bitmap color routing from bitmap data, screen matrix nibbles, Color RAM, and `$D021`.
 
 ### Traceability
 
@@ -283,6 +291,7 @@ The VIC-II address generation shall correctly translate 14-bit VIC addresses (0-
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: `draw_graphics()` and the mode pipeline define the per-pixel display-mode timing and color-routing behavior that FLI/AFLI slices must preserve while forcing badlines and pointer changes.
 
 ### Traceability
 
@@ -304,18 +313,26 @@ The VIC-II sprite DMA shall be emulated with sub-cycle accuracy to support sprit
 
 ### Acceptance Criteria
 
-1. Each sprite's p-access (pointer fetch) occurs at a specific cycle position on the raster line, with sprite 0 earliest and sprite 7 latest.
-2. Each sprite's three s-accesses (data fetch, 3 bytes) occur at consecutive cycles following the p-access.
-3. The CPU is halted during sprite DMA cycles (2 cycles per sprite for setup, 3 for data).
-4. Disabling a sprite (clearing its bit in $D015) at the correct cycle prevents its DMA from occurring.
-5. Re-enabling a sprite and setting its Y-position to match the current raster line triggers DMA on the next line.
-6. The exact cycle positions for each sprite's DMA match the VICE x64sc reference.
+1. Each sprite's p-access and s-access cycles are table-driven by the active VIC-II model and must not be inferred from sprite number alone.
+2. For PAL x64sc timing, VICE table cycles are sprites 3-7 at 1/2, 3/4, 5/6, 7/8, and 9/10; sprites 0-2 at 58/59, 60/61, and 62/63. In vice-sharp `CurrentCycle` / `RasterX` terms these normalize to sprites 3-7 at 0/1, 2/3, 4/5, 6/7, and 8/9; sprites 0-2 at 57/58, 59/60, and 61/62.
+3. The CPU is halted according to the VICE BA/DMA mask for the matching sprite access slots. For PAL x64sc, sprites 3-7 consume their early-line p-/s-access slots after `sprite_dma` is latched on the prior late-line checks, so their BA lead covers the previous line's final cycles and the following line's first cycles.
+4. `$D015` enable bits and sprite Y registers are sampled by VICE `check_sprite_dma` at PAL public cycles 55 and 56, which normalize to vice-sharp cycles 54 and 55. Once `sprite_dma` is latched, later `$D015` clears do not cancel the already-active DMA/BA window.
+5. Disabling a sprite (clearing its bit in $D015) before both sprite-DMA check cycles prevents its DMA from occurring.
+6. Re-enabling a sprite and setting its Y-position before a matching line's sprite-DMA checks triggers the applicable BA/data slots; missing those checks waits until a later line whose low raster byte matches the sprite Y value.
+7. The exact cycle positions for each sprite's DMA match the VICE x64sc reference.
 
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/viciitypes.h`: `VICII_PAL_CYCLE(c)` maps public PAL cycle numbers to zero-based internal cycles.
+- `native/vice/vice/src/viciisc/vicii-cycle.c`: `check_sprite_dma` samples `$D015` and sprite Y at PAL public cycles 55/56, latches `sprite_dma`, and uses that latch for later BA/data DMA until sprite MC base completion clears it.
+- `native/vice/vice/src/viciisc/vicii-chip-model.c`: per-model sprite DMA fetch tables.
+- `native/vice/vice/src/viciisc/vicii-fetch.c`: sprite pointer/data fetch operations.
 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `ISpriteUnit`
-- **Test Suite:** `SpriteDmaTimingTests`, `SpriteMultiplexTests`, `SpriteDmaCycleTests`
+- **Related FRs:** `FR-VIC-004`, `FR-VIC-006`, `FR-VIC-007`
+- **Technical Requirement:** `TR-CYCLE-001`
+- **Test Requirement:** `TEST-VIC-001`, `TEST-X64SC-LOCKSTEP-001`
+- **Test Suite:** `VicIISpriteDmaTests`, `VicIISpriteDmaStallTests`, `X64ScVariantLockstepTests`, `SpriteDmaTimingTests`, `SpriteMultiplexTests`, `SpriteDmaCycleTests`

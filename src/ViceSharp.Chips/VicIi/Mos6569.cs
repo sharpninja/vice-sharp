@@ -21,6 +21,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private readonly byte[] _registers = new byte[64];
     private const byte InterruptSourceMask = 0x0F;
     private ushort _rasterIrqLine;
+    private bool _rasterIrqCompareArmed;
 
     public ushort CurrentRasterLine { get; private set; }
     
@@ -73,6 +74,19 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private int _lastBadLineCounted = -1;
     private int _badLineCountThisFrame;
 
+    // BACKFILL-VIDEO-001 / FR-VIC-007: VICE-style border flip-flops.
+    // _verticalBorderActive mirrors vborder, _verticalBorderNextActive mirrors
+    // set_vborder, and _mainBorderActive mirrors the horizontal main-border
+    // state that is cleared at the left display check and set at the right
+    // display check. Per-line snapshots let whole-line renderers consume the
+    // cycle-driven vertical border state without changing static render-only
+    // fallback behavior for lines that were never ticked.
+    private readonly bool[] _verticalBorderActiveByRasterLine = new bool[512];
+    private readonly bool[] _verticalBorderLineCaptured = new bool[512];
+    private bool _verticalBorderActive = true;
+    private bool _verticalBorderNextActive = true;
+    private bool _mainBorderActive = true;
+
     // BACKFILL-VIDEO-001: Sprite DMA cycle stealing accounting.
     // Each enabled sprite that intersects the current raster line steals
     // two CPU cycles for s-data fetches. _spriteDmaCyclesThisFrame
@@ -80,6 +94,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // each line is counted at most once.
     private int _spriteDmaCyclesThisFrame;
     private int _lastSpriteDmaLineCounted = -1;
+    private byte _spriteDmaActiveMask;
+    private readonly ushort[] _spriteDmaStartLines = new ushort[8];
+    private readonly byte[] _spriteDmaHeights = new byte[8];
 
     // BACKFILL-VIDEO-001 / FR-VIC: Light pen latch state.
     // On a high-to-low transition of the LP pin the VIC-II latches
@@ -150,29 +167,19 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public bool IsDmaStealing => IsBadLine && RasterX >= 14 && RasterX < 54;
 
     /// <summary>
-    /// BACKFILL-VIDEO-001 / FR-VIC: CPU cycle is stolen when either the
-    /// bad-line c-access window is active (RasterX 12..54 on a bad line)
-    /// or the sprite-DMA window is active (RasterX 55..62 of the current
-    /// line, or RasterX 0..7 of the next line, when any enabled sprite
-    /// intersects the relevant raster line). The sprite-DMA window is a
-    /// simplification of the real per-sprite p-/s-access pairs: the
-    /// implementation asserts BA for the full wrap-around window whenever
-    /// any sprite contributes DMA on the in-flight or just-completed
-    /// scanline. This is accurate at the cycle-count granularity the
-    /// cycle stealer cares about and composes additively with bad-line
-    /// theft.
+    /// BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
+    /// CPU cycle is stolen when either the bad-line c-access window is
+    /// active (RasterX 12..54 on a bad line) or the active VIC-II model's
+    /// sprite BA/DMA mask requests the bus for an enabled sprite.
     /// </summary>
     public bool IsCpuCycleStolen =>
         (IsBadLine && RasterX >= 12 && RasterX < 55)
         || IsInSpriteDmaStallWindow(leadingEdgeOffset: 0);
 
     /// <summary>
-    /// BACKFILL-VIDEO-001 / FR-VIC: Mandatory cycle steal mirrors the
-    /// IsCpuCycleStolen window but lags by one cycle on each leading
-    /// edge - matching the existing bad-line semantics (12..55 stolen,
-    /// 13..56 mandatory). For the sprite-DMA window this becomes
-    /// RasterX 56..62 on the current line plus 0..8 on the next line
-    /// wrap when a sprite intersects.
+    /// BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
+    /// Mandatory cycle steal mirrors IsCpuCycleStolen but lags by one
+    /// cycle, matching the existing bad-line semantics.
     /// </summary>
     public bool IsCpuCycleStealMandatory =>
         (IsBadLine && RasterX >= 13 && RasterX < 56)
@@ -253,10 +260,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public BorderSide GetVerticalBorder()
     {
-        // VICE-style: 25-row mode boundaries
-        if (CurrentRasterLine < 51 || CurrentRasterLine >= 251) return BorderSide.Extended;
-        if (CurrentRasterLine < 55 || CurrentRasterLine >= 247) return BorderSide.Normal;
-        return BorderSide.None;
+        if (!_verticalBorderActive)
+            return BorderSide.None;
+
+        return CurrentRasterLine < 51 || CurrentRasterLine >= 251
+            ? BorderSide.Extended
+            : BorderSide.Normal;
     }
     
     /// <summary>
@@ -278,7 +287,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public enum VideoMode { StandardText, MulticolorText, Bitmap, ExtendedBackground }
 
     /// <summary>
-    /// FR-VIC (BACKFILL-VIDEO-001 display mode selection).
+    /// BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008.
     /// Abstract VIC-II display mode encoded by the three selector bits
     /// $D011 bit 5 (BMM), $D011 bit 6 (ECM), and $D016 bit 4 (MCM).
     /// Five valid combinations plus a single Invalid bucket for the
@@ -286,7 +295,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// black screen / garbage. Distinct from VideoMode (which collapses
     /// hi-res and multicolor bitmap into a single Bitmap entry and has
     /// no Invalid state): VicIIDisplayMode is the canonical mode for
-    /// downstream pixel-pipeline routing in future slices.
+    /// downstream pixel-pipeline routing.
     /// </summary>
     public enum VicIIDisplayMode
     {
@@ -299,11 +308,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     }
 
     /// <summary>
-    /// FR-VIC (BACKFILL-VIDEO-001 display mode selection).
+    /// BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008.
     /// Decode the three selector bits ($D011 bit 5 = BMM, $D011 bit 6
     /// = ECM, $D016 bit 4 = MCM) into one of the five valid display
-    /// modes or Invalid. Pure register decoding; pixel-rendering effect
-    /// of each mode is a future slice.
+    /// modes or Invalid. VideoRenderer routes visible pixels through this
+    /// selector using the VICE display-mode color table.
     /// </summary>
     public VicIIDisplayMode DisplayModeSelection
     {
@@ -512,6 +521,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public void SetRasterIrqLine(ushort line)
     {
         _rasterIrqLine = (ushort)(line & 0x01FF);
+        _rasterIrqCompareArmed = true;
     }
     
     /// <summary>
@@ -572,6 +582,46 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// VICE-style: Right border end pixel position
     /// </summary>
     public int RightBorderEndPixel => Csel ? 344 : 335;
+
+    /// <summary>
+    /// FR-VIC-007: current vertical border flip-flop state.
+    /// </summary>
+    public bool IsVerticalBorderActive => _verticalBorderActive;
+
+    /// <summary>
+    /// FR-VIC-007: current main horizontal border flip-flop state.
+    /// </summary>
+    public bool IsMainBorderActive => _mainBorderActive;
+
+    /// <summary>
+    /// FR-VIC-007: returns the captured vertical border state for a ticked
+    /// raster line, or the static RSEL boundary result for render-only lines.
+    /// </summary>
+    public bool IsRasterLineVerticalBorderActive(int rasterLine)
+    {
+        if ((uint)rasterLine < (uint)_verticalBorderActiveByRasterLine.Length &&
+            _verticalBorderLineCaptured[rasterLine])
+        {
+            return _verticalBorderActiveByRasterLine[rasterLine];
+        }
+
+        return rasterLine < UpperBorderStart || rasterLine >= LowerBorderStart;
+    }
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / FR-VIC-004 / FR-VIC-007 / TEST-VIC-001:
+    /// returns whether a sprite pixel is visible at the supplied VIC
+    /// pixel coordinate once the closed border window is applied.
+    /// </summary>
+    public bool CanRenderSpritePixelAt(int xVicPixel, int rasterLine)
+    {
+        if (IsRasterLineVerticalBorderActive(rasterLine))
+        {
+            return false;
+        }
+
+        return xVicPixel >= LeftBorderPixel && xVicPixel < RightBorderEndPixel;
+    }
     
     /// <summary>
     /// VICE-style: Y scroll value (bits 0-2 of $D011)
@@ -581,8 +631,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// <summary>
     /// FR-VIC (BACKFILL-VIDEO-001 $D016 decoding): X scroll value
     /// (bits 0-2 of $D016). Consumed by the pixel sequencer to shift
-    /// rendered pixels 0-7 to the right. Pure register decoding here;
-    /// the pixel-sequencer effect is a future slice.
+    /// rendered pixels 0-7 to the right; mode-specific color routing is
+    /// covered by VideoRenderer.
     /// </summary>
     public byte XScroll => (byte)(_registers[0x16] & 0x07);
     
@@ -645,7 +695,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // the latch in $D019 bit 0 is set unconditionally on compare match;
         // RefreshInterruptLine then gates the IRQ output by $D01A enable.
         // BACKFILL-VIDEO-001 / FR-VIC: latch is independent of enable.
-        if (RasterX == 58 && CurrentRasterLine == _rasterIrqLine)
+        if (_rasterIrqCompareArmed && RasterX == 58 && CurrentRasterLine == _rasterIrqLine)
         {
             _registers[0x19] |= 0x01;
             RefreshInterruptLine();
@@ -655,6 +705,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         {
             RasterX = 0;
             CurrentRasterLine++;
+            _rasterIrqCompareArmed = true;
 
             if (CurrentRasterLine >= TotalLines)
             {
@@ -669,6 +720,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 // resets on the frame wrap so each frame is independent.
                 _spriteDmaCyclesThisFrame = 0;
                 _lastSpriteDmaLineCounted = -1;
+                _spriteDmaActiveMask = 0;
+                Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
+                Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
                 // BACKFILL-VIDEO-001 / FR-VIC: clear the LP "already latched
                 // this frame" flag so the next LP trigger can re-arm. The
                 // last latched X/Y values are kept (consistent with reading
@@ -676,6 +730,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _lightPenTriggeredThisFrame = false;
             }
 
+            UpdateVerticalBorderForLineStart();
             UpdateBadLineLatchForStartOfLine();
 
             // BACKFILL-VIDEO-001 / FR-VIC: count this scanline as a bad line
@@ -693,6 +748,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
             ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
         }
+        else
+        {
+            UpdateBorderFlipFlopsForCurrentCycle();
+        }
+
+        UpdatePalSpriteDmaLatchForCurrentCycle();
 
         LastReadPhi1 = Phi1MemoryReader?.Invoke(CurrentCycle) ?? 0;
 
@@ -715,6 +776,13 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         RasterX = ResetRasterCycle;
         CycleCounter = 0;
         _rasterIrqLine = 0;
+        _rasterIrqCompareArmed = false;
+        _verticalBorderActive = true;
+        _verticalBorderNextActive = true;
+        _mainBorderActive = true;
+        Array.Fill(_verticalBorderActiveByRasterLine, true);
+        Array.Clear(_verticalBorderLineCaptured, 0, _verticalBorderLineCaptured.Length);
+        CaptureVerticalBorderForCurrentLine();
         _allowBadLines = false;
         _refreshCounter = 0;
         Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
@@ -733,6 +801,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // BACKFILL-VIDEO-001: clear per-frame sprite-DMA counter on reset.
         _spriteDmaCyclesThisFrame = 0;
         _lastSpriteDmaLineCounted = -1;
+        _spriteDmaActiveMask = 0;
+        Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
+        Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
         // BACKFILL-VIDEO-001 / FR-VIC: clear light-pen latch state on reset.
         _lightPenLatchedX = 0;
         _lightPenLatchedY = 0;
@@ -784,12 +855,276 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _spriteDmaCyclesThisFrame += intersectingSprites * 2;
     }
 
-    // BACKFILL-VIDEO-001 / FR-VIC: helper for the cycle-steal predicate.
-    // Returns true if any sprite enabled in $D015 intersects the given
-    // raster line (Y..Y+20 for a normal sprite, Y..Y+41 for Y-expanded).
-    // Used by IsInSpriteDmaStallWindow to gate BA assertion during the
-    // sprite-DMA cycles at the end / start of each scanline.
-    private bool IsAnySpriteIntersectingLine(int rasterLine)
+    private void UpdateVerticalBorderForLineStart()
+    {
+        CheckVerticalBorderTopForCurrentLine();
+        CheckVerticalBorderBottomForCurrentLine();
+        CaptureVerticalBorderForCurrentLine();
+    }
+
+    private void UpdateBorderFlipFlopsForCurrentCycle()
+    {
+        if (RasterX == LeftBorderCheckCycle)
+        {
+            CheckVerticalBorderBottomForCurrentLine();
+            _verticalBorderActive = _verticalBorderNextActive;
+            CaptureVerticalBorderForCurrentLine();
+            if (!_verticalBorderActive)
+                _mainBorderActive = false;
+        }
+
+        if (RasterX == RightBorderCheckCycle)
+            _mainBorderActive = true;
+    }
+
+    private void CheckVerticalBorderTopForCurrentLine()
+    {
+        if (CurrentRasterLine == UpperBorderStart && IsDisplayEnabled)
+        {
+            _verticalBorderActive = false;
+            _verticalBorderNextActive = false;
+        }
+    }
+
+    private void CheckVerticalBorderBottomForCurrentLine()
+    {
+        if (CurrentRasterLine == LowerBorderStart)
+            _verticalBorderNextActive = true;
+    }
+
+    private int LeftBorderCheckCycle => Csel ? 17 : 18;
+
+    private int RightBorderCheckCycle => Csel ? 57 : 56;
+
+    private void CaptureVerticalBorderForCurrentLine()
+    {
+        if ((uint)CurrentRasterLine >= (uint)_verticalBorderActiveByRasterLine.Length)
+            return;
+
+        _verticalBorderActiveByRasterLine[CurrentRasterLine] = _verticalBorderActive;
+        _verticalBorderLineCaptured[CurrentRasterLine] = true;
+    }
+
+    // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
+    // PAL x64sc sprite p-/s-access pairs from VICE cycle_tab_pal in
+    // native/vice/vice/src/viciisc/vicii-chip-model.c.
+    private static readonly SpriteDmaAccess[] PalSpriteDmaAccesses =
+    [
+        new(3, 0),
+        new(4, 2),
+        new(5, 4),
+        new(6, 6),
+        new(7, 8),
+        new(0, 57),
+        new(1, 59),
+        new(2, 61),
+    ];
+
+    private readonly record struct SpriteDmaAccess(int SpriteNumber, int FirstCurrentCycle);
+
+    private void UpdatePalSpriteDmaLatchForCurrentCycle()
+    {
+        if (CyclesPerLine != PalCyclesPerLine)
+        {
+            return;
+        }
+
+        if (RasterX == 0)
+        {
+            ClearExpiredSpriteDmaLatches();
+            return;
+        }
+
+        // VICE x64sc checks sprite DMA at PAL public cycles 55 and 56
+        // (zero-based CurrentCycle/RasterX 54 and 55). $D015 and sprite Y
+        // are sampled here; later BA/data slots use the sprite_dma latch.
+        if (RasterX is 54 or 55)
+        {
+            LatchSpriteDmaForCurrentLine();
+        }
+    }
+
+    private void LatchSpriteDmaForCurrentLine()
+    {
+        byte enabled = _registers[0x15];
+        if (enabled == 0)
+        {
+            return;
+        }
+
+        int rasterLow = CurrentRasterLine & 0xFF;
+        for (int spriteNumber = 0; spriteNumber < 8; spriteNumber++)
+        {
+            byte bit = (byte)(1 << spriteNumber);
+            if ((enabled & bit) == 0 || (_spriteDmaActiveMask & bit) != 0)
+            {
+                continue;
+            }
+
+            ref SpriteState sprite = ref _sprites[spriteNumber];
+            if (sprite.Y != rasterLow)
+            {
+                continue;
+            }
+
+            _spriteDmaActiveMask |= bit;
+            _spriteDmaStartLines[spriteNumber] = CurrentRasterLine;
+            _spriteDmaHeights[spriteNumber] = (byte)(sprite.IsExpandedY ? 42 : 21);
+        }
+    }
+
+    private void ClearExpiredSpriteDmaLatches()
+    {
+        for (int spriteNumber = 0; spriteNumber < 8; spriteNumber++)
+        {
+            byte bit = (byte)(1 << spriteNumber);
+            if ((_spriteDmaActiveMask & bit) == 0)
+            {
+                continue;
+            }
+
+            int height = _spriteDmaHeights[spriteNumber] == 0 ? 21 : _spriteDmaHeights[spriteNumber];
+            int elapsedLines = NormalizeRasterLine(CurrentRasterLine - _spriteDmaStartLines[spriteNumber]);
+            if (elapsedLines < height)
+            {
+                continue;
+            }
+
+            _spriteDmaActiveMask = (byte)(_spriteDmaActiveMask & ~bit);
+            _spriteDmaStartLines[spriteNumber] = 0;
+            _spriteDmaHeights[spriteNumber] = 0;
+        }
+    }
+
+    private bool IsSpriteEnabledAndIntersectingLine(int spriteNumber, int rasterLine)
+    {
+        byte enabled = _registers[0x15];
+        if (enabled == 0)
+        {
+            return false;
+        }
+
+        if ((enabled & (1 << spriteNumber)) == 0)
+        {
+            return false;
+        }
+
+        ref SpriteState s = ref _sprites[spriteNumber];
+        int spriteY = s.Y;
+        int height = s.IsExpandedY ? 42 : 21;
+        int row = rasterLine - spriteY;
+        return row >= 0 && row < height;
+    }
+
+    // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
+    // sprite-DMA cycle-steal window.
+    //
+    // VICE's PAL table uses one-based raster cycles 1..63 and then stores
+    // them in cycle_table[cycle - 1]. The values above are already
+    // normalized to vice-sharp CurrentCycle/RasterX terms. Each sprite's
+    // BA mask starts three cycles before its first p-access and remains
+    // asserted through the second s-access cycle.
+    //
+    // leadingEdgeOffset = 0 -&gt; matches IsCpuCycleStolen window.
+    // leadingEdgeOffset = 1 -&gt; mandatory window (one cycle later on the
+    // leading edges, mirroring bad-line semantics: stolen is 12..54,
+    // mandatory is 13..55).
+    //
+    // Non-PAL tables are still a backfill target; until they are imported,
+    // this helper preserves the prior coarse behavior for non-63-cycle
+    // models instead of pretending the PAL table applies to them.
+    private bool IsInSpriteDmaStallWindow(int leadingEdgeOffset)
+    {
+        if (CyclesPerLine != PalCyclesPerLine)
+        {
+            return IsInCoarseSpriteDmaStallWindow(leadingEdgeOffset);
+        }
+
+        foreach (SpriteDmaAccess access in PalSpriteDmaAccesses)
+        {
+            if (IsSpriteDmaBaSlotActive(access, leadingEdgeOffset))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsSpriteDmaBaSlotActive(SpriteDmaAccess access, int leadingEdgeOffset)
+    {
+        for (int delta = -3; delta <= 1; delta++)
+        {
+            int cycle = access.FirstCurrentCycle + delta + leadingEdgeOffset;
+            MapCurrentCycleToRasterX(cycle, out int rasterLineOffset, out int rasterX);
+            if (RasterX != rasterX)
+            {
+                continue;
+            }
+
+            int accessLine = NormalizeRasterLine(CurrentRasterLine - rasterLineOffset);
+            if (IsSpriteDmaActiveForAccessLine(access.SpriteNumber, accessLine))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsSpriteDmaActiveForAccessLine(int spriteNumber, int accessLine)
+    {
+        byte bit = (byte)(1 << spriteNumber);
+        if ((_spriteDmaActiveMask & bit) == 0)
+        {
+            return false;
+        }
+
+        int height = _spriteDmaHeights[spriteNumber] == 0 ? 21 : _spriteDmaHeights[spriteNumber];
+        int elapsedLines = NormalizeRasterLine(accessLine - _spriteDmaStartLines[spriteNumber]);
+        return elapsedLines >= 0 && elapsedLines < height;
+    }
+
+    private void MapCurrentCycleToRasterX(int cycle, out int rasterLineOffset, out int rasterX)
+    {
+        rasterLineOffset = Math.DivRem(cycle, PalCyclesPerLine, out rasterX);
+        if (rasterX < 0)
+        {
+            rasterLineOffset--;
+            rasterX += PalCyclesPerLine;
+        }
+    }
+
+    private int NormalizeRasterLine(int rasterLine)
+    {
+        int normalized = rasterLine % TotalLines;
+        return normalized < 0 ? normalized + TotalLines : normalized;
+    }
+
+    private bool IsInCoarseSpriteDmaStallWindow(int leadingEdgeOffset)
+    {
+        int trailingEnd = 8 + leadingEdgeOffset;
+        if (RasterX < trailingEnd)
+        {
+            return IsAnySpriteEnabledAndIntersectingLine(CurrentRasterLine);
+        }
+
+        int leadingStart = 55 + leadingEdgeOffset;
+        if (RasterX >= leadingStart && RasterX < CyclesPerLine)
+        {
+            if (IsAnySpriteEnabledAndIntersectingLine(CurrentRasterLine))
+            {
+                return true;
+            }
+
+            int nextLine = NormalizeRasterLine(CurrentRasterLine + 1);
+            return IsAnySpriteEnabledAndIntersectingLine(nextLine);
+        }
+
+        return false;
+    }
+
+    private bool IsAnySpriteEnabledAndIntersectingLine(int rasterLine)
     {
         byte enabled = _registers[0x15];
         if (enabled == 0)
@@ -799,77 +1134,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         for (int n = 0; n < 8; n++)
         {
-            if ((enabled & (1 << n)) == 0)
-            {
-                continue;
-            }
-
-            ref SpriteState s = ref _sprites[n];
-            int spriteY = s.Y;
-            int height = s.IsExpandedY ? 42 : 21;
-            int row = rasterLine - spriteY;
-            if (row >= 0 && row < height)
+            if (IsSpriteEnabledAndIntersectingLine(n, rasterLine))
             {
                 return true;
             }
-        }
-
-        return false;
-    }
-
-    // BACKFILL-VIDEO-001 / FR-VIC: sprite-DMA cycle-steal window.
-    //
-    // Real hardware schedules sprite p-/s-access pairs in cycles 55..62
-    // of one scanline (sprites 0..3) plus cycles 0..7 of the next
-    // scanline (sprites 4..7). This implementation uses a single wide
-    // window: RasterX in [55, CyclesPerLine) on the in-flight line OR
-    // RasterX in [0, 8) on the just-started line whenever a sprite is
-    // intersecting the relevant scanline.
-    //
-    // leadingEdgeOffset = 0 -&gt; matches IsCpuCycleStolen window.
-    // leadingEdgeOffset = 1 -&gt; mandatory window (one cycle later on the
-    // leading edges, mirroring bad-line semantics: stolen is 12..54,
-    // mandatory is 13..55).
-    //
-    // The wrap-around portion uses the CURRENT raster line for sprite
-    // intersection (which is already the "next line" once we are at
-    // cycles 0..7) so any sprite still intersecting the new line keeps
-    // the window open. This is a slight conservative over-assertion on
-    // the very last raster line of a multi-line sprite (the next line
-    // no longer intersects, so BA releases at cycle 0 of the next
-    // line); accuracy matches real hardware for the common case where
-    // a sprite spans multiple consecutive lines.
-    private bool IsInSpriteDmaStallWindow(int leadingEdgeOffset)
-    {
-        // Trailing edge: cycles [0, 8 + leadingEdgeOffset) on the current
-        // line. Check whether any sprite intersects the current line.
-        int trailingEnd = 8 + leadingEdgeOffset;
-        if (RasterX < trailingEnd)
-        {
-            return IsAnySpriteIntersectingLine(CurrentRasterLine);
-        }
-
-        // Leading edge: cycles [55 + leadingEdgeOffset, CyclesPerLine) on
-        // the current line. Sprite DMA at the end of one line services
-        // sprites that will be displayed on the NEXT line, so we check
-        // intersection against either the current or next line. The
-        // hot-path check is intersection on the current line - a sprite
-        // spanning into the next line will be reported there. We also
-        // check the next line so the window opens for a sprite that
-        // first intersects the next line.
-        int leadingStart = 55 + leadingEdgeOffset;
-        if (RasterX >= leadingStart && RasterX < CyclesPerLine)
-        {
-            if (IsAnySpriteIntersectingLine(CurrentRasterLine))
-            {
-                return true;
-            }
-            int nextLine = CurrentRasterLine + 1;
-            if (nextLine >= TotalLines)
-            {
-                nextLine = 0;
-            }
-            return IsAnySpriteIntersectingLine(nextLine);
         }
 
         return false;
@@ -1032,12 +1300,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (register == 0x12)
         {
             _rasterIrqLine = (ushort)((_rasterIrqLine & 0x100) | value);
+            _rasterIrqCompareArmed = true;
             return;
         }
 
         if (register == 0x11)
         {
             _rasterIrqLine = (ushort)((_rasterIrqLine & 0x0FF) | ((value & 0x80) << 1));
+            _rasterIrqCompareArmed = true;
             _registers[register] = value;
             return;
         }
@@ -1216,7 +1486,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         int upperBorder = UpperBorderStart;
         int lowerBorder = LowerBorderStart;
 
-        if (yPos < upperBorder || yPos >= lowerBorder)
+        if (IsRasterLineVerticalBorderActive(yPos))
             return BorderColor;
 
         if (xPos < leftBorderPixel || xPos >= rightBorderEndPixel || xPos >= 320)
@@ -1307,10 +1577,6 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         {
             return;
         }
-
-        // Visible screen vertical extent.
-        int upperBorder = UpperBorderStart;
-        int lowerBorder = LowerBorderStart;
 
         // Per-pixel sprite opacity bitmask across the VIC pixel x range 0..503.
         // Backed by a stackalloc to keep this allocation-free on the hot path.
@@ -1413,11 +1679,6 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         byte spriteSpriteAcc = 0;
         byte spriteBackgroundAcc = 0;
 
-        bool insideVisibleY = rasterLine >= upperBorder && rasterLine < lowerBorder;
-        // The display window in VIC pixel space is [LeftBorderPixel, RightBorderEndPixel).
-        int leftPixel = LeftBorderPixel;
-        int rightPixel = RightBorderEndPixel;
-
         for (int x = 0; x < PixelSpan; x++)
         {
             byte m = spriteMask[x];
@@ -1432,7 +1693,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             }
             // Sprite-background: only if we are within the visible character window AND
             // the underlying character/bitmap pixel is a foreground pixel.
-            if (insideVisibleY && x >= leftPixel && x < rightPixel && IsBackgroundForegroundPixel(x, rasterLine))
+            if (CanRenderSpritePixelAt(x, rasterLine) && IsBackgroundForegroundPixel(x, rasterLine))
             {
                 spriteBackgroundAcc |= m;
             }
@@ -1476,7 +1737,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         int upperBorder = UpperBorderStart;
         int lowerBorder = LowerBorderStart;
 
-        if (rasterLine < upperBorder || rasterLine >= lowerBorder)
+        if (IsRasterLineVerticalBorderActive(rasterLine))
         {
             return false;
         }

@@ -6,7 +6,8 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
+/// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+/// (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
 ///
 /// Sprite DMA on the VIC-II steals two CPU cycles per sprite per raster
 /// line that the sprite intersects. Each sprite is 21 source rows tall
@@ -74,7 +75,8 @@ public sealed class VicIISpriteDmaTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
     /// Use case: With $D015 = 0x00 no sprite is enabled, so sprite DMA
     /// never triggers regardless of sprite Y positions or expansion.
     /// Acceptance: After a full PAL frame, SpriteDmaCyclesThisFrame == 0.
@@ -95,7 +97,8 @@ public sealed class VicIISpriteDmaTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
     /// Use case: Enable sprite 0 at Y=100. A normal sprite occupies 21
     /// raster lines (Y=100..120). Each intersecting line steals 2 CPU
     /// cycles for the s-data fetches.
@@ -116,7 +119,8 @@ public sealed class VicIISpriteDmaTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
     /// Use case: Y-expansion ($D017 bit n = 1) doubles the vertical
     /// extent of sprite n to 42 raster lines. Each of the 42 lines
     /// still costs 2 CPU cycles.
@@ -139,7 +143,8 @@ public sealed class VicIISpriteDmaTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
     /// Use case: With all 8 sprites enabled at the same Y position, each
     /// of the 21 shared intersection lines incurs 8 * 2 = 16 stolen
     /// cycles. Total across the frame: 21 * 16 = 336 stolen cycles.
@@ -167,7 +172,8 @@ public sealed class VicIISpriteDmaTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA cycle stealing).
     /// Use case: Sprite DMA and bad-line cycle theft compose
     /// independently. Place sprite 0 over the bad-line band ($30..$F7)
     /// at a Y value that overlaps at least one bad line. With DEN=1 and

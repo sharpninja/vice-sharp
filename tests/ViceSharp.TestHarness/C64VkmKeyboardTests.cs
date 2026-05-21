@@ -3,6 +3,7 @@ namespace ViceSharp.TestHarness;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Chips.Input;
+using ViceSharp.RomFetch;
 using Xunit;
 
 [Collection("NativeVice")]
@@ -220,17 +221,7 @@ public sealed class C64VkmKeyboardTests
 
     private static string FindGtk3PosVkm()
     {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            var path = Path.Combine(directory.FullName, "native", "vice", "vice", "data", "C64", "gtk3_pos.vkm");
-            if (File.Exists(path))
-                return path;
-
-            directory = directory.Parent;
-        }
-
-        throw new FileNotFoundException("Could not locate native/vice/vice/data/C64/gtk3_pos.vkm from test output path.");
+        return ViceDataPathResolver.FindDataFile("C64", "gtk3_pos.vkm");
     }
 
     private static string FormatDiagnostics(IEnumerable<C64VkmDiagnostic> diagnostics)

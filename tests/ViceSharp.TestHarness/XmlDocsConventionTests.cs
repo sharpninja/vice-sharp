@@ -16,17 +16,12 @@ using Xunit;
 ///   - <c>Use case:</c>
 ///   - <c>Acceptance:</c>
 ///
-/// Rollout policy: this convention uses a ratchet. The current violation
-/// count is the baseline below; landing new tests is fine only if their
-/// XMLDOCS are present (the new test will pass through the ratchet by
-/// reducing the violation count, not increasing it). When all tests are
-/// retrofitted, drop <see cref="ExpectedMaxViolations"/> to zero and the
-/// build will reject any regression.
+/// Rollout policy: this convention uses a zero-violation ratchet. Landing new
+/// tests is fine only if their XMLDOCS are present.
 ///
 /// Set the environment variable <c>VICESHARP_XMLDOCS_ENFORCE=1</c> at any
 /// time to force zero violations regardless of the ratchet baseline.
-/// TODO(QA-XMLDOCS-001): drive ExpectedMaxViolations to 0 as the corpus is
-/// retrofitted, then flip enforcement on by default.
+/// QA-XMLDOCS-001 is closed when <see cref="ExpectedMaxViolations"/> remains 0.
 /// </summary>
 public sealed class XmlDocsConventionTests
 {

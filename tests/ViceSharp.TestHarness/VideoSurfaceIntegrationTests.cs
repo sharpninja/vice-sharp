@@ -164,7 +164,9 @@ public sealed class VideoSurfaceIntegrationTests
         var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
-        // Act - Run a frame
+        // Act - boot far enough for the ROM to program VIC colors, then
+        // render a frame for surface inspection.
+        RunUntilReadyPrompt(machine);
         machine.RunFrame();
         
         var frameBuffer = videoChip.FrameBuffer;
@@ -332,9 +334,9 @@ public sealed class VideoSurfaceIntegrationTests
 
     /// <summary>
     /// FR: FR-VIC-007, TR: TR-CYCLE-001.
-    /// Use case: After the boot ROM programs the blue border and dark
-    /// grey background, the rendered frame must contain at least two
-    /// distinct colours and a non-trivial pixel count for visual
+    /// Use case: After the VIC-II is configured with distinct border
+    /// and background colours, the rendered frame must contain at least
+    /// two distinct colours and a non-trivial pixel count for visual
     /// regression debugging.
     /// Acceptance: TotalPixels &gt; 0 and UniqueColors &gt; 1 after
     /// running a single frame; the frame is also dumped to a temp BMP
@@ -346,7 +348,11 @@ public sealed class VideoSurfaceIntegrationTests
         var machine = MachineTestFactory.CreateC64Machine();
         var videoChip = (IVideoChip)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
         
-        // Act - Run a frame
+        machine.Bus.Write(0xD011, 0x1B);
+        machine.Bus.Write(0xD016, 0x08);
+        machine.Bus.Write(0xD020, 0x06);
+        machine.Bus.Write(0xD021, 0x0B);
+
         machine.RunFrame();
         
         // Write framebuffer to PNG file for analysis

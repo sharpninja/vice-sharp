@@ -30,7 +30,7 @@ The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/Vice
 |-------------------|--------------------|-------|
 | `-8 <path>` | `-8 <path>` | Attach D64 to drive 8. |
 | `-9 <path>` | `-9 <path>` | Attach D64 to drive 9. |
-| `-cart <path>` | `-cart <path>` | Attach cartridge image. (Image is loaded; live memory-map wiring is bounded; see section 3.) |
+| `-cart <path>` | `-cart <path>` | Attach standard 8K / 16K raw or CRT cartridge image. Live memory-map wiring is implemented for standard cartridges; see section 3 for remaining mapper limits. |
 | `+truedrive` | `+truedrive` | Enable true-drive emulation; drive YAML peripheral gets `fidelity: TrueDevice`. |
 | `-truedrive` | `-truedrive` | Disable true-drive emulation. |
 | `-config <path>` (closest analogue) | `--machine-yaml <path>` / `-m <path>` | Explicit machine topology YAML. ViceSharp uses YAML topologies instead of a flat `vicerc`. |
@@ -42,7 +42,7 @@ The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/Vice
 
 | Classic VICE flag | ViceSharp behaviour |
 |-------------------|---------------------|
-| `-cart <path>` | The image loads and normalises to 8K / 16K ROML+ROMH banks. Live cartridge-port pin wiring (`GAME` / `EXROM` driving the memory map) is staged but not exercised end-to-end yet; expect the cart to load but boot-from-cart behaviour to be incomplete. |
+| `-cart <path>` | Standard raw/CRT images load, normalise to 8K / 16K ROML+ROMH banks, and drive the C64 memory map through `GAME` / `EXROM`. Broader mapper families and cart-converter workflows are post-MVP. |
 | `-autostart <path>` (classic) | No direct equivalent. Use `-8 <disk.d64>` + a BASIC `LOAD"*",8,1: RUN` from the running console, or build a topology where the drive image is mounted at boot. |
 
 ### Not yet (collected as unknown)
@@ -53,12 +53,12 @@ Each of these is currently in the launcher's `Unknown` bucket; the run still pro
 |-------------------|--------|
 | `-warp` | Not yet. The console host always runs at full speed within its `--cycles` budget; a warp toggle is meaningful only for an interactive UI host. |
 | `-sound` / `-soundoutput` | Not yet. SID audio backend wiring exists (`Sid6581(IBus, IAudioBackend?)`) but no default backend is connected. |
-| `-fullscreen` | Not yet. There is no Avalonia host with display output wired in the launcher path. |
+| `-fullscreen` | Not yet. The Avalonia/host-control core exists, but the launcher path does not start an always-on display shell. |
 | `-model <name>` (`c64c`, `c64pal`, etc.) | Not yet. ViceSharp currently builds a single C64 model; PAL / NTSC variants are deferred. |
 | `-ntsc` / `-pal` | Not yet. See `-model`. |
 | `-autostart <path>` | Not yet. |
-| `-tape <path>` | Not yet. TAP support exists at the device layer (`RUNTIME-TAPE-001`) but the launcher does not surface it. |
-| `-monitor` (built-in machine-language monitor) | Not yet via the launcher. The monitor surface is being built under `BACKFILL-HOSTUI-001` (gRPC + typed RPCs). |
+| `-tape <path>` | Not yet via the launcher. TAP support exists at the device layer, but launcher attach plus spin-up/record timing remain under `RUNTIME-TAPE-002`. |
+| `-monitor` (built-in machine-language monitor) | Not yet via the launcher. The gRPC monitor/control surface is built under `BACKFILL-HOSTUI-001`; wiring this flag belongs with `CLI-LAUNCHER-001`. |
 | `-keymap`, `-joydev`, `-userportdevice`, `-cartrev`, etc. | Not yet. |
 
 If a flag you depend on is in this list, please file an issue (see [USER-GUIDE.md, Where to file regressions](USER-GUIDE.md#where-to-file-regressions)) so it gets prioritised against real demand.
@@ -77,7 +77,7 @@ Recommendation:
 
 ### No always-on UI / GUI host
 
-The launcher invokes the console host. There is no Avalonia screen, no built-in monitor window, no sound output by default. ViceSharp's "interactive" runs are intended to come through the host UI work landing under `BACKFILL-HOSTUI-001`; until then, treat the launcher as a batch-mode emulator. `--cycles N` is the way you bound a run.
+The launcher invokes the console host. It does not start an Avalonia screen, built-in monitor window, or default sound output. The host UI/control core exists behind gRPC and the in-process Avalonia host boundary, but the launcher remains a batch-mode emulator until `CLI-LAUNCHER-001` wires those surfaces into process-level flags. `--cycles N` is the way you bound a run.
 
 ### True-drive emulation defaults
 
@@ -94,7 +94,7 @@ ViceSharp targets cycle-exact parity with native VICE on the C64 host path. The 
 What this means in practice:
 - For boot sequences, KERNAL traps, and any code that lives inside the lockstep gate, ViceSharp's CPU output is identical to VICE cycle-for-cycle.
 - For VIC-II pixel-level behaviour, the gate is "first scanline parity"; full pixel sequencer and sprite-collision parity are pending under `BACKFILL-VIDEO-001`. Demo code that depends on raster effects can diverge from VICE.
-- For SID, hard sync and ring modulation are wired and exercised, but combined waveforms and the famous ADSR bug are deferred. Demos that depend on those will sound different.
+- For SID, hard sync, ring modulation, combined waveforms, ADSR behaviour, digi output, and dual-SID coverage are wired and exercised in the focused suite. Further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression.
 
 ## 5. Bug compatibility
 
@@ -106,8 +106,8 @@ Classic VICE faithfully reproduces several Commodore-era hardware bugs that real
 | 6510 jump-vector page-cross bug (`JMP ($xxFF)`) | Reproduced. |
 | VIC-II "bad line" cycle stealing | Reproduced at the CIA / CPU contention level; pixel-level effects pending under `BACKFILL-VIDEO-001`. |
 | VIC-II sprite-DMA timing | Bounded. Sprite fetch is wired but full collision parity pending. |
-| SID ADSR bug | Not yet. Deferred under `BACKFILL-SID-001` slice 4. |
-| SID combined waveforms | Not yet. Deferred under `BACKFILL-SID-001` slice 3. |
+| SID ADSR bug | Reproduced in the focused Phase 1 SID suite; further analog deepening is post-MVP. |
+| SID combined waveforms | Reproduced for the Phase 1 SID suite; further analog deepening is post-MVP. |
 | 1541 GCR bit-stream timing | Not yet. Sector-stream fast path is the default; cycle-accurate GCR is future work. |
 
 If a specific demo / game depends on a deferred bug, file a regression with the SID dump or D64; that helps prioritise the relevant slice.

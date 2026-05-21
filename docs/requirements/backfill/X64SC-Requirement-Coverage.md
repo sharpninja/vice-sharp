@@ -27,7 +27,7 @@ Each imported FR is classified for the x64sc backfill with one of these values:
 | CPU 6510 execution | `FR-CPU-001` to `FR-CPU-004` | x64sc Required | BACKFILL-CORE-001 | Includes undocumented NMOS behavior, exact cycle timing, interrupts, and the 6510 I/O port. |
 | C128 8502 mode | `FR-CPU-005` | Out Of x64sc Scope | none | C128 is imported but outside the x64sc target. |
 | Memory and PLA banking | `FR-MEM-001` to `FR-MEM-006` | x64sc Required | BACKFILL-CORE-001 | Includes Ultimax memory mode, VIC bank switching, color RAM, zero page, stack behavior, and definable system-core PLA/address-decoder policy assembled by `ArchitectureBuilder`. |
-| VIC-II rendering and timing | `FR-VIC-001` to `FR-VIC-010` | x64sc Required | BACKFILL-VIDEO-001 | Must cover PAL, NTSC, old NTSC, PAL-N, 6567, 6569, 6572, 8562, and 8565 timing. |
+| VIC-II rendering and timing | `FR-VIC-001` to `FR-VIC-010` | x64sc Required | BACKFILL-VIDEO-001 | Must cover PAL, NTSC, old NTSC, PAL-N, 6567, 6569, 6572, 8562, and 8565 timing. Border behavior includes closed-border sprite masking and opened-border sprite visibility from `FR-VIC-007`; sprite DMA timing must use model-specific VICE tables from `FR-VIC-010`. |
 | SID audio | `FR-SID-001` to `FR-SID-012` | x64sc Required | BACKFILL-SID-001 | Includes 6581, 8580, filter differences, digi playback, and multi-SID configuration where x64sc exposes it. |
 | CIA I/O | `FR-CIA-001` to `FR-CIA-007` | x64sc Required | BACKFILL-CORE-001 | Includes timers, TOD, keyboard matrix scanning, joystick reads, shift register, IRQ, and NMI behavior. |
 | VIA chip core | `FR-VIA-001` to `FR-VIA-003` | Shared Infrastructure | BACKFILL-MEDIA-001 | Required for drive-side behavior, not the C64 motherboard. |

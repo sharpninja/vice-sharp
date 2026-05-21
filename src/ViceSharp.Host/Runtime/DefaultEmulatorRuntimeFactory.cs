@@ -96,21 +96,15 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
 
     private static bool TryFindC64RomBasePath(out string romBasePath)
     {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
+        var dataRoots = ViceDataPathResolver.FindDataRoots();
+        foreach (var dataRoot in dataRoots)
         {
-            var candidate = Path.Combine(directory.FullName, "roms");
-            if (Directory.Exists(Path.Combine(candidate, "C64")))
+            var provider = CreateC64RomProvider(dataRoot, dataRoots.Where(path => !string.Equals(path, dataRoot, StringComparison.OrdinalIgnoreCase)));
+            if (new C64RomSet().IsComplete(provider))
             {
-                var provider = CreateC64RomProvider(candidate);
-                if (new C64RomSet().IsComplete(provider))
-                {
-                    romBasePath = candidate;
-                    return true;
-                }
+                romBasePath = dataRoot;
+                return true;
             }
-
-            directory = directory.Parent;
         }
 
         romBasePath = string.Empty;
@@ -119,19 +113,11 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
 
     private static RomProvider CreateC64RomProvider(string romBasePath)
     {
-        return new RomProvider(romBasePath, FindNativeViceRomFallbacks(romBasePath));
+        return new RomProvider(romBasePath, ViceDataPathResolver.FindDataRoots().Where(path => !string.Equals(path, romBasePath, StringComparison.OrdinalIgnoreCase)));
     }
 
-    private static IEnumerable<string> FindNativeViceRomFallbacks(string romBasePath)
+    private static RomProvider CreateC64RomProvider(string romBasePath, IEnumerable<string> fallbackRomBasePaths)
     {
-        var directory = new DirectoryInfo(romBasePath);
-        while (directory is not null)
-        {
-            var candidate = Path.Combine(directory.FullName, "native", "vice", "vice", "data");
-            if (Directory.Exists(Path.Combine(candidate, "C64")))
-                yield return candidate;
-
-            directory = directory.Parent;
-        }
+        return new RomProvider(romBasePath, fallbackRomBasePaths);
     }
 }

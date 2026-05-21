@@ -2,7 +2,7 @@ namespace ViceSharp.Architectures.C1541;
 
 /// <summary>
 /// Canonical 1541 (and family) drive ROM filenames as bundled by upstream
-/// VICE under native/vice/vice/data/DRIVES/. Each ROM is 16384 bytes and is
+/// VICE under the DRIVES folder in the configured VICE data root. Each ROM is 16384 bytes and is
 /// mapped at $C000-$FFFF inside the drive 6502's address space.
 /// </summary>
 public static class C1541ViceRomNames

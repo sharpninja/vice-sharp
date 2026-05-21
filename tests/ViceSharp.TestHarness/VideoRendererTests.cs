@@ -271,6 +271,254 @@ public sealed class VideoRendererTests
     }
 
     /// <summary>
+    /// FR: FR-VIC-002, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: Multicolor text cells with Color RAM bit 3 set must
+    /// route two-bit character pairs through the VICE color table.
+    /// Acceptance: Pair values 00, 01, 10, and 11 render as $D021,
+    /// $D022, $D023, and the Color RAM low three bits respectively.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsMulticolorTextPairsFromViceColorTable()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigurePixelModeScreen(vic, d011: 0x18, d016: 0x18, d018: 0x15);
+        vic.Write(0xD021, 0x06);
+        vic.Write(0xD022, 0x02);
+        vic.Write(0xD023, 0x04);
+        ram.Write(vic.ScreenMemoryBase, 0x01);
+        ram.Write(0xD800, 0x0B);
+        ram.Write((ushort)(vic.CharacterBase + 0x08), 0x1B);
+
+        renderer.RenderFullFrame();
+
+        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int x = vic.LeftBorderPixel;
+        Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, x, y));
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, x + 2, y));
+        Assert.Equal(ToBgra(0x04), ReadPixel(renderer.FrameBuffer, x + 4, y));
+        Assert.Equal(ToBgra(0x03), ReadPixel(renderer.FrameBuffer, x + 6, y));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-002, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: Extended Color Mode uses the screen-code upper bits
+    /// to pick one of the four background registers while the lower six
+    /// bits still select the character glyph.
+    /// Acceptance: A screen code with upper bits %10 renders a zero bit
+    /// from $D023 and a one bit from Color RAM.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsExtendedColorBackgroundFromScreenCode()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigurePixelModeScreen(vic, d011: 0x58, d016: 0x08, d018: 0x15);
+        vic.Write(0xD023, 0x04);
+        ram.Write(vic.ScreenMemoryBase, 0x81);
+        ram.Write(0xD800, 0x07);
+        ram.Write((ushort)(vic.CharacterBase + 0x08), 0x40);
+
+        renderer.RenderFullFrame();
+
+        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int x = vic.LeftBorderPixel;
+        Assert.Equal(ToBgra(0x04), ReadPixel(renderer.FrameBuffer, x, y));
+        Assert.Equal(ToBgra(0x07), ReadPixel(renderer.FrameBuffer, x + 1, y));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-003, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: Standard bitmap mode reads bitmap bytes from the
+    /// $D018-selected bitmap base and color pairs from the screen matrix.
+    /// Acceptance: A one bit renders the screen byte high nibble; a zero
+    /// bit renders the low nibble.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsStandardBitmapFromScreenMatrixNibbles()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigurePixelModeScreen(vic, d011: 0x38, d016: 0x08, d018: 0x18);
+        ram.Write(vic.ScreenMemoryBase, 0xA5);
+        ram.Write(vic.BitmapPointerBase, 0x80);
+
+        renderer.RenderFullFrame();
+
+        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int x = vic.LeftBorderPixel;
+        Assert.Equal(ToBgra(0x0A), ReadPixel(renderer.FrameBuffer, x, y));
+        Assert.Equal(ToBgra(0x05), ReadPixel(renderer.FrameBuffer, x + 1, y));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-003, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: Multicolor bitmap mode routes two-bit bitmap pairs
+    /// through $D021, screen matrix high nibble, screen matrix low
+    /// nibble, and Color RAM.
+    /// Acceptance: Pair values 00, 01, 10, and 11 render those four
+    /// palette sources in VICE table order.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsMulticolorBitmapFromViceColorTable()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigurePixelModeScreen(vic, d011: 0x38, d016: 0x18, d018: 0x18);
+        vic.Write(0xD021, 0x06);
+        ram.Write(vic.ScreenMemoryBase, 0xA5);
+        ram.Write(0xD800, 0x03);
+        ram.Write(vic.BitmapPointerBase, 0x1B);
+
+        renderer.RenderFullFrame();
+
+        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int x = vic.LeftBorderPixel;
+        Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, x, y));
+        Assert.Equal(ToBgra(0x0A), ReadPixel(renderer.FrameBuffer, x + 2, y));
+        Assert.Equal(ToBgra(0x05), ReadPixel(renderer.FrameBuffer, x + 4, y));
+        Assert.Equal(ToBgra(0x03), ReadPixel(renderer.FrameBuffer, x + 6, y));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-002, FR: FR-VIC-003, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: VICE marks ECM combined with BMM or MCM as COL_NONE
+    /// for display-mode output.
+    /// Acceptance: A visible-area pixel in an invalid mode renders as
+    /// palette index 0 instead of background, screen, bitmap, or Color RAM.
+    /// </summary>
+    [Theory]
+    [InlineData(0x58, 0x18)]
+    [InlineData(0x78, 0x08)]
+    [InlineData(0x78, 0x18)]
+    public void RenderFullFrame_DrawsInvalidDisplayModeAsBlack(byte d011, byte d016)
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigurePixelModeScreen(vic, d011, d016, d018: 0x18);
+        vic.Write(0xD021, 0x06);
+        ram.Write(vic.ScreenMemoryBase, 0xA5);
+        ram.Write(vic.BitmapPointerBase, 0xFF);
+
+        renderer.RenderFullFrame();
+
+        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        Assert.Equal(ToBgra(0x00), ReadPixel(renderer.FrameBuffer, vic.LeftBorderPixel, y));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: An enabled opaque sprite must become visible in the
+    /// rendered BGRA framebuffer, not only in collision latches.
+    /// Acceptance: With sprite 0 enabled at a visible raster coordinate
+    /// and its first source bit set, the matching framebuffer pixel uses
+    /// sprite 0's colour register instead of the background colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsEnabledSpriteOverBackground()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        ConfigureSprite(ram, vic, sprite: 0, x: 96, y: 60, pointer: 0x20, color: 0x02);
+        vic.Write(0xD015, 0x01);
+
+        renderer.RenderFullFrame();
+
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 96, VideoRenderer.RasterLineToFrameY(60)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: Closed side borders mask sprite output even when an enabled
+    /// sprite source bit overlaps the framebuffer pixel.
+    /// Acceptance: Sprite 0 placed at x=0 on a visible raster line leaves the
+    /// side-border pixel at x=0 in the border colour instead of the sprite
+    /// colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_KeepsSpriteBehindClosedSideBorder()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        ConfigureSprite(ram, vic, sprite: 0, x: 0, y: 60, pointer: 0x20, color: 0x02);
+        vic.Write(0xD015, 0x01);
+
+        renderer.RenderFullFrame();
+
+        Assert.Equal(ToBgra(0x03), ReadPixel(renderer.FrameBuffer, 0, VideoRenderer.RasterLineToFrameY(60)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-004, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: When two opaque sprites overlap, the lower-numbered
+    /// sprite has display priority for the visible framebuffer pixel.
+    /// Acceptance: Sprites 0 and 1 placed at the same coordinate render
+    /// sprite 0's colour at the overlap pixel.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_LowerNumberedSpriteWinsWhenSpritesOverlap()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        ConfigureSprite(ram, vic, sprite: 0, x: 96, y: 60, pointer: 0x20, color: 0x02);
+        ConfigureSprite(ram, vic, sprite: 1, x: 96, y: 60, pointer: 0x21, color: 0x04);
+        vic.Write(0xD015, 0x03);
+
+        renderer.RenderFullFrame();
+
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 96, VideoRenderer.RasterLineToFrameY(60)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: $D01B sprite priority places a sprite behind foreground
+    /// character pixels while still allowing it to appear over background
+    /// pixels.
+    /// Acceptance: A behind-background sprite over a foreground character
+    /// pixel keeps the character colour; the adjacent background pixel uses
+    /// the sprite colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_SpritePriorityBehindForegroundKeepsCharacterPixel()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        ConfigureSprite(ram, vic, sprite: 0, x: 96, y: 60, pointer: 0x20, color: 0x02, firstRowByte: 0xC0);
+        ConfigureForegroundCharacterPixel(ram, vic, x: 96, rasterLine: 60, color: 0x04);
+        vic.Write(0xD015, 0x01);
+        vic.Write(0xD01B, 0x01);
+
+        renderer.RenderFullFrame();
+
+        int frameY = VideoRenderer.RasterLineToFrameY(60);
+        Assert.Equal(ToBgra(0x04), ReadPixel(renderer.FrameBuffer, 96, frameY));
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 97, frameY));
+    }
+
+    /// <summary>
     /// FR: FR-VIC-001, TR: TR-CYCLE-001.
     /// Use case: After Reset, the VIC-II's externally visible raster
     /// position must be at line 0, cycle <c>ResetRasterCycle</c> so
@@ -295,6 +543,58 @@ public sealed class VideoRendererTests
     {
         var offset = ((y * VideoRenderer.ScreenWidth) + x) * 4;
         return BitConverter.ToUInt32(frameBuffer, offset);
+    }
+
+    private static void ConfigureStandardScreen(Mos6569 vic)
+    {
+        vic.Write(0xD011, 0x1B);
+        vic.Write(0xD016, 0x08);
+        vic.Write(0xD021, 0x06);
+    }
+
+    private static void ConfigurePixelModeScreen(Mos6569 vic, byte d011, byte d016, byte d018)
+    {
+        vic.Write(0xD011, d011);
+        vic.Write(0xD016, d016);
+        vic.Write(0xD018, d018);
+    }
+
+    private static void ConfigureSprite(
+        RamDevice ram,
+        Mos6569 vic,
+        int sprite,
+        byte x,
+        byte y,
+        byte pointer,
+        byte color,
+        byte firstRowByte = 0x80)
+    {
+        ram.Write((ushort)(vic.ScreenMemoryBase + 0x03F8 + sprite), pointer);
+        ram.Write((ushort)(pointer * 64), firstRowByte);
+        ram.Write((ushort)(pointer * 64 + 1), 0x00);
+        ram.Write((ushort)(pointer * 64 + 2), 0x00);
+        vic.Write((ushort)(0xD000 + sprite * 2), x);
+        vic.Write((ushort)(0xD001 + sprite * 2), y);
+        vic.Write((ushort)(0xD027 + sprite), color);
+    }
+
+    private static void ConfigureForegroundCharacterPixel(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte color)
+    {
+        int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        int screenX = x - vic.LeftBorderPixel;
+        int visLine = rasterLine - vic.UpperBorderStart;
+        int screenLine = visLine + vic.YScroll;
+        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
+        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int col = screenX / 8;
+        int charX = screenX % 8;
+        int charRow = screenLine & 7;
+        int screenIndex = screenRow * columns + col;
+        byte charCode = 1;
+
+        ram.Write((ushort)(vic.ScreenMemoryBase + screenIndex), charCode);
+        ram.Write((ushort)(0xD800 + screenIndex), color);
+        ram.Write((ushort)(vic.CharacterBase + charCode * 8 + charRow), (byte)(1 << (7 - charX)));
     }
 
     private static uint ToBgra(int paletteIndex)

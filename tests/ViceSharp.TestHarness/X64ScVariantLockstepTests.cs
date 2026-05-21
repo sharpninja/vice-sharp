@@ -8,6 +8,7 @@ using ViceSharp.Chips.IEC;
 using ViceSharp.Chips.Input;
 using ViceSharp.Chips.VicIi;
 using ViceSharp.Core;
+using ViceSharp.RomFetch;
 using Xunit;
 
 namespace ViceSharp.TestHarness;
@@ -1333,17 +1334,7 @@ public sealed class X64ScVariantLockstepTests
 
     private static string FindGtk3PosVkm()
     {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            var path = Path.Combine(directory.FullName, "native", "vice", "vice", "data", "C64", "gtk3_pos.vkm");
-            if (File.Exists(path))
-                return path;
-
-            directory = directory.Parent;
-        }
-
-        throw new FileNotFoundException("Could not locate native/vice/vice/data/C64/gtk3_pos.vkm from test output path.");
+        return ViceDataPathResolver.FindDataFile("C64", "gtk3_pos.vkm");
     }
 
     private static byte[] CreateDeterministicD64Image()

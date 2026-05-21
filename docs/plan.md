@@ -1,99 +1,311 @@
-# ViceSharp 30-Stage Execution Plan
+# ViceSharp Phase 1 Completion Plan
 
-## Current Consolidated State (2026-05-12)
-- Live workspace was clean on `main...origin/main` at `f2dbb29` before the current runtime TODO implementation slice.
-- Current validation is green: focused boot/lockstep/C64 machine gate passes 8/8, focused VIC/reset render gate passes 3/3, `LockstepValidationTests.First100000CyclesMatch` passes, and `dotnet test .\ViceSharp.slnx --nologo` passes 62/62.
-- C64 ROM wiring is implemented through `C64RomLoader` and `C64MemoryMap` ROM-load mode; `BasicBootProofTests.C64_Boot_Reaches_Ready_Prompt` is green in the full harness.
-- VICE-backed lockstep validation now clears `ResetStateMatches`, `First100CyclesMatch`, `First10000CyclesMatch`, and `First100000CyclesMatch`.
-- Native shim reset determinism was tightened for hosted validation: RAM random-init chance is forced to zero and VIC-II registers are cleared through VICE's register reset path before each shim reset.
-- CIA2 port-A idle input remains aligned with VICE for the KERNAL setup (`DD00=$07`, `DD02=$3F`, readback `$47`).
-- MCP TODO cleanup completed for the active items: `ARCH-LOCKSTEP-001` and `ARCH-ROM-001` were marked done through the plugin with current validation evidence.
-- Bounded runtime-gap TODOs are implemented for 1541/D64 attach+sector reads, TAP datasette pulse reads, standard 8K/16K cartridge mapping, runtime snapshot save/load, and BMP frame capture.
+Updated: 2026-05-20
+Workspace: `F:\GitHub\vice-sharp`
+Baseline: `main` at `c9871f4`, ahead of `origin/main` by 93 commits
 
-## Open Work Queue
+This file replaces the stale May 12 30-stage execution snapshot in its
+entirety. Keep this document as the live Phase 1 closeout plan. Do not append
+the old stage list back into this file.
 
-| Order | ID / Source | Scope | Current Status | Required Gate |
-|-------|-------------|-------|----------------|---------------|
-| 1 | `ARCH-LOCKSTEP-001` | Align managed lockstep reset/native bootstrap semantics. Normalize reset/bootstrap PC visibility, CPU side-effect timing, branch/stack timing, C64 RAM reset assumptions, and native reset determinism before widening to full lockstep. | Done through MCP TODO update; 100k lockstep and full harness are green. | Preserve `First100000CyclesMatch` as the regression gate. |
-| 2 | `ARCH-ROM-001` | Keep ROM wiring current and verify real boot path. ROM load plumbing is done; remaining work is status cleanup. | Done through MCP TODO update; BASIC `READY.` proof is green in `BasicBootProofTests`. | Preserve boot proof and ROM-load coverage in the suite. |
-| 3 | Stage 28 | Determinism replay after 10k lockstep gate. | Complete in working tree; `First100000CyclesMatch` passes. | Keep the 100k gate in the suite and preserve the validation evidence in TODO/session/handoff. |
-| 4 | `RUNTIME-1541-001` | Bounded 1541 drive validation. | Implemented with D64 attach validation and deterministic sector read gate. | `StorageRuntimeTests` plus full solution test. |
-| 5 | `RUNTIME-TAPE-001` | Bounded datasette runtime validation. | Implemented with TAP attach validation and motor/play-gated pulse reads. | `StorageRuntimeTests` plus full solution test. |
-| 6 | `RUNTIME-CART-001` | Bounded cartridge mapping validation. | Implemented with raw standard 8K/16K ROML/ROMH mapping and read-only behavior. | `StandardCartridgeTests` plus full solution test. |
-| 7 | `RUNTIME-SNAPSHOT-001` | Bounded snapshot save/load validation. | Implemented with deterministic 64K runtime snapshot save/load/restore. | `RuntimeSnapshotTests` plus full solution test. |
-| 8 | `RUNTIME-CAPTURE-001` | Bounded capture/export validation. | Implemented with BGRA-to-BMP artifact writer and recording frame sink. | `RuntimeCaptureTests` plus full solution test. |
+## Sources Of Truth
 
-## Next Execution Slice
-1. Commit and push the bounded runtime TODO implementation after MCP TODO closure.
-2. Deepen one runtime gate at a time, starting with real 1541 command/IEC behavior unless the user redirects.
-3. Keep `First100000CyclesMatch` in the normal validation path and treat any future mismatch as a regression with exact cycle/register evidence.
-4. Update MCP TODO/session state between runtime slices; do not hand-edit `docs/todo.yaml`.
+Use these inputs, in this order, when this document and local state disagree:
 
-## BYRD Adherence
-- One change per commit
-- Build+test after every commit
-- Zero warnings
-- Runnable always
-- Push every commit
-- No speculative, no partial, no refactor outside task
+1. Live MCP TODO state queried through `mcpserver-codex-plugin`.
+2. `README.md` Completion Dashboard and current validation notes.
+3. Current git state and recent MCP session log evidence.
+4. `handoff.md` for session continuity.
+5. Older files such as archived session logs or previous plan snapshots only as
+   historical context.
 
-## Execution Table
+Slice 0 reconciliation is now the baseline for this plan. It used live MCP TODO
+state, subagent code/test review, and focused validation to separate stale open
+TODOs from real Phase 1 blockers before new feature work continues.
 
-| Stage | Task | File | Validation Required |
-|-------|------|------|----------------------|
-| 1 | Update plan baseline | docs/plan.md | This file, Iteration 0 marked 100% |
-| 2 | handoff.md snapshot | handoff.md | Aligned to current files |
-| 3 | C64Machine.cs wiring | src/ViceSharp.Core/ArchitectureBuilder.cs | Full bus/clock/interrupt router, empty chips, compiles clean |
-| 4 | Memory map + PLA | src/ViceSharp.Chips/PLA/ | $0000-$FFFF exact regions, RAM/ROM/IO/PLA priority |
-| 5 | Reset sequencing | src/ViceSharp.Chips/Cpu/ | 7-cycle reset to all chips + port init |
-| 6 | Mos6510 fetch loop | src/ViceSharp.Chips/Cpu/Mos6510.cs | Empty single-cycle exec skeleton |
-| 7 | CPU opcode table | src/ViceSharp.Chips/Cpu/ | 256-entry table, all unimplemented → trap |
-| 8 | Addressing modes | src/ViceSharp.Chips/Cpu/ | All 13 modes + exact cycle counts |
-| 9 | Official opcodes | src/ViceSharp.Chips/Cpu/ | All 151 official 6510 |
-| 10 | Illegal opcodes | src/ViceSharp.Chips/Cpu/ | All 105 unofficial (LAX/SAX etc) |
-| 11 | Processor port $00/$01 | src/ViceSharp.Chips/Cpu/Mos6510.cs | Full banking + open-bus behavior |
-| 12 | CPU interrupt logic | src/ViceSharp.Chips/Cpu/ | IRQ/NMI/RDY/RES exact pin handling |
-| 13 | Mos6569 raster core | src/ViceSharp.Chips/VicIi/ | 63 cycles/line, 312 lines/frame |
-| 14 | VIC-II badlines + DMA | src/ViceSharp.Chips/VicIi/ | Exact 40-cycle stall, sprite DMA |
-| 15 | VIC-II sprites + collisions | src/ViceSharp.Chips/VicIi/ | Full DMA/rendering pipeline |
-| 16 | VIC-II IRQ | src/ViceSharp.Chips/VicIi/ | Raster compare, lightpen, sprite collision |
-| 17 | Mos6526 skeleton | src/ViceSharp.Chips/Cia/ | Timer A/B countdown registers |
-| 18 | CIA timers + TOD | src/ViceSharp.Chips/Cia/ | Exact cycle countdown + interrupt gen |
-| 19 | CIA I/O ports | src/ViceSharp.Chips/Cia/ | Keyboard matrix, joystick, VIC bank select |
-| 20 | SID 3-voice + filter | src/ViceSharp.Chips/Sid/ | Full synthesis + ADSR + 8580 inheritance |
-| 21 | IEC/D64 + Input complete | src/ViceSharp.Chips/IEC/, Input/ | D64 sector r/w, joystick/keyboard final |
-| 22 | ROM loader + SHA1 | src/ViceSharp.RomFetch/ | Kernal/BASIC/CHARGEN load + verify |
-| 23 | First boot | tests/ViceSharp.TestHarness/ | Reset → execute to BASIC $E55B |
-| 24 | First raster IRQ | tests/ViceSharp.TestHarness/ | Run to line 0 interrupt |
-| 25 | VICE trace logger | tests/ViceSharp.TestHarness/ | Exact match to x64sc monitor format |
-| 26 | Golden trace capture | tests/ViceSharp.TestHarness/ | 10000 cycles from latest VICE nightly |
-| 27 | Lockstep validation | tests/ViceSharp.TestHarness/ | Cycle-by-cycle diff, zero deviation |
-| 28 | Determinism replay | tests/ViceSharp.TestHarness/ | 100000 cycle bit-exact test |
-| 29 | Final handoff update | handoff.md | Add boot, 100k lockstep proof, and bounded runtime TODO results |
-| 30 | README refresh | README.md | Show current validation baseline and bounded runtime gate status |
+## Phase 1 Definition
 
-## Gates (between every stage)
-- Build 100% clean + all tests pass
-- NativeAOT valid
-- No new warnings
-- System runs (console harness)
+Phase 1 means Iteration 1 C64 bringup is complete enough to operate the C64 and
+required x64sc profiles through real boot, input, media, capture, snapshot, and
+host-control flows with native-comparable validation. It does not mean every
+future VICE machine, every cartridge mapper, every platform host, or complete
+performance parity is done.
 
-## Forbidden
-- No optimizations
-- No features outside current stage
-- No working-dir junk
+Phase 1 is complete only when all of these are true:
 
-## Chip Folders (current)
-- `src/ViceSharp.Chips/Cpu/` - MOS6510/6502
-- `src/ViceSharp.Chips/VicIi/` - MOS6569
-- `src/ViceSharp.Chips/Cia/` - MOS6526
-- `src/ViceSharp.Chips/Sid/` - MOS6581
-- `src/ViceSharp.Chips/PLA/` - MOS906114
-- `src/ViceSharp.Chips/IEC/` - Disk CPU
-- `src/ViceSharp.Chips/Input/` - Keyboard/Joystick
+1. Every Phase 1 implementation slice is driven by current canonical
+   `FR-*`, `TR-*`, and `TEST-*` requirements, with VICE source evidence cited
+   before code changes. If VICE source or classic documentation proves a
+   requirement is incomplete or wrong, the requirement is corrected before the
+   implementation is treated as done.
+2. C64 and required x64sc profiles boot to BASIC `READY.` with ROM-backed reset
+   and deterministic managed/native validation still green.
+3. CPU, 6510 port, PLA, memory map, ROM loader, CIA, SID MVP, VIA, interrupt,
+   and reset behavior remain closed under the normal full-suite gate.
+4. VIC-II MVP parity includes deeper visible-frame validation: badlines, DMA CPU
+   inhibition, sprite DMA, sprite priority and collisions, borders/open borders,
+   bank switching effects, raster IRQ behavior, and model timing checkpoints.
+5. Media MVP works from the runtime and host surfaces: true-drive 1541/D64
+   attach and load path, TAP datasette motor/timing path, standard cartridge
+   live memory mapping and boot behavior, full-machine snapshot resume, and
+   deterministic frame/audio capture.
+6. Keyboard, joystick/control-port, and host/UI control flows are usable through
+   the gRPC boundary without bypassing the host-owned emulator lifecycle.
+7. Final x64sc lockstep gates run without unsupported required-profile skips.
+   Missing native VICE binaries or configured VICE data roots count as
+   blockers, not passes.
+8. A minimal upstream VICE testbench path exists for selected x64sc-compatible
+   cases, including debugcart exit handling and process-level smoke validation.
+9. MCP TODO, session log, README dashboard, `handoff.md`, and this file all
+   agree on what is done, what is deferred, and what remains post-Phase 1.
 
-## Iteration Status
-- **Iteration 0 (Foundations)** — Complete (100%)
-- **Iteration 1 (C64 Bringup)** — In progress (boot/lockstep baseline green; bounded runtime gap gates implemented)
-- **Active blocker** — No MCP TODO creation blocker remains; next code blocker is deeper true-drive or runtime subsystem behavior beyond the bounded gates.
-- **Open TODO cleanup** — `ARCH-LOCKSTEP-001` and `ARCH-ROM-001` are done in MCP TODO; bounded runtime-gap TODOs are ready to close in MCP.
+## Byrd Slice Rules
+
+Every implementation slice follows the Byrd Development Process:
+
+1. Open/update the MCP session turn and query the relevant TODOs.
+2. Identify the exact canonical `FR-*`, `TR-*`, and `TEST-*` IDs, plus the
+   VICE source files that define the behavior. Broad labels such as `FR-VIC`
+   are audit findings, not sufficient slice anchors.
+3. Correct requirement text, traceability maps, or test requirements first when
+   the imported VICE requirement is incomplete, stale, or contradicted by VICE
+   source behavior.
+4. Pick one small slice with explicit exit criteria.
+5. Add or update the failing validation first when practical.
+6. Implement the minimum behavior needed for that slice.
+7. Run focused tests, then run broader gates when shared behavior changed.
+8. Update MCP TODO/session-log state and dashboard/docs before broadening scope.
+9. Commit only a green, coherent slice; leave unrelated dirty files alone.
+
+No slice is complete when it only changes code. It is complete when the code,
+tests, dashboard, and MCP state all agree.
+
+## Slice 0 - State Reconciliation
+
+Goal: remove planning ambiguity before more implementation work.
+
+Actions:
+
+1. Query MCP TODO again and classify each open item as Phase 1 blocker,
+   Phase 1 validation-only, or post-Phase 1.
+2. Reconcile dashboard/TODO mismatches:
+   - `RUNTIME-1541-002` is marked done in MCP but still has stale remaining
+     text. Split or clear that stale remainder.
+   - `BACKFILL-HOSTUI-001` is still open in MCP while the README dashboard
+     marks Host UI + monitor control as complete. Close, split, or correct it.
+   - `QA-XMLDOCS-001` is open in MCP while the README dashboard claims the
+     XMLDOCS test contract is complete. Decide whether remaining retrofits are
+     Phase 1 or post-Phase 1.
+   - `BACKFILL-SID-001` remains open; decide whether 8580/filter deepening is
+     post-MVP or required for final lockstep.
+3. Refresh `README.md`, `handoff.md`, and MCP TODOs only after the current truth
+   is known.
+
+Current result from 2026-05-19:
+
+- `QA-XMLDOCS-001` is validation-only/closeable: the ratchet is already
+  `ExpectedMaxViolations = 0`, and `XmlDocsConventionTests` passed 1/1.
+- `BACKFILL-SID-001` is validation-only/closeable for Phase 1: focused
+  ROM-independent SID coverage passed 58/58; deeper analog 8580/filter work is
+  post-MVP unless final lockstep finds a concrete regression.
+- `BACKFILL-HOSTUI-001` is validation-only/closeable for the host-core scope:
+  focused host/gRPC/Avalonia boundary coverage passed 115/115, and the
+  in-process frame smoke skips only when the runtime falls back to
+  the minimal machine without a video chip.
+- `RUNTIME-1541-002` is done for the D64/1541 substrate. Full drive-CPU
+  lockstep, KERNAL load-path validation, and GCR/fastloader depth remain under
+  `ARCH-TRUEDRIVE-1541-002` and `BACKFILL-MEDIA-001`.
+- `RUNTIME-CART-002` is validation-only/closeable for standard raw/CRT
+  cartridge mapping. Advanced cartridge families remain post-MVP.
+- `RUNTIME-CAPTURE-002` stays open only for configurable capture formats; BMP
+  single/multi-frame and WAV recording are already implemented.
+- ROM/native integration tests resolve VICE data from `VICESHARP_ROM_PATH`,
+  `VICE_DATA_PATH`, `VICE_HOME`, or a local `x64sc.exe` install on `PATH`.
+  The repo-local checkout is not expected to contain ROMs.
+
+Gate:
+
+- No Phase 1 blocker has contradictory README/MCP status.
+- Every deferred open TODO has an explicit reason and target phase.
+- `docs/plan.md` remains the current closeout plan.
+
+## Slice 0.5 - VICE Requirements Traceability Gate
+
+Goal: make imported VICE requirements drive design and code instead of serving
+as after-the-fact labels.
+
+Current audit result from 2026-05-20:
+
+- Imported requirements exist, but enforcement is uneven. The current extractor
+  found 144 canonical IDs in `docs/requirements`, 77 referenced from `src` or
+  `tests`, 67 canonical IDs not referenced from source/test files, and 54
+  noncanonical IDs in source/test files. For FRs only, the current split is
+  108 canonical, 67 referenced, and 41 unreferenced.
+- Active code and tests still contain broad or noncanonical labels such as
+  `FR-VIC`, `FR-CIA-TIMER`, and `FR-INPUT-KEYBOARD`, which makes it unclear
+  which imported requirement actually drove the implementation.
+- Some requirement docs cite aspirational suite names while the real tests use
+  different names, so traceability can appear complete without executable
+  evidence.
+- `FR-VIC-007` described opening borders but did not explicitly state the
+  inverse behavior: closed vertical/side borders mask sprite pixels, and only
+  an opened border exposes sprite pixels in the border area.
+- `FR-VIC-010` described sprite DMA ordering as sprite 0 through sprite 7, but
+  VICE PAL x64sc source schedules sprites 3-7 at one-based table cycles 1/2,
+  3/4, 5/6, 7/8, and 9/10, then sprites 0-2 at 58/59, 60/61, and 62/63.
+  VICE maps PAL cycle `c` to internal cycle `c - 1`, so vice-sharp
+  `CurrentCycle` expects sprites 3-7 at 0/1, 2/3, 4/5, 6/7, and 8/9, then
+  sprites 0-2 at 57/58, 59/60, and 61/62.
+- `FR-VIC-010` also needed the VICE `sprite_dma` latch semantics surfaced:
+  PAL public cycles 55/56 (vice-sharp 54/55) sample `$D015` and sprite Y once,
+  then BA/data DMA use the latched mask. Clearing `$D015` after latch-on must
+  not cancel the active DMA window, and enabling after both checks must wait for
+  a later matching raster line.
+
+Required gate before more Phase 1 implementation:
+
+1. Name the canonical `FR-*`, `TR-*`, `TEST-*`, and owning `BACKFILL-*` IDs for
+   the slice.
+2. Cite the VICE documentation or source files that define the behavior.
+3. If the canonical requirement is missing, stale, or wrong, amend the
+   requirement before changing code.
+4. Add or update executable tests that reference the canonical IDs.
+5. Run `tools/check_requirement_traceability.ps1` and record its output in the
+   handoff/session notes. New broad or noncanonical IDs in touched files are
+   blockers unless they are explicitly documented as a cleanup finding.
+
+Gate:
+
+- `FR-VIC-007`, `FR-VIC-010`, `TEST-VIC-001`, and the x64sc coverage note are
+  amended to reflect the VICE behavior already found during Slice 1.
+- Active Slice 1 renderer/border code and tests reference canonical VIC-II IDs
+  rather than broad `FR-VIC` labels.
+- Further Slice 1 work starts from this gate, not from code-first discovery.
+
+## Slice Order
+
+| Order | Slice | Primary TODOs | Scope | Exit Gate |
+|-------|-------|---------------|-------|-----------|
+| 0 | Reconcile tracked state | All open Phase 1 TODOs | Resolve dashboard/TODO conflicts and split post-MVP work. | MCP TODO, README, handoff, and this plan agree. |
+| 0.5 | VICE requirements traceability gate | All open Phase 1 TODOs | Audit imported VICE FR coverage, noncanonical labels, stale test-suite names, and missing acceptance criteria before more feature work. | Requirement text and test requirements are current for the next slice; traceability check output is recorded. |
+| 1 | VIC-II visible parity | `BACKFILL-VIDEO-001` | Badline/DMA CPU inhibition, sprite DMA, sprite priority/collisions, border/open-border behavior, bank switching side effects, visible frame checkpoints. | Focused VIC tests, x64sc raster/chip checkpoints, full solution test. |
+| 2 | True-drive 1541/D64 close | `ARCH-TRUEDRIVE-1541-002`, `BACKFILL-MEDIA-001` | Compare drive CPU lockstep, validate real IEC/D64 load behavior through C64 KERNAL paths, and document any native-shim exposure gaps. | 100k drive CPU lockstep or documented native-shim blocker, D64 attach/load smoke, full solution test. |
+| 3 | Datasette MVP completion | `RUNTIME-TAPE-002`, `BACKFILL-MEDIA-001` | Datasette motor, spin-up/spin-down timing, play/record/rewind state, gated pulse delivery, CIA FLAG behavior. | TAP/datasette timing tests and host/launcher tape attach smoke. |
+| 4 | Snapshot and capture close | `RUNTIME-SNAPSHOT-002`, `RUNTIME-CAPTURE-002`, `BACKFILL-MEDIA-001` | Snapshot all required chip/timing/bus state; add configured capture formats required by Phase 1. | Deterministic save/load/resume test, capture artifact tests, full solution test. |
+| 5 | Input parity close | `BACKFILL-INPUT-001` | Joystick/control-port parity, longer keyboard workflows, model-specific keyboard matrix behavior, and host input injection coverage. | Input parity tests, host input protocol tests, full solution test. |
+| 6 | Testbench and launcher shim | `ARCH-TESTBENCH-001`, `CLI-LAUNCHER-001` | Minimal x64sc-compatible runner, debugcart exits, `-limitcycles`, selected VICE-style flags, PRG/SYS autostart, screenshot/monitor smoke. | Selected upstream testbench cases run from process-level smoke tests. |
+| 7 | Final x64sc lockstep | `BACKFILL-LOCKSTEP-001` | Run all required x64sc profile gates with media/input/video/snapshot coverage and no required skips. | Final x64sc lockstep green; blockers must identify missing asset, native shim gap, or exact failing subsystem. |
+| 8 | Phase 1 closeout | docs plus MCP TODO/session state | README dashboard refresh, handoff refresh, MCP TODO/session closure, and explicit post-Phase 1 split list. | Full closeout validation set passes and docs agree. |
+
+## Slice 1 Progress - VIC-II Visible Parity
+
+2026-05-19 landed the first Slice 1 implementation step:
+
+- `VideoRenderer` now composes visible sprite pixels into the BGRA framebuffer
+  instead of leaving sprite behavior only in collision latches.
+- Lower-numbered sprites win when opaque sprite pixels overlap.
+- `$D01B` sprite priority now keeps behind-background sprites behind
+  foreground character pixels while still drawing them over background pixels.
+- Focused gate passed: sprite renderer/collision/DMA set 39/39, broader
+  video unit/service gate 122/122 with installed VICE data, XMLDOCS 1/1.
+
+2026-05-20 continued Slice 1 with a VICE-source-driven display-mode pixel
+slice:
+
+- `VideoRenderer` now routes standard text, multicolor text, extended color,
+  standard bitmap, multicolor bitmap, and invalid ECM combinations through the
+  VICE `viciisc/vicii-draw-cycle.c` color table.
+- Focused framebuffer tests cover `FR-VIC-002`, `FR-VIC-003`, `FR-VIC-008`,
+  and `TEST-VIC-001` color routing, including invalid modes rendering black.
+- `RomProvider` now resolves the legacy `characters` alias to the installed
+  VICE `chargen-901225-01.bin` data file, so local VICE data roots work without
+  repo-local ROMs.
+
+Remaining Slice 1 work:
+
+- Continue only after Slice 0.5 is satisfied. The 2026-05-20 border/sprite
+  masking work exposed a systemic traceability gap: the VICE behavior was
+  discoverable from classic VICE source, but the canonical imported FR did not
+  explicitly drive the design before implementation.
+- Open-border/border flip-flop timing.
+- Remaining sprite DMA depth beyond the PAL x64sc BA-mask latch: non-PAL
+  per-model tables, sprite data-fetch side effects, and native lockstep
+  checkpoints for multiplexing edge cases.
+- Native x64sc visible-frame/checkpoint validation for the display-mode pixel
+  effects now covered by synthetic framebuffer tests.
+- FLI/AFLI timing depth from `FR-VIC-008`: forced badlines, the left-edge FLI
+  bug, mid-line `$D018` effects, and AFLI bitmap behavior.
+- Native x64sc visible-frame/checkpoint validation against the installed VICE
+  data root for the remaining border, sprite, display-mode, and FLI cases.
+
+## Phase 1 Blockers
+
+Treat these as current blockers after Slice 0 reconciliation:
+
+- `BACKFILL-VIDEO-001`: final visible VIC-II parity.
+- `BACKFILL-MEDIA-001`: umbrella media parity for disk, tape, cartridge,
+  snapshot, and capture.
+- `BACKFILL-INPUT-001`: keyboard and control-port parity beyond held-key gates.
+- `BACKFILL-LOCKSTEP-001`: final all-profile x64sc validation gate.
+- `RUNTIME-TAPE-002`: datasette motor and timing behavior.
+- `RUNTIME-SNAPSHOT-002`: full chip/timing snapshot round-trip.
+- `RUNTIME-CAPTURE-002`: configurable capture formats required for Phase 1.
+- `ARCH-TESTBENCH-001`: upstream VICE testbench runner smoke.
+- `ARCH-TRUEDRIVE-1541-002`: true drive-CPU lockstep, unless the native shim
+  exposure is formally split as post-Phase 1.
+- `CLI-LAUNCHER-001`: launcher-level flags and process smoke needed for
+  drop-in x64sc-style workflows.
+
+## Slice 0 Validation-Only Closures
+
+These items should not consume further Phase 1 implementation time unless a
+new failing gate proves otherwise:
+
+- `QA-XMLDOCS-001`: close with 0 ratchet violations.
+- `BACKFILL-SID-001`: close for Phase 1; analog/8580 deepening is post-MVP.
+- `BACKFILL-HOSTUI-001`: close for host-core control; launcher/UI shell work
+  remains under `CLI-LAUNCHER-001` or platform host TODOs.
+- `RUNTIME-1541-002`: keep done and clear stale remaining text; true-drive
+  lockstep remains under `ARCH-TRUEDRIVE-1541-002`.
+- `RUNTIME-CART-002`: close for standard 8K/16K raw/CRT mapping; broad mapper
+  families stay post-MVP.
+
+## Likely Post-Phase 1 Deferrals
+
+Do not pull these into Phase 1 unless the user explicitly changes scope:
+
+- `ARCH-ADHOCMACHINE-001`: Avalonia 12 ad-hoc machine helper app and richer
+  chip catalog metadata.
+- `PLATFORM-CROSS-001`: UWP Xbox, Avalonia mobile, and MacOS host code.
+- `PERF-BENCHMARK-001`: native VICE performance measurement integration beyond
+  benchmark smoke/wiring.
+- Further analog SID/8580 filter deepening beyond the current Phase 1 gates.
+- Broad cartridge mapper families beyond standard 8K/16K/CRT behavior needed
+  for Phase 1 tests.
+- Wiki publishing that requires operator authorization.
+
+## Validation Set
+
+Use focused tests inside each slice, then run this closeout set before declaring
+Phase 1 complete:
+
+```powershell
+dotnet build .\ViceSharp.slnx --nologo
+dotnet test .\ViceSharp.slnx --nologo
+dotnet test .\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj --nologo --filter "FullyQualifiedName~X64ScVariantLockstepTests"
+dotnet publish .\src\ViceSharp.Console\ViceSharp.Console.csproj -c Release -r win-x64 --self-contained /p:PublishAot=true
+git diff --check
+```
+
+Add native VICE/testbench commands to this list once `ARCH-TESTBENCH-001` lands.
+If a command is skipped, the closeout note must state the exact reason.
+
+## Done Statement
+
+Phase 1 can be called complete when Slice 8 is closed and the final handoff says:
+
+- The repository is on a known commit.
+- The working tree state is intentional.
+- Full validation results are listed with exact commands and counts.
+- All Phase 1 TODOs are done or explicitly split to later phases.
+- README, MCP TODO, session logs, `handoff.md`, and this plan agree.

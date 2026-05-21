@@ -158,4 +158,23 @@ public sealed class VicIIRasterIrqTests
         Assert.Equal(0x01, latch & 0x01);
         Assert.Equal(0x00, latch & 0x80);
     }
+
+    /// <summary>
+    /// FR/TR: FR-VIC raster IRQ + raster compare (BACKFILL-VIDEO-001).
+    /// Use case: Native VICE reset starts on raster line 0 with compare line
+    /// 0, but the reset line must not immediately leave a stale raster IRQ
+    /// latch after the first scanline.
+    /// Acceptance: Advancing from reset through line 0 does not set $D019
+    /// bit 0 when software has not programmed a compare event.
+    /// </summary>
+    [Fact]
+    public void RasterIrq_DoesNotLatchDefaultResetLineZeroCompare()
+    {
+        var vic = BuildVic(out var irq);
+
+        Advance(vic, vic.CyclesPerLine);
+
+        Assert.False(irq.IsAsserted);
+        Assert.Equal(0x00, vic.Read(InterruptLatch) & 0x01);
+    }
 }

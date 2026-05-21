@@ -97,7 +97,7 @@ public sealed class VideoRenderer
         int lowerBorder = _vic.LowerBorderStart;
         int visLine = lineNumber - upperBorder;
 
-        if (lineNumber < upperBorder || lineNumber >= lowerBorder)
+        if (_vic.IsRasterLineVerticalBorderActive(lineNumber))
         {
             // Outside visible area - draw border
             DrawBorder(line, borderPixel);
@@ -116,56 +116,21 @@ public sealed class VideoRenderer
         for (int x = 0; x < ScreenWidth; x++)
         {
             int offset = x * 4;
-            uint pixel;
+            var background = RenderBackgroundPixel(
+                x,
+                leftBorderPixel,
+                rightBorderPixel,
+                screenWidth,
+                screenRow,
+                charRow,
+                columns,
+                bgPixel,
+                borderPixel);
+            uint pixel = background.Pixel;
             
-            // Check if we're in the side border (based on VIC CSEL setting)
-            if (x < leftBorderPixel || x >= rightBorderPixel)
+            if (TryGetSpritePixel(x, lineNumber, background.IsForeground, out var spritePixel))
             {
-                // Side border
-                pixel = borderPixel;
-            }
-            else
-            {
-                int screenX = x - leftBorderPixel;
-                
-                // Check if in main screen area
-                if (screenX < screenWidth)
-                {
-                    // Main screen area - render characters
-                    int col = screenX / 8;
-                    int charX = screenX % 8;
-                    
-                    // Use VIC row/column configuration instead of PAL defaults
-                    int screenIndex = screenRow * columns + col;
-                    
-                    // Read character code from screen RAM
-                    ushort screenAddr = (ushort)(_vic.ScreenMemoryBase + screenIndex);
-                    byte charCode = _vic.ReadVideoMemory(screenAddr);
-                    
-                    // Read color from color RAM at $D800
-                    ushort colorAddr = (ushort)(0xD800 + screenIndex);
-                    byte colorCode = _vic.ReadVideoMemory(colorAddr);
-                    
-                    // Character generator base is at $D000, each char is 8 bytes
-                    ushort charAddr = (ushort)(_vic.CharacterBase + charCode * 8 + charRow);
-                    byte charData = _vic.ReadVideoMemory(charAddr);
-                    
-                    // Get bit position (bit 7 is leftmost pixel)
-                    int bitPos = 7 - charX;
-                    byte bit = (byte)((charData >> bitPos) & 0x01);
-                    
-                    // Foreground color (4-bit, convert to 0-15)
-                    byte fgColor = (byte)(colorCode & 0x0F);
-                    
-                    // Select pixel: foreground or background
-                    uint fgPixel = Palette[fgColor];
-                    pixel = bit != 0 ? fgPixel : bgPixel;
-                }
-                else
-                {
-                    // Right extended border
-                    pixel = borderPixel;
-                }
+                pixel = spritePixel;
             }
             
             line[offset] = (byte)(pixel >> 0);
@@ -174,6 +139,256 @@ public sealed class VideoRenderer
             line[offset + 3] = 0xFF;
         }
     }
+
+    private PixelSample RenderBackgroundPixel(
+        int x,
+        int leftBorderPixel,
+        int rightBorderPixel,
+        int screenWidth,
+        int screenRow,
+        int charRow,
+        int columns,
+        uint bgPixel,
+        uint borderPixel)
+    {
+        if (x < leftBorderPixel || x >= rightBorderPixel)
+        {
+            return new PixelSample(borderPixel, false);
+        }
+
+        int screenX = x - leftBorderPixel;
+        if (screenX >= screenWidth)
+        {
+            return new PixelSample(borderPixel, false);
+        }
+
+        int col = screenX / 8;
+        int charX = screenX % 8;
+        int screenIndex = screenRow * columns + col;
+
+        ushort screenAddr = (ushort)(_vic.ScreenMemoryBase + screenIndex);
+        byte charCode = _vic.ReadVideoMemory(screenAddr);
+
+        ushort colorAddr = (ushort)(0xD800 + screenIndex);
+        byte colorCode = _vic.ReadVideoMemory(colorAddr);
+
+        // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008 /
+        // TEST-VIC-001: follow the VICE vicii-draw-cycle.c mode color table.
+        return _vic.DisplayModeSelection switch
+        {
+            Mos6569.VicIIDisplayMode.StandardText => RenderStandardTextPixel(charCode, colorCode, charRow, charX, bgPixel),
+            Mos6569.VicIIDisplayMode.MulticolorText => RenderMulticolorTextPixel(charCode, colorCode, charRow, charX, bgPixel),
+            Mos6569.VicIIDisplayMode.ExtendedColor => RenderExtendedColorPixel(charCode, colorCode, charRow, charX),
+            Mos6569.VicIIDisplayMode.StandardBitmap => RenderStandardBitmapPixel(screenIndex, colorCode: charCode, charRow, charX),
+            Mos6569.VicIIDisplayMode.MulticolorBitmap => RenderMulticolorBitmapPixel(screenIndex, screenCode: charCode, colorCode, charRow, charX, bgPixel),
+            _ => new PixelSample(Palette[0], false),
+        };
+    }
+
+    private PixelSample RenderStandardTextPixel(byte charCode, byte colorCode, int charRow, int charX, uint bgPixel)
+    {
+        byte charData = ReadCharacterRow(charCode, charRow);
+        bool isForeground = ((charData >> (7 - charX)) & 0x01) != 0;
+        return isForeground
+            ? new PixelSample(Palette[colorCode & 0x0F], true)
+            : new PixelSample(bgPixel, false);
+    }
+
+    private PixelSample RenderMulticolorTextPixel(byte charCode, byte colorCode, int charRow, int charX, uint bgPixel)
+    {
+        byte charData = ReadCharacterRow(charCode, charRow);
+        if ((colorCode & 0x08) == 0)
+        {
+            bool isForeground = ((charData >> (7 - charX)) & 0x01) != 0;
+            return isForeground
+                ? new PixelSample(Palette[colorCode & 0x07], true)
+                : new PixelSample(bgPixel, false);
+        }
+
+        int pair = ReadMulticolorPair(charData, charX);
+        return pair switch
+        {
+            0 => new PixelSample(bgPixel, false),
+            1 => new PixelSample(Palette[_vic.AuxiliaryColor & 0x0F], false),
+            2 => new PixelSample(Palette[_vic.Peek(0xD023) & 0x0F], true),
+            _ => new PixelSample(Palette[colorCode & 0x07], true),
+        };
+    }
+
+    private PixelSample RenderExtendedColorPixel(byte screenCode, byte colorCode, int charRow, int charX)
+    {
+        byte charData = ReadCharacterRow((byte)(screenCode & 0x3F), charRow);
+        bool isForeground = ((charData >> (7 - charX)) & 0x01) != 0;
+        if (isForeground)
+        {
+            return new PixelSample(Palette[colorCode & 0x0F], true);
+        }
+
+        int backgroundRegister = (screenCode >> 6) & 0x03;
+        byte backgroundColor = backgroundRegister switch
+        {
+            0 => _vic.BackgroundColor,
+            1 => _vic.AuxiliaryColor,
+            2 => (byte)(_vic.Peek(0xD023) & 0x0F),
+            _ => (byte)(_vic.Peek(0xD024) & 0x0F),
+        };
+        return new PixelSample(Palette[backgroundColor & 0x0F], false);
+    }
+
+    private PixelSample RenderStandardBitmapPixel(int screenIndex, byte colorCode, int charRow, int charX)
+    {
+        byte bitmapData = ReadBitmapRow(screenIndex, charRow);
+        bool isForeground = ((bitmapData >> (7 - charX)) & 0x01) != 0;
+        byte paletteIndex = isForeground
+            ? (byte)(colorCode >> 4)
+            : (byte)(colorCode & 0x0F);
+        return new PixelSample(Palette[paletteIndex & 0x0F], isForeground);
+    }
+
+    private PixelSample RenderMulticolorBitmapPixel(int screenIndex, byte screenCode, byte colorCode, int charRow, int charX, uint bgPixel)
+    {
+        byte bitmapData = ReadBitmapRow(screenIndex, charRow);
+        int pair = ReadMulticolorPair(bitmapData, charX);
+        return pair switch
+        {
+            0 => new PixelSample(bgPixel, false),
+            1 => new PixelSample(Palette[(screenCode >> 4) & 0x0F], false),
+            2 => new PixelSample(Palette[screenCode & 0x0F], true),
+            _ => new PixelSample(Palette[colorCode & 0x0F], true),
+        };
+    }
+
+    private byte ReadCharacterRow(byte charCode, int charRow)
+    {
+        ushort charAddr = (ushort)(_vic.CharacterBase + charCode * 8 + charRow);
+        return _vic.ReadVideoMemory(charAddr);
+    }
+
+    private byte ReadBitmapRow(int screenIndex, int charRow)
+    {
+        ushort bitmapAddr = (ushort)(_vic.BitmapPointerBase + screenIndex * 8 + charRow);
+        return _vic.ReadVideoMemory(bitmapAddr);
+    }
+
+    private static int ReadMulticolorPair(byte source, int charX)
+    {
+        int pairShift = 6 - ((charX / 2) * 2);
+        return (source >> pairShift) & 0x03;
+    }
+
+    // BACKFILL-VIDEO-001 / FR-VIC-004 / FR-VIC-007 / TEST-VIC-001:
+    // sprite composition must respect sprite priority and current border
+    // visibility state before a pixel reaches the framebuffer.
+    private bool TryGetSpritePixel(int x, int rasterLine, bool backgroundIsForeground, out uint pixel)
+    {
+        pixel = 0;
+
+        if (!_vic.CanRenderSpritePixelAt(x, rasterLine))
+        {
+            return false;
+        }
+
+        byte enabled = _vic.Peek(0xD015);
+        if (enabled == 0)
+        {
+            return false;
+        }
+
+        for (int sprite = 0; sprite < 8; sprite++)
+        {
+            if ((enabled & (1 << sprite)) == 0)
+            {
+                continue;
+            }
+
+            if (!TryGetSpritePaletteIndex(sprite, x, rasterLine, out var paletteIndex))
+            {
+                continue;
+            }
+
+            if (_vic.GetSpritePriority(sprite) == Mos6569.SpritePriority.Behind && backgroundIsForeground)
+            {
+                continue;
+            }
+
+            pixel = Palette[paletteIndex & 0x0F];
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryGetSpritePaletteIndex(int sprite, int x, int rasterLine, out byte paletteIndex)
+    {
+        paletteIndex = 0;
+
+        int spriteX = _vic.GetSpriteX(sprite);
+        int spriteY = _vic.GetSpriteY(sprite);
+        bool expandedX = _vic.GetSpriteExpansionX(sprite) == Mos6569.SpriteExpansion.Double;
+        bool expandedY = _vic.GetSpriteExpansionY(sprite) == Mos6569.SpriteExpansion.Double;
+        bool multicolor = _vic.GetSpriteColorMode(sprite) == Mos6569.SpriteColorMode.Multi;
+        int width = expandedX ? 48 : 24;
+        int height = expandedY ? 42 : 21;
+
+        int localX = x - spriteX;
+        int localY = rasterLine - spriteY;
+        if (localX < 0 || localX >= width || localY < 0 || localY >= height)
+        {
+            return false;
+        }
+
+        int sourceX = expandedX ? localX / 2 : localX;
+        int sourceY = expandedY ? localY / 2 : localY;
+        byte pointer = _vic.ReadVideoMemory((ushort)(_vic.ScreenMemoryBase + 0x03F8 + sprite));
+        ushort baseAddress = (ushort)(pointer * 64 + sourceY * 3);
+        byte row0 = _vic.ReadVideoMemory(baseAddress);
+        byte row1 = _vic.ReadVideoMemory((ushort)(baseAddress + 1));
+        byte row2 = _vic.ReadVideoMemory((ushort)(baseAddress + 2));
+
+        if (multicolor)
+        {
+            int evenSource = sourceX & ~1;
+            int byteIndex = evenSource / 8;
+            int bitIndex = 7 - (evenSource % 8);
+            byte source = byteIndex switch
+            {
+                0 => row0,
+                1 => row1,
+                _ => row2,
+            };
+            int pair = (source >> (bitIndex - 1)) & 0x03;
+            if (pair == 0)
+            {
+                return false;
+            }
+
+            paletteIndex = pair switch
+            {
+                1 => (byte)(_vic.Peek(0xD025) & 0x0F),
+                2 => _vic.GetSpriteColor(sprite),
+                _ => (byte)(_vic.Peek(0xD026) & 0x0F),
+            };
+            return true;
+        }
+
+        int rowByteIndex = sourceX / 8;
+        int rowBitIndex = 7 - (sourceX % 8);
+        byte rowByte = rowByteIndex switch
+        {
+            0 => row0,
+            1 => row1,
+            _ => row2,
+        };
+        if (((rowByte >> rowBitIndex) & 0x01) == 0)
+        {
+            return false;
+        }
+
+        paletteIndex = _vic.GetSpriteColor(sprite);
+        return true;
+    }
+
+    private readonly record struct PixelSample(uint Pixel, bool IsForeground);
 
     private void DrawBorder(Span<byte> line, uint borderPixel)
     {

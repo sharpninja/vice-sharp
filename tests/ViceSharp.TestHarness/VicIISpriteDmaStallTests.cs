@@ -6,29 +6,21 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA stall, follow-up to commit
-/// 38b164f).
+/// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+/// (BACKFILL-VIDEO-001 sprite DMA stall, follow-up to commit 38b164f).
 ///
 /// The prior sprite-DMA slice added the SpriteDmaCyclesThisFrame counter
 /// but did NOT extend IsCpuCycleStolen / IsCpuCycleStealMandatory to the
-/// sprite-DMA window. Today those are gated only on bad lines (cycles
-/// 12-54 on bad-line scanlines). Real hardware also asserts BA during
-/// the sprite-DMA cycles at the end of each scanline (cycles 55..62 plus
-/// 0..7 of the next line on a 63-cycle PAL line) when any enabled sprite
-/// intersects.
-///
-/// Simplification used here: a single wide window (RasterX &gt;= 55 OR
-/// RasterX &lt; 8) is treated as the sprite-DMA window for IsCpuCycleStolen
-/// whenever any enabled sprite intersects the current raster line. The
-/// IsCpuCycleStealMandatory window is offset by one cycle on the leading
-/// edge to mirror the existing bad-line offset (RasterX &gt;= 56 OR
-/// RasterX &lt; 9). This is a coarse approximation of the real per-sprite
-/// p-/s-access pairs; it is sufficient to model BA assertion at the
-/// cycle-count granularity the cycle stealer cares about.
+/// sprite-DMA window. These tests pin the PAL x64sc table-driven BA mask:
+/// sprite 0 asserts on cycles 54..58, sprite 2 ends at cycle 62, and
+/// sprite 3 owns the early-line wrap after the VICE cycle 55/56
+/// sprite_dma latch.
 /// </summary>
 public sealed class VicIISpriteDmaStallTests
 {
     private const ushort SpriteY0 = 0xD001;
+    private const ushort SpriteY2 = 0xD005;
+    private const ushort SpriteY3 = 0xD007;
     private const ushort ScreenControl1 = 0xD011;
     private const ushort SpriteEnable = 0xD015;
     private const ushort SpriteYExpansion = 0xD017;
@@ -54,16 +46,16 @@ public sealed class VicIISpriteDmaStallTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
     /// Use case: With $D015 = 0x00 no sprite is enabled, so sprite-DMA
     /// cycle stealing must never fire. On a non-bad-line, the cycle-steal
     /// predicate stays false across the entire scanline including the
-    /// 55..62 and 0..7 end-of-line / start-of-line cycles that the
-    /// sprite-DMA window normally covers.
+    /// PAL sprite BA slots normally cover.
     /// Acceptance: For every cycle 0..(CyclesPerLine-1) on a non-bad
     /// raster line (line 0x10 with DEN=1), IsCpuCycleStolen is false and
     /// IsCpuCycleStealMandatory is false. No false positives in the
-    /// 55..62 or 0..7 sprite-DMA window.
+    /// sprite-DMA BA slots.
     /// </summary>
     [Fact]
     public void SpriteDmaStall_NoSpritesEnabled_NoStallAnyCycle()
@@ -91,17 +83,15 @@ public sealed class VicIISpriteDmaStallTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
     /// Use case: Sprite 0 enabled at Y=0x10 intersects raster lines
     /// 0x10..0x24. On a non-bad-line within that span (line 0x10 with
     /// YSCROLL=0 -&gt; 0x10 is not a bad line because 0x10 &lt; $30),
-    /// IsCpuCycleStolen must assert during the sprite-DMA window
-    /// (cycles 55..62 of the line plus 0..7 of the next line wrap).
-    /// Outside that window (cycles 8..54 of the non-bad line) the
-    /// CPU must own the bus.
-    /// Acceptance: IsCpuCycleStolen is true at cycles 55..62 on line
-    /// 0x10 and at cycles 0..7 on line 0x11; false at cycles 8..54 on
-    /// line 0x10 (no bad-line stall in play here).
+    /// IsCpuCycleStolen must assert during sprite 0's PAL BA mask,
+    /// cycles 54..58. Outside that per-sprite mask the CPU owns the bus.
+    /// Acceptance: IsCpuCycleStolen is true at cycles 54..58 on line
+    /// 0x10; false at cycle 59 on line 0x10 and cycle 0 on line 0x11.
     /// </summary>
     [Fact]
     public void SpriteDmaStall_OneSpriteIntersects_StallDuringSpriteDmaWindow()
@@ -117,23 +107,21 @@ public sealed class VicIISpriteDmaStallTests
         AdvanceTo(vic, 0x10, 0);
         Assert.False(vic.IsBadLine);
 
-        // Sprite-DMA window: cycles 55..62 on this line.
-        for (byte c = 55; c < vic.CyclesPerLine; c++)
+        // Sprite 0 PAL BA mask: cycles 54..58 on this line.
+        for (byte c = 54; c <= 58; c++)
         {
             AdvanceTo(vic, 0x10, c);
             Assert.True(vic.IsCpuCycleStolen,
                 $"Sprite-DMA stall expected at line $10 cycle {c}.");
         }
 
-        // Cycles 0..7 on the next line (line $11) are still inside the
-        // sprite-DMA window because the sprite still intersects line $11
-        // (Y=$10 spans 21 lines = $10..$24).
-        for (byte c = 0; c < 8; c++)
-        {
-            AdvanceTo(vic, 0x11, c);
-            Assert.True(vic.IsCpuCycleStolen,
-                $"Sprite-DMA stall expected at line $11 cycle {c} (window wraps).");
-        }
+        AdvanceTo(vic, 0x10, 59);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 0 PAL BA mask must release at line $10 cycle 59.");
+
+        AdvanceTo(vic, 0x11, 0);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 0 PAL BA mask does not wrap into next-line cycle 0.");
 
         // Outside the sprite-DMA window the CPU should own the bus on a
         // non-bad-line. Probe a middle cycle.
@@ -143,17 +131,255 @@ public sealed class VicIISpriteDmaStallTests
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// Use case: Sprite 2's PAL x64sc p-/s-access pair occurs at VICE
+    /// table cycles 62/63, which map to vice-sharp cycles 61/62.
+    /// Acceptance: IsCpuCycleStolen is true at cycles 58..62 on line
+    /// 0x10; false at line $10 cycle 57 and line $11 cycle 0.
+    /// </summary>
+    [Fact]
+    public void SpriteDmaStall_Sprite2EndsAtLineEnd()
+    {
+        var vic = BuildVic();
+
+        vic.Write(ScreenControl1, 0x10); // DEN=1, YSCROLL=0
+        vic.Write(SpriteY2, 0x10);
+        vic.Write(SpriteEnable, 0x04);
+
+        AdvanceTo(vic, 0x10, 57);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 2 PAL BA mask must not start before cycle 58.");
+
+        for (byte c = 58; c < vic.CyclesPerLine; c++)
+        {
+            AdvanceTo(vic, 0x10, c);
+            Assert.True(vic.IsCpuCycleStolen,
+                $"Sprite 2 PAL BA mask expected at line $10 cycle {c}.");
+        }
+
+        AdvanceTo(vic, 0x11, 0);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 2 PAL BA mask releases before next-line cycle 0.");
+    }
+
+    /// <summary>
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// Use case: Sprite 3's PAL x64sc access pair occurs at VICE table
+    /// cycles 1/2, which map to vice-sharp cycles 0/1. VICE latches
+    /// sprite_dma at public cycles 55/56 (vice-sharp 54/55), so sprite
+    /// 3's BA lead starts later on that same line and continues through
+    /// cycles 0..1 of the following line.
+    /// Acceptance: IsCpuCycleStolen is false at line $10 cycle 59,
+    /// true at line $10 cycles 60..62 and line $11 cycles 0..1, then
+    /// false at line $11 cycle 2.
+    /// </summary>
+    [Fact]
+    public void SpriteDmaStall_Sprite3UsesEarlyLineTableSlot()
+    {
+        var vic = BuildVic();
+
+        vic.Write(ScreenControl1, 0x10); // DEN=1, YSCROLL=0
+        vic.Write(SpriteY3, 0x10);
+        vic.Write(SpriteEnable, 0x08);
+
+        AdvanceTo(vic, 0x10, 59);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 3 PAL BA mask must not start before cycle 60 after the DMA latch.");
+
+        AdvanceTo(vic, 0x10, 60);
+        Assert.True(vic.IsCpuCycleStolen,
+            "Sprite 3 PAL BA mask starts three cycles before its following-line access slot.");
+
+        AdvanceTo(vic, 0x10, 61);
+        Assert.True(vic.IsCpuCycleStolen,
+            "Sprite 3 PAL BA mask covers the next-to-last cycle before its following-line access slot.");
+
+        AdvanceTo(vic, 0x10, 62);
+        Assert.True(vic.IsCpuCycleStolen,
+            "Sprite 3 PAL BA mask covers the last cycle before its following-line access slot.");
+
+        for (byte c = 0; c <= 1; c++)
+        {
+            AdvanceTo(vic, 0x11, c);
+            Assert.True(vic.IsCpuCycleStolen,
+                $"Sprite 3 PAL BA mask expected at line $11 cycle {c}.");
+        }
+
+        AdvanceTo(vic, 0x11, 2);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 3 PAL BA mask releases after cycle 1.");
+    }
+
+    /// <summary>
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// Use case: VICE samples $D015 during the PAL public 55/56
+    /// sprite-DMA checks (vice-sharp cycles 54/55). Clearing sprite 0's
+    /// enable bit before those checks prevents sprite_dma from latching.
+    /// Acceptance: After clearing $D015 at line $10 cycle 53, sprite 0's
+    /// would-be cycles 54..58 are not stolen.
+    /// </summary>
+    [Fact]
+    public void SpriteDmaStall_DisableBeforeCheck_PreventsDmaWindow()
+    {
+        var vic = BuildVic();
+
+        vic.Write(ScreenControl1, 0x10); // DEN=1, YSCROLL=0
+        vic.Write(SpriteY0, 0x10);
+        vic.Write(SpriteEnable, 0x01);
+
+        AdvanceTo(vic, 0x10, 53);
+        vic.Write(SpriteEnable, 0x00);
+
+        for (byte c = 54; c <= 58; c++)
+        {
+            AdvanceTo(vic, 0x10, c);
+            Assert.False(vic.IsCpuCycleStolen,
+                $"Clearing $D015 before sprite-DMA check must prevent line $10 cycle {c} from stealing.");
+        }
+    }
+
+    /// <summary>
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// Use case: Once VICE has latched sprite_dma, a later $D015 clear
+    /// does not cancel BA/data DMA for the already-active sprite.
+    /// Acceptance: Clearing $D015 after reaching line $10 cycle 54 keeps
+    /// sprite 0's remaining cycles 54..58 stolen and releases at cycle 59.
+    /// </summary>
+    [Fact]
+    public void SpriteDmaStall_DisableAfterCheck_DoesNotCancelLatchedWindow()
+    {
+        var vic = BuildVic();
+
+        vic.Write(ScreenControl1, 0x10); // DEN=1, YSCROLL=0
+        vic.Write(SpriteY0, 0x10);
+        vic.Write(SpriteEnable, 0x01);
+
+        AdvanceTo(vic, 0x10, 54);
+        vic.Write(SpriteEnable, 0x00);
+
+        for (byte c = 54; c <= 58; c++)
+        {
+            AdvanceTo(vic, 0x10, c);
+            Assert.True(vic.IsCpuCycleStolen,
+                $"Latched sprite-DMA window must survive $D015 clear at line $10 cycle {c}.");
+        }
+
+        AdvanceTo(vic, 0x10, 59);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 0 PAL BA mask must still release at line $10 cycle 59.");
+    }
+
+    /// <summary>
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// Use case: Re-enabling a sprite and writing a Y value before the
+    /// PAL public 55/56 checks lets VICE latch sprite_dma. For sprites
+    /// 3-7, the fetch slot is at the start of the following line, with
+    /// the BA lead beginning three cycles earlier.
+    /// Acceptance: Enabling sprite 3 at line $10 cycle 53 with Y=$10
+    /// steals line $10 cycles 60..62 and line $11 cycles 0..1.
+    /// </summary>
+    [Fact]
+    public void SpriteDmaStall_ReenableBeforeCheck_TriggersFollowingLineEarlySlot()
+    {
+        var vic = BuildVic();
+
+        vic.Write(ScreenControl1, 0x10); // DEN=1, YSCROLL=0
+        vic.Write(SpriteY3, 0x00);
+        vic.Write(SpriteEnable, 0x00);
+
+        AdvanceTo(vic, 0x10, 53);
+        vic.Write(SpriteY3, 0x10);
+        vic.Write(SpriteEnable, 0x08);
+
+        for (byte c = 60; c < vic.CyclesPerLine; c++)
+        {
+            AdvanceTo(vic, 0x10, c);
+            Assert.True(vic.IsCpuCycleStolen,
+                $"Sprite 3 BA lead expected at line $10 cycle {c} after pre-check enable.");
+        }
+
+        for (byte c = 0; c <= 1; c++)
+        {
+            AdvanceTo(vic, 0x11, c);
+            Assert.True(vic.IsCpuCycleStolen,
+                $"Sprite 3 following-line access expected at line $11 cycle {c}.");
+        }
+    }
+
+    /// <summary>
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// Use case: Re-enabling a sprite after both PAL public 55/56 checks
+    /// must not retroactively create the current line's BA/data window.
+    /// The same sprite can latch on a later line once its Y value matches
+    /// before that later line's checks.
+    /// Acceptance: Enabling sprite 3 after line $10 cycle 55 does not
+    /// steal line $10 cycles 60..62 or line $11 cycles 0..1. Rewriting
+    /// Y=$11 before line $11's checks then steals line $11 cycles 60..62
+    /// and line $12 cycles 0..1.
+    /// </summary>
+    [Fact]
+    public void SpriteDmaStall_ReenableAfterCheck_WaitsForNextMatchingLine()
+    {
+        var vic = BuildVic();
+
+        vic.Write(ScreenControl1, 0x10); // DEN=1, YSCROLL=0
+        vic.Write(SpriteY3, 0x00);
+        vic.Write(SpriteEnable, 0x00);
+
+        AdvanceTo(vic, 0x10, 56);
+        vic.Write(SpriteY3, 0x10);
+        vic.Write(SpriteEnable, 0x08);
+
+        for (byte c = 60; c < vic.CyclesPerLine; c++)
+        {
+            AdvanceTo(vic, 0x10, c);
+            Assert.False(vic.IsCpuCycleStolen,
+                $"Post-check enable must not retroactively steal line $10 cycle {c}.");
+        }
+
+        for (byte c = 0; c <= 1; c++)
+        {
+            AdvanceTo(vic, 0x11, c);
+            Assert.False(vic.IsCpuCycleStolen,
+                $"Post-check enable must not retroactively steal line $11 cycle {c}.");
+        }
+
+        AdvanceTo(vic, 0x11, 53);
+        vic.Write(SpriteY3, 0x11);
+
+        for (byte c = 60; c < vic.CyclesPerLine; c++)
+        {
+            AdvanceTo(vic, 0x11, c);
+            Assert.True(vic.IsCpuCycleStolen,
+                $"Next matching line should steal at line $11 cycle {c}.");
+        }
+
+        for (byte c = 0; c <= 1; c++)
+        {
+            AdvanceTo(vic, 0x12, c);
+            Assert.True(vic.IsCpuCycleStolen,
+                $"Next matching line should carry into line $12 cycle {c}.");
+        }
+    }
+
+    /// <summary>
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
     /// Use case: On a bad line that ALSO has an intersecting sprite, both
     /// stall windows fire. The bad-line window covers cycles 12..54 and
-    /// the sprite-DMA window covers cycles 55..62 plus 0..7 wrap. The
-    /// composition produces a near-continuous stall band across cycles
-    /// 12..62 of the bad line plus 0..7 of the next line.
+    /// sprite 0's PAL BA mask covers cycles 54..58. The composition
+    /// produces a continuous stall band across cycles 12..58.
     /// Acceptance: With $D011=$10 (DEN=1, YSCROLL=0) and sprite 0 enabled
     /// at Y=$30 (the first bad line), IsCpuCycleStolen is true at cycle
-    /// 12 (bad-line entry), at cycle 54 (bad-line exit), at cycle 55
-    /// (sprite-DMA entry), at cycle 62 (last cycle of the line), and at
-    /// cycle 0 of line $31 (still inside the sprite-DMA wrap).
+    /// 12 (bad-line entry), at cycle 54 (bad-line exit and sprite BA),
+    /// and at cycle 58; false at cycle 59 because sprite 0's PAL BA
+    /// mask has released and no other sprite is enabled.
     /// </summary>
     [Fact]
     public void SpriteDmaStall_ComposesWithBadLine_BothWindowsAssertStall()
@@ -175,23 +401,22 @@ public sealed class VicIISpriteDmaStallTests
             "Bad-line stall window: cycle 54 must steal.");
 
         AdvanceTo(vic, 0x30, 55);
-        // Bad-line window exits at 55; sprite-DMA window opens.
+        // Bad-line window exits at 55; sprite-DMA BA keeps the bus.
         Assert.True(vic.IsCpuCycleStolen,
-            "Sprite-DMA stall window opens at cycle 55 of line $30.");
+            "Sprite-DMA stall window covers cycle 55 of line $30.");
 
-        AdvanceTo(vic, 0x30, 62);
+        AdvanceTo(vic, 0x30, 58);
         Assert.True(vic.IsCpuCycleStolen,
-            "Sprite-DMA stall covers cycle 62 (last cycle of line $30).");
+            "Sprite 0 PAL BA mask covers cycle 58 of line $30.");
 
-        // Wrap to the next line; sprite still intersects since Y=$30
-        // spans $30..$44.
-        AdvanceTo(vic, 0x31, 0);
-        Assert.True(vic.IsCpuCycleStolen,
-            "Sprite-DMA stall wrap: cycle 0 of line $31 still in window.");
+        AdvanceTo(vic, 0x30, 59);
+        Assert.False(vic.IsCpuCycleStolen,
+            "Sprite 0 PAL BA mask releases at cycle 59 once the bad-line window has ended.");
     }
 
     /// <summary>
-    /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 sprite DMA stall).
+    /// FR/TR: FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001
+    /// (BACKFILL-VIDEO-001 sprite DMA stall).
     /// Use case: IsCpuCycleStealMandatory is the "BA has been low for 3+
     /// cycles" flavour of the cycle steal; this slice models it with a
     /// one-cycle leading-edge offset (window opens one cycle later than
@@ -199,9 +424,8 @@ public sealed class VicIISpriteDmaStallTests
     /// IsCpuCycleStolen is RasterX 12..54 and IsCpuCycleStealMandatory is
     /// 13..55).
     /// Acceptance: With sprite 0 enabled at Y=$10 on non-bad-line $10,
-    /// IsCpuCycleStealMandatory is false at cycle 55, true at cycles
-    /// 56..62, true at cycles 0..8 of line $11, and false at cycle 9
-    /// of line $11.
+    /// IsCpuCycleStealMandatory is false at cycle 54, true at cycles
+    /// 55..59, and false at cycle 60.
     /// </summary>
     [Fact]
     public void SpriteDmaStall_MandatoryFlag_OffsetByOneCycle()
@@ -213,30 +437,22 @@ public sealed class VicIISpriteDmaStallTests
         vic.Write(SpriteEnable, 0x01);
 
         // Non-bad-line, sprite intersects.
+        AdvanceTo(vic, 0x10, 54);
+        Assert.True(vic.IsCpuCycleStolen, "Leading edge of stolen window at cycle 54.");
+        Assert.False(vic.IsCpuCycleStealMandatory,
+            "Mandatory flag lags by one cycle: cycle 54 is not mandatory yet.");
+
         AdvanceTo(vic, 0x10, 55);
-        Assert.True(vic.IsCpuCycleStolen, "Leading edge of stolen window at cycle 55.");
+        Assert.True(vic.IsCpuCycleStolen, "Cycle 55 still stolen.");
+        Assert.True(vic.IsCpuCycleStealMandatory,
+            "Mandatory flag asserts at cycle 55 (one cycle after the stolen window opens).");
+
+        AdvanceTo(vic, 0x10, 59);
+        Assert.True(vic.IsCpuCycleStealMandatory,
+            "Mandatory flag covers the one-cycle-delayed tail of sprite 0's PAL BA mask.");
+
+        AdvanceTo(vic, 0x10, 60);
         Assert.False(vic.IsCpuCycleStealMandatory,
-            "Mandatory flag lags by one cycle: cycle 55 is not mandatory yet.");
-
-        AdvanceTo(vic, 0x10, 56);
-        Assert.True(vic.IsCpuCycleStolen, "Cycle 56 still stolen.");
-        Assert.True(vic.IsCpuCycleStealMandatory,
-            "Mandatory flag asserts at cycle 56 (one cycle after the stolen window opens).");
-
-        AdvanceTo(vic, 0x10, 62);
-        Assert.True(vic.IsCpuCycleStealMandatory,
-            "Mandatory flag covers last cycle of the line.");
-
-        AdvanceTo(vic, 0x11, 0);
-        Assert.True(vic.IsCpuCycleStealMandatory,
-            "Mandatory flag stays asserted into cycle 0 of the next line.");
-
-        AdvanceTo(vic, 0x11, 8);
-        Assert.True(vic.IsCpuCycleStealMandatory,
-            "Mandatory flag still asserted at cycle 8 of next line.");
-
-        AdvanceTo(vic, 0x11, 9);
-        Assert.False(vic.IsCpuCycleStealMandatory,
-            "Mandatory flag releases at cycle 9 (one cycle after the stolen window closes).");
+            "Mandatory flag releases after sprite 0's delayed PAL BA mask closes.");
     }
 }

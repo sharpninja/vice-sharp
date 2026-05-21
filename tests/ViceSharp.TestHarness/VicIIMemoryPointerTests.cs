@@ -94,8 +94,8 @@ public sealed class VicIIMemoryPointerTests
     /// <summary>
     /// FR/TR: FR-VIC (BACKFILL-VIDEO-001 $D016 decoding).
     /// Use case: Bits 2-0 of $D016 are the X scroll value (0..7
-    /// pixels) consumed by the pixel sequencer. Routing only - the
-    /// pixel-sequencer effect is a future slice.
+    /// pixels) consumed by the pixel sequencer. This test keeps register
+    /// decoding separate from the VideoRenderer mode-color coverage.
     /// Acceptance: Write $D016 = $07 -&gt; XScroll == 7. Write $D016 =
     /// $03 -&gt; XScroll == 3. Write $D016 = $18 (bit 3 set, low bits
     /// clear) -&gt; XScroll == 0.

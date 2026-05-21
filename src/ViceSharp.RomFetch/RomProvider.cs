@@ -84,17 +84,41 @@ public class RomProvider : IRomProvider
     {
         foreach (var basePath in _romBasePaths)
         {
-            var candidate = Path.Combine(basePath, architecture, romName);
-            if (File.Exists(candidate))
+            foreach (var fileName in EnumerateRomFileNames(romName))
             {
-                path = candidate;
-                return true;
+                var candidate = Path.Combine(basePath, architecture, fileName);
+                if (File.Exists(candidate))
+                {
+                    path = candidate;
+                    return true;
+                }
             }
         }
 
         path = string.Empty;
         return false;
     }
+
+    private static IEnumerable<string> EnumerateRomFileNames(string romName)
+    {
+        yield return romName;
+
+        if (!RomFileAliases.TryGetValue(romName, out var aliases))
+            yield break;
+
+        foreach (var alias in aliases)
+        {
+            if (!string.Equals(alias, romName, StringComparison.OrdinalIgnoreCase))
+                yield return alias;
+        }
+    }
+
+    private static readonly Dictionary<string, string[]> RomFileAliases = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["basic"] = ["basic-901226-01.bin"],
+        ["kernal"] = ["kernal-901227-03.bin"],
+        ["characters"] = ["chargen-901225-01.bin"],
+    };
 
     private static readonly Dictionary<string, RomEntry> RomDatabase = new()
     {

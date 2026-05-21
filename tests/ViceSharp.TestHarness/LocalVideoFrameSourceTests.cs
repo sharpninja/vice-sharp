@@ -350,7 +350,7 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     private const string RomsUnavailableSkipReason =
-        "C64 ROMs are not available in this worktree; running/paused video-frame source tests require BASIC/KERNAL/character ROMs to build a machine with a video chip.";
+        "C64 ROMs are not available through the VICE data resolver; running/paused video-frame source tests require BASIC/KERNAL/character ROMs to build a machine with a video chip.";
 
     private static EmulatorRuntimeSession? TryCreateC64Session(string sessionId)
     {

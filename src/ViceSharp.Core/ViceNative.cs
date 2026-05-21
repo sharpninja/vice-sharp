@@ -1,6 +1,9 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 using ViceSharp.Abstractions;
+using ViceSharp.RomFetch;
 
 namespace ViceSharp.Core;
 
@@ -295,6 +298,14 @@ public static unsafe partial class ViceNative
 
     private static string? FindLibraryPath()
     {
+        foreach (var candidatePath in EnumerateCandidateLibraryPaths())
+            return TryCreateRelocatedRuntime(candidatePath, out var relocatedPath) ? relocatedPath : candidatePath;
+
+        return null;
+    }
+
+    private static IEnumerable<string> EnumerateCandidateLibraryPaths()
+    {
         foreach (var root in EnumerateSearchRoots(AppContext.BaseDirectory))
         {
             foreach (var relativeDirectory in RelativeSearchDirectories)
@@ -306,13 +317,84 @@ public static unsafe partial class ViceNative
                     {
                         var candidatePath = Path.Combine(candidateDirectory, fileName);
                         if (File.Exists(candidatePath))
-                            return candidatePath;
+                            yield return candidatePath;
                     }
                 }
             }
         }
+    }
 
-        return null;
+    private static bool TryCreateRelocatedRuntime(string sourceLibraryPath, out string relocatedLibraryPath)
+    {
+        relocatedLibraryPath = string.Empty;
+
+        if (!ViceDataPathResolver.TryFindDataRoot(out var dataRoot))
+            return false;
+
+        try
+        {
+            var sourceDirectory = Path.GetDirectoryName(sourceLibraryPath);
+            if (string.IsNullOrWhiteSpace(sourceDirectory))
+                return false;
+
+            var runtimeDirectory = Path.Combine(
+                Path.GetTempPath(),
+                "ViceSharpNative",
+                CreateRuntimeDirectoryName(sourceLibraryPath, dataRoot));
+            Directory.CreateDirectory(runtimeDirectory);
+            CopyNativeRuntimeFiles(sourceDirectory, runtimeDirectory);
+
+            var expectedDataDirectory = Path.Combine(runtimeDirectory, "vice", "vice", "data");
+            if (!Directory.Exists(expectedDataDirectory))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(expectedDataDirectory)!);
+                Directory.CreateSymbolicLink(expectedDataDirectory, dataRoot);
+            }
+
+            if (!Directory.Exists(Path.Combine(expectedDataDirectory, "C64")))
+                return false;
+
+            relocatedLibraryPath = Path.Combine(runtimeDirectory, Path.GetFileName(sourceLibraryPath));
+            return File.Exists(relocatedLibraryPath);
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
+        }
+        catch (PlatformNotSupportedException)
+        {
+            return false;
+        }
+    }
+
+    private static string CreateRuntimeDirectoryName(string sourceLibraryPath, string dataRoot)
+    {
+        var sourceInfo = new FileInfo(sourceLibraryPath);
+        var input = $"{sourceInfo.FullName}|{sourceInfo.LastWriteTimeUtc.Ticks}|{sourceInfo.Length}|{dataRoot}";
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(input)))[..16];
+    }
+
+    private static void CopyNativeRuntimeFiles(string sourceDirectory, string runtimeDirectory)
+    {
+        foreach (var sourcePath in Directory.EnumerateFiles(sourceDirectory, "*.dll", SearchOption.TopDirectoryOnly))
+        {
+            var destinationPath = Path.Combine(runtimeDirectory, Path.GetFileName(sourcePath));
+            var sourceInfo = new FileInfo(sourcePath);
+            var destinationInfo = new FileInfo(destinationPath);
+            if (destinationInfo.Exists &&
+                destinationInfo.Length == sourceInfo.Length &&
+                destinationInfo.LastWriteTimeUtc >= sourceInfo.LastWriteTimeUtc)
+            {
+                continue;
+            }
+
+            File.Copy(sourcePath, destinationPath, overwrite: true);
+            File.SetLastWriteTimeUtc(destinationPath, sourceInfo.LastWriteTimeUtc);
+        }
     }
 
     private static IEnumerable<string> EnumerateSearchRoots(string startingDirectory)
