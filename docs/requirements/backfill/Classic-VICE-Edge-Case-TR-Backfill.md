@@ -154,6 +154,8 @@ The repeatable scanner reviewed 812 C/C++/header/inc files under `native/vice/vi
 
 **Traceability:** FR-VIC-001, FR-VIC-005, TEST-VIC-001.
 
+**Current Implementation Evidence:** The 2026-05-21 register-readback slice applies VICE `vicii-mem.c` hardcoded read masks for `$D019` fixed bits 6-4, `$D01A` high-nibble readback, unused `$D02F-$D03F` reads as `$FF`, and collision-register write-ignore behavior. Focused register-readback/IRQ/collision validation passed `37/37`; broader VIC/video validation passed `174/174`. Native x64sc register checkpoint expansion remains under `BACKFILL-VIDEO-001`.
+
 ### TR-VIC-EDGE-007: VIC-II VSP Bug Memory-Corruption Behavior
 
 **ID:** TR-VIC-EDGE-007

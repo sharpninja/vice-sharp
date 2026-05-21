@@ -14,7 +14,7 @@ issue.
   VICE documentation as the FR corpus.
 - The latest `tools/check_requirement_traceability.ps1` audit after the
   2026-05-21 edge-TR and side-border work found 163 canonical IDs in
-  `docs/requirements`, with 80 referenced from `src` or `tests`, 83 not
+  `docs/requirements`, with 81 referenced from `src` or `tests`, 82 not
   referenced from source/test files, and 53 noncanonical IDs still present in
   source/test files.
 - The FR-only breakdown is 108 canonical FRs, 67 referenced from `src` or
@@ -59,10 +59,11 @@ Every Phase 1 slice must now pass this gate before implementation continues:
 - `docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md` now
   records 19 VICE-source-derived observable edge TRs, and `docs/plan.md`
   integrates those TRs into the Phase 1 slice order.
-- `TR-VIC-EDGE-001` and `TR-VIC-EDGE-002` now have executable managed coverage
-  for invalid ECM priority/collision behavior and continuous side-border
-  behavior respectively. Native visible-frame/checkpoint validation remains
-  open under `BACKFILL-VIDEO-001`.
+- `TR-VIC-EDGE-001`, `TR-VIC-EDGE-002`, and `TR-VIC-EDGE-006` now have
+  executable managed coverage for invalid ECM priority/collision behavior,
+  continuous side-border behavior, and VIC-II register readback/collision-latch
+  behavior respectively. Native visible-frame/register checkpoint validation
+  remains open under `BACKFILL-VIDEO-001`.
 
 ## Follow-Up Work
 

@@ -35,8 +35,8 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
 ⏳ **Iteration 1 (C64 Bringup)** — In progress with the current boot and lockstep validation baseline green:
   - BASIC `READY.` boot proof is covered by the test harness
   - VICE-backed lockstep validation reaches the 100,000-cycle regression gate
-  - Latest committed parity slice: `646b3a1` (`TR-VIC-EDGE-002` managed continuous side-border behavior)
-  - Current verified gates: focused border/renderer `52/52`, broader VIC/video `170/170`, requirements traceability `163` canonical / `80` referenced / `83` unreferenced / `53` noncanonical
+  - Latest parity slice: `TR-VIC-EDGE-006` managed VIC-II register readback and collision-latch write behavior
+  - Current verified gates: focused VIC-II register-readback/IRQ/collision `37/37`, broader VIC/video `174/174`, requirements traceability `163` canonical / `81` referenced / `82` unreferenced / `53` noncanonical
   - Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` was attempted on 2026-05-21 and timed out after five minutes; do not treat it as a green full-solution gate
 
 Working chip layer implementations:
@@ -69,7 +69,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 |---------|:----:|:----:|--------|
 | MOS 6510 CPU (official + illegal opcodes) | ✅ | 100% | `LockstepValidationTests.First100000CyclesMatch` |
 | Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
-| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color register read mask + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers + managed continuous side-border behavior) | 🟢 | 96% | `BACKFILL-VIDEO-001` (native side-border checkpoints, non-PAL sprite DMA tables, sprite fetch side effects, FLI/AFLI timing, matrix/register edge cases, and native visible-frame checkpoints remain) |
+| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color/register read masks + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers + managed continuous side-border behavior) | 🟢 | 96% | `BACKFILL-VIDEO-001` (native side-border/register checkpoints, non-PAL sprite DMA tables, sprite fetch side effects, FLI/AFLI timing, matrix idle/fill behavior, and native visible-frame checkpoints remain) |
 | MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + keyboard scan + joystick scan + ICR) | ✅ | 100% | `BACKFILL-CIA` + base input scan coverage |
 | MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + dual-SID + noise LFSR + determinism) | ✅ | 100% | `BACKFILL-SID-001` closed; 8580 filter deepening is post-MVP |
 | MOS 6522 VIA (timer-1 PB7 + timer-2 phi2+PB6 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ✅ | 100% | `BACKFILL-VIA` complete |
@@ -109,7 +109,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Latest committed validation on 2026-05-21: focused border/renderer `52/52`, broader VIC/video `170/170`, and requirement traceability passed with `163` canonical IDs, `80` referenced canonical IDs, `83` unreferenced canonical IDs, and `53` noncanonical source/test references. Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes and was stopped cleanly, so the current green gate remains focused rather than solution-wide. MCP session turn: `req-20260521T211500Z-update-logs-docs-current-progress`.
+Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Latest validation on 2026-05-21: focused VIC-II register-readback/IRQ/collision `37/37`, broader VIC/video `174/174`, and requirement traceability passed with `163` canonical IDs, `81` referenced canonical IDs, `82` unreferenced canonical IDs, and `53` noncanonical source/test references. Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes during the prior full-suite attempt and was stopped cleanly, so the current green gate remains focused rather than solution-wide. MCP TODO/session state was updated for `BACKFILL-VIDEO-001`.
 
 ## Supported Machines (planned)
 

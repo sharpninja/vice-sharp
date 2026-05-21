@@ -93,7 +93,7 @@ ViceSharp targets cycle-exact parity with native VICE on the C64 host path. The 
 
 What this means in practice:
 - For boot sequences, KERNAL traps, and any code that lives inside the lockstep gate, ViceSharp's CPU output is identical to VICE cycle-for-cycle.
-- For VIC-II pixel-level behaviour, visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, and managed continuous side-border behavior are implemented, but native display-mode checkpoints, sprite fetch depth, FLI/AFLI timing, matrix idle/fill, and register readback edge cases remain under `BACKFILL-VIDEO-001`. Demo code that depends on deep raster effects can still diverge from VICE.
+- For VIC-II pixel-level behaviour, visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, managed continuous side-border behavior, and VIC-II register readback masks/collision latch writes are implemented, but native display-mode/register checkpoints, sprite fetch depth, FLI/AFLI timing, and matrix idle/fill behavior remain under `BACKFILL-VIDEO-001`. Demo code that depends on deep raster effects can still diverge from VICE.
 - For SID, hard sync, ring modulation, combined waveforms, ADSR behaviour, digi output, and dual-SID coverage are wired and exercised in the focused suite. Further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression.
 
 ## 5. Bug compatibility

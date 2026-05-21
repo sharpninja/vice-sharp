@@ -103,7 +103,7 @@ public sealed class VicIIRasterIrqTests
         Advance(vic, 59);
 
         Assert.True(irq.IsAsserted);
-        Assert.Equal(0x81, vic.Read(InterruptLatch));
+        Assert.Equal(0xF1, vic.Read(InterruptLatch));
     }
 
     /// <summary>
@@ -111,8 +111,8 @@ public sealed class VicIIRasterIrqTests
     /// Use case: $D019 is write-1-to-clear per bit. After a raster IRQ fires,
     /// writing $01 to $D019 must clear bit 0 of the latch and (since no other
     /// latches are set) deassert the IRQ output.
-    /// Acceptance: After IRQ has fired and $D019 reads $81, writing $D019 = $01
-    /// causes the next $D019 read to return $00 and the IRQ line to release.
+    /// Acceptance: After IRQ has fired and $D019 reads $F1, writing $D019 = $01
+    /// causes the next $D019 read to expose no source bits and the IRQ line to release.
     /// </summary>
     [Fact]
     public void RasterIrq_WriteOneToD019_ClearsLatchAndDeassertsIrq()
@@ -125,12 +125,12 @@ public sealed class VicIIRasterIrqTests
         Advance(vic, 59);
 
         Assert.True(irq.IsAsserted);
-        Assert.Equal(0x81, vic.Read(InterruptLatch));
+        Assert.Equal(0xF1, vic.Read(InterruptLatch));
 
         vic.Write(InterruptLatch, 0x01);
 
         Assert.False(irq.IsAsserted);
-        Assert.Equal(0x00, vic.Read(InterruptLatch));
+        Assert.Equal(0x00, vic.Read(InterruptLatch) & 0x0F);
     }
 
     /// <summary>

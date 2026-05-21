@@ -1356,9 +1356,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     {
         int register = (offset - BaseAddress) & 0x3F;
 
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-006 / FR-VIC-001 /
+        // TEST-VIC-001: VICE viciisc/vicii-mem.c:d019_read returns the
+        // IRQ latch with bits 6-4 fixed high.
         if (register == 0x19)
         {
-            return _registers[0x19];
+            return (byte)(_registers[0x19] | 0x70);
         }
 
         if (register == 0x11)
@@ -1429,6 +1432,22 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return (byte)(_registers[register] | 0x01);
         }
 
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-006 / FR-VIC-001 /
+        // TEST-VIC-001: VICE viciisc/vicii-mem.c reads $D01A with
+        // the high nibble fixed high while bits 3-0 expose the IRQ mask.
+        if (register == 0x1A)
+        {
+            return (byte)(_registers[register] | 0xF0);
+        }
+
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-006 / FR-VIC-001 /
+        // TEST-VIC-001: Unused VIC-II registers $D02F-$D03F read as $FF
+        // in VICE viciisc/vicii-mem.c and ignore writes.
+        if (register >= 0x2F)
+        {
+            return 0xFF;
+        }
+
         return _registers[register];
     }
 
@@ -1463,6 +1482,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         {
             _registers[register] = (byte)(value & InterruptSourceMask);
             RefreshInterruptLine();
+            return;
+        }
+
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-006 / FR-VIC-005 /
+        // TEST-VIC-001: Collision latches are read/clear state; writes do not
+        // create sprite or background collisions.
+        if (register == 0x1E || register == 0x1F)
+        {
+            return;
+        }
+
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-006 / FR-VIC-001 /
+        // TEST-VIC-001: Unused VIC-II registers $D02F-$D03F ignore writes.
+        if (register >= 0x2F)
+        {
             return;
         }
 

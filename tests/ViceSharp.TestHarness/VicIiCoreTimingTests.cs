@@ -62,8 +62,9 @@ public sealed class VicIiCoreTimingTests
     /// compare line and remain latched in $D019 bit 0 until the
     /// CPU writes a 1 to that bit to clear it.
     /// Acceptance: After 57 cycles IRQ is still low; the next tick
-    /// raises IRQ and $D019 reads $81 (raster flag + IR master); writing
-    /// $01 to $D019 deasserts IRQ and clears the flag.
+    /// raises IRQ and $D019 reads $F1 (raster flag + IR master + fixed
+    /// high bits 6-4); writing $01 to $D019 deasserts IRQ and clears
+    /// the flag.
     /// </summary>
     [Fact]
     public void RasterIrq_AssertsAtCompareCycleAndClearsByWriteOneToD019()
@@ -76,18 +77,18 @@ public sealed class VicIiCoreTimingTests
 
         Advance(vic, 57);
         Assert.False(irq.IsAsserted);
-        Assert.Equal(0x00, vic.Read(0xD019));
+        Assert.Equal(0x70, vic.Read(0xD019));
 
         vic.Tick();
 
         Assert.True(irq.IsAsserted);
-        Assert.Equal(0x81, vic.Read(0xD019));
-        Assert.Equal(0x81, vic.Read(0xD019));
+        Assert.Equal(0xF1, vic.Read(0xD019));
+        Assert.Equal(0xF1, vic.Read(0xD019));
 
         vic.Write(0xD019, 0x01);
 
         Assert.False(irq.IsAsserted);
-        Assert.Equal(0x00, vic.Read(0xD019));
+        Assert.Equal(0x70, vic.Read(0xD019));
     }
 
     /// <summary>
@@ -116,7 +117,7 @@ public sealed class VicIiCoreTimingTests
 
         Advance(vic, 58);
         Assert.True(irq.IsAsserted);
-        Assert.Equal(0x81, vic.Read(0xD019));
+        Assert.Equal(0xF1, vic.Read(0xD019));
     }
 
     /// <summary>
