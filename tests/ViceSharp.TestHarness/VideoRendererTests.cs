@@ -417,6 +417,52 @@ public sealed class VideoRendererTests
     }
 
     /// <summary>
+    /// FR: FR-VIC-002, FR: FR-VIC-003, FR: FR-VIC-004, FR: FR-VIC-005,
+    /// FR: FR-VIC-008, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: x64sc renders invalid ECM selector colors as COL_NONE
+    /// (palette 0) but still uses the hidden graphics pixel priority bit
+    /// for $D01B sprite/background priority.
+    /// Acceptance: A behind-background sprite stays behind an invalid-mode
+    /// foreground pixel even though that pixel is black, and appears over the
+    /// adjacent invalid-mode background pixel.
+    /// </summary>
+    [Theory]
+    [InlineData(0x58, 0x18, 0, 1)]
+    [InlineData(0x58, 0x18, 1, 2)]
+    [InlineData(0x78, 0x08, 2, 1)]
+    [InlineData(0x78, 0x18, 3, 2)]
+    public void RenderFullFrame_InvalidEcmBlackPixelStillBlocksBehindSpriteWhenForeground(
+        byte d011,
+        byte d016,
+        int sourceKind,
+        int firstBackgroundOffset)
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigurePixelModeScreen(vic, d011, d016, d018: sourceKind <= 1 ? (byte)0x15 : (byte)0x18);
+        ConfigureInvalidEcmForegroundSource(ram, vic, x: 96, rasterLine: 60, sourceKind);
+        ConfigureSprite(
+            ram,
+            vic,
+            sprite: 0,
+            x: 96,
+            y: 60,
+            pointer: 0x20,
+            color: 0x02,
+            firstRowByte: firstBackgroundOffset == 1 ? (byte)0xC0 : (byte)0xE0);
+        vic.Write(0xD015, 0x01);
+        vic.Write(0xD01B, 0x01);
+
+        renderer.RenderFullFrame();
+
+        int frameY = VideoRenderer.RasterLineToFrameY(60);
+        Assert.Equal(ToBgra(0x00), ReadPixel(renderer.FrameBuffer, 96, frameY));
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 96 + firstBackgroundOffset, frameY));
+    }
+
+    /// <summary>
     /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
     /// Use case: An enabled opaque sprite must become visible in the
     /// rendered BGRA framebuffer, not only in collision latches.
@@ -629,6 +675,32 @@ public sealed class VideoRendererTests
 
     private static void ConfigureForegroundCharacterPixel(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte color)
     {
+        ConfigureCharacterByte(ram, vic, x, rasterLine, color, (byte)(1 << (7 - ((x - vic.LeftBorderPixel) % 8))));
+    }
+
+    private static void ConfigureInvalidEcmForegroundSource(RamDevice ram, Mos6569 vic, int x, int rasterLine, int sourceKind)
+    {
+        switch (sourceKind)
+        {
+            case 0:
+                ConfigureCharacterByte(ram, vic, x, rasterLine, color: 0x07, charByte: 0x80);
+                break;
+            case 1:
+                ConfigureCharacterByte(ram, vic, x, rasterLine, color: 0x0B, charByte: 0x90);
+                break;
+            case 2:
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x80);
+                break;
+            case 3:
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x90);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(sourceKind));
+        }
+    }
+
+    private static void ConfigureCharacterByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte color, byte charByte)
+    {
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = x - vic.LeftBorderPixel;
         int visLine = rasterLine - vic.UpperBorderStart;
@@ -643,7 +715,22 @@ public sealed class VideoRendererTests
 
         ram.Write((ushort)(vic.ScreenMemoryBase + screenIndex), charCode);
         ram.Write((ushort)(0xD800 + screenIndex), color);
-        ram.Write((ushort)(vic.CharacterBase + charCode * 8 + charRow), (byte)(1 << (7 - charX)));
+        ram.Write((ushort)(vic.CharacterBase + charCode * 8 + charRow), charByte);
+    }
+
+    private static void ConfigureBitmapByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte bitmapByte)
+    {
+        int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        int screenX = x - vic.LeftBorderPixel;
+        int visLine = rasterLine - vic.UpperBorderStart;
+        int screenLine = visLine + vic.YScroll;
+        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
+        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int col = screenX / 8;
+        int charRow = screenLine & 7;
+        int screenIndex = screenRow * columns + col;
+
+        ram.Write((ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow), bitmapByte);
     }
 
     private static uint ToBgra(int paletteIndex)

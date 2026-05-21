@@ -639,6 +639,61 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         return xVicPixel >= LeftBorderPixel && xVicPixel < rightBorderEndPixel;
     }
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / BACKFILL-VIDEO-002 / FR-VIC-002 / FR-VIC-003 /
+    /// FR-VIC-005 / FR-VIC-008 / TEST-VIC-001: returns the x64sc-style
+    /// foreground/priority bit for a graphics pixel. Invalid ECM selector
+    /// combinations still render as color 0, but VICE keeps the hidden
+    /// <c>px &amp; 0x02</c> priority bit for sprite priority and
+    /// sprite-background collision logic.
+    /// </summary>
+    public bool IsGraphicsPixelForegroundForSpritePriority(int xVicPixel, int rasterLine)
+    {
+        if (IsRasterLineVerticalBorderActive(rasterLine))
+        {
+            return false;
+        }
+
+        int screenX = xVicPixel - LeftBorderPixel;
+        if (screenX < 0)
+        {
+            return false;
+        }
+
+        int columns = Columns == ColumnMode.Wide40 ? 40 : 38;
+        if (screenX >= columns * 8)
+        {
+            return false;
+        }
+
+        int visLine = rasterLine - UpperBorderStart;
+        if (visLine < 0 || rasterLine >= LowerBorderStart)
+        {
+            return false;
+        }
+
+        int screenLine = visLine + YScroll;
+        int screenRowCount = Math.Max((LowerBorderStart - UpperBorderStart) / 8, 1);
+        int row = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int col = screenX / 8;
+        int charX = screenX % 8;
+        int charRow = screenLine & 7;
+        int screenIndex = row * columns + col;
+        byte screenCode = ReadVideoMemory((ushort)(ScreenMemoryBase + screenIndex));
+        byte colorCode = ReadVideoMemory((ushort)(0xD800 + screenIndex));
+
+        return DisplayModeSelection switch
+        {
+            VicIIDisplayMode.StandardText => IsStandardTextForeground(screenCode, charRow, charX, extendedColor: false),
+            VicIIDisplayMode.MulticolorText => IsMulticolorTextForeground(screenCode, colorCode, charRow, charX),
+            VicIIDisplayMode.StandardBitmap => IsStandardBitmapForeground(screenIndex, charRow, charX),
+            VicIIDisplayMode.MulticolorBitmap => IsMulticolorBitmapForeground(screenIndex, charRow, charX),
+            VicIIDisplayMode.ExtendedColor => IsStandardTextForeground(screenCode, charRow, charX, extendedColor: true),
+            VicIIDisplayMode.Invalid => IsInvalidDisplayModeForeground(screenCode, colorCode, screenIndex, charRow, charX),
+            _ => false,
+        };
+    }
     
     /// <summary>
     /// VICE-style: Y scroll value (bits 0-2 of $D011)
@@ -1730,7 +1785,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             }
             // Sprite-background: only if we are within the visible character window AND
             // the underlying character/bitmap pixel is a foreground pixel.
-            if (CanRenderSpritePixelAt(x, rasterLine) && IsBackgroundForegroundPixel(x, rasterLine))
+            if (CanRenderSpritePixelAt(x, rasterLine) && IsGraphicsPixelForegroundForSpritePriority(x, rasterLine))
             {
                 spriteBackgroundAcc |= m;
             }
@@ -1761,65 +1816,57 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         }
     }
 
-    // BACKFILL-VIDEO-001: Determine whether the background pixel at the given
-    // VIC pixel coordinate is a foreground (non-transparent) pixel for the
-    // purposes of sprite-background collision. Conservative: treats the bit
-    // pattern from character/bitmap mode as foreground when the source bit
-    // is set. Extended-bg / multicolor-text modes use the same simplification
-    // (any set bit counts as foreground); this is a known approximation and
-    // remains tracked by FR-VIC-005 for the BACKFILL-VIDEO-001 slice.
-    private bool IsBackgroundForegroundPixel(int xVicPixel, int rasterLine)
+    private bool IsInvalidDisplayModeForeground(byte screenCode, byte colorCode, int screenIndex, int charRow, int charX)
     {
-        int leftBorderPixel = LeftBorderPixel;
-        int upperBorder = UpperBorderStart;
-        int lowerBorder = LowerBorderStart;
+        bool bmm = (_registers[0x11] & 0x20) != 0;
+        bool mcm = (_registers[0x16] & 0x10) != 0;
 
-        if (IsRasterLineVerticalBorderActive(rasterLine))
+        if (bmm)
         {
-            return false;
+            return mcm
+                ? IsMulticolorBitmapForeground(screenIndex, charRow, charX)
+                : IsStandardBitmapForeground(screenIndex, charRow, charX);
         }
 
-        int screenX = xVicPixel - leftBorderPixel;
-        if (screenX < 0)
+        return mcm && IsMulticolorTextForeground(screenCode, colorCode, charRow, charX);
+    }
+
+    private bool IsStandardTextForeground(byte screenCode, int charRow, int charX, bool extendedColor)
+    {
+        byte glyph = extendedColor ? (byte)(screenCode & 0x3F) : screenCode;
+        byte charLine = ReadVideoMemory((ushort)(CharacterBase + glyph * 8 + charRow));
+        int bitPos = 7 - charX;
+        return ((charLine >> bitPos) & 0x01) != 0;
+    }
+
+    private bool IsMulticolorTextForeground(byte screenCode, byte colorCode, int charRow, int charX)
+    {
+        byte charLine = ReadVideoMemory((ushort)(CharacterBase + screenCode * 8 + charRow));
+        if ((colorCode & 0x08) == 0)
         {
-            return false;
-        }
-        int columns = Columns == ColumnMode.Wide40 ? 40 : 38;
-        if (screenX >= columns * 8)
-        {
-            return false;
+            int bitPos = 7 - charX;
+            return ((charLine >> bitPos) & 0x01) != 0;
         }
 
-        int visLine = rasterLine - upperBorder;
-        int screenLine = visLine + YScroll;
-        int screenRowCount = Math.Max((lowerBorder - upperBorder) / 8, 1);
-        int row = Math.Max((screenLine / 8) % screenRowCount, 0);
+        return (ReadMulticolorPair(charLine, charX) & 0x02) != 0;
+    }
 
-        int col = screenX / 8;
-        int charX = screenX % 8;
-        int charOffset = row * columns + col;
+    private bool IsStandardBitmapForeground(int screenIndex, int charRow, int charX)
+    {
+        byte bitmapByte = ReadVideoMemory((ushort)(BitmapPointerBase + screenIndex * 8 + charRow));
+        int bitPos = 7 - charX;
+        return ((bitmapByte >> bitPos) & 0x01) != 0;
+    }
 
-        byte charCode = ReadVideoMemory((ushort)(ScreenMemoryBase + charOffset));
+    private bool IsMulticolorBitmapForeground(int screenIndex, int charRow, int charX)
+    {
+        byte bitmapByte = ReadVideoMemory((ushort)(BitmapPointerBase + screenIndex * 8 + charRow));
+        return (ReadMulticolorPair(bitmapByte, charX) & 0x02) != 0;
+    }
 
-        switch (DisplayMode)
-        {
-            case VideoMode.StandardText:
-            case VideoMode.MulticolorText:
-            case VideoMode.ExtendedBackground:
-            {
-                byte charLine = ReadVideoMemory((ushort)(CharacterBase + charCode * 8 + (screenLine & 0x07)));
-                int bitPos = 7 - charX;
-                return ((charLine >> bitPos) & 0x01) != 0;
-            }
-            case VideoMode.Bitmap:
-            {
-                int bitmapOffset = (row * columns + col) * 8 + (screenLine & 0x07);
-                byte bitmapByte = ReadVideoMemory((ushort)(BitmapPointerBase + bitmapOffset));
-                int bitPos = 7 - charX;
-                return ((bitmapByte >> bitPos) & 0x01) != 0;
-            }
-            default:
-                return false;
-        }
+    private static int ReadMulticolorPair(byte source, int charX)
+    {
+        int pairShift = 6 - ((charX / 2) * 2);
+        return (source >> pairShift) & 0x03;
     }
 }

@@ -118,6 +118,7 @@ public sealed class VideoRenderer
             int offset = x * 4;
             var background = RenderBackgroundPixel(
                 x,
+                lineNumber,
                 leftBorderPixel,
                 rightBorderPixel,
                 screenWidth,
@@ -142,6 +143,7 @@ public sealed class VideoRenderer
 
     private PixelSample RenderBackgroundPixel(
         int x,
+        int rasterLine,
         int leftBorderPixel,
         int rightBorderPixel,
         int screenWidth,
@@ -181,7 +183,7 @@ public sealed class VideoRenderer
             Mos6569.VicIIDisplayMode.ExtendedColor => RenderExtendedColorPixel(charCode, colorCode, charRow, charX),
             Mos6569.VicIIDisplayMode.StandardBitmap => RenderStandardBitmapPixel(screenIndex, colorCode: charCode, charRow, charX),
             Mos6569.VicIIDisplayMode.MulticolorBitmap => RenderMulticolorBitmapPixel(screenIndex, screenCode: charCode, colorCode, charRow, charX, bgPixel),
-            _ => new PixelSample(Palette[0], false),
+            _ => new PixelSample(Palette[0], _vic.IsGraphicsPixelForegroundForSpritePriority(x, rasterLine)),
         };
     }
 

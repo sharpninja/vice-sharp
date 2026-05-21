@@ -187,6 +187,38 @@ public sealed class SpriteCollisionTests
     }
 
     /// <summary>
+    /// FR/TR: FR-VIC-002 / FR-VIC-003 / FR-VIC-005 / FR-VIC-008 /
+    /// TEST-VIC-001 (BACKFILL-VIDEO-002 invalid ECM priority).
+    /// Use case: x64sc maps invalid ECM display-mode colors to COL_NONE
+    /// while preserving the hidden graphics foreground bit used by
+    /// sprite-background collision detection.
+    /// Acceptance: A sprite over an invalid ECM foreground pixel still
+    /// latches $D01F even though the visible graphics output is black, while
+    /// adjacent hires zero-bits or multicolor %01 pairs remain non-foreground.
+    /// </summary>
+    [Theory]
+    [InlineData(0x58, 0x18, 0, 1)]
+    [InlineData(0x58, 0x18, 1, 2)]
+    [InlineData(0x78, 0x08, 2, 1)]
+    [InlineData(0x78, 0x18, 3, 2)]
+    public void SpriteBackground_InvalidEcmForeground_LatchesOnlyForHiddenPriorityBits(
+        byte d011,
+        byte d016,
+        int sourceKind,
+        int firstBackgroundOffset)
+    {
+        var foregroundVic = BuildInvalidEcmCollisionVic(d011, d016, sourceKind, spriteX: 96);
+        AdvanceTo(foregroundVic, line: 90, extra: 0);
+        AdvanceTo(foregroundVic, line: 130, extra: 0);
+        Assert.Equal(0x01, foregroundVic.Read(SpriteBackgroundCollision));
+
+        var backgroundVic = BuildInvalidEcmCollisionVic(d011, d016, sourceKind, spriteX: 96 + firstBackgroundOffset);
+        AdvanceTo(backgroundVic, line: 90, extra: 0);
+        AdvanceTo(backgroundVic, line: 130, extra: 0);
+        Assert.Equal(0x00, backgroundVic.Read(SpriteBackgroundCollision));
+    }
+
+    /// <summary>
     /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
     /// Use case: $D01F read-clear semantics: after reading the latch, a
     /// subsequent read must return 0 until new collisions accumulate.
@@ -205,5 +237,91 @@ public sealed class SpriteCollisionTests
 
         Assert.Equal(0x01, vic.Read(SpriteBackgroundCollision));
         Assert.Equal(0x00, vic.Read(SpriteBackgroundCollision));
+    }
+
+    private static void ConfigureSprite(RamDevice ram, Mos6569 vic, int sprite, int x, byte y, byte pointer)
+    {
+        ram.Write((ushort)(vic.ScreenMemoryBase + 0x03F8 + sprite), pointer);
+        ram.Write((ushort)(pointer * 64), 0x80);
+        ram.Write((ushort)(pointer * 64 + 1), 0x00);
+        ram.Write((ushort)(pointer * 64 + 2), 0x00);
+        vic.Write((ushort)(0xD000 + sprite * 2), (byte)(x & 0xFF));
+        byte xMsb = vic.Peek(0xD010);
+        xMsb = x >= 0x100
+            ? (byte)(xMsb | (1 << sprite))
+            : (byte)(xMsb & ~(1 << sprite));
+        vic.Write(0xD010, xMsb);
+        vic.Write((ushort)(0xD001 + sprite * 2), y);
+    }
+
+    private static Mos6569 BuildInvalidEcmCollisionVic(byte d011, byte d016, int sourceKind, int spriteX)
+    {
+        var bus = new BasicBus();
+        var memory = new byte[0x10000];
+        var ram = new RamDevice(0x0000, 0xFFFF, memory);
+        bus.RegisterDevice(ram);
+        var vic = new Mos6569(bus, new InterruptLine(InterruptType.Irq));
+
+        vic.Write(ScreenControl1, d011);
+        vic.Write(ScreenControl2, d016);
+        vic.Write(MemoryPointers, sourceKind <= 1 ? (byte)0x15 : (byte)0x18);
+        ConfigureInvalidEcmForegroundSource(ram, vic, x: 96, rasterLine: 100, sourceKind);
+        ConfigureSprite(ram, vic, sprite: 0, x: spriteX, y: 100, pointer: 0x20);
+        vic.Write(SpriteEnable, 0x01);
+        return vic;
+    }
+
+    private static void ConfigureInvalidEcmForegroundSource(RamDevice ram, Mos6569 vic, int x, int rasterLine, int sourceKind)
+    {
+        switch (sourceKind)
+        {
+            case 0:
+                ConfigureCharacterByte(ram, vic, x, rasterLine, color: 0x07, charByte: 0x80);
+                break;
+            case 1:
+                ConfigureCharacterByte(ram, vic, x, rasterLine, color: 0x0B, charByte: 0x90);
+                break;
+            case 2:
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x80);
+                break;
+            case 3:
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x90);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(sourceKind));
+        }
+    }
+
+    private static void ConfigureCharacterByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte color, byte charByte)
+    {
+        int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        int screenX = x - vic.LeftBorderPixel;
+        int visLine = rasterLine - vic.UpperBorderStart;
+        int screenLine = visLine + vic.YScroll;
+        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
+        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int col = screenX / 8;
+        int charRow = screenLine & 7;
+        int screenIndex = screenRow * columns + col;
+        byte charCode = 1;
+
+        ram.Write((ushort)(vic.ScreenMemoryBase + screenIndex), charCode);
+        ram.Write((ushort)(0xD800 + screenIndex), color);
+        ram.Write((ushort)(vic.CharacterBase + charCode * 8 + charRow), charByte);
+    }
+
+    private static void ConfigureBitmapByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte bitmapByte)
+    {
+        int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        int screenX = x - vic.LeftBorderPixel;
+        int visLine = rasterLine - vic.UpperBorderStart;
+        int screenLine = visLine + vic.YScroll;
+        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
+        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int col = screenX / 8;
+        int charRow = screenLine & 7;
+        int screenIndex = screenRow * columns + col;
+
+        ram.Write((ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow), bitmapByte);
     }
 }

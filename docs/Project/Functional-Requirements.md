@@ -3351,7 +3351,9 @@ The VIC-II raster engine shall generate video output with cycle-accurate timing 
 5. The raster interrupt triggers at cycle 0 of the matching line (PAL) with a 1-cycle acknowledge latency.
 6. The display window begins at line 51 (PAL) and ends at line 250.
 7. Display/idle state transitions occur at the correct cycles within each line.
-8. A light-pen high-to-low transition latches the current raster X position and low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch, and re-arms only at the frame boundary.
+8. A light-pen high-to-low transition latches the current raster X position and
+   low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch,
+   and re-arms only at the frame boundary.
 
 ### Source References
 
@@ -3360,7 +3362,7 @@ The VIC-II raster engine shall generate video output with cycle-accurate timing 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `IClockedDevice`
-- **Test Suite:** `RasterTimingTests`, `PalNtscVariantTests`, `RasterInterruptTests`
+- **Test Suite:** `RasterTimingTests`, `PalNtscVariantTests`, `RasterInterruptTests`, `VicIILightPenTests`
 
 ---
 
@@ -3382,20 +3384,19 @@ The VIC-II shall support all three character display modes: Standard Character M
 1. Standard mode displays 40x25 characters using 8x8 pixel character cells with 2 colors (background + foreground from Color RAM).
 2. Multicolor character mode (MCM bit set) displays 4x8 double-wide pixel characters with up to 4 colors per cell when color nybble bit 3 is set.
 3. Extended Color Mode (ECM bit set) allows 4 background colors selected by the upper 2 bits of the screen code, limiting the character set to 64 characters.
-4. ECM + MCM combination is invalid and produces a black screen (all outputs zero).
+4. ECM + MCM combination is invalid for visible graphics output and renders as color 0, but x64sc still derives the hidden foreground/priority bit from the underlying character pixel: hires character one-bits when Color RAM bit 3 is clear, and multicolor character pairs %10/%11 when Color RAM bit 3 is set.
 5. Screen matrix base and character generator base are controlled by $D018.
 6. Character data fetch timing (c-access and g-access) occurs at the correct cycles per line.
 
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: invalid ECM character-mode `colors[]` entries map visible output to `COL_NONE`, while `draw_graphics()` keeps `pixel_pri = px & 0x2` for sprite priority and collision handling.
 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`
 - **Test Suite:** `StandardCharModeTests`, `MulticolorCharModeTests`, `EcmModeTests`, `InvalidModeTests`
-
----
 
 ## FR-VIC-003 Bitmap Display Modes (Standard, Multicolor)
 
@@ -3415,20 +3416,19 @@ The VIC-II shall support Standard Bitmap Mode and Multicolor Bitmap Mode. In bit
 1. Standard bitmap mode (BMM=1, MCM=0) displays 320x200 pixels; each 8x8 cell has a foreground/background pair from the screen matrix byte.
 2. Multicolor bitmap mode (BMM=1, MCM=1) displays 160x200 double-wide pixels; each 4x8 cell uses up to 4 colors from screen matrix, Color RAM, and background register.
 3. The bitmap base address is selected by bit 3 of $D018 (either $0000 or $2000 relative to VIC bank).
-4. BMM + ECM combination is invalid and produces a black screen.
-5. BMM + MCM + ECM combination is invalid and produces a black screen.
+4. BMM + ECM combination is invalid for visible graphics output and renders as color 0, but x64sc still derives the hidden foreground/priority bit from the underlying standard-bitmap one-bits.
+5. BMM + MCM + ECM combination is invalid for visible graphics output and renders as color 0, but x64sc still derives the hidden foreground/priority bit from multicolor bitmap pairs %10/%11.
 6. Bitmap data fetch timing matches hardware (g-access reads bitmap data instead of character generator).
 
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: invalid ECM bitmap-mode `colors[]` entries map visible output to `COL_NONE`, while `draw_graphics()` keeps `pixel_pri = px & 0x2` for sprite priority and collision handling.
 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`
 - **Test Suite:** `StandardBitmapModeTests`, `MulticolorBitmapModeTests`, `InvalidModeCombinationTests`
-
----
 
 ## FR-VIC-004 Sprite Engine (8 Hardware Sprites)
 
@@ -3486,17 +3486,17 @@ The VIC-II shall detect sprite-to-sprite and sprite-to-background collisions and
 5. Collision interrupt (if enabled in $D01A) fires when a new collision is detected.
 6. In multicolor mode, the "transparent" color (bit pattern %00) does not trigger collisions.
 7. Expanded sprites use the expanded pixel area for collision detection.
+8. Invalid ECM display-mode pixels that render as color 0 still participate in sprite priority and sprite-background collision when the x64sc hidden foreground/priority bit is set.
 
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: `draw_graphics()` writes the per-pixel priority buffer from `px & 0x2`; sprite/background priority and collision code consume that buffer even when the selected color entry is `COL_NONE`.
 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `ISpriteUnit`
 - **Test Suite:** `SpriteCollisionTests`, `CollisionRegisterLatchTests`, `CollisionInterruptTests`
-
----
 
 ## FR-VIC-006 Badline Handling and CPU DMA Cycle Stealing
 
@@ -3665,8 +3665,15 @@ The VIC-II sprite DMA shall be emulated with sub-cycle accuracy to support sprit
 ### Source References
 
 - `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
+- `native/vice/vice/src/viciisc/viciitypes.h`: `VICII_PAL_CYCLE(c)` maps public PAL cycle numbers to zero-based internal cycles.
+- `native/vice/vice/src/viciisc/vicii-cycle.c`: `check_sprite_dma` samples `$D015` and sprite Y at PAL public cycles 55/56, latches `sprite_dma`, and uses that latch for later BA/data DMA until sprite MC base completion clears it.
+- `native/vice/vice/src/viciisc/vicii-chip-model.c`: per-model sprite DMA fetch tables.
+- `native/vice/vice/src/viciisc/vicii-fetch.c`: sprite pointer/data fetch operations.
 
 ### Traceability
 
 - **Interfaces:** `IVideoChip`, `ISpriteUnit`
-- **Test Suite:** `SpriteDmaTimingTests`, `SpriteMultiplexTests`, `SpriteDmaCycleTests`
+- **Related FRs:** `FR-VIC-004`, `FR-VIC-006`, `FR-VIC-007`
+- **Technical Requirement:** `TR-CYCLE-001`
+- **Test Requirement:** `TEST-VIC-001`, `TEST-X64SC-LOCKSTEP-001`
+- **Test Suite:** `VicIISpriteDmaTests`, `VicIISpriteDmaStallTests`, `X64ScVariantLockstepTests`, `SpriteDmaTimingTests`, `SpriteMultiplexTests`, `SpriteDmaCycleTests`

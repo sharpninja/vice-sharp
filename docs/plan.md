@@ -263,6 +263,23 @@ slice:
   sprite pixel in the BGRA framebuffer at x=340. Focused renderer/border tests
   passed 28/28; the broader VIC/video gate passed 155/155.
 
+2026-05-21 continued Slice 1 with invalid ECM priority/collision backfill:
+
+- `FR-VIC-002`, `FR-VIC-003`, and `FR-VIC-005` now explicitly capture the
+  x64sc behavior from `viciisc/vicii-draw-cycle.c`: invalid ECM selector
+  combinations render visible graphics as color 0/`COL_NONE`, but keep the
+  hidden `px & 0x2` foreground/priority bit for `$D01B` sprite priority and
+  `$D01F` sprite-background collision.
+- `Mos6569` now exposes one display-mode-aware foreground/priority helper used
+  by both collision processing and the framebuffer renderer, replacing the old
+  simplified foreground approximation.
+- Focused renderer/collision tests cover ECM+MCM hires, ECM+MCM multicolor,
+  ECM+BMM, and ECM+BMM+MCM cases, including multicolor `%01` pairs remaining
+  non-foreground while `%10` pairs block behind-background sprites and latch
+  sprite-background collisions. Focused renderer/collision tests passed 37/37,
+  the broader VIC/video gate passed 163/163, and the traceability audit
+  completed with the existing repo-wide canonical/noncanonical backlog.
+
 Remaining Slice 1 work:
 
 - Continue from the Slice 0.5 gate result above. The 2026-05-20 border/sprite
@@ -275,8 +292,9 @@ Remaining Slice 1 work:
 - Remaining sprite DMA depth beyond the PAL x64sc BA-mask latch: non-PAL
   per-model tables, sprite data-fetch side effects, and native lockstep
   checkpoints for multiplexing edge cases.
-- Native x64sc visible-frame/checkpoint validation for the display-mode pixel
-  effects now covered by synthetic framebuffer tests.
+- Native x64sc visible-frame/checkpoint validation remains for the display-mode
+  pixel effects now covered by synthetic framebuffer tests, including invalid
+  ECM priority/collision pixels.
 - FLI/AFLI timing depth from `FR-VIC-008`: forced badlines, the left-edge FLI
   bug, mid-line `$D018` effects, and AFLI bitmap behavior.
 - Native x64sc visible-frame/checkpoint validation against the installed VICE
