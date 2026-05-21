@@ -83,11 +83,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // fallback behavior for lines that were never ticked.
     private readonly bool[] _verticalBorderActiveByRasterLine = new bool[512];
     private readonly bool[] _verticalBorderLineCaptured = new bool[512];
+    private readonly bool[] _horizontalDisplayOpenByRasterLine = new bool[512];
+    private readonly bool[] _leftBorderOpenByRasterLine = new bool[512];
     private readonly bool[] _rightBorderOpenByRasterLine = new bool[512];
-    private readonly bool[] _rightBorderLineCaptured = new bool[512];
+    private readonly bool[] _horizontalBorderLineCaptured = new bool[512];
     private bool _verticalBorderActive = true;
     private bool _verticalBorderNextActive = true;
     private bool _mainBorderActive = true;
+    private bool _mainBorderOpenedThisLine;
 
     // BACKFILL-VIDEO-001: Sprite DMA cycle stealing accounting.
     // Each enabled sprite that intersects the current raster line steals
@@ -618,8 +621,33 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public bool IsRasterLineRightBorderOpen(int rasterLine) =>
         (uint)rasterLine < (uint)_rightBorderOpenByRasterLine.Length &&
-        _rightBorderLineCaptured[rasterLine] &&
+        _horizontalBorderLineCaptured[rasterLine] &&
         _rightBorderOpenByRasterLine[rasterLine];
+
+    /// <summary>
+    /// FR-VIC-007: returns whether an opened right side border carried into
+    /// the next raster line's left side border.
+    /// </summary>
+    public bool IsRasterLineLeftBorderOpen(int rasterLine) =>
+        (uint)rasterLine < (uint)_leftBorderOpenByRasterLine.Length &&
+        _horizontalBorderLineCaptured[rasterLine] &&
+        _leftBorderOpenByRasterLine[rasterLine];
+
+    /// <summary>
+    /// FR-VIC-007: returns whether the line ever escaped the main horizontal
+    /// border flip-flop. A cycle-17 CSEL 0-to-1 switch misses both left-border
+    /// checks in x64sc and leaves the whole line blank.
+    /// </summary>
+    public bool IsRasterLineHorizontalDisplayOpen(int rasterLine)
+    {
+        if ((uint)rasterLine < (uint)_horizontalDisplayOpenByRasterLine.Length &&
+            _horizontalBorderLineCaptured[rasterLine])
+        {
+            return _horizontalDisplayOpenByRasterLine[rasterLine];
+        }
+
+        return true;
+    }
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-004 / FR-VIC-007 / TEST-VIC-001:
@@ -633,11 +661,20 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return false;
         }
 
+        if (!IsRasterLineHorizontalDisplayOpen(rasterLine))
+        {
+            return false;
+        }
+
+        int leftBorderPixel = IsRasterLineLeftBorderOpen(rasterLine)
+            ? 0
+            : LeftBorderPixel;
+
         int rightBorderEndPixel = IsRasterLineRightBorderOpen(rasterLine)
             ? VideoRenderer.ScreenWidth
             : RightBorderEndPixel;
 
-        return xVicPixel >= LeftBorderPixel && xVicPixel < rightBorderEndPixel;
+        return xVicPixel >= leftBorderPixel && xVicPixel < rightBorderEndPixel;
     }
 
     /// <summary>
@@ -804,7 +841,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _lightPenTriggeredThisFrame = false;
             }
 
+            bool leftBorderOpen = !_mainBorderActive;
             UpdateVerticalBorderForLineStart();
+            CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);
             UpdateBadLineLatchForStartOfLine();
 
             // BACKFILL-VIDEO-001 / FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001:
@@ -856,11 +895,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _verticalBorderActive = true;
         _verticalBorderNextActive = true;
         _mainBorderActive = true;
+        _mainBorderOpenedThisLine = false;
         Array.Fill(_verticalBorderActiveByRasterLine, true);
         Array.Clear(_verticalBorderLineCaptured, 0, _verticalBorderLineCaptured.Length);
+        Array.Clear(_horizontalDisplayOpenByRasterLine, 0, _horizontalDisplayOpenByRasterLine.Length);
+        Array.Clear(_leftBorderOpenByRasterLine, 0, _leftBorderOpenByRasterLine.Length);
         Array.Clear(_rightBorderOpenByRasterLine, 0, _rightBorderOpenByRasterLine.Length);
-        Array.Clear(_rightBorderLineCaptured, 0, _rightBorderLineCaptured.Length);
+        Array.Clear(_horizontalBorderLineCaptured, 0, _horizontalBorderLineCaptured.Length);
         CaptureVerticalBorderForCurrentLine();
+        CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen: false);
         _allowBadLines = false;
         _refreshCounter = 0;
         Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
@@ -949,7 +992,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             _verticalBorderActive = _verticalBorderNextActive;
             CaptureVerticalBorderForCurrentLine();
             if (!_verticalBorderActive)
+            {
                 _mainBorderActive = false;
+                _mainBorderOpenedThisLine = true;
+            }
         }
 
         if (RasterX == RightBorderCheckCycle)
@@ -984,13 +1030,23 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _verticalBorderLineCaptured[CurrentRasterLine] = true;
     }
 
+    private void CaptureHorizontalBorderForLineStart(int rasterLine, bool leftBorderOpen)
+    {
+        if ((uint)rasterLine >= (uint)_leftBorderOpenByRasterLine.Length)
+            return;
+
+        _leftBorderOpenByRasterLine[rasterLine] = leftBorderOpen;
+        _mainBorderOpenedThisLine = leftBorderOpen;
+    }
+
     private void CaptureHorizontalBorderForCompletedLine(int rasterLine)
     {
         if ((uint)rasterLine >= (uint)_rightBorderOpenByRasterLine.Length)
             return;
 
         _rightBorderOpenByRasterLine[rasterLine] = !_verticalBorderActive && !_mainBorderActive;
-        _rightBorderLineCaptured[rasterLine] = true;
+        _horizontalDisplayOpenByRasterLine[rasterLine] = _mainBorderOpenedThisLine;
+        _horizontalBorderLineCaptured[rasterLine] = true;
     }
 
     // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:

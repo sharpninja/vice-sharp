@@ -512,7 +512,8 @@ public sealed class VideoRendererTests
     }
 
     /// <summary>
-    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-VIC-EDGE-002,
+    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
     /// Use case: VICE x64sc keeps the right side border open when CSEL
     /// changes from 40-column to 38-column mode at PAL cycle 56, so the
     /// framebuffer compositor must allow sprite pixels in that opened border.
@@ -539,6 +540,165 @@ public sealed class VideoRendererTests
 
         Assert.True(vic.IsRasterLineRightBorderOpen(100));
         Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 340, VideoRenderer.RasterLineToFrameY(100)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-VIC-EDGE-002, TR: TR-CYCLE-001,
+    /// TEST: TEST-VIC-001, TODO: BACKFILL-VIDEO-001.
+    /// Use case: Opening the right side border in VICE suppresses border
+    /// drawing; pixels without sprite coverage show the background/idle fill
+    /// instead of the border colour.
+    /// Acceptance: A right-side pixel opened by the cycle-56 CSEL switch
+    /// renders background colour, not border colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsBackgroundInOpenedRightSideBorder()
+    {
+        var (bus, _, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        vic.Write(0xD021, 0x06);
+
+        AdvanceTo(vic, 100, 56);
+        vic.Write(0xD016, 0x00);
+        AdvanceTo(vic, 101, 0);
+
+        renderer.RenderFullFrame();
+
+        Assert.True(vic.IsRasterLineRightBorderOpen(100));
+        Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, 340, VideoRenderer.RasterLineToFrameY(100)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-VIC-EDGE-002,
+    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: A right side-border open on one line carries into the next
+    /// line's left border in VICE x64sc, allowing continuous side-border
+    /// effects to show sprites at the far left edge.
+    /// Acceptance: Sprite 0 at x=0 on the following line renders with sprite
+    /// colour instead of border colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsSpriteInCarriedOpenLeftSideBorder()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        ConfigureSprite(ram, vic, sprite: 0, x: 0, y: 101, pointer: 0x20, color: 0x02);
+        vic.Write(0xD015, 0x01);
+
+        AdvanceTo(vic, 100, 56);
+        vic.Write(0xD016, 0x00);
+        AdvanceTo(vic, 102, 0);
+
+        renderer.RenderFullFrame();
+
+        Assert.True(vic.IsRasterLineLeftBorderOpen(101));
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 0, VideoRenderer.RasterLineToFrameY(101)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-007, TR: TR-VIC-EDGE-002, TR: TR-CYCLE-001,
+    /// TEST: TEST-VIC-001, TODO: BACKFILL-VIDEO-001.
+    /// Use case: A right-open side border carries into the next line's left
+    /// side border, where VICE suppresses border drawing even without sprite
+    /// coverage.
+    /// Acceptance: The carried-open left edge renders background colour, not
+    /// border colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsBackgroundInCarriedOpenLeftSideBorder()
+    {
+        var (bus, _, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        vic.Write(0xD021, 0x06);
+
+        AdvanceTo(vic, 100, 56);
+        vic.Write(0xD016, 0x00);
+        AdvanceTo(vic, 102, 0);
+
+        renderer.RenderFullFrame();
+
+        Assert.True(vic.IsRasterLineLeftBorderOpen(101));
+        Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, 0, VideoRenderer.RasterLineToFrameY(101)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-VIC-EDGE-002,
+    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: Continuous side-border effects repeat the CSEL timing on
+    /// adjacent lines, so the renderer must keep admitting sprite pixels at
+    /// the far left edge after multiple carried-open lines.
+    /// Acceptance: Sprite 0 at x=0 on the second carried line renders with
+    /// sprite colour instead of border colour.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_DrawsSpriteInContinuousOpenLeftSideBorder()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        ConfigureSprite(ram, vic, sprite: 0, x: 0, y: 102, pointer: 0x20, color: 0x02);
+        vic.Write(0xD015, 0x01);
+
+        AdvanceTo(vic, 100, 56);
+        vic.Write(0xD016, 0x00);
+
+        AdvanceTo(vic, 101, 55);
+        vic.Write(0xD016, 0x08);
+        AdvanceTo(vic, 101, 56);
+        vic.Write(0xD016, 0x00);
+
+        AdvanceTo(vic, 103, 0);
+
+        renderer.RenderFullFrame();
+
+        Assert.True(vic.IsRasterLineLeftBorderOpen(102));
+        Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, 0, VideoRenderer.RasterLineToFrameY(102)));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-VIC-EDGE-002,
+    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: Switching CSEL from 38-column to 40-column mode at PAL
+    /// cycle 17 leaves the whole line blank in VICE x64sc.
+    /// Acceptance: The framebuffer keeps the border colour at a normally
+    /// visible sprite coordinate on the blanked line.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_KeepsSpriteBehindCycle17CselBlankedLine()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        vic.Write(0xD016, 0x00);
+        ConfigureSprite(ram, vic, sprite: 0, x: 96, y: 100, pointer: 0x20, color: 0x02);
+        vic.Write(0xD015, 0x01);
+
+        AdvanceTo(vic, 100, 17);
+        vic.Write(0xD016, 0x08);
+        AdvanceTo(vic, 101, 0);
+
+        renderer.RenderFullFrame();
+
+        Assert.False(vic.IsRasterLineHorizontalDisplayOpen(100));
+        Assert.Equal(ToBgra(0x03), ReadPixel(renderer.FrameBuffer, 96, VideoRenderer.RasterLineToFrameY(100)));
     }
 
     /// <summary>

@@ -4,15 +4,16 @@
 
 | Field | Value |
 |-------|-------|
-| Source Corpus | `native/vice/vice/doc` |
-| Generated | 2026-05-13 |
-| Purpose | Inventory classic VICE documentation reviewed for Functional Requirement extraction. |
+| Source Corpus | `native/vice/vice/doc`, `native/vice/vice/src` |
+| Generated | 2026-05-21 |
+| Purpose | Inventory classic VICE documentation and source reviewed for requirement extraction. |
 
 ## Extraction Rules
 
-- Use classic VICE docs only for Functional Requirements.
+- Use classic VICE docs for Functional Requirements.
 - Extract only observable emulator behavior, formats, controls, and compatibility expectations.
-- Do not extract Vice-Sharp Technical Requirements from VICE design choices; derive TRs from Vice-Sharp architecture docs and interfaces.
+- Do not extract Vice-Sharp Technical Requirements from arbitrary VICE design choices; derive normal TRs from Vice-Sharp architecture docs and interfaces.
+- Narrow exception: VICE source may create or clarify TRs only when the code encodes observable compatibility behavior that ViceSharp must match, such as cycle timing, bus arbitration, latch/readback semantics, invalid display-mode output, protocol timing, media pulse interpretation, or documented hardware quirks. Record the source file references and affected machine/profile for each such TR.
 - Generated HTML/assets are excluded unless they contain non-duplicated text, such as keymap coverage notes.
 
 ## Source Inventory

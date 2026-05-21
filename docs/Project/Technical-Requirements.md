@@ -197,6 +197,22 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 - GitHub Actions mirrors the build for community contributors who submit PRs to the GitHub mirror.
 - The `_build` project uses the same .NET SDK version as the main solution (specified in `global.json`).
 
+## TR-CPU-EDGE-001
+
+**6510 Interrupt Latency Edge Cases** — Observable behavior: 6510 interrupt dispatch models BRK delaying NMI by one opcode, taken branches delaying IRQ/NMI by one cycle, and SEI-specific IRQ delay-counter handling.
+Affected profile: C64/x64sc 6510 CPU core.
+Sources: native/vice/vice/src/mainc64cpu.c:185-193,663-708; native/vice/vice/src/maincpu.c:454-501.
+Acceptance: IRQ/NMI tests around BRK, taken branches, CLI/SEI, and pending interrupt lines match x64sc instruction and cycle traces.
+Related: FR-CPU-002, FR-CPU-003, TEST-CPU-001.
+
+## TR-CPU-EDGE-002
+
+**6510 BA-Low Dummy Access and Bus Stall Semantics** — Observable behavior: CPU memory access helpers distinguish real and dummy reads/writes and apply BA-low checks to reads, stack accesses, and zero-page accesses so DMA bus steals stall the CPU with x64sc side effects.
+Affected profile: C64/x64sc 6510 CPU and VIC-II shared bus.
+Sources: native/vice/vice/src/mainc64cpu.c:270-288,320-330,362-371,395-448.
+Acceptance: CPU/VIC bus arbitration tests prove dummy accesses, stack accesses, zero-page reads, and DMA stalls match x64sc traces.
+Related: FR-CPU-002, FR-VIC-006, FR-VIC-010, TEST-CPU-001, TEST-VIC-001.
+
 ## TR-CYCLE-001
 
 **Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior** — ## TR-CYCLE-001: Sub-Cycle Bus-Phase Accuracy
@@ -311,6 +327,14 @@ Determinism is a foundational requirement for: (1) snapshot-based replay (FR-SNP
 ## TR-DOC-DASHBOARD-001
 
 **Completion Dashboard markdown structure in root README** — The Completion Dashboard section in README.md uses one table per group (Iteration 0, Iteration 1, Iterations 2-5, Tooling/Ecosystem). Columns: Feature, State (✅/🟢/🟡/⚪), %, Source. Source column links to the live MCP TODO id and to in-repo artifacts where present. The dashboard cites a refresh date and a snapshot link to /mcpserver/todo?done=false.
+
+## TR-DRV-EDGE-001
+
+**VDrive Directory BAM and REL Flush Quirks** — Observable behavior: virtual drive behavior includes DOS quirks for directory traversal, native partition block counts, zero inputs, status-channel continuity, and listen/unlisten REL flush events.
+Affected profile: 1541/1571/1581-style virtual drives and host filesystem drive emulation.
+Sources: native/vice/vice/src/vdrive/vdrive-dir.c:279-302,393-396,515,749; native/vice/vice/src/serial/fsdrive.c:67,228-267.
+Acceptance: directory listing, BAM/block-count, zero-pattern matching, status-channel, and REL flush tests reproduce VICE virtual-drive behavior.
+Related: FR-DRV-001, FR-DRV-003, FR-DRV-005, TEST-DRV-001.
 
 ## TR-GRPC-BOUNDARY-001
 
@@ -441,6 +465,14 @@ ViceSharp host status shall distinguish requested throttle settings from measure
 - FR-HOST-006
 - FR-UI-002
 - FR-CFG-008
+
+## TR-IEC-EDGE-001
+
+**IEC ATN EOI ACK NACK and Bit Timeout Timing** — Observable behavior: IEC serial devices model ATN edge handling, listener/talker role changes, EOI signaling, frame acknowledge, NACK recovery, and microsecond-scale clock/data timing windows.
+Affected profile: C64 IEC bus and 1541-style device interactions.
+Sources: native/vice/vice/src/serial/serial-iec-device.c:279-291,388-430,487-534,555-622,633-721.
+Acceptance: IEC protocol tests match x64sc device-line transitions and timing for ATN, EOI, byte acknowledge, NACK, and role reversal.
+Related: FR-DRV-005, FR-DRV-006, TEST-DRV-001.
 
 ## TR-INPUT-VKM-001
 
@@ -635,6 +667,14 @@ FFmpeg is the industry standard for media encoding/decoding, supports all requir
 - FFmpeg bindings are isolated in a separate assembly (`ViceSharp.Media.FFmpeg`) so the core library has no FFmpeg dependency.
 - The media encoding pipeline runs on a dedicated thread (producer-consumer pattern with the emulation thread), not on the emulation hot path.
 - Frame data is copied to a native-memory staging buffer before handoff to FFmpeg, decoupling the emulation frame buffer from the encoder.
+
+## TR-MEDIA-EDGE-001
+
+**P64 GCR Pulse Stream Weak-Bit and Syncmark Handling** — Observable behavior: P64/GCR conversion treats weak regions as special pulse values and preserves syncmark-border alignment considerations when converting between pulse streams and GCR bytes.
+Affected profile: disk image and low-level GCR media behavior for C64 drives.
+Sources: native/vice/vice/src/lib/p64/p64.c:663-673,686-724,724-763.
+Acceptance: P64/GCR tests preserve weak-bit regions and syncmark-aligned GCR byte reconstruction with VICE-compatible pulse semantics.
+Related: FR-DRV-004, TEST-DRV-001.
 
 ## TR-MVVM-001
 
@@ -863,6 +903,38 @@ At approximately 985,000 CPU cycles per second (PAL), even a 1-microsecond overh
 
 **XMLDOCS convention test with ratchet baseline** — tests/ViceSharp.TestHarness/XmlDocsConventionTests.cs scans test source files via regex for [Fact]|[Theory]|[ViceFact]|[ViceTheory] method declarations and asserts each preceding doc comment contains FR-, TR-, "Use case:", and "Acceptance:" tokens. Violations are sorted; the test fails if the count exceeds ExpectedMaxViolations (current baseline 192). VICESHARP_XMLDOCS_ENFORCE=1 forces zero-tolerance. The constant must only decrease as the corpus is retrofitted.
 
+## TR-RAM-EDGE-001
+
+**VICE RAM Initialization Pattern Semantics** — Observable behavior: RAM initialization supports VICE-compatible start value, value inversion, pattern inversion, random span/repeat, and random chance behavior with machine-specific factory defaults.
+Affected profile: C64/x64sc startup RAM plus other machine profiles when enabled.
+Sources: native/vice/vice/src/ram.c:49-60,137-178,197-221,233-339.
+Acceptance: given the same RAM-init resources and random seed, startup RAM bytes match VICE pattern behavior.
+Related: FR-CFG-007, TEST-CFG-001, TEST-MEM-001.
+
+## TR-SID-EDGE-001
+
+**SID ADSR Delay and Envelope Pipeline Semantics** — Observable behavior: SID envelope generation models ADSR delay bug behavior, envelope decrement pipeline delays, exponential-counter transitions, hold-zero behavior, and rate-counter state transitions visible through audio output and ENV3 reads.
+Affected profile: C64 SID 6581/8580 profiles.
+Sources: native/vice/vice/src/resid/envelope.cc:42-55,94-122,230-247; native/vice/vice/src/resid/envelope.h:120-179,386-412.
+Acceptance: ADSR delay, envelope freeze/hold-zero, ENV3 sampling, and envelope transition tests match VICE/reSID behavior.
+Related: FR-SID-001, FR-SID-002, TEST-SID-001.
+
+## TR-SID-EDGE-002
+
+**SID Waveform Test-Bit Noise and Floating DAC Behavior** — Observable behavior: SID waveform generation models test-bit shift-register reset timing, combined waveform writeback, noise shift-register transitions, and floating DAC TTL differences between MOS6581 and MOS8580.
+Affected profile: C64 SID 6581/8580 profiles.
+Sources: native/vice/vice/src/resid/wave.cc:28-46,172-197,224-250,254-290.
+Acceptance: waveform tests cover test-bit transitions, combined waveforms, noise shift state, and 6581/8580 floating-output fade behavior against VICE/reSID reference output.
+Related: FR-SID-001, FR-SID-003, TEST-SID-001.
+
+## TR-SID-EDGE-003
+
+**MOS8580 One-Cycle Write Pipeline and Digi Boost** — Observable behavior: MOS8580 SID writes are delayed by one cycle in fast sampling mode, and the external input path can simulate the 8580 digi-boost hardware modification.
+Affected profile: C64C/MOS8580 SID profiles.
+Sources: native/vice/vice/src/resid/sid.cc:154,202-215,749-752.
+Acceptance: 8580 mode tests prove write side effects occur with the VICE/reSID pipeline delay and digi-boost input affects generated samples when configured.
+Related: FR-SID-001, FR-SID-004, TEST-SID-001.
+
 ## TR-SIMD-001
 
 **SIMD-Accelerated Rendering and Audio with Generic Specialization for CPU Core** — ## TR-SIMD-001: SIMD-Accelerated Rendering and Audio
@@ -1007,6 +1079,22 @@ ACID transactions ensure that a snapshot taken at any point captures a consisten
 - Delta compression uses XOR encoding: the delta is the XOR of the old and new state bytes, yielding zero bytes for unchanged data which compress well.
 - The UI accesses state through a "published snapshot" -- a copy-on-write reference that is updated atomically at frame boundaries.
 
+## TR-TAP-EDGE-001
+
+**TAP Version Long-Pulse and TurboTape Threshold Behavior** — Observable behavior: TAP parsing honors VICE pulse thresholds, version-specific long-pulse encoding, version 2 halfwave behavior, machine/video clock selection, and TurboTape pilot/header detection thresholds.
+Affected profile: C64 TAP loading plus other TAP-tagged machines when enabled.
+Sources: native/vice/vice/src/tape/tap.c:52-82,91-105,121-192,389-422,970-992,1251-1385.
+Acceptance: TAP fixtures cover version 0/1/2 pulse encoding, long pulses, clock selection, CBM pilot detection, and TurboTape pilot/header detection against VICE behavior.
+Related: FR-TAP-002, FR-TAP-003, FR-TAP-005, TEST-TAP-001.
+
+## TR-TAPE-EDGE-001
+
+**Tapeport Sense Motor and RTC Dongle Line Semantics** — Observable behavior: tapeport devices can assert sense independently of a datasette; the sense dongle asserts sense when enabled and after power-up, and CP Clock F83 combines motor-state and RTC data-line state to drive tape sense.
+Affected profile: C64 tapeport peripherals and datasette sense-line behavior.
+Sources: native/vice/vice/src/tapeport/sense-dongle.c:50-58,77,93; native/vice/vice/src/tapeport/cp-clockf83.c:161-174,178-190.
+Acceptance: tapeport peripheral tests prove sense-line state, motor-line inversion, and RTC SDA/SCL effects match VICE for supported tapeport devices.
+Related: FR-TAP-001, FR-TAP-004, TEST-TAP-001.
+
 ## TR-UI-SHELL-001
 
 **Avalonia Emulator Control Shell** — ## TR-UI-SHELL-001: Avalonia Emulator Control Shell
@@ -1053,3 +1141,67 @@ The Avalonia shell shall present emulator controls through ViewModels and host-c
 - FR-UI-002
 - FR-UI-003
 - FR-UI-004
+
+## TR-VDC-EDGE-001
+
+**VDC Register Display-Width and Busy-Status Edge Cases** — Observable behavior: VDC behavior includes invalid displayed widths, semigraphics width overrides, busy status timing during memory reads/writes, v0 horizontal-scroll/border quirks, register readback masks, and invalid register reads returning 0xff.
+Affected profile: C128 VDC profiles only; non-Phase-1 by default.
+Sources: native/vice/vice/src/vdc/vdc-draw.c:177-252; native/vice/vice/src/vdc/vdc-mem.c:53-62,335-340,388-407,545-568,572-588.
+Acceptance: C128/VDC tests cover displayed-width invalid values, semigraphics overrides, register readback masks, busy timing, invalid register reads, and v0 border/xscroll quirks against VICE behavior.
+Related: FR-PRF-003, TEST-PRF-001.
+
+## TR-VIC-EDGE-001
+
+**Invalid VIC-II Mode Priority and Collision Semantics** — Observable behavior: invalid ECM/BMM/MCM selector combinations render with no visible graphics color while preserving hidden foreground priority bits for sprite priority and sprite-background collision.
+Affected profile: C64/C64C/SX-64 x64sc VIC-II.
+Sources: native/vice/vice/src/viciisc/vicii-draw-cycle.c:41,133-141,196-224,401-428.
+Acceptance: invalid-mode visible output, priority, and collision tests match x64sc.
+Related: FR-VIC-002, FR-VIC-003, FR-VIC-005, TEST-VIC-001.
+
+## TR-VIC-EDGE-002
+
+**VIC-II Border Flip-Flop Cycle Checks** — Observable behavior: vertical and horizontal border state is controlled by model-specific cycle-table checks; CSEL/RSEL changes can skip side-border checks and closed borders mask sprite pixels.
+Affected profile: C64/C64C/SX-64 x64sc VIC-II PAL/NTSC.
+Sources: native/vice/vice/src/viciisc/vicii-cycle.c:168-202,408,480-482; native/vice/vice/src/viciisc/vicii-chip-model.c:92-95,145-147,223-225,306-308,384-386.
+Acceptance: border flip-flop cycles, open-border cases, and closed-border sprite masking match x64sc.
+Related: FR-VIC-007, FR-VIC-004, FR-VIC-005, TEST-VIC-001.
+
+## TR-VIC-EDGE-003
+
+**VIC-II Badline Idle-State and RC Windows** — Observable behavior: badline activation depends on display-enable timing, raster low bits, first/last DMA line state, idle-state transitions, and RC update windows.
+Affected profile: C64/C64C/SX-64 x64sc VIC-II.
+Sources: native/vice/vice/src/viciisc/vicii-cycle.c:56-61,527-565,576-598; native/vice/vice/src/vicii/vicii-fetch.c:135-166.
+Acceptance: badline fetches, idle-state changes, and CPU DMA steals match x64sc traces.
+Related: FR-VIC-001, FR-VIC-006, FR-VIC-008, TEST-VIC-001.
+
+## TR-VIC-EDGE-004
+
+**VIC-II Sprite DMA Latch and Per-Model Fetch Tables** — Observable behavior: sprite DMA is latched by enable/Y-match checks before fetch slots, and fetch/BA behavior is driven by per-model tables; clears after the latch do not cancel active DMA.
+Affected profile: C64/C64C/SX-64 x64sc VIC-II PAL/NTSC.
+Sources: native/vice/vice/src/viciisc/vicii-cycle.c:118-128,503,626; native/vice/vice/src/viciisc/vicii-chip-model.c:735-746; native/vice/vice/src/viciisc/vicii-fetch.c:275-309.
+Acceptance: sprite latch, BA stall, p/s access, and line rollover tests match x64sc.
+Related: FR-VIC-004, FR-VIC-006, FR-VIC-010, TEST-VIC-001.
+
+## TR-VIC-EDGE-005
+
+**VIC-II Matrix Fetch Idle and 0xff Fill Behavior** — Observable behavior: VIC-II matrix and graphics fetches use observable idle/fill values including 0xff matrix fill, RAM-derived color nibbles, and special RAM/character-ROM address latching.
+Affected profile: C64/C64C/SX-64 x64sc VIC-II.
+Sources: native/vice/vice/src/viciisc/vicii-fetch.c:192-199,208-227,234-264; native/vice/vice/src/vicii/vicii-fetch.c:72-109.
+Acceptance: idle graphics, matrix fill, background source, and RAM/ROM transition fetches match x64sc.
+Related: FR-VIC-001, FR-VIC-006, FR-VIC-008, FR-VIC-009, TEST-VIC-001.
+
+## TR-VIC-EDGE-006
+
+**VIC-II Register Readback and Collision Latch Semantics** — Observable behavior: VIC-II register reads expose unused one bits per register, IRQ status has fixed high bits, collision-register writes are ignored, and collision latches clear on read side effects.
+Affected profile: C64/C64C/SX-64 x64sc VIC-II.
+Sources: native/vice/vice/src/viciisc/vicii-mem.c:48-63,229,265-267,517,522-554,570-713.
+Acceptance: D000-D03F readback, IRQ clear, and collision read-clear tests match x64sc.
+Related: FR-VIC-001, FR-VIC-005, TEST-VIC-001.
+
+## TR-VIC-EDGE-007
+
+**VIC-II VSP Bug Memory-Corruption Behavior** — Observable behavior: x64sc simulates VSP memory corruption using line/channel probability tables when a qualifying badline follows a vulnerable idle state.
+Affected profile: C64 x64sc VIC-II; deferred unless VSP/AGSP compatibility enters Phase 1.
+Sources: native/vice/vice/src/viciisc/vicii-cycle.c:259-261,314-346,524,536-540.
+Acceptance: controlled-seed VSP corruption tests match x64sc-compatible VSP programs when enabled.
+Related: FR-VIC-008, TEST-VIC-001.

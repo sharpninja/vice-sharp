@@ -180,13 +180,20 @@ Gate result from 2026-05-21:
 - `TEST-VIC-001` and `X64SC-Requirement-Coverage.md` already include closed
   border masking, opened-border sprite visibility, sprite priority, and
   per-model sprite DMA timing.
-- After the 2026-05-21 Slice 0.5 cleanup,
-  `tools/check_requirement_traceability.ps1` reports 144 canonical IDs,
-  79 referenced canonical IDs, 65 unreferenced canonical IDs, and 53
-  noncanonical IDs in `src`/`tests`. The touched VIC-II source/test slice no
-  longer contains the broad `FR-VIC` label. The remaining noncanonical labels
-  are debt outside this slice. New work must not add new broad/noncanonical
-  IDs, and touched files must move toward canonical IDs.
+- After the 2026-05-21 Slice 0.5 cleanup, the touched VIC-II source/test slice
+  no longer contains the broad `FR-VIC` label. The remaining noncanonical
+  labels are debt outside that slice. New work must not add new broad or
+  noncanonical IDs, and touched files must move toward canonical IDs.
+- The 2026-05-21 classic VICE edge-case backfill scanned
+  `native/vice/vice/src`, recorded the repeatable inventory under
+  `docs/requirements/backfill/`, and promoted 19 observable compatibility
+  behaviors to canonical `TR-*-EDGE-*` requirements with source references,
+  FR/TEST mappings, and deferred/non-Phase-1 notes where appropriate.
+  `tools/check_requirement_traceability.ps1` now reports 163 canonical IDs,
+  79 referenced canonical IDs, 84 unreferenced canonical IDs, and 53
+  noncanonical IDs in `src`/`tests`; the added edge TRs are requirements-only
+  anchors for future implementation slices, so they intentionally increase the
+  unreferenced count until those slices add executable coverage.
 
 Required gate for each further Phase 1 implementation slice:
 
@@ -209,19 +216,45 @@ Gate:
 - Further Slice 1 work starts from canonical requirements, VICE evidence, and
   focused validation rather than code-first discovery.
 
+## Classic VICE Edge-Case Integration
+
+The `TR-*-EDGE-*` requirements from the 2026-05-21 classic VICE source
+backfill are now planning inputs, not a side inventory. A Phase 1 slice that
+touches an affected subsystem must name the relevant edge TR before design,
+add or update executable coverage for the observable behavior, and record any
+deferment explicitly.
+
+| Area | Edge TRs | Phase 1 Effect |
+|------|----------|----------------|
+| VIC-II visible parity | `TR-VIC-EDGE-001` through `TR-VIC-EDGE-006` | Required under `BACKFILL-VIDEO-001`. These drive invalid-mode priority/collision, border flip-flops, badline/idle windows, sprite DMA latch/fetch timing, matrix idle/fill behavior, and register/collision readback. |
+| VIC-II VSP/AGSP | `TR-VIC-EDGE-007` | Deferred unless Phase 1 explicitly accepts VSP/AGSP demo compatibility. Do not spend Slice 1 time here unless a final x64sc gate finds a concrete VSP blocker. |
+| CPU and shared bus | `TR-CPU-EDGE-001`, `TR-CPU-EDGE-002`, `TR-RAM-EDGE-001` | Required when CPU, VIC DMA, reset/startup RAM, or lockstep slices touch interrupt latency, BA-low stalls, dummy accesses, or RAM-init determinism. |
+| Disk, IEC, and media images | `TR-IEC-EDGE-001`, `TR-DRV-EDGE-001`, `TR-MEDIA-EDGE-001` | Required under `ARCH-TRUEDRIVE-1541-002` and `BACKFILL-MEDIA-001` for real KERNAL load/autostart, IEC bit timing, directory/BAM behavior, and weak/sync media image behavior. |
+| Tape and tapeport | `TR-TAP-EDGE-001`, `TR-TAPE-EDGE-001` | Required under `RUNTIME-TAPE-002` and `BACKFILL-MEDIA-001` for TAP pulse interpretation, motor/sense behavior, and CIA FLAG timing. |
+| SID | `TR-SID-EDGE-001` through `TR-SID-EDGE-003` | Phase 1 validation-only unless final lockstep or audio/register gates expose a concrete SID parity failure. Keep deeper analog/filter work post-MVP. |
+| VDC/C128 | `TR-VDC-EDGE-001` | Non-Phase-1 unless a C128 profile enters the required x64sc-equivalent scope. |
+
+For x64sc parity, these edge cases change the implementation posture: the
+remaining work is no longer broad "make it match VICE" parity. It is a set of
+observable compatibility traps that must be tested directly. The highest-risk
+Phase 1 impacts are VIC-II raster-visible behavior, CPU/VIC bus timing, and
+media/tape protocol timing because small cycle or latch differences can pass
+basic boot tests while still failing demos, fastloaders, native checkpoints, or
+longer KERNAL workflows.
+
 ## Slice Order
 
 | Order | Slice | Primary TODOs | Scope | Exit Gate |
 |-------|-------|---------------|-------|-----------|
 | 0 | Reconcile tracked state | All open Phase 1 TODOs | Resolve dashboard/TODO conflicts and split post-MVP work. | MCP TODO, README, handoff, and this plan agree. |
 | 0.5 | VICE requirements traceability gate | All open Phase 1 TODOs | Audit imported VICE FR coverage, noncanonical labels, stale test-suite names, and missing acceptance criteria before more feature work. | Requirement text and test requirements are current for the next slice; traceability check output is recorded. |
-| 1 | VIC-II visible parity | `BACKFILL-VIDEO-001` | Badline/DMA CPU inhibition, sprite DMA, sprite priority/collisions, border/open-border behavior, bank switching side effects, visible frame checkpoints. | Focused VIC tests, x64sc raster/chip checkpoints, full solution test. |
-| 2 | True-drive 1541/D64 close | `ARCH-TRUEDRIVE-1541-002`, `BACKFILL-MEDIA-001` | Compare drive CPU lockstep, validate real IEC/D64 load behavior through C64 KERNAL paths, and document any native-shim exposure gaps. | 100k drive CPU lockstep or documented native-shim blocker, D64 attach/load smoke, full solution test. |
-| 3 | Datasette MVP completion | `RUNTIME-TAPE-002`, `BACKFILL-MEDIA-001` | Datasette motor, spin-up/spin-down timing, play/record/rewind state, gated pulse delivery, CIA FLAG behavior. | TAP/datasette timing tests and host/launcher tape attach smoke. |
+| 1 | VIC-II visible parity | `BACKFILL-VIDEO-001` | Badline/DMA CPU inhibition, sprite DMA, sprite priority/collisions, border/open-border behavior, bank switching side effects, visible frame checkpoints, and `TR-VIC-EDGE-001` through `TR-VIC-EDGE-006`. | Focused VIC tests, x64sc raster/chip checkpoints, full solution test. |
+| 2 | True-drive 1541/D64 close | `ARCH-TRUEDRIVE-1541-002`, `BACKFILL-MEDIA-001` | Compare drive CPU lockstep, validate real IEC/D64 load behavior through C64 KERNAL paths, cover `TR-IEC-EDGE-001`, `TR-DRV-EDGE-001`, and `TR-MEDIA-EDGE-001`, and document any native-shim exposure gaps. | 100k drive CPU lockstep or documented native-shim blocker, D64 attach/load smoke, full solution test. |
+| 3 | Datasette MVP completion | `RUNTIME-TAPE-002`, `BACKFILL-MEDIA-001` | Datasette motor, spin-up/spin-down timing, play/record/rewind state, gated pulse delivery, CIA FLAG behavior, `TR-TAP-EDGE-001`, and `TR-TAPE-EDGE-001`. | TAP/datasette timing tests and host/launcher tape attach smoke. |
 | 4 | Snapshot and capture close | `RUNTIME-SNAPSHOT-002`, `RUNTIME-CAPTURE-002`, `BACKFILL-MEDIA-001` | Snapshot all required chip/timing/bus state; add configured capture formats required by Phase 1. | Deterministic save/load/resume test, capture artifact tests, full solution test. |
 | 5 | Input parity close | `BACKFILL-INPUT-001` | Joystick/control-port parity, longer keyboard workflows, model-specific keyboard matrix behavior, and host input injection coverage. | Input parity tests, host input protocol tests, full solution test. |
 | 6 | Testbench and launcher shim | `ARCH-TESTBENCH-001`, `CLI-LAUNCHER-001` | Minimal x64sc-compatible runner, debugcart exits, `-limitcycles`, selected VICE-style flags, PRG/SYS autostart, screenshot/monitor smoke. | Selected upstream testbench cases run from process-level smoke tests. |
-| 7 | Final x64sc lockstep | `BACKFILL-LOCKSTEP-001` | Run all required x64sc profile gates with media/input/video/snapshot coverage and no required skips. | Final x64sc lockstep green; blockers must identify missing asset, native shim gap, or exact failing subsystem. |
+| 7 | Final x64sc lockstep | `BACKFILL-LOCKSTEP-001` | Run all required x64sc profile gates with media/input/video/snapshot coverage, no required skips, and explicit triage for every Phase-1-relevant edge TR. | Final x64sc lockstep green; blockers must identify missing asset, native shim gap, exact failing subsystem, or deferred edge TR. |
 | 8 | Performance first pass | `PERF-TUNING-001` | Profile CPU, VIC/video, memory/bus, scheduler, host UI/frame-source, and allocation hotspots against a selected classic VICE/x64sc comparison profile; remediate the highest-impact bottlenecks. | Repeatable benchmark shows vice-sharp reaches at least 25% of classic VICE performance on the selected profile, with deterministic validation still green. |
 | 9 | Phase 1 closeout | docs plus MCP TODO/session state | README dashboard refresh, handoff refresh, MCP TODO/session closure, and explicit post-Phase 1 split list. | Full closeout validation set passes and docs agree. |
 
@@ -280,6 +313,22 @@ slice:
   the broader VIC/video gate passed 163/163, and the traceability audit
   completed with the existing repo-wide canonical/noncanonical backlog.
 
+2026-05-21 continued Slice 1 with continuous side-border backfill:
+
+- `TR-VIC-EDGE-002` now has managed coverage for cycle-56 CSEL 1-to-0
+  right-side-border opening, carried left-side-border opening on the following
+  line, repeated continuous side-border carry across multiple lines, and the
+  cycle-17 CSEL 0-to-1 blank-line edge.
+- `Mos6569` now snapshots per-line horizontal display state, left-border-open
+  carry, and right-border-open state so render-time visibility follows the
+  cycle-driven flip-flop state instead of static `$D016` geometry alone.
+- `VideoRenderer` now suppresses border drawing for opened side borders and
+  renders background fill for non-sprite opened-border pixels while still
+  allowing sprites through the opened border.
+- Focused border/renderer tests passed 52/52. The broader VIC/video gate
+  passed 170/170. The traceability audit now reports 80 referenced canonical
+  IDs, including `TR-VIC-EDGE-002`.
+
 Remaining Slice 1 work:
 
 - Continue from the Slice 0.5 gate result above. The 2026-05-20 border/sprite
@@ -287,16 +336,22 @@ Remaining Slice 1 work:
   discoverable from classic VICE source, but the canonical imported FR did not
   explicitly drive the design before implementation. The corrected rule is now
   to update or cite the canonical requirement before broadening a slice.
-- Remaining open-border/border flip-flop depth: left-side/continuous
-  side-border cases, non-PAL model timing, and native x64sc checkpoints.
-- Remaining sprite DMA depth beyond the PAL x64sc BA-mask latch: non-PAL
-  per-model tables, sprite data-fetch side effects, and native lockstep
-  checkpoints for multiplexing edge cases.
-- Native x64sc visible-frame/checkpoint validation remains for the display-mode
-  pixel effects now covered by synthetic framebuffer tests, including invalid
-  ECM priority/collision pixels.
-- FLI/AFLI timing depth from `FR-VIC-008`: forced badlines, the left-edge FLI
-  bug, mid-line `$D018` effects, and AFLI bitmap behavior.
+- `TR-VIC-EDGE-002`: remaining open-border/border flip-flop depth is native
+  x64sc checkpoint validation and model-aware visible-frame validation beyond
+  the current managed PAL/non-PAL cycle-state tests.
+- `TR-VIC-EDGE-004`: remaining sprite DMA depth covers non-PAL per-model
+  tables, sprite data-fetch side effects, and native lockstep checkpoints for
+  multiplexing edge cases.
+- `TR-VIC-EDGE-001`: native x64sc visible-frame/checkpoint validation remains
+  for the display-mode pixel effects now covered by synthetic framebuffer
+  tests, including invalid ECM priority/collision pixels.
+- `TR-VIC-EDGE-003` and `FR-VIC-008`: FLI/AFLI timing depth covers forced
+  badlines, the left-edge FLI bug, mid-line `$D018` effects, and AFLI bitmap
+  behavior.
+- `TR-VIC-EDGE-005` and `TR-VIC-EDGE-006`: matrix idle/fill behavior and
+  register/collision readback must be checked before visible parity is called
+  complete, especially where native checkpoints expose observable output or
+  latch differences.
 - Native x64sc visible-frame/checkpoint validation against the installed VICE
   data root for the remaining border, sprite, display-mode, and FLI cases.
 

@@ -97,15 +97,17 @@ public sealed class VideoRenderer
         int lowerBorder = _vic.LowerBorderStart;
         int visLine = lineNumber - upperBorder;
 
-        if (_vic.IsRasterLineVerticalBorderActive(lineNumber))
+        if (_vic.IsRasterLineVerticalBorderActive(lineNumber) ||
+            !_vic.IsRasterLineHorizontalDisplayOpen(lineNumber))
         {
-            // Outside visible area - draw border
             DrawBorder(line, borderPixel);
             return;
         }
 
         int leftBorderPixel = _vic.LeftBorderPixel;
         int rightBorderPixel = _vic.RightBorderEndPixel;
+        bool leftBorderOpen = _vic.IsRasterLineLeftBorderOpen(lineNumber);
+        bool rightBorderOpen = _vic.IsRasterLineRightBorderOpen(lineNumber);
         int columns = _vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenWidth = columns * 8;
         int screenLine = visLine + _vic.YScroll;
@@ -121,6 +123,8 @@ public sealed class VideoRenderer
                 lineNumber,
                 leftBorderPixel,
                 rightBorderPixel,
+                leftBorderOpen,
+                rightBorderOpen,
                 screenWidth,
                 screenRow,
                 charRow,
@@ -146,6 +150,8 @@ public sealed class VideoRenderer
         int rasterLine,
         int leftBorderPixel,
         int rightBorderPixel,
+        bool leftBorderOpen,
+        bool rightBorderOpen,
         int screenWidth,
         int screenRow,
         int charRow,
@@ -153,9 +159,17 @@ public sealed class VideoRenderer
         uint bgPixel,
         uint borderPixel)
     {
-        if (x < leftBorderPixel || x >= rightBorderPixel)
+        bool inLeftBorder = x < leftBorderPixel;
+        bool inRightBorder = x >= rightBorderPixel;
+
+        if ((inLeftBorder && !leftBorderOpen) || (inRightBorder && !rightBorderOpen))
         {
             return new PixelSample(borderPixel, false);
+        }
+
+        if (inLeftBorder || inRightBorder)
+        {
+            return new PixelSample(bgPixel, false);
         }
 
         int screenX = x - leftBorderPixel;
