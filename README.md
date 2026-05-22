@@ -86,7 +86,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Host UI + Monitor control surface (10 services + 8 adapters + view model + registry + mapper + frame source + InProcessGrpcHost + 2 clients; ~230 tests) | ✅ | 100% | `BACKFILL-HOSTUI-001` closeable; launcher/UI shell work is tracked separately |
 | Core primitives (SystemClock + DoubleBufferedMutationQueue + LockFreePubSub + BasicBus + SimpleRam) | ✅ | 100% | TR-PUBSUB-PERFORMANCE + TR-Cycle-Accuracy + TR-System-Core |
 | x64sc variant lockstep gate (293/293 variants, raster checkpoints) | 🟢 | 50% | `BACKFILL-LOCKSTEP-001` |
-| Upstream VICE testbench integration | ⚪ | 0% | `ARCH-TESTBENCH-001` |
+| Upstream VICE testbench integration | 🟡 | 5% | `ARCH-TESTBENCH-001` next wave focus |
 
 ### Iterations 2-5 — Other Machines
 

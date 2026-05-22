@@ -3331,72 +3331,11 @@ The 1541 and 1571 disk drives each contain two VIA 6522 chips. VIA1 ($1800-$180F
 
 ## FR-VIC-001 Raster Engine with PAL/NTSC Timing
 
-## FR-VIC-001: Raster Engine and Timing
-
-**ID:** FR-VIC-001
-**Title:** Raster Engine with PAL/NTSC Timing
-**Priority:** P0 -- Critical
-**Iteration:** 1
-
-### Description
-
-The VIC-II raster engine shall generate video output with cycle-accurate timing for both PAL (6569, 312 lines, 63 cycles/line) and NTSC (6567, 263 lines, 65 cycles/line) variants. The raster counter, raster interrupt, and display/idle state transitions shall match real hardware timing.
-
-### Acceptance Criteria
-
-1. PAL variant generates 312 raster lines with 63 CPU cycles per line (504 pixels per line).
-2. NTSC variant generates 263 raster lines with 65 CPU cycles per line (520 pixels per line).
-3. The raster counter ($D011 bit 7 + $D012) increments once per raster line.
-4. A raster interrupt fires when the raster counter matches the value set in $D011/$D012.
-5. The raster interrupt triggers at cycle 0 of the matching line (PAL) with a 1-cycle acknowledge latency.
-6. The display window begins at line 51 (PAL) and ends at line 250.
-7. Display/idle state transitions occur at the correct cycles within each line.
-8. A light-pen high-to-low transition latches the current raster X position and
-   low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch,
-   and re-arms only at the frame boundary.
-
-### Source References
-
-- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
-
-### Traceability
-
-- **Interfaces:** `IVideoChip`, `IClockedDevice`
-- **Test Suite:** `RasterTimingTests`, `PalNtscVariantTests`, `RasterInterruptTests`, `VicIILightPenTests`
-
----
+VIC-II raster engine shall generate cycle-accurate video output for PAL 6569 with 312 lines and 63 cycles per line and NTSC 6567 with 263 lines and 65 cycles per line. Acceptance: raster counter $D011 bit 7 plus $D012 increments once per raster line; raster interrupt fires when $D011/$D012 match and triggers at cycle 0 of the matching PAL line with 1-cycle acknowledge latency; PAL display window begins at line 51 and ends at line 250; display/idle transitions occur at the correct cycles; light-pen high-to-low transition latches current raster X and low raster line into $D013/$D014, sets the light-pen interrupt latch, and re-arms only at the frame boundary. Source: native/vice/vice/doc/vice.texi. Tests: RasterTimingTests, PalNtscVariantTests, RasterInterruptTests, VicIILightPenTests.
 
 ## FR-VIC-002 Character Display Modes (Standard, Multicolor, ECM)
 
-## FR-VIC-002: Character Display Modes
-
-**ID:** FR-VIC-002
-**Title:** Character Display Modes (Standard, Multicolor, ECM)
-**Priority:** P0 -- Critical
-**Iteration:** 1
-
-### Description
-
-The VIC-II shall support all three character display modes: Standard Character Mode, Multicolor Character Mode, and Extended Color Mode (ECM). Character data is fetched from the screen matrix and character generator according to the configured VIC bank and pointers.
-
-### Acceptance Criteria
-
-1. Standard mode displays 40x25 characters using 8x8 pixel character cells with 2 colors (background + foreground from Color RAM).
-2. Multicolor character mode (MCM bit set) displays 4x8 double-wide pixel characters with up to 4 colors per cell when color nybble bit 3 is set.
-3. Extended Color Mode (ECM bit set) allows 4 background colors selected by the upper 2 bits of the screen code, limiting the character set to 64 characters.
-4. ECM + MCM combination is invalid for visible graphics output and renders as color 0, but x64sc still derives the hidden foreground/priority bit from the underlying character pixel: hires character one-bits when Color RAM bit 3 is clear, and multicolor character pairs %10/%11 when Color RAM bit 3 is set.
-5. Screen matrix base and character generator base are controlled by $D018.
-6. Character data fetch timing (c-access and g-access) occurs at the correct cycles per line.
-
-### Source References
-
-- `native/vice/vice/doc/vice.texi`: video settings, C64/C128 VIC-II features, display mode, border, raster, and palette behavior.
-- `native/vice/vice/src/viciisc/vicii-draw-cycle.c`: invalid ECM character-mode `colors[]` entries map visible output to `COL_NONE`, while `draw_graphics()` keeps `pixel_pri = px & 0x2` for sprite priority and collision handling.
-
-### Traceability
-
-- **Interfaces:** `IVideoChip`
-- **Test Suite:** `StandardCharModeTests`, `MulticolorCharModeTests`, `EcmModeTests`, `InvalidModeTests`
+VIC-II shall support Standard Character Mode, Multicolor Character Mode, and Extended Color Mode with screen matrix and character data fetched from the selected VIC bank and $D018 pointers. Acceptance: standard mode displays 40x25 8x8 character cells with background and Color RAM foreground; MCM displays 4x8 double-wide pixels with up to four colors when Color RAM bit 3 is set; ECM selects four backgrounds from upper screen-code bits and limits character selection to 64 glyphs; invalid ECM/BMM/MCM selector combinations render visible graphics as color 0 while x64sc still derives hidden foreground priority and sprite-background collision bits from the underlying character pixel, including hires character one-bits when Color RAM bit 3 is clear and multicolor pairs %10/%11 when Color RAM bit 3 is set; c-access and g-access timing occurs at the correct cycles. Sources: native/vice/vice/doc/vice.texi and native/vice/vice/src/viciisc/vicii-draw-cycle.c:41,133-141,196-224,401-428. Tests: StandardCharModeTests, MulticolorCharModeTests, EcmModeTests, InvalidModeTests.
 
 ## FR-VIC-003 Bitmap Display Modes (Standard, Multicolor)
 

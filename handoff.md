@@ -4,10 +4,10 @@
 
 - Workspace: `F:\GitHub\vice-sharp`
 - Branch: `main`
-- Last synchronized project commit before this implementation slice: `06b080d3f3717b32e4b2b89ea6149f3ff7dc6319` (`feat(vic): add register readback edge coverage`)
-- `origin/main` and `github/main` were both verified at `06b080d3f3717b32e4b2b89ea6149f3ff7dc6319` before the matrix/idle slice.
+- Last synchronized project commit before this MCP backfill/planning slice: `8c1b2fc99670597b8a9eb86f67bd90c644dc457b` (`docs(handoff): record matrix wiki sync`)
+- `origin/main` and `github/main` were both verified at `8c1b2fc99670597b8a9eb86f67bd90c644dc457b` before this slice.
 - Matrix/idle implementation commit: `243c651805a04d89fcfb1a26073b5de210037519` (`feat(vic): add matrix idle fetch coverage`).
-- The only intentionally uncommitted local item was `docs/reddit-followup-post.md`.
+- No intentionally uncommitted local docs are expected after the prior reddit follow-up draft deletion.
 - Active plan: `docs/plan.md`, "ViceSharp Phase 1 Completion Plan", updated 2026-05-21.
 - This is a reboot continuity handoff, not a Phase 1 completion claim.
 
@@ -24,6 +24,12 @@
   were updated instead.
 - MCP STDIO frames on physical blank lines. For multiline markdown payloads, pass compressed JSON or another single-line serialized payload so blank lines do not truncate the request.
 - All subagents must read `AGENTS-README-FIRST.yaml` before work and must report progress to the main agent at least every five minutes.
+- 2026-05-21/22 MCP backfill verified the Codex plugin trust path, imported
+  pending and failsafe recovery data through plugin calls, normalized legacy
+  invalid request IDs with `powershell-yaml`, replayed valid edge-case
+  requirement updates, and skipped only empty or superseded failsafe payloads.
+  `ARCH-TESTBENCH-001` is now marked in MCP TODO state as the next-wave
+  high-priority Phase 1 focus.
 
 ## Important Local Environment Notes
 
@@ -116,19 +122,26 @@
 
 ## Current Phase 1 Plan
 
-`PERF-TUNING-001` is now required for Phase 1 completion. The active closeout order in `docs/plan.md` is:
+`PERF-TUNING-001` is now required for Phase 1 completion. The next wave is
+`ARCH-TESTBENCH-001`: inventory the upstream VICE testbench/x64sc hook and
+debugcart contract, compare it to the current ViceSharp launcher surface, then
+implement the smallest runner path that can execute selected upstream smoke
+cases unchanged.
+
+The active closeout order in `docs/plan.md` is:
 
 1. Reconcile tracked state.
 2. Run the VICE requirements traceability gate.
-3. Continue `BACKFILL-VIDEO-001`.
-4. Close true-drive 1541 and D64 behavior.
-5. Complete datasette MVP.
-6. Complete snapshot and capture closeout.
-7. Close input parity.
-8. Finish testbench and launcher shim.
-9. Run final x64sc lockstep.
-10. Run the performance first pass for `PERF-TUNING-001`, targeting 25% of classic VICE performance.
-11. Complete Phase 1 closeout.
+3. Start `ARCH-TESTBENCH-001` as the next implementation wave.
+4. Continue `BACKFILL-VIDEO-001`.
+5. Close true-drive 1541 and D64 behavior.
+6. Complete datasette MVP.
+7. Complete snapshot and capture closeout.
+8. Close input parity.
+9. Finish launcher shim follow-through.
+10. Run final x64sc lockstep.
+11. Run the performance first pass for `PERF-TUNING-001`, targeting 25% of classic VICE performance.
+12. Complete Phase 1 closeout.
 
 Real Phase 1 blockers still listed in the plan:
 

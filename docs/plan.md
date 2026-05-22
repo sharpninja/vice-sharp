@@ -244,6 +244,13 @@ longer KERNAL workflows.
 
 ## Slice Order
 
+2026-05-21 next-wave focus: pull `ARCH-TESTBENCH-001` forward as the
+immediate implementation slice before broadening optional native-depth
+`BACKFILL-VIDEO-001` work. The first gate is an inventory of the upstream VICE
+testbench/x64sc hook and debugcart contract against the current ViceSharp
+launcher surface, followed by the smallest x64sc-compatible runner path that can
+execute selected upstream smoke cases unchanged.
+
 | Order | Slice | Primary TODOs | Scope | Exit Gate |
 |-------|-------|---------------|-------|-----------|
 | 0 | Reconcile tracked state | All open Phase 1 TODOs | Resolve dashboard/TODO conflicts and split post-MVP work. | MCP TODO, README, handoff, and this plan agree. |
@@ -403,7 +410,9 @@ Treat these as current blockers after Slice 0 reconciliation:
 - `RUNTIME-TAPE-002`: datasette motor and timing behavior.
 - `RUNTIME-SNAPSHOT-002`: full chip/timing snapshot round-trip.
 - `RUNTIME-CAPTURE-002`: configurable capture formats required for Phase 1.
-- `ARCH-TESTBENCH-001`: upstream VICE testbench runner smoke.
+- `ARCH-TESTBENCH-001`: upstream VICE testbench runner smoke; this is the next
+  implementation focus so native checkpoints and parity work can run through a
+  durable x64sc-compatible process harness.
 - `ARCH-TRUEDRIVE-1541-002`: true drive-CPU lockstep, unless the native shim
   exposure is formally split as post-Phase 1.
 - `CLI-LAUNCHER-001`: launcher-level flags and process smoke needed for
