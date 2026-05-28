@@ -15,6 +15,12 @@ namespace ViceSharp.Launcher;
 ///   --cycles N             cycle budget for the run
 ///   -v / --verbose         verbose output
 ///   --help / -h / -?       show help
+///   -debugcart / +debugcart   (ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6)
+///   --limitcycles / -limitcycles N   (ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC7)
+///   trailing *.prg or -autostart   (ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC8)
+///
+/// VICE sources: debugcart.c (regression $D7FF signaling), autostart/mon_file.c,
+/// vice.texi, testbench harness patterns ("x64sc -debugcart -limitcycles 100000000 program.prg").
 ///
 /// Unknown flags are collected into <see cref="ViceArgs.Unknown"/> rather
 /// than thrown - VICE itself is lenient about unrecognised flags.
@@ -34,6 +40,11 @@ public static class ViceArgsParser
         long? cycles = null;
         bool verbose = false;
         bool help = false;
+        // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6-8: testbench flags for gated recognition
+        // (prevents landing in Unknown for harness invocations using debug cart + bounded cycles + prg autostart)
+        bool? debugCart = null;
+        long? limitCycles = null;
+        string? autostartPrg = null;
         var unknown = new List<string>();
 
         for (int i = 0; i < args.Length; i++)
@@ -62,12 +73,33 @@ public static class ViceArgsParser
                 case "-h":
                 case "-?":
                     help = true; break;
+                // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6: +/-debugcart for VICE debug cart device
+                // (enables $D7FF result writes for automatic regression test harness signaling per debugcart.c)
+                case "+debugcart": debugCart = true; break;
+                case "-debugcart": debugCart = false; break;
+                // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC7: limitcycles (testbench bounded execution)
+                case "--limitcycles":
+                case "-limitcycles":
+                    if (long.TryParse(Take(), out var lc)) limitCycles = lc;
+                    else unknown.Add($"--limitcycles (non-numeric)");
+                    break;
+                // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC8: basic -autostart for prg
+                case "-autostart":
+                    autostartPrg = Take(); break;
                 default:
                     if (a.StartsWith("--machine-yaml=", StringComparison.Ordinal))
                         machineYaml = a["--machine-yaml=".Length..];
                     else if (a.StartsWith("--cycles=", StringComparison.Ordinal) &&
                              long.TryParse(a["--cycles=".Length..], out var nv))
                         cycles = nv;
+                    // AC7 = form for consistency with cycles
+                    else if (a.StartsWith("--limitcycles=", StringComparison.Ordinal) &&
+                             long.TryParse(a["--limitcycles=".Length..], out var lcv))
+                        limitCycles = lcv;
+                    // AC8 / AC6-8: trailing .prg positional (classic VICE "x64sc ... testcase.prg" autostart)
+                    // or any bare *.prg arg; do not treat as unknown (testbench recognition gate)
+                    else if (a.EndsWith(".prg", StringComparison.OrdinalIgnoreCase))
+                        autostartPrg = a;
                     else
                         unknown.Add(a);
                     break;
@@ -83,6 +115,10 @@ public static class ViceArgsParser
             TrueDrive = trueDrive,
             MachineYamlPath = machineYaml,
             Cycles = cycles,
+            // ARCH-TESTBENCH-001 etc: wire the three testbench flags (minimal addition only for this gated slice)
+            DebugCart = debugCart,
+            LimitCycles = limitCycles,
+            AutostartPrg = autostartPrg,
             Verbose = verbose,
             ShowHelp = help,
             Unknown = unknown,

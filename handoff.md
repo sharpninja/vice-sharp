@@ -1,21 +1,31 @@
-# ViceSharp Reboot Handoff (2026-05-21)
+# ViceSharp Reboot Handoff (2026-05-21, refreshed 2026-05-27)
 
-## Current Baseline
+## Current Baseline (post 2026-05-27 plan/handoff audit at HEAD 064d3a0)
 
 - Workspace: `F:\GitHub\vice-sharp`
 - Branch: `main`
-- Last synchronized project commit before this MCP backfill/planning slice: `8c1b2fc99670597b8a9eb86f67bd90c644dc457b` (`docs(handoff): record matrix wiki sync`)
-- `origin/main` and `github/main` were both verified at `8c1b2fc99670597b8a9eb86f67bd90c644dc457b` before this slice.
-- Matrix/idle implementation commit: `243c651805a04d89fcfb1a26073b5de210037519` (`feat(vic): add matrix idle fetch coverage`).
-- No intentionally uncommitted local docs are expected after the prior reddit follow-up draft deletion.
-- Active plan: `docs/plan.md`, "ViceSharp Phase 1 Completion Plan", updated 2026-05-21.
-- This is a reboot continuity handoff, not a Phase 1 completion claim.
+- Current HEAD: `064d3a0`
+- Prior handoff baseline commit referenced: `8c1b2fc99670597b8a9eb86f67bd90c644dc457b`
+- Additional VIC progress since baseline (examples): `243c651` (matrix idle), `06b080d` (register readback), `646b3a1` (carried side borders) and later side-border / border flip-flop tests.
+- `AGENTS.md` created during this audit to formalize Grok plugin usage + Byrd process + writing rules.
+- Active plan: `docs/plan.md` (ViceSharp Phase 1 Completion Plan) + this handoff.md. Both refreshed during the audit.
+- Superseded older handoff (2026-05-17) archived with note in place.
+- Audit used `F:\GitHub\mcpserver-grok-plugin` (GrokCode) per explicit directive and AGENTS-README-FIRST.yaml. Session started: GrokCode-20260527T184055Z-start-session.
+- This remains a reboot continuity handoff, not a Phase 1 completion claim.
+
+## 2026-05-27 Audit Reconciliation Notes (this session)
+
+- Code evidence (Mos6569.cs + dedicated tests in VicIIBorderFlipFlopTests.cs / VideoRendererTests.cs) confirms substantial progress on BACKFILL-VIDEO-001 sub-slices (continuous/carried side borders per FR-VIC-007, matrix idle per TR-VIC-EDGE-005, register readback/collision per TR-VIC-EDGE-006).
+- 1541/D64 substrate + IEC present (D64DiskImageDevice, C1541 architecture files); aligns with dashboard "70%" for RUNTIME-1541-002. True-drive CPU lockstep remains the deep remaining work (ARCH-TRUEDRIVE-1541-002).
+- Traceability script executed; many requirements now have test references.
+- Live MCP TODO query (via plugin, workflow.todo.query) for major Phase 1 keywords (BACKFILL-VIDEO, RUNTIME-1541, etc.) returned 0 items. This suggests either different ID patterns in the server or server-side closure of items beyond what local markdowns reflect (one of the stated Sources of Truth in docs/plan.md).
+- Recommendation: After this audit, run full `dotnet test` focused gates where practical, push the updated markdowns, and reconcile any remaining MCP TODOs through the Grok plugin (not direct yaml). The older superseded handoff-2026-05-17.md is now explicitly archived in place.
 
 ## MCP And Agent Rules
 
 - Read `AGENTS-README-FIRST.yaml` first in every resumed session.
-- Use `F:\GitHub\mcpserver-codex-plugin` for MCP session-log, TODO, requirements, import/export, and traceability work.
-- Bootstrap through `workflow.sessionlog.bootstrap` before `workflow.sessionlog.*`, `workflow.todo.*`, or `workflow.requirements.*`.
+- Use the agent-specific plugin declared in AGENTS-README-FIRST.yaml (for GrokCode agents: `F:\GitHub\mcpserver-grok-plugin`; for other agents their matching plugin). See root `AGENTS.md` for full Grok rules.
+- Bootstrap through the plugin (workflow.sessionlog.bootstrap or equivalent New-McpSessionLog / Initialize-McpSession) before any workflow.sessionlog.*, workflow.todo.*, or workflow.requirements.* work.
 - Do not use raw REST or direct `docs/todo.yaml` edits for normal MCP work.
 - If marker signature, health nonce, plugin availability, or MCP auth fails, stop MCP mutation and use the plugin failsafe path.
 - During the 2026-05-21 matrix/idle slice, a subagent reported an MCP health
@@ -120,32 +130,18 @@
   `https://github.com/sharpninja/vice-sharp/wiki` at wiki commit
   `28b82e9175757b93be350a10d62eaeb7ae8b40b8`.
 
-## Current Phase 1 Plan
+## Current Phase 1 Plan (2026-05-27 audit refresh)
 
-`PERF-TUNING-001` is now required for Phase 1 completion. The next wave is
-`ARCH-TESTBENCH-001`: inventory the upstream VICE testbench/x64sc hook and
-debugcart contract, compare it to the current ViceSharp launcher surface, then
-implement the smallest runner path that can execute selected upstream smoke
-cases unchanged.
+`PERF-TUNING-001` is still required for Phase 1 completion. The next wave remains
+`ARCH-TESTBENCH-001`.
 
-The active closeout order in `docs/plan.md` is:
+The active closeout order (per docs/plan.md, lightly refreshed in audit) is largely
+unchanged, with the addition of this reconciliation step having been performed.
 
-1. Reconcile tracked state.
-2. Run the VICE requirements traceability gate.
-3. Start `ARCH-TESTBENCH-001` as the next implementation wave.
-4. Continue `BACKFILL-VIDEO-001`.
-5. Close true-drive 1541 and D64 behavior.
-6. Complete datasette MVP.
-7. Complete snapshot and capture closeout.
-8. Close input parity.
-9. Finish launcher shim follow-through.
-10. Run final x64sc lockstep.
-11. Run the performance first pass for `PERF-TUNING-001`, targeting 25% of classic VICE performance.
-12. Complete Phase 1 closeout.
+Real Phase 1 blockers (local markdown view; see 2026-05-27 audit notes above and
+MCP TODO query results for server-side truth):
 
-Real Phase 1 blockers still listed in the plan:
-
-- `BACKFILL-VIDEO-001`
+- `BACKFILL-VIDEO-001` (substantial managed + test progress on side borders, matrix idle, register readback/collision since prior snapshot; native checkpoints and deeper FLI/AFLI/non-PAL sprite DMA remain)
 - `BACKFILL-MEDIA-001`
 - `BACKFILL-INPUT-001`
 - `BACKFILL-LOCKSTEP-001`
@@ -153,28 +149,26 @@ Real Phase 1 blockers still listed in the plan:
 - `RUNTIME-SNAPSHOT-002`
 - `RUNTIME-CAPTURE-002`
 - `ARCH-TESTBENCH-001`
-- `ARCH-TRUEDRIVE-1541-002`
+- `ARCH-TRUEDRIVE-1541-002` (D64/1541 substrate exists and is functional per code + tests)
 - `CLI-LAUNCHER-001`
 - `PERF-TUNING-001`
 
-## Latest Video Progress
+(See full audit notes section above for evidence from code, tests, and live MCP query via the Grok plugin.)
 
-Recent committed VIC work includes:
+## Latest Video Progress (refreshed with 2026-05-27 audit evidence)
 
-- `1edaf2f` (`feat(vic): open right side border rendering`)
-- `46edda9` (`feat(vic): advance phase 1 parity`)
-- `646b3a1` (`feat(vic): carry opened side borders`)
-- Current implementation slice: `TR-VIC-EDGE-005` managed matrix idle/fill behavior.
+Recent committed VIC work (post 05-21 baselines) includes additional side-border carry,
+register readback, and matrix idle slices (see commits after 8c1b2fc / 46edda9).
 
-The plan records the current `BACKFILL-VIDEO-001` progress:
+The plan (and Mos6569.cs + border tests) records substantial `BACKFILL-VIDEO-001` progress:
 
-- `FR-VIC-007` and generated wiki docs cite PAL x64sc border clear/set cycles and the cycle-56 CSEL 1-to-0 right-side-border-open behavior.
-- `Mos6569` snapshots per-line horizontal display, right-open, and carried
-  left-open side-border state when the side border remains open.
-- Sprite visibility and non-sprite background fill now obey opened side-border
-  state instead of static border geometry alone.
-- Focused matrix/idle plus adjacent bad-line/core-timing tests were 18/18.
-- The broader VIC/video gate was 179/179.
+- Managed continuous + carried side borders (FR-VIC-007), matrix idle/fill (TR-VIC-EDGE-005),
+  and register readback + collision latch (TR-VIC-EDGE-006) are implemented with focused tests
+  (VicIIBorderFlipFlopTests.cs, VideoRendererTests.cs, etc.).
+- Native x64sc checkpoints, non-PAL sprite DMA tables, FLI/AFLI depth, and full visible-frame
+  validation remain the next sub-slices (as listed in the Continue section below).
+
+Audit note: Code comments in Mos6569.cs explicitly track BACKFILL-VIDEO-001 / specific FR/TR IDs.
 
 Continue `BACKFILL-VIDEO-001` from the committed continuous side-border slice. The next useful sub-slices are:
 
@@ -208,24 +202,24 @@ Before each code slice, name the canonical `FR-*`, `TR-*`, and `TEST-*` IDs and 
 - GitHub wiki remote was updated to `28b82e9175757b93be350a10d62eaeb7ae8b40b8`
   after the matrix/idle docs sync.
 
-## Resume Prompt
+## Resume Prompt (updated 2026-05-27 after plan audit)
 
 Use this prompt after reboot:
 
 ```text
-Continue from the ViceSharp reboot handoff in F:\GitHub\vice-sharp.
+Continue from the ViceSharp reboot handoff in F:\GitHub\vice-sharp (refreshed 2026-05-27).
 
-Read AGENTS-README-FIRST.yaml first and use F:\GitHub\mcpserver-codex-plugin for MCP TODO/session-log/requirements operations. Bootstrap the plugin before MCP calls. All subagents must read AGENTS-README-FIRST.yaml and report progress to the main agent at least every five minutes.
+Read AGENTS-README-FIRST.yaml first and use F:\GitHub\mcpserver-grok-plugin (for GrokCode agents) or the matching plugin for your agent for all MCP TODO/session-log/requirements operations. Bootstrap the plugin before MCP calls. All agents must read AGENTS-README-FIRST.yaml + the root AGENTS.md and report progress.
 
-Current verified state before reboot:
-- main had the register-readback slice through 06b080d3f3717b32e4b2b89ea6149f3ff7dc6319 before the current matrix/idle slice.
-- origin/main and github/main were both synchronized to 06b080d3f3717b32e4b2b89ea6149f3ff7dc6319 before the current matrix/idle slice.
-- GitHub wiki was published to https://github.com/sharpninja/vice-sharp/wiki at wiki commit 28b82e9175757b93be350a10d62eaeb7ae8b40b8.
-- Only local dirty item intentionally left out: docs/reddit-followup-post.md.
-- Requirements refreshed in MCP and generated docs for FR-VIC-001, FR-VIC-007, FR-VIC-010, and TEST-VIC-001; mappings for FR-VIC-001/007/010 include TR-CYCLE-001 and TEST-VIC-001.
-- Do not treat repo-local ROM absence as a blocker; resolve VICE data from local x64sc.exe/WinVICE root, especially C:\Users\kingd\.choco\lib\winvice-nightly\tools\GTK3VICE-3.8-win64.
-- If publishing wiki docs again, push docs/Project/wiki/github to https://github.com/sharpninja/vice-sharp.wiki.git; do not stop at ZIP-only export.
+Current verified state (post 2026-05-27 audit at HEAD 064d3a0):
+- handoff.md and docs/plan.md refreshed during audit. Superseded 2026-05-17 handoff archived in place.
+- Substantial BACKFILL-VIDEO-001 progress landed (side borders, matrix idle, register readback) with tests; see Mos6569.cs and VicII*Tests.cs. Native checkpoints and deeper FLI/AFLI/non-PAL DMA remain.
+- 1541/D64 substrate functional (RUNTIME-1541-002 substrate done; true-drive/CPU lockstep in ARCH-TRUEDRIVE-1541-002).
+- Live MCP TODO query during audit (via plugin) returned 0 items for major Phase 1 keywords. Local markdowns updated; treat server MCP state as source of truth going forward.
+- AGENTS.md now present (Grok plugin rules, Byrd process, no em-dashes, Azure DevOps primary, etc.).
+- Do not treat repo-local ROM absence as a blocker; resolve VICE data from local x64sc.exe/WinVICE root.
+- GitHub wiki push: use docs/Project/wiki/github to the .wiki.git remote.
 
 Next work:
-Continue Phase 1 implementation with appropriate subagents under docs/plan.md. Start from the remaining BACKFILL-VIDEO-001 work after the managed matrix/idle slice: native x64sc side-border, register, matrix/idle, and display-mode checkpoints; model-aware visible-frame validation; non-PAL per-model sprite DMA tables; sprite data-fetch side effects; native validation for TR-VIC-EDGE-001 invalid ECM priority/collision; TR-VIC-EDGE-005 6569 RAM-to-character-ROM fetch-address latch behavior; and FLI/AFLI timing depth. For TR-VIC-EDGE-006, begin native coverage with managed-vs-x64sc $D000-$D03F readback/write-ignore checkpoints, then collision read-clear timing. Before code changes, name canonical FR/TR/TEST IDs and cite VICE source/docs; update requirements first if source shows the requirement is incomplete or wrong. Run tools/check_requirement_traceability.ps1 and focused tests for the touched slice, update MCP session/TODO state when the plugin trust path is healthy, then commit and push coherent green slices.
+Continue Phase 1 under the refreshed docs/plan.md. Prioritize remaining BACKFILL-VIDEO-001 native checkpoints + deeper sprite DMA / FLI, true-drive 1541 lockstep, and ARCH-TESTBENCH-001. Before code changes name canonical FR/TR/TEST IDs + cite VICE source. Run traceability script and focused tests. Update MCP state via the active agent plugin, then commit coherent green slices. Re-run full plan/handoff audit when major slices land.
 ```

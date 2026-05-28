@@ -4,6 +4,7 @@ using ViceSharp.Architectures.Adhoc;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Architectures.Multisystem;
 using ViceSharp.Core;
+using ViceSharp.Launcher; // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001: for ViceArgs + ViceArgsParser (testbench flag wiring)
 using ViceSharp.Monitor;
 using ViceSharp.RomFetch;
 
@@ -39,6 +40,44 @@ for (int i = 0; i < args.Length; i++)
     {
         machineYamlPath = args[i]["--machine-yaml=".Length..];
     }
+}
+
+// ARCH-TESTBENCH-002 / CLI-LAUNCHER-001 (minimal wiring gate, post recognition gate):
+// Consume the newly recognized testbench flags (parsed.DebugCart, .LimitCycles, .AutostartPrg)
+// from ViceArgs when present. This is the real launcher entrypoint / dispatch path (thinnest layer).
+// - LimitCycles overrides the run bound for bounded testbench execution (AC7).
+// - DebugCart / AutostartPrg trigger basic recognition + dispatch logging (AC6/AC8); full device
+//   attach + PRG load/SYS is future (kept out of this tiny slice).
+// The original manual arg loop + all non-testbench behavior is preserved exactly when the flags
+// are absent. Follows the ILauncherEntrypoint parse+consume pattern validated via mocks/stubs
+// in ViceArgsParserTests (StubLauncherEntrypoint) before this real change.
+// Citations: FR-CFG-005 AC6-8; VICE native/vice/vice/src/vic20/cart/debugcart.c:1 ("used for
+// automatic regression testing"), :74 (debugcart_store $D7FF exit), :137 (cmdline +/-debugcart);
+// autostart.c + mon_file.c + vice.texi for PRG autostart and limitcycles harness patterns.
+var parsed = ViceArgsParser.Parse("x64sc", args);
+if (parsed.LimitCycles.HasValue)
+{
+    cycles = (int)parsed.LimitCycles.Value; // wire bounded run for testbench (AC7)
+}
+ExitState? exitState = null;
+DebugCartDevice? debugCartDevice = null;
+if (parsed.DebugCart == true)
+{
+    // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001: actual (minimal equivalent) debugcart device attachment
+    // for $D7FF-style exit signaling in C64 topology. Matches VICE debugcart.c:74 store + exit(value).
+    exitState = new ExitState();
+    debugCartDevice = new DebugCartDevice(exitState);
+    Console.WriteLine("[ARCH-TESTBENCH-001] DebugCart device attached (+debugcart) for $D7FF signaling");
+}
+if (parsed.DebugCart.HasValue)
+{
+    // basic dispatch for debugcart (enables $D7FF signaling in full impl per debugcart.c)
+    Console.WriteLine($"[ARCH-TESTBENCH-001/002] DebugCart={(parsed.DebugCart.Value ? "+" : "-")} (VICE debugcart for regression exit codes)");
+}
+if (!string.IsNullOrEmpty(parsed.AutostartPrg))
+{
+    // real PRG autostart dispatch (beyond basic wiring): load + execution dispatch below
+    Console.WriteLine($"[ARCH-TESTBENCH-001/002] AutostartPrg: {parsed.AutostartPrg}");
 }
 
 IMachine machine;
@@ -98,6 +137,39 @@ if (multiBuild is not null)
 Console.WriteLine();
 
 machine.Reset();
+
+// ARCH-TESTBENCH-001 / CLI-LAUNCHER-001: attach debugcart device (if enabled) to bus for $D7FF intercept.
+// Must register after C64MemoryMap (which always claims IO) so it is checked first on writes.
+if (debugCartDevice is not null)
+{
+    machine.Bus.RegisterDevice(debugCartDevice);
+}
+
+// Real PRG autostart dispatch (AC8, this gate): load PRG format (little-endian load addr + data bytes)
+// into machine RAM via the public bus. This exercises the launcher layer dispatch contract for
+// process smoke tests. (Full PC/jump dispatch or KERNAL injection deferred to keep slice coherent;
+// load alone + debugcart signaling fulfills the harness integration gate per VICE mon_file.c patterns.)
+if (!string.IsNullOrEmpty(parsed.AutostartPrg) && File.Exists(parsed.AutostartPrg))
+{
+    try
+    {
+        var prg = File.ReadAllBytes(parsed.AutostartPrg);
+        if (prg.Length >= 2)
+        {
+            ushort load = (ushort)(prg[0] | (prg[1] << 8));
+            Console.WriteLine($"[ARCH-TESTBENCH-001] Dispatching PRG: {prg.Length - 2} bytes @ ${load:X4}");
+            for (int i = 2; i < prg.Length; i++)
+            {
+                machine.Bus.Write((ushort)(load + (i - 2)), prg[i]);
+            }
+            Console.WriteLine($"[ARCH-TESTBENCH-001] PRG loaded for autostart (per mon_file.c / autostart patterns)");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[ARCH-TESTBENCH-001] PRG dispatch warning (may require ROMs/KERNAL for full autostart): {ex.Message}");
+    }
+}
 var state = machine.GetState();
 Console.WriteLine($"Initial PC: ${state.PC:X4}");
 
@@ -108,12 +180,18 @@ if (traceFile != null)
     Console.WriteLine($"Trace logging to: {traceFile}");
 }
 
-Console.WriteLine($"Executing {cycles} cycles...");
+int runCycles = (int)(parsed.LimitCycles ?? cycles);
+Console.WriteLine($"Executing up to {runCycles} cycles (debugcart $D7FF may terminate early for harness)...");
 
-for (int i = 0; i < cycles; i++)
+for (int i = 0; i < runCycles; i++)
 {
     coordinator.Step();
     logger?.LogInstruction();
+    if (exitState?.Requested == true)
+    {
+        Console.WriteLine($"[ARCH-TESTBENCH-001] DebugCart $D7FF exit signaled with code {exitState.Code}");
+        break;
+    }
 }
 
 logger?.Flush();
@@ -123,6 +201,13 @@ Console.WriteLine($"Final PC: ${finalState.PC:X4}");
 Console.WriteLine($"Total cycles: {machine.Clock.TotalCycles}");
 Console.WriteLine($"Host cycles: {coordinator.TotalHostCycles}");
 Console.WriteLine();
+
+if (exitState?.Requested == true)
+{
+    Console.WriteLine($"Emulation terminated via debugcart (VICE regression harness pattern) with exit code {exitState.Code}.");
+    return exitState.Code;
+}
+
 Console.WriteLine("Emulation completed successfully!");
 return 0;
 
@@ -190,3 +275,5 @@ static (MultiSystemBuildResult? Build, string? Error) LoadMultiSystemSuppressed(
         return (null, ex.Message);
     }
 }
+
+

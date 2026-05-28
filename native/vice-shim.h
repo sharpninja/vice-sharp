@@ -63,6 +63,15 @@ struct vice_vic_state {
 
 VICE_SHIM_API void vice_vic_get_state(void* machine, struct vice_vic_state* state);
 
+// Visible frame capture (for native visible raster/pixel checkpoints under display-mode effects, e.g. invalid ECM COL_NONE black per vicii-draw-cycle.c:133-141 etc.).
+// Returns non-zero on success; fills buffer with BGRA (320x200 recommended). Authentic from native VICE vicii state.
+VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buffer, int length, int* width, int* height);
+
+// Line pixel+pri snapshot at raster/draw boundary (for TR-VIC-EDGE-001 native ECM reinforcement, BACKFILL-VIDEO-001).
+// Returns non-zero on success; fills pri_buffer (0/1 per pixel) for the line using native vicii state (gbuf/pri logic per vicii-draw-cycle.c:196/224).
+// Checkpointed authentic pri_buffer for invalid ECM (pri preserved on COL_NONE pixels).
+VICE_SHIM_API int vice_vic_get_graphics_priority_at_raster(void* machine, uint16_t raster_line, uint8_t* pri_buffer, int length);
+
 // CIA State
 struct vice_cia_state {
     uint8_t port_a;

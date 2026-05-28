@@ -130,6 +130,24 @@ public sealed class AttachPanelViewModel : ObservableObject
         set => SetSettingsProperty(ref _limiterEnabled, value);
     }
 
+    /// <summary>
+    /// When true, the speed limiter is disabled and the emulator runs
+    /// as fast as the host allows (equivalent to VICE warp mode).
+    /// This is the recommended mode for profiling with dotTrace.
+    /// </summary>
+    public bool IsWarpMode
+    {
+        get => !LimiterEnabled;
+        set
+        {
+            if (IsWarpMode != value)
+            {
+                LimiterEnabled = !value;           // will raise PropertyChanged for LimiterEnabled + HasPending...
+                OnPropertyChanged();               // raise for "IsWarpMode" itself
+            }
+        }
+    }
+
     public MachineProfileOption SelectedMachineProfile
     {
         get => _selectedMachineProfile;

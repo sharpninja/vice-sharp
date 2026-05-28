@@ -1,8 +1,8 @@
 # ViceSharp Phase 1 Completion Plan
 
-Updated: 2026-05-21
+Updated: 2026-05-27 (audit refresh at HEAD 064d3a0; see handoff.md for full reconciliation)
 Workspace: `F:\GitHub\vice-sharp`
-Baseline: `main` at `46edda9` with intended local plan updates pending
+Baseline: `main` at `064d3a0` (post-audit; prior 2026-05-21 snapshot at 46edda9 / 8c1b2fc)
 
 This file replaces the stale May 12 30-stage execution snapshot in its
 entirety. Keep this document as the live Phase 1 closeout plan. Do not append
@@ -107,20 +107,21 @@ Actions:
 3. Refresh `README.md`, `handoff.md`, and MCP TODOs only after the current truth
    is known.
 
-Current result from 2026-05-19:
+Current result from 2026-05-19 (with 2026-05-27 audit notes):
 
 - `QA-XMLDOCS-001` is validation-only/closeable: the ratchet is already
-  `ExpectedMaxViolations = 0`, and `XmlDocsConventionTests` passed 1/1.
+  `ExpectedMaxViolations = 0`, and `XmlDocsConventionTests` passed 1/1. (Audit
+  confirms README now marks this CLOSED.)
 - `BACKFILL-SID-001` is validation-only/closeable for Phase 1: focused
   ROM-independent SID coverage passed 58/58; deeper analog 8580/filter work is
   post-MVP unless final lockstep finds a concrete regression.
 - `BACKFILL-HOSTUI-001` is validation-only/closeable for the host-core scope:
   focused host/gRPC/Avalonia boundary coverage passed 115/115, and the
   in-process frame smoke skips only when the runtime falls back to
-  the minimal machine without a video chip.
-- `RUNTIME-1541-002` is done for the D64/1541 substrate. Full drive-CPU
-  lockstep, KERNAL load-path validation, and GCR/fastloader depth remain under
-  `ARCH-TRUEDRIVE-1541-002` and `BACKFILL-MEDIA-001`.
+  the minimal machine without a video chip. (Audit: README now marks Host UI complete.)
+- `RUNTIME-1541-002` is done for the D64/1541 substrate (code in D64DiskImageDevice,
+  C1541 architecture, IEC wiring). Full drive-CPU lockstep, KERNAL load-path validation,
+  and GCR/fastloader depth remain under `ARCH-TRUEDRIVE-1541-002` and `BACKFILL-MEDIA-001`.
 - `RUNTIME-CART-002` is validation-only/closeable for standard raw/CRT
   cartridge mapping. Advanced cartridge families remain post-MVP.
 - `RUNTIME-CAPTURE-002` stays open only for configurable capture formats; BMP
@@ -128,6 +129,10 @@ Current result from 2026-05-19:
 - ROM/native integration tests resolve VICE data from `VICESHARP_ROM_PATH`,
   `VICE_DATA_PATH`, `VICE_HOME`, or a local `x64sc.exe` install on `PATH`.
   The repo-local checkout is not expected to contain ROMs.
+- 2026-05-27 audit note: Live MCP TODO query (via active Grok plugin) for the major
+  Phase 1 keywords returned 0 open items. Local markdowns (this file, handoff.md, README)
+  were the primary source of "open work" and have been refreshed; server MCP state
+  appears ahead of or using different labels than the historical BACKFILL-*/RUNTIME-* IDs.
 
 Gate:
 

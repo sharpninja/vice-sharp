@@ -380,6 +380,97 @@ public sealed class AttachPanelViewModelTests
         Assert.Empty(changes);
     }
 
+    /// <summary>
+    /// FR: FR-Host-UI-Boundary, TR: TR-MVVM-001
+    /// (BACKFILL-HOSTUI-001 + Warp Mode addition).
+    /// Use case: The UI must be able to toggle the limiter on/off to
+    /// enter "Warp" (uncapped) mode for profiling or fast-forward.
+    /// Acceptance: Toggling LimiterEnabled raises PropertyChanged for
+    /// both LimiterEnabled and HasPendingSettingsChanges, and the
+    /// value is reflected immediately.
+    /// </summary>
+    [Fact]
+    public void LimiterEnabled_ToggleRaisesPropertyChanged()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var changes = TrackPropertyChanges(viewModel);
+
+        Assert.True(viewModel.LimiterEnabled);
+
+        viewModel.LimiterEnabled = false;
+        Assert.False(viewModel.LimiterEnabled);
+        Assert.Contains(nameof(viewModel.LimiterEnabled), changes);
+        Assert.Contains(nameof(viewModel.HasPendingSettingsChanges), changes);
+
+        changes.Clear();
+        viewModel.LimiterEnabled = true;
+        Assert.True(viewModel.LimiterEnabled);
+        Assert.Contains(nameof(viewModel.LimiterEnabled), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-Host-UI-Boundary, TR: TR-MVVM-001
+    /// (BACKFILL-HOSTUI-001 + Warp Mode addition).
+    /// Use case: When the limiter is disabled this represents Warp
+    /// (uncapped) mode, which is the intended fast path for
+    /// dotTrace / performance work. The view-model must still allow
+    /// rate changes to be staged even while disabled.
+    /// Acceptance: With LimiterEnabled=false, changing the rate still
+    /// clamps correctly and marks HasPendingSettingsChanges.
+    /// </summary>
+    [Fact]
+    public void Limiter_WhenDisabled_RateChangesStillClampAndMarkPending()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        viewModel.LimiterEnabled = false;
+
+        var changes = TrackPropertyChanges(viewModel);
+
+        viewModel.LimiterRatePercent = 9999;
+        Assert.Equal(AttachPanelViewModel.LimiterMaximumPercent, viewModel.LimiterRatePercent);
+        Assert.Contains(nameof(viewModel.LimiterRatePercent), changes);
+        Assert.True(viewModel.HasPendingSettingsChanges);
+    }
+
+    /// <summary>
+    /// FR: FR-Host-UI-Boundary, TR: TR-MVVM-001
+    /// (BACKFILL-HOSTUI-001 + Warp Mode addition).
+    /// Use case: The UI exposes "Warp Mode" as the inverse of the limiter.
+    /// Toggling Warp Mode must correctly enable/disable the limiter so that
+    /// when Warp is active the speed limiter is removed (uncapped speed),
+    /// and when Warp is turned off the limiter is re-enabled.
+    /// Acceptance: Setting IsWarpMode = true sets LimiterEnabled = false
+    /// and raises PropertyChanged for both; setting IsWarpMode = false
+    /// sets LimiterEnabled = true and raises the notifications. The two
+    /// properties remain perfect inverses.
+    /// </summary>
+    [Fact]
+    public void IsWarpMode_ToggleRemovesAndEnablesLimiter()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var changes = TrackPropertyChanges(viewModel);
+
+        // Default state: limiter on → warp off
+        Assert.True(viewModel.LimiterEnabled);
+        Assert.False(viewModel.IsWarpMode);
+
+        // Turn Warp on → limiter must be disabled
+        viewModel.IsWarpMode = true;
+        Assert.False(viewModel.LimiterEnabled);
+        Assert.True(viewModel.IsWarpMode);
+        Assert.Contains(nameof(viewModel.IsWarpMode), changes);
+        Assert.Contains(nameof(viewModel.LimiterEnabled), changes);
+        Assert.True(viewModel.HasPendingSettingsChanges);
+
+        // Turn Warp off → limiter must be re-enabled
+        changes.Clear();
+        viewModel.IsWarpMode = false;
+        Assert.True(viewModel.LimiterEnabled);
+        Assert.False(viewModel.IsWarpMode);
+        Assert.Contains(nameof(viewModel.IsWarpMode), changes);
+        Assert.Contains(nameof(viewModel.LimiterEnabled), changes);
+    }
+
     private static List<string> TrackPropertyChanges(INotifyPropertyChanged source)
     {
         var changes = new List<string>();

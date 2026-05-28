@@ -50,7 +50,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-21`.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-27` (post-audit at HEAD 064d3a0; see handoff.md for details). Several BACKFILL-VIDEO-001 sub-slices (side borders, matrix idle, register readback) have additional managed + test coverage since the prior snapshot. MCP TODO query during audit returned no open matches for the major Phase 1 keywords, suggesting server-side progress beyond the local markdowns.
 
 **Legend** — State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 

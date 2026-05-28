@@ -527,6 +527,37 @@ public sealed class VicIISpriteDmaStallTests
             return false;
         }
 
+        /// <summary>
+        /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-004 / PERF-SPRITE-DMA-OPT-001 / FR-VIC-006 / FR-VIC-010.
+        /// Filtered oracle: same VICE table-driven BA window logic as IsInNtscSpriteDmaStallWindow,
+        /// but applies sprite enable (0xD015) and Y-intersect (0xD001+n*2 vs rasterLine) filtering
+        /// matching the real Mos6569 ComputeIsInSpriteDmaStallWindow behavior.
+        /// Use this in regression tests that compare stub to live IsCpuCycleStolen/IsCpuCycleStealMandatory
+        /// where only a subset of sprites are enabled or Y-intersecting.
+        /// VICE sources: vicii-chip-model.c:272-403/437-566, vicii-cycle.c:118/499/502/503.
+        /// </summary>
+        public bool IsInNtscSpriteDmaStallWindowForLine(int rasterX, int leadingEdgeOffset, ushort rasterLine)
+        {
+            byte spriteEnable = _inner.Read(0xD015);
+            var table = Mos6569.GetSpriteDmaAccessTableForTest(CyclesPerLine);
+            int cpl = CyclesPerLine;
+            foreach (var access in table)
+            {
+                if (((spriteEnable >> access.SpriteNumber) & 1) == 0) continue;
+                byte spriteY = _inner.Read((ushort)(0xD001 + access.SpriteNumber * 2));
+                int relLine = ((rasterLine - spriteY) + 256) & 0xFF;
+                if (relLine >= 21) continue;
+                for (int delta = -3; delta <= 1; delta++)
+                {
+                    int cycle = access.FirstCurrentCycle + delta + leadingEdgeOffset;
+                    int rx = ((cycle % cpl) + cpl) % cpl;
+                    if (rx == rasterX)
+                        return true;
+                }
+            }
+            return false;
+        }
+
         // FLI/AFLI extension for this TR-VIC-EDGE-004 slice (mocks phase only).
         // Simulates VICE badline DMA data-fetch side effects + FLI forced badline timing for sprite DMA windows (vicii-cycle.c / vicii-sprite.c).
         // Used to validate compose of badline c-access window + per-model table sprite stalls under FLI YSCROLL force on NTSC/oldNTSC cpl.
@@ -649,6 +680,8 @@ public sealed class VicIISpriteDmaStallTests
         ntsc.Write(0xD011, 0x10);
         ntsc.Write(0xD001, 0x30); // intersecting Y for sprite 0
         ntsc.Write(0xD015, 0x01);
+
+        AdvanceTo(ntsc, 0x30, 0);
 
         // NTSC 65cpl: table sprite0 First=59 + deltas -3..+1 + offset0 => rasterX 56-60 stall on intersecting line.
         // (Matches simulator oracle from mocks gate.)
@@ -967,13 +1000,15 @@ public sealed class VicIISpriteDmaStallTests
     public void SpriteDmaStall_NonPalModels_LivePropertiesMatchTableSimulator_NoRegression()
     {
         // NTSC 65 cpl (Mos6567) - real model vs VICE table oracle (stub provides the expected windows without needing Advance).
+        // YSCROLL=3 (0x13) so line $30 (48 decimal, 48&7=0) is NOT a bad line (would be with YSCROLL=0).
+        // IsCpuCycleStolen must reflect only sprite DMA windows so stub and live agree cleanly.
         var ntsc = new Mos6567(new BasicBus(), new InterruptLine(InterruptType.Irq));
-        ntsc.Write(ScreenControl1, 0x10);
+        ntsc.Write(ScreenControl1, 0x13);
         ntsc.Write(0xD001, 0x30);
         ntsc.Write(SpriteEnable, 0x01);
 
         var stubNtsc = new NtscDmaTableStub(new BasicBus(), new InterruptLine(InterruptType.Irq), isOldNtsc: false);
-        stubNtsc.Write(ScreenControl1, 0x10);
+        stubNtsc.Write(ScreenControl1, 0x13);
         stubNtsc.Write(0xD001, 0x30);
         stubNtsc.Write(SpriteEnable, 0x01);
 
@@ -986,8 +1021,8 @@ public sealed class VicIISpriteDmaStallTests
             bool liveStolen = ntsc.IsCpuCycleStolen;
             bool liveMandatory = ntsc.IsCpuCycleStealMandatory;
 
-            bool stubStolen = stubNtsc.IsInNtscSpriteDmaStallWindow(x, leadingEdgeOffset: 0);
-            bool stubMandatory = stubNtsc.IsInNtscSpriteDmaStallWindow(x, leadingEdgeOffset: 1);
+            bool stubStolen = stubNtsc.IsInNtscSpriteDmaStallWindowForLine(x, 0, 0x30);
+            bool stubMandatory = stubNtsc.IsInNtscSpriteDmaStallWindowForLine(x, 1, 0x30);
 
             Assert.True(stubStolen == liveStolen,
                 $"NTSC rasterX {x}: live IsCpuCycleStolen must match VICE table simulator after any DMA mapping optimization.");
@@ -995,14 +1030,14 @@ public sealed class VicIISpriteDmaStallTests
                 $"NTSC rasterX {x}: live IsCpuCycleStealMandatory must match VICE table simulator after any DMA mapping optimization.");
         }
 
-        // Old NTSC 64 cpl - same pattern.
+        // Old NTSC 64 cpl - same pattern. YSCROLL=3 for same reason.
         var oldNtsc = new Mos6567R56A(new BasicBus(), new InterruptLine(InterruptType.Irq));
-        oldNtsc.Write(ScreenControl1, 0x10);
+        oldNtsc.Write(ScreenControl1, 0x13);
         oldNtsc.Write(0xD001, 0x30);
         oldNtsc.Write(SpriteEnable, 0x01);
 
         var stubOld = new NtscDmaTableStub(new BasicBus(), new InterruptLine(InterruptType.Irq), isOldNtsc: true);
-        stubOld.Write(ScreenControl1, 0x10);
+        stubOld.Write(ScreenControl1, 0x13);
         stubOld.Write(0xD001, 0x30);
         stubOld.Write(SpriteEnable, 0x01);
 
@@ -1015,13 +1050,94 @@ public sealed class VicIISpriteDmaStallTests
             bool liveStolen = oldNtsc.IsCpuCycleStolen;
             bool liveMandatory = oldNtsc.IsCpuCycleStealMandatory;
 
-            bool stubStolen = stubOld.IsInNtscSpriteDmaStallWindow(x, leadingEdgeOffset: 0);
-            bool stubMandatory = stubOld.IsInNtscSpriteDmaStallWindow(x, leadingEdgeOffset: 1);
+            bool stubStolen = stubOld.IsInNtscSpriteDmaStallWindowForLine(x, 0, 0x30);
+            bool stubMandatory = stubOld.IsInNtscSpriteDmaStallWindowForLine(x, 1, 0x30);
 
             Assert.True(stubStolen == liveStolen,
                 $"OldNTSC rasterX {x}: live IsCpuCycleStolen must match VICE table simulator.");
             Assert.True(stubMandatory == liveMandatory,
                 $"OldNTSC rasterX {x}: live IsCpuCycleStealMandatory must match VICE table simulator.");
+        }
+    }
+
+    /// <summary>
+    /// PERF-SPRITE-DMA-OPT-002 / BACKFILL-VIDEO-001 / TR-VIC-EDGE-004 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001.
+    ///
+    /// Use case: The precomputed BA window lookup tables (indexed by rasterX, built at static init
+    /// in Mos6569) must encode exactly the same (spriteNumber, lineOffset) entries as explicit
+    /// delta-scan + MapCurrentCycleToRasterX math would produce for every model and offset.
+    /// Any future edit to BuildDmaWindowLookup, the delta range (-3..+1), or the cpl-modular wrap
+    /// must not silently alter which (spriteNum, lineOff) pairs are checked at each rasterX.
+    ///
+    /// Acceptance criteria:
+    /// - For PAL (63 cpl), NTSC (65 cpl), and oldNTSC (64 cpl):
+    ///   - For leadingEdgeOffset 0 (IsCpuCycleStolen) and 1 (IsCpuCycleStealMandatory):
+    ///     - For every rasterX in 0..(cpl-1):
+    ///       - The set of (spriteNumber, lineOffset) pairs in the precomputed table exactly
+    ///         matches the set produced by explicit delta loop + DivRem wrap.
+    ///
+    /// VICE sources (verbatim per BDP):
+    /// vicii-chip-model.c:272-403 (cycle_tab_ntsc SprDma*/BaSpr*/ChkSprDma for 65 cpl 6567R8/8562),
+    /// :437-566 (cycle_tab_ntsc_old for 64 cpl 6567R56A), vicii-cycle.c:118 (check_sprite_dma Y-latch),
+    /// :499/502/503 (model cycle flags + late-line + BA), vicii-fetch.c:275-309 (sprite fetch side effects).
+    ///
+    /// Reference to plan: docs/perf-sprite-dma-optimization-plan-001.md (user directive: iterate to 225%).
+    /// Performance motivation: eliminates 80 Math.DivRem/cycle (8 sprites x 5 deltas x 2 offsets) from
+    /// ComputeIsInSpriteDmaStallWindow; replaces with 1 array index per call.
+    ///
+    /// BDP order: This test (full AC + VICE cites) written first. Tables added to Mos6569 to make it
+    /// green. ComputeIsInSpriteDmaStallWindow then replaced to use tables. Behavioral regression guards:
+    /// SpriteDmaStall_CacheEquivalence_FullModels_Badline_Fli_Compose_NoRegression and
+    /// SpriteDmaStall_NonPalModels_LivePropertiesMatchTableSimulator_NoRegression.
+    /// </summary>
+    [Fact]
+    public void SpriteDmaStall_PrecomputedWindowTable_MatchesDeltaScanMath_AllModels()
+    {
+        foreach (int cpl in new[] { Mos6569.PalCyclesPerLine, Mos6569.NtscCyclesPerLine, Mos6569.NtscOldCyclesPerLine })
+        {
+            var table = Mos6569.GetSpriteDmaAccessTableForTest(cpl);
+            string label = cpl switch
+            {
+                Mos6569.NtscCyclesPerLine => "NTSC-65cpl",
+                Mos6569.NtscOldCyclesPerLine => "OldNTSC-64cpl",
+                _ => "PAL-63cpl",
+            };
+
+            for (int offset = 0; offset <= 1; offset++)
+            {
+                // Reference: explicit delta-scan matching original IsSpriteDmaBaSlotActive + MapCurrentCycleToRasterX.
+                var expected = new List<(int SpriteNumber, int LineOffset)>[cpl];
+                for (int i = 0; i < cpl; i++) expected[i] = [];
+                foreach (var access in table)
+                {
+                    for (int delta = -3; delta <= 1; delta++)
+                    {
+                        int cycle = access.FirstCurrentCycle + delta + offset;
+                        int lineOff = Math.DivRem(cycle, cpl, out int rx);
+                        if (rx < 0) { lineOff--; rx += cpl; }
+                        expected[rx].Add((access.SpriteNumber, lineOff));
+                    }
+                }
+
+                // Actual: precomputed tables from Mos6569 (PERF-SPRITE-DMA-OPT-002).
+                var actual = Mos6569.TestOnly_GetPrecomputedDmaWindowsForTest(cpl, offset);
+                Assert.NotNull(actual);
+                Assert.Equal(cpl, actual.Length);
+
+                for (int rx = 0; rx < cpl; rx++)
+                {
+                    var exp = expected[rx].OrderBy(e => e.SpriteNumber).ThenBy(e => e.LineOffset).ToArray();
+                    var act = actual[rx].OrderBy(e => e.SpriteNumber).ThenBy(e => e.LineOffset).ToArray();
+                    Assert.True(exp.Length == act.Length,
+                        $"{label} offset={offset} rasterX={rx}: expected {exp.Length} entries, got {act.Length}.");
+                    for (int k = 0; k < exp.Length; k++)
+                    {
+                        Assert.True(
+                            exp[k].SpriteNumber == act[k].SpriteNumber && exp[k].LineOffset == act[k].LineOffset,
+                            $"{label} offset={offset} rasterX={rx}[{k}]: expected ({exp[k].SpriteNumber},{exp[k].LineOffset}), got ({act[k].SpriteNumber},{act[k].LineOffset}).");
+                    }
+                }
+            }
         }
     }
 }

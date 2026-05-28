@@ -327,11 +327,21 @@ public sealed class AttachPanelView : UserControl
             }
         };
         stack.Children.Add(slider);
+        // Dedicated Warp toggle for VICE-like uncapped speed (ideal for profiling with dotTrace)
         stack.Children.Add(CreateBooleanRow(
-            "Enabled",
-            () => ViewModel.LimiterEnabled,
-            value => ViewModel.LimiterEnabled = value,
-            nameof(AttachPanelViewModel.LimiterEnabled)));
+            "Warp Mode (Alt+W)",
+            () => ViewModel.IsWarpMode,
+            value => ViewModel.IsWarpMode = value,
+            nameof(AttachPanelViewModel.IsWarpMode)));
+
+        var warpNote = new TextBlock
+        {
+            Text = "Warp = uncapped speed (same as VICE -warp). Use with dotTrace for profiling.",
+            FontSize = 11,
+            Foreground = Brushes.OrangeRed,
+            FontWeight = FontWeight.SemiBold
+        };
+        stack.Children.Add(warpNote);
         return stack;
     }
 

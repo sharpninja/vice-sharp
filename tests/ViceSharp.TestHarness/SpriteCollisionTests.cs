@@ -324,4 +324,101 @@ public sealed class SpriteCollisionTests
 
         ram.Write((ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow), bitmapByte);
     }
+
+    // =====================================================================
+    // BDP-gated addition for BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 (narrow slice)
+    // Tests written FIRST per Byrd Development Process (requirements-driven,
+    // full acceptance criteria in XMLDOC, mocks/stubs via controlled
+    // VideoMemoryReader + register state, validated green before any real
+    // logic changes in Mos6569).
+    // =====================================================================
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 / FR-VIC-002 / FR-VIC-003 /
+    /// FR-VIC-005 / FR-VIC-008 / TEST-VIC-001:
+    /// Invalid ECM display mode combinations (ECM bit set with BMM or MCM)
+    /// must preserve the hidden graphics priority bit (VICE "px &amp; 0x2")
+    /// for sprite priority decisions and sprite-background collision
+    /// detection, even though the color path forces COL_NONE (rendered pixel 0).
+    /// 
+    /// VICE sources (from explore subagent gaps report 019e6acc-29b8-77f1-a9cc-56499af366f9):
+    /// - viciisc/vicii-draw-cycle.c:146-188 (gbuf_pixel_reg / px construction
+    ///   for the 8 vmode combos, including the MCM/BMM/ECM kludge paths)
+    /// - viciisc/vicii-draw-cycle.c:194-196: "pixel_pri = (px &amp; 0x2);"
+    ///   and "cc = colors[vmode | px];"
+    /// - viciisc/vicii-draw-cycle.c:224: "pri_buffer[i] = pixel_pri;"
+    /// - viciisc/vicii-draw-cycle.c:402: "uint8_t pixel_pri = pri_buffer[i];"
+    ///   then "if (!(pixel_pri &amp;&amp; spri))" for render/collision choice
+    /// - viciisc/vicii-draw-cycle.c:134-141 (colors[] table: COL_D02X_EXT for
+    ///   valid ECM, COL_NONE for the three ECM=1 invalid rows)
+    /// 
+    /// Use case / acceptance (mocks/stubs first):
+    /// With VideoMemoryReader stub + forced D011/D016 producing
+    /// DisplayModeSelection == Invalid with ECM contributing, and character/
+    /// bitmap data bytes producing 2-bit "px" values with bit 1 set vs clear
+    /// (at specific charX), IsGraphicsPixelForegroundForSpritePriority must
+    /// return exactly the (px &amp; 0x2) != 0 result for all three invalid ECM
+    /// combos. This drives correct TryGetSpritePixel priority skip and
+    /// ProcessSpriteCollisionsForRasterLine sb-collision latch.
+    /// The visible render path (VideoRenderer) correctly yields color 0 for
+    /// these pixels (separate concern).
+    /// </summary>
+    [Theory]
+    [InlineData(0x58, 0x18, 0x80, 0, true)]   // ECM1 BMM0 MCM1 (invalid), char high bit -> px=3 or equiv, pri=1
+    [InlineData(0x58, 0x18, 0x40, 0, false)]  // same mode, data bit producing px bit1=0
+    [InlineData(0x78, 0x08, 0x80, 2, true)]   // ECM1 BMM1 MCM0 (invalid), bitmap high -> pri
+    [InlineData(0x78, 0x08, 0x20, 2, false)]
+    [InlineData(0x78, 0x18, 0xC0, 3, true)]   // ECM1 BMM1 MCM1 (invalid), mc bitmap pair high bit
+    [InlineData(0x78, 0x18, 0x30, 3, false)]
+    public void IsGraphicsPixelForegroundForSpritePriority_InvalidEcm_PreservesVicePxBit1(
+        byte d011, byte d016, byte dataByte, int sourceKind, bool expectedPriBit)
+    {
+        // Stub memory reader (mocks the gbuf fetch for the target column/char)
+        var vic = new Mos6569(new BasicBus(), new InterruptLine(InterruptType.Irq));
+        vic.Write(ScreenControl1, d011);
+        vic.Write(ScreenControl2, d016);
+
+        // Compute a screen location inside a visible char cell (col 9, charX=0 for simplicity)
+        const int TestRaster = 100;
+        const int TestVicX = 96; // inside left border + some chars
+        int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        int screenX = TestVicX - vic.LeftBorderPixel;
+        int visLine = TestRaster - vic.UpperBorderStart;
+        int screenLine = visLine + vic.YScroll;
+        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
+        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int col = screenX / 8;
+        int charX = screenX % 8; // 0
+        int charRow = screenLine & 7;
+        int screenIndex = screenRow * columns + col;
+
+        vic.VideoMemoryReader = addr =>
+        {
+            ushort masked = (ushort)(addr & 0x3FFF);
+            if (sourceKind <= 1)
+            {
+                // Character screen + color + glyph data (for BMM=0 cases)
+                if (masked == (ushort)(vic.ScreenMemoryBase + screenIndex)) return 0x01; // charCode
+                if (masked == (ushort)(0xD800 + screenIndex)) return (byte)(sourceKind == 0 ? 0x07 : 0x0B);
+                ushort glyphAddr = (ushort)(vic.CharacterBase + 0x01 * 8 + charRow);
+                if (masked == glyphAddr) return dataByte;
+            }
+            else
+            {
+                // Bitmap data (for BMM=1 cases)
+                ushort bmpAddr = (ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow);
+                if (masked == bmpAddr) return dataByte;
+                // Also satisfy screen read in IsGraphics path
+                if (masked == (ushort)(vic.ScreenMemoryBase + screenIndex)) return 0x00;
+                if (masked == (ushort)(0xD800 + screenIndex)) return 0x00;
+            }
+            return 0x00;
+        };
+
+        // Exercise the priority/collision query path (this is the contract under test)
+        bool actual = vic.IsGraphicsPixelForegroundForSpritePriority(TestVicX, TestRaster);
+
+        // Acceptance: must match VICE (px & 0x2) semantics for the invalid ECM case
+        Assert.Equal(expectedPriBit, actual);
+    }
 }

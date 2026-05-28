@@ -398,4 +398,50 @@ public sealed class VicIiCoreTimingTests
         public void RegisterDevice(IAddressSpace device) { }
         public void UnregisterDevice(IAddressSpace device) { }
     }
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 (native depth) / TR-VIC-EDGE-00X (FLI/AFLI timing depth) /
+    /// FR-VIC-002 / FR-VIC-003 / FR-VIC-007 / TEST-VIC-001.
+    ///
+    /// Use case / acceptance criteria: FLI (and AFLI on non-PAL) forces badlines on every raster line
+    /// by writing YSCROLL each line to match (CurrentRasterLine &amp; 7). IsForcedBadline must be true,
+    /// IsBadLine must follow for DMA/fetch windows, and IsDmaStealing / video matrix access must be
+    /// asserted during the appropriate cycles even across consecutive lines (normal badline latch
+    /// alone is insufficient for full FLI depth).
+    ///
+    /// VICE sources (from explore subagent report ID 019e6acc-29b8-77f1-a9cc-56499af366f9):
+    /// native/vice/vice/src/viciisc/vicii-cycle.c (raster handler + badline force for FLI at start-of-line
+    /// and per-cycle evaluation), vicii-fetch.c:275-309 (sprite ptr + data fetch side effects under forced
+    /// badlines), vicii-draw-cycle.c (timing interaction of FLI forced DMA with priority/collision).
+    /// Additional: vicii-chip-model.c for model-specific FLI timing on NTSC.
+    ///
+    /// BDP: This [Fact] + expectations constitute the tests/mocks-first gate for the narrow FLI/AFLI
+    /// timing depth slice. Simulator-like assertions exercised on every run before any Mos6569 predicate
+    /// change. Full relevant suite (including this + lockstep) must stay green.
+    /// </summary>
+    [Fact]
+    public void FliTiming_ForcedBadlines_EveryLineByYScrollUpdate()
+    {
+        var vic = new Mos6569(new BasicBus(), new InterruptLine(InterruptType.Irq));
+
+        // DEN set, start with YSCROLL=0
+        vic.Write(0xD011, 0x10); // DEN=1, YSCROLL=0
+
+        // Line $30 (&amp;7=0) matches YSCROLL=0 -> normal + forced
+        AdvanceTo(vic, 0x30, 0);
+        Assert.True(vic.IsForcedBadline, "FLI: line $30 must report forced badline when DEN+YSCROLL match");
+        Assert.True(vic.IsBadLine, "FLI: IsBadLine must be true for forced case on line $30");
+
+        // FLI pattern: advance to next line, update YSCROLL to 1 to force $31 (&amp;7 ==1)
+        Advance(vic, vic.CyclesPerLine);
+        Assert.Equal(0x31, vic.CurrentRasterLine);
+        vic.Write(0xD011, 0x11); // YSCROLL=1 now matches line &amp;7
+        Assert.True(vic.IsForcedBadline, "FLI: line $31 must be forced bad after YSCROLL update");
+        Assert.True(vic.IsBadLine, "FLI depth: IsBadLine follows forced on consecutive line");
+
+        // DMA stealing window must be active under forced badline (data-fetch side effect)
+        Advance(vic, 20); // into c-access window ~14+
+        Assert.True(vic.IsDmaStealing || vic.IsVideoMatrixAccess,
+            "FLI: forced badline must drive DMA stealing / video matrix access for fetch timing parity");
+    }
 }

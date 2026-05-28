@@ -334,14 +334,29 @@ public partial class MainWindow : Window
             return;
 
         var clockMhz = status.EffectiveClockHz / 1_000_000.0;
+        string limiterText = status.LimiterRatePercent > 0 && status.LimiterRatePercent < 1000
+            ? $"Limiter {status.LimiterRatePercent:0}%"
+            : "WARP";
+
         _statusText.Text =
-            $"Power {status.PowerState} | Run {status.RunState} | Limiter {status.LimiterRatePercent:0}% | " +
+            $"Power {status.PowerState} | Run {status.RunState} | {limiterText} | " +
             $"FPS {status.MeasuredFramesPerSecond:0.0} | Clock {clockMhz:0.000} MHz ({status.EffectiveClockPercent:0}%) | " +
             $"Cycle {status.Cycle} | PC {status.MachineState.Pc:X4}";
     }
 
     private async void OnVideoKeyDown(object? sender, KeyEventArgs e)
     {
+        // Warp toggle: Alt+W (or Ctrl+W as fallback), like classic VICE
+        if ((e.Key == Key.W) && (e.KeyModifiers.HasFlag(KeyModifiers.Alt) || e.KeyModifiers.HasFlag(KeyModifiers.Control)))
+        {
+            if (_attachViewModel is not null)
+            {
+                _attachViewModel.IsWarpMode = !_attachViewModel.IsWarpMode;
+                e.Handled = true;
+                return;
+            }
+        }
+
         await SendKeyStateAsync(e, true).ConfigureAwait(true);
     }
 

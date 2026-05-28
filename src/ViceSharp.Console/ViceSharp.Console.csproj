@@ -5,6 +5,10 @@
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
     <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" />
     <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
+    <!-- ARCH-TESTBENCH-002 / CLI-LAUNCHER-001 minimal wiring: reference Launcher to consume ViceArgs / ViceArgsParser
+         for the newly recognized testbench flags (DebugCart, LimitCycles, AutostartPrg) in the real entrypoint.
+         Thinnest change; no other refs or restructuring. -->
+    <ProjectReference Include="..\ViceSharp.Launcher\ViceSharp.Launcher.csproj" />
     <ProjectReference Include="..\ViceSharp.Monitor\ViceSharp.Monitor.csproj" />
   </ItemGroup>
 

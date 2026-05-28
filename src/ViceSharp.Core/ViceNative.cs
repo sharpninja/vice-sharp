@@ -126,6 +126,12 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_state")]
     public static partial void GetVicState(IntPtr instance, ref ViceVicState state);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_capture_visible_frame")]
+    public static partial int CaptureVisibleFrame(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_graphics_priority_at_raster")]
+    public static partial int GetGraphicsPriorityAtRaster(IntPtr instance, ushort rasterLine, [Out] byte[] buffer, int length);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_cia_get_state")]
     public static partial void GetCiaState(IntPtr instance, int ciaIndex, ref ViceCiaState state);
 

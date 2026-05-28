@@ -175,3 +175,5 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-VIC-EDGE-005 | Tracked | Technical-Requirements.md |
 | TR-VIC-EDGE-006 | Tracked | Technical-Requirements.md |
 | TR-VIC-EDGE-007 | Tracked | Technical-Requirements.md |
+| BACKFILL-VIDEO-001 | Tracked | Functional-Requirements.md |
+| PERF-SPRITE-DMA-OPT-001 | Tracked | Technical-Requirements.md |
