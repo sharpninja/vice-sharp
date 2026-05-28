@@ -117,3 +117,36 @@ This plan is the required "formulate a plan" artifact. The unit test that follow
 - Cache confirmed: no regressions in stall windows for PAL/NTSC/oldNTSC + badline/FLI combos.
 - PERF-PLAN/TEST/VALIDATE complete. Next: user measurement on Avalonia warp BASIC profile (report the % for 225% gate or next iteration).
 - No broadening. BDP followed.
+
+**Precomputed BA window lookup (PERF-SPRITE-DMA-OPT-002, after context compaction)**:
+- Added `BuildDmaWindowLookup` static helper + 6 static readonly `(SpriteNumber, LineOffset)[][]` arrays (PalDmaWindowsOffset0/1, NtscDmaWindowsOffset0/1, OldNtscDmaWindowsOffset0/1) to Mos6569. Built at class load using same delta (-3..+1) + DivRem + cpl-wrap math as the original `IsSpriteDmaBaSlotActive` path.
+- Added `TestOnly_GetPrecomputedDmaWindowsForTest(cpl, offset)` static accessor for BDP test gate.
+- Replaced `ComputeIsInSpriteDmaStallWindow` inner loop: was 8-sprite x 5-delta x 2-offset = 80 `Math.DivRem`/cycle; now 1 static array index + small list traversal per call (typically 0-2 entries per rasterX).
+- New test `SpriteDmaStall_PrecomputedWindowTable_MatchesDeltaScanMath_AllModels` verifies table accuracy for all 3 models and both offsets before any production change. GREEN (1/1, written first per BDP).
+- Full regression suite: 68 passed, 1 skipped, 0 failed (new test included).
+- `IsSpriteDmaBaSlotActive` + `MapCurrentCycleToRasterX` now dead code in the production hot path; retained in file to avoid broadening the slice.
+- Next: user measures Avalonia warp BASIC % against 225% threshold; if below, continue with next narrow slice.
+
+**Non-PAL test fixes (Claude continuation after context compaction)**:
+- Fixed `SpriteDmaStall_NonPal_RealModels_TableDriven_AfterWiring`: added `AdvanceTo(ntsc, 0x30, 0)` before the stall-check loop (loop was starting at line 0, never reached line $30 where sprite 0 intersects).
+- Fixed `SpriteDmaStall_NonPalModels_LivePropertiesMatchTableSimulator_NoRegression`: added `IsInNtscSpriteDmaStallWindowForLine(rasterX, offset, rasterLine)` to NtscDmaTableStub applying sprite enable + Y-intersect filtering (matching real Mos6569 ComputeIsInSpriteDmaStallWindow); updated test to use YSCROLL=3 (0x13) to avoid badline on line $30 (48&7=0 == YSCROLL=0 was triggering the badline term in IsCpuCycleStolen, which the stub does not model).
+- Full DMA suite: 17/17. Broader suite (DMA + CoreTiming + SpriteCollision + ViceArgs): 67 passed, 1 skipped (pre-existing), 0 failed.
+
+**Verification (Claude-20260527T231228Z-sprite-dma-cache-test)**:
+- Independent re-verification: isolated test `SpriteDmaStall_CacheEquivalence_FullModels_Badline_Fli_Compose_NoRegression` passes (1/1, 575 ms).
+- Full DMA suite: 15/17, same 2 pre-existing non-PAL failures (`SpriteDmaStall_NonPal_RealModels_TableDriven_AfterWiring`, `SpriteDmaStall_NonPalModels_LivePropertiesMatchTableSimulator_NoRegression`).
+- VicIiCoreTimingTests, SpriteCollisionTests, ViceArgsParserTests: all green (no regressions introduced).
+- TestOnly_GetCachedStallWindow / TestOnly_ComputeStallWindow hooks confirmed present in Mos6569.cs:1135-1139.
+- Cache fields _inSpriteDmaStallWindow0/1 confirmed populated at latch sites (lines 1170-1171, 1226-1227) and zeroed on Reset (lines 936-939).
+- Artifact is complete and permanent. Slice exit criteria met.
+
+**PERF-CLOCK-001 + PERF-CLOCK-002 + PERF-RENDER-001 + PERF-RENDER-002 + PERF-VIC-002 + PERF-VIC-003 (Claude continuation)**:
+- PERF-CLOCK-001: SystemClock.TickPhase refactored to pre-sorted dispatch arrays (phi1Fast[], phi2Fast[], phi1Slow[], phi2Slow[]). Eliminates per-cycle Phase/ClockDivisor virtual property reads and long modulo from hot path. SlowDeviceEntry struct with counter field replaces `_cycle % divisor`. RebuildDispatchArrays() called on Register/Unregister only. Reset() zeroes slow device counters.
+- PERF-CLOCK-002: IsCpuCycleStolen reads each stealer property once into locals (stolen, mand) before compound assignments. Eliminates double property reads per stolen cycle.
+- PERF-RENDER-001: Removed `_renderer.Tick()` per-cycle call from Mos6569.Tick(). Added `_renderer.NotifyLineCompleted(completedLine)` and `_renderer.NotifyFrameCompleted()` direct calls at line-wrap point. Eliminates 19,344 no-op calls per PAL frame (98.4% reduction in renderer entry points). Parity: line N still rendered when line N+1 begins; FrameCompleted still fires at frame-wrap.
+- PERF-RENDER-002: `DisplayModeSelection` switch expression (3 register reads) cached once per line at start of RenderRasterLine; passed as parameter to RenderBackgroundPixel. Eliminates 383 redundant switch evaluations per visible line (119,808/frame for PAL).
+- PERF-VIC-002: VideoMemoryReader initialized to `addr => _bus.Read(addr)` in Mos6569 constructor. ReadVideoMemory() is now `VideoMemoryReader(address)` - direct invoke, no null check.
+- PERF-VIC-003: Phi1MemoryReader initialized to `_ => (byte)0` in constructor. Tick() path is now `Phi1MemoryReader(CurrentCycle)` - direct invoke, no null check, no ?? fallback.
+- New BDP tests: SystemClockDispatchTests.cs (6 tests), VideoRendererDispatchTests.cs (5 tests). All 11 green.
+- Broader regression suite: 80 passed, 1 skipped, 0 failed (includes all DMA + CoreTiming + SpriteCollision + ViceArgs + LockstepValidation + new dispatch tests).
+- Next: user measures Avalonia warp BASIC % against 225% threshold.

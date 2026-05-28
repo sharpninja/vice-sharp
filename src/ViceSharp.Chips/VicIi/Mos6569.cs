@@ -252,8 +252,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     
     public byte RasterX;
     public uint CycleCounter;
-    public Func<ushort, byte>? VideoMemoryReader { get; set; }
-    public Func<byte, byte>? Phi1MemoryReader { get; set; }
+    // PERF-VIC-002/003: initialized to non-null defaults in constructor so ReadVideoMemory
+    // and Phi1MemoryReader paths need no null check. C64MemoryMap overrides both on wiring.
+    public Func<ushort, byte> VideoMemoryReader { get; set; } = null!;
+    public Func<byte, byte> Phi1MemoryReader { get; set; } = null!;
     public byte LastReadPhi1 { get; private set; }
     
     // VICE-style: Border configuration
@@ -783,6 +785,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _bus = bus;
         _irqLine = irqLine;
         _renderer = new VideoRenderer(this);
+        // PERF-VIC-002: default reads through bus; C64MemoryMap overrides for PLA banking.
+        VideoMemoryReader = addr => _bus.Read(addr);
+        // PERF-VIC-003: default returns open-bus 0; C64MemoryMap overrides for phi1 banking.
+        Phi1MemoryReader = _ => (byte)0;
     }
 
     public void ConfigureTiming(TvSystem system, int cyclesPerLine, int visibleLines, int totalLines, double frameRate)
@@ -821,12 +827,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         if (RasterX >= CyclesPerLine)
         {
+            int completedLine = CurrentRasterLine;
             CaptureHorizontalBorderForCompletedLine(CurrentRasterLine);
             RasterX = 0;
             CurrentRasterLine++;
             _rasterIrqCompareArmed = true;
 
-            if (CurrentRasterLine >= TotalLines)
+            bool frameWrapped = CurrentRasterLine >= TotalLines;
+            if (frameWrapped)
             {
                 CurrentRasterLine = 0;
                 _refreshCounter = 0xFF;
@@ -870,6 +878,17 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
             // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
             ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
+
+            // PERF-RENDER-001: trigger render exactly once per completed line instead of
+            // calling _renderer.Tick() every cycle (19,656x/frame) and checking
+            // RasterX==0 inside the renderer. Matches original timing: line N is rendered
+            // when line N+1 begins (CurrentRasterLine>0 guard from original Tick()).
+            // Frame-wrap (line TotalLines-1) fires FrameCompleted instead (no render,
+            // matching original _currentFrame>0 guard on line 0 detection).
+            if (!frameWrapped)
+                _renderer.NotifyLineCompleted(completedLine);
+            else
+                _renderer.NotifyFrameCompleted();
         }
         else
         {
@@ -878,10 +897,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         UpdateSpriteDmaLatchForCurrentCycle();
 
-        LastReadPhi1 = Phi1MemoryReader?.Invoke(CurrentCycle) ?? 0;
+        // PERF-VIC-003: Phi1MemoryReader initialized to non-null default in constructor;
+        // direct invoke eliminates null check per cycle.
+        LastReadPhi1 = Phi1MemoryReader(CurrentCycle);
 
-        // Update raster register
-        _renderer.Tick();
         _registers[0x12] = (byte)CurrentRasterLine;
     }
 
@@ -1138,6 +1157,54 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public bool TestOnly_ComputeStallWindow(int leadingEdgeOffset) =>
         ComputeIsInSpriteDmaStallWindow(leadingEdgeOffset);
 
+    // PERF-SPRITE-DMA-OPT-002 / BACKFILL-VIDEO-001 / TR-VIC-EDGE-004 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
+    // Precomputed BA window lookup: for each model+offset, maps rasterX -> [(spriteNumber, lineOffset)].
+    // Built once at class load via BuildDmaWindowLookup (same delta/cpl-wrap math as the original
+    // IsSpriteDmaBaSlotActive + MapCurrentCycleToRasterX loop). Replaces 80 Math.DivRem/cycle with
+    // one array index per call, eliminating the per-cycle table-scan cost from ComputeIsInSpriteDmaStallWindow.
+    // VICE sources: vicii-chip-model.c:272-403/437-566 (cycle_tab_ntsc/ntsc_old SprDma*/BaSpr* tables).
+    private static readonly (int SpriteNumber, int LineOffset)[][] PalDmaWindowsOffset0 =
+        BuildDmaWindowLookup(PalSpriteDmaAccesses, PalCyclesPerLine, 0);
+    private static readonly (int SpriteNumber, int LineOffset)[][] PalDmaWindowsOffset1 =
+        BuildDmaWindowLookup(PalSpriteDmaAccesses, PalCyclesPerLine, 1);
+    private static readonly (int SpriteNumber, int LineOffset)[][] NtscDmaWindowsOffset0 =
+        BuildDmaWindowLookup(NtscSpriteDmaAccesses, NtscCyclesPerLine, 0);
+    private static readonly (int SpriteNumber, int LineOffset)[][] NtscDmaWindowsOffset1 =
+        BuildDmaWindowLookup(NtscSpriteDmaAccesses, NtscCyclesPerLine, 1);
+    private static readonly (int SpriteNumber, int LineOffset)[][] OldNtscDmaWindowsOffset0 =
+        BuildDmaWindowLookup(NtscOldSpriteDmaAccesses, NtscOldCyclesPerLine, 0);
+    private static readonly (int SpriteNumber, int LineOffset)[][] OldNtscDmaWindowsOffset1 =
+        BuildDmaWindowLookup(NtscOldSpriteDmaAccesses, NtscOldCyclesPerLine, 1);
+
+    private static (int SpriteNumber, int LineOffset)[][] BuildDmaWindowLookup(SpriteDmaAccess[] table, int cpl, int leadingEdgeOffset)
+    {
+        var slots = new List<(int SpriteNumber, int LineOffset)>[cpl];
+        for (int i = 0; i < cpl; i++) slots[i] = [];
+        foreach (SpriteDmaAccess access in table)
+        {
+            for (int delta = -3; delta <= 1; delta++)
+            {
+                int cycle = access.FirstCurrentCycle + delta + leadingEdgeOffset;
+                int lineOff = Math.DivRem(cycle, cpl, out int rx);
+                if (rx < 0) { lineOff--; rx += cpl; }
+                slots[rx].Add((access.SpriteNumber, lineOff));
+            }
+        }
+        return [.. slots.Select(l => l.ToArray())];
+    }
+
+    // PERF-SPRITE-DMA-OPT-002: test-only accessor for precomputed tables (BDP SpriteDmaStall_PrecomputedWindowTable test).
+    public static (int SpriteNumber, int LineOffset)[][] TestOnly_GetPrecomputedDmaWindowsForTest(int cyclesPerLine, int leadingEdgeOffset) =>
+        (cyclesPerLine, leadingEdgeOffset) switch
+        {
+            (NtscCyclesPerLine, 0) => NtscDmaWindowsOffset0,
+            (NtscCyclesPerLine, 1) => NtscDmaWindowsOffset1,
+            (NtscOldCyclesPerLine, 0) => OldNtscDmaWindowsOffset0,
+            (NtscOldCyclesPerLine, 1) => OldNtscDmaWindowsOffset1,
+            (_, 0) => PalDmaWindowsOffset0,
+            _ => PalDmaWindowsOffset1,
+        };
+
     // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001 / TR-VIC-EDGE-004:
     // Generalized latch (was UpdatePal...) now selects model check cycles from VICE tables.
     // PAL: 54/55 (vicii-cycle.c:499). NTSC/old: equivalent from cycle_tab (chip-model.c:272+/437+ per report 019e6acc).
@@ -1269,32 +1336,28 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // Lockstep + VIC suite green (PAL unchanged; NTSC parity for sprite BA windows).
     private bool ComputeIsInSpriteDmaStallWindow(int leadingEdgeOffset)
     {
-        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-004 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001:
-        // Activate per-model tables for NTSC/old-NTSC (65/64 cpl) + data-fetch side effects (cpl-aware
-        // MapCurrentCycleToRasterX in IsSpriteDmaBaSlotActive + Y-latch in IsSpriteDmaActiveForAccessLine).
-        // Mocks/stubs validated first in VicIISpriteDmaStallTests (NtscDmaTableStub + Get*ForTest exercising
-        // exact VICE cycle_tab_* expectations). PAL path unchanged. Lockstep (NTSC profiles) + all VIC tests
-        // remain green (behavioral parity for exercised cases; coarse was approximation).
-        //
-        // VICE sources (explore subagent report ID 019e6acc-29b8-77f1-a9cc-56499af366f9):
-        // vicii-chip-model.c:272-403 (cycle_tab_ntsc + SprDma*/BaSpr* for 6567R8/8562 65cpl),
-        // :437-566 (cycle_tab_ntsc_old for 6567R56A 64cpl), vicii-cycle.c:118 (check_sprite_dma),
-        // :499 (model flags), :503 (late-line handling).
-        var table = CyclesPerLine switch
+        // PERF-SPRITE-DMA-OPT-002 / BACKFILL-VIDEO-001 / TR-VIC-EDGE-004 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 / TEST-VIC-001:
+        // Precomputed rasterX lookup replaces 8-sprite x 5-delta table scan + 80 Math.DivRem/cycle.
+        // Tables (PalDmaWindows*/NtscDmaWindows*/OldNtscDmaWindows*) built at static init via BuildDmaWindowLookup
+        // using the same delta (-3..+1) + cpl-modular wrap as the original IsSpriteDmaBaSlotActive path.
+        // VICE sources: vicii-chip-model.c:272-403/437-566 (cycle_tab_ntsc/ntsc_old SprDma*/BaSpr*),
+        // vicii-cycle.c:118/499/502/503 (check_sprite_dma + model BA semantics).
+        // Regression guards: SpriteDmaStall_PrecomputedWindowTable_MatchesDeltaScanMath_AllModels,
+        // SpriteDmaStall_CacheEquivalence_FullModels_Badline_Fli_Compose_NoRegression,
+        // SpriteDmaStall_NonPalModels_LivePropertiesMatchTableSimulator_NoRegression.
+        var windows = _cyclesPerLine switch
         {
-            NtscCyclesPerLine => NtscSpriteDmaAccesses,
-            NtscOldCyclesPerLine => NtscOldSpriteDmaAccesses,
-            _ => PalSpriteDmaAccesses
+            NtscCyclesPerLine    => leadingEdgeOffset == 0 ? NtscDmaWindowsOffset0    : NtscDmaWindowsOffset1,
+            NtscOldCyclesPerLine => leadingEdgeOffset == 0 ? OldNtscDmaWindowsOffset0 : OldNtscDmaWindowsOffset1,
+            _                    => leadingEdgeOffset == 0 ? PalDmaWindowsOffset0     : PalDmaWindowsOffset1,
         };
 
-        foreach (SpriteDmaAccess access in table)
+        foreach (var (spriteNum, lineOff) in windows[RasterX])
         {
-            if (IsSpriteDmaBaSlotActive(access, leadingEdgeOffset))
-            {
+            int accessLine = NormalizeRasterLine(CurrentRasterLine - lineOff);
+            if (IsSpriteDmaActiveForAccessLine(spriteNum, accessLine))
                 return true;
-            }
         }
-
         return false;
     }
 
@@ -1753,10 +1816,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         return address >= BaseAddress && address < BaseAddress + 0x0400;
     }
 
-    public byte ReadVideoMemory(ushort address)
-    {
-        return VideoMemoryReader?.Invoke(address) ?? _bus.Read(address);
-    }
+    // PERF-VIC-002: VideoMemoryReader guaranteed non-null (initialized in constructor);
+    // direct invoke eliminates the null check per memory read.
+    public byte ReadVideoMemory(ushort address) => VideoMemoryReader(address);
 
     private int NormalizeVideoMatrixSlot(int slot)
     {

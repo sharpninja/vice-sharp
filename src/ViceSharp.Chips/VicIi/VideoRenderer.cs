@@ -29,7 +29,6 @@ public sealed class VideoRenderer
     public readonly byte[] FrameBuffer = new byte[ScreenWidth * ScreenHeight * 4];
 
     private readonly Mos6569 _vic;
-    private int _currentFrame;
 
     // C64 palette in BGRA format - built from VicPalette colors
     // Format: 0xAABBGGRR (Alpha, Blue, Green, Red)
@@ -58,24 +57,18 @@ public sealed class VideoRenderer
     {
     }
 
-    /// <summary>
-    /// Step video pipeline one cycle - called from VIC Tick()
-    /// Renders a full scanline when cycle hits end of line
-    /// </summary>
-    public void Tick()
+    // PERF-RENDER-001: called once per completed scanline from Mos6569.Tick() at line-wrap,
+    // eliminating 19,344 no-op per-cycle Tick() calls per PAL frame.
+    // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008 / TEST-VIC-001.
+    internal void NotifyLineCompleted(int completedLine)
     {
-        // Check if we've completed a line (63 cycles for PAL)
-        if (_vic.RasterX == 0 && _vic.CurrentRasterLine > 0)
-        {
-            RenderRasterLine(_vic.CurrentRasterLine - 1);
-        }
+        RenderRasterLine(completedLine);
+    }
 
-        // Check for frame complete
-        if (_vic.CurrentRasterLine == 0 && _currentFrame > 0)
-        {
-            FrameCompleted?.Invoke(this, EventArgs.Empty);
-        }
-        _currentFrame++;
+    // PERF-RENDER-001: called once per frame at frame-wrap from Mos6569.Tick().
+    internal void NotifyFrameCompleted()
+    {
+        FrameCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     private void RenderRasterLine(int lineNumber)
@@ -115,6 +108,10 @@ public sealed class VideoRenderer
         int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
         int charRow = screenLine & 7;
 
+        // PERF-RENDER-002: cache DisplayModeSelection once per line rather than
+        // evaluating the 3-register switch expression for every pixel (384x per line).
+        var displayMode = _vic.DisplayModeSelection;
+
         for (int x = 0; x < ScreenWidth; x++)
         {
             int offset = x * 4;
@@ -130,7 +127,8 @@ public sealed class VideoRenderer
                 charRow,
                 columns,
                 bgPixel,
-                borderPixel);
+                borderPixel,
+                displayMode);
             uint pixel = background.Pixel;
             
             if (TryGetSpritePixel(x, lineNumber, background.IsForeground, out var spritePixel))
@@ -157,7 +155,8 @@ public sealed class VideoRenderer
         int charRow,
         int columns,
         uint bgPixel,
-        uint borderPixel)
+        uint borderPixel,
+        Mos6569.VicIIDisplayMode displayMode)
     {
         bool inLeftBorder = x < leftBorderPixel;
         bool inRightBorder = x >= rightBorderPixel;
@@ -190,7 +189,8 @@ public sealed class VideoRenderer
 
         // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008 /
         // TEST-VIC-001: follow the VICE vicii-draw-cycle.c mode color table.
-        return _vic.DisplayModeSelection switch
+        // PERF-RENDER-002: displayMode cached once per line by RenderRasterLine.
+        return displayMode switch
         {
             Mos6569.VicIIDisplayMode.StandardText => RenderStandardTextPixel(charCode, colorCode, charRow, charX, bgPixel),
             Mos6569.VicIIDisplayMode.MulticolorText => RenderMulticolorTextPixel(charCode, colorCode, charRow, charX, bgPixel),
@@ -441,7 +441,6 @@ public sealed class VideoRenderer
 
     public void Reset()
     {
-        _currentFrame = 0;
         Array.Clear(FrameBuffer);
     }
 }
