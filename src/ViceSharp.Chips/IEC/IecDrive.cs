@@ -27,9 +27,17 @@ public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
     private bool _clockLine;
     private bool _dataLine;
     
-    // Drive buffer
+    // Drive buffer (exposed for test inspection via SectorBuffer property).
     private readonly byte[] _sectorBuffer = new byte[256];
-    
+
+    // Motor ramp state machine.
+    // Commodore 1541 motor requires ~300ms spin-up at 1,000,000 Hz drive clock
+    // = 300,000 cycles before reliable sector access is possible.
+    // VICE drive/drive.c: motor state tracked per drive unit.
+    private const long MotorRampCyclesToSpeed = 300_000;
+    private long _motorRampCycles = 0;
+    private long _motorRotationCycles = 0;
+
     // Disk image support
     private D64Image? _diskImage;
     
@@ -39,15 +47,70 @@ public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
         _diskImage = diskImage;
     }
     
+    /// <summary>
+    /// Number of drive cycles elapsed since the motor reached operating speed.
+    /// Zero while motor is off or during the 300,000-cycle ramp-up phase.
+    /// Advances monotonically once the ramp is complete.
+    /// VICE drive/drive.c: motor rotation tracking for GCR flux emulation.
+    /// </summary>
+    public long MotorRotationCycles => _motorRotationCycles;
+
+    /// <summary>
+    /// The current 256-byte sector buffer (read by ReadSector, written by WriteSector).
+    /// Exposed for test inspection; production callers should use ReadSector/WriteSector.
+    /// </summary>
+    public byte[] SectorBuffer => _sectorBuffer;
+
     public void Reset()
     {
         MotorOn = false;
         CurrentTrack = 18;
+        _motorRampCycles = 0;
+        _motorRotationCycles = 0;
     }
-    
+
+    /// <summary>
+    /// Set motor state (simulates the 1541 VIA2 MOTEN bit, port B bit 2).
+    /// Turning the motor off resets the ramp counter; the drive must complete
+    /// a new 300,000-cycle ramp before rotation resumes.
+    /// VICE drive/drive.c: motor enable/disable via VIA2 port B write.
+    /// </summary>
+    public void SetMotor(bool enabled)
+    {
+        if (!enabled)
+        {
+            MotorOn = false;
+            _motorRampCycles = 0;
+            _motorRotationCycles = 0;
+        }
+        else
+        {
+            MotorOn = true;
+        }
+    }
+
+    /// <summary>
+    /// Advance the drive motor state machine by one drive cycle.
+    ///
+    /// Motor ramp (TR-DRV-EDGE-001): When MotorOn is true, the drive spends
+    /// the first 300,000 cycles in spin-up (ramp). During ramp, MotorRotationCycles
+    /// stays at 0. After ramp, MotorRotationCycles increments each cycle.
+    /// When MotorOn is false, both counters remain at 0.
+    /// VICE drive/drive.c: motor cycle tracking for D64 sector timing.
+    /// </summary>
     public void Tick()
     {
-        // IEC timing: drives respond to bus commands
+        if (!MotorOn)
+            return;
+
+        if (_motorRampCycles < MotorRampCyclesToSpeed)
+        {
+            _motorRampCycles++;
+        }
+        else
+        {
+            _motorRotationCycles++;
+        }
     }
     
     public void Initialize() => Reset();
