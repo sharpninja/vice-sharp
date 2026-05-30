@@ -26,7 +26,7 @@ internal static class HostProtocolMapper
             state.Cycle,
             ToMachineStateDto(state),
             session.PowerState,
-            session.LimiterRatePercent,
+            session.LimiterEnabled ? session.LimiterRatePercent : 0.0,
             session.MeasuredFramesPerSecond,
             session.FrameCount,
             nominalClockHz,

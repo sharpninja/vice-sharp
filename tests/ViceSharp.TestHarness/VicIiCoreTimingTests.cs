@@ -61,10 +61,12 @@ public sealed class VicIiCoreTimingTests
     /// Use case: The VIC-II raster IRQ must assert on the configured
     /// compare line and remain latched in $D019 bit 0 until the
     /// CPU writes a 1 to that bit to clear it.
-    /// Acceptance: After 57 cycles IRQ is still low; the next tick
-    /// raises IRQ and $D019 reads $F1 (raster flag + IR master + fixed
-    /// high bits 6-4); writing $01 to $D019 deasserts IRQ and clears
-    /// the flag.
+    /// Acceptance: Writing $D012=$00 arms the comparator for line 0;
+    /// the VIC starts on line 0 so the first Tick fires the latch
+    /// immediately (VICE-compatible: raster IRQ asserts at the first
+    /// cycle of the matching raster line, not at a fixed cycle offset).
+    /// $D019 reads $F1 (raster flag + IR master + fixed high bits 6-4);
+    /// writing $01 to $D019 deasserts IRQ and clears the flag.
     /// </summary>
     [Fact]
     public void RasterIrq_AssertsAtCompareCycleAndClearsByWriteOneToD019()
@@ -75,10 +77,13 @@ public sealed class VicIiCoreTimingTests
         vic.Write(0xD012, 0x00);
         vic.Write(0xD01A, 0x01);
 
-        Advance(vic, 57);
+        // Before any tick: comparator just armed, no tick yet — latch still clear.
         Assert.False(irq.IsAsserted);
         Assert.Equal(0x70, vic.Read(0xD019));
 
+        // VICE-compatible: fires at the first cycle of the matching line.
+        // VIC is on line 0 and _rasterIrqLine=0 with compare armed,
+        // so the first Tick asserts the latch without delay.
         vic.Tick();
 
         Assert.True(irq.IsAsserted);
@@ -403,11 +408,12 @@ public sealed class VicIiCoreTimingTests
     /// BACKFILL-VIDEO-001 (native depth) / TR-VIC-EDGE-00X (FLI/AFLI timing depth) /
     /// FR-VIC-002 / FR-VIC-003 / FR-VIC-007 / TEST-VIC-001.
     ///
-    /// Use case / acceptance criteria: FLI (and AFLI on non-PAL) forces badlines on every raster line
-    /// by writing YSCROLL each line to match (CurrentRasterLine &amp; 7). IsForcedBadline must be true,
-    /// IsBadLine must follow for DMA/fetch windows, and IsDmaStealing / video matrix access must be
-    /// asserted during the appropriate cycles even across consecutive lines (normal badline latch
-    /// alone is insufficient for full FLI depth).
+    /// Use case: FLI (and AFLI on non-PAL) forces badlines on every raster line
+    /// by writing YSCROLL each line to match (CurrentRasterLine &amp; 7), making IsForcedBadline
+    /// and IsBadLine true on consecutive lines for DMA/fetch timing depth.
+    /// Acceptance: IsForcedBadline must be true, IsBadLine must follow for DMA/fetch windows,
+    /// and IsDmaStealing / video matrix access must be asserted during the appropriate cycles
+    /// even across consecutive lines (normal badline latch alone insufficient for full FLI depth).
     ///
     /// VICE sources (from explore subagent report ID 019e6acc-29b8-77f1-a9cc-56499af366f9):
     /// native/vice/vice/src/viciisc/vicii-cycle.c (raster handler + badline force for FLI at start-of-line

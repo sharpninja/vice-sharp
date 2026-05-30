@@ -352,16 +352,16 @@ public sealed class SpriteCollisionTests
     /// - viciisc/vicii-draw-cycle.c:134-141 (colors[] table: COL_D02X_EXT for
     ///   valid ECM, COL_NONE for the three ECM=1 invalid rows)
     /// 
-    /// Use case / acceptance (mocks/stubs first):
-    /// With VideoMemoryReader stub + forced D011/D016 producing
+    /// Use case: With VideoMemoryReader stub + forced D011/D016 producing
     /// DisplayModeSelection == Invalid with ECM contributing, and character/
     /// bitmap data bytes producing 2-bit "px" values with bit 1 set vs clear
     /// (at specific charX), IsGraphicsPixelForegroundForSpritePriority must
-    /// return exactly the (px &amp; 0x2) != 0 result for all three invalid ECM
-    /// combos. This drives correct TryGetSpritePixel priority skip and
-    /// ProcessSpriteCollisionsForRasterLine sb-collision latch.
-    /// The visible render path (VideoRenderer) correctly yields color 0 for
-    /// these pixels (separate concern).
+    /// return exactly the (px &amp; 0x2) != 0 result for all three invalid ECM combos
+    /// (mocks/stubs first per BDP).
+    /// Acceptance: IsGraphicsPixelForegroundForSpritePriority returns true when px bit 1
+    /// is set and false otherwise for all invalid ECM combos, driving correct
+    /// TryGetSpritePixel priority skip and ProcessSpriteCollisionsForRasterLine
+    /// sb-collision latch; visible render path yields color 0 for these pixels.
     /// </summary>
     [Theory]
     [InlineData(0x58, 0x18, 0x80, 0, true)]   // ECM1 BMM0 MCM1 (invalid), char high bit -> px=3 or equiv, pri=1

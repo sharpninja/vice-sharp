@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
@@ -32,9 +33,22 @@ public sealed class LocalVideoFrameSource : ILocalVideoFrameSource
         {
             if (session.RunState == EmulatorRunState.Running)
             {
-                session.Machine.RunFrame();
-                session.RecordFrame();
-                session.AdvanceHostAutomationFrame();
+                if (!session.LimiterEnabled)
+                {
+                    var deadline = Stopwatch.GetTimestamp() + Stopwatch.Frequency / 50;
+                    do
+                    {
+                        session.Machine.RunFrame();
+                        session.RecordFrame();
+                        session.AdvanceHostAutomationFrame();
+                    } while (Stopwatch.GetTimestamp() < deadline);
+                }
+                else
+                {
+                    session.Machine.RunFrame();
+                    session.RecordFrame();
+                    session.AdvanceHostAutomationFrame();
+                }
             }
 
             var videoChip = session.Machine.Devices.GetByRole(DeviceRole.VideoChip) as IVideoChip;

@@ -19,7 +19,7 @@ using Xunit;
 public sealed class SystemClockDispatchTests
 {
     /// <summary>
-    /// PERF-CLOCK-001.
+    /// TR-CYCLE-001 / PERF-CLOCK-001.
     /// Use case: Phi1-phase device must tick exactly once per SystemClock.Step() call,
     /// during Phi1, regardless of whether the clock has slow or fast Phi2 devices also
     /// registered.
@@ -45,7 +45,7 @@ public sealed class SystemClockDispatchTests
     }
 
     /// <summary>
-    /// PERF-CLOCK-001.
+    /// TR-CYCLE-001 / PERF-CLOCK-001.
     /// Use case: A slow device with ClockDivisor=16 (like SID) must tick every
     /// 16 master cycles, not every cycle. The fast Phi2 device alongside it
     /// must not be affected.
@@ -70,7 +70,7 @@ public sealed class SystemClockDispatchTests
     }
 
     /// <summary>
-    /// PERF-CLOCK-001.
+    /// TR-CYCLE-001 / PERF-CLOCK-001.
     /// Use case: Unregistering a device must stop it from receiving ticks immediately;
     /// the remaining devices continue without disruption.
     /// Acceptance: Register two devices, step 10, unregister one, step 10 more.
@@ -99,7 +99,7 @@ public sealed class SystemClockDispatchTests
     }
 
     /// <summary>
-    /// PERF-CLOCK-001.
+    /// TR-CYCLE-001 / PERF-CLOCK-001.
     /// Use case: Reset must reset slow-device counters so the divisor counting
     /// restarts from zero after reset, matching behavior of original modulo-based
     /// dispatch (_cycle % divisor == 0 with _cycle reset to 0).
@@ -125,7 +125,7 @@ public sealed class SystemClockDispatchTests
     }
 
     /// <summary>
-    /// PERF-CLOCK-001 / PERF-CLOCK-002.
+    /// TR-CYCLE-001 / PERF-CLOCK-001 / PERF-CLOCK-002.
     /// Use case: Full parity check - mixed Phi1/Phi2, fast/slow devices with a
     /// cycle stealer registered. The optimized array path must produce identical
     /// tick counts to the original List dispatch for 500 steps.
@@ -156,7 +156,7 @@ public sealed class SystemClockDispatchTests
     }
 
     /// <summary>
-    /// PERF-CLOCK-002.
+    /// TR-CYCLE-001 / PERF-CLOCK-002.
     /// Use case: IsCpuCycleStolen must read stealer properties only once per call
     /// to avoid stale double-reads when the property has a side effect or changes
     /// between reads (theoretical). More concretely: if IsCpuCycleStolen returns

@@ -352,6 +352,7 @@ public partial class MainWindow : Window
             if (_attachViewModel is not null)
             {
                 _attachViewModel.IsWarpMode = !_attachViewModel.IsWarpMode;
+                await _attachViewModel.ApplySettingsAsync(false).ConfigureAwait(true);
                 e.Handled = true;
                 return;
             }

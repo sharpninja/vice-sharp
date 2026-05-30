@@ -68,6 +68,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private byte _rowCounter;
     private int _videoMatrixLineIndex;
     private bool _idleState;
+    // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003: vcbase captures vc at RC update (cycle 58 / RasterX 57)
+    // when rc==7; vc is restored from vcbase at VC update (cycle 14 / RasterX 13) each line.
+    // VICE viciisc/vicii-cycle.c:544 (vc = vcbase), vicii-cycle.c:558 (vcbase = vc).
+    private ushort _vcBase;
 
     // BACKFILL-VIDEO-001: Track which raster line last contributed to the
     // per-frame bad-line count so each bad line is counted exactly once even
@@ -815,14 +819,57 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         CycleCounter++;
         RasterX++;
 
-        // VICE-style raster interrupt (at cycle 58 of line):
-        // the latch in $D019 bit 0 is set unconditionally on compare match;
-        // RefreshInterruptLine then gates the IRQ output by $D01A enable.
+        // VICE-style raster interrupt: fires at the FIRST cycle of the matching
+        // raster line (equivalent to vicii.raster_irq_triggered logic in VICE).
+        // VICE checks raster_line == raster_irq_line on every vicii_cycle() call
+        // and fires once per line entry (guarded by raster_irq_triggered).
+        // After reset, raster_cycle = 6 and raster_line = 0 = raster_irq_line,
+        // so VICE fires the latch on the very first vicii_cycle() call.
+        // Firing here (before the line-wrap check) matches that: if CurrentRasterLine
+        // already equals _rasterIrqLine when Tick() is entered, the latch fires
+        // immediately rather than waiting for RasterX to reach a specific value.
         // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: latch is independent of enable.
-        if (_rasterIrqCompareArmed && RasterX == 58 && CurrentRasterLine == _rasterIrqLine)
+        if (_rasterIrqCompareArmed && CurrentRasterLine == _rasterIrqLine)
         {
+            _rasterIrqCompareArmed = false; // once per line entry (matches raster_irq_triggered)
             _registers[0x19] |= 0x01;
             RefreshInterruptLine();
+        }
+
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:
+        // VC update at VICE cycle 14 / managed RasterX 13 (VICII_PAL_CYCLE(14) = 13).
+        // Resets vc to vcbase and vmli to 0. On a bad line, also resets rc to 0 and
+        // clears idle_state. VICE viciisc/vicii-cycle.c:541-548.
+        if (RasterX == 13)
+        {
+            _videoCounter = _vcBase;
+            _videoMatrixLineIndex = 0;
+            if (IsBadLine)
+            {
+                _rowCounter = 0;
+                _idleState = false;
+            }
+        }
+
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:
+        // RC update at VICE cycle 58 / managed RasterX 57 (VICII_PAL_CYCLE(58) = 57).
+        // If rc == 7: enter idle state and capture vcbase = vc. Then if !idle_state
+        // or bad_line: increment rc, clear idle_state. The two branches use the
+        // updated idle_state from the first branch, so a bad line both sets idle (rc==7
+        // case) then immediately clears it (second branch bad_line=1).
+        // VICE viciisc/vicii-cycle.c:551-563.
+        if (RasterX == 57)
+        {
+            if (_rowCounter == 7)
+            {
+                _idleState = true;
+                _vcBase = _videoCounter;
+            }
+            if (!_idleState || IsBadLine)
+            {
+                _rowCounter = (byte)((_rowCounter + 1) & 0x7);
+                _idleState = false;
+            }
         }
 
         if (RasterX >= CyclesPerLine)
@@ -918,7 +965,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         RasterX = ResetRasterCycle;
         CycleCounter = 0;
         _rasterIrqLine = 0;
-        _rasterIrqCompareArmed = false;
+        // Armed on reset: hardware fires the raster IRQ unconditionally when raster_line
+        // matches raster_irq_line. Starting disarmed caused managed to skip the first
+        // match at line 0 (before any line wrap), diverging from VICE which fires at
+        // cycle 1 of line 0. Arm here so the first pass through line 0 fires the latch.
+        _rasterIrqCompareArmed = true;
         _verticalBorderActive = true;
         _verticalBorderNextActive = true;
         _mainBorderActive = true;
@@ -936,6 +987,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
         Array.Clear(_colorBuffer, 0, _colorBuffer.Length);
         _videoCounter = 0;
+        _vcBase = 0;
         _rowCounter = 0;
         _videoMatrixLineIndex = 0;
         _idleState = false;
@@ -1490,6 +1542,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     }
 
     public bool IsGraphicsIdle => _idleState;
+
+    /// <summary>
+    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:
+    /// Current row counter (RC) value, 0-7. Incremented at cycle 58 of each line;
+    /// resets to 0 on bad lines at cycle 14. Matches VICE vicii.rc field.
+    /// VICE viciisc/vicii-cycle.c:556-563.
+    /// </summary>
+    public byte CurrentRowCounter => _rowCounter;
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001:

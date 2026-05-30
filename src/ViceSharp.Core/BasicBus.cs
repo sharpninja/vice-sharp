@@ -11,47 +11,37 @@ public sealed class BasicBus : IBus
     private List<IAddressSpace> _devices = new();
     private readonly object _lock = new();
 
+    // PERF-BUS-001: Read/Write/Peek run on the single emulation thread (SystemClock);
+    // no lock needed here. RegisterDevice/UnregisterDevice retain their lock for
+    // safe setup/teardown from any thread.
     public byte Read(ushort address)
     {
-        lock (_lock)
+        foreach (var device in _devices)
         {
-            foreach (var device in _devices)
-            {
-                if (device.HandlesAddress(address))
-                {
-                    return device.Read(address);
-                }
-            }
+            if (device.HandlesAddress(address))
+                return device.Read(address);
         }
         return 0xFF;
     }
 
     public void Write(ushort address, byte value)
     {
-        lock (_lock)
+        foreach (var device in _devices)
         {
-            foreach (var device in _devices)
+            if (device.HandlesAddress(address))
             {
-                if (device.HandlesAddress(address))
-                {
-                    device.Write(address, value);
-                    return;
-                }
+                device.Write(address, value);
+                return;
             }
         }
     }
 
     public byte Peek(ushort address)
     {
-        lock (_lock)
+        foreach (var device in _devices)
         {
-            foreach (var device in _devices)
-            {
-                if (device.HandlesAddress(address))
-                {
-                    return device.Peek(address);
-                }
-            }
+            if (device.HandlesAddress(address))
+                return device.Peek(address);
         }
         return 0xFF;
     }

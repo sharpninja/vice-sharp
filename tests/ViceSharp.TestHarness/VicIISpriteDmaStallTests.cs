@@ -596,7 +596,7 @@ public sealed class VicIISpriteDmaStallTests
     /// deltas (-3..+1), plus latch at ChkSprDma-equivalent rasterX (NTSC ~56/57) instead of PAL 54/55 or coarse 8/55 fallback.
     /// This is the data-fetch side effect (multi-line DMA height after check) + stall window for non-PAL.
     ///
-    /// Acceptance (mocks first per Byrd Development Process):
+    /// Acceptance: (mocks first per Byrd Development Process)
     /// - Tables (NtscSpriteDmaAccesses / NtscOldSpriteDmaAccesses via GetSpriteDmaAccessTableForTest) + simulator encode VICE exactly.
     /// - Stub validates exact rasterX hits for BA windows per table + cpl (no 63 hardcode distortion).
     /// - Real NTSC/old-NTSC instances (post wiring) produce identical stall predicate to simulator at model cpl.
@@ -668,6 +668,8 @@ public sealed class VicIISpriteDmaStallTests
     /// the Map/latch/dispatch changes in Mos6569 make NTSC paths use tables.
     ///
     /// VICE sources: same as parent (chip-model.c:272-403/437-566, cycle.c:118/502, fetch.c:275-309 from explore report 019e6acc-29b8-77f1-a9cc-56499af366f9).
+    /// Use case: Real non-PAL models use per-model VICE cycle tables for sprite DMA BA windows after wiring.
+    /// Acceptance: Real Mos6567/Mos6567R56A report IsCpuCycleStolen at VICE table-driven rasterX windows for intersecting sprites.
     /// </summary>
     [Fact]
     public void SpriteDmaStall_NonPal_RealModels_TableDriven_AfterWiring()
@@ -720,6 +722,8 @@ public sealed class VicIISpriteDmaStallTests
     ///
     /// Data-fetch side effect contract (cpl-aware mapping): the % cpl simulation in stub (and future prod MapCurrentCycleToRasterX)
     /// must use model cpl (65 for NTSC, 64 for old) not PAL 63. Refined to red (removed || true) as the tiniest failing gate.
+    /// Use case: Non-PAL DMA BA window % math uses model cpl (65/64) not hardcoded PAL 63 in the cpl-aware mapping path.
+    /// Acceptance: Stub IsInNtscSpriteDmaStallWindow returns true at table-derived rasterX 58-59 for NTSC intersecting sprite per model cpl.
     /// </summary>
     [Fact]
     public void SpriteDmaStall_NonPalCplMappingSideEffect_MockContractValidated()
@@ -749,9 +753,9 @@ public sealed class VicIISpriteDmaStallTests
     /// native/vice/vice/src/viciisc/vicii-chip-model.c:272-403 and 437-566 (NTSC/oldNTSC SprDma*/BaSpr* tables + cpl mapping),
     /// vicii-cycle.c and vicii-sprite.c (badline DMA data-fetch side effects, FLI badline timing for sprite DMA windows, latch behavior under AFLI/FLI modes).
     ///
-    /// Use case (FLI/AFLI timing edge on live non-PAL paths): An FLI (or AFLI) program on NTSC or oldNTSC model writes $D011 repeatedly during the display window to force YSCROLL = (raster_line &amp; 7) on every line, making IsBadLine (and IsForcedBadline) true for sprite-intersecting lines. Sprite DMA stall windows from the per-model tables (chip-model.c cycle_tab_*) must still compose correctly with the badline c-access window; the data-fetch side-effect latch (UpdateSpriteDmaLatchForCurrentCycle at model ChkSprDma-equivalent cycles ~56/57 for NTSC) must fire so IsInSpriteDmaStallWindow and active mask for multi-line DMA height remain accurate. This exercises the now-live cpl-aware dispatch/latch under FLI badline conditions.
+    /// Use case: FLI/AFLI timing edge on live non-PAL paths. An FLI (or AFLI) program on NTSC or oldNTSC model writes $D011 repeatedly during the display window to force YSCROLL = (raster_line &amp; 7) on every line, making IsBadLine (and IsForcedBadline) true for sprite-intersecting lines. Sprite DMA stall windows from the per-model tables (chip-model.c cycle_tab_*) must still compose correctly with the badline c-access window; the data-fetch side-effect latch (UpdateSpriteDmaLatchForCurrentCycle at model ChkSprDma-equivalent cycles ~56/57 for NTSC) must fire so IsInSpriteDmaStallWindow and active mask for multi-line DMA height remain accurate. This exercises the now-live cpl-aware dispatch/latch under FLI badline conditions.
     ///
-    /// Acceptance criteria (mocks/stubs first per Byrd Development Process):
+    /// Acceptance: (mocks/stubs first per Byrd Development Process)
     /// - NtscDmaTableStub (extended for this slice) + SimulateFliBadlineSpriteDmaCompose encodes VICE badline + table sprite compose for NTSC 65cpl and oldNTSC 64cpl.
     /// - Mock facts assert correct stall hits at both badline entry (RasterX ~12) and model-specific table sprite slots (e.g. NTSC sprite0 ~56-60) when FLI force is active.
     /// - Real Mos6567 / Mos6567R56A under identical FLI YSCROLL force + intersecting sprites produce matching stall predicates and IsForcedBadline true.
@@ -797,9 +801,9 @@ public sealed class VicIISpriteDmaStallTests
     /// native/vice/vice/src/viciisc/vicii-chip-model.c:272-403 and 437-566 (NTSC/oldNTSC SprDma*/BaSpr* tables + cpl mapping),
     /// vicii-cycle.c and vicii-sprite.c (badline DMA data-fetch side effects, FLI badline timing for sprite DMA windows, latch behavior under AFLI/FLI modes).
     ///
-    /// Use case (real-model asserts on live non-PAL paths under FLI): Real Mos6567 (65 cpl) and Mos6567R56A (64 cpl) with FLI YSCROLL forcing (writes to $D011 making (raster &amp; 7) == YScroll on sprite-intersect lines) must report IsCpuCycleStolen true at badline entry + model table sprite slots, IsForcedBadline true, and latch side effects active for DMA height. Exercises the live cpl-aware UpdateSpriteDmaLatchForCurrentCycle / IsInSpriteDmaStallWindow / dispatch exactly as VICE does for FLI badline + sprite DMA interaction.
+    /// Use case: Real-model asserts on live non-PAL paths under FLI. Real Mos6567 (65 cpl) and Mos6567R56A (64 cpl) with FLI YSCROLL forcing (writes to $D011 making (raster &amp; 7) == YScroll on sprite-intersect lines) must report IsCpuCycleStolen true at badline entry + model table sprite slots, IsForcedBadline true, and latch side effects active for DMA height. Exercises the live cpl-aware UpdateSpriteDmaLatchForCurrentCycle / IsInSpriteDmaStallWindow / dispatch exactly as VICE does for FLI badline + sprite DMA interaction.
     ///
-    /// Acceptance criteria:
+    /// Acceptance:
     /// - Real NTSC/oldNTSC instances under FLI force + intersecting sprite show stall at expected model cycles (badline 12+ and table sprite e.g. 56-60 for NTSC sprite0).
     /// - IsForcedBadline true when YSCROLL forced on the line.
     /// - No regression to PAL or lockstep 100k cycles.
@@ -880,7 +884,7 @@ public sealed class VicIISpriteDmaStallTests
     /// TR-VIC-EDGE-004 (the expensive tables), TR-CYCLE-001 (stolen vs mandatory 1-cycle offset), TEST-VIC-001 (VICE parity + lockstep).
     /// Reference: docs/perf-sprite-dma-optimization-plan-001.md + user dotTrace finding (MapCurrentCycleToRasterX dominant after tables).
     ///
-    /// Acceptance criteria (mocks/stubs + real models):
+    /// Acceptance: (mocks/stubs + real models)
     /// - For every exercised (model, raster line, rasterX, sprite enable/Y/expansion, badline/FLI force) combination,
     ///   the cached value (TestOnly_GetCachedStallWindow) exactly equals the authoritative compute (TestOnly_ComputeStallWindow).
     /// - Covers PAL (63cpl), NTSC (65cpl late slots + early wrap), oldNTSC (64cpl).
@@ -1069,7 +1073,7 @@ public sealed class VicIISpriteDmaStallTests
     /// Any future edit to BuildDmaWindowLookup, the delta range (-3..+1), or the cpl-modular wrap
     /// must not silently alter which (spriteNum, lineOff) pairs are checked at each rasterX.
     ///
-    /// Acceptance criteria:
+    /// Acceptance:
     /// - For PAL (63 cpl), NTSC (65 cpl), and oldNTSC (64 cpl):
     ///   - For leadingEdgeOffset 0 (IsCpuCycleStolen) and 1 (IsCpuCycleStealMandatory):
     ///     - For every rasterX in 0..(cpl-1):

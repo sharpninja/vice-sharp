@@ -46,10 +46,17 @@ public sealed class LockstepValidator : IDisposable
         if (!ValidateState())
             return ValidationReport.Fail(0, 0, GetStateDiff());
 
+        long prevNativeCycle = 0;
         for (_cycleCount = 0; _cycleCount < maxCycles; _cycleCount++)
         {
-            _machine.Clock.Step();
             _native.Step();
+            long nativeCycle = _native.GetState().Cycle;
+            long nativeDelta = nativeCycle - prevNativeCycle;
+            prevNativeCycle = nativeCycle;
+
+            for (long j = 0; j < nativeDelta; j++)
+                _machine.Clock.Step();
+
             RecordTrace(_cycleCount + 1);
 
             if (!ValidateState())

@@ -1404,10 +1404,26 @@ public sealed class X64ScVariantLockstepTests
         string modelSelector,
         string checkpoint)
     {
+        // Delta-stepping: each StepCycle fires one CLK_INC checkpoint, but bad-line steals
+        // advance maincpu_clk by 43 extra ticks WITHOUT checkpoints. Advancing managed by
+        // the same delta keeps both machines at the same absolute cycle position.
+        // Same fix as LockstepValidator.Run().
+        var initState = new ViceNativeBridge.ViceVicState();
+        ViceNativeBridge.GetVicState(native, ref initState);
+        long prevNativeCycle = initState.Cycle;
+
         for (var cycle = 0L; cycle < cycles; cycle++)
         {
-            machine.Clock.Step();
             ViceNativeBridge.StepCycle(native);
+
+            var vicState = new ViceNativeBridge.ViceVicState();
+            ViceNativeBridge.GetVicState(native, ref vicState);
+            long nativeDelta = vicState.Cycle - prevNativeCycle;
+            prevNativeCycle = vicState.Cycle;
+
+            for (long j = 0; j < nativeDelta; j++)
+                machine.Clock.Step();
+
             AssertCpuStateMatches(
                 machine,
                 native,

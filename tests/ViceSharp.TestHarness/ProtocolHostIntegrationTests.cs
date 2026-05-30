@@ -154,7 +154,9 @@ public sealed class ProtocolHostIntegrationTests
         Assert.Equal("configured-paths", updated.Settings.Resources!.Mode);
         Assert.Contains(updated.Diagnostics, diagnostic => diagnostic.Setting == "limiter.ratePercent" && diagnostic.AppliedLive);
         Assert.Contains(updated.Diagnostics, diagnostic => diagnostic.Setting == "profile" && diagnostic.RestartRequired);
-        Assert.Equal(125, status.EmulatorStatus!.LimiterRatePercent);
+        // LimiterEnabled=false signals warp mode by emitting LimiterRatePercent=0
+        // so the status bar can show "WARP" (rate 0 triggers the warp display path).
+        Assert.Equal(0, status.EmulatorStatus!.LimiterRatePercent);
     }
 
     /// <summary>

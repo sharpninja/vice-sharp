@@ -30,6 +30,23 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private const ushort ColorRamStart = 0xD800;
     private const ushort ColorRamEnd = 0xDBFF;
 
+    // PERF-MEM-001: precomputed 16-entry (one per 4KB page) read dispatch table.
+    // Rebuilt whenever PLA banking state changes (CPU writes $0001) or cartridge
+    // is attached/ejected. Eliminates 5 if-branches + PLA property reads (~3 bit-ANDs)
+    // from the hot Read() path (~80,000 calls per PAL frame).
+    private enum PageKind : byte
+    {
+        Ram = 0,
+        Pla0 = 1,     // page 0: $0000-$0001 -> PLA, $0002-$0FFF -> RAM
+        BasicRom = 2,  // $A000-$BFFF when BasicRomVisible && no cart override
+        KernalRom = 3, // $E000-$FFFF when KernalRomVisible && no cart override
+        Io = 4,        // $D000-$DFFF when CHAREN && (LORAM||HIRAM)
+        CharRom = 5,   // $D000-$DFFF when !CHAREN && (LORAM||HIRAM)
+        CartOrRam = 6, // page may be overridden by attached cartridge: use slow path
+    }
+
+    private readonly PageKind[] _readPageTable = new PageKind[16];
+
     private readonly byte[] _ram = new byte[0x10000];
     private readonly byte[] _colorRam = new byte[0x0400];
     private readonly byte[] _basicRom = new byte[0x2000];
@@ -109,6 +126,10 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _vic.Phi1MemoryReader = ReadVicPhi1OpenBus;
 
         Reset();
+        // Note: RebuildReadPageTable() is called inside Reset(). The PLA DataRegister
+        // is 0 at this point (not yet Initialize()'d), so the table will be all-RAM
+        // until machine.Reset() is called, which resets the PLA first and then calls
+        // this Reset() again, rebuilding the table with the correct PLA state.
     }
 
     public DeviceId Id => new DeviceId(0x0101);
@@ -137,6 +158,12 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _vicPhi1Bank = 0;
         if (_attachedCartridgeMappingMode == CartridgeMappingMode.GameSystem)
             _gameSystemCartridgeBank = 0;
+
+        // PERF-MEM-001: Rebuild page table so it reflects PLA state after a machine
+        // reset. The machine's Reset() resets all IClockedDevice chips (including the
+        // PLA, which sets DataRegister=0x37) before resetting non-clocked devices
+        // (this class), so the PLA is already at the correct power-up state here.
+        RebuildReadPageTable();
     }
 
     private void InitializeRam()
@@ -189,17 +216,34 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public byte Read(ushort address)
     {
-        byte value;
-        if (address <= 0x0001)
-            return LatchCpuBusValue(_pla.Read(address));
+        // PERF-MEM-001: precomputed page table eliminates 5 if-branches + PLA property
+        // reads from the hot path. Table is rebuilt on PLA state change or cart attach/eject.
+        return _readPageTable[address >> 12] switch
+        {
+            PageKind.Ram => LatchCpuBusValue(_ram[address]),
+            PageKind.Pla0 => address <= 0x0001
+                ? LatchCpuBusValue(_pla.Read(address))
+                : LatchCpuBusValue(_ram[address]),
+            PageKind.BasicRom => LatchCpuBusValue(_basicRom[address - BasicStart]),
+            PageKind.KernalRom => LatchCpuBusValue(_kernalRom[address - KernalStart]),
+            PageKind.Io => LatchCpuBusValue(ReadIo(address, peek: false)),
+            PageKind.CharRom => LatchCpuBusValue(_charRom[address - CharStart]),
+            _ /* CartOrRam */ => ReadWithCartridgeCheck(address),
+        };
+    }
 
+    // PERF-MEM-001: slow path used only when a cartridge is attached and the address
+    // falls in a page that may be overridden by the cart image. Identical to the
+    // original read logic for cart-affected pages.
+    private byte ReadWithCartridgeCheck(ushort address)
+    {
         if (TryReadCartridge(address, out var cartridgeValue))
             return LatchCpuBusValue(cartridgeValue);
 
         if (address is >= BasicStart and < 0xC000 && _pla.BasicRomVisible)
             return LatchCpuBusValue(_basicRom[address - BasicStart]);
 
-        if (address is >= KernalStart && _pla.KernalRomVisible)
+        if (address >= KernalStart && _pla.KernalRomVisible)
             return LatchCpuBusValue(_kernalRom[address - KernalStart]);
 
         if (address is >= IoStart and <= IoEnd)
@@ -211,8 +255,57 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 return LatchCpuBusValue(_charRom[address - CharStart]);
         }
 
-        value = _ram[address];
-        return LatchCpuBusValue(value);
+        return LatchCpuBusValue(_ram[address]);
+    }
+
+    // PERF-MEM-001: Rebuild the 16-entry page table from current PLA + cart state.
+    // Called on constructor, PLA writes ($0000/$0001), and cart attach/eject.
+    // Cost is tiny (~20 array writes) and happens rarely (only when banking changes).
+    private void RebuildReadPageTable()
+    {
+        // Default all pages to RAM.
+        for (int i = 0; i < 16; i++)
+            _readPageTable[i] = PageKind.Ram;
+
+        // Page 0 ($0000-$0FFF): $0000-$0001 are PLA processor port.
+        _readPageTable[0x0] = PageKind.Pla0;
+
+        bool hasCart = _cartridgeImage is not null;
+
+        if (hasCart)
+        {
+            // Cartridge may intercept $8000-$9FFF, $A000-$BFFF, and/or $E000-$FFFF.
+            // Mark affected pages as CartOrRam (slow path) rather than pre-routing
+            // to ROM, because cart takes priority over ROM.
+            _readPageTable[0x8] = PageKind.CartOrRam;
+            _readPageTable[0x9] = PageKind.CartOrRam;
+            _readPageTable[0xA] = PageKind.CartOrRam;
+            _readPageTable[0xB] = PageKind.CartOrRam;
+            _readPageTable[0xE] = PageKind.CartOrRam;
+            _readPageTable[0xF] = PageKind.CartOrRam;
+        }
+        else
+        {
+            // No cartridge: pure PLA-based mapping.
+            if (_pla.BasicRomVisible)
+            {
+                _readPageTable[0xA] = PageKind.BasicRom;
+                _readPageTable[0xB] = PageKind.BasicRom;
+            }
+
+            if (_pla.KernalRomVisible)
+            {
+                _readPageTable[0xE] = PageKind.KernalRom;
+                _readPageTable[0xF] = PageKind.KernalRom;
+            }
+        }
+
+        // $D000-$DFFF: I/O, CharROM, or RAM depending on CHAREN + LORAM/HIRAM.
+        if (IsIoVisible)
+            _readPageTable[0xD] = PageKind.Io;
+        else if (IsCpuCharRomVisible)
+            _readPageTable[0xD] = PageKind.CharRom;
+        // else: already set to Ram
     }
 
     public byte Peek(ushort address)
@@ -270,6 +363,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             _ram[address] = value;
             _pla.Write(address, value);
+            RebuildReadPageTable(); // PERF-MEM-001: PLA banking bits may have changed
             return;
         }
 
@@ -298,6 +392,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _cartridgeImage = image.ToArray();
         _attachedCartridgeMappingMode = resolvedMappingMode;
         _gameSystemCartridgeBank = 0;
+        RebuildReadPageTable(); // PERF-MEM-001: cart pages now active
     }
 
     public void EjectCartridge()
@@ -305,6 +400,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _cartridgeImage = null;
         _attachedCartridgeMappingMode = null;
         _gameSystemCartridgeBank = 0;
+        RebuildReadPageTable(); // PERF-MEM-001: cart pages now inactive
     }
 
     /// <summary>
@@ -322,6 +418,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     public void SetCartPortPinSource(IBusEndpoint? endpoint)
     {
         _cartPortPinSource = endpoint;
+        RebuildReadPageTable(); // PERF-MEM-001: GAME/EXROM pin state may affect cart mapping
     }
 
     private CartridgeMappingMode? ResolveActiveMappingMode()

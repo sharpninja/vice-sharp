@@ -23,7 +23,7 @@ using Xunit;
 public sealed class VideoRendererDispatchTests
 {
     /// <summary>
-    /// PERF-RENDER-001.
+    /// PERF-RENDER-001 / FR-VIC-002 / FR-VIC-008 / BACKFILL-VIDEO-001.
     /// Use case: FrameCompleted must fire exactly once per complete C64 frame
     /// (PAL: 63 cycles x 312 lines = 19,656 ticks). Previously fired from
     /// VideoRenderer.Tick() called every cycle; now fired once at line-wrap
@@ -55,7 +55,7 @@ public sealed class VideoRendererDispatchTests
     }
 
     /// <summary>
-    /// PERF-RENDER-001.
+    /// PERF-RENDER-001 / FR-VIC-002 / FR-VIC-008 / BACKFILL-VIDEO-001.
     /// Use case: The FrameBuffer must not be all-zero after one complete frame
     /// (border color #14 = light blue fills border area). This proves the line
     /// render is called from the new path, not from the removed per-cycle Tick.
@@ -85,7 +85,7 @@ public sealed class VideoRendererDispatchTests
     }
 
     /// <summary>
-    /// PERF-RENDER-001.
+    /// PERF-RENDER-001 / FR-VIC-002 / FR-VIC-008 / BACKFILL-VIDEO-001.
     /// Use case: The rendered framebuffer after the optimized direct-call path
     /// must be pixel-identical to the reference framebuffer produced by the
     /// original per-cycle Tick() path. This is the primary regression gate.
@@ -119,7 +119,7 @@ public sealed class VideoRendererDispatchTests
     }
 
     /// <summary>
-    /// PERF-RENDER-002 / PERF-VIC-002.
+    /// PERF-RENDER-002 / PERF-VIC-002 / FR-VIC-002 / FR-VIC-003 / BACKFILL-VIDEO-001.
     /// Use case: VideoMemoryReader initialized to non-null default in Mos6569
     /// constructor means ReadVideoMemory() never returns a different value
     /// between a null-VideoMemoryReader instance and one where VideoMemoryReader
@@ -156,7 +156,7 @@ public sealed class VideoRendererDispatchTests
     }
 
     /// <summary>
-    /// PERF-VIC-003.
+    /// PERF-VIC-003 / FR-VIC-002 / FR-VIC-008 / BACKFILL-VIDEO-001.
     /// Use case: Phi1MemoryReader initialized to non-null default (returns 0)
     /// means LastReadPhi1 is deterministically 0 when no banking override is set.
     /// An explicit delegate returning 0 must produce the same LastReadPhi1 value.

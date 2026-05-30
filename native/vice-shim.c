@@ -549,8 +549,35 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
     } else {
         vice_shim_detach_cartridge_locked();
     }
+    /* vicii_powerup() resets all internal VIC state fields that vicii_reset()
+       skips: allow_bad_lines, bad_line, idle_state, vcbase, vc, irq_status,
+       raster_irq_line, sprite_sprite_collisions, sprite_background_collisions.
+       It also calls vicii_reset() at the end, setting raster_cycle=6.
+       Without this, stale allow_bad_lines=1 and bad_line=1 from a prior test
+       cause check_badline() to assert BA-low for ~40 cycles at raster_line=0,
+       producing vicii_steal_cycles() loops that advance raster_cycle without
+       checkpoints and diverge managed vs native by 43 cycles. */
+    vicii_powerup();
+    /* vicii_powerup() does NOT call vicii_new_sprites_init(), so sprite_dma
+       bits from the prior test persist. vicii_check_sprite_ba() returns 1 for
+       any set bit, adding more BA-low steal cycles. Clear explicitly. */
+    vicii.sprite_dma = 0;
+    vicii.sprite_display_bits = 0;
     vicii_reset_registers();
+    /* Clear BA-low flags before maincpu_reset so check_ba() does not
+       call maincpu_steal_cycles() and advance raster_cycle 43 extra
+       ticks before the first real CLK_INC checkpoint. On real hardware
+       all chips reset simultaneously; leftover BA state from the prior
+       run must not carry into the reset sequence. */
+    maincpu_ba_low_flags = 0;
     maincpu_reset();
+    /* Clear any IRQ status bits that vicii_cycle() may have set during
+       the CPU reset vector fetch sequence. On real hardware all chips
+       reset simultaneously; in emulation the CPU reset runs a few VIC
+       cycles before it halts, which can latch the raster IRQ at line 0.
+       Force irq_status back to 0 so the post-reset snapshot matches
+       managed Reset() which clears _registers[0x19] unconditionally. */
+    vicii.irq_status = 0;
     vice_shim_reset_cpu_state_locked();
     LeaveCriticalSection(&g_state_lock);
 }
@@ -1230,6 +1257,11 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
         state->display_state = 0;
         state->sprite_dma = vicii.sprite_dma;
         memcpy(state->registers, vicii.regs, sizeof(state->registers));
+        /* $D019: vicii.irq_status holds the live IRQ latch (bits 0-3 = source flags).
+           vicii.regs[0x19] only reflects the last CPU write; vicii_irq_raster_set()
+           updates irq_status, NOT regs[0x19]. Override so the snapshot matches what
+           managed Peek(0xD019) returns (managed stores latch in _registers[0x19]). */
+        state->registers[0x19] = (uint8_t)(vicii.irq_status & 0x0F);
     }
     LeaveCriticalSection(&g_state_lock);
 }

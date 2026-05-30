@@ -276,13 +276,10 @@ public sealed class InputServiceHost : IInputService
 
     private static IEnumerable<KeyboardMapDto> EnumerateKeyboardMaps(string selectedId)
     {
+        var c64Path = FindViceC64DataPath();
         var foundAny = false;
-        var root = FindRepositoryRoot();
-        var c64Path = root is null
-            ? null
-            : Path.Combine(root, "native", "vice", "vice", "data", "C64");
 
-        if (c64Path is not null && Directory.Exists(c64Path))
+        if (c64Path is not null)
         {
             foreach (var path in Directory.EnumerateFiles(c64Path, "*.vkm").OrderBy(path => path, StringComparer.OrdinalIgnoreCase))
             {
@@ -314,6 +311,23 @@ public sealed class InputServiceHost : IInputService
         }
     }
 
+    /// <summary>
+    /// Finds the VICE C64 data directory containing *.vkm files.
+    /// Delegates to ViceDataPathResolver (same logic used by the ROM loader)
+    /// then appends the "C64" subdirectory.
+    /// </summary>
+    private static string? FindViceC64DataPath()
+    {
+        foreach (var dataRoot in ViceSharp.RomFetch.ViceDataPathResolver.FindDataRoots())
+        {
+            var candidate = Path.Combine(dataRoot, "C64");
+            if (Directory.Exists(candidate) && Directory.EnumerateFiles(candidate, "*.vkm").Any())
+                return candidate;
+        }
+
+        return null;
+    }
+
     private static KeyboardMapDto CreateCustomKeyboardMapDto(SetKeyboardMapRequest request)
     {
         var id = string.IsNullOrWhiteSpace(request.KeyboardMapId)
@@ -335,20 +349,6 @@ public sealed class InputServiceHost : IInputService
             .Replace("sdl_", "SDL ", StringComparison.OrdinalIgnoreCase)
             .Replace("_", " ", StringComparison.Ordinal)
             .Trim();
-    }
-
-    private static string? FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "ViceSharp.slnx")))
-                return directory.FullName;
-
-            directory = directory.Parent;
-        }
-
-        return null;
     }
 
     private enum KeyboardMapApplyResult

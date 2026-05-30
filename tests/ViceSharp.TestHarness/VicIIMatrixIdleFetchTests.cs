@@ -25,6 +25,7 @@ public sealed class VicIIMatrixIdleFetchTests
     }
 
     /// <summary>
+    /// FR-VIC-001 / TR-VIC-EDGE-005.
     /// Use case: VICE bad-line prefetch slots do not fetch screen
     /// matrix bytes; they seed vbuf with $ff and cbuf from the CPU
     /// RAM value's low nibble.
@@ -43,6 +44,7 @@ public sealed class VicIIMatrixIdleFetchTests
     }
 
     /// <summary>
+    /// FR-VIC-001 / TR-VIC-EDGE-005.
     /// Use case: VICE matrix fetch slots latch the screen matrix byte
     /// and the low nibble of color RAM for the same VC counter.
     /// Acceptance: Latching matrix byte $42 with color RAM byte $9e
@@ -60,6 +62,7 @@ public sealed class VicIIMatrixIdleFetchTests
     }
 
     /// <summary>
+    /// FR-VIC-001 / TR-VIC-EDGE-005.
     /// Use case: Standard text graphics fetches consume the latched
     /// vbuf character byte, not the screen matrix address directly.
     /// Acceptance: With character base $0800 and latched character $23,
@@ -77,6 +80,7 @@ public sealed class VicIIMatrixIdleFetchTests
     }
 
     /// <summary>
+    /// FR-VIC-001 / TR-VIC-EDGE-005.
     /// Use case: VICE idle graphics fetches use a fixed gap address,
     /// but ECM changes that address from $3fff to $39ff.
     /// Acceptance: ECM clear reports $3fff; ECM set reports $39ff;
@@ -97,6 +101,7 @@ public sealed class VicIIMatrixIdleFetchTests
     }
 
     /// <summary>
+    /// FR-VIC-001 / TR-VIC-EDGE-005.
     /// Use case: The VIC-II matrix latch is exactly 40 columns wide.
     /// Acceptance: Slots 0 and 39 are valid; slot 40 is rejected.
     /// </summary>
