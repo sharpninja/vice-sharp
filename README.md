@@ -51,7 +51,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-31` at HEAD `6086e11` (Phase 1 closeout; see `docs/handoff.md` for the full Phase 1 close record). Full suite: 1641 passed / 2 skipped / 0 failed. Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps).
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-31` at HEAD `32880a4` (Phase 1 marathon close - all six original deferral items pulled back into scope and shipped; see `docs/handoff.md`). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). AOT publish: gate green via YamlStream representation-model rewrite. Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. 8580 SID: real Chamberlin SVF on linear cutoff curve. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
 
 **Legend** — State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 

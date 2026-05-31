@@ -1,9 +1,22 @@
 # ViceSharp - Phase 1 Closeout Handoff
 
-**Date:** 2026-05-31
-**HEAD:** `6086e11`
+**Date:** 2026-05-31 (marathon pull-in complete)
+**HEAD:** `32880a4`
 **Branch:** `main` (Azure DevOps `origin`)
-**Status:** Phase 1 (Iteration 1 C64 bringup) **COMPLETE**.
+**Status:** Phase 1 (Iteration 1 C64 bringup) **COMPLETE**, including all six deferral items that were pulled back into scope mid-session.
+
+## Marathon items shipped (all 7)
+
+| # | Item | Commit(s) | Driving IDs |
+|---|---|---|---|
+| 1 | AOT YAML fix (YamlStream representation model) | `aecfcff` | ARCH-ADHOCMACHINE-001 AOT gate |
+| 2 | PERF-BENCHMARK-001 native VICE baseline | `3f4d65e` | PERF-BENCHMARK-001 |
+| 3 | Wiki publishing automation (PowerShell + Nuke) | `d62b578` | REPO-MAINT-001 |
+| 4 | 8580 SID filter deepening (real SVF + linear curve) | `371d749` | BACKFILL-SID-001 |
+| 5 | 7 advanced cartridge mappers (Magic Desk, Ocean, FC-III, AR, EasyFlash, SS5, RR-Net) | `a2be2b6` `f90ab87` `881d302` `14a19d4` | BACKFILL-CART-001 |
+| 6 | ARCH-ADHOCMACHINE-001 Avalonia helper app | `32d45bb` | ARCH-ADHOCMACHINE-001 |
+| 7 | PLATFORM-CROSS-001 host shells (macOS, Xbox, Android, iOS) | `5c84bc6` `0aee29c` `73bf823` `32880a4` | PLATFORM-CROSS-001 |
+| - | QA-XMLDOCS-001 ratchet retrofit (test docs + Use case + Acceptance markers) | `32d45bb` | QA-XMLDOCS-001 |
 
 ## Test totals at closeout
 
@@ -80,14 +93,13 @@ Notes:
 | 8 | `6086e11` | PERF-TUNING-001 | PerfProbe single-shot cycles-per-second measurement |
 | 9 | (this commit) | DOC-DASHBOARD-001 | Handoff + README dashboard refresh + plan.md closeout |
 
-## Post-Phase 1 deferrals
+## Post-Phase 1 deferrals (all marathon items landed; only deepening + advanced topics remain)
 
-- **PERF-BENCHMARK-001**: native-VICE baseline comparison via NativeViceBaseline + full BenchmarkDotNet sweep + perf regression CI gate.
-- **ARCH-ADHOCMACHINE-001 (helper app)**: schema + loader + --machine-yaml flag are live; the Avalonia helper app for ad-hoc topology authoring remains pending.
-- **PLATFORM-CROSS-001**: UWP Xbox, Avalonia mobile, MacOS host shells (wireframes only).
-- **BACKFILL-SID-001 (8580 filter deepening)**: 6581 filter parity is complete; 8580 model deepening is post-MVP.
-- **Advanced cartridge mappers**: standard 8K/16K + Ultimax + GameSystem covered; Action Replay / Ocean / EasyFlash / Final Cartridge III / RR-Net / Magic Desk / Super Snapshot / etc. are post-MVP.
-- **Wiki publishing**: requirements wiki export to Azure DevOps wiki sync remains manual; CI hook deferred to REPO-MAINT-001.
+- **PERF-BENCHMARK-001 deepening**: a real `step_n_cycles` shim path (without per-cycle checkpoint callbacks) to make managed/native cycles/sec directly comparable.
+- **ARCH-ADHOCMACHINE-001 helper app deepening**: live YAML schema lint, runtime preview, machine launch button.
+- **PLATFORM-CROSS-001 platform-specific TFM enablement**: the Android + iOS shells default to net10.0; flipping to net10.0-android / net10.0-ios requires trimming the AspNetCore transitive dep from ViceSharp.Avalonia. Opt in today with `/p:ViceSharpHost{Android,Ios}Fallback=false` after that dep work lands.
+- **BACKFILL-SID-001 (8580 filter deepening)**: real reSID-style 8580 filter coefficient table; voice 3 OSC3/ENV3 read-back differences vs 6581.
+- **Advanced cartridge mappers deepening**: Action Replay freeze ROM + EXROM/GAME pin manipulation + LED; EasyFlash $DE02 control register + flash write emulation; Super Snapshot V5 freeze button; RR-Net CS8900A Ethernet at $DE00-$DE0F; FC-III bits 2-6 (LED/NMI/freeze).
 - **VSP / AGSP**: VIC sprite/AGSP advanced raster effects are not part of Phase 1.
 
 ## Requirements (MCP Server snapshot)
