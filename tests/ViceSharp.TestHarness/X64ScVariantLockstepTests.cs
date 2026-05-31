@@ -349,6 +349,29 @@ public sealed class X64ScVariantLockstepTests
     }
 
     /// <summary>
+    /// FR: FR-VIC-001, FR: FR-CPU-002, TR: TR-CYCLE-001, BACKFILL-LOCKSTEP-001.
+    /// Use case: Extend frame-level lockstep coverage across ten consecutive
+    /// PAL frames to expose drift that only accumulates over many vertical
+    /// blank wraps and CIA timer cycles. This is the Phase 1 slice 7A depth
+    /// gate: any divergence within 10 frames blocks Phase 1 close.
+    /// Acceptance: Validator reports Success after exactly
+    /// CyclesPerLine*RasterLines*10 cycles for every no-cartridge variant.
+    /// </summary>
+    [ViceTheory]
+    [MemberData(nameof(NoCartridgeBootModelSelectors))]
+    public void FirstTenProfileFramesMatch_ForEveryDeterministicNoCartridgeX64ScVariant(string modelSelector)
+    {
+        var profile = C64MachineProfiles.Resolve(modelSelector);
+        var cycles = profile.CyclesPerLine * profile.RasterLines * 10;
+        using var validator = new LockstepValidator(modelSelector);
+
+        var report = validator.Run(cycles);
+
+        report.Success.Should().BeTrue($"{modelSelector}: {FormatReport(report)} {validator.FormatRamtasDiagnostic()}");
+        report.TotalCyclesExecuted.Should().Be(cycles);
+    }
+
+    /// <summary>
     /// FR: FR-CPU-001, FR: FR-VIC-002, TR: TR-CYCLE-001.
     /// Use case: For each basic-capable variant, both managed and native
     /// machines should display the "READY." prompt at the same frame and
