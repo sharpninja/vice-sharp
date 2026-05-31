@@ -213,9 +213,12 @@ sealed partial class Build : NukeBuild
 
     /// <summary>
     /// Install the most recent PublishMsi output silently via msiexec.
-    /// Requires elevation (msiexec triggers a UAC prompt when not already
-    /// running elevated). For unattended CI use, invoke this target from an
-    /// already-elevated shell (gsudo or scheduled task).
+    /// The per-machine MSI requires elevation; when the current process is
+    /// not already running as Administrator the target self-elevates via
+    /// `gsudo` (preferred) or `sudo` (PowerShell 7.5+ on Windows 11) so a
+    /// plain `pwsh ./build.ps1 InstallMsi` works for the user with a
+    /// single UAC prompt. Exit code 3010 (success-reboot-required) is
+    /// treated as success.
     /// </summary>
     Target InstallMsi => _ => _
         .DependsOn(PublishMsi)
@@ -225,13 +228,57 @@ sealed partial class Build : NukeBuild
                 throw new InvalidOperationException(
                     $"MSI not found at {MsiOutputPath}. Run PublishMsi first.");
 
-            Serilog.Log.Information("Installing {Msi} via msiexec /qn", MsiOutputPath);
-            var args = $"/i \"{MsiOutputPath}\" /qn /norestart /log \"{InstallerOutputDir / "install.log"}\"";
-            var exitCode = RunProcess("msiexec.exe", args, throwOnNonZero: false);
-            if (exitCode is not (0 or 3010))  // 3010 = success, reboot required
+            var logPath = InstallerOutputDir / "install.log";
+            var msiArgs = $"/i \"{MsiOutputPath}\" /qn /norestart /log \"{logPath}\"";
+
+            int exitCode;
+            if (IsCurrentProcessElevated())
+            {
+                Serilog.Log.Information("Installing {Msi} via msiexec /qn (already elevated)", MsiOutputPath);
+                exitCode = RunProcess("msiexec.exe", msiArgs, throwOnNonZero: false);
+            }
+            else
+            {
+                var elevator = FindOnPath("gsudo.exe") ?? FindOnPath("gsudo")
+                            ?? FindOnPath("sudo.exe") ?? FindOnPath("sudo");
+                if (elevator is null)
+                    throw new InvalidOperationException(
+                        "InstallMsi needs Administrator privileges to write Program Files but "
+                      + "neither gsudo nor sudo was found on PATH. Either install gsudo "
+                      + "(`winget install gerardog.gsudo`) or run this target from an already "
+                      + "elevated PowerShell session.");
+
+                Serilog.Log.Information(
+                    "Installing {Msi} via {Elevator} -> msiexec /qn (will trigger UAC prompt)",
+                    MsiOutputPath, System.IO.Path.GetFileName(elevator));
+                var elevatedArgs = $"msiexec.exe {msiArgs}";
+                exitCode = RunProcess(elevator, elevatedArgs, throwOnNonZero: false);
+            }
+
+            if (exitCode is not (0 or 3010))
                 throw new InvalidOperationException(
-                    $"msiexec exited with code {exitCode}. See {InstallerOutputDir / "install.log"} for details.");
+                    $"msiexec exited with code {exitCode}. See {logPath} for details "
+                  + "(MSI error 1925 = elevation required; 1603 = generic install failure; "
+                  + "consult the log's last 'Error' line).");
+
+            Serilog.Log.Information("InstallMsi complete (exit {ExitCode})", exitCode);
         });
+
+    static bool IsCurrentProcessElevated()
+    {
+        if (!OperatingSystem.IsWindows())
+            return true;  // non-Windows: leave it to the user; msiexec is a no-op anyway
+        try
+        {
+            using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var principal = new System.Security.Principal.WindowsPrincipal(identity);
+            return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     /// <summary>
     /// Generate winget manifests for the latest PublishMsi output and stage
