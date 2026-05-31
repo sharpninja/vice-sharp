@@ -145,53 +145,61 @@ sealed partial class Build : NukeBuild
     [Parameter("Runtime identifier for the AOT publish that feeds PublishMsi. Default win-x64.")]
     readonly string MsiRuntimeIdentifier = "win-x64";
 
-    AbsolutePath ConsoleProject => RootDirectory / "src" / "ViceSharp.Console" / "ViceSharp.Console.csproj";
+    AbsolutePath AvaloniaProject => RootDirectory / "src" / "ViceSharp.Avalonia" / "ViceSharp.Avalonia.csproj";
 
-    AbsolutePath ConsolePublishDir =>
-        RootDirectory / "src" / "ViceSharp.Console" / "bin" / "Release" / "net10.0" / MsiRuntimeIdentifier / "publish";
+    AbsolutePath AvaloniaPublishDir =>
+        RootDirectory / "src" / "ViceSharp.Avalonia" / "bin" / "Release" / "net10.0" / MsiRuntimeIdentifier / "publish";
 
     AbsolutePath InstallerProject => RootDirectory / "installer" / "ViceSharp.Installer.wixproj";
 
     AbsolutePath InstallerOutputDir => ArtifactsDirectory / "installer";
 
-    AbsolutePath MsiOutputPath => InstallerOutputDir / "ViceSharp.Console.msi";
+    AbsolutePath MsiOutputPath => InstallerOutputDir / "ViceSharp.msi";
 
     AbsolutePath WingetOutputDir => ArtifactsDirectory / "winget";
 
     /// <summary>
-    /// Publish the AOT Console and pack it into a per-machine MSI installer
-    /// via the WixToolset.Sdk wixproj at installer/. The MSI ends up in
-    /// artifacts/installer/ViceSharp.Console.msi with version
-    /// <see cref="MsiVersion"/>. Reuses the existing PublishAot step's
-    /// output path so the produced executable matches what users get when
-    /// they invoke `dotnet publish` directly.
+    /// Publish the ViceSharp.Avalonia desktop GUI (self-contained, win-x64
+    /// by default) and pack the entire publish directory into a per-machine
+    /// MSI via the WixToolset.Sdk wixproj at installer/. The MSI ends up in
+    /// artifacts/installer/ViceSharp.msi with version
+    /// <see cref="MsiVersion"/>. The Avalonia GUI is shipped as a
+    /// self-contained bundle (the Avalonia stack is not AOT-friendly today),
+    /// so the WiX <c>Files</c> harvest pulls all 390+ runtime files into
+    /// Program Files\ViceSharp\.
     /// </summary>
     Target PublishMsi => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
-            // Step 1: AOT-publish ViceSharp.Console (the wixproj wraps this output).
-            Serilog.Log.Information("Publishing ViceSharp.Console (AOT, {Rid}) -> {Out}", MsiRuntimeIdentifier, ConsolePublishDir);
+            // Step 1: self-contained publish of ViceSharp.Avalonia.
+            // Avalonia + the in-proc gRPC host transitively reference paths
+            // that the AOT trim analyzer cannot statically resolve, so this
+            // is a normal (non-AOT) self-contained publish.
+            Serilog.Log.Information("Publishing ViceSharp.Avalonia (self-contained, {Rid}) -> {Out}",
+                MsiRuntimeIdentifier, AvaloniaPublishDir);
             DotNetPublish(s => s
-                .SetProject(ConsoleProject)
+                .SetProject(AvaloniaProject)
                 .SetConfiguration("Release")
                 .SetRuntime(MsiRuntimeIdentifier)
                 .SetSelfContained(true)
-                .SetProperty("PublishAot", "true"));
+                .SetProperty("PublishAot", "false")
+                .SetProperty("PublishSingleFile", "false")
+                .SetProperty("PublishReadyToRun", "true"));
 
-            var exePath = ConsolePublishDir / "ViceSharp.Console.exe";
+            var exePath = AvaloniaPublishDir / "ViceSharp.Avalonia.exe";
             if (!exePath.FileExists())
                 throw new InvalidOperationException(
-                    $"Expected AOT-published binary at {exePath} but it was not produced. PublishMsi cannot continue.");
+                    $"Expected Avalonia entry exe at {exePath} but it was not produced. PublishMsi cannot continue.");
 
             // Step 2: build the WiX installer project.
             InstallerOutputDir.CreateOrCleanDirectory();
-            Serilog.Log.Information("Building installer wixproj with PublishedRoot={Root}", ConsolePublishDir);
+            Serilog.Log.Information("Building installer wixproj with PublishedRoot={Root}", AvaloniaPublishDir);
             DotNetBuild(s => s
                 .SetProjectFile(InstallerProject)
                 .SetConfiguration("Release")
                 .SetProperty("ProductVersion", MsiVersion)
-                .SetProperty("PublishedRoot", ConsolePublishDir));
+                .SetProperty("PublishedRoot", AvaloniaPublishDir));
 
             // Step 3: copy the produced MSI to artifacts/installer/.
             var built = (RootDirectory / "installer" / "bin" / "x64" / "Release" / "en-US")
@@ -336,7 +344,7 @@ InstallModes:
 UpgradeBehavior: install
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/sharpninja/vice-sharp/releases/download/v{MsiVersion}/ViceSharp.Console.msi
+    InstallerUrl: https://github.com/sharpninja/vice-sharp/releases/download/v{MsiVersion}/ViceSharp.msi
     InstallerSha256: {sha}
     InstallerType: wix
 ManifestType: installer
@@ -351,13 +359,14 @@ PackageIdentifier: {WingetPackageId}
 PackageVersion: {MsiVersion}
 PackageLocale: en-US
 Publisher: {publisher}
-PackageName: ViceSharp Console
+PackageName: ViceSharp
 License: MIT
-ShortDescription: VICE-compatible C64 substrate (Console).
+ShortDescription: VICE-compatible Commodore 64 emulator (Avalonia GUI).
 Description: |
   ViceSharp is a .NET 10 Commodore 64 emulator with VICE compatibility.
-  This package installs the ViceSharp.Console host (CLI launcher, debug
-  monitor, testbench harness).
+  This package installs the ViceSharp Avalonia desktop GUI: a full host
+  with monitor, drive / tape attach, debug stepping, snapshot, frame
+  capture, and cycle-accurate VIC-II / SID / CIA emulation.
 Moniker: vicesharp
 Tags:
   - commodore

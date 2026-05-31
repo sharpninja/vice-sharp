@@ -10,7 +10,7 @@
       preceding AOT publish step.
     -->
     <OutputType>Package</OutputType>
-    <OutputName>ViceSharp.Console</OutputName>
+    <OutputName>ViceSharp</OutputName>
     <Platforms>x64</Platforms>
     <Platform>x64</Platform>
     <SuppressIces>ICE61</SuppressIces>

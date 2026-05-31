@@ -1,25 +1,23 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 
   <!--
-    ViceSharp.Console MSI installer.
+    ViceSharp MSI installer.
 
-    The package is a per-machine install that drops the single self-contained
-    AOT exe + any sibling native bits into Program Files\ViceSharp\, adds a
-    Start menu shortcut, and stamps the version into Add/Remove Programs.
-
-    Heat-style harvesting is intentionally avoided: the AOT-published Console
-    is a single self-contained exe so the file list is short and stable.
-    Extra payload (icon, license, optional native vice shim) can be appended
-    as additional `File` elements without rerunning a generator.
+    The package is a per-machine install that drops the published
+    ViceSharp.Avalonia desktop GUI (self-contained, with all 390+ runtime
+    DLLs and Avalonia's native bits) into Program Files\ViceSharp\, adds
+    a Start menu shortcut, and stamps the version into Add/Remove Programs.
 
     PublishedRoot is provided by the build system as a WiX preprocessor
-    variable (`-d PublishedRoot=...`) so the installer can find the AOT
-    publish output regardless of where the build hosts puts it.
+    variable (`-d PublishedRoot=...`) so the installer can find the
+    publish output regardless of where the build host puts it. The
+    Files element auto-harvests every file under that directory tree.
   -->
 
-  <?define ProductName = "ViceSharp Console" ?>
+  <?define ProductName = "ViceSharp" ?>
   <?define Manufacturer = "sharpninja" ?>
   <?define UpgradeCodeGuid = "6F8B1C4E-7A2D-4E5B-9F3A-1C8E5B7D9F2A" ?>
+  <?define EntryExe = "ViceSharp.Avalonia.exe" ?>
 
   <Package Name="$(ProductName)"
            Manufacturer="$(Manufacturer)"
@@ -32,13 +30,7 @@
     <MediaTemplate EmbedCab="yes" />
 
     <StandardDirectory Id="ProgramFiles64Folder">
-      <Directory Id="INSTALLFOLDER" Name="ViceSharp">
-        <Component Id="ConsoleExe" Guid="*">
-          <File Id="ViceSharpConsoleExe"
-                Source="$(var.PublishedRoot)\ViceSharp.Console.exe"
-                KeyPath="yes" />
-        </Component>
-      </Directory>
+      <Directory Id="INSTALLFOLDER" Name="ViceSharp" />
     </StandardDirectory>
 
     <StandardDirectory Id="ProgramMenuFolder">
@@ -46,8 +38,8 @@
         <Component Id="StartMenuShortcut" Guid="*">
           <Shortcut Id="StartMenuShortcut"
                     Name="$(ProductName)"
-                    Description="VICE-compatible C64 substrate (Console)"
-                    Target="[INSTALLFOLDER]ViceSharp.Console.exe"
+                    Description="VICE-compatible Commodore 64 emulator"
+                    Target="[INSTALLFOLDER]$(EntryExe)"
                     WorkingDirectory="INSTALLFOLDER" />
           <RemoveFolder Id="StartMenuShortcutDir" On="uninstall" />
           <RegistryValue Root="HKCU"
@@ -61,15 +53,26 @@
     </StandardDirectory>
 
     <Feature Id="Main"
-             Title="ViceSharp Console"
+             Title="ViceSharp"
              Level="1"
              AllowAdvertise="no"
              InstallDefault="local"
              TypicalDefault="install">
-      <ComponentRef Id="ConsoleExe" />
+      <ComponentGroupRef Id="HarvestedFiles" />
       <ComponentRef Id="StartMenuShortcut" />
     </Feature>
 
   </Package>
+
+  <Fragment>
+    <!--
+      Auto-harvest every file under the publish output. WiX 5 generates a
+      Component per file with hash-based stable IDs and lays out the
+      directory structure under INSTALLFOLDER. No Heat invocation needed.
+    -->
+    <ComponentGroup Id="HarvestedFiles" Directory="INSTALLFOLDER">
+      <Files Include="$(var.PublishedRoot)\**" />
+    </ComponentGroup>
+  </Fragment>
 
 </Wix>
