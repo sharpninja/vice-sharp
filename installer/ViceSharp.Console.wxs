@@ -1,0 +1,75 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+
+  <!--
+    ViceSharp.Console MSI installer.
+
+    The package is a per-machine install that drops the single self-contained
+    AOT exe + any sibling native bits into Program Files\ViceSharp\, adds a
+    Start menu shortcut, and stamps the version into Add/Remove Programs.
+
+    Heat-style harvesting is intentionally avoided: the AOT-published Console
+    is a single self-contained exe so the file list is short and stable.
+    Extra payload (icon, license, optional native vice shim) can be appended
+    as additional `File` elements without rerunning a generator.
+
+    PublishedRoot is provided by the build system as a WiX preprocessor
+    variable (`-d PublishedRoot=...`) so the installer can find the AOT
+    publish output regardless of where the build hosts puts it.
+  -->
+
+  <?define ProductName = "ViceSharp Console" ?>
+  <?define Manufacturer = "sharpninja" ?>
+  <?define UpgradeCodeGuid = "6F8B1C4E-7A2D-4E5B-9F3A-1C8E5B7D9F2A" ?>
+
+  <Package Name="$(ProductName)"
+           Manufacturer="$(Manufacturer)"
+           Version="$(var.ProductVersion)"
+           UpgradeCode="$(UpgradeCodeGuid)"
+           Scope="perMachine">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of $(ProductName) is already installed." />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="ViceSharp">
+        <Component Id="ConsoleExe" Guid="*">
+          <File Id="ViceSharpConsoleExe"
+                Source="$(var.PublishedRoot)\ViceSharp.Console.exe"
+                KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="StartMenuShortcutDir" Name="$(ProductName)">
+        <Component Id="StartMenuShortcut" Guid="*">
+          <Shortcut Id="StartMenuShortcut"
+                    Name="$(ProductName)"
+                    Description="VICE-compatible C64 substrate (Console)"
+                    Target="[INSTALLFOLDER]ViceSharp.Console.exe"
+                    WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="StartMenuShortcutDir" On="uninstall" />
+          <RegistryValue Root="HKCU"
+                         Key="Software\$(Manufacturer)\$(ProductName)"
+                         Name="installed"
+                         Type="integer"
+                         Value="1"
+                         KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <Feature Id="Main"
+             Title="ViceSharp Console"
+             Level="1"
+             AllowAdvertise="no"
+             InstallDefault="local"
+             TypicalDefault="install">
+      <ComponentRef Id="ConsoleExe" />
+      <ComponentRef Id="StartMenuShortcut" />
+    </Feature>
+
+  </Package>
+
+</Wix>

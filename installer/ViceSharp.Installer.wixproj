@@ -1,0 +1,26 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+
+  <PropertyGroup>
+    <!--
+      WiX 5 SDK project. Build with:
+        dotnet build installer/ViceSharp.Installer.wixproj
+          /p:ProductVersion=0.1.0.0
+          /p:PublishedRoot=<absolute path to AOT publish dir>
+      The Nuke `PublishMsi` target supplies both properties from the
+      preceding AOT publish step.
+    -->
+    <OutputType>Package</OutputType>
+    <OutputName>ViceSharp.Console</OutputName>
+    <Platforms>x64</Platforms>
+    <Platform>x64</Platform>
+    <SuppressIces>ICE61</SuppressIces>
+    <DefineConstants>ProductVersion=$(ProductVersion);PublishedRoot=$(PublishedRoot)</DefineConstants>
+  </PropertyGroup>
+
+  <!--
+    WixToolset.Sdk auto-includes every .wxs file in the project directory
+    via its default compile items, so do NOT add explicit <Compile> items
+    (doing so produces WIX0089: Multiple entry sections).
+  -->
+
+</Project>
