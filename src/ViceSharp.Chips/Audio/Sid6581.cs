@@ -223,8 +223,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // BP); the HP tap is computed each step from the current LP, BP, the
     // filter input and the resonance Q feedback, so it does not need its
     // own state field.
-    private double _svfLowPass;
-    private double _svfBandPass;
+    // Chamberlin SVF integrator state. protected so Sid8580 can reuse the
+    // same state-variable filter topology with its own cutoff curve.
+    protected double _svfLowPass;
+    protected double _svfBandPass;
 
     /// <summary>
     /// FR-SID-004 (BACKFILL-SID-001 filter slice). State-variable filter
@@ -742,5 +744,21 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         }
 
         return 12300f + ((reg11 - 0x600) / 511f) * 2700f;
+    }
+
+    /// <summary>
+    /// FR-SID-003 / FR-SID-004 (8580 filter deepening). 8580 cutoff curve is
+    /// essentially linear from ~30Hz at register 0 to ~12,500Hz at register
+    /// 0x7FF, in contrast with the 6581's kinked three-segment curve. Source:
+    /// resid sid8580.c filter calibration tables + Bob Yannes interview. The
+    /// curve is monotone, continuous, and roughly 12kHz wide.
+    /// </summary>
+    public static float MapCutoffRegToFrequency8580(int reg11)
+    {
+        if (reg11 < 0) reg11 = 0;
+        if (reg11 > 0x7FF) reg11 = 0x7FF;
+        const float minHz = 30f;
+        const float maxHz = 12500f;
+        return minHz + (reg11 / 2047f) * (maxHz - minHz);
     }
 }
