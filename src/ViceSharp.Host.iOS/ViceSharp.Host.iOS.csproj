@@ -10,9 +10,12 @@
     solution stays buildable. See README.md for details.
   -->
   <PropertyGroup>
-    <TargetFramework Condition="'$(ViceSharpHostIosFallback)' != 'true'">net10.0-ios</TargetFramework>
-    <TargetFramework Condition="'$(ViceSharpHostIosFallback)' == 'true'">net10.0</TargetFramework>
-    <SupportedOSPlatformVersion Condition="'$(ViceSharpHostIosFallback)' != 'true'">13.0</SupportedOSPlatformVersion>
+    <!-- net10.0 fallback is the default for the same AspNetCore runtime-pack
+         reason as the Android sibling. Set /p:ViceSharpHostIosFallback=false
+         once the upstream Avalonia transitive AspNetCore dep is trimmed. -->
+    <TargetFramework Condition="'$(ViceSharpHostIosFallback)' == 'false'">net10.0-ios</TargetFramework>
+    <TargetFramework Condition="'$(ViceSharpHostIosFallback)' != 'false'">net10.0</TargetFramework>
+    <SupportedOSPlatformVersion Condition="'$(ViceSharpHostIosFallback)' == 'false'">13.0</SupportedOSPlatformVersion>
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <ApplicationId>org.vicesharp.host.ios</ApplicationId>
@@ -25,14 +28,14 @@
     <NoWarn>$(NoWarn);NU1903</NoWarn>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(ViceSharpHostIosFallback)' != 'true'">
+  <ItemGroup Condition="'$(ViceSharpHostIosFallback)' == 'false'">
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.iOS" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(ViceSharpHostIosFallback)' == 'true'">
+  <ItemGroup Condition="'$(ViceSharpHostIosFallback)' != 'false'">
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
