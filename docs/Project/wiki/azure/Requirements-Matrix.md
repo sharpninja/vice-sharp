@@ -175,5 +175,14 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-VIC-EDGE-005 | Tracked | Technical-Requirements.md |
 | TR-VIC-EDGE-006 | Tracked | Technical-Requirements.md |
 | TR-VIC-EDGE-007 | Tracked | Technical-Requirements.md |
+| ARCH-TRUEDRIVE-1541-002 | Tracked | Functional-Requirements.md |
+| BACKFILL-MEDIA-001 | Tracked | Functional-Requirements.md |
 | BACKFILL-VIDEO-001 | Tracked | Functional-Requirements.md |
+| RUNTIME-TAPE-002 | Tracked | Functional-Requirements.md |
 | PERF-SPRITE-DMA-OPT-001 | Tracked | Technical-Requirements.md |
+| TEST-DRV-MOTOR-001 | Tracked | Testing-Requirements.md |
+| TEST-IEC-TIMING-001 | Tracked | Testing-Requirements.md |
+| TEST-TAPE-RAMP-001 | Tracked | Testing-Requirements.md |
+| TEST-TAPE-SENSE-001 | Tracked | Testing-Requirements.md |
+| TEST-VIC-CHECKPOINT-001 | Tracked | Testing-Requirements.md |
+| TEST-VIC-RC-001 | Tracked | Testing-Requirements.md |
