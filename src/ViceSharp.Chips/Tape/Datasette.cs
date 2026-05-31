@@ -2,10 +2,43 @@ using ViceSharp.Abstractions;
 
 namespace ViceSharp.Chips.Tape;
 
+/// <summary>
+/// Commodore C2N Datasette emulation.
+///
+/// Motor ramp (TR-TAPE-EDGE-001): VICE models a 32,000-cycle motor spin-up
+/// delay before tape pulses are delivered (datasette/datasette.c:62
+/// MOTOR_DELAY=32000). Tick() advances the ramp counter when MotorEnabled
+/// is true; TryReadNextPulse blocks during the ramp period.
+///
+/// Sense line (TR-TAP-EDGE-001): SenseLine returns false (low) when any
+/// Datasette button (PlayPressed or RecordPressed) is pressed. CIA1 Port B
+/// bit 4 ($DC01 bit 4) reflects this signal; low = button pressed.
+///
+/// Record mode (TR-TAP-EDGE-001): When RecordPressed and MotorEnabled are
+/// true, TryWritePulse(cycles) stores a pulse to the internal record buffer.
+/// RecordedPulseCount tracks the number of pulses written.
+/// VICE datasette/datasette.c: record path stores pulses to image buffer.
+/// </summary>
 public sealed class Datasette : ITapeDevice
 {
+    // VICE MOTOR_DELAY constant (datasette/datasette.c:62): 32,000 cycles.
+    // At C64 PAL 985,248 Hz this is ~32ms; motor must spin up before pulses.
+    private const int MotorRampCycles = 32_000;
+
     private TapImage? _image;
     private TapPulseReader? _reader;
+
+    // Motor ramp state machine.
+    // _motorRampStarted tracks whether Tick() has been called with motor on.
+    // Before any Tick() call, TryReadNextPulse delivers pulses immediately
+    // (backward-compatible with tests that do not use the Tick() timing path).
+    // Once Tick() is called with motor on, the 32,000-cycle ramp applies.
+    private long _motorRampCounter = 0;
+    private bool _motorRampComplete = false;
+    private bool _motorRampStarted = false;
+
+    // Record mode buffer (stored pulses for inspection or future playback).
+    private readonly List<int> _recordBuffer = new();
 
     public DeviceId Id => new(0x0020);
 
@@ -19,11 +52,37 @@ public sealed class Datasette : ITapeDevice
 
     public bool PlayPressed { get; set; }
 
+    /// <summary>
+    /// True when the RECORD button is pressed. Enables TryWritePulse and
+    /// asserts the SENSE line low (same as PlayPressed).
+    /// VICE datasette.c: RecordPressed drives record mode.
+    /// </summary>
+    public bool RecordPressed { get; set; }
+
+    /// <summary>
+    /// SENSE line state as driven by the Datasette hardware.
+    /// False (low) when any button is pressed (PlayPressed or RecordPressed);
+    /// true (high) when no button is pressed. Reflects CIA1 $DC01 bit 4.
+    /// VICE datasette.c: sense line is active-low, asserted by PLAY or RECORD.
+    /// </summary>
+    public bool SenseLine => !(PlayPressed || RecordPressed);
+
+    /// <summary>
+    /// Number of pulse values stored by TryWritePulse calls (record mode).
+    /// Resets to zero when Reset() is called.
+    /// </summary>
+    public int RecordedPulseCount => _recordBuffer.Count;
+
     public void Reset()
     {
         MotorEnabled = false;
         PlayPressed = false;
+        RecordPressed = false;
         _reader = _image?.CreatePulseReader();
+        _motorRampCounter = 0;
+        _motorRampComplete = false;
+        _motorRampStarted = false;
+        _recordBuffer.Clear();
     }
 
     public void Attach() => IsAttached = true;
@@ -52,16 +111,75 @@ public sealed class Datasette : ITapeDevice
         return true;
     }
 
+    /// <summary>
+    /// Advance the Datasette state machine by one machine cycle.
+    ///
+    /// Motor ramp: when MotorEnabled is true, tracks the 32,000-cycle ramp.
+    /// The ramp only activates after the first Tick() call with motor on;
+    /// before any Tick(), TryReadNextPulse delivers pulses immediately
+    /// (backward-compatible with tests that manage timing externally).
+    /// After the ramp completes, pulses are delivered. Motor off resets
+    /// the ramp so a full new spin-up is required on next motor-on.
+    /// VICE datasette/datasette.c:62 MOTOR_DELAY=32000,
+    /// datasette.c:1196 motor_stop_clk reset on motor off.
+    /// </summary>
+    public void Tick()
+    {
+        if (MotorEnabled)
+        {
+            if (!_motorRampStarted)
+            {
+                // First Tick with motor on: begin the ramp countdown.
+                _motorRampStarted = true;
+                _motorRampComplete = false;
+                _motorRampCounter = 0;
+            }
+            if (!_motorRampComplete)
+            {
+                _motorRampCounter++;
+                if (_motorRampCounter >= MotorRampCycles)
+                    _motorRampComplete = true;
+            }
+        }
+        else
+        {
+            // Motor off: reset ramp so a new spin-up is required.
+            _motorRampCounter = 0;
+            _motorRampComplete = false;
+            _motorRampStarted = false;
+        }
+    }
+
     public bool TryReadNextPulse(out int cycles)
     {
         cycles = 0;
 
-        if (!IsAttached || !MotorEnabled || !PlayPressed || _reader is null)
+        // Ramp only blocks when Tick() has been called with motor on.
+        // If Tick() has never been called (external pulse management),
+        // the ramp is not applied (backward-compatible behavior).
+        // VICE datasette.c:62 MOTOR_DELAY=32000 (applies when clocked).
+        bool rampBlocking = _motorRampStarted && !_motorRampComplete;
+        if (!IsAttached || !MotorEnabled || !PlayPressed || _reader is null || rampBlocking)
         {
             return false;
         }
 
         return _reader.TryReadNextPulse(out cycles);
+    }
+
+    /// <summary>
+    /// Store a pulse value (in machine cycles) to the record buffer.
+    /// Returns true when RecordPressed and MotorEnabled are both true;
+    /// returns false otherwise (motor off or not in record mode).
+    /// VICE datasette.c: record mode appends pulses to the tape image buffer.
+    /// </summary>
+    public bool TryWritePulse(int cycles)
+    {
+        if (!MotorEnabled || !RecordPressed)
+            return false;
+
+        _recordBuffer.Add(cycles);
+        return true;
     }
 
     /// <summary>
