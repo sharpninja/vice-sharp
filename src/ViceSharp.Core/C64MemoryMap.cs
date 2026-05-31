@@ -71,6 +71,14 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private byte[]? _cartridgeImage;
     private CartridgeMappingMode? _attachedCartridgeMappingMode;
     private int _gameSystemCartridgeBank;
+
+    // Magic Desk (CRT type 19) state. _magicDeskCartridgeBank selects the
+    // active 8K ROML bank (bits 0-6 of the latest $DE00 write).
+    // _magicDeskDisabled mirrors bit 7 of the latest $DE00 write: when
+    // high the cartridge releases its ROML mapping (EXROM goes high) and
+    // $8000-$9FFF reads fall through to RAM/BASIC.
+    private int _magicDeskCartridgeBank;
+    private bool _magicDeskDisabled;
     private int _vicPhi1Bank;
     private byte _lastCpuBusValue = 0xFF;
     private bool _loadingRoms;
@@ -158,6 +166,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _vicPhi1Bank = 0;
         if (_attachedCartridgeMappingMode == CartridgeMappingMode.GameSystem)
             _gameSystemCartridgeBank = 0;
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.MagicDesk)
+        {
+            _magicDeskCartridgeBank = 0;
+            _magicDeskDisabled = false;
+        }
 
         // PERF-MEM-001: Rebuild page table so it reflects PLA state after a machine
         // reset. The machine's Reset() resets all IClockedDevice chips (including the
@@ -392,6 +405,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _cartridgeImage = image.ToArray();
         _attachedCartridgeMappingMode = resolvedMappingMode;
         _gameSystemCartridgeBank = 0;
+        _magicDeskCartridgeBank = 0;
+        _magicDeskDisabled = false;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now active
     }
 
@@ -400,6 +415,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _cartridgeImage = null;
         _attachedCartridgeMappingMode = null;
         _gameSystemCartridgeBank = 0;
+        _magicDeskCartridgeBank = 0;
+        _magicDeskDisabled = false;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now inactive
     }
 
@@ -709,6 +726,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (TryStoreGameSystemBankRegister(address))
             return;
 
+        if (TryStoreMagicDeskBankRegister(address, value))
+            return;
+
         if (address < 0xD400)
         {
             _vic.Write(address, value);
@@ -767,6 +787,34 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         }
 
         _gameSystemCartridgeBank = address & 0x3F;
+        return true;
+    }
+
+    /// <summary>
+    /// Magic Desk (CRT type 19) bank-register store. Any write to $DE00-$DEFF
+    /// loads the bank selector: data bits 0-6 = bank index modulo the image
+    /// size, data bit 7 = disable (release ROML). Reads from $DE00 return 0,
+    /// matching VICE c64cart/magicdesk.c behaviour. Returns true when the
+    /// store is consumed by the mapper (so the caller does not pass the
+    /// value through to the I/O fallback).
+    /// </summary>
+    private bool TryStoreMagicDeskBankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.MagicDesk ||
+            address is < CartridgeIo1Start or > CartridgeIo1End)
+        {
+            return false;
+        }
+
+        var prevDisabled = _magicDeskDisabled;
+        var prevBank = _magicDeskCartridgeBank;
+        _magicDeskDisabled = (value & 0x80) != 0;
+        var bankCount = _cartridgeImage is null
+            ? 1
+            : System.Math.Max(1, _cartridgeImage.Length / CartridgeBankSize);
+        _magicDeskCartridgeBank = (value & 0x7F) % bankCount;
+        if (prevDisabled != _magicDeskDisabled || prevBank != _magicDeskCartridgeBank)
+            RebuildReadPageTable();
         return true;
     }
 
@@ -869,6 +917,13 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             CartridgeMappingMode.Standard16K => imageLength == CartridgeBankSize * 2,
             CartridgeMappingMode.Ultimax => imageLength is CartridgeBankSize or CartridgeBankSize * 2,
             CartridgeMappingMode.GameSystem => imageLength == GameSystemCartridgeSize,
+            // Magic Desk images come in 32K (4 banks), 64K (8), or 128K (16);
+            // VICE also accepts 256K and 512K for derivative carts. Each bank
+            // is exactly 8K and the total must be a non-zero multiple.
+            CartridgeMappingMode.MagicDesk =>
+                imageLength > 0 &&
+                imageLength % CartridgeBankSize == 0 &&
+                imageLength / CartridgeBankSize is >= 4 and <= 64,
             _ => false
         };
 
@@ -892,9 +947,14 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             if (mappingMode == CartridgeMappingMode.Ultimax && imageLength == CartridgeBankSize)
                 return false;
 
-            offset = mappingMode == CartridgeMappingMode.GameSystem
-                ? (_gameSystemCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart
-                : address - CartridgeRomLowStart;
+            offset = mappingMode switch
+            {
+                CartridgeMappingMode.GameSystem
+                    => (_gameSystemCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                CartridgeMappingMode.MagicDesk
+                    => (_magicDeskCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                _ => address - CartridgeRomLowStart,
+            };
             return true;
         }
 
@@ -926,6 +986,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             CartridgeMappingMode.Ultimax => true,
             CartridgeMappingMode.Standard8K or CartridgeMappingMode.Standard16K or CartridgeMappingMode.GameSystem
                 => _pla.Loram && _pla.Hiram,
+            CartridgeMappingMode.MagicDesk
+                => _pla.Loram && _pla.Hiram && !_magicDeskDisabled,
             _ => false
         };
     }

@@ -47,5 +47,12 @@ public enum CartridgeMappingMode
     Ultimax = 3,
 
     /// <summary>C64 Games System cartridge mapped as 64 switchable 8K ROML banks.</summary>
-    GameSystem = 4
+    GameSystem = 4,
+
+    /// <summary>
+    /// Magic Desk / Domark / HES Australia (CRT type 19). 32K/64K/128K image
+    /// split into 8K ROML banks. Writes to $DE00 select bank: data bits 0-6
+    /// = bank index, bit 7 = cart-disable (releases ROML when high).
+    /// </summary>
+    MagicDesk = 5
 }
