@@ -28,9 +28,26 @@ Measured via `dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pe
 | 10,000,000 | 706 ms | 14,159,246 | 1437% |
 | 20,000,000 | 1144 ms | 17,479,339 | 1774% |
 
-Lowest measurement is 47x the Phase 1 target. No optimisation work landed for the Phase 1 gate. Native-VICE baseline comparison and deeper tuning deferred to PERF-BENCHMARK-001 (post-Phase 1).
+Lowest measurement is 47x the Phase 1 target. No optimisation work landed for the Phase 1 gate.
 
 Machine: PAYTON-LEGION2, net10.0, Release JIT, room-less C64 with one PAL frame warm-up.
+
+## Native VICE baseline (PERF-BENCHMARK-001)
+
+Native VICE comparison wired via `NativeViceBaseline.Run` in `tests/ViceSharp.Benchmarks/`. Drives the native shim's `vice_machine_step_cycle` (warp-mode style raw cycle pumping with no host-clock pacing) and reports cycles/sec. Run via `dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --perf-compare <budget>`.
+
+Measured at HEAD `aecfcff` (PAYTON-LEGION2):
+
+| Layer | Cycles/sec | % PAL realtime |
+|-------|----------:|---------------:|
+| Managed (ViceSharp `SystemClock.Step`) | 9,995,412 | 1014% |
+| Native (VICE shim `vice_machine_step_cycle`) | 552,921 | 56% |
+| Ratio managed/native | **18.08x** | (managed is faster) |
+
+Notes:
+- Native shim emits a per-cycle checkpoint callback that managed code does not, which is the dominant cost on the native side. A real `step_n_cycles` shim entry without per-cycle callbacks would narrow the gap; deferred.
+- Managed is comfortably above the 25% PAL real-time gate (PERF-TUNING-001) at 1014%.
+- Both numbers move on every run because the workload is single-threaded JIT-bound; report the lowest of three when treating as a regression gate.
 
 ## Phase 1 slices closed in this session
 

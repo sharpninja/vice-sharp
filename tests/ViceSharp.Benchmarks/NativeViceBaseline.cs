@@ -1,27 +1,60 @@
+using System.Diagnostics;
+using ViceSharp.Core;
+
 namespace ViceSharp.Benchmarks;
 
 /// <summary>
-/// Reserved stub for the native VICE comparison workload.
+/// Native VICE comparison probe (PERF-BENCHMARK-001). Drives the native
+/// x64sc machine through <see cref="ViceNative"/> via the shim's
+/// <c>vice_machine_step_cycle</c> entry point and reports cycles per second.
+/// Used alongside <see cref="PerfProbe"/> to compute a managed-vs-native
+/// performance ratio for the Phase 1 closeout dashboard.
 ///
-/// The plan is to invoke the existing native shim built from
-/// <c>native/vice/...</c> through <c>ViceSharp.Core.ViceNative</c>, drive the
-/// same scripted workloads as the managed benchmarks, and emit comparable
-/// timing measurements so the Completion Dashboard can ingest both sides.
-///
-/// TODO(perf-vs-vice): wire up the native shim, run the matching workload,
-/// and surface metrics in a shared report schema. Tracked under
-/// MCP TODO PERF-BENCHMARK-001 remaining work.
+/// Note: the shim's step_cycle path mimics warp-mode (raw cycle pumping with
+/// no host-clock pacing) so this number is comparable to the managed
+/// <c>SystemClock.Step</c> hot path under release JIT.
 /// </summary>
-internal static class NativeViceBaseline
+public static class NativeViceBaseline
 {
     /// <summary>
-    /// Placeholder so consumers can reference the type from future BenchmarkDotNet
-    /// attribute classes without compile errors. Always throws; will be replaced
-    /// by the real shim invocation once the comparison slice lands.
+    /// Returns the cycles per second the native shim can pump on this host.
+    /// Throws <see cref="NotSupportedException"/> when the native shim is not
+    /// available (no built native library, no VICE source).
     /// </summary>
-    public static double EmulatedCyclesPerSecond()
+    public static (long cyclesExecuted, TimeSpan elapsed, double cyclesPerSecond) Run(
+        long budgetCycles,
+        string? modelSelector = null)
     {
-        throw new NotImplementedException(
-            "Native VICE comparison is not implemented in this slice. See PERF-BENCHMARK-001.");
+        if (!ViceNative.IsAvailable)
+            throw new NotSupportedException(
+                $"Native VICE shim is not available: {ViceNative.AvailabilityMessage}");
+
+        var machine = string.IsNullOrWhiteSpace(modelSelector)
+            ? ViceNative.Create()
+            : ViceNative.CreateModel(modelSelector);
+        if (machine == IntPtr.Zero)
+            throw new InvalidOperationException(
+                $"Native VICE failed to create a machine for model '{modelSelector ?? "default"}'.");
+
+        try
+        {
+            ViceNative.ResetNative(machine);
+
+            // Warm-up: pump one PAL frame so any first-call paths settle.
+            for (var i = 0; i < BenchmarkMachineFactory.PalFrameCycles; i++)
+                ViceNative.StepNative(machine);
+
+            var sw = Stopwatch.StartNew();
+            for (var i = 0L; i < budgetCycles; i++)
+                ViceNative.StepNative(machine);
+            sw.Stop();
+
+            var cps = budgetCycles / sw.Elapsed.TotalSeconds;
+            return (budgetCycles, sw.Elapsed, cps);
+        }
+        finally
+        {
+            ViceNative.Destroy(machine);
+        }
     }
 }

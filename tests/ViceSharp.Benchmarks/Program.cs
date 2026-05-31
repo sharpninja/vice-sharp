@@ -24,6 +24,48 @@ public static class Program
             return 0;
         }
 
+        if (args.Length > 0 && args[0] == "--native-probe")
+        {
+            long budget = args.Length > 1 && long.TryParse(args[1], out var nb)
+                ? nb
+                : PerfProbe.DefaultBudgetCycles;
+            string? model = args.Length > 2 ? args[2] : null;
+            try
+            {
+                var (cycles, elapsed, cps) = NativeViceBaseline.Run(budget, model);
+                var realtimePct = cps / PerfProbe.PalCyclesPerSecond * 100.0;
+                Console.WriteLine($"NativeViceBaseline: model={model ?? "default"} cycles={cycles:N0} elapsed={elapsed.TotalMilliseconds:F2}ms cycles/sec={cps:N0} pct-realtime={realtimePct:F2}%");
+                return 0;
+            }
+            catch (NotSupportedException ex)
+            {
+                Console.WriteLine($"NativeViceBaseline: SKIPPED - {ex.Message}");
+                return 0;
+            }
+        }
+
+        if (args.Length > 0 && args[0] == "--perf-compare")
+        {
+            long budget = args.Length > 1 && long.TryParse(args[1], out var cb)
+                ? cb
+                : PerfProbe.DefaultBudgetCycles;
+            var (_, mElapsed, mCps) = PerfProbe.Run(budget);
+            var mPct = mCps / PerfProbe.PalCyclesPerSecond * 100.0;
+            Console.WriteLine($"managed: cycles/sec={mCps:N0} pct-realtime={mPct:F2}% elapsed={mElapsed.TotalMilliseconds:F2}ms");
+            try
+            {
+                var (_, nElapsed, nCps) = NativeViceBaseline.Run(budget);
+                var nPct = nCps / PerfProbe.PalCyclesPerSecond * 100.0;
+                Console.WriteLine($"native:  cycles/sec={nCps:N0} pct-realtime={nPct:F2}% elapsed={nElapsed.TotalMilliseconds:F2}ms");
+                Console.WriteLine($"ratio managed/native: {mCps / nCps:F3}x");
+            }
+            catch (NotSupportedException ex)
+            {
+                Console.WriteLine($"native:  SKIPPED - {ex.Message}");
+            }
+            return 0;
+        }
+
         var switcher = BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly);
         switcher.Run(args);
         return 0;
