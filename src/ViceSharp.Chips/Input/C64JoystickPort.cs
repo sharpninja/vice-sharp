@@ -105,4 +105,12 @@ public sealed class C64JoystickPort : IInputSource
     public bool Left => (State & JoystickButtons.Left) != 0;
     public bool Right => (State & JoystickButtons.Right) != 0;
     public bool Fire => (State & JoystickButtons.Fire) != 0;
+
+    /// <summary>
+    /// Enumerate available joystick devices. Returns a stub keyboard-joystick
+    /// device (models a keyboard mapped as a joystick, always present).
+    /// VICE: joyport devices enumerated from joyport.c device table.
+    /// </summary>
+    public static IReadOnlyList<C64JoystickPort> EnumerateDevices()
+        => new[] { new C64JoystickPort() };
 }

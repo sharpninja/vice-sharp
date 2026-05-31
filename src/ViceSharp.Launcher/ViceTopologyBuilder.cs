@@ -3,6 +3,18 @@ using System.Text;
 namespace ViceSharp.Launcher;
 
 /// <summary>
+/// Parsed descriptor from a topology YAML that may include testbench keys.
+/// ARCH-TESTBENCH-001 / CLI-LAUNCHER-001.
+/// </summary>
+public sealed record ViceTopologyDescriptor
+{
+    public bool? DebugCart { get; init; }
+    public long? LimitCycles { get; init; }
+    public string? HostKind { get; init; }
+    public string RawYaml { get; init; } = string.Empty;
+}
+
+/// <summary>
 /// Maps a <see cref="ViceArgs"/> bundle to a multi-system YAML topology
 /// string the main ViceSharp.Console host can consume via
 /// <c>--machine-yaml</c>.
@@ -33,6 +45,63 @@ public static class ViceTopologyBuilder
             _ => throw new InvalidOperationException(
                 $"Unknown binary name '{args.BinaryName}' and no --machine-yaml supplied."),
         };
+    }
+
+    /// <summary>
+    /// Parses a topology YAML string and extracts testbench keys
+    /// (debugcart, limitcycles) along with the primary host kind.
+    /// Uses simple line-by-line key extraction (no YAML library required).
+    /// ARCH-TESTBENCH-001 / CLI-LAUNCHER-001.
+    /// </summary>
+    public static ViceTopologyDescriptor ParseDescriptor(string yaml)
+    {
+        bool? debugCart = null;
+        long? limitCycles = null;
+        string? hostKind = null;
+
+        foreach (var line in yaml.Split('\n'))
+        {
+            var trimmed = line.Trim();
+            if (TryParseYamlBool(trimmed, "debugcart:", out var dc))
+                debugCart = dc;
+            else if (TryParseYamlLong(trimmed, "limitcycles:", out var lc))
+                limitCycles = lc;
+            else if (TryParseYamlString(trimmed, "kind:", out var k))
+                hostKind ??= k; // first kind encountered = host kind
+        }
+
+        return new ViceTopologyDescriptor
+        {
+            DebugCart = debugCart,
+            LimitCycles = limitCycles,
+            HostKind = hostKind,
+            RawYaml = yaml,
+        };
+    }
+
+    private static bool TryParseYamlBool(string line, string prefix, out bool value)
+    {
+        value = false;
+        if (!line.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return false;
+        var rest = line[prefix.Length..].Trim().ToLowerInvariant();
+        if (rest == "true") { value = true; return true; }
+        if (rest == "false") { value = false; return true; }
+        return false;
+    }
+
+    private static bool TryParseYamlLong(string line, string prefix, out long value)
+    {
+        value = 0;
+        if (!line.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return false;
+        return long.TryParse(line[prefix.Length..].Trim(), out value);
+    }
+
+    private static bool TryParseYamlString(string line, string prefix, out string value)
+    {
+        value = string.Empty;
+        if (!line.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return false;
+        value = line[prefix.Length..].Trim();
+        return !string.IsNullOrEmpty(value);
     }
 
     private static string BuildC64Topology(ViceArgs args)

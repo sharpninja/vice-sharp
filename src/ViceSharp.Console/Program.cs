@@ -55,6 +55,12 @@ for (int i = 0; i < args.Length; i++)
 // automatic regression testing"), :74 (debugcart_store $D7FF exit), :137 (cmdline +/-debugcart);
 // autostart.c + mon_file.c + vice.texi for PRG autostart and limitcycles harness patterns.
 var parsed = ViceArgsParser.Parse("x64sc", args);
+// CLI-LAUNCHER-001: show help text and exit when --help / -h / -? supplied.
+if (parsed.ShowHelp)
+{
+    Console.WriteLine(ViceArgsParser.GetHelpText());
+    return 0;
+}
 if (parsed.LimitCycles.HasValue)
 {
     cycles = (int)parsed.LimitCycles.Value; // wire bounded run for testbench (AC7)

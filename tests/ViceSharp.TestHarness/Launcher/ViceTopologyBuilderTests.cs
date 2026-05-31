@@ -125,4 +125,58 @@ public sealed class ViceTopologyBuilderTests
             File.Delete(path);
         }
     }
+
+    // =====================================================================
+    // Slice 6B: ARCH-TESTBENCH-001 - ParseDescriptor with debugcart/limitcycles
+    // =====================================================================
+
+    /// <summary>
+    /// ARCH-TESTBENCH-001.
+    /// Use case: A YAML topology with testbench keys (debugcart + limitcycles)
+    /// should produce a descriptor with those fields populated.
+    /// Acceptance: ViceTopologyBuilder.ParseDescriptor(yaml).DebugCart == true,
+    /// .LimitCycles == 50000.
+    /// </summary>
+    [Fact]
+    public void ParseDescriptor_WithDebugCartAndLimitCycles_PopulatesFields()
+    {
+        var yaml = """
+            schemaVersion: 1
+            debugcart: true
+            limitcycles: 50000
+            coordinator:
+              host:
+                id: c64-host
+                kind: C64
+            """;
+
+        var descriptor = ViceTopologyBuilder.ParseDescriptor(yaml);
+
+        descriptor.DebugCart.Should().BeTrue();
+        descriptor.LimitCycles.Should().Be(50000);
+    }
+
+    /// <summary>
+    /// ARCH-TESTBENCH-001.
+    /// Use case: A YAML topology without testbench keys should have null
+    /// DebugCart and LimitCycles fields.
+    /// Acceptance: ParseDescriptor returns descriptor with null fields when
+    /// no testbench keys present.
+    /// </summary>
+    [Fact]
+    public void ParseDescriptor_WithoutTestbenchKeys_HasNullFields()
+    {
+        var yaml = """
+            schemaVersion: 1
+            coordinator:
+              host:
+                id: c64-host
+                kind: C64
+            """;
+
+        var descriptor = ViceTopologyBuilder.ParseDescriptor(yaml);
+
+        descriptor.DebugCart.Should().BeNull();
+        descriptor.LimitCycles.Should().BeNull();
+    }
 }

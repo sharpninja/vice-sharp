@@ -2,6 +2,7 @@ namespace ViceSharp.TestHarness.Launcher;
 
 using FluentAssertions;
 using ViceSharp.Launcher;
+using ViceSharp.TestHarness;
 using Xunit;
 
 /// <summary>
@@ -449,12 +450,12 @@ public sealed class ViceArgsParserTests
     /// Exercises the full harness contract via the now-wired launcher entry (Program) with
     /// debugcart device + PRG load dispatch + bounded run + $D7FF exit code return.
     /// This is the "process" invocation path (Console.exe + flags + prg).
-    /// 
+    ///
     /// Skipped in automated suite runs without VICE ROMs / data root (per handoff: ROM absence
     /// is not a Phase 1 blocker). When run in env with VICE_DATA_PATH or WinVICE install, it
     /// launches the built console with VICE-style testbench args and asserts exit code from
     /// the debugcart signaling matches the written value.
-    /// 
+    ///
     /// Selected case: minimal PRG payload that writes known value to $D7FF after load/dispatch.
     /// </summary>
     [Fact(Skip = "Requires VICE ROMs + built console exe in env with VICESHARP_ROM_PATH or equivalent; see docs/handoff.md. Contract validated via mocks + build in this gate.")]
@@ -466,5 +467,59 @@ public sealed class ViceArgsParserTests
         // 3. Wait, assert ExitCode == 42, output contains dispatch + device attach logs.
         // For this coherent slice the mocks + real build + unit harness tests provide the green validation.
         Assert.True(true, "Process smoke shape defined; full execution gated on ROMs per project rules.");
+    }
+
+    // =====================================================================
+    // Slice 6A: CLI-LAUNCHER-001 - Help text
+    // =====================================================================
+
+    /// <summary>
+    /// CLI-LAUNCHER-001.
+    /// Use case: --help should print usage text covering all recognized flags.
+    /// Acceptance: GetHelpText() returns a non-empty string containing at minimum
+    /// the key flag names: "-8", "-9", "--limitcycles", "-debugcart", "--help".
+    /// </summary>
+    [Fact]
+    public void GetHelpText_ContainsAllKeyFlags()
+    {
+        var help = ViceArgsParser.GetHelpText();
+
+        help.Should().NotBeNullOrWhiteSpace();
+        help.Should().Contain("-8");
+        help.Should().Contain("-9");
+        help.Should().Contain("--limitcycles");
+        help.Should().Contain("-debugcart");
+        help.Should().Contain("--help");
+        help.Should().Contain("-truedrive");
+        help.Should().Contain("--cycles");
+    }
+
+    // =====================================================================
+    // Slice 6C: ARCH-TESTBENCH-001 - ROM-less process smoke
+    // =====================================================================
+
+    /// <summary>
+    /// ARCH-TESTBENCH-001: ROM-less process smoke. Requires ViceSharp.Console.exe
+    /// in the build output; skipped when absent.
+    /// Use case: Launch ViceSharp.Console.exe with +debugcart -limitcycles 100
+    /// and no ROM/PRG. Should exit 0 (ROM-less C64, 100 cycles, no $D7FF write).
+    /// </summary>
+    [SkipIfNoBuildArtifact("ViceSharp.Console.exe")]
+    public void ProcessSmoke_RomLess_DebugCart_LimitCycles_ExitsZero()
+    {
+        var assemblyDir = Path.GetDirectoryName(typeof(ViceArgsParserTests).Assembly.Location)!;
+        var exePath = Path.Combine(assemblyDir, "ViceSharp.Console.exe");
+
+        var psi = new System.Diagnostics.ProcessStartInfo(exePath,
+            "+debugcart -limitcycles 100")
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+
+        using var process = System.Diagnostics.Process.Start(psi)!;
+        process.WaitForExit(10_000); // 10-second timeout
+        Assert.Equal(0, process.ExitCode);
     }
 }

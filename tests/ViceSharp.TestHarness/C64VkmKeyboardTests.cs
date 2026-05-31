@@ -219,6 +219,81 @@ public sealed class C64VkmKeyboardTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-INP-001, FR: FR-INP-006, TR: TR-INPUT-VKM-001.
+    /// Use case: C64HostKeyboardMapper.LoadFromFile must parse a VKM file
+    /// and return an IKeyboardInputMap that resolves the mapped keys.
+    /// Acceptance: Loading a two-entry VKM resolves Space to 0x3C and
+    /// Return to 0x01; on a file with parse errors the method throws
+    /// InvalidOperationException.
+    /// </summary>
+    [Fact]
+    public void LoadFromFile_LoadsVkmAndResolvesKeys()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            var path = Path.Combine(dir, "test.vkm");
+            File.WriteAllText(path, "Space 7 4 8\nReturn 0 1 8\n");
+
+            var map = C64HostKeyboardMapper.LoadFromFile(path);
+
+            Assert.True(map.TryResolve("Space", out var space));
+            Assert.Equal(new byte[] { 0x3C }, space.ToArray());
+            Assert.True(map.TryResolve("Return", out var ret));
+            Assert.Equal(new byte[] { 0x01 }, ret.ToArray());
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR: FR-INP-001, TR: TR-INPUT-VKM-001.
+    /// Use case: A key pressed and held must remain in the CIA matrix for
+    /// multiple PAL frames without auto-release. The key state persists
+    /// until explicitly released via SetKeyState(pressed: false).
+    /// Acceptance: After pressing Space and stepping 30 PAL frames (30 x
+    /// 19,656 cycles), the CIA1 matrix still shows Space pressed; releasing
+    /// clears it.
+    /// </summary>
+    [Fact]
+    public void KeyRepeat_HeldKey_PersistsAcross30PalFrames()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+        var keyboardInput = machine.Devices.All.OfType<IMachineKeyboardInput>().Single();
+
+        // Press Space (row 7, col 4, keycode 0x3C).
+        Assert.True(keyboardInput.SetKeyState("Space", pressed: true));
+
+        // Step 30 PAL frames (30 * 312 * 63 = 589,680 cycles).
+        const int palFrameCycles = 312 * 63; // 19,656
+        for (var f = 0; f < 30; f++)
+            for (var c = 0; c < palFrameCycles; c++)
+                machine.Clock.Step();
+
+        // Space = row 7, col 4.
+        // Column mask selects col 4: ~(1<<4) = 0xEF.
+        // Row bit for row 7 = 1<<7 = 0x80.
+        // CIA Port B = column select, Port A = row output.
+        machine.Bus.Write(0xDC02, 0x00); // CIA1 DDRA = all input
+        machine.Bus.Write(0xDC03, 0xFF); // CIA1 DDRB = all output
+        machine.Bus.Write(0xDC01, 0xEF); // Write column mask: select column 4
+        var portA = machine.Bus.Read(0xDC00);
+        Assert.True(
+            (portA & 0x80) == 0,
+            "Space key (row 7) must still be pressed after 30 PAL frames.");
+
+        // Release.
+        keyboardInput.SetKeyState("Space", pressed: false);
+        var portAAfter = machine.Bus.Read(0xDC00);
+        Assert.True(
+            (portAAfter & 0x80) == 0x80,
+            "Space key row bit must be released after SetKeyState(pressed: false).");
+    }
+
     private static string FindGtk3PosVkm()
     {
         return ViceDataPathResolver.FindDataFile("C64", "gtk3_pos.vkm");

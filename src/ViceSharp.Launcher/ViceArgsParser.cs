@@ -125,6 +125,33 @@ public static class ViceArgsParser
         };
     }
 
+    /// <summary>
+    /// Returns a usage/help text string listing all recognized flags.
+    /// VICE convention: help is printed when --help / -h / -? is present.
+    /// CLI-LAUNCHER-001 / FR-CFG-005.
+    /// </summary>
+    public static string GetHelpText() =>
+        """
+        ViceSharp - VICE-compatible C64 substrate
+
+        Usage: x64sc [options] [program.prg]
+
+          -8 path             Attach disk image to drive 8
+          -9 path             Attach disk image to drive 9
+          -cart path          Attach cartridge image
+          +truedrive          Enable true-drive emulation
+          -truedrive          Disable true-drive emulation
+          --machine-yaml path Machine topology YAML file (-m path)
+          --cycles N          Cycle budget for the run
+          -v / --verbose      Verbose output
+          --help / -h / -?    Show this help text
+          +debugcart          Enable debug cartridge device ($D7FF signaling)
+          -debugcart          Disable debug cartridge device
+          --limitcycles N     Bounded execution cycle limit (testbench)
+          -autostart path     Autostart PRG/SID/T64 file
+          [program.prg]       Positional PRG autostart (testbench style)
+        """;
+
     private static string NormalizeBinaryName(string name)
     {
         var trimmed = Path.GetFileNameWithoutExtension(name).ToLowerInvariant();
