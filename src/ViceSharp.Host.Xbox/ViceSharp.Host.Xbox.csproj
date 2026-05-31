@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    PLATFORM-CROSS-001 Phase 1: UWP Xbox host shell scaffold.
+
+    Target framework selection:
+      - Preferred: net10.0-windows10.0.19041.0 (UWP-compatible Windows desktop
+        target). Requires the windows-app SDK / Windows desktop workload.
+      - This build host does NOT have the UWP / windows-app workload installed,
+        so the project falls back to plain net10.0 for buildability on the
+        current machine. The cross-platform Avalonia stack still works on Xbox
+        developer mode via the standard .NET runtime + Avalonia.Desktop.
+
+    To switch to the Windows-specific UWP target once the workload is
+    available, replace <TargetFramework>net10.0</TargetFramework> with
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework> and add a
+    <UseUwp>true</UseUwp> property if the workload requires it.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>ViceSharp.Host.Xbox</RootNamespace>
+    <AssemblyName>ViceSharp.Host.Xbox</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj" />
+    <ProjectReference Include="..\ViceSharp.Host\ViceSharp.Host.csproj" />
+  </ItemGroup>
+</Project>
