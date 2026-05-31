@@ -32,6 +32,23 @@ Lowest measurement is 47x the Phase 1 target. No optimisation work landed for th
 
 Machine: PAYTON-LEGION2, net10.0, Release JIT, room-less C64 with one PAL frame warm-up.
 
+## Wiki publishing automation (REPO-MAINT-001)
+
+`tools/Publish-Wiki.ps1` plus the Nuke `PublishWiki` target close the wiki sync gate. The script:
+
+1. Re-exports the requirements wiki ZIP from MCP (`POST /mcpserver/requirements/generate?format=wiki&docType=all`) when `-RegenerateSource` is supplied, then expands into `docs/Project/wiki/{azure,github}/`.
+2. Clones each wiki target repo (Azure DevOps + GitHub are both git-backed wikis), mirrors the source dir over, and pushes when there are real changes.
+3. Skips a target when its token env var is absent (`ADO_PAT`, `GITHUB_TOKEN`), so the same target is safe to invoke in CI environments that only carry one credential.
+
+Invocation:
+```
+nuke PublishWiki                                    # full regen + push both targets
+pwsh tools/Publish-Wiki.ps1 -DryRun                 # stage clones, show diffs, no push
+pwsh tools/Publish-Wiki.ps1 -Target azure -RegenerateSource
+```
+
+Smoke test at HEAD (no PATs set): both targets correctly skip with WARN message, exit 0.
+
 ## Native VICE baseline (PERF-BENCHMARK-001)
 
 Native VICE comparison wired via `NativeViceBaseline.Run` in `tests/ViceSharp.Benchmarks/`. Drives the native shim's `vice_machine_step_cycle` (warp-mode style raw cycle pumping with no host-clock pacing) and reports cycles/sec. Run via `dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --perf-compare <budget>`.

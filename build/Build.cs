@@ -115,4 +115,33 @@ sealed partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetNoBuild(true));
         });
+
+    /// <summary>
+    /// REPO-MAINT-001 wiki publishing. Regenerates the wiki source set from
+    /// the MCP requirements store and pushes the Azure DevOps + GitHub wiki
+    /// repos via tools/Publish-Wiki.ps1. Requires the ADO_PAT and
+    /// GITHUB_TOKEN environment variables (each target is skipped if its
+    /// token is absent so the target is safe to invoke without both).
+    /// </summary>
+    Target PublishWiki => _ => _
+        .Executes(() =>
+        {
+            var script = RootDirectory / "tools" / "Publish-Wiki.ps1";
+            Serilog.Log.Information("Invoking wiki publisher: {Script}", script);
+            var args = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"" + script + "\" -Target both -RegenerateSource";
+            var psi = new System.Diagnostics.ProcessStartInfo("pwsh.exe", args)
+            {
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            };
+            using var p = System.Diagnostics.Process.Start(psi)!;
+            p.OutputDataReceived += (_, e) => { if (e.Data != null) Serilog.Log.Information(e.Data); };
+            p.ErrorDataReceived  += (_, e) => { if (e.Data != null) Serilog.Log.Warning(e.Data); };
+            p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
+            p.WaitForExit();
+            if (p.ExitCode != 0)
+                throw new InvalidOperationException($"Publish-Wiki.ps1 exited with code {p.ExitCode}.");
+        });
 }
