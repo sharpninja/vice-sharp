@@ -18,8 +18,12 @@ public sealed class FinalCartridgeIIITests
     private const int Fc3ImageSize = BankSize * 8;  // 4 banks * 16K = 64K
 
     /// <summary>
-    /// FR-CART-FC3: attach a 64K FC-III image, bank 0 must default-map for
-    /// both ROML ($8000-$9FFF) and ROMH ($A000-$BFFF) before any $DFFF write.
+    /// FR-CART-FC3.
+    /// Use case: attach a 64K Final Cartridge III image; bank 0 must
+    /// default-map for both ROML ($8000-$9FFF) and ROMH ($A000-$BFFF)
+    /// before any $DFFF write.
+    /// Acceptance: bus reads at $8010 and $A010 return the bank-0 ROML
+    /// and ROMH sentinel bytes respectively.
     /// </summary>
     [Fact]
     public void Attach_64K_MapsBank0_ForRomLowAndRomHigh()
@@ -35,8 +39,11 @@ public sealed class FinalCartridgeIIITests
     }
 
     /// <summary>
-    /// FR-CART-FC3: writing $DFFF = N (bits 0-1) selects bank N for both
-    /// ROML and ROMH.
+    /// FR-CART-FC3.
+    /// Use case: writing $DFFF = N (bits 0-1) selects FC-III bank N for both
+    /// ROML and ROMH at the same time (16K bank).
+    /// Acceptance: for bank N in 0..3, bus reads at $8010 and $A010 return
+    /// the per-bank ROML and ROMH sentinels.
     /// </summary>
     [Theory]
     [InlineData(0, 0x00, 0xC0)]
@@ -57,8 +64,12 @@ public sealed class FinalCartridgeIIITests
     }
 
     /// <summary>
-    /// FR-CART-FC3: bit 7 of $DFFF hides the cartridge. Both ROML and ROMH
-    /// release; reads fall through to RAM/BASIC.
+    /// FR-CART-FC3.
+    /// Use case: bit 7 of $DFFF hides the cartridge so both ROML and ROMH
+    /// release. Reads in those windows fall through to RAM/BASIC. Clearing
+    /// bit 7 and re-selecting a bank restores the cartridge view.
+    /// Acceptance: after $DFFF = $80 the RAM sentinel at $8010 returns;
+    /// after $DFFF = $02 the bank-2 ROML and ROMH sentinels return.
     /// </summary>
     [Fact]
     public void WriteToDfff_Bit7_HidesCartridge()
@@ -85,8 +96,11 @@ public sealed class FinalCartridgeIIITests
     }
 
     /// <summary>
-    /// FR-CART-FC3: only $DFFF is the bank register. Writes to other I/O
-    /// addresses ($DE00, $DF00, $DFFE) must NOT change the bank.
+    /// FR-CART-FC3.
+    /// Use case: only $DFFF is the FC-III bank register. Writes to other
+    /// I/O addresses ($DE00, $DF00, $DFFE) must NOT change the bank.
+    /// Acceptance: after writing $02 to $DE00, $DF00, or $DFFE the bank-0
+    /// sentinel still shows at $8010 (no bank change).
     /// </summary>
     [Theory]
     [InlineData(0xDE00)]
@@ -106,7 +120,11 @@ public sealed class FinalCartridgeIIITests
     }
 
     /// <summary>
-    /// FR-CART-FC3: invalid image sizes are rejected.
+    /// FR-CART-FC3.
+    /// Use case: only the fixed 64K image size (4 banks of 16K) is valid
+    /// for Final Cartridge III. Smaller or oversize images must be rejected.
+    /// Acceptance: AttachCartridge throws ArgumentException for 8K, 32K,
+    /// and off-by-one image sizes.
     /// </summary>
     [Theory]
     [InlineData(BankSize)]              // 8K

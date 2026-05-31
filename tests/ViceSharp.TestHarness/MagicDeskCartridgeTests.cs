@@ -18,9 +18,10 @@ public sealed class MagicDeskCartridgeTests
     private const int BankSize = StandardCartridgeImage.RomBankSize;
 
     /// <summary>
-    /// FR-CART-MAGICDESK acceptance criterion 1: attach a 32K Magic Desk
-    /// image, verify bank 0 is mapped at $8000-$9FFF immediately after
-    /// reset (no write to $DE00 yet).
+    /// FR-CART-MAGICDESK acceptance criterion 1.
+    /// Use case: attach a 32K Magic Desk image; bank 0 must be mapped at
+    /// $8000-$9FFF immediately after reset before any write to $DE00.
+    /// Acceptance: bus reads at $8000 and $8001 match bank 0 sentinel bytes.
     /// </summary>
     [Fact]
     public void Attach_32K_MapsBank0_AtRomLowByDefault()
@@ -36,9 +37,11 @@ public sealed class MagicDeskCartridgeTests
     }
 
     /// <summary>
-    /// FR-CART-MAGICDESK acceptance criterion 2: writing $DE00 = bank index
-    /// selects the matching 8K bank for $8000-$9FFF. Each bank is filled
-    /// with a unique sentinel byte so the test can prove the switch.
+    /// FR-CART-MAGICDESK acceptance criterion 2.
+    /// Use case: writing $DE00 = bank index selects the matching 8K bank for
+    /// $8000-$9FFF. Each bank carries a unique sentinel byte at offset 0x10.
+    /// Acceptance: bus read at $8010 returns the per-bank sentinel for each
+    /// of bank 0..3.
     /// </summary>
     [Theory]
     [InlineData(0, 0x00)]
@@ -60,10 +63,12 @@ public sealed class MagicDeskCartridgeTests
     }
 
     /// <summary>
-    /// FR-CART-MAGICDESK acceptance criterion 3: writing $DE00 with bit 7
-    /// set disables the cartridge - ROML is released so $8000 reads fall
-    /// through to RAM. Clearing bit 7 re-enables the previously selected
-    /// bank.
+    /// FR-CART-MAGICDESK acceptance criterion 3.
+    /// Use case: writing $DE00 with bit 7 set disables the cartridge so ROML
+    /// releases and $8000 reads fall through to RAM under ROM. Clearing bit 7
+    /// and re-selecting a bank restores the cartridge view.
+    /// Acceptance: after writing $DE00 = $80 the RAM sentinel is visible at
+    /// $8010; after writing $DE00 = $02 the bank-2 sentinel is visible.
     /// </summary>
     [Fact]
     public void WriteToDe00_Bit7_DisablesCartridge_AndReenables()
@@ -95,8 +100,12 @@ public sealed class MagicDeskCartridgeTests
     }
 
     /// <summary>
-    /// FR-CART-MAGICDESK validation: invalid image sizes (not a multiple
-    /// of 8K, or below the 4-bank minimum) must be rejected.
+    /// FR-CART-MAGICDESK validation.
+    /// Use case: invalid Magic Desk image sizes (not a multiple of 8K, below
+    /// the 4-bank minimum, or otherwise malformed) must be rejected at
+    /// attach time.
+    /// Acceptance: AttachCartridge throws ArgumentException for 8K, 16K,
+    /// 24K, and off-by-one image sizes.
     /// </summary>
     [Theory]
     [InlineData(BankSize)]              // 8K - too small (need >= 4 banks)

@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj" />
+    <Project Path="src/ViceSharp.AdhocHelper/ViceSharp.AdhocHelper.csproj" />
     <Project Path="src/ViceSharp.Architectures/ViceSharp.Architectures.csproj" />
     <Project Path="src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj" />
     <Project Path="src/ViceSharp.Chips/ViceSharp.Chips.csproj" />

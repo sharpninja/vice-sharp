@@ -21,8 +21,11 @@ public sealed class AdvancedCartridgeScaffoldTests
     // ----------- Action Replay -----------
 
     /// <summary>
-    /// FR-CART-AR: 32K (4 banks of 8K) Action Replay. Bank reg at $DE00:
-    /// bits 0-3 = bank, bit 7 = hide.
+    /// FR-CART-AR.
+    /// Use case: 32K Action Replay (4 banks of 8K) selects an active ROML
+    /// bank via a write to $DE00 (bits 0-3 = bank index, bit 7 = hide).
+    /// Acceptance: writing $DE00 with bits 0-3 = N causes the bus read at
+    /// $8010 to return the per-bank sentinel byte for each of bank 0..3.
     /// </summary>
     [Theory]
     [InlineData(0x00, 0x00)]
@@ -40,6 +43,13 @@ public sealed class AdvancedCartridgeScaffoldTests
         machine.Bus.Read(0x8010).Should().Be(expectedSentinel);
     }
 
+    /// <summary>
+    /// FR-CART-AR.
+    /// Use case: bit 7 of the Action Replay $DE00 register hides the
+    /// cartridge so ROML releases and $8000 reads fall through to RAM.
+    /// Acceptance: after writing $DE00 = $80 the RAM sentinel ($A5)
+    /// shows at $8010 instead of the cart bank-0 sentinel.
+    /// </summary>
     [Fact]
     public void ActionReplay_Bit7_Hides()
     {
@@ -54,6 +64,13 @@ public sealed class AdvancedCartridgeScaffoldTests
         machine.Bus.Read(0x8010).Should().Be((byte)0xA5);
     }
 
+    /// <summary>
+    /// FR-CART-AR.
+    /// Use case: Action Replay images must be exactly 32K (4 banks of 8K).
+    /// Smaller or larger images must be rejected at attach time.
+    /// Acceptance: AttachCartridge throws ArgumentException for 8K and 64K
+    /// image sizes.
+    /// </summary>
     [Theory]
     [InlineData(BankSize)]              // 8K  too small
     [InlineData(BankSize * 8)]          // 64K too large
@@ -67,8 +84,12 @@ public sealed class AdvancedCartridgeScaffoldTests
     // ----------- EasyFlash -----------
 
     /// <summary>
-    /// FR-CART-EASYFLASH: 64K..1024K image (8..128 banks of 8K). Bank reg
-    /// at $DE00 bits 0-5.
+    /// FR-CART-EASYFLASH.
+    /// Use case: EasyFlash (64K..1024K image, 8..128 banks of 8K) selects
+    /// an active ROML bank via a write to $DE00; bits 0-5 of the value
+    /// are the bank index modulo the bank-count.
+    /// Acceptance: writing $DE00 with bits 0-5 = N causes the bus read at
+    /// $8010 to return the sentinel for bank N (N in 0, 4, 7 covered).
     /// </summary>
     [Theory]
     [InlineData(0x00, 0x00)]
@@ -85,6 +106,14 @@ public sealed class AdvancedCartridgeScaffoldTests
         machine.Bus.Read(0x8010).Should().Be(expectedSentinel);
     }
 
+    /// <summary>
+    /// FR-CART-EASYFLASH.
+    /// Use case: EasyFlash requires at least 64K (8 banks of 8K) up to a
+    /// 1024K (128 banks) ceiling; smaller, non-multiple, or off-by-one
+    /// images must be rejected at attach time.
+    /// Acceptance: AttachCartridge throws ArgumentException for 8K, 24K,
+    /// and 64K+1 image sizes.
+    /// </summary>
     [Theory]
     [InlineData(BankSize)]              // 8K  too small
     [InlineData(BankSize * 3)]          // 24K too small + odd
@@ -99,8 +128,13 @@ public sealed class AdvancedCartridgeScaffoldTests
     // ----------- Super Snapshot V5 -----------
 
     /// <summary>
-    /// FR-CART-SS5: 64K image (4 banks of 16K, ROML+ROMH). Bank reg at
-    /// $DE00 bits 2-4; bit 1 hides.
+    /// FR-CART-SS5.
+    /// Use case: Super Snapshot V5 (64K, 4 banks of 16K with ROML+ROMH)
+    /// selects an active 16K bank via a write to $DE00 with the bank
+    /// index in bits 2-4 (not 0-1).
+    /// Acceptance: writing $DE00 with the bank field set causes the bus
+    /// reads at $8010 (ROML) and $A010 (ROMH) to return the per-bank
+    /// sentinels for each of bank 0..3.
     /// </summary>
     [Theory]
     [InlineData(0b0_000_00,  0x00, 0xC0)]  // bank 0
@@ -119,6 +153,13 @@ public sealed class AdvancedCartridgeScaffoldTests
         machine.Bus.Read(0xA010).Should().Be(romhSentinel);
     }
 
+    /// <summary>
+    /// FR-CART-SS5.
+    /// Use case: bit 1 of the Super Snapshot V5 $DE00 register hides the
+    /// cartridge so ROML releases and $8000 reads fall through to RAM.
+    /// Acceptance: after writing $DE00 = $02 the seeded RAM byte ($33)
+    /// shows at $8010 instead of the bank-0 cart sentinel.
+    /// </summary>
     [Fact]
     public void SuperSnapshot_Bit1_Hides()
     {
@@ -136,8 +177,13 @@ public sealed class AdvancedCartridgeScaffoldTests
     // ----------- RR-Net -----------
 
     /// <summary>
-    /// FR-CART-RRNET: 64K image (4 banks of 16K). Bank reg at $DE00 bits
-    /// 0-3, bit 7 hides. Ethernet I/O at $DE00-$DE0F is stubbed.
+    /// FR-CART-RRNET.
+    /// Use case: RR-Net (64K, 4 banks of 16K with ROML+ROMH) selects an
+    /// active 16K bank via a write to $DE00 with bits 0-3 = bank index.
+    /// The Ethernet I/O window at $DE00-$DE0F is stubbed in this slice.
+    /// Acceptance: writing $DE00 with bits 0-3 = N causes the bus reads
+    /// at $8010 (ROML) and $A010 (ROMH) to return the per-bank sentinels
+    /// for each of bank 0..3.
     /// </summary>
     [Theory]
     [InlineData(0x00, 0x00, 0xC0)]
@@ -156,6 +202,13 @@ public sealed class AdvancedCartridgeScaffoldTests
         machine.Bus.Read(0xA010).Should().Be(romhSentinel);
     }
 
+    /// <summary>
+    /// FR-CART-RRNET.
+    /// Use case: bit 7 of the RR-Net $DE00 register hides the cartridge
+    /// so ROML releases and $8000 reads fall through to RAM.
+    /// Acceptance: after writing $DE00 = $80 the seeded RAM byte ($BB)
+    /// shows at $8010 instead of the bank-0 cart sentinel.
+    /// </summary>
     [Fact]
     public void RRNet_Bit7_Hides()
     {

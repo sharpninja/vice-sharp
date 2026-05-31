@@ -17,8 +17,10 @@ public sealed class OceanCartridgeTests
     private const int BankSize = StandardCartridgeImage.RomBankSize;
 
     /// <summary>
-    /// FR-CART-OCEAN: 32K image default-maps bank 0 at $8000-$9FFF before
-    /// any write to $DE00.
+    /// FR-CART-OCEAN.
+    /// Use case: attach a 32K Ocean image; bank 0 must be mapped at
+    /// $8000-$9FFF before any write to $DE00.
+    /// Acceptance: bus reads at $8000 / $8001 return the bank-0 sentinel bytes.
     /// </summary>
     [Fact]
     public void Attach_32K_MapsBank0_AtRomLowByDefault()
@@ -34,8 +36,11 @@ public sealed class OceanCartridgeTests
     }
 
     /// <summary>
-    /// FR-CART-OCEAN: writing $DE00 = N selects bank N. Sentinels at
-    /// offset 0x10 in each bank prove the switch.
+    /// FR-CART-OCEAN.
+    /// Use case: writing $DE00 = N selects Ocean bank N for $8000-$9FFF.
+    /// Sentinel bytes at offset 0x10 in each bank prove the switch.
+    /// Acceptance: bus read at $8010 returns the per-bank sentinel for each
+    /// of bank 0..3.
     /// </summary>
     [Theory]
     [InlineData(0, 0x00)]
@@ -56,8 +61,12 @@ public sealed class OceanCartridgeTests
     }
 
     /// <summary>
-    /// FR-CART-OCEAN: bit 7 of $DE00 is NOT a disable bit for Ocean (unlike
-    /// Magic Desk). Bits 6-7 are ignored; bits 0-5 still select the bank.
+    /// FR-CART-OCEAN.
+    /// Use case: bit 7 of $DE00 is NOT a disable bit on Ocean (unlike
+    /// Magic Desk); bits 6-7 must be ignored while bits 0-5 still select
+    /// the bank.
+    /// Acceptance: writing $DE00 = $C2 selects bank 2 (bus read at $8010
+    /// returns the bank-2 sentinel $20).
     /// </summary>
     [Fact]
     public void WriteToDe00_HighBits_AreIgnored()
@@ -75,7 +84,11 @@ public sealed class OceanCartridgeTests
     }
 
     /// <summary>
-    /// FR-CART-OCEAN: invalid image sizes are rejected.
+    /// FR-CART-OCEAN.
+    /// Use case: invalid Ocean image sizes (not a 4..64-bank multiple of 8K)
+    /// must be rejected at attach time.
+    /// Acceptance: AttachCartridge throws ArgumentException for 8K, 24K,
+    /// and off-by-one image sizes.
     /// </summary>
     [Theory]
     [InlineData(BankSize)]              // 8K - too small
