@@ -54,5 +54,12 @@ public enum CartridgeMappingMode
     /// split into 8K ROML banks. Writes to $DE00 select bank: data bits 0-6
     /// = bank index, bit 7 = cart-disable (releases ROML when high).
     /// </summary>
-    MagicDesk = 5
+    MagicDesk = 5,
+
+    /// <summary>
+    /// Ocean (CRT type 5). 32K to 512K image split into 8K ROML banks.
+    /// Writes to $DE00 take bits 0-5 (mod bank-count) as the bank index.
+    /// No disable bit; ROML is always mapped while attached.
+    /// </summary>
+    Ocean = 6
 }

@@ -79,6 +79,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     // $8000-$9FFF reads fall through to RAM/BASIC.
     private int _magicDeskCartridgeBank;
     private bool _magicDeskDisabled;
+
+    // Ocean (CRT type 5) state. Same ROML-only bank selection as Magic
+    // Desk but without a disable bit; the register stores bits 0-5 of
+    // the latest $DE00 write as the active bank index.
+    private int _oceanCartridgeBank;
     private int _vicPhi1Bank;
     private byte _lastCpuBusValue = 0xFF;
     private bool _loadingRoms;
@@ -171,6 +176,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             _magicDeskCartridgeBank = 0;
             _magicDeskDisabled = false;
         }
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.Ocean)
+            _oceanCartridgeBank = 0;
 
         // PERF-MEM-001: Rebuild page table so it reflects PLA state after a machine
         // reset. The machine's Reset() resets all IClockedDevice chips (including the
@@ -407,6 +414,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _gameSystemCartridgeBank = 0;
         _magicDeskCartridgeBank = 0;
         _magicDeskDisabled = false;
+        _oceanCartridgeBank = 0;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now active
     }
 
@@ -417,6 +425,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _gameSystemCartridgeBank = 0;
         _magicDeskCartridgeBank = 0;
         _magicDeskDisabled = false;
+        _oceanCartridgeBank = 0;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now inactive
     }
 
@@ -729,6 +738,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (TryStoreMagicDeskBankRegister(address, value))
             return;
 
+        if (TryStoreOceanBankRegister(address, value))
+            return;
+
         if (address < 0xD400)
         {
             _vic.Write(address, value);
@@ -814,6 +826,30 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             : System.Math.Max(1, _cartridgeImage.Length / CartridgeBankSize);
         _magicDeskCartridgeBank = (value & 0x7F) % bankCount;
         if (prevDisabled != _magicDeskDisabled || prevBank != _magicDeskCartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// Ocean (CRT type 5) bank-register store. Writes to $DE00-$DEFF select
+    /// the active 8K ROML bank. The data byte's bits 0-5 are mod bank-count;
+    /// no disable bit (ROML is always mapped while attached). Source: VICE
+    /// src/c64/cart/ocean.c.
+    /// </summary>
+    private bool TryStoreOceanBankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.Ocean ||
+            address is < CartridgeIo1Start or > CartridgeIo1End)
+        {
+            return false;
+        }
+
+        var prev = _oceanCartridgeBank;
+        var bankCount = _cartridgeImage is null
+            ? 1
+            : System.Math.Max(1, _cartridgeImage.Length / CartridgeBankSize);
+        _oceanCartridgeBank = (value & 0x3F) % bankCount;
+        if (prev != _oceanCartridgeBank)
             RebuildReadPageTable();
         return true;
     }
@@ -924,6 +960,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 imageLength > 0 &&
                 imageLength % CartridgeBankSize == 0 &&
                 imageLength / CartridgeBankSize is >= 4 and <= 64,
+            // Ocean accepts the same bank-multiple shapes (4..64 banks of 8K).
+            CartridgeMappingMode.Ocean =>
+                imageLength > 0 &&
+                imageLength % CartridgeBankSize == 0 &&
+                imageLength / CartridgeBankSize is >= 4 and <= 64,
             _ => false
         };
 
@@ -953,6 +994,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                     => (_gameSystemCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
                 CartridgeMappingMode.MagicDesk
                     => (_magicDeskCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                CartridgeMappingMode.Ocean
+                    => (_oceanCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
                 _ => address - CartridgeRomLowStart,
             };
             return true;
@@ -988,6 +1031,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 => _pla.Loram && _pla.Hiram,
             CartridgeMappingMode.MagicDesk
                 => _pla.Loram && _pla.Hiram && !_magicDeskDisabled,
+            CartridgeMappingMode.Ocean
+                => _pla.Loram && _pla.Hiram,
             _ => false
         };
     }
