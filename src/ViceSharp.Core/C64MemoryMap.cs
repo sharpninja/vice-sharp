@@ -79,6 +79,38 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     // $8000-$9FFF reads fall through to RAM/BASIC.
     private int _magicDeskCartridgeBank;
     private bool _magicDeskDisabled;
+
+    // Ocean (CRT type 5) state. Same ROML-only bank selection as Magic
+    // Desk but without a disable bit; the register stores bits 0-5 of
+    // the latest $DE00 write as the active bank index.
+    private int _oceanCartridgeBank;
+
+    // Final Cartridge III (CRT type 60) state. 16K banks (ROML+ROMH) and a
+    // hide bit. Bank register lives at $DFFF: bits 0-1 select bank, bit 7
+    // hides the cartridge so $8000-$BFFF reads fall through to RAM/BASIC.
+    private int _fc3CartridgeBank;
+    private bool _fc3Hidden;
+    private const ushort Fc3BankRegisterAddress = 0xDFFF;
+
+    // Action Replay V4/V5 (CRT type 1) state. 32K image, 4 banks of 8K
+    // (ROML only). Bank reg at $DE00: bits 0-3 = bank mod 4, bit 7 = hide.
+    private int _arCartridgeBank;
+    private bool _arHidden;
+
+    // EasyFlash (CRT type 32) state. Up to 1024K image, banked 8K ROML.
+    // Bank reg at $DE00 (bits 0-5 mod bank-count). Flash writes deferred.
+    private int _easyFlashCartridgeBank;
+
+    // Super Snapshot V5 (CRT type 4) state. 64K image = 4 banks of 16K
+    // (ROML+ROMH). Bank reg at $DE00: bits 2-4 = bank, bit 1 = hide.
+    private int _ss5CartridgeBank;
+    private bool _ss5Hidden;
+
+    // RR-Net (CRT type 25) state. 64K image = 4 banks of 16K (ROML+ROMH).
+    // Bank reg at $DE00: bits 0-3 = bank mod 4, bit 7 = hide. The $DE00-
+    // $DE0F Ethernet register window is stubbed.
+    private int _rrNetCartridgeBank;
+    private bool _rrNetHidden;
     private int _vicPhi1Bank;
     private byte _lastCpuBusValue = 0xFF;
     private bool _loadingRoms;
@@ -170,6 +202,30 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             _magicDeskCartridgeBank = 0;
             _magicDeskDisabled = false;
+        }
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.Ocean)
+            _oceanCartridgeBank = 0;
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.FinalCartridgeIII)
+        {
+            _fc3CartridgeBank = 0;
+            _fc3Hidden = false;
+        }
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.ActionReplay)
+        {
+            _arCartridgeBank = 0;
+            _arHidden = false;
+        }
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.EasyFlash)
+            _easyFlashCartridgeBank = 0;
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.SuperSnapshotV5)
+        {
+            _ss5CartridgeBank = 0;
+            _ss5Hidden = false;
+        }
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.RRNet)
+        {
+            _rrNetCartridgeBank = 0;
+            _rrNetHidden = false;
         }
 
         // PERF-MEM-001: Rebuild page table so it reflects PLA state after a machine
@@ -407,6 +463,16 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _gameSystemCartridgeBank = 0;
         _magicDeskCartridgeBank = 0;
         _magicDeskDisabled = false;
+        _oceanCartridgeBank = 0;
+        _fc3CartridgeBank = 0;
+        _fc3Hidden = false;
+        _arCartridgeBank = 0;
+        _arHidden = false;
+        _easyFlashCartridgeBank = 0;
+        _ss5CartridgeBank = 0;
+        _ss5Hidden = false;
+        _rrNetCartridgeBank = 0;
+        _rrNetHidden = false;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now active
     }
 
@@ -417,6 +483,16 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _gameSystemCartridgeBank = 0;
         _magicDeskCartridgeBank = 0;
         _magicDeskDisabled = false;
+        _oceanCartridgeBank = 0;
+        _fc3CartridgeBank = 0;
+        _fc3Hidden = false;
+        _arCartridgeBank = 0;
+        _arHidden = false;
+        _easyFlashCartridgeBank = 0;
+        _ss5CartridgeBank = 0;
+        _ss5Hidden = false;
+        _rrNetCartridgeBank = 0;
+        _rrNetHidden = false;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now inactive
     }
 
@@ -729,6 +805,24 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (TryStoreMagicDeskBankRegister(address, value))
             return;
 
+        if (TryStoreOceanBankRegister(address, value))
+            return;
+
+        if (TryStoreFc3BankRegister(address, value))
+            return;
+
+        if (TryStoreActionReplayBankRegister(address, value))
+            return;
+
+        if (TryStoreEasyFlashBankRegister(address, value))
+            return;
+
+        if (TryStoreSuperSnapshotBankRegister(address, value))
+            return;
+
+        if (TryStoreRRNetBankRegister(address, value))
+            return;
+
         if (address < 0xD400)
         {
             _vic.Write(address, value);
@@ -814,6 +908,144 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             : System.Math.Max(1, _cartridgeImage.Length / CartridgeBankSize);
         _magicDeskCartridgeBank = (value & 0x7F) % bankCount;
         if (prevDisabled != _magicDeskDisabled || prevBank != _magicDeskCartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// Ocean (CRT type 5) bank-register store. Writes to $DE00-$DEFF select
+    /// the active 8K ROML bank. The data byte's bits 0-5 are mod bank-count;
+    /// no disable bit (ROML is always mapped while attached). Source: VICE
+    /// src/c64/cart/ocean.c.
+    /// </summary>
+    private bool TryStoreOceanBankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.Ocean ||
+            address is < CartridgeIo1Start or > CartridgeIo1End)
+        {
+            return false;
+        }
+
+        var prev = _oceanCartridgeBank;
+        var bankCount = _cartridgeImage is null
+            ? 1
+            : System.Math.Max(1, _cartridgeImage.Length / CartridgeBankSize);
+        _oceanCartridgeBank = (value & 0x3F) % bankCount;
+        if (prev != _oceanCartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// Final Cartridge III (CRT type 60) bank-register store at $DFFF.
+    /// Data bits 0-1 = bank index (mod 4), bit 7 = hide (release ROML+ROMH).
+    /// Bits 2-6 carry LED/NMI/freeze control and are accepted-but-ignored in
+    /// this slice (left for follow-up FC-III deepening). Source: VICE
+    /// src/c64/cart/finalIII.c.
+    /// </summary>
+    private bool TryStoreFc3BankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.FinalCartridgeIII ||
+            address != Fc3BankRegisterAddress)
+        {
+            return false;
+        }
+
+        var prevHidden = _fc3Hidden;
+        var prevBank = _fc3CartridgeBank;
+        _fc3Hidden = (value & 0x80) != 0;
+        _fc3CartridgeBank = value & 0x03;
+        if (prevHidden != _fc3Hidden || prevBank != _fc3CartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// Action Replay V4/V5 (CRT type 1) $DE00 store. Bits 0-3 select bank
+    /// (mod 4); bit 7 hides the cartridge (release ROML). Bits 4-6 = LED /
+    /// EXROM / GAME (deferred). Source: VICE src/c64/cart/actionreplay.c.
+    /// </summary>
+    private bool TryStoreActionReplayBankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.ActionReplay ||
+            address is < CartridgeIo1Start or > CartridgeIo1End)
+        {
+            return false;
+        }
+
+        var prevHidden = _arHidden;
+        var prevBank = _arCartridgeBank;
+        _arHidden = (value & 0x80) != 0;
+        _arCartridgeBank = value & 0x03;
+        if (prevHidden != _arHidden || prevBank != _arCartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// EasyFlash (CRT type 32) $DE00 bank-select. Bits 0-5 = bank mod
+    /// bank-count. The $DE02 control register and flash writes are
+    /// deferred to a follow-up EasyFlash slice.
+    /// </summary>
+    private bool TryStoreEasyFlashBankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.EasyFlash ||
+            address != CartridgeIo1Start)
+        {
+            return false;
+        }
+
+        var prev = _easyFlashCartridgeBank;
+        var bankCount = _cartridgeImage is null
+            ? 1
+            : System.Math.Max(1, _cartridgeImage.Length / CartridgeBankSize);
+        _easyFlashCartridgeBank = (value & 0x3F) % bankCount;
+        if (prev != _easyFlashCartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// Super Snapshot V5 (CRT type 4) $DE00 store. Bits 2-4 select bank
+    /// (mod 4); bit 1 hides the cartridge. Source: VICE src/c64/cart/
+    /// supersnapshot.c. Freeze button deferred.
+    /// </summary>
+    private bool TryStoreSuperSnapshotBankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.SuperSnapshotV5 ||
+            address is < CartridgeIo1Start or > CartridgeIo1End)
+        {
+            return false;
+        }
+
+        var prevHidden = _ss5Hidden;
+        var prevBank = _ss5CartridgeBank;
+        _ss5Hidden = (value & 0x02) != 0;
+        _ss5CartridgeBank = (value >> 2) & 0x03;
+        if (prevHidden != _ss5Hidden || prevBank != _ss5CartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// RR-Net (CRT type 25) $DE00 store. Bits 0-3 select 16K bank (mod 4),
+    /// bit 7 hides. The Ethernet I/O register window at $DE00-$DE0F is
+    /// stubbed (writes here still update the bank register but Ethernet
+    /// behaviour is not modelled). Source: VICE src/c64/cart/retroreplay.c.
+    /// </summary>
+    private bool TryStoreRRNetBankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.RRNet ||
+            address is < CartridgeIo1Start or > CartridgeIo1End)
+        {
+            return false;
+        }
+
+        var prevHidden = _rrNetHidden;
+        var prevBank = _rrNetCartridgeBank;
+        _rrNetHidden = (value & 0x80) != 0;
+        _rrNetCartridgeBank = value & 0x03;
+        if (prevHidden != _rrNetHidden || prevBank != _rrNetCartridgeBank)
             RebuildReadPageTable();
         return true;
     }
@@ -924,6 +1156,29 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 imageLength > 0 &&
                 imageLength % CartridgeBankSize == 0 &&
                 imageLength / CartridgeBankSize is >= 4 and <= 64,
+            // Ocean accepts the same bank-multiple shapes (4..64 banks of 8K).
+            CartridgeMappingMode.Ocean =>
+                imageLength > 0 &&
+                imageLength % CartridgeBankSize == 0 &&
+                imageLength / CartridgeBankSize is >= 4 and <= 64,
+            // FC-III ships as a fixed 64K image (4 banks of 16K).
+            CartridgeMappingMode.FinalCartridgeIII =>
+                imageLength == CartridgeBankSize * 8,  // 4 banks * 16K = 64K
+            // Action Replay ships as a fixed 32K image (4 banks of 8K).
+            CartridgeMappingMode.ActionReplay =>
+                imageLength == CartridgeBankSize * 4,
+            // EasyFlash up to 1024K (128 banks of 8K); require at least 64K
+            // (8 banks) since smaller images are unusual for EasyFlash.
+            CartridgeMappingMode.EasyFlash =>
+                imageLength > 0 &&
+                imageLength % CartridgeBankSize == 0 &&
+                imageLength / CartridgeBankSize is >= 8 and <= 128,
+            // Super Snapshot V5 = fixed 64K (4 banks of 16K).
+            CartridgeMappingMode.SuperSnapshotV5 =>
+                imageLength == CartridgeBankSize * 8,
+            // RR-Net base ships as 64K (4 banks of 16K).
+            CartridgeMappingMode.RRNet =>
+                imageLength == CartridgeBankSize * 8,
             _ => false
         };
 
@@ -953,6 +1208,23 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                     => (_gameSystemCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
                 CartridgeMappingMode.MagicDesk
                     => (_magicDeskCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                CartridgeMappingMode.Ocean
+                    => (_oceanCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                // FC-III: 16K banks (ROML+ROMH); ROML lives at offset (bank * 16K).
+                CartridgeMappingMode.FinalCartridgeIII
+                    => (_fc3CartridgeBank * CartridgeBankSize * 2) + address - CartridgeRomLowStart,
+                // Action Replay: 8K ROML banks.
+                CartridgeMappingMode.ActionReplay
+                    => (_arCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                // EasyFlash: 8K ROML banks.
+                CartridgeMappingMode.EasyFlash
+                    => (_easyFlashCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                // Super Snapshot V5: 16K banks (ROML+ROMH); ROML at (bank * 16K).
+                CartridgeMappingMode.SuperSnapshotV5
+                    => (_ss5CartridgeBank * CartridgeBankSize * 2) + address - CartridgeRomLowStart,
+                // RR-Net: 16K banks (ROML+ROMH); ROML at (bank * 16K).
+                CartridgeMappingMode.RRNet
+                    => (_rrNetCartridgeBank * CartridgeBankSize * 2) + address - CartridgeRomLowStart,
                 _ => address - CartridgeRomLowStart,
             };
             return true;
@@ -965,6 +1237,43 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 return false;
 
             offset = CartridgeBankSize + address - CartridgeStandardRomHighStart;
+            return true;
+        }
+
+        if (mappingMode == CartridgeMappingMode.FinalCartridgeIII &&
+            address is >= CartridgeStandardRomHighStart and <= CartridgeStandardRomHighEnd)
+        {
+            if (!IsRomHighVisible(mappingMode))
+                return false;
+
+            // FC-III ROMH offset = (bank * 16K) + 8K + (address - $A000).
+            offset = (_fc3CartridgeBank * CartridgeBankSize * 2)
+                   + CartridgeBankSize
+                   + address - CartridgeStandardRomHighStart;
+            return true;
+        }
+
+        if (mappingMode == CartridgeMappingMode.SuperSnapshotV5 &&
+            address is >= CartridgeStandardRomHighStart and <= CartridgeStandardRomHighEnd)
+        {
+            if (!IsRomHighVisible(mappingMode))
+                return false;
+
+            offset = (_ss5CartridgeBank * CartridgeBankSize * 2)
+                   + CartridgeBankSize
+                   + address - CartridgeStandardRomHighStart;
+            return true;
+        }
+
+        if (mappingMode == CartridgeMappingMode.RRNet &&
+            address is >= CartridgeStandardRomHighStart and <= CartridgeStandardRomHighEnd)
+        {
+            if (!IsRomHighVisible(mappingMode))
+                return false;
+
+            offset = (_rrNetCartridgeBank * CartridgeBankSize * 2)
+                   + CartridgeBankSize
+                   + address - CartridgeStandardRomHighStart;
             return true;
         }
 
@@ -988,6 +1297,18 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 => _pla.Loram && _pla.Hiram,
             CartridgeMappingMode.MagicDesk
                 => _pla.Loram && _pla.Hiram && !_magicDeskDisabled,
+            CartridgeMappingMode.Ocean
+                => _pla.Loram && _pla.Hiram,
+            CartridgeMappingMode.FinalCartridgeIII
+                => _pla.Loram && _pla.Hiram && !_fc3Hidden,
+            CartridgeMappingMode.ActionReplay
+                => _pla.Loram && _pla.Hiram && !_arHidden,
+            CartridgeMappingMode.EasyFlash
+                => _pla.Loram && _pla.Hiram,
+            CartridgeMappingMode.SuperSnapshotV5
+                => _pla.Loram && _pla.Hiram && !_ss5Hidden,
+            CartridgeMappingMode.RRNet
+                => _pla.Loram && _pla.Hiram && !_rrNetHidden,
             _ => false
         };
     }
@@ -998,6 +1319,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             CartridgeMappingMode.Ultimax => true,
             CartridgeMappingMode.Standard16K => _pla.Hiram,
+            CartridgeMappingMode.FinalCartridgeIII => _pla.Hiram && !_fc3Hidden,
+            CartridgeMappingMode.SuperSnapshotV5 => _pla.Hiram && !_ss5Hidden,
+            CartridgeMappingMode.RRNet => _pla.Hiram && !_rrNetHidden,
             _ => false
         };
     }

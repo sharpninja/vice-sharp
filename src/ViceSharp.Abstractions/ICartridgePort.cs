@@ -54,5 +54,53 @@ public enum CartridgeMappingMode
     /// split into 8K ROML banks. Writes to $DE00 select bank: data bits 0-6
     /// = bank index, bit 7 = cart-disable (releases ROML when high).
     /// </summary>
-    MagicDesk = 5
+    MagicDesk = 5,
+
+    /// <summary>
+    /// Ocean (CRT type 5). 32K to 512K image split into 8K ROML banks.
+    /// Writes to $DE00 take bits 0-5 (mod bank-count) as the bank index.
+    /// No disable bit; ROML is always mapped while attached.
+    /// </summary>
+    Ocean = 6,
+
+    /// <summary>
+    /// Final Cartridge III (CRT type 60). 64K image split into 4 banks of
+    /// 16K each (ROML + ROMH). The bank register lives at $DFFF: bits 0-1
+    /// select bank, bit 7 = hide (releases ROML and ROMH). Standard 16K
+    /// mapping is assumed (no Ultimax flip).
+    /// </summary>
+    FinalCartridgeIII = 7,
+
+    /// <summary>
+    /// Action Replay V4/V5 (CRT type 1). 32K image = 4 banks of 8K. Bank
+    /// register at $DE00: bits 0-3 = bank (mod 4), bit 7 = hide (release
+    /// ROML). Bits 4-6 are reserved (LED + control). This slice implements
+    /// the minimum-viable mapper (bank + hide); freeze ROM and EXROM/GAME
+    /// pin manipulation are deferred to a follow-up Action Replay slice.
+    /// </summary>
+    ActionReplay = 8,
+
+    /// <summary>
+    /// EasyFlash (CRT type 32). Up to 1024K of flash split into 8K ROML
+    /// banks. Bank register at $DE00 (bits 0-5 = bank, mod bank-count);
+    /// control register at $DE02 (bits 0-2 = mode). This slice implements
+    /// only bank switching; flash write emulation is deferred.
+    /// </summary>
+    EasyFlash = 9,
+
+    /// <summary>
+    /// Super Snapshot V5 (CRT type 4). 64K image = 4 banks of 16K (ROML +
+    /// ROMH). Bank register at $DE00 (bits 2-4 = bank, mod 4); bit 1 = hide.
+    /// This slice implements bank + hide; freeze button is deferred.
+    /// </summary>
+    SuperSnapshotV5 = 10,
+
+    /// <summary>
+    /// RR-Net (CRT type 25). 64K image = 4 banks of 16K (ROML + ROMH) plus
+    /// an Ethernet I/O register window at $DE00-$DE0F. Bank register at
+    /// $DE00 mirrors Action Replay (bits 0-3 = bank, bit 7 = hide). This
+    /// slice implements bank + hide; the Ethernet register window is
+    /// stubbed (reads as $FF, writes are ignored).
+    /// </summary>
+    RRNet = 11
 }
