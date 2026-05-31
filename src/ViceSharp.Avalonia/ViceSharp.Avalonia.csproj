@@ -6,6 +6,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--
+      PLATFORM-CROSS-001: This desktop exe is also referenced by the iOS /
+      Android host shells for the shared App/MainWindow types. Without this
+      flag the mobile (self-contained) heads fail with NETSDK1150 because
+      this project is non self-contained. Suppressing the executable check
+      keeps the desktop run path intact while allowing the mobile shells
+      to compile.
+    -->
+    <ShouldBeValidatedAsExecutableReference>false</ShouldBeValidatedAsExecutableReference>
   </PropertyGroup>
 
   <ItemGroup>

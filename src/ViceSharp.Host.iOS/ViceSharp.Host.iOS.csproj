@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    PLATFORM-CROSS-001 iOS host shell.
+
+    Defaults to net10.0-ios when the iOS workload is installed. Actually
+    producing an .ipa requires a paired Mac (Apple's toolchain), but the
+    msbuild step still succeeds on Windows: the workload provides the
+    targets and a stub link step. If the workload is missing, set
+    /p:ViceSharpHostIosFallback=true to fall back to net10.0 so the
+    solution stays buildable. See README.md for details.
+  -->
+  <PropertyGroup>
+    <TargetFramework Condition="'$(ViceSharpHostIosFallback)' != 'true'">net10.0-ios</TargetFramework>
+    <TargetFramework Condition="'$(ViceSharpHostIosFallback)' == 'true'">net10.0</TargetFramework>
+    <SupportedOSPlatformVersion Condition="'$(ViceSharpHostIosFallback)' != 'true'">13.0</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <ApplicationId>org.vicesharp.host.ios</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>0.1</ApplicationDisplayVersion>
+
+    <IsAotCompatible>false</IsAotCompatible>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(ViceSharpHostIosFallback)' != 'true'">
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.iOS" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ViceSharpHostIosFallback)' == 'true'">
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj"
+                      GlobalPropertiesToRemove="RuntimeIdentifier;SelfContained" />
+  </ItemGroup>
+</Project>

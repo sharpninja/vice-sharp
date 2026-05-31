@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    PLATFORM-CROSS-001 Android host shell.
+
+    Defaults to net10.0-android so the workload bootstraps the full Mono / Java
+    toolchain. If the Android workload is missing on the build host, set
+    /p:ViceSharpHostAndroidFallback=true (or define the property in the
+    environment) to fall back to net10.0 and build a plain desktop assembly
+    that still compiles solution-wide. See README.md for details.
+  -->
+  <PropertyGroup>
+    <TargetFramework Condition="'$(ViceSharpHostAndroidFallback)' != 'true'">net10.0-android</TargetFramework>
+    <TargetFramework Condition="'$(ViceSharpHostAndroidFallback)' == 'true'">net10.0</TargetFramework>
+    <SupportedOSPlatformVersion Condition="'$(ViceSharpHostAndroidFallback)' != 'true'">23</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <ApplicationId>org.vicesharp.host.android</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>0.1</ApplicationDisplayVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+
+    <!-- Avalonia mobile packages are not AOT- / trim-clean today and the root
+         Directory.Build.props enables both analyzers and treats warnings as
+         errors. Disable those for this scaffold so the project remains
+         buildable everywhere; tighten before shipping to a store. -->
+    <IsAotCompatible>false</IsAotCompatible>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);XA4218;XA4301;NU1903;NETSDK1206</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(ViceSharpHostAndroidFallback)' != 'true'">
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Android" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ViceSharpHostAndroidFallback)' == 'true'">
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj"
+                      GlobalPropertiesToRemove="RuntimeIdentifier;SelfContained" />
+  </ItemGroup>
+</Project>
