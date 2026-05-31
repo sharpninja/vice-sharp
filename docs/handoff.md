@@ -22,7 +22,7 @@
 
 ```
 dotnet test ViceSharp.slnx --nologo
-Passed: 1641 / Skipped: 2 / Failed: 0
+Passed: 1702 / Skipped: 2 / Failed: 0 (post-marathon; baseline before marathon was 1641)
 ```
 
 Skipped: two ROM-gated process-smoke tests (gated on Console.exe + ROMs absent on this machine; not a Phase 1 blocker).
