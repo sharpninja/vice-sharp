@@ -139,8 +139,11 @@ public partial class MainWindow : Window
             return;
         }
 
+        // Narrower sidebar default (240 vs 300 prior). The slot panels reflow
+        // into compact horizontal layouts at this width; the splitter still
+        // lets the user widen the sidebar when needed.
         if (_attachViewModel.DockSide == AttachDockSide.Left)
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(300, GridUnitType.Pixel));
+            _layout.ColumnDefinitions.Add(new ColumnDefinition(240, GridUnitType.Pixel));
         else
             _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
 
@@ -149,7 +152,7 @@ public partial class MainWindow : Window
         if (_attachViewModel.DockSide == AttachDockSide.Left)
             _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
         else
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(300, GridUnitType.Pixel));
+            _layout.ColumnDefinitions.Add(new ColumnDefinition(240, GridUnitType.Pixel));
 
         var splitter = new GridSplitter
         {

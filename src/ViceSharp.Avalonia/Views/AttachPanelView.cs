@@ -37,8 +37,12 @@ public sealed class AttachPanelView : UserControl
     {
         var root = new DockPanel
         {
-            MinWidth = 260,
-            MaxWidth = 360,
+            // MinWidth + MaxWidth previously clamped the sidebar to 260..360;
+            // the new compact slot layout works as low as ~210 and the host
+            // grid lets the user drag wider via the splitter, so loosen the
+            // bounds so horizontal space tracks the host column.
+            MinWidth = 210,
+            MaxWidth = 480,
             Background = new SolidColorBrush(Color.FromRgb(31, 34, 39))
         };
 
@@ -180,7 +184,8 @@ public sealed class AttachPanelView : UserControl
         {
             ItemsSource = ViewModel.KeyboardMaps,
             SelectedItem = ViewModel.SelectedKeyboardMap,
-            MinHeight = 30,
+            MinHeight = 28,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
             ItemTemplate = new FuncDataTemplate<KeyboardMapDto>((map, _) => new TextBlock
             {
                 Text = map?.DisplayName ?? string.Empty
@@ -212,7 +217,10 @@ public sealed class AttachPanelView : UserControl
         var custom = new Button
         {
             Content = "Custom VKM",
-            Padding = new Thickness(9, 5)
+            Padding = new Thickness(7, 4),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            FontSize = 12
         };
         custom.Click += async (_, _) => await SelectCustomKeyboardMapAsync().ConfigureAwait(true);
         stack.Children.Add(custom);
@@ -672,35 +680,62 @@ public sealed class AttachPanelView : UserControl
             BorderBrush = SlotBorderBrush,
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(6),
-            Padding = SlotPadding,
+            Padding = new Thickness(7, 6),
             Background = new SolidColorBrush(Color.FromRgb(39, 43, 49))
         };
 
-        var stack = new StackPanel { Spacing = 7 };
+        var stack = new StackPanel { Spacing = 5 };
         panel.Child = stack;
 
-        var titleRow = new DockPanel();
-        titleRow.Children.Add(new TextBlock
+        // Compact title row: slot name | media kind chip | read-only checkbox
+        // on the far right. Read-only used to be its own row; folding it into
+        // the header reclaims a row of vertical space and uses the otherwise
+        // empty horizontal expanse to the right of the title.
+        var titleRow = new Grid();
+        titleRow.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+        titleRow.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+        titleRow.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+
+        var title = new TextBlock
         {
             Text = slot.Title,
-            FontSize = 14,
-            FontWeight = FontWeight.SemiBold
-        });
+            FontSize = 13,
+            FontWeight = FontWeight.SemiBold,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        Grid.SetColumn(title, 0);
+        titleRow.Children.Add(title);
+
         var kind = new TextBlock
         {
             Text = slot.MediaKind,
-            FontSize = 12,
+            FontSize = 11,
             Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
-            HorizontalAlignment = HorizontalAlignment.Right
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(6, 0)
         };
-        DockPanel.SetDock(kind, Dock.Right);
+        Grid.SetColumn(kind, 1);
         titleRow.Children.Add(kind);
+
+        var readOnly = new CheckBox
+        {
+            Content = "RO",
+            FontSize = 11,
+            MinHeight = 20,
+            Padding = new Thickness(3, 0, 0, 0),
+            IsChecked = slot.IsReadOnly
+        };
+        ToolTip.SetTip(readOnly, "Read only");
+        Grid.SetColumn(readOnly, 2);
+        titleRow.Children.Add(readOnly);
+
         stack.Children.Add(titleRow);
 
         var status = new TextBlock
         {
             Text = slot.StatusText,
-            FontSize = 12,
+            FontSize = 11,
             TextWrapping = TextWrapping.Wrap
         };
         stack.Children.Add(status);
@@ -708,18 +743,12 @@ public sealed class AttachPanelView : UserControl
         var error = new TextBlock
         {
             Text = slot.ValidationError,
-            FontSize = 12,
+            FontSize = 11,
             Foreground = ErrorBrush,
             TextWrapping = TextWrapping.Wrap
         };
         stack.Children.Add(error);
 
-        var readOnly = new CheckBox
-        {
-            Content = "Read only",
-            FontSize = 12,
-            IsChecked = slot.IsReadOnly
-        };
         readOnly.Click += (_, _) => slot.IsReadOnly = readOnly.IsChecked == true;
         slot.PropertyChanged += (_, args) =>
         {
@@ -730,28 +759,42 @@ public sealed class AttachPanelView : UserControl
             else if (args.PropertyName == nameof(AttachSlotViewModel.IsReadOnly))
                 readOnly.IsChecked = slot.IsReadOnly;
         };
-        stack.Children.Add(readOnly);
 
-        var buttons = new StackPanel
+        // Buttons row uses a Grid with equal star columns so the Attach +
+        // Eject buttons stretch to fill the full slot width instead of
+        // floating left with empty space on the right.
+        var buttons = new Grid
         {
-            Orientation = Orientation.Horizontal,
-            Spacing = 6
+            ColumnDefinitions =
+            {
+                new ColumnDefinition(GridLength.Star),
+                new ColumnDefinition(new GridLength(4, GridUnitType.Pixel)),
+                new ColumnDefinition(GridLength.Star)
+            }
         };
 
         var attach = new Button
         {
             Content = "Attach",
-            Padding = new Thickness(9, 5)
+            Padding = new Thickness(7, 4),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            FontSize = 12
         };
         attach.Click += async (_, _) => await AttachFromPickerAsync(slot).ConfigureAwait(true);
+        Grid.SetColumn(attach, 0);
         buttons.Children.Add(attach);
 
         var eject = new Button
         {
             Content = "Eject",
-            Padding = new Thickness(9, 5)
+            Padding = new Thickness(7, 4),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            FontSize = 12
         };
         eject.Click += async (_, _) => await ViewModel.EjectAsync(slot).ConfigureAwait(true);
+        Grid.SetColumn(eject, 2);
         buttons.Children.Add(eject);
 
         stack.Children.Add(buttons);
@@ -760,8 +803,9 @@ public sealed class AttachPanelView : UserControl
         {
             PlaceholderText = "Recent",
             ItemsSource = slot.RecentFiles,
-            FontSize = 12,
-            MinHeight = 28
+            FontSize = 11,
+            MinHeight = 24,
+            HorizontalAlignment = HorizontalAlignment.Stretch
         };
         recent.SelectionChanged += async (_, _) =>
         {
