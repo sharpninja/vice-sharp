@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    PLATFORM-CROSS-001 macOS host shell.
+
+    Targets net10.0 (cross-platform Avalonia desktop entrypoint) so the
+    project builds on Windows / Linux CI even when the .NET macOS workload
+    is not provisioned. On a macOS build host with the `macos` workload,
+    bundling/codesigning is driven by the Info.plist + RuntimeIdentifier;
+    rebuild with `-r osx-arm64` (or `osx-x64`) for an .app bundle.
+
+    We reuse ViceSharp.Avalonia's App + MainWindow + view-models rather
+    than duplicating UI; this csproj only provides the macOS entrypoint.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>ViceSharp.Host.MacOS</RootNamespace>
+    <AssemblyName>ViceSharp.Host.MacOS</AssemblyName>
+
+    <!--
+      macOS bundle metadata. These properties are honoured by the macOS
+      workload when packaging an .app bundle; on net10.0 (no workload)
+      they are harmless.
+    -->
+    <ApplicationId>com.sharpninja.vicesharp.macos</ApplicationId>
+    <CFBundleIdentifier>com.sharpninja.vicesharp.macos</CFBundleIdentifier>
+    <CFBundleName>ViceSharp</CFBundleName>
+    <CFBundleDisplayName>ViceSharp</CFBundleDisplayName>
+    <CFBundleVersion>1.0.0</CFBundleVersion>
+    <CFBundleShortVersionString>1.0.0</CFBundleShortVersionString>
+    <CFBundleExecutable>ViceSharp.Host.MacOS</CFBundleExecutable>
+
+    <!--
+      Phase 1 closeout note: trim analyzer warnings from Avalonia's
+      reflection-based markup loader bubble up here; turn off
+      trim warnings-as-errors for this shell to avoid blocking the
+      cross-build until trim attribution lands in upstream Avalonia.
+    -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj" />
+    <ProjectReference Include="..\ViceSharp.Host\ViceSharp.Host.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Info.plist">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="README.md" />
+  </ItemGroup>
+
+</Project>
