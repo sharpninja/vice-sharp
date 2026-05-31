@@ -27,7 +27,13 @@
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of $(ProductName) is already installed." />
 
-    <MediaTemplate EmbedCab="yes" />
+    <!--
+      CompressionLevel="high" uses LZX instead of the default mszip; for the
+      Avalonia publish output this cuts the cab by ~20% with a small
+      additional install-time CPU cost. EmbedCab keeps the package as a
+      single .msi (no external .cab).
+    -->
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <StandardDirectory Id="ProgramFiles64Folder">
       <Directory Id="INSTALLFOLDER" Name="ViceSharp" />
@@ -69,8 +75,23 @@
       Auto-harvest every file under the publish output. WiX 5 generates a
       Component per file with hash-based stable IDs and lays out the
       directory structure under INSTALLFOLDER. No Heat invocation needed.
+
+      Exclusions reclaim the bulk of the install size:
+        *.pdb : managed + native debug symbols (libSkiaSharp.pdb alone is
+                84 MB, libHarfBuzzSharp.pdb is 21 MB). End users never
+                attach a debugger from inside Program Files.
+        *.xml : per-assembly XML doc comments. Not useful at runtime.
+        createdump.exe : .NET crash dumper. Optional; we keep crashes to
+                Event Log instead.
+        *.dbg : ELF separate-debug files (rare but harmless to exclude).
     -->
     <ComponentGroup Id="HarvestedFiles" Directory="INSTALLFOLDER">
+      <!--
+        File exclusions (*.pdb, *.xml, createdump.exe, etc.) are applied
+        in Build.cs PublishMsi by deleting them from PublishedRoot AFTER
+        the publish and BEFORE this Files harvest. WiX 5's Files element
+        only supports Include, so the filter has to happen upstream.
+      -->
       <Files Include="$(var.PublishedRoot)\**" />
     </ComponentGroup>
   </Fragment>

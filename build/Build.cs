@@ -159,38 +159,75 @@ sealed partial class Build : NukeBuild
     AbsolutePath WingetOutputDir => ArtifactsDirectory / "winget";
 
     /// <summary>
-    /// Publish the ViceSharp.Avalonia desktop GUI (self-contained, win-x64
-    /// by default) and pack the entire publish directory into a per-machine
-    /// MSI via the WixToolset.Sdk wixproj at installer/. The MSI ends up in
-    /// artifacts/installer/ViceSharp.msi with version
-    /// <see cref="MsiVersion"/>. The Avalonia GUI is shipped as a
-    /// self-contained bundle (the Avalonia stack is not AOT-friendly today),
-    /// so the WiX <c>Files</c> harvest pulls all 390+ runtime files into
-    /// Program Files\ViceSharp\.
+    /// Publish the ViceSharp.Avalonia desktop GUI as a NativeAOT,
+    /// self-contained, trimmed, single-file Windows binary, then pack it
+    /// into a per-machine MSI via the WixToolset.Sdk wixproj at
+    /// installer/. The MSI lands at artifacts/installer/ViceSharp.msi
+    /// with version <see cref="MsiVersion"/>. AOT publish collapses the
+    /// previously-needed 391-file publish tree down to one native exe
+    /// plus a handful of native dependencies (Skia, HarfBuzz, ANGLE),
+    /// so the MSI is a fraction of the non-AOT footprint.
     /// </summary>
     Target PublishMsi => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
-            // Step 1: self-contained publish of ViceSharp.Avalonia.
-            // Avalonia + the in-proc gRPC host transitively reference paths
-            // that the AOT trim analyzer cannot statically resolve, so this
-            // is a normal (non-AOT) self-contained publish.
-            Serilog.Log.Information("Publishing ViceSharp.Avalonia (self-contained, {Rid}) -> {Out}",
+            // Step 1: AOT + trimmed + self-contained publish of
+            // ViceSharp.Avalonia. PublishAot=true implies PublishTrimmed
+            // (full trim) and produces a single native exe; the only
+            // sibling files are the unmanaged native libraries Avalonia
+            // calls into (libSkiaSharp, libHarfBuzzSharp, av_libglesv2,
+            // aspnetcorev2_inprocess) which cannot be inlined.
+            Serilog.Log.Information("Publishing ViceSharp.Avalonia (AOT + trimmed + self-contained, {Rid}) -> {Out}",
                 MsiRuntimeIdentifier, AvaloniaPublishDir);
             DotNetPublish(s => s
                 .SetProject(AvaloniaProject)
                 .SetConfiguration("Release")
                 .SetRuntime(MsiRuntimeIdentifier)
                 .SetSelfContained(true)
-                .SetProperty("PublishAot", "false")
+                .SetProperty("PublishAot", "true")
+                .SetProperty("PublishTrimmed", "true")
+                .SetProperty("TrimMode", "full")
+                // PublishSingleFile is mutually exclusive with PublishAot
+                // (AOT already produces a single native exe; setting both
+                // triggers NETSDK1191). Leave SingleFile off.
                 .SetProperty("PublishSingleFile", "false")
-                .SetProperty("PublishReadyToRun", "true"));
+                // Strip managed PDBs / XML doc files at publish time; the
+                // native libSkiaSharp.pdb and libHarfBuzzSharp.pdb that
+                // come from the SkiaSharp / HarfBuzz NuGet packages are
+                // pruned in step 1b below.
+                .SetProperty("DebugType", "none")
+                .SetProperty("DebugSymbols", "false")
+                .SetProperty("DocumentationFile", string.Empty)
+                .SetProperty("GenerateDocumentationFile", "false")
+                .SetProperty("CopyDocumentationFilesFromPackages", "false"));
 
             var exePath = AvaloniaPublishDir / "ViceSharp.Avalonia.exe";
             if (!exePath.FileExists())
                 throw new InvalidOperationException(
                     $"Expected Avalonia entry exe at {exePath} but it was not produced. PublishMsi cannot continue.");
+
+            // Step 1b: prune oversized files we don't want in the MSI.
+            // WiX 5's <Files Include="**"> harvest is all-or-nothing per
+            // glob, so apply the exclusion here. The native PDBs are the
+            // big ticket items (libSkiaSharp.pdb ~84 MB,
+            // libHarfBuzzSharp.pdb ~21 MB) and end users never attach a
+            // debugger from Program Files.
+            string[] excludeGlobs = ["**/*.pdb", "**/*.xml", "**/*.dbg", "**/createdump.exe"];
+            long deletedBytes = 0;
+            int deletedCount = 0;
+            foreach (var glob in excludeGlobs)
+            {
+                foreach (var f in AvaloniaPublishDir.GlobFiles(glob))
+                {
+                    var size = new System.IO.FileInfo(f).Length;
+                    f.DeleteFile();
+                    deletedBytes += size;
+                    deletedCount++;
+                }
+            }
+            Serilog.Log.Information("Pruned {Count} debug/doc files from publish dir ({Bytes:N0} bytes / {Mb:F1} MB)",
+                deletedCount, deletedBytes, deletedBytes / 1024.0 / 1024.0);
 
             // Step 2: build the WiX installer project.
             InstallerOutputDir.CreateOrCleanDirectory();
