@@ -1,8 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using ViceSharp.Abstractions;
 using YamlDotNet.Core;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.RepresentationModel;
 
 namespace ViceSharp.Architectures.Multisystem;
 
@@ -13,28 +11,16 @@ namespace ViceSharp.Architectures.Multisystem;
 /// <c>coordinator:</c> key triggers multi-system mode.
 /// </summary>
 /// <remarks>
-/// Uses YamlDotNet's reflection-based deserializer; callers using NativeAOT
-/// must invoke this loader only from non-AOT code paths.
+/// Uses YamlDotNet's low-level <see cref="YamlStream"/> representation
+/// model with manual field binding. The reflection-emit IDeserializer path
+/// is intentionally avoided so this loader stays NativeAOT and trim-safe.
 /// </remarks>
-[RequiresDynamicCode(LoaderRequiresDynamicCode)]
-[RequiresUnreferencedCode(LoaderRequiresUnreferencedCode)]
 public sealed class MultiSystemYamlLoader
 {
-    internal const string LoaderRequiresDynamicCode =
-        "YamlDotNet's default deserializer uses reflection emit, which is incompatible with NativeAOT.";
-    internal const string LoaderRequiresUnreferencedCode =
-        "YamlDotNet's default deserializer uses runtime type discovery, which is incompatible with trimming.";
-
     private const int SupportedSchemaVersion = 1;
-
-    private readonly IDeserializer _deserializer;
 
     public MultiSystemYamlLoader()
     {
-        _deserializer = new DeserializerBuilder()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-            .IgnoreUnmatchedProperties()
-            .Build();
     }
 
     /// <summary>True when the YAML at <paramref name="path"/> declares a coordinator section.</summary>
@@ -81,8 +67,18 @@ public sealed class MultiSystemYamlLoader
         MultiSystemDocument doc;
         try
         {
-            doc = _deserializer.Deserialize<MultiSystemDocument>(yaml)
-                ?? throw new MultiSystemValidationException("yaml document is empty or not a mapping.");
+            var stream = new YamlStream();
+            stream.Load(new StringReader(yaml));
+            if (stream.Documents.Count == 0)
+            {
+                throw new MultiSystemValidationException("yaml document is empty or not a mapping.");
+            }
+            var root = stream.Documents[0].RootNode;
+            if (root is not YamlMappingNode rootMap)
+            {
+                throw new MultiSystemValidationException("yaml document root must be a mapping.");
+            }
+            doc = BindDocument(rootMap);
         }
         catch (YamlException ex)
         {
@@ -91,6 +87,215 @@ public sealed class MultiSystemYamlLoader
 
         return Validate(doc, basePath);
     }
+
+    // ---- Binding helpers (low-level YamlStream -> DTO) ----
+
+    private static MultiSystemDocument BindDocument(YamlMappingNode root)
+    {
+        var doc = new MultiSystemDocument();
+        foreach (var (key, value) in EnumerateMapping(root))
+        {
+            switch (key)
+            {
+                case "schemaVersion":
+                    doc.SchemaVersion = ParseInt(value);
+                    break;
+                case "coordinator":
+                    doc.Coordinator = BindCoordinator(RequireMapping(value, "coordinator"));
+                    break;
+            }
+        }
+        return doc;
+    }
+
+    private static MultiSystemSection BindCoordinator(YamlMappingNode map)
+    {
+        var section = new MultiSystemSection();
+        foreach (var (key, value) in EnumerateMapping(map))
+        {
+            switch (key)
+            {
+                case "host":
+                    section.Host = BindMachineSpec(RequireMapping(value, "coordinator.host"));
+                    break;
+                case "peripherals":
+                    section.Peripherals = BindPeripheralList(RequireSequence(value, "coordinator.peripherals"));
+                    break;
+                case "cartExtensions":
+                    section.CartExtensions = BindCartExtensionList(RequireSequence(value, "coordinator.cartExtensions"));
+                    break;
+                case "buses":
+                    section.Buses = BindBusList(RequireSequence(value, "coordinator.buses"));
+                    break;
+            }
+        }
+        return section;
+    }
+
+    private static MultiSystemMachineSpec BindMachineSpec(YamlMappingNode map)
+    {
+        var spec = new MultiSystemMachineSpec();
+        foreach (var (key, value) in EnumerateMapping(map))
+        {
+            switch (key)
+            {
+                case "id": spec.Id = ParseString(value); break;
+                case "kind": spec.Kind = ParseString(value); break;
+                case "yamlPath": spec.YamlPath = ParseString(value); break;
+                case "yamlInline": spec.YamlInline = ParseString(value); break;
+                case "busAttachments":
+                    spec.BusAttachments = BindAttachmentList(RequireSequence(value, "busAttachments"));
+                    break;
+            }
+        }
+        return spec;
+    }
+
+    private static List<MultiSystemPeripheralSpec> BindPeripheralList(YamlSequenceNode seq)
+    {
+        var list = new List<MultiSystemPeripheralSpec>();
+        foreach (var node in seq)
+        {
+            var m = RequireMapping(node, "coordinator.peripherals[]");
+            var spec = new MultiSystemPeripheralSpec();
+            foreach (var (key, value) in EnumerateMapping(m))
+            {
+                switch (key)
+                {
+                    case "id": spec.Id = ParseString(value); break;
+                    case "role": spec.Role = ParseString(value); break;
+                    case "fidelity": spec.Fidelity = ParseString(value); break;
+                    case "kind": spec.Kind = ParseString(value); break;
+                    case "deviceNumber": spec.DeviceNumber = ParseInt(value); break;
+                    case "diskImagePath": spec.DiskImagePath = ParseString(value); break;
+                    case "yamlPath": spec.YamlPath = ParseString(value); break;
+                    case "yamlInline": spec.YamlInline = ParseString(value); break;
+                    case "busAttachments":
+                        spec.BusAttachments = BindAttachmentList(RequireSequence(value, "peripherals[].busAttachments"));
+                        break;
+                }
+            }
+            list.Add(spec);
+        }
+        return list;
+    }
+
+    private static List<MultiSystemCartExtensionSpec> BindCartExtensionList(YamlSequenceNode seq)
+    {
+        var list = new List<MultiSystemCartExtensionSpec>();
+        foreach (var node in seq)
+        {
+            var m = RequireMapping(node, "coordinator.cartExtensions[]");
+            var spec = new MultiSystemCartExtensionSpec();
+            foreach (var (key, value) in EnumerateMapping(m))
+            {
+                switch (key)
+                {
+                    case "id": spec.Id = ParseString(value); break;
+                    case "fidelity": spec.Fidelity = ParseString(value); break;
+                    case "yamlPath": spec.YamlPath = ParseString(value); break;
+                    case "yamlInline": spec.YamlInline = ParseString(value); break;
+                    case "busAttachments":
+                        spec.BusAttachments = BindAttachmentList(RequireSequence(value, "cartExtensions[].busAttachments"));
+                        break;
+                }
+            }
+            list.Add(spec);
+        }
+        return list;
+    }
+
+    private static List<MultiSystemBusSpec> BindBusList(YamlSequenceNode seq)
+    {
+        var list = new List<MultiSystemBusSpec>();
+        foreach (var node in seq)
+        {
+            var m = RequireMapping(node, "coordinator.buses[]");
+            var bus = new MultiSystemBusSpec();
+            foreach (var (key, value) in EnumerateMapping(m))
+            {
+                switch (key)
+                {
+                    case "id": bus.Id = ParseString(value); break;
+                    case "signals":
+                        bus.Signals = BindStringList(RequireSequence(value, "buses[].signals"));
+                        break;
+                }
+            }
+            list.Add(bus);
+        }
+        return list;
+    }
+
+    private static List<MultiSystemBusAttachment> BindAttachmentList(YamlSequenceNode seq)
+    {
+        var list = new List<MultiSystemBusAttachment>();
+        foreach (var node in seq)
+        {
+            var m = RequireMapping(node, "busAttachments[]");
+            var att = new MultiSystemBusAttachment();
+            foreach (var (key, value) in EnumerateMapping(m))
+            {
+                switch (key)
+                {
+                    case "busId": att.BusId = ParseString(value); break;
+                    case "endpointName": att.EndpointName = ParseString(value); break;
+                }
+            }
+            list.Add(att);
+        }
+        return list;
+    }
+
+    private static List<string> BindStringList(YamlSequenceNode seq)
+    {
+        var list = new List<string>();
+        foreach (var node in seq)
+        {
+            var s = ParseString(node);
+            if (s is not null) list.Add(s);
+        }
+        return list;
+    }
+
+    private static IEnumerable<(string Key, YamlNode Value)> EnumerateMapping(YamlMappingNode map)
+    {
+        foreach (var entry in map.Children)
+        {
+            if (entry.Key is YamlScalarNode keyNode && keyNode.Value is { } keyValue)
+            {
+                yield return (keyValue, entry.Value);
+            }
+        }
+    }
+
+    private static YamlMappingNode RequireMapping(YamlNode node, string path)
+    {
+        return node as YamlMappingNode
+            ?? throw new MultiSystemValidationException($"'{path}' must be a mapping.");
+    }
+
+    private static YamlSequenceNode RequireSequence(YamlNode node, string path)
+    {
+        return node as YamlSequenceNode
+            ?? throw new MultiSystemValidationException($"'{path}' must be a sequence.");
+    }
+
+    private static string? ParseString(YamlNode node)
+    {
+        return node is YamlScalarNode scalar ? scalar.Value : null;
+    }
+
+    private static int? ParseInt(YamlNode node)
+    {
+        var s = ParseString(node);
+        if (string.IsNullOrWhiteSpace(s)) return null;
+        return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var v)
+            ? v
+            : null;
+    }
+
+    // ---- Validation (unchanged) ----
 
     private static MultiSystemBlueprint Validate(MultiSystemDocument doc, string basePath)
     {

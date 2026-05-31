@@ -1,9 +1,7 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using ViceSharp.Abstractions;
 using YamlDotNet.Core;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.RepresentationModel;
 
 namespace ViceSharp.Architectures.Adhoc;
 
@@ -13,30 +11,18 @@ namespace ViceSharp.Architectures.Adhoc;
 /// that can build a runnable <see cref="IMachine"/>.
 /// </summary>
 /// <remarks>
-/// This loader uses YamlDotNet's reflection-based deserializer, so callers
-/// using NativeAOT must invoke <see cref="LoadFromFile"/> and
-/// <see cref="LoadFromString"/> only from non-AOT code paths or supply their
-/// own pre-validated <see cref="AdhocMachineBlueprint"/>.
+/// Uses YamlDotNet's low-level <see cref="YamlStream"/> representation
+/// model with manual field binding so the loader stays NativeAOT and
+/// trim-safe. Earlier revisions used the reflection-emit IDeserializer
+/// which produced IL2104/IL3053 warnings under AOT publish; the
+/// representation-model path avoids reflection-emit entirely.
 /// </remarks>
-[RequiresDynamicCode(LoaderRequiresDynamicCode)]
-[RequiresUnreferencedCode(LoaderRequiresUnreferencedCode)]
 public sealed class AdhocMachineYamlLoader
 {
-    internal const string LoaderRequiresDynamicCode =
-        "YamlDotNet's default deserializer uses reflection emit, which is incompatible with NativeAOT.";
-    internal const string LoaderRequiresUnreferencedCode =
-        "YamlDotNet's default deserializer uses runtime type discovery, which is incompatible with trimming.";
-
     private const int SupportedSchemaVersion = 1;
-
-    private readonly IDeserializer _deserializer;
 
     public AdhocMachineYamlLoader()
     {
-        _deserializer = new DeserializerBuilder()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-            .IgnoreUnmatchedProperties()
-            .Build();
     }
 
     /// <summary>
@@ -65,9 +51,18 @@ public sealed class AdhocMachineYamlLoader
         AdhocMachineDocument doc;
         try
         {
-            doc = _deserializer.Deserialize<AdhocMachineDocument>(yaml)
-                ?? throw new AdhocMachineValidationException(
-                    "yaml document is empty or not a mapping.");
+            var stream = new YamlStream();
+            stream.Load(new StringReader(yaml));
+            if (stream.Documents.Count == 0)
+            {
+                throw new AdhocMachineValidationException("yaml document is empty.");
+            }
+            var root = stream.Documents[0].RootNode;
+            if (root is not YamlMappingNode rootMap)
+            {
+                throw new AdhocMachineValidationException("yaml document root must be a mapping.");
+            }
+            doc = BindDocument(rootMap);
         }
         catch (YamlException ex)
         {
@@ -77,6 +72,219 @@ public sealed class AdhocMachineYamlLoader
 
         return Validate(doc);
     }
+
+    private static AdhocMachineDocument BindDocument(YamlMappingNode root)
+    {
+        var doc = new AdhocMachineDocument();
+        foreach (var (key, value) in EnumerateMapping(root))
+        {
+            switch (key)
+            {
+                case "schemaVersion":
+                    doc.SchemaVersion = ParseInt(value);
+                    break;
+                case "machine":
+                    doc.Machine = BindMachineSection(RequireMapping(value, "machine"));
+                    break;
+                case "memory":
+                    doc.Memory = BindMemorySection(RequireMapping(value, "memory"));
+                    break;
+                case "chips":
+                    doc.Chips = BindChipList(RequireSequence(value, "chips"));
+                    break;
+                case "interruptLines":
+                    doc.InterruptLines = BindInterruptLineList(RequireSequence(value, "interruptLines"));
+                    break;
+                default:
+                    // Ignore unknown top-level keys (matches IgnoreUnmatchedProperties).
+                    break;
+            }
+        }
+        return doc;
+    }
+
+    private static AdhocMachineSection BindMachineSection(YamlMappingNode map)
+    {
+        var section = new AdhocMachineSection();
+        foreach (var (key, value) in EnumerateMapping(map))
+        {
+            switch (key)
+            {
+                case "name":
+                    section.Name = ParseString(value);
+                    break;
+                case "videoStandard":
+                    section.VideoStandard = ParseString(value);
+                    break;
+                case "masterClockHz":
+                    section.MasterClockHz = ParseLong(value);
+                    break;
+                case "resetVector":
+                    section.ResetVector = ParseString(value);
+                    break;
+            }
+        }
+        return section;
+    }
+
+    private static AdhocMemorySection BindMemorySection(YamlMappingNode map)
+    {
+        var section = new AdhocMemorySection();
+        foreach (var (key, value) in EnumerateMapping(map))
+        {
+            if (key == "regions")
+            {
+                section.Regions = new List<AdhocMemoryRegion>();
+                foreach (var item in RequireSequence(value, "memory.regions"))
+                {
+                    section.Regions.Add(BindMemoryRegion(RequireMapping(item, "memory.regions[]")));
+                }
+            }
+        }
+        return section;
+    }
+
+    private static AdhocMemoryRegion BindMemoryRegion(YamlMappingNode map)
+    {
+        var region = new AdhocMemoryRegion();
+        foreach (var (key, value) in EnumerateMapping(map))
+        {
+            switch (key)
+            {
+                case "id":
+                    region.Id = ParseString(value);
+                    break;
+                case "kind":
+                    region.Kind = ParseString(value);
+                    break;
+                case "start":
+                    region.Start = ParseString(value);
+                    break;
+                case "end":
+                    region.End = ParseString(value);
+                    break;
+                case "size":
+                    region.Size = ParseInt(value);
+                    break;
+            }
+        }
+        return region;
+    }
+
+    private static List<AdhocChipDefinition> BindChipList(YamlSequenceNode seq)
+    {
+        var list = new List<AdhocChipDefinition>();
+        foreach (var node in seq)
+        {
+            list.Add(BindChip(RequireMapping(node, "chips[]")));
+        }
+        return list;
+    }
+
+    private static AdhocChipDefinition BindChip(YamlMappingNode map)
+    {
+        var chip = new AdhocChipDefinition();
+        foreach (var (key, value) in EnumerateMapping(map))
+        {
+            switch (key)
+            {
+                case "id":
+                    chip.Id = ParseString(value);
+                    break;
+                case "type":
+                    chip.Type = ParseString(value);
+                    break;
+                case "role":
+                    chip.Role = ParseString(value);
+                    break;
+                case "baseAddress":
+                    chip.BaseAddress = ParseString(value);
+                    break;
+                case "irqLine":
+                    chip.IrqLine = ParseString(value);
+                    break;
+                case "nmiLine":
+                    chip.NmiLine = ParseString(value);
+                    break;
+            }
+        }
+        return chip;
+    }
+
+    private static List<AdhocInterruptLineDefinition> BindInterruptLineList(YamlSequenceNode seq)
+    {
+        var list = new List<AdhocInterruptLineDefinition>();
+        foreach (var node in seq)
+        {
+            var line = new AdhocInterruptLineDefinition();
+            foreach (var (key, value) in EnumerateMapping(RequireMapping(node, "interruptLines[]")))
+            {
+                switch (key)
+                {
+                    case "id":
+                        line.Id = ParseString(value);
+                        break;
+                    case "type":
+                        line.Type = ParseString(value);
+                        break;
+                }
+            }
+            list.Add(line);
+        }
+        return list;
+    }
+
+    // ---- YAML helpers ----
+
+    internal static IEnumerable<(string Key, YamlNode Value)> EnumerateMapping(YamlMappingNode map)
+    {
+        foreach (var entry in map.Children)
+        {
+            var keyNode = entry.Key as YamlScalarNode;
+            if (keyNode is null || keyNode.Value is null) continue;
+            yield return (keyNode.Value, entry.Value);
+        }
+    }
+
+    internal static YamlMappingNode RequireMapping(YamlNode node, string path)
+    {
+        return node as YamlMappingNode
+            ?? throw new AdhocMachineValidationException($"'{path}' must be a mapping.");
+    }
+
+    internal static YamlSequenceNode RequireSequence(YamlNode node, string path)
+    {
+        return node as YamlSequenceNode
+            ?? throw new AdhocMachineValidationException($"'{path}' must be a sequence.");
+    }
+
+    internal static string? ParseString(YamlNode node)
+    {
+        if (node is YamlScalarNode scalar)
+        {
+            // YamlScalarNode.Value is null for null literal; otherwise the raw string.
+            return scalar.Value;
+        }
+        return null;
+    }
+
+    internal static int? ParseInt(YamlNode node)
+    {
+        var s = ParseString(node);
+        if (string.IsNullOrWhiteSpace(s)) return null;
+        if (int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v)) return v;
+        return null;
+    }
+
+    internal static long? ParseLong(YamlNode node)
+    {
+        var s = ParseString(node);
+        if (string.IsNullOrWhiteSpace(s)) return null;
+        if (long.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v)) return v;
+        return null;
+    }
+
+    // ---- Validation (unchanged from prior revision) ----
 
     private static AdhocMachineBlueprint Validate(AdhocMachineDocument doc)
     {
@@ -285,9 +493,6 @@ public sealed class AdhocMachineYamlLoader
             }
 
             ushort? baseAddress = null;
-            // Chips whose I/O window is configurable per-machine (CIA, VIC-II)
-            // must supply a baseAddress. Chips with a fixed window (SID at
-            // 0xD400, CPU at no address) accept none.
             var requiresBaseAddress = type is AdhocChipType.Mos6526 or AdhocChipType.Mos6569;
             var forbidsBaseAddress = type is AdhocChipType.Mos6502 or AdhocChipType.Sid6581;
             if (!string.IsNullOrWhiteSpace(chip.BaseAddress))

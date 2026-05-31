@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.Adhoc;
 using ViceSharp.Core;
@@ -198,8 +197,6 @@ public sealed class MultiSystemBlueprint
     /// per-peripheral deviceNumber. Systems with neither a kind nor a yaml
     /// spec are routed through the adhoc YAML loader fallback.
     /// </summary>
-    [RequiresDynamicCode(MultiSystemYamlLoader.LoaderRequiresDynamicCode)]
-    [RequiresUnreferencedCode(MultiSystemYamlLoader.LoaderRequiresUnreferencedCode)]
     public MultiSystemBuildResult BuildCoordinatorAuto(IArchitectureBuilder builder)
     {
         var adhoc = new AdhocMachineYamlLoader();
@@ -216,8 +213,6 @@ public sealed class MultiSystemBlueprint
         });
     }
 
-    [RequiresDynamicCode(MultiSystemYamlLoader.LoaderRequiresDynamicCode)]
-    [RequiresUnreferencedCode(MultiSystemYamlLoader.LoaderRequiresUnreferencedCode)]
     private IMachine BuildKind(
         IArchitectureBuilder builder,
         string systemId,
@@ -266,8 +261,6 @@ public sealed class MultiSystemBlueprint
         return null;
     }
 
-    [RequiresDynamicCode(MultiSystemYamlLoader.LoaderRequiresDynamicCode)]
-    [RequiresUnreferencedCode(MultiSystemYamlLoader.LoaderRequiresUnreferencedCode)]
     public MultiSystemBuildResult BuildCoordinatorWithAdhocLoader(IArchitectureBuilder builder)
     {
         var adhoc = new AdhocMachineYamlLoader();
