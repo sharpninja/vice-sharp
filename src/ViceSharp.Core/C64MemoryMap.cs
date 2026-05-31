@@ -84,6 +84,13 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     // Desk but without a disable bit; the register stores bits 0-5 of
     // the latest $DE00 write as the active bank index.
     private int _oceanCartridgeBank;
+
+    // Final Cartridge III (CRT type 60) state. 16K banks (ROML+ROMH) and a
+    // hide bit. Bank register lives at $DFFF: bits 0-1 select bank, bit 7
+    // hides the cartridge so $8000-$BFFF reads fall through to RAM/BASIC.
+    private int _fc3CartridgeBank;
+    private bool _fc3Hidden;
+    private const ushort Fc3BankRegisterAddress = 0xDFFF;
     private int _vicPhi1Bank;
     private byte _lastCpuBusValue = 0xFF;
     private bool _loadingRoms;
@@ -178,6 +185,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         }
         if (_attachedCartridgeMappingMode == CartridgeMappingMode.Ocean)
             _oceanCartridgeBank = 0;
+        if (_attachedCartridgeMappingMode == CartridgeMappingMode.FinalCartridgeIII)
+        {
+            _fc3CartridgeBank = 0;
+            _fc3Hidden = false;
+        }
 
         // PERF-MEM-001: Rebuild page table so it reflects PLA state after a machine
         // reset. The machine's Reset() resets all IClockedDevice chips (including the
@@ -415,6 +427,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _magicDeskCartridgeBank = 0;
         _magicDeskDisabled = false;
         _oceanCartridgeBank = 0;
+        _fc3CartridgeBank = 0;
+        _fc3Hidden = false;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now active
     }
 
@@ -426,6 +440,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _magicDeskCartridgeBank = 0;
         _magicDeskDisabled = false;
         _oceanCartridgeBank = 0;
+        _fc3CartridgeBank = 0;
+        _fc3Hidden = false;
         RebuildReadPageTable(); // PERF-MEM-001: cart pages now inactive
     }
 
@@ -741,6 +757,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (TryStoreOceanBankRegister(address, value))
             return;
 
+        if (TryStoreFc3BankRegister(address, value))
+            return;
+
         if (address < 0xD400)
         {
             _vic.Write(address, value);
@@ -850,6 +869,30 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             : System.Math.Max(1, _cartridgeImage.Length / CartridgeBankSize);
         _oceanCartridgeBank = (value & 0x3F) % bankCount;
         if (prev != _oceanCartridgeBank)
+            RebuildReadPageTable();
+        return true;
+    }
+
+    /// <summary>
+    /// Final Cartridge III (CRT type 60) bank-register store at $DFFF.
+    /// Data bits 0-1 = bank index (mod 4), bit 7 = hide (release ROML+ROMH).
+    /// Bits 2-6 carry LED/NMI/freeze control and are accepted-but-ignored in
+    /// this slice (left for follow-up FC-III deepening). Source: VICE
+    /// src/c64/cart/finalIII.c.
+    /// </summary>
+    private bool TryStoreFc3BankRegister(ushort address, byte value)
+    {
+        if (_attachedCartridgeMappingMode != CartridgeMappingMode.FinalCartridgeIII ||
+            address != Fc3BankRegisterAddress)
+        {
+            return false;
+        }
+
+        var prevHidden = _fc3Hidden;
+        var prevBank = _fc3CartridgeBank;
+        _fc3Hidden = (value & 0x80) != 0;
+        _fc3CartridgeBank = value & 0x03;
+        if (prevHidden != _fc3Hidden || prevBank != _fc3CartridgeBank)
             RebuildReadPageTable();
         return true;
     }
@@ -965,6 +1008,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 imageLength > 0 &&
                 imageLength % CartridgeBankSize == 0 &&
                 imageLength / CartridgeBankSize is >= 4 and <= 64,
+            // FC-III ships as a fixed 64K image (4 banks of 16K).
+            CartridgeMappingMode.FinalCartridgeIII =>
+                imageLength == CartridgeBankSize * 8,  // 4 banks * 16K = 64K
             _ => false
         };
 
@@ -996,6 +1042,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                     => (_magicDeskCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
                 CartridgeMappingMode.Ocean
                     => (_oceanCartridgeBank * CartridgeBankSize) + address - CartridgeRomLowStart,
+                // FC-III: 16K banks (ROML+ROMH); ROML lives at offset (bank * 16K).
+                CartridgeMappingMode.FinalCartridgeIII
+                    => (_fc3CartridgeBank * CartridgeBankSize * 2) + address - CartridgeRomLowStart,
                 _ => address - CartridgeRomLowStart,
             };
             return true;
@@ -1008,6 +1057,19 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 return false;
 
             offset = CartridgeBankSize + address - CartridgeStandardRomHighStart;
+            return true;
+        }
+
+        if (mappingMode == CartridgeMappingMode.FinalCartridgeIII &&
+            address is >= CartridgeStandardRomHighStart and <= CartridgeStandardRomHighEnd)
+        {
+            if (!IsRomHighVisible(mappingMode))
+                return false;
+
+            // FC-III ROMH offset = (bank * 16K) + 8K + (address - $A000).
+            offset = (_fc3CartridgeBank * CartridgeBankSize * 2)
+                   + CartridgeBankSize
+                   + address - CartridgeStandardRomHighStart;
             return true;
         }
 
@@ -1033,6 +1095,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
                 => _pla.Loram && _pla.Hiram && !_magicDeskDisabled,
             CartridgeMappingMode.Ocean
                 => _pla.Loram && _pla.Hiram,
+            CartridgeMappingMode.FinalCartridgeIII
+                => _pla.Loram && _pla.Hiram && !_fc3Hidden,
             _ => false
         };
     }
@@ -1043,6 +1107,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         {
             CartridgeMappingMode.Ultimax => true,
             CartridgeMappingMode.Standard16K => _pla.Hiram,
+            CartridgeMappingMode.FinalCartridgeIII => _pla.Hiram && !_fc3Hidden,
             _ => false
         };
     }

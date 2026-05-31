@@ -61,5 +61,13 @@ public enum CartridgeMappingMode
     /// Writes to $DE00 take bits 0-5 (mod bank-count) as the bank index.
     /// No disable bit; ROML is always mapped while attached.
     /// </summary>
-    Ocean = 6
+    Ocean = 6,
+
+    /// <summary>
+    /// Final Cartridge III (CRT type 60). 64K image split into 4 banks of
+    /// 16K each (ROML + ROMH). The bank register lives at $DFFF: bits 0-1
+    /// select bank, bit 7 = hide (releases ROML and ROMH). Standard 16K
+    /// mapping is assumed (no Ultimax flip).
+    /// </summary>
+    FinalCartridgeIII = 7
 }
