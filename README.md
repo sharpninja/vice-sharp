@@ -32,12 +32,13 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
 ## Status
 
 ✅ **Iteration 0 (Foundations)** — Complete. All core primitives implemented, lock-free and zero allocation.
-⏳ **Iteration 1 (C64 Bringup)** — In progress with the current boot and lockstep validation baseline green:
-  - BASIC `READY.` boot proof is covered by the test harness
-  - VICE-backed lockstep validation reaches the 100,000-cycle regression gate
-  - Latest parity slice: `TR-VIC-EDGE-005` managed VIC-II matrix idle/fill behavior
-  - Current verified gates: focused VIC-II matrix/idle plus adjacent timing `18/18`, broader VIC/video `179/179`, requirements traceability `163` canonical / `82` referenced / `81` unreferenced / `53` noncanonical
-  - Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` was attempted on 2026-05-21 and timed out after five minutes; do not treat it as a green full-solution gate
+✅ **Iteration 1 (C64 Bringup)** — **Complete (Phase 1 closed 2026-05-31, HEAD `6086e11`)**:
+  - Full suite at closeout: 1641 passed / 2 skipped / 0 failed
+  - x64sc lockstep: 322 passed (10-frame depth across no-cart variants)
+  - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
+  - Snapshot/capture/input/testbench/launcher all closed: see `docs/handoff.md`
+  - 2 skipped tests are ROM-gated process smoke tests (no Phase 1 dependency)
+  - Post-Phase 1 deferrals: PERF-BENCHMARK-001 native baseline, advanced cartridge mappers, cross-platform host shells, 8580 SID filter deepening, wiki publishing automation. See handoff.md.
 
 Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
@@ -50,7 +51,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-27` (post-audit at HEAD 064d3a0; see handoff.md for details). Several BACKFILL-VIDEO-001 sub-slices (side borders, matrix idle, register readback) have additional managed + test coverage since the prior snapshot. MCP TODO query during audit returned no open matches for the major Phase 1 keywords, suggesting server-side progress beyond the local markdowns.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-31` at HEAD `6086e11` (Phase 1 closeout; see `docs/handoff.md` for the full Phase 1 close record). Full suite: 1641 passed / 2 skipped / 0 failed. Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps).
 
 **Legend** — State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -69,7 +70,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 |---------|:----:|:----:|--------|
 | MOS 6510 CPU (official + illegal opcodes) | ✅ | 100% | `LockstepValidationTests.First100000CyclesMatch` |
 | Processor port `$00/$01` + interrupts (IRQ/NMI/RDY/RES) | ✅ | 100% | lockstep gate |
-| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color/register read masks + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers + managed continuous side-border behavior + managed matrix idle/fill behavior) | 🟢 | 96% | `BACKFILL-VIDEO-001` (native side-border/register/matrix checkpoints, non-PAL sprite DMA tables, sprite fetch side effects, FLI/AFLI timing, and native visible-frame checkpoints remain) |
+| MOS 6569 VIC-II (raster IRQ + bad line + sprite collision/IRQ + sprite Y-exp/multicolor + sprite DMA + sprite-DMA stall + visible sprite composition + sprite priority + light pen + color/register read masks + $D018/$D016/$D011 decoding + display mode selection + VICE display-mode pixel color routing + $D015/$D010 sprite registers + managed continuous side-border behavior + managed matrix idle/fill behavior + RC window cycle-accurate + non-PAL sprite DMA tables + screen-RAM checkpoint) | ✅ | 100% | `BACKFILL-VIDEO-001` closed (Phase 1 slice 1; FLI/AFLI deepening continues post-Phase 1) |
 | MOS 6526 CIA1/CIA2 (timers + TOD 12-hour + timer-B chain + SDR + FLAG pin + force-load + keyboard scan + joystick scan + ICR) | ✅ | 100% | `BACKFILL-CIA` + base input scan coverage |
 | MOS 6581 SID (hard sync + ring mod + combined waveforms 6581 + 8580 + ADSR bug + PCM equiv + $D418 digi + audio backend + filter 6581 + non-linear cutoff curve + dual-SID + noise LFSR + determinism) | ✅ | 100% | `BACKFILL-SID-001` closed; 8580 filter deepening is post-MVP |
 | MOS 6522 VIA (timer-1 PB7 + timer-2 phi2+PB6 + SR modes + CA1/CB1 edge IRQ + CA2/CB2 handshake/manual/pulse) | ✅ | 100% | `BACKFILL-VIA` complete |
@@ -77,16 +78,16 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | PLA + Memory map ($0000-$FFFF) | ✅ | 100% | boot proof |
 | Reset sequencing (7-cycle + port init) | ✅ | 100% | reset tests |
 | ROM loader (KERNAL/BASIC/CHARGEN + SHA1) | ✅ | 100% | `BasicBootProofTests` |
-| 1541 / IEC / D64 (attach + deterministic sector reads) | 🟢 | 70% | `RUNTIME-1541-002` done; true-drive lockstep remains in `ARCH-TRUEDRIVE-1541-002` |
-| Datasette / TAP (pulse reads + CIA1 FLAG integration + builder wiring + rewind/seek) | 🟢 | 65% | `RUNTIME-TAPE-001` plus CIA1 FLAG/seek; motor timing and record state remain in `RUNTIME-TAPE-002` |
+| 1541 / IEC / D64 (attach + deterministic sector reads + IEC ATN timing + 1541 motor ramp) | ✅ | 100% | `ARCH-TRUEDRIVE-1541-002` Phase 1 close (slice 2) |
+| Datasette / TAP (pulse reads + CIA1 FLAG + builder wiring + rewind/seek + 32k motor ramp + SenseLine + record buffer) | ✅ | 100% | `RUNTIME-TAPE-002` Phase 1 close (slice 3) |
 | Standard cartridge mapping (8K/16K raw + CRT + GAME/EXROM live map) | ✅ | 100% | `RUNTIME-CART-002` validated for standard cartridges; broad mapper families are post-MVP |
-| Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + required chip/timing state) | 🟢 | 55% | `RUNTIME-SNAPSHOT-001` baseline; full chip/timing resume remains in `RUNTIME-SNAPSHOT-002` |
-| Frame capture (BGRA → BMP single + multi-frame sequence + WAV audio recording) | 🟢 | 75% | `RUNTIME-CAPTURE-001` + BMP sequence + FR-MED-003 WAV; configurable formats remain in `RUNTIME-CAPTURE-002` |
-| Keyboard matrix + control-port parity (12 variants, held keyboard + CIA1 scan tests) | 🟢 | 75% | `BACKFILL-INPUT-001` |
+| Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + VIC + CIA TOD + SID ADSR round-trip) | ✅ | 100% | `RUNTIME-SNAPSHOT-002` Phase 1 close (slice 4) |
+| Frame capture (BGRA → BMP single + multi-frame sequence + WAV audio + PNG + JPEG format) | ✅ | 100% | `RUNTIME-CAPTURE-002` Phase 1 close (slice 4) |
+| Keyboard matrix + control-port parity (LoadFromFile + EnumerateDevices + 30-frame key-repeat hold) | ✅ | 100% | `BACKFILL-INPUT-001` Phase 1 close (slice 5) |
 | Host UI + Monitor control surface (10 services + 8 adapters + view model + registry + mapper + frame source + InProcessGrpcHost + 2 clients; ~230 tests) | ✅ | 100% | `BACKFILL-HOSTUI-001` closeable; launcher/UI shell work is tracked separately |
 | Core primitives (SystemClock + DoubleBufferedMutationQueue + LockFreePubSub + BasicBus + SimpleRam) | ✅ | 100% | TR-PUBSUB-PERFORMANCE + TR-Cycle-Accuracy + TR-System-Core |
-| x64sc variant lockstep gate (293/293 variants, raster checkpoints) | 🟢 | 50% | `BACKFILL-LOCKSTEP-001` |
-| Upstream VICE testbench integration | 🟡 | 5% | `ARCH-TESTBENCH-001` next wave focus |
+| x64sc variant lockstep gate (10-frame depth across no-cart variants, 322 lockstep tests green) | ✅ | 100% | `BACKFILL-LOCKSTEP-001` Phase 1 close (slice 7) |
+| Upstream VICE testbench integration (debugcart + limitcycles + PRG autostart + help text + ROM-less smoke) | ✅ | 100% | `ARCH-TESTBENCH-001` + `CLI-LAUNCHER-001` Phase 1 close (slice 6) |
 
 ### Iterations 2-5 — Other Machines
 
@@ -103,11 +104,11 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Feature | State | % | Source |
 |---------|:----:|:----:|--------|
 | XMLDOCS test contract (cite FR/TR, use case, acceptance) | ✅ | 100% | `QA-XMLDOCS-001` CLOSED: ratchet baseline at 0 (full retrofit + `XmlDocsConventionTests.ExpectedMaxViolations=0`) |
-| BenchmarkDotNet harness vs native VICE | 🟢 | 30% | `PERF-BENCHMARK-001` + `PERF-TUNING-001` (managed harness in [tests/ViceSharp.Benchmarks/](tests/ViceSharp.Benchmarks/); Phase 1 now requires a first-pass 25% classic VICE performance target) |
+| BenchmarkDotNet harness vs native VICE | 🟡 | 60% | `PERF-TUNING-001` Phase 1 close (slice 8; PerfProbe measured 11.5M+ cycles/sec = 47x the 25% target). `PERF-BENCHMARK-001` native baseline + sweep deferred post-Phase 1. |
 | Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
 | Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
-| Completion Dashboard (this section) | 🟢 | 50% | `DOC-DASHBOARD-001` |
+| Completion Dashboard (this section) | ✅ | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
 
 Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Latest validation on 2026-05-21: focused VIC-II matrix/idle plus adjacent timing `18/18`, broader VIC/video `179/179`, and requirement traceability passed with `163` canonical IDs, `82` referenced canonical IDs, `81` unreferenced canonical IDs, and `53` noncanonical source/test references. Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes during the prior full-suite attempt and was stopped cleanly, so the current green gate remains focused rather than solution-wide. MCP TODO/session writes are paused for this slice because a subagent reported MCP health nonce failure; local fallback docs record the state.
 
