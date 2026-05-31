@@ -8,6 +8,8 @@
     <Project Path="src/ViceSharp.Console/ViceSharp.Console.csproj" />
     <Project Path="src/ViceSharp.Core/ViceSharp.Core.csproj" />
     <Project Path="src/ViceSharp.Host/ViceSharp.Host.csproj" />
+    <Project Path="src/ViceSharp.Host.Android/ViceSharp.Host.Android.csproj" />
+    <Project Path="src/ViceSharp.Host.iOS/ViceSharp.Host.iOS.csproj" />
     <Project Path="src/ViceSharp.Host.MacOS/ViceSharp.Host.MacOS.csproj" />
     <Project Path="src/ViceSharp.Host.Xbox/ViceSharp.Host.Xbox.csproj" />
     <Project Path="src/ViceSharp.Launcher/ViceSharp.Launcher.csproj" />
