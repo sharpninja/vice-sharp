@@ -6,6 +6,15 @@
     <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- SETTINGS-INI-001: IConfiguration for the custom INI provider/source
+         (ConfigurationProvider/ConfigurationRoot base types) and the
+         appsettings.json folder resolution. Core configuration path is
+         reflection-free, so AOT/trim-safe (the reflective Binder is not used). -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

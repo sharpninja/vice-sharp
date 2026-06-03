@@ -35,7 +35,12 @@ public sealed class MainActivity : AvaloniaMainActivity
 /// Android application object that wires the Avalonia AppBuilder to the
 /// shared ViceSharp <see cref="SharedApp"/>.
 /// </summary>
-[Application]
+// BRANDING-ICON-001: android:icon / android:roundIcon point at the generated
+// launcher mipmaps (adaptive icon under API 26+, legacy square/round below).
+[Application(
+    Label = "ViceSharp",
+    Icon = "@mipmap/ic_launcher",
+    RoundIcon = "@mipmap/ic_launcher_round")]
 public sealed class MainApplication : AvaloniaAndroidApplication<SharedApp>
 {
     public MainApplication(nint javaReference, global::Android.Runtime.JniHandleOwnership transfer)

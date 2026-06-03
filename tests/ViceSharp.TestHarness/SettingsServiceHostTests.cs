@@ -1,5 +1,6 @@
 namespace ViceSharp.TestHarness;
 
+using ViceSharp.Abstractions;
 using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
@@ -399,6 +400,47 @@ public sealed class SettingsServiceHostTests
             await settingsService.ValidateResourcesAsync(
                 new ValidateSettingsResourcesRequest(session.SessionId),
                 cts.Token));
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
+    /// Use case: the GUI "Apply + Restart" action sends UpdateSettings with
+    /// RestartSession=true while the emulator is running. The host rebuilds
+    /// the session from a fresh machine and must carry the prior run state
+    /// forward, because LocalVideoFrameSource only advances the machine
+    /// (RunFrame) while RunState is Running. If the restart forced
+    /// RunState.Stopped, the video source would stop producing new frames and
+    /// the emulator display would go blank until the user manually resumed.
+    /// Acceptance: after UpdateSettings(RestartSession=true) with a
+    /// restart-relevant display change against a Running/On session, the
+    /// registry's replaced session reports RunState.Running and PowerState
+    /// "On" (the prior run/power state is preserved across the restart).
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_RestartSession_PreservesRunningRunState()
+    {
+        var factory = new DefaultEmulatorRuntimeFactory(
+            new ArchitectureBuilder(),
+            [MinimalHostArchitectureDescriptor.Instance],
+            MinimalHostArchitectureDescriptor.ArchitectureId);
+        var registry = new EmulatorRuntimeRegistry();
+        var session = factory.Create(new CreateEmulatorSessionRequest());
+        session.PowerState = "On";
+        session.RunState = EmulatorRunState.Running;
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry, factory);
+
+        var response = await settingsService.UpdateSettingsAsync(
+            new UpdateSettingsRequest(
+                session.SessionId,
+                Display: new DisplaySettingsDto(),
+                RestartSession: true),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+        Assert.True(registry.TryGet(session.SessionId, out var restarted));
+        Assert.Equal(EmulatorRunState.Running, restarted!.RunState);
+        Assert.Equal("On", restarted.PowerState);
     }
 
     private static EmulatorRuntimeSession CreateMinimalSession()

@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="YamlDotNet" />
+    <!-- Source generator for the [YamlStaticContext]/[YamlSerializable] AOT-safe,
+         reflection-free serializer (MachineDefinitionYamlContext). Analyzer-only;
+         not a runtime dependency. -->
+    <PackageReference Include="Vecc.YamlDotNet.Analyzers.StaticGenerator" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup>

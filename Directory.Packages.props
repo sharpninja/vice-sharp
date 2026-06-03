@@ -44,6 +44,11 @@
     <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.1" />
   </ItemGroup>
   <ItemGroup Label="Serialization">
-    <PackageVersion Include="YamlDotNet" Version="17.1.0" />
+    <PackageVersion Include="YamlDotNet" Version="18.0.0" />
+    <PackageVersion Include="Vecc.YamlDotNet.Analyzers.StaticGenerator" Version="18.0.0" />
+  </ItemGroup>
+  <ItemGroup Label="Configuration">
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
   </ItemGroup>
 </Project>

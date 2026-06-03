@@ -28,6 +28,14 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of $(ProductName) is already installed." />
 
     <!--
+      BRANDING-ICON-001: product icon for Add/Remove Programs and the Start
+      menu shortcut. The Icon Id must end in .ico so WiX infers the type.
+      Sourced from the committed Avalonia asset (same .ico embedded in the exe).
+    -->
+    <Icon Id="ProductIcon.ico" SourceFile="..\src\ViceSharp.Avalonia\Assets\vicesharp.ico" />
+    <Property Id="ARPPRODUCTICON" Value="ProductIcon.ico" />
+
+    <!--
       CompressionLevel="high" uses LZX instead of the default mszip; for the
       Avalonia publish output this cuts the cab by ~20% with a small
       additional install-time CPU cost. EmbedCab keeps the package as a
@@ -46,7 +54,8 @@
                     Name="$(ProductName)"
                     Description="VICE-compatible Commodore 64 emulator"
                     Target="[INSTALLFOLDER]$(EntryExe)"
-                    WorkingDirectory="INSTALLFOLDER" />
+                    WorkingDirectory="INSTALLFOLDER"
+                    Icon="ProductIcon.ico" />
           <RemoveFolder Id="StartMenuShortcutDir" On="uninstall" />
           <RegistryValue Root="HKCU"
                          Key="Software\$(Manufacturer)\$(ProductName)"

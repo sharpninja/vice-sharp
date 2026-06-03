@@ -16,6 +16,7 @@ int cycles = 100000;
 string? traceFile = null;
 string? romPath = null;
 string? machineYamlPath = null;
+string? exportMachinesDir = null;
 
 for (int i = 0; i < args.Length; i++)
 {
@@ -40,6 +41,32 @@ for (int i = 0; i < args.Length; i++)
     {
         machineYamlPath = args[i]["--machine-yaml=".Length..];
     }
+    else if (string.Equals(args[i], "--export-machines", StringComparison.OrdinalIgnoreCase) && i + 1 < args.Length)
+    {
+        exportMachinesDir = args[++i];
+    }
+    else if (args[i].StartsWith("--export-machines=", StringComparison.OrdinalIgnoreCase))
+    {
+        exportMachinesDir = args[i]["--export-machines=".Length..];
+    }
+}
+
+// MACHINE-DEFS-001: export one machine-definition YAML per C64 variant, derived
+// from C64MachineProfiles (the single source of truth). Writes <id>.machine.yaml
+// for every variant, then exits. Pure string emission (AOT-safe).
+if (exportMachinesDir is not null)
+{
+    Directory.CreateDirectory(exportMachinesDir);
+    var written = 0;
+    foreach (var (id, yaml) in C64MachineDefinitionWriter.All())
+    {
+        File.WriteAllText(Path.Combine(exportMachinesDir, $"{id}.machine.yaml"), yaml);
+        Console.WriteLine($"  {id}.machine.yaml");
+        written++;
+    }
+
+    Console.WriteLine($"Wrote {written} C64 machine definitions to {exportMachinesDir}");
+    return 0;
 }
 
 // ARCH-TESTBENCH-002 / CLI-LAUNCHER-001 (minimal wiring gate, post recognition gate):

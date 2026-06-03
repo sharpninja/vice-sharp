@@ -364,7 +364,12 @@ public sealed class SettingsServiceHost : ISettingsService
         return new EmulatorRuntimeSession(current.SessionId, created.Architecture, created.Machine)
         {
             PowerState = current.PowerState,
-            RunState = EmulatorRunState.Stopped,
+            // Preserve the prior run state across the restart. The video frame
+            // source only advances the machine (RunFrame) while Running, so
+            // forcing Stopped here would blank the emulator display after an
+            // "Apply + Restart" of a running machine until the user manually
+            // resumed. A paused/stopped session likewise stays as it was.
+            RunState = current.RunState,
             LimiterRatePercent = limiterRatePercent,
             LimiterEnabled = limiterEnabled,
             DisplaySettings = display,

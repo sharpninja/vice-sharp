@@ -62,6 +62,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="README.md" />
+    <!--
+      BRANDING-ICON-001: the bundle icon. CFBundleIconFile in Info.plist names
+      "AppIcon"; under the macOS workload (-r osx-arm64) this icns is copied
+      into Contents/Resources of the .app. On the plain net10.0 CI build it is
+      simply carried to the output directory.
+    -->
+    <None Include="Assets\AppIcon.icns">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>AppIcon.icns</Link>
+    </None>
   </ItemGroup>
 
 </Project>

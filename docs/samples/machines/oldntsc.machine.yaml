@@ -1,0 +1,81 @@
+schemaVersion: 1
+machine:
+  id: oldntsc
+  name: Commodore 64 old NTSC
+  videoStandard: Ntsc
+  masterClockHz: 1022730
+  resetVector: 0xFFFC
+systemCore:
+  board: BreadboxOld
+  busPolicy: Standard
+  addressDecoderPolicy: Standard
+  keyboardConnected: true
+  tapePortConnected: true
+  iecBusConnected: true
+  cia2Connected: true
+  cartridgeBootExpected: false
+interruptLines:
+- id: irq
+  type: Irq
+- id: nmi
+  type: Nmi
+memory:
+  regions:
+  - id: ram-main
+    kind: Ram
+    start: 0x0000
+    end: 0xFFFF
+  - id: ram-color
+    kind: Ram
+    start: 0xD800
+    end: 0xDBFF
+  - id: rom-basic
+    kind: Rom
+    start: 0xA000
+    end: 0xBFFF
+    rom:
+      system: C64
+      role: basic
+      file: basic-901226-01.bin
+  - id: rom-kernal
+    kind: Rom
+    start: 0xE000
+    end: 0xFFFF
+    rom:
+      system: C64
+      role: kernal
+      file: kernal-901227-01.bin
+  - id: rom-chargen
+    kind: Rom
+    start: 0xD000
+    end: 0xDFFF
+    rom:
+      system: C64
+      role: chargen
+      file: chargen-901225-01.bin
+chips:
+- id: cpu
+  type: Mos6502
+  role: Cpu
+- id: vic
+  type: Mos6569
+  model: Mos6567R56A
+  role: VideoChip
+  baseAddress: 0xD000
+  irqLine: irq
+  cyclesPerLine: 64
+  rasterLines: 262
+- id: cia1
+  type: Mos6526
+  role: Cia1
+  baseAddress: 0xDC00
+  irqLine: irq
+- id: cia2
+  type: Mos6526
+  role: Cia2
+  baseAddress: 0xDD00
+  irqLine: nmi
+- id: sid
+  type: Sid6581
+  model: Mos6581
+  role: AudioChip

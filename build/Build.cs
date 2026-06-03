@@ -136,8 +136,8 @@ sealed partial class Build : NukeBuild
 
     // ---- MSI / winget pipeline ----------------------------------------------
 
-    [Parameter("Semantic version stamped into the MSI ProductVersion and winget manifests. Default 0.1.0.0.")]
-    readonly string MsiVersion = "0.1.0.0";
+    [Parameter("Semantic version stamped into the MSI ProductVersion and winget manifests. Default 0.1.0.2.")]
+    readonly string MsiVersion = "0.1.0.2";
 
     [Parameter("Winget package identifier (publisher.identifier). Default sharpninja.ViceSharp.")]
     readonly string WingetPackageId = "sharpninja.ViceSharp";

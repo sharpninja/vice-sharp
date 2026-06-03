@@ -1,0 +1,127 @@
+diff --git a/vice/src/c64/c64cpusc.c b/vice/src/c64/c64cpusc.c
+index 5971a3c9d3..3ee311afbf 100644
+--- a/vice/src/c64/c64cpusc.c
++++ b/vice/src/c64/c64cpusc.c
+@@ -32,6 +32,10 @@
+ #include "monitor.h"
+ #include "vicii-cycle.h"
+ 
++#ifdef VICE_SHIM_HOSTED
++#include "../vice-shim-runtime.h"
++#endif
++
+ /* ------------------------------------------------------------------------- */
+ 
+ /* Global clock counter.  */
+@@ -44,11 +48,32 @@ CLOCK maincpu_clk_limit = 0L;
+ /* Mask: BA low */
+ int maincpu_ba_low_flags = 0;
+ 
++#ifdef VICE_SHIM_HOSTED
++/* Hosted build (ViceSharp): after the normal per-cycle accounting, publish the
++   CPU register file to the shim, let the host pause/stop at this cycle
++   boundary, then re-import in case the host adjusted state. A stop request
++   unwinds maincpu_mainloop() (return) so the hosting thread regains control.
++   EXPORT_REGISTERS()/IMPORT_REGISTERS() are in scope here because CLK_INC()
++   only expands inside the 6510dtvcore.c body, after those macros are defined. */
++#define CLK_INC()                                      \
++    do {                                               \
++        interrupt_delay();                             \
++        maincpu_clk++;                                 \
++        maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII; \
++        maincpu_ba_low_flags |= vicii_cycle();         \
++        EXPORT_REGISTERS();                            \
++        if (vice_shim_cycle_checkpoint()) {            \
++            return;                                    \
++        }                                              \
++        IMPORT_REGISTERS();                            \
++    } while (0)
++#else
+ #define CLK_INC()                                  \
+     interrupt_delay();                             \
+     maincpu_clk++;                                 \
+     maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII; \
+     maincpu_ba_low_flags |= vicii_cycle()
++#endif
+ 
+ 
+ /* Skip cycle implementation */
+diff --git a/vice/src/mainc64cpu.c b/vice/src/mainc64cpu.c
+index 357b27452b..f14ea309a2 100644
+--- a/vice/src/mainc64cpu.c
++++ b/vice/src/mainc64cpu.c
+@@ -56,6 +56,10 @@
+ #include "traps.h"
+ #include "types.h"
+ 
++#ifdef VICE_SHIM_HOSTED
++#include "vice-shim-runtime.h"
++#endif
++
+ #ifndef EXIT_FAILURE
+ #define EXIT_FAILURE 1
+ #endif
+@@ -752,7 +756,37 @@ void maincpu_mainloop(void)
+      */
+     bank_base_ready = true;
+ 
++#ifdef VICE_SHIM_HOSTED
++    /* Hosted build (ViceSharp): the host bootstraps the CPU explicitly. When a
++       bootstrap is pending, adopt the host-provided register file and clear the
++       per-run CPU bookkeeping instead of triggering the normal power-on reset.
++       IMPORT_REGISTERS() is not yet defined at this point in the translation
++       unit (6510dtvcore.c defines it below, inside the loop), so the import is
++       inlined here. reg_a_write/reg_a_read are #defined to reg_a in the
++       non-DTV core, so the locals below are the CPU's real register storage. */
++    if (vice_shim_take_bootstrap_maincpu()) {
++        reg_a = maincpu_regs.a;
++        reg_x = maincpu_regs.x;
++        reg_y = maincpu_regs.y;
++        reg_sp = maincpu_regs.sp;
++        reg_p = maincpu_regs.p;
++        flag_n = maincpu_regs.n;
++        flag_z = maincpu_regs.z;
++        bank_start = bank_limit = 0; /* prevent caching */
++        JUMP(maincpu_regs.pc);
++        maincpu_jammed = 0;
++        last_opcode_info = 0;
++        last_opcode_addr = reg_pc;
++        stolen_cycles = 0;
++        check_ba_low = 0;
++        reu_dma_triggered = 0;
++        maincpu_rmw_flag = 0;
++    } else {
++        machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++    }
++#else
+     machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++#endif
+ 
+     while (1) {
+ #define CPU_LOG_ID maincpu_log
+diff --git a/vice/src/vice-shim-runtime.h b/vice/src/vice-shim-runtime.h
+new file mode 100644
+index 0000000000..7cb833d571
+--- /dev/null
++++ b/vice/src/vice-shim-runtime.h
+@@ -0,0 +1,20 @@
++#ifndef VICE_SHIM_RUNTIME_H
++#define VICE_SHIM_RUNTIME_H
++
++/*
++ * ViceSharp hosted-runtime hooks. Implemented in native/vice-shim.c and linked
++ * into vice_x64.dll. Only referenced when the CPU cores are compiled with
++ * -DVICE_SHIM_HOSTED (see native/build-vice-shim.sh). See
++ * native/patches/vice-shim-runtime.prompt.md for the canonical spec.
++ */
++
++/* Called once per CPU cycle from the hosted CLK_INC(). Returns nonzero when the
++   host has asked the CPU to stop at this cycle boundary. */
++int vice_shim_cycle_checkpoint(void);
++
++/* Returns nonzero when the host has queued a CPU bootstrap (adopt host-provided
++   registers instead of performing the normal power-on reset). Consumes the
++   pending flag. */
++int vice_shim_take_bootstrap_maincpu(void);
++
++#endif

@@ -46,4 +46,15 @@
     <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj"
                       GlobalPropertiesToRemove="RuntimeIdentifier;SelfContained" />
   </ItemGroup>
+
+  <!--
+    BRANDING-ICON-001: the iOS app-icon asset catalog. Under the
+    net10.0-ios workload actool compiles it (ImageAsset is the asset-catalog
+    build action) and selects the set named "AppIcon" automatically. Inert on
+    the net10.0 desktop-fallback build. iOS forbids alpha in app icons, so
+    AppIcon-1024.png is flattened onto the brand navy by tools/generate-icons.py.
+  -->
+  <ItemGroup Condition="'$(ViceSharpHostIosFallback)' == 'false'">
+    <ImageAsset Include="Assets.xcassets\**\*" />
+  </ItemGroup>
 </Project>

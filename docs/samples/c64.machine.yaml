@@ -28,14 +28,39 @@ memory:
       kind: Rom
       start: 0xA000
       end:   0xBFFF
+      # ROM selection: which dump fills this region. `system`/`role` pick the
+      # ViceRomCatalog entry; `candidates` (ordered, most-preferred first)
+      # overrides the catalog defaults for this machine. Add or reorder freely.
+      rom:
+        system: C64
+        role: basic
+        candidates:
+          - basic-901226-01.bin
     - id: rom-kernal
       kind: Rom
       start: 0xE000
       end:   0xFFFF
+      rom:
+        system: C64
+        role: kernal
+        candidates:
+          - kernal-901227-03.bin
+          - kernal-901227-02.bin
+          - kernal-901227-01.bin
+          - kernal-251104-04.bin
+          - kernal-906145-02.bin
+          - kernal-901246-01.bin
+          - kernal-390852-01.bin
     - id: rom-chargen
       kind: Rom
       start: 0xD000
       end:   0xDFFF
+      rom:
+        system: C64
+        role: chargen
+        candidates:
+          - chargen-901225-01.bin
+          - chargen-906143-02.bin
 
 chips:
   - id: cpu

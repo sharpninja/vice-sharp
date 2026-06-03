@@ -4,6 +4,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- BRANDING-ICON-001: embed the Commodore chicken-head icon in the
+         Windows PE (Explorer, taskbar pin, MSI shortcut all inherit it). -->
+    <ApplicationIcon>Assets\vicesharp.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!--
@@ -29,5 +32,21 @@
   <ItemGroup>
     <ProjectReference Include="..\ViceSharp.Host\ViceSharp.Host.csproj" />
     <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+  </ItemGroup>
+
+  <!-- BRANDING-ICON-001: pack the app icon PNG so the Avalonia runtime can
+       load it as the WindowIcon (Icon="/Assets/...") on every head that
+       reuses this project (desktop, macOS, mobile). -->
+  <ItemGroup>
+    <AvaloniaResource Include="Assets/**" />
+  </ItemGroup>
+
+  <!-- SETTINGS-INI-001: deploy the bootstrap appsettings.json. It only selects
+       the folder for the INI files (vice.ini / vice-sharp.ini); see
+       ViceConfigLocator. Lands in the publish output and thus the MSI. -->
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
