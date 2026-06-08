@@ -12,6 +12,7 @@ and the full machine end-to-end:
 - `VicIiBenchmarks` - tick the MOS 6569 for one PAL frame
 - `SidBenchmarks` - tick the MOS 6581 with a sawtooth voice + ADSR
 - `CiaBenchmarks` - tick the MOS 6526 with a short Timer A latch
+- `PubSubBenchmarks` - measure TR-PUBSUB-001 publish, delivery, pool, and arena costs
 - `FullSystemBenchmark` - drive the romless Commodore64 via `IClock.Step`
 
 These benchmarks do not require ROMs or a native VICE build; everything runs
@@ -27,6 +28,12 @@ To run a single class:
 
 ```bash
 dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --filter "*CpuBenchmarks*"
+```
+
+For the quick TR-PUBSUB-001 stopwatch probe:
+
+```bash
+dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000
 ```
 
 BenchmarkDotNet writes reports under `BenchmarkDotNet.Artifacts/results/`.

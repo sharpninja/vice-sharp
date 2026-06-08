@@ -88,4 +88,43 @@ public sealed class BenchmarksSmokeTests
         bench.IterationSetup();
         bench.OneFrame();
     }
+
+    /// <summary>
+    /// FR: FR-PERF-BENCHMARK, TR: TR-PUBSUB-001.
+    /// Use case: CI must catch breakage in the PubSub microbenchmark wiring.
+    /// Acceptance: setup plus each PubSub benchmark workload runs without
+    /// throwing against the live LockFreePubSub surface.
+    /// </summary>
+    [Fact]
+    public void PubSubBenchmarks_OneIteration()
+    {
+        var bench = new PubSubBenchmarks();
+        bench.Setup();
+
+        bench.PublishTypedOneSubscriber();
+        bench.PublishTypedThreeSubscribers();
+        bench.PublishPackedPayload();
+        bench.MessagePoolRentReturn();
+        bench.PayloadArenaAllocate();
+    }
+
+    /// <summary>
+    /// FR: FR-PERF-BENCHMARK, TR: TR-PUBSUB-001.
+    /// Use case: the quick PubSub stopwatch probe must remain runnable for
+    /// local requirement validation without invoking BenchmarkDotNet.
+    /// Acceptance: a small probe run reports positive timing values and no
+    /// steady-state allocations.
+    /// </summary>
+    [Fact]
+    public void PubSubPerfProbe_SmallRun()
+    {
+        var result = PubSubPerfProbe.Run(1024);
+
+        Assert.True(result.PublishOneSubscriberNs > 0);
+        Assert.True(result.PublishThreeSubscribersNs > 0);
+        Assert.True(result.PublishPackedPayloadNs > 0);
+        Assert.True(result.MessagePoolRentReturnNs > 0);
+        Assert.True(result.PayloadArenaAllocateNs > 0);
+        Assert.Equal(0, result.AllocatedBytes);
+    }
 }

@@ -44,6 +44,16 @@ public static class Program
             }
         }
 
+        if (args.Length > 0 && args[0] == "--pubsub-probe")
+        {
+            var messageCount = args.Length > 1 && int.TryParse(args[1], out var pc)
+                ? pc
+                : PubSubPerfProbe.DefaultMessageCount;
+            var result = PubSubPerfProbe.Run(messageCount);
+            Console.WriteLine($"PubSubPerfProbe: messages={result.MessageCount:N0} publish-one={result.PublishOneSubscriberNs:F2}ns publish-three={result.PublishThreeSubscribersNs:F2}ns publish-packed={result.PublishPackedPayloadNs:F2}ns pool-rent-return={result.MessagePoolRentReturnNs:F2}ns arena-alloc={result.PayloadArenaAllocateNs:F2}ns allocated={result.AllocatedBytes:N0} bytes");
+            return 0;
+        }
+
         if (args.Length > 0 && args[0] == "--perf-compare")
         {
             long budget = args.Length > 1 && long.TryParse(args[1], out var cb)
