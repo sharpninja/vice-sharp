@@ -8,7 +8,7 @@ This guide walks a new user from a fresh clone to a running C64 with a true-driv
 
 - **[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)** (10.0.201 or later). Verify with `dotnet --version`.
 - **Git**.
-- *(Optional)* **MSYS2 + mingw-w64 gcc**, only required if you intend to rebuild the native VICE shim DLL (`native/vice_x64.dll`). The DLL is checked in pre-built for Windows x64; you do not need MSYS2 just to run ViceSharp.
+- **Native VICE shim for Windows x64**. Download `vice-sharp-native-win-x64.zip` from [GitHub Releases](https://github.com/sharpninja/vice-sharp/releases), extract it at the repository root, and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist. Alternatively install **MSYS2 + mingw-w64 gcc** and let the build recreate the shim from source.
 
 ### Clone and build
 
@@ -18,7 +18,7 @@ cd vice-sharp
 dotnet build ViceSharp.slnx
 ```
 
-The build is `TreatWarningsAsErrors`; a clean checkout on a supported SDK builds with zero warnings. If you see SDK-version errors, re-check `dotnet --version`.
+The build is `TreatWarningsAsErrors`; a clean checkout on a supported SDK builds with zero warnings. If you see SDK-version errors, re-check `dotnet --version`. If you do not install the release bundle first, Windows builds that touch native VICE will invoke `native/build-vice-shim.ps1` and require MSYS2 at `C:\msys64`.
 
 ### First-run verification
 
@@ -26,7 +26,7 @@ The build is `TreatWarningsAsErrors`; a clean checkout on a supported SDK builds
 dotnet test ViceSharp.slnx --nologo
 ```
 
-Expect the entire suite to pass. A regression here means your local environment is off (typically a missing native VICE DLL or a wrong .NET SDK) rather than a real failure.
+Expect the entire suite to pass. A regression here means your local environment is off (typically a missing native VICE bundle or a wrong .NET SDK) rather than a real failure.
 
 ## 2. Get ROMs
 
@@ -190,7 +190,7 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 
 **Drive sits idle / `PC` never moves** — true-drive emulation may be off. In YAML, set `fidelity: TrueDevice`. From the launcher, pass `+truedrive`. The CPU on a buffered drive doesn't run by design.
 
-**`Native VICE failed to create a machine`** — the native shim couldn't allocate a VICE instance. On Windows this is usually disk pressure (the shim writes scratch state) or a missing `native/vice_x64.dll`. Free space and confirm the DLL is next to the test binary, or rebuild the shim with `pwsh native/build-vice-shim.ps1` (needs MSYS2 + gcc).
+**`Native VICE failed to create a machine`** — the native shim couldn't allocate a VICE instance. On Windows this is usually disk pressure (the shim writes scratch state) or a missing native bundle. Free space and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist, or rebuild the shim with `pwsh native/build-vice-shim.ps1` (needs MSYS2 + gcc). Maintainers can package a rebuilt bundle with `pwsh tools/Package-NativeViceBinary.ps1`.
 
 **`SetDriveTrueEmulation` returns non-zero** — VICE rejected the resource set. The most common cause is an out-of-range unit number; valid units are 8..11.
 
