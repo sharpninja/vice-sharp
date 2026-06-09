@@ -317,3 +317,19 @@ Resource files, ROM/romset selection, palettes, hotkeys, autostart, peripherals,
 ### Traceability
 
 - **Related FR Area(s):** FR-CFG
+
+---
+
+## TEST-CLI-LAUNCHER-001: CLI Launcher and Testbench Smoke Tests
+
+**ID:** TEST-CLI-LAUNCHER-001
+**Title:** CLI Launcher and Testbench Smoke Tests
+**Priority:** P1 -- Important
+
+### Condition
+
+VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`, PRG autostart dispatch, help text, and process smoke behavior are verified with parser, stub entrypoint, and real console process tests.
+
+### Traceability
+
+- **Related FR Area(s):** FR-CFG, FR-HOST

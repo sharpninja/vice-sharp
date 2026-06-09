@@ -743,7 +743,10 @@ internal static class GrpcHostMapping
             ModelId = value.ModelId,
             HostAutomationDescription = value.HostAutomationDescription,
             HostAutomationActive = value.HostAutomationActive,
-            LastHostAutomationError = value.LastHostAutomationError
+            LastHostAutomationError = value.LastHostAutomationError,
+            IecBusActive = value.IecBusActive,
+            IecBusTransitionCount = value.IecBusTransitionCount,
+            IecBusActivityState = value.IecBusActivityState
         };
     }
 

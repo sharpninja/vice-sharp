@@ -20,6 +20,22 @@ Placeholder requirement backfilled for TODO link FR-CFG-001.
 
 Placeholder requirement backfilled for TODO link FR-CFG-005.
 
+## FR-DRV-005 IEC Serial Bus Protocol
+
+The emulator shall expose an active-low IEC serial bus with ATN, CLK, DATA, and SRQ line behavior that drives 1541/D64 operations and observable bus activity.
+**Acceptance Criteria:**
+- [ ] IEC bus endpoints resolve ATN, CLK, DATA, and SRQ as active-low wired-OR lines.
+- [ ] Mounted D64 directory and file operations generate observable IEC line activity from the bus signal source.
+- [ ] Mounted D64 directory and file operations complete with correct data through the IEC path.
+
+## FR-HOST-006 Host Runtime Status and Control Telemetry
+
+The host runtime shall expose emulator status telemetry for runtime state, timing, media, automation, and IEC bus activity to clients.
+**Acceptance Criteria:**
+- [ ] Host status responses include existing runtime fields including session, run state, cycle, frame, model, limiter, and automation status.
+- [ ] Host status responses include IEC activity derived from emulator bus traffic and safe for UI polling.
+- [ ] Status polling does not mutate emulator, drive, or bus state.
+
 ## FR-PUBSUB-001 Internal Pub/Sub Event Bus
 
 ViceSharp shall provide an internal synchronous topic-based Pub/Sub event bus for transient intra-frame device-to-device communication, including interrupts, NMI, bus availability, address-enable control, DMA, clock, and state notifications. The bus exposes typed publish and subscribe APIs, raw payload compatibility, deterministic registration-order delivery, handle-based unsubscription, frame reset behavior, and message pool integration.
@@ -27,6 +43,22 @@ ViceSharp shall provide an internal synchronous topic-based Pub/Sub event bus fo
 - [x] Public IPubSub exposes typed Publish/Subscribe, raw payload compatibility, Unsubscribe by SubscriptionHandle, Flush, FrameReset, and SubscriptionCount. (evidence: src/ViceSharp.Abstractions/IPubSub.cs)
 - [x] Publish delivers synchronously to subscribers in registration order for each topic. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
 - [x] Message pool exhaustion, return, and frame reset behavior are covered by focused tests. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
+
+## FR-UI-002 Emulator Status and Machine Control Bar
+
+The UI shall provide a status and control bar for runtime state, controls, performance fields, and IEC activity.
+**Acceptance Criteria:**
+- [ ] The status bar presents existing run state, cycle, frame, model, limiter, automation, and control commands.
+- [ ] The status bar presents IEC activity from host telemetry without replacing existing fields.
+- [ ] The status bar remains usable without stealing emulator focus for normal display interaction.
+
+## FR-UI-003 Collapsible Tabbed Emulator Sidebar
+
+The UI shall provide a dockable tabbed sidebar with peripherals and settings surfaces driven by host protocol state.
+**Acceptance Criteria:**
+- [ ] The peripherals tab exposes drive attachment state and media commands for configured drives.
+- [ ] Drive entries expose IEC active/idle state from the same host telemetry source as the status bar.
+- [ ] Drive IEC activity returns idle in the peripherals tab after bus activity settles.
 
 ## FR-VIC-001 VIC-II PAL raster cycle counter and frame-periodic behavior
 

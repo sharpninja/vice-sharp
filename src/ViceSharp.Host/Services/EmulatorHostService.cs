@@ -340,7 +340,7 @@ public sealed class EmulatorHostService : IEmulatorHost
                 HostProtocolMapper.ToStatusDto(session));
         }
 
-        if (!TryReadDrive8AutostartProgram(attachment, out var program, out var programError))
+        if (!TryReadDrive8AutostartProgram(drive8, attachment, out var program, out var programError))
         {
             return new EmulatorCommandResponse(
                 RpcStatus.FailedPrecondition(programError),
@@ -365,6 +365,7 @@ public sealed class EmulatorHostService : IEmulatorHost
     }
 
     private static bool TryReadDrive8AutostartProgram(
+        IFloppyDrive drive,
         MediaAttachmentDto? attachment,
         out D64ProgramFile? program,
         out string error)
@@ -377,26 +378,17 @@ public sealed class EmulatorHostService : IEmulatorHost
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(attachment.FilePath) || !File.Exists(attachment.FilePath))
+        if (drive is not IecDrive iecDrive)
         {
-            error = "ResetAndAutostartDrive8 requires drive 8 media that is readable by the host.";
+            error = "ResetAndAutostartDrive8 requires runtime IEC drive 8 media access.";
             return false;
         }
 
-        try
-        {
-            var image = new D64Image(File.ReadAllBytes(attachment.FilePath));
-            if (image.TryReadFirstProgram(out program, out error))
-                return true;
+        if (iecDrive.TryReadFirstProgram(out program, out error))
+            return true;
 
-            error = $"ResetAndAutostartDrive8 could not find a runnable PRG in drive 8 media. {error}";
-            return false;
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
-        {
-            error = $"ResetAndAutostartDrive8 could not read drive 8 media. {ex.Message}";
-            return false;
-        }
+        error = $"ResetAndAutostartDrive8 could not find a runnable PRG in drive 8 media. {error}";
+        return false;
     }
 
     private static string? LoadAutostartProgramIntoBasic(IMachine machine, D64ProgramFile program)

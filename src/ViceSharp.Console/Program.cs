@@ -3,6 +3,7 @@ using ViceSharp.Abstractions;
 using ViceSharp.Architectures.Adhoc;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Architectures.Multisystem;
+using ViceSharp.Chips.Cpu;
 using ViceSharp.Core;
 using ViceSharp.Launcher; // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001: for ViceArgs + ViceArgsParser (testbench flag wiring)
 using ViceSharp.Monitor;
@@ -100,7 +101,7 @@ if (parsed.DebugCart == true)
     // for $D7FF-style exit signaling in C64 topology. Matches VICE debugcart.c:74 store + exit(value).
     exitState = new ExitState();
     debugCartDevice = new DebugCartDevice(exitState);
-    Console.WriteLine("[ARCH-TESTBENCH-001] DebugCart device attached (+debugcart) for $D7FF signaling");
+    Console.WriteLine("[ARCH-TESTBENCH-001] DebugCart device attached (-debugcart) for $D7FF signaling");
 }
 if (parsed.DebugCart.HasValue)
 {
@@ -194,6 +195,11 @@ if (!string.IsNullOrEmpty(parsed.AutostartPrg) && File.Exists(parsed.AutostartPr
             for (int i = 2; i < prg.Length; i++)
             {
                 machine.Bus.Write((ushort)(load + (i - 2)), prg[i]);
+            }
+            if (machine.Devices.All.OfType<Mos6502>().FirstOrDefault() is { } cpu)
+            {
+                cpu.PC = load;
+                Console.WriteLine($"[ARCH-TESTBENCH-001] PRG dispatch PC set to ${load:X4}");
             }
             Console.WriteLine($"[ARCH-TESTBENCH-001] PRG loaded for autostart (per mon_file.c / autostart patterns)");
         }
@@ -308,5 +314,3 @@ static (MultiSystemBuildResult? Build, string? Error) LoadMultiSystemSuppressed(
         return (null, ex.Message);
     }
 }
-
-

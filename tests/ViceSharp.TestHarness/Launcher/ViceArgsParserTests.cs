@@ -127,6 +127,23 @@ public sealed class ViceArgsParserTests
         ViceArgsParser.Parse("x64sc", new[] { flag }).Verbose.Should().BeTrue();
     }
 
+    /// <summary>
+    /// ARCH-TESTBENCH-001 / CLI-LAUNCHER-001.
+    /// Use case: VICE resource command-line convention uses a leading
+    /// minus to enable a boolean resource and a leading plus to disable it.
+    /// Acceptance: -debugcart enables debugcart and +debugcart disables it.
+    /// </summary>
+    [Theory]
+    [InlineData("-debugcart", true)]
+    [InlineData("+debugcart", false)]
+    public void DebugCart_UsesViceBooleanPolarity(string flag, bool expected)
+    {
+        var parsed = ViceArgsParser.Parse("x64sc", new[] { flag });
+
+        parsed.DebugCart.Should().Be(expected);
+        parsed.Unknown.Should().BeEmpty();
+    }
+
     // =====================================================================
     // Gated test for ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 (first red gate
     // after requirements reconciliation subagent 019e6ace-fd89-7bc1-85a3-cd8f919e6bf6)
@@ -220,7 +237,7 @@ public sealed class ViceArgsParserTests
     /// 
     /// Driving IDs: ARCH-TESTBENCH-001, CLI-LAUNCHER-001, FR-CFG-005 (AC6-8 extended),
     /// TEST-CLI-LAUNCHER-001 (inferred from reconciliation for parser/launcher contract),
-    /// TR-HOST-001 / TR-GRPC-BOUNDARY-001 (CLI surface for host control in test mode).
+    /// TR-GRPC-BOUNDARY-001 (CLI surface for host control in test mode).
     /// 
     /// Use case: Upstream VICE testbench / regression harness invokes x64sc (or equivalent)
     /// with -debugcart (enables debug cartridge device for deterministic test result signaling),
@@ -280,7 +297,7 @@ public sealed class ViceArgsParserTests
         // Consumption via the ILauncherEntrypoint pattern (stub plays role of real dispatch)
         launcher.LastParsed.Should().NotBeNull();
         launcher.EffectiveCycles.Should().Be(100000000); // from -limitcycles
-        launcher.DebugCartEnabled.Should().Be(false); // from -debugcart
+        launcher.DebugCartEnabled.Should().Be(true); // from -debugcart
         launcher.AutostartPrgUsed.Should().Be("testcase.prg");
     }
 
@@ -291,7 +308,7 @@ public sealed class ViceArgsParserTests
     /// 
     /// Driving IDs: ARCH-TESTBENCH-001, ARCH-TESTBENCH-002 (wiring gate), CLI-LAUNCHER-001,
     /// FR-CFG-005 (AC6 debugcart, AC7 limitcycles, AC8 autostart-prg), TEST-CLI-LAUNCHER-001.
-    /// TR-HOST-001, TR-GRPC-BOUNDARY-001.
+    /// TR-GRPC-BOUNDARY-001.
     /// 
     /// Use case (from VICE testbench): when CLI supplies the testbench flags, the entrypoint
     /// (Console/Program or future ILauncherEntrypoint impl) must consume parsed.DebugCart,
@@ -327,7 +344,7 @@ public sealed class ViceArgsParserTests
         var launcher = new StubLauncherEntrypoint();
         var testbenchArgs = new[]
         {
-            "+debugcart",
+            "-debugcart",
             "-limitcycles",
             "5000000",
             "myapp.prg"
@@ -374,9 +391,9 @@ public sealed class ViceArgsParserTests
     /// 
     /// Driving IDs: ARCH-TESTBENCH-001, CLI-LAUNCHER-001, FR-CFG-005 (AC6 debugcart for
     /// $D7FF regression signaling, AC7 limitcycles bounded runs, AC8 PRG/SYS autostart),
-    /// TEST-CLI-LAUNCHER-HARNESS-001 (inferred for integration smoke).
+    /// TEST-CLI-LAUNCHER-001.
     /// 
-    /// Use case (VICE testbench): "x64sc +debugcart -limitcycles 100000000 testcase.prg"
+    /// Use case (VICE testbench): "x64sc -debugcart -limitcycles 100000000 testcase.prg"
     /// attaches the debug "cartridge", loads+starts the PRG, runs bounded, and on write to
     /// $D7FF the harness observes the exit code from process termination (no UI required).
     /// 
@@ -409,7 +426,7 @@ public sealed class ViceArgsParserTests
         launcher.SimulatePrgPayload(prgBytes, 0x1000);
         var testbenchArgs = new[]
         {
-            "+debugcart",
+            "-debugcart",
             "-limitcycles",
             "5000000",
             "testcase.prg"
@@ -451,22 +468,32 @@ public sealed class ViceArgsParserTests
     /// debugcart device + PRG load dispatch + bounded run + $D7FF exit code return.
     /// This is the "process" invocation path (Console.exe + flags + prg).
     ///
-    /// Skipped in automated suite runs without VICE ROMs / data root (per handoff: ROM absence
-    /// is not a Phase 1 blocker). When run in env with VICE_DATA_PATH or WinVICE install, it
-    /// launches the built console with VICE-style testbench args and asserts exit code from
-    /// the debugcart signaling matches the written value.
-    ///
-    /// Selected case: minimal PRG payload that writes known value to $D7FF after load/dispatch.
+    /// Selected case: minimal PRG payload loaded at $C000 writes known value to $D7FF after
+    /// launcher dispatch sets the CPU PC to the PRG load address.
     /// </summary>
-    [Fact(Skip = "Requires VICE ROMs + built console exe in env with VICESHARP_ROM_PATH or equivalent; see docs/handoff.md. Contract validated via mocks + build in this gate.")]
+    [Fact]
     public void ProcessSmoke_ViceTestbenchStyle_DebugCart_Prg_ExitCode()
     {
-        // In full env this would:
-        // 1. Write embedded minimal PRG (LDA #42; STA $D7FF ...) to temp file.
-        // 2. Process.Start the ViceSharp.Console.exe with "+debugcart" "-limitcycles" "100000" prgpath
-        // 3. Wait, assert ExitCode == 42, output contains dispatch + device attach logs.
-        // For this coherent slice the mocks + real build + unit harness tests provide the green validation.
-        Assert.True(true, "Process smoke shape defined; full execution gated on ROMs per project rules.");
+        var prgPath = Path.Combine(Path.GetTempPath(), $"vicesharp-debugcart-{Guid.NewGuid():N}.prg");
+        File.WriteAllBytes(
+            prgPath,
+            [
+                0x00, 0xC0,
+                0xA9, 0x2A,
+                0x8D, 0xFF, 0xD7,
+                0x4C, 0x07, 0xC0
+            ]);
+
+        var psi = CreateConsoleStartInfo($"-debugcart -limitcycles 100000 {Quote(prgPath)}");
+
+        using var process = System.Diagnostics.Process.Start(psi)!;
+        var stdout = process.StandardOutput.ReadToEnd();
+        var stderr = process.StandardError.ReadToEnd();
+
+        Assert.True(process.WaitForExit(20_000), $"Console process did not exit. stdout={stdout} stderr={stderr}");
+        Assert.Equal(0x2A, process.ExitCode);
+        Assert.Contains("DebugCart", stdout);
+        Assert.Contains("PRG dispatch PC set", stdout);
     }
 
     // =====================================================================
@@ -501,25 +528,66 @@ public sealed class ViceArgsParserTests
     /// <summary>
     /// ARCH-TESTBENCH-001: ROM-less process smoke. Requires ViceSharp.Console.exe
     /// in the build output; skipped when absent.
-    /// Use case: Launch ViceSharp.Console.exe with +debugcart -limitcycles 100
+    /// Use case: Launch ViceSharp.Console.exe with -debugcart -limitcycles 100
     /// and no ROM/PRG. Should exit 0 (ROM-less C64, 100 cycles, no $D7FF write).
     /// </summary>
-    [SkipIfNoBuildArtifact("ViceSharp.Console.exe")]
+    [Fact]
     public void ProcessSmoke_RomLess_DebugCart_LimitCycles_ExitsZero()
     {
-        var assemblyDir = Path.GetDirectoryName(typeof(ViceArgsParserTests).Assembly.Location)!;
-        var exePath = Path.Combine(assemblyDir, "ViceSharp.Console.exe");
-
-        var psi = new System.Diagnostics.ProcessStartInfo(exePath,
-            "+debugcart -limitcycles 100")
-        {
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-        };
+        var psi = CreateConsoleStartInfo("-debugcart -limitcycles 100");
 
         using var process = System.Diagnostics.Process.Start(psi)!;
-        process.WaitForExit(10_000); // 10-second timeout
+        var stdout = process.StandardOutput.ReadToEnd();
+        var stderr = process.StandardError.ReadToEnd();
+
+        Assert.True(process.WaitForExit(20_000), $"Console process did not exit. stdout={stdout} stderr={stderr}");
         Assert.Equal(0, process.ExitCode);
+    }
+
+    private static System.Diagnostics.ProcessStartInfo CreateConsoleStartInfo(string arguments)
+    {
+        var assemblyDir = Path.GetDirectoryName(typeof(ViceArgsParserTests).Assembly.Location)!;
+        var candidates = new[]
+        {
+            Path.Combine(assemblyDir, OperatingSystem.IsWindows() ? "ViceSharp.Console.exe" : "ViceSharp.Console"),
+            Path.Combine(assemblyDir, "ViceSharp.Console.dll"),
+            Path.Combine(RepoRoot, "src", "ViceSharp.Console", "bin", "Debug", "net10.0", OperatingSystem.IsWindows() ? "ViceSharp.Console.exe" : "ViceSharp.Console"),
+            Path.Combine(RepoRoot, "src", "ViceSharp.Console", "bin", "Debug", "net10.0", "ViceSharp.Console.dll")
+        };
+
+        foreach (var candidate in candidates)
+        {
+            if (!File.Exists(candidate))
+                continue;
+
+            var isDll = string.Equals(Path.GetExtension(candidate), ".dll", StringComparison.OrdinalIgnoreCase);
+            return new System.Diagnostics.ProcessStartInfo(
+                isDll ? "dotnet" : candidate,
+                isDll ? $"{Quote(candidate)} {arguments}" : arguments)
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+            };
+        }
+
+        throw new FileNotFoundException("Could not locate built ViceSharp.Console executable or dll.", candidates[0]);
+    }
+
+    private static string Quote(string value) => $"\"{value.Replace("\"", "\\\"", StringComparison.Ordinal)}\"";
+
+    private static string RepoRoot
+    {
+        get
+        {
+            var directory = new DirectoryInfo(AppContext.BaseDirectory);
+            while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "ViceSharp.slnx")))
+                directory = directory.Parent;
+
+            if (directory is null)
+                throw new InvalidOperationException("Could not locate repository root.");
+
+            return directory.FullName;
+        }
     }
 }

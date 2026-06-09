@@ -471,6 +471,65 @@ public sealed class AttachPanelViewModelTests
         Assert.Contains(nameof(viewModel.LimiterEnabled), changes);
     }
 
+    /// <summary>
+    /// FR: FR-UI-003, FR: FR-HOST-006, TR: TR-UI-SHELL-001, TEST-UI-001.
+    /// Use case: The peripherals tab must show IEC active/idle state on
+    /// drive slots using the same host status telemetry as the status bar.
+    /// Acceptance: Applying an active status marks drive 8 and drive 9
+    /// active, leaves non-drive media slots idle, and applying a later idle
+    /// status returns both drives to idle.
+    /// </summary>
+    [Fact]
+    public void ApplyStatus_UpdatesDriveIecActivityFromHostTelemetry()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+        var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);
+        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: true, transitionCount: 6));
+
+        Assert.True(drive8.IsIecBusActive);
+        Assert.True(drive9.IsIecBusActive);
+        Assert.Equal("IEC Active", drive8.IecActivityText);
+        Assert.False(tape.IsIecBusActive);
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 6));
+
+        Assert.False(drive8.IsIecBusActive);
+        Assert.False(drive9.IsIecBusActive);
+        Assert.Equal("IEC Idle", drive8.IecActivityText);
+    }
+
+    /// <summary>
+    /// FR: FR-UI-002, FR: FR-HOST-006, TR: TR-UI-SHELL-001, TEST-UI-001.
+    /// Use case: The status bar view-model consumes the same host status
+    /// payload and must add IEC activity without losing existing runtime
+    /// fields.
+    /// Acceptance: Active and idle statuses render the IEC state while
+    /// retaining power, run state, limiter, FPS, clock, cycle, and PC text.
+    /// </summary>
+    [Fact]
+    public void StatusBarViewModel_FormatsIecActivityWithoutDroppingRuntimeFields()
+    {
+        var viewModel = new StatusBarViewModel();
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: true, transitionCount: 12), RpcStatus.Ok());
+
+        Assert.Contains("Power On", viewModel.StatusText);
+        Assert.Contains("Run Running", viewModel.StatusText);
+        Assert.Contains("Limiter 100%", viewModel.StatusText);
+        Assert.Contains("FPS 50.0", viewModel.StatusText);
+        Assert.Contains("Clock 1.000 MHz", viewModel.StatusText);
+        Assert.Contains("Cycle 1234", viewModel.StatusText);
+        Assert.Contains("PC C000", viewModel.StatusText);
+        Assert.Contains("IEC Active", viewModel.StatusText);
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 12), RpcStatus.Ok());
+
+        Assert.Contains("IEC Idle", viewModel.StatusText);
+    }
+
     private static List<string> TrackPropertyChanges(INotifyPropertyChanged source)
     {
         var changes = new List<string>();
@@ -481,4 +540,23 @@ public sealed class AttachPanelViewModelTests
         };
         return changes;
     }
+
+    private static EmulatorStatusDto CreateStatus(bool iecActive, long transitionCount)
+        => new(
+            "session",
+            "C64",
+            EmulatorRunState.Running,
+            1234,
+            new MachineStateDto(0, 0, 0, 0, 0, 0xC000, 1234),
+            PowerState: "On",
+            LimiterRatePercent: 100,
+            MeasuredFps: 50,
+            FrameCount: 60,
+            NominalClockHz: 1_000_000,
+            EffectiveClockHz: 1_000_000,
+            EffectiveClockPercent: 100,
+            Pc: 0xC000,
+            IecBusActive: iecActive,
+            IecBusTransitionCount: transitionCount,
+            IecBusActivityState: iecActive ? "Active" : "Idle");
 }

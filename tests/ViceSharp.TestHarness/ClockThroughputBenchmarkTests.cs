@@ -29,6 +29,11 @@ using Xunit;
 /// </summary>
 public sealed class ClockThroughputBenchmarkTests
 {
+    /// <summary>
+    /// FR-PRF-001, TR-PERF-HARNESS.
+    /// Use case: A gated diagnostic benchmark measures the GUI frame-pump path.
+    /// Acceptance: When enabled, the frame source produces at least one frame and writes the report.
+    /// </summary>
     [Fact]
     public async Task MeasureGuiFramePumpThroughput()
     {

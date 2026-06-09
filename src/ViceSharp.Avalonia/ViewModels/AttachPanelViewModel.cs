@@ -280,6 +280,14 @@ public sealed class AttachPanelViewModel : ObservableObject
         StatusText = "Connected";
     }
 
+    public void ApplyStatus(EmulatorStatusDto status)
+    {
+        ArgumentNullException.ThrowIfNull(status);
+
+        foreach (var slot in Slots)
+            slot.SetIecActivity(status.IecBusActive);
+    }
+
     public async Task AttachAsync(AttachSlotViewModel slot, string filePath, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(slot);

@@ -154,6 +154,9 @@ message EmulatorStatusDto {
   string host_automation_description = 15;
   bool host_automation_active = 16;
   string last_host_automation_error = 17;
+  bool iec_bus_active = 18;
+  int64 iec_bus_transition_count = 19;
+  string iec_bus_activity_state = 20;
 }
 
 message CreateEmulatorSessionRequest {

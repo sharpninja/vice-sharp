@@ -1,5 +1,6 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
+using ViceSharp.Chips.IEC;
 using ViceSharp.Core;
 using ViceSharp.Protocol;
 using ViceSharp.RomFetch;
@@ -52,7 +53,7 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
 
         var machine = _architectureBuilder.Build(descriptor);
         var sessionId = $"emulator-{Guid.NewGuid():N}";
-        return new EmulatorRuntimeSession(sessionId, descriptor, machine);
+        return new EmulatorRuntimeSession(sessionId, descriptor, machine, CreateIecBusActivityMonitor(machine));
     }
 
     private static IEnumerable<(string Key, IArchitectureDescriptor Descriptor)> CreateDescriptorKeys(
@@ -119,5 +120,18 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
     private static RomProvider CreateC64RomProvider(string romBasePath, IEnumerable<string> fallbackRomBasePaths)
     {
         return new RomProvider(romBasePath, fallbackRomBasePaths);
+    }
+
+    private static IecBusActivityMonitor? CreateIecBusActivityMonitor(IMachine machine)
+    {
+        var drives = machine.Devices.All.OfType<IecDrive>().ToArray();
+        if (drives.Length == 0)
+            return null;
+
+        var bus = IecInterSystemBus.Create();
+        foreach (var drive in drives)
+            drive.ConnectIecBus(bus);
+
+        return new IecBusActivityMonitor(bus);
     }
 }

@@ -37,7 +37,7 @@ public sealed class ViceArgs
     public long? Cycles { get; init; }
 
     /// <summary>
-    /// Debug cart enabled (+debugcart / -debugcart). ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6.
+    /// Debug cart enabled (-debugcart) or disabled (+debugcart). ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6.
     /// VICE: native/vice/vice/src/vic20/cart/debugcart.c (and c64) - "used for automatic regression testing";
     /// writes result byte to $D7FF for harness observation of deterministic exit without UI.
     /// </summary>

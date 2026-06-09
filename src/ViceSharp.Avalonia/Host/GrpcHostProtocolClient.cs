@@ -473,7 +473,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             value.ModelId,
             value.HostAutomationDescription,
             value.HostAutomationActive,
-            value.LastHostAutomationError);
+            value.LastHostAutomationError,
+            value.IecBusActive,
+            value.IecBusTransitionCount,
+            value.IecBusActivityState);
     }
 
     private static InputStateDto? MapInputState(GrpcContracts.InputStateDto? inputState)

@@ -36,7 +36,10 @@ internal static class HostProtocolMapper
             modelId,
             session.HostKeyboardAutomation?.Description ?? string.Empty,
             session.HostKeyboardAutomation?.IsActive == true,
-            session.LastHostAutomationError ?? string.Empty);
+            session.LastHostAutomationError ?? string.Empty,
+            session.IecBusActivity?.IsActive == true,
+            session.IecBusActivity?.TransitionCount ?? 0,
+            session.IecBusActivity?.ActivityState ?? "Idle");
     }
 
     public static MachineStateDto ToMachineStateDto(MachineState state)

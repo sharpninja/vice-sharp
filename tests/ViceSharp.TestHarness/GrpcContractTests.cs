@@ -68,6 +68,9 @@ public sealed class GrpcContractTests
         Assert.Contains("host_automation_description", proto);
         Assert.Contains("host_automation_active", proto);
         Assert.Contains("last_host_automation_error", proto);
+        Assert.Contains("iec_bus_active", proto);
+        Assert.Contains("iec_bus_transition_count", proto);
+        Assert.Contains("iec_bus_activity_state", proto);
         Assert.Contains("scale", proto);
         Assert.Contains("crop_mode", proto);
         Assert.Contains("aspect_mode", proto);

@@ -17,6 +17,7 @@ public partial class MainWindow : Window
     private readonly IAsyncDisposable? _localHost;
     private readonly ILocalVideoFrameSource? _localVideoFrameSource;
     private readonly AttachPanelViewModel _attachViewModel;
+    private readonly StatusBarViewModel _statusBarViewModel = new();
     private readonly AttachPanelView _attachPanel;
     private readonly VideoSurface _video;
     private readonly DockPanel _root = new();
@@ -43,6 +44,11 @@ public partial class MainWindow : Window
         {
             if (args.PropertyName == nameof(AttachPanelViewModel.DockSide))
                 BuildLayout();
+        };
+        _statusBarViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(StatusBarViewModel.StatusText))
+                _statusText.Text = _statusBarViewModel.StatusText;
         };
 
         _attachPanel = new AttachPanelView(_attachViewModel)
@@ -257,7 +263,7 @@ public partial class MainWindow : Window
 
         _statusText.Margin = new Thickness(10, 7, 8, 4);
         _statusText.FontSize = 12;
-        _statusText.Text = "Power ? | Run ? | Limiter 100% | FPS 0.0 | Clock 0.000 MHz | Cycle 0 | PC 0000";
+        _statusText.Text = _statusBarViewModel.StatusText;
         _statusText.TextTrimming = global::Avalonia.Media.TextTrimming.CharacterEllipsis;
         bar.Children.Add(_statusText);
 
@@ -327,24 +333,9 @@ public partial class MainWindow : Window
 
     private void ApplyStatus(Protocol.EmulatorStatusDto? status, Protocol.RpcStatus rpcStatus)
     {
-        if (!rpcStatus.IsSuccess)
-        {
-            _statusText.Text = rpcStatus.Message;
-            return;
-        }
-
-        if (status is null)
-            return;
-
-        var clockMhz = status.EffectiveClockHz / 1_000_000.0;
-        string limiterText = status.LimiterRatePercent > 0 && status.LimiterRatePercent < 1000
-            ? $"Limiter {status.LimiterRatePercent:0}%"
-            : "WARP";
-
-        _statusText.Text =
-            $"Power {status.PowerState} | Run {status.RunState} | {limiterText} | " +
-            $"FPS {status.MeasuredFramesPerSecond:0.0} | Clock {clockMhz:0.000} MHz ({status.EffectiveClockPercent:0}%) | " +
-            $"Cycle {status.Cycle} | PC {status.MachineState.Pc:X4}";
+        _statusBarViewModel.ApplyStatus(status, rpcStatus);
+        if (rpcStatus.IsSuccess && status is not null)
+            _attachViewModel.ApplyStatus(status);
     }
 
     private async void OnVideoKeyDown(object? sender, KeyEventArgs e)

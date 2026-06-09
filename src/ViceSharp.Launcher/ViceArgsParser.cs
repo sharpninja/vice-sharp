@@ -15,7 +15,7 @@ namespace ViceSharp.Launcher;
 ///   --cycles N             cycle budget for the run
 ///   -v / --verbose         verbose output
 ///   --help / -h / -?       show help
-///   -debugcart / +debugcart   (ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6)
+///   -debugcart / +debugcart   enable / disable debugcart (ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6)
 ///   --limitcycles / -limitcycles N   (ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC7)
 ///   trailing *.prg or -autostart   (ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC8)
 ///
@@ -73,10 +73,10 @@ public static class ViceArgsParser
                 case "-h":
                 case "-?":
                     help = true; break;
-                // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6: +/-debugcart for VICE debug cart device
+                // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC6: -debugcart enables, +debugcart disables.
                 // (enables $D7FF result writes for automatic regression test harness signaling per debugcart.c)
-                case "+debugcart": debugCart = true; break;
-                case "-debugcart": debugCart = false; break;
+                case "-debugcart": debugCart = true; break;
+                case "+debugcart": debugCart = false; break;
                 // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001 / FR-CFG-005 AC7: limitcycles (testbench bounded execution)
                 case "--limitcycles":
                 case "-limitcycles":
@@ -145,8 +145,8 @@ public static class ViceArgsParser
           --cycles N          Cycle budget for the run
           -v / --verbose      Verbose output
           --help / -h / -?    Show this help text
-          +debugcart          Enable debug cartridge device ($D7FF signaling)
-          -debugcart          Disable debug cartridge device
+          -debugcart          Enable debug cartridge device ($D7FF signaling)
+          +debugcart          Disable debug cartridge device
           --limitcycles N     Bounded execution cycle limit (testbench)
           -autostart path     Autostart PRG/SID/T64 file
           [program.prg]       Positional PRG autostart (testbench style)

@@ -110,7 +110,10 @@ public sealed record EmulatorStatusDto(
     string ModelId = "",
     string HostAutomationDescription = "",
     bool HostAutomationActive = false,
-    string LastHostAutomationError = "")
+    string LastHostAutomationError = "",
+    bool IecBusActive = false,
+    long IecBusTransitionCount = 0,
+    string IecBusActivityState = "Idle")
 {
     public double MeasuredFramesPerSecond => MeasuredFps;
 }

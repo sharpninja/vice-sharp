@@ -740,6 +740,19 @@ public sealed class AttachPanelView : UserControl
         };
         stack.Children.Add(status);
 
+        TextBlock? iecActivity = null;
+        if (slot.Slot is MediaSlot.Drive8 or MediaSlot.Drive9)
+        {
+            iecActivity = new TextBlock
+            {
+                Text = slot.IecActivityText,
+                FontSize = 11,
+                Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
+                TextWrapping = TextWrapping.Wrap
+            };
+            stack.Children.Add(iecActivity);
+        }
+
         var error = new TextBlock
         {
             Text = slot.ValidationError,
@@ -754,6 +767,8 @@ public sealed class AttachPanelView : UserControl
         {
             if (args.PropertyName == nameof(AttachSlotViewModel.StatusText))
                 status.Text = slot.StatusText;
+            else if (args.PropertyName == nameof(AttachSlotViewModel.IecActivityText) && iecActivity is not null)
+                iecActivity.Text = slot.IecActivityText;
             else if (args.PropertyName == nameof(AttachSlotViewModel.ValidationError))
                 error.Text = slot.ValidationError;
             else if (args.PropertyName == nameof(AttachSlotViewModel.IsReadOnly))

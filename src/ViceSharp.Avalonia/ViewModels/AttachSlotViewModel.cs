@@ -10,6 +10,7 @@ public sealed class AttachSlotViewModel : ObservableObject
     private string _validationError = string.Empty;
     private bool _isAttached;
     private bool _isReadOnly;
+    private bool _isIecBusActive;
 
     public AttachSlotViewModel(MediaSlot slot, string title, string mediaKind, string[] filePatterns)
     {
@@ -61,6 +62,18 @@ public sealed class AttachSlotViewModel : ObservableObject
         set => SetProperty(ref _isReadOnly, value);
     }
 
+    public bool IsIecBusActive
+    {
+        get => _isIecBusActive;
+        private set
+        {
+            if (SetProperty(ref _isIecBusActive, value))
+                OnPropertyChanged(nameof(IecActivityText));
+        }
+    }
+
+    public string IecActivityText => IsIecBusActive ? "IEC Active" : "IEC Idle";
+
     public void ApplyAttachment(MediaAttachmentDto attachment, string recentFilePath = "")
     {
         FilePath = attachment.FilePath;
@@ -111,5 +124,13 @@ public sealed class AttachSlotViewModel : ObservableObject
 
         while (RecentFiles.Count > 6)
             RecentFiles.RemoveAt(RecentFiles.Count - 1);
+    }
+
+    public void SetIecActivity(bool isActive)
+    {
+        if (Slot is not (MediaSlot.Drive8 or MediaSlot.Drive9))
+            isActive = false;
+
+        IsIecBusActive = isActive;
     }
 }

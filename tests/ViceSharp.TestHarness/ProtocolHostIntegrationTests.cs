@@ -687,6 +687,47 @@ public sealed class ProtocolHostIntegrationTests
     }
 
     /// <summary>
+    /// FR: FR-DRV-005, FR-HOST-006; TR: TR-HOST-STATUS-001; TEST-DRV-001.
+    /// Use case: ResetAndAutostartDrive8 must read the PRG from the runtime
+    /// drive over the IEC path after media has been attached, not by re-reading
+    /// the original host D64 file.
+    /// Acceptance: Moving the original D64 file after attach does not break
+    /// autostart, and the returned status reports IEC bus transitions.
+    /// </summary>
+    [Fact]
+    public async Task EmulatorHost_ResetAndAutostartDrive8ReadsRuntimeDiskOverIecBus()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var machine = MachineTestFactory.CreateC64Machine();
+        var iecBus = IecInterSystemBus.Create();
+        var monitor = new IecBusActivityMonitor(iecBus);
+        foreach (var drive in machine.Devices.All.OfType<IecDrive>())
+            drive.ConnectIecBus(iecBus);
+        var session = new EmulatorRuntimeSession("test-session", machine.Architecture, machine, monitor);
+        registry.Add(session);
+        var emulatorHost = new EmulatorHostService(registry, new DefaultEmulatorRuntimeFactory());
+        var mediaService = new MediaServiceHost(registry);
+        var diskPath = Path.Combine(Path.GetTempPath(), $"vicesharp-{Guid.NewGuid():N}.d64");
+        var movedPath = diskPath + ".moved";
+        await File.WriteAllBytesAsync(diskPath, CreateD64Image(), TestContext.Current.CancellationToken);
+
+        var attached = await mediaService.AttachMediaAsync(
+            new AttachMediaRequest("test-session", MediaSlot.Drive8, diskPath, "demo.d64"),
+            TestContext.Current.CancellationToken);
+        File.Move(diskPath, movedPath);
+        var autostart = await emulatorHost.ResetAndAutostartDrive8Async(
+            new ResetAndAutostartDrive8Request("test-session"),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, attached.Status.Code);
+        Assert.True(attached.Attachment!.AppliedToRuntime);
+        Assert.Equal(RpcStatusCode.Ok, autostart.Status.Code);
+        Assert.NotNull(autostart.EmulatorStatus);
+        Assert.True(autostart.EmulatorStatus!.IecBusTransitionCount >= 2);
+        Assert.True(autostart.EmulatorStatus.IecBusActive);
+    }
+
+    /// <summary>
     /// FR: FR-CFG-008, FR: FR-HOST-006, TR: TR-GRPC-BOUNDARY-001.
     /// Use case: A client uses the generated gRPC SettingsService client
     /// to enumerate profiles, apply settings and observe the resulting

@@ -1,0 +1,23 @@
+# Phase 1 Open TODO Acceptance Coverage - 2026-06-08
+
+This matrix records the BDPv4 acceptance coverage used for the open Phase 1 TODOs:
+`ARCH-ROM-001`, `ARCH-TESTBENCH-001`, `CLI-LAUNCHER-001`, `TEST-VICICACHE-001`,
+`BACKFILL-VIDEO-001`, and GitHub issue `ISSUE-2`.
+
+## Coverage Matrix
+
+| Requirement | Acceptance Criteria | Direct Test Coverage | Validation Evidence |
+| --- | --- | --- | --- |
+| `ARCH-ROM-001` | C64/C1541 ROM loading, missing-provider behavior, profile ROM selection, checksum validation. | `C64MachineTests`, `C64MachineProfileTests`, `C1541*` tests. | `dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj --filter "FullyQualifiedName~C64MachineTests|FullyQualifiedName~C64MachineProfileTests|FullyQualifiedName~C1541"`: 353 passed, 0 failed, 0 skipped. |
+| `ARCH-TESTBENCH-001` | Debugcart signaling, bounded `-limitcycles`, PRG dispatch, x64sc-style testbench process invocation. | `ViceArgsParserTests.DebugCart_UsesViceBooleanPolarity`, `HarnessSmoke_DebugCart_PrgDispatch_BoundedExit_SimulatedViaStub`, `ProcessSmoke_ViceTestbenchStyle_DebugCart_Prg_ExitCode`, `ProcessSmoke_RomLess_DebugCart_LimitCycles_ExitsZero`. | `dotnet test ... --filter "FullyQualifiedName~ViceArgsParserTests|FullyQualifiedName~ViceTopologyBuilderTests"`: 36 passed, 0 failed, 0 skipped. |
+| `CLI-LAUNCHER-001` | Parser topology, help text, VICE `-debugcart` enable and `+debugcart` disable polarity, `-limitcycles`, PRG autostart. | `ViceArgsParserTests`, `ViceTopologyBuilderTests`, real `ViceSharp.Console` process smoke. | Same launcher focused command: 36 passed, 0 failed, 0 skipped. |
+| `ISSUE-2`, `FR-DRV-005`, `FR-HOST-006` | IEC activity derives from `IInterSystemBus.LineChanged`; D64 directory/PRG read produces IEC transitions; host status reports active/idle and transition count. | `IecBusActivityTests`, `ProtocolHostIntegrationTests.EmulatorHost_ResetAndAutostartDrive8ReadsRuntimeDiskOverIecBus`. | `dotnet test ... --filter "FullyQualifiedName~IecBusActivityTests|...ReadsRuntimeDiskOverIecBus|...ProtocolProject_KeepsProtoSourceContract"`: 6 passed, 0 failed, 0 skipped. |
+| `ISSUE-2`, `FR-UI-002`, `FR-UI-003` | Status bar shows IEC active/idle; peripherals drive slots show active/idle from the same host status DTO; state returns idle after hold expires. | `AttachPanelViewModelTests.ApplyStatus_UpdatesDriveIecActivityFromHostTelemetry`, `AttachPanelViewModelTests.StatusBarViewModel_FormatsIecActivityWithoutDroppingRuntimeFields`, `IecBusActivityTests.Monitor_ReportsActiveFromLineChanges_ThenReturnsIdle`. | Same IEC/UI focused command: 6 passed, 0 failed, 0 skipped. |
+| `TEST-VICICACHE-001` | Sprite DMA stall cache equivalence and non-PAL table coverage remain green. | `VicIISpriteDmaStallTests`, including `SpriteDmaStall_CacheEquivalence_FullModels_Badline_Fli_Compose_NoRegression`. | `dotnet test ... --filter "FullyQualifiedName~VicIISpriteDmaStallTests"`: 18 passed, 0 failed, 0 skipped. |
+| `BACKFILL-VIDEO-001` | Native/managed checkpoint depth for invalid modes, border behavior, matrix/idle behavior, register readback, sprite DMA, and FLI/AFLI-visible paths. | `VicIiCheckpointTests`, `VicIIRegisterReadbackNativeTests`, `VicIISpriteDmaNativeCheckpointTests`, `VicIIBorderFlipFlopTests`, `VideoRendererTests`. | `dotnet test ... --filter "FullyQualifiedName~VicIiCheckpointTests|FullyQualifiedName~VicIIRegisterReadbackNativeTests|FullyQualifiedName~VicIISpriteDmaNativeCheckpointTests|FullyQualifiedName~VicIIBorderFlipFlopTests|FullyQualifiedName~VideoRendererTests"`: 68 passed, 0 failed, 0 skipped. |
+
+## Notes
+
+- The launcher debugcart polarity now follows the VICE boolean resource convention: `-debugcart` enables the resource and `+debugcart` disables it.
+- D64 autostart now reads the PRG through the runtime `IecDrive`, so moving the original host D64 path after attach no longer breaks autostart.
+- IEC UI indication is a single host status source: `EmulatorStatusDto.IecBusActive`, `IecBusTransitionCount`, and `IecBusActivityState`.

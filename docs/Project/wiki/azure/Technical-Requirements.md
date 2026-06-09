@@ -4,6 +4,14 @@
 
 **PERF-SPRITE-DMA-OPT-001** — Placeholder requirement backfilled for TODO link PERF-SPRITE-DMA-OPT-001.
 
+## TEST-DRV-001
+
+**TEST-DRV-001** — Placeholder requirement backfilled for TODO link TEST-DRV-001.
+
+## TEST-UI-001
+
+**TEST-UI-001** — Placeholder requirement backfilled for TODO link TEST-UI-001.
+
 ## TEST-VIC-001
 
 **TEST-VIC-001** — Placeholder requirement backfilled for TODO link TEST-VIC-001.
@@ -18,7 +26,19 @@
 
 ## TR-GRPC-BOUNDARY-001
 
-**TR-GRPC-BOUNDARY-001** — Placeholder requirement backfilled for TODO link TR-GRPC-BOUNDARY-001.
+**Host Protocol Boundary DTOs** — Host protocol and gRPC adapters expose emulator status, media, command, monitor, and settings state through DTOs without UI clients reaching into emulator internals.
+**Acceptance Criteria:**
+- [ ] Status, media, command, monitor, and settings requests remain DTO-only across the host protocol boundary.
+- [ ] The status DTO includes IEC activity telemetry without removing existing status fields.
+- [ ] gRPC service adapters and the Avalonia gRPC client preserve IEC activity telemetry on status round trips.
+
+## TR-HOST-STATUS-001
+
+**Measured Emulator Runtime Telemetry** — Host status telemetry shall report runtime, media, automation, and IEC activity from authoritative runtime state without mutating it.
+**Acceptance Criteria:**
+- [ ] Status responses include existing runtime telemetry and IEC activity fields.
+- [ ] IEC activity is derived from authoritative IEC line changes or an equivalent host-owned bus signal monitor.
+- [ ] Status polling does not mutate machine, drive, or bus state.
 
 ## TR-IEC-EDGE-001
 
@@ -43,6 +63,14 @@
 ## TR-TAPE-EDGE-001
 
 **Datasette motor 32,000-cycle ramp before pulse delivery** — Datasette.Tick() enforces 32,000-cycle motor ramp (MOTOR_DELAY=32000, datasette/datasette.c:62) before TryReadNextPulse delivers pulses. Ramp only activates when Tick() is used as timing. Motor off resets ramp.
+
+## TR-UI-SHELL-001
+
+**Avalonia Emulator Control Shell** — The Avalonia shell shall bind host protocol DTOs into status bar and sidebar ViewModels without reaching into emulator internals.
+**Acceptance Criteria:**
+- [ ] The shell has status bar and peripherals sidebar surfaces that display IEC activity.
+- [ ] ViewModels consume host client abstractions and DTOs rather than emulator internals.
+- [ ] ViewModel tests cover peripherals and status active-to-idle IEC transitions.
 
 ## TR-VIC-EDGE-001
 

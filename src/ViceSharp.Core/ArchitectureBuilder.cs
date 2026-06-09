@@ -459,7 +459,7 @@ internal sealed class DeviceRegistry : IDeviceRegistry
 
 // ARCH-TESTBENCH-001 / CLI-LAUNCHER-001: minimal debugcart device (or equivalent) for harness smoke.
 // $D7FF write triggers exit signaling (pattern from debugcart.c:74). Registered on bus in launcher
-// entry for C64 topology when +debugcart supplied. Enables process-level testbench exit codes.
+// entry for C64 topology when -debugcart supplied. Enables process-level testbench exit codes.
 public sealed class ExitState
 {
     public bool Requested { get; set; }
@@ -496,5 +496,4 @@ public sealed class DebugCartDevice : IAddressSpace, IDevice
         }
     }
 }
-
 

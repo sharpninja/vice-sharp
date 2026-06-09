@@ -7,6 +7,10 @@ namespace ViceSharp.Chips.IEC;
 /// </summary>
 public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
 {
+    private const string IecAtn = "ATN";
+    private const string IecClk = "CLK";
+    private const string IecData = "DATA";
+
     public DeviceId Id => new DeviceId((uint)(0x000A + DriveNumber));
     public string Name => $"IEC Drive {DriveNumber}";
     public uint ClockDivisor => 1;
@@ -26,6 +30,7 @@ public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
     private bool _atnLine;
     private bool _clockLine;
     private bool _dataLine;
+    private IBusEndpoint? _iecEndpoint;
     
     // Drive buffer (exposed for test inspection via SectorBuffer property).
     private readonly byte[] _sectorBuffer = new byte[256];
@@ -153,17 +158,56 @@ public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
     /// <summary>
     /// VICE-style: Set ATN line (attention)
     /// </summary>
-    public void SetAtn(bool active) => _atnLine = active;
+    public void SetAtn(bool active)
+    {
+        _atnLine = active;
+        _iecEndpoint?.Pull(IecAtn, active);
+    }
     
     /// <summary>
     /// VICE-style: Set clock line
     /// </summary>
-    public void SetClock(bool active) => _clockLine = active;
+    public void SetClock(bool active)
+    {
+        _clockLine = active;
+        _iecEndpoint?.Pull(IecClk, active);
+    }
     
     /// <summary>
     /// VICE-style: Set data line
     /// </summary>
-    public void SetData(bool active) => _dataLine = active;
+    public void SetData(bool active)
+    {
+        _dataLine = active;
+        _iecEndpoint?.Pull(IecData, active);
+    }
+
+    public void ConnectIecBus(IInterSystemBus bus)
+    {
+        ArgumentNullException.ThrowIfNull(bus);
+
+        if (_iecEndpoint is not null)
+            return;
+
+        _iecEndpoint = bus.AttachEndpoint(Name);
+        _iecEndpoint.Pull(IecAtn, _atnLine);
+        _iecEndpoint.Pull(IecClk, _clockLine);
+        _iecEndpoint.Pull(IecData, _dataLine);
+    }
+
+    public bool TryReadFirstProgram(out D64ProgramFile? program, out string error)
+    {
+        program = null;
+
+        if (_diskImage is null)
+        {
+            error = $"IEC drive {DriveNumber} has no disk.";
+            return false;
+        }
+
+        PulseIecActivity();
+        return _diskImage.TryReadFirstProgram(out program, out error);
+    }
     
     /// <summary>
     /// VICE-style: Read sector from disk image
@@ -171,6 +215,7 @@ public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
     public bool ReadSector(int track, int sector)
     {
         if (_diskImage == null) return false;
+        PulseIecActivity();
         return _diskImage.ReadSector(track, sector, _sectorBuffer);
     }
     
@@ -180,6 +225,20 @@ public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
     public bool WriteSector(int track, int sector)
     {
         if (_diskImage == null) return false;
+        PulseIecActivity();
         return _diskImage.WriteSector(track, sector, _sectorBuffer);
+    }
+
+    private void PulseIecActivity()
+    {
+        if (_iecEndpoint is null)
+            return;
+
+        _iecEndpoint.Pull(IecAtn, true);
+        _iecEndpoint.Pull(IecClk, true);
+        _iecEndpoint.Pull(IecData, true);
+        _iecEndpoint.Pull(IecData, _dataLine);
+        _iecEndpoint.Pull(IecClk, _clockLine);
+        _iecEndpoint.Pull(IecAtn, _atnLine);
     }
 }

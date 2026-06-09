@@ -12,7 +12,8 @@ public sealed class EmulatorRuntimeSession
     public EmulatorRuntimeSession(
         string sessionId,
         IArchitectureDescriptor architecture,
-        IMachine machine)
+        IMachine machine,
+        IecBusActivityMonitor? iecBusActivity = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
         ArgumentNullException.ThrowIfNull(architecture);
@@ -21,6 +22,7 @@ public sealed class EmulatorRuntimeSession
         SessionId = sessionId;
         Architecture = architecture;
         Machine = machine;
+        IecBusActivity = iecBusActivity;
         _lastPerformanceSampleTime = DateTimeOffset.UtcNow;
         _lastPerformanceSampleCycle = machine.GetState().Cycle;
     }
@@ -30,6 +32,8 @@ public sealed class EmulatorRuntimeSession
     public IArchitectureDescriptor Architecture { get; }
 
     public IMachine Machine { get; }
+
+    public IecBusActivityMonitor? IecBusActivity { get; }
 
     public string PowerState { get; set; } = "On";
 

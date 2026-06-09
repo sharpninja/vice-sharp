@@ -1,5 +1,17 @@
 # Testing Requirements (MCP Server)
 
+## TEST-DRV
+
+### TEST-DRV-001
+
+Focused integration tests shall prove D64 directory and file operations complete over the IEC bus and produce bus activity telemetry.
+
+**Acceptance Criteria:**
+- [ ] Tests prove mounted D64 directory and file operations execute through IEC bus line activity.
+- [ ] Tests prove the same D64 operations complete with correct directory and file data over the IEC path.
+- [ ] Focused IEC/D64 tests run with zero failed and zero skipped tests.
+
+
 ## TEST-DRV-MOTOR
 
 ### TEST-DRV-MOTOR-001
@@ -42,6 +54,18 @@ With tape inserted, MotorEnabled=true, PlayPressed=true: TryReadNextPulse return
 
 SenseLine==false when PlayPressed or RecordPressed, true otherwise. TryWritePulse returns true only when MotorEnabled && RecordPressed, incrementing RecordedPulseCount. 7 pass.
 
+
+
+## TEST-UI
+
+### TEST-UI-001
+
+Focused ViewModel and protocol tests shall prove IEC activity appears in both peripherals and status surfaces from host telemetry.
+
+**Acceptance Criteria:**
+- [ ] ViewModel tests prove peripherals panel drive entries show IEC active and idle states from host telemetry.
+- [ ] ViewModel tests prove status bar IEC activity uses the same source while preserving status fields.
+- [ ] Focused UI tests run with zero failed and zero skipped tests.
 
 
 ## TEST-VIC-CHECKPOINT

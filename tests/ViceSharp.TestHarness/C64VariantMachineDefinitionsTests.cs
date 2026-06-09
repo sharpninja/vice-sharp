@@ -26,6 +26,11 @@ public sealed class C64VariantMachineDefinitionsTests
         return data;
     }
 
+    /// <summary>
+    /// FR-CFG-001, TR-SYSTEM-CORE-001.
+    /// Use case: Sample machine YAML files must be present for every C64 variant.
+    /// Acceptance: The machine sample file set equals the expected 14 profile files.
+    /// </summary>
     [Fact]
     public void EveryC64Variant_HasAMachineDefinition()
     {
@@ -44,6 +49,11 @@ public sealed class C64VariantMachineDefinitionsTests
         Assert.Equal(expected.OrderBy(s => s), files.OrderBy(s => s));
     }
 
+    /// <summary>
+    /// FR-CFG-001, TR-SYSTEM-CORE-001.
+    /// Use case: Each checked-in variant machine YAML must load as an ad-hoc machine.
+    /// Acceptance: Loader returns a blueprint with a non-empty name and positive clock.
+    /// </summary>
     [Theory]
     [MemberData(nameof(VariantFiles))]
     public void VariantDefinition_LoadsAndDescribesAMachine(string fileName)
