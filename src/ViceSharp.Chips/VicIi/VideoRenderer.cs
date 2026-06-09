@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using ViceSharp.Abstractions;
 
 namespace ViceSharp.Chips.VicIi;
@@ -112,9 +113,26 @@ public sealed class VideoRenderer
         // evaluating the 3-register switch expression for every pixel (384x per line).
         var displayMode = _vic.DisplayModeSelection;
 
+        if (displayMode == Mos6569.VicIIDisplayMode.StandardText && _vic.Peek(0xD015) == 0)
+        {
+            RenderStandardTextLineNoSprites(
+                line,
+                leftBorderPixel,
+                rightBorderPixel,
+                leftBorderOpen,
+                rightBorderOpen,
+                screenWidth,
+                screenRow,
+                charRow,
+                columns,
+                bgPixel,
+                borderPixel);
+            return;
+        }
+
+        var pixels = MemoryMarshal.Cast<byte, uint>(line);
         for (int x = 0; x < ScreenWidth; x++)
         {
-            int offset = x * 4;
             var background = RenderBackgroundPixel(
                 x,
                 lineNumber,
@@ -135,11 +153,63 @@ public sealed class VideoRenderer
             {
                 pixel = spritePixel;
             }
-            
-            line[offset] = (byte)(pixel >> 0);
-            line[offset + 1] = (byte)(pixel >> 8);
-            line[offset + 2] = (byte)(pixel >> 16);
-            line[offset + 3] = 0xFF;
+
+            pixels[x] = pixel;
+        }
+    }
+
+    private void RenderStandardTextLineNoSprites(
+        Span<byte> line,
+        int leftBorderPixel,
+        int rightBorderPixel,
+        bool leftBorderOpen,
+        bool rightBorderOpen,
+        int screenWidth,
+        int screenRow,
+        int charRow,
+        int columns,
+        uint bgPixel,
+        uint borderPixel)
+    {
+        var pixels = MemoryMarshal.Cast<byte, uint>(line);
+        pixels.Fill(borderPixel);
+
+        if (leftBorderOpen)
+        {
+            FillPixels(pixels, 0, leftBorderPixel, bgPixel);
+        }
+
+        var displayStart = leftBorderPixel;
+        var displayEnd = Math.Min(rightBorderPixel, leftBorderPixel + screenWidth);
+        if (displayEnd > displayStart)
+        {
+            for (var col = 0; col < columns; col++)
+            {
+                var x = displayStart + col * 8;
+                if (x >= displayEnd)
+                {
+                    break;
+                }
+
+                var screenIndex = screenRow * columns + col;
+                byte charCode = _vic.ReadVideoMemory((ushort)(_vic.ScreenMemoryBase + screenIndex));
+                byte colorCode = _vic.ReadVideoMemory((ushort)(0xD800 + screenIndex));
+                byte charData = ReadCharacterRow(charCode, charRow);
+                uint fgPixel = Palette[colorCode & 0x0F];
+                var pixelsInCell = Math.Min(8, displayEnd - x);
+
+                for (var charX = 0; charX < pixelsInCell; charX++)
+                {
+                    pixels[x + charX] = ((charData >> (7 - charX)) & 0x01) != 0
+                        ? fgPixel
+                        : bgPixel;
+                }
+            }
+        }
+
+        if (rightBorderOpen)
+        {
+            FillPixels(pixels, rightBorderPixel, ScreenWidth - rightBorderPixel, bgPixel);
         }
     }
 
@@ -408,14 +478,17 @@ public sealed class VideoRenderer
 
     private void DrawBorder(Span<byte> line, uint borderPixel)
     {
-        for (int x = 0; x < ScreenWidth; x++)
+        MemoryMarshal.Cast<byte, uint>(line).Fill(borderPixel);
+    }
+
+    private static void FillPixels(Span<uint> pixels, int start, int length, uint pixel)
+    {
+        if (length <= 0)
         {
-            int offset = x * 4;
-            line[offset] = (byte)(borderPixel >> 0);
-            line[offset + 1] = (byte)(borderPixel >> 8);
-            line[offset + 2] = (byte)(borderPixel >> 16);
-            line[offset + 3] = 0xFF;
+            return;
         }
+
+        pixels.Slice(start, length).Fill(pixel);
     }
 
     /// <summary>
