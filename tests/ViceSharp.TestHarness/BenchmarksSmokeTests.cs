@@ -130,7 +130,7 @@ public sealed class BenchmarksSmokeTests
     }
 
     /// <summary>
-    /// FR: FR-PERF-RUNFRAME-001, TR: TR-PERF-HARNESS.
+    /// FR: FR-PERF-RUNFRAME-001, TEST: TEST-PERF-RUNFRAME-001, TR: TR-CORE-CYCLE-001.
     /// Use case: CI must catch benchmark regressions that accidentally use the
     /// minimal host or romless helper instead of the production C64 PAL path.
     /// Acceptance: C64PalRunFrameBenchmark.Setup builds the Commodore 64 PAL
@@ -147,7 +147,7 @@ public sealed class BenchmarksSmokeTests
     }
 
     /// <summary>
-    /// FR: FR-PERF-RUNFRAME-001, TR: TR-PERF-HARNESS.
+    /// FR: FR-PERF-RUNFRAME-001, TEST: TEST-PERF-RUNFRAME-001, TR: TR-PERF-ALLOC-001.
     /// Use case: The stopwatch probe must remain runnable for the required
     /// warmup/measurement workflow without invoking BenchmarkDotNet.
     /// Acceptance: A small probe reports positive median/p95 timings for the

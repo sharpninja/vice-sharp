@@ -219,7 +219,7 @@ public sealed class BasicBusAndSimpleRamTests
     }
 
     /// <summary>
-    /// FR/TR: FR-PERF-RUNFRAME-001, TR-System-Core (BasicBus + C64MemoryMap).
+    /// FR/TR: FR-PERF-RUNFRAME-001, TR-CORE-CYCLE-001, TR-CORE-DET-001.
     /// Use case: The managed C64 PAL frame loop uses a single
     /// <see cref="C64MemoryMap"/> behind <see cref="BasicBus"/> for the
     /// normal machine topology, but debug cartridges and overlays must

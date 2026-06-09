@@ -272,7 +272,7 @@ public sealed class VideoRendererTests
 
     /// <summary>
     /// FR: FR-PERF-RUNFRAME-001, FR-VIC-002, FR-VIC-007,
-    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// TR: TR-CORE-CYCLE-001, TEST: TEST-VIC-001.
     /// Use case: The common C64 PAL frame path renders standard text
     /// without enabled sprites. Its optimized scanline renderer must
     /// remain pixel-exact for the side border, background pixels, and
@@ -494,7 +494,7 @@ public sealed class VideoRendererTests
 
     /// <summary>
     /// FR: FR-PERF-RUNFRAME-001, FR-VIC-004, FR-VIC-007,
-    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// TR: TR-CORE-CYCLE-001, TEST: TEST-VIC-001.
     /// Use case: An enabled opaque sprite must become visible in the
     /// rendered BGRA framebuffer, not only in collision latches. This
     /// also proves standard-text rendering falls back to the sprite

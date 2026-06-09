@@ -28,6 +28,19 @@ After setting IecBus.Atn=false and calling Tick() up to 985 times, Clock==false 
 
 
 
+## TEST-PERF-RUNFRAME
+
+### TEST-PERF-RUNFRAME-001
+
+The benchmark harness builds a real-ROM C64 PAL machine through ArchitectureBuilder, measures IMachine.RunFrame after warmup over the required 600-frame window, reports median and p95 frame time, and proves the measured hot path allocates zero bytes on the current thread.
+
+**Acceptance Criteria:**
+- [x] Benchmark/probe builds Commodore 64 PAL through ArchitectureBuilder with the real ROM provider. (evidence: BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed)
+- [x] RunFramePerfProbe 60/600 reports median <= 18 ms, p95 <= 22 ms, and 0 allocated bytes. (evidence: median=1.575ms; p95=2.753ms; allocated=0 bytes)
+- [x] Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID and Lockstep/Checkpoint gates pass with 0 failed and 0 skipped tests. (evidence: focused=182 passed; lockstep/checkpoint=333 passed)
+- [x] BenchmarkDotNet C64PalRunFrameBenchmark completes and reports no managed allocation. (evidence: BenchmarkDotNet mean=2.262ms median=2.255ms; Allocated reported none)
+
+
 ## TEST-PUBSUB
 
 ### TEST-PUBSUB-001
