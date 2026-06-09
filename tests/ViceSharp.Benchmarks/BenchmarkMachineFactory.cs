@@ -1,6 +1,7 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Core;
+using ViceSharp.RomFetch;
 
 namespace ViceSharp.Benchmarks;
 
@@ -37,5 +38,37 @@ internal static class BenchmarkMachineFactory
         var machine = new Commodore64(bus, clock, irq, nmi);
         machine.Reset();
         return machine;
+    }
+
+    /// <summary>
+    /// Build a real-ROM C64 PAL machine through the production ArchitectureBuilder path.
+    /// </summary>
+    public static IMachine CreateC64Pal()
+    {
+        var descriptor = new C64Descriptor(C64MachineProfiles.C64Pal);
+        var machine = new ArchitectureBuilder(CreateC64RomProvider()).Build(descriptor);
+        if (!string.Equals(machine.Architecture.MachineName, C64MachineProfiles.C64Pal.DisplayName, StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException(
+                $"Expected {C64MachineProfiles.C64Pal.DisplayName}, got {machine.Architecture.MachineName}.");
+        }
+
+        return machine;
+    }
+
+    private static RomProvider CreateC64RomProvider()
+    {
+        var dataRoots = ViceDataPathResolver.FindDataRoots();
+        foreach (var dataRoot in dataRoots)
+        {
+            var provider = new RomProvider(
+                dataRoot,
+                dataRoots.Where(path => !string.Equals(path, dataRoot, StringComparison.OrdinalIgnoreCase)));
+            if (new C64RomSet().IsComplete(provider))
+                return provider;
+        }
+
+        throw new DirectoryNotFoundException(
+            "Could not locate a VICE data root with complete C64 ROM resources. Set VICESHARP_ROM_PATH or VICE_DATA_PATH to a VICE data root, or put x64sc.exe on PATH.");
     }
 }

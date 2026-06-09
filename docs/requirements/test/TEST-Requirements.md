@@ -240,6 +240,23 @@ C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for r
 
 ---
 
+## TEST-PERF-RUNFRAME-001: C64 PAL RunFrame Performance Tests
+
+**ID:** TEST-PERF-RUNFRAME-001
+**Title:** C64 PAL RunFrame Performance Tests
+**Priority:** P0 -- Critical
+
+### Condition
+
+The benchmark harness builds a real-ROM C64 PAL machine through `ArchitectureBuilder`, measures `IMachine.RunFrame()` after warmup over the required 600-frame window, reports median and p95 frame time, and proves the measured hot path allocates zero bytes on the current thread.
+
+### Traceability
+
+- **Related FR Area(s):** FR-PERF-RUNFRAME-001
+- **Related TR Area(s):** TR-CYCLE-001, TR-DET-001, TR-ALLOC-001, TR-AOT-001
+
+---
+
 ## TEST-GRPC-001: gRPC Boundary Tests
 
 **ID:** TEST-GRPC-001

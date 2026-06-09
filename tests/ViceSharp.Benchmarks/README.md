@@ -14,9 +14,11 @@ and the full machine end-to-end:
 - `CiaBenchmarks` - tick the MOS 6526 with a short Timer A latch
 - `PubSubBenchmarks` - measure TR-PUBSUB-001 publish, delivery, pool, and arena costs
 - `FullSystemBenchmark` - drive the romless Commodore64 via `IClock.Step`
+- `C64PalRunFrameBenchmark` - drive real-ROM C64 PAL via `IMachine.RunFrame()`
 
-These benchmarks do not require ROMs or a native VICE build; everything runs
-offline against in-memory RAM.
+Most subsystem benchmarks do not require ROMs or a native VICE build. The
+FR-PERF-RUNFRAME-001 C64 PAL benchmark intentionally requires a complete VICE
+C64 data root so it measures the production `ArchitectureBuilder` path.
 
 ## Running
 
@@ -34,6 +36,12 @@ For the quick TR-PUBSUB-001 stopwatch probe:
 
 ```bash
 dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --pubsub-probe 1000000
+```
+
+For the FR-PERF-RUNFRAME-001 RunFrame probe:
+
+```bash
+dotnet run -c Release --project tests/ViceSharp.Benchmarks -- --runframe-probe 60 600
 ```
 
 BenchmarkDotNet writes reports under `BenchmarkDotNet.Artifacts/results/`.

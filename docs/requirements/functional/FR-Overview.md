@@ -29,6 +29,7 @@ This document serves as the master index for all ViceSharp Functional Requiremen
 | FR-Media-Capture.md | Media Capture | FR-MED-001 .. FR-MED-005 |
 | FR-Memory-System.md | Memory | FR-MEM-001 .. FR-MEM-006 |
 | FR-Monitor.md | Machine Monitor | FR-MON-001 .. FR-MON-006 |
+| FR-Performance.md | Runtime Performance | FR-PERF-RUNFRAME-001 |
 | FR-Snapshot.md | Snapshot / Replay | FR-SNP-001 .. FR-SNP-004 |
 | FR-Storage-Drives.md | Disk Drives | FR-DRV-001 .. FR-DRV-006 |
 | FR-Storage-Tape.md | Tape / Datasette | FR-TAP-001 .. FR-TAP-005 |
@@ -98,6 +99,7 @@ This document serves as the master index for all ViceSharp Functional Requiremen
 | FR-MON-004 | CPU Register Inspection and Manipulation | `IMonitor`, `ICpu` | 1 |
 | FR-MON-005 | Memory Bank View Selection | `IMonitor`, `IAddressSpace` | 2 |
 | FR-MON-006 | Watch Expressions | `IMonitor` | 2 |
+| FR-PERF-RUNFRAME-001 | C64 PAL RunFrame Throughput | `IMachine`, `IClock`, `IBus`, `IVideoChip`, `IAudioChip` | 1 |
 | FR-PRF-001 | Commodore 64 (Original NMOS) Machine Profile | `IMachineProfile` | 1 |
 | FR-PRF-002 | Commodore 64C Machine Profile | `IMachineProfile` | 2 |
 | FR-PRF-003 | Commodore SX-64 Machine Profile | `IMachineProfile` | 2 |
