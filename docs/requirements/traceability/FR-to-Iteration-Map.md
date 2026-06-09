@@ -55,6 +55,7 @@ This map groups Functional Requirements by planned implementation iteration.
 | FR-MON-003 | Breakpoint Management | Machine Monitor |
 | FR-MON-004 | CPU Register Inspection and Manipulation | Machine Monitor |
 | FR-PRF-001 | Commodore 64 (Original NMOS) Machine Profile | Machine Profiles |
+| FR-PERF-RUNFRAME-001 | C64 PAL RunFrame Throughput | Runtime Performance |
 | FR-SID-001 | Three Independent Voice Oscillators | Audio (SID) |
 | FR-SID-002 | Waveform Generation (Triangle, Sawtooth, Pulse, Noise) | Audio (SID) |
 | FR-SID-004 | 6581 SID Filter Emulation | Audio (SID) |

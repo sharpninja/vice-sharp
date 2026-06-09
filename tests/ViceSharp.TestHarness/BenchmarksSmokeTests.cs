@@ -1,5 +1,6 @@
 namespace ViceSharp.TestHarness;
 
+using ViceSharp.Architectures.C64;
 using ViceSharp.Benchmarks;
 using Xunit;
 
@@ -125,6 +126,41 @@ public sealed class BenchmarksSmokeTests
         Assert.True(result.PublishPackedPayloadNs > 0);
         Assert.True(result.MessagePoolRentReturnNs > 0);
         Assert.True(result.PayloadArenaAllocateNs > 0);
+        Assert.Equal(0, result.AllocatedBytes);
+    }
+
+    /// <summary>
+    /// FR: FR-PERF-RUNFRAME-001, TR: TR-PERF-HARNESS.
+    /// Use case: CI must catch benchmark regressions that accidentally use the
+    /// minimal host or romless helper instead of the production C64 PAL path.
+    /// Acceptance: C64PalRunFrameBenchmark.Setup builds the Commodore 64 PAL
+    /// architecture and one RunFrame iteration completes without throwing.
+    /// </summary>
+    [Fact]
+    public void C64PalRunFrameBenchmark_UsesRealC64Pal()
+    {
+        var bench = new C64PalRunFrameBenchmark();
+        bench.Setup();
+
+        Assert.Equal(C64MachineProfiles.C64Pal.DisplayName, bench.ArchitectureName);
+        bench.RunFrame();
+    }
+
+    /// <summary>
+    /// FR: FR-PERF-RUNFRAME-001, TR: TR-PERF-HARNESS.
+    /// Use case: The stopwatch probe must remain runnable for the required
+    /// warmup/measurement workflow without invoking BenchmarkDotNet.
+    /// Acceptance: A small probe reports positive median/p95 timings for the
+    /// real C64 PAL architecture and records zero RunFrame hot-path allocations.
+    /// </summary>
+    [Fact]
+    public void RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations()
+    {
+        var result = RunFramePerfProbe.Run(warmupFrames: 1, measuredFrames: 2);
+
+        Assert.Equal(C64MachineProfiles.C64Pal.DisplayName, result.ArchitectureName);
+        Assert.True(result.MedianMilliseconds > 0);
+        Assert.True(result.P95Milliseconds > 0);
         Assert.Equal(0, result.AllocatedBytes);
     }
 }

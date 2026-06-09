@@ -219,6 +219,43 @@ public sealed class BasicBusAndSimpleRamTests
     }
 
     /// <summary>
+    /// FR/TR: FR-PERF-RUNFRAME-001, TR-System-Core (BasicBus + C64MemoryMap).
+    /// Use case: The managed C64 PAL frame loop uses a single
+    /// <see cref="C64MemoryMap"/> behind <see cref="BasicBus"/> for the
+    /// normal machine topology, but debug cartridges and overlays must
+    /// still keep the bus' last-registered-wins contract while attached.
+    /// Acceptance: A plain C64 bus round-trips RAM through the memory
+    /// map; a later overlay wins for its claimed address; after
+    /// unregistering the overlay the C64 memory map value is visible
+    /// again.
+    /// </summary>
+    [Fact]
+    public void BasicBus_C64MemoryMapFastPath_FallsBackWhenOverlayRegistered()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+        var bus = Assert.IsType<BasicBus>(machine.Bus);
+        const ushort address = 0x0400;
+
+        bus.Write(address, 0x11);
+        Assert.Equal(0x11, bus.Read(address));
+        Assert.Equal(0x11, bus.Peek(address));
+
+        var overlay = new RangeDevice(address, address, readValue: 0x77, peekValue: 0x88, id: 99);
+        bus.RegisterDevice(overlay);
+
+        Assert.Equal(0x77, bus.Read(address));
+        Assert.Equal(0x88, bus.Peek(address));
+        bus.Write(address, 0x22);
+        Assert.Equal(1, overlay.WriteCount);
+        Assert.Equal(0x22, overlay.LastWriteValue);
+
+        bus.UnregisterDevice(overlay);
+
+        Assert.Equal(0x11, bus.Read(address));
+        Assert.Equal(0x11, bus.Peek(address));
+    }
+
+    /// <summary>
     /// FR/TR: TR-System-Core (BasicBus + SimpleRam).
     /// Use case: A write to an address no device claims is the open-bus
     /// write condition - on real hardware this is harmless. The bus

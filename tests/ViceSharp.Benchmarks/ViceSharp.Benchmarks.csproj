@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\src\ViceSharp.Core\ViceSharp.Core.csproj" />
     <ProjectReference Include="..\..\src\ViceSharp.Chips\ViceSharp.Chips.csproj" />
     <ProjectReference Include="..\..\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
+    <ProjectReference Include="..\..\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
   </ItemGroup>
 
   <ItemGroup>

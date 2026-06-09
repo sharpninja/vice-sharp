@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Running;
+using System.Globalization;
 
 namespace ViceSharp.Benchmarks;
 
@@ -21,6 +22,22 @@ public static class Program
             var (cycles, elapsed, cps) = PerfProbe.Run(budget);
             var realtimePct = cps / PerfProbe.PalCyclesPerSecond * 100.0;
             Console.WriteLine($"PerfProbe: cycles={cycles:N0} elapsed={elapsed.TotalMilliseconds:F2}ms cycles/sec={cps:N0} pct-realtime={realtimePct:F2}%");
+            return 0;
+        }
+
+        if (args.Length > 0 && args[0] == "--runframe-probe")
+        {
+            var warmupFrames = args.Length > 1 && int.TryParse(args[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var warmup)
+                ? warmup
+                : RunFramePerfProbe.DefaultWarmupFrames;
+            var measuredFrames = args.Length > 2 && int.TryParse(args[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out var measured)
+                ? measured
+                : RunFramePerfProbe.DefaultMeasuredFrames;
+            var result = RunFramePerfProbe.Run(warmupFrames, measuredFrames);
+            Console.WriteLine(
+                string.Create(
+                    CultureInfo.InvariantCulture,
+                    $"RunFramePerfProbe: architecture={result.ArchitectureName} warmup={result.WarmupFrames} frames={result.MeasuredFrames} median={result.MedianMilliseconds:F3}ms p95={result.P95Milliseconds:F3}ms min={result.MinMilliseconds:F3}ms max={result.MaxMilliseconds:F3}ms allocated={result.AllocatedBytes:N0} bytes target-met={result.MeetsTarget}"));
             return 0;
         }
 

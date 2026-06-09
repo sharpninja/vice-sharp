@@ -169,6 +169,13 @@ This map links Functional Requirements to the ViceSharp interfaces or host servi
 | FR-MON-006 | Watch Expressions | `IMonitor` |
 ---
 
+## Runtime Performance
+
+| FR ID | FR Title | Primary Interfaces |
+|-------|----------|--------------------|
+| FR-PERF-RUNFRAME-001 | C64 PAL RunFrame Throughput | `IMachine`, `IClock`, `IBus`, `IVideoChip`, `IAudioChip` |
+---
+
 ## Snapshot / Replay
 
 | FR ID | FR Title | Primary Interfaces |

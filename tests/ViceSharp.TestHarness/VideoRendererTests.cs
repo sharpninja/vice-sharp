@@ -271,6 +271,36 @@ public sealed class VideoRendererTests
     }
 
     /// <summary>
+    /// FR: FR-PERF-RUNFRAME-001, FR-VIC-002, FR-VIC-007,
+    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: The common C64 PAL frame path renders standard text
+    /// without enabled sprites. Its optimized scanline renderer must
+    /// remain pixel-exact for the side border, background pixels, and
+    /// character foreground bits.
+    /// Acceptance: A closed left-border pixel uses $D020, the first
+    /// glyph bit uses Color RAM, and the adjacent zero bit uses $D021.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_StandardTextNoSprites_RendersBorderBackgroundAndGlyphPixels()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+        vic.Write(0xD020, 0x03);
+        ConfigureCharacterByte(ram, vic, x: vic.LeftBorderPixel, rasterLine: vic.UpperBorderStart, color: 0x04, charByte: 0x80);
+
+        renderer.RenderFullFrame();
+
+        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int x = vic.LeftBorderPixel;
+        Assert.Equal(ToBgra(0x03), ReadPixel(renderer.FrameBuffer, x - 1, y));
+        Assert.Equal(ToBgra(0x04), ReadPixel(renderer.FrameBuffer, x, y));
+        Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, x + 1, y));
+    }
+
+    /// <summary>
     /// FR: FR-VIC-002, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
     /// Use case: Multicolor text cells with Color RAM bit 3 set must
     /// route two-bit character pairs through the VICE color table.
@@ -463,9 +493,12 @@ public sealed class VideoRendererTests
     }
 
     /// <summary>
-    /// FR: FR-VIC-004, FR: FR-VIC-007, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// FR: FR-PERF-RUNFRAME-001, FR-VIC-004, FR-VIC-007,
+    /// TR: TR-CYCLE-001, TEST: TEST-VIC-001.
     /// Use case: An enabled opaque sprite must become visible in the
-    /// rendered BGRA framebuffer, not only in collision latches.
+    /// rendered BGRA framebuffer, not only in collision latches. This
+    /// also proves standard-text rendering falls back to the sprite
+    /// compositor when $D015 enables any sprite.
     /// Acceptance: With sprite 0 enabled at a visible raster coordinate
     /// and its first source bit set, the matching framebuffer pixel uses
     /// sprite 0's colour register instead of the background colour.
