@@ -250,10 +250,18 @@ C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for r
 
 The benchmark harness builds a real-ROM C64 PAL machine through `ArchitectureBuilder`, measures `IMachine.RunFrame()` after warmup over the required 600-frame window, reports median and p95 frame time, and proves the measured hot path allocates zero bytes on the current thread.
 
+### Acceptance Criteria
+
+1. `C64PalRunFrameBenchmark` builds Commodore 64 PAL through `ArchitectureBuilder` with the real ROM provider.
+2. `RunFramePerfProbe` reports median `<= 18 ms`, p95 `<= 22 ms`, and `0` allocated bytes for the 60 warmup / 600 measured frame workflow.
+3. Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID tests pass with `0` failed and `0` skipped.
+4. Lockstep and checkpoint gates pass with `0` failed and `0` skipped.
+5. BenchmarkDotNet completes `C64PalRunFrameBenchmark` and reports no managed allocation.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-PERF-RUNFRAME-001
-- **Related TR Area(s):** TR-CYCLE-001, TR-DET-001, TR-ALLOC-001, TR-AOT-001
+- **Related TR Area(s):** TR-CORE-CYCLE-001, TR-CORE-DET-001, TR-PERF-ALLOC-001, TR-PERF-AOT-001
 
 ---
 
