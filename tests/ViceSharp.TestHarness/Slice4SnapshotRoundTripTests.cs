@@ -26,7 +26,7 @@ public sealed class Slice4SnapshotRoundTripTests
         var cpu = (Mos6502)machine.Devices.GetByRole(DeviceRole.Cpu)!;
         var irq = new InterruptLine(InterruptType.Irq);
         var cia1 = new Mos6526(machine.Bus, irq) { BaseAddress = 0xDC00 };
-        var sid = new Sid6581(machine.Bus);
+        var sid = new Sid6581(machine.Bus) { BaseAddress = 0xD400 };
         machine.Bus.RegisterDevice(cia1);
         machine.Bus.RegisterDevice(sid);
         machine.Clock.Register(cia1);
@@ -40,7 +40,7 @@ public sealed class Slice4SnapshotRoundTripTests
         var cpu = (Mos6502)machine.Devices.GetByRole(DeviceRole.Cpu)!;
         var irq = new InterruptLine(InterruptType.Irq);
         var cia1 = new Mos6526(machine.Bus, irq) { BaseAddress = 0xDC00 };
-        var sid = new Sid6581(machine.Bus);
+        var sid = new Sid6581(machine.Bus) { BaseAddress = 0xD400 };
         var vicIrq = new InterruptLine(InterruptType.Irq);
         var vic = new Mos6569(machine.Bus, vicIrq) { BaseAddress = 0xD000 };
         machine.Bus.RegisterDevice(cia1);

@@ -3,7 +3,7 @@ using ViceSharp.Abstractions;
 namespace ViceSharp.Chips.VicIi;
 
 /// <summary>
-/// HMOS MOS 8565 PAL VIC-II variant used by newer C64C and C64GS models.
+/// HMOS MOS 8565 PAL VIC-II variant.
 /// </summary>
 public sealed class Mos8565 : Mos6569
 {

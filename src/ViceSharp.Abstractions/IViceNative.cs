@@ -31,6 +31,11 @@ public interface IViceNative : IDisposable
     void DetachDisk(uint unit, uint drive);
 
     /// <summary>
+    /// Apply a host keyboard matrix key state to the native emulator.
+    /// </summary>
+    void SetKeyboardMatrixKey(int row, int column, bool pressed);
+
+    /// <summary>
     /// Read a byte from native physical C64 RAM without bus side effects.
     /// </summary>
     byte PeekRam(ushort address);

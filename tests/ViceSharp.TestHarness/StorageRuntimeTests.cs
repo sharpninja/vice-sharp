@@ -1,5 +1,6 @@
 using ViceSharp.Chips.IEC;
 using ViceSharp.Chips.Tape;
+using ViceSharp.Core;
 using Xunit;
 
 namespace ViceSharp.TestHarness;

@@ -1,4 +1,6 @@
-namespace ViceSharp.Chips.IEC;
+using ViceSharp.Chips.IEC;
+
+namespace ViceSharp.Core;
 
 public sealed class IecD64Attachment
 {

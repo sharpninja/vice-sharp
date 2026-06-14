@@ -1,7 +1,7 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Audio;
 using ViceSharp.Chips.Cia;
-using ViceSharp.Chips.Input;
+using ViceSharp.Core.Input;
 using ViceSharp.Chips.Pla;
 using ViceSharp.Chips.VicIi;
 
@@ -27,6 +27,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private const ushort CharStart = 0xD000;
     private const ushort IoStart = 0xD000;
     private const ushort IoEnd = 0xDFFF;
+    private const ushort VicScreenControl2 = 0xD016;
     private const ushort ColorRamStart = 0xD800;
     private const ushort ColorRamEnd = 0xDBFF;
 
@@ -111,6 +112,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     // $DE0F Ethernet register window is stubbed.
     private int _rrNetCartridgeBank;
     private bool _rrNetHidden;
+    private int _vicBank = 3;
     private int _vicPhi1Bank;
     private byte _lastCpuBusValue = 0xFF;
     private bool _loadingRoms;
@@ -157,7 +159,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             _cia2.PortAOutputChanged = value =>
             {
                 var bank = 3 - (value & 0x03);
-                _vic.VicBank = bank;
+                _vicBank = bank;
                 _vicPhi1Bank = bank;
             };
         }
@@ -166,10 +168,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _vic.Phi1MemoryReader = ReadVicPhi1OpenBus;
 
         Reset();
-        // Note: RebuildReadPageTable() is called inside Reset(). The PLA DataRegister
-        // is 0 at this point (not yet Initialize()'d), so the table will be all-RAM
-        // until machine.Reset() is called, which resets the PLA first and then calls
-        // this Reset() again, rebuilding the table with the correct PLA state.
+        // Note: RebuildReadPageTable() is called inside Reset(). The board
+        // processor-port state is applied there, so the table is rebuilt with
+        // the C64 power-up PLA inputs during machine.Reset().
     }
 
     public DeviceId Id => new DeviceId(0x0101);
@@ -183,6 +184,10 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     public CartridgeMappingMode? AttachedMappingMode => _attachedCartridgeMappingMode;
 
+    public bool ShouldDeferCpuAbsoluteStore(ushort address) => address == VicScreenControl2;
+
+    public bool ShouldDelayCpuFetchAfterWrite(ushort address) => address == VicScreenControl2;
+
     public bool IsCartridgeAttached => _cartridgeImage is not null;
 
     public void Reset()
@@ -194,7 +199,9 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _keyboardKeyPressCounts.Clear();
         _joystickPort1.Reset();
         _joystickPort2.Reset();
-        _vic.VicBank = 3;
+        _pla.WriteDataDirection(0x2F);
+        _pla.WriteDataPort(0x37);
+        _vicBank = 3;
         _vicPhi1Bank = 0;
         if (_attachedCartridgeMappingMode == CartridgeMappingMode.GameSystem)
             _gameSystemCartridgeBank = 0;
@@ -228,10 +235,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             _rrNetHidden = false;
         }
 
-        // PERF-MEM-001: Rebuild page table so it reflects PLA state after a machine
-        // reset. The machine's Reset() resets all IClockedDevice chips (including the
-        // PLA, which sets DataRegister=0x37) before resetting non-clocked devices
-        // (this class), so the PLA is already at the correct power-up state here.
+        // PERF-MEM-001: Rebuild page table after applying the board-owned
+        // processor-port reset state so PLA banking starts in the C64 power-up map.
         RebuildReadPageTable();
     }
 
@@ -598,10 +603,10 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (TryReadUltimaxVideoMemory(vicAddress, out var cartridgeValue))
             return cartridgeValue;
 
-        if (vicAddress is >= 0x1000 and < 0x2000 && (_vic.VicBank is 0 or 2))
+        if (vicAddress is >= 0x1000 and < 0x2000 && (_vicBank is 0 or 2))
             return _charRom[vicAddress - 0x1000];
 
-        return _ram[_vic.TranslateVicAddress(vicAddress)];
+        return _ram[TranslateVicAddress(vicAddress)];
     }
 
     private bool IsIoVisible => _pla.Charen && (_pla.Loram || _pla.Hiram);
@@ -795,6 +800,15 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private ushort TranslateVicPhi1Address(ushort vicAddress)
     {
         return (ushort)((_vicPhi1Bank << 14) | (vicAddress & 0x3FFF));
+    }
+
+    public ushort TranslateVicAddressForDiagnostics(ushort vicAddress) => TranslateVicAddress(vicAddress);
+
+    public int VicBankForDiagnostics => _vicBank;
+
+    private ushort TranslateVicAddress(ushort vicAddress)
+    {
+        return (ushort)((_vicBank << 14) | (vicAddress & 0x3FFF));
     }
 
     private void WriteIo(ushort address, byte value)

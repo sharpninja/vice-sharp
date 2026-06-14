@@ -7,12 +7,12 @@ using ViceSharp.Chips.Pla;
 /// <summary>
 /// FR/TR: FR-CPU (BACKFILL-CPU 6510 processor port).
 /// Use case: The 6510 reserves zero-page $00 (DDR) and $01 (data) for its
-/// internal 6-bit I/O port. Writes to $01 must drive the C64 PLA banking
-/// bits (LORAM/HIRAM/CHAREN, bits 0-2). Writes to $00 must update the
+/// internal 6-bit I/O port. Board mapping decides which absolute addresses
+/// expose the port. Writes to the data latch must drive PLA banking bits
+/// (LORAM/HIRAM/CHAREN, bits 0-2). Writes to the DDR must update the
 /// data direction register so subsequent reads of $01 apply the DDR mask:
 /// output bits return what was written, input bits return the external
-/// pull-up default. Bit 4 (tape sense) is conventionally an input pin so
-/// CPU writes do not change the observable bit on read.
+/// pull-up default.
 /// </summary>
 public sealed class ProcessorPortTests
 {
@@ -37,20 +37,38 @@ public sealed class ProcessorPortTests
 
     /// <summary>
     /// FR/TR: FR-CPU (BACKFILL-CPU 6510 processor port).
-    /// Use case: The 6510 reset state mirrors the C64 power-up: DDR is
-    /// $2F (bits 0-5 output) and the data register is $37 (LORAM, HIRAM,
-    /// CHAREN, tape motor + sense pull-up).
-    /// Acceptance: After Reset() the DataDirection is 0x2F and the
-    /// DataRegister is 0x37, mirroring the documented C64 power-up port
-    /// state.
+    /// Use case: The shared chip model resets to a neutral state. Board
+    /// integration supplies any machine-specific processor-port power-up
+    /// values.
+    /// Acceptance: After Reset() the DataDirection and DataRegister are zero.
     /// </summary>
     [Fact]
-    public void Reset_InitializesPortToC64PowerUpState()
+    public void Reset_InitializesPortToNeutralChipState()
     {
         var bus = new MockProcessorPortBus();
         var pla = new Mos906114(bus);
 
         pla.Reset();
+
+        Assert.Equal(0x00, pla.DataDirection);
+        Assert.Equal(0x00, pla.DataRegister);
+        Assert.False(pla.Loram);
+        Assert.False(pla.Hiram);
+        Assert.False(pla.Charen);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-CPU (BACKFILL-CPU 6510 processor port), ARCH-CHIPGLUE-001.
+    /// Use case: C64 board reset owns the documented processor-port power-up
+    /// state rather than the shared PLA core.
+    /// Acceptance: A reset C64 machine exposes DDR=$2F and data=$37 through
+    /// its PLA device, enabling LORAM, HIRAM, and CHAREN.
+    /// </summary>
+    [Fact]
+    public void C64MachineReset_AppliesPowerUpProcessorPortState()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+        var pla = (Mos906114)machine.Devices.GetByRole(DeviceRole.Pla)!;
 
         Assert.Equal(0x2F, pla.DataDirection);
         Assert.Equal(0x37, pla.DataRegister);
@@ -73,6 +91,7 @@ public sealed class ProcessorPortTests
         var bus = new MockProcessorPortBus();
         var pla = new Mos906114(bus);
         pla.Reset();
+        pla.WriteDataDirection(0x2F);
 
         pla.WriteDataPort(0x07);
 
@@ -132,20 +151,18 @@ public sealed class ProcessorPortTests
 
     /// <summary>
     /// FR/TR: FR-CPU (BACKFILL-CPU 6510 processor port).
-    /// Use case: Tape sense (bit 4) is wired as an input on every C64 -
-    /// the DDR bit 4 must be zero in the documented power-up state. The
-    /// CPU cannot drive bit 4 even by writing $01: the bit always reads
-    /// back as the external pull-up state, not the value the CPU stored.
-    /// Acceptance: With reset DDR ($2F, bit 4 cleared = input), writing
-    /// $01 with bit 4 set and bit 4 clear yields the same bit 4 readback,
-    /// which is the input pull-up value (zero in the simple model).
+    /// Use case: Input pins are controlled by external pull-up state. The
+    /// data latch cannot drive a bit whose DDR bit is zero.
+    /// Acceptance: With bit 4 configured as an input, writing the data latch
+    /// with bit 4 set and clear yields the same bit 4 readback.
     /// </summary>
     [Fact]
-    public void ReadProcessorPort_TapeSenseBit_IsReadOnly()
+    public void ReadProcessorPort_InputBit_IsReadOnly()
     {
         var bus = new MockProcessorPortBus();
         var pla = new Mos906114(bus);
         pla.Reset();
+        pla.WriteDataDirection(0x2F);
 
         pla.WriteDataPort(0x37 | 0x10);
         var withBit4Set = pla.ReadProcessorPort() & 0x10;

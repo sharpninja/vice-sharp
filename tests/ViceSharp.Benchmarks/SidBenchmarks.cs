@@ -23,7 +23,7 @@ public class SidBenchmarks
     public void Setup()
     {
         _bus = new BasicBus();
-        _sid = new Sid6581(_bus);
+        _sid = new Sid6581(_bus) { BaseAddress = 0xD400 };
         _bus.RegisterDevice(_sid);
         _sid.Reset();
 

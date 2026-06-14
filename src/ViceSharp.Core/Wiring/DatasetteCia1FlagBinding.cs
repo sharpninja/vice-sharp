@@ -1,6 +1,7 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Tape;
+using ViceSharp.Core;
 
 namespace ViceSharp.Core.Wiring;
 

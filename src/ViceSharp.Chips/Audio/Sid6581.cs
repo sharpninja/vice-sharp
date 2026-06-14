@@ -102,8 +102,8 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // outputs of every selected waveform together. With a single
             // waveform selected this collapses to that waveform's value;
             // with two or more selected the result is the bitwise AND of
-            // their 8-bit outputs (the iconic distorted/attenuated C64
-            // combined-waveform sound). With zero waveform bits selected
+            // their 8-bit outputs (the distorted/attenuated combined-waveform
+            // sound associated with SID silicon). With zero waveform bits selected
             // the voice is silent.
             int triValue = 0, sawValue = 0, pulValue = 0, noiseValue = 0;
 
@@ -186,7 +186,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // FR-SID-010 digi playback: the 4-bit master-volume DAC ($D418 bits 0-3)
         // contributes a small DC offset proportional to volume even when no
         // voices are gated. This is the rail that makes the famous Galway/
-        // Daglish 4-bit PCM technique audible on real C64 hardware: rapid
+        // Daglish 4-bit PCM technique audible on real SID hardware: rapid
         // $D418 writes alone produce hearable PCM through the DAC nonlinearity.
         // The chosen DC magnitude (DigiDcOffset) is modest enough to leave
         // normal voice output dominant while still letting per-write volume
@@ -385,7 +385,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// <summary>
     /// Generate a sample + push it to the configured audio backend (if any).
     /// Buffers samples internally and flushes in batches of 256 to amortise
-    /// backend overhead. Call once per audio-sample tick (host responsibility).
+        /// backend overhead. Call once per audio-sample tick.
     /// </summary>
     public void GenerateSampleAndOutput()
     {
@@ -694,25 +694,19 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// <summary>
     /// FR-SID-012 (BACKFILL-SID-001 dual-SID slice, acceptance criteria 1,
     /// 6). The base address of this SID chip's 32-byte register window.
-    /// The C64's hardware SID at <c>$D400</c> mirrors across the entire
-    /// $D400-$D7FF I/O sub-block, but in a dual-SID or 3SID host that
-    /// mirroring belongs to the memory-map dispatcher, not to the chip
-    /// itself: each chip claims only its native 32-byte window so a
-    /// second instance can coexist at <c>$D420</c> (or any other 32-byte
-    /// boundary) without ambiguity. Default remains <c>$D400</c>, which
-    /// preserves the single-SID baseline; the host's memory map fills
-    /// the surrounding mirrors when no second SID is configured.
+    /// Board-specific placement and any mirror window belong to the
+    /// memory-map dispatcher, not to the chip itself: each chip claims
+    /// only its native 32-byte window so multiple instances can coexist
+    /// at board-selected 32-byte boundaries without ambiguity.
     /// </summary>
-    public ushort BaseAddress { get; init; } = 0xD400;
+    public ushort BaseAddress { get; init; }
 
     /// <summary>
     /// FR-SID-012 (BACKFILL-SID-001 dual-SID slice, acceptance criterion 6).
     /// The chip claims only its native 32-byte register window
-    /// (<c>BaseAddress</c> .. <c>BaseAddress + 0x1F</c>). The C64
-    /// memory-map dispatcher is responsible for filling the surrounding
-    /// $D400-$D7FF mirror window in single-SID mode; narrowing the chip's
-    /// own range here is the prerequisite that lets a second SID claim
-    /// <c>$D420</c> without colliding with the primary at <c>$D400</c>.
+    /// (<c>BaseAddress</c> .. <c>BaseAddress + 0x1F</c>). The owning
+    /// memory-map dispatcher is responsible for filling any surrounding
+    /// mirror window.
     /// </summary>
     public bool HandlesAddress(ushort address)
     {

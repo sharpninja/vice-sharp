@@ -1,4 +1,4 @@
-namespace ViceSharp.Chips.IEC;
+namespace ViceSharp.Core;
 
 /// <summary>
 /// Commodore IEC Serial Bus Protocol.

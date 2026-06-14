@@ -192,14 +192,31 @@ partial class Mos6502
                 break;
 
             // JMP - Jump
-            case 0x4C: PC = Absolute(); break;
-            case 0x6C: PC = Indirect(); break;
+            case 0x4C:
+            {
+                var source = (ushort)(PC - 1);
+                var target = Absolute();
+                PC = target;
+                PublishControlTransfer(source, target, 0, opcode);
+                break;
+            }
+            case 0x6C:
+            {
+                var source = (ushort)(PC - 1);
+                var target = Indirect();
+                PC = target;
+                PublishControlTransfer(source, target, 0, opcode);
+                break;
+            }
 
             // JSR - Jump to Subroutine
             case 0x20:
+                var jsrSource = (ushort)(PC - 1);
                 ushort addr = Absolute();
+                var returnPc = PC;
                 PushWord((ushort)(PC - 1));
                 PC = addr;
+                PublishControlTransfer(jsrSource, addr, returnPc, opcode);
                 break;
 
             // STA - Store Accumulator

@@ -8,6 +8,8 @@ using Xunit;
 
 public sealed class CiaTimerInterruptTests
 {
+    private static Mos6526 CreateCia1(IBus bus, IInterruptLine irq) => new(bus, irq) { BaseAddress = 0xDC00 };
+
     /// <summary>
     /// FR: FR-CIA-001, FR: FR-CIA-007, TR: TR-CYCLE-001.
     /// Use case: Configure CIA Timer A as a one-shot, enable underflow IRQ
@@ -22,7 +24,7 @@ public sealed class CiaTimerInterruptTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = CreateCia1(bus, irq);
 
         cia.Write(0xDC04, 0x02);
         cia.Write(0xDC05, 0x00);
@@ -55,7 +57,7 @@ public sealed class CiaTimerInterruptTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = CreateCia1(bus, irq);
 
         cia.Write(0xDC04, 0x01);
         cia.Write(0xDC05, 0x00);
@@ -89,7 +91,7 @@ public sealed class CiaTimerInterruptTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = CreateCia1(bus, irq);
 
         cia.Write(0xDC04, 0x01);
         cia.Write(0xDC05, 0x00);
@@ -133,7 +135,7 @@ public sealed class CiaTimerInterruptTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = CreateCia1(bus, irq);
 
         // CRB.7 = 0 by default -> writes target live TOD clock.
         // Load CLOCK = 12:59:59.09 PM (HOUR = 0x92).

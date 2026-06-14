@@ -6,7 +6,7 @@
 |-------|-------|
 | Project | ViceSharp |
 | Version | 0.1.0-draft |
-| Last Updated | 2026-05-13 |
+| Last Updated | 2026-06-12 |
 | Status | Draft |
 
 ## Purpose
@@ -237,6 +237,31 @@ C64, C64C, SX-64, C128, VIC-20, PET, Plus/4, and C16 profiles are verified for r
 ### Traceability
 
 - **Related FR Area(s):** FR-PRF
+
+---
+
+## TEST-ARCH-CHIPGLUE-001: Shared Chip Glue Boundary Tests
+
+**ID:** TEST-ARCH-CHIPGLUE-001
+**Title:** Shared Chip Glue Boundary Tests
+**Priority:** P0 -- Critical
+
+### Condition
+
+Source-boundary, focused integration, and lockstep/checkpoint tests verify that reusable chip implementations stay free of machine-specific board and device glue. Machine-specific wiring for C64, C1541, IEC, datasette, cartridge, input, and media helper behavior is owned by Core machine/device definitions or host services.
+
+### Acceptance Criteria
+
+1. `ChipGlueBoundaryTests` prove moved and retired helper locations: duplicate/fake chip stubs are absent from `src/ViceSharp.Chips`, Core-owned device adapters exist, and shared chip files do not contain guarded C64/C1541 board policy.
+2. Focused tests cover the moved or guarded behavior for C64 memory map, processor port, CIA, VIA, SID, VIC-II/video, IEC/drive, standard cartridge mapping, C64 input/VKM, datasette/TAP, and media capture.
+3. The `ARCH-CHIPGLUE-001` audit document inventories every remaining `src/ViceSharp.Chips` type and maps each acceptance criterion to direct evidence.
+4. The x64sc lockstep/checkpoint gate passes after the remediation with `0` failed and `0` skipped tests.
+
+### Traceability
+
+- **Related TR Area(s):** TR-SYSTEM-CORE-001
+- **Related TEST Area(s):** TEST-X64SC-LOCKSTEP-001, TEST-CIA-001, TEST-VIA-001, TEST-DRV-001, TEST-TAP-001, TEST-CRT-001, TEST-INPUT-001, TEST-MED-001
+- **Related TODO:** ARCH-CHIPGLUE-001
 
 ---
 

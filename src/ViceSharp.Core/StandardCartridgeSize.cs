@@ -1,4 +1,4 @@
-namespace ViceSharp.Chips.Cartridges;
+namespace ViceSharp.Core;
 
 public enum StandardCartridgeSize
 {

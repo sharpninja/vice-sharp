@@ -3,7 +3,7 @@ namespace ViceSharp.TestHarness;
 using FluentAssertions;
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Cia;
-using ViceSharp.Chips.Input;
+using ViceSharp.Core.Input;
 using ViceSharp.Core;
 using Xunit;
 
@@ -35,7 +35,7 @@ public sealed class Cia1KeyboardScanTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = new Mos6526(bus, irq) { BaseAddress = 0xDC00 };
         var keyboard = new C64KeyboardMatrix();
         keyboard.Initialize();
         cia.Reset();
@@ -44,6 +44,7 @@ public sealed class Cia1KeyboardScanTests
         // the keyboard column mask, PA reads return the row state.
         cia.PortAInput = keyboard.ReadRowState;
         cia.PortBOutputChanged = value => keyboard.SetColumnMask(value);
+        cia.Write(0xDC03, 0xFF);
 
         return (cia, keyboard);
     }

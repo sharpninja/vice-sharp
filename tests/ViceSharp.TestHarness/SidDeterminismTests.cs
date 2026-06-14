@@ -28,7 +28,7 @@ public sealed class SidDeterminismTests
     private static Sid6581 BuildSid()
     {
         var bus = new BasicBus();
-        return new Sid6581(bus);
+        return new Sid6581(bus) { BaseAddress = 0xD400 };
     }
 
     /// <summary>

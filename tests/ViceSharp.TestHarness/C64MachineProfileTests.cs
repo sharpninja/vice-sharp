@@ -2,7 +2,6 @@ using FluentAssertions;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Chips.Audio;
-using ViceSharp.Chips.Cartridges;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Tape;
 using ViceSharp.Chips.VicIi;

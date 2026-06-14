@@ -465,6 +465,11 @@ public static unsafe partial class ViceNative
             ViceNative.DetachDisk(_instance, unit, drive);
         }
 
+        public void SetKeyboardMatrixKey(int row, int column, bool pressed)
+        {
+            ViceNative.SetKeyboardMatrixKey(_instance, row, column, pressed);
+        }
+
         public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
 
         public MachineState GetState()

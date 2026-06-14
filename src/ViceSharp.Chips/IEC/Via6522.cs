@@ -7,10 +7,9 @@ namespace ViceSharp.Chips.IEC;
 /// IRQ-emitting. Supports the 16-register layout (Port A/B, DDR A/B, two
 /// 16-bit timers, shift register, ACR, PCR, IFR, IER).
 ///
-/// Used by the 1541 floppy drive: VIA1 ($1800-$1BFF) handles IEC bus (PB)
-/// + LED; VIA2 ($1C00-$1FFF) handles head/motor/byte-ready. The drive's
-/// 6502 reads/writes via this address space; timer underflows and CB1/CA1
-/// transitions assert the drive IRQ line through IInterruptLine.
+/// Machine-specific boards connect external pins through the Port A/B and
+/// control-line callbacks; the VIA itself has no knowledge of that board
+/// wiring.
 ///
 /// Implementation scope: register R/W with mirroring, one-shot + continuous
 /// Timer 1 + one-shot Timer 2 decrement, IFR/IER + IRQ assertion, port
@@ -19,8 +18,8 @@ namespace ViceSharp.Chips.IEC;
 /// </summary>
 public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
 {
-    private const ushort DefaultBaseAddress = 0x1800;
-    private const ushort DefaultMirrorSize = 0x0400;
+    private const ushort DefaultBaseAddress = 0x0000;
+    private const ushort DefaultMirrorSize = 0x0010;
 
     private const byte IfrTimer1 = 0x40;
     private const byte IfrTimer2 = 0x20;
@@ -133,10 +132,10 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// <inheritdoc />
     public DeviceId SourceId { get; init; }
 
-    /// <summary>Base address; defaults to $1800 (1541 VIA1).</summary>
+    /// <summary>Base address of the owning board's VIA register window.</summary>
     public ushort BaseAddress { get; init; } = DefaultBaseAddress;
 
-    /// <summary>Mirrored window size; defaults to $0400 (1541 VIA mirror region).</summary>
+    /// <summary>Mirrored window size of the owning board's VIA register window.</summary>
     public ushort Size { get; init; } = DefaultMirrorSize;
 
     /// <inheritdoc />
@@ -148,16 +147,16 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// <inheritdoc />
     public IReadOnlyList<IInterruptLine> ConnectedLines => new[] { _irqLine };
 
-    /// <summary>Port A external input function (e.g. IEC DATA in).</summary>
+    /// <summary>Port A external input function.</summary>
     public Func<byte>? PortAInput { get; set; }
 
-    /// <summary>Port B external input function (e.g. IEC ATN/CLK in).</summary>
+    /// <summary>Port B external input function.</summary>
     public Func<byte>? PortBInput { get; set; }
 
-    /// <summary>Fires after Port A output bits change (LED, head step lines).</summary>
+    /// <summary>Fires after Port A output bits change.</summary>
     public Action<byte>? PortAOutputChanged { get; set; }
 
-    /// <summary>Fires after Port B output bits change (IEC bus pulls, motor).</summary>
+    /// <summary>Fires after Port B output bits change.</summary>
     public Action<byte>? PortBOutputChanged { get; set; }
 
     /// <inheritdoc />
@@ -272,11 +271,11 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         {
             case 0x00:
                 _portBOutput = value;
-                PortBOutputChanged?.Invoke((byte)(_portBOutput & _ddrb));
+                PortBOutputChanged?.Invoke(ComposePortPins(_portBOutput, _ddrb));
                 // Handshake output mode (PCR bits 7..5 = 100): an ORB write
                 // drives CB2 low; the line stays low until the next CB1
                 // active edge restores it. This is the canonical 6522 write-
-                // handshake protocol used by the IEC fast-serial drivers.
+                // handshake protocol used by boards that wire CB1/CB2.
                 if (GetCb2Mode() == Cb2ModeHandshakeOut)
                     _cb2State = false;
                 // Pulse output mode (PCR bits 7..5 = 101): an ORB write
@@ -293,15 +292,15 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                 _ifr &= unchecked((byte)~0x03);
                 RefreshIrq();
                 _portAOutput = value;
-                PortAOutputChanged?.Invoke((byte)(_portAOutput & _ddra));
+                PortAOutputChanged?.Invoke(ComposePortPins(_portAOutput, _ddra));
                 break;
             case 0x02:
                 _ddrb = value;
-                PortBOutputChanged?.Invoke((byte)(_portBOutput & _ddrb));
+                PortBOutputChanged?.Invoke(ComposePortPins(_portBOutput, _ddrb));
                 break;
             case 0x03:
                 _ddra = value;
-                PortAOutputChanged?.Invoke((byte)(_portAOutput & _ddra));
+                PortAOutputChanged?.Invoke(ComposePortPins(_portAOutput, _ddra));
                 break;
             case 0x04:
                 _t1Latch = (ushort)((_t1Latch & 0xFF00) | value);
@@ -551,7 +550,6 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// transition latches IFR bit 1; IER bit 1 then gates the IRQ output.
     /// When CA2 is in handshake output mode (PCR bits 3..1 = 100) an active
     /// CA1 edge also restores CA2 to high, completing the read handshake.
-    /// Used by the 1541 to deliver BYTE-READY from the disk controller.
     /// </summary>
     /// <param name="rising">True for a low-to-high transition; false for high-to-low.</param>
     public void TriggerCa1(bool rising)
@@ -691,6 +689,11 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         return combined;
     }
 
+    private static byte ComposePortPins(byte outputLatch, byte dataDirection)
+    {
+        return (byte)(outputLatch | ~dataDirection);
+    }
+
     /// <summary>
     /// Advances the shift register one phi2 cycle. Implemented modes:
     /// - 010 (shift in under phi2): clocks one bit from CB2 (defaults to 0
@@ -719,7 +722,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0b010: // shift in under phi2
                 {
                     // CB2 not yet plumbed - sample 0 as a safe default. Real
-                    // CB2 input lands when the IEC fast-serial pins are wired.
+                    // CB2 input lands when board-specific pin wiring supplies it.
                     var incoming = 0;
                     _sr = (byte)(((_sr << 1) | (incoming & 0x01)) & 0xFF);
                     AdvanceShiftCount();

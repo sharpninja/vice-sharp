@@ -3,7 +3,7 @@ using ViceSharp.Abstractions;
 namespace ViceSharp.Chips.VicIi;
 
 /// <summary>
-/// Original MOS 6569R1 PAL VIC-II variant used by early PAL C64 boards.
+/// Original MOS 6569R1 PAL VIC-II variant.
 /// </summary>
 public sealed class Mos6569R1 : Mos6569
 {

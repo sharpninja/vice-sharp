@@ -91,7 +91,7 @@ public sealed class MultiSystemKindDispatchTests
     /// FR/TR: ARCH-WIRING-004
     /// Use case: Auto-bind still fires on the kind-built machines; the C64
     /// asserts ATN and both drives observe it.
-    /// Acceptance: Host CIA2 PA = $08 -> drive-8 PB7 = 1 + drive-9 PB7 = 1.
+    /// Acceptance: Host CIA2 PA3 high -> drive-8 PB7 = 1 + drive-9 PB7 = 1.
     /// </summary>
     [Fact]
     public void Kind_AutoBind_HostAssertsAtn_BothDrivesSeeIt()
@@ -100,6 +100,7 @@ public sealed class MultiSystemKindDispatchTests
         var hostCia2 = (Mos6526)build.SystemsById["c64-host"].Devices.GetByRole(DeviceRole.Cia2)!;
 
         hostCia2.Write(0xDD00, 0x08);
+        hostCia2.Write(0xDD02, 0x38);
 
         var drive8Pb = build.SystemsById["drive-8"].Devices.GetAll<Via6522>()
             .OrderBy(v => v.BaseAddress).First().Read(0x1800);

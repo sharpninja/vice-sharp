@@ -3,7 +3,7 @@ using ViceSharp.Abstractions;
 namespace ViceSharp.Chips.VicIi;
 
 /// <summary>
-/// HMOS MOS 8562 NTSC VIC-II variant used by newer NTSC C64C models.
+/// HMOS MOS 8562 NTSC VIC-II variant.
 /// </summary>
 public sealed class Mos8562 : Mos6569
 {

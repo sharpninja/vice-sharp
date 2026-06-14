@@ -104,12 +104,13 @@ public sealed class MultiSystemBlueprint
         foreach (var ext in _cartExtensions)
             AttachEndpoints(ext.BusAttachments, ext.Id, busesById, endpoints);
 
-        AutoBindChipsToBuses(systemsById, busesById, endpoints);
+        AutoBindChipsToBuses(coord, systemsById, busesById, endpoints);
 
         return new MultiSystemBuildResult(coord, systemsById, busesById, endpoints);
     }
 
     private static void AutoBindChipsToBuses(
+        SystemCoordinator coord,
         IReadOnlyDictionary<string, IMachine> systemsById,
         IReadOnlyDictionary<string, IInterSystemBus> busesById,
         IReadOnlyDictionary<(string SystemId, string BusId), IBusEndpoint> endpoints)
@@ -118,35 +119,39 @@ public sealed class MultiSystemBlueprint
         {
             IBusEndpoint? iecEp = null;
             IBusEndpoint? userPortEp = null;
+            IInterSystemBus? iecBusForSystem = null;
             foreach (var (key, ep) in endpoints)
             {
                 if (key.SystemId != systemId) continue;
                 if (!busesById.TryGetValue(key.BusId, out var bus)) continue;
-                if (bus.Name == ViceSharp.Chips.IEC.IecInterSystemBus.BusName) iecEp = ep;
+                if (bus.Name == ViceSharp.Chips.IEC.IecInterSystemBus.BusName)
+                {
+                    iecEp = ep;
+                    iecBusForSystem = bus;
+                }
                 else if (bus.Name == ViceSharp.Core.UserPortInterSystemBus.BusName) userPortEp = ep;
             }
 
             if (iecEp is null && userPortEp is null) continue;
 
             var cia2 = machine.Devices.GetByRole(DeviceRole.Cia2) as ViceSharp.Chips.Cia.Mos6526;
-            if (cia2 is not null)
-                ViceSharp.Core.Wiring.C64Cia2BusBinding.Bind(cia2, userPort: userPortEp, iec: iecEp);
+            var c64Interface = machine.Devices.GetAll<C64Cia2InterfaceDevice>().FirstOrDefault();
+            if (cia2 is not null && c64Interface is not null)
+                c64Interface.ConnectCia2(cia2, userPort: userPortEp, iec: iecEp, synchronizeIec: coord.SynchronizePeripheralSystemsToHost);
 
             if (iecEp is not null)
             {
                 var driveVia1 = FindDriveVia1(machine);
-                if (driveVia1 is not null)
-                {
-                    var deviceNumber = (machine.Architecture as IDriveArchitectureDescriptor)?.DeviceNumber ?? 8;
-                    ViceSharp.Core.Wiring.C1541Via1BusBinding.Bind(driveVia1, iecEp, deviceNumber);
-                }
+                var iecInterface = machine.Devices.GetAll<C1541IecInterfaceDevice>().FirstOrDefault();
+                if (driveVia1 is not null && iecInterface is not null)
+                    iecInterface.ConnectVia1(driveVia1, iecEp, iecBusForSystem);
             }
 
-            // VIA2 (head/motor/WPRT) - bind to the mounted disk if present.
+            // VIA2 connects to the 1541 drive mechanism device when present.
             var driveVia2 = FindDriveVia2(machine);
-            var disk = machine.Devices.GetByRole(DeviceRole.DriveDisk) as D64DiskImageDevice;
-            if (driveVia2 is not null)
-                ViceSharp.Core.Wiring.C1541Via2BusBinding.Bind(driveVia2, disk);
+            var mechanism = machine.Devices.GetAll<C1541DriveMechanismDevice>().FirstOrDefault();
+            if (driveVia2 is not null && mechanism is not null)
+                mechanism.ConnectVia2(driveVia2);
         }
     }
 

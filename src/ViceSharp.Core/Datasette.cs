@@ -1,9 +1,10 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.Tape;
 
-namespace ViceSharp.Chips.Tape;
+namespace ViceSharp.Core;
 
 /// <summary>
-/// Commodore C2N Datasette emulation.
+/// C2N Datasette peripheral emulation.
 ///
 /// Motor ramp (TR-TAPE-EDGE-001): VICE models a 32,000-cycle motor spin-up
 /// delay before tape pulses are delivered (datasette/datasette.c:62
@@ -11,8 +12,8 @@ namespace ViceSharp.Chips.Tape;
 /// is true; TryReadNextPulse blocks during the ramp period.
 ///
 /// Sense line (TR-TAP-EDGE-001): SenseLine returns false (low) when any
-/// Datasette button (PlayPressed or RecordPressed) is pressed. CIA1 Port B
-/// bit 4 ($DC01 bit 4) reflects this signal; low = button pressed.
+/// Datasette button (PlayPressed or RecordPressed) is pressed. Machine glue
+/// maps this active-low line to the owning board's input port.
 ///
 /// Record mode (TR-TAP-EDGE-001): When RecordPressed and MotorEnabled are
 /// true, TryWritePulse(cycles) stores a pulse to the internal record buffer.
@@ -21,8 +22,7 @@ namespace ViceSharp.Chips.Tape;
 /// </summary>
 public sealed class Datasette : ITapeDevice
 {
-    // VICE MOTOR_DELAY constant (datasette/datasette.c:62): 32,000 cycles.
-    // At C64 PAL 985,248 Hz this is ~32ms; motor must spin up before pulses.
+    // VICE MOTOR_DELAY constant (datasette/datasette.c:62): 32,000 device cycles.
     private const int MotorRampCycles = 32_000;
 
     private TapImage? _image;
@@ -62,7 +62,8 @@ public sealed class Datasette : ITapeDevice
     /// <summary>
     /// SENSE line state as driven by the Datasette hardware.
     /// False (low) when any button is pressed (PlayPressed or RecordPressed);
-    /// true (high) when no button is pressed. Reflects CIA1 $DC01 bit 4.
+    /// true (high) when no button is pressed. The owning machine maps this
+    /// line to its input port.
     /// VICE datasette.c: sense line is active-low, asserted by PLAY or RECORD.
     /// </summary>
     public bool SenseLine => !(PlayPressed || RecordPressed);

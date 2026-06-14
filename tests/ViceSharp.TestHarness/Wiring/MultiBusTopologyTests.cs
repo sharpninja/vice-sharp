@@ -81,7 +81,7 @@ public sealed class MultiBusTopologyTests
     /// Use case: Auto-bind wires host CIA2 to BOTH the IEC + UserPort
     /// endpoints. Host CIA2 PA writes drive IEC; host CIA2 PB writes drive
     /// UserPort. Verified via direct register writes.
-    /// Acceptance: Host PA=$08 -> drive VIA1 PB7 = 1; host PB=$5A -> peer
+    /// Acceptance: Host PA3 high -> drive VIA1 PB7 = 1; host PB=$5A -> peer
     /// CIA2 read of PB returns $5A.
     /// </summary>
     [Fact]
@@ -95,6 +95,7 @@ public sealed class MultiBusTopologyTests
         peerCia2.Write(0xDD03, 0x00); // peer DDRB all inputs
 
         hostCia2.Write(0xDD00, 0x08); // assert ATN
+        hostCia2.Write(0xDD02, 0x38); // PA3..PA5 outputs
         hostCia2.Write(0xDD03, 0xFF); // host DDRB all outputs
         hostCia2.Write(0xDD01, 0x5A);
 

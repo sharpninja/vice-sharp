@@ -1,7 +1,7 @@
 using System.Buffers.Binary;
 using ViceSharp.Abstractions;
 
-namespace ViceSharp.Chips.Cartridges;
+namespace ViceSharp.Core;
 
 /// <summary>
 /// Deterministic standard C64 cartridge ROM image.

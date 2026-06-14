@@ -18,7 +18,7 @@ public sealed class SidRegisterReadbackTests
     [Fact]
     public void Voice3Readback_UsesOsc3AndEnv3Addresses()
     {
-        var sid = new Sid6581(new BasicBus());
+        var sid = new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
 
         sid.Write(0xD40E, 0x00);
         sid.Write(0xD40F, 0x80);

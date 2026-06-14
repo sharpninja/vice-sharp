@@ -124,8 +124,8 @@ public sealed class Sid8580FilterTests
         }
 
         var bus = new BasicBus();
-        var sid6581 = new Sid6581(bus);
-        var sid8580 = new Sid8580(bus);
+        var sid6581 = new Sid6581(bus) { BaseAddress = 0xD400 };
+        var sid8580 = new Sid8580(bus) { BaseAddress = 0xD400 };
 
         var trace6581 = Run(sid6581);
         var trace8580 = Run(sid8580);

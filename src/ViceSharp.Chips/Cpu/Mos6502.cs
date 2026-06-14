@@ -106,10 +106,19 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     }
 
     private readonly IBus _bus;
+    private IPubSub? _pubSub;
+
+    public Func<ushort, bool>? ShouldDeferAbsoluteStore { get; set; }
+    public Func<ushort, bool>? ShouldDelayNextFetchAfterWrite { get; set; }
 
     public Mos6502(IBus bus)
     {
         _bus = bus;
+    }
+
+    public void ConnectPubSub(IPubSub pubSub)
+    {
+        _pubSub = pubSub ?? throw new ArgumentNullException(nameof(pubSub));
     }
 
     private byte _opcode;
@@ -219,6 +228,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             _stagedReturnAddress = 0;
             _effectiveAddress = 0;
             _fetched = 0;
+
         }
 
         _cycle--;
@@ -266,15 +276,30 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 Push((byte)_pc);
                 return true;
             case 0:
-                var lo = Read((ushort)(_instructionPC + 1));
-                var hi = Read(_pc);
-                PC = (ushort)(lo | (hi << 8));
-                _callTargetFetchPending = true;
-                _suppressBootstrapBoundary = true;
+                CompleteJsrTargetFetch();
                 return true;
             default:
                 return false;
         }
+    }
+
+    private void CompleteJsrTargetFetch()
+    {
+        var source = _instructionPC;
+        var lo = Read((ushort)(_instructionPC + 1));
+        var hi = Read(_pc);
+        var target = (ushort)(lo | (hi << 8));
+        var returnPc = (ushort)(source + 3);
+        PC = target;
+        PublishControlTransfer(source, target, returnPc, 0x20);
+        _cycle = 0;
+        _callTargetFetchPending = true;
+        _suppressBootstrapBoundary = true;
+    }
+
+    private void PublishControlTransfer(ushort source, ushort target, ushort returnPc, byte opcode)
+    {
+        _pubSub?.Publish(CpuControlTransferEvent.Topic, new CpuControlTransferEvent(source, target, returnPc, opcode));
     }
 
     private bool TryExecuteCycleStagedMemoryReadOpcode()
@@ -473,7 +498,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 return true;
             case 0x8E:
                 var stxAddress = ReadAbsoluteOperand();
-                if (stxAddress == 0xD016)
+                if (ShouldDeferAbsoluteStore?.Invoke(stxAddress) == true)
                 {
                     return false;
                 }
@@ -881,7 +906,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
     private void DelayNextFetchAfterMappedIoWrite(ushort address)
     {
-        if (address != 0xD016)
+        if (ShouldDelayNextFetchAfterWrite?.Invoke(address) != true)
         {
             return;
         }

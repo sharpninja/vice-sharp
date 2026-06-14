@@ -2,6 +2,7 @@ namespace ViceSharp.TestHarness.C1541;
 
 using FluentAssertions;
 using ViceSharp.Chips.IEC;
+using ViceSharp.Core;
 using Xunit;
 
 /// <summary>

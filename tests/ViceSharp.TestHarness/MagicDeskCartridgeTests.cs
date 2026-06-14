@@ -2,7 +2,7 @@ namespace ViceSharp.TestHarness;
 
 using FluentAssertions;
 using ViceSharp.Abstractions;
-using ViceSharp.Chips.Cartridges;
+using ViceSharp.Core;
 using Xunit;
 
 /// <summary>

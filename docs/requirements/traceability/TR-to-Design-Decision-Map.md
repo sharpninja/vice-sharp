@@ -6,7 +6,7 @@
 |-------|-------|
 | Project | ViceSharp |
 | Version | 0.1.0-draft |
-| Last Updated | 2026-05-13 |
+| Last Updated | 2026-06-12 |
 
 ## Purpose
 
@@ -86,6 +86,7 @@ This map links Technical Requirements to Vice-Sharp architecture decisions and s
 |-------------|----------|
 | DD-SYSCORE-001 | Machine profiles select system-core definitions for board logic, bus routing, and programmable logic behavior; `ArchitectureBuilder` glues those definitions to concrete chip instances. |
 | DD-SYSCORE-002 | x64sc variants are the first proving ground for definable-computer behavior because they vary board policy while sharing reusable chip families. |
+| DD-SYSCORE-003 | Shared chip implementations model reusable chip behavior only; machine/device glue and adapter wiring live in Core machine/device definitions. |
 
 **Architecture Sources**
 

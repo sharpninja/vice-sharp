@@ -11,7 +11,6 @@ using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Core;
-using ViceSharp.Chips.Cartridges;
 using ViceSharp.Chips.IEC;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;

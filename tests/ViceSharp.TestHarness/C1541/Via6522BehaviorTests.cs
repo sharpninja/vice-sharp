@@ -61,7 +61,8 @@ public sealed class Via6522BehaviorTests
     /// <summary>
     /// FR/TR: ARCH-TRUEDRIVE-1541-001
     /// Use case: DDRA + ORA control port-A output bits.
-    /// Acceptance: Output callback fires with the masked value; input callback
+    /// Acceptance: Output callback fires with the physical pin image
+    /// (ORA | ~DDRA), matching VICE's viacore store callback; input callback
     /// supplies the undriven bits during read.
     /// </summary>
     [Fact]
@@ -75,7 +76,7 @@ public sealed class Via6522BehaviorTests
         via.Write(0x1803, 0x0F); // DDRA = lower 4 bits as output
         via.Write(0x1801, 0xC5); // ORA = $C5
 
-        lastOut.Should().Be(0x05);
+        lastOut.Should().Be(0xF5);
         via.Read(0x1801).Should().Be((byte)((0xC5 & 0x0F) | (0xF0 & 0xF0)));
     }
 

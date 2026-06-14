@@ -2,7 +2,7 @@ namespace ViceSharp.TestHarness;
 
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
-using ViceSharp.Chips.Input;
+using ViceSharp.Core.Input;
 using ViceSharp.RomFetch;
 using Xunit;
 
@@ -153,6 +153,7 @@ public sealed class C64VkmKeyboardTests
         mapSelection.SelectKeyboardMap(result.KeyboardMap);
 
         Assert.True(keyboardInput.SetKeyState("Left", pressed: true));
+        machine.Bus.Write(0xDC03, 0xFF);
         machine.Bus.Write(0xDC01, 0xFB);
         Assert.Equal(0, machine.Bus.Read(0xDC00) & 0x01);
         machine.Bus.Write(0xDC01, 0xEF);

@@ -10,12 +10,13 @@ using Xunit;
 /// <summary>
 /// FR/TR: ARCH-WIRING-002 (Phase F2).
 /// Use case: A 1541 drive's VIA1 reads ATN/CLK/DATA from the IEC bus and
-/// drives CLK/DATA back; without the binding the VIA bits sit in isolation
-/// and the drive can never respond to a host. This helper closes the loop
-/// so a coordinator-driven C64 + 1541 actually exchange handshakes.
+/// drives CLK/DATA back; without the interface device the VIA bits sit in
+/// isolation and the drive can never respond to a host.
 /// </summary>
-public sealed class C1541Via1BusBindingTests
+public sealed class C1541IecInterfaceDeviceTests
 {
+    private const byte IfrCa1 = 0x02;
+
     private static Via6522 BuildIsolatedVia()
     {
         var bus = new BasicBus();
@@ -37,7 +38,7 @@ public sealed class C1541Via1BusBindingTests
         var bus = IecInterSystemBus.Create();
         var driveEp = bus.AttachEndpoint("drive-8");
         var hostEp = bus.AttachEndpoint("c64");
-        C1541Via1BusBinding.Bind(via, driveEp, deviceNumber: 8);
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp);
 
         hostEp.Pull(IecInterSystemBus.Atn, low: true);
 
@@ -57,12 +58,77 @@ public sealed class C1541Via1BusBindingTests
         var bus = IecInterSystemBus.Create();
         var driveEp = bus.AttachEndpoint("drive-8");
         var hostEp = bus.AttachEndpoint("c64");
-        C1541Via1BusBinding.Bind(via, driveEp, deviceNumber: 8);
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp);
 
         via.Write(0x1802, 0xFF); // DDRB = all outputs
         via.Write(0x1800, 0x02); // PB1 set -> assert DATA
 
         hostEp.ReadLine(IecInterSystemBus.Data).Should().BeFalse();
+    }
+
+    /// <summary>
+    /// FR/TR: ARCH-WIRING-002
+    /// Use case: VICE's 1541 VIA1 gates DATA low when ATNA differs from
+    /// host ATN, even when PB1 DATA OUT is not asserted.
+    /// Acceptance: Host ATN active with PB4/ATNA low pulls DATA low.
+    /// </summary>
+    [Fact]
+    public void HostAssertsAtn_AtnaLow_AutoPullsIecData()
+    {
+        var via = BuildIsolatedVia();
+        var bus = IecInterSystemBus.Create();
+        var driveEp = bus.AttachEndpoint("drive-8");
+        var hostEp = bus.AttachEndpoint("c64");
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp, bus);
+
+        hostEp.Pull(IecInterSystemBus.Atn, low: true);
+
+        hostEp.ReadLine(IecInterSystemBus.Data).Should().BeFalse();
+    }
+
+    /// <summary>
+    /// FR/TR: ARCH-WIRING-002
+    /// Use case: The VICE 1541 DATA gate releases the automatic ATN
+    /// acknowledge when ATNA matches the active ATN state.
+    /// Acceptance: With host ATN active, setting PB4/ATNA releases DATA
+    /// unless PB1 DATA OUT is asserted.
+    /// </summary>
+    [Fact]
+    public void HostAssertsAtn_AtnaSet_ReleasesAutomaticDataAck()
+    {
+        var via = BuildIsolatedVia();
+        var bus = IecInterSystemBus.Create();
+        var driveEp = bus.AttachEndpoint("drive-8");
+        var hostEp = bus.AttachEndpoint("c64");
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp, bus);
+        via.Write(0x1802, 0x1A); // PB1/PB3/PB4 outputs
+        hostEp.Pull(IecInterSystemBus.Atn, low: true);
+
+        via.Write(0x1800, 0x10); // ATNA set, DATA OUT clear
+
+        hostEp.ReadLine(IecInterSystemBus.Data).Should().BeTrue();
+    }
+
+    /// <summary>
+    /// FR/TR: ARCH-WIRING-002
+    /// Use case: VICE signals VIA1 CA1 when host ATN transitions, which is
+    /// how the 1541 DOS notices an attention condition.
+    /// Acceptance: Host ATN assertion latches VIA1 IFR bit 1 when CA1 is
+    /// configured for a rising active edge.
+    /// </summary>
+    [Fact]
+    public void HostAssertsAtn_TriggersVia1Ca1RisingEdge()
+    {
+        var via = BuildIsolatedVia();
+        var bus = IecInterSystemBus.Create();
+        var driveEp = bus.AttachEndpoint("drive-8");
+        var hostEp = bus.AttachEndpoint("c64");
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp, bus);
+        via.Write(0x180C, 0x01); // PCR bit 0 = 1 -> CA1 active edge is rising
+
+        hostEp.Pull(IecInterSystemBus.Atn, low: true);
+
+        (via.Read(0x180D) & IfrCa1).Should().Be(IfrCa1);
     }
 
     /// <summary>
@@ -77,7 +143,7 @@ public sealed class C1541Via1BusBindingTests
         var bus = IecInterSystemBus.Create();
         var driveEp = bus.AttachEndpoint("drive-8");
         var hostEp = bus.AttachEndpoint("c64");
-        C1541Via1BusBinding.Bind(via, driveEp, deviceNumber: 8);
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp);
         via.Write(0x1802, 0xFF);
 
         via.Write(0x1800, 0x08);
@@ -97,7 +163,7 @@ public sealed class C1541Via1BusBindingTests
         var bus = IecInterSystemBus.Create();
         var driveEp = bus.AttachEndpoint("drive-8");
         var hostEp = bus.AttachEndpoint("c64");
-        C1541Via1BusBinding.Bind(via, driveEp, deviceNumber: 8);
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp);
 
         hostEp.Pull(IecInterSystemBus.Clk, low: true);
 
@@ -119,7 +185,7 @@ public sealed class C1541Via1BusBindingTests
         var via = BuildIsolatedVia();
         var bus = IecInterSystemBus.Create();
         var driveEp = bus.AttachEndpoint($"drive-{deviceNumber}");
-        C1541Via1BusBinding.Bind(via, driveEp, deviceNumber);
+        new C1541IecInterfaceDevice(deviceNumber).ConnectVia1(via, driveEp);
 
         var read = via.Read(0x1800);
         (read & 0x60).Should().Be((byte)expectedBits);
@@ -131,14 +197,10 @@ public sealed class C1541Via1BusBindingTests
     /// Acceptance: Bind with deviceNumber=12 throws ArgumentOutOfRangeException.
     /// </summary>
     [Fact]
-    public void Bind_DeviceNumberOutOfRange_Throws()
+    public void Constructor_DeviceNumberOutOfRange_Throws()
     {
-        var via = BuildIsolatedVia();
-        var bus = IecInterSystemBus.Create();
-        var ep = bus.AttachEndpoint("drive");
-
         Assert.Throws<ArgumentOutOfRangeException>(() =>
-            C1541Via1BusBinding.Bind(via, ep, deviceNumber: 12));
+            new C1541IecInterfaceDevice(12));
     }
 
     /// <summary>
@@ -147,7 +209,7 @@ public sealed class C1541Via1BusBindingTests
     /// asserts ATN; drive (VIA1-bound) observes ATN low + replies by
     /// pulling DATA.
     /// Acceptance: After CIA2 PA3=1 + drive sees ATN -> drive sets PB1=1
-    /// -> host CIA2 reads DATA pulled (PA7 = 1).
+    /// -> host CIA2 reads DATA pulled (PA7 = 0).
     /// </summary>
     [Fact]
     public void HostAssertsAtn_DriveAcksByPullingData_HostSeesData()
@@ -159,13 +221,13 @@ public sealed class C1541Via1BusBindingTests
         // Host CIA2
         var cia = new ViceSharp.Chips.Cia.Mos6526(new BasicBus(), new InterruptLine(InterruptType.Nmi))
         { BaseAddress = 0xDD00, PortAExternalInputMask = 0xC0 };
-        C64Cia2BusBinding.Bind(cia, iec: hostEp);
-        cia.Write(0xDD02 + 1, 0xFF); // DDRA = all outputs (for ATN/CLK/DATA out)
+        new C64Cia2InterfaceDevice().ConnectCia2(cia, iec: hostEp);
+        cia.Write(0xDD02, 0x38); // PA3..PA5 outputs
 
         // Drive VIA1 - matches 1541 hardware: PB1, PB3, PB4 outputs; PB0,
         // PB2, PB7 inputs (DATA/CLK/ATN in); PB5/PB6 jumper inputs.
         var via = BuildIsolatedVia();
-        C1541Via1BusBinding.Bind(via, driveEp, deviceNumber: 8);
+        new C1541IecInterfaceDevice(8).ConnectVia1(via, driveEp);
         via.Write(0x1802, 0x1A); // DDRB = outputs on PB1, PB3, PB4 only
 
         // Host asserts ATN
@@ -175,7 +237,7 @@ public sealed class C1541Via1BusBindingTests
         driveSeesAtn.Should().BeTrue();
         via.Write(0x1800, 0x02);
 
-        // Host CIA2 sees DATA low -> PA7 = 1
-        (cia.Read(0xDD00) & 0x80).Should().Be(0x80);
+        // Host CIA2 sees DATA low -> PA7 = 0
+        (cia.Read(0xDD00) & 0x80).Should().Be(0x00);
     }
 }

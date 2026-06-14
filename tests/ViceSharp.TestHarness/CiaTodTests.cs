@@ -26,14 +26,24 @@ public sealed class CiaTodTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        return new Mos6526(bus, irq);
+        return new Mos6526(bus, irq)
+        {
+            BaseAddress = 0xDC00,
+            TodCyclesPer50HzTick = Pal50HzCyclesPerTick,
+            TodCyclesPer60HzTick = Pal60HzCyclesPerTick
+        };
     }
 
     private static (Mos6526 cia, InterruptLine irq) BuildCiaWithIrq()
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = new Mos6526(bus, irq)
+        {
+            BaseAddress = 0xDC00,
+            TodCyclesPer50HzTick = Pal50HzCyclesPerTick,
+            TodCyclesPer60HzTick = Pal60HzCyclesPerTick
+        };
         return (cia, irq);
     }
 

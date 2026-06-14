@@ -4,6 +4,7 @@ using FluentAssertions;
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Tape;
+using ViceSharp.Core;
 using ViceSharp.Core.Wiring;
 using Xunit;
 

@@ -1,225 +1,205 @@
-# ViceSharp Reboot Handoff (2026-05-21, refreshed 2026-05-27)
+# ViceSharp Claude Handoff - 2026-06-14
 
-## Current Baseline (post 2026-05-27 plan/handoff audit at HEAD 064d3a0)
+## Start Here
 
 - Workspace: `F:\GitHub\vice-sharp`
-- Branch: `main`
-- Current HEAD: `064d3a0`
-- Prior handoff baseline commit referenced: `8c1b2fc99670597b8a9eb86f67bd90c644dc457b`
-- Additional VIC progress since baseline (examples): `243c651` (matrix idle), `06b080d` (register readback), `646b3a1` (carried side borders) and later side-border / border flip-flop tests.
-- `AGENTS.md` created during this audit to formalize Grok plugin usage + Byrd process + writing rules.
-- Active plan: `docs/plan.md` (ViceSharp Phase 1 Completion Plan) + this handoff.md. Both refreshed during the audit.
-- Superseded older handoff (2026-05-17) archived with note in place.
-- Audit used `F:\GitHub\mcpserver-grok-plugin` (GrokCode) per explicit directive and AGENTS-README-FIRST.yaml. Session started: GrokCode-20260527T184055Z-start-session.
-- This remains a reboot continuity handoff, not a Phase 1 completion claim.
+- Branch: `codex/x64sc-d64-30s-lockstep`
+- Current HEAD at handoff write: `8eb4c51`
+- GitHub remote: `github=https://github.com/sharpninja/vice-sharp.git`
+- Azure remote: `origin=https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp`
+- Read `AGENTS-README-FIRST.yaml` first. It says Claude must use `mcpserver-claude-code-plugin`, with fallback root hint `F:\GitHub\mcpserver-claude-code-plugin`.
+- There is no root `AGENTS.md` file in this checkout at this handoff. Use the marker file and the user/developer instructions from the active session.
+- Treat the worktree as intentionally dirty. Do not revert broad changes unless the user explicitly asks.
 
-## 2026-05-27 Audit Reconciliation Notes (this session)
+## Current User Request Context
 
-- Code evidence (Mos6569.cs + dedicated tests in VicIIBorderFlipFlopTests.cs / VideoRendererTests.cs) confirms substantial progress on BACKFILL-VIDEO-001 sub-slices (continuous/carried side borders per FR-VIC-007, matrix idle per TR-VIC-EDGE-005, register readback/collision per TR-VIC-EDGE-006).
-- 1541/D64 substrate + IEC present (D64DiskImageDevice, C1541 architecture files); aligns with dashboard "70%" for RUNTIME-1541-002. True-drive CPU lockstep remains the deep remaining work (ARCH-TRUEDRIVE-1541-002).
-- Traceability script executed; many requirements now have test references.
-- Live MCP TODO query (via plugin, workflow.todo.query) for major Phase 1 keywords (BACKFILL-VIDEO, RUNTIME-1541, etc.) returned 0 items. This suggests either different ID patterns in the server or server-side closure of items beyond what local markdowns reflect (one of the stated Sources of Truth in docs/plan.md).
-- Recommendation: After this audit, run full `dotnet test` focused gates where practical, push the updated markdowns, and reconcile any remaining MCP TODOs through the Grok plugin (not direct yaml). The older superseded handoff-2026-05-17.md is now explicitly archived in place.
+The user asked to remediate audit results as a requirement for Iteration 1 completion using BDPv4, then asked Codex to complete the plan. The completed scope is `ARCH-CHIPGLUE-001`: audit all chip implementations for machine-specific glue and move that glue to the owning machine/device definition.
 
-## MCP And Agent Rules
+The user was explicit about the architecture rule:
 
-- Read `AGENTS-README-FIRST.yaml` first in every resumed session.
-- Use the agent-specific plugin declared in AGENTS-README-FIRST.yaml (for GrokCode agents: `F:\GitHub\mcpserver-grok-plugin`; for other agents their matching plugin). See root `AGENTS.md` for full Grok rules.
-- Bootstrap through the plugin (workflow.sessionlog.bootstrap or equivalent New-McpSessionLog / Initialize-McpSession) before any workflow.sessionlog.*, workflow.todo.*, or workflow.requirements.* work.
-- Do not use raw REST or direct `docs/todo.yaml` edits for normal MCP work.
-- If marker signature, health nonce, plugin availability, or MCP auth fails, stop MCP mutation and use the plugin failsafe path.
-- During the 2026-05-21 matrix/idle slice, a subagent reported an MCP health
-  nonce failure after the main agent had opened the turn and queried TODO
-  state. MCP mutation was paused after that report, and local fallback docs
-  were updated instead.
-- MCP STDIO frames on physical blank lines. For multiline markdown payloads, pass compressed JSON or another single-line serialized payload so blank lines do not truncate the request.
-- All subagents must read `AGENTS-README-FIRST.yaml` before work and must report progress to the main agent at least every five minutes.
-- 2026-05-21/22 MCP backfill verified the Codex plugin trust path, imported
-  pending and failsafe recovery data through plugin calls, normalized legacy
-  invalid request IDs with `powershell-yaml`, replayed valid edge-case
-  requirement updates, and skipped only empty or superseded failsafe payloads.
-  `ARCH-TESTBENCH-001` is now marked in MCP TODO state as the next-wave
-  high-priority Phase 1 focus.
+- Shared chip implementations must not contain machine-specific glue.
+- The VIA chip must be one common implementation.
+- C1541/VIC-20/etc. wiring belongs in the owning machine or device adapter, not in the chip.
+- Drive-specific glue belongs in drive machine/device implementation, not attached to VIA.
 
-## Important Local Environment Notes
+## What Is Done
 
-- The repo is not expected to contain ROMs.
-- Resolve VICE data from the local WinVICE install/root, not from repo-local ROM folders.
-- Last verified local WinVICE root: `C:\Users\kingd\.choco\lib\winvice-nightly\tools\GTK3VICE-3.8-win64`.
-- Its VICE data folders are directly under that root, including `C64` and `DRIVES`.
-- If a tool says it cannot locate repo ROMs, that is not a valid Phase 1 blocker.
+The code remediation and requirement closure are implemented in the dirty worktree.
 
-## Requirements And Wiki State
+Core boundary changes in the worktree include:
 
-- MCP requirements were refreshed for:
-  - `FR-VIC-001`
-  - `FR-VIC-007`
-  - `FR-VIC-010`
-  - `TEST-VIC-001`
-- Mappings were verified for `FR-VIC-001`, `FR-VIC-007`, and `FR-VIC-010`; each maps to `TR-CYCLE-001` and `TEST-VIC-001`.
-- Server-generated wiki export was committed in `857a69c`.
-- Generated wiki files updated under:
-  - `docs/Project/wiki/azure/`
-  - `docs/Project/wiki/github/`
-  - `docs/requirements/requirements-wiki-documents.zip`
-- The GitHub wiki was also published to the actual wiki repository, not just zipped:
-  - URL: `https://github.com/sharpninja/vice-sharp/wiki`
-  - Wiki remote: `https://github.com/sharpninja/vice-sharp.wiki.git`
-  - Wiki commit: `28b82e9175757b93be350a10d62eaeb7ae8b40b8` (`docs(wiki): refresh from 243c651`)
-- Future wiki exports should push `docs/Project/wiki/github` to the GitHub wiki remote after generating the ZIP.
+- New Core-owned device/runtime helpers:
+  - `src/ViceSharp.Core/C1541DriveMechanismDevice.cs`
+  - `src/ViceSharp.Core/C1541IecInterfaceDevice.cs`
+  - `src/ViceSharp.Core/C64Cia2InterfaceDevice.cs`
+  - `src/ViceSharp.Core/IecBus.cs`
+  - `src/ViceSharp.Core/IecDrive.cs`
+  - `src/ViceSharp.Core/IecD64Attachment.cs`
+  - `src/ViceSharp.Core/Datasette.cs`
+  - `src/ViceSharp.Core/StandardCartridgeImage.cs`
+  - `src/ViceSharp.Core/StandardCartridgeSize.cs`
+  - `src/ViceSharp.Core/Input/*`
+  - `src/ViceSharp.Core/Media/*`
+- Removed or moved out of `src/ViceSharp.Chips`:
+  - fake/legacy IEC stubs: `DiskController`, `Mos6502DiskCpu`
+  - duplicate CIA stub: `Interface/Cia6526`
+  - legacy video stub: `Video/VicII`
+  - IEC drive/runtime helpers
+  - C64 input/VKM helpers
+  - Datasette runtime helper
+  - media capture helpers
+  - standard cartridge mapping helpers
+- Shared chip code now keeps generic chip behavior only:
+  - `Via6522` exposes generic registers/pins, no 1541 address/window defaults.
+  - `Mos6526` no longer owns C64 CIA1/CIA2 defaults or PAL TOD cadence.
+  - `Mos6502` no longer owns C64 VIC `$D016` timing policy.
+  - SID defaults are supplied by machine construction rather than chip core.
+  - PLA processor-port reset policy lives in C64 assembly.
+  - VIC-bank translation lives in `C64MemoryMap`.
 
-## Current Classic VICE Edge-Case Backfill
+Requirement and handoff docs updated:
 
-- The requirements-only backfill slice is complete and committed in the main
-  repo.
-- The slice scanned `native/vice/vice/src` with
-  `tools/audit_vice_edge_cases.ps1` and wrote the review inventory to
-  `docs/requirements/backfill/Classic-VICE-Edge-Case-Inventory.md`.
-- The curated promotion record is
-  `docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md`.
-- The VICE source provenance policy in
-  `docs/requirements/sources/VICE-Source-Manifest.md` now allows the narrow
-  exception that classic VICE source may create or clarify TRs only for
-  observable compatibility behavior ViceSharp must match.
-- MCP requirements now include 19 new canonical edge TRs:
-  `TR-VIC-EDGE-001` through `TR-VIC-EDGE-007`, `TR-CPU-EDGE-001`,
-  `TR-CPU-EDGE-002`, `TR-RAM-EDGE-001`, `TR-SID-EDGE-001` through
-  `TR-SID-EDGE-003`, `TR-IEC-EDGE-001`, `TR-DRV-EDGE-001`,
-  `TR-MEDIA-EDGE-001`, `TR-TAP-EDGE-001`, `TR-TAPE-EDGE-001`, and
-  `TR-VDC-EDGE-001`.
-- Generated requirements markdown and wiki markdown were refreshed under
-  `docs/Project/` and `docs/Project/wiki/`.
-- Current traceability audit output after the matrix/idle implementation slice: 163 canonical IDs,
-  82 referenced canonical IDs, 81 unreferenced canonical IDs, and 53
-  noncanonical IDs in `src`/`tests`. The new edge TRs are requirements-only
-  anchors and are expected to remain unreferenced until their implementation
-  slices add executable coverage.
-- `docs/plan.md` now integrates the edge TRs into the Phase 1 slice order:
-  VIC-II edge TRs drive `BACKFILL-VIDEO-001`, media/tape edge TRs drive
-  `BACKFILL-MEDIA-001`, `ARCH-TRUEDRIVE-1541-002`, and `RUNTIME-TAPE-002`,
-  and final lockstep must explicitly triage every Phase-1-relevant edge TR.
-- `BACKFILL-VIDEO-001` continued with `TR-VIC-EDGE-002` continuous side-border
-  implementation:
-  - `Mos6569` now snapshots per-line horizontal-display, left-border-open, and
-    right-border-open state.
-  - `VideoRenderer` renders background fill in opened side borders and admits
-    sprites through carried-open side borders.
-  - Managed coverage now includes right-open, left-carry, continuous carry,
-    cycle-17 blank-line behavior, and PAL/NTSC/PAL-N/old-NTSC/HMOS border
-    cycle invariance.
-- `BACKFILL-VIDEO-001` continued with `TR-VIC-EDGE-006` register readback and
-  collision latch behavior:
-  - `Mos6569.Read` now matches VICE/x64sc fixed readback bits for `$D019`,
-    `$D01A`, and unused `$D02F-$D03F`.
-  - Writes to unused VIC-II registers and collision registers do not fabricate
-    register or latch state.
-  - Managed coverage now includes focused register-readback/IRQ/collision validation.
-- `BACKFILL-VIDEO-001` continued with `TR-VIC-EDGE-005` matrix idle/fill
-  behavior:
-  - `Mos6569` now tracks the 40-column matrix/color latches and exposes the
-    VICE idle graphics address rule (`$39ff` in ECM, `$3fff` otherwise).
-  - `C64MemoryMap` latches matrix prefetch `$ff` and color nibbles from raw
-    CPU-program RAM at the visible PC, matching VICE `ram_base_phi2[reg_pc]`.
-  - Managed coverage now includes focused matrix prefetch, real matrix fetch,
-    standard-text graphics latch consumption, and ECM idle graphics address
-    validation.
-- MCP TODOs updated with edge TR links:
-  `BACKFILL-VIDEO-001`, `BACKFILL-MEDIA-001`, `ARCH-TRUEDRIVE-1541-002`,
-  `RUNTIME-TAPE-002`, and `BACKFILL-LOCKSTEP-001`.
-- GitHub wiki was published from `docs/Project/wiki/github` to
-  `https://github.com/sharpninja/vice-sharp/wiki` at wiki commit
-  `28b82e9175757b93be350a10d62eaeb7ae8b40b8`.
+- `docs/requirements/technical/TR-System-Core.md`
+  - Added AC 6-10 for chip-glue ownership, inventory, common VIA, moved helpers, and validation.
+- `docs/requirements/test/TEST-Requirements.md`
+  - Added canonical `TEST-ARCH-CHIPGLUE-001`.
+- `docs/requirements/traceability/Phase1-Open-Todo-AC-Matrix-2026-06-08.md`
+  - Added `ARCH-CHIPGLUE-001`, `TR-SYSTEM-CORE-001`, and `TEST-ARCH-CHIPGLUE-001`.
+- `docs/requirements/traceability/TR-to-Design-Decision-Map.md`
+  - Added `DD-SYSCORE-003`: shared chips model reusable chip behavior only; machine/device glue lives in Core.
+- `docs/requirements/traceability/ARCH-CHIPGLUE-001-Chip-Audit-2026-06-12.md`
+  - New audit artifact with inventory, VICE separation reference, moved/retired items, and validation evidence.
+- `README.md`
+  - Iteration 1 dashboard includes the chip/package boundary audit.
+- `docs/handoff.md`
+  - Added a 2026-06-12 Iteration 1 remediation addendum.
+- `tests/ViceSharp.TestHarness/Architecture/ChipGlueBoundaryTests.cs`
+  - New source-boundary tests with direct `TR-SYSTEM-CORE-001 / TEST-ARCH-CHIPGLUE-001 / ARCH-CHIPGLUE-001` citation.
 
-## Current Phase 1 Plan (2026-05-27 audit refresh)
+## Validation Already Run
 
-`PERF-TUNING-001` is still required for Phase 1 completion. The next wave remains
-`ARCH-TESTBENCH-001`.
+All commands below were run by Codex in this workspace before writing this handoff.
 
-The active closeout order (per docs/plan.md, lightly refreshed in audit) is largely
-unchanged, with the addition of this reconciliation step having been performed.
+Traceability:
 
-Real Phase 1 blockers (local markdown view; see 2026-05-27 audit notes above and
-MCP TODO query results for server-side truth):
+```pwsh
+.\tools\check_requirement_traceability.ps1
+```
 
-- `BACKFILL-VIDEO-001` (substantial managed + test progress on side borders, matrix idle, register readback/collision since prior snapshot; native checkpoints and deeper FLI/AFLI/non-PAL sprite DMA remain)
-- `BACKFILL-MEDIA-001`
-- `BACKFILL-INPUT-001`
-- `BACKFILL-LOCKSTEP-001`
-- `RUNTIME-TAPE-002`
-- `RUNTIME-SNAPSHOT-002`
-- `RUNTIME-CAPTURE-002`
-- `ARCH-TESTBENCH-001`
-- `ARCH-TRUEDRIVE-1541-002` (D64/1541 substrate exists and is functional per code + tests)
-- `CLI-LAUNCHER-001`
-- `PERF-TUNING-001`
+Result: exit 0. Output reported 167 canonical IDs, 97 referenced canonical IDs, 70 missing from `src`/`tests`, and 75 noncanonical references. This historical backlog is reported but not a failure without `-FailOnMissing` or `-FailOnNonCanonical`.
 
-(See full audit notes section above for evidence from code, tests, and live MCP query via the Grok plugin.)
+XMLDOC gate:
 
-## Latest Video Progress (refreshed with 2026-05-27 audit evidence)
+```pwsh
+dotnet test tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-restore --filter "FullyQualifiedName~XmlDocsConventionTests" --logger "console;verbosity=minimal"
+```
 
-Recent committed VIC work (post 05-21 baselines) includes additional side-border carry,
-register readback, and matrix idle slices (see commits after 8c1b2fc / 46edda9).
+Result: 1 passed, 0 failed, 0 skipped.
 
-The plan (and Mos6569.cs + border tests) records substantial `BACKFILL-VIDEO-001` progress:
+Consolidated chip-glue focused gate:
 
-- Managed continuous + carried side borders (FR-VIC-007), matrix idle/fill (TR-VIC-EDGE-005),
-  and register readback + collision latch (TR-VIC-EDGE-006) are implemented with focused tests
-  (VicIIBorderFlipFlopTests.cs, VideoRendererTests.cs, etc.).
-- Native x64sc checkpoints, non-PAL sprite DMA tables, FLI/AFLI depth, and full visible-frame
-  validation remain the next sub-slices (as listed in the Continue section below).
+```pwsh
+dotnet test tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-restore --filter "FullyQualifiedName~ChipGlueBoundaryTests|FullyQualifiedName~C64MemoryMap|FullyQualifiedName~ProcessorPortTests|FullyQualifiedName~Cia|FullyQualifiedName~Via6522|FullyQualifiedName~Sid|FullyQualifiedName~VicII|FullyQualifiedName~VideoRenderer|FullyQualifiedName~IecDriveMotorRampTests|FullyQualifiedName~IecTimingTests|FullyQualifiedName~StorageRuntimeTests|FullyQualifiedName~StandardCartridgeTests|FullyQualifiedName~C64JoystickPortTests|FullyQualifiedName~C64VkmKeyboardTests|FullyQualifiedName~Datasette|FullyQualifiedName~TapImageTests|FullyQualifiedName~WavAudioRecorderTests|FullyQualifiedName~RecordingAudioBackendTests|FullyQualifiedName~FrameSequenceCaptureTests" --logger "console;verbosity=minimal"
+```
 
-Audit note: Code comments in Mos6569.cs explicitly track BACKFILL-VIDEO-001 / specific FR/TR IDs.
+Result: 579 passed, 0 failed, 0 skipped.
 
-Continue `BACKFILL-VIDEO-001` from the committed continuous side-border slice. The next useful sub-slices are:
+x64sc lockstep/checkpoint gate:
 
-- native x64sc side-border checkpoints
-- model-aware visible-frame validation beyond the managed PAL/non-PAL cycle-state tests
-- non-PAL per-model sprite DMA tables
-- sprite data-fetch side effects
-- native lockstep checkpoints for multiplexing edge cases
-- visible-frame/checkpoint validation for display-mode pixel effects
-- `TR-VIC-EDGE-001` invalid ECM priority/collision remediation
-- native `TR-VIC-EDGE-006` register checkpoints for the managed readback behavior,
-  starting with managed-vs-x64sc `$D000-$D03F` readback/write-ignore coverage
-  and then collision read-clear timing
-- native `TR-VIC-EDGE-005` matrix/idle checkpoints and the 6569
-  RAM-to-character-ROM fetch-address latch path
-- FLI/AFLI timing depth
+```pwsh
+dotnet test tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj -c Release --no-restore --filter "FullyQualifiedName~Lockstep|FullyQualifiedName~Checkpoint" --logger "console;verbosity=minimal"
+```
 
-Before each code slice, name the canonical `FR-*`, `TR-*`, and `TEST-*` IDs and cite VICE source/docs. If the imported requirement is incomplete or wrong, update the requirement first, then implement.
+Result: 335 passed, 0 failed, 0 skipped.
 
-## Validation At Wrap-Up
+Whitespace:
 
-- `git diff --check` passed before this handoff refresh.
-- Focused matrix/idle plus adjacent bad-line/core-timing validation passed `18/18`.
-- Broader VIC/video validation passed `179/179`.
-- Requirements traceability passed with 163 canonical IDs, 82 referenced canonical IDs, 81 unreferenced canonical IDs, and 53 noncanonical references.
-- `dotnet test .\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj --no-build --nologo --filter "FullyQualifiedName~X64ScVariantLockstepTests"` was attempted after this slice and timed out after 240 seconds; the associated test processes were stopped. Do not treat that gate as green for this slice.
-- Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes and was stopped cleanly; it is not a current green full-solution gate.
-- The requirements ZIP was readable and hashed as:
-  - `CCE3EC1DC605ACCBF4ED7938B49EB89D18B9C04A074F26B9BCFB01FB5FB07AFD`
-- GitHub wiki remote was reachable at `refs/heads/master`.
-- GitHub wiki remote was updated to `28b82e9175757b93be350a10d62eaeb7ae8b40b8`
-  after the matrix/idle docs sync.
+```pwsh
+git diff --check
+```
 
-## Resume Prompt (updated 2026-05-27 after plan audit)
+Result: clean.
 
-Use this prompt after reboot:
+Known validation noise: the test runs print PowerShell profile/native-build helper noise from `SnippetsManager.psm1`, but the test processes exit 0 and report clean pass counts.
+
+## Current Git State
+
+The branch is dirty. The dirty set is broad and is expected for this handoff. Important status categories:
+
+- Requirement/documentation files modified:
+  - `README.md`
+  - `docs/handoff.md`
+  - `docs/requirements/technical/TR-System-Core.md`
+  - `docs/requirements/test/TEST-Requirements.md`
+  - `docs/requirements/traceability/Phase1-Open-Todo-AC-Matrix-2026-06-08.md`
+  - `docs/requirements/traceability/TR-to-Design-Decision-Map.md`
+  - `docs/requirements/traceability/ARCH-CHIPGLUE-001-Chip-Audit-2026-06-12.md`
+- New boundary tests:
+  - `tests/ViceSharp.TestHarness/Architecture/ChipGlueBoundaryTests.cs`
+- Broad code/test movement for chip-glue cleanup:
+  - many files deleted from `src/ViceSharp.Chips`
+  - new Core-owned helpers under `src/ViceSharp.Core`
+  - new/renamed C1541/C64 device wiring tests under `tests/ViceSharp.TestHarness/Wiring`
+  - multiple existing CIA/VIA/SID/VIC/IEC/input/tape/media tests updated for moved namespaces and ownership boundaries
+- Untracked marker backup files exist:
+  - `AGENTS-README-FIRST.yaml.deleted-20260613T1853064646959Z`
+  - `AGENTS-README-FIRST.yaml.deleted-20260614T0235109221607Z`
+  These look like tool-created backups. Do not delete them without user approval.
+
+Use `git status --short --branch` for the exact current list before making any commit.
+
+## MCP / TODO State
+
+Previous Codex verification in this continuation reported live MCP TODO state as `0 open / 8 total`, and `ARCH-CHIPGLUE-001` was marked done. That was before this 2026-06-14 handoff write. Claude should re-bootstrap through `mcpserver-claude-code-plugin` and re-query TODO state before mutating MCP records.
+
+Do not use raw REST or direct DB/YAML writes for MCP state. Follow `AGENTS-README-FIRST.yaml`:
+
+1. Verify marker trust and health nonce.
+2. Use the Claude plugin, not Codex/Grok/Cline plugin.
+3. Reopen or continue the session log.
+4. Query TODOs.
+5. Only then perform MCP TODO/session/requirements writes.
+
+## What Claude Should Do Next
+
+1. Bootstrap from `AGENTS-README-FIRST.yaml` with `mcpserver-claude-code-plugin`.
+2. Run `git status --short --branch` and inspect the dirty tree before edits.
+3. Confirm live MCP TODO state and session log state.
+4. Decide with the user whether to commit the current remediation set as one coherent architecture/requirements slice, or split into:
+   - code movement/remediation,
+   - boundary tests,
+   - requirements/docs.
+5. If committing, do not include unrelated generated/backup artifacts unless the user explicitly wants them. In particular, review the two `AGENTS-README-FIRST.yaml.deleted-*` files.
+6. Re-run the gates before push if any code changes are made after this handoff:
+   - traceability script
+   - XMLDOC convention
+   - consolidated chip-glue focused gate
+   - lockstep/checkpoint gate
+7. If publishing/wrapping up, update MCP session/TODO/requirements through the Claude plugin, then push to the requested remote.
+
+## Resume Prompt For Claude
 
 ```text
-Continue from the ViceSharp reboot handoff in F:\GitHub\vice-sharp (refreshed 2026-05-27).
+Continue in F:\GitHub\vice-sharp from root handoff.md dated 2026-06-14.
 
-Read AGENTS-README-FIRST.yaml first and use F:\GitHub\mcpserver-grok-plugin (for GrokCode agents) or the matching plugin for your agent for all MCP TODO/session-log/requirements operations. Bootstrap the plugin before MCP calls. All agents must read AGENTS-README-FIRST.yaml + the root AGENTS.md and report progress.
+Read AGENTS-README-FIRST.yaml first. Use mcpserver-claude-code-plugin for MCP session log, TODO, and requirements operations. Do not substitute raw REST or another agent plugin.
 
-Current verified state (post 2026-05-27 audit at HEAD 064d3a0):
-- handoff.md and docs/plan.md refreshed during audit. Superseded 2026-05-17 handoff archived in place.
-- Substantial BACKFILL-VIDEO-001 progress landed (side borders, matrix idle, register readback) with tests; see Mos6569.cs and VicII*Tests.cs. Native checkpoints and deeper FLI/AFLI/non-PAL DMA remain.
-- 1541/D64 substrate functional (RUNTIME-1541-002 substrate done; true-drive/CPU lockstep in ARCH-TRUEDRIVE-1541-002).
-- Live MCP TODO query during audit (via plugin) returned 0 items for major Phase 1 keywords. Local markdowns updated; treat server MCP state as source of truth going forward.
-- AGENTS.md now present (Grok plugin rules, Byrd process, no em-dashes, Azure DevOps primary, etc.).
-- Do not treat repo-local ROM absence as a blocker; resolve VICE data from local x64sc.exe/WinVICE root.
-- GitHub wiki push: use docs/Project/wiki/github to the .wiki.git remote.
+Current branch is codex/x64sc-d64-30s-lockstep at HEAD 8eb4c51 with a broad dirty worktree. Treat the dirty set as intentional unless proven otherwise; do not revert user/Codex work.
 
-Next work:
-Continue Phase 1 under the refreshed docs/plan.md. Prioritize remaining BACKFILL-VIDEO-001 native checkpoints + deeper sprite DMA / FLI, true-drive 1541 lockstep, and ARCH-TESTBENCH-001. Before code changes name canonical FR/TR/TEST IDs + cite VICE source. Run traceability script and focused tests. Update MCP state via the active agent plugin, then commit coherent green slices. Re-run full plan/handoff audit when major slices land.
+The completed slice is ARCH-CHIPGLUE-001 for Iteration 1 completion. Shared chip implementations must remain machine-agnostic; machine/device glue belongs in Core machine/device adapters. VIA must stay one common implementation. C1541 wiring belongs in C1541 device adapters, not Via6522.
+
+Key evidence:
+- docs/requirements/traceability/ARCH-CHIPGLUE-001-Chip-Audit-2026-06-12.md
+- docs/requirements/test/TEST-Requirements.md has TEST-ARCH-CHIPGLUE-001
+- docs/requirements/technical/TR-System-Core.md has AC 6-10
+- tests/ViceSharp.TestHarness/Architecture/ChipGlueBoundaryTests.cs cites TR-SYSTEM-CORE-001 / TEST-ARCH-CHIPGLUE-001 / ARCH-CHIPGLUE-001
+
+Last Codex validation:
+- traceability script exited 0
+- XMLDOC: 1 passed, 0 failed, 0 skipped
+- consolidated chip-glue gate: 579 passed, 0 failed, 0 skipped
+- lockstep/checkpoint gate: 335 passed, 0 failed, 0 skipped
+- git diff --check clean
+
+Next: re-query MCP TODO state, inspect dirty status, then either commit/push the remediation slice or continue only if the user asks for more implementation.
 ```
