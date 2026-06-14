@@ -21,7 +21,7 @@ public sealed class CiaSerialPortTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = new Mos6526(bus, irq) { BaseAddress = 0xDC00 };
         return (cia, irq);
     }
 

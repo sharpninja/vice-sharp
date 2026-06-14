@@ -23,7 +23,7 @@ public sealed class SidAdsrBugTests
 {
     private static Sid6581 BuildSid()
     {
-        return new Sid6581(new BasicBus());
+        return new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
     }
 
     private static void StartAttack(Sid6581 sid, byte attackRateNibble)

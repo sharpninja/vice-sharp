@@ -31,7 +31,7 @@ public sealed class VideoRenderer
 
     private readonly Mos6569 _vic;
 
-    // C64 palette in BGRA format - built from VicPalette colors
+    // VIC-II palette in BGRA format - built from VicPalette colors
     // Format: 0xAABBGGRR (Alpha, Blue, Green, Red)
     private static readonly uint[] Palette = new uint[16];
 

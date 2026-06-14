@@ -75,9 +75,9 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var profile = (descriptor as IProfiledArchitectureDescriptor)?.MachineProfile;
         var systemCore = profile is null ? null : new SystemCore(profile.SystemCore);
         var vic = CreateVicII(bus, irqLine, descriptor, profile);
-        var cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
+        var cia1 = CreateC64Cia(bus, irqLine, 0xDC00, descriptor.MasterClockHz);
         var cia2Connected = profile?.SystemCore.Cia2Connected ?? true;
-        var cia2 = cia2Connected ? new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 } : null;
+        var cia2 = cia2Connected ? CreateC64Cia(bus, nmiLine, 0xDD00, descriptor.MasterClockHz) : null;
         var pla = new Mos906114(bus);
         var sid = CreateSid(bus, profile);
         var defaultCartridgeMappingMode = ResolveDefaultCartridgeMappingMode(profile);
@@ -93,7 +93,10 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             cia2Connected: cia2Connected,
             defaultCartridgeMappingMode: defaultCartridgeMappingMode,
             cpuPcReader: () => cpu.PC);
+        cpu.ShouldDeferAbsoluteStore = memory.ShouldDeferCpuAbsoluteStore;
+        cpu.ShouldDelayNextFetchAfterWrite = memory.ShouldDelayCpuFetchAfterWrite;
         var iecBusConnected = profile?.SystemCore.IecBusConnected ?? true;
+        var cia2Interface = cia2Connected ? new C64Cia2InterfaceDevice() : null;
         var drive8 = iecBusConnected ? new IecDrive(8) : null;
         var drive9 = iecBusConnected ? new IecDrive(9) : null;
         var datasette = profile?.SystemCore.TapePortConnected == false ? null : new Datasette();
@@ -148,6 +151,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         deviceRegistry.Add(cia1, DeviceRole.Cia1);
         if (cia2 is not null)
             deviceRegistry.Add(cia2, DeviceRole.Cia2);
+        if (cia2Interface is not null)
+            deviceRegistry.Add(cia2Interface);
         deviceRegistry.Add(pla, DeviceRole.Pla);
         deviceRegistry.Add(sid, DeviceRole.AudioChip);
         if (drive8 is not null)
@@ -241,11 +246,21 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         deviceRegistry.Add(cpu, DeviceRole.DriveCpu);
 
         // Optional D64 disk image mount.
+        D64DiskImageDevice? disk = null;
         if (descriptor is IDriveArchitectureDescriptor drive && !string.IsNullOrWhiteSpace(drive.DiskImagePath))
         {
-            var disk = D64DiskImageDevice.LoadFromFile(drive.DiskImagePath!);
+            disk = D64DiskImageDevice.LoadFromFile(drive.DiskImagePath!);
             deviceRegistry.Add(disk, DeviceRole.DriveDisk);
         }
+
+        var deviceNumber = descriptor is IDriveArchitectureDescriptor driveDescriptor
+            ? driveDescriptor.DeviceNumber
+            : 8;
+        deviceRegistry.Add(new C1541IecInterfaceDevice(deviceNumber));
+
+        var driveMechanism = new C1541DriveMechanismDevice(disk, cpu);
+        clock.Register(driveMechanism);
+        deviceRegistry.Add(driveMechanism);
 
         var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
         machine.Reset();
@@ -283,6 +298,16 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         {
             "GameSystem" or "Max" => 0x3F,
             _ => 0x7F
+        };
+    }
+
+    private static Mos6526 CreateC64Cia(IBus bus, IInterruptLine line, ushort baseAddress, long masterClockHz)
+    {
+        return new Mos6526(bus, line)
+        {
+            BaseAddress = baseAddress,
+            TodCyclesPer50HzTick = (int)(masterClockHz / 50),
+            TodCyclesPer60HzTick = (int)(masterClockHz / 60)
         };
     }
 
@@ -331,10 +356,10 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         if (profile is not null &&
             profile.SidModel.Contains("8580", StringComparison.OrdinalIgnoreCase))
         {
-            return new Sid8580(bus);
+            return new Sid8580(bus) { BaseAddress = 0xD400 };
         }
 
-        return new Sid6581(bus);
+        return new Sid6581(bus) { BaseAddress = 0xD400 };
     }
 }
 
@@ -496,4 +521,3 @@ public sealed class DebugCartDevice : IAddressSpace, IDevice
         }
     }
 }
-

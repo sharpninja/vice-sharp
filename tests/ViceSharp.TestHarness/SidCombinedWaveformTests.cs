@@ -35,7 +35,7 @@ public sealed class SidCombinedWaveformTests
 
     private static Sid6581 BuildPrimedSid()
     {
-        var sid = new Sid6581(new BasicBus());
+        var sid = new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
         // Master volume max so envelope-scaled output is observable.
         sid.Write(Volume, 0x0F);
         // Voice 1 frequency = max so each Tick advances the accumulator by
@@ -258,7 +258,7 @@ public sealed class SidCombinedWaveformTests
         PrimeEnvelope(sid);
 
         // Capture the digi DC baseline using a fresh SID with the same volume.
-        var baselineSid = new Sid6581(new BasicBus());
+        var baselineSid = new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
         baselineSid.Write(Volume, 0x0F);
         for (int i = 0; i < 8; i++) baselineSid.Tick();
         float baseline = baselineSid.GenerateSample();

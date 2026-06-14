@@ -13,7 +13,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     public string Name => "MOS 6526 CIA";
     public uint ClockDivisor => 1;
     public ClockPhase Phase => ClockPhase.Phi2;
-    public ushort BaseAddress { get; init; } = 0xDC00;
+    public ushort BaseAddress { get; init; }
     public ushort Size => 64;
     
     // Timer modes
@@ -54,6 +54,10 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     public Func<byte>? PortAInput { get; set; }
     public Func<byte>? PortBInput { get; set; }
     public byte PortAExternalInputMask { get; set; }
+    public byte PortAOutputLatch => _portA;
+    public byte PortBOutputLatch => _portB;
+    public byte PortADataDirection => _portADir;
+    public byte PortBDataDirection => _portBDir;
     public Action<byte>? PortAOutputChanged { get; set; }
     public Action<byte>? PortBOutputChanged { get; set; }
     
@@ -74,12 +78,11 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     private byte _todLatchedMinutes;
     private byte _todLatchedHours;
 
-    // Cycle accumulator that converts host phi2 cycles into TOD ticks
-    // (50Hz when CRA bit 7 = 1, 60Hz when CRA bit 7 = 0). At PAL phi2 of
-    // 985_248 Hz, 50Hz -> 19_704 cycles/tick and 60Hz -> 16_420 cycles/tick.
+    // Cycle accumulator that converts phi2 cycles into TOD ticks. CRA bit 7
+    // selects 50Hz or 60Hz TOD cadence; board code owns the external clock rate.
     private int _todCycleCounter;
-    private const int TodCyclesPer50HzTick = 985_248 / 50;
-    private const int TodCyclesPer60HzTick = 985_248 / 60;
+    public int TodCyclesPer50HzTick { get; init; } = 1_000_000 / 50;
+    public int TodCyclesPer60HzTick { get; init; } = 1_000_000 / 60;
     
     // Interrupt state
     private byte _interruptMask;
@@ -320,14 +323,20 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
             // Ports
             case 0x00:
                 _portA = value;
-                PortAOutputChanged?.Invoke(value);
+                PortAOutputChanged?.Invoke(ComposePortPins(_portA, _portADir));
                 break;
-            case 0x02: _portADir = value; break;
+            case 0x02:
+                _portADir = value;
+                PortAOutputChanged?.Invoke(ComposePortPins(_portA, _portADir));
+                break;
             case 0x01:
                 _portB = value;
-                PortBOutputChanged?.Invoke(value);
+                PortBOutputChanged?.Invoke(ComposePortPins(_portB, _portBDir));
                 break;
-            case 0x03: _portBDir = value; break;
+            case 0x03:
+                _portBDir = value;
+                PortBOutputChanged?.Invoke(ComposePortPins(_portB, _portBDir));
+                break;
             
             // Interrupt mask
             case 0x0D:
@@ -347,6 +356,11 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
         byte input = inputReader?.Invoke() ?? (byte)0xFF;
         var value = (byte)((outputLatch & dataDirection) | (input & ~dataDirection));
         return (byte)((value & ~externalInputMask) | (input & externalInputMask));
+    }
+
+    private static byte ComposePortPins(byte outputLatch, byte dataDirection)
+    {
+        return (byte)(outputLatch | ~dataDirection);
     }
 
     private static TimerState CreateResetTimer() => new()
@@ -473,10 +487,8 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     /// Models a high-to-low transition on the CIA FLAG pin (FLG, pin 24).
     /// The transition latches ICR bit 4 and recomputes the IRQ output
     /// via the shared interrupt path; IMR bit 4 gates the IRQ assert.
-    /// On real C64 hardware CIA1 FLAG is wired to the datasette READ
-    /// line and CIA2 FLAG is wired to a user-port pin; this method
-    /// surfaces only the pin-edge contract so callers (peripheral
-    /// substrates) can drive the latch.
+    /// Surfaces only the generic pin-edge contract so board-level glue can
+    /// drive the latch.
     /// </summary>
     public void TriggerFlagPin()
     {
@@ -504,7 +516,7 @@ public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
     }
 
     // Timer B input-source select (CRB bits 5-6, INMODE):
-    //   00 -> phi2 host cycles (default; counts every Tick).
+    //   00 -> phi2 cycles (default; counts every Tick).
     //   01 -> CNT pin transitions (NOT IMPLEMENTED; CNT not yet plumbed).
     //   10 -> Timer A underflow events (chained mode for 32-bit timers).
     //   11 -> Timer A underflow gated by CNT high (NOT IMPLEMENTED;

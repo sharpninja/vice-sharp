@@ -1,5 +1,6 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.IEC;
+using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 

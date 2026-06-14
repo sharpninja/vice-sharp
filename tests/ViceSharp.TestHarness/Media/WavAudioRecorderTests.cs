@@ -3,7 +3,7 @@ namespace ViceSharp.TestHarness.Media;
 using System.IO;
 using System.Text;
 using FluentAssertions;
-using ViceSharp.Chips.Media;
+using ViceSharp.Core.Media;
 using Xunit;
 
 /// <summary>

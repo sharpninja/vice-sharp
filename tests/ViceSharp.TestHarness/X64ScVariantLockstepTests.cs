@@ -2,13 +2,13 @@ using FluentAssertions;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Chips.Audio;
-using ViceSharp.Chips.Cartridges;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.IEC;
-using ViceSharp.Chips.Input;
+using ViceSharp.Core.Input;
 using ViceSharp.Chips.VicIi;
 using ViceSharp.Core;
 using ViceSharp.RomFetch;
+using System.Reflection;
 using Xunit;
 
 namespace ViceSharp.TestHarness;
@@ -19,6 +19,9 @@ public sealed class X64ScVariantLockstepTests
     private const ushort BasicScreenStart = 0x0400;
     private const int BasicScreenLength = 1000;
     private const int BasicReadyMaxFrames = 180;
+    private const int SelectedD64LockstepSeconds = 30;
+    private const string SelectedD64EnvironmentVariable = "VICESHARP_SELECTED_D64";
+    private const string SelectedD64DefaultFileName = "frostpoint.d64";
 
     private static string[] RequiredSelectors => C64MachineProfiles.All.Select(profile => profile.Id).ToArray();
     private static string[] NoCartridgeBootSelectors => C64MachineProfiles.All
@@ -369,6 +372,45 @@ public sealed class X64ScVariantLockstepTests
 
         report.Success.Should().BeTrue($"{modelSelector}: {FormatReport(report)} {validator.FormatRamtasDiagnostic()}");
         report.TotalCyclesExecuted.Should().Be(cycles);
+    }
+
+    /// <summary>
+    /// FR: BACKFILL-LOCKSTEP-001, FR: ARCH-TRUEDRIVE-1541-002, TR: TR-CYCLE-001.
+    /// Use case: The final selected-media x64sc gate must keep the managed
+    /// PAL C64 in CPU lockstep with native VICE for a full 30 seconds while
+    /// the selected D64 image is attached to drive 8 on both machines.
+    /// Acceptance: With <c>VICESHARP_SELECTED_D64</c> pointing at the selected
+    /// image, or the workstation default <c>Downloads\frostpoint.d64</c>
+    /// present, the validator reports success after exactly
+    /// NominalClockHz*30 cycles with zero skipped coverage in this environment.
+    /// </summary>
+    [ViceFact]
+    public void SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal()
+    {
+        var selectedD64Path = ResolveSelectedD64Path();
+        if (selectedD64Path is null)
+        {
+            Assert.Skip(
+                $"Set {SelectedD64EnvironmentVariable} to the selected D64 image, or place {SelectedD64DefaultFileName} in the user Downloads folder.");
+        }
+
+        var profile = C64MachineProfiles.C64Pal;
+        var cycles = profile.NominalClockHz * SelectedD64LockstepSeconds;
+        var diskImage = File.ReadAllBytes(selectedD64Path);
+        diskImage.Should().HaveCount(D64Image.DiskSize35Track, "selected D64 image must be a canonical 35-track D64");
+
+        using var validator = new LockstepValidator(
+            profile.Id,
+            diskImage: diskImage,
+            diskPath: selectedD64Path,
+            recordRecentTrace: true);
+        validator.QueueC64Drive8LoadCommand(profile.CyclesPerLine * profile.RasterLines);
+
+        var report = validator.RunUntilKernalCloseStableAndSearchNative(cycles, profile.NominalClockHz);
+
+        report.Success.Should().BeTrue(
+            $"{profile.Id} selected D64 '{selectedD64Path}' should converge after the managed KERNAL CLOSE routine returns: " +
+            $"{report} {validator.FormatRamtasDiagnostic()}{Environment.NewLine}{report.Trace}");
     }
 
     /// <summary>
@@ -1378,6 +1420,25 @@ public sealed class X64ScVariantLockstepTests
         return path;
     }
 
+    private static string? ResolveSelectedD64Path()
+    {
+        var configuredPath = Environment.GetEnvironmentVariable(SelectedD64EnvironmentVariable);
+        if (!string.IsNullOrWhiteSpace(configuredPath))
+        {
+            configuredPath = Environment.ExpandEnvironmentVariables(configuredPath);
+            File.Exists(configuredPath).Should().BeTrue(
+                $"{SelectedD64EnvironmentVariable} should point at an existing selected D64 image");
+            return configuredPath;
+        }
+
+        var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (string.IsNullOrWhiteSpace(profilePath))
+            return null;
+
+        var workstationDefault = Path.Combine(profilePath, "Downloads", SelectedD64DefaultFileName);
+        return File.Exists(workstationDefault) ? workstationDefault : null;
+    }
+
     private static bool TryCreateRequiredDeterministicCartridge(
         C64MachineProfile profile,
         out byte[] cartridge,
@@ -1488,7 +1549,7 @@ public sealed class X64ScVariantLockstepTests
 
         var managedVic = vic is null
             ? "managed VIC unavailable"
-            : $"managedVic(line={vic.CurrentRasterLine},cycle={vic.CurrentCycle},bank={vic.VicBank},lastPhi1=${vic.LastReadPhi1:X2},d018=${vic.Peek(0xD018):X2})";
+            : $"managedVic(line={vic.CurrentRasterLine},cycle={vic.CurrentCycle}{FormatManagedVicBank(memory)},lastPhi1=${vic.LastReadPhi1:X2},d018=${vic.Peek(0xD018):X2})";
         var nativeVic = $"nativeVic(line={nativeState.RasterLine},cycle={nativeState.RasterCycle},d018=${nativeState.Registers[0x18]:X2})";
         var managedPhi1 = vic is null || memory is null
             ? "managedPhi1 unavailable"
@@ -1501,14 +1562,41 @@ public sealed class X64ScVariantLockstepTests
 
     private static string FormatManagedPhi1Memory(Mos6569 vic, IMemory memory)
     {
-        var idleAddress = vic.TranslateVicAddress(0x3FFF);
-        var pointer3Address = vic.TranslateVicAddress(0x03FB);
-        var pointer4Address = vic.TranslateVicAddress(0x03FC);
-        var refreshAddress = vic.TranslateVicAddress((ushort)(0x3F00 + (byte)(0xFF - vic.CurrentRasterLine * 5)));
+        if (!TryTranslateManagedVicAddress(memory, 0x3FFF, out var idleAddress) ||
+            !TryTranslateManagedVicAddress(memory, 0x03FB, out var pointer3Address) ||
+            !TryTranslateManagedVicAddress(memory, 0x03FC, out var pointer4Address) ||
+            !TryTranslateManagedVicAddress(memory, (ushort)(0x3F00 + (byte)(0xFF - vic.CurrentRasterLine * 5)), out var refreshAddress))
+            return "managedPhi1 address translation unavailable";
 
         return
             $"managedPhi1(idle=${idleAddress:X4}:${memory.Span[idleAddress]:X2},ptr3=${pointer3Address:X4}:${memory.Span[pointer3Address]:X2}," +
             $"ptr4=${pointer4Address:X4}:${memory.Span[pointer4Address]:X2},refresh0=${refreshAddress:X4}:${memory.Span[refreshAddress]:X2})";
+    }
+
+    private static string FormatManagedVicBank(IMemory? memory)
+    {
+        if (memory is null)
+            return string.Empty;
+
+        var property = memory.GetType().GetProperty(
+            "VicBankForDiagnostics",
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        return property?.GetValue(memory) is int bank ? $",bank={bank}" : string.Empty;
+    }
+
+    private static bool TryTranslateManagedVicAddress(IMemory memory, ushort vicAddress, out ushort address)
+    {
+        var method = memory.GetType().GetMethod(
+            "TranslateVicAddressForDiagnostics",
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        if (method?.Invoke(memory, [vicAddress]) is ushort translatedAddress)
+        {
+            address = translatedAddress;
+            return true;
+        }
+
+        address = 0;
+        return false;
     }
 
     private static void AssertCiaCheckpointMatches(

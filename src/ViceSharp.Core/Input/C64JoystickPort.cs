@@ -1,6 +1,6 @@
 using ViceSharp.Abstractions;
 
-namespace ViceSharp.Chips.Input;
+namespace ViceSharp.Core.Input;
 
 /// <summary>
 /// C64 Digital Joystick Port implementation.
@@ -74,43 +74,9 @@ public sealed class C64JoystickPort : IInputSource
     /// </summary>
     public void SetPotY(byte value) => _potY = value;
     
-    // VICE-style: Automatic fire mode
-    private int _autoFireCounter;
-    private bool _autoFireEnabled;
-    
-    /// <summary>
-    /// Enable VICE-style automatic fire
-    /// </summary>
-    public void SetAutoFire(bool enabled) => _autoFireEnabled = enabled;
-    
-    /// <summary>
-    /// Update auto fire counter (call each frame)
-    /// </summary>
-    public void UpdateAutoFire()
-    {
-        if (_autoFireEnabled)
-        {
-            _autoFireCounter++;
-            // Toggle fire every 10 frames (~6 Hz)
-            if (_autoFireCounter >= 10)
-            {
-                _autoFireCounter = 0;
-                State ^= JoystickButtons.Fire;
-            }
-        }
-    }
-    
     public bool Up => (State & JoystickButtons.Up) != 0;
     public bool Down => (State & JoystickButtons.Down) != 0;
     public bool Left => (State & JoystickButtons.Left) != 0;
     public bool Right => (State & JoystickButtons.Right) != 0;
     public bool Fire => (State & JoystickButtons.Fire) != 0;
-
-    /// <summary>
-    /// Enumerate available joystick devices. Returns a stub keyboard-joystick
-    /// device (models a keyboard mapped as a joystick, always present).
-    /// VICE: joyport devices enumerated from joyport.c device table.
-    /// </summary>
-    public static IReadOnlyList<C64JoystickPort> EnumerateDevices()
-        => new[] { new C64JoystickPort() };
 }

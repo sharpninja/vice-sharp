@@ -12,7 +12,6 @@ public sealed class SystemCoordinator : ISystemCoordinator
 {
     private readonly List<IMachine> _systems = new();
     private readonly List<IInterSystemBus> _buses = new();
-    private readonly Dictionary<IMachine, long> _accumulators = new();
     private readonly HashSet<IMachine> _cartExtensions = new();
     private long _hostCycles;
 
@@ -27,7 +26,6 @@ public sealed class SystemCoordinator : ISystemCoordinator
         if (_systems.Contains(machine))
             throw new InvalidOperationException("Machine already attached.");
         _systems.Add(machine);
-        _accumulators[machine] = 0;
     }
 
     public void AttachCartExtension(IMachine extension, IMachine host)
@@ -37,7 +35,6 @@ public sealed class SystemCoordinator : ISystemCoordinator
         if (_systems.Contains(extension))
             throw new InvalidOperationException("Extension already attached.");
         _systems.Add(extension);
-        _accumulators[extension] = 0;
         _cartExtensions.Add(extension);
     }
 
@@ -45,7 +42,6 @@ public sealed class SystemCoordinator : ISystemCoordinator
     {
         if (!_systems.Remove(machine))
             throw new InvalidOperationException("Machine is not attached.");
-        _accumulators.Remove(machine);
         _cartExtensions.Remove(machine);
     }
 
@@ -65,27 +61,14 @@ public sealed class SystemCoordinator : ISystemCoordinator
         }
 
         var host = _systems[0];
-        var hostRate = host.Clock.FrequencyHz;
-
-        foreach (var machine in _systems)
+        host.Clock.Step();
+        foreach (var machine in _cartExtensions)
         {
-            if (ReferenceEquals(machine, host) || _cartExtensions.Contains(machine))
-            {
-                machine.Clock.Step();
-                continue;
-            }
-
-            var rate = machine.Clock.FrequencyHz;
-            var acc = _accumulators[machine] + rate;
-            while (acc >= hostRate)
-            {
-                machine.Clock.Step();
-                acc -= hostRate;
-            }
-            _accumulators[machine] = acc;
+            machine.Clock.Step();
         }
 
-        _hostCycles++;
+        _hostCycles = host.Clock.TotalCycles;
+        SynchronizePeripheralSystemsToHost();
     }
 
     public void Step(long hostCycles)
@@ -94,13 +77,39 @@ public sealed class SystemCoordinator : ISystemCoordinator
             Step();
     }
 
+    /// <summary>
+    /// Advances non-host, non-cart systems to the host clock's current cycle.
+    /// VICE calls drive_cpu_execute_* from IEC callbacks before reading or
+    /// mutating serial bus state; this method gives board-level IEC glue the
+    /// same catch-up point without moving that policy into chip cores.
+    /// </summary>
+    public void SynchronizePeripheralSystemsToHost()
+    {
+        if (_systems.Count == 0)
+            return;
+
+        var host = _systems[0];
+        var hostRate = host.Clock.FrequencyHz;
+        var hostCycles = host.Clock.TotalCycles;
+
+        for (var i = 1; i < _systems.Count; i++)
+        {
+            var machine = _systems[i];
+            if (_cartExtensions.Contains(machine))
+                continue;
+
+            var targetCycles = hostCycles * machine.Clock.FrequencyHz / hostRate;
+            while (machine.Clock.TotalCycles < targetCycles)
+                machine.Clock.Step();
+        }
+    }
+
     public void Reset()
     {
         _hostCycles = 0;
         foreach (var machine in _systems)
         {
             machine.Reset();
-            _accumulators[machine] = 0;
         }
     }
 }

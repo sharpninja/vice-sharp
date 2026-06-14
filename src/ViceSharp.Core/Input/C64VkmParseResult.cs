@@ -1,4 +1,4 @@
-namespace ViceSharp.Chips.Input;
+namespace ViceSharp.Core.Input;
 
 public sealed class C64VkmParseResult
 {

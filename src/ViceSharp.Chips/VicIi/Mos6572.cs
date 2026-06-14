@@ -3,7 +3,7 @@ using ViceSharp.Abstractions;
 namespace ViceSharp.Chips.VicIi;
 
 /// <summary>
-/// MOS 6572 PAL-N VIC-II variant used by Drean/PAL-N C64 models.
+/// MOS 6572 PAL-N VIC-II variant.
 /// </summary>
 public sealed class Mos6572 : Mos6569
 {

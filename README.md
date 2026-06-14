@@ -37,6 +37,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
   - x64sc lockstep: 322 passed (10-frame depth across no-cart variants)
   - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
   - Snapshot/capture/input/testbench/launcher all closed: see `docs/handoff.md`
+  - Post-closeout audit remediation: `ARCH-CHIPGLUE-001` verified that reusable chip cores stay machine-agnostic and C64/C1541 glue lives in Core machine/device adapters.
   - 2 skipped tests are ROM-gated process smoke tests (no Phase 1 dependency)
   - Post-Phase 1 deferrals: PERF-BENCHMARK-001 native baseline, advanced cartridge mappers, cross-platform host shells, 8580 SID filter deepening, wiki publishing automation. See handoff.md.
 
@@ -86,6 +87,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Keyboard matrix + control-port parity (LoadFromFile + EnumerateDevices + 30-frame key-repeat hold) | ✅ | 100% | `BACKFILL-INPUT-001` Phase 1 close (slice 5) |
 | Host UI + Monitor control surface (10 services + 8 adapters + view model + registry + mapper + frame source + InProcessGrpcHost + 2 clients; ~230 tests) | ✅ | 100% | `BACKFILL-HOSTUI-001` closeable; launcher/UI shell work is tracked separately |
 | Core primitives (SystemClock + DoubleBufferedMutationQueue + LockFreePubSub + BasicBus + SimpleRam) | ✅ | 100% | TR-PUBSUB-PERFORMANCE + TR-Cycle-Accuracy + TR-System-Core |
+| Chip/package boundary audit (shared chips vs machine/device glue) | ✅ | 100% | `ARCH-CHIPGLUE-001` closed with `TEST-ARCH-CHIPGLUE-001`; focused gate 579/579 and lockstep/checkpoint 335/335 |
 | x64sc variant lockstep gate (10-frame depth across no-cart variants, 322 lockstep tests green) | ✅ | 100% | `BACKFILL-LOCKSTEP-001` Phase 1 close (slice 7) |
 | Upstream VICE testbench integration (debugcart + limitcycles + PRG autostart + help text + ROM-less smoke) | ✅ | 100% | `ARCH-TESTBENCH-001` + `CLI-LAUNCHER-001` Phase 1 close (slice 6) |
 

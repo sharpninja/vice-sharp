@@ -1,4 +1,4 @@
-namespace ViceSharp.Chips.Media;
+namespace ViceSharp.Core.Media;
 
 using System;
 using ViceSharp.Abstractions;

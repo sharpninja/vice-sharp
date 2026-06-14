@@ -1,6 +1,6 @@
 using ViceSharp.Abstractions;
 
-namespace ViceSharp.Chips.Input;
+namespace ViceSharp.Core.Input;
 
 /// <summary>
 /// C64 8×8 Keyboard Matrix implementation.

@@ -90,6 +90,7 @@ public sealed class HostInputServiceTests
             new SetKeyStateRequest("test-session", "Space", true),
             TestContext.Current.CancellationToken);
 
+        machine.Bus.Write(0xDC03, 0xFF);
         machine.Bus.Write(0xDC01, 0xEF);
         Assert.Equal(0, machine.Bus.Read(0xDC00) & 0x80);
 
@@ -132,6 +133,7 @@ public sealed class HostInputServiceTests
             new SetKeyStateRequest("test-session", "Left", false),
             TestContext.Current.CancellationToken);
 
+        machine.Bus.Write(0xDC03, 0xFF);
         machine.Bus.Write(0xDC01, 0x7F);
         Assert.Equal(0, machine.Bus.Read(0xDC00) & 0x02);
 

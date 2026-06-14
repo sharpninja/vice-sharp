@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace ViceSharp.Chips.Input;
+namespace ViceSharp.Core.Input;
 
 public static class C64VkmParser
 {

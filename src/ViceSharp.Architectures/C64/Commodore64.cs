@@ -43,9 +43,9 @@ public sealed class Commodore64 : IMachine
         // Initialize chips
         _cpu = new Mos6502(bus);
         _vic = new Mos6569(bus, irqLine);
-        _cia1 = new Mos6526(bus, irqLine) { BaseAddress = 0xDC00 };
-        _cia2 = new Mos6526(bus, nmiLine) { BaseAddress = 0xDD00 };
-        _sid = new Sid6581(bus);
+        _cia1 = CreateC64Cia(bus, irqLine, 0xDC00);
+        _cia2 = CreateC64Cia(bus, nmiLine, 0xDD00);
+        _sid = new Sid6581(bus) { BaseAddress = 0xD400 };
 
         // Register devices on bus
         _bus.RegisterDevice(_cpu);
@@ -71,6 +71,17 @@ public sealed class Commodore64 : IMachine
         _clock.Register(_cia1);
         _clock.Register(_cia2);
         _clock.Register(_sid);
+    }
+
+    private static Mos6526 CreateC64Cia(IBus bus, IInterruptLine line, ushort baseAddress)
+    {
+        const int c64PalClockHz = 985_248;
+        return new Mos6526(bus, line)
+        {
+            BaseAddress = baseAddress,
+            TodCyclesPer50HzTick = c64PalClockHz / 50,
+            TodCyclesPer60HzTick = c64PalClockHz / 60
+        };
     }
 
     public void Reset()

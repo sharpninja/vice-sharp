@@ -47,7 +47,7 @@ public sealed class SampleMultiSystemYamlTests
     /// FR/TR: ARCH-WIRING-005
     /// Use case: After the sample loads, host CIA2 + drive VIA1 are auto-
     /// bound. A host CIA2 write asserting ATN reaches the drive's VIA1 PB7.
-    /// Acceptance: cia2.Write($DD00, $08) -> drive PB7 = 1.
+    /// Acceptance: CIA2 PA3 high -> drive PB7 = 1.
     /// </summary>
     [Fact]
     public void SampleYaml_HostAssertsAtn_DriveSeesIt()
@@ -60,6 +60,7 @@ public sealed class SampleMultiSystemYamlTests
             .OrderBy(v => v.BaseAddress).First();
 
         hostCia2.Write(0xDD00, 0x08);
+        hostCia2.Write(0xDD02, 0x38);
 
         (driveVia1.Read(0x1800) & 0x80).Should().Be(0x80);
     }

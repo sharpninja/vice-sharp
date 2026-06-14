@@ -248,7 +248,7 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
         (ushort addr, byte val)[] stimulusPrefix,
         Func<Sid6581, IntPtr, short[], short[], Action<int>> perSampleHookFactory)
     {
-        var managedSid = new Sid6581(new BasicBus());
+        var managedSid = new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
         var native = _fixture!.NativeMachine;
 
         // Reset the native SID to a known state by zeroing all 25 register

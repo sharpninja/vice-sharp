@@ -3,7 +3,7 @@ using ViceSharp.Abstractions;
 namespace ViceSharp.Chips.Pla;
 
 /// <summary>
-/// MOS 906114 Programmable Logic Array - C64 Memory Banking Controller.
+/// MOS 906114 Programmable Logic Array banking model.
 /// </summary>
 public sealed class Mos906114 : IAddressSpace, IClockedDevice
 {
@@ -13,19 +13,19 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     public uint ClockDivisor => 1;
     public ClockPhase Phase => ClockPhase.Phi1;
 
-    public ushort BaseAddress { get; init; } = 0x0001;
-    public ushort Size => 1;
+    public ushort BaseAddress { get; init; }
+    public ushort Size => 2;
     public bool IsReadOnly => false;
 
     /// <summary>
-    /// 6510 processor port DDR ($00). Bits 0-5 select pin direction
+    /// Processor-port DDR latch. Bits 0-5 select pin direction
     /// (1 = output, 0 = input); bits 6-7 are unused on the 6510 and
     /// always read zero.
     /// </summary>
     public byte DataDirection { get; private set; }
 
     /// <summary>
-    /// 6510 processor port data latch ($01). Reads through
+    /// Processor-port data latch. Reads through
     /// <see cref="ReadProcessorPort"/> mix this latch with the DDR mask;
     /// the banking selector exposes the latch directly via
     /// <see cref="Loram"/>, <see cref="Hiram"/> and <see cref="Charen"/>.
@@ -41,8 +41,8 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     /// <summary>
     /// External pull-up state applied to input bits when the processor
     /// port is read. The simple model used here returns 0 for every
-    /// unconnected input bit; this can be raised in a future slice to
-    /// emulate tape sense / NMOS capacitor decay.
+    /// unconnected input bit; board integration owns any external line
+    /// state or NMOS capacitor decay model.
     /// </summary>
     public byte InputPullUp { get; set; } = 0x00;
 
@@ -72,28 +72,26 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     /// <inheritdoc />
     public void Reset()
     {
-        // C64 power-up: DDR=$2F (bits 0-5 output, bit 4 tape sense input),
-        // data latch=$37 (LORAM+HIRAM+CHAREN+motor on, tape data low).
-        DataDirection = 0x2F;
-        DataRegister = 0x37;
+        DataDirection = 0x00;
+        DataRegister = 0x00;
     }
 
     /// <inheritdoc />
     public byte Peek(ushort offset) => Read(offset);
 
     /// <inheritdoc />
-    public byte Read(ushort offset)
+    public byte Read(ushort address)
     {
-        return (offset & 0x0001) == 0
+        var register = (ushort)(address - BaseAddress);
+        return (register & 0x0001) == 0
             ? DataDirection
             : ReadProcessorPort();
     }
 
     /// <summary>
-    /// Compute the value the CPU sees when it reads $01. Output bits
+    /// Compute the value visible on the processor data port. Output bits
     /// (DDR=1) return the latched data; input bits (DDR=0) return the
-    /// external pull-up state, which models the tape sense / unconnected
-    /// bit-6/7 behaviour in the simple no-NMOS-cap model.
+    /// external pull-up state.
     /// </summary>
     public byte ReadProcessorPort()
     {
@@ -103,7 +101,7 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     }
 
     /// <summary>
-    /// Update the 6510 data-direction register. Bits 6-7 are masked off
+    /// Update the data-direction register. Bits 6-7 are masked off
     /// since they are not implemented on the chip.
     /// </summary>
     public void WriteDataDirection(byte value)
@@ -112,9 +110,9 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     }
 
     /// <summary>
-    /// Update the 6510 data latch. Bits 0-2 propagate to the PLA banking
+    /// Update the data latch. Bits 0-2 propagate to the PLA banking
     /// state (LORAM/HIRAM/CHAREN); other bits are stored for future
-    /// tape / cassette routing slices.
+    /// board integration.
     /// </summary>
     public void WriteDataPort(byte value)
     {
@@ -122,9 +120,10 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     }
 
     /// <inheritdoc />
-    public void Write(ushort offset, byte value)
+    public void Write(ushort address, byte value)
     {
-        if ((offset & 0x0001) == 0)
+        var register = (ushort)(address - BaseAddress);
+        if ((register & 0x0001) == 0)
         {
             WriteDataDirection(value);
         }
@@ -148,7 +147,7 @@ public sealed class Mos906114 : IAddressSpace, IClockedDevice
     /// <inheritdoc />
     public bool HandlesAddress(ushort address)
     {
-        return address == 0x0000 || address == 0x0001;
+        return address >= BaseAddress && address < BaseAddress + Size;
     }
 
     /// <summary>

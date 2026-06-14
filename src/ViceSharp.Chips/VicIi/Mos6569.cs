@@ -257,7 +257,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public byte RasterX;
     public uint CycleCounter;
     // PERF-VIC-002/003: initialized to non-null defaults in constructor so ReadVideoMemory
-    // and Phi1MemoryReader paths need no null check. C64MemoryMap overrides both on wiring.
+    // and Phi1MemoryReader paths need no null check. Machine memory maps
+    // override both when their board wiring supplies a faster path.
     public Func<ushort, byte> VideoMemoryReader { get; set; } = null!;
     public Func<byte, byte> Phi1MemoryReader { get; set; } = null!;
     public byte LastReadPhi1 { get; private set; }
@@ -765,20 +766,6 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public bool IsForcedBadline => IsDisplayEnabled && (CurrentRasterLine & 7) == YScroll;
     
-    /// <summary>
-    /// VICE-style: Get VIC bank from CIA2 port A (bank selection)
-    /// </summary>
-    public int VicBank { get; set; } = 3;  // Default bank 3 ($C000-$FFFF)
-    
-    /// <summary>
-    /// VICE-style: Translate VIC address to system address
-    /// </summary>
-    public ushort TranslateVicAddress(ushort vicAddr)
-    {
-        // VIC addresses 14 bits, translate to 16-bit with bank
-        return (ushort)((VicBank << 14) | (vicAddr & 0x3FFF));
-    }
-
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
 
@@ -789,9 +776,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _bus = bus;
         _irqLine = irqLine;
         _renderer = new VideoRenderer(this);
-        // PERF-VIC-002: default reads through bus; C64MemoryMap overrides for PLA banking.
+        // PERF-VIC-002: default reads through bus; machine maps may override for banked video memory.
         VideoMemoryReader = addr => _bus.Read(addr);
-        // PERF-VIC-003: default returns open-bus 0; C64MemoryMap overrides for phi1 banking.
+        // PERF-VIC-003: default returns open-bus 0; machine maps may override for phi1 banking.
         Phi1MemoryReader = _ => (byte)0;
     }
 
@@ -1944,83 +1931,6 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _registers[0x19] |= 0x08;
         RefreshInterruptLine();
     }
-    
-    /// <summary>
-    /// VICE-style: Get pixel color at given raster position
-    /// </summary>
-    public byte GetPixelColor(byte x, byte y)
-    {
-        int xPos = x;
-        int yPos = y;
-        int leftBorderPixel = LeftBorderPixel;
-        int rightBorderEndPixel = RightBorderEndPixel;
-        int upperBorder = UpperBorderStart;
-        int lowerBorder = LowerBorderStart;
-
-        if (IsRasterLineVerticalBorderActive(yPos))
-            return BorderColor;
-
-        if (xPos < leftBorderPixel || xPos >= rightBorderEndPixel || xPos >= 320)
-            return BorderColor;
-
-        int columns = Columns == ColumnMode.Wide40 ? 40 : 38;
-        int visibleLine = yPos - upperBorder;
-        int screenLine = visibleLine + YScroll;
-        int rowCount = Math.Max((lowerBorder - upperBorder) / 8, 1);
-        int row = Math.Max((screenLine / 8) % rowCount, 0);
-
-        int screenX = x - leftBorderPixel;
-        if (screenX >= columns * 8)
-            return BorderColor;
-
-        int col = screenX / 8;
-        int charX = screenX % 8;
-        int charOffset = row * columns + col;
-        
-        // Get character from screen memory
-        byte charCode = ReadVideoMemory((ushort)(ScreenMemoryBase + charOffset));
-        
-        // Get bitmap data based on display mode
-        switch (DisplayMode)
-        {
-            case VideoMode.StandardText:
-            case VideoMode.MulticolorText:
-                // Fetch character line from ROM
-                byte charLine = ReadVideoMemory((ushort)(CharacterBase + charCode * 8 + (screenLine & 0x07)));
-                // Get bit within byte (x % 8, leftmost bit at position 7)
-                int bitPos = 7 - charX;
-                byte colorIndex = (byte)((charLine >> bitPos) & 0x01);
-                return colorIndex != 0 ? (byte)0x0E : BackgroundColor; // White or background
-                
-            case VideoMode.Bitmap:
-                // Direct bitmap mode
-                int bitmapOffset = charCode * 64 + (screenLine & 0x07) * 8 + charX;
-                byte bitmapByte = ReadVideoMemory((ushort)(BitmapPointerBase + bitmapOffset));
-                return (byte)(bitmapByte & 0x0F);
-                
-            case VideoMode.ExtendedBackground:
-            default:
-                return BackgroundColor;
-        }
-    }
-    
-    /// <summary>
-    /// VICE-style: Generate a complete frame of pixel data (320x200 visible area)
-    /// </summary>
-    public void GenerateFrame(Span<byte> frameBuffer)
-    {
-        if (frameBuffer.Length < 320 * 200)
-            return;
-
-        for (int y = 0; y < 200; y++)
-        {
-            for (int x = 0; x < 320; x++)
-            {
-                frameBuffer[y * 320 + x] = GetPixelColor((byte)x, (byte)y);
-            }
-        }
-    }
-
     // BACKFILL-VIDEO-001: minimal sprite collision raster.
     //
     // Approximation note: production Mos6569 has no per-pixel sprite composition

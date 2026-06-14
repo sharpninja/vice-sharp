@@ -5,6 +5,20 @@
 **Branch:** `main` (Azure DevOps `origin`)
 **Status:** Phase 1 (Iteration 1 C64 bringup) **COMPLETE**, including all six deferral items that were pulled back into scope mid-session.
 
+## 2026-06-12 Iteration 1 remediation addendum
+
+`ARCH-CHIPGLUE-001` is now treated as an Iteration 1 completion requirement.
+The remediation audit is recorded in
+`docs/requirements/traceability/ARCH-CHIPGLUE-001-Chip-Audit-2026-06-12.md`
+and verifies that shared chip implementations remain reusable chip models while
+C64/C1541 board and device glue lives in Core machine/device adapters.
+
+Validation recorded for the remediation:
+
+- Consolidated chip-glue focused gate: 579 passed, 0 failed, 0 skipped.
+- x64sc lockstep/checkpoint gate: 335 passed, 0 failed, 0 skipped.
+- Source inventory and VICE separation reference captured in the audit document.
+
 ## Marathon items shipped (all 7)
 
 | # | Item | Commit(s) | Driving IDs |

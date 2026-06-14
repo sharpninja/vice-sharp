@@ -70,7 +70,7 @@ public sealed class MultiSystemAutoBindTests
     /// Use case: After BuildCoordinator on a YAML topology with a real C64
     /// + 1541 + IEC bus, the host CIA2 + drive VIA1 are auto-bound to the
     /// shared IEC endpoint without any explicit Bind call.
-    /// Acceptance: Writing $DD00 = $08 on the host (asserts ATN via CIA2)
+    /// Acceptance: Driving CIA2 PA3 high on the host (asserts ATN via CIA2)
     /// causes the drive's VIA1 PB7 to read 1 (drive sees ATN).
     /// </summary>
     [Fact]
@@ -82,6 +82,7 @@ public sealed class MultiSystemAutoBindTests
             .OrderBy(v => v.BaseAddress).First();
 
         hostCia2.Write(0xDD00, 0x08);
+        hostCia2.Write(0xDD02, 0x38);
 
         (driveVia1.Read(0x1800) & 0x80).Should().Be(0x80);
     }
@@ -89,8 +90,8 @@ public sealed class MultiSystemAutoBindTests
     /// <summary>
     /// FR/TR: ARCH-WIRING-003
     /// Use case: Drive responds by asserting DATA via VIA1 PB1; host CIA2
-    /// reads DATA pulled (PA7 = 1).
-    /// Acceptance: VIA1 write $1800 = $02 -> CIA2 PA7 reads 1.
+    /// reads DATA pulled (PA7 = 0, matching VICE cpu_port polarity).
+    /// Acceptance: VIA1 write $1800 = $02 -> CIA2 PA7 reads 0.
     /// </summary>
     [Fact]
     public void AutoBind_DriveAssertsData_HostCia2SeesIt()
@@ -103,7 +104,7 @@ public sealed class MultiSystemAutoBindTests
 
         driveVia1.Write(0x1800, 0x02); // PB1 = 1 -> assert DATA
 
-        (hostCia2.Read(0xDD00) & 0x80).Should().Be(0x80);
+        (hostCia2.Read(0xDD00) & 0x80).Should().Be(0x00);
     }
 
     /// <summary>
@@ -153,6 +154,7 @@ public sealed class MultiSystemAutoBindTests
         var hostCia2 = (Mos6526)c64.Devices.GetByRole(DeviceRole.Cia2)!;
         var driveVia1 = drive.Devices.GetAll<Via6522>().OrderBy(v => v.BaseAddress).First();
         hostCia2.Write(0xDD00, 0x08);
+        hostCia2.Write(0xDD02, 0x38);
         (driveVia1.Read(0x1800) & 0x80).Should().Be(0x80);
     }
 
@@ -174,6 +176,7 @@ public sealed class MultiSystemAutoBindTests
         driveVia1.Write(0x1802, 0x00); // DDRB all inputs
 
         hostCia2.Write(0xDD00, 0x00);
+        hostCia2.Write(0xDD02, 0x38);
         var pbIdle = driveVia1.Read(0x1800);
         hostCia2.Write(0xDD00, 0x08);
         var pbAfterAtnWrite = driveVia1.Read(0x1800);

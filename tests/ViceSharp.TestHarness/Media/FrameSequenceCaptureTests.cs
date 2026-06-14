@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
-using ViceSharp.Chips.Media;
+using ViceSharp.Core.Media;
 using Xunit;
 
 /// <summary>

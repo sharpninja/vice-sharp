@@ -37,7 +37,7 @@ public sealed class SidAudioBackendTests
     [Fact]
     public void NoBackend_GenerateAndOutput_DoesNotThrow()
     {
-        var sid = new Sid6581(new BasicBus());
+        var sid = new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
         var act = () =>
         {
             for (int i = 0; i < 1000; i++) sid.GenerateSampleAndOutput();
@@ -56,7 +56,7 @@ public sealed class SidAudioBackendTests
     public void BackendWired_BatchesSamples_FlushesAt256()
     {
         var backend = new CapturingBackend();
-        var sid = new Sid6581(new BasicBus(), backend);
+        var sid = new Sid6581(new BasicBus(), backend) { BaseAddress = 0xD400 };
 
         for (int i = 0; i < 256; i++) sid.GenerateSampleAndOutput();
         backend.Received.Count.Should().Be(256);
@@ -75,7 +75,7 @@ public sealed class SidAudioBackendTests
     public void Flush_DrainsPartialBuffer()
     {
         var backend = new CapturingBackend();
-        var sid = new Sid6581(new BasicBus(), backend);
+        var sid = new Sid6581(new BasicBus(), backend) { BaseAddress = 0xD400 };
 
         for (int i = 0; i < 10; i++) sid.GenerateSampleAndOutput();
         sid.FlushAudioBuffer();
@@ -93,7 +93,7 @@ public sealed class SidAudioBackendTests
     public void GeneratedSamples_StayInValidRange()
     {
         var backend = new CapturingBackend();
-        var sid = new Sid6581(new BasicBus(), backend);
+        var sid = new Sid6581(new BasicBus(), backend) { BaseAddress = 0xD400 };
         // Set volume + voice with envelope to produce output.
         sid.Write(0xD418, 0x0F); // volume = 15
         sid.Write(0xD400, 0x10); // V1 freq lo

@@ -12,7 +12,7 @@ public sealed class Mos6581 : IAudioChip, IAddressSpace
     public uint ClockDivisor => 16;
     public ClockPhase Phase => ClockPhase.Phi2;
 
-    public ushort BaseAddress { get; init; } = 0xD400;
+    public ushort BaseAddress { get; init; }
     public ushort Size => 32;
     public bool IsReadOnly => false;
 

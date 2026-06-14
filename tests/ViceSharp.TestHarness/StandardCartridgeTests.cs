@@ -1,6 +1,6 @@
 namespace ViceSharp.TestHarness;
 
-using ViceSharp.Chips.Cartridges;
+using ViceSharp.Core;
 using Xunit;
 
 public sealed class StandardCartridgeTests

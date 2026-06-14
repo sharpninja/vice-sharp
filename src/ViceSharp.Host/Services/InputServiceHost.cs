@@ -1,7 +1,7 @@
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 using ViceSharp.Abstractions;
-using ViceSharp.Chips.Input;
+using ViceSharp.Core.Input;
 
 namespace ViceSharp.Host.Services;
 

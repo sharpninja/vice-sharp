@@ -1,6 +1,7 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.IEC;
 
-namespace ViceSharp.Chips.IEC;
+namespace ViceSharp.Core;
 
 /// <summary>
 /// VICE-style IEC disk drive emulation

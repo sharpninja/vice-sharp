@@ -1,6 +1,7 @@
 namespace ViceSharp.TestHarness.C1541;
 
 using ViceSharp.Chips.IEC;
+using ViceSharp.Core;
 using Xunit;
 
 /// <summary>

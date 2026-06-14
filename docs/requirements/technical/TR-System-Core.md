@@ -6,7 +6,7 @@
 |-------|-------|
 | Quality Area | Architecture / Machine Definition |
 | Version | 0.1.0-draft |
-| Last Updated | 2026-05-13 |
+| Last Updated | 2026-06-12 |
 
 ---
 
@@ -33,6 +33,10 @@ The x64sc C64-family variants are the first acceptance testbed for this requirem
 6. Chip implementations expose pins/registers/signals; they do not hard-code whole-machine policy that belongs to board wiring.
 7. x64sc variants shall be represented by system-core definitions rather than scattered model-condition branches.
 8. gRPC host/session APIs expose selected profile identity and observable behavior, but the emulator host owns the assembled machine.
+9. Shared chip implementations model reusable silicon behavior only; machine, board, drive, and host-device glue belongs to Core machine/device definitions or host services.
+10. Reusable chip variants may remain under `src/ViceSharp.Chips` when they represent real chip family differences, while file-format helpers may remain there only when they do not own machine wiring.
+11. C1541/VIC-20/other VIA users share one generic VIA implementation; per-device IEC, motor, stepper, byte-ready, and address-window behavior is supplied by the owning device adapter.
+12. Source-boundary tests guard the chip package against reintroducing machine-specific adapters, retired duplicate chip cores, or fake device stubs.
 
 ### Acceptance Criteria
 
@@ -41,6 +45,11 @@ The x64sc C64-family variants are the first acceptance testbed for this requirem
 3. A test can prove that two variants with the same chips but different board policy produce different bus-visible behavior without changing chip code.
 4. Core timing tests validate interrupt routing, raster/badline timing, VIC/CPU bus ordering, and selected memory windows through the system core.
 5. Final lockstep validation can select every x64sc profile and compare CPU, memory windows, CIA/VIC/SID registers, IRQ/NMI, and raster checkpoints against native x64sc.
+6. The `src/ViceSharp.Chips` source tree is inventoried and every remaining type is classified as reusable chip behavior, chip variant, media-format helper, moved device helper, or retired duplicate/stub.
+7. Shared chip implementations contain no C64, C1541, or other machine-specific board glue; C64 CPU timing, processor-port reset policy, CIA/SID address windows, VIC-bank translation, and IEC/datasette/cartridge glue live outside shared chip cores.
+8. VIA behavior is implemented once as a shared chip, and C1541 drive wiring is encapsulated in drive/device adapters rather than in the VIA implementation.
+9. C64/device helpers that are not shared chips, including IEC drive runtime, standard cartridge mapping, datasette, C64 input/VKM, and media capture helpers, no longer live in `src/ViceSharp.Chips`.
+10. `TEST-ARCH-CHIPGLUE-001` and the x64sc lockstep/checkpoint gate pass with 0 failed and 0 skipped tests for the chip-glue remediation scope.
 
 ### Verification Method
 
@@ -48,6 +57,8 @@ The x64sc C64-family variants are the first acceptance testbed for this requirem
 - Integration tests that instantiate each x64sc profile and assert selected system-core policy.
 - Native x64sc lockstep tests that compare bus-visible behavior across all required variants.
 - Boundary tests that keep UI/client code outside system-core internals.
+- `ChipGlueBoundaryTests` plus focused CIA/VIA/SID/VIC/IEC/drive/cartridge/input/tape/media tests that keep machine/device glue outside reusable chip implementations.
+- `docs/requirements/traceability/ARCH-CHIPGLUE-001-Chip-Audit-2026-06-12.md` records the source inventory, VICE separation reference, moved/retired items, and validation evidence.
 
 ### Related TRs
 
@@ -62,3 +73,4 @@ The x64sc C64-family variants are the first acceptance testbed for this requirem
 - `ArchitectureBuilder` remains the machine assembly boundary between system-core policy and concrete chip instances.
 - The system core is the right home for PLA/address-decoder logic, machine-specific bus policy, and chip interconnects.
 - x64sc model diversity is the first proving ground for the definable computer architecture.
+- Shared chips remain reusable silicon models; board and device adapters own the glue logic that binds those chips into a specific machine.

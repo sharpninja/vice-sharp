@@ -174,7 +174,7 @@ public sealed class SidDualSidTests
     [Fact]
     public void DefaultSid_ClaimsOnly_32ByteRegisterWindow()
     {
-        var sid = new Sid6581(new BasicBus());
+        var sid = new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
 
         sid.BaseAddress.Should().Be((ushort)0xD400,
             "default base address must remain $D400 for single-SID configs");

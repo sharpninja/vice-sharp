@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using ViceSharp.Abstractions;
-using ViceSharp.Chips.Media;
+using ViceSharp.Core.Media;
 using Xunit;
 
 /// <summary>

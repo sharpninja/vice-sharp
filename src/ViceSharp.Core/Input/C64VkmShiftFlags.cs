@@ -1,4 +1,4 @@
-namespace ViceSharp.Chips.Input;
+namespace ViceSharp.Core.Input;
 
 internal static class C64VkmShiftFlags
 {

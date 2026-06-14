@@ -1,4 +1,4 @@
-namespace ViceSharp.Chips.Input;
+namespace ViceSharp.Core.Input;
 
 public static class C64HostKeyboardMapper
 {

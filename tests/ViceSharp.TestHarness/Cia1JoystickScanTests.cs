@@ -3,7 +3,7 @@ namespace ViceSharp.TestHarness;
 using FluentAssertions;
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Cia;
-using ViceSharp.Chips.Input;
+using ViceSharp.Core.Input;
 using ViceSharp.Core;
 using Xunit;
 
@@ -31,7 +31,7 @@ public sealed class Cia1JoystickScanTests
     {
         var bus = new BasicBus();
         var irq = new InterruptLine(InterruptType.Irq);
-        var cia = new Mos6526(bus, irq);
+        var cia = new Mos6526(bus, irq) { BaseAddress = 0xDC00 };
         var keyboard = new C64KeyboardMatrix();
         var port1 = new C64JoystickPort();
         var port2 = new C64JoystickPort();
