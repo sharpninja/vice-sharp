@@ -47,6 +47,33 @@ public sealed class InterSystemBus : IInterSystemBus
         return value;
     }
 
+    public BusSnapshot Snapshot()
+    {
+        var lines = new List<BusLineSnapshot>(Signals.Count);
+        foreach (var signal in Signals)
+        {
+            List<string>? pullers = null;
+            foreach (var ep in _endpoints)
+            {
+                if (!ep.IsPullingLow(signal))
+                    continue;
+                pullers ??= new List<string>();
+                pullers.Add(ep.Name);
+            }
+
+            lines.Add(new BusLineSnapshot(
+                signal,
+                _resolved[signal],
+                (IReadOnlyList<string>?)pullers ?? Array.Empty<string>()));
+        }
+
+        var endpoints = new List<string>(_endpoints.Count);
+        foreach (var ep in _endpoints)
+            endpoints.Add(ep.Name);
+
+        return new BusSnapshot(Name, lines, endpoints);
+    }
+
     internal void Recompute()
     {
         foreach (var signal in Signals)
