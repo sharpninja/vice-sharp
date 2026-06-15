@@ -13,6 +13,12 @@ public sealed class C1541DriveMechanismDevice : IClockedDevice
     private const byte ProcessorOverflowFlag = 0x40;
     private const byte SpeedZoneMask = 0x60;
 
+    // 1541 VIA2 ($1C00) port B bit 3 drives the green activity LED. The drive
+    // DOS ROM lights it during seeks/reads/writes (and holds it for errors);
+    // VICE surfaces the same bit as the per-drive led_status. It is independent
+    // of IEC bus traffic.
+    private const byte LedBit = 0x08;
+
     private readonly DriveHeadState _head = new();
     private readonly Mos6502? _driveCpu;
     private D64DiskImageDevice? _disk;
@@ -35,6 +41,14 @@ public sealed class C1541DriveMechanismDevice : IClockedDevice
     public string Name => "1541 Drive Mechanism";
     public uint ClockDivisor => 1;
     public ClockPhase Phase => ClockPhase.Phi2;
+
+    /// <summary>
+    /// True when the drive activity LED is lit, reflecting the latest VIA2
+    /// ($1C00) port B bit 3 output written by the 1541 DOS ROM. This is the
+    /// VICE led_status signal and the source for the per-drive UI LED; it is
+    /// a function of the drive firmware, not of IEC bus traffic.
+    /// </summary>
+    public bool LedOn => (_lastPortBOutput & LedBit) != 0;
 
     public void Mount(D64DiskImageDevice? disk) => _disk = disk;
 
