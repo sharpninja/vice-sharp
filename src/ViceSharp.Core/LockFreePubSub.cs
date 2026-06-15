@@ -272,9 +272,16 @@ public sealed class LockFreePubSub : IPubSub
             for (var i = 0; i < highWater; i++)
             {
                 var entry = entries[i];
-                if (Volatile.Read(ref entry.Active) == 1 && entry.CanAccept(payloadKind, payloadTypeHandle, payload.Length))
+                // SubscriberEntry is a struct, so copying it out of the array
+                // is not atomic. A concurrent Subscribe writing this slot can
+                // tear the copy (Active reads 1 from the new entry while Handler
+                // is still the default null). Capture and null-check the handler
+                // so a racing subscribe never dereferences a null delegate; the
+                // in-flight message is simply not delivered to the slot mid-swap.
+                var handler = entry.Handler;
+                if (handler is not null && Volatile.Read(ref entry.Active) == 1 && entry.CanAccept(payloadKind, payloadTypeHandle, payload.Length))
                 {
-                    entry.Handler(deliveredPayload, kind, topic);
+                    handler(deliveredPayload, kind, topic);
                 }
             }
 

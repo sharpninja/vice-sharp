@@ -32,13 +32,13 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
 ## Status
 
 ✅ **Iteration 0 (Foundations)** — Complete. All core primitives implemented, lock-free and zero allocation.
-✅ **Iteration 1 (C64 Bringup)** — **Complete (Phase 1 closed 2026-05-31, HEAD `6086e11`)**:
-  - Full suite at closeout: 1641 passed / 2 skipped / 0 failed
+✅ **Iteration 1 (C64 Bringup)** — **Complete (Phase 1 closed 2026-05-31; chip-glue boundary closeout 2026-06-14)**:
+  - Full suite green: 1841 passed / 1 skipped / 0 failed (the single skip is the `VICESHARP_CLOCK_BENCH`-gated perf benchmark, which passes on demand)
   - x64sc lockstep: 322 passed (10-frame depth across no-cart variants)
   - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
   - Snapshot/capture/input/testbench/launcher all closed: see `docs/handoff.md`
-  - Post-closeout audit remediation: `ARCH-CHIPGLUE-001` verified that reusable chip cores stay machine-agnostic and C64/C1541 glue lives in Core machine/device adapters.
-  - 2 skipped tests are ROM-gated process smoke tests (no Phase 1 dependency)
+  - Closeout remediation: `ARCH-CHIPGLUE-001` moved all C64/C1541 board and device glue into Core machine/device adapters so reusable chip cores stay machine-agnostic. Two post-slice stabilizations followed: the gRPC keyboard-matrix integration test now configures CIA1 DDRB before scanning (Mos6526 reports DDR-gated port pins), and a lock-free `LockFreePubSub` torn-struct race was fixed.
+  - The single skipped test is an opt-in clock-throughput benchmark (`VICESHARP_CLOCK_BENCH=1`), not a functional gap.
   - Post-Phase 1 deferrals: PERF-BENCHMARK-001 native baseline, advanced cartridge mappers, cross-platform host shells, 8580 SID filter deepening, wiki publishing automation. See handoff.md.
 
 Working chip layer implementations:

@@ -1602,6 +1602,13 @@ public sealed class ProtocolHostIntegrationTests
 
         lock (session.SyncRoot)
         {
+            // Configure CIA1 PortB as output (DDRB = 0xFF) so writing $DC01
+            // drives the keyboard column mask. Mos6526 now reports DDR-gated
+            // pins from PortBOutputChanged (latch | ~DDR), so an unconfigured
+            // PortB floats high and never selects a column. This mirrors the
+            // canonical Cia1KeyboardScanTests setup and what the KERNAL does
+            // during a real keyboard scan.
+            session.Machine.Bus.Write(0xDC03, 0xFF);
             session.Machine.Bus.Write(0xDC01, 0xEF);
             Assert.Equal(0, session.Machine.Bus.Read(0xDC00) & 0x80);
         }
