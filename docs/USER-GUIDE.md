@@ -166,7 +166,7 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 
 | Area | State | Notes |
 |------|-------|-------|
-| C64 host (MOS 6510 + VIC-II + SID + CIA x2 + PLA + KERNAL boot) | Working | 100k-cycle lockstep parity against native VICE. |
+| C64 host (MOS 6510 + VIC-II + SID + CIA x2 + PLA + KERNAL boot) | Working | Cycle-exact lockstep parity with native VICE `x64sc`: 322 x64sc variant cases (C64 / C64C / SX-64, PAL + NTSC) at multi-frame depth, plus the 335-case lockstep/checkpoint gate and 100k-cycle parity. |
 | Multi-system substrate (YAML topology + auto-binds) | Working | Canonical sample builds C64 + true-drive 1541 with one CLI invocation; ROM-backed boot still requires local ROM assets. |
 | 1541 drive (true-drive: 6502 + VIA1 + VIA2 + IEC) | Bounded | IEC, head step, motor, D64 sector reads/writes, and stream commit are wired; drive-CPU lockstep and full KERNAL load validation remain Phase 1 work. |
 | CIA1 / CIA2 timers, TOD, ports | Working | Full solution test passes. |

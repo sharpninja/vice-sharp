@@ -2,6 +2,8 @@
 
 A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10 with NativeAOT support.
 
+> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, verified by an automated per-cycle diff harness across the no-cartridge C64 family (322 x64sc lockstep cases; full suite 1841 passing, 0 failing). See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
+
 ## Quick Start
 
 ```pwsh

@@ -14,9 +14,17 @@
 
 **Exit criteria:** `dotnet test` passes, NativeAOT console app starts and exits cleanly, all docs written.
 
-## Iteration 1 — C64 (MVP)
+## Iteration 1 — C64 (MVP) ✅ COMPLETED
 
 **Goal:** Playable Commodore 64 emulation.
+
+**Status:** The managed C64 core now runs in cycle-exact lockstep with VICE's
+`x64sc`. An automated harness drives both the managed core and the native
+`x64sc` engine and diffs them at per-cycle checkpoints (CPU + bus, VIC-II
+raster/sprite state, CIA, SID register reads); 322 x64sc variant lockstep
+cases pass across the no-cartridge C64 family (C64 / C64C / SX-64, PAL + NTSC)
+at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
+100k-cycle parity. Full suite: 1841 passing, 0 failing.
 
 - MOS 6510 CPU — full instruction set, cycle-accurate
 - VIC-II (6567/6569) — raster engine, sprites, border, badlines, DMA stealing
