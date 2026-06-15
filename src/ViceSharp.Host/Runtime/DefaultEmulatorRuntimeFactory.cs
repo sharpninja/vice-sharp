@@ -1,6 +1,5 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
-using ViceSharp.Chips.IEC;
 using ViceSharp.Core;
 using ViceSharp.Protocol;
 using ViceSharp.RomFetch;
@@ -124,14 +123,13 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
 
     private static IecBusActivityMonitor? CreateIecBusActivityMonitor(IMachine machine)
     {
-        var drives = machine.Devices.All.OfType<IecDrive>().ToArray();
-        if (drives.Length == 0)
+        // Watch the machine's always-on IEC bus (the single instance the drives
+        // are already wired to by the architecture builder), so the activity
+        // indicator reflects the real bus rather than a throwaway one.
+        var busDevice = machine.Devices.All.OfType<IecBusDevice>().FirstOrDefault();
+        if (busDevice is null)
             return null;
 
-        var bus = IecInterSystemBus.Create();
-        foreach (var drive in drives)
-            drive.ConnectIecBus(bus);
-
-        return new IecBusActivityMonitor(bus);
+        return new IecBusActivityMonitor(busDevice.Bus);
     }
 }

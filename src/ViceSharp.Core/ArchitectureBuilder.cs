@@ -99,6 +99,19 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var cia2Interface = cia2Connected ? new C64Cia2InterfaceDevice() : null;
         var drive8 = iecBusConnected ? new IecDrive(8) : null;
         var drive9 = iecBusConnected ? new IecDrive(9) : null;
+
+        // DD-IEC-1: the IEC serial bus is always present on a C64 (it hangs off
+        // CIA2), independent of whether a drive is attached. Create it once and
+        // attach the drives so the bus, spy and activity monitor observe the
+        // real machine bus. CIA2 is intentionally NOT routed to the live bus
+        // here - that read (with the faithful electrical model) is parity-gated
+        // and lands separately; until then CIA2 keeps its native-matching mask.
+        var iecBus = iecBusConnected ? IecInterSystemBus.Create() : null;
+        if (iecBus is not null)
+        {
+            drive8?.ConnectIecBus(iecBus);
+            drive9?.ConnectIecBus(iecBus);
+        }
         var datasette = profile?.SystemCore.TapePortConnected == false ? null : new Datasette();
         var datasetteCia1FlagBinding = datasette is null
             ? null
@@ -153,6 +166,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             deviceRegistry.Add(cia2, DeviceRole.Cia2);
         if (cia2Interface is not null)
             deviceRegistry.Add(cia2Interface);
+        if (iecBus is not null)
+            deviceRegistry.Add(new IecBusDevice(iecBus));
         deviceRegistry.Add(pla, DeviceRole.Pla);
         deviceRegistry.Add(sid, DeviceRole.AudioChip);
         if (drive8 is not null)
