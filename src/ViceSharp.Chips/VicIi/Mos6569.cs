@@ -725,12 +725,13 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return false;
         }
 
-        int screenLine = visLine + YScroll;
-        int screenRowCount = Math.Max((LowerBorderStart - UpperBorderStart) / 8, 1);
-        int row = Math.Max((screenLine / 8) % screenRowCount, 0);
+        if (!TryMapRasterLineToDisplayCell(rasterLine, out var row, out var charRow))
+        {
+            return false;
+        }
+
         int col = screenX / 8;
         int charX = screenX % 8;
-        int charRow = screenLine & 7;
         int screenIndex = row * columns + col;
         byte screenCode = ReadVideoMemory((ushort)(ScreenMemoryBase + screenIndex));
         byte colorCode = ReadVideoMemory((ushort)(0xD800 + screenIndex));
@@ -751,6 +752,36 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// VICE-style: Y scroll value (bits 0-2 of $D011)
     /// </summary>
     public byte YScroll => (byte)(_registers[0x11] & 0x07);
+
+    /// <summary>
+    /// Maps a raster line to the display cell consumed by the simplified
+    /// whole-line renderer. VICE C64SC uses bad-line timing plus
+    /// <c>vc</c>/<c>vmli</c>/<c>rc</c> fetch state rather than wrapping
+    /// <c>ysmooth</c>-offset rows with modulo; lower fine-scroll overflow
+    /// therefore has no row-0 cell to render.
+    /// </summary>
+    public bool TryMapRasterLineToDisplayCell(int rasterLine, out int row, out int charRow)
+    {
+        row = 0;
+        charRow = 0;
+
+        int visibleLine = rasterLine - UpperBorderStart;
+        if (visibleLine < 0 || rasterLine >= LowerBorderStart)
+        {
+            return false;
+        }
+
+        int screenLine = visibleLine + YScroll;
+        int rowCount = Math.Max((LowerBorderStart - UpperBorderStart) / 8, 1);
+        if (screenLine < 0 || screenLine >= rowCount * 8)
+        {
+            return false;
+        }
+
+        row = screenLine / 8;
+        charRow = screenLine & 0x07;
+        return true;
+    }
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-007 /
@@ -1931,6 +1962,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _registers[0x19] |= 0x08;
         RefreshInterruptLine();
     }
+
     // BACKFILL-VIDEO-001: minimal sprite collision raster.
     //
     // Approximation note: production Mos6569 has no per-pixel sprite composition

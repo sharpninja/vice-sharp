@@ -86,11 +86,6 @@ public sealed class VideoRenderer
         uint borderPixel = Palette[borderColor & 0x0F];
         uint bgPixel = Palette[backgroundColor & 0x0F];
 
-        // Calculate if we're in visible vertical area (lines 51-250 are visible)
-        int upperBorder = _vic.UpperBorderStart;
-        int lowerBorder = _vic.LowerBorderStart;
-        int visLine = lineNumber - upperBorder;
-
         if (_vic.IsRasterLineVerticalBorderActive(lineNumber) ||
             !_vic.IsRasterLineHorizontalDisplayOpen(lineNumber))
         {
@@ -104,10 +99,7 @@ public sealed class VideoRenderer
         bool rightBorderOpen = _vic.IsRasterLineRightBorderOpen(lineNumber);
         int columns = _vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenWidth = columns * 8;
-        int screenLine = visLine + _vic.YScroll;
-        int screenRowCount = Math.Max((lowerBorder - upperBorder) / 8, 1);
-        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
-        int charRow = screenLine & 7;
+        bool hasDisplayCell = _vic.TryMapRasterLineToDisplayCell(lineNumber, out var screenRow, out var charRow);
 
         // PERF-RENDER-002: cache DisplayModeSelection once per line rather than
         // evaluating the 3-register switch expression for every pixel (384x per line).
@@ -122,6 +114,7 @@ public sealed class VideoRenderer
                 leftBorderOpen,
                 rightBorderOpen,
                 screenWidth,
+                hasDisplayCell,
                 screenRow,
                 charRow,
                 columns,
@@ -141,6 +134,7 @@ public sealed class VideoRenderer
                 leftBorderOpen,
                 rightBorderOpen,
                 screenWidth,
+                hasDisplayCell,
                 screenRow,
                 charRow,
                 columns,
@@ -165,6 +159,7 @@ public sealed class VideoRenderer
         bool leftBorderOpen,
         bool rightBorderOpen,
         int screenWidth,
+        bool hasDisplayCell,
         int screenRow,
         int charRow,
         int columns,
@@ -181,7 +176,13 @@ public sealed class VideoRenderer
 
         var displayStart = leftBorderPixel;
         var displayEnd = Math.Min(rightBorderPixel, leftBorderPixel + screenWidth);
-        if (displayEnd > displayStart)
+        if (displayEnd > displayStart && !hasDisplayCell)
+        {
+            // Lower fine-scroll overflow has no matrix row to render; the
+            // display window shows background instead of wrapping row 0.
+            FillPixels(pixels, displayStart, displayEnd - displayStart, bgPixel);
+        }
+        else if (displayEnd > displayStart)
         {
             for (var col = 0; col < columns; col++)
             {
@@ -221,6 +222,7 @@ public sealed class VideoRenderer
         bool leftBorderOpen,
         bool rightBorderOpen,
         int screenWidth,
+        bool hasDisplayCell,
         int screenRow,
         int charRow,
         int columns,
@@ -245,6 +247,11 @@ public sealed class VideoRenderer
         if (screenX >= screenWidth)
         {
             return new PixelSample(borderPixel, false);
+        }
+
+        if (!hasDisplayCell)
+        {
+            return new PixelSample(bgPixel, false);
         }
 
         int col = screenX / 8;

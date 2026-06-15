@@ -165,6 +165,45 @@ public sealed class VideoRendererTests
     }
 
     /// <summary>
+    /// FR: FR-VIC-002, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: With fine vertical scroll near the bottom of the 25-row
+    /// display window, the renderer must not wrap screen row 0 into the
+    /// lower overflow lines. VICE C64SC does not compute the matrix row as
+    /// <c>((visibleLine + ysmooth) / 8) % 25</c>; <c>vicii-cycle.c</c>
+    /// sets bad lines from <c>(raster_line &amp; 7) == ysmooth</c>,
+    /// <c>vicii-fetch.c</c> advances <c>vc</c>/<c>vmli</c> through the
+    /// fetched matrix bytes, and <c>vicii-draw-cycle.c</c> consumes
+    /// <c>vbuf</c>/<c>cbuf</c> through <c>dmli</c> without wrapping row 25
+    /// back to row 0.
+    /// Acceptance: With YSCROLL=7, a foreground pixel present only in
+    /// screen row 0, character row 0 does not appear at raster
+    /// <c>LowerBorderStart - YScroll</c>; that pixel remains the background
+    /// colour instead of rendering the row-0 foreground colour at the bottom.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_YScrollLowerOverflowDoesNotWrapFirstScreenRowToBottom()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        vic.Write(0xD011, 0x1F);
+        vic.Write(0xD016, 0x08);
+        vic.Write(0xD021, 0x06);
+
+        ram.Write(vic.ScreenMemoryBase, 0x01);
+        ram.Write(0xD800, 0x07);
+        ram.Write((ushort)(vic.CharacterBase + 0x08), 0x80);
+
+        renderer.RenderFullFrame();
+
+        int rasterLine = vic.LowerBorderStart - vic.YScroll;
+        int frameY = VideoRenderer.RasterLineToFrameY(rasterLine);
+
+        Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, vic.LeftBorderPixel, frameY));
+    }
+
+    /// <summary>
     /// FR: FR-VIC-001, TR: TR-CYCLE-001.
     /// Use case: The renderer's static PAL timing constants must equal
     /// the documented PAL VIC-II values (63 cycles per line, 312 total

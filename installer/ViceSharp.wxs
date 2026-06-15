@@ -25,7 +25,8 @@
            UpgradeCode="$(UpgradeCodeGuid)"
            Scope="perMachine">
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of $(ProductName) is already installed." />
+    <MajorUpgrade AllowSameVersionUpgrades="yes"
+                  DowngradeErrorMessage="A newer version of $(ProductName) is already installed." />
 
     <!--
       BRANDING-ICON-001: product icon for Add/Remove Programs and the Start
