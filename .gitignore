@@ -91,4 +91,6 @@ docs/todo.yaml
 
 agents-readme-first.yaml
 AGENTS-README-FIRST.yaml
-package-lock.json  
+# MCP marker rotation backups (contain rotated API keys/HMAC - never commit).
+AGENTS-README-FIRST.yaml.deleted-*
+package-lock.json
