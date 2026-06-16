@@ -800,6 +800,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private readonly IBus _bus;
     private readonly IInterruptLine _irqLine;
 
+    // Optional host pub/sub bus for per-scanline raster notifications (raster splits). Null until a
+    // host connects one; the publish on the line boundary is a no-op when unset.
+    private IPubSub? _pubSub;
+
     public IReadOnlyList<IInterruptLine> ConnectedLines => new[] { _irqLine };
 
     public Mos6569(IBus bus, IInterruptLine irqLine)
@@ -811,6 +815,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         VideoMemoryReader = addr => _bus.Read(addr);
         // PERF-VIC-003: default returns open-bus 0; machine maps may override for phi1 banking.
         Phi1MemoryReader = _ => (byte)0;
+    }
+
+    /// <summary>
+    /// Connects a pub/sub bus so the VIC publishes a <see cref="RasterLineEvent"/> at each scanline
+    /// boundary (just before the completed line is rendered). Enables host-driven raster splits.
+    /// </summary>
+    public void ConnectPubSub(IPubSub pubSub)
+    {
+        _pubSub = pubSub ?? throw new ArgumentNullException(nameof(pubSub));
     }
 
     public void ConfigureTiming(TvSystem system, int cyclesPerLine, int visibleLines, int totalLines, double frameRate)
@@ -951,7 +964,13 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             // Frame-wrap (line TotalLines-1) fires FrameCompleted instead (no render,
             // matching original _currentFrame>0 guard on line 0 detection).
             if (!frameWrapped)
+            {
+                // Notify host subscribers of the line about to be rendered so they can reprogram
+                // VIC mode registers (raster split). The render call below samples those registers,
+                // so a synchronous handler that writes $D011/$D016/$D018 affects this exact line.
+                _pubSub?.Publish(RasterLineEvent.Topic, new RasterLineEvent(completedLine, CurrentRasterLine));
                 _renderer.NotifyLineCompleted(completedLine);
+            }
             else
                 _renderer.NotifyFrameCompleted();
         }
