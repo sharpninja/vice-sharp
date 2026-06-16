@@ -2,9 +2,100 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="using:ViceSharp.Avalonia.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="720"
         x:Class="ViceSharp.Avalonia.MainWindow"
+        x:DataType="vm:AttachPanelViewModel"
         Icon="/Assets/vicesharp-icon.png"
-        Title="ViceSharp.Avalonia">
-    Welcome to Avalonia!
+        Title="ViceSharp">
+    <!-- UI-REDESIGN S1 (FR-UIFLYOUT-001, FR-UIMENUBAR-001 skeleton, TR-UIAXAML-VIEWS-001):
+         declarative shell = Menu (top) + transport/status bar (bottom) +
+         SplitView flyout (pane = sidebar host, content = video host). The single
+         side-toggle button flips the flyout edge; the menu structure is filled
+         out in S5. Hosts are populated from code-behind to keep the existing
+         host-client / video / timer wiring intact while the views migrate. -->
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top" x:Name="PART_Menu">
+            <MenuItem Header="_File">
+                <MenuItem Header="Smart attach disk/tape..." Click="OnMenuSmartAttach" />
+                <Separator />
+                <MenuItem Header="Attach disk image">
+                    <MenuItem Header="Drive 8..." Click="OnMenuAttachDrive8" />
+                    <MenuItem Header="Drive 9..." Click="OnMenuAttachDrive9" />
+                </MenuItem>
+                <MenuItem Header="Detach disk">
+                    <MenuItem Header="Drive 8" Click="OnMenuDetachDrive8" />
+                    <MenuItem Header="Drive 9" Click="OnMenuDetachDrive9" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Reset">
+                    <MenuItem Header="Soft (warm)" Click="OnMenuWarmReset" />
+                    <MenuItem Header="Hard (cold)" Click="OnMenuColdReset" />
+                </MenuItem>
+                <MenuItem Header="Autostart drive 8" Click="OnRunDrive8" />
+                <Separator />
+                <MenuItem Header="E_xit" Click="OnMenuExit" />
+            </MenuItem>
+            <MenuItem Header="_Snapshot">
+                <MenuItem Header="Media recording..." IsEnabled="False" />
+            </MenuItem>
+            <MenuItem Header="_Settings">
+                <MenuItem Header="Settings..." Click="OnMenuShowSettings" />
+                <Separator />
+                <MenuItem Header="Warp mode" Click="OnMenuToggleWarp" />
+                <MenuItem Header="True Drive">
+                    <MenuItem Header="Drive 8" Click="OnMenuTrueDrive8" />
+                    <MenuItem Header="Drive 9" Click="OnMenuTrueDrive9" />
+                </MenuItem>
+                <MenuItem Header="Swap joystick ports" Click="OnMenuSwapJoysticks" />
+            </MenuItem>
+            <MenuItem Header="_Debug">
+                <MenuItem Header="Pause" Click="OnMenuPause" />
+                <MenuItem Header="Resume" Click="OnMenuResume" />
+                <Separator />
+                <MenuItem Header="Step cycle" Click="OnStepCycle" />
+                <MenuItem Header="Step frame" Click="OnStepFrame" />
+                <Separator />
+                <MenuItem Header="Open monitor" Click="OnMenuOpenMonitor" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="About ViceSharp" Click="OnMenuAbout" />
+            </MenuItem>
+        </Menu>
+
+        <Border DockPanel.Dock="Bottom" MinHeight="34" Background="#1A1C20">
+            <DockPanel LastChildFill="True">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="4" Margin="6,4">
+                    <Button x:Name="PART_SidebarToggle" Content="☰" Padding="8,3" MinHeight="24"
+                            ToolTip.Tip="Show/hide sidebar" Click="OnToggleSidebar" />
+                    <Button x:Name="PART_DockSideToggle" Content="⇄" Padding="8,3" MinHeight="24"
+                            ToolTip.Tip="Move sidebar left/right" Click="OnToggleDockSide" />
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4" Margin="6,4">
+                    <Button Content="Pause" Padding="7,3" MinHeight="24" Click="OnMenuPause" />
+                    <Button Content="Resume" Padding="7,3" MinHeight="24" Click="OnMenuResume" />
+                    <Button Content="+1 cyc" Padding="7,3" MinHeight="24" Click="OnStepCycle" />
+                    <Button Content="+1 frm" Padding="7,3" MinHeight="24" Click="OnStepFrame" />
+                    <Button Content="-1 cyc" Padding="7,3" MinHeight="24" Click="OnRewindCycle" />
+                    <Button Content="-1 frm" Padding="7,3" MinHeight="24" Click="OnRewindFrame" />
+                    <Button Content="Cold" Padding="7,3" MinHeight="24" Click="OnMenuColdReset" />
+                    <Button Content="Warm" Padding="7,3" MinHeight="24" Click="OnMenuWarmReset" />
+                    <Button Content="Run 8" Padding="7,3" MinHeight="24" Click="OnRunDrive8" />
+                </StackPanel>
+                <TextBlock x:Name="PART_StatusText" Margin="10,7,8,4" FontSize="12"
+                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+            </DockPanel>
+        </Border>
+
+        <SplitView x:Name="PART_SplitView"
+                   DisplayMode="Inline"
+                   OpenPaneLength="260"
+                   IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}"
+                   PanePlacement="{Binding PanePlacement}">
+            <SplitView.Pane>
+                <ContentControl x:Name="PART_SidebarHost" />
+            </SplitView.Pane>
+            <ContentControl x:Name="PART_VideoHost" />
+        </SplitView>
+    </DockPanel>
 </Window>

@@ -13,6 +13,14 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
 
     public string SessionId => string.Empty;
 
+    public bool TrueDrive => false;
+
+    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.CompletedTask;
+    }
+
     public ValueTask<GetEmulatorStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

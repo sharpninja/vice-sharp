@@ -69,7 +69,11 @@ public sealed class GrpcEmulatorHostService : GrpcContracts.EmulatorHost.Emulato
         ServerCallContext context)
     {
         var response = await _inner.CreateSessionAsync(
-            new CreateEmulatorSessionRequest(request.ArchitectureId, request.DisplayName),
+            new CreateEmulatorSessionRequest(
+                request.ArchitectureId,
+                request.DisplayName,
+                request.TrueDrive,
+                request.TrueDriveDevice == 0 ? 8 : request.TrueDriveDevice),
             context.CancellationToken).ConfigureAwait(false);
 
         return new GrpcContracts.CreateEmulatorSessionResponse

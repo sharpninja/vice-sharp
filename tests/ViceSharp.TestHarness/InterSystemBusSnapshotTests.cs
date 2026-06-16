@@ -15,6 +15,9 @@ using Xunit;
 public sealed class InterSystemBusSnapshotTests
 {
     /// <summary>
+    /// FR: RUNTIME-IECSPY-001, TR: TR-IECBUS-OBSERV-001.
+    /// Use case: Spying an idle IEC bus must show every line high with no
+    /// talkers so the diagnostic shows a quiescent bus.
     /// Acceptance: On an idle IEC bus every line reads high, no line has
     /// pullers, and no endpoint is talking; all attached endpoints are listed.
     /// </summary>
@@ -34,6 +37,9 @@ public sealed class InterSystemBusSnapshotTests
     }
 
     /// <summary>
+    /// FR: RUNTIME-IECSPY-001, TR: TR-IECBUS-OBSERV-001.
+    /// Use case: When a drive pulls DATA low the spy must identify the asserted
+    /// line and which endpoint is talking.
     /// Acceptance: When the drive pulls DATA low, the snapshot reports DATA
     /// asserted with the drive as its sole puller, other lines high, and the
     /// drive listed as the talking endpoint.
@@ -59,6 +65,9 @@ public sealed class InterSystemBusSnapshotTests
     }
 
     /// <summary>
+    /// FR: RUNTIME-IECSPY-001, TR: TR-IECBUS-OBSERV-001.
+    /// Use case: Wired-AND contention (two endpoints pulling one line) must be
+    /// fully attributed by the spy.
     /// Acceptance: Two endpoints pulling the same line (wired-AND) both appear
     /// in that line's puller list and as talking endpoints.
     /// </summary>
@@ -80,6 +89,9 @@ public sealed class InterSystemBusSnapshotTests
     }
 
     /// <summary>
+    /// FR: RUNTIME-IECSPY-001, TR: TR-IECBUS-OBSERV-001.
+    /// Use case: After an endpoint releases a line the spy must show the line
+    /// recovered to high with no talkers.
     /// Acceptance: Releasing a pull restores the line to high with no pullers.
     /// </summary>
     [Fact]
@@ -97,6 +109,9 @@ public sealed class InterSystemBusSnapshotTests
     }
 
     /// <summary>
+    /// FR: RUNTIME-IECSPY-001, TR: TR-IECBUS-OBSERV-001.
+    /// Use case: Snapshotting is pure observation and must never perturb the
+    /// resolved bus state, even across repeated reads.
     /// Acceptance: Taking a snapshot does not change resolved bus state.
     /// </summary>
     [Fact]

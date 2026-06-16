@@ -15,6 +15,8 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     private readonly GrpcContracts.SettingsService.SettingsServiceClient _settingsClient;
     private readonly GrpcContracts.MonitorService.MonitorServiceClient _monitorClient;
     private string _sessionId;
+    private bool _trueDrive;
+    private int _trueDriveDevice = 8;
 
     public GrpcHostProtocolClient(Uri endpoint, string sessionId = "")
     {
@@ -30,6 +32,35 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     }
 
     public string SessionId => _sessionId;
+
+    public bool TrueDrive => _trueDrive;
+
+    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, CancellationToken cancellationToken = default)
+    {
+        if (_trueDrive == enabled && _trueDriveDevice == driveDevice)
+            return ValueTask.CompletedTask;
+
+        _trueDrive = enabled;
+        _trueDriveDevice = driveDevice;
+
+        // True-drive is a machine-config choice: drop the current session so the
+        // next EnsureSessionAsync rebuilds the rig with the new selection.
+        if (!string.IsNullOrWhiteSpace(_sessionId))
+        {
+            try
+            {
+                _hostClient.Shutdown(new GrpcContracts.SessionRequest { SessionId = _sessionId });
+            }
+            catch
+            {
+                // Best-effort; the new session is created fresh regardless.
+            }
+
+            _sessionId = string.Empty;
+        }
+
+        return ValueTask.CompletedTask;
+    }
 
     public async ValueTask<GetEmulatorStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
     {
@@ -359,7 +390,9 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         var response = await _hostClient.CreateSessionAsync(
             new GrpcContracts.CreateEmulatorSessionRequest
             {
-                ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty
+                ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty,
+                TrueDrive = _trueDrive,
+                TrueDriveDevice = _trueDriveDevice
             },
             cancellationToken: cancellationToken).ConfigureAwait(false);
 

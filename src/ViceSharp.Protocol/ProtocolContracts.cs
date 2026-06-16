@@ -205,7 +205,11 @@ public interface IEmulatorHost
         CancellationToken cancellationToken = default);
 }
 
-public sealed record CreateEmulatorSessionRequest(string ArchitectureId = "minimal", string DisplayName = "");
+public sealed record CreateEmulatorSessionRequest(
+    string ArchitectureId = "minimal",
+    string DisplayName = "",
+    bool TrueDrive = false,
+    int TrueDriveDevice = 8);
 
 public sealed record SessionRequest(string SessionId);
 

@@ -20,7 +20,11 @@ public sealed class CoordinatorMachine : IMachine
     private readonly SystemCoordinator _coordinator;
     private readonly int _hostCyclesPerFrame;
 
-    public CoordinatorMachine(IMachine host, SystemCoordinator coordinator, int hostCyclesPerFrame)
+    public CoordinatorMachine(
+        IMachine host,
+        SystemCoordinator coordinator,
+        int hostCyclesPerFrame,
+        IInterSystemBus? iecBus = null)
     {
         ArgumentNullException.ThrowIfNull(host);
         ArgumentNullException.ThrowIfNull(coordinator);
@@ -30,7 +34,16 @@ public sealed class CoordinatorMachine : IMachine
         _host = host;
         _coordinator = coordinator;
         _hostCyclesPerFrame = hostCyclesPerFrame;
+        IecBus = iecBus;
     }
+
+    /// <summary>
+    /// The live inter-system IEC bus the rig's peripherals are wired to (the
+    /// bus that actually carries traffic), or null. Distinct from the host's
+    /// internal always-on bus; used by the host runtime to monitor real IEC
+    /// activity on the true-drive path.
+    /// </summary>
+    public IInterSystemBus? IecBus { get; }
 
     /// <summary>The C64 host machine presented to the runtime.</summary>
     public IMachine Host => _host;

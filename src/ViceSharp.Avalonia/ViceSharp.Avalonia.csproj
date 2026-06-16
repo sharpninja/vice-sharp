@@ -27,6 +27,10 @@
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="Grpc.Net.Client" />
+    <!-- UI-REMOTECTRL-001: embeddable Avalonia visual-tree inspection/control
+         server over gRPC. Disabled by default; opt-in via the
+         VICESHARP_REMOTECONTROL_* environment switches (see App.axaml.cs). -->
+    <PackageReference Include="SharpNinja.Avalonia.RemoteControl.Server" />
   </ItemGroup>
 
   <ItemGroup>

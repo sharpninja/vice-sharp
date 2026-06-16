@@ -22,6 +22,9 @@ public sealed class IecBusTraceRecorderTests
     }
 
     /// <summary>
+    /// FR: FR-IECMON-001, TR: TR-IECTRACE-001.
+    /// Use case: Opening the scope must seed the trace with the current bus
+    /// state so the timing diagram has a starting point.
     /// Acceptance: Starting the recorder captures a baseline step sample of the
     /// current bus state at the current cycle.
     /// </summary>
@@ -43,6 +46,9 @@ public sealed class IecBusTraceRecorderTests
     }
 
     /// <summary>
+    /// FR: FR-IECMON-001, TR: TR-IECTRACE-001.
+    /// Use case: Every IEC line transition must be captured as a cycle-stamped
+    /// edge so the protocol decoder can reconstruct traffic.
     /// Acceptance: Each line edge appends a cycle-stamped edge sample naming the
     /// changed signal and snapshotting the resulting bus state.
     /// </summary>
@@ -66,6 +72,9 @@ public sealed class IecBusTraceRecorderTests
     }
 
     /// <summary>
+    /// FR: FR-IECMON-001, TR: TR-IECTRACE-001.
+    /// Use case: Step boundaries must appear in the trace even when no line
+    /// changed so the diagram has a time axis when the bus is quiet.
     /// Acceptance: MarkStep records a step sample even when no line changed.
     /// </summary>
     [Fact]
@@ -85,6 +94,9 @@ public sealed class IecBusTraceRecorderTests
     }
 
     /// <summary>
+    /// FR: FR-IECMON-001, TR: TR-IECTRACE-001.
+    /// Use case: The trace ring is bounded; beyond capacity the oldest samples
+    /// must be evicted so memory stays bounded during long runs.
     /// Acceptance: The ring evicts oldest samples beyond capacity, preserving
     /// chronological order of the survivors.
     /// </summary>
@@ -110,6 +122,9 @@ public sealed class IecBusTraceRecorderTests
     }
 
     /// <summary>
+    /// FR: FR-IECMON-001, TR: TR-IECTRACE-001.
+    /// Use case: Closing the scope must stop recording so the trace stays
+    /// inactive (and cost-free) when the monitor is not open.
     /// Acceptance: After Stop, further edges are not recorded.
     /// </summary>
     [Fact]
@@ -129,6 +144,9 @@ public sealed class IecBusTraceRecorderTests
     }
 
     /// <summary>
+    /// FR: FR-IECMON-001, TR: TR-IECTRACE-001.
+    /// Use case: The scope fetches only new samples since the last poll cycle so
+    /// the UI can incrementally append to the timing diagram.
     /// Acceptance: Since(cycle) returns only samples at or after the given cycle.
     /// </summary>
     [Fact]

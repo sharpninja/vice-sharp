@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
@@ -17,37 +16,27 @@ public partial class MainWindow : Window
     private readonly IAsyncDisposable? _localHost;
     private readonly ILocalVideoFrameSource? _localVideoFrameSource;
     private readonly AttachPanelViewModel _attachViewModel;
+    private readonly ShellViewModel _shell;
     private readonly StatusBarViewModel _statusBarViewModel = new();
     private readonly AttachPanelView _attachPanel;
     private readonly VideoSurface _video;
-    private readonly DockPanel _root = new();
-    private readonly Grid _layout = new();
-    private readonly TextBlock _statusText = new();
-    private DockPanel? _sidebarHost;
-    private bool _sidebarCollapsed;
+    private TextBlock? _statusText;
 
     public MainWindow()
     {
         InitializeComponent();
-        Title = "ViceSharp";
-        Width = 1120;
-        Height = 720;
-        MinWidth = 780;
-        MinHeight = 520;
 
         var hostConnection = CreateHostClient();
         _hostClient = hostConnection.Client;
         _localHost = hostConnection.LocalHost;
         _localVideoFrameSource = hostConnection.VideoFrameSource;
         _attachViewModel = new AttachPanelViewModel(_hostClient);
-        _attachViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.DockSide))
-                BuildLayout();
-        };
+        _shell = new ShellViewModel(_hostClient, _attachViewModel);
+        DataContext = _attachViewModel;
+
         _statusBarViewModel.PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName == nameof(StatusBarViewModel.StatusText))
+            if (args.PropertyName == nameof(StatusBarViewModel.StatusText) && _statusText is not null)
                 _statusText.Text = _statusBarViewModel.StatusText;
         };
 
@@ -65,12 +54,17 @@ public partial class MainWindow : Window
         _video.KeyDown += OnVideoKeyDown;
         _video.KeyUp += OnVideoKeyUp;
 
-        var statusBar = CreateStatusBar();
-        DockPanel.SetDock(statusBar, Dock.Bottom);
-        _root.Children.Add(statusBar);
-        _root.Children.Add(_layout);
-        Content = _root;
-        BuildLayout();
+        // Inject the live views into the declarative shell's named hosts. The
+        // sidebar pane and video content stay code-behind-owned for now; the
+        // reusable PeripheralCardView / SidebarView land in S2.
+        _statusText = this.FindControl<TextBlock>("PART_StatusText");
+        if (_statusText is not null)
+            _statusText.Text = _statusBarViewModel.StatusText;
+        if (this.FindControl<ContentControl>("PART_SidebarHost") is { } sidebarHost)
+            sidebarHost.Content = _attachPanel;
+        if (this.FindControl<ContentControl>("PART_VideoHost") is { } videoHost)
+            videoHost.Content = _video;
+
         Opened += (_, _) => _video.Focus();
 
         _ = _attachViewModel.RefreshAsync();
@@ -79,7 +73,6 @@ public partial class MainWindow : Window
             TimeSpan.FromSeconds(1.0 / 50.0),
             DispatcherPriority.Render,
             async (_, _) => await RefreshFrameAsync().ConfigureAwait(true));
-
         renderTimer.Start();
 
         var statusTimer = new DispatcherTimer(
@@ -120,185 +113,115 @@ public partial class MainWindow : Window
         }
     }
 
-    private void BuildLayout()
+    // ---- Shell commands (single side-toggle + flyout open/close) -------------
+
+    private void OnToggleSidebar(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
-        _layout.Children.Clear();
-        _layout.ColumnDefinitions.Clear();
-
-        if (_sidebarCollapsed)
-        {
-            if (_attachViewModel.DockSide == AttachDockSide.Left)
-            {
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(44, GridUnitType.Pixel));
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-                AddToColumn(CreateCollapsedSidebar(), 0);
-                AddToColumn(_video, 1);
-            }
-            else
-            {
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(44, GridUnitType.Pixel));
-                AddToColumn(_video, 0);
-                AddToColumn(CreateCollapsedSidebar(), 1);
-            }
-
-            return;
-        }
-
-        // Narrower sidebar default (240 vs 300 prior). The slot panels reflow
-        // into compact horizontal layouts at this width; the splitter still
-        // lets the user widen the sidebar when needed.
-        if (_attachViewModel.DockSide == AttachDockSide.Left)
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(240, GridUnitType.Pixel));
-        else
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-
-        _layout.ColumnDefinitions.Add(new ColumnDefinition(4, GridUnitType.Pixel));
-
-        if (_attachViewModel.DockSide == AttachDockSide.Left)
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-        else
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(240, GridUnitType.Pixel));
-
-        var splitter = new GridSplitter
-        {
-            Width = 4,
-            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
-            VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch
-        };
-
-        if (_attachViewModel.DockSide == AttachDockSide.Left)
-        {
-            AddToColumn(CreateSidebarHost(), 0);
-            AddToColumn(splitter, 1);
-            AddToColumn(_video, 2);
-        }
-        else
-        {
-            AddToColumn(_video, 0);
-            AddToColumn(splitter, 1);
-            AddToColumn(CreateSidebarHost(), 2);
-        }
+        _attachViewModel.ToggleSidebar();
+        _video.Focus();
     }
 
-    private Control CreateSidebarHost()
+    private void OnToggleDockSide(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (_sidebarHost is not null)
-            return _sidebarHost;
+        _attachViewModel.ToggleDockSide();
+        _video.Focus();
+    }
 
-        var host = new DockPanel();
-        var collapse = new Button
+    // ---- Menu + transport commands ------------------------------------------
+
+    private void OnMenuExit(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => Close();
+
+    private void OnMenuPause(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.PauseAsync().AsTask());
+
+    private void OnMenuResume(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.ResumeAsync().AsTask());
+
+    private void OnStepCycle(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.StepCycleAsync(1).AsTask());
+
+    private void OnStepFrame(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.StepFrameAsync(1).AsTask());
+
+    private void OnRewindCycle(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.RewindCycleAsync(1).AsTask());
+
+    private void OnRewindFrame(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.RewindFrameAsync(1).AsTask());
+
+    private void OnMenuColdReset(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.ColdResetAsync().AsTask());
+
+    private void OnMenuWarmReset(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.WarmResetAsync().AsTask());
+
+    private void OnRunDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.AutostartDrive8Async().AsTask());
+
+    private void OnMenuToggleWarp(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.ToggleWarpAsync();
+
+    private void OnMenuSwapJoysticks(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.SwapJoysticksAsync();
+
+    private void OnMenuTrueDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _shell.ToggleTrueDrive(Protocol.MediaSlot.Drive8);
+
+    private void OnMenuTrueDrive9(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _shell.ToggleTrueDrive(Protocol.MediaSlot.Drive9);
+
+    private void OnMenuAttachDrive9(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.AttachAsync(Protocol.MediaSlot.Drive9);
+
+    private void OnMenuDetachDrive9(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.DetachAsync(Protocol.MediaSlot.Drive9);
+
+    private void OnMenuShowSettings(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _shell.ShowSettings();
+
+    private void OnMenuOpenMonitor(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => OpenMonitorWindow();
+
+    private void OnMenuAbout(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var about = new Window
         {
-            Content = "☰",
-            Padding = new Thickness(8, 4),
-            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left,
-            Margin = new Thickness(8, 6, 8, 0)
+            Title = "About ViceSharp",
+            Width = 360,
+            Height = 180,
+            CanResize = false,
+            Content = new TextBlock
+            {
+                Margin = new global::Avalonia.Thickness(16),
+                TextWrapping = global::Avalonia.Media.TextWrapping.Wrap,
+                Text = "ViceSharp\nA C# .NET 10 port of the VICE Commodore 64 emulator."
+            }
         };
-        collapse.Click += (_, _) =>
+        about.ShowDialog(this);
+    }
+
+    private void OnMenuSmartAttach(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.AttachAsync(Protocol.MediaSlot.Drive8);
+
+    private void OnMenuAttachDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.AttachAsync(Protocol.MediaSlot.Drive8);
+
+    private void OnMenuDetachDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.DetachAsync(Protocol.MediaSlot.Drive8);
+
+    private async Task RunCommandAsync(Func<Task<Protocol.EmulatorCommandResponse>> action)
+    {
+        try
         {
-            _sidebarCollapsed = true;
-            BuildLayout();
+            var response = await action().ConfigureAwait(true);
+            ApplyStatus(response.EmulatorStatus, response.Status);
             _video.Focus();
-        };
-        DockPanel.SetDock(collapse, Dock.Top);
-        host.Children.Add(collapse);
-        host.Children.Add(_attachPanel);
-        _sidebarHost = host;
-        return _sidebarHost;
-    }
-
-    private Control CreateCollapsedSidebar()
-    {
-        var panel = new Border
-        {
-            Background = new global::Avalonia.Media.SolidColorBrush(global::Avalonia.Media.Color.FromRgb(31, 34, 39)),
-            Child = new Button
-            {
-                Content = "☰",
-                Padding = new Thickness(8),
-                HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Center,
-                VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Top,
-                Margin = new Thickness(0, 8, 0, 0)
-            }
-        };
-        if (panel.Child is Button button)
-        {
-            button.Click += (_, _) =>
-            {
-                _sidebarCollapsed = false;
-                BuildLayout();
-                _video.Focus();
-            };
         }
-
-        return panel;
-    }
-
-    private Control CreateStatusBar()
-    {
-        var bar = new DockPanel
+        catch (Exception ex)
         {
-            MinHeight = 34,
-            Background = new global::Avalonia.Media.SolidColorBrush(global::Avalonia.Media.Color.FromRgb(26, 28, 32)),
-            LastChildFill = true
-        };
-
-        var controls = new StackPanel
-        {
-            Orientation = global::Avalonia.Layout.Orientation.Horizontal,
-            Spacing = 4,
-            Margin = new Thickness(8, 4)
-        };
-        controls.Children.Add(CreateStatusButton("Pause", () => _hostClient.PauseAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("Resume", () => _hostClient.ResumeAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("+1 cyc", () => _hostClient.StepCycleAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("+1 frm", () => _hostClient.StepFrameAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("-1 cyc", () => _hostClient.RewindCycleAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("-1 frm", () => _hostClient.RewindFrameAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("Cold", () => _hostClient.ColdResetAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("Warm", () => _hostClient.WarmResetAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("Run 8", () => _hostClient.ResetAndAutostartDrive8Async().AsTask()));
-        DockPanel.SetDock(controls, Dock.Right);
-        bar.Children.Add(controls);
-
-        _statusText.Margin = new Thickness(10, 7, 8, 4);
-        _statusText.FontSize = 12;
-        _statusText.Text = _statusBarViewModel.StatusText;
-        _statusText.TextTrimming = global::Avalonia.Media.TextTrimming.CharacterEllipsis;
-        bar.Children.Add(_statusText);
-
-        return bar;
-    }
-
-    private Button CreateStatusButton(string label, Func<Task<Protocol.EmulatorCommandResponse>> action)
-    {
-        var button = new Button
-        {
-            Content = label,
-            Padding = new Thickness(7, 3),
-            MinHeight = 24
-        };
-        button.Click += async (_, _) =>
-        {
-            try
-            {
-                var response = await action().ConfigureAwait(true);
-                ApplyStatus(response.EmulatorStatus, response.Status);
-                _video.Focus();
-            }
-            catch (Exception ex)
-            {
+            if (_statusText is not null)
                 _statusText.Text = ex.Message;
-            }
-        };
-        return button;
-    }
-
-    private void AddToColumn(Control control, int column, int columnSpan = 1)
-    {
-        Grid.SetColumn(control, column);
-        Grid.SetColumnSpan(control, columnSpan);
-        _layout.Children.Add(control);
+        }
     }
 
     private async Task RefreshFrameAsync()
@@ -343,13 +266,10 @@ public partial class MainWindow : Window
         // Warp toggle: Alt+W (or Ctrl+W as fallback), like classic VICE
         if ((e.Key == Key.W) && (e.KeyModifiers.HasFlag(KeyModifiers.Alt) || e.KeyModifiers.HasFlag(KeyModifiers.Control)))
         {
-            if (_attachViewModel is not null)
-            {
-                _attachViewModel.IsWarpMode = !_attachViewModel.IsWarpMode;
-                await _attachViewModel.ApplySettingsAsync(false).ConfigureAwait(true);
-                e.Handled = true;
-                return;
-            }
+            _attachViewModel.IsWarpMode = !_attachViewModel.IsWarpMode;
+            await _attachViewModel.ApplySettingsAsync(false).ConfigureAwait(true);
+            e.Handled = true;
+            return;
         }
 
         await SendKeyStateAsync(e, true).ConfigureAwait(true);

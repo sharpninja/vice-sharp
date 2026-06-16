@@ -2,6 +2,7 @@ namespace ViceSharp.TestHarness;
 
 using System.Collections.Specialized;
 using System.ComponentModel;
+using NSubstitute;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.ViewModels;
 using ViceSharp.Protocol;
@@ -528,6 +529,270 @@ public sealed class AttachPanelViewModelTests
         viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 12), RpcStatus.Ok());
 
         Assert.Contains("IEC Idle", viewModel.StatusText);
+    }
+
+    /// <summary>
+    /// FR: FR-UIFLYOUT-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIFLYOUT-001.
+    /// Use case: The shell replaces the separate Left/Right dock buttons with a
+    /// single icon that flips the flyout side, so the view-model must expose a
+    /// single ToggleDockSide that alternates Left and Right.
+    /// Acceptance: From the default Left, ToggleDockSide makes DockSide Right and
+    /// a second call returns it to Left; each flip raises PropertyChanged for
+    /// DockSide and the derived PanePlacement.
+    /// </summary>
+    [Fact]
+    public void ToggleDockSide_FlipsLeftRight()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var changes = TrackPropertyChanges(viewModel);
+
+        Assert.Equal(AttachDockSide.Left, viewModel.DockSide);
+
+        viewModel.ToggleDockSide();
+        Assert.Equal(AttachDockSide.Right, viewModel.DockSide);
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Right, viewModel.PanePlacement);
+        Assert.Contains(nameof(viewModel.DockSide), changes);
+        Assert.Contains(nameof(viewModel.PanePlacement), changes);
+
+        changes.Clear();
+        viewModel.ToggleDockSide();
+        Assert.Equal(AttachDockSide.Left, viewModel.DockSide);
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Left, viewModel.PanePlacement);
+        Assert.Contains(nameof(viewModel.DockSide), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-UIFLYOUT-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIFLYOUT-001.
+    /// Use case: The sidebar is a flyout whose open/closed state the shell binds
+    /// to SplitView.IsPaneOpen; the view-model must default to open and offer a
+    /// ToggleSidebar that flips the state with notification.
+    /// Acceptance: IsPaneOpen defaults to true; ToggleSidebar flips it to false
+    /// then back to true, raising PropertyChanged(IsPaneOpen) on each flip.
+    /// </summary>
+    [Fact]
+    public void ToggleSidebar_TogglesIsPaneOpen()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var changes = TrackPropertyChanges(viewModel);
+
+        Assert.True(viewModel.IsPaneOpen);
+
+        viewModel.ToggleSidebar();
+        Assert.False(viewModel.IsPaneOpen);
+        Assert.Contains(nameof(viewModel.IsPaneOpen), changes);
+
+        changes.Clear();
+        viewModel.ToggleSidebar();
+        Assert.True(viewModel.IsPaneOpen);
+        Assert.Contains(nameof(viewModel.IsPaneOpen), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-UIFLYOUT-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIFLYOUT-001.
+    /// Use case: The AXAML shell binds SplitView.PanePlacement to the view-model
+    /// so the flyout renders on the correct edge; the mapping from the
+    /// dock-side enum to the Avalonia placement must be deterministic.
+    /// Acceptance: Left maps to SplitViewPanePlacement.Left and Right maps to
+    /// SplitViewPanePlacement.Right, both consistent with DockSide.
+    /// </summary>
+    [Fact]
+    public void PanePlacement_MatchesDockSide()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+        viewModel.DockLeft();
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Left, viewModel.PanePlacement);
+
+        viewModel.DockRight();
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Right, viewModel.PanePlacement);
+    }
+
+    /// <summary>
+    /// FR: FR-UIPERIPHERAL-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIPERIPHERAL-001.
+    /// Use case: A single reusable card template renders every peripheral; its
+    /// drive-only affordances (IEC activity, True Drive toggle) are gated on
+    /// SupportsTrueDrive so the same template adapts per slot kind, and True
+    /// Drive is a settable binding surface that defaults off.
+    /// Acceptance: Drive 8 and Drive 9 report SupportsTrueDrive true while Tape
+    /// and Cartridge report false; TrueDrive defaults false and toggling it
+    /// raises PropertyChanged so the card checkbox stays in sync.
+    /// </summary>
+    [Fact]
+    public void PeripheralCard_BindingSurface_TrueDrivePerSlotKind()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+        var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);
+        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);
+        var cartridge = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Cartridge);
+
+        Assert.True(drive8.SupportsTrueDrive);
+        Assert.True(drive9.SupportsTrueDrive);
+        Assert.False(tape.SupportsTrueDrive);
+        Assert.False(cartridge.SupportsTrueDrive);
+
+        Assert.False(drive8.TrueDrive);
+        var changes = TrackPropertyChanges(drive8);
+        drive8.TrueDrive = true;
+        Assert.True(drive8.TrueDrive);
+        Assert.Contains(nameof(drive8.TrueDrive), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-UIPERIPHERAL-001, TR: TR-MVVM-001, TEST-UIPERIPHERAL-001.
+    /// Use case: The reusable card's Attach button routes through the panel
+    /// view-model's host-backed picker pipeline rather than owning the dialog,
+    /// so the card stays presentation-only.
+    /// Acceptance: With no FilePicker set, AttachFromPickerAsync surfaces an
+    /// inline "File picker is unavailable." error; with a picker that returns a
+    /// path the attach is routed to the host (observed here as the disconnected
+    /// host reporting a validation error on the slot).
+    /// </summary>
+    [Fact]
+    public async Task AttachFromPicker_RoutesThroughHostAttachPipeline()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+
+        await viewModel.AttachFromPickerAsync(drive8, TestContext.Current.CancellationToken);
+        Assert.True(drive8.HasValidationError);
+        Assert.Equal("File picker is unavailable.", drive8.ValidationError);
+
+        var pickerInvoked = false;
+        viewModel.FilePicker = _ =>
+        {
+            pickerInvoked = true;
+            return Task.FromResult<string?>(@"C:\does-not-exist\demo.d64");
+        };
+
+        await viewModel.AttachFromPickerAsync(drive8, TestContext.Current.CancellationToken);
+        Assert.True(pickerInvoked);
+        Assert.True(drive8.HasValidationError);
+    }
+
+    /// <summary>
+    /// FR: FR-UISETTINGS-001, TR: TR-UIAXAML-VIEWS-001, TEST-UISETTINGS-001.
+    /// Use case: The SettingsView UserControl binds its combo boxes two-way to
+    /// the view-model's selection properties; changing one must stage a pending
+    /// change, and Revert must restore the last applied local state so the
+    /// settings form behaves predictably without a host round-trip.
+    /// Acceptance: Changing SelectedRenderer and SelectedPalette flips
+    /// HasPendingSettingsChanges true and raises PropertyChanged for the
+    /// selections; RevertSettings restores the original values and clears the
+    /// pending flag.
+    /// </summary>
+    [Fact]
+    public void SettingsSelections_StagePendingChange_AndRevertRestores()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var originalRenderer = viewModel.SelectedRenderer;
+        var originalPalette = viewModel.SelectedPalette;
+        var changes = TrackPropertyChanges(viewModel);
+
+        viewModel.SelectedRenderer = "Software";
+        viewModel.SelectedPalette = "Amber";
+
+        Assert.Equal("Software", viewModel.SelectedRenderer);
+        Assert.Equal("Amber", viewModel.SelectedPalette);
+        Assert.True(viewModel.HasPendingSettingsChanges);
+        Assert.Contains(nameof(viewModel.SelectedRenderer), changes);
+        Assert.Contains(nameof(viewModel.SelectedPalette), changes);
+
+        viewModel.RevertSettings();
+
+        Assert.Equal(originalRenderer, viewModel.SelectedRenderer);
+        Assert.Equal(originalPalette, viewModel.SelectedPalette);
+        Assert.False(viewModel.HasPendingSettingsChanges);
+    }
+
+    /// <summary>
+    /// FR: FR-DRVLED-001, TR: TR-UIAXAML-VIEWS-001, TEST-DRVLED-001.
+    /// Use case: The peripheral card shows a per-drive activity LED. The LED is
+    /// a VM-level state that lights for drives during IEC activity (simulated
+    /// proxy) and can be set faithfully from VIA2 PB3 telemetry (true-drive),
+    /// but never lights for non-drive slots.
+    /// Acceptance: SetIecActivity(true) lights Drive 8's LedOn and raises
+    /// PropertyChanged; the Tape slot never lights; SetDriveLed(true) lights a
+    /// drive and is a no-op on a non-drive slot.
+    /// </summary>
+    [Fact]
+    public void DriveLed_LightsForDrivesOnly()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);
+        var changes = TrackPropertyChanges(drive8);
+
+        drive8.SetIecActivity(true);
+        Assert.True(drive8.LedOn);
+        Assert.Contains(nameof(drive8.LedOn), changes);
+
+        drive8.SetIecActivity(false);
+        Assert.False(drive8.LedOn);
+
+        tape.SetIecActivity(true);
+        Assert.False(tape.LedOn);
+
+        drive8.SetDriveLed(true);
+        Assert.True(drive8.LedOn);
+
+        tape.SetDriveLed(true);
+        Assert.False(tape.LedOn);
+    }
+
+    /// <summary>
+    /// FR: FR-UISETTINGS-001, TR: TR-UIAXAML-VIEWS-001, TEST-UISETTINGS-001.
+    /// Use case: The Settings Warp checkbox binds to the derived IsWarpMode; when
+    /// a Revert (or host settings load) changes the underlying limiter state, the
+    /// checkbox must update, which requires PropertyChanged for the derived
+    /// IsWarpMode (not only LimiterEnabled).
+    /// Acceptance: With Warp turned on locally, RevertSettings restores the
+    /// limiter, sets IsWarpMode back to false, and raises PropertyChanged for
+    /// IsWarpMode so the bound checkbox refreshes.
+    /// </summary>
+    [Fact]
+    public void RevertSettings_RaisesIsWarpModeNotification()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        viewModel.IsWarpMode = true;
+        Assert.True(viewModel.IsWarpMode);
+
+        var changes = TrackPropertyChanges(viewModel);
+        viewModel.RevertSettings();
+
+        Assert.False(viewModel.IsWarpMode);
+        Assert.Contains(nameof(viewModel.IsWarpMode), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-DRVTRUE-001, TR: TR-MVVM-001, TEST-DRVTRUE-001.
+    /// Use case: Toggling a drive's True Drive (from the card checkbox or the
+    /// menu) must drive the host to rebuild the session as a true-drive rig for
+    /// that device; because only one true-drive rig is supported, enabling one
+    /// drive disables the other.
+    /// Acceptance: Setting Drive 8 TrueDrive routes SetTrueDriveAsync(true, 8);
+    /// then setting Drive 9 TrueDrive turns Drive 8 off and routes
+    /// SetTrueDriveAsync(true, 9); clearing it routes SetTrueDriveAsync(false, _).
+    /// </summary>
+    [Fact]
+    public async Task TrueDriveToggle_DrivesHostSessionAndIsSingleSelection()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        host.SetTrueDriveAsync(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
+            .Returns(ValueTask.CompletedTask);
+        var viewModel = new AttachPanelViewModel(host);
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+        var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);
+
+        drive8.TrueDrive = true;
+        await host.Received(1).SetTrueDriveAsync(true, 8, Arg.Any<CancellationToken>());
+
+        drive9.TrueDrive = true;
+        Assert.False(drive8.TrueDrive); // single true-drive
+        await host.Received(1).SetTrueDriveAsync(true, 9, Arg.Any<CancellationToken>());
+
+        drive9.TrueDrive = false;
+        await host.Received(1).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<CancellationToken>());
     }
 
     private static List<string> TrackPropertyChanges(INotifyPropertyChanged source)

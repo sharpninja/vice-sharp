@@ -44,13 +44,36 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
     public EmulatorRuntimeSession Create(CreateEmulatorSessionRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
+        // Honor the session request's True Drive selection (default false keeps
+        // the simulated-drive path byte-identical, so native parity is safe).
+        return Create(request, request.TrueDrive, request.TrueDriveDevice);
+    }
+
+    /// <summary>
+    /// FR-DRVTRUE-001: create a session, optionally as a cycle-accurate
+    /// true-drive rig. With <paramref name="trueDrive"/> false (the default) the
+    /// machine is built exactly as before, so the simulated-drive path and
+    /// native lockstep parity are unchanged. With it true and a C64 architecture
+    /// selected, the session runs a <see cref="CoordinatorMachine"/> (C64 host +
+    /// emulated 1541 over IEC).
+    /// </summary>
+    public EmulatorRuntimeSession Create(
+        CreateEmulatorSessionRequest request,
+        bool trueDrive,
+        int driveDevice = 8,
+        string? diskImagePath = null)
+    {
+        ArgumentNullException.ThrowIfNull(request);
 
         var architectureId = string.IsNullOrWhiteSpace(request.ArchitectureId) ? _defaultArchitectureId : request.ArchitectureId;
 
         if (!_descriptors.TryGetValue(architectureId, out var descriptor))
             throw new InvalidOperationException($"Architecture '{architectureId}' is not registered.");
 
-        var machine = _architectureBuilder.Build(descriptor);
+        var machine = trueDrive && descriptor is C64Descriptor
+            ? C64TrueDriveRigBuilder.Build(_architectureBuilder, descriptor, driveDevice, diskImagePath)
+            : _architectureBuilder.Build(descriptor);
+
         var sessionId = $"emulator-{Guid.NewGuid():N}";
         return new EmulatorRuntimeSession(sessionId, descriptor, machine, CreateIecBusActivityMonitor(machine));
     }
@@ -123,9 +146,14 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
 
     private static IecBusActivityMonitor? CreateIecBusActivityMonitor(IMachine machine)
     {
-        // Watch the machine's always-on IEC bus (the single instance the drives
-        // are already wired to by the architecture builder), so the activity
-        // indicator reflects the real bus rather than a throwaway one.
+        // On the true-drive rig the live IEC traffic flows on the coordinator's
+        // own bus (the host's always-on bus is unused there), so watch that one.
+        if (machine is CoordinatorMachine { IecBus: { } rigBus })
+            return new IecBusActivityMonitor(rigBus);
+
+        // Otherwise watch the machine's always-on IEC bus (the single instance
+        // the drives are already wired to by the architecture builder), so the
+        // activity indicator reflects the real bus rather than a throwaway one.
         var busDevice = machine.Devices.All.OfType<IecBusDevice>().FirstOrDefault();
         if (busDevice is null)
             return null;

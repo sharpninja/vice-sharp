@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ViceSharp.Avalonia.ViewModels"
+             xmlns:conv="using:ViceSharp.Avalonia.Converters"
+             x:Class="ViceSharp.Avalonia.Views.PeripheralCardView"
+             x:DataType="vm:AttachSlotViewModel">
+    <UserControl.Resources>
+        <conv:LedBrushConverter x:Key="LedBrush" />
+    </UserControl.Resources>
+    <!-- FR-UIPERIPHERAL-001 / TR-UIAXAML-VIEWS-001: one reusable card that
+         renders every peripheral kind (Drive 8/9, Tape, Cartridge) bound to an
+         AttachSlotViewModel. Attach/Eject/Recent route through the Panel
+         property (the owning AttachPanelViewModel). -->
+    <Border BorderBrush="#4A4E56" BorderThickness="1" CornerRadius="6"
+            Padding="7,6" Background="#272B31">
+        <StackPanel Spacing="5">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                <!-- FR-DRVLED-001: per-drive activity LED (drives only). -->
+                <Ellipse Grid.Column="0" Width="9" Height="9" Margin="0,0,6,0"
+                         VerticalAlignment="Center" ToolTip.Tip="Drive activity LED"
+                         IsVisible="{Binding SupportsTrueDrive}"
+                         Fill="{Binding LedOn, Converter={StaticResource LedBrush}}" />
+                <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="13"
+                           FontWeight="SemiBold" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="2" Text="{Binding MediaKind}" FontSize="11"
+                           Foreground="#B0B8C4" Margin="6,0"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <CheckBox Grid.Column="3" Content="RO" FontSize="11" MinHeight="20"
+                          Padding="3,0,0,0" ToolTip.Tip="Read only"
+                          IsChecked="{Binding IsReadOnly, Mode=TwoWay}" />
+            </Grid>
+
+            <TextBlock Text="{Binding StatusText}" FontSize="11" TextWrapping="Wrap" />
+
+            <!-- Drive-only rows: IEC activity + True Drive selector. -->
+            <TextBlock Text="{Binding IecActivityText}" FontSize="11" Foreground="#B0B8C4"
+                       TextWrapping="Wrap" IsVisible="{Binding SupportsTrueDrive}" />
+            <CheckBox Content="True Drive (emulated 1541)" FontSize="11" MinHeight="20"
+                      ToolTip.Tip="On = cycle-accurate emulated 1541 over IEC; Off = simulated drive"
+                      IsVisible="{Binding SupportsTrueDrive}"
+                      IsChecked="{Binding TrueDrive, Mode=TwoWay}" />
+
+            <TextBlock Text="{Binding ValidationError}" FontSize="11" Foreground="#B93939"
+                       TextWrapping="Wrap" IsVisible="{Binding HasValidationError}" />
+
+            <Grid ColumnDefinitions="*,4,*">
+                <Button x:Name="PART_Attach" Grid.Column="0" Content="Attach" FontSize="12"
+                        Padding="7,4" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" Click="OnAttach" />
+                <Button x:Name="PART_Eject" Grid.Column="2" Content="Eject" FontSize="12"
+                        Padding="7,4" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" Click="OnEject" />
+            </Grid>
+
+            <ComboBox x:Name="PART_Recent" PlaceholderText="Recent" FontSize="11"
+                      MinHeight="24" HorizontalAlignment="Stretch"
+                      ItemsSource="{Binding RecentFiles}" SelectionChanged="OnRecentSelected" />
+        </StackPanel>
+    </Border>
+</UserControl>

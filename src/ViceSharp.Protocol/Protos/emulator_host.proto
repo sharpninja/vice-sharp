@@ -162,6 +162,11 @@ message EmulatorStatusDto {
 message CreateEmulatorSessionRequest {
   string architecture_id = 1;
   string display_name = 2;
+  // FR-DRVTRUE-001: when true (and a C64 architecture is selected) the host
+  // builds a cycle-accurate true-drive rig (C64 + emulated 1541 over IEC) for
+  // true_drive_device. Default false keeps the simulated-drive path / parity.
+  bool true_drive = 3;
+  int32 true_drive_device = 4;
 }
 
 message SessionRequest {

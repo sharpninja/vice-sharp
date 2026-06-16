@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Protocol;
 
@@ -11,6 +12,8 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     private readonly IHostProtocolClient _hostClient;
     private AttachDockSide _dockSide = AttachDockSide.Left;
+    private bool _isPaneOpen = true;
+    private bool _applyingTrueDrive;
     private SidebarTab _activeTab = SidebarTab.Peripherals;
     private string _statusText = "Disconnected";
     private KeyboardMapDto? _selectedKeyboardMap;
@@ -56,7 +59,24 @@ public sealed class AttachPanelViewModel : ObservableObject
         ];
         _selectedMachineProfile = MachineProfiles[0];
         _appliedSettings = CaptureSettings();
+
+        // FR-DRVTRUE-001: when a drive's True Drive toggle flips (from the card
+        // checkbox or the menu), drive the host to (re)build the session as a
+        // true-drive rig. Only one true-drive rig is supported at a time, so
+        // enabling one drive disables the other.
+        foreach (var slot in Slots)
+        {
+            if (slot.SupportsTrueDrive)
+                slot.PropertyChanged += OnSlotPropertyChanged;
+        }
     }
+
+    /// <summary>
+    /// Host-supplied file picker used by <see cref="AttachFromPickerAsync"/> so a
+    /// reusable peripheral card can request an attach without owning the dialog.
+    /// Set by the shell (the Avalonia window provides the StorageProvider).
+    /// </summary>
+    public Func<AttachSlotViewModel, Task<string?>>? FilePicker { get; set; }
 
     public ObservableCollection<AttachSlotViewModel> Slots { get; }
 
@@ -87,7 +107,31 @@ public sealed class AttachPanelViewModel : ObservableObject
     public AttachDockSide DockSide
     {
         get => _dockSide;
-        private set => SetProperty(ref _dockSide, value);
+        private set
+        {
+            if (SetProperty(ref _dockSide, value))
+                OnPropertyChanged(nameof(PanePlacement));
+        }
+    }
+
+    /// <summary>
+    /// Avalonia <c>SplitView.PanePlacement</c> value derived from
+    /// <see cref="DockSide"/>: Left maps to the left edge, Right to the right.
+    /// Lets the AXAML shell bind the flyout side without a converter.
+    /// </summary>
+    public global::Avalonia.Controls.SplitViewPanePlacement PanePlacement =>
+        _dockSide == AttachDockSide.Left
+            ? global::Avalonia.Controls.SplitViewPanePlacement.Left
+            : global::Avalonia.Controls.SplitViewPanePlacement.Right;
+
+    /// <summary>
+    /// Whether the sidebar flyout pane is open. Bound to
+    /// <c>SplitView.IsPaneOpen</c>; the single toggle button flips it.
+    /// </summary>
+    public bool IsPaneOpen
+    {
+        get => _isPaneOpen;
+        set => SetProperty(ref _isPaneOpen, value);
     }
 
     public SidebarTab ActiveTab
@@ -250,6 +294,14 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     public void DockRight() => DockSide = AttachDockSide.Right;
 
+    /// <summary>Flip the sidebar flyout between the left and right edges.
+    /// Backs the single side-toggle icon button (FR-UIFLYOUT-001).</summary>
+    public void ToggleDockSide() =>
+        DockSide = _dockSide == AttachDockSide.Left ? AttachDockSide.Right : AttachDockSide.Left;
+
+    /// <summary>Open or close the sidebar flyout pane (FR-UIFLYOUT-001).</summary>
+    public void ToggleSidebar() => IsPaneOpen = !IsPaneOpen;
+
     public void ShowPeripherals() => ActiveTab = SidebarTab.Peripherals;
 
     public void ShowSettings() => ActiveTab = SidebarTab.Settings;
@@ -324,6 +376,63 @@ public sealed class AttachPanelViewModel : ObservableObject
             slot.ApplyAttachment(response.Attachment, filePath);
 
         StatusText = "Attached";
+    }
+
+    /// <summary>
+    /// Show the host file picker for <paramref name="slot"/> and attach the
+    /// chosen file. Backs the reusable peripheral card's Attach button
+    /// (FR-UIPERIPHERAL-001). No-op with an inline error if no picker is set.
+    /// </summary>
+    public async Task AttachFromPickerAsync(AttachSlotViewModel slot, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(slot);
+
+        if (FilePicker is null)
+        {
+            slot.MarkError("File picker is unavailable.");
+            return;
+        }
+
+        var filePath = await FilePicker(slot).ConfigureAwait(true);
+        if (!string.IsNullOrWhiteSpace(filePath))
+            await AttachAsync(slot, filePath, cancellationToken).ConfigureAwait(true);
+    }
+
+    private async void OnSlotPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(AttachSlotViewModel.TrueDrive) || sender is not AttachSlotViewModel changed)
+            return;
+        if (_applyingTrueDrive)
+            return;
+
+        _applyingTrueDrive = true;
+        try
+        {
+            // Single true-drive rig: enabling one drive disables the other.
+            if (changed.TrueDrive)
+            {
+                foreach (var other in Slots)
+                {
+                    if (other.SupportsTrueDrive && !ReferenceEquals(other, changed) && other.TrueDrive)
+                        other.TrueDrive = false;
+                }
+            }
+
+            var active = Slots.FirstOrDefault(slot => slot.SupportsTrueDrive && slot.TrueDrive);
+            var device = active?.Slot == MediaSlot.Drive9 ? 9 : 8;
+            await _hostClient.SetTrueDriveAsync(active is not null, device).ConfigureAwait(true);
+            StatusText = active is not null
+                ? $"True Drive enabled for {active.Title} (session restarted)"
+                : "True Drive disabled (session restarted)";
+        }
+        catch (Exception ex)
+        {
+            StatusText = ex.Message;
+        }
+        finally
+        {
+            _applyingTrueDrive = false;
+        }
     }
 
     public async Task EjectAsync(AttachSlotViewModel slot, CancellationToken cancellationToken = default)
@@ -554,6 +663,7 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
+        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp checkbox in sync
         OnPropertyChanged(nameof(SelectedMachineProfile));
         OnPropertyChanged(nameof(SelectedRenderer));
         OnPropertyChanged(nameof(SelectedDisplayScale));
@@ -844,6 +954,7 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
+        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp checkbox in sync
         OnPropertyChanged(nameof(SelectedMachineProfile));
         OnPropertyChanged(nameof(SelectedRenderer));
         OnPropertyChanged(nameof(SelectedDisplayScale));

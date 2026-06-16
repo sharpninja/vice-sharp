@@ -15,6 +15,10 @@ artifacts/
 !**/[Pp]ackages/build/
 *.nuget.props
 *.nuget.targets
+# Vendored SharpNinja.Avalonia.RemoteControl.* feed (UI-REMOTECTRL-001): tracked
+# on purpose so restore is reproducible on Azure DevOps/CI without the sibling repo.
+!nuget-local/
+!nuget-local/*.nupkg
 
 ## Build results
 [Dd]ebug/

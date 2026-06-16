@@ -574,6 +574,17 @@ public sealed class AvaloniaBoundaryTests
 
         public string SessionId => "test-session";
 
+        public bool TrueDrive { get; private set; }
+
+        public int? TrueDriveDevice { get; private set; }
+
+        public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, CancellationToken cancellationToken = default)
+        {
+            TrueDrive = enabled;
+            TrueDriveDevice = driveDevice;
+            return ValueTask.CompletedTask;
+        }
+
         public MediaSlot? AttachedSlot { get; private set; }
 
         public string? AttachedPath { get; private set; }
