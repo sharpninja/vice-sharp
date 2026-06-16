@@ -578,10 +578,13 @@ public sealed class AvaloniaBoundaryTests
 
         public int? TrueDriveDevice { get; private set; }
 
-        public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, CancellationToken cancellationToken = default)
+        public string? TrueDriveDiskImagePath { get; private set; }
+
+        public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
         {
             TrueDrive = enabled;
             TrueDriveDevice = driveDevice;
+            TrueDriveDiskImagePath = diskImagePath;
             return ValueTask.CompletedTask;
         }
 

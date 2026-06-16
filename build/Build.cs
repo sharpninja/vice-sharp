@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using System.Text.Json;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Git;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -136,8 +138,57 @@ sealed partial class Build : NukeBuild
 
     // ---- MSI / winget pipeline ----------------------------------------------
 
-    [Parameter("Semantic version stamped into the MSI ProductVersion and winget manifests. Default 0.1.0.2.")]
-    readonly string MsiVersion = "0.1.0.2";
+    [Parameter("Override the MSI/winget ProductVersion. Default: GitVersion {Major}.{Minor}.{CommitsSinceVersionSource}.")]
+    readonly string MsiVersionOverride = null!;
+
+    string? _msiVersionCache;
+
+    /// <summary>
+    /// MSI/winget ProductVersion, derived from GitVersion so each build past a
+    /// new commit gets a fresh, upgradeable version (0.1.&lt;commitHeight&gt;).
+    /// Falls back to the git commit count if GitVersion is unavailable. The WiX
+    /// MajorUpgrade (AllowSameVersionUpgrades) makes same-version redeploys
+    /// reinstall. Override with --msi-version-override.
+    /// </summary>
+    string MsiVersion => _msiVersionCache ??= ResolveMsiVersion();
+
+    string ResolveMsiVersion()
+    {
+        if (!string.IsNullOrWhiteSpace(MsiVersionOverride))
+            return MsiVersionOverride;
+
+        // Primary: GitVersion (the repo's chosen versioning tool).
+        try
+        {
+            var json = string.Join(
+                "\n",
+                ProcessTasks.StartProcess(
+                        "dotnet-gitversion",
+                        $"/targetpath \"{RootDirectory}\" /output json",
+                        logOutput: false)
+                    .AssertZeroExitCode()
+                    .Output.Select(o => o.Text));
+            using var doc = JsonDocument.Parse(json);
+            var r = doc.RootElement;
+            var version =
+                $"{r.GetProperty("Major").GetInt32()}." +
+                $"{r.GetProperty("Minor").GetInt32()}." +
+                $"{r.GetProperty("CommitsSinceVersionSource").GetInt32()}";
+            Serilog.Log.Information("MSI version from GitVersion: {Version}", version);
+            return version;
+        }
+        catch (Exception ex)
+        {
+            // Fallback: git commit height - monotonic and always available.
+            Serilog.Log.Warning("GitVersion unavailable ({Message}); using git commit-count fallback", ex.Message);
+            var count = string.Concat(
+                    ProcessTasks.StartProcess("git", "rev-list --count HEAD", RootDirectory, logOutput: false)
+                        .AssertZeroExitCode()
+                        .Output.Select(o => o.Text))
+                .Trim();
+            return $"0.1.{(string.IsNullOrWhiteSpace(count) ? "0" : count)}";
+        }
+    }
 
     [Parameter("Winget package identifier (publisher.identifier). Default sharpninja.ViceSharp.")]
     readonly string WingetPackageId = "sharpninja.ViceSharp";

@@ -16,7 +16,7 @@ public interface IHostProtocolClient
     /// (the next call rebuilds the rig); attached media must be re-attached.
     /// Mirrors VICE's per-unit DriveTrueEmulation requiring a drive reset.
     /// </summary>
-    ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, CancellationToken cancellationToken = default);
+    ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default);
 
     ValueTask<GetEmulatorStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default);
 

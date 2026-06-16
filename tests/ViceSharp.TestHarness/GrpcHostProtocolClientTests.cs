@@ -65,7 +65,7 @@ public sealed class GrpcHostProtocolClientTests
         Assert.False(string.IsNullOrWhiteSpace(firstSession));
         Assert.False(client.TrueDrive);
 
-        await client.SetTrueDriveAsync(true, 8, TestContext.Current.CancellationToken);
+        await client.SetTrueDriveAsync(true, 8, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(client.TrueDrive);
 
         var afterToggle = await client.GetStatusAsync(TestContext.Current.CancellationToken);

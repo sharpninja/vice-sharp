@@ -1,3 +1,4 @@
+using System.IO;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Core;
@@ -46,7 +47,11 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
         ArgumentNullException.ThrowIfNull(request);
         // Honor the session request's True Drive selection (default false keeps
         // the simulated-drive path byte-identical, so native parity is safe).
-        return Create(request, request.TrueDrive, request.TrueDriveDevice);
+        return Create(
+            request,
+            request.TrueDrive,
+            request.TrueDriveDevice,
+            string.IsNullOrWhiteSpace(request.TrueDriveDiskImagePath) ? null : request.TrueDriveDiskImagePath);
     }
 
     /// <summary>
@@ -70,12 +75,30 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
         if (!_descriptors.TryGetValue(architectureId, out var descriptor))
             throw new InvalidOperationException($"Architecture '{architectureId}' is not registered.");
 
-        var machine = trueDrive && descriptor is C64Descriptor
+        var isTrueDriveRig = trueDrive && descriptor is C64Descriptor;
+        var machine = isTrueDriveRig
             ? C64TrueDriveRigBuilder.Build(_architectureBuilder, descriptor, driveDevice, diskImagePath)
             : _architectureBuilder.Build(descriptor);
 
         var sessionId = $"emulator-{Guid.NewGuid():N}";
-        return new EmulatorRuntimeSession(sessionId, descriptor, machine, CreateIecBusActivityMonitor(machine));
+        var session = new EmulatorRuntimeSession(sessionId, descriptor, machine, CreateIecBusActivityMonitor(machine));
+
+        // The true-drive rig boots with the disk inserted at build time, so the
+        // session's media list must reflect it (otherwise the host reports the
+        // drive empty even though the 1541 has the disk).
+        if (isTrueDriveRig && !string.IsNullOrWhiteSpace(diskImagePath) && File.Exists(diskImagePath))
+        {
+            var slot = driveDevice == 9 ? MediaSlot.Drive9 : MediaSlot.Drive8;
+            session.MediaAttachments[slot] = new MediaAttachmentDto(
+                slot,
+                diskImagePath,
+                Path.GetFileName(diskImagePath),
+                IsAttached: true,
+                IsReadOnly: false,
+                AppliedToRuntime: true);
+        }
+
+        return session;
     }
 
     private static IEnumerable<(string Key, IArchitectureDescriptor Descriptor)> CreateDescriptorKeys(

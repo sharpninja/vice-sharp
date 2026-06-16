@@ -209,7 +209,8 @@ public sealed record CreateEmulatorSessionRequest(
     string ArchitectureId = "minimal",
     string DisplayName = "",
     bool TrueDrive = false,
-    int TrueDriveDevice = 8);
+    int TrueDriveDevice = 8,
+    string TrueDriveDiskImagePath = "");
 
 public sealed record SessionRequest(string SessionId);
 

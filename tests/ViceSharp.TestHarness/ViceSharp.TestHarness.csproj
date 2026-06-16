@@ -40,6 +40,7 @@
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="NSubstitute" />
+    <PackageReference Include="Avalonia.Headless.XUnit" />
   </ItemGroup>
 
   <Target Name="BuildViceNative"

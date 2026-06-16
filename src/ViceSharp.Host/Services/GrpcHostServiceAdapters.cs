@@ -73,7 +73,8 @@ public sealed class GrpcEmulatorHostService : GrpcContracts.EmulatorHost.Emulato
                 request.ArchitectureId,
                 request.DisplayName,
                 request.TrueDrive,
-                request.TrueDriveDevice == 0 ? 8 : request.TrueDriveDevice),
+                request.TrueDriveDevice == 0 ? 8 : request.TrueDriveDevice,
+                request.TrueDriveDiskImagePath ?? string.Empty),
             context.CancellationToken).ConfigureAwait(false);
 
         return new GrpcContracts.CreateEmulatorSessionResponse

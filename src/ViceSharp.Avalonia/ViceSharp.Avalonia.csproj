@@ -27,9 +27,18 @@
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="Grpc.Net.Client" />
-    <!-- UI-REMOTECTRL-001: embeddable Avalonia visual-tree inspection/control
-         server over gRPC. Disabled by default; opt-in via the
-         VICESHARP_REMOTECONTROL_* environment switches (see App.axaml.cs). -->
+  </ItemGroup>
+
+  <!-- UI-REMOTECTRL-001: embeddable Avalonia visual-tree inspection/control
+       server over gRPC. Debug-only dev tooling, disabled at runtime by default
+       (opt-in via VICESHARP_REMOTECONTROL_* env switches). Excluded from the
+       NativeAOT/trimmed publish that feeds the MSI: the gRPC server SDK is not
+       trim/AOT-safe (IL2104 + ilc failure), and it is not needed in a shipped
+       build. The REMOTECONTROL define gates the wiring in App.axaml.cs. -->
+  <PropertyGroup Condition="'$(PublishAot)' != 'true'">
+    <DefineConstants>$(DefineConstants);REMOTECONTROL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(PublishAot)' != 'true'">
     <PackageReference Include="SharpNinja.Avalonia.RemoteControl.Server" />
   </ItemGroup>
 

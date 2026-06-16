@@ -15,7 +15,7 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
 
     public bool TrueDrive => false;
 
-    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, CancellationToken cancellationToken = default)
+    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         return ValueTask.CompletedTask;

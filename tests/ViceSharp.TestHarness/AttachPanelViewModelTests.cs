@@ -778,21 +778,21 @@ public sealed class AttachPanelViewModelTests
     public async Task TrueDriveToggle_DrivesHostSessionAndIsSingleSelection()
     {
         var host = Substitute.For<IHostProtocolClient>();
-        host.SetTrueDriveAsync(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
+        host.SetTrueDriveAsync(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns(ValueTask.CompletedTask);
         var viewModel = new AttachPanelViewModel(host);
         var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
         var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);
 
         drive8.TrueDrive = true;
-        await host.Received(1).SetTrueDriveAsync(true, 8, Arg.Any<CancellationToken>());
+        await host.Received(1).SetTrueDriveAsync(true, 8, Arg.Any<string?>(), Arg.Any<CancellationToken>());
 
         drive9.TrueDrive = true;
         Assert.False(drive8.TrueDrive); // single true-drive
-        await host.Received(1).SetTrueDriveAsync(true, 9, Arg.Any<CancellationToken>());
+        await host.Received(1).SetTrueDriveAsync(true, 9, Arg.Any<string?>(), Arg.Any<CancellationToken>());
 
         drive9.TrueDrive = false;
-        await host.Received(1).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<CancellationToken>());
+        await host.Received(1).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
     }
 
     private static List<string> TrackPropertyChanges(INotifyPropertyChanged source)

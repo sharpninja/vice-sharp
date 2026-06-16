@@ -420,7 +420,10 @@ public sealed class AttachPanelViewModel : ObservableObject
 
             var active = Slots.FirstOrDefault(slot => slot.SupportsTrueDrive && slot.TrueDrive);
             var device = active?.Slot == MediaSlot.Drive9 ? 9 : 8;
-            await _hostClient.SetTrueDriveAsync(active is not null, device).ConfigureAwait(true);
+            // Carry the already-attached disk so the rebuilt true-drive session
+            // boots with it inserted (the rig loads the D64 at build time).
+            var diskPath = active is { IsAttached: true } ? active.FilePath : null;
+            await _hostClient.SetTrueDriveAsync(active is not null, device, diskPath).ConfigureAwait(true);
             StatusText = active is not null
                 ? $"True Drive enabled for {active.Title} (session restarted)"
                 : "True Drive disabled (session restarted)";

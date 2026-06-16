@@ -36,6 +36,7 @@
             <TextBlock Text="{Binding IecActivityText}" FontSize="11" Foreground="#B0B8C4"
                        TextWrapping="Wrap" IsVisible="{Binding SupportsTrueDrive}" />
             <CheckBox Content="True Drive (emulated 1541)" FontSize="11" MinHeight="20"
+                      AutomationProperties.AutomationId="Drive.TrueDriveToggle"
                       ToolTip.Tip="On = cycle-accurate emulated 1541 over IEC; Off = simulated drive"
                       IsVisible="{Binding SupportsTrueDrive}"
                       IsChecked="{Binding TrueDrive, Mode=TwoWay}" />

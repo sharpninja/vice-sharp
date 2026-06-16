@@ -167,6 +167,9 @@ message CreateEmulatorSessionRequest {
   // true_drive_device. Default false keeps the simulated-drive path / parity.
   bool true_drive = 3;
   int32 true_drive_device = 4;
+  // Host-readable D64 path inserted into the true-drive 1541 at build time so a
+  // disk attached before enabling True Drive survives the session rebuild.
+  string true_drive_disk_image_path = 5;
 }
 
 message SessionRequest {

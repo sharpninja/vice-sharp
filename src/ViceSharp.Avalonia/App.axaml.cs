@@ -1,22 +1,28 @@
-using System;
-using System.Net;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+#if REMOTECONTROL
+using System;
+using System.Net;
+using Avalonia.Controls;
 using Avalonia.RemoteControl.Server;
 using Avalonia.RemoteControl.Server.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+#endif
 
 namespace ViceSharp.Avalonia;
 
 public partial class App : Application
 {
+#if REMOTECONTROL
     // UI-REMOTECTRL-001: keep the lifetime registration + provider alive for the
     // process lifetime so the embedded remote-control server is started on
-    // Avalonia startup and stopped on exit.
+    // Avalonia startup and stopped on exit. Debug-only dev tooling; excluded
+    // from the NativeAOT/trimmed MSI publish (the gRPC server SDK is not
+    // trim/AOT-safe).
     private IServiceProvider? _remoteControlServices;
     private IDisposable? _remoteControlLifetime;
+#endif
 
     public override void Initialize()
     {
@@ -28,12 +34,15 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
+#if REMOTECONTROL
             TryStartRemoteControl(desktop);
+#endif
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
+#if REMOTECONTROL
     /// <summary>
     /// UI-REMOTECTRL-001: optionally start the embeddable Avalonia.RemoteControl
     /// gRPC server for live visual-tree inspection. Disabled by default; it only
@@ -107,4 +116,5 @@ public partial class App : Application
     {
         public Control? GetRootControl() => desktop.MainWindow;
     }
+#endif
 }

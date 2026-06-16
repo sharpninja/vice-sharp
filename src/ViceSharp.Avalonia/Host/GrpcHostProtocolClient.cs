@@ -17,6 +17,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     private string _sessionId;
     private bool _trueDrive;
     private int _trueDriveDevice = 8;
+    private string _trueDriveDiskImagePath = string.Empty;
 
     public GrpcHostProtocolClient(Uri endpoint, string sessionId = "")
     {
@@ -35,13 +36,15 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
     public bool TrueDrive => _trueDrive;
 
-    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, CancellationToken cancellationToken = default)
+    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
     {
-        if (_trueDrive == enabled && _trueDriveDevice == driveDevice)
+        var disk = diskImagePath ?? string.Empty;
+        if (_trueDrive == enabled && _trueDriveDevice == driveDevice && _trueDriveDiskImagePath == disk)
             return ValueTask.CompletedTask;
 
         _trueDrive = enabled;
         _trueDriveDevice = driveDevice;
+        _trueDriveDiskImagePath = disk;
 
         // True-drive is a machine-config choice: drop the current session so the
         // next EnsureSessionAsync rebuilds the rig with the new selection.
@@ -392,7 +395,8 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             {
                 ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty,
                 TrueDrive = _trueDrive,
-                TrueDriveDevice = _trueDriveDevice
+                TrueDriveDevice = _trueDriveDevice,
+                TrueDriveDiskImagePath = _trueDriveDiskImagePath
             },
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
