@@ -28,6 +28,10 @@ public static class GrpcHostServiceAdapters
         services.AddSingleton<SnapshotServiceHost>();
         services.AddSingleton<CaptureServiceHost>();
         services.AddSingleton<ILocalVideoFrameSource, LocalVideoFrameSource>();
+        // Host-owned emulation worker thread (docs/Decoupling.md): advances Running
+        // sessions in real time off the UI thread. GetFrameAsync is a pure pull.
+        services.AddSingleton<EmulationPumpService>();
+        services.AddHostedService(provider => provider.GetRequiredService<EmulationPumpService>());
         services.AddSingleton<IEmulatorHost>(provider => provider.GetRequiredService<EmulatorHostService>());
         services.AddSingleton<IMediaService>(provider => provider.GetRequiredService<MediaServiceHost>());
         services.AddSingleton<IVideoService>(provider => provider.GetRequiredService<VideoServiceHost>());

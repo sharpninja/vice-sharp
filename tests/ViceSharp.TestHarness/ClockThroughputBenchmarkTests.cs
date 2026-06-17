@@ -54,7 +54,9 @@ public sealed class ClockThroughputBenchmarkTests
 
         var registry = new EmulatorRuntimeRegistry();
         registry.Add(session);
-        var frameSource = new LocalVideoFrameSource(registry);
+        // Emulation is advanced by the host worker (BUG-THROTTLE-001); drive it
+        // directly here to measure the same RunFrame path the worker runs.
+        var pump = new EmulationPumpService(registry);
 
         var nominalClockHz = session.Architecture.MasterClockHz;
         var architecture = session.Architecture.MachineName;
@@ -62,7 +64,7 @@ public sealed class ClockThroughputBenchmarkTests
 
         // Warm up JIT + ROM boot so the measurement reflects steady state.
         for (var i = 0; i < 30; i++)
-            await frameSource.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
+            pump.PumpSession(session);
 
         var startCycle = session.Machine.GetState().Cycle;
         var frames = 0;
@@ -70,7 +72,7 @@ public sealed class ClockThroughputBenchmarkTests
         var sw = Stopwatch.StartNew();
         while (sw.Elapsed < budget)
         {
-            await frameSource.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
+            pump.PumpSession(session);
             frames++;
         }
         sw.Stop();

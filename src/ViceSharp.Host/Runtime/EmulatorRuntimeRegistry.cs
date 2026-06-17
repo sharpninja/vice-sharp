@@ -17,6 +17,15 @@ public sealed class EmulatorRuntimeRegistry
         }
     }
 
+    /// <summary>Snapshot of all live sessions (for the emulation pump to iterate without holding the registry lock during frame work).</summary>
+    public EmulatorRuntimeSession[] Snapshot()
+    {
+        lock (_syncRoot)
+        {
+            return _sessions.Values.ToArray();
+        }
+    }
+
     public bool TryGet(string sessionId, [NotNullWhen(true)] out EmulatorRuntimeSession? session)
     {
         if (string.IsNullOrWhiteSpace(sessionId))

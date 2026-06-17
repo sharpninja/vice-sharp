@@ -23,11 +23,17 @@ public sealed class EmulatorRuntimeSession
         Architecture = architecture;
         Machine = machine;
         IecBusActivity = iecBusActivity;
+        RefreshRateHz = architecture is IProfiledArchitectureDescriptor profiled && profiled.MachineProfile.RefreshRateHz > 0
+            ? profiled.MachineProfile.RefreshRateHz
+            : 50.125; // PAL fallback
         _lastPerformanceSampleTime = DateTimeOffset.UtcNow;
         _lastPerformanceSampleCycle = machine.GetState().Cycle;
     }
 
     public string SessionId { get; }
+
+    /// <summary>Emulated video refresh rate (frames/sec) used by the emulation pump to pace to real time.</summary>
+    public double RefreshRateHz { get; }
 
     public IArchitectureDescriptor Architecture { get; }
 

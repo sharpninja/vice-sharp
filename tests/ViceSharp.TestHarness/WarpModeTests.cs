@@ -47,37 +47,37 @@ public sealed class WarpModeTests
     }
 
     /// <summary>
-    /// FR: FR-WARP-001, TR: TR-WARP-FRAMES-001.
-    /// Use case: Normal (non-warp) operation: one frame of emulation per render tick.
-    /// Acceptance: After a single GetFrameAsync call with LimiterEnabled = true,
-    ///   the session's FrameCount equals 1.
+    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-WARP-FRAMES-001.
+    /// Use case: Normal (non-warp) operation: the emulation pump advances exactly
+    ///   one frame per tick. (Frame advancement moved off GetFrameAsync to the
+    ///   host worker per docs/Decoupling.md; GetFrameAsync is now a pure pull.)
+    /// Acceptance: A single PumpSession call with LimiterEnabled = true sets
+    ///   FrameCount to 1.
     /// </summary>
     [Fact]
-    public async Task GetFrameAsync_WhenLimiterEnabled_RunsExactlyOneFrame()
+    public async Task PumpSession_WhenLimiterEnabled_RunsExactlyOneFrame()
     {
         var (registry, sessionId) = await CreateRunningSessionAsync();
-        var frameSource = new LocalVideoFrameSource(registry);
+        var pump = new EmulationPumpService(registry);
 
         registry.TryGet(sessionId, out var session);
         session!.LimiterEnabled = true;
 
-        await frameSource.GetFrameAsync(sessionId, TestContext.Current.CancellationToken);
+        pump.PumpSession(session);
 
         Assert.Equal(1, session.FrameCount);
     }
 
     /// <summary>
-    /// FR: FR-WARP-001, TR: TR-WARP-FRAMES-001.
+    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-WARP-FRAMES-001.
     /// Use case: Warp mode must run as many emulation frames as possible within
-    ///   each 20ms render window so effective emulation speed exceeds 100%.
-    /// Acceptance: After a single GetFrameAsync call with LimiterEnabled = false,
-    ///   the session's FrameCount is greater than 1 (multiple frames were run).
-    /// Uses WarpFastMachine (no-op RunFrame) to remove Debug-build timing sensitivity:
-    ///   with a real C64 machine RunFrame takes ~20-40ms in Debug, exhausting the 20ms
-    ///   warp budget after exactly one iteration.
+    ///   each tick so effective emulation speed exceeds 100%.
+    /// Acceptance: A single PumpSession call with LimiterEnabled = false advances
+    ///   more than one frame (the warp burst).
+    /// Uses WarpFastMachine (no-op RunFrame) to remove Debug-build timing sensitivity.
     /// </summary>
     [Fact]
-    public async Task GetFrameAsync_WhenLimiterDisabled_RunsMultipleFrames()
+    public void PumpSession_WhenLimiterDisabled_RunsMultipleFrames()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = new EmulatorRuntimeSession(
@@ -88,8 +88,8 @@ public sealed class WarpModeTests
         session.LimiterEnabled = false;
         registry.Add(session);
 
-        var frameSource = new LocalVideoFrameSource(registry);
-        await frameSource.GetFrameAsync("warp-fast-test", TestContext.Current.CancellationToken);
+        var pump = new EmulationPumpService(registry);
+        pump.PumpSession(session);
 
         Assert.True(session.FrameCount > 1,
             $"Expected multiple frames in warp mode but got {session.FrameCount}.");

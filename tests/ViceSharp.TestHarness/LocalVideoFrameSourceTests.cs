@@ -7,35 +7,19 @@ using ViceSharp.Protocol;
 using Xunit;
 
 /// <summary>
-/// Direct (in-process) unit tests for <see cref="LocalVideoFrameSource"/>,
-/// the in-process video-frame producer registered as
-/// <see cref="ILocalVideoFrameSource"/> in the host composition root.
-/// This service is the bridge between the host's gRPC
-/// <see cref="VideoServiceHost.GetFrameAsync"/> surface (which is a
-/// stateless pull-only adapter) and the runtime registry, with one
-/// critical behavioural difference: when the session's
-/// <see cref="EmulatorRuntimeSession.RunState"/> is
-/// <see cref="EmulatorRunState.Running"/>, calling
-/// <see cref="LocalVideoFrameSource.GetFrameAsync"/> drives the
-/// emulator forward by one frame (RunFrame + RecordFrame +
-/// AdvanceHostAutomationFrame) before snapshotting the framebuffer.
-/// In every other run-state, GetFrameAsync is a pure read of the
-/// current framebuffer. Tests cover constructor guards, the cancellation
-/// contract, the missing-session NotFound path, the no-video-chip
-/// Unavailable path, and the running-vs-non-running frame-advance
-/// distinction (the part that is unique to this service).
+/// Direct (in-process) unit tests for <see cref="LocalVideoFrameSource"/>.
+/// Per the decoupling design (docs/Decoupling.md, BUG-THROTTLE-001), emulation is
+/// driven by the host worker (<see cref="EmulationPumpService"/>) and
+/// <see cref="LocalVideoFrameSource.GetFrameAsync"/> is a PURE PULL of the
+/// committed framebuffer - it never advances the machine.
 /// </summary>
 public sealed class LocalVideoFrameSourceTests
 {
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A client constructs a <see cref="LocalVideoFrameSource"/>
-    /// without supplying the runtime registry (a misconfigured DI
-    /// container is the most common failure mode).
-    /// Acceptance: The constructor throws
-    /// <see cref="ArgumentNullException"/> immediately so the
-    /// composition error surfaces at host startup rather than at first
-    /// RPC.
+    /// FR/TR: FR-Host-UI-Boundary / TR-GRPC-BOUNDARY-001.
+    /// Use case: A misconfigured DI container constructs the frame source without
+    /// the runtime registry.
+    /// Acceptance: The constructor throws ArgumentNullException immediately.
     /// </summary>
     [Fact]
     public void Constructor_NullRegistry_Throws()
@@ -44,13 +28,10 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A caller invokes <see cref="LocalVideoFrameSource.GetFrameAsync"/>
-    /// with a session id that the runtime registry has never seen (e.g.
-    /// the session was already closed before the video poll arrived).
-    /// Acceptance: The response carries the standard missing-session
-    /// NotFound status with the unknown id surfaced in the message and
-    /// a null frame payload (no allocation).
+    /// FR/TR: FR-Host-UI-Boundary / TR-GRPC-BOUNDARY-001.
+    /// Use case: A frame poll arrives for a session id the registry never saw.
+    /// Acceptance: The response carries NotFound with the id in the message and a
+    /// null frame payload.
     /// </summary>
     [Fact]
     public async Task GetFrameAsync_MissingSession_ReturnsNotFoundStatus()
@@ -66,15 +47,10 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A caller invokes <see cref="LocalVideoFrameSource.GetFrameAsync"/>
-    /// against a freshly registered session whose architecture exposes
-    /// no video chip (the minimal-host descriptor has zero devices). The
-    /// service must refuse gracefully without allocating a phantom
-    /// framebuffer.
-    /// Acceptance: The response carries
-    /// <see cref="RpcStatusCode.Unavailable"/>, a null frame payload,
-    /// and a message that identifies the missing video chip.
+    /// FR/TR: FR-Host-UI-Boundary / TR-GRPC-BOUNDARY-001.
+    /// Use case: A poll targets a session whose architecture exposes no video chip.
+    /// Acceptance: The response carries Unavailable, a null frame, and a message
+    /// naming the missing video chip.
     /// </summary>
     [Fact]
     public async Task GetFrameAsync_ValidSessionNoVideoChip_ReturnsUnavailable()
@@ -92,14 +68,10 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A caller cancels a video-frame poll before the service
-    /// has a chance to run; the service must observe the cancellation
-    /// before any session lookup, frame advance, or framebuffer copy.
-    /// Acceptance: Invoking
-    /// <see cref="LocalVideoFrameSource.GetFrameAsync"/> with an
-    /// already-cancelled <see cref="CancellationToken"/> throws
-    /// <see cref="OperationCanceledException"/>.
+    /// FR/TR: FR-Host-UI-Boundary / TR-GRPC-BOUNDARY-001.
+    /// Use case: A caller cancels the poll before the service runs.
+    /// Acceptance: GetFrameAsync with an already-cancelled token throws
+    /// OperationCanceledException before any session lookup or copy.
     /// </summary>
     [Fact]
     public async Task GetFrameAsync_CancelledToken_Throws()
@@ -117,16 +89,11 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: The contract surface that DI consumers depend on is
-    /// the <see cref="ILocalVideoFrameSource"/> interface, not the
-    /// concrete class. Hosts that wire the registry should be able to
-    /// resolve the source through the interface and the resulting
-    /// behaviour must be identical to invoking the concrete type.
-    /// Acceptance: The concrete <see cref="LocalVideoFrameSource"/> can
-    /// be assigned to <see cref="ILocalVideoFrameSource"/> and
-    /// GetFrameAsync delivers the same NotFound status when invoked
-    /// through the interface for an unknown session.
+    /// FR/TR: FR-Host-UI-Boundary / TR-GRPC-BOUNDARY-001.
+    /// Use case: DI consumers resolve the source through the ILocalVideoFrameSource
+    /// interface, not the concrete type.
+    /// Acceptance: Invoked through the interface, GetFrameAsync delivers the same
+    /// NotFound contract for an unknown session.
     /// </summary>
     [Fact]
     public async Task GetFrameAsync_InvokedThroughInterface_PreservesContract()
@@ -141,18 +108,10 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A C64 session is registered but never marked as
-    /// running (RunState defaults to Stopped). A client polls for a
-    /// frame: the source must return the current framebuffer state
-    /// without advancing the machine - polling a stopped session
-    /// MUST NOT silently execute cycles.
-    /// Acceptance: The response carries
-    /// <see cref="RpcStatusCode.Ok"/>, a populated
-    /// <see cref="VideoFrameDto"/> with the chip's frame dimensions,
-    /// and the session's <see cref="EmulatorRuntimeSession.FrameCount"/>
-    /// remains zero (no RecordFrame call was made because RunState was
-    /// not Running).
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
+    /// Use case: A Stopped session is polled for a frame.
+    /// Acceptance: GetFrameAsync returns Ok with the current framebuffer and does
+    /// NOT advance the machine (FrameCount unchanged) - it is a pure pull.
     /// </summary>
     [Fact]
     public async Task GetFrameAsync_StoppedSession_ReturnsFrameWithoutAdvancingMachine()
@@ -177,127 +136,102 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A C64 session is in the
-    /// <see cref="EmulatorRunState.Running"/> state. The host's video
-    /// poll is the work-pump for the emulator: each call must run
-    /// exactly one frame and record the advance on the session
-    /// performance counters so callers (the UI) drive emulation
-    /// throughput by polling at the desired FPS.
-    /// Acceptance: A single GetFrameAsync call increments
-    /// <see cref="EmulatorRuntimeSession.FrameCount"/> by exactly one
-    /// and the response carries a populated frame payload whose
-    /// dimensions match the video chip.
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
+    /// Use case: Frame advancement is the host worker's job, not the video poll.
+    /// Acceptance: One PumpSession tick advances exactly one frame on a Running
+    /// session (limiter on); a following GetFrameAsync pull returns the committed
+    /// frame without further advancing.
     /// </summary>
     [Fact]
-    public async Task GetFrameAsync_RunningSession_AdvancesOneFrameAndRecordsCounter()
+    public async Task Pump_AdvancesFrame_AndGetFrameAsyncPullsWithoutAdvancing()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("running-session");
         Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
         registry.Add(session);
         session.RunState = EmulatorRunState.Running;
+        var pump = new EmulationPumpService(registry);
         var source = new LocalVideoFrameSource(registry);
 
-        var beforeFrameCount = session.FrameCount;
+        var before = session.FrameCount;
+        pump.PumpSession(session);
+        Assert.Equal(before + 1, session.FrameCount);
 
+        var afterPump = session.FrameCount;
         var response = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
         Assert.NotNull(response.Frame);
-        Assert.Equal(beforeFrameCount + 1, session.FrameCount);
+        Assert.Equal(afterPump, session.FrameCount);
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A running C64 session is polled repeatedly (the UI's
-    /// frame-display loop). Each poll must independently advance the
-    /// emulator so a UI that polls N times in a second drives N frames
-    /// of work.
-    /// Acceptance: After three successive GetFrameAsync calls against a
-    /// Running session, <see cref="EmulatorRuntimeSession.FrameCount"/>
-    /// has advanced by exactly three and every response carries an Ok
-    /// status with a populated frame payload.
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
+    /// Use case: The worker advances one frame per tick on a Running session.
+    /// Acceptance: Three PumpSession ticks advance FrameCount by exactly three.
     /// </summary>
     [Fact]
-    public async Task GetFrameAsync_RunningSession_RepeatedPollsAdvanceFrameCount()
+    public void Pump_RepeatedTicks_AdvanceFrameCount()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("repeat-session");
         Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
         registry.Add(session);
         session.RunState = EmulatorRunState.Running;
-        var source = new LocalVideoFrameSource(registry);
+        var pump = new EmulationPumpService(registry);
 
-        var beforeFrameCount = session.FrameCount;
-
+        var before = session.FrameCount;
         for (var i = 0; i < 3; i++)
-        {
-            var response = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
-            Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
-            Assert.NotNull(response.Frame);
-        }
+            pump.PumpSession(session);
 
-        Assert.Equal(beforeFrameCount + 3, session.FrameCount);
+        Assert.Equal(before + 3, session.FrameCount);
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A session is created, marked Running so the source
-    /// will execute machine work, then switched back to Paused before
-    /// the next poll (UI pause). The source must respect the latest
-    /// run state and stop pumping frames - polling a Paused session
-    /// MUST NOT continue emulation behind the user's back.
-    /// Acceptance: The Running poll advances the frame counter by one,
-    /// then after RunState is set to Paused a subsequent poll returns
-    /// Ok with a populated frame but leaves the frame counter at the
-    /// post-running value (zero further advances).
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
+    /// Use case: A paused session must not advance behind the user's back.
+    /// Acceptance: PumpSession advances one frame while Running, then is a no-op
+    /// once the session is Paused.
     /// </summary>
     [Fact]
-    public async Task GetFrameAsync_PausedSessionAfterRunning_StopsAdvancing()
+    public void Pump_PausedSession_DoesNotAdvance()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("pause-session");
         Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
         registry.Add(session);
-        session.RunState = EmulatorRunState.Running;
-        var source = new LocalVideoFrameSource(registry);
+        var pump = new EmulationPumpService(registry);
 
-        var beforeFrameCount = session.FrameCount;
-        await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
-        var afterRunningFrameCount = session.FrameCount;
+        session.RunState = EmulatorRunState.Running;
+        pump.PumpSession(session);
+        var afterRunning = session.FrameCount;
+        Assert.Equal(1, afterRunning);
 
         session.RunState = EmulatorRunState.Paused;
-        var pausedResponse = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
-
-        Assert.Equal(beforeFrameCount + 1, afterRunningFrameCount);
-        Assert.Equal(RpcStatusCode.Ok, pausedResponse.Status.Code);
-        Assert.NotNull(pausedResponse.Frame);
-        Assert.Equal(afterRunningFrameCount, session.FrameCount);
+        pump.PumpSession(session);
+        Assert.Equal(afterRunning, session.FrameCount);
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: After running one or more frames in a session, a UI
-    /// caller polls again. The cycle reported in the
-    /// <see cref="VideoFrameDto.Cycle"/> field must monotonically
-    /// reflect the machine's live cycle counter so a debugger can stamp
-    /// frames in cycle order.
-    /// Acceptance: For a Running session, the cycle on a later poll is
-    /// strictly greater than the cycle on the first poll (the machine
-    /// has executed cycles in between).
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
+    /// Use case: A debugger stamps frames in cycle order as the worker runs.
+    /// Acceptance: After two PumpSession ticks the later pulled frame carries a
+    /// strictly greater cycle stamp than the earlier one.
     /// </summary>
     [Fact]
-    public async Task GetFrameAsync_RunningSession_CycleIncreasesAcrossPolls()
+    public async Task Pump_AdvancesCycle_ReflectedInPulledFrame()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("cycle-session");
         Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
         registry.Add(session);
         session.RunState = EmulatorRunState.Running;
+        var pump = new EmulationPumpService(registry);
         var source = new LocalVideoFrameSource(registry);
 
+        pump.PumpSession(session);
         var first = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
+        pump.PumpSession(session);
         var second = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
 
         Assert.NotNull(first.Frame);
@@ -307,24 +241,19 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 LocalVideoFrameSource).
-    /// Use case: A C64 session is polled while Running and the response
-    /// carries the framebuffer bytes back to the caller. The byte array
-    /// in the DTO must be an independent copy (defensive copy) of the
-    /// chip's live framebuffer so the caller cannot mutate emulator
-    /// state by writing into the response payload.
-    /// Acceptance: Mutating the returned <see cref="VideoFrameDto.Bgra"/>
-    /// array does NOT change the underlying video chip framebuffer
-    /// bytes (the response payload is decoupled from the live buffer).
+    /// FR/TR: FR-Host-UI-Boundary / TR-GRPC-BOUNDARY-001.
+    /// Use case: The UI must not be able to mutate emulator state through the frame
+    /// payload it receives.
+    /// Acceptance: Mutating the returned Bgra array does not change the live video
+    /// chip framebuffer (the payload is a defensive copy).
     /// </summary>
     [Fact]
-    public async Task GetFrameAsync_RunningSession_FramePayloadIsDefensiveCopy()
+    public async Task GetFrameAsync_FramePayloadIsDefensiveCopy()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("copy-session");
         Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
         registry.Add(session);
-        session.RunState = EmulatorRunState.Running;
         var source = new LocalVideoFrameSource(registry);
 
         var response = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
@@ -333,7 +262,6 @@ public sealed class LocalVideoFrameSourceTests
         var videoChip = (ViceSharp.Abstractions.IVideoChip)session.Machine.Devices.GetByRole(ViceSharp.Abstractions.DeviceRole.VideoChip)!;
         var liveBufferSnapshot = (byte[])videoChip.FrameBuffer.Clone();
 
-        // Mutate the response payload - the live buffer must remain unchanged.
         for (var i = 0; i < response.Frame.Bgra.Length; i++)
             response.Frame.Bgra[i] = (byte)~response.Frame.Bgra[i];
 
@@ -361,9 +289,6 @@ public sealed class LocalVideoFrameSourceTests
         }
         catch (DirectoryNotFoundException)
         {
-            // No C64 ROMs available in this worktree; the test is skipped
-            // so that ROM-free CI runs are still green while ROM-equipped
-            // runs exercise the full video frame source.
             return null;
         }
     }
