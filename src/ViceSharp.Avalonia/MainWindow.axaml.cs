@@ -17,6 +17,7 @@ public partial class MainWindow : Window
     private readonly ILocalVideoFrameSource? _localVideoFrameSource;
     private readonly AttachPanelViewModel _attachViewModel;
     private readonly ShellViewModel _shell;
+    private readonly Persistence.SessionPersistence _persistence = new();
     private readonly StatusBarViewModel _statusBarViewModel = new();
     private readonly AttachPanelView _attachPanel;
     private readonly VideoSurface _video;
@@ -67,7 +68,7 @@ public partial class MainWindow : Window
 
         Opened += (_, _) => _video.Focus();
 
-        _ = _attachViewModel.RefreshAsync();
+        _ = InitializeViewModelAsync();
 
         var renderTimer = new DispatcherTimer(
             TimeSpan.FromSeconds(1.0 / 50.0),
@@ -80,6 +81,55 @@ public partial class MainWindow : Window
             DispatcherPriority.Background,
             async (_, _) => await UpdateStatusAsync().ConfigureAwait(true));
         statusTimer.Start();
+    }
+
+    private async Task InitializeViewModelAsync()
+    {
+        await _attachViewModel.RefreshAsync().ConfigureAwait(true);
+
+        Persistence.PersistedState persisted;
+        try
+        {
+            persisted = _persistence.Load();
+        }
+        catch
+        {
+            return; // first run / unreadable config: nothing to restore
+        }
+
+        _attachViewModel.SaveSettingsOnExit = persisted.SaveSettingsOnExit;
+        _attachViewModel.SaveTransientValuesOnExit = persisted.SaveTransientValuesOnExit;
+
+        try
+        {
+            if (persisted.Settings is not null)
+                await _attachViewModel.ApplyPersistedSettingsAsync(persisted.Settings).ConfigureAwait(true);
+            if (persisted.Transient is not null)
+                await _attachViewModel.ApplyPersistedTransientAsync(persisted.Transient).ConfigureAwait(true);
+        }
+        catch
+        {
+            // Restoring persisted state must never break startup.
+        }
+    }
+
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        try
+        {
+            var state = new Persistence.PersistedState(
+                _attachViewModel.SaveSettingsOnExit,
+                _attachViewModel.SaveTransientValuesOnExit,
+                _attachViewModel.SaveSettingsOnExit ? _attachViewModel.CapturePersistedSettings() : null,
+                _attachViewModel.SaveTransientValuesOnExit ? _attachViewModel.CapturePersistedTransient() : null);
+            _persistence.Save(state);
+        }
+        catch
+        {
+            // Persistence must never block window close.
+        }
+
+        base.OnClosing(e);
     }
 
     protected override async void OnClosed(EventArgs e)

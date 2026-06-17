@@ -102,6 +102,11 @@
                     <ComboBox Classes="row" ItemsSource="{Binding ResourceModes}"
                               SelectedItem="{Binding SelectedResourceMode, Mode=TwoWay}" />
                 </DockPanel>
+                <TextBlock Classes="section" Text="Persistence" Margin="0,6,0,0" />
+                <CheckBox Content="Save settings on exit"
+                          IsChecked="{Binding SaveSettingsOnExit, Mode=TwoWay}" />
+                <CheckBox Content="Save transient values on exit (attached disks, keyboard map)"
+                          IsChecked="{Binding SaveTransientValuesOnExit, Mode=TwoWay}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="6">

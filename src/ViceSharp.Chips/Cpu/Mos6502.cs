@@ -111,6 +111,16 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     public Func<ushort, bool>? ShouldDeferAbsoluteStore { get; set; }
     public Func<ushort, bool>? ShouldDelayNextFetchAfterWrite { get; set; }
 
+    /// <summary>
+    /// Optional KERNAL-trap hook (the VICE serial-trap equivalent). Invoked at
+    /// each instruction boundary with the address about to be fetched. If it
+    /// returns true the trapped instruction is skipped: the handler has already
+    /// mutated registers/memory and set <see cref="PC"/> to the routine's resume
+    /// address. Used to service virtual (non-true-drive) disk I/O without
+    /// bit-banging the IEC bus. Null on true-drive and cycle-parity rigs.
+    /// </summary>
+    public Func<ushort, bool>? SerialTrapHook { get; set; }
+
     public Mos6502(IBus bus)
     {
         _bus = bus;
@@ -202,6 +212,17 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         {
             _instructionPC = _pc;
             _visiblePC = _instructionPC;
+
+            // KERNAL serial-bus trap (VICE virtual device traps). If a trap fires
+            // it has set PC to the routine's resume address; skip the trapped
+            // instruction and re-fetch from there on the next cycle. The hook is
+            // a no-op (returns false) unless a virtual disk is being addressed,
+            // so cycle-accurate behaviour is unchanged in every other case.
+            if (SerialTrapHook is not null && SerialTrapHook(_pc))
+            {
+                return;
+            }
+
             _opcode = Read(_pc++);
             _cycle = GetCycleCount(_opcode);
             _stagedMemoryReadCompleted = false;

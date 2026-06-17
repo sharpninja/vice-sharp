@@ -5,6 +5,7 @@ using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Cpu;
 using ViceSharp.Chips.Pla;
 using ViceSharp.Chips.IEC;
+using ViceSharp.Chips.Serial;
 using ViceSharp.Chips.Tape;
 using ViceSharp.Core.Wiring;
 using ViceSharp.RomFetch;
@@ -18,12 +19,19 @@ namespace ViceSharp.Core;
 public sealed class ArchitectureBuilder : IArchitectureBuilder
 {
     private readonly IRomProvider? _romProvider;
+    private readonly IAudioBackend? _audioBackend;
 
     public ArchitectureBuilder() { }
 
-    public ArchitectureBuilder(IRomProvider romProvider)
+    public ArchitectureBuilder(IAudioBackend? audioBackend)
+    {
+        _audioBackend = audioBackend;
+    }
+
+    public ArchitectureBuilder(IRomProvider romProvider, IAudioBackend? audioBackend = null)
     {
         _romProvider = romProvider;
+        _audioBackend = audioBackend;
     }
 
     /// <inheritdoc />
@@ -79,7 +87,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var cia2Connected = profile?.SystemCore.Cia2Connected ?? true;
         var cia2 = cia2Connected ? CreateC64Cia(bus, nmiLine, 0xDD00, descriptor.MasterClockHz) : null;
         var pla = new Mos906114(bus);
-        var sid = CreateSid(bus, profile);
+        var sid = CreateSid(bus, profile, _audioBackend, descriptor.MasterClockHz);
         var defaultCartridgeMappingMode = ResolveDefaultCartridgeMappingMode(profile);
         var cia2PortAInputMask = ResolveCia2PortAInputMask(profile);
         var memory = new C64MemoryMap(
@@ -179,8 +187,26 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         if (datasetteCia1FlagBinding is not null)
             deviceRegistry.Add(datasetteCia1FlagBinding);
 
+        // KERNAL serial-bus traps (VICE virtual device traps): service LOAD/$ on
+        // the simulated drive when True Drive is OFF. The hook declines unless the
+        // addressed drive has a disk, so it is inert on parity rigs and on the
+        // true-drive host C64 (whose disk lives in the emulated 1541, not here).
+        KernalSerialTrap? serialTrap = null;
+        if (drive8 is not null || drive9 is not null)
+        {
+            var virtualDrives = new VirtualDriveServer(device => device switch
+            {
+                8 => drive8?.DiskImage,
+                9 => drive9?.DiskImage,
+                _ => null
+            });
+            serialTrap = new KernalSerialTrap(cpu, bus, virtualDrives);
+            cpu.SerialTrapHook = serialTrap.TryHandle;
+        }
+
         var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
         machine.Reset();
+        serialTrap?.Reset();
         return machine;
     }
 
@@ -366,15 +392,19 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         return vic;
     }
 
-    private static Sid6581 CreateSid(IBus bus, IMachineProfile? profile)
+    private static Sid6581 CreateSid(IBus bus, IMachineProfile? profile, IAudioBackend? audioBackend, double masterClockHz)
     {
-        if (profile is not null &&
-            profile.SidModel.Contains("8580", StringComparison.OrdinalIgnoreCase))
-        {
-            return new Sid8580(bus) { BaseAddress = 0xD400 };
-        }
+        var sid = profile is not null &&
+                  profile.SidModel.Contains("8580", StringComparison.OrdinalIgnoreCase)
+            ? new Sid8580(bus, audioBackend) { BaseAddress = 0xD400 }
+            : new Sid6581(bus, audioBackend) { BaseAddress = 0xD400 };
 
-        return new Sid6581(bus) { BaseAddress = 0xD400 };
+        // Drive live-audio emission at 44.1 kHz only when a backend is present;
+        // otherwise the SID never touches the audio path (parity-preserving).
+        if (audioBackend is not null)
+            sid.ConfigureAudioClock(masterClockHz);
+
+        return sid;
     }
 }
 

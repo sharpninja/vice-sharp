@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using ViceSharp.Avalonia.Host;
+using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Protocol;
 
 namespace ViceSharp.Avalonia.ViewModels;
@@ -31,6 +32,8 @@ public sealed class AttachPanelViewModel : ObservableObject
     private string _selectedPrimaryJoystickPort = "Joystick 2";
     private bool _swapJoystickPorts;
     private string _selectedResourceMode = "Auto detect";
+    private bool _saveSettingsOnExit;
+    private bool _saveTransientValuesOnExit;
     private string _settingsStatusText = "Settings will load from the connected host.";
     private bool _hasPendingSettingsChanges;
     private bool _requiresRestart;
@@ -969,6 +972,117 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedPrimaryJoystickPort));
         OnPropertyChanged(nameof(SwapJoystickPorts));
         OnPropertyChanged(nameof(SelectedResourceMode));
+    }
+
+    // ---- Save-on-exit toggles + persistence capture/apply --------------------
+
+    /// <summary>Persist the Settings tab to vice-sharp.ini on exit (user toggle).</summary>
+    public bool SaveSettingsOnExit
+    {
+        get => _saveSettingsOnExit;
+        set => SetProperty(ref _saveSettingsOnExit, value);
+    }
+
+    /// <summary>Persist transient session state (attached media + keyboard map) on exit (user toggle).</summary>
+    public bool SaveTransientValuesOnExit
+    {
+        get => _saveTransientValuesOnExit;
+        set => SetProperty(ref _saveTransientValuesOnExit, value);
+    }
+
+    /// <summary>Capture the current Settings-tab values for persistence.</summary>
+    public PersistedSettings CapturePersistedSettings() => new(
+        LimiterRatePercent,
+        LimiterEnabled,
+        SelectedMachineProfile.Id,
+        SelectedRenderer,
+        SelectedDisplayScale,
+        SelectedCropMode,
+        SelectedAspectMode,
+        SelectedPalette,
+        SelectedAudioMode,
+        SelectedInputMode,
+        SelectedPrimaryJoystickPort,
+        SwapJoystickPorts,
+        SelectedResourceMode,
+        (int)DockSide);
+
+    /// <summary>Capture the current transient state (attached media + keyboard map).</summary>
+    public PersistedTransient CapturePersistedTransient()
+    {
+        var attachments = Slots
+            .Where(slot => slot.IsAttached && !string.IsNullOrWhiteSpace(slot.FilePath))
+            .Select(slot => new PersistedAttachment(slot.Slot.ToString(), slot.FilePath, slot.IsReadOnly, slot.TrueDrive))
+            .ToList();
+
+        return new PersistedTransient(attachments, SelectedKeyboardMap?.Id, SelectedKeyboardMap?.SourcePath);
+    }
+
+    /// <summary>Apply persisted Settings-tab values and push them to the host.</summary>
+    public async Task ApplyPersistedSettingsAsync(PersistedSettings settings, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        LimiterRatePercent = Math.Clamp(settings.LimiterRatePercent, LimiterMinimumPercent, LimiterMaximumPercent);
+        LimiterEnabled = settings.LimiterEnabled;
+        SelectedMachineProfile = MachineProfiles.FirstOrDefault(
+            profile => string.Equals(profile.Id, settings.MachineProfileId, StringComparison.OrdinalIgnoreCase)) ?? SelectedMachineProfile;
+        SelectedRenderer = settings.Renderer;
+        SelectedDisplayScale = settings.DisplayScale;
+        SelectedCropMode = settings.CropMode;
+        SelectedAspectMode = settings.AspectMode;
+        SelectedPalette = settings.Palette;
+        SelectedAudioMode = settings.AudioMode;
+        SelectedInputMode = settings.InputMode;
+        SelectedPrimaryJoystickPort = settings.PrimaryJoystickPort;
+        SwapJoystickPorts = settings.SwapJoystickPorts;
+        SelectedResourceMode = settings.ResourceMode;
+        if ((AttachDockSide)settings.DockSide == AttachDockSide.Right)
+            DockRight();
+        else
+            DockLeft();
+
+        await ApplySettingsAsync(RequiresRestart, cancellationToken).ConfigureAwait(true);
+    }
+
+    /// <summary>Re-apply persisted transient state: keyboard map, then attached media.</summary>
+    public async Task ApplyPersistedTransientAsync(PersistedTransient transient, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(transient);
+
+        if (!string.IsNullOrWhiteSpace(transient.KeyboardMapId))
+        {
+            if (!string.IsNullOrWhiteSpace(transient.KeyboardMapSourcePath) && File.Exists(transient.KeyboardMapSourcePath))
+            {
+                var payload = await File.ReadAllBytesAsync(transient.KeyboardMapSourcePath, cancellationToken).ConfigureAwait(true);
+                await SelectCustomKeyboardMapAsync(transient.KeyboardMapSourcePath, payload, cancellationToken).ConfigureAwait(true);
+            }
+            else
+            {
+                await SelectKeyboardMapAsync(transient.KeyboardMapId, cancellationToken).ConfigureAwait(true);
+            }
+        }
+
+        foreach (var attachment in transient.Attachments)
+        {
+            if (string.IsNullOrWhiteSpace(attachment.FilePath) || !File.Exists(attachment.FilePath))
+                continue;
+            if (!Enum.TryParse<MediaSlot>(attachment.Slot, out var slot))
+                continue;
+
+            await _hostClient.AttachMediaAsync(slot, attachment.FilePath, attachment.IsReadOnly, cancellationToken).ConfigureAwait(true);
+        }
+
+        await RefreshAsync(cancellationToken).ConfigureAwait(true);
+
+        // Re-apply true-drive selections through the existing per-slot toggle path;
+        // its observer rebuilds the session as a true-drive rig with the disk.
+        foreach (var attachment in transient.Attachments.Where(a => a.TrueDrive))
+        {
+            var slot = Slots.FirstOrDefault(s => s.Slot.ToString() == attachment.Slot);
+            if (slot is { SupportsTrueDrive: true } && !slot.TrueDrive)
+                slot.TrueDrive = true;
+        }
     }
 }
 

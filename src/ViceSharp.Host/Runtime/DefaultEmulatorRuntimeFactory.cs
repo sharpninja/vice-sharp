@@ -2,6 +2,7 @@ using System.IO;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Core;
+using ViceSharp.Host.Audio;
 using ViceSharp.Protocol;
 using ViceSharp.RomFetch;
 
@@ -119,9 +120,12 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
 
     private static IArchitectureBuilder CreateDefaultArchitectureBuilder()
     {
+        // Attach the platform real-time audio backend so the SID streams live
+        // (null on non-Windows / headless, which leaves emulation silent).
+        var audioBackend = AudioBackendFactory.CreateDefault();
         return TryFindC64RomBasePath(out var romBasePath)
-            ? new ArchitectureBuilder(CreateC64RomProvider(romBasePath))
-            : new ArchitectureBuilder();
+            ? new ArchitectureBuilder(CreateC64RomProvider(romBasePath), audioBackend)
+            : new ArchitectureBuilder(audioBackend);
     }
 
     private static IEnumerable<IArchitectureDescriptor> CreateDefaultDescriptors()

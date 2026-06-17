@@ -87,8 +87,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             bool ringMod = (voice.Control & 0x04) != 0;
 
             int sample = 0;
-            uint phase = voice.WaveformAccumulator >> 24;
-            uint pulseWidth = (uint)voice.PulseWidth << 16;
+            // The phase accumulator is 24-bit (sync uses bit 23, noise bit 19),
+            // so the 8-bit waveform index is bits 16-23. Reading bits 24-31
+            // (>> 24) capped the oscillator at ~15 Hz - every note was sub-audible
+            // DC, which is why no sound was produced. (OSC3 readback at Read()
+            // keeps its existing extraction; it is parity-gated separately.)
+            uint phase = (voice.WaveformAccumulator >> 16) & 0xFF;
             // Hard sync is handled cycle-accurately in Tick() via MSB-edge
             // detection; GenerateSample only reads the post-sync state.
             _ = sync;
@@ -127,7 +131,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             }
             if (hasPulse)
             {
-                pulValue = phase < (pulseWidth >> 24) ? 0xFF : 0x00;
+                // 12-bit pulse width compared at the 8-bit phase resolution
+                // (top 8 bits of PW), so a 50% duty register (~$800) gives a
+                // 50% duty wave.
+                pulValue = phase < (uint)(voice.PulseWidth >> 4) ? 0xFF : 0x00;
             }
             if (hasNoise)
             {
@@ -374,12 +381,42 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private readonly float[] _sampleBuffer = new float[256];
     private int _sampleBufferLen;
 
+    // Audio sample-rate downconversion. The SID is clocked (Tick) at
+    // masterClockHz / ClockDivisor; output runs at SamplingRate (44.1 kHz).
+    // _audioTicksPerSample is how many Tick()s elapse per emitted sample
+    // (e.g. PAL: (985248/16)/44100 ~= 1.396). A fractional accumulator emits
+    // one sample whenever it crosses that threshold, sampling the evolving
+    // synthesis state. Zero (the default) disables emission entirely - so a
+    // SID built without an audio backend behaves exactly as before and never
+    // touches the audio path (preserving native cycle parity).
+    private double _audioTicksPerSample;
+    private double _audioSampleAccumulator;
+
     public Sid6581(IBus bus) : this(bus, audioBackend: null) { }
 
     public Sid6581(IBus bus, IAudioBackend? audioBackend)
     {
         _bus = bus;
         _audioBackend = audioBackend;
+    }
+
+    /// <summary>
+    /// Configure live-audio emission for the given system master clock (Hz).
+    /// Enables per-Tick sample generation at <see cref="SamplingRate"/> so the
+    /// SID streams to its audio backend during emulation. No effect unless an
+    /// audio backend was supplied at construction.
+    /// </summary>
+    public void ConfigureAudioClock(double masterClockHz)
+    {
+        if (masterClockHz <= 0.0)
+        {
+            _audioTicksPerSample = 0.0;
+            return;
+        }
+
+        var sidTickHz = masterClockHz / ClockDivisor;
+        _audioTicksPerSample = sidTickHz / SamplingRate;
+        _audioSampleAccumulator = 0.0;
     }
 
     /// <summary>
@@ -492,6 +529,20 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // Voice 2 syncs from voice 1.
         if ((_voices[2].Control & 0x02) != 0 && prevMsb1 && !newMsb1)
             _voices[2].WaveformAccumulator = 0;
+
+        // Live-audio emission: once a backend is attached and the audio clock is
+        // configured, sample the (now-advanced) synthesis state at 44.1 kHz via
+        // a fractional tick:sample accumulator. Inert (no allocation, no call)
+        // when audio is not configured, so parity rigs are unaffected.
+        if (_audioBackend is not null && _audioTicksPerSample > 0.0)
+        {
+            _audioSampleAccumulator += 1.0;
+            if (_audioSampleAccumulator >= _audioTicksPerSample)
+            {
+                _audioSampleAccumulator -= _audioTicksPerSample;
+                GenerateSampleAndOutput();
+            }
+        }
     }
 
     private void ProcessEnvelope(ref Voice voice)
