@@ -6,7 +6,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 {
     public DeviceId Id => new DeviceId(0x0004);
     public string Name => "MOS 6581 SID";
-    public uint ClockDivisor => 16;
+    // BUG-SIDAUDIO-001: the SID phase accumulator and ADSR rate counter advance once per
+    // Tick, and the ADSR rate tables are resid rate_counter_period values in phi2-cycle
+    // units, so the SID must tick once per phi2 master cycle (divisor 1). Ticking every 16
+    // cycles made pitch and envelopes 16x too slow. (The audio sample rate self-corrects via
+    // ConfigureAudioClock either way; only pitch/envelope timing were wrong.)
+    public uint ClockDivisor => 1;
     public ClockPhase Phase => ClockPhase.Phi2;
 
     public int SamplingRate => 44100;

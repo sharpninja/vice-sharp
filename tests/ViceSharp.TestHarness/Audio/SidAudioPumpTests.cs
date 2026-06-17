@@ -38,9 +38,9 @@ public sealed class SidAudioPumpTests
         public void Stop() { }
     }
 
-    // SID Tick() is invoked once per ClockDivisor (16) master cycles, so a PAL
-    // frame (19656 master cycles) is 19656 / 16 = 1228.5 ~= 1228 ticks.
-    private const int PalTicksPerFrame = 1228;
+    // BUG-SIDAUDIO-001: SID Tick() is invoked once per master cycle (ClockDivisor = 1),
+    // so a PAL frame (19656 master cycles) is 19656 ticks.
+    private const int PalTicksPerFrame = 19656;
     private const double PalMasterClockHz = 985248.0;
 
     [Fact]
@@ -54,7 +54,7 @@ public sealed class SidAudioPumpTests
             sid.Tick();
         sid.FlushAudioBuffer();
 
-        // 1228 ticks / ((985248/16)/44100 ~= 1.396 ticks-per-sample) ~= 879 samples.
+        // 19656 ticks / ((985248/1)/44100 ~= 22.34 ticks-per-sample) ~= 880 samples.
         backend.TotalSamples.Should().BeInRange(872, 886);
     }
 
@@ -103,7 +103,9 @@ public sealed class SidAudioPumpTests
         sid.Write(0xD418, 0x0F); // master volume = 15
         sid.Write(0xD404, 0x21); // sawtooth (0x20) + gate (0x01)
 
-        for (var i = 0; i < 25000; i++)
+        // ~0.41 s of emulated time: 400000 master-cycle ticks (ClockDivisor = 1) at
+        // ~22.34 ticks/sample yields ~17900 samples.
+        for (var i = 0; i < 400_000; i++)
             sid.Tick();
         sid.FlushAudioBuffer();
 
