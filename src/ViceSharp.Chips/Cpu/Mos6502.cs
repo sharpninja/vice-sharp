@@ -132,6 +132,8 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     }
 
     private byte _opcode;
+    private ushort _currentInstructionPc; // fetch address of the in-flight instruction (for the completed-instruction publish)
+    private bool _instructionExecuted; // guards the instruction-completed publish against the first (pre-fetch) boundary
     private int _cycle;
     private int _bootstrapCycles;
     private bool _suppressBootstrapBoundary;
@@ -210,8 +212,21 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
         if (_cycle == 0)
         {
+            // Instruction boundary: the previous instruction has fully executed.
+            // Publish it (opcode + post-execution registers) for diagnostic / pacing
+            // subscribers. Gated on a live subscriber so an unobserved run pays only
+            // a null + count check per instruction; pure notification, so cycle parity
+            // is unaffected.
+            if (_instructionExecuted && _pubSub is { SubscriptionCount: > 0 })
+            {
+                _pubSub.Publish(
+                    CpuInstructionCompletedEvent.Topic,
+                    new CpuInstructionCompletedEvent(_currentInstructionPc, _opcode, A, X, Y, S, P, _pc));
+            }
+
             _instructionPC = _pc;
             _visiblePC = _instructionPC;
+            _currentInstructionPc = _pc; // the instruction about to be fetched here
 
             // KERNAL serial-bus trap (VICE virtual device traps). If a trap fires
             // it has set PC to the routine's resume address; skip the trapped
@@ -224,6 +239,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             }
 
             _opcode = Read(_pc++);
+            _instructionExecuted = true; // a real instruction has now been fetched/executed
             _cycle = GetCycleCount(_opcode);
             _stagedMemoryReadCompleted = false;
             _delayNextFetch = false;

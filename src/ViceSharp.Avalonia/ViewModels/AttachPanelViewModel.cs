@@ -586,12 +586,27 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         if (response.KeyboardMap is not null)
         {
-            _selectedKeyboardMap = response.KeyboardMap;
+            // Select the instance actually present in KeyboardMaps (matched by Id) so
+            // the bound ComboBox can display it. The host returns a fresh DTO with
+            // IsSelected = true, which value-mismatches every list item (IsSelected =
+            // false) and would blank the combo. Custom maps not in the list are added.
+            _selectedKeyboardMap = ResolveKeyboardMapInstance(response.KeyboardMap);
             OnPropertyChanged(nameof(SelectedKeyboardMap));
             KeyboardMapStatus = string.IsNullOrWhiteSpace(response.KeyboardMap.Error)
                 ? $"Using {response.KeyboardMap.DisplayName}"
                 : response.KeyboardMap.Error;
         }
+    }
+
+    private KeyboardMapDto ResolveKeyboardMapInstance(KeyboardMapDto map)
+    {
+        var existing = KeyboardMaps.FirstOrDefault(
+            candidate => string.Equals(candidate.Id, map.Id, StringComparison.OrdinalIgnoreCase));
+        if (existing is not null)
+            return existing;
+
+        KeyboardMaps.Add(map);
+        return map;
     }
 
     private bool SetSettingsProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = "")
@@ -1045,23 +1060,10 @@ public sealed class AttachPanelViewModel : ObservableObject
         await ApplySettingsAsync(RequiresRestart, cancellationToken).ConfigureAwait(true);
     }
 
-    /// <summary>Re-apply persisted transient state: keyboard map, then attached media.</summary>
+    /// <summary>Re-apply persisted transient state: attached media + true-drive, then the keyboard map last.</summary>
     public async Task ApplyPersistedTransientAsync(PersistedTransient transient, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(transient);
-
-        if (!string.IsNullOrWhiteSpace(transient.KeyboardMapId))
-        {
-            if (!string.IsNullOrWhiteSpace(transient.KeyboardMapSourcePath) && File.Exists(transient.KeyboardMapSourcePath))
-            {
-                var payload = await File.ReadAllBytesAsync(transient.KeyboardMapSourcePath, cancellationToken).ConfigureAwait(true);
-                await SelectCustomKeyboardMapAsync(transient.KeyboardMapSourcePath, payload, cancellationToken).ConfigureAwait(true);
-            }
-            else
-            {
-                await SelectKeyboardMapAsync(transient.KeyboardMapId, cancellationToken).ConfigureAwait(true);
-            }
-        }
 
         foreach (var attachment in transient.Attachments)
         {
@@ -1082,6 +1084,23 @@ public sealed class AttachPanelViewModel : ObservableObject
             var slot = Slots.FirstOrDefault(s => s.Slot.ToString() == attachment.Slot);
             if (slot is { SupportsTrueDrive: true } && !slot.TrueDrive)
                 slot.TrueDrive = true;
+        }
+
+        // Restore the keyboard map LAST. RefreshAsync (and a true-drive session
+        // rebuild) re-list the keyboard maps and reset the selection to the host
+        // default, so applying it earlier was immediately clobbered (symptom: the
+        // keyboard map reverted to the first entry after restart).
+        if (!string.IsNullOrWhiteSpace(transient.KeyboardMapId))
+        {
+            if (!string.IsNullOrWhiteSpace(transient.KeyboardMapSourcePath) && File.Exists(transient.KeyboardMapSourcePath))
+            {
+                var payload = await File.ReadAllBytesAsync(transient.KeyboardMapSourcePath, cancellationToken).ConfigureAwait(true);
+                await SelectCustomKeyboardMapAsync(transient.KeyboardMapSourcePath, payload, cancellationToken).ConfigureAwait(true);
+            }
+            else
+            {
+                await SelectKeyboardMapAsync(transient.KeyboardMapId, cancellationToken).ConfigureAwait(true);
+            }
         }
     }
 }

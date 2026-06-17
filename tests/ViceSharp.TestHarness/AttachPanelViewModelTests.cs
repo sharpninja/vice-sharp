@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using NSubstitute;
 using ViceSharp.Avalonia.Host;
+using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Avalonia.ViewModels;
 using ViceSharp.Protocol;
 using Xunit;
@@ -793,6 +794,98 @@ public sealed class AttachPanelViewModelTests
 
         drive9.TrueDrive = false;
         await host.Received(1).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// FR: FR-INP-001 / FR-CFG-006, TR: TR-MVVM-001.
+    /// Use case: After the user picks a keyboard map the host round-trips a fresh
+    /// KeyboardMapDto (IsSelected = true). The bound ComboBox can only show the
+    /// selection when SelectedKeyboardMap is the SAME instance present in the
+    /// KeyboardMaps source; a foreign instance leaves the combo blank (the reported
+    /// regression: the combo briefly shows the pick then blanks).
+    /// Acceptance: After SelectKeyboardMapAsync, SelectedKeyboardMap has the chosen
+    /// Id and is reference-contained in KeyboardMaps.
+    /// </summary>
+    [Fact]
+    public async Task SelectKeyboardMap_SelectsListInstance_SoComboDoesNotBlank()
+    {
+        var host = CreateKeyboardMapHost();
+        var viewModel = new AttachPanelViewModel(host);
+        await viewModel.RefreshKeyboardMapsAsync(TestContext.Current.CancellationToken);
+
+        await viewModel.SelectKeyboardMapAsync("c64:gtk3_sym", TestContext.Current.CancellationToken);
+
+        Assert.NotNull(viewModel.SelectedKeyboardMap);
+        Assert.Equal("c64:gtk3_sym", viewModel.SelectedKeyboardMap!.Id);
+        Assert.Contains(viewModel.SelectedKeyboardMap, viewModel.KeyboardMaps);
+    }
+
+    /// <summary>
+    /// FR: FR-INP-001 / FR-CFG-006, TR: TR-MVVM-001.
+    /// Use case: On startup the persisted keyboard map id must be restored as the
+    /// active selection and stay visible in the combo (the reported regression: the
+    /// selection reverted to the first map after restart).
+    /// Acceptance: After ApplyPersistedTransientAsync with a saved id,
+    /// SelectedKeyboardMap has that id and is reference-contained in KeyboardMaps.
+    /// </summary>
+    [Fact]
+    public async Task RestorePersistedTransient_RestoresKeyboardMapSelection()
+    {
+        var host = CreateKeyboardMapHost();
+        var viewModel = new AttachPanelViewModel(host);
+        await viewModel.RefreshKeyboardMapsAsync(TestContext.Current.CancellationToken);
+
+        await viewModel.ApplyPersistedTransientAsync(
+            new PersistedTransient([], "c64:keyrah", null),
+            TestContext.Current.CancellationToken);
+
+        Assert.NotNull(viewModel.SelectedKeyboardMap);
+        Assert.Equal("c64:keyrah", viewModel.SelectedKeyboardMap!.Id);
+        Assert.Contains(viewModel.SelectedKeyboardMap, viewModel.KeyboardMaps);
+    }
+
+    private static KeyboardMapDto[] BuildKeyboardMaps() =>
+    [
+        new KeyboardMapDto("c64:gtk3_pos", "GTK3 pos", "c64", "builtin", "", true, true),
+        new KeyboardMapDto("c64:gtk3_sym", "GTK3 sym", "c64", "builtin", "", false, true),
+        new KeyboardMapDto("c64:keyrah", "GTK3 keyrah", "c64", "builtin", "", false, true),
+    ];
+
+    private static IHostProtocolClient CreateKeyboardMapHost()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        var maps = BuildKeyboardMaps();
+
+        host.ListKeyboardMapsAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListKeyboardMapsResponse>(new ListKeyboardMapsResponse(RpcStatus.Ok(), maps)));
+
+        // RefreshAsync (invoked from ApplyPersistedTransientAsync) lists media and
+        // settings; return minimal Ok responses so the restore path runs end-to-end.
+        host.ListMediaAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListMediaResponse>(new ListMediaResponse(RpcStatus.Ok(), [])));
+        host.ListSettingsProfilesAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListSettingsProfilesResponse>(new ListSettingsProfilesResponse(RpcStatus.Ok(), [])));
+        host.GetSettingsAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<GetSettingsResponse>(new GetSettingsResponse(RpcStatus.Ok(), null)));
+
+        // The real host returns a FRESH KeyboardMapDto (IsSelected = true) for the
+        // chosen id - a different instance than the one in the list.
+        host.SetKeyboardMapAsync(
+                Arg.Any<string>(),
+                Arg.Any<byte[]?>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var id = call.ArgAt<string>(0);
+                var template = maps.FirstOrDefault(map => map.Id == id) ?? maps[0];
+                return new ValueTask<KeyboardMapResponse>(new KeyboardMapResponse(
+                    RpcStatus.Ok(),
+                    new KeyboardMapDto(id, template.DisplayName, "c64", "builtin", "", true, true)));
+            });
+
+        return host;
     }
 
     private static List<string> TrackPropertyChanges(INotifyPropertyChanged source)

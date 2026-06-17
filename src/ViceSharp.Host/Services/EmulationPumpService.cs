@@ -1,7 +1,6 @@
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Hosting;
+using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 
@@ -9,29 +8,56 @@ namespace ViceSharp.Host.Services;
 
 /// <summary>
 /// Host-owned emulation worker - the day-one decoupling design (docs/Decoupling.md):
-/// the emulator runs on a dedicated background thread that continuously advances
-/// each Running session's frames, paced to the machine's real-time refresh rate,
-/// while the UI thread only renders the committed framebuffer
-/// (<see cref="LocalVideoFrameSource"/> is a pure pull). This removes the previous
-/// deviation where emulation ran on the UI thread via the render timer's
-/// GetFrameAsync poll, which competed with rendering and ran sub-real-time.
+/// the emulator runs on a dedicated background thread that continuously advances each
+/// Running session's master clock, while the UI thread only renders the committed
+/// framebuffer (<see cref="LocalVideoFrameSource"/> is a lock-free pull).
 ///
-/// Registered as an <see cref="IHostedService"/> so it starts/stops with the host
-/// process; unit tests that build sessions directly (no host) drive
-/// <see cref="PumpSession"/> deterministically instead.
+/// BUG-THROTTLE-001: the worker advances the CPU clock in clean whole-instruction groups
+/// (so a pause/snapshot always lands on a consistent CPU boundary) and is throttled to
+/// real time by a pluggable <see cref="IEmulationGate"/> strategy ("Semaphore" or "VICE").
+/// This service owns the worker thread, the cycle advancement, and per-frame bookkeeping;
+/// the gate owns the pacing (how much to run per tick and how to block/sleep). Video frames
+/// are a side effect of the VIC reaching end-of-frame; per-frame bookkeeping hangs off
+/// <see cref="IVideoChip.FrameCompleted"/>.
+///
+/// Registered as an <see cref="IHostedService"/>; unit tests drive <see cref="PumpSession"/>
+/// directly (one deterministic clean-instruction group - no pacing wait, which lives in the gate).
 /// </summary>
-public sealed partial class EmulationPumpService : IHostedService, IDisposable
+public sealed class EmulationPumpService : IHostedService, IDisposable
 {
+    // The CPU is stepped a whole instruction at a time in fixed groups so the worker
+    // always stops on a clean instruction boundary (never mid-instruction).
+    private const int InstructionGroupSize = 5;
+
     private readonly EmulatorRuntimeRegistry _registry;
-    private Thread? _thread;
+    private readonly IEmulationGate _gate;
+    private readonly ConditionalWeakTable<EmulatorRuntimeSession, FrameBookkeeping> _frames = new();
+    private readonly Func<EmulatorRuntimeSession, long, long> _advance;
+    private Thread? _workerThread;
     private volatile bool _running;
-    private bool _raisedTimerResolution;
 
     public EmulationPumpService(EmulatorRuntimeRegistry registry)
+        : this(registry, SelectGate())
+    {
+    }
+
+    public EmulationPumpService(EmulatorRuntimeRegistry registry, IEmulationGate gate)
     {
         ArgumentNullException.ThrowIfNull(registry);
+        ArgumentNullException.ThrowIfNull(gate);
         _registry = registry;
+        _gate = gate;
+        _advance = (session, cycles) => AdvanceCleanly(session, cycles);
     }
+
+    /// <summary>Active pacing strategy name (e.g. "Semaphore", "VICE").</summary>
+    public string GateName => _gate.Name;
+
+    // Strategy selection: VICESHARP_PACE = "vice" | "semaphore" (default).
+    private static IEmulationGate SelectGate()
+        => string.Equals(Environment.GetEnvironmentVariable("VICESHARP_PACE"), "vice", StringComparison.OrdinalIgnoreCase)
+            ? new ViceEmulationGate()
+            : new SemaphoreEmulationGate();
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -39,13 +65,16 @@ public sealed partial class EmulationPumpService : IHostedService, IDisposable
             return Task.CompletedTask;
 
         _running = true;
-        RaiseTimerResolution(true);
-        _thread = new Thread(Loop)
+        _gate.Start();
+        _workerThread = new Thread(Loop)
         {
             IsBackground = true,
             Name = "ViceSharp.Emulation",
+            // Mostly blocks in the gate; raise priority so a busy foreground GUI cannot
+            // starve it of CPU when the gate releases it.
+            Priority = ThreadPriority.AboveNormal,
         };
-        _thread.Start();
+        _workerThread.Start();
         return Task.CompletedTask;
     }
 
@@ -55,154 +84,130 @@ public sealed partial class EmulationPumpService : IHostedService, IDisposable
         return Task.CompletedTask;
     }
 
-    public void Dispose() => Shutdown();
+    public void Dispose()
+    {
+        Shutdown();
+        _gate.Dispose();
+    }
 
     private void Shutdown()
     {
-        if (!_running && _thread is null)
+        if (!_running && _workerThread is null)
             return;
 
         _running = false;
-        _thread?.Join(TimeSpan.FromSeconds(2));
-        _thread = null;
-        RaiseTimerResolution(false);
+        _gate.Stop(); // unblocks the worker if it is waiting inside the gate
+        _workerThread?.Join(TimeSpan.FromSeconds(2));
+        _workerThread = null;
     }
 
     private void Loop()
     {
-        var deadline = Stopwatch.GetTimestamp();
         while (_running)
         {
-            var ranAny = false;
-            var warp = false;
-            var refreshHz = 50.125;
-
-            foreach (var session in _registry.Snapshot())
-            {
-                if (session.RunState != EmulatorRunState.Running)
-                    continue;
-
-                PumpSession(session);
-                ranAny = true;
-                if (!session.LimiterEnabled)
-                    warp = true;
-                refreshHz = session.RefreshRateHz;
-            }
-
-            if (!ranAny)
-            {
-                // Nothing running: idle without burning a core, and reset the
-                // pacing clock so we do not "catch up" a burst when work resumes.
+            // The gate advances + paces every Running session; idle when none are running.
+            if (!_gate.Tick(_registry, _advance))
                 Thread.Sleep(8);
-                deadline = Stopwatch.GetTimestamp();
-                continue;
-            }
-
-            if (warp)
-            {
-                // Warp already ran a burst inside PumpSession; do not pace.
-                deadline = Stopwatch.GetTimestamp();
-                continue;
-            }
-
-            deadline += (long)(Stopwatch.Frequency / Math.Max(1.0, refreshHz));
-
-            // If we fell far behind real time (host stall, debugger break), resync
-            // rather than sprint to catch up.
-            var now = Stopwatch.GetTimestamp();
-            if (deadline < now)
-                deadline = now;
-
-            SleepUntil(deadline);
         }
     }
 
     /// <summary>
-    /// Run the frames due for one session this tick: exactly one with the limiter
-    /// on, or a warp burst (as many as fit in a ~20 ms window) with it off. Holds
-    /// the session lock so it serialises with host RPC mutations and the frame
-    /// pull. Returns the number of frames advanced.
+    /// Advance one session by a single deterministic step (one clean instruction group
+    /// with the limiter on, or a warp cycle burst with it off) and run any per-frame
+    /// bookkeeping. Test entry point - does NOT pace (pacing lives in the gate).
+    /// Returns the master cycles advanced.
     /// </summary>
-    public int PumpSession(EmulatorRuntimeSession session)
+    public long PumpSession(EmulatorRuntimeSession session)
     {
         ArgumentNullException.ThrowIfNull(session);
+
+        if (session.LimiterEnabled)
+            return AdvanceCleanly(session, 1);
+
+        long warpTarget;
+        lock (session.SyncRoot)
+            warpTarget = Math.Max(1, (long)(session.Machine.Clock.FrequencyHz / 1000.0)) * 64;
+        return AdvanceCleanly(session, warpTarget);
+    }
+
+    /// <summary>
+    /// Advance one session by whole instructions until at least <paramref name="targetCycles"/>
+    /// master cycles have elapsed, always ending on a clean instruction boundary, then run
+    /// any per-frame bookkeeping that came due. Returns the cycles advanced.
+    /// </summary>
+    private long AdvanceCleanly(EmulatorRuntimeSession session, long targetCycles)
+    {
+        if (targetCycles <= 0)
+            return 0;
 
         lock (session.SyncRoot)
         {
             if (session.RunState != EmulatorRunState.Running)
                 return 0;
 
-            if (session.LimiterEnabled)
-            {
-                RunOneFrame(session);
-                return 1;
-            }
+            var frame = _frames.GetValue(session, static _ => new FrameBookkeeping());
+            EnsureFrameSubscription(session, frame);
 
-            var ran = 0;
-            var deadline = Stopwatch.GetTimestamp() + Stopwatch.Frequency / 50;
+            var machine = session.Machine;
+            var clock = machine.Clock;
+            var before = clock.TotalCycles;
+
             do
             {
-                RunOneFrame(session);
-                ran++;
+                for (var i = 0; i < InstructionGroupSize; i++)
+                    machine.StepInstruction();
             }
-            while (Stopwatch.GetTimestamp() < deadline && session.RunState == EmulatorRunState.Running);
+            while (clock.TotalCycles - before < targetCycles && session.RunState == EmulatorRunState.Running);
 
-            return ran;
+            var advanced = clock.TotalCycles - before;
+
+            DrainCompletedFrames(session, frame);
+            session.UpdatePerformanceCounters();
+            return advanced;
         }
     }
 
-    private static void RunOneFrame(EmulatorRuntimeSession session)
+    private void EnsureFrameSubscription(EmulatorRuntimeSession session, FrameBookkeeping frame)
     {
-        session.Machine.RunFrame();
-        session.RecordFrame();
-        session.AdvanceHostAutomationFrame();
-    }
-
-    private void SleepUntil(long deadlineTimestamp)
-    {
-        while (_running)
-        {
-            var remaining = deadlineTimestamp - Stopwatch.GetTimestamp();
-            if (remaining <= 0)
-                break;
-
-            var ms = remaining * 1000.0 / Stopwatch.Frequency;
-            if (ms > 2.0)
-                Thread.Sleep(1); // ~1 ms with the raised timer resolution
-            else
-                Thread.SpinWait(64); // spin the final sub-millisecond for steadiness
-        }
-    }
-
-    private void RaiseTimerResolution(bool raise)
-    {
-        if (!OperatingSystem.IsWindows())
+        if (frame.Subscribed)
             return;
 
-        try
+        frame.Subscribed = true;
+        if (session.Machine.Devices.GetByRole(DeviceRole.VideoChip) is not IVideoChip videoChip)
+            return; // headless/minimal machine: no frames, nothing to count.
+
+        // FrameCompleted fires on this worker thread inside the step, while the framebuffer
+        // holds a whole frame; commit a tear-free snapshot for the UI pull at that instant
+        // and bump a worker-local counter that DrainCompletedFrames consumes after the step.
+        var clock = session.Machine.Clock;
+        frame.VideoChip = videoChip;
+        frame.FrameHandler = (_, _) =>
         {
-            if (raise)
-            {
-                TimeBeginPeriod(1);
-                _raisedTimerResolution = true;
-            }
-            else if (_raisedTimerResolution)
-            {
-                TimeEndPeriod(1);
-                _raisedTimerResolution = false;
-            }
-        }
-        catch
+            session.CommitFrame(videoChip, clock.TotalCycles);
+            frame.PendingFrames++;
+        };
+        videoChip.FrameCompleted += frame.FrameHandler;
+    }
+
+    private static void DrainCompletedFrames(EmulatorRuntimeSession session, FrameBookkeeping frame)
+    {
+        var pending = frame.PendingFrames;
+        if (pending <= 0)
+            return;
+
+        frame.PendingFrames -= pending;
+        for (var i = 0; i < pending; i++)
         {
-            // Timer-resolution control is best-effort; pacing still works without it.
+            session.RecordFrame();
+            session.AdvanceHostAutomationFrame();
         }
     }
 
-    [SupportedOSPlatform("windows")]
-    [LibraryImport("winmm.dll", EntryPoint = "timeBeginPeriod")]
-    private static partial uint TimeBeginPeriod(uint period);
-
-    [SupportedOSPlatform("windows")]
-    [LibraryImport("winmm.dll", EntryPoint = "timeEndPeriod")]
-    private static partial uint TimeEndPeriod(uint period);
+    private sealed class FrameBookkeeping
+    {
+        public bool Subscribed;
+        public int PendingFrames;
+        public IVideoChip? VideoChip;
+        public EventHandler? FrameHandler;
+    }
 }

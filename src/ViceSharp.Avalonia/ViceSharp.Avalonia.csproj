@@ -9,6 +9,14 @@
     <ApplicationIcon>Assets\vicesharp.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- BUG-THROTTLE-001: JIT build (NativeAOT disabled). Background (concurrent)
+         workstation GC keeps gen2 collections off the stop-the-world path so the
+         emulation worker thread is not stalled; tiered PGO lets the JIT re-optimise
+         the hot cycle loop at runtime. -->
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <TieredCompilation>true</TieredCompilation>
+    <TieredPGO>true</TieredPGO>
     <!--
       PLATFORM-CROSS-001: This desktop exe is also referenced by the iOS /
       Android host shells for the shared App/MainWindow types. Without this

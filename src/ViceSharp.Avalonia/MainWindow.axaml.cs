@@ -278,10 +278,24 @@ public partial class MainWindow : Window
     {
         try
         {
-            var frame = _localVideoFrameSource is null
-                ? await _hostClient.GetFrameAsync().ConfigureAwait(true)
-                : await GetLocalFrameAsync().ConfigureAwait(true);
+            // In-process: zero-allocation, lock-free copy of the emulation thread's
+            // published frame straight into the render surface (BUG-THROTTLE-001 /
+            // FR-1132) - the UI render tick never touches the emulation lock.
+            if (_localVideoFrameSource is not null)
+            {
+                var sessionId = _hostClient.SessionId;
+                if (string.IsNullOrWhiteSpace(sessionId))
+                {
+                    await _hostClient.ListMediaAsync().ConfigureAwait(true);
+                    sessionId = _hostClient.SessionId;
+                }
 
+                if (!string.IsNullOrWhiteSpace(sessionId))
+                    _video.UpdateFrom(_localVideoFrameSource, sessionId);
+                return;
+            }
+
+            var frame = await _hostClient.GetFrameAsync().ConfigureAwait(true);
             if (frame.Status.IsSuccess)
                 _video.SetFrame(frame.Frame);
         }
@@ -395,16 +409,6 @@ public partial class MainWindow : Window
             Key.Decimal => ".",
             _ => e.Key.ToString()
         };
-    }
-
-    private async ValueTask<Protocol.GetVideoFrameResponse> GetLocalFrameAsync()
-    {
-        if (string.IsNullOrWhiteSpace(_hostClient.SessionId))
-            await _hostClient.ListMediaAsync().ConfigureAwait(true);
-
-        return string.IsNullOrWhiteSpace(_hostClient.SessionId)
-            ? new Protocol.GetVideoFrameResponse(Protocol.RpcStatus.Unavailable("No emulator session is available."), null)
-            : await _localVideoFrameSource!.GetFrameAsync(_hostClient.SessionId).ConfigureAwait(true);
     }
 
     private async Task<string?> PickMediaFileAsync(AttachSlotViewModel slot)

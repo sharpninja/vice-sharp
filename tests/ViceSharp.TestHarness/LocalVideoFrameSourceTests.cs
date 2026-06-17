@@ -136,14 +136,15 @@ public sealed class LocalVideoFrameSourceTests
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
-    /// Use case: Frame advancement is the host worker's job, not the video poll.
-    /// Acceptance: One PumpSession tick advances exactly one frame on a Running
-    /// session (limiter on); a following GetFrameAsync pull returns the committed
-    /// frame without further advancing.
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001, TR-CYCLE-PACE-001.
+    /// Use case: Advancing the emulation is the host worker's job and is driven by
+    /// the CPU clock, not the video poll. The poll is a pure pull.
+    /// Acceptance: One PumpSession tick advances the master clock (TotalCycles) on a
+    /// Running session; a following GetFrameAsync pull returns the committed frame
+    /// WITHOUT advancing the clock further.
     /// </summary>
     [Fact]
-    public async Task Pump_AdvancesFrame_AndGetFrameAsyncPullsWithoutAdvancing()
+    public async Task Pump_AdvancesCpuClock_AndGetFrameAsyncPullsWithoutAdvancing()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("running-session");
@@ -153,25 +154,30 @@ public sealed class LocalVideoFrameSourceTests
         var pump = new EmulationPumpService(registry);
         var source = new LocalVideoFrameSource(registry);
 
-        var before = session.FrameCount;
+        var clock = session.Machine.Clock;
+        var before = clock.TotalCycles;
         pump.PumpSession(session);
-        Assert.Equal(before + 1, session.FrameCount);
+        Assert.True(clock.TotalCycles > before, "pump did not advance the CPU clock");
 
-        var afterPump = session.FrameCount;
+        var afterPump = clock.TotalCycles;
         var response = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
         Assert.NotNull(response.Frame);
-        Assert.Equal(afterPump, session.FrameCount);
+        Assert.Equal(afterPump, clock.TotalCycles);
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
-    /// Use case: The worker advances one frame per tick on a Running session.
-    /// Acceptance: Three PumpSession ticks advance FrameCount by exactly three.
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001, TR-CYCLE-PACE-001.
+    /// Use case: The frame counter is decoupled from the pump's cycle pacing - it is
+    /// driven by the VIC-II FrameCompleted event as the clock ticks, not by a count
+    /// of pump calls. Pumping enough cycle slices to cover a video frame must roll
+    /// the counter.
+    /// Acceptance: After pumping well over one frame's worth of cycle slices,
+    /// FrameCount has increased.
     /// </summary>
     [Fact]
-    public void Pump_RepeatedTicks_AdvanceFrameCount()
+    public void Pump_AccumulatesCompletedFrames_FromVideoChipEvent()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("repeat-session");
@@ -181,20 +187,20 @@ public sealed class LocalVideoFrameSourceTests
         var pump = new EmulationPumpService(registry);
 
         var before = session.FrameCount;
-        for (var i = 0; i < 3; i++)
-            pump.PumpSession(session);
+        PumpUntilFrameCompletes(pump, session);
 
-        Assert.Equal(before + 3, session.FrameCount);
+        Assert.True(session.FrameCount > before,
+            $"Expected the VIC FrameCompleted event to advance FrameCount past {before}, got {session.FrameCount}.");
     }
 
     /// <summary>
-    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001.
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001, TR-CYCLE-PACE-001.
     /// Use case: A paused session must not advance behind the user's back.
-    /// Acceptance: PumpSession advances one frame while Running, then is a no-op
-    /// once the session is Paused.
+    /// Acceptance: PumpSession advances the CPU clock while Running, then is a no-op
+    /// (no cycles) once the session is Paused.
     /// </summary>
     [Fact]
-    public void Pump_PausedSession_DoesNotAdvance()
+    public void Pump_PausedSession_DoesNotAdvanceCpuClock()
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = TryCreateC64Session("pause-session");
@@ -202,14 +208,16 @@ public sealed class LocalVideoFrameSourceTests
         registry.Add(session);
         var pump = new EmulationPumpService(registry);
 
+        var clock = session.Machine.Clock;
         session.RunState = EmulatorRunState.Running;
+        var before = clock.TotalCycles;
         pump.PumpSession(session);
-        var afterRunning = session.FrameCount;
-        Assert.Equal(1, afterRunning);
+        var afterRunning = clock.TotalCycles;
+        Assert.True(afterRunning > before, "pump did not advance the clock while Running");
 
         session.RunState = EmulatorRunState.Paused;
         pump.PumpSession(session);
-        Assert.Equal(afterRunning, session.FrameCount);
+        Assert.Equal(afterRunning, clock.TotalCycles);
     }
 
     /// <summary>
@@ -238,6 +246,106 @@ public sealed class LocalVideoFrameSourceTests
         Assert.NotNull(second.Frame);
         Assert.True(second.Frame.Cycle > first.Frame.Cycle,
             $"Expected second cycle ({second.Frame.Cycle}) > first cycle ({first.Frame.Cycle}).");
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001, TR-CYCLE-PACE-001.
+    /// Use case: Because the worker advances sub-frame cycle slices, the UI pull must
+    /// return the last COMPLETE frame (committed at the video chip's FrameCompleted
+    /// boundary), never a half-rendered mid-frame buffer.
+    /// Acceptance: After pumping past a frame boundary, the pulled frame's cycle
+    /// equals the session's committed-frame cycle and is stable across consecutive
+    /// pulls when no new frame has completed.
+    /// </summary>
+    [Fact]
+    public async Task Pump_PullReturnsLastCompletedFrame_NotMidFrame()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = TryCreateC64Session("commit-session");
+        Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
+        registry.Add(session);
+        session.RunState = EmulatorRunState.Running;
+        var pump = new EmulationPumpService(registry);
+        var source = new LocalVideoFrameSource(registry);
+
+        PumpUntilFrameCompletes(pump, session);
+        Assert.True(session.HasCommittedFrame, "no complete frame was committed");
+
+        var first = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
+        var second = await source.GetFrameAsync(session.SessionId, TestContext.Current.CancellationToken);
+
+        Assert.NotNull(first.Frame);
+        Assert.NotNull(second.Frame);
+        Assert.Equal(session.CommittedFrameCycle, first.Frame.Cycle);
+        Assert.Equal(first.Frame.Cycle, second.Frame.Cycle);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001, TR-CYCLE-PACE-001, FR-1132.
+    /// Use case: The in-process UI render path copies the emulation thread's latest
+    /// published frame straight into its own buffer with no allocation and no
+    /// emulation lock (TryCopyFrameInto).
+    /// Acceptance: After a frame completes, TryCopyFrameInto fills the caller's
+    /// destination span and reports the committed dimensions and cycle.
+    /// </summary>
+    [Fact]
+    public void TryCopyFrameInto_AfterFrameCompletes_CopiesPublishedFrame()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = TryCreateC64Session("zerocopy-session");
+        Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
+        registry.Add(session);
+        session.RunState = EmulatorRunState.Running;
+        var pump = new EmulationPumpService(registry);
+        var source = new LocalVideoFrameSource(registry);
+
+        PumpUntilFrameCompletes(pump, session);
+        Assert.True(session.HasCommittedFrame, "no complete frame was published");
+
+        var videoChip = (ViceSharp.Abstractions.IVideoChip)session.Machine.Devices.GetByRole(ViceSharp.Abstractions.DeviceRole.VideoChip)!;
+        var dest = new byte[videoChip.FrameBuffer.Length];
+
+        var ok = source.TryCopyFrameInto(session.SessionId, dest, out var width, out var height, out var cycle);
+
+        Assert.True(ok);
+        Assert.True(width > 0);
+        Assert.True(height > 0);
+        Assert.Equal(session.CommittedFrameCycle, cycle);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary / BUG-THROTTLE-001, TR-CYCLE-PACE-001.
+    /// Use case: Before any frame is published (unknown session or one that never
+    /// ran) the zero-copy read must fail cleanly rather than expose a partial buffer.
+    /// Acceptance: TryCopyFrameInto returns false for an unknown session and for a
+    /// freshly created session that has not published a frame.
+    /// </summary>
+    [Fact]
+    public void TryCopyFrameInto_NoPublishedFrame_ReturnsFalse()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var source = new LocalVideoFrameSource(registry);
+        var dest = new byte[VideoFrameByteLength];
+
+        Assert.False(source.TryCopyFrameInto("nonexistent", dest, out _, out _, out _));
+
+        var session = TryCreateC64Session("fresh-session");
+        Assert.SkipWhen(session is null, RomsUnavailableSkipReason);
+        registry.Add(session);
+
+        Assert.False(source.TryCopyFrameInto(session.SessionId, dest, out _, out _, out _));
+    }
+
+    private const int VideoFrameByteLength = 384 * 272 * 4;
+
+    // A PumpSession advances one clean ~5-instruction group (tens of cycles), so pump
+    // until at least one full video frame (~19656 cycles) has completed. Bounded so a
+    // machine that never produces frames fails fast instead of hanging.
+    private static void PumpUntilFrameCompletes(EmulationPumpService pump, EmulatorRuntimeSession session)
+    {
+        var before = session.FrameCount;
+        for (var i = 0; i < 100_000 && session.FrameCount == before; i++)
+            pump.PumpSession(session);
     }
 
     /// <summary>

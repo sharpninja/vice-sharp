@@ -9,6 +9,18 @@ public sealed class EmulatorRuntimeSession
     private long _lastPerformanceSampleCycle;
     private long _lastPerformanceSampleFrameCount;
 
+    // Lock-free double-buffered presented frame. The emulation worker writes a
+    // completed frame to the back buffer then atomically publishes it; the UI
+    // reads the published buffer with no lock and copies it into its own render
+    // surface. The two big pixel buffers are reused (no per-frame allocation).
+    private byte[] _frameBufferA = Array.Empty<byte>();
+    private byte[] _frameBufferB = Array.Empty<byte>();
+    private volatile byte[]? _publishedFrame;
+    private int _committedWidth;
+    private int _committedHeight;
+    private long _committedCycle;
+    private bool _writeToA = true;
+
     public EmulatorRuntimeSession(
         string sessionId,
         IArchitectureDescriptor architecture,
@@ -23,17 +35,11 @@ public sealed class EmulatorRuntimeSession
         Architecture = architecture;
         Machine = machine;
         IecBusActivity = iecBusActivity;
-        RefreshRateHz = architecture is IProfiledArchitectureDescriptor profiled && profiled.MachineProfile.RefreshRateHz > 0
-            ? profiled.MachineProfile.RefreshRateHz
-            : 50.125; // PAL fallback
         _lastPerformanceSampleTime = DateTimeOffset.UtcNow;
         _lastPerformanceSampleCycle = machine.GetState().Cycle;
     }
 
     public string SessionId { get; }
-
-    /// <summary>Emulated video refresh rate (frames/sec) used by the emulation pump to pace to real time.</summary>
-    public double RefreshRateHz { get; }
 
     public IArchitectureDescriptor Architecture { get; }
 
@@ -115,6 +121,72 @@ public sealed class EmulatorRuntimeSession
     {
         FrameCount++;
         UpdatePerformanceCounters();
+    }
+
+    /// <summary>Master-cycle stamp at which the last published frame completed.</summary>
+    public long CommittedFrameCycle => _committedCycle;
+
+    /// <summary>True once at least one complete frame has been published.</summary>
+    public bool HasCommittedFrame => _publishedFrame is not null;
+
+    /// <summary>
+    /// Publish a complete video frame for tear-free, lock-free presentation. Called
+    /// by the emulation worker at the instant the video chip raises FrameCompleted -
+    /// while the framebuffer holds a whole frame and before the next frame's lines
+    /// overwrite it. Writes to the back buffer then atomically publishes it; the two
+    /// pixel buffers are reused so there is no per-frame allocation. The UI reads the
+    /// published buffer with NO lock (it never touches <see cref="SyncRoot"/>), so the
+    /// render pull cannot stall the emulation thread.
+    /// </summary>
+    public void CommitFrame(IVideoChip videoChip, long cycle)
+    {
+        ArgumentNullException.ThrowIfNull(videoChip);
+
+        var source = videoChip.FrameBuffer;
+        // Choose the buffer that is NOT currently published so a concurrent reader
+        // of the published buffer is never overwritten mid-copy.
+        var back = _writeToA ? _frameBufferA : _frameBufferB;
+        if (back.Length != source.Length)
+        {
+            back = new byte[source.Length];
+            if (_writeToA) _frameBufferA = back; else _frameBufferB = back;
+        }
+
+        source.CopyTo(back, 0);
+        _committedWidth = videoChip.FrameWidth;
+        _committedHeight = videoChip.FrameHeight;
+        _committedCycle = cycle;
+        _publishedFrame = back;       // volatile publish (release barrier)
+        _writeToA = !_writeToA;
+    }
+
+    /// <summary>
+    /// Copy the latest published frame into the caller's destination span (e.g. a
+    /// WriteableBitmap's locked buffer), with NO allocation and NO lock. Returns
+    /// false when no complete frame has been published yet, or the destination is
+    /// too small. This is the UI's read path: a <see cref="ReadOnlySpan{T}"/> over
+    /// the emulation thread's published buffer, copied into the UI's own buffer.
+    /// </summary>
+    public bool TryCopyLatestFrameInto(Span<byte> destination, out int width, out int height, out long cycle)
+    {
+        var published = _publishedFrame; // volatile read (acquire barrier)
+        if (published is null)
+        {
+            width = 0;
+            height = 0;
+            cycle = 0;
+            return false;
+        }
+
+        width = _committedWidth;
+        height = _committedHeight;
+        cycle = _committedCycle;
+
+        if (destination.Length < published.Length)
+            return false;
+
+        ((ReadOnlySpan<byte>)published).CopyTo(destination);
+        return true;
     }
 
     public void ResetPerformanceCounters()

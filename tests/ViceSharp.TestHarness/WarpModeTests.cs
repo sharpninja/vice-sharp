@@ -1,6 +1,5 @@
 namespace ViceSharp.TestHarness;
 
-using ViceSharp.Abstractions;
 using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
@@ -47,15 +46,17 @@ public sealed class WarpModeTests
     }
 
     /// <summary>
-    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-WARP-FRAMES-001.
-    /// Use case: Normal (non-warp) operation: the emulation pump advances exactly
-    ///   one frame per tick. (Frame advancement moved off GetFrameAsync to the
-    ///   host worker per docs/Decoupling.md; GetFrameAsync is now a pure pull.)
-    /// Acceptance: A single PumpSession call with LimiterEnabled = true sets
-    ///   FrameCount to 1.
+    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-CYCLE-PACE-001.
+    /// Use case: Timing is driven by the emulated CPU clock, not the video frame
+    ///   rate. With the limiter on, one pump tick advances the master clock by a
+    ///   single sub-frame cycle slice (so the worker can pace at ~1 kHz against
+    ///   real time), never a whole video frame.
+    /// Acceptance: A single PumpSession call advances the clock by a positive
+    ///   number of master cycles that is a small fraction of a second (well under
+    ///   one video frame's worth), and TotalCycles moves by exactly that amount.
     /// </summary>
     [Fact]
-    public async Task PumpSession_WhenLimiterEnabled_RunsExactlyOneFrame()
+    public async Task PumpSession_WhenLimiterEnabled_AdvancesCpuClockBySubFrameSlice()
     {
         var (registry, sessionId) = await CreateRunningSessionAsync();
         var pump = new EmulationPumpService(registry);
@@ -63,36 +64,97 @@ public sealed class WarpModeTests
         registry.TryGet(sessionId, out var session);
         session!.LimiterEnabled = true;
 
-        pump.PumpSession(session);
+        var clock = session.Machine.Clock;
+        var before = clock.TotalCycles;
+        var advanced = pump.PumpSession(session);
 
-        Assert.Equal(1, session.FrameCount);
+        Assert.True(advanced > 0, "pump advanced no cycles");
+        Assert.Equal(advanced, clock.TotalCycles - before);
+        // A slice is ~1 ms of emulated time: far less than one frame (~19656 cycles
+        // / ~20 ms). Bound it under 100 ms of cycles to prove sub-frame pacing.
+        Assert.True(advanced <= clock.FrequencyHz / 10,
+            $"Expected a sub-frame cycle slice but advanced {advanced} cycles.");
     }
 
     /// <summary>
-    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-WARP-FRAMES-001.
-    /// Use case: Warp mode must run as many emulation frames as possible within
-    ///   each tick so effective emulation speed exceeds 100%.
-    /// Acceptance: A single PumpSession call with LimiterEnabled = false advances
-    ///   more than one frame (the warp burst).
-    /// Uses WarpFastMachine (no-op RunFrame) to remove Debug-build timing sensitivity.
+    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-CYCLE-PACE-001.
+    /// Use case: Warp (limiter off) runs the CPU clock flat out, advancing a larger
+    ///   cycle burst per tick than the paced slice so effective speed exceeds 100%.
+    /// Acceptance: A PumpSession tick with LimiterEnabled = false advances strictly
+    ///   more master cycles than the same session advances with the limiter on.
     /// </summary>
     [Fact]
-    public void PumpSession_WhenLimiterDisabled_RunsMultipleFrames()
+    public async Task PumpSession_WhenLimiterDisabled_AdvancesLargerCycleBurst()
+    {
+        var (registry, sessionId) = await CreateRunningSessionAsync();
+        var pump = new EmulationPumpService(registry);
+
+        registry.TryGet(sessionId, out var session);
+
+        session!.LimiterEnabled = true;
+        var limitedCycles = pump.PumpSession(session);
+
+        session.LimiterEnabled = false;
+        var warpCycles = pump.PumpSession(session);
+
+        Assert.True(warpCycles > limitedCycles,
+            $"Expected warp burst ({warpCycles}) to exceed the paced slice ({limitedCycles}).");
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-CYCLE-PACE-001.
+    /// Use case: The emulation throttle is a selectable strategy (gate); the active one
+    ///   is reported so callers/diagnostics know which is in effect.
+    /// Acceptance: A pump built with the VICE gate reports GateName "VICE"; one built with
+    ///   the Semaphore gate reports "Semaphore".
+    /// </summary>
+    [Fact]
+    public void EmulationPump_GateName_ReflectsInjectedStrategy()
     {
         var registry = new EmulatorRuntimeRegistry();
-        var session = new EmulatorRuntimeSession(
-            "warp-fast-test",
-            MinimalHostArchitectureDescriptor.Instance,
-            new WarpFastMachine());
-        session.RunState = EmulatorRunState.Running;
-        session.LimiterEnabled = false;
-        registry.Add(session);
+        using var vice = new EmulationPumpService(registry, new ViceEmulationGate());
+        using var semaphore = new EmulationPumpService(registry, new SemaphoreEmulationGate());
 
-        var pump = new EmulationPumpService(registry);
-        pump.PumpSession(session);
+        Assert.Equal("VICE", vice.GateName);
+        Assert.Equal("Semaphore", semaphore.GateName);
+    }
 
-        Assert.True(session.FrameCount > 1,
-            $"Expected multiple frames in warp mode but got {session.FrameCount}.");
+    /// <summary>
+    /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-CYCLE-PACE-001.
+    /// Use case: The VICE gate advances a Running limiter-on session toward real time on
+    ///   each tick (its first tick primes the vsync anchor and advances a chunk without
+    ///   sleeping), and reports its strategy name.
+    /// Acceptance: ViceEmulationGate.Tick advances the master clock and returns true for a
+    ///   Running session; Name is "VICE".
+    /// </summary>
+    [Fact]
+    public async Task ViceGate_Tick_AdvancesRunningSession()
+    {
+        var (registry, sessionId) = await CreateRunningSessionAsync();
+        registry.TryGet(sessionId, out var session);
+        session!.LimiterEnabled = true;
+
+        using var gate = new ViceEmulationGate();
+        gate.Start();
+
+        var clock = session.Machine.Clock;
+        var before = clock.TotalCycles;
+        var ran = gate.Tick(registry, Advance);
+        gate.Stop();
+
+        Assert.True(ran, "the gate reported no running session");
+        Assert.True(clock.TotalCycles > before, "the gate did not advance the clock");
+        Assert.Equal("VICE", gate.Name);
+
+        static long Advance(EmulatorRuntimeSession target, long cycles)
+        {
+            lock (target.SyncRoot)
+            {
+                var start = target.Machine.Clock.TotalCycles;
+                target.Machine.Clock.Step(cycles);
+                return target.Machine.Clock.TotalCycles - start;
+            }
+        }
     }
 
     private static EmulatorRuntimeSession CreateMinimalSession()
@@ -121,28 +183,5 @@ public sealed class WarpModeTests
             TestContext.Current.CancellationToken);
 
         return (registry, created.SessionId);
-    }
-
-    // No-op machine: RunFrame() returns instantly so the 20ms warp budget
-    // runs thousands of iterations regardless of Debug/Release build timing.
-    private sealed class WarpFastMachine : IMachine
-    {
-        public IBus Bus => throw new NotSupportedException();
-        public IClock Clock => throw new NotSupportedException();
-        public IDeviceRegistry Devices { get; } = new WarpFastDeviceRegistry();
-        public IArchitectureDescriptor Architecture => MinimalHostArchitectureDescriptor.Instance;
-        public void RunFrame() { }
-        public void StepInstruction() { }
-        public MachineState GetState() => new();
-        public void Reset() { }
-    }
-
-    private sealed class WarpFastDeviceRegistry : IDeviceRegistry
-    {
-        public IDevice? GetById(DeviceId id) => null;
-        public IDevice? GetByRole(DeviceRole role) => null;
-        public IReadOnlyList<T> GetAll<T>() where T : IDevice => [];
-        public IReadOnlyList<IDevice> All => [];
-        public int Count => 0;
     }
 }

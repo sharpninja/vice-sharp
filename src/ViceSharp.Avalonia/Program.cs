@@ -17,6 +17,12 @@ class Program
         if (Environment.GetEnvironmentVariable("VICESHARP_AUDIO") is null)
             Environment.SetEnvironmentVariable("VICESHARP_AUDIO", "1");
 
+        // BUG-THROTTLE-001 (temporary): log the emulation worker's per-second
+        // wall-time breakdown to %TEMP%/vicesharp-pump.log to locate the GUI
+        // under-run. Respect an explicit override.
+        if (Environment.GetEnvironmentVariable("VICESHARP_PUMP_DIAG") is null)
+            Environment.SetEnvironmentVariable("VICESHARP_PUMP_DIAG", "1");
+
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 

@@ -223,30 +223,26 @@ sealed partial class Build : NukeBuild
         .DependsOn(Restore)
         .Executes(() =>
         {
-            // Step 1: AOT + trimmed + self-contained publish of
-            // ViceSharp.Avalonia. PublishAot=true implies PublishTrimmed
-            // (full trim) and produces a single native exe; the only
-            // sibling files are the unmanaged native libraries Avalonia
-            // calls into (libSkiaSharp, libHarfBuzzSharp, av_libglesv2,
-            // aspnetcorev2_inprocess) which cannot be inlined.
-            Serilog.Log.Information("Publishing ViceSharp.Avalonia (AOT + trimmed + self-contained, {Rid}) -> {Out}",
+            // Step 1: self-contained JIT publish of ViceSharp.Avalonia.
+            // NativeAOT was disabled deliberately (BUG-THROTTLE-001): the tiered
+            // JIT + dynamic PGO runs the dispatch-heavy cycle-accurate emulation
+            // measurably faster than trimmed AOT (the per-cycle instruction stepping
+            // cost that AOT could not optimise away), and a low-pause background GC
+            // (set in the .csproj) keeps the worker from stalling. ReadyToRun gives
+            // a fast cold start while the JIT still re-optimises hot paths at runtime.
+            // No trimming: it would risk Avalonia/gRPC reflection without AOT's safety.
+            Serilog.Log.Information("Publishing ViceSharp.Avalonia (self-contained JIT + ReadyToRun, {Rid}) -> {Out}",
                 MsiRuntimeIdentifier, AvaloniaPublishDir);
             DotNetPublish(s => s
                 .SetProject(AvaloniaProject)
                 .SetConfiguration("Release")
                 .SetRuntime(MsiRuntimeIdentifier)
                 .SetSelfContained(true)
-                .SetProperty("PublishAot", "true")
-                .SetProperty("PublishTrimmed", "true")
-                .SetProperty("TrimMode", "full")
-                // PublishSingleFile is mutually exclusive with PublishAot
-                // (AOT already produces a single native exe; setting both
-                // triggers NETSDK1191). Leave SingleFile off.
+                .SetProperty("PublishAot", "false")
+                .SetProperty("PublishTrimmed", "false")
+                .SetProperty("PublishReadyToRun", "true")
                 .SetProperty("PublishSingleFile", "false")
-                // Strip managed PDBs / XML doc files at publish time; the
-                // native libSkiaSharp.pdb and libHarfBuzzSharp.pdb that
-                // come from the SkiaSharp / HarfBuzz NuGet packages are
-                // pruned in step 1b below.
+                // Strip managed PDBs / XML doc files at publish time.
                 .SetProperty("DebugType", "none")
                 .SetProperty("DebugSymbols", "false")
                 .SetProperty("DocumentationFile", string.Empty)
