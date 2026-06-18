@@ -181,7 +181,7 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
-    /// FR-PACESEL-001 / TR-PACESEL-001 / TEST-PACESEL-003.
+    /// FR-PACESEL-001 / TR-PACESEL-STRAT-001 / TEST-PACESEL-001.
     /// Use case: The pacing strategy applies live (the pump swaps its gate), so changing it
     /// must mark a pending settings change but NOT require a session restart.
     /// Acceptance: Setting SelectedPacingStrategy to "VICE" flags HasPendingSettingsChanges

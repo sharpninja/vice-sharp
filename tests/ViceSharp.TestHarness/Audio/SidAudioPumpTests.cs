@@ -43,6 +43,12 @@ public sealed class SidAudioPumpTests
     private const int PalTicksPerFrame = 19656;
     private const double PalMasterClockHz = 985248.0;
 
+    /// <summary>
+    /// FR-SIDAUDIO-001 / TR-SIDAUDIO-CLOCK-001 / TEST-SIDAUDIO-001.
+    /// Use case: with a backend and a configured audio clock, ticking the SID for one PAL
+    ///   frame's worth of master cycles emits roughly one frame of 44.1 kHz samples.
+    /// Acceptance: 19656 ticks (ClockDivisor 1) yield 872..886 samples.
+    /// </summary>
     [Fact]
     public void Tick_WithBackendAndClock_EmitsRoughlyOneFrameOfSamples()
     {
@@ -58,6 +64,12 @@ public sealed class SidAudioPumpTests
         backend.TotalSamples.Should().BeInRange(872, 886);
     }
 
+    /// <summary>
+    /// FR-SIDAUDIO-001 / TR-SIDAUDIO-CLOCK-001 / TEST-SIDAUDIO-001.
+    /// Use case: audio emission must be gated on an explicitly configured audio clock so a
+    ///   parity (silent) run touches nothing on the audio path.
+    /// Acceptance: without ConfigureAudioClock, ticking emits zero samples.
+    /// </summary>
     [Fact]
     public void Tick_WithBackendButNoClockConfigured_EmitsNothing()
     {
@@ -72,6 +84,12 @@ public sealed class SidAudioPumpTests
         backend.TotalSamples.Should().Be(0, "audio emission must be gated on an explicitly configured clock");
     }
 
+    /// <summary>
+    /// FR-SIDAUDIO-001 / TR-SIDAUDIO-CLOCK-001 / TEST-SIDAUDIO-001.
+    /// Use case: with no audio backend, the SID's per-tick sample path must be inert (no
+    ///   allocation, no throw) even when the audio clock is configured.
+    /// Acceptance: ticking + flushing with a null backend does not throw.
+    /// </summary>
     [Fact]
     public void Tick_WithNoBackend_DoesNotThrow_AndEmitsNothing()
     {
@@ -88,6 +106,12 @@ public sealed class SidAudioPumpTests
         act.Should().NotThrow();
     }
 
+    /// <summary>
+    /// FR-SIDAUDIO-001 / TR-SIDAUDIO-CLOCK-001 / TEST-SIDAUDIO-001.
+    /// Use case: a gated sawtooth voice must produce a continuous, time-varying sample
+    ///   stream (proving emission is clocked against the evolving synthesis state).
+    /// Acceptance: 400000 ticks yield more than 15000 samples with more than 50 distinct values.
+    /// </summary>
     [Fact]
     public void Sid_WithGatedVoice_ProducesTimeVaryingSamples()
     {
@@ -114,6 +138,13 @@ public sealed class SidAudioPumpTests
             "a gated sawtooth voice must yield a varying waveform");
     }
 
+    /// <summary>
+    /// FR-SIDAUDIO-001 / TR-SIDAUDIO-CLOCK-001 / TEST-SIDAUDIO-001.
+    /// Use case: float samples are converted to little-endian PCM16 with clamping for the
+    ///   audio output path.
+    /// Acceptance: 0/1/-1 map to 0x0000/0x7FFF/0x8001 and out-of-range values clamp to
+    ///   0x7FFF / 0x8000, all little-endian.
+    /// </summary>
     [Fact]
     public void ConvertToPcm16_ClampsAndEncodesLittleEndian()
     {

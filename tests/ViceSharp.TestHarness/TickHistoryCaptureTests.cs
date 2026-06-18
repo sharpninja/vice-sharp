@@ -9,7 +9,7 @@ using ViceSharp.Protocol;
 using Xunit;
 
 /// <summary>
-/// FR-TICKHIST-001 / TR-TICKHIST-004 / TEST-TICKHIST-002.
+/// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001 / TEST-TICKHIST-001.
 /// End-to-end wiring of the tick-history capture: the machine pub/sub (CPU
 /// instruction-completed + bus memory-write events) feeds the session's
 /// <see cref="TickHistoryRecorder"/> as the emulation pump advances a running session.
@@ -17,7 +17,7 @@ using Xunit;
 public sealed class TickHistoryCaptureTests
 {
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-004.
+    /// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001.
     /// Use case: as the pump advances a running session, completed CPU instructions flow
     ///   through the machine pub/sub into the recorder.
     /// Acceptance: after pumping, the session's tick history is non-empty and bounded by
@@ -40,7 +40,7 @@ public sealed class TickHistoryCaptureTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-002.
+    /// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001.
     /// Use case: the bus publishes a memory-write event (carrying the pre-write byte) for
     ///   each write when a subscriber is listening, so the recorder can capture write-deltas.
     /// Acceptance: writing $42 over an existing $07 at $0400 publishes one MemoryWriteEvent
@@ -68,7 +68,7 @@ public sealed class TickHistoryCaptureTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-002.
+    /// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001.
     /// Use case: with no subscriber, the bus must not publish (zero-cost unobserved path).
     /// Acceptance: a write with no subscription produces no captured events.
     /// </summary>
@@ -89,7 +89,7 @@ public sealed class TickHistoryCaptureTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-005.
+    /// FR-TICKHIST-001 / TR-TICKHIST-RPC-001.
     /// Use case: the monitor RPC surfaces the captured ticks to the UI.
     /// Acceptance: after pumping, GetTickHistory returns Ok with a non-empty, index-ordered
     ///   tick list.
@@ -113,7 +113,7 @@ public sealed class TickHistoryCaptureTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-003.
+    /// FR-TICKHIST-001 / TR-TICKHIST-RPC-001.
     /// Use case: reconstructing memory at the NEWEST captured tick (no later writes to undo)
     ///   must equal the current paused memory.
     /// Acceptance: ReadMemoryAtTick at the newest tick returns the same bytes as a live
@@ -142,7 +142,7 @@ public sealed class TickHistoryCaptureTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-005.
+    /// FR-TICKHIST-001 / TR-TICKHIST-RPC-001.
     /// Use case: an out-of-range tick index is rejected.
     /// Acceptance: ReadMemoryAtTick with an impossible index returns InvalidArgument.
     /// </summary>

@@ -8,7 +8,7 @@ using ViceSharp.Protocol;
 using Xunit;
 
 /// <summary>
-/// FR-TICKHIST-001 / TR-TICKHIST-006 / TEST-TICKHIST-003.
+/// FR-TICKHIST-001 / TR-TICKHIST-UI-001 / TEST-TICKHIST-001.
 /// The History panel view-model: refreshes the last ticks (newest first) and, only when the
 /// emulator is paused, opens a debug screen with the tick's registers and a reconstructed
 /// memory dump.
@@ -23,7 +23,7 @@ public sealed class TickHistoryViewModelTests
         });
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-006.
+    /// FR-TICKHIST-001 / TR-TICKHIST-UI-001.
     /// Use case: refreshing loads the captured ticks newest-first for the list.
     /// Acceptance: RefreshAsync populates Ticks in reverse index order (newest at top).
     /// </summary>
@@ -43,7 +43,7 @@ public sealed class TickHistoryViewModelTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-006.
+    /// FR-TICKHIST-001 / TR-TICKHIST-UI-001.
     /// Use case: clicking a tick while RUNNING must not open the debug screen (inspection is
     ///   only meaningful when paused).
     /// Acceptance: InspectAsync with IsPaused=false leaves IsDebugVisible false and reads no
@@ -67,7 +67,7 @@ public sealed class TickHistoryViewModelTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-003.
+    /// FR-TICKHIST-001 / TR-TICKHIST-UI-001.
     /// Use case: clicking a tick while PAUSED opens the debug screen with that tick's
     ///   registers and a reconstructed memory dump.
     /// Acceptance: InspectAsync with IsPaused=true sets IsDebugVisible, fills RegistersText
@@ -96,7 +96,7 @@ public sealed class TickHistoryViewModelTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-006.
+    /// FR-TICKHIST-001 / TR-TICKHIST-UI-001.
     /// Use case: returning from the debug screen clears it.
     /// Acceptance: CloseDebug sets IsDebugVisible false and empties the dump.
     /// </summary>
@@ -123,7 +123,7 @@ public sealed class TickHistoryViewModelTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-003.
+    /// FR-TICKHIST-001 / TR-TICKHIST-UI-001.
     /// Use case: the hex dump renders classic address/hex/ascii lines.
     /// Acceptance: HexDump.Format yields one line per 16 bytes, starting with the address.
     /// </summary>

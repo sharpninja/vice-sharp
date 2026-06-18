@@ -210,7 +210,7 @@ public sealed class SettingsServiceHostTests
     }
 
     /// <summary>
-    /// FR-PACESEL-001 / TR-PACESEL-001 / TEST-PACESEL-002.
+    /// FR-PACESEL-001 / TR-PACESEL-STRAT-001 / TEST-PACESEL-001.
     /// Use case: A client selects the "vice" pacing strategy via the limiter settings.
     /// Acceptance: UpdateSettings returns Ok with a live "limiter.pacingStrategy" diagnostic,
     ///   the global emulation pump switches its active gate to VICE, and a subsequent

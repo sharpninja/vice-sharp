@@ -10,7 +10,7 @@ using ViceSharp.Protocol;
 using Xunit;
 
 /// <summary>
-/// FR-SNDREG-001 / TR-SNDREG-001 / TEST-SNDREG-001.
+/// FR-SNDREG-001 / TR-SNDREG-GATE-001 / TEST-SNDREG-001.
 /// The VICE pacing strategy's regulator 1 (sound-buffer back-pressure, faithful to
 /// VICE sound.c sound_flush): when the audio device is the timing source the emulation
 /// worker paces to the device draining its sample buffer - it blocks (advances nothing)
@@ -23,7 +23,7 @@ public sealed class ViceGateSoundRegulatorTests
 
     // ---- EvaluateSound: the pure regulator-1 decision ----
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: with no audio chip, sound is not the timing source.
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: with no audio chip, sound is not the timing source.
     /// Acceptance: EvaluateSound(null, ...) == NotTimingSource.</summary>
     [Fact]
     public void EvaluateSound_NullChip_ReturnsNotTimingSource()
@@ -31,7 +31,7 @@ public sealed class ViceGateSoundRegulatorTests
             ViceEmulationGate.SoundAction.NotTimingSource,
             ViceEmulationGate.EvaluateSound(null, 2048));
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: a chip that is not emitting (no backend / clock unconfigured) is
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a chip that is not emitting (no backend / clock unconfigured) is
     /// not the timing source. Acceptance: inactive chip => NotTimingSource.</summary>
     [Fact]
     public void EvaluateSound_InactiveChip_ReturnsNotTimingSource()
@@ -42,7 +42,7 @@ public sealed class ViceGateSoundRegulatorTests
             ViceEmulationGate.EvaluateSound(chip, 2048));
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: an active chip whose device buffer has room must keep running.
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: an active chip whose device buffer has room must keep running.
     /// Acceptance: queued below high-water => Advance.</summary>
     [Fact]
     public void EvaluateSound_ActiveChipBelowHighWater_ReturnsAdvance()
@@ -53,7 +53,7 @@ public sealed class ViceGateSoundRegulatorTests
             ViceEmulationGate.EvaluateSound(chip, 2048));
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: a full device buffer back-pressures the CPU. Acceptance: queued
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a full device buffer back-pressures the CPU. Acceptance: queued
     /// exactly at the high-water mark => BackPressure (boundary is inclusive).</summary>
     [Fact]
     public void EvaluateSound_ActiveChipAtHighWater_ReturnsBackPressure()
@@ -64,7 +64,7 @@ public sealed class ViceGateSoundRegulatorTests
             ViceEmulationGate.EvaluateSound(chip, 2048));
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: an over-full device buffer back-pressures the CPU.
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: an over-full device buffer back-pressures the CPU.
     /// Acceptance: queued above the high-water mark => BackPressure.</summary>
     [Fact]
     public void EvaluateSound_ActiveChipAboveHighWater_ReturnsBackPressure()
@@ -77,7 +77,7 @@ public sealed class ViceGateSoundRegulatorTests
 
     // ---- Gate.Tick: regulator selection + back-pressure effect ----
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: audio is the timing source and the buffer has room - the gate
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: audio is the timing source and the buffer has room - the gate
     /// runs the sound regulator and advances the clock. Acceptance: Tick advances the
     /// master clock and LastRegulator == Sound.</summary>
     [Fact]
@@ -97,7 +97,7 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: audio is the timing source and the device buffer is full - the
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: audio is the timing source and the device buffer is full - the
     /// worker must block rather than overrun the buffer. Acceptance: Tick advances ZERO
     /// master cycles (back-pressure) and LastRegulator == Sound.</summary>
     [Fact]
@@ -121,7 +121,7 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: with no audio device the gate falls through to the vsync
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: with no audio device the gate falls through to the vsync
     /// regulator. Acceptance: Tick advances a chunk and LastRegulator == Vsync.</summary>
     [Fact]
     public void Tick_NoAudioChip_SelectsVsync()
@@ -139,7 +139,7 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: warp (limiter off) skips BOTH regulators even when audio is the
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: warp (limiter off) skips BOTH regulators even when audio is the
     /// timing source and its buffer is full - warp has highest precedence. Acceptance: Tick
     /// advances a burst and LastRegulator == Warp.</summary>
     [Fact]
@@ -161,7 +161,7 @@ public sealed class ViceGateSoundRegulatorTests
 
     // ---- SID-side wiring: IsAudioTimingSource + QueuedSampleCount ----
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: a SID with no backend is silent and not a timing source.
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a SID with no backend is silent and not a timing source.
     /// Acceptance: IsAudioTimingSource false, QueuedSampleCount 0.</summary>
     [Fact]
     public void Sid_NoBackend_IsNotTimingSource_AndZeroQueued()
@@ -171,7 +171,7 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.Equal(0, sid.QueuedSampleCount);
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: a SID with a backend but before ConfigureAudioClock is not yet a
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a SID with a backend but before ConfigureAudioClock is not yet a
     /// timing source (it emits nothing). Acceptance: IsAudioTimingSource false.</summary>
     [Fact]
     public void Sid_BackendButClockNotConfigured_IsNotTimingSource()
@@ -180,7 +180,7 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.False(sid.IsAudioTimingSource);
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: a SID with a backend and a configured audio clock IS the timing
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a SID with a backend and a configured audio clock IS the timing
     /// source. Acceptance: IsAudioTimingSource true.</summary>
     [Fact]
     public void Sid_BackendConfigured_IsTimingSource()
@@ -190,7 +190,7 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.True(sid.IsAudioTimingSource);
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-001. Use case: the SID surfaces the backend's queue depth so the gate can
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: the SID surfaces the backend's queue depth so the gate can
     /// back-pressure on it. Acceptance: QueuedSampleCount mirrors the backend.</summary>
     [Fact]
     public void Sid_QueuedSampleCount_ReflectsBackend()

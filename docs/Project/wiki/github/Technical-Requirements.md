@@ -1,5 +1,9 @@
 # Technical Requirements (MCP Server)
 
+## [TR-REMOTECTRL-SERVER-001]
+
+**[TR-REMOTECTRL-SERVER-001]** — Placeholder requirement backfilled for TODO link [TR-REMOTECTRL-SERVER-001].
+
 ## PERF-SPRITE-DMA-OPT-001
 
 **PERF-SPRITE-DMA-OPT-001** — Placeholder requirement backfilled for TODO link PERF-SPRITE-DMA-OPT-001.
@@ -30,6 +34,13 @@
 - [x] Performance optimizations introduce no reflection, expression trees, or dynamic code generation in the RunFrame call graph. (evidence: Code review of PR #3 optimized BasicBus and VideoRenderer with direct/static paths only)
 - [x] Performance optimizations avoid LINQ and closure allocation in the measured RunFrame hot path. (evidence: PR #3 uses loops and span fills in hot path; RunFramePerfProbe reports allocated=0 bytes)
 
+## TR-CHIPSTATE-CAPTURE-001
+
+**IStatefulDevice per-tick chip capture** — IStatefulDevice (StateName, StateSize, CaptureState(Span), DecodeState) is implemented by VIC/SID/CIA/PLA. The recorder preallocates per-slot buffers (zero-alloc capture) and deep-copies on Snapshot; the pump registers Machine.Devices.All.OfType<IStatefulDevice>() before subscribing and the host decodes in the same order.
+**Acceptance Criteria:**
+- [x] A captured tick carries each device's StateSize bytes; capture allocates nothing on the hot path
+- [x] Snapshot deep-copies chip state so ring reuse cannot corrupt an earlier snapshot
+
 ## TR-CORE-CYCLE-001
 
 **Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior** — Managed C64 PAL execution must preserve C64 bus, CPU, and VIC-II ordering semantics while optimizing RunFrame so performance changes do not alter cycle-observable behavior.
@@ -59,6 +70,10 @@
 
 **1541 drive motor 300,000-cycle ramp before rotation** — IecDrive.Tick() enforces 300,000-cycle motor ramp-up (300ms at 1MHz drive clock) before MotorRotationCycles advances. Motor off resets ramp. VICE drive/drive.c.
 
+## TR-DRVLIFE-001
+
+**Drive attach/detach lifecycle** — Enabling a drive creates/starts the drive instance, registers it on the clock and connects it to the always-on IEC bus; disabling stops it, unregisters from the clock and disconnects from the bus.
+
 ## TR-GRPC-BOUNDARY-001
 
 **Host Protocol Boundary DTOs** — Host protocol and gRPC adapters expose emulator status, media, command, monitor, and settings state through DTOs without UI clients reaching into emulator internals.
@@ -75,9 +90,32 @@
 - [ ] IEC activity is derived from authoritative IEC line changes or an equivalent host-owned bus signal monitor.
 - [ ] Status polling does not mutate machine, drive, or bus state.
 
+## TR-IECDECODE-001
+
+**IEC protocol decoder** — Pure state machine over trace samples emitting decoded IEC events: ATN command frame, LISTEN/TALK + device, OPEN/secondary/channel, data bytes with EOI, turnaround, timeout/error.
+
 ## TR-IEC-EDGE-001
 
 **IEC bus ATN-response within 985-cycle spec window** — IecBus.Tick() asserts CLK and DATA low within 985 cycles (Tat=1ms at PAL 985,248Hz) of ATN falling edge. Releases both on ATN rising edge. VICE iecbus/iecbus.c:247-266.
+
+## TR-IECELEC-001
+
+**Faithful IEC serial electrical model with native parity** — CIA2 reads the live open-collector IEC bus through the C64 inverting buffers; idle DATA-low is supplied by the true-drive 1541 holding DATA. C64GS (no IEC) keeps disconnected->low. Idle reads match native ($47 normal C64 / $07 C64GS) and native CIA2-IO lockstep stays green.
+
+## TR-IECSPY-001
+
+**IInterSystemBus.Snapshot API** — IInterSystemBus exposes Snapshot() returning BusSnapshot (per-line level + pullers, talking endpoints, attached endpoints). Read-only. DONE.
+
+## TR-IECTRACE-001
+
+**IEC trace recorder (edge + step marks)** — IecBusTraceRecorder subscribes to bus.LineChanged, cycle-stamps each edge from SystemClock plus a sample per step boundary, into a bounded ring; re-derives deterministically after rewind; inactive unless the monitor is open.
+
+## TR-PACESEL-STRAT-001
+
+**Live-switchable pacing strategy plumbing** — EmulationGateStrategies provides canonical ids + gate factory. EmulationPumpService.SetStrategy swaps the gate on the worker thread (no restart). LimiterSettingsDto.PacingStrategy flows through proto/gRPC, SettingsServiceHost applies it live to the pump and round-trips it, and the UI exposes a dropdown.
+**Acceptance Criteria:**
+- [x] EmulationGateStrategies.CreateGate/Normalize/DisplayName map ids to gates, defaulting to Semaphore
+- [x] SetStrategy swaps the gate live; SettingsServiceHost applies and round-trips PacingStrategy
 
 ## TR-PERF-ALLOC-001
 
@@ -105,6 +143,36 @@
 - [x] Default message pool capacity is 8192 slots and does not resize during emulation. (evidence: src/ViceSharp.Core/LockFreePubSub.cs DefaultMessageCapacity = 8192 and LockFreeMessagePool(capacity = 8192))
 - [x] Delivery order is deterministic in registration order and preserved when subscriber route arrays grow. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs Publish_DeliversSubscribersInRegistrationOrder and Subscribe_WhenRouteSubscriberArrayGrows_PreservesDeliveryOrder)
 
+## TR-REMOTECTRL-001
+
+**Embeddable RemoteControl server integration + vendored feed** — ViceSharp.Avalonia references SharpNinja.Avalonia.RemoteControl.Server (0.7.3), vendored into a repo-local NuGet feed (nuget-local/ + NuGet.config package source mapping) so restore is reproducible on Azure DevOps/CI without the sibling source repo. The Avalonia App builds a DI ServiceCollection, calls AddAvaloniaRemoteControl, registers an IRemoteControlRootProvider returning the desktop MainWindow, and attaches the host to the classic-desktop lifetime. Startup is gated behind VICESHARP_REMOTECONTROL_ENABLE and fails closed without a bearer token. Requires Avalonia >= 12.0.3 and Grpc >= 2.80.0 (central package versions bumped accordingly).
+
+## TR-REMOTECTRL-SERVER-001
+
+**Embeddable RemoteControl server integration + vendored feed** — ViceSharp.Avalonia references SharpNinja.Avalonia.RemoteControl.Server (0.7.3), vendored into a repo-local NuGet feed (nuget-local/ + NuGet.config package source mapping) so restore is reproducible on Azure DevOps/CI without the sibling source repo. The Avalonia App builds a DI ServiceCollection, calls AddAvaloniaRemoteControl, registers an IRemoteControlRootProvider returning the desktop MainWindow, and attaches the host to the classic-desktop lifetime. Startup is gated behind VICESHARP_REMOTECONTROL_ENABLE and fails closed without a bearer token. Requires Avalonia >= 12.0.3 and Grpc >= 2.80.0 (central package versions bumped accordingly).
+
+## TR-REVEXEC-001
+
+**Frame-snapshot ring reverse execution** — A frame-granular snapshot ring keyed by cycle backs RewindCycle/RewindFrame: restore nearest snapshot <= target, re-run deterministically to target. Replaces the NotImplemented host stubs. Bounded memory.
+
+## TR-SIDAUDIO-CLOCK-001
+
+**SID ticks once per phi2 cycle** — Sid6581.ClockDivisor is 1 so the SystemClock ticks the SID every master cycle; the 24-bit accumulator advances by Frequency per tick and the ADSR rate tables are resid phi2-cycle values. ConfigureAudioClock divides by ClockDivisor so the 44.1 kHz sample rate self-corrects.
+**Acceptance Criteria:**
+- [x] Sid6581.ClockDivisor returns 1
+- [x] Direct-Tick SID tests are divisor-independent; only SystemClock-driven calibration changed
+
+## TR-SNAPFULL-001
+
+**Complete machine snapshot/restore with deterministic round-trip** — GetState()+restore capture all execution-affecting state (CPU incl. pending IRQ/NMI + pipeline, VIC sequencer, CIA timer pipelines + TOD, SID, PLA/processor port, memory, and the 1541 drive + IEC bus when present). Invariant: restore then run N cycles equals continuous run N (full MachineState + memory equality).
+
+## TR-SNDREG-GATE-001
+
+**Sound back-pressure regulator in ViceEmulationGate** — IAudioChip exposes QueuedSampleCount and IsAudioTimingSource (Sid6581 overrides). ViceEmulationGate.EvaluateSound decides NotTimingSource/Advance/BackPressure; Tick applies warp->sound->vsync precedence and reports LastRegulator; HighWaterSamples is about 46 ms.
+**Acceptance Criteria:**
+- [x] EvaluateSound returns BackPressure at or over high-water, Advance below, NotTimingSource when inactive
+- [x] Gate Tick selects Sound/Vsync/Warp and exposes it via LastRegulator
+
 ## TR-TAP-EDGE-001
 
 **Datasette sense line and record mode** — Datasette.SenseLine = false when PlayPressed or RecordPressed (CIA1  bit 4 active-low). TryWritePulse stores pulse when MotorEnabled && RecordPressed. RecordedPulseCount tracks stored pulses.
@@ -112,6 +180,35 @@
 ## TR-TAPE-EDGE-001
 
 **Datasette motor 32,000-cycle ramp before pulse delivery** — Datasette.Tick() enforces 32,000-cycle motor ramp (MOTOR_DELAY=32000, datasette/datasette.c:62) before TryReadNextPulse delivers pulses. Ramp only activates when Tick() is used as timing. Motor off resets ramp.
+
+## TR-TICKHIST-CAPTURE-001
+
+**Write-delta capture and reconstruction** — BasicBus publishes MemoryWriteEvent (pre-write byte, gated on a live subscriber); the CPU publishes instruction-completed events; one LockFreePubSub per machine is wired in ArchitectureBuilder and exposed via IMachine.PubSub. TickHistoryRecorder keeps a 100-deep ring bundling write-deltas per instruction; reconstruction reverse-applies later ticks' writes to the current paused RAM.
+**Acceptance Criteria:**
+- [x] Bus publishes MemoryWriteEvent with the pre-write byte only when subscribed
+- [x] Recorder ring is bounded to 100 and reconstruction recovers as-of-tick RAM
+
+## TR-TICKHIST-RPC-001
+
+**Tick-history monitor RPCs** — IMonitorService gains GetTickHistory, ReadMemoryAtTick (reconstructed) and GetChipStateAtTick, with proto/gRPC messages and mappers. IHostProtocolClient surfaces ReadRegisters/ReadMemory/Disassemble plus the three new calls.
+**Acceptance Criteria:**
+- [x] GetTickHistory returns index-ordered ticks; ReadMemoryAtTick at the newest tick equals current memory
+- [x] Out-of-range tick index returns InvalidArgument
+
+## TR-TICKHIST-UI-001
+
+**History tab and debug screen** — SidebarTab.History hosts TickHistoryView bound to TickHistoryViewModel; IsPaused is fed via AttachPanelViewModel.ApplyStatus. Selecting a tick while paused shows registers, each chip's decoded state, and a reconstructed scrolling hex dump.
+**Acceptance Criteria:**
+- [x] Refresh lists ticks newest-first; inspect while paused opens the debug screen
+- [x] Inspect while running does not open the debug screen
+
+## TR-UIAXAML-001
+
+**All Avalonia views authored in AXAML + MVVM** — Every Avalonia view in ViceSharp.Avalonia is authored declaratively in AXAML with MVVM bindings (no imperative control-tree construction in code-behind), to ease maintenance. The shell window, the sidebar, each per-peripheral control, and the settings panel are AXAML UserControls/Windows bound to view models; code-behind is limited to InitializeComponent and thin glue.
+
+## TR-UIAXAML-VIEWS-001
+
+**All Avalonia views authored in AXAML + MVVM** — Every Avalonia view in ViceSharp.Avalonia is authored declaratively in AXAML with MVVM bindings (no imperative control-tree construction in code-behind), to ease maintenance. The shell window, the sidebar, each per-peripheral control, and the settings panel are AXAML UserControls/Windows bound to view models; code-behind is limited to InitializeComponent and thin glue.
 
 ## TR-UI-SHELL-001
 

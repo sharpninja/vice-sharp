@@ -1,5 +1,13 @@
 # Functional Requirements (MCP Server)
 
+## [FR-DRVTRUE-001, [FR-DRVTRUE-001,
+
+Placeholder requirement backfilled for TODO link [FR-DRVTRUE-001,.
+
+## [FR-REMOTECTRL-001] [FR-REMOTECTRL-001]
+
+Placeholder requirement backfilled for TODO link [FR-REMOTECTRL-001].
+
 ## ARCH-TRUEDRIVE-1541-002 True-Drive 1541 IEC timing and motor ramp
 
 IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.
@@ -20,6 +28,15 @@ Placeholder requirement backfilled for TODO link FR-CFG-001.
 
 Placeholder requirement backfilled for TODO link FR-CFG-005.
 
+## FR-CHIPSTATE-001 Per-tick full chip state capture
+
+Each captured tick snapshots the full internal state of every stateful chip (VIC, SID, CIA, PLA) for display in the debug screen.
+**Acceptance Criteria:**
+- [x] VIC, SID, CIA and PLA each implement IStatefulDevice
+- [x] Each chip's state is captured per tick with zero hot-path allocation
+- [x] Captured state decodes into named register/field values
+- [x] The debug screen shows each chip's decoded state at the selected tick
+
 ## FR-DRV-005 IEC Serial Bus Protocol
 
 The emulator shall expose an active-low IEC serial bus with ATN, CLK, DATA, and SRQ line behavior that drives 1541/D64 operations and observable bus activity.
@@ -28,6 +45,14 @@ The emulator shall expose an active-low IEC serial bus with ATN, CLK, DATA, and 
 - [ ] Mounted D64 directory and file operations generate observable IEC line activity from the bus signal source.
 - [ ] Mounted D64 directory and file operations complete with correct data through the IEC path.
 
+## FR-DRVLED-001 Per-drive activity LED
+
+Each drive card shows an activity LED sourced from that drive's VIA2 (1C00) port B bit 3, set by the 1541 DOS ROM (VICE led_status model), independent of IEC bus traffic.
+
+## FR-DRVTRUE-001 Per-drive True Drive toggle
+
+Each IEC drive's UI exposes a True Drive toggle. Enabled = cycle-accurate emulated 1541 (6502+VIA+DOS over IEC); disabled (default) = lightweight simulated/buffered drive. Mirrors VICE per-unit DriveTrueEmulation / Fidelity TrueDevice vs Buffered. The runtime honors it (gated true-drive coordinator path), default off so existing behavior is unchanged.
+
 ## FR-HOST-006 Host Runtime Status and Control Telemetry
 
 The host runtime shall expose emulator status telemetry for runtime state, timing, media, automation, and IEC bus activity to clients.
@@ -35,6 +60,27 @@ The host runtime shall expose emulator status telemetry for runtime state, timin
 - [ ] Host status responses include existing runtime fields including session, run state, cycle, frame, model, limiter, and automation status.
 - [ ] Host status responses include IEC activity derived from emulator bus traffic and safe for UI polling.
 - [ ] Status polling does not mutate emulator, drive, or bus state.
+
+## FR-IECLOAD-001 True-drive 1541 LOAD over IEC
+
+A single-system C64 with a true-drive 1541 attached completes LOAD"*",8,1, LOAD"$",8 and SAVE over the IEC bus, talking to the drive's DOS ROM via the faithful serial electrical model.
+
+## FR-IECMON-001 IEC bus monitor (scope view)
+
+Dedicated logic-analyzer panel showing a timing diagram of the IEC lines over emulator time, colored by which device drives each segment, with decoded IEC protocol bands, cursor/zoom/scroll, synced to forward step and reverse step.
+
+## FR-IECSPY-001 IEC bus snapshot / spy
+
+At any instant the IEC bus can be snapshotted to read each line's level (ATN/CLK/DATA/SRQ), which endpoints are pulling each line low, and which devices are talking. Read-only; never perturbs bus state. DONE.
+
+## FR-PACESEL-001 Selectable emulation pacing strategy
+
+The pacing strategy (Semaphore vs VICE) is selectable in settings, applied live by swapping the gate on the worker thread, and persisted.
+**Acceptance Criteria:**
+- [x] Strategy is selectable in the Settings UI (Semaphore or VICE)
+- [x] Change applies live - the pump swaps the gate with no session restart
+- [x] Selection round-trips through the settings DTO and persists
+- [x] Unknown or null strategy defaults to Semaphore
 
 ## FR-PERF-RUNFRAME-001 C64 PAL RunFrame Throughput
 
@@ -54,6 +100,40 @@ ViceSharp shall provide an internal synchronous topic-based Pub/Sub event bus fo
 - [x] Publish delivers synchronously to subscribers in registration order for each topic. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
 - [x] Message pool exhaustion, return, and frame reset behavior are covered by focused tests. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
 
+## FR-REMOTECTRL-001 Live Avalonia visual-tree inspection over gRPC
+
+ViceSharp.Avalonia can expose its live Avalonia visual tree for remote inspection and (optionally) interaction over gRPC via the SharpNinja.Avalonia.RemoteControl embeddable server, to support UI development/validation. The server is disabled by default and only starts when explicitly enabled via environment switches, and then only with a bearer token on a loopback transport (interaction and live frames remain deny-by-default opt-ins).
+
+## FR-REVEXEC-001 Reverse execution (backward step)
+
+The emulator can step backward by cycle and by frame, restoring exact prior state, so protocols can be watched forward and backward. Backed by a frame-granular snapshot ring and deterministic re-run.
+
+## FR-SIDAUDIO-001 SID plays at correct pitch
+
+The SID must tick at the phi2 master-clock rate so pitch, envelopes, noise and sync are correct (BUG-SIDAUDIO-001). It was registered as a slow device (ClockDivisor 16) while its accumulator advanced once per Tick, making everything 16x too slow.
+**Acceptance Criteria:**
+- [x] With voice freq 0x8000, after stepping the SystemClock 8192 master cycles OSC3 reads 0x10 (was 0x01 at the 16x-slow rate)
+- [x] Audio sample rate remains 44.1 kHz (self-corrects via ConfigureAudioClock at either divisor)
+- [x] ADSR, noise-LFSR and hard-sync run at the phi2 rate
+
+## FR-SNDREG-001 VICE gate sound back-pressure regulator
+
+When the SID is the audio timing source, the VICE pacing gate paces the worker to the audio device draining its sample buffer (regulator 1), taking precedence over vsync.
+**Acceptance Criteria:**
+- [x] Buffer at or over the high-water mark => worker blocks (advances nothing)
+- [x] Buffer has room => worker advances a chunk
+- [x] Warp skips both sound and vsync (highest precedence)
+- [x] No active audio device => falls through to the vsync regulator
+
+## FR-TICKHIST-001 Last-100-ticks time-travel debugger
+
+A History panel lists the last 100 executed CPU instructions; when paused, selecting a tick opens a debug screen with that tick's registers, reconstructed memory, and chip state.
+**Acceptance Criteria:**
+- [x] History panel lists the last 100 completed instructions, newest first
+- [x] Selecting a tick while paused shows that tick's CPU registers
+- [x] Memory dump is reconstructed as-of-tick (later ticks' write-deltas reverse-applied to current RAM)
+- [x] Inspection is only available while the emulator is paused
+
 ## FR-UI-002 Emulator Status and Machine Control Bar
 
 The UI shall provide a status and control bar for runtime state, controls, performance fields, and IEC activity.
@@ -69,6 +149,22 @@ The UI shall provide a dockable tabbed sidebar with peripherals and settings sur
 - [ ] The peripherals tab exposes drive attachment state and media commands for configured drives.
 - [ ] Drive entries expose IEC active/idle state from the same host telemetry source as the status bar.
 - [ ] Drive IEC activity returns idle in the peripherals tab after bus activity settles.
+
+## FR-UIFLYOUT-001 Flyout sidebar with single side-toggle
+
+The Attach/settings sidebar is a proper flyout (Avalonia SplitView/Flyout). A single icon button toggles the flyout's side (left/right), replacing the separate Left and Right buttons.
+
+## FR-UIMENUBAR-001 VICE-style menu bar
+
+A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about). Menu commands bind to the existing view-model actions/host services.
+
+## FR-UIPERIPHERAL-001 Reusable per-peripheral UserControl
+
+Each peripheral in the sidebar (Drive 8, Drive 9, Tape, Cartridge) is rendered by a single reusable AXAML UserControl bound to a per-slot view model (status, attach/eject, RO, activity LED, True Drive toggle for drives).
+
+## FR-UISETTINGS-001 Settings panel as a UserControl
+
+The settings panel is a self-contained reusable AXAML UserControl bound to the settings view model (machine profile, video/renderer/palette, audio, input/joystick, limiter, resource mode).
 
 ## FR-VIC-001 VIC-II PAL raster cycle counter and frame-periodic behavior
 

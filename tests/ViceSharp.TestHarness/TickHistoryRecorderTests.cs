@@ -5,7 +5,7 @@ using ViceSharp.Host.Runtime;
 using Xunit;
 
 /// <summary>
-/// FR-TICKHIST-001 / TR-TICKHIST-001 / TEST-TICKHIST-001.
+/// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001 / TEST-TICKHIST-001.
 /// The tick-history recorder keeps the last 100 completed CPU instructions, each bundled
 /// with the memory write-deltas (address + old byte) that occurred during it, and the
 /// reconstruction engine reverse-applies those deltas to the current paused memory image
@@ -28,7 +28,7 @@ public sealed class TickHistoryRecorderTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-CHIP-001 / TR-TICKHIST-007.
+    /// FR-CHIPSTATE-001 / TR-CHIPSTATE-CAPTURE-001.
     /// Use case: each tick also snapshots every stateful chip's full state.
     /// Acceptance: with one 4-byte stateful device, a captured tick carries a 4-byte chip
     ///   state equal to the device's value at capture time.
@@ -49,7 +49,7 @@ public sealed class TickHistoryRecorderTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-CHIP-001 / TR-TICKHIST-007.
+    /// FR-CHIPSTATE-001 / TR-CHIPSTATE-CAPTURE-001.
     /// Use case: a snapshot's chip state must be an immutable copy (the ring reuses buffers),
     ///   so later captures do not corrupt an earlier snapshot.
     /// Acceptance: after snapshotting, changing the device's value and capturing again leaves
@@ -73,7 +73,7 @@ public sealed class TickHistoryRecorderTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-001.
+    /// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001.
     /// Use case: completed instructions are retained in execution order (oldest first).
     /// Acceptance: after three OnInstructionCompleted calls, Snapshot returns them in order.
     /// </summary>
@@ -95,7 +95,7 @@ public sealed class TickHistoryRecorderTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-001.
+    /// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001.
     /// Use case: the history is a bounded ring of the last 100 instructions.
     /// Acceptance: after 150 instructions, exactly 100 are kept and the oldest retained is
     ///   the 51st (index 50) instruction, newest is the 150th.
@@ -116,7 +116,7 @@ public sealed class TickHistoryRecorderTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-002.
+    /// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001.
     /// Use case: memory writes observed since the previous instruction are bundled into the
     ///   next completed instruction, then the pending set resets.
     /// Acceptance: writes before the first OnInstructionCompleted attach to tick 0; tick 1
@@ -141,7 +141,7 @@ public sealed class TickHistoryRecorderTests
     }
 
     /// <summary>
-    /// FR-TICKHIST-001 / TR-TICKHIST-003.
+    /// FR-TICKHIST-001 / TR-TICKHIST-CAPTURE-001.
     /// Use case: reconstruct RAM as it was at a past tick by reverse-applying the deltas of
     ///   every later tick onto the current (paused) memory image.
     /// Acceptance: with current $10 = 0x33, tick1 having overwritten $10 (old 0x22) and tick2

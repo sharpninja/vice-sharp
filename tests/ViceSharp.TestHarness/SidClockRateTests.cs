@@ -13,7 +13,7 @@ using Xunit;
 public sealed class SidClockRateTests
 {
     /// <summary>
-    /// FR-SID-TIMING-001, TR-SID-PHI2-001.
+    /// FR-SIDAUDIO-001, TR-SIDAUDIO-CLOCK-001, TEST-SIDAUDIO-001.
     /// Use case: When the SID is driven by the SystemClock, stepping N master cycles must
     ///   advance a voice's phase by N x Frequency (the accumulator increments every phi2
     ///   cycle), so the output frequency is Frequency x phi2 / 2^24 - the correct pitch.
