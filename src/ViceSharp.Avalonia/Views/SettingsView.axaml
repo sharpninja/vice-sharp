@@ -114,14 +114,15 @@
                           IsChecked="{Binding SaveTransientValuesOnExit, Mode=TwoWay}" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="6">
-                <Button Content="Validate" Padding="9,5" Click="OnValidate" />
-                <Button Content="Apply" Padding="9,5" Click="OnApply"
+            <!-- FR-SIDEBARUI-001: action buttons wrap to new rows when the panel is narrow. -->
+            <WrapPanel Orientation="Horizontal">
+                <Button Content="Validate" Padding="9,5" Margin="0,0,6,6" Click="OnValidate" />
+                <Button Content="Apply" Padding="9,5" Margin="0,0,6,6" Click="OnApply"
                         IsEnabled="{Binding HasPendingSettingsChanges}" />
-                <Button Content="Revert" Padding="9,5" Click="OnRevert"
+                <Button Content="Revert" Padding="9,5" Margin="0,0,6,6" Click="OnRevert"
                         IsEnabled="{Binding HasPendingSettingsChanges}" />
-                <Button Content="Apply + Restart" Padding="9,5" Click="OnApplyRestart" />
-            </StackPanel>
+                <Button Content="Apply + Restart" Padding="9,5" Margin="0,0,6,6" Click="OnApplyRestart" />
+            </WrapPanel>
 
             <StackPanel Spacing="5" IsVisible="{Binding HasSettingsValidationResults}">
                 <TextBlock Classes="section" Text="Validation" />

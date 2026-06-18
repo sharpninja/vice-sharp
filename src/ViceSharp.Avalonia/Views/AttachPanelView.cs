@@ -80,58 +80,56 @@ public sealed class AttachPanelView : UserControl
         };
         header.Children.Add(status);
 
-        var tabs = new StackPanel
+        // FR-SIDEBARUI-001: full-height collapse expander on the INNER edge (facing the
+        // video), so it sits Right when the panel is anchored Left and Left when anchored
+        // Right. Docked first so it spans the panel height; flips edge + glyph with the anchor.
+        var collapse = new Button
         {
-            Orientation = Orientation.Horizontal,
-            Spacing = 6
+            Content = ViewModel.CollapseGlyph,
+            FontSize = 11,
+            Padding = new Thickness(1),
+            Width = 18,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            BorderThickness = new Thickness(0),
+            Background = new SolidColorBrush(Color.FromRgb(39, 43, 49))
         };
-        tabs.Children.Add(CreateTabButton("Peripherals", () => ViewModel.ShowPeripherals()));
-        tabs.Children.Add(CreateTabButton("Settings", () => ViewModel.ShowSettings()));
-        tabs.Children.Add(CreateTabButton("Monitor", () => ViewModel.ShowMonitor()));
-        tabs.Children.Add(CreateTabButton("History", () => ViewModel.ShowHistory()));
-        header.Children.Add(tabs);
+        ToolTip.SetTip(collapse, "Collapse panel");
+        collapse.Click += (_, _) => ViewModel.ToggleSidebar();
+        DockPanel.SetDock(collapse, ViewModel.CollapseExpanderDock);
+        ViewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(AttachPanelViewModel.CollapseExpanderDock))
+                DockPanel.SetDock(collapse, ViewModel.CollapseExpanderDock);
+            else if (args.PropertyName == nameof(AttachPanelViewModel.CollapseGlyph))
+                collapse.Content = ViewModel.CollapseGlyph;
+        };
+        root.Children.Add(collapse);
 
         DockPanel.SetDock(header, Dock.Top);
         root.Children.Add(header);
 
-        var content = new ContentControl
+        // FR-SIDEBARUI-001: real TabControl for the sidebar sections. SelectedIndex tracks the
+        // SidebarTab enum order (Peripherals=0, Settings=1, Monitor=2, History=3).
+        var tabs = new TabControl { Padding = new Thickness(0) };
+        tabs.Items.Add(new TabItem { Header = "Peripherals", Content = CreatePeripheralsPanel() });
+        tabs.Items.Add(new TabItem { Header = "Settings", Content = new SettingsView { DataContext = ViewModel } });
+        tabs.Items.Add(new TabItem { Header = "Monitor", Content = CreateMonitorPanel(includePopOut: true) });
+        tabs.Items.Add(new TabItem { Header = "History", Content = new TickHistoryView { DataContext = ViewModel.TickHistory } });
+        tabs.SelectedIndex = (int)ViewModel.ActiveTab;
+        tabs.SelectionChanged += (_, _) =>
         {
-            Content = CreateActiveTabContent()
+            if (tabs.SelectedIndex >= 0)
+                ViewModel.ActiveTab = (SidebarTab)tabs.SelectedIndex;
         };
-
         ViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(AttachPanelViewModel.ActiveTab))
-                content.Content = CreateActiveTabContent();
+                tabs.SelectedIndex = (int)ViewModel.ActiveTab;
         };
 
-        root.Children.Add(content);
+        root.Children.Add(tabs);
         return root;
-    }
-
-    private Button CreateTabButton(string label, Action action)
-    {
-        var button = new Button
-        {
-            Content = label,
-            Padding = new Thickness(7, 4),
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
-        button.Click += (_, _) => action();
-        return button;
-    }
-
-    private Control CreateActiveTabContent()
-    {
-        return ViewModel.ActiveTab switch
-        {
-            // FR-UISETTINGS-001: settings are now the reusable SettingsView
-            // UserControl (declarative AXAML + MVVM) bound to the same VM.
-            SidebarTab.Settings => new SettingsView { DataContext = ViewModel },
-            SidebarTab.Monitor => CreateMonitorPanel(includePopOut: true),
-            SidebarTab.History => new TickHistoryView { DataContext = ViewModel.TickHistory },
-            _ => CreatePeripheralsPanel()
-        };
     }
 
     private Control CreatePeripheralsPanel()
@@ -274,15 +272,13 @@ public sealed class AttachPanelView : UserControl
         };
         stack.Children.Add(command);
 
-        var buttons = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            Spacing = 6
-        };
+        // FR-SIDEBARUI-001: action buttons wrap when the panel is narrow.
+        var buttons = new WrapPanel { Orientation = Orientation.Horizontal };
         var run = new Button
         {
             Content = "Run",
-            Padding = new Thickness(9, 5)
+            Padding = new Thickness(9, 5),
+            Margin = new Thickness(0, 0, 6, 6)
         };
         run.Click += async (_, _) =>
         {
@@ -296,7 +292,8 @@ public sealed class AttachPanelView : UserControl
             var pop = new Button
             {
                 Content = "Pop out",
-                Padding = new Thickness(9, 5)
+                Padding = new Thickness(9, 5),
+                Margin = new Thickness(0, 0, 6, 6)
             };
             pop.Click += (_, _) => PopOutMonitorRequested?.Invoke();
             buttons.Children.Add(pop);

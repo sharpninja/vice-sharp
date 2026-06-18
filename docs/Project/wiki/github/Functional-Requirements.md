@@ -116,6 +116,14 @@ The SID must tick at the phi2 master-clock rate so pitch, envelopes, noise and s
 - [x] Audio sample rate remains 44.1 kHz (self-corrects via ConfigureAudioClock at either divisor)
 - [x] ADSR, noise-LFSR and hard-sync run at the phi2 rate
 
+## FR-SIDEBARUI-001 Responsive sidebar layout with collapse expander
+
+The attach sidebar has a collapse expander on its inner edge (facing the video) that flips side with the panel anchor, and its button groups wrap to new rows when the panel is narrow.
+**Acceptance Criteria:**
+- [x] The collapse expander sits on the inner edge - Right when the panel is anchored Left, Left when anchored Right
+- [x] The expander toggles the sidebar pane and its chevron points toward the collapse direction
+- [x] Tab and action button groups wrap to new rows (WrapPanel) when the panel is narrow
+
 ## FR-SNDREG-001 VICE gate sound back-pressure regulator
 
 When the SID is the audio timing source, the VICE pacing gate paces the worker to the audio device draining its sample buffer (regulator 1), taking precedence over vsync.

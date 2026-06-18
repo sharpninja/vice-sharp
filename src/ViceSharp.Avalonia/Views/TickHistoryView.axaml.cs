@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ViceSharp.Avalonia.ViewModels;
@@ -32,4 +33,31 @@ public partial class TickHistoryView : UserControl
         if (ViewModel is { } vm && e.AddedItems.Count > 0 && e.AddedItems[0] is TickRowViewModel tick)
             _ = vm.InspectAsync(tick);
     }
+
+    private void OnSearch(object? sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not { } vm)
+            return;
+
+        vm.SearchMemory();
+        if (vm.MatchLineIndex >= 0 && this.FindControl<ListBox>("MemoryDumpList") is { } list)
+            list.ScrollIntoView(vm.MatchLineIndex);
+    }
+
+    private void OnSearchKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            OnSearch(sender, e);
+            e.Handled = true;
+        }
+    }
+
+    private void OnNavFirst(object? sender, RoutedEventArgs e) => _ = ViewModel?.NavigateFirstAsync();
+
+    private void OnNavPrevious(object? sender, RoutedEventArgs e) => _ = ViewModel?.NavigatePreviousAsync();
+
+    private void OnNavNext(object? sender, RoutedEventArgs e) => _ = ViewModel?.NavigateNextAsync();
+
+    private void OnNavLast(object? sender, RoutedEventArgs e) => _ = ViewModel?.NavigateLastAsync();
 }

@@ -174,6 +174,17 @@ SidClockRateTests drives the SID via the SystemClock and asserts OSC3 = 0x10 aft
 - [x] SidAudioPumpTests sample-count assertions still pass after recalibration
 
 
+## TEST-SIDEBARUI
+
+### TEST-SIDEBARUI-001
+
+AttachPanelViewModelTests.CollapseExpander_DockAndGlyph_TrackAnchorSide asserts the expander dock side and chevron glyph follow the panel anchor and raise PropertyChanged.
+
+**Acceptance Criteria:**
+- [x] Anchored Left yields CollapseExpanderDock Right and glyph the left chevron
+- [x] Anchored Right yields CollapseExpanderDock Left and glyph the right chevron, with PropertyChanged raised for both
+
+
 ## TEST-SNAPFULL
 
 ### TEST-SNAPFULL-001
@@ -218,6 +229,14 @@ TickHistoryRecorderTests (ring order/capacity, write bundling, reconstruction), 
 **Acceptance Criteria:**
 - [x] Reconstruct at the newest tick yields current memory; at an earlier tick yields the pre-write byte
 - [x] InspectAsync opens the debug screen with a memory dump only when paused
+
+### TEST-TICKHIST-002
+
+Verify the emulation pump does not capture when recording is disabled (default) and that GetTickHistory arms recording.
+
+**Acceptance Criteria:**
+- [x] Pump_DoesNotCaptureHistory_WhenRecordingDisabled - default off yields empty history after pumping.
+- [x] GetTickHistory_ArmsHistoryRecording - calling the RPC sets HistoryRecordingEnabled true.
 
 
 ## TEST-UI

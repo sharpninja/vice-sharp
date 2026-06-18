@@ -199,6 +199,31 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
+    /// FR-SIDEBARUI-001 / TR-SIDEBARUI-LAYOUT-001 / TEST-SIDEBARUI-001.
+    /// Use case: the sidebar collapse expander sits on the INNER edge facing the video, so it
+    ///   flips side (and chevron direction) with the panel's anchor.
+    /// Acceptance: anchored Left gives CollapseExpanderDock Right and glyph "◀"; anchored
+    ///   Right gives Dock Left and glyph "▶"; switching anchors raises PropertyChanged for both.
+    /// </summary>
+    [Fact]
+    public void CollapseExpander_DockAndGlyph_TrackAnchorSide()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+        viewModel.DockLeft();
+        Assert.Equal(global::Avalonia.Controls.Dock.Right, viewModel.CollapseExpanderDock);
+        Assert.Equal("◀", viewModel.CollapseGlyph);
+
+        var changes = TrackPropertyChanges(viewModel);
+        viewModel.DockRight();
+
+        Assert.Equal(global::Avalonia.Controls.Dock.Left, viewModel.CollapseExpanderDock);
+        Assert.Equal("▶", viewModel.CollapseGlyph);
+        Assert.Contains(nameof(viewModel.CollapseExpanderDock), changes);
+        Assert.Contains(nameof(viewModel.CollapseGlyph), changes);
+    }
+
+    /// <summary>
     /// FR: FR-Host-UI-Boundary, TR: TR-MVVM-001
     /// (BACKFILL-HOSTUI-001 AttachSlotViewModel).
     /// Use case: A freshly constructed attach slot exposes the

@@ -28,6 +28,7 @@ public sealed class TickHistoryCaptureTests
     {
         var (registry, sessionId) = await CreateRunningSessionAsync();
         registry.TryGet(sessionId, out var session);
+        session!.HistoryRecordingEnabled = true; // opt-in recorder must be armed to capture.
 
         var pump = new EmulationPumpService(registry, new SemaphoreEmulationGate());
         for (var i = 0; i < 60; i++)
@@ -37,6 +38,48 @@ public sealed class TickHistoryCaptureTests
 
         Assert.NotEmpty(ticks);
         Assert.True(ticks.Count <= TickHistoryRecorder.Capacity);
+    }
+
+    /// <summary>
+    /// FR-TICKHIST-001 / TR-TICKHIST-PERF-001 / TEST-TICKHIST-002 (BUG-TICKHIST-PERF-001).
+    /// Use case: the time-travel recorder is OPT-IN. When it has not been armed (the default),
+    ///   advancing the pump must not subscribe the recorder, so the per-instruction chip-state
+    ///   capture and per-write delta recording impose ZERO overhead on normal emulation.
+    /// Acceptance: with HistoryRecordingEnabled left at its default (false), pumping a running
+    ///   session leaves the tick history empty.
+    /// </summary>
+    [Fact]
+    public async Task Pump_DoesNotCaptureHistory_WhenRecordingDisabled()
+    {
+        var (registry, sessionId) = await CreateRunningSessionAsync();
+        registry.TryGet(sessionId, out var session);
+
+        Assert.False(session!.HistoryRecordingEnabled); // default: recording is OFF.
+
+        var pump = new EmulationPumpService(registry, new SemaphoreEmulationGate());
+        for (var i = 0; i < 60; i++)
+            pump.PumpSession(session!);
+
+        Assert.Empty(session!.TickHistory.Snapshot());
+    }
+
+    /// <summary>
+    /// FR-TICKHIST-001 / TR-TICKHIST-PERF-001 / TEST-TICKHIST-002 (BUG-TICKHIST-PERF-001).
+    /// Use case: reading the tick history (the History panel opening / refreshing) arms the
+    ///   opt-in recorder so subsequent emulation starts capturing.
+    /// Acceptance: calling GetTickHistoryAsync sets the session's HistoryRecordingEnabled flag.
+    /// </summary>
+    [Fact]
+    public async Task GetTickHistory_ArmsHistoryRecording()
+    {
+        var (registry, sessionId) = await CreateRunningSessionAsync();
+        registry.TryGet(sessionId, out var session);
+        Assert.False(session!.HistoryRecordingEnabled);
+
+        var monitor = new MonitorServiceHost(registry);
+        await monitor.GetTickHistoryAsync(new SessionRequest(sessionId), TestContext.Current.CancellationToken);
+
+        Assert.True(session!.HistoryRecordingEnabled);
     }
 
     /// <summary>
@@ -99,6 +142,7 @@ public sealed class TickHistoryCaptureTests
     {
         var (registry, sessionId) = await CreateRunningSessionAsync();
         registry.TryGet(sessionId, out var session);
+        session!.HistoryRecordingEnabled = true; // arm the opt-in recorder before pumping.
         var pump = new EmulationPumpService(registry, new SemaphoreEmulationGate());
         for (var i = 0; i < 60; i++)
             pump.PumpSession(session!);
@@ -124,6 +168,7 @@ public sealed class TickHistoryCaptureTests
     {
         var (registry, sessionId) = await CreateRunningSessionAsync();
         registry.TryGet(sessionId, out var session);
+        session!.HistoryRecordingEnabled = true; // arm the opt-in recorder before pumping.
         var pump = new EmulationPumpService(registry, new SemaphoreEmulationGate());
         for (var i = 0; i < 60; i++)
             pump.PumpSession(session!);

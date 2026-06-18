@@ -224,6 +224,11 @@ public sealed class MonitorServiceHost : IMonitorService
         if (!_registry.TryGet(request.SessionId, out var session))
             return ValueTask.FromResult(new GetTickHistoryResponse(HostProtocolMapper.MissingSessionStatus(request.SessionId), []));
 
+        // BUG-TICKHIST-PERF-001: opening / refreshing the History panel arms the opt-in
+        // recorder so subsequent emulation begins capturing. Until this point the recorder
+        // stays unsubscribed and emulation runs at full speed.
+        session.HistoryRecordingEnabled = true;
+
         var ticks = session.TickHistory.Snapshot();
         var dtos = new TickHistoryEntryDto[ticks.Count];
         for (var i = 0; i < ticks.Count; i++)

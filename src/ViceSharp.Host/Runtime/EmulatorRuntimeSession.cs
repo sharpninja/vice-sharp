@@ -53,6 +53,16 @@ public sealed class EmulatorRuntimeSession
     /// </summary>
     public TickHistoryRecorder TickHistory { get; } = new();
 
+    /// <summary>
+    /// Gates the time-travel tick-history recorder (BUG-TICKHIST-PERF-001). Default false:
+    /// the recorder stays UNSUBSCRIBED so the per-instruction chip-state capture and the
+    /// per-write delta recording impose zero overhead and emulation runs at full speed.
+    /// The host arms it the first time the History panel reads the trace
+    /// (<c>MonitorServiceHost.GetTickHistoryAsync</c>), making the debugger pay-for-use.
+    /// Read on the emulation worker thread, written from RPC threads, so it is volatile.
+    /// </summary>
+    public volatile bool HistoryRecordingEnabled;
+
     public string PowerState { get; set; } = "On";
 
     public EmulatorRunState RunState { get; set; } = EmulatorRunState.Stopped;

@@ -192,6 +192,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-REMOTECTRL-001 | Tracked | Functional-Requirements.md |
 | FR-REVEXEC-001 | Tracked | Functional-Requirements.md |
 | FR-SIDAUDIO-001 | Tracked | Functional-Requirements.md |
+| FR-SIDEBARUI-001 | Tracked | Functional-Requirements.md |
 | FR-SNDREG-001 | Tracked | Functional-Requirements.md |
 | FR-TICKHIST-001 | Tracked | Functional-Requirements.md |
 | FR-UIFLYOUT-001 | Tracked | Functional-Requirements.md |
@@ -217,9 +218,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-REMOTECTRL-SERVER-001 | Tracked | Technical-Requirements.md |
 | TR-REVEXEC-001 | Tracked | Technical-Requirements.md |
 | TR-SIDAUDIO-CLOCK-001 | Tracked | Technical-Requirements.md |
+| TR-SIDEBARUI-LAYOUT-001 | Tracked | Technical-Requirements.md |
 | TR-SNAPFULL-001 | Tracked | Technical-Requirements.md |
 | TR-SNDREG-GATE-001 | Tracked | Technical-Requirements.md |
 | TR-TICKHIST-CAPTURE-001 | Tracked | Technical-Requirements.md |
+| TR-TICKHIST-PERF-001 | Tracked | Technical-Requirements.md |
 | TR-TICKHIST-RPC-001 | Tracked | Technical-Requirements.md |
 | TR-TICKHIST-UI-001 | Tracked | Technical-Requirements.md |
 | TR-UIAXAML-001 | Tracked | Technical-Requirements.md |
@@ -242,11 +245,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-REMOTECTRL-001 | Tracked | Testing-Requirements.md |
 | TEST-REVEXEC-001 | Tracked | Testing-Requirements.md |
 | TEST-SIDAUDIO-001 | Tracked | Testing-Requirements.md |
+| TEST-SIDEBARUI-001 | Tracked | Testing-Requirements.md |
 | TEST-SNAPFULL-001 | Tracked | Testing-Requirements.md |
 | TEST-SNDREG-001 | Tracked | Testing-Requirements.md |
 | TEST-TAPE-RAMP-001 | Tracked | Testing-Requirements.md |
 | TEST-TAPE-SENSE-001 | Tracked | Testing-Requirements.md |
 | TEST-TICKHIST-001 | Tracked | Testing-Requirements.md |
+| TEST-TICKHIST-002 | Tracked | Testing-Requirements.md |
 | TEST-UIFLYOUT-001 | Tracked | Testing-Requirements.md |
 | TEST-UIMENUBAR-001 | Tracked | Testing-Requirements.md |
 | TEST-UIPERIPHERAL-001 | Tracked | Testing-Requirements.md |

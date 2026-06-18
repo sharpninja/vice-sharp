@@ -240,6 +240,12 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
         if (frame.HistorySubscribed)
             return;
 
+        // BUG-TICKHIST-PERF-001: the recorder is opt-in. Stay unsubscribed (zero per-instruction
+        // and per-write cost) until the user opens the History panel, which arms recording via
+        // GetTickHistoryAsync. Re-checked every advance so arming takes effect on the next frame.
+        if (!session.HistoryRecordingEnabled)
+            return;
+
         frame.HistorySubscribed = true;
         if (session.Machine.PubSub is not { } pubSub)
             return; // machine without a pub/sub (e.g. minimal headless): no history.

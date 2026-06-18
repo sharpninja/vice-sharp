@@ -117,9 +117,29 @@ public sealed class AttachPanelViewModel : ObservableObject
         private set
         {
             if (SetProperty(ref _dockSide, value))
+            {
                 OnPropertyChanged(nameof(PanePlacement));
+                OnPropertyChanged(nameof(CollapseExpanderDock));
+                OnPropertyChanged(nameof(CollapseGlyph));
+            }
         }
     }
+
+    /// <summary>
+    /// Which edge of the sidebar the collapse expander sits on - the INNER edge facing the
+    /// video: Right when the panel is anchored Left, Left when anchored Right.
+    /// </summary>
+    public global::Avalonia.Controls.Dock CollapseExpanderDock =>
+        _dockSide == AttachDockSide.Left
+            ? global::Avalonia.Controls.Dock.Right
+            : global::Avalonia.Controls.Dock.Left;
+
+    /// <summary>
+    /// Chevron pointing in the direction the panel collapses (toward its anchored screen
+    /// edge): "&#9664;" when anchored Left, "&#9654;" when anchored Right.
+    /// </summary>
+    public string CollapseGlyph =>
+        _dockSide == AttachDockSide.Left ? "◀" : "▶";
 
     /// <summary>
     /// Avalonia <c>SplitView.PanePlacement</c> value derived from
@@ -144,7 +164,16 @@ public sealed class AttachPanelViewModel : ObservableObject
     public SidebarTab ActiveTab
     {
         get => _activeTab;
-        set => SetProperty(ref _activeTab, value);
+        set
+        {
+            if (SetProperty(ref _activeTab, value) && value == SidebarTab.History)
+            {
+                // BUG-TICKHIST-PERF-001: selecting History arms the opt-in recorder (the
+                // refresh hits GetTickHistory, which enables capture host-side). Leaving the
+                // tab unopened keeps the recorder off so emulation runs at full speed.
+                _ = TickHistory.RefreshAsync();
+            }
+        }
     }
 
     public string StatusText

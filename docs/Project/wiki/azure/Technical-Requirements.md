@@ -162,6 +162,13 @@
 - [x] Sid6581.ClockDivisor returns 1
 - [x] Direct-Tick SID tests are divisor-independent; only SystemClock-driven calibration changed
 
+## TR-SIDEBARUI-LAYOUT-001
+
+**Anchor-derived collapse expander + wrap-panel button groups** — AttachPanelViewModel exposes CollapseExpanderDock (Avalonia Dock) and CollapseGlyph derived from DockSide and raised on change. AttachPanelView docks a full-height collapse Button on CollapseExpanderDock and re-docks it on change. The tab buttons, Monitor buttons and Settings action buttons use WrapPanel with per-button margins.
+**Acceptance Criteria:**
+- [x] CollapseExpanderDock is Dock.Right when DockSide is Left and Dock.Left when DockSide is Right
+- [x] Changing DockSide raises PropertyChanged for CollapseExpanderDock and CollapseGlyph
+
 ## TR-SNAPFULL-001
 
 **Complete machine snapshot/restore with deterministic round-trip** — GetState()+restore capture all execution-affecting state (CPU incl. pending IRQ/NMI + pipeline, VIC sequencer, CIA timer pipelines + TOD, SID, PLA/processor port, memory, and the 1541 drive + IEC bus when present). Invariant: restore then run N cycles equals continuous run N (full MachineState + memory equality).
@@ -187,6 +194,14 @@
 **Acceptance Criteria:**
 - [x] Bus publishes MemoryWriteEvent with the pre-write byte only when subscribed
 - [x] Recorder ring is bounded to 100 and reconstruction recovers as-of-tick RAM
+
+## TR-TICKHIST-PERF-001
+
+**Tick-history capture is opt-in (zero default overhead)** — The time-travel recorder must stay unsubscribed by default so per-instruction chip-state capture and per-write delta recording impose zero overhead; it is armed only when the History panel reads the trace.
+**Acceptance Criteria:**
+- [x] With recording disabled (default) advancing the emulation pump does not subscribe the recorder and tick history stays empty.
+- [x] Reading the tick history via GetTickHistory arms recording so subsequent emulation captures.
+- [x] BasicBus publishes MemoryWriteEvent only when SubscriptionCount is greater than zero so the default path has zero per-write cost.
 
 ## TR-TICKHIST-RPC-001
 
