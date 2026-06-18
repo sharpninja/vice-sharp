@@ -18,6 +18,18 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     public int ChannelCount => 1;
     public byte MasterVolume { get => _volume; set => _volume = value; }
 
+    /// <summary>
+    /// Pending-playback depth of the attached audio backend (0 when none). The pacing
+    /// gate's sound back-pressure regulator throttles the worker on this.
+    /// </summary>
+    public int QueuedSampleCount => _audioBackend?.QueuedSampleCount ?? 0;
+
+    /// <summary>
+    /// True once a backend is attached AND <see cref="ConfigureAudioClock"/> has run
+    /// (so the SID is streaming samples and can be the emulation timing source).
+    /// </summary>
+    public bool IsAudioTimingSource => _audioBackend is not null && _audioTicksPerSample > 0.0;
+
     // Waveform types
     public enum Waveform { Triangle = 0x04, Sawtooth = 0x08, Pulse = 0x40, Noise = 0x80, None = 0x00 }
     

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 
@@ -12,11 +13,12 @@ namespace ViceSharp.Host.Services;
 /// Two regulators, in precedence order:
 ///
 ///  1. Sound-buffer back-pressure (sound.c sound_flush): when the audio device is the
-///     timing source, the emulator thread blocks while the device's sample buffer is full
-///     and resumes as it drains, so the fixed cycle:sample ratio paces the CPU. This
-///     regulator is currently DISABLED for ViceSharp because the SID sample rate is wrong
-///     (BUG-SIDAUDIO-001) - enabling it would pace the CPU at the wrong rate. It will be
-///     turned on once the SID emits at the correct rate.
+///     timing source (the SID has a live backend and a configured audio clock), the
+///     emulator thread blocks while the device's sample buffer is at/over its high-water
+///     mark and resumes as the device drains it, so the fixed cycle:sample ratio paces the
+///     CPU. Enabled now that the SID emits at the correct phi2 rate (BUG-SIDAUDIO-001 fixed;
+///     the sample rate was always 44.1 kHz - only pitch was wrong). Takes precedence over
+///     vsync: when sound is the timing source, vsync is skipped for that session.
 ///
 ///  2. vsync (vsync.c set_timer_speed / vsync_do_vsync): precompute emulated_clk_per_second
 ///     = master clock x speed, then convert the emulated-cycle delta since the anchor into
@@ -34,11 +36,60 @@ public sealed partial class ViceEmulationGate : IEmulationGate
     private const double ChunkHz = 100.0;
     private const long WarpBurstMultiplier = 64;
 
+    // ~46 ms of audio at 44.1 kHz (~2.3 PAL frames): enough buffer to ride out scheduling
+    // jitter without underruns, low enough latency to feel responsive, and well under the
+    // WinMm ~32K-sample ceiling where SubmitSamples would start dropping batches.
+    internal const int HighWaterSamples = 2048;
+
     private readonly ConditionalWeakTable<EmulatorRuntimeSession, Anchor> _anchors = new();
     private volatile bool _running;
     private bool _raisedTimerResolution;
 
     public string Name => "VICE";
+
+    /// <summary>Which regulator was applied to the most recently processed running session
+    /// in the last <see cref="Tick"/> (diagnostics / tests).</summary>
+    internal PacingRegulator LastRegulator { get; private set; }
+
+    /// <summary>Pause invoked once per tick when a device buffer is full, to avoid a hot
+    /// spin while it drains in real time. Overridable so tests pace deterministically.</summary>
+    internal Action BackPressurePause { get; set; } = static () => Thread.Sleep(1);
+
+    /// <summary>Regulator that paced a session on a given tick.</summary>
+    internal enum PacingRegulator
+    {
+        Warp,
+        Vsync,
+        Sound,
+    }
+
+    /// <summary>Outcome of the sound back-pressure decision for one session.</summary>
+    internal enum SoundAction
+    {
+        /// <summary>No live audio: the gate should fall through to vsync.</summary>
+        NotTimingSource,
+
+        /// <summary>The device buffer has room: emit one more chunk of samples.</summary>
+        Advance,
+
+        /// <summary>The device buffer is full: block the worker until it drains.</summary>
+        BackPressure,
+    }
+
+    /// <summary>
+    /// Regulator 1 decision: given the session's audio chip, decide whether sound is the
+    /// timing source and, if so, whether the device buffer has room (advance) or is full
+    /// (back-pressure). Pure - the caller performs the advance / block.
+    /// </summary>
+    internal static SoundAction EvaluateSound(IAudioChip? chip, int highWaterSamples)
+    {
+        if (chip is null || !chip.IsAudioTimingSource)
+            return SoundAction.NotTimingSource;
+
+        return chip.QueuedSampleCount >= highWaterSamples
+            ? SoundAction.BackPressure
+            : SoundAction.Advance;
+    }
 
     public void Start()
     {
@@ -60,6 +111,7 @@ public sealed partial class ViceEmulationGate : IEmulationGate
         ArgumentNullException.ThrowIfNull(advance);
 
         var ranAny = false;
+        var backPressured = false;
         var swFreq = Stopwatch.Frequency;
 
         foreach (var session in registry.Snapshot())
@@ -78,17 +130,39 @@ public sealed partial class ViceEmulationGate : IEmulationGate
 
             if (!session.LimiterEnabled)
             {
-                // warp_enabled: skip both regulators, run flat out.
+                // warp_enabled: highest precedence - skip both regulators, run flat out.
                 anchor.Primed = false;
                 advance(session, chunk * WarpBurstMultiplier);
+                LastRegulator = PacingRegulator.Warp;
                 continue;
             }
 
-            // Run one chunk of emulated time (samples are emitted to the audio device here;
-            // the sound regulator would back-pressure on them once the SID rate is correct).
+            // Regulator 1 - sound back-pressure (takes precedence over vsync): when the SID
+            // is the audio timing source, pace to the device draining its sample buffer.
+            var audioChip = session.Machine.Devices.GetByRole(DeviceRole.AudioChip) as IAudioChip;
+            var soundAction = EvaluateSound(audioChip, HighWaterSamples);
+            if (soundAction != SoundAction.NotTimingSource)
+            {
+                LastRegulator = PacingRegulator.Sound;
+                if (soundAction == SoundAction.BackPressure)
+                {
+                    // Device buffer full: block (advance nothing); it drains in real time.
+                    backPressured = true;
+                    continue;
+                }
+
+                // Buffer has room: emit one chunk of samples. Sound is the timing source,
+                // so the vsync anchor stays parked.
+                advance(session, chunk);
+                anchor.Primed = false;
+                continue;
+            }
+
+            // Regulator 2 - vsync: run a chunk, then sleep so wall-clock tracks
+            // emulated-cycle progress.
+            LastRegulator = PacingRegulator.Vsync;
             advance(session, chunk);
 
-            // Regulator 2 - vsync: sleep so wall-clock tracks emulated-cycle progress.
             long totalCycles;
             lock (session.SyncRoot)
                 totalCycles = session.Machine.Clock.TotalCycles;
@@ -127,6 +201,9 @@ public sealed partial class ViceEmulationGate : IEmulationGate
                 anchor.AnchorCycle = totalCycles;
             }
         }
+
+        if (backPressured)
+            BackPressurePause(); // let a full device buffer drain instead of hot-spinning
 
         return ranAny;
     }
