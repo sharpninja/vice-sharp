@@ -563,6 +563,46 @@ public sealed class GrpcMonitorServiceHost : GrpcContracts.MonitorService.Monito
         };
     }
 
+    public override async Task<GrpcContracts.GetTickHistoryResponse> GetTickHistory(
+        GrpcContracts.SessionRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.GetTickHistoryAsync(new SessionRequest(request.SessionId), context.CancellationToken).ConfigureAwait(false);
+        var result = new GrpcContracts.GetTickHistoryResponse { Status = HostMap.Map(response.Status) };
+        result.Ticks.AddRange(response.Ticks.Select(HostMap.Map));
+        return result;
+    }
+
+    public override async Task<GrpcContracts.MonitorMemoryResponse> ReadMemoryAtTick(
+        GrpcContracts.ReadMemoryAtTickRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.ReadMemoryAtTickAsync(
+            new ReadMemoryAtTickRequest(request.SessionId, request.TickIndex, request.Address, request.Length),
+            context.CancellationToken).ConfigureAwait(false);
+
+        return new GrpcContracts.MonitorMemoryResponse
+        {
+            Status = HostMap.Map(response.Status),
+            Address = (uint)Math.Max(0, response.Address),
+            Data = ByteString.CopyFrom(response.Data),
+            EmulatorStatus = HostMap.Map(response.EmulatorStatus)
+        };
+    }
+
+    public override async Task<GrpcContracts.GetChipStateAtTickResponse> GetChipStateAtTick(
+        GrpcContracts.GetChipStateAtTickRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.GetChipStateAtTickAsync(
+            new GetChipStateAtTickRequest(request.SessionId, request.TickIndex),
+            context.CancellationToken).ConfigureAwait(false);
+
+        var result = new GrpcContracts.GetChipStateAtTickResponse { Status = HostMap.Map(response.Status) };
+        result.Chips.AddRange(response.Chips.Select(HostMap.Map));
+        return result;
+    }
+
     private static async Task<GrpcContracts.MonitorBreakpointsResponse> MapBreakpointsAsync(ValueTask<MonitorBreakpointsResponse> task)
     {
         var response = await task.ConfigureAwait(false);
@@ -851,7 +891,7 @@ internal static class GrpcHostMapping
     }
 
     public static GrpcContracts.LimiterSettingsDto Map(LimiterSettingsDto value)
-        => new() { RatePercent = value.RatePercent, IsEnabled = value.IsEnabled };
+        => new() { RatePercent = value.RatePercent, IsEnabled = value.IsEnabled, PacingStrategy = value.PacingStrategy };
 
     public static GrpcContracts.DisplaySettingsDto Map(DisplaySettingsDto value)
         => new()
@@ -880,6 +920,33 @@ internal static class GrpcHostMapping
     public static GrpcContracts.ResourceSettingsDto Map(ResourceSettingsDto value)
         => new() { Mode = value.Mode };
 
+    public static GrpcContracts.ChipStateDto Map(ChipStateDto value)
+    {
+        var dto = new GrpcContracts.ChipStateDto { ChipName = value.ChipName };
+        dto.Fields.AddRange(value.Fields.Select(f => new GrpcContracts.ChipStateFieldDto
+        {
+            Name = f.Name,
+            Value = f.Value,
+            Width = f.Width
+        }));
+        return dto;
+    }
+
+    public static GrpcContracts.TickHistoryEntryDto Map(TickHistoryEntryDto value)
+        => new()
+        {
+            Index = value.Index,
+            InstructionAddress = (uint)value.InstructionAddress,
+            Opcode = (uint)value.Opcode,
+            A = (uint)value.A,
+            X = (uint)value.X,
+            Y = (uint)value.Y,
+            S = (uint)value.S,
+            P = (uint)value.P,
+            Pc = (uint)value.Pc,
+            WriteCount = value.WriteCount
+        };
+
     public static GrpcContracts.SettingApplyDiagnosticDto Map(SettingApplyDiagnosticDto value)
         => new()
         {
@@ -901,7 +968,7 @@ internal static class GrpcHostMapping
         };
 
     public static LimiterSettingsDto Map(GrpcContracts.LimiterSettingsDto value)
-        => new(value.RatePercent, value.IsEnabled);
+        => new(value.RatePercent, value.IsEnabled, DefaultIfBlank(value.PacingStrategy, new LimiterSettingsDto().PacingStrategy));
 
     public static DisplaySettingsDto Map(GrpcContracts.DisplaySettingsDto value)
     {

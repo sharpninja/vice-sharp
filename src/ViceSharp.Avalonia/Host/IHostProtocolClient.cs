@@ -95,5 +95,32 @@ public interface IHostProtocolClient
         string command,
         CancellationToken cancellationToken = default);
 
+    ValueTask<MonitorRegistersResponse> ReadRegistersAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorMemoryResponse> ReadMemoryAsync(
+        int address,
+        int length,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<MonitorDisassemblyResponse> DisassembleAsync(
+        int address,
+        int count,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: the last captured CPU instructions (ticks).</summary>
+    ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: a memory window reconstructed as it was at a past tick.</summary>
+    ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(
+        int tickIndex,
+        int address,
+        int length,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: each chip's decoded full state at a past tick.</summary>
+    ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(
+        int tickIndex,
+        CancellationToken cancellationToken = default);
+
     ValueTask<GetVideoFrameResponse> GetFrameAsync(CancellationToken cancellationToken = default);
 }

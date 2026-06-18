@@ -181,6 +181,24 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
+    /// FR-PACESEL-001 / TR-PACESEL-001 / TEST-PACESEL-003.
+    /// Use case: The pacing strategy applies live (the pump swaps its gate), so changing it
+    /// must mark a pending settings change but NOT require a session restart.
+    /// Acceptance: Setting SelectedPacingStrategy to "VICE" flags HasPendingSettingsChanges
+    /// true and leaves RequiresRestart false.
+    /// </summary>
+    [Fact]
+    public void LiveSettingChange_PacingStrategy_FlagsPendingNotRestart()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+        viewModel.SelectedPacingStrategy = "VICE";
+
+        Assert.True(viewModel.HasPendingSettingsChanges);
+        Assert.False(viewModel.RequiresRestart);
+    }
+
+    /// <summary>
     /// FR: FR-Host-UI-Boundary, TR: TR-MVVM-001
     /// (BACKFILL-HOSTUI-001 AttachSlotViewModel).
     /// Use case: A freshly constructed attach slot exposes the

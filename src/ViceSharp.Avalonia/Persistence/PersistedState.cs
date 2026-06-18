@@ -29,7 +29,8 @@ public sealed record PersistedSettings(
     string PrimaryJoystickPort,
     bool SwapJoystickPorts,
     string ResourceMode,
-    int DockSide);
+    int DockSide,
+    string PacingStrategy = "Semaphore");
 
 /// <summary>Per-session runtime state: attached media + selected keyboard map.</summary>
 public sealed record PersistedTransient(

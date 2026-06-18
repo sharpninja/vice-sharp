@@ -30,4 +30,11 @@ public interface IMachine
 
     /// <summary>Resets the machine to initial power-on state.</summary>
     void Reset();
+
+    /// <summary>
+    /// The machine's pub/sub bus for diagnostic / debug events (CPU instruction boundaries,
+    /// memory writes). Null on machines that do not wire one; the time-travel debugger's
+    /// tick-history recorder subscribes to it when present.
+    /// </summary>
+    IPubSub? PubSub => null;
 }

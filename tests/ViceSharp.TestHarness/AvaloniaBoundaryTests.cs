@@ -829,6 +829,42 @@ public sealed class AvaloniaBoundaryTests
             return ValueTask.FromResult(new MonitorCommandResponse(RpcStatus.NotImplemented("No monitor."), string.Empty, CreateStatus()));
         }
 
+        public ValueTask<MonitorRegistersResponse> ReadRegistersAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorRegistersResponse(RpcStatus.NotImplemented("No monitor."), null, CreateStatus()));
+        }
+
+        public ValueTask<MonitorMemoryResponse> ReadMemoryAsync(int address, int length, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorMemoryResponse(RpcStatus.NotImplemented("No monitor."), address, System.Array.Empty<byte>(), CreateStatus()));
+        }
+
+        public ValueTask<MonitorDisassemblyResponse> DisassembleAsync(int address, int count, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorDisassemblyResponse(RpcStatus.NotImplemented("No monitor."), System.Array.Empty<MonitorDisassemblyLineDto>(), CreateStatus()));
+        }
+
+        public ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new GetTickHistoryResponse(RpcStatus.NotImplemented("No monitor."), System.Array.Empty<TickHistoryEntryDto>()));
+        }
+
+        public ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(int tickIndex, int address, int length, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorMemoryResponse(RpcStatus.NotImplemented("No monitor."), address, System.Array.Empty<byte>(), CreateStatus()));
+        }
+
+        public ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(int tickIndex, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new GetChipStateAtTickResponse(RpcStatus.NotImplemented("No monitor."), System.Array.Empty<ChipStateDto>()));
+        }
+
         public ValueTask<GetVideoFrameResponse> GetFrameAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();

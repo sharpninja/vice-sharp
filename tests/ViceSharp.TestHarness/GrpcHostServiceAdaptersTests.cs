@@ -837,6 +837,15 @@ public sealed class GrpcHostServiceAdaptersTests
 
         public ValueTask<MonitorMemoryWriteResponse> WriteMemoryAsync(MonitorWriteMemoryRequest request, CancellationToken cancellationToken = default)
             => ValueTask.FromResult(WriteMemoryResponse);
+
+        public ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(SessionRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(new GetTickHistoryResponse(RpcStatus.Ok(), System.Array.Empty<TickHistoryEntryDto>()));
+
+        public ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(ReadMemoryAtTickRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(ReadMemoryResponse);
+
+        public ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(GetChipStateAtTickRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(new GetChipStateAtTickResponse(RpcStatus.Ok(), System.Array.Empty<ChipStateDto>()));
     }
 
     private sealed class FakeSnapshotService : ISnapshotService

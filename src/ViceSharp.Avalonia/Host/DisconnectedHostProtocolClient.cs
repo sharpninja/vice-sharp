@@ -150,6 +150,42 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
         return ValueTask.FromResult(new MonitorCommandResponse(_disconnectedStatus, string.Empty, null));
     }
 
+    public ValueTask<MonitorRegistersResponse> ReadRegistersAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorRegistersResponse(_disconnectedStatus, null, null));
+    }
+
+    public ValueTask<MonitorMemoryResponse> ReadMemoryAsync(int address, int length, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorMemoryResponse(_disconnectedStatus, address, Array.Empty<byte>(), null));
+    }
+
+    public ValueTask<MonitorDisassemblyResponse> DisassembleAsync(int address, int count, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorDisassemblyResponse(_disconnectedStatus, Array.Empty<MonitorDisassemblyLineDto>(), null));
+    }
+
+    public ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new GetTickHistoryResponse(_disconnectedStatus, Array.Empty<TickHistoryEntryDto>()));
+    }
+
+    public ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(int tickIndex, int address, int length, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorMemoryResponse(_disconnectedStatus, address, Array.Empty<byte>(), null));
+    }
+
+    public ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(int tickIndex, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new GetChipStateAtTickResponse(_disconnectedStatus, Array.Empty<ChipStateDto>()));
+    }
+
     public ValueTask<GetVideoFrameResponse> GetFrameAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

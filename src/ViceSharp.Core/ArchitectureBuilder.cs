@@ -61,9 +61,21 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         deviceRegistry.Add(ram, DeviceRole.SystemRam);
         deviceRegistry.Add(cpu, DeviceRole.Cpu);
 
-        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
+        var pubSub = ConnectMachinePubSub(bus, cpu);
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, pubSub);
         machine.Reset();
         return machine;
+    }
+
+    // Wire one machine pub/sub: the CPU publishes instruction-completed events and the bus
+    // publishes memory-write events on it, both gated on a live subscriber. The host's
+    // tick-history recorder subscribes for the time-travel debugger.
+    private static LockFreePubSub ConnectMachinePubSub(BasicBus bus, Mos6502 cpu)
+    {
+        var pubSub = new LockFreePubSub();
+        cpu.ConnectPubSub(pubSub);
+        bus.ConnectPubSub(pubSub);
+        return pubSub;
     }
 
     private IMachine BuildC64Machine(IArchitectureDescriptor descriptor)
@@ -204,7 +216,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             cpu.SerialTrapHook = serialTrap.TryHandle;
         }
 
-        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
+        var pubSub = ConnectMachinePubSub(bus, cpu);
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, pubSub);
         machine.Reset();
         serialTrap?.Reset();
         return machine;
@@ -418,6 +431,7 @@ internal sealed class Machine : IMachine
     private readonly IDeviceRegistry _devices;
     private readonly IArchitectureDescriptor _architecture;
     private readonly Mos6502 _cpu;
+    private readonly IPubSub? _pubSub;
     private readonly int _frameCycles;
 
     public Machine(
@@ -425,13 +439,15 @@ internal sealed class Machine : IMachine
         IBus bus,
         IClock clock,
         IDeviceRegistry deviceRegistry,
-        Mos6502 cpu)
+        Mos6502 cpu,
+        IPubSub? pubSub = null)
     {
         _architecture = architecture;
         _bus = bus;
         _clock = clock;
         _devices = deviceRegistry;
         _cpu = cpu;
+        _pubSub = pubSub;
         _frameCycles = architecture is IProfiledArchitectureDescriptor profiled
             ? profiled.MachineProfile.CyclesPerLine * profiled.MachineProfile.RasterLines
             : architecture.VideoStandard == VideoStandard.Ntsc ? 263 * 65 : 312 * 63;
@@ -441,6 +457,7 @@ internal sealed class Machine : IMachine
     public IClock Clock => _clock;
     public IDeviceRegistry Devices => _devices;
     public IArchitectureDescriptor Architecture => _architecture;
+    public IPubSub? PubSub => _pubSub;
 
     public void RunFrame() => _clock.Step(_frameCycles);
 

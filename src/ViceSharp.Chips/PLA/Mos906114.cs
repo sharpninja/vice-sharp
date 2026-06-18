@@ -5,7 +5,7 @@ namespace ViceSharp.Chips.Pla;
 /// <summary>
 /// MOS 906114 Programmable Logic Array banking model.
 /// </summary>
-public sealed class Mos906114 : IAddressSpace, IClockedDevice
+public sealed partial class Mos906114 : IAddressSpace, IClockedDevice
 {
     public DeviceId Id => new DeviceId(0x0007);
     public DeviceId SourceId => Id;

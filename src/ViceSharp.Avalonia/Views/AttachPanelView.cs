@@ -88,6 +88,7 @@ public sealed class AttachPanelView : UserControl
         tabs.Children.Add(CreateTabButton("Peripherals", () => ViewModel.ShowPeripherals()));
         tabs.Children.Add(CreateTabButton("Settings", () => ViewModel.ShowSettings()));
         tabs.Children.Add(CreateTabButton("Monitor", () => ViewModel.ShowMonitor()));
+        tabs.Children.Add(CreateTabButton("History", () => ViewModel.ShowHistory()));
         header.Children.Add(tabs);
 
         DockPanel.SetDock(header, Dock.Top);
@@ -128,6 +129,7 @@ public sealed class AttachPanelView : UserControl
             // UserControl (declarative AXAML + MVVM) bound to the same VM.
             SidebarTab.Settings => new SettingsView { DataContext = ViewModel },
             SidebarTab.Monitor => CreateMonitorPanel(includePopOut: true),
+            SidebarTab.History => new TickHistoryView { DataContext = ViewModel.TickHistory },
             _ => CreatePeripheralsPanel()
         };
     }

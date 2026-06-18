@@ -1,3 +1,5 @@
+using System.Linq;
+using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 
@@ -210,6 +212,113 @@ public sealed class MonitorServiceHost : IMonitorService
                 request.Address,
                 request.Data.Length,
                 HostProtocolMapper.ToStatusDto(session)));
+        }
+    }
+
+    public ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (!_registry.TryGet(request.SessionId, out var session))
+            return ValueTask.FromResult(new GetTickHistoryResponse(HostProtocolMapper.MissingSessionStatus(request.SessionId), []));
+
+        var ticks = session.TickHistory.Snapshot();
+        var dtos = new TickHistoryEntryDto[ticks.Count];
+        for (var i = 0; i < ticks.Count; i++)
+        {
+            var r = ticks[i].Registers;
+            dtos[i] = new TickHistoryEntryDto(
+                i,
+                r.InstructionAddress,
+                r.Opcode,
+                r.A, r.X, r.Y, r.S, r.P,
+                r.Pc,
+                ticks[i].Writes.Length);
+        }
+
+        return ValueTask.FromResult(new GetTickHistoryResponse(RpcStatus.Ok(), dtos));
+    }
+
+    public ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(
+        ReadMemoryAtTickRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (!_registry.TryGet(request.SessionId, out var session))
+            return ValueTask.FromResult(new MonitorMemoryResponse(HostProtocolMapper.MissingSessionStatus(request.SessionId), request.Address, [], null));
+
+        var validation = ValidateMemoryRange(request.Address, request.Length);
+        if (validation is not null)
+            return ValueTask.FromResult(new MonitorMemoryResponse(validation, request.Address, [], null));
+
+        lock (session.SyncRoot)
+        {
+            var ticks = session.TickHistory.Snapshot();
+            if (request.TickIndex < 0 || request.TickIndex >= ticks.Count)
+                return ValueTask.FromResult(new MonitorMemoryResponse(
+                    RpcStatus.InvalidArgument($"Tick index {request.TickIndex} is out of range (0..{ticks.Count - 1})."),
+                    request.Address,
+                    [],
+                    HostProtocolMapper.ToStatusDto(session)));
+
+            // Snapshot the current (paused) memory image, then reverse-apply later ticks'
+            // write-deltas to reconstruct RAM as it was at the requested tick.
+            var image = new byte[AddressSpaceSize];
+            for (var addr = 0; addr < AddressSpaceSize; addr++)
+                image[addr] = session.Machine.Bus.Peek((ushort)addr);
+
+            TickHistoryReconstruction.ReconstructInto(image, ticks, request.TickIndex);
+
+            var data = new byte[request.Length];
+            Array.Copy(image, request.Address, data, 0, request.Length);
+
+            return ValueTask.FromResult(new MonitorMemoryResponse(
+                RpcStatus.Ok(),
+                request.Address,
+                data,
+                HostProtocolMapper.ToStatusDto(session)));
+        }
+    }
+
+    public ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(
+        GetChipStateAtTickRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (!_registry.TryGet(request.SessionId, out var session))
+            return ValueTask.FromResult(new GetChipStateAtTickResponse(HostProtocolMapper.MissingSessionStatus(request.SessionId), []));
+
+        lock (session.SyncRoot)
+        {
+            var ticks = session.TickHistory.Snapshot();
+            if (request.TickIndex < 0 || request.TickIndex >= ticks.Count)
+                return ValueTask.FromResult(new GetChipStateAtTickResponse(
+                    RpcStatus.InvalidArgument($"Tick index {request.TickIndex} is out of range (0..{ticks.Count - 1})."),
+                    []));
+
+            var chipState = ticks[request.TickIndex].ChipState;
+            // Decode by iterating the stateful devices in the same registry order the recorder
+            // captured them, slicing the blob by each device's StateSize.
+            var devices = session.Machine.Devices.All.OfType<IStatefulDevice>().ToArray();
+            var chips = new List<ChipStateDto>(devices.Length);
+            var offset = 0;
+            foreach (var device in devices)
+            {
+                if (offset + device.StateSize > chipState.Length)
+                    break;
+
+                var fields = device.DecodeState(chipState.AsSpan(offset, device.StateSize))
+                    .Select(f => new ChipStateFieldDto(f.Name, f.Value, f.Width))
+                    .ToArray();
+                chips.Add(new ChipStateDto(device.StateName, fields));
+                offset += device.StateSize;
+            }
+
+            return ValueTask.FromResult(new GetChipStateAtTickResponse(RpcStatus.Ok(), chips));
         }
     }
 

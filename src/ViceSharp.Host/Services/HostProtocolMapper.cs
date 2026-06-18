@@ -68,7 +68,7 @@ internal static class HostProtocolMapper
 
         return new SessionSettingsDto(
             profileId,
-            new LimiterSettingsDto(session.LimiterRatePercent, session.LimiterEnabled),
+            new LimiterSettingsDto(session.LimiterRatePercent, session.LimiterEnabled, session.PacingStrategy),
             session.DisplaySettings,
             session.InputSettings,
             session.AudioSettings,

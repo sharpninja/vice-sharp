@@ -6,7 +6,7 @@ namespace ViceSharp.Chips.Cia;
 /// MOS 6526 CIA (Complex Interface Adapter) chip.
 /// Timer and I/O port emulation with VICE-compatible behavior.
 /// </summary>
-public sealed class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
+public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptSource
 {
     public DeviceId Id => new DeviceId(0x0005);
     public DeviceId SourceId => Id;

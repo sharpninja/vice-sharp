@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Hosting;
 using ViceSharp.Abstractions;
@@ -30,9 +31,10 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
     private const int InstructionGroupSize = 5;
 
     private readonly EmulatorRuntimeRegistry _registry;
-    private readonly IEmulationGate _gate;
     private readonly ConditionalWeakTable<EmulatorRuntimeSession, FrameBookkeeping> _frames = new();
     private readonly Func<EmulatorRuntimeSession, long, long> _advance;
+    private volatile IEmulationGate _gate;
+    private volatile string? _pendingStrategyId;
     private Thread? _workerThread;
     private volatile bool _running;
 
@@ -53,11 +55,42 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
     /// <summary>Active pacing strategy name (e.g. "Semaphore", "VICE").</summary>
     public string GateName => _gate.Name;
 
-    // Strategy selection: VICESHARP_PACE = "vice" | "semaphore" (default).
+    /// <summary>
+    /// Switch the active pacing strategy ("semaphore" | "vice", or their display names);
+    /// idempotent and safe from any thread. On a running pump the swap is staged and
+    /// performed by the worker thread at the top of its next loop, so the old gate is never
+    /// disposed mid-Tick; on a not-yet-started pump it takes effect immediately (StartAsync
+    /// starts the new gate).
+    /// </summary>
+    public void SetStrategy(string? strategyName)
+    {
+        var id = EmulationGateStrategies.Normalize(strategyName);
+        if (string.Equals(_gate.Name, EmulationGateStrategies.DisplayName(id), StringComparison.Ordinal))
+            return; // already active
+
+        if (_running)
+            _pendingStrategyId = id;    // worker swaps at its next loop iteration
+        else
+            SwapGate(id, start: false); // not started yet: StartAsync starts the new gate
+    }
+
+    // Strategy selection at construction: VICESHARP_PACE = "vice" | "semaphore" (default).
     private static IEmulationGate SelectGate()
-        => string.Equals(Environment.GetEnvironmentVariable("VICESHARP_PACE"), "vice", StringComparison.OrdinalIgnoreCase)
-            ? new ViceEmulationGate()
-            : new SemaphoreEmulationGate();
+        => EmulationGateStrategies.CreateGate(Environment.GetEnvironmentVariable("VICESHARP_PACE"));
+
+    // Replace the active gate. start=false for a not-yet-running pump (StartAsync will start
+    // it); start=true when swapping a live gate on the worker thread.
+    private void SwapGate(string strategyId, bool start)
+    {
+        var newGate = EmulationGateStrategies.CreateGate(strategyId);
+        var old = _gate;
+        if (start)
+            newGate.Start();
+        _gate = newGate;
+        if (start)
+            old.Stop();
+        old.Dispose();
+    }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -105,6 +138,15 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
     {
         while (_running)
         {
+            // Live strategy switch: swap the gate on this worker thread (the only thread
+            // that calls Tick) so the outgoing gate is never disposed mid-Tick.
+            var pending = _pendingStrategyId;
+            if (pending is not null)
+            {
+                _pendingStrategyId = null;
+                SwapGate(pending, start: true);
+            }
+
             // The gate advances + paces every Running session; idle when none are running.
             if (!_gate.Tick(_registry, _advance))
                 Thread.Sleep(8);
@@ -147,6 +189,7 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
 
             var frame = _frames.GetValue(session, static _ => new FrameBookkeeping());
             EnsureFrameSubscription(session, frame);
+            EnsureHistorySubscription(session, frame);
 
             var machine = session.Machine;
             var clock = machine.Clock;
@@ -189,6 +232,35 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
         videoChip.FrameCompleted += frame.FrameHandler;
     }
 
+    // Subscribe the session's tick-history recorder to the machine pub/sub once: memory
+    // writes (write-deltas) and instruction-completed events feed the rolling 100-tick
+    // trace for the time-travel debugger. Subscribing turns on the bus/CPU publish gates.
+    private static void EnsureHistorySubscription(EmulatorRuntimeSession session, FrameBookkeeping frame)
+    {
+        if (frame.HistorySubscribed)
+            return;
+
+        frame.HistorySubscribed = true;
+        if (session.Machine.PubSub is not { } pubSub)
+            return; // machine without a pub/sub (e.g. minimal headless): no history.
+
+        var history = session.TickHistory;
+
+        // Register the chips whose full state is captured per tick (before subscribing, so
+        // the very first instruction captures chip state too). Order = device-registry order;
+        // the host decodes per-tick chip state by iterating the same devices in the same order.
+        var statefulDevices = session.Machine.Devices.All.OfType<IStatefulDevice>().ToArray();
+        if (statefulDevices.Length > 0)
+            history.SetStatefulDevices(statefulDevices);
+
+        pubSub.Subscribe<MemoryWriteEvent>(
+            MemoryWriteEvent.Topic,
+            e => history.OnMemoryWrite(e.Address, e.OldValue));
+        pubSub.Subscribe<CpuInstructionCompletedEvent>(
+            CpuInstructionCompletedEvent.Topic,
+            history.OnInstructionCompleted);
+    }
+
     private static void DrainCompletedFrames(EmulatorRuntimeSession session, FrameBookkeeping frame)
     {
         var pending = frame.PendingFrames;
@@ -206,6 +278,7 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
     private sealed class FrameBookkeeping
     {
         public bool Subscribed;
+        public bool HistorySubscribed;
         public int PendingFrames;
         public IVideoChip? VideoChip;
         public EventHandler? FrameHandler;

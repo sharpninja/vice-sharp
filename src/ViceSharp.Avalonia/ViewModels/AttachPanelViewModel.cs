@@ -32,6 +32,7 @@ public sealed class AttachPanelViewModel : ObservableObject
     private string _selectedPrimaryJoystickPort = "Joystick 2";
     private bool _swapJoystickPorts;
     private string _selectedResourceMode = "Auto detect";
+    private string _selectedPacingStrategy = "Semaphore";
     private bool _saveSettingsOnExit;
     private bool _saveTransientValuesOnExit;
     private string _settingsStatusText = "Settings will load from the connected host.";
@@ -45,6 +46,7 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         ArgumentNullException.ThrowIfNull(hostClient);
         _hostClient = hostClient;
+        TickHistory = new TickHistoryViewModel(hostClient);
 
         Slots =
         [
@@ -106,6 +108,8 @@ public sealed class AttachPanelViewModel : ObservableObject
     public IReadOnlyList<string> PrimaryJoystickPorts { get; } = ["Joystick 2", "Joystick 1"];
 
     public IReadOnlyList<string> ResourceModes { get; } = ["Auto detect", "Use configured paths", "Missing resources"];
+
+    public IReadOnlyList<string> PacingStrategies { get; } = ["Semaphore", "VICE"];
 
     public AttachDockSide DockSide
     {
@@ -261,6 +265,13 @@ public sealed class AttachPanelViewModel : ObservableObject
         set => SetSettingsProperty(ref _selectedResourceMode, value);
     }
 
+    /// <summary>Emulation pacing strategy ("Semaphore" | "VICE"). Applies live.</summary>
+    public string SelectedPacingStrategy
+    {
+        get => _selectedPacingStrategy;
+        set => SetSettingsProperty(ref _selectedPacingStrategy, value);
+    }
+
     public string SettingsStatusText
     {
         get => _settingsStatusText;
@@ -311,6 +322,11 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     public void ShowMonitor() => ActiveTab = SidebarTab.Monitor;
 
+    public void ShowHistory() => ActiveTab = SidebarTab.History;
+
+    /// <summary>The "last 100 ticks" time-travel debugger panel view-model.</summary>
+    public TickHistoryViewModel TickHistory { get; }
+
     public async Task RefreshAsync(CancellationToken cancellationToken = default)
     {
         var response = await _hostClient.ListMediaAsync(cancellationToken);
@@ -341,6 +357,9 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         foreach (var slot in Slots)
             slot.SetIecActivity(status.IecBusActive);
+
+        // The time-travel debugger only allows inspecting a tick while paused.
+        TickHistory.IsPaused = status.RunState == EmulatorRunState.Paused;
     }
 
     public async Task AttachAsync(AttachSlotViewModel slot, string filePath, CancellationToken cancellationToken = default)
@@ -681,6 +700,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         _selectedPrimaryJoystickPort = FromInputPort(settings.Input.PrimaryJoystickPort);
         _swapJoystickPorts = settings.Input.SwapJoystickPorts;
         _selectedResourceMode = FromResourceModeId(settings.Resources?.Mode ?? new ResourceSettingsDto().Mode);
+        _selectedPacingStrategy = FromPacingStrategyId(settings.Limiter.PacingStrategy);
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
@@ -696,13 +716,14 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedPrimaryJoystickPort));
         OnPropertyChanged(nameof(SwapJoystickPorts));
         OnPropertyChanged(nameof(SelectedResourceMode));
+        OnPropertyChanged(nameof(SelectedPacingStrategy));
     }
 
     private UpdateSettingsRequest CreateUpdateSettingsRequest(bool restartSession)
     {
         return new UpdateSettingsRequest(
             _hostClient.SessionId,
-            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled),
+            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled, ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
                 ToPaletteId(SelectedPalette),
@@ -726,7 +747,7 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         return new ValidateSettingsResourcesRequest(
             _hostClient.SessionId,
-            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled),
+            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled, ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
                 ToPaletteId(SelectedPalette),
@@ -934,6 +955,12 @@ public sealed class AttachPanelViewModel : ObservableObject
         return inputPort == InputPort.Joystick1 ? "Joystick 1" : "Joystick 2";
     }
 
+    private static string ToPacingStrategyId(string strategy)
+        => string.Equals(strategy, "VICE", StringComparison.OrdinalIgnoreCase) ? "vice" : "semaphore";
+
+    private static string FromPacingStrategyId(string id)
+        => string.Equals(id, "vice", StringComparison.OrdinalIgnoreCase) ? "VICE" : "Semaphore";
+
     private static bool IsRestartRelevant(string propertyName)
     {
         return propertyName is nameof(SelectedMachineProfile) or nameof(SelectedResourceMode);
@@ -954,7 +981,8 @@ public sealed class AttachPanelViewModel : ObservableObject
             SelectedInputMode,
             SelectedPrimaryJoystickPort,
             SwapJoystickPorts,
-            SelectedResourceMode);
+            SelectedResourceMode,
+            SelectedPacingStrategy);
     }
 
     private void RestoreSettings(SettingsSnapshot snapshot)
@@ -972,6 +1000,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         _selectedPrimaryJoystickPort = snapshot.PrimaryJoystickPort;
         _swapJoystickPorts = snapshot.SwapJoystickPorts;
         _selectedResourceMode = snapshot.ResourceMode;
+        _selectedPacingStrategy = snapshot.PacingStrategy;
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
@@ -987,6 +1016,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedPrimaryJoystickPort));
         OnPropertyChanged(nameof(SwapJoystickPorts));
         OnPropertyChanged(nameof(SelectedResourceMode));
+        OnPropertyChanged(nameof(SelectedPacingStrategy));
     }
 
     // ---- Save-on-exit toggles + persistence capture/apply --------------------
@@ -1020,7 +1050,8 @@ public sealed class AttachPanelViewModel : ObservableObject
         SelectedPrimaryJoystickPort,
         SwapJoystickPorts,
         SelectedResourceMode,
-        (int)DockSide);
+        (int)DockSide,
+        SelectedPacingStrategy);
 
     /// <summary>Capture the current transient state (attached media + keyboard map).</summary>
     public PersistedTransient CapturePersistedTransient()
@@ -1052,6 +1083,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         SelectedPrimaryJoystickPort = settings.PrimaryJoystickPort;
         SwapJoystickPorts = settings.SwapJoystickPorts;
         SelectedResourceMode = settings.ResourceMode;
+        SelectedPacingStrategy = settings.PacingStrategy;
         if ((AttachDockSide)settings.DockSide == AttachDockSide.Right)
             DockRight();
         else
@@ -1120,11 +1152,13 @@ internal sealed record SettingsSnapshot(
     string InputMode,
     string PrimaryJoystickPort,
     bool SwapJoystickPorts,
-    string ResourceMode);
+    string ResourceMode,
+    string PacingStrategy);
 
 public enum SidebarTab
 {
     Peripherals,
     Settings,
-    Monitor
+    Monitor,
+    History
 }

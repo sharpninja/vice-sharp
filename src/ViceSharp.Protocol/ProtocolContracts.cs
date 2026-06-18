@@ -277,7 +277,7 @@ public sealed record SettingsProfileDto(
     bool IsAvailable,
     string Description = "");
 
-public sealed record LimiterSettingsDto(double RatePercent = 100, bool IsEnabled = true);
+public sealed record LimiterSettingsDto(double RatePercent = 100, bool IsEnabled = true, string PacingStrategy = "semaphore");
 
 public sealed record DisplaySettingsDto(
     string Renderer = "host",
@@ -548,6 +548,9 @@ public static class MonitorService
     public const string RemoveBreakpoint = "RemoveBreakpoint";
     public const string ReadMemory = "ReadMemory";
     public const string WriteMemory = "WriteMemory";
+    public const string GetTickHistory = "GetTickHistory";
+    public const string ReadMemoryAtTick = "ReadMemoryAtTick";
+    public const string GetChipStateAtTick = "GetChipStateAtTick";
 }
 
 public interface IMonitorService
@@ -582,6 +585,22 @@ public interface IMonitorService
 
     ValueTask<MonitorMemoryWriteResponse> WriteMemoryAsync(
         MonitorWriteMemoryRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: the last captured CPU instructions (ticks).</summary>
+    ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: a memory window reconstructed as it was at a past tick
+    /// (current paused memory with later ticks' write-deltas reverse-applied).</summary>
+    ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(
+        ReadMemoryAtTickRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: each chip's decoded full state as captured at a past tick.</summary>
+    ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(
+        GetChipStateAtTickRequest request,
         CancellationToken cancellationToken = default);
 }
 
@@ -635,6 +654,34 @@ public sealed record MonitorMemoryWriteResponse(
     int Address,
     int BytesWritten,
     EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
+
+public sealed record TickHistoryEntryDto(
+    int Index,
+    int InstructionAddress,
+    int Opcode,
+    int A,
+    int X,
+    int Y,
+    int S,
+    int P,
+    int Pc,
+    int WriteCount);
+
+public sealed record GetTickHistoryResponse(
+    RpcStatus Status,
+    IReadOnlyList<TickHistoryEntryDto> Ticks) : IRpcResponse;
+
+public sealed record ReadMemoryAtTickRequest(string SessionId, int TickIndex, int Address, int Length);
+
+public sealed record ChipStateFieldDto(string Name, int Value, int Width);
+
+public sealed record ChipStateDto(string ChipName, IReadOnlyList<ChipStateFieldDto> Fields);
+
+public sealed record GetChipStateAtTickRequest(string SessionId, int TickIndex);
+
+public sealed record GetChipStateAtTickResponse(
+    RpcStatus Status,
+    IReadOnlyList<ChipStateDto> Chips) : IRpcResponse;
 
 public static class SnapshotService
 {

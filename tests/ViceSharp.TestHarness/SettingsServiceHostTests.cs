@@ -210,6 +210,41 @@ public sealed class SettingsServiceHostTests
     }
 
     /// <summary>
+    /// FR-PACESEL-001 / TR-PACESEL-001 / TEST-PACESEL-002.
+    /// Use case: A client selects the "vice" pacing strategy via the limiter settings.
+    /// Acceptance: UpdateSettings returns Ok with a live "limiter.pacingStrategy" diagnostic,
+    ///   the global emulation pump switches its active gate to VICE, and a subsequent
+    ///   GetSettings round-trips the stored strategy id.
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_PacingStrategy_AppliesToPumpAndRoundTrips()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        using var pump = new EmulationPumpService(registry, EmulationGateStrategies.CreateGate("semaphore"));
+        var settingsService = new SettingsServiceHost(registry, new DefaultEmulatorRuntimeFactory(), pump);
+
+        var update = await settingsService.UpdateSettingsAsync(
+            new UpdateSettingsRequest(session.SessionId, Limiter: new LimiterSettingsDto(100, true, "vice")),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, update.Status.Code);
+        Assert.NotNull(update.Settings);
+        Assert.Equal("vice", update.Settings.Limiter.PacingStrategy);
+        Assert.Equal("VICE", pump.GateName);
+        Assert.Contains(update.Diagnostics, diagnostic =>
+            string.Equals(diagnostic.Setting, "limiter.pacingStrategy", System.StringComparison.OrdinalIgnoreCase) &&
+            diagnostic.AppliedLive);
+
+        var get = await settingsService.GetSettingsAsync(
+            new SessionRequest(session.SessionId),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal("vice", get.Settings!.Limiter.PacingStrategy);
+    }
+
+    /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
     /// Use case: A client calls UpdateSettings with an out-of-range
     /// limiter rate that violates the host validation policy

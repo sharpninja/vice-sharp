@@ -48,6 +48,11 @@
                 <CheckBox Content="Warp Mode (Alt+W)" IsChecked="{Binding IsWarpMode, Mode=TwoWay}" />
                 <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="OrangeRed" TextWrapping="Wrap"
                            Text="Warp = uncapped speed (same as VICE -warp). Use with dotTrace for profiling." />
+                <TextBlock FontSize="13" FontWeight="SemiBold" Text="Pacing strategy" />
+                <ComboBox Classes="row" ItemsSource="{Binding PacingStrategies}"
+                          SelectedItem="{Binding SelectedPacingStrategy, Mode=TwoWay}" />
+                <TextBlock FontSize="11" Foreground="#9AA0A6" TextWrapping="Wrap"
+                           Text="Semaphore: high-res timer releases the worker. VICE: faithful sound back-pressure + vsync." />
             </StackPanel>
 
             <StackPanel Spacing="7">

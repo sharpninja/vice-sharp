@@ -47,6 +47,12 @@ public sealed class EmulatorRuntimeSession
 
     public IecBusActivityMonitor? IecBusActivity { get; }
 
+    /// <summary>
+    /// Rolling last-100-instruction trace with per-instruction memory write-deltas, for the
+    /// time-travel debugger. Populated by the emulation pump from the machine's pub/sub.
+    /// </summary>
+    public TickHistoryRecorder TickHistory { get; } = new();
+
     public string PowerState { get; set; } = "On";
 
     public EmulatorRunState RunState { get; set; } = EmulatorRunState.Stopped;
@@ -66,6 +72,13 @@ public sealed class EmulatorRuntimeSession
     public double LimiterRatePercent { get; set; } = 100;
 
     public bool LimiterEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Selected emulation pacing strategy id ("semaphore" | "vice"), surfaced in the
+    /// limiter settings. The active gate lives on the global emulation pump; this mirrors
+    /// the choice so GetSettings round-trips it.
+    /// </summary>
+    public string PacingStrategy { get; set; } = "semaphore";
 
     public DisplaySettingsDto DisplaySettings { get; set; } = new();
 
