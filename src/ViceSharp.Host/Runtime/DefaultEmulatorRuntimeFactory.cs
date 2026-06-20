@@ -2,6 +2,7 @@ using System.IO;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Core;
+using ViceSharp.Core.Media;
 using ViceSharp.Host.Audio;
 using ViceSharp.Protocol;
 using ViceSharp.RomFetch;
@@ -14,9 +15,21 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
     private readonly IReadOnlyDictionary<string, IArchitectureDescriptor> _descriptors;
     private readonly string _defaultArchitectureId;
 
+    // Live sound-recording tap installed in the SID -> output path for sessions
+    // this factory builds (FR-MED-003). Null for the explicit-builder ctors used
+    // by headless test rigs. Created once and shared by every session this
+    // factory creates (one interactive session at a time in practice).
+    private readonly CaptureAudioTap? _audioTap;
+
     public DefaultEmulatorRuntimeFactory()
-        : this(CreateDefaultArchitectureBuilder(), CreateDefaultDescriptors(), CreateDefaultArchitectureId())
+        : this(CreateDefaultAudioTap())
     {
+    }
+
+    private DefaultEmulatorRuntimeFactory(CaptureAudioTap? audioTap)
+        : this(CreateDefaultArchitectureBuilder(audioTap), CreateDefaultDescriptors(), CreateDefaultArchitectureId())
+    {
+        _audioTap = audioTap;
     }
 
     public DefaultEmulatorRuntimeFactory(
@@ -82,7 +95,12 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
             : _architectureBuilder.Build(descriptor);
 
         var sessionId = $"emulator-{Guid.NewGuid():N}";
-        var session = new EmulatorRuntimeSession(sessionId, descriptor, machine, CreateIecBusActivityMonitor(machine));
+        var session = new EmulatorRuntimeSession(sessionId, descriptor, machine, CreateIecBusActivityMonitor(machine))
+        {
+            // Expose the live audio tap so sound capture can attach a recorder
+            // (null for explicit-builder test rigs with no live audio path).
+            AudioCaptureTap = _audioTap,
+        };
 
         // The true-drive rig boots with the disk inserted at build time, so the
         // session's media list must reflect it (otherwise the host reports the
@@ -118,11 +136,23 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
         }
     }
 
-    private static IArchitectureBuilder CreateDefaultArchitectureBuilder()
+    // Wrap the platform real-time backend in a recording tap so a
+    // StartCapture(Audio) can attach a WAV recorder at runtime without rebuilding
+    // the machine. While nothing is recording the tap is a transparent pass-through.
+    //
+    // CRITICAL (parity): only install the tap when a REAL audio device exists. On
+    // non-Windows / headless / test hosts CreateDefault() returns null, and we must
+    // pass null through to the SID (not a tap wrapping null) so the SID never
+    // touches the audio path - otherwise it would emit samples and become an audio
+    // timing source, perturbing cycle-accurate parity and pacing tests.
+    private static CaptureAudioTap? CreateDefaultAudioTap()
     {
-        // Attach the platform real-time audio backend so the SID streams live
-        // (null on non-Windows / headless, which leaves emulation silent).
-        var audioBackend = AudioBackendFactory.CreateDefault();
+        var backend = AudioBackendFactory.CreateDefault();
+        return backend is null ? null : new CaptureAudioTap(backend);
+    }
+
+    private static IArchitectureBuilder CreateDefaultArchitectureBuilder(IAudioBackend? audioBackend)
+    {
         return TryFindC64RomBasePath(out var romBasePath)
             ? new ArchitectureBuilder(CreateC64RomProvider(romBasePath), audioBackend)
             : new ArchitectureBuilder(audioBackend);

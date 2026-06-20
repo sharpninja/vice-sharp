@@ -123,4 +123,28 @@ public interface IHostProtocolClient
         CancellationToken cancellationToken = default);
 
     ValueTask<GetVideoFrameResponse> GetFrameAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Discover the screenshot / sound / video formats the host supports.</summary>
+    ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Capture the current frame to <paramref name="filePath"/> as a screenshot
+    /// ("png" default, or "bmp"). Mirrors x64sc's screenshot capability.</summary>
+    ValueTask<CaptureFrameResponse> CaptureFrameAsync(
+        string filePath,
+        string format = "png",
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Begin a continuous sound or video recording to <paramref name="targetPath"/>.</summary>
+    ValueTask<StartCaptureResponse> StartCaptureAsync(
+        CaptureKind kind,
+        string targetPath,
+        string format = "",
+        IReadOnlyDictionary<string, string>? options = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Stop an active recording started with <see cref="StartCaptureAsync"/>.</summary>
+    ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default);
+
+    /// <summary>List the captures active (or recently completed) for the session.</summary>
+    ValueTask<ListCapturesResponse> ListCapturesAsync(CancellationToken cancellationToken = default);
 }

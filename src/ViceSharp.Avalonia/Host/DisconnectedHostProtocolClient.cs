@@ -192,6 +192,37 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
         return ValueTask.FromResult(new GetVideoFrameResponse(_disconnectedStatus, null));
     }
 
+    public ValueTask<CaptureFrameResponse> CaptureFrameAsync(string filePath, string format = "png", CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new CaptureFrameResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new GetCaptureCapabilitiesResponse(
+            _disconnectedStatus, Array.Empty<string>(), Array.Empty<string>(), Array.Empty<CaptureVideoFormatDto>()));
+    }
+
+    public ValueTask<StartCaptureResponse> StartCaptureAsync(CaptureKind kind, string targetPath, string format = "", IReadOnlyDictionary<string, string>? options = null, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new StartCaptureResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new StopCaptureResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<ListCapturesResponse> ListCapturesAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new ListCapturesResponse(_disconnectedStatus, Array.Empty<CaptureSessionDto>()));
+    }
+
     private ValueTask<EmulatorCommandResponse> CommandAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

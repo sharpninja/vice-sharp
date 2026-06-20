@@ -14,6 +14,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     private readonly GrpcContracts.InputService.InputServiceClient _inputClient;
     private readonly GrpcContracts.SettingsService.SettingsServiceClient _settingsClient;
     private readonly GrpcContracts.MonitorService.MonitorServiceClient _monitorClient;
+    private readonly GrpcContracts.CaptureService.CaptureServiceClient _captureClient;
     private string _sessionId;
     private bool _trueDrive;
     private int _trueDriveDevice = 8;
@@ -29,6 +30,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         _inputClient = new GrpcContracts.InputService.InputServiceClient(_channel);
         _settingsClient = new GrpcContracts.SettingsService.SettingsServiceClient(_channel);
         _monitorClient = new GrpcContracts.MonitorService.MonitorServiceClient(_channel);
+        _captureClient = new GrpcContracts.CaptureService.CaptureServiceClient(_channel);
         _sessionId = sessionId;
     }
 
@@ -441,6 +443,95 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
         return new GetVideoFrameResponse(MapStatus(response.Status), response.Frame is null ? null : MapFrame(response.Frame));
     }
+
+    public async ValueTask<CaptureFrameResponse> CaptureFrameAsync(
+        string filePath,
+        string format = "png",
+        CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.CaptureFrameAsync(
+            new GrpcContracts.CaptureFrameRequest { SessionId = sessionId, FilePath = filePath, Format = format },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new CaptureFrameResponse(
+            MapStatus(response.Status),
+            response.Artifact is null
+                ? null
+                : new CaptureArtifactDto(response.Artifact.FilePath, response.Artifact.Format, response.Artifact.Cycle));
+    }
+
+    public async ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.GetCaptureCapabilitiesAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        var video = new CaptureVideoFormatDto[response.VideoFormats.Count];
+        for (var i = 0; i < video.Length; i++)
+        {
+            var v = response.VideoFormats[i];
+            video[i] = new CaptureVideoFormatDto(v.Id, v.Container, v.VideoCodecs.ToArray(), v.AudioCodecs.ToArray(), v.RequiresFfmpeg);
+        }
+
+        return new GetCaptureCapabilitiesResponse(
+            MapStatus(response.Status),
+            response.ScreenshotFormats.ToArray(),
+            response.AudioFormats.ToArray(),
+            video);
+    }
+
+    public async ValueTask<StartCaptureResponse> StartCaptureAsync(
+        CaptureKind kind,
+        string targetPath,
+        string format = "",
+        IReadOnlyDictionary<string, string>? options = null,
+        CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var request = new GrpcContracts.StartCaptureRequest
+        {
+            SessionId = sessionId,
+            Kind = (GrpcContracts.CaptureKind)(int)kind,
+            TargetPath = targetPath,
+            Format = format
+        };
+        if (options is not null)
+            foreach (var pair in options)
+                request.Options[pair.Key] = pair.Value;
+
+        var response = await _captureClient.StartCaptureAsync(request, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return new StartCaptureResponse(MapStatus(response.Status), MapCapture(response.Capture));
+    }
+
+    public async ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.StopCaptureAsync(
+            new GrpcContracts.StopCaptureRequest { SessionId = sessionId, CaptureId = captureId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+        return new StopCaptureResponse(MapStatus(response.Status), MapCapture(response.Capture));
+    }
+
+    public async ValueTask<ListCapturesResponse> ListCapturesAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.ListCapturesAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        var captures = new CaptureSessionDto[response.Captures.Count];
+        for (var i = 0; i < captures.Length; i++)
+            captures[i] = MapCapture(response.Captures[i])!;
+
+        return new ListCapturesResponse(MapStatus(response.Status), captures);
+    }
+
+    private static CaptureSessionDto? MapCapture(GrpcContracts.CaptureSessionDto? capture)
+        => capture is null
+            ? null
+            : new CaptureSessionDto(capture.CaptureId, (CaptureKind)(int)capture.Kind, capture.TargetPath, capture.IsActive);
 
     public void Dispose()
     {

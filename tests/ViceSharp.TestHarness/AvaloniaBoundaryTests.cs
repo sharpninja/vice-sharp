@@ -871,6 +871,37 @@ public sealed class AvaloniaBoundaryTests
             return ValueTask.FromResult(new GetVideoFrameResponse(RpcStatus.Unavailable("No frame."), null));
         }
 
+        public ValueTask<CaptureFrameResponse> CaptureFrameAsync(string filePath, string format = "png", CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new CaptureFrameResponse(RpcStatus.Unavailable("No capture."), null));
+        }
+
+        public ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new GetCaptureCapabilitiesResponse(
+                RpcStatus.Unavailable("No capture."), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<CaptureVideoFormatDto>()));
+        }
+
+        public ValueTask<StartCaptureResponse> StartCaptureAsync(CaptureKind kind, string targetPath, string format = "", IReadOnlyDictionary<string, string>? options = null, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new StartCaptureResponse(RpcStatus.Unavailable("No capture."), null));
+        }
+
+        public ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new StopCaptureResponse(RpcStatus.Unavailable("No capture."), null));
+        }
+
+        public ValueTask<ListCapturesResponse> ListCapturesAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new ListCapturesResponse(RpcStatus.Unavailable("No capture."), Array.Empty<CaptureSessionDto>()));
+        }
+
         private ValueTask<EmulatorCommandResponse> CommandAsync(
             CancellationToken cancellationToken,
             RpcStatus? status = null)

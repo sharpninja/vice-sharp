@@ -1,4 +1,6 @@
+using System.IO;
 using ViceSharp.Abstractions;
+using ViceSharp.Core.Media;
 using ViceSharp.Protocol;
 
 namespace ViceSharp.Host.Runtime;
@@ -20,6 +22,17 @@ public sealed class EmulatorRuntimeSession
     private int _committedHeight;
     private long _committedCycle;
     private bool _writeToA = true;
+
+    // Live media-recording state (FR-MED-002 video / FR-MED-003 audio). Guarded
+    // by _captureSync, which the emulation worker takes per frame to tee video and
+    // which the RPC threads take to begin/finalise a recording. Distinct from
+    // SyncRoot so the lock-free UI frame read path is unaffected.
+    private readonly object _captureSync = new();
+    private FrameSequenceCapture? _videoCapture;
+    private string? _videoCaptureId;
+    private WavAudioRecorder? _audioRecorder;
+    private Stream? _audioStream;
+    private string? _audioCaptureId;
 
     public EmulatorRuntimeSession(
         string sessionId,
@@ -76,6 +89,33 @@ public sealed class EmulatorRuntimeSession
     public Dictionary<InputPort, JoystickStateDto> JoystickStates { get; } = new();
 
     public Dictionary<string, CaptureSessionDto> CaptureSessions { get; } = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// The live audio-recording tap installed in the SID -> output path at
+    /// machine-build time, or null when the session has no live audio path
+    /// (headless / test rigs built without the platform backend). Sound capture
+    /// (FR-MED-003) attaches a WAV recorder to this tap; video capture does not
+    /// use it.
+    /// </summary>
+    public CaptureAudioTap? AudioCaptureTap { get; set; }
+
+    /// <summary>True while a numbered-BMP video capture is in progress.</summary>
+    public bool IsVideoCaptureActive
+    {
+        get { lock (_captureSync) { return _videoCapture is not null; } }
+    }
+
+    /// <summary>True while a WAV sound recording is in progress.</summary>
+    public bool IsAudioCaptureActive
+    {
+        get { lock (_captureSync) { return _audioRecorder is not null; } }
+    }
+
+    /// <summary>Number of frames written by the active (or just-finished) video capture.</summary>
+    public int VideoCaptureFrameCount
+    {
+        get { lock (_captureSync) { return _videoCapture?.FrameCount ?? 0; } }
+    }
 
     public SortedSet<ushort> Breakpoints { get; } = new();
 
@@ -181,6 +221,104 @@ public sealed class EmulatorRuntimeSession
         _committedCycle = cycle;
         _publishedFrame = back;       // volatile publish (release barrier)
         _writeToA = !_writeToA;
+
+        // Tee the just-published frame to an active video capture (FR-MED-002).
+        // The copy `back` is owned by this session, so passing it to the BMP
+        // writer cannot race the next frame's render.
+        RecordVideoFrameIfActive(((ReadOnlySpan<byte>)back)[..source.Length], _committedWidth, _committedHeight);
+    }
+
+    /// <summary>
+    /// Writes the supplied BGRA frame to the active video capture (numbered BMP
+    /// sequence) when one is running; a no-op otherwise. Called by the emulation
+    /// worker from <see cref="CommitFrame"/>, and directly by tests to drive a
+    /// capture without a full video chip.
+    /// </summary>
+    public void RecordVideoFrameIfActive(ReadOnlySpan<byte> bgra, int width, int height)
+    {
+        lock (_captureSync)
+        {
+            _videoCapture?.CaptureFrame(bgra, width, height);
+        }
+    }
+
+    /// <summary>
+    /// Begins a numbered-BMP video capture into <paramref name="outputDirectory"/>
+    /// (FR-MED-002). Any previously-active video capture is finalised first. The
+    /// directory is created if it does not exist.
+    /// </summary>
+    public void BeginVideoCapture(string captureId, string outputDirectory)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(captureId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(outputDirectory);
+        lock (_captureSync)
+        {
+            _videoCapture?.Dispose();
+            _videoCapture = new FrameSequenceCapture(outputDirectory);
+            _videoCaptureId = captureId;
+        }
+    }
+
+    /// <summary>
+    /// Finalises the active video capture and returns the number of frames it
+    /// wrote (0 when none was active).
+    /// </summary>
+    public int EndVideoCapture()
+    {
+        lock (_captureSync)
+        {
+            var frames = _videoCapture?.FrameCount ?? 0;
+            _videoCapture?.Dispose();
+            _videoCapture = null;
+            _videoCaptureId = null;
+            return frames;
+        }
+    }
+
+    /// <summary>
+    /// Begins a WAV sound recording (FR-MED-003) by attaching
+    /// <paramref name="recorder"/> to the live audio tap. Requires
+    /// <see cref="AudioCaptureTap"/> to be set (a live audio path). The session
+    /// takes ownership of <paramref name="recorder"/> and <paramref name="stream"/>
+    /// for the duration of the capture and finalises both in
+    /// <see cref="EndAudioCapture"/>.
+    /// </summary>
+    public void BeginAudioCapture(string captureId, WavAudioRecorder recorder, Stream stream)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(captureId);
+        ArgumentNullException.ThrowIfNull(recorder);
+        ArgumentNullException.ThrowIfNull(stream);
+
+        var tap = AudioCaptureTap
+            ?? throw new InvalidOperationException("This session has no live audio path to record from.");
+
+        lock (_captureSync)
+        {
+            _audioRecorder = recorder;
+            _audioStream = stream;
+            _audioCaptureId = captureId;
+            tap.AttachRecorder(recorder);
+        }
+    }
+
+    /// <summary>
+    /// Finalises the active WAV recording: detaches it from the tap, patches the
+    /// RIFF/data sizes, and closes the output stream. Returns the number of PCM
+    /// data bytes written (0 when none was active).
+    /// </summary>
+    public long EndAudioCapture()
+    {
+        lock (_captureSync)
+        {
+            AudioCaptureTap?.DetachRecorder();
+            long bytes = _audioRecorder?.DataBytesWritten ?? 0;
+            _audioRecorder?.Dispose();   // Stop() patches header sizes
+            _audioStream?.Dispose();
+            _audioRecorder = null;
+            _audioStream = null;
+            _audioCaptureId = null;
+            return bytes;
+        }
     }
 
     /// <summary>

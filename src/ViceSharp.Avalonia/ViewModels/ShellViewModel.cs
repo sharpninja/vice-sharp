@@ -46,6 +46,62 @@ public sealed class ShellViewModel
 
     public ValueTask<EmulatorCommandResponse> AutostartDrive8Async(CancellationToken ct = default) => _host.ResetAndAutostartDrive8Async(ct);
 
+    /// <summary>Capture the current frame to <paramref name="filePath"/> as a screenshot
+    /// ("png" or "bmp"). Wired to Snapshot -&gt; Save screenshot... (x64sc screenshot parity).</summary>
+    public ValueTask<CaptureFrameResponse> CaptureScreenshotAsync(string filePath, string format = "png", CancellationToken ct = default)
+        => _host.CaptureFrameAsync(filePath, format, ct);
+
+    private string? _soundCaptureId;
+    private string? _videoCaptureId;
+
+    /// <summary>True while a WAV sound recording is in progress.</summary>
+    public bool IsRecordingSound => _soundCaptureId is not null;
+
+    /// <summary>True while a BMP-sequence video recording is in progress.</summary>
+    public bool IsRecordingVideo => _videoCaptureId is not null;
+
+    /// <summary>Start recording the emulator's audio output to <paramref name="filePath"/>
+    /// as WAV (x64sc sound-recording parity). Wired to Snapshot -&gt; Record sound...</summary>
+    public async ValueTask<RpcStatus> StartSoundRecordingAsync(string filePath, CancellationToken ct = default)
+    {
+        var response = await _host.StartCaptureAsync(CaptureKind.Audio, filePath, "wav", null, ct).ConfigureAwait(false);
+        if (response.Status.IsSuccess && response.Capture is not null)
+            _soundCaptureId = response.Capture.CaptureId;
+        return response.Status;
+    }
+
+    /// <summary>Stop the active sound recording (no-op when none is active).</summary>
+    public async ValueTask<RpcStatus> StopSoundRecordingAsync(CancellationToken ct = default)
+    {
+        var id = _soundCaptureId;
+        if (id is null)
+            return RpcStatus.Ok();
+        var response = await _host.StopCaptureAsync(id, ct).ConfigureAwait(false);
+        _soundCaptureId = null;
+        return response.Status;
+    }
+
+    /// <summary>Start recording video into <paramref name="outputDirectory"/> as a numbered
+    /// BMP sequence (frame_NNNNNN.bmp). Wired to Snapshot -&gt; Record video...</summary>
+    public async ValueTask<RpcStatus> StartVideoRecordingAsync(string outputDirectory, CancellationToken ct = default)
+    {
+        var response = await _host.StartCaptureAsync(CaptureKind.Video, outputDirectory, "bmpseq", null, ct).ConfigureAwait(false);
+        if (response.Status.IsSuccess && response.Capture is not null)
+            _videoCaptureId = response.Capture.CaptureId;
+        return response.Status;
+    }
+
+    /// <summary>Stop the active video recording (no-op when none is active).</summary>
+    public async ValueTask<RpcStatus> StopVideoRecordingAsync(CancellationToken ct = default)
+    {
+        var id = _videoCaptureId;
+        if (id is null)
+            return RpcStatus.Ok();
+        var response = await _host.StopCaptureAsync(id, ct).ConfigureAwait(false);
+        _videoCaptureId = null;
+        return response.Status;
+    }
+
     // ---- Menu actions --------------------------------------------------------
 
     /// <summary>Toggle VICE-style warp (uncapped) mode and apply settings.</summary>

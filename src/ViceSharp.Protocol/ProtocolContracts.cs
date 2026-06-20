@@ -716,13 +716,19 @@ public sealed record RestoreSnapshotResponse(
 public static class CaptureService
 {
     public const string ServiceName = "vice_sharp.v1.CaptureService";
+    public const string GetCaptureCapabilities = "GetCaptureCapabilities";
     public const string StartCapture = "StartCapture";
     public const string StopCapture = "StopCapture";
     public const string CaptureFrame = "CaptureFrame";
+    public const string ListCaptures = "ListCaptures";
 }
 
 public interface ICaptureService
 {
+    ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
     ValueTask<StartCaptureResponse> StartCaptureAsync(
         StartCaptureRequest request,
         CancellationToken cancellationToken = default);
@@ -734,6 +740,10 @@ public interface ICaptureService
     ValueTask<CaptureFrameResponse> CaptureFrameAsync(
         CaptureFrameRequest request,
         CancellationToken cancellationToken = default);
+
+    ValueTask<ListCapturesResponse> ListCapturesAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed record CaptureSessionDto(
@@ -744,11 +754,34 @@ public sealed record CaptureSessionDto(
 
 public sealed record CaptureArtifactDto(string FilePath, string Format, long Cycle);
 
-public sealed record StartCaptureRequest(string SessionId, CaptureKind Kind, string TargetPath);
+public sealed record StartCaptureRequest(
+    string SessionId,
+    CaptureKind Kind,
+    string TargetPath,
+    string Format = "",
+    IReadOnlyDictionary<string, string>? Options = null);
+
+/// <summary>One selectable video-recording driver and the codecs it offers (x64sc parity).</summary>
+public sealed record CaptureVideoFormatDto(
+    string Id,
+    string Container,
+    IReadOnlyList<string> VideoCodecs,
+    IReadOnlyList<string> AudioCodecs,
+    bool RequiresFfmpeg);
+
+public sealed record GetCaptureCapabilitiesResponse(
+    RpcStatus Status,
+    IReadOnlyList<string> ScreenshotFormats,
+    IReadOnlyList<string> AudioFormats,
+    IReadOnlyList<CaptureVideoFormatDto> VideoFormats) : IRpcResponse;
+
+public sealed record ListCapturesResponse(
+    RpcStatus Status,
+    IReadOnlyList<CaptureSessionDto> Captures) : IRpcResponse;
 
 public sealed record StopCaptureRequest(string SessionId, string CaptureId);
 
-public sealed record CaptureFrameRequest(string SessionId, string FilePath);
+public sealed record CaptureFrameRequest(string SessionId, string FilePath, string Format = "png");
 
 public sealed record StartCaptureResponse(
     RpcStatus Status,

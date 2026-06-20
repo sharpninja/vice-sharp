@@ -48,6 +48,27 @@ public sealed class ShellViewModelTests
     }
 
     /// <summary>
+    /// FR: FR-MED-001, TR: TR-MEDIA-001, TEST-MED-001 (x64sc screenshot parity).
+    /// Use case: the Snapshot -&gt; Save screenshot menu action must drive the host capture
+    ///   RPC with the chosen file path and image format.
+    /// Acceptance: ShellViewModel.CaptureScreenshotAsync forwards the path and format exactly
+    ///   once to IHostProtocolClient.CaptureFrameAsync and returns its response.
+    /// </summary>
+    [Fact]
+    public async Task CaptureScreenshotAsync_ForwardsPathAndFormat_ToHost()
+    {
+        var (shell, host, _) = CreateShell();
+        host.CaptureFrameAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<CaptureFrameResponse>(
+                new CaptureFrameResponse(RpcStatus.Ok(), new CaptureArtifactDto("shot.png", "png", 0))));
+
+        var response = await shell.CaptureScreenshotAsync("shot.png", "png", TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+        await host.Received(1).CaptureFrameAsync("shot.png", "png", Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
     /// FR: FR-UIMENUBAR-001, TR: TR-MVVM-001, TEST-UIMENUBAR-001.
     /// Use case: The Debug/transport menu items and the status-bar transport
     /// buttons must invoke the corresponding host protocol commands.

@@ -871,7 +871,15 @@ public sealed class GrpcHostServiceAdaptersTests
         public CaptureFrameResponse FrameResponse { get; set; } =
             new(RpcStatus.Ok(), null);
 
+        public GetCaptureCapabilitiesResponse CapabilitiesResponse { get; set; } =
+            new(RpcStatus.Ok(), ["png", "bmp"], ["wav"], System.Array.Empty<CaptureVideoFormatDto>());
+        public ListCapturesResponse ListResponse { get; set; } =
+            new(RpcStatus.Ok(), System.Array.Empty<CaptureSessionDto>());
+
         public StartCaptureRequest? LastStartRequest { get; private set; }
+
+        public ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(SessionRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(CapabilitiesResponse);
 
         public ValueTask<StartCaptureResponse> StartCaptureAsync(StartCaptureRequest request, CancellationToken cancellationToken = default)
         {
@@ -884,5 +892,8 @@ public sealed class GrpcHostServiceAdaptersTests
 
         public ValueTask<CaptureFrameResponse> CaptureFrameAsync(CaptureFrameRequest request, CancellationToken cancellationToken = default)
             => ValueTask.FromResult(FrameResponse);
+
+        public ValueTask<ListCapturesResponse> ListCapturesAsync(SessionRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(ListResponse);
     }
 }

@@ -68,6 +68,44 @@ public sealed class Slice4CaptureTests
         }
     }
 
+    /// <summary>
+    /// FR-MED-001 / TR-MEDIA-001 (x64sc screenshot parity).
+    /// Use case: the host captures an already-copied BGRA frame in the requested screenshot
+    ///   format (the path the wired CaptureFrame RPC takes after snapshotting under lock).
+    /// Acceptance: "PNG" writes the PNG signature and returns canonical "png"; "bmp" writes the
+    ///   BM signature and returns "bmp"; an unsupported format throws ArgumentOutOfRangeException.
+    /// </summary>
+    [Fact]
+    public async Task CaptureBgra_RoutesFormat_AndReturnsCanonicalName()
+    {
+        var frame = new byte[8 * 8 * 4];
+        var png = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.png");
+        var bmp = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.bmp");
+
+        try
+        {
+            var pngFmt = await FrameCapture.CaptureBgraAsync(frame, 8, 8, png, "PNG", TestContext.Current.CancellationToken);
+            Assert.Equal("png", pngFmt);
+            var pngBytes = await File.ReadAllBytesAsync(png, TestContext.Current.CancellationToken);
+            Assert.Equal(0x89, pngBytes[0]);
+            Assert.Equal(0x50, pngBytes[1]); // 'P'
+
+            var bmpFmt = await FrameCapture.CaptureBgraAsync(frame, 8, 8, bmp, "bmp", TestContext.Current.CancellationToken);
+            Assert.Equal("bmp", bmpFmt);
+            var bmpBytes = await File.ReadAllBytesAsync(bmp, TestContext.Current.CancellationToken);
+            Assert.Equal((byte)'B', bmpBytes[0]);
+            Assert.Equal((byte)'M', bmpBytes[1]);
+
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>
+                await FrameCapture.CaptureBgraAsync(frame, 8, 8, png, "gif", TestContext.Current.CancellationToken));
+        }
+        finally
+        {
+            if (File.Exists(png)) File.Delete(png);
+            if (File.Exists(bmp)) File.Delete(bmp);
+        }
+    }
+
     private sealed class TestVideoChip : IVideoChip
     {
         public DeviceId Id => new(0xC002);

@@ -263,6 +263,130 @@ public partial class MainWindow : Window
     private void OnMenuSwapJoysticks(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _ = _shell.SwapJoysticksAsync();
 
+    private async void OnMenuSaveScreenshot(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Save screenshot",
+            SuggestedFileName = "vicesharp",
+            DefaultExtension = "png",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("PNG image") { Patterns = ["*.png"] },
+                new FilePickerFileType("BMP image") { Patterns = ["*.bmp"] }
+            ]
+        });
+
+        var path = file?.TryGetLocalPath();
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        var format = global::System.IO.Path.GetExtension(path).TrimStart('.').ToLowerInvariant();
+        if (format is not ("png" or "bmp"))
+            format = "png";
+
+        try
+        {
+            var response = await _shell.CaptureScreenshotAsync(path, format).ConfigureAwait(true);
+            if (!response.Status.IsSuccess)
+                ApplyStatus(null, response.Status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
+    private async void OnMenuRecordSound(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Toggle: stop an active recording, otherwise pick a target and start one.
+        if (_shell.IsRecordingSound)
+        {
+            await StopRecordingAsync(_shell.StopSoundRecordingAsync()).ConfigureAwait(true);
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Record sound",
+            SuggestedFileName = "vicesharp",
+            DefaultExtension = "wav",
+            FileTypeChoices = [new FilePickerFileType("WAV audio") { Patterns = ["*.wav"] }]
+        });
+
+        var path = file?.TryGetLocalPath();
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        try
+        {
+            var status = await _shell.StartSoundRecordingAsync(path).ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
+    private async void OnMenuRecordVideo(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Toggle: stop an active recording, otherwise pick an output folder and start one.
+        if (_shell.IsRecordingVideo)
+        {
+            await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = "Choose video output folder (numbered BMP frames)",
+            AllowMultiple = false
+        });
+
+        var dir = folders.Count > 0 ? folders[0].TryGetLocalPath() : null;
+        if (string.IsNullOrWhiteSpace(dir))
+            return;
+
+        try
+        {
+            var status = await _shell.StartVideoRecordingAsync(dir).ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
+    private async global::System.Threading.Tasks.Task StopRecordingAsync(ValueTask<Protocol.RpcStatus> stopOperation)
+    {
+        try
+        {
+            var status = await stopOperation.ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
     private void OnMenuTrueDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _shell.ToggleTrueDrive(Protocol.MediaSlot.Drive8);
 

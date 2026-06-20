@@ -70,9 +70,15 @@ service SnapshotService {
 }
 
 service CaptureService {
+  // Discover the screenshot / sound / video formats this host supports.
+  rpc GetCaptureCapabilities(SessionRequest) returns (GetCaptureCapabilitiesResponse);
+  // One-shot screenshot.
+  rpc CaptureFrame(CaptureFrameRequest) returns (CaptureFrameResponse);
+  // Continuous sound / video recording.
   rpc StartCapture(StartCaptureRequest) returns (StartCaptureResponse);
   rpc StopCapture(StopCaptureRequest) returns (StopCaptureResponse);
-  rpc CaptureFrame(CaptureFrameRequest) returns (CaptureFrameResponse);
+  // List the captures active (or recently completed) for a session.
+  rpc ListCaptures(SessionRequest) returns (ListCapturesResponse);
 }
 
 message RpcStatus {
@@ -642,6 +648,8 @@ message StartCaptureRequest {
   string session_id = 1;
   CaptureKind kind = 2;
   string target_path = 3;
+  string format = 4;                // sound/video format or video driver id (e.g. "wav", "ffmpeg", "bmpseq", "zmbv")
+  map<string, string> options = 5;  // driver options (e.g. container, video_codec, audio_codec, bitrate)
 }
 
 message StopCaptureRequest {
@@ -652,6 +660,7 @@ message StopCaptureRequest {
 message CaptureFrameRequest {
   string session_id = 1;
   string file_path = 2;
+  string format = 3; // "png" (default), "bmp"
 }
 
 message StartCaptureResponse {
@@ -667,4 +676,24 @@ message StopCaptureResponse {
 message CaptureFrameResponse {
   RpcStatus status = 1;
   CaptureArtifactDto artifact = 2;
+}
+
+message CaptureVideoFormatDto {
+  string id = 1;                    // driver id: "bmpseq", "ffmpeg", "zmbv"
+  string container = 2;             // "mp4", "mkv", "avi"; empty for a frame sequence
+  repeated string video_codecs = 3;
+  repeated string audio_codecs = 4;
+  bool requires_ffmpeg = 5;
+}
+
+message GetCaptureCapabilitiesResponse {
+  RpcStatus status = 1;
+  repeated string screenshot_formats = 2;           // e.g. "png", "bmp"
+  repeated string audio_formats = 3;                // e.g. "wav"
+  repeated CaptureVideoFormatDto video_formats = 4;
+}
+
+message ListCapturesResponse {
+  RpcStatus status = 1;
+  repeated CaptureSessionDto captures = 2;
 }

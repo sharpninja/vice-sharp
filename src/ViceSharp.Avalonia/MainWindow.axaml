@@ -37,7 +37,10 @@
                 <MenuItem Header="E_xit" Click="OnMenuExit" />
             </MenuItem>
             <MenuItem Header="_Snapshot">
-                <MenuItem Header="Media recording..." IsEnabled="False" />
+                <MenuItem Header="Save screenshot..." Click="OnMenuSaveScreenshot" />
+                <Separator />
+                <MenuItem Header="Record sound..." Click="OnMenuRecordSound" />
+                <MenuItem Header="Record video (BMP sequence)..." Click="OnMenuRecordVideo" />
             </MenuItem>
             <MenuItem Header="_Settings">
                 <MenuItem Header="Settings..." Click="OnMenuShowSettings" />

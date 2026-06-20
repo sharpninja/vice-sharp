@@ -667,12 +667,57 @@ public sealed class GrpcCaptureServiceHost : GrpcContracts.CaptureService.Captur
         _inner = inner;
     }
 
+    public override async Task<GrpcContracts.GetCaptureCapabilitiesResponse> GetCaptureCapabilities(
+        GrpcContracts.SessionRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.GetCaptureCapabilitiesAsync(
+            new SessionRequest(request.SessionId), context.CancellationToken).ConfigureAwait(false);
+
+        var grpc = new GrpcContracts.GetCaptureCapabilitiesResponse { Status = HostMap.Map(response.Status) };
+        grpc.ScreenshotFormats.AddRange(response.ScreenshotFormats);
+        grpc.AudioFormats.AddRange(response.AudioFormats);
+        foreach (var v in response.VideoFormats)
+        {
+            var dto = new GrpcContracts.CaptureVideoFormatDto
+            {
+                Id = v.Id,
+                Container = v.Container,
+                RequiresFfmpeg = v.RequiresFfmpeg
+            };
+            dto.VideoCodecs.AddRange(v.VideoCodecs);
+            dto.AudioCodecs.AddRange(v.AudioCodecs);
+            grpc.VideoFormats.Add(dto);
+        }
+
+        return grpc;
+    }
+
+    public override async Task<GrpcContracts.ListCapturesResponse> ListCaptures(
+        GrpcContracts.SessionRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.ListCapturesAsync(
+            new SessionRequest(request.SessionId), context.CancellationToken).ConfigureAwait(false);
+
+        var grpc = new GrpcContracts.ListCapturesResponse { Status = HostMap.Map(response.Status) };
+        foreach (var capture in response.Captures)
+            grpc.Captures.Add(Map(capture)!);
+
+        return grpc;
+    }
+
     public override async Task<GrpcContracts.StartCaptureResponse> StartCapture(
         GrpcContracts.StartCaptureRequest request,
         ServerCallContext context)
     {
         var response = await _inner.StartCaptureAsync(
-            new StartCaptureRequest(request.SessionId, (CaptureKind)(int)request.Kind, request.TargetPath),
+            new StartCaptureRequest(
+                request.SessionId,
+                (CaptureKind)(int)request.Kind,
+                request.TargetPath,
+                request.Format,
+                request.Options.Count == 0 ? null : new Dictionary<string, string>(request.Options)),
             context.CancellationToken).ConfigureAwait(false);
         return new GrpcContracts.StartCaptureResponse { Status = HostMap.Map(response.Status), Capture = Map(response.Capture) };
     }
@@ -692,7 +737,10 @@ public sealed class GrpcCaptureServiceHost : GrpcContracts.CaptureService.Captur
         ServerCallContext context)
     {
         var response = await _inner.CaptureFrameAsync(
-            new CaptureFrameRequest(request.SessionId, request.FilePath),
+            new CaptureFrameRequest(
+                request.SessionId,
+                request.FilePath,
+                string.IsNullOrEmpty(request.Format) ? "png" : request.Format),
             context.CancellationToken).ConfigureAwait(false);
         return new GrpcContracts.CaptureFrameResponse
         {
