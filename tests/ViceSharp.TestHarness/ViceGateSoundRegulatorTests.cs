@@ -77,39 +77,22 @@ public sealed class ViceGateSoundRegulatorTests
 
     // ---- Gate.Tick: regulator selection + back-pressure effect ----
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: audio is the timing source and the buffer has room - the gate
-    /// runs the sound regulator and advances the clock. Acceptance: Tick advances the
-    /// master clock and LastRegulator == Sound.</summary>
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001 / TEST-SNDREG-001.
+    /// Use case: even when the SID is the audio timing source the gate paces via vsync, not
+    ///   sound back-pressure - the sound-buffer regulator over-throttled (~23% real-time) in
+    ///   the WinMm setup, so vsync (cycle-progress -> wall-clock) is the pacer and holds 100%.
+    /// Acceptance: with an active audio chip whose buffer is full, Tick still ADVANCES the
+    ///   clock (never blocks) and LastRegulator == Vsync.</summary>
     [Fact]
-    public void Tick_SoundActiveBelowHighWater_AdvancesAndSelectsSound()
-    {
-        var chip = new FakeAudioChip { IsAudioTimingSource = true, QueuedSampleCount = 0 };
-        var (registry, session) = BuildSession(chip, limiterEnabled: true);
-        using var gate = new ViceEmulationGate { BackPressurePause = static () => { } };
-        gate.Start();
-
-        var before = session.Machine.Clock.TotalCycles;
-        var ran = gate.Tick(registry, Advance);
-        gate.Stop();
-
-        Assert.True(ran, "the gate reported no running session");
-        Assert.True(session.Machine.Clock.TotalCycles > before, "sound regulator did not advance the clock");
-        Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
-    }
-
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: audio is the timing source and the device buffer is full - the
-    /// worker must block rather than overrun the buffer. Acceptance: Tick advances ZERO
-    /// master cycles (back-pressure) and LastRegulator == Sound.</summary>
-    [Fact]
-    public void Tick_SoundActiveAboveHighWater_BackPressuresWithoutAdvancing()
+    public void Tick_AudioTimingSource_PacesViaVsync_NotSoundBackPressure()
     {
         var chip = new FakeAudioChip
         {
             IsAudioTimingSource = true,
-            QueuedSampleCount = ViceEmulationGate.HighWaterSamples + 5000,
+            QueuedSampleCount = ViceEmulationGate.HighWaterSamples + 5000, // full buffer is ignored
         };
         var (registry, session) = BuildSession(chip, limiterEnabled: true);
-        using var gate = new ViceEmulationGate { BackPressurePause = static () => { } };
+        using var gate = new ViceEmulationGate();
         gate.Start();
 
         var before = session.Machine.Clock.TotalCycles;
@@ -117,8 +100,8 @@ public sealed class ViceGateSoundRegulatorTests
         gate.Stop();
 
         Assert.True(ran, "the gate reported no running session");
-        Assert.Equal(before, session.Machine.Clock.TotalCycles); // blocked: nothing advanced
-        Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
+        Assert.True(session.Machine.Clock.TotalCycles > before, "VICE did not advance under vsync (a full audio buffer must not block it)");
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
     }
 
     /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: with no audio device the gate falls through to the vsync
@@ -127,7 +110,7 @@ public sealed class ViceGateSoundRegulatorTests
     public void Tick_NoAudioChip_SelectsVsync()
     {
         var (registry, session) = BuildSession(chip: null, limiterEnabled: true);
-        using var gate = new ViceEmulationGate { BackPressurePause = static () => { } };
+        using var gate = new ViceEmulationGate();
         gate.Start();
 
         var before = session.Machine.Clock.TotalCycles;
@@ -147,7 +130,7 @@ public sealed class ViceGateSoundRegulatorTests
     {
         var chip = new FakeAudioChip { IsAudioTimingSource = true, QueuedSampleCount = 999_999 };
         var (registry, session) = BuildSession(chip, limiterEnabled: false);
-        using var gate = new ViceEmulationGate { BackPressurePause = static () => { } };
+        using var gate = new ViceEmulationGate();
         gate.Start();
 
         var before = session.Machine.Clock.TotalCycles;

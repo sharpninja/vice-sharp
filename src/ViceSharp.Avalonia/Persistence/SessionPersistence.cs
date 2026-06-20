@@ -33,6 +33,9 @@ public sealed class SessionPersistence
     private const string KeySwapJoysticks = "SettingsSwapJoystickPorts";
     private const string KeyResourceMode = "SettingsResourceMode";
     private const string KeyDockSide = "SettingsDockSide";
+    private const string KeyPacingStrategy = "SettingsPacingStrategy";
+    private const string KeyMasterVolume = "SettingsMasterVolumePercent";
+    private const string KeyMuted = "SettingsMuted";
 
     private const string KeyKeyboardMapId = "TransientKeyboardMapId";
     private const string KeyKeyboardMapSource = "TransientKeyboardMapSource";
@@ -106,7 +109,12 @@ public sealed class SessionPersistence
             ReadString(map, KeyPrimaryJoystick, "Joystick 2"),
             ReadBool(map, KeySwapJoysticks),
             ReadString(map, KeyResourceMode, "Auto detect"),
-            ReadInt(map, KeyDockSide, 0));
+            ReadInt(map, KeyDockSide, 0))
+        {
+            PacingStrategy = ReadString(map, KeyPacingStrategy, "Semaphore"),
+            MasterVolumePercent = ReadDouble(map, KeyMasterVolume, 100),
+            Muted = ReadBool(map, KeyMuted),
+        };
     }
 
     private static void WriteSettings(Dictionary<string, string> map, PersistedSettings v)
@@ -125,6 +133,9 @@ public sealed class SessionPersistence
         map[KeySwapJoysticks] = Bool(v.SwapJoystickPorts);
         map[KeyResourceMode] = v.ResourceMode;
         map[KeyDockSide] = v.DockSide.ToString(CultureInfo.InvariantCulture);
+        map[KeyPacingStrategy] = v.PacingStrategy;
+        map[KeyMasterVolume] = v.MasterVolumePercent.ToString(CultureInfo.InvariantCulture);
+        map[KeyMuted] = Bool(v.Muted);
     }
 
     private static PersistedTransient ReadTransient(Dictionary<string, string> map)

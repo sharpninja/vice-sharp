@@ -200,27 +200,90 @@ public sealed class AttachPanelViewModelTests
 
     /// <summary>
     /// FR-SIDEBARUI-001 / TR-SIDEBARUI-LAYOUT-001 / TEST-SIDEBARUI-001.
-    /// Use case: the sidebar collapse expander sits on the INNER edge facing the video, so it
-    ///   flips side (and chevron direction) with the panel's anchor.
-    /// Acceptance: anchored Left gives CollapseExpanderDock Right and glyph "◀"; anchored
-    ///   Right gives Dock Left and glyph "▶"; switching anchors raises PropertyChanged for both.
+    /// Use case: the sidebar resize splitter sits on the INNER edge facing the video, so it
+    ///   flips side with the panel's anchor.
+    /// Acceptance: anchored Left gives SplitterDock Right; anchored Right gives Dock Left;
+    ///   switching anchors raises PropertyChanged for SplitterDock.
     /// </summary>
     [Fact]
-    public void CollapseExpander_DockAndGlyph_TrackAnchorSide()
+    public void Splitter_Dock_TracksAnchorSide()
     {
         var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
 
         viewModel.DockLeft();
-        Assert.Equal(global::Avalonia.Controls.Dock.Right, viewModel.CollapseExpanderDock);
-        Assert.Equal("◀", viewModel.CollapseGlyph);
+        Assert.Equal(global::Avalonia.Controls.Dock.Right, viewModel.SplitterDock);
 
         var changes = TrackPropertyChanges(viewModel);
         viewModel.DockRight();
 
-        Assert.Equal(global::Avalonia.Controls.Dock.Left, viewModel.CollapseExpanderDock);
-        Assert.Equal("▶", viewModel.CollapseGlyph);
-        Assert.Contains(nameof(viewModel.CollapseExpanderDock), changes);
-        Assert.Contains(nameof(viewModel.CollapseGlyph), changes);
+        Assert.Equal(global::Avalonia.Controls.Dock.Left, viewModel.SplitterDock);
+        Assert.Contains(nameof(viewModel.SplitterDock), changes);
+    }
+
+    /// <summary>
+    /// FR-SIDEBARUI-001 / TR-SIDEBARUI-LAYOUT-001 / TEST-SIDEBARUI-001.
+    /// Use case: dragging the inner-edge splitter resizes the sidebar pane width (bound to
+    ///   SplitView.OpenPaneLength), clamped to a sensible range. The drag direction respects
+    ///   the anchor: the splitter is on the pane's right edge when anchored Left (rightward
+    ///   drag widens) and its left edge when anchored Right (rightward drag narrows).
+    /// Acceptance: SidebarWidth starts at the default; a +40 drag widens to 300 when anchored
+    ///   Left and narrows back to 260 when anchored Right; extreme drags clamp to
+    ///   [SidebarMinWidth, SidebarMaxWidth].
+    /// </summary>
+    [Fact]
+    public void Splitter_ResizeSidebar_RespectsAnchorAndClamps()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        Assert.Equal(260d, viewModel.SidebarWidth);
+
+        viewModel.DockLeft();
+        viewModel.ResizeSidebar(40);
+        Assert.Equal(300d, viewModel.SidebarWidth);
+
+        viewModel.DockRight();
+        viewModel.ResizeSidebar(40);
+        Assert.Equal(260d, viewModel.SidebarWidth);
+
+        viewModel.DockLeft();
+        viewModel.ResizeSidebar(100000);
+        Assert.Equal(AttachPanelViewModel.SidebarMaxWidth, viewModel.SidebarWidth);
+
+        viewModel.ResizeSidebar(-100000);
+        Assert.Equal(AttachPanelViewModel.SidebarMinWidth, viewModel.SidebarWidth);
+    }
+
+    /// <summary>
+    /// FR-AUDIOOUT-001 / TR-AUDIOOUT-MASTER-001 / TEST-AUDIOOUT-001.
+    /// Use case: the status-bar mute toggle and volume slider drive the process-wide master
+    ///   output level (MasterAudioControl), which the audio backend applies to its samples.
+    /// Acceptance: setting MasterVolumePercent scales MasterAudioControl.Volume (percent/100);
+    ///   toggling Muted sets MasterAudioControl.Muted so EffectiveGain is 0 while muted and the
+    ///   stored volume returns when unmuted.
+    /// </summary>
+    [Fact]
+    public void AudioControls_MuteAndVolume_DriveMasterAudioControl()
+    {
+        try
+        {
+            global::ViceSharp.Host.Audio.MasterAudioControl.Muted = false;
+            global::ViceSharp.Host.Audio.MasterAudioControl.Volume = 1f;
+            var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+            viewModel.MasterVolumePercent = 40;
+            Assert.Equal(0.40f, global::ViceSharp.Host.Audio.MasterAudioControl.Volume, 2);
+
+            viewModel.Muted = true;
+            Assert.True(global::ViceSharp.Host.Audio.MasterAudioControl.Muted);
+            Assert.Equal(0f, global::ViceSharp.Host.Audio.MasterAudioControl.EffectiveGain);
+
+            viewModel.Muted = false;
+            Assert.Equal(0.40f, global::ViceSharp.Host.Audio.MasterAudioControl.EffectiveGain, 2);
+        }
+        finally
+        {
+            global::ViceSharp.Host.Audio.MasterAudioControl.Muted = false;
+            global::ViceSharp.Host.Audio.MasterAudioControl.Volume = 1f;
+        }
     }
 
     /// <summary>
@@ -573,6 +636,37 @@ public sealed class AttachPanelViewModelTests
         viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 12), RpcStatus.Ok());
 
         Assert.Contains("IEC Idle", viewModel.StatusText);
+    }
+
+    /// <summary>
+    /// FR: FR-UI-002, TR: TR-UI-SHELL-001, TEST-UI-001.
+    /// Use case: the status bar splits its runtime text into individual cells laid out
+    ///   in a two-row grid, so each field is exposed as its own bare value (label lives
+    ///   in the view) rather than only as one concatenated string.
+    /// Acceptance: a successful ApplyStatus populates Power/Run/Limiter/Fps/Clock/Cycle/
+    ///   Pc/Iec with the bare values and leaves ErrorText empty; a failed poll routes the
+    ///   message to ErrorText so the cells can collapse to a single error line.
+    /// </summary>
+    [Fact]
+    public void StatusBarViewModel_ExposesPerFieldCells_ForTwoRowGrid()
+    {
+        var viewModel = new StatusBarViewModel();
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: true, transitionCount: 12), RpcStatus.Ok());
+
+        Assert.Equal("On", viewModel.Power);
+        Assert.Equal("Running", viewModel.Run);
+        Assert.Equal("100%", viewModel.Limiter);
+        Assert.Equal("50.0", viewModel.Fps);
+        Assert.Equal("1.000 MHz (100%)", viewModel.Clock);
+        Assert.Equal("1234", viewModel.Cycle);
+        Assert.Equal("C000", viewModel.Pc);
+        Assert.Equal("Active", viewModel.Iec);
+        Assert.Empty(viewModel.ErrorText);
+
+        viewModel.ApplyStatus(null, RpcStatus.Unavailable("host down"));
+
+        Assert.Equal("host down", viewModel.ErrorText);
     }
 
     /// <summary>

@@ -65,37 +65,142 @@
 
         <Border DockPanel.Dock="Bottom" MinHeight="34" Background="#1A1C20">
             <DockPanel LastChildFill="True">
-                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="4" Margin="6,4">
+                <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Spacing="4" Margin="6,4"
+                            VerticalAlignment="Center">
                     <Button x:Name="PART_SidebarToggle" Content="☰" Padding="8,3" MinHeight="24"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                             ToolTip.Tip="Show/hide sidebar" Click="OnToggleSidebar" />
                     <Button x:Name="PART_DockSideToggle" Content="⇄" Padding="8,3" MinHeight="24"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                             ToolTip.Tip="Move sidebar left/right" Click="OnToggleDockSide" />
                 </StackPanel>
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4" Margin="6,4">
-                    <Button Content="Pause" Padding="7,3" MinHeight="24" Click="OnMenuPause" />
-                    <Button Content="Resume" Padding="7,3" MinHeight="24" Click="OnMenuResume" />
-                    <Button Content="+1 cyc" Padding="7,3" MinHeight="24" Click="OnStepCycle" />
-                    <Button Content="+1 frm" Padding="7,3" MinHeight="24" Click="OnStepFrame" />
-                    <Button Content="-1 cyc" Padding="7,3" MinHeight="24" Click="OnRewindCycle" />
-                    <Button Content="-1 frm" Padding="7,3" MinHeight="24" Click="OnRewindFrame" />
-                    <Button Content="Cold" Padding="7,3" MinHeight="24" Click="OnMenuColdReset" />
-                    <Button Content="Warm" Padding="7,3" MinHeight="24" Click="OnMenuWarmReset" />
-                    <Button Content="Run 8" Padding="7,3" MinHeight="24" Click="OnRunDrive8" />
+                <!-- Status fields split into cells laid out as a two-row grid
+                     (4 columns x 2 rows). Docked Left so it keeps its size and the
+                     transport WrapPanel (fill child) consumes the remaining width.
+                     The grid collapses to a single error line on a failed poll. -->
+                <Panel x:Name="PART_StatusHost" DockPanel.Dock="Left"
+                       x:DataType="vm:StatusBarViewModel" Margin="8,3">
+                    <Panel.Styles>
+                        <Style Selector="Border.statusCell">
+                            <Setter Property="Background" Value="#232730" />
+                            <Setter Property="CornerRadius" Value="3" />
+                            <Setter Property="Margin" Value="2,1" />
+                            <Setter Property="Padding" Value="7,2" />
+                            <Setter Property="MinWidth" Value="74" />
+                        </Style>
+                        <Style Selector="Border.statusCell TextBlock.lbl">
+                            <Setter Property="FontSize" Value="9" />
+                            <Setter Property="Foreground" Value="#7A8290" />
+                        </Style>
+                        <Style Selector="Border.statusCell TextBlock.val">
+                            <Setter Property="FontSize" Value="12" />
+                            <Setter Property="Foreground" Value="#E2E8F0" />
+                            <Setter Property="FontFamily" Value="Cascadia Mono,Consolas,monospace" />
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                        </Style>
+                    </Panel.Styles>
+
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto"
+                          VerticalAlignment="Center"
+                          ToolTip.Tip="{Binding StatusText}"
+                          IsVisible="{Binding !HasError}">
+                        <Border Grid.Row="0" Grid.Column="0" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="POWER" />
+                                <TextBlock Classes="val" Text="{Binding Power}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="1" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="RUN" />
+                                <TextBlock Classes="val" Text="{Binding Run}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="2" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="LIMITER" />
+                                <TextBlock Classes="val" Text="{Binding Limiter}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="3" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="FPS" />
+                                <TextBlock Classes="val" Text="{Binding Fps}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="0" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="CLOCK" />
+                                <TextBlock Classes="val" Text="{Binding Clock}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="CYCLE" />
+                                <TextBlock Classes="val" Text="{Binding Cycle}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="PC" />
+                                <TextBlock Classes="val" Text="{Binding Pc}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="IEC" />
+                                <TextBlock Classes="val" Text="{Binding Iec}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <TextBlock VerticalAlignment="Center" Margin="2,0" FontSize="12"
+                               Foreground="#FF8A8A" TextTrimming="CharacterEllipsis"
+                               Text="{Binding ErrorText}"
+                               IsVisible="{Binding HasError}" />
+                </Panel>
+                <!-- Master audio: mute toggle + volume slider, stacked, between the
+                     status grid and the transport controls. Bound to AttachPanelViewModel,
+                     which drives the process-wide MasterAudioControl. -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Spacing="2"
+                            VerticalAlignment="Center" Margin="6,3" Width="124">
+                    <ToggleButton IsChecked="{Binding Muted}" Content="Mute"
+                                  Padding="6,1" MinHeight="20" FontSize="11"
+                                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                  ToolTip.Tip="Mute emulator audio" />
+                    <Slider Minimum="0" Maximum="100" Value="{Binding MasterVolumePercent}"
+                            MinHeight="0" Padding="0" TickFrequency="10"
+                            ToolTip.Tip="Master volume" />
                 </StackPanel>
-                <TextBlock x:Name="PART_StatusText" Margin="10,7,8,4" FontSize="12"
-                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                <!-- Transport controls: the fill child, so they consume the unused
+                     bar width left of the right edge. Right-aligned and measured
+                     against that whole leftover, so they sit in one row when there
+                     is room and only wrap to further rows when the bar gets narrow.
+                     WrapPanel has no Spacing, so each button carries its own
+                     right/bottom margin for the inter-row gap. -->
+                <WrapPanel Orientation="Horizontal" Margin="6,4"
+                           HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="Pause" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuPause" />
+                    <Button Content="Resume" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuResume" />
+                    <Button Content="+1 cyc" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnStepCycle" />
+                    <Button Content="+1 frm" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnStepFrame" />
+                    <Button Content="-1 cyc" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnRewindCycle" />
+                    <Button Content="-1 frm" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnRewindFrame" />
+                    <Button Content="Cold" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuColdReset" />
+                    <Button Content="Warm" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuWarmReset" />
+                    <Button Content="Run 8" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnRunDrive8" />
+                </WrapPanel>
             </DockPanel>
         </Border>
 
-        <SplitView x:Name="PART_SplitView"
-                   DisplayMode="Inline"
-                   OpenPaneLength="260"
-                   IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}"
-                   PanePlacement="{Binding PanePlacement}">
-            <SplitView.Pane>
-                <ContentControl x:Name="PART_SidebarHost" />
-            </SplitView.Pane>
-            <ContentControl x:Name="PART_VideoHost" />
-        </SplitView>
+        <!-- Emulator display is a control docked to the right, aspect-sized by
+             VideoSurface.MeasureOverride so it takes only the width it needs; the sidebar is
+             the stretched fill child and consumes the rest. Code-behind (ApplyContentLayout)
+             flips the dock edge with DockSide and, on collapse, reorders so the display fills. -->
+        <DockPanel x:Name="PART_ContentPanel" LastChildFill="True">
+            <ContentControl x:Name="PART_VideoHost" DockPanel.Dock="Right" />
+            <ContentControl x:Name="PART_SidebarHost"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+        </DockPanel>
     </DockPanel>
 </Window>

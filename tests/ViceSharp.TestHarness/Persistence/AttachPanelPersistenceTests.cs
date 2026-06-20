@@ -32,6 +32,8 @@ public sealed class AttachPanelPersistenceTests
             SelectedPalette = "Pepto",
             SelectedDisplayScale = "3x",
             SwapJoystickPorts = true,
+            MasterVolumePercent = 55,
+            Muted = true,
         };
 
         var snapshot = vm.CapturePersistedSettings();
@@ -39,6 +41,8 @@ public sealed class AttachPanelPersistenceTests
         snapshot.Palette.Should().Be("Pepto");
         snapshot.DisplayScale.Should().Be("3x");
         snapshot.SwapJoystickPorts.Should().BeTrue();
+        snapshot.MasterVolumePercent.Should().Be(55);
+        snapshot.Muted.Should().BeTrue();
     }
 
     [Fact]

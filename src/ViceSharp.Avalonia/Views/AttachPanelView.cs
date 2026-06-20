@@ -42,12 +42,11 @@ public sealed class AttachPanelView : UserControl
     {
         var root = new DockPanel
         {
-            // MinWidth + MaxWidth previously clamped the sidebar to 260..360;
-            // the new compact slot layout works as low as ~210 and the host
-            // grid lets the user drag wider via the splitter, so loosen the
-            // bounds so horizontal space tracks the host column.
+            // The sidebar stretches to fill the width the aspect-sized emulator display leaves
+            // (MainWindow.ApplyContentLayout). Keep only a minimum so it stays usable when
+            // narrow; NO MaxWidth, or the panel would stop short of the display and leave a gap.
             MinWidth = 210,
-            MaxWidth = 480,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
             Background = new SolidColorBrush(Color.FromRgb(31, 34, 39))
         };
 
@@ -80,32 +79,9 @@ public sealed class AttachPanelView : UserControl
         };
         header.Children.Add(status);
 
-        // FR-SIDEBARUI-001: full-height collapse expander on the INNER edge (facing the
-        // video), so it sits Right when the panel is anchored Left and Left when anchored
-        // Right. Docked first so it spans the panel height; flips edge + glyph with the anchor.
-        var collapse = new Button
-        {
-            Content = ViewModel.CollapseGlyph,
-            FontSize = 11,
-            Padding = new Thickness(1),
-            Width = 18,
-            VerticalAlignment = VerticalAlignment.Stretch,
-            VerticalContentAlignment = VerticalAlignment.Center,
-            BorderThickness = new Thickness(0),
-            Background = new SolidColorBrush(Color.FromRgb(39, 43, 49))
-        };
-        ToolTip.SetTip(collapse, "Collapse panel");
-        collapse.Click += (_, _) => ViewModel.ToggleSidebar();
-        DockPanel.SetDock(collapse, ViewModel.CollapseExpanderDock);
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.CollapseExpanderDock))
-                DockPanel.SetDock(collapse, ViewModel.CollapseExpanderDock);
-            else if (args.PropertyName == nameof(AttachPanelViewModel.CollapseGlyph))
-                collapse.Content = ViewModel.CollapseGlyph;
-        };
-        root.Children.Add(collapse);
-
+        // FR-SIDEBARUI-001: the sidebar stretches to fill the width the aspect-sized emulator
+        // display leaves unused (MainWindow.ApplyContentLayout), so there is no in-panel
+        // splitter or collapse handle; the status-bar toggle collapses the whole pane.
         DockPanel.SetDock(header, Dock.Top);
         root.Children.Add(header);
 

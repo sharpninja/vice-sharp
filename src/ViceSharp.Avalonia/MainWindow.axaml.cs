@@ -21,7 +21,9 @@ public partial class MainWindow : Window
     private readonly StatusBarViewModel _statusBarViewModel = new();
     private readonly AttachPanelView _attachPanel;
     private readonly VideoSurface _video;
-    private TextBlock? _statusText;
+    private DockPanel? _contentPanel;
+    private ContentControl? _sidebarHost;
+    private ContentControl? _videoHost;
 
     public MainWindow()
     {
@@ -35,22 +37,19 @@ public partial class MainWindow : Window
         _shell = new ShellViewModel(_hostClient, _attachViewModel);
         DataContext = _attachViewModel;
 
-        _statusBarViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(StatusBarViewModel.StatusText) && _statusText is not null)
-                _statusText.Text = _statusBarViewModel.StatusText;
-        };
-
         _attachPanel = new AttachPanelView(_attachViewModel)
         {
             PickFileAsync = PickMediaFileAsync,
             PickKeyboardMapFileAsync = PickKeyboardMapFileAsync,
             PopOutMonitorRequested = OpenMonitorWindow
         };
+        // Fixed natural size; a Viewbox (set on PART_VideoHost below) scales it uniformly so
+        // the display control wraps the image tightly (no internal letterbox) and the sidebar
+        // can fill right up to it.
         _video = new VideoSurface
         {
-            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
-            VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch
+            Width = VideoSurface.SourceWidth,
+            Height = VideoSurface.SourceHeight
         };
         _video.KeyDown += OnVideoKeyDown;
         _video.KeyUp += OnVideoKeyUp;
@@ -58,13 +57,32 @@ public partial class MainWindow : Window
         // Inject the live views into the declarative shell's named hosts. The
         // sidebar pane and video content stay code-behind-owned for now; the
         // reusable PeripheralCardView / SidebarView land in S2.
-        _statusText = this.FindControl<TextBlock>("PART_StatusText");
-        if (_statusText is not null)
-            _statusText.Text = _statusBarViewModel.StatusText;
-        if (this.FindControl<ContentControl>("PART_SidebarHost") is { } sidebarHost)
-            sidebarHost.Content = _attachPanel;
-        if (this.FindControl<ContentControl>("PART_VideoHost") is { } videoHost)
-            videoHost.Content = _video;
+        if (this.FindControl<Panel>("PART_StatusHost") is { } statusHost)
+            statusHost.DataContext = _statusBarViewModel;
+        _sidebarHost = this.FindControl<ContentControl>("PART_SidebarHost");
+        if (_sidebarHost is not null)
+            _sidebarHost.Content = _attachPanel;
+        _videoHost = this.FindControl<ContentControl>("PART_VideoHost");
+        if (_videoHost is not null)
+            _videoHost.Content = new Viewbox
+            {
+                Stretch = global::Avalonia.Media.Stretch.Uniform,
+                Child = _video
+            };
+        _contentPanel = this.FindControl<DockPanel>("PART_ContentPanel");
+
+        // The sidebar stretches to fill the width the aspect-sized display does not use.
+        // Re-flow when the sidebar is collapsed/opened or flipped to the other edge.
+        _attachViewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is nameof(AttachPanelViewModel.IsPaneOpen)
+                or nameof(AttachPanelViewModel.PanePlacement)
+                or nameof(AttachPanelViewModel.DockSide))
+            {
+                ApplyContentLayout();
+            }
+        };
+        ApplyContentLayout();
 
         Opened += (_, _) => _video.Focus();
 
@@ -81,6 +99,37 @@ public partial class MainWindow : Window
             DispatcherPriority.Background,
             async (_, _) => await UpdateStatusAsync().ConfigureAwait(true));
         statusTimer.Start();
+    }
+
+    // Lay out the content panel: the emulator display is docked to an edge and aspect-sized
+    // (VideoSurface.MeasureOverride), and the sidebar is the stretched fill (last) child that
+    // consumes the rest. Flipping DockSide moves the display's dock edge; collapsing hides the
+    // sidebar and reorders so the display becomes the fill child and covers the window.
+    private void ApplyContentLayout()
+    {
+        if (_contentPanel is null || _sidebarHost is null || _videoHost is null)
+            return;
+
+        if (_attachViewModel.IsPaneOpen)
+        {
+            _sidebarHost.IsVisible = true;
+            var sidebarLeft = _attachViewModel.DockSide == AttachDockSide.Left;
+            DockPanel.SetDock(_videoHost, sidebarLeft ? Dock.Right : Dock.Left);
+            MoveToFront(_videoHost); // display docked first; sidebar is last => fills/stretches
+        }
+        else
+        {
+            _sidebarHost.IsVisible = false;
+            MoveToFront(_sidebarHost); // display is last => fills the window
+        }
+    }
+
+    private void MoveToFront(Control child)
+    {
+        var children = _contentPanel!.Children;
+        var index = children.IndexOf(child);
+        if (index > 0)
+            children.Move(index, 0);
     }
 
     private async Task InitializeViewModelAsync()
@@ -269,8 +318,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            if (_statusText is not null)
-                _statusText.Text = ex.Message;
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
         }
     }
 

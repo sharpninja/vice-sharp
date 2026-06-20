@@ -43,7 +43,10 @@ public sealed class SessionPersistenceTests : IDisposable
         PrimaryJoystickPort: "Joystick 1",
         SwapJoystickPorts: true,
         ResourceMode: "Use configured paths",
-        DockSide: 1);
+        DockSide: 1,
+        PacingStrategy: "VICE",
+        MasterVolumePercent: 65,
+        Muted: true);
 
     private static PersistedTransient SampleTransient() => new(
         new List<PersistedAttachment>
@@ -73,6 +76,29 @@ public sealed class SessionPersistenceTests : IDisposable
         var loaded = new SessionPersistence(_dir).Load();
 
         loaded.Settings.Should().Be(SampleSettings());
+    }
+
+    [Fact]
+    public void PersistedSettings_DefaultsMasterVolumeTo100_AndUnmuted()
+    {
+        var defaults = new PersistedSettings(
+            LimiterRatePercent: 100,
+            LimiterEnabled: true,
+            MachineProfileId: "c64",
+            Renderer: "Host direct",
+            DisplayScale: "2x",
+            CropMode: "Visible area",
+            AspectMode: "VICE pixel aspect",
+            Palette: "VICE default",
+            AudioMode: "Enabled",
+            InputMode: "Keyboard + joystick",
+            PrimaryJoystickPort: "Joystick 2",
+            SwapJoystickPorts: false,
+            ResourceMode: "Auto detect",
+            DockSide: 0);
+
+        defaults.MasterVolumePercent.Should().Be(100);
+        defaults.Muted.Should().BeFalse();
     }
 
     [Fact]

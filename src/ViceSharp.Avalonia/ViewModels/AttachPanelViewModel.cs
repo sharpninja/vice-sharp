@@ -14,6 +14,9 @@ public sealed class AttachPanelViewModel : ObservableObject
     private readonly IHostProtocolClient _hostClient;
     private AttachDockSide _dockSide = AttachDockSide.Left;
     private bool _isPaneOpen = true;
+    private double _sidebarWidth = 260;
+    private bool _muted;
+    private double _masterVolumePercent = 100;
     private bool _applyingTrueDrive;
     private SidebarTab _activeTab = SidebarTab.Peripherals;
     private string _statusText = "Disconnected";
@@ -119,27 +122,70 @@ public sealed class AttachPanelViewModel : ObservableObject
             if (SetProperty(ref _dockSide, value))
             {
                 OnPropertyChanged(nameof(PanePlacement));
-                OnPropertyChanged(nameof(CollapseExpanderDock));
-                OnPropertyChanged(nameof(CollapseGlyph));
+                OnPropertyChanged(nameof(SplitterDock));
             }
         }
     }
 
     /// <summary>
-    /// Which edge of the sidebar the collapse expander sits on - the INNER edge facing the
+    /// Which edge of the sidebar the resize splitter sits on - the INNER edge facing the
     /// video: Right when the panel is anchored Left, Left when anchored Right.
     /// </summary>
-    public global::Avalonia.Controls.Dock CollapseExpanderDock =>
+    public global::Avalonia.Controls.Dock SplitterDock =>
         _dockSide == AttachDockSide.Left
             ? global::Avalonia.Controls.Dock.Right
             : global::Avalonia.Controls.Dock.Left;
 
+    /// <summary>Smallest / largest sidebar pane width the splitter allows (bound to OpenPaneLength).</summary>
+    public const double SidebarMinWidth = 200;
+    public const double SidebarMaxWidth = 560;
+
     /// <summary>
-    /// Chevron pointing in the direction the panel collapses (toward its anchored screen
-    /// edge): "&#9664;" when anchored Left, "&#9654;" when anchored Right.
+    /// Resizable sidebar pane width, bound to <c>SplitView.OpenPaneLength</c>. Dragging the
+    /// inner-edge splitter adjusts it within [<see cref="SidebarMinWidth"/>, <see cref="SidebarMaxWidth"/>].
     /// </summary>
-    public string CollapseGlyph =>
-        _dockSide == AttachDockSide.Left ? "◀" : "▶";
+    public double SidebarWidth
+    {
+        get => _sidebarWidth;
+        private set => SetProperty(ref _sidebarWidth, System.Math.Clamp(value, SidebarMinWidth, SidebarMaxWidth));
+    }
+
+    /// <summary>
+    /// Apply a horizontal drag delta from the inner-edge splitter. When anchored Left the
+    /// splitter is on the pane's right edge, so a rightward (positive) drag widens; anchored
+    /// Right it is on the left edge, so a rightward drag narrows.
+    /// </summary>
+    public void ResizeSidebar(double deltaX) =>
+        SidebarWidth += _dockSide == AttachDockSide.Left ? deltaX : -deltaX;
+
+    /// <summary>
+    /// Mutes the emulator's audio output (the status-bar mute toggle). Drives the process-wide
+    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/> the audio backend reads.
+    /// </summary>
+    public bool Muted
+    {
+        get => _muted;
+        set
+        {
+            if (SetProperty(ref _muted, value))
+                global::ViceSharp.Host.Audio.MasterAudioControl.Muted = value;
+        }
+    }
+
+    /// <summary>
+    /// Master output volume as a percentage 0-100 (the status-bar volume slider). Drives
+    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/>.Volume (percent / 100).
+    /// </summary>
+    public double MasterVolumePercent
+    {
+        get => _masterVolumePercent;
+        set
+        {
+            var clamped = System.Math.Clamp(value, 0, 100);
+            if (SetProperty(ref _masterVolumePercent, clamped))
+                global::ViceSharp.Host.Audio.MasterAudioControl.Volume = (float)(clamped / 100.0);
+        }
+    }
 
     /// <summary>
     /// Avalonia <c>SplitView.PanePlacement</c> value derived from
@@ -1080,7 +1126,9 @@ public sealed class AttachPanelViewModel : ObservableObject
         SwapJoystickPorts,
         SelectedResourceMode,
         (int)DockSide,
-        SelectedPacingStrategy);
+        SelectedPacingStrategy,
+        MasterVolumePercent,
+        Muted);
 
     /// <summary>Capture the current transient state (attached media + keyboard map).</summary>
     public PersistedTransient CapturePersistedTransient()
@@ -1113,6 +1161,8 @@ public sealed class AttachPanelViewModel : ObservableObject
         SwapJoystickPorts = settings.SwapJoystickPorts;
         SelectedResourceMode = settings.ResourceMode;
         SelectedPacingStrategy = settings.PacingStrategy;
+        MasterVolumePercent = settings.MasterVolumePercent;
+        Muted = settings.Muted;
         if ((AttachDockSide)settings.DockSide == AttachDockSide.Right)
             DockRight();
         else

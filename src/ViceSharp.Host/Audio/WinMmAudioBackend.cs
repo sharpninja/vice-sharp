@@ -120,7 +120,10 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
             var bytes = sampleCount * 2;
 
             var dest = new Span<byte>((void*)_dataPtrs[slot], bytes);
-            AudioSampleConverter.ConvertToPcm16(samples[..sampleCount], dest);
+            // Apply the app's master output level (mute/volume) during conversion so
+            // silence/attenuation costs nothing extra and the sample timing is preserved.
+            AudioSampleConverter.ConvertToPcm16(
+                samples[..sampleCount], dest, MasterAudioControl.EffectiveGain);
 
             var header = new WaveHdr
             {
