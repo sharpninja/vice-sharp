@@ -81,11 +81,19 @@ public sealed class ShellViewModel
         return response.Status;
     }
 
-    /// <summary>Start recording video into <paramref name="outputDirectory"/> as a numbered
-    /// BMP sequence (frame_NNNNNN.bmp). Wired to Snapshot -&gt; Record video...</summary>
-    public async ValueTask<RpcStatus> StartVideoRecordingAsync(string outputDirectory, CancellationToken ct = default)
+    /// <summary>Start recording video to <paramref name="target"/> in the given
+    /// <paramref name="format"/>: a muxed container with sound ("mp4"/"mkv"/"avi", via
+    /// ffmpeg; target is a file) or a numbered BMP sequence ("bmpseq"; target is a
+    /// directory). <paramref name="options"/> carries format-specific settings such
+    /// as the BMP-sequence "frames" selector ("all" | "unique"). Wired to
+    /// Snapshot -&gt; Record video...</summary>
+    public async ValueTask<RpcStatus> StartVideoRecordingAsync(
+        string target,
+        string format = "mp4",
+        IReadOnlyDictionary<string, string>? options = null,
+        CancellationToken ct = default)
     {
-        var response = await _host.StartCaptureAsync(CaptureKind.Video, outputDirectory, "bmpseq", null, ct).ConfigureAwait(false);
+        var response = await _host.StartCaptureAsync(CaptureKind.Video, target, format, options, ct).ConfigureAwait(false);
         if (response.Status.IsSuccess && response.Capture is not null)
             _videoCaptureId = response.Capture.CaptureId;
         return response.Status;

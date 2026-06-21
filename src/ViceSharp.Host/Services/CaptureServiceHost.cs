@@ -43,7 +43,20 @@ public sealed class CaptureServiceHost : ICaptureService
             RpcStatus.Ok(),
             FrameCapture.ScreenshotFormats,
             SupportedAudioFormats,
-            SupportedVideoFormats));
+            BuildVideoFormats()));
+    }
+
+    // The bmpseq sequence is always available; the muxed ffmpeg containers are
+    // advertised only when an ffmpeg executable can be located.
+    private static IReadOnlyList<CaptureVideoFormatDto> BuildVideoFormats()
+    {
+        if (!FfmpegLocator.IsAvailable)
+            return SupportedVideoFormats;
+
+        var formats = new List<CaptureVideoFormatDto>(SupportedVideoFormats);
+        foreach (var f in FfmpegVideoFormats.All)
+            formats.Add(new CaptureVideoFormatDto(f.Id, f.Container, [f.VideoCodec], [f.AudioCodec], RequiresFfmpeg: true));
+        return formats;
     }
 
     public ValueTask<ListCapturesResponse> ListCapturesAsync(
@@ -76,54 +89,151 @@ public sealed class CaptureServiceHost : ICaptureService
             return ValueTask.FromResult(new StartCaptureResponse(RpcStatus.InvalidArgument("TargetPath is required."), null));
 
         var format = (request.Format ?? string.Empty).Trim().ToLowerInvariant();
+        var captureId = $"capture-{Guid.NewGuid():N}";
 
-        lock (session.SyncRoot)
+        var response = request.Kind switch
         {
-            var captureId = $"capture-{Guid.NewGuid():N}";
+            CaptureKind.Video => StartVideoCapture(session, request, format, captureId),
+            CaptureKind.Audio => StartAudioCapture(session, request, format, captureId),
+            // Screenshot (and any future one-shot kinds) keep the lightweight
+            // metadata handle; the actual encode happens via CaptureFrame.
+            _ => StartMetadataCapture(session, request, captureId),
+        };
+        return ValueTask.FromResult(response);
+    }
+
+    private static StartCaptureResponse StartVideoCapture(
+        EmulatorRuntimeSession session, StartCaptureRequest request, string format, string captureId)
+    {
+        // FR-MED-002: numbered-BMP sequence (no external tooling). TargetPath is a directory.
+        if (format is "" or "bmp" or "bmpseq")
+        {
             try
             {
-                switch (request.Kind)
+                var sink = new FrameSequenceCapture(request.TargetPath, ParseFrameMode(request.Options));
+                lock (session.SyncRoot)
                 {
-                    case CaptureKind.Video:
-                        // FR-MED-002: continuous numbered-BMP video capture. TargetPath is
-                        // the output directory the emulation worker tees frames into.
-                        if (format is not ("" or "bmp" or "bmpseq"))
-                            return ValueTask.FromResult(new StartCaptureResponse(
-                                RpcStatus.InvalidArgument($"Unsupported video format '{request.Format}'. Use bmpseq."), null));
-                        session.BeginVideoCapture(captureId, request.TargetPath);
-                        break;
-
-                    case CaptureKind.Audio:
-                        // FR-MED-003: WAV sound recording, tapped off the live SID -> output path.
-                        if (format is not ("" or "wav"))
-                            return ValueTask.FromResult(new StartCaptureResponse(
-                                RpcStatus.InvalidArgument($"Unsupported audio format '{request.Format}'. Use wav."), null));
-                        if (session.AudioCaptureTap is null)
-                            return ValueTask.FromResult(new StartCaptureResponse(
-                                RpcStatus.Unavailable("This session has no live audio path to record."), null));
-
-                        var dir = Path.GetDirectoryName(request.TargetPath);
-                        if (!string.IsNullOrEmpty(dir))
-                            Directory.CreateDirectory(dir);
-                        var stream = new FileStream(request.TargetPath, FileMode.Create, FileAccess.Write);
-                        var recorder = new WavAudioRecorder(stream, 44100, 1);
-                        session.BeginAudioCapture(captureId, recorder, stream);
-                        break;
-
-                    // Screenshot (and any future one-shot kinds) keep the lightweight
-                    // metadata handle; the actual encode happens via CaptureFrame.
+                    session.BeginVideoCapture(captureId, sink);
+                    return RegisterCapture(session, request, captureId);
                 }
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
             {
-                return ValueTask.FromResult(new StartCaptureResponse(
-                    RpcStatus.InvalidArgument($"Could not start capture: {ex.Message}"), null));
+                return new StartCaptureResponse(RpcStatus.InvalidArgument($"Could not start capture: {ex.Message}"), null);
+            }
+        }
+
+        // FR-MED-004: muxed video+audio via external ffmpeg (mp4/mkv/avi).
+        if (FfmpegVideoFormats.TryGet(format, out var videoFormat))
+        {
+            var ffmpegPath = FfmpegLocator.Locate();
+            if (ffmpegPath is null)
+                return new StartCaptureResponse(
+                    RpcStatus.Unavailable("ffmpeg was not found on PATH (or VICESHARP_FFMPEG). Install ffmpeg to record muxed video."),
+                    null);
+
+            int width, height;
+            double frameRate;
+            bool includeAudio;
+            lock (session.SyncRoot)
+            {
+                if (session.Machine.Devices.GetByRole(DeviceRole.VideoChip) is not IVideoChip videoChip)
+                    return new StartCaptureResponse(RpcStatus.Unavailable("The session has no video chip."), null);
+                width = videoChip.FrameWidth;
+                height = videoChip.FrameHeight;
+                frameRate = (session.Architecture as IProfiledArchitectureDescriptor)?.MachineProfile.RefreshRateHz ?? 50.0;
+                includeAudio = session.AudioCaptureTap is not null;
             }
 
-            var capture = new CaptureSessionDto(captureId, request.Kind, request.TargetPath, true);
-            session.CaptureSessions[capture.CaptureId] = capture;
-            return ValueTask.FromResult(new StartCaptureResponse(RpcStatus.Ok(), capture));
+            FfmpegVideoRecorder recorder;
+            try
+            {
+                // Launch ffmpeg + wait for the socket connect OUTSIDE the session lock
+                // so a slow/failed start never stalls other RPCs on the session.
+                recorder = new FfmpegVideoRecorder(
+                    ffmpegPath, videoFormat, width, height, frameRate, request.TargetPath, includeAudio);
+                recorder.Start();
+            }
+            catch (Exception ex) when (ex is InvalidOperationException or IOException or UnauthorizedAccessException or ArgumentException)
+            {
+                return new StartCaptureResponse(
+                    RpcStatus.InvalidArgument($"Could not start ffmpeg video capture: {ex.Message}"), null);
+            }
+
+            lock (session.SyncRoot)
+            {
+                session.BeginVideoCapture(captureId, recorder, includeAudio ? recorder : null);
+                return RegisterCapture(session, request, captureId);
+            }
         }
+
+        return new StartCaptureResponse(
+            RpcStatus.InvalidArgument($"Unsupported video format '{request.Format}'. Use bmpseq, mp4, mkv or avi."), null);
+    }
+
+    private static StartCaptureResponse StartAudioCapture(
+        EmulatorRuntimeSession session, StartCaptureRequest request, string format, string captureId)
+    {
+        // FR-MED-003: WAV sound recording, tapped off the live SID -> output path.
+        if (format is not ("" or "wav"))
+            return new StartCaptureResponse(
+                RpcStatus.InvalidArgument($"Unsupported audio format '{request.Format}'. Use wav."), null);
+        if (session.AudioCaptureTap is null)
+            return new StartCaptureResponse(
+                RpcStatus.Unavailable("This session has no live audio path to record."), null);
+
+        try
+        {
+            var dir = Path.GetDirectoryName(request.TargetPath);
+            if (!string.IsNullOrEmpty(dir))
+                Directory.CreateDirectory(dir);
+            var stream = new FileStream(request.TargetPath, FileMode.Create, FileAccess.Write);
+            var recorder = new WavAudioRecorder(stream, 44100, 1);
+            lock (session.SyncRoot)
+            {
+                session.BeginAudioCapture(captureId, recorder, stream);
+                return RegisterCapture(session, request, captureId);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
+        {
+            return new StartCaptureResponse(RpcStatus.InvalidArgument($"Could not start capture: {ex.Message}"), null);
+        }
+    }
+
+    // BMP-sequence frame selection from the capture options ("frames" = "all" |
+    // "unique"). Defaults to writing every frame.
+    private static FrameSequenceMode ParseFrameMode(IReadOnlyDictionary<string, string>? options)
+    {
+        if (options is not null)
+        {
+            foreach (var kv in options)
+            {
+                if (kv.Key.Equals("frames", StringComparison.OrdinalIgnoreCase)
+                    && kv.Value.Trim().Equals("unique", StringComparison.OrdinalIgnoreCase))
+                    return FrameSequenceMode.UniqueFrames;
+            }
+        }
+
+        return FrameSequenceMode.AllFrames;
+    }
+
+    private static StartCaptureResponse StartMetadataCapture(
+        EmulatorRuntimeSession session, StartCaptureRequest request, string captureId)
+    {
+        lock (session.SyncRoot)
+        {
+            return RegisterCapture(session, request, captureId);
+        }
+    }
+
+    // Records the active capture handle in the session map. Must be called under session.SyncRoot.
+    private static StartCaptureResponse RegisterCapture(
+        EmulatorRuntimeSession session, StartCaptureRequest request, string captureId)
+    {
+        var capture = new CaptureSessionDto(captureId, request.Kind, request.TargetPath, true);
+        session.CaptureSessions[capture.CaptureId] = capture;
+        return new StartCaptureResponse(RpcStatus.Ok(), capture);
     }
 
     public ValueTask<StopCaptureResponse> StopCaptureAsync(

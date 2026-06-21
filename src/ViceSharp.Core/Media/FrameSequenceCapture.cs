@@ -18,10 +18,13 @@ using System.IO;
 /// zero-padded to 6 digits). Disposing the session silently ignores
 /// any subsequent frames.
 /// </summary>
-public sealed class FrameSequenceCapture : IDisposable
+public sealed class FrameSequenceCapture : IVideoCaptureSink
 {
     private readonly string _outputDir;
+    private readonly FrameSequenceMode _mode;
+    private byte[]? _lastWrittenFrame;
     private int _frameIndex;
+    private int _framesConsidered;
     private bool _disposed;
 
     /// <summary>
@@ -30,18 +33,31 @@ public sealed class FrameSequenceCapture : IDisposable
     /// it does not already exist.
     /// </summary>
     /// <param name="outputDirectory">Target directory for BMP artifacts.</param>
-    public FrameSequenceCapture(string outputDirectory)
+    /// <param name="mode">
+    /// <see cref="FrameSequenceMode.AllFrames"/> writes every submitted frame;
+    /// <see cref="FrameSequenceMode.UniqueFrames"/> skips a frame that is
+    /// byte-identical to the previously written one (collapsing static screens to
+    /// a compact, contiguously-numbered set of distinct frames).
+    /// </param>
+    public FrameSequenceCapture(string outputDirectory, FrameSequenceMode mode = FrameSequenceMode.AllFrames)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(outputDirectory);
         _outputDir = outputDirectory;
+        _mode = mode;
         Directory.CreateDirectory(outputDirectory);
     }
 
     /// <summary>Target directory for captured BMP frames.</summary>
     public string OutputDirectory => _outputDir;
 
-    /// <summary>Total number of frames written so far.</summary>
+    /// <summary>Whether every frame is written or only distinct (deduplicated) frames.</summary>
+    public FrameSequenceMode Mode => _mode;
+
+    /// <summary>Total number of BMP files written so far.</summary>
     public int FrameCount => _frameIndex;
+
+    /// <summary>Total number of frames submitted (including ones skipped as duplicates).</summary>
+    public int FramesConsidered => _framesConsidered;
 
     /// <summary>
     /// Persists a single BGRA frame as the next numbered BMP file in
@@ -62,6 +78,20 @@ public sealed class FrameSequenceCapture : IDisposable
         var expectedLength = checked(width * height * 4);
         if (bgra.Length != expectedLength)
             throw new ArgumentException("BGRA frame length does not match width and height.", nameof(bgra));
+
+        _framesConsidered++;
+
+        // Unique mode collapses runs of identical frames (e.g. a static screen) by
+        // skipping any frame byte-identical to the previously written one.
+        if (_mode == FrameSequenceMode.UniqueFrames)
+        {
+            if (_lastWrittenFrame is not null && bgra.SequenceEqual(_lastWrittenFrame))
+                return;
+
+            if (_lastWrittenFrame is null || _lastWrittenFrame.Length != bgra.Length)
+                _lastWrittenFrame = new byte[bgra.Length];
+            bgra.CopyTo(_lastWrittenFrame);
+        }
 
         _frameIndex++;
         var path = Path.Combine(_outputDir, $"frame_{_frameIndex:D6}.bmp");

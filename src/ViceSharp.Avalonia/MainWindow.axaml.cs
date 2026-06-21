@@ -338,9 +338,64 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void OnMenuRecordVideo(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    private async void OnMenuRecordVideoMp4(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
-        // Toggle: stop an active recording, otherwise pick an output folder and start one.
+        // Toggle: stop an active recording, otherwise pick an output file and start
+        // a muxed MP4 (H.264 + AAC) recording with sound, via ffmpeg.
+        if (_shell.IsRecordingVideo)
+        {
+            await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Record video (MP4 + sound)",
+            SuggestedFileName = "vicesharp",
+            DefaultExtension = "mp4",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("MP4 video") { Patterns = ["*.mp4"] },
+                new FilePickerFileType("Matroska video") { Patterns = ["*.mkv"] },
+                new FilePickerFileType("AVI video") { Patterns = ["*.avi"] }
+            ]
+        });
+
+        var path = file?.TryGetLocalPath();
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        var format = global::System.IO.Path.GetExtension(path).TrimStart('.').ToLowerInvariant();
+        if (format is not ("mp4" or "mkv" or "avi"))
+            format = "mp4";
+
+        try
+        {
+            var status = await _shell.StartVideoRecordingAsync(path, format).ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
+    private void OnMenuRecordVideoBmpAll(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RecordBmpSequenceAsync(uniqueFrames: false);
+
+    private void OnMenuRecordVideoBmpUnique(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RecordBmpSequenceAsync(uniqueFrames: true);
+
+    private async global::System.Threading.Tasks.Task RecordBmpSequenceAsync(bool uniqueFrames)
+    {
+        // Toggle: stop an active recording, otherwise pick an output folder and
+        // start a numbered-BMP frame sequence. "unique" deduplicates consecutive
+        // identical frames; "all" writes one BMP per emulated frame.
         if (_shell.IsRecordingVideo)
         {
             await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
@@ -353,7 +408,9 @@ public partial class MainWindow : Window
 
         var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Choose video output folder (numbered BMP frames)",
+            Title = uniqueFrames
+                ? "Choose output folder (unique BMP frames)"
+                : "Choose output folder (all BMP frames)",
             AllowMultiple = false
         });
 
@@ -361,9 +418,14 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(dir))
             return;
 
+        var options = new global::System.Collections.Generic.Dictionary<string, string>
+        {
+            ["frames"] = uniqueFrames ? "unique" : "all",
+        };
+
         try
         {
-            var status = await _shell.StartVideoRecordingAsync(dir).ConfigureAwait(true);
+            var status = await _shell.StartVideoRecordingAsync(dir, "bmpseq", options).ConfigureAwait(true);
             if (!status.IsSuccess)
                 ApplyStatus(null, status);
         }

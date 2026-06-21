@@ -493,9 +493,9 @@ public sealed class CaptureServiceHostTests
     }
 
     /// <summary>
-    /// FR-MED-002 (video capture format validation).
-    /// Use case: a client requests a video format the host cannot drive (e.g. mp4
-    /// without an external muxer).
+    /// FR-MED-002 / FR-MED-004 (video capture format validation).
+    /// Use case: a client requests a video format the host does not support at all
+    /// (not bmpseq, and not one of the ffmpeg containers mp4/mkv/avi) - e.g. "wmv".
     /// Acceptance: StartCapture(Video) returns InvalidArgument, registers no
     /// capture, and does not arm the session.
     /// </summary>
@@ -509,7 +509,7 @@ public sealed class CaptureServiceHostTests
         var dir = Path.Combine(Path.GetTempPath(), $"vice-sharp-{Guid.NewGuid():N}");
 
         var response = await captureService.StartCaptureAsync(
-            new StartCaptureRequest(session.SessionId, CaptureKind.Video, dir, "mp4"),
+            new StartCaptureRequest(session.SessionId, CaptureKind.Video, dir, "wmv"),
             TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);
@@ -616,6 +616,108 @@ public sealed class CaptureServiceHostTests
 
         Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
         Assert.Contains(response.VideoFormats, f => f.Id == "bmpseq" && !f.RequiresFfmpeg);
+    }
+
+    /// <summary>
+    /// FR-MED-002 (unique-frames BMP export via capture options).
+    /// Use case: a client records a BMP sequence with options { frames: unique }
+    /// so runs of identical frames collapse to single BMPs.
+    /// Acceptance: feeding A, A, B, B teed frames writes exactly two BMPs (the two
+    /// distinct frames); the duplicates are skipped.
+    /// </summary>
+    [Fact]
+    public async Task StartCapture_Video_BmpUnique_DeduplicatesConsecutiveFrames()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var captureService = new CaptureServiceHost(registry);
+        var dir = Path.Combine(Path.GetTempPath(), $"vice-sharp-uniq-{Guid.NewGuid():N}");
+        var options = new Dictionary<string, string> { ["frames"] = "unique" };
+
+        var start = await captureService.StartCaptureAsync(
+            new StartCaptureRequest(session.SessionId, CaptureKind.Video, dir, "bmpseq", options),
+            TestContext.Current.CancellationToken);
+        Assert.Equal(RpcStatusCode.Ok, start.Status.Code);
+
+        var a = new byte[2 * 2 * 4];
+        var b = new byte[2 * 2 * 4];
+        Array.Fill(b, (byte)0x7F);
+        session.RecordVideoFrameIfActive(a, 2, 2);
+        session.RecordVideoFrameIfActive(a, 2, 2); // duplicate -> skipped
+        session.RecordVideoFrameIfActive(b, 2, 2);
+        session.RecordVideoFrameIfActive(b, 2, 2); // duplicate -> skipped
+
+        var stop = await captureService.StopCaptureAsync(
+            new StopCaptureRequest(session.SessionId, start.Capture!.CaptureId),
+            TestContext.Current.CancellationToken);
+        Assert.Equal(RpcStatusCode.Ok, stop.Status.Code);
+
+        try
+        {
+            var files = Directory.GetFiles(dir, "frame_*.bmp");
+            Assert.Equal(2, files.Length);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR-MED-004 / TR-MEDIA-VIDEO-FFMPEG-001 (capability discovery - muxed video).
+    /// Use case: when ffmpeg is installed, the host should advertise the muxed
+    /// containers (mp4/mkv/avi) it can drive, each flagged RequiresFfmpeg.
+    /// Acceptance: GetCaptureCapabilities includes an mp4 video format whose
+    /// RequiresFfmpeg flag is set (alongside the always-available bmpseq).
+    /// </summary>
+    [Fact]
+    public async Task GetCaptureCapabilitiesAsync_WhenFfmpegAvailable_AdvertisesMuxedVideoFormats()
+    {
+        if (!ViceSharp.Core.Media.FfmpegLocator.IsAvailable)
+        {
+            Assert.Skip("ffmpeg not installed - muxed video formats are not advertised.");
+            return;
+        }
+
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var captureService = new CaptureServiceHost(registry);
+
+        var response = await captureService.GetCaptureCapabilitiesAsync(
+            new SessionRequest(session.SessionId), TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+        Assert.Contains(response.VideoFormats, f => f.Id == "bmpseq" && !f.RequiresFfmpeg);
+        Assert.Contains(response.VideoFormats, f => f.Id == "mp4" && f.RequiresFfmpeg);
+    }
+
+    /// <summary>
+    /// FR-MED-004 (muxed video requires a real video chip).
+    /// Use case: a client requests an mp4 recording on the minimal host
+    /// architecture, which exposes no video chip.
+    /// Acceptance: StartCapture(Video, mp4) returns Unavailable (no video chip, or
+    /// ffmpeg missing) and registers no capture - never a half-open ffmpeg process.
+    /// </summary>
+    [Fact]
+    public async Task StartCapture_VideoMp4_NoVideoChip_ReturnsUnavailable()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var captureService = new CaptureServiceHost(registry);
+        var path = Path.Combine(Path.GetTempPath(), $"vice-sharp-{Guid.NewGuid():N}.mp4");
+
+        var response = await captureService.StartCaptureAsync(
+            new StartCaptureRequest(session.SessionId, CaptureKind.Video, path, "mp4"),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Unavailable, response.Status.Code);
+        Assert.Null(response.Capture);
+        Assert.Empty(session.CaptureSessions);
+        Assert.False(session.IsVideoCaptureActive);
+        Assert.False(File.Exists(path));
     }
 
     private static EmulatorRuntimeSession CreateMinimalSession()

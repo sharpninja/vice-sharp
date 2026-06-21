@@ -28,7 +28,8 @@ public sealed class EmulatorRuntimeSession
     // which the RPC threads take to begin/finalise a recording. Distinct from
     // SyncRoot so the lock-free UI frame read path is unaffected.
     private readonly object _captureSync = new();
-    private FrameSequenceCapture? _videoCapture;
+    private IVideoCaptureSink? _videoCapture;
+    private IAudioRecorder? _videoAudioTrack;
     private string? _videoCaptureId;
     private WavAudioRecorder? _audioRecorder;
     private Stream? _audioStream;
@@ -238,41 +239,79 @@ public sealed class EmulatorRuntimeSession
     {
         lock (_captureSync)
         {
-            _videoCapture?.CaptureFrame(bgra, width, height);
+            if (_videoCapture is null)
+                return;
+            try
+            {
+                _videoCapture.CaptureFrame(bgra, width, height);
+            }
+            catch
+            {
+                // A recorder fault (e.g. ffmpeg died, or a frame-size mismatch) must
+                // never propagate onto the emulation worker thread. Drop the frame;
+                // the recorder's own fault latch stops further writes and the user
+                // finalises via StopCapture (which runs off this thread).
+            }
         }
     }
 
     /// <summary>
-    /// Begins a numbered-BMP video capture into <paramref name="outputDirectory"/>
-    /// (FR-MED-002). Any previously-active video capture is finalised first. The
-    /// directory is created if it does not exist.
+    /// Begins a video capture driven by <paramref name="sink"/> (a numbered-BMP
+    /// sequence or a muxed ffmpeg recorder). Any previously-active video capture
+    /// is finalised first. When <paramref name="audioTrack"/> is supplied and the
+    /// session has a live audio path, it is attached to the
+    /// <see cref="AudioCaptureTap"/> so the recorder also receives the SID audio
+    /// stream (FR-MED-004 muxed video+audio). The caller has already started the
+    /// sink (e.g. launched ffmpeg) so it is ready to receive frames/samples.
     /// </summary>
-    public void BeginVideoCapture(string captureId, string outputDirectory)
+    public void BeginVideoCapture(string captureId, IVideoCaptureSink sink, IAudioRecorder? audioTrack = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(captureId);
-        ArgumentException.ThrowIfNullOrWhiteSpace(outputDirectory);
+        ArgumentNullException.ThrowIfNull(sink);
         lock (_captureSync)
         {
-            _videoCapture?.Dispose();
-            _videoCapture = new FrameSequenceCapture(outputDirectory);
+            EndVideoCaptureCore();
+            _videoCapture = sink;
             _videoCaptureId = captureId;
+
+            if (audioTrack is not null && AudioCaptureTap is not null)
+            {
+                _videoAudioTrack = audioTrack;
+                AudioCaptureTap.AttachRecorder(audioTrack);
+            }
         }
     }
 
     /// <summary>
-    /// Finalises the active video capture and returns the number of frames it
-    /// wrote (0 when none was active).
+    /// Finalises the active video capture (detaching any audio track from the tap
+    /// and disposing the sink, which flushes/closes an ffmpeg recorder) and
+    /// returns the number of frames it wrote (0 when none was active).
     /// </summary>
     public int EndVideoCapture()
     {
         lock (_captureSync)
         {
-            var frames = _videoCapture?.FrameCount ?? 0;
-            _videoCapture?.Dispose();
-            _videoCapture = null;
-            _videoCaptureId = null;
-            return frames;
+            return EndVideoCaptureCore();
         }
+    }
+
+    // Must be called under _captureSync.
+    private int EndVideoCaptureCore()
+    {
+        var frames = _videoCapture?.FrameCount ?? 0;
+
+        // Detach the audio track from the tap BEFORE disposing the sink so no
+        // further samples are written into a half-closed ffmpeg recorder.
+        if (_videoAudioTrack is not null)
+        {
+            AudioCaptureTap?.DetachRecorder();
+            _videoAudioTrack = null;
+        }
+
+        _videoCapture?.Dispose();
+        _videoCapture = null;
+        _videoCaptureId = null;
+        return frames;
     }
 
     /// <summary>

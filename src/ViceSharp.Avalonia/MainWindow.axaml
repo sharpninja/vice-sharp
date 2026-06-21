@@ -40,7 +40,11 @@
                 <MenuItem Header="Save screenshot..." Click="OnMenuSaveScreenshot" />
                 <Separator />
                 <MenuItem Header="Record sound..." Click="OnMenuRecordSound" />
-                <MenuItem Header="Record video (BMP sequence)..." Click="OnMenuRecordVideo" />
+                <MenuItem Header="Record video">
+                    <MenuItem Header="MP4 + sound..." Click="OnMenuRecordVideoMp4" />
+                    <MenuItem Header="BMP sequence (all frames)..." Click="OnMenuRecordVideoBmpAll" />
+                    <MenuItem Header="BMP sequence (unique frames)..." Click="OnMenuRecordVideoBmpUnique" />
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Settings">
                 <MenuItem Header="Settings..." Click="OnMenuShowSettings" />
