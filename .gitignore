@@ -3,6 +3,10 @@ bin/
 obj/
 artifacts/
 .dotnet-home/
+
+## aiUnit AI review run artifacts (generated)
+**/AiReviewLogs/
+**/aiunit-results/
 *.user
 *.suo
 *.userosscache
@@ -94,3 +98,4 @@ AGENTS-README-FIRST.yaml
 # MCP marker rotation backups (contain rotated API keys/HMAC - never commit).
 AGENTS-README-FIRST.yaml.deleted-*
 package-lock.json
+tools/aiunit-grok-claude-shim/publish/

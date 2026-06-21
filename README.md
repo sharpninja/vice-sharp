@@ -85,7 +85,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Datasette / TAP (pulse reads + CIA1 FLAG + builder wiring + rewind/seek + 32k motor ramp + SenseLine + record buffer) | ✅ | 100% | `RUNTIME-TAPE-002` Phase 1 close (slice 3) |
 | Standard cartridge mapping (8K/16K raw + CRT + GAME/EXROM live map) | ✅ | 100% | `RUNTIME-CART-002` validated for standard cartridges; broad mapper families are post-MVP |
 | Runtime snapshot (CPU A/X/Y/S/P/PC + 64K + VIC + CIA TOD + SID ADSR round-trip) | ✅ | 100% | `RUNTIME-SNAPSHOT-002` Phase 1 close (slice 4) |
-| Frame capture (BGRA → BMP single + multi-frame sequence + WAV audio + PNG + JPEG format) | ✅ | 100% | `RUNTIME-CAPTURE-002` Phase 1 close (slice 4) |
+| Media export (PNG/BMP screenshot + WAV sound + BMP sequence all/unique + muxed MP4/MKV/AVI video via ffmpeg, over the gRPC capture surface) | ✅ | 100% | `RUNTIME-CAPTURE-002` + `FR-MED-002/003/004`; ffmpeg-backed muxed video mirrors VICE `ffmpegexedrv` |
 | Keyboard matrix + control-port parity (LoadFromFile + EnumerateDevices + 30-frame key-repeat hold) | ✅ | 100% | `BACKFILL-INPUT-001` Phase 1 close (slice 5) |
 | Host UI + Monitor control surface (10 services + 8 adapters + view model + registry + mapper + frame source + InProcessGrpcHost + 2 clients; ~230 tests) | ✅ | 100% | `BACKFILL-HOSTUI-001` closeable; launcher/UI shell work is tracked separately |
 | Core primitives (SystemClock + DoubleBufferedMutationQueue + LockFreePubSub + BasicBus + SimpleRam) | ✅ | 100% | TR-PUBSUB-PERFORMANCE + TR-Cycle-Accuracy + TR-System-Core |
@@ -150,7 +150,7 @@ build.cmd Compile     # Windows
 | `Clean` | Remove bin/obj/artifacts |
 | `Restore` | Restore NuGet packages |
 | `Compile` | Build with TreatWarningsAsErrors |
-| `Test` | Run unit tests (excludes determinism) |
+| `Test` | Run unit tests (excludes determinism and the on-demand aiUnit AI reviews) |
 | `DeterminismTest` | Run determinism verification tests |
 | `PublishAot` | Publish NativeAOT console app |
 | `CiAzure` | Full Azure DevOps CI pipeline |
@@ -195,3 +195,4 @@ ViceSharp is a derivative work of VICE, which is also licensed under GPL-2.0-or-
 2. Follow the Byrd Development Process: tests first, then implementation
 3. All tests must pass before submitting a PR
 4. NativeAOT compatibility is required for all non-test assemblies
+5. Optional: run the aiUnit AI Code Review / Project Review before a PR (see [docs/AI-Review.md](docs/AI-Review.md))

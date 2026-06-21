@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    aiUnit Grok shim: a tiny executable named "claude" that speaks the Claude CLI
+    stdin protocol aiUnit's cli adapter expects, and forwards the prompt to the
+    Grok Build CLI in headless prompt-file mode. Published on demand and prepended
+    to PATH so aiUnit's "grok" strategy (Command=claude) drives Grok Build. Not part
+    of the main solution; opts out of central package management and warnings as
+    errors so it publishes cleanly under the repo's strict Directory.Build.props.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>claude</AssemblyName>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

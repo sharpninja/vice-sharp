@@ -175,12 +175,25 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | Standard 8K / 16K cartridge mapping (raw + CRT) | Working | Image normalises to ROML/ROMH and drives the live C64 memory map with GAME/EXROM behaviour; broader mapper families are post-MVP. |
 | Tape (TAP pulse reads) | Bounded | TAP pulse stream, CIA1 FLAG integration, builder wiring, rewind, and seek are present; spin-up/spin-down timing and record state remain Phase 1 work. |
 | Snapshot save/load | Bounded | 64K + public CPU state round-trips; full chip, timing, and resume state remain Phase 1 work. |
-| Frame capture (BGRA -> BMP, WAV) | Bounded | Single-frame BMP, multi-frame BMP sequence, and WAV recording work; configurable output formats remain Phase 1 work. |
+| Media capture / recording | Working | Screenshot (PNG/BMP), WAV sound, BMP frame sequence (all or unique frames), and muxed video with sound (MP4 / MKV / AVI via ffmpeg) export through the gRPC capture surface and the Avalonia Snapshot menu. See "Media capture and recording" below. |
 | VIC-II pixel sequencer / sprite collisions | Partial | Visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, managed continuous side-border behavior, VIC-II register readback masks/collision latch writes, and managed matrix idle/fill behavior are covered; native display-mode/register/matrix checkpoints, sprite fetch depth, and FLI/AFLI timing remain under `BACKFILL-VIDEO-001`. |
 | SID combined waveforms + ADSR-bug accuracy | Working | Combined waveform, ADSR, digi, filter, PCM-equivalence, and dual-SID coverage are in the focused suite; further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression. |
 | Cartridge ports / user port as live CPU attachment | Substrate ready | `IInterSystemBus` supports `UserPort` and `CartPort` bus kinds; chip-level bindings are in for CIA2 / VIA1 / VIA2 / GAME / EXROM. Cartridge-as-running-CPU sample topology is future work. |
 | C128 / VIC-20 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException`. |
 | Host UI (Avalonia, monitor, gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Launcher-integrated always-on UI remains separate work. |
+
+### Media capture and recording
+
+From the Avalonia desktop UI, the **Snapshot** menu exports emulator output:
+
+- **Save screenshot...** writes the current frame as PNG or BMP (chosen by the file extension).
+- **Record sound...** toggles a WAV recording of the SID output (start, then choose a file; pick the menu item again to stop).
+- **Record video** offers three modes (toggle to start, pick again to stop):
+  - **MP4 + sound** muxes H.264 video and AAC audio into an `.mp4` (also `.mkv` / `.avi` by extension). Requires `ffmpeg` on `PATH` (or set `VICESHARP_FFMPEG` to its full path).
+  - **BMP sequence (all frames)** writes one numbered `frame_NNNNNN.bmp` per emulated frame into the chosen folder.
+  - **BMP sequence (unique frames)** writes only frames that differ from the previous one, collapsing static screens.
+
+Everything is also driveable over the gRPC `CaptureService` (capability discovery, screenshot, start/stop, and listing active captures). Muxed video and WAV sound need a live audio device; headless hosts export screenshots and the BMP sequence only.
 
 ## 8. Troubleshooting
 

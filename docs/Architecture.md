@@ -142,11 +142,37 @@ The `IArchitectureValidator` catches configuration errors at build time, not run
 
 ## Media Capture
 
-ViceSharp supports capturing output in multiple formats:
+ViceSharp exports emulator output through one gRPC `CaptureService` surface
+(`GetCaptureCapabilities`, `CaptureFrame`, `StartCapture`, `StopCapture`,
+`ListCaptures`). The host implementation (`CaptureServiceHost`) routes each request
+to a concrete recorder in `ViceSharp.Core.Media`:
 
-- `IScreenshotCapture` — single-frame PNG/BMP capture from `IFrameSink`
-- `IVideoRecorder` — continuous frame recording to MP4 via FFmpeg (AoT-compatible via P/Invoke)
-- `IAudioRecorder` — audio stream recording to WAV/FLAC
-- `IMediaCaptureSession` — coordinated A/V recording with synchronized timestamps
+| Facility | Format(s) | Recorder | Tee point |
+|----------|-----------|----------|-----------|
+| Screenshot (one-shot) | `png`, `bmp` | `FrameCapture.CaptureBgraAsync` | reads the committed frame buffer |
+| Video (frame sequence) | `bmpseq` (numbered 24-bit BMPs) | `FrameSequenceCapture` (`AllFrames` / `UniqueFrames`) | `EmulatorRuntimeSession.CommitFrame` |
+| Video (muxed, with sound) | `mp4`, `mkv`, `avi` | `FfmpegVideoRecorder` (external ffmpeg) | `CommitFrame` (video) + `CaptureAudioTap` (audio) |
+| Sound | `wav` (16-bit PCM) | `WavAudioRecorder` | `CaptureAudioTap` in the SID -> output path |
 
-All capture interfaces operate on the committed frame buffer, never blocking the emulation thread.
+Key design points:
+
+- **Two tee points, one worker thread.** Completed frames are teed from
+  `CommitFrame` and SID samples from `CaptureAudioTap`, both on the emulation
+  worker. A capture-only lock (`_captureSync`) keeps this off the lock-free UI
+  frame-read path, and a recorder fault can never propagate onto the worker.
+- **`IVideoCaptureSink`** unifies the BMP-sequence and ffmpeg recorders so the
+  session drives either through one surface. The ffmpeg recorder also implements
+  `IAudioRecorder`, so a single object receives both video frames and audio.
+- **External ffmpeg, not libav.** `FfmpegVideoRecorder` mirrors VICE's
+  `ffmpegexedrv`: it opens two loopback TCP servers, launches `ffmpeg` as a client
+  of both, and streams raw BGRA video + s16le PCM for muxing into the chosen
+  container. `FfmpegLocator` finds the binary (PATH or `VICESHARP_FFMPEG`), and the
+  muxed formats are advertised by `GetCaptureCapabilities` only when ffmpeg is
+  present. Launch happens off the session lock.
+- **Parity-preserving audio tap.** `CaptureAudioTap` is installed in the SID audio
+  path only when a real audio device exists, so headless and test hosts keep the
+  SID silent (no timing perturbation) and simply advertise no sound/muxed-video
+  capture.
+
+The capture client surface is exposed to the Avalonia UI through
+`IHostProtocolClient` (Snapshot menu: Save screenshot, Record sound, Record video).

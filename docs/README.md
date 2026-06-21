@@ -18,6 +18,7 @@
 
 - [ROMs.md](ROMs.md) — Legal ROM options, environment variable setup
 - [ROL.md](ROL.md) — Registry of Lore (122+ entries)
+- [AI-Review.md](AI-Review.md) — aiUnit AI Code Review + Project Review tests, and running them with the Grok Build CLI
 
 ## Iteration Plans
 

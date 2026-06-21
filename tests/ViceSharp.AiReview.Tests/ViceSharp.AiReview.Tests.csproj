@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ViceSharp.AiReview.Tests: SharpNinja.aiUnit AI Code Review + AI Project Review
+    integration tests. The [Theory] rows run the configured review agent (the
+    "grok" strategy in appsettings.aiunit.json, driven through the local
+    claude-protocol shim under tools/aiunit-grok-claude-shim) at xUnit discovery
+    via aiUnit's review executor, which never throws: a missing or failing agent
+    yields a normalized status:"error" findings JSON. The test bodies persist that
+    JSON to AiReviewLogs/ and assert nothing that can fail the run, per the
+    operator contract "do not fail the test, write the output to a log".
+
+    Kept as a SEPARATE project from ViceSharp.TestHarness because:
+      * aiUnit targets xUnit v2 while the harness uses xUnit v3 (incompatible in
+        one project), and
+      * the slow, host-bound AI review calls must not gate the focused unit suite.
+
+    Opts out of central package management (the repo pins xUnit v3) and relaxes
+    warnings-as-errors so the aiUnit/xUnit v2 stack restores cleanly here.
+  -->
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- Do not let the focused unit gate accidentally pick these slow AI tests up. -->
+    <IsPublishable>false</IsPublishable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="SharpNinja.aiUnit" Version="0.11.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

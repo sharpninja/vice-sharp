@@ -65,7 +65,9 @@ sealed partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetNoRestore(true)
                 .SetNoBuild(true)
-                .SetFilter("Category!=Determinism"));
+                // Exclude Determinism (its own target) and the slow, host-bound,
+                // non-deterministic aiUnit AI reviews (run on demand via AiReview target).
+                .SetFilter("Category!=Determinism&Category!=AiReview"));
         });
 
     Target DeterminismTest => _ => _
