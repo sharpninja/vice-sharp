@@ -4,88 +4,100 @@ using System.Text.Json;
 namespace ViceSharp.AiReview.Tests;
 
 /// <summary>
-/// Writes aiUnit review findings JSON to a per-run log file under
-/// <c>tests/ViceSharp.AiReview.Tests/AiReviewLogs/</c> and appends a one-line
-/// summary to <c>ai-review.log</c>. Report-only: the AI review theories call
-/// this and assert nothing, so a review run never fails the test suite
-/// (operator contract: do not fail the test, write the output to a log).
+/// Writes each aiUnit review (the prompt and the model's response) to a
+/// timestamped markdown file under <c>docs/reviews/</c>. Report-only: the AI
+/// review theories call this and assert nothing, so a review run never fails the
+/// test suite (operator contract: do not fail the test, write the output to a
+/// file). File name: <c>{kind}-review-{yyyyMMddTHHmmssfffZ}.md</c> (sorts
+/// chronologically).
 /// </summary>
 public static class ReviewLog
 {
     private static readonly object WriteGate = new();
 
-    /// <summary>Absolute directory the review logs are written to.</summary>
-    public static string LogDirectory { get; } = ResolveLogDirectory();
+    /// <summary>Absolute <c>docs/reviews</c> directory review markdown is written to.</summary>
+    public static string ReviewsDirectory { get; } = ResolveReviewsDirectory();
 
     /// <summary>
-    /// Writes <paramref name="resultJson"/> (and the originating prompt) to a
-    /// unique log file, appends a summary line to the aggregate log, and
-    /// returns the per-run file path. The result is embedded as parsed JSON
-    /// when valid, otherwise as a raw string so error payloads are still kept.
+    /// Writes the review to a timestamped markdown file under
+    /// <see cref="ReviewsDirectory"/> and returns its path.
     /// </summary>
     public static string Write(string reviewKind, string prompt, string resultJson)
+        => Write(reviewKind, prompt, resultJson, ReviewsDirectory);
+
+    /// <summary>
+    /// Writes the review to a timestamped markdown file under
+    /// <paramref name="targetDirectory"/> (used by tests to redirect output) and
+    /// returns its path. The response is embedded as a pretty-printed JSON block
+    /// when it parses, otherwise verbatim so error payloads are still preserved.
+    /// </summary>
+    public static string Write(string reviewKind, string prompt, string resultJson, string targetDirectory)
     {
-        Directory.CreateDirectory(LogDirectory);
+        Directory.CreateDirectory(targetDirectory);
 
         string stamp = DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ");
-        string fileName = $"{Sanitize(reviewKind)}-{stamp}-{Guid.NewGuid():N}.json";
-        string path = Path.Combine(LogDirectory, fileName);
+        string fileName = $"{Sanitize(reviewKind)}-review-{stamp}.md";
+        string path = Path.Combine(targetDirectory, fileName);
 
         lock (WriteGate)
         {
-            File.WriteAllText(path, BuildEnvelope(reviewKind, prompt, resultJson, stamp));
-            File.AppendAllText(
-                Path.Combine(LogDirectory, "ai-review.log"),
-                SummaryLine(reviewKind, resultJson, fileName) + Environment.NewLine);
+            File.WriteAllText(path, BuildMarkdown(reviewKind, prompt, resultJson, stamp), new UTF8Encoding(false));
         }
 
         return path;
     }
 
-    private static string BuildEnvelope(string reviewKind, string prompt, string resultJson, string stamp)
+    private static string BuildMarkdown(string reviewKind, string prompt, string resultJson, string stamp)
     {
-        using var stream = new MemoryStream();
-        using (var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true }))
-        {
-            writer.WriteStartObject();
-            writer.WriteString("capturedUtc", stamp);
-            writer.WriteString("reviewKind", reviewKind);
-            writer.WriteString("prompt", prompt);
-            writer.WritePropertyName("result");
-            if (TryParse(resultJson, out JsonDocument? doc) && doc is not null)
-            {
-                using (doc)
-                {
-                    doc.RootElement.WriteTo(writer);
-                }
-            }
-            else
-            {
-                writer.WriteStringValue(resultJson);
-            }
+        var (status, summary, prettyResponse, isJson) = Describe(resultJson);
 
-            writer.WriteEndObject();
+        var sb = new StringBuilder();
+        sb.Append("# ").Append(Title(reviewKind)).AppendLine(" Review");
+        sb.AppendLine();
+        sb.Append("- **Captured (UTC):** ").AppendLine(stamp);
+        sb.Append("- **Review kind:** ").AppendLine(reviewKind);
+        sb.Append("- **Status:** ").AppendLine(status);
+        if (!string.IsNullOrWhiteSpace(summary))
+        {
+            sb.Append("- **Summary:** ").AppendLine(summary);
         }
 
-        return Encoding.UTF8.GetString(stream.ToArray());
+        sb.AppendLine();
+        sb.AppendLine("## Prompt");
+        sb.AppendLine();
+        sb.AppendLine("```text");
+        sb.AppendLine(prompt);
+        sb.AppendLine("```");
+
+        sb.AppendLine();
+        sb.AppendLine("## Response");
+        sb.AppendLine();
+        sb.AppendLine(isJson ? "```json" : "```text");
+        sb.AppendLine(prettyResponse);
+        sb.AppendLine("```");
+
+        return sb.ToString();
     }
 
-    private static string SummaryLine(string reviewKind, string resultJson, string fileName)
+    private static (string Status, string Summary, string Response, bool IsJson) Describe(string resultJson)
     {
-        string status = "unknown";
-        if (TryParse(resultJson, out JsonDocument? doc) && doc is not null)
+        if (!TryParse(resultJson, out JsonDocument? doc) || doc is null)
         {
-            using (doc)
-            {
-                if (doc.RootElement.TryGetProperty("status", out JsonElement s)
-                    && s.ValueKind == JsonValueKind.String)
-                {
-                    status = s.GetString() ?? "unknown";
-                }
-            }
+            return ("unknown", string.Empty, resultJson, false);
         }
 
-        return $"{DateTime.UtcNow:O}  {reviewKind,-7}  status={status,-7}  {fileName}";
+        using (doc)
+        {
+            JsonElement root = doc.RootElement;
+            string status = root.TryGetProperty("status", out JsonElement s) && s.ValueKind == JsonValueKind.String
+                ? s.GetString() ?? "unknown"
+                : "unknown";
+            string summary = root.TryGetProperty("summary", out JsonElement m) && m.ValueKind == JsonValueKind.String
+                ? m.GetString() ?? string.Empty
+                : string.Empty;
+            string pretty = JsonSerializer.Serialize(root, new JsonSerializerOptions { WriteIndented = true });
+            return (status, summary, pretty, true);
+        }
     }
 
     private static bool TryParse(string json, out JsonDocument? doc)
@@ -102,6 +114,16 @@ public static class ReviewLog
         }
     }
 
+    private static string Title(string reviewKind) =>
+        reviewKind switch
+        {
+            "code" => "AI Code",
+            "project" => "AI Project",
+            "plan" => "AI Plan",
+            _ => "AI " + char.ToUpperInvariant(reviewKind.Length > 0 ? reviewKind[0] : 'r') +
+                 (reviewKind.Length > 1 ? reviewKind[1..] : string.Empty),
+        };
+
     private static string Sanitize(string value)
     {
         foreach (char invalid in Path.GetInvalidFileNameChars())
@@ -112,10 +134,10 @@ public static class ReviewLog
         return value;
     }
 
-    private static string ResolveLogDirectory()
+    private static string ResolveReviewsDirectory()
     {
         // Walk up from the test output directory to the repo root (the folder
-        // holding ViceSharp.slnx), then anchor the log dir under the test project.
+        // holding ViceSharp.slnx), then anchor at docs/reviews.
         DirectoryInfo? dir = new(AppContext.BaseDirectory);
         while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "ViceSharp.slnx")))
         {
@@ -123,6 +145,6 @@ public static class ReviewLog
         }
 
         string root = dir?.FullName ?? AppContext.BaseDirectory;
-        return Path.Combine(root, "tests", "ViceSharp.AiReview.Tests", "AiReviewLogs");
+        return Path.Combine(root, "docs", "reviews");
     }
 }

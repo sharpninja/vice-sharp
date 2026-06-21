@@ -4,8 +4,7 @@ obj/
 artifacts/
 .dotnet-home/
 
-## aiUnit AI review run artifacts (generated)
-**/AiReviewLogs/
+## aiUnit per-review run logs (generated). Saved reviews live in docs/reviews/ (tracked).
 **/aiunit-results/
 *.user
 *.suo

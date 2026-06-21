@@ -39,6 +39,10 @@
 
   <ItemGroup>
     <None Update="appsettings.aiunit.json" CopyToOutputDirectory="PreserveNewest" />
+    <!-- preEnumerateTheories:false keeps the review agent from being invoked at
+         xUnit discovery, so the default gate (which excludes Category=AiReview at
+         execution) never triggers a real AI call. -->
+    <None Update="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

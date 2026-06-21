@@ -33,9 +33,10 @@ Both prompts are prefixed with a requirements-governance preamble that points th
 reviewer at `AGENTS-README-FIRST.yaml` and the MCP Server as the single source of
 truth for requirements.
 
-Findings are written under `tests/ViceSharp.AiReview.Tests/AiReviewLogs/`
-(`aiunit-results/` holds aiUnit's own per-review run logs). Both directories are
-git-ignored.
+Each review is saved as a timestamped markdown file (the prompt plus the model's
+response) under [`docs/reviews/`](reviews/), named
+`{kind}-review-{yyyyMMddTHHmmssfffZ}.md`. aiUnit also writes its own per-review run
+logs under `tests/ViceSharp.AiReview.Tests/aiunit-results/` (git-ignored).
 
 ## Running with the Grok Build CLI (default strategy)
 
@@ -64,8 +65,8 @@ $env:PATH = "F:\GitHub\vice-sharp\tools\aiunit-grok-claude-shim\publish;$env:PAT
 dotnet test tests/ViceSharp.AiReview.Tests/ViceSharp.AiReview.Tests.csproj `
     --filter "Category=AiReview"
 
-# 5. Read the findings.
-#    tests/ViceSharp.AiReview.Tests/AiReviewLogs/  (code-*.json, project-*.json, ai-review.log)
+# 5. Read the saved reviews (prompt + response as markdown).
+#    docs/reviews/  (code-review-*.md, project-review-*.md)
 ```
 
 ## Other strategies
