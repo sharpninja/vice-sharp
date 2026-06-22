@@ -119,25 +119,39 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     /// </summary>
     public void Start()
     {
+        // Claim the started flag under the lock, then release it: the process
+        // launch and the blocking socket accept run WITHOUT holding _sync, so the
+        // operational lock (used by the emulation tee paths) is never held during
+        // long I/O.
         lock (_sync)
         {
             if (_started) throw new InvalidOperationException("Recorder already started.");
             _started = true;
+        }
 
+        TcpListener? videoListener = null;
+        TcpListener? audioListener = null;
+        Process? ffmpeg = null;
+        TcpClient? videoClient = null;
+        NetworkStream? videoStream = null;
+        Task<TcpClient>? audioAccept = null;
+
+        try
+        {
             var dir = Path.GetDirectoryName(_outputPath);
             if (!string.IsNullOrEmpty(dir))
                 Directory.CreateDirectory(dir);
 
-            _videoListener = new TcpListener(IPAddress.Loopback, 0);
-            _videoListener.Start();
-            var videoPort = ((IPEndPoint)_videoListener.LocalEndpoint).Port;
+            videoListener = new TcpListener(IPAddress.Loopback, 0);
+            videoListener.Start();
+            var videoPort = ((IPEndPoint)videoListener.LocalEndpoint).Port;
 
             var audioPort = 0;
             if (_includeAudio)
             {
-                _audioListener = new TcpListener(IPAddress.Loopback, 0);
-                _audioListener.Start();
-                audioPort = ((IPEndPoint)_audioListener.LocalEndpoint).Port;
+                audioListener = new TcpListener(IPAddress.Loopback, 0);
+                audioListener.Start();
+                audioPort = ((IPEndPoint)audioListener.LocalEndpoint).Port;
             }
 
             var argv = FfmpegArgumentBuilder.Build(
@@ -158,7 +172,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
 
             try
             {
-                _ffmpeg = Process.Start(psi)
+                ffmpeg = Process.Start(psi)
                     ?? throw new InvalidOperationException($"Failed to start ffmpeg at '{_ffmpegPath}'.");
             }
             catch (Exception ex) when (ex is not InvalidOperationException)
@@ -167,21 +181,76 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             }
 
             // Drain stdout/stderr so a chatty ffmpeg never blocks on a full pipe.
-            DrainAsync(_ffmpeg.StandardError, capture: true);
-            DrainAsync(_ffmpeg.StandardOutput, capture: false);
+            DrainAsync(ffmpeg.StandardError, capture: true);
+            DrainAsync(ffmpeg.StandardOutput, capture: false);
 
             // The video connection is mandatory and quick (ffmpeg opens input 0
             // during init); block briefly for it so frame writes have a stream.
-            _videoClient = AcceptOrThrow(_videoListener, "video");
-            _videoStream = _videoClient.GetStream();
+            videoClient = AcceptOrThrow(videoListener, "video");
+            videoStream = videoClient.GetStream();
 
             // Audio connects asynchronously: ffmpeg may only open the audio input
             // after it has begun reading video, so blocking here could deadlock
             // Start(). WriteSamples promotes the accepted client to a live stream
             // once it connects; any samples before then are dropped (a few ms).
-            if (_includeAudio && _audioListener is not null)
-                _audioAccept = _audioListener.AcceptTcpClientAsync();
+            if (_includeAudio && audioListener is not null)
+                audioAccept = audioListener.AcceptTcpClientAsync();
+
+            // Publish the connected resources under a short critical section.
+            lock (_sync)
+            {
+                _videoListener = videoListener;
+                _audioListener = audioListener;
+                _ffmpeg = ffmpeg;
+                _videoClient = videoClient;
+                _videoStream = videoStream;
+                _audioAccept = audioAccept;
+            }
         }
+        catch
+        {
+            // Any failure after we claimed _started must release every resource we
+            // acquired (ffmpeg process + listeners + clients) so nothing leaks;
+            // callers are not required to dispose a recorder whose Start threw.
+            DisposeStartResources(videoStream, videoClient, videoListener, audioListener, audioAccept, ffmpeg);
+            lock (_sync) { _stopped = true; }
+            throw;
+        }
+    }
+
+    private static void DisposeStartResources(
+        NetworkStream? videoStream, TcpClient? videoClient,
+        TcpListener? videoListener, TcpListener? audioListener,
+        Task<TcpClient>? audioAccept, Process? ffmpeg)
+    {
+        CloseQuietly(videoStream);
+        try { videoClient?.Close(); } catch { /* already closed */ }
+        try { videoListener?.Stop(); } catch { /* already stopped */ }
+        try { audioListener?.Stop(); } catch { /* already stopped */ }
+        ObserveAudioAccept(audioAccept);
+        if (ffmpeg is not null)
+        {
+            try { if (!ffmpeg.HasExited) ffmpeg.Kill(entireProcessTree: true); } catch { /* already gone */ }
+            try { ffmpeg.Dispose(); } catch { /* already disposed */ }
+        }
+    }
+
+    // Observe a pending audio-accept task so a never-connected audio input does not
+    // surface as an unobserved task exception when its listener is stopped.
+    private static void ObserveAudioAccept(Task<TcpClient>? pendingAudioAccept)
+    {
+        if (pendingAudioAccept is null) return;
+
+        _ = pendingAudioAccept.ContinueWith(
+            t => { _ = t.Exception; t.Result.Close(); },
+            CancellationToken.None,
+            TaskContinuationOptions.OnlyOnRanToCompletion,
+            TaskScheduler.Default);
+        _ = pendingAudioAccept.ContinueWith(
+            t => { _ = t.Exception; },
+            CancellationToken.None,
+            TaskContinuationOptions.OnlyOnFaulted,
+            TaskScheduler.Default);
     }
 
     private TcpClient AcceptOrThrow(TcpListener listener, string label)
@@ -230,14 +299,19 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     /// <inheritdoc/>
     public void CaptureFrame(ReadOnlySpan<byte> bgra, int width, int height)
     {
-        if (bgra.Length != _expectedFrameBytes)
-            throw new ArgumentException(
-                $"Frame is {bgra.Length} bytes but the recorder was configured for {_width}x{_height} ({_expectedFrameBytes} bytes).",
-                nameof(bgra));
-
         lock (_sync)
         {
             if (_stopped || _faulted || _videoStream is null) return;
+
+            // A frame whose size does not match the configured geometry is dropped
+            // (and faults the recorder) rather than thrown on the emulation worker's
+            // hot path.
+            if (bgra.Length != _expectedFrameBytes)
+            {
+                _faulted = true;
+                return;
+            }
+
             try
             {
                 _videoStream.Write(bgra);
@@ -324,19 +398,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
 
         // Observe the audio-accept task so a never-connected audio input does not
         // surface as an unobserved task exception when the listener is stopped.
-        if (pendingAudioAccept is not null)
-        {
-            _ = pendingAudioAccept.ContinueWith(
-                t => { _ = t.Exception; t.Result.Close(); },
-                CancellationToken.None,
-                TaskContinuationOptions.OnlyOnRanToCompletion,
-                TaskScheduler.Default);
-            _ = pendingAudioAccept.ContinueWith(
-                t => { _ = t.Exception; },
-                CancellationToken.None,
-                TaskContinuationOptions.OnlyOnFaulted,
-                TaskScheduler.Default);
-        }
+        ObserveAudioAccept(pendingAudioAccept);
 
         if (ffmpeg is null) return;
         try

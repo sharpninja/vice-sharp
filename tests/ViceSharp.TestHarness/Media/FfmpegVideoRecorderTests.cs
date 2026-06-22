@@ -118,6 +118,51 @@ public sealed class FfmpegVideoRecorderTests
         }
     }
 
+    /// <summary>
+    /// FR-MED-004 (review finding LIFETIME-START-FAIL).
+    /// Use case: ffmpeg cannot be launched (bad path). Start must fail cleanly and
+    /// release any resources it acquired (listeners/process), and a follow-up
+    /// Dispose must be a safe, non-hanging no-op.
+    /// </summary>
+    [Fact]
+    public void Start_InvalidFfmpegPath_ThrowsInvalidOperation_AndDisposeIsSafe()
+    {
+        var bogus = Path.Combine(Path.GetTempPath(), $"no-such-ffmpeg-{Guid.NewGuid():N}.exe");
+        var outPath = Path.Combine(Path.GetTempPath(), $"vice-x-{Guid.NewGuid():N}.mp4");
+        var recorder = new FfmpegVideoRecorder(
+            bogus, FfmpegVideoFormats.Mp4, 64, 64, frameRate: 50.0, outPath, includeAudio: true);
+
+        Assert.Throws<InvalidOperationException>(recorder.Start);
+
+        // After a failed Start the recorder must already be torn down, so Dispose
+        // returns promptly without throwing.
+        var ex = Record.Exception(recorder.Dispose);
+        Assert.Null(ex);
+        if (File.Exists(outPath)) File.Delete(outPath);
+    }
+
+    /// <summary>
+    /// FR-MED-004 (review finding INPUT-VALIDATION before-lock).
+    /// Use case: a frame arrives before Start (no socket) or with a mismatched
+    /// size. CaptureFrame must drop it (the recorder is inactive/faulted), never
+    /// throw on the emulation worker's hot path.
+    /// </summary>
+    [Fact]
+    public void CaptureFrame_BeforeStart_DropsFrameWithoutThrowing()
+    {
+        var ffmpeg = FfmpegLocator.Locate() ?? "ffmpeg"; // path is not actually executed here
+        var outPath = Path.Combine(Path.GetTempPath(), $"vice-x-{Guid.NewGuid():N}.mp4");
+        using var recorder = new FfmpegVideoRecorder(
+            ffmpeg, FfmpegVideoFormats.Mp4, 64, 64, frameRate: 50.0, outPath, includeAudio: false);
+
+        // Not started: no video stream. Neither a wrong-sized nor a right-sized
+        // frame may throw - both are dropped.
+        recorder.CaptureFrame(new byte[10], 64, 64);
+        recorder.CaptureFrame(new byte[64 * 64 * 4], 64, 64);
+
+        Assert.Equal(0, recorder.FrameCount);
+    }
+
     // Returns the newline-joined codec_type list (e.g. "video\naudio") via ffprobe,
     // or null when ffprobe is not alongside ffmpeg.
     private static string? ProbeStreamTypes(string ffmpegPath, string mediaPath)

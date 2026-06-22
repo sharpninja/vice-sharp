@@ -32,6 +32,9 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
     private readonly int _sampleRate;
     private readonly int _channels;
     private readonly long _headerStartPosition;
+    // Serialises all output-stream access (WriteSamples vs Stop's header patch) so
+    // an in-flight worker write cannot race the RPC-thread finalisation.
+    private readonly object _sync = new();
     private uint _dataBytesWritten;
     private bool _stopped;
     private bool _disposed;
@@ -74,29 +77,35 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
     /// </summary>
     public void WriteSamples(ReadOnlySpan<short> samples)
     {
-        if (_stopped) throw new InvalidOperationException("Cannot write samples after Stop.");
         if (samples.IsEmpty) return;
 
-        Span<byte> buffer = stackalloc byte[2];
-        // Use a small chunk of the heap for larger writes to avoid one
-        // stream call per sample.
-        const int ChunkBytes = 4096;
-        byte[] chunk = new byte[ChunkBytes];
-        int filled = 0;
-
-        foreach (var s in samples)
+        lock (_sync)
         {
-            BinaryPrimitives.WriteInt16LittleEndian(buffer, s);
-            chunk[filled++] = buffer[0];
-            chunk[filled++] = buffer[1];
-            if (filled == ChunkBytes)
+            // Writes after Stop are silently ignored (per IAudioRecorder), so a
+            // late worker batch racing finalisation can never corrupt the file.
+            if (_stopped) return;
+
+            Span<byte> buffer = stackalloc byte[2];
+            // Use a small chunk of the heap for larger writes to avoid one
+            // stream call per sample.
+            const int ChunkBytes = 4096;
+            byte[] chunk = new byte[ChunkBytes];
+            int filled = 0;
+
+            foreach (var s in samples)
             {
-                _output.Write(chunk, 0, filled);
-                filled = 0;
+                BinaryPrimitives.WriteInt16LittleEndian(buffer, s);
+                chunk[filled++] = buffer[0];
+                chunk[filled++] = buffer[1];
+                if (filled == ChunkBytes)
+                {
+                    _output.Write(chunk, 0, filled);
+                    filled = 0;
+                }
             }
+            if (filled > 0) _output.Write(chunk, 0, filled);
+            _dataBytesWritten += (uint)(samples.Length * BytesPerSample);
         }
-        if (filled > 0) _output.Write(chunk, 0, filled);
-        _dataBytesWritten += (uint)(samples.Length * BytesPerSample);
     }
 
     /// <summary>
@@ -105,26 +114,29 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
     /// </summary>
     public void Stop()
     {
-        if (_stopped) return;
-        _stopped = true;
+        lock (_sync)
+        {
+            if (_stopped) return;
+            _stopped = true;
 
-        long endPosition = _output.Position;
+            long endPosition = _output.Position;
 
-        // RIFF chunk size = 36 + dataBytes (covers everything after the
-        // RIFF size field).
-        uint riffSize = 36u + _dataBytesWritten;
+            // RIFF chunk size = 36 + dataBytes (covers everything after the
+            // RIFF size field).
+            uint riffSize = 36u + _dataBytesWritten;
 
-        // Patch RIFF size at offset 4.
-        _output.Seek(_headerStartPosition + 4, SeekOrigin.Begin);
-        WriteLeUInt32(riffSize);
+            // Patch RIFF size at offset 4.
+            _output.Seek(_headerStartPosition + 4, SeekOrigin.Begin);
+            WriteLeUInt32(riffSize);
 
-        // Patch data chunk size at offset 40.
-        _output.Seek(_headerStartPosition + 40, SeekOrigin.Begin);
-        WriteLeUInt32(_dataBytesWritten);
+            // Patch data chunk size at offset 40.
+            _output.Seek(_headerStartPosition + 40, SeekOrigin.Begin);
+            WriteLeUInt32(_dataBytesWritten);
 
-        // Restore position to end so any further (out-of-band) writes append.
-        _output.Seek(endPosition, SeekOrigin.Begin);
-        _output.Flush();
+            // Restore position to end so any further (out-of-band) writes append.
+            _output.Seek(endPosition, SeekOrigin.Begin);
+            _output.Flush();
+        }
     }
 
     /// <summary>Stops the recorder (patching final sizes). Stream is not closed.</summary>

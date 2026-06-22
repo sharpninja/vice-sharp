@@ -152,7 +152,17 @@ public sealed class CaptureServiceHost : ICaptureService
                 // so a slow/failed start never stalls other RPCs on the session.
                 recorder = new FfmpegVideoRecorder(
                     ffmpegPath, videoFormat, width, height, frameRate, request.TargetPath, includeAudio);
-                recorder.Start();
+                try
+                {
+                    recorder.Start();
+                }
+                catch
+                {
+                    // Release the ffmpeg process + sockets if Start failed partway
+                    // (the caller must not leak a half-started recorder).
+                    recorder.Dispose();
+                    throw;
+                }
             }
             catch (Exception ex) when (ex is InvalidOperationException or IOException or UnauthorizedAccessException or ArgumentException)
             {
@@ -182,13 +192,15 @@ public sealed class CaptureServiceHost : ICaptureService
             return new StartCaptureResponse(
                 RpcStatus.Unavailable("This session has no live audio path to record."), null);
 
+        FileStream? stream = null;
+        WavAudioRecorder? recorder = null;
         try
         {
             var dir = Path.GetDirectoryName(request.TargetPath);
             if (!string.IsNullOrEmpty(dir))
                 Directory.CreateDirectory(dir);
-            var stream = new FileStream(request.TargetPath, FileMode.Create, FileAccess.Write);
-            var recorder = new WavAudioRecorder(stream, 44100, 1);
+            stream = new FileStream(request.TargetPath, FileMode.Create, FileAccess.Write);
+            recorder = new WavAudioRecorder(stream, 44100, 1);
             lock (session.SyncRoot)
             {
                 session.BeginAudioCapture(captureId, recorder, stream);
@@ -197,6 +209,10 @@ public sealed class CaptureServiceHost : ICaptureService
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
         {
+            // Release the file handle + recorder if anything failed after they were
+            // allocated (the session only owns them once BeginAudioCapture succeeds).
+            recorder?.Dispose();
+            stream?.Dispose();
             return new StartCaptureResponse(RpcStatus.InvalidArgument($"Could not start capture: {ex.Message}"), null);
         }
     }
