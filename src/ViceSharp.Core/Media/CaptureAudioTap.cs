@@ -82,24 +82,28 @@ public sealed class CaptureAudioTap : IAudioBackend
     /// <inheritdoc/>
     public void SubmitSamples(ReadOnlySpan<float> samples)
     {
-        lock (_sync)
+        // Snapshot the recorder under the lock, then do the clamp/scale/write
+        // OUTSIDE it so the recorder's work never gates Attach/Detach (or, with a
+        // background-queue recorder, a transient back-pressure block). The recorder
+        // itself is safe against a concurrent Detach/Stop.
+        IAudioRecorder? recorder;
+        lock (_sync) { recorder = _recorder; }
+
+        if (recorder is not null && !samples.IsEmpty)
         {
-            if (_recorder is not null && !samples.IsEmpty)
+            int processed = 0;
+            while (processed < samples.Length)
             {
-                int processed = 0;
-                while (processed < samples.Length)
+                int chunk = Math.Min(_scratch.Length, samples.Length - processed);
+                for (int i = 0; i < chunk; i++)
                 {
-                    int chunk = Math.Min(_scratch.Length, samples.Length - processed);
-                    for (int i = 0; i < chunk; i++)
-                    {
-                        float s = samples[processed + i];
-                        if (s > 1f) s = 1f;
-                        else if (s < -1f) s = -1f;
-                        _scratch[i] = (short)(s * 32767f);
-                    }
-                    _recorder.WriteSamples(new ReadOnlySpan<short>(_scratch, 0, chunk));
-                    processed += chunk;
+                    float s = samples[processed + i];
+                    if (s > 1f) s = 1f;
+                    else if (s < -1f) s = -1f;
+                    _scratch[i] = (short)(s * 32767f);
                 }
+                recorder.WriteSamples(new ReadOnlySpan<short>(_scratch, 0, chunk));
+                processed += chunk;
             }
         }
 

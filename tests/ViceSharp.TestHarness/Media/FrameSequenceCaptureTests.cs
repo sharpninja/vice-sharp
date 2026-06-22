@@ -274,6 +274,25 @@ public sealed class FrameSequenceCaptureTests : IDisposable
         Directory.GetFiles(_tempDir, "*.bmp").Should().HaveCount(3);
     }
 
+    /// <summary>
+    /// FR-MED-002 (review finding: throw on worker path for invalid frames).
+    /// Use case: a mismatched-size frame must be dropped, never thrown, on the
+    /// emulation worker's hot path.
+    /// Acceptance: a wrong-sized frame produces no exception, no BMP, and does not
+    /// advance the frame count.
+    /// </summary>
+    [Fact]
+    public void WrongSizedFrame_IsDroppedNotThrown()
+    {
+        using var capture = new FrameSequenceCapture(_tempDir);
+
+        var ex = Record.Exception(() => capture.CaptureFrame(new byte[10], width: 4, height: 4));
+
+        ex.Should().BeNull("a size mismatch is dropped, not thrown, on the worker path");
+        capture.FrameCount.Should().Be(0);
+        Directory.GetFiles(_tempDir, "*.bmp").Should().BeEmpty();
+    }
+
     private static byte[] MakeSolidFrame(int width, int height, byte b, byte g, byte r)
     {
         var buf = new byte[width * height * 4];

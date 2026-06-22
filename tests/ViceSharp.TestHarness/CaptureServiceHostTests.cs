@@ -720,6 +720,42 @@ public sealed class CaptureServiceHostTests
         Assert.False(File.Exists(path));
     }
 
+    /// <summary>
+    /// FR-MED (review finding: active captures not finalized on session close).
+    /// Use case: a session with in-progress video AND audio captures is closed.
+    /// Acceptance: EndAllCaptures finalises both (the recorders are disposed and the
+    /// session reports neither capture active), so no ffmpeg process / file handle
+    /// is leaked on teardown.
+    /// </summary>
+    [Fact]
+    public void EndAllCaptures_FinalizesActiveVideoAndAudio()
+    {
+        var session = CreateMinimalSession();
+        session.AudioCaptureTap = new CaptureAudioTap(downstream: null);
+        var dir = Path.Combine(Path.GetTempPath(), $"vice-endall-{Guid.NewGuid():N}");
+        var wavPath = Path.Combine(Path.GetTempPath(), $"vice-endall-{Guid.NewGuid():N}.wav");
+
+        try
+        {
+            session.BeginVideoCapture("video-cap", new FrameSequenceCapture(dir));
+            var stream = new FileStream(wavPath, FileMode.Create, FileAccess.Write);
+            session.BeginAudioCapture("audio-cap", new WavAudioRecorder(stream, 44100, 1), stream);
+
+            Assert.True(session.IsVideoCaptureActive);
+            Assert.True(session.IsAudioCaptureActive);
+
+            session.EndAllCaptures();
+
+            Assert.False(session.IsVideoCaptureActive);
+            Assert.False(session.IsAudioCaptureActive);
+        }
+        finally
+        {
+            if (Directory.Exists(dir)) Directory.Delete(dir, recursive: true);
+            if (File.Exists(wavPath)) File.Delete(wavPath);
+        }
+    }
+
     private static EmulatorRuntimeSession CreateMinimalSession()
     {
         var factory = new DefaultEmulatorRuntimeFactory(

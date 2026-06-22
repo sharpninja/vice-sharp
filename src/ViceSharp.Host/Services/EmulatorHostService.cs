@@ -286,6 +286,10 @@ public sealed class EmulatorHostService : IEmulatorHost
             session.PowerState = "Off";
         }
 
+        // Finalise any in-progress recordings before the session is dropped, so an
+        // active ffmpeg process / open file handle is not leaked on session close.
+        session.EndAllCaptures();
+
         _registry.Remove(request.SessionId);
         return ValueTask.FromResult(new EmulatorCommandResponse(RpcStatus.Ok(), null));
     }

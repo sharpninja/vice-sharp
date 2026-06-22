@@ -349,14 +349,34 @@ public sealed class EmulatorRuntimeSession
     {
         lock (_captureSync)
         {
-            AudioCaptureTap?.DetachRecorder();
-            long bytes = _audioRecorder?.DataBytesWritten ?? 0;
-            _audioRecorder?.Dispose();   // Stop() patches header sizes
-            _audioStream?.Dispose();
-            _audioRecorder = null;
-            _audioStream = null;
-            _audioCaptureId = null;
-            return bytes;
+            return EndAudioCaptureCore();
+        }
+    }
+
+    // Must be called under _captureSync.
+    private long EndAudioCaptureCore()
+    {
+        AudioCaptureTap?.DetachRecorder();
+        long bytes = _audioRecorder?.DataBytesWritten ?? 0;
+        _audioRecorder?.Dispose();   // Stop() patches header sizes
+        _audioStream?.Dispose();
+        _audioRecorder = null;
+        _audioStream = null;
+        _audioCaptureId = null;
+        return bytes;
+    }
+
+    /// <summary>
+    /// Finalises any in-progress video AND audio capture. Called when the session
+    /// is closed/removed so an active ffmpeg process or open file handle is never
+    /// leaked on teardown.
+    /// </summary>
+    public void EndAllCaptures()
+    {
+        lock (_captureSync)
+        {
+            EndVideoCaptureCore();
+            EndAudioCaptureCore();
         }
     }
 

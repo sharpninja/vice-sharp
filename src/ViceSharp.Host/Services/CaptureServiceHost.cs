@@ -20,6 +20,11 @@ public sealed class CaptureServiceHost : ICaptureService
     // Formats this host can actually encode today. Screenshot (png/bmp) + WAV sound +
     // numbered-BMP video sequence are all wired end-to-end. Container/codec video
     // drivers (ffmpeg/zmbv) advertise additional entries here as they land.
+    // The emulated SID drives a single mono channel at the host sample rate; the
+    // sound recorders are configured to match it.
+    private const int SidSampleRate = 44100;
+    private const int SidChannels = 1;
+
     private static readonly IReadOnlyList<string> SupportedAudioFormats = ["wav"];
     private static readonly IReadOnlyList<CaptureVideoFormatDto> SupportedVideoFormats =
     [
@@ -151,7 +156,8 @@ public sealed class CaptureServiceHost : ICaptureService
                 // Launch ffmpeg + wait for the socket connect OUTSIDE the session lock
                 // so a slow/failed start never stalls other RPCs on the session.
                 recorder = new FfmpegVideoRecorder(
-                    ffmpegPath, videoFormat, width, height, frameRate, request.TargetPath, includeAudio);
+                    ffmpegPath, videoFormat, width, height, frameRate, request.TargetPath, includeAudio,
+                    SidSampleRate, SidChannels);
                 try
                 {
                     recorder.Start();
@@ -200,7 +206,7 @@ public sealed class CaptureServiceHost : ICaptureService
             if (!string.IsNullOrEmpty(dir))
                 Directory.CreateDirectory(dir);
             stream = new FileStream(request.TargetPath, FileMode.Create, FileAccess.Write);
-            recorder = new WavAudioRecorder(stream, 44100, 1);
+            recorder = new WavAudioRecorder(stream, SidSampleRate, SidChannels);
             lock (session.SyncRoot)
             {
                 session.BeginAudioCapture(captureId, recorder, stream);

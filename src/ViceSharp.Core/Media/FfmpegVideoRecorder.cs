@@ -48,12 +48,26 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     private NetworkStream? _audioStream;
     private Task<TcpClient>? _audioAccept;
     private Process? _ffmpeg;
+    // Background writers move the actual socket writes OFF the emulation worker
+    // thread (the worker only copies + enqueues). Created once each stream connects.
+    private BackgroundByteWriter? _videoWriter;
+    private BackgroundByteWriter? _audioWriter;
     private readonly StringBuilder _stderr = new();
     private byte[] _audioScratch = [];
+    // Audio captured before ffmpeg connects the audio socket is buffered here
+    // (bounded) and flushed when the writer comes up, so the start of the audio
+    // track is never lost.
+    private byte[] _pendingAudio = [];
+    private int _pendingAudioLen;
     private int _frameCount;
     private bool _started;
     private bool _stopped;
     private bool _faulted;
+
+    // Bounded back-pressure depth: the worker only blocks if a writer cannot keep
+    // up. ~16 BGRA frames (~6.5 MB at 384x272) / 64 audio batches.
+    private const int VideoQueueCapacity = 16;
+    private const int AudioQueueCapacity = 64;
 
     /// <summary>How long to wait for ffmpeg to connect back to each socket.</summary>
     private static readonly TimeSpan ConnectTimeout = TimeSpan.FromSeconds(15);
@@ -109,7 +123,14 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     /// <summary>Captured ffmpeg stderr, populated after a fault or stop (diagnostics).</summary>
     public string StandardError
     {
-        get { lock (_stderr) { return _stderr.ToString(); } }
+        get
+        {
+            string err;
+            lock (_stderr) { err = _stderr.ToString(); }
+            if (_videoWriter?.FaultException is { } vf) err += $"\n[video-writer fault] {vf}";
+            if (_audioWriter?.FaultException is { } af) err += $"\n[audio-writer fault] {af}";
+            return err;
+        }
     }
 
     /// <summary>
@@ -196,7 +217,10 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             if (_includeAudio && audioListener is not null)
                 audioAccept = audioListener.AcceptTcpClientAsync();
 
-            // Publish the connected resources under a short critical section.
+            // Publish the connected resources under a short critical section, and
+            // start the background video writer (the worker enqueues; this thread
+            // performs the socket writes).
+            var connectedVideoStream = videoStream;
             lock (_sync)
             {
                 _videoListener = videoListener;
@@ -205,6 +229,8 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
                 _videoClient = videoClient;
                 _videoStream = videoStream;
                 _audioAccept = audioAccept;
+                _videoWriter = new BackgroundByteWriter(
+                    (b, n) => connectedVideoStream.Write(b, 0, n), VideoQueueCapacity, "vice-ffmpeg-video");
             }
         }
         catch
@@ -263,8 +289,8 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
         return task.Result;
     }
 
-    // Promote the async audio accept to a live stream once ffmpeg has connected.
-    // Must be called under _sync.
+    // Promote the async audio accept to a live stream once ffmpeg has connected,
+    // and start its background writer. Must be called under _sync.
     private void EnsureAudioStreamLocked()
     {
         if (_audioStream is not null || _audioAccept is null)
@@ -273,7 +299,34 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
         {
             _audioClient = _audioAccept.Result;
             _audioStream = _audioClient.GetStream();
+            var connectedAudioStream = _audioStream;
+            _audioWriter = new BackgroundByteWriter(
+                (b, n) => connectedAudioStream.Write(b, 0, n), AudioQueueCapacity, "vice-ffmpeg-audio");
+
+            // Flush audio captured before the connection completed.
+            if (_pendingAudioLen > 0)
+            {
+                _audioWriter.Enqueue(new ReadOnlySpan<byte>(_pendingAudio, 0, _pendingAudioLen));
+                _pendingAudioLen = 0;
+            }
         }
+    }
+
+    // Buffer pre-connection audio bytes (bounded to ~0.5s) so the start of the
+    // track survives the brief window before ffmpeg connects the audio socket.
+    // Must be called under _sync.
+    private void BufferPendingAudioLocked(ReadOnlySpan<byte> bytes)
+    {
+        const int MaxPendingBytes = 44100 * 2; // ~0.5s of mono s16
+        if (_pendingAudioLen + bytes.Length > MaxPendingBytes)
+            return; // audio never connected; stop growing the buffer
+
+        var needed = _pendingAudioLen + bytes.Length;
+        if (_pendingAudio.Length < needed)
+            Array.Resize(ref _pendingAudio, Math.Max(needed, 8192));
+
+        bytes.CopyTo(_pendingAudio.AsSpan(_pendingAudioLen));
+        _pendingAudioLen += bytes.Length;
     }
 
     private void DrainAsync(StreamReader reader, bool capture)
@@ -299,9 +352,11 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     /// <inheritdoc/>
     public void CaptureFrame(ReadOnlySpan<byte> bgra, int width, int height)
     {
+        BackgroundByteWriter writer;
         lock (_sync)
         {
-            if (_stopped || _faulted || _videoStream is null) return;
+            if (_stopped || _faulted || _videoWriter is null) return;
+            if (_videoWriter.Faulted) { _faulted = true; return; }
 
             // A frame whose size does not match the configured geometry is dropped
             // (and faults the recorder) rather than thrown on the emulation worker's
@@ -312,16 +367,13 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
                 return;
             }
 
-            try
-            {
-                _videoStream.Write(bgra);
-                _frameCount++;
-            }
-            catch (Exception ex) when (ex is IOException or ObjectDisposedException or SocketException)
-            {
-                _faulted = true;
-            }
+            writer = _videoWriter;
+            _frameCount++;
         }
+
+        // Copy + enqueue happen OUTSIDE _sync: the (rare) back-pressure block when
+        // the writer is saturated never holds the operational lock.
+        writer.Enqueue(bgra);
     }
 
     /// <inheritdoc/>
@@ -329,20 +381,26 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     {
         if (samples.IsEmpty) return;
 
+        BackgroundByteWriter writer;
+        ReadOnlySpan<byte> bytes;
         lock (_sync)
         {
             if (_stopped || _faulted) return;
             EnsureAudioStreamLocked();
-            if (_audioStream is null) return; // ffmpeg has not connected audio yet
-            try
+            bytes = ToLittleEndianBytes(samples); // fills the reused scratch (worker thread only)
+
+            if (_audioWriter is null)
             {
-                _audioStream.Write(ToLittleEndianBytes(samples));
+                // ffmpeg has not connected audio yet: buffer so the track start is
+                // not lost (flushed by EnsureAudioStreamLocked on connect).
+                BufferPendingAudioLocked(bytes);
+                return;
             }
-            catch (Exception ex) when (ex is IOException or ObjectDisposedException or SocketException)
-            {
-                _faulted = true;
-            }
+            if (_audioWriter.Faulted) { _faulted = true; return; }
+            writer = _audioWriter;
         }
+
+        writer.Enqueue(bytes);
     }
 
     private ReadOnlySpan<byte> ToLittleEndianBytes(ReadOnlySpan<short> samples)
@@ -373,45 +431,87 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     /// </summary>
     public void Stop()
     {
-        Process? ffmpeg;
-        Task<TcpClient>? pendingAudioAccept;
+        // Latch stopped; if audio was expected but ffmpeg has not connected the
+        // audio socket yet (a very short recording can Stop within ffmpeg's startup
+        // window), capture the pending accept so we can wait for it below.
+        Task<TcpClient>? acceptToAwait;
         lock (_sync)
         {
             if (_stopped) return;
             _stopped = true;
-
-            // Grab the audio stream if it connected (so we close it cleanly and
-            // ffmpeg sees EOF on both inputs).
-            EnsureAudioStreamLocked();
-
-            // Closing the streams sends FIN; ffmpeg's rawvideo/s16le demuxers see
-            // EOF and -shortest finalises the muxer.
-            CloseQuietly(_videoStream);
-            CloseQuietly(_audioStream);
-            _videoClient?.Close();
-            _audioClient?.Close();
-            _videoListener?.Stop();
-            _audioListener?.Stop();
-            pendingAudioAccept = _audioAccept;
-            ffmpeg = _ffmpeg;
+            acceptToAwait = (_includeAudio && _audioWriter is null) ? _audioAccept : null;
         }
 
-        // Observe the audio-accept task so a never-connected audio input does not
-        // surface as an unobserved task exception when the listener is stopped.
+        // Wait briefly for a late audio connection, then promote it and flush the
+        // buffered audio - otherwise -shortest would truncate the file to zero.
+        if (acceptToAwait is not null)
+        {
+            try { acceptToAwait.Wait(ConnectTimeout); } catch { /* never connected */ }
+            lock (_sync) { EnsureAudioStreamLocked(); }
+        }
+
+        Process? ffmpeg;
+        Task<TcpClient>? pendingAudioAccept;
+        BackgroundByteWriter? videoWriter;
+        BackgroundByteWriter? audioWriter;
+        NetworkStream? videoStream;
+        NetworkStream? audioStream;
+        TcpClient? videoClient;
+        TcpClient? audioClient;
+        TcpListener? videoListener;
+        TcpListener? audioListener;
+        lock (_sync)
+        {
+            videoWriter = _videoWriter;
+            audioWriter = _audioWriter;
+            videoStream = _videoStream;
+            audioStream = _audioStream;
+            videoClient = _videoClient;
+            audioClient = _audioClient;
+            videoListener = _videoListener;
+            audioListener = _audioListener;
+            ffmpeg = _ffmpeg;
+
+            // Only observe the accept task when audio NEVER connected; once it has,
+            // the accepted client is _audioClient and is closed below (avoids a
+            // double-close race between the observe continuation and EnsureAudioStream).
+            pendingAudioAccept = _audioStream is null ? _audioAccept : null;
+        }
+
+        // 1) Flush every queued frame/sample to the sockets (the background writers
+        //    perform the actual writes), then close the sockets so ffmpeg sees EOF
+        //    on both inputs and -shortest finalises the muxer.
+        videoWriter?.CompleteAndJoin(ShutdownTimeout);
+        audioWriter?.CompleteAndJoin(ShutdownTimeout);
+
+        CloseQuietly(videoStream);
+        CloseQuietly(audioStream);
+        try { videoClient?.Close(); } catch { /* already closed */ }
+        try { audioClient?.Close(); } catch { /* already closed */ }
+        try { videoListener?.Stop(); } catch { /* already stopped */ }
+        try { audioListener?.Stop(); } catch { /* already stopped */ }
+
         ObserveAudioAccept(pendingAudioAccept);
 
-        if (ffmpeg is null) return;
-        try
+        // 2) Wait for ffmpeg to finalise the container.
+        if (ffmpeg is not null)
         {
-            if (!ffmpeg.WaitForExit((int)ShutdownTimeout.TotalMilliseconds))
+            try
             {
-                try { ffmpeg.Kill(entireProcessTree: true); } catch { /* already gone */ }
+                if (!ffmpeg.WaitForExit((int)ShutdownTimeout.TotalMilliseconds))
+                {
+                    try { ffmpeg.Kill(entireProcessTree: true); } catch { /* already gone */ }
+                }
+            }
+            catch
+            {
+                // Process already exited / inaccessible.
             }
         }
-        catch
-        {
-            // Process already exited / inaccessible.
-        }
+
+        // 3) Release the writer queues (returns any pooled buffers).
+        videoWriter?.Dispose();
+        audioWriter?.Dispose();
     }
 
     private static void CloseQuietly(NetworkStream? stream)
