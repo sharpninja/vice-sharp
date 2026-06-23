@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ViceSharp.Abstractions;
 
 namespace ViceSharp.Core;
@@ -57,6 +58,26 @@ public sealed class CoordinatorMachine : IMachine
 
     /// <summary>The rig's primary CPU is the C64 host's CPU (drive CPUs are their own systems).</summary>
     public ICpu? PrimaryCpu => _host.PrimaryCpu;
+
+    /// <summary>
+    /// The rig's per-CPU roster: the host first (system 0) then each peripheral system's CPU,
+    /// each carrying its own ExecutedCycles and clock so the status surface lists every CPU -
+    /// host and each drive - distinctly.
+    /// </summary>
+    public IReadOnlyList<CpuInfo> CpuInfos
+    {
+        get
+        {
+            var roster = new List<CpuInfo>(_coordinator.Systems.Count);
+            foreach (var system in _coordinator.Systems)
+            {
+                if (system.PrimaryCpu is { } cpu)
+                    roster.Add(new CpuInfo(system.Architecture.MachineName, cpu.ExecutedCycles, system.Clock.FrequencyHz));
+            }
+
+            return roster;
+        }
+    }
 
     public IDeviceRegistry Devices => _host.Devices;
 
