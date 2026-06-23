@@ -268,7 +268,8 @@ public sealed class ProtocolHostIntegrationTests
         Assert.NotNull(reset.EmulatorStatus);
         Assert.Equal(0, reset.EmulatorStatus.Cycle);
         Assert.Equal(0, reset.EmulatorStatus.FrameCount);
-        Assert.Equal(EmulatorRunState.Stopped, reset.EmulatorStatus.RunState);
+        // A reset reboots the machine running (like real hardware), not halted.
+        Assert.Equal(EmulatorRunState.Running, reset.EmulatorStatus.RunState);
     }
 
     /// <summary>

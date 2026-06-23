@@ -136,7 +136,12 @@ public sealed class EmulatorHostService : IEmulatorHost
             }
 
             session.Machine.Reset();
-            session.RunState = EmulatorRunState.Stopped;
+            // A reset reboots the machine and keeps it running, exactly like a real
+            // C64 reset boots straight into a running BASIC. Forcing Stopped here
+            // wedged the emulator at the reset vector (the pump only advances while
+            // Running), so neither Cold nor Warm reset appeared to do anything until
+            // the user manually pressed Resume.
+            session.RunState = EmulatorRunState.Running;
             session.PowerState = "On";
             session.ResetPerformanceCounters();
             session.ClearHostKeyboardAutomation();

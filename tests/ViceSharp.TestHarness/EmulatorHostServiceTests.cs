@@ -229,15 +229,18 @@ public sealed class EmulatorHostServiceTests
     /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 EmulatorHostService).
     /// Use case: A client invokes ColdReset / WarmReset against a
-    /// valid session id.
+    /// valid session id and expects the machine to reboot and keep
+    /// running, exactly as a real C64 reset reboots into a running
+    /// BASIC - not halt at the reset vector.
     /// Acceptance: Each call returns Ok with a non-null status payload
-    /// and leaves the session in RunState.Stopped per the reset
-    /// contract.
+    /// and leaves the session in RunState.Running, so the emulation pump
+    /// resumes advancing the clock (previously it forced Stopped, which
+    /// wedged the emulator until a manual Resume).
     /// </summary>
     [Theory]
     [InlineData("Cold")]
     [InlineData("Warm")]
-    public async Task ResetAsync_Valid_ReturnsOkAndStoppedState(string kind)
+    public async Task ResetAsync_Valid_ReturnsOkAndRunningState(string kind)
     {
         var service = CreateService();
         var sessionId = await CreateSessionAsync(service);
@@ -253,7 +256,7 @@ public sealed class EmulatorHostServiceTests
 
         Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
         Assert.NotNull(response.EmulatorStatus);
-        Assert.Equal(EmulatorRunState.Stopped, response.EmulatorStatus!.RunState);
+        Assert.Equal(EmulatorRunState.Running, response.EmulatorStatus!.RunState);
     }
 
     /// <summary>
