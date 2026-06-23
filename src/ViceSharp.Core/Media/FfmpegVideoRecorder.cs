@@ -64,9 +64,13 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     private bool _stopped;
     private bool _faulted;
 
-    // Bounded back-pressure depth: the worker only blocks if a writer cannot keep
-    // up. ~16 BGRA frames (~6.5 MB at 384x272) / 64 audio batches.
-    private const int VideoQueueCapacity = 16;
+    // Bounded queue depth. The writers are DROP-ON-FULL (see Start/EnsureAudioStream):
+    // the emulation worker must never block on a stalled ffmpeg socket, so a full
+    // queue drops the overflow rather than freezing the emulator. The video depth is
+    // sized to absorb ffmpeg's startup window (output open + header) without dropping
+    // a normal recording's first frames. ~32 BGRA frames (~13 MB at 384x272) / 64
+    // audio batches.
+    private const int VideoQueueCapacity = 32;
     private const int AudioQueueCapacity = 64;
 
     /// <summary>How long to wait for ffmpeg to connect back to each socket.</summary>
@@ -129,6 +133,10 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             lock (_stderr) { err = _stderr.ToString(); }
             if (_videoWriter?.FaultException is { } vf) err += $"\n[video-writer fault] {vf}";
             if (_audioWriter?.FaultException is { } af) err += $"\n[audio-writer fault] {af}";
+            // A non-zero drop count means ffmpeg could not drain the socket fast enough
+            // and frames/samples were dropped to keep the emulator live (never frozen).
+            if (_videoWriter is { DroppedCount: > 0 } vw) err += $"\n[video-writer dropped] {vw.DroppedCount} frame(s) under back-pressure";
+            if (_audioWriter is { DroppedCount: > 0 } aw) err += $"\n[audio-writer dropped] {aw.DroppedCount} batch(es) under back-pressure";
             return err;
         }
     }
@@ -231,7 +239,8 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
                 _videoStream = videoStream;
                 _audioAccept = audioAccept;
                 _videoWriter = new BackgroundByteWriter(
-                    (b, n) => connectedVideoStream.Write(b, 0, n), VideoQueueCapacity, "vice-ffmpeg-video");
+                    (b, n) => connectedVideoStream.Write(b, 0, n), VideoQueueCapacity, "vice-ffmpeg-video",
+                    dropWhenFull: true);
             }
         }
         catch
@@ -303,7 +312,8 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             _audioListener?.Stop(); // only one client connects; stop listening now
             var connectedAudioStream = _audioStream;
             _audioWriter = new BackgroundByteWriter(
-                (b, n) => connectedAudioStream.Write(b, 0, n), AudioQueueCapacity, "vice-ffmpeg-audio");
+                (b, n) => connectedAudioStream.Write(b, 0, n), AudioQueueCapacity, "vice-ffmpeg-audio",
+                dropWhenFull: true);
 
             // Flush audio captured before the connection completed.
             if (_pendingAudioLen > 0)

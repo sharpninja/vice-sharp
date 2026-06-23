@@ -3,6 +3,7 @@ namespace ViceSharp.TestHarness.Media;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using ViceSharp.Core.Media;
 using Xunit;
@@ -48,6 +49,61 @@ public sealed class BackgroundByteWriterTests
 
         Volatile.Read(ref count).Should().Be(1);
         writer.Dispose();
+    }
+
+    /// <summary>
+    /// Bug repro (emulator freezes when video recording starts): when the consumer
+    /// (a stalled ffmpeg socket) stops draining, a blocking bounded queue applies
+    /// back-pressure onto the producer - which is the emulation worker - freezing the
+    /// emulator. A drop-on-full writer must NEVER block the producer; it drops the
+    /// overflow and counts it instead.
+    /// </summary>
+    // xUnit1051: deliberate consumer stall + wall-clock bound to prove non-blocking;
+    // TestContext-driven cancellation does not apply to the simulated stall.
+#pragma warning disable xUnit1051
+    [Fact]
+    public async Task Enqueue_WithDropPolicy_WhenConsumerStalls_NeverBlocksProducer()
+    {
+        using var release = new ManualResetEventSlim(false);
+        using var writer = new BackgroundByteWriter(
+            (_, _) => release.Wait(), capacity: 2, name: "test", dropWhenFull: true);
+
+        // The single consumer write blocks forever, so the bounded queue saturates at
+        // capacity. With drop-on-full the producer must complete the whole burst well
+        // inside the timeout rather than blocking on a full queue.
+        var producer = Task.Run(() =>
+        {
+            for (var i = 0; i < 5000; i++)
+                writer.Enqueue(new byte[] { (byte)i });
+        });
+
+        var finished = await Task.WhenAny(producer, Task.Delay(TimeSpan.FromSeconds(2)));
+        finished.Should().BeSameAs(producer,
+            "a drop-on-full writer must not apply back-pressure to the emulation worker");
+        writer.DroppedCount.Should().BeGreaterThan(0);
+
+        release.Set(); // let the consumer drain so teardown joins promptly
+        await producer; // observe completion / surface any producer exception
+    }
+#pragma warning restore xUnit1051
+
+    /// <summary>
+    /// The default (blocking) policy is unchanged: with a consumer that keeps up,
+    /// every payload is written and nothing is dropped.
+    /// </summary>
+    [Fact]
+    public void DefaultPolicy_WritesEverything_AndDropsNothing()
+    {
+        var count = 0;
+        using var writer = new BackgroundByteWriter(
+            (_, _) => Interlocked.Increment(ref count), capacity: 4, name: "test");
+
+        for (var i = 0; i < 100; i++)
+            writer.Enqueue(new byte[] { (byte)i });
+        writer.CompleteAndJoin(TimeSpan.FromSeconds(5));
+
+        Volatile.Read(ref count).Should().Be(100);
+        writer.DroppedCount.Should().Be(0);
     }
 
     [Fact]
