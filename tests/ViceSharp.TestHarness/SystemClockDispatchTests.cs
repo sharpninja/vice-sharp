@@ -236,6 +236,8 @@ public sealed class SystemClockDispatchTests
         public ushort PC { get; set; }
         public byte Flags { get; set; }
         public int TickCount { get; private set; }
+        // Executed-only by construction: the clock does not Tick() a stolen CPU cycle.
+        public long ExecutedCycles => TickCount;
         public bool CanStealCurrentCycle => true;
         public bool CanForceStealCurrentCycle => false;
         public void Tick() => TickCount++;

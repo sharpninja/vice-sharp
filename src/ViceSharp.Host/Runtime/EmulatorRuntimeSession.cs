@@ -50,7 +50,7 @@ public sealed class EmulatorRuntimeSession
         Machine = machine;
         IecBusActivity = iecBusActivity;
         _lastPerformanceSampleTime = DateTimeOffset.UtcNow;
-        _lastPerformanceSampleCycle = machine.GetState().Cycle;
+        _lastPerformanceSampleCycle = machine.PrimaryCpu?.ExecutedCycles ?? machine.GetState().Cycle;
     }
 
     public string SessionId { get; }
@@ -451,31 +451,42 @@ public sealed class EmulatorRuntimeSession
         return true;
     }
 
-    public void ResetPerformanceCounters()
+    // FR-CPUTICK-001: the headline rate is the PRIMARY CPU's own executed-cycle rate
+    // (ExecutedCycles per wall-second, divided by its clock for percent), not the system
+    // clock - so a multi-CPU rig (host + drive, C128 8502 + Z80) measures the right CPU and
+    // is not conflated by peripheral cycles. Falls back to the system clock if a machine has
+    // no CPU. The C64 6510 is BA-halted on VIC badlines, so this reads slightly under 100%
+    // at real time (faithful per-CPU duty).
+    private long PrimaryCpuExecutedCycles => Machine.PrimaryCpu?.ExecutedCycles ?? Machine.GetState().Cycle;
+
+    public void ResetPerformanceCounters() => ResetPerformanceCounters(DateTimeOffset.UtcNow);
+
+    internal void ResetPerformanceCounters(DateTimeOffset now)
     {
         FrameCount = 0;
         MeasuredFramesPerSecond = 0;
         EffectiveClockHz = 0;
-        _lastPerformanceSampleTime = DateTimeOffset.UtcNow;
-        _lastPerformanceSampleCycle = Machine.GetState().Cycle;
+        _lastPerformanceSampleTime = now;
+        _lastPerformanceSampleCycle = PrimaryCpuExecutedCycles;
         _lastPerformanceSampleFrameCount = FrameCount;
     }
 
-    public void UpdatePerformanceCounters()
+    public void UpdatePerformanceCounters() => UpdatePerformanceCounters(DateTimeOffset.UtcNow);
+
+    internal void UpdatePerformanceCounters(DateTimeOffset now)
     {
-        var now = DateTimeOffset.UtcNow;
         var elapsed = (now - _lastPerformanceSampleTime).TotalSeconds;
         if (elapsed < 0.25)
             return;
 
-        var state = Machine.GetState();
-        var cycleDelta = Math.Max(0, state.Cycle - _lastPerformanceSampleCycle);
+        var executed = PrimaryCpuExecutedCycles;
+        var cycleDelta = Math.Max(0, executed - _lastPerformanceSampleCycle);
         var frameDelta = Math.Max(0, FrameCount - _lastPerformanceSampleFrameCount);
 
         EffectiveClockHz = cycleDelta / elapsed;
         MeasuredFramesPerSecond = frameDelta / elapsed;
         _lastPerformanceSampleTime = now;
-        _lastPerformanceSampleCycle = state.Cycle;
+        _lastPerformanceSampleCycle = executed;
         _lastPerformanceSampleFrameCount = FrameCount;
     }
 }

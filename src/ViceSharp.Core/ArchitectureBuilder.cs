@@ -458,6 +458,7 @@ internal sealed class Machine : IMachine
     public IDeviceRegistry Devices => _devices;
     public IArchitectureDescriptor Architecture => _architecture;
     public IPubSub? PubSub => _pubSub;
+    public ICpu? PrimaryCpu => _cpu;
 
     public void RunFrame() => _clock.Step(_frameCycles);
 

@@ -55,6 +55,9 @@ public sealed class CoordinatorMachine : IMachine
 
     public IClock Clock => _host.Clock;
 
+    /// <summary>The rig's primary CPU is the C64 host's CPU (drive CPUs are their own systems).</summary>
+    public ICpu? PrimaryCpu => _host.PrimaryCpu;
+
     public IDeviceRegistry Devices => _host.Devices;
 
     public IArchitectureDescriptor Architecture => _host.Architecture;

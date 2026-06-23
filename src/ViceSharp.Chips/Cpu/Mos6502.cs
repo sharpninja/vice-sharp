@@ -31,6 +31,11 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     }
     public byte Flags { get => P; set => P = value; }
     public byte P;
+
+    // FR-CPUTICK-001: this CPU's own executed-cycle counter (incremented per Tick()).
+    private long _executedCycles;
+    public long ExecutedCycles => _executedCycles;
+
     public bool IsInstructionBoundary => !_suppressBootstrapBoundary && _cycle == 0;
     public int DebugCycle => _cycle;
     public byte DebugOpcode => _opcode;
@@ -166,6 +171,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
     public void Tick()
     {
+        // Per-CPU executed-cycle counter (FR-CPUTICK-001): Tick() is invoked once per
+        // cycle this CPU actually executes - the clock skips it on stolen cycles - so a
+        // simple increment here counts executed cycles only, independently of the shared
+        // system clock and of any other CPU in the rig.
+        _executedCycles++;
+
         var fetchingBranchTarget = false;
         var fetchingCallTarget = false;
         if (_suppressBootstrapBoundary)
@@ -965,6 +976,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
     public void Reset()
     {
+        _executedCycles = 0;
         A = 0;
         X = 0;
         Y = 0;

@@ -37,4 +37,13 @@ public interface IMachine
     /// tick-history recorder subscribes to it when present.
     /// </summary>
     IPubSub? PubSub => null;
+
+    /// <summary>
+    /// This machine's primary CPU - the one whose own executed-cycle rate is the headline
+    /// emulation speed (<see cref="ICpu.ExecutedCycles"/> over wall time ÷ its clock). Null on
+    /// machines without a CPU. A rig with more than one CPU (a coordinator's host plus each
+    /// drive, or the C128's 8502 + Z80) exposes the others through their own systems; this is
+    /// the principal one for the status headline.
+    /// </summary>
+    ICpu? PrimaryCpu => null;
 }
