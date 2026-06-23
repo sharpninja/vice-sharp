@@ -214,4 +214,54 @@ public sealed class ShellViewModelTests
         await host.Received(1).AttachMediaAsync(
             MediaSlot.Drive8, Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
     }
+
+    /// <summary>
+    /// FR: FR-MED-004, FR: FR-UIMENUBAR-001, TR: TR-MVVM-001, TEST-UIMENUBAR-001.
+    /// Use case: the Stop-recording button (visible while a video recording runs)
+    /// must end the active recording. This pins the lifecycle the button's
+    /// visibility and click handler depend on.
+    /// Acceptance: StartVideoRecordingAsync flips IsRecordingVideo true and remembers
+    /// the capture id; StopVideoRecordingAsync routes that exact id to the host's
+    /// StopCaptureAsync and flips IsRecordingVideo back to false.
+    /// </summary>
+    [Fact]
+    public async Task VideoRecording_StartThenStop_TogglesStateAndRoutesStopToHost()
+    {
+        var (shell, host, _) = CreateShell();
+        var ct = TestContext.Current.CancellationToken;
+
+        host.StartCaptureAsync(CaptureKind.Video, Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<IReadOnlyDictionary<string, string>?>(), Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<StartCaptureResponse>(new StartCaptureResponse(
+                RpcStatus.Ok(), new CaptureSessionDto("vid-1", CaptureKind.Video, "out.mp4", IsActive: true))));
+        host.StopCaptureAsync("vid-1", Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<StopCaptureResponse>(new StopCaptureResponse(RpcStatus.Ok(), null)));
+
+        Assert.False(shell.IsRecordingVideo);
+
+        await shell.StartVideoRecordingAsync("out.mp4", "mp4", null, ct);
+        Assert.True(shell.IsRecordingVideo);
+
+        await shell.StopVideoRecordingAsync(ct);
+        Assert.False(shell.IsRecordingVideo);
+        await host.Received(1).StopCaptureAsync("vid-1", Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// FR: FR-MED-004, FR: FR-UIMENUBAR-001, TR: TR-MVVM-001, TEST-UIMENUBAR-001.
+    /// Use case: clicking the toolbar Stop button when no recording is active (for
+    /// instance if its visibility briefly lags the shell state) must be harmless.
+    /// Acceptance: StopVideoRecordingAsync returns Ok and does not call the host's
+    /// StopCaptureAsync when nothing is recording.
+    /// </summary>
+    [Fact]
+    public async Task StopVideoRecording_WhenNotRecording_IsNoOp()
+    {
+        var (shell, host, _) = CreateShell();
+
+        var status = await shell.StopVideoRecordingAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, status.Code);
+        await host.DidNotReceive().StopCaptureAsync(Arg.Any<string>(), Arg.Any<CancellationToken>());
+    }
 }

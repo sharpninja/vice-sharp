@@ -187,6 +187,13 @@
                      right/bottom margin for the inter-row gap. -->
                 <WrapPanel Orientation="Horizontal" Margin="6,4"
                            HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <!-- Visible only while a video recording is active (toggled from
+                         code-behind via RefreshRecordingIndicator); one click stops it.
+                         A discoverable alternative to re-invoking the Snapshot menu. -->
+                    <Button x:Name="PART_StopRecording" Content="⏹ Stop recording"
+                            Padding="9,3" MinHeight="24" Margin="0,0,8,4" IsVisible="False"
+                            Background="#C0392B" Foreground="White" FontWeight="SemiBold"
+                            ToolTip.Tip="Stop the active video recording" Click="OnStopRecording" />
                     <Button Content="Pause" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuPause" />
                     <Button Content="Resume" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuResume" />
                     <Button Content="+1 cyc" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnStepCycle" />

@@ -383,6 +383,8 @@ public partial class MainWindow : Window
         {
             ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
         }
+
+        RefreshRecordingIndicator();
     }
 
     private void OnMenuRecordVideoBmpAll(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -433,6 +435,8 @@ public partial class MainWindow : Window
         {
             ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
         }
+
+        RefreshRecordingIndicator();
     }
 
     private async global::System.Threading.Tasks.Task StopRecordingAsync(ValueTask<Protocol.RpcStatus> stopOperation)
@@ -447,6 +451,27 @@ public partial class MainWindow : Window
         {
             ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
         }
+        finally
+        {
+            // Whatever the outcome, reflect the live recording state on the toolbar
+            // Stop button (covers every stop path: MP4, BMP sequence, and sound).
+            RefreshRecordingIndicator();
+        }
+    }
+
+    // The toolbar Stop button: one obvious click to end a running video recording,
+    // without hunting back through the Snapshot menu's toggle. Stops the active
+    // video capture; the shell call is a safe no-op if nothing is recording.
+    private async void OnStopRecording(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
+
+    // Shows the Stop button while a video recording is active and hides it otherwise.
+    // ShellViewModel is not observable, so the menu/stop handlers call this after each
+    // start/stop instead of binding.
+    private void RefreshRecordingIndicator()
+    {
+        if (this.FindControl<global::Avalonia.Controls.Button>("PART_StopRecording") is { } stop)
+            stop.IsVisible = _shell.IsRecordingVideo;
     }
 
     private void OnMenuTrueDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
