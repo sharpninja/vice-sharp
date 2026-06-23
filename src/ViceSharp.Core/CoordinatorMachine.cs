@@ -89,11 +89,14 @@ public sealed class CoordinatorMachine : IMachine
 
     public void StepInstruction()
     {
-        // Advance the host one instruction, then let the coordinator pull the
-        // peripheral machines up to the host's new cycle count so the rig stays
-        // in lockstep (IEC accesses already sync lazily during the step).
+        // Advance the host one instruction only. Peripheral CPUs (the drive 6502) are NOT
+        // stepped in lockstep here: each runs on its own clock and is coupled to the host
+        // solely through the async IEC bus - the drive catches up lazily whenever the host's
+        // CIA2 reads or writes an IEC line (C64Cia2InterfaceDevice.synchronizeIec), and ATN
+        // edges reach the drive's VIA CA1 via the bus LineChanged event. This is VICE's own
+        // model (drive_cpu_execute is driven from the IEC callbacks), and removing the rigid
+        // per-instruction catch-up is what lets each CPU keep its own independent tick rate.
         _host.StepInstruction();
-        _coordinator.SynchronizePeripheralSystemsToHost();
     }
 
     public void Reset() => _coordinator.Reset();
