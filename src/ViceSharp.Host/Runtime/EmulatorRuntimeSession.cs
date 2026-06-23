@@ -11,6 +11,10 @@ public sealed class EmulatorRuntimeSession
     private long _lastPerformanceSampleCycle;
     private long _lastPerformanceSampleFrameCount;
 
+    // Per-CPU rate baselines, keyed "{index}:{label}" so each CPU in the machine's roster
+    // (host + each peripheral) gets its own executed-cycle anchor for an independent rate.
+    private Dictionary<string, long> _lastPerCpuExecuted = new();
+
     // Lock-free double-buffered presented frame. The emulation worker writes a
     // completed frame to the back buffer then atomically publishes it; the UI
     // reads the published buffer with no lock and copies it into its own render
@@ -51,6 +55,7 @@ public sealed class EmulatorRuntimeSession
         IecBusActivity = iecBusActivity;
         _lastPerformanceSampleTime = DateTimeOffset.UtcNow;
         _lastPerformanceSampleCycle = machine.PrimaryCpu?.ExecutedCycles ?? machine.GetState().Cycle;
+        _lastPerCpuExecuted = SnapshotCpuExecuted();
     }
 
     public string SessionId { get; }
@@ -144,6 +149,13 @@ public sealed class EmulatorRuntimeSession
     public double MeasuredFramesPerSecond { get; private set; }
 
     public double EffectiveClockHz { get; private set; }
+
+    /// <summary>
+    /// Per-CPU speed readings - one per CPU in the machine's roster (host first, then each
+    /// peripheral CPU), each measuring that CPU's own executed-cycle rate over wall time and its
+    /// percentage of its own clock. Lets the status surface list every CPU's rate distinctly.
+    /// </summary>
+    public IReadOnlyList<CpuRateReading> PerCpuRates { get; private set; } = Array.Empty<CpuRateReading>();
 
     public string SelectedKeyboardMapId { get; set; } = "c64:gtk3_pos";
 
@@ -466,9 +478,11 @@ public sealed class EmulatorRuntimeSession
         FrameCount = 0;
         MeasuredFramesPerSecond = 0;
         EffectiveClockHz = 0;
+        PerCpuRates = Array.Empty<CpuRateReading>();
         _lastPerformanceSampleTime = now;
         _lastPerformanceSampleCycle = PrimaryCpuExecutedCycles;
         _lastPerformanceSampleFrameCount = FrameCount;
+        _lastPerCpuExecuted = SnapshotCpuExecuted();
     }
 
     public void UpdatePerformanceCounters() => UpdatePerformanceCounters(DateTimeOffset.UtcNow);
@@ -485,8 +499,50 @@ public sealed class EmulatorRuntimeSession
 
         EffectiveClockHz = cycleDelta / elapsed;
         MeasuredFramesPerSecond = frameDelta / elapsed;
+        PerCpuRates = ComputePerCpuRates(elapsed);
         _lastPerformanceSampleTime = now;
         _lastPerformanceSampleCycle = executed;
         _lastPerformanceSampleFrameCount = FrameCount;
+    }
+
+    // Measures each CPU in the machine's roster on its OWN clock: that CPU's executed-cycle
+    // delta since the last sample over the elapsed wall time, and as a percentage of its target
+    // clock. Re-anchors per CPU so the host and each peripheral read independently. A CPU that
+    // appears mid-run (hot-plugged drive) baselines this sample and reads a real rate next time.
+    private IReadOnlyList<CpuRateReading> ComputePerCpuRates(double elapsed)
+    {
+        var infos = Machine.CpuInfos;
+        if (infos.Count == 0)
+        {
+            _lastPerCpuExecuted = new Dictionary<string, long>();
+            return Array.Empty<CpuRateReading>();
+        }
+
+        var readings = new List<CpuRateReading>(infos.Count);
+        var next = new Dictionary<string, long>(infos.Count);
+        for (var i = 0; i < infos.Count; i++)
+        {
+            var info = infos[i];
+            var key = $"{i}:{info.Label}";
+            next[key] = info.ExecutedCycles;
+
+            var previous = _lastPerCpuExecuted.TryGetValue(key, out var p) ? p : info.ExecutedCycles;
+            var delta = Math.Max(0, info.ExecutedCycles - previous);
+            var hz = elapsed > 0 ? delta / elapsed : 0.0;
+            var percent = info.ClockHz > 0 ? hz / info.ClockHz * 100.0 : 0.0;
+            readings.Add(new CpuRateReading(info.Label, hz, percent));
+        }
+
+        _lastPerCpuExecuted = next;
+        return readings;
+    }
+
+    private Dictionary<string, long> SnapshotCpuExecuted()
+    {
+        var infos = Machine.CpuInfos;
+        var samples = new Dictionary<string, long>(infos.Count);
+        for (var i = 0; i < infos.Count; i++)
+            samples[$"{i}:{infos[i].Label}"] = infos[i].ExecutedCycles;
+        return samples;
     }
 }

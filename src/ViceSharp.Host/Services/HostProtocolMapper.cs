@@ -39,7 +39,21 @@ internal static class HostProtocolMapper
             session.LastHostAutomationError ?? string.Empty,
             session.IecBusActivity?.IsActive == true,
             session.IecBusActivity?.TransitionCount ?? 0,
-            session.IecBusActivity?.ActivityState ?? "Idle");
+            session.IecBusActivity?.ActivityState ?? "Idle")
+        {
+            PerCpuRates = ToPerCpuRateDtos(session.PerCpuRates),
+        };
+    }
+
+    private static IReadOnlyList<PerCpuRateDto> ToPerCpuRateDtos(IReadOnlyList<CpuRateReading> readings)
+    {
+        if (readings.Count == 0)
+            return Array.Empty<PerCpuRateDto>();
+
+        var dtos = new PerCpuRateDto[readings.Count];
+        for (var i = 0; i < readings.Count; i++)
+            dtos[i] = new PerCpuRateDto(readings[i].Label, readings[i].EffectiveClockHz, readings[i].EffectiveClockPercent);
+        return dtos;
     }
 
     public static MachineStateDto ToMachineStateDto(MachineState state)

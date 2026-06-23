@@ -813,7 +813,7 @@ internal static class GrpcHostMapping
         if (value is null)
             return null;
 
-        return new GrpcContracts.EmulatorStatusDto
+        var grpc = new GrpcContracts.EmulatorStatusDto
         {
             SessionId = value.SessionId,
             Architecture = value.Architecture,
@@ -845,6 +845,18 @@ internal static class GrpcHostMapping
             IecBusTransitionCount = value.IecBusTransitionCount,
             IecBusActivityState = value.IecBusActivityState
         };
+
+        foreach (var rate in value.PerCpuRates)
+        {
+            grpc.PerCpuRates.Add(new GrpcContracts.PerCpuRateDto
+            {
+                Label = rate.Label,
+                EffectiveClockHz = rate.EffectiveClockHz,
+                EffectiveClockPercent = rate.EffectiveClockPercent
+            });
+        }
+
+        return grpc;
     }
 
     public static GrpcContracts.MediaAttachmentDto? Map(MediaAttachmentDto? value)

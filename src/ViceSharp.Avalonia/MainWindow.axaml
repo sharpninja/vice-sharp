@@ -107,7 +107,7 @@
                         </Style>
                     </Panel.Styles>
 
-                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto"
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto"
                           VerticalAlignment="Center"
                           ToolTip.Tip="{Binding StatusText}"
                           IsVisible="{Binding !HasError}">
@@ -157,6 +157,26 @@
                             <StackPanel>
                                 <TextBlock Classes="lbl" Text="IEC" />
                                 <TextBlock Classes="val" Text="{Binding Iec}" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Per-CPU rates: one entry per CPU (host + each drive), shown only on
+                             multi-CPU rigs so a bare C64 keeps the compact two-row layout. -->
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Classes="statusCell"
+                                IsVisible="{Binding HasPerCpuRates}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Classes="lbl" Text="CPUS" VerticalAlignment="Center" />
+                                <ItemsControl ItemsSource="{Binding PerCpuRates}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" Spacing="8" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Classes="val" Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                         </Border>
                     </Grid>

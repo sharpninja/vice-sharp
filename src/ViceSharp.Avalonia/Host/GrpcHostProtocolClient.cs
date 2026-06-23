@@ -658,6 +658,12 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
                 (ushort)value.MachineState.Pc,
                 value.MachineState.Cycle);
 
+        var perCpuRates = value.PerCpuRates.Count == 0
+            ? (IReadOnlyList<PerCpuRateDto>)Array.Empty<PerCpuRateDto>()
+            : value.PerCpuRates
+                .Select(r => new PerCpuRateDto(r.Label, r.EffectiveClockHz, r.EffectiveClockPercent))
+                .ToArray();
+
         return new EmulatorStatusDto(
             value.SessionId,
             value.Architecture,
@@ -678,7 +684,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             value.LastHostAutomationError,
             value.IecBusActive,
             value.IecBusTransitionCount,
-            value.IecBusActivityState);
+            value.IecBusActivityState)
+        {
+            PerCpuRates = perCpuRates,
+        };
     }
 
     private static MachineStateDto? MapMachineState(GrpcContracts.MachineStateDto? value)

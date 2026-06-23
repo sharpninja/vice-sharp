@@ -93,6 +93,10 @@ public enum SettingsResourceKind
 
 public sealed record MachineStateDto(byte A, byte X, byte Y, byte S, byte P, ushort Pc, long Cycle);
 
+/// <summary>One CPU's speed entry on the status surface: its label, its effective rate (its own
+/// executed-cycle delta over wall time), and that as a percent of its own target clock.</summary>
+public sealed record PerCpuRateDto(string Label, double EffectiveClockHz, double EffectiveClockPercent);
+
 public sealed record EmulatorStatusDto(
     string SessionId,
     string Architecture,
@@ -116,6 +120,13 @@ public sealed record EmulatorStatusDto(
     string IecBusActivityState = "Idle")
 {
     public double MeasuredFramesPerSecond => MeasuredFps;
+
+    /// <summary>
+    /// Per-CPU speed entries - one per CPU in the rig (host first, then each peripheral CPU) so
+    /// the status surface lists each distinctly. Init-only with an empty default so existing
+    /// construction sites are unaffected; set via a <c>with</c> expression on the mapping path.
+    /// </summary>
+    public IReadOnlyList<PerCpuRateDto> PerCpuRates { get; init; } = Array.Empty<PerCpuRateDto>();
 }
 
 public static class EmulatorHost

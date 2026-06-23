@@ -11,6 +11,13 @@ namespace ViceSharp.Abstractions;
 public readonly record struct CpuInfo(string Label, long ExecutedCycles, long ClockHz);
 
 /// <summary>
+/// A measured per-CPU speed reading for the status surface: a CPU's label, its effective rate
+/// (its own ExecutedCycles delta over wall time), and that as a percentage of its target clock.
+/// One per CPU so the host and each peripheral CPU are listed distinctly.
+/// </summary>
+public readonly record struct CpuRateReading(string Label, double EffectiveClockHz, double EffectiveClockPercent);
+
+/// <summary>
 /// A fully-assembled emulated machine. Created by IArchitectureBuilder
 /// from an IArchitectureDescriptor. Owns the bus, clock, and all
 /// registered devices.

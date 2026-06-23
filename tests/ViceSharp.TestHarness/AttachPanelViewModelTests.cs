@@ -670,6 +670,39 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
+    /// FR: FR-CPUTICK-001, TR: TR-CPU-TICK-001, TEST-CPUTICK-001 (AC3 display).
+    /// Use case: a true-drive rig (C64 + 1541) must show each CPU's own speed on the status bar
+    ///   so the user sees the host and the drive running at their own rates; a bare C64 should
+    ///   not add a redundant row (its single CPU is the headline Clock).
+    /// Acceptance: a status with more than one PerCpuRate exposes one compact formatted row per
+    ///   CPU (label shortened + percent) and folds them into StatusText; a single-CPU status
+    ///   leaves PerCpuRates empty.
+    /// </summary>
+    [Fact]
+    public void StatusBarViewModel_ListsPerCpuRows_OnlyForMultiCpuRigs()
+    {
+        var viewModel = new StatusBarViewModel();
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 0), RpcStatus.Ok());
+        Assert.Empty(viewModel.PerCpuRates);
+
+        var rig = CreateStatus(iecActive: true, transitionCount: 5) with
+        {
+            PerCpuRates = new[]
+            {
+                new PerCpuRateDto("Commodore 64 PAL", 970_000d, 98d),
+                new PerCpuRateDto("C1541", 1_000_000d, 100d),
+            },
+        };
+        viewModel.ApplyStatus(rig, RpcStatus.Ok());
+
+        Assert.Equal(2, viewModel.PerCpuRates.Count);
+        Assert.Equal("C64 98%", viewModel.PerCpuRates[0]);
+        Assert.Equal("1541 100%", viewModel.PerCpuRates[1]);
+        Assert.Contains("CPUs C64 98%, 1541 100%", viewModel.StatusText);
+    }
+
+    /// <summary>
     /// FR: FR-UIFLYOUT-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIFLYOUT-001.
     /// Use case: The shell replaces the separate Left/Right dock buttons with a
     /// single icon that flips the flyout side, so the view-model must expose a
