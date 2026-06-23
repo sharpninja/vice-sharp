@@ -90,6 +90,42 @@ public sealed partial class ViceEmulationGate : IEmulationGate
             : SoundAction.Advance;
     }
 
+    /// <summary>
+    /// vsync self-correction (TEST-SYSINDEP-001 AC4): the cycles still owed to real time since
+    /// the anchor - shouldHave(now) minus already-done - clamped to a per-tick cap so one tick
+    /// never holds the lock too long, with the remainder carried forward by the persistent
+    /// anchor (so cycles are never dropped, unlike a fixed chunk). A gap beyond the
+    /// catastrophic threshold sets <paramref name="resync"/> so the caller re-anchors to now
+    /// instead of sprinting. Mirrors <see cref="SemaphoreEmulationGate"/>'s proven deficit pacer.
+    /// </summary>
+    internal static long ComputeRealtimeDeficit(
+        long emulatedClkPerSecond,
+        long swFreq,
+        long anchorWall,
+        long anchorCycle,
+        long now,
+        long totalCycles,
+        out bool resync)
+    {
+        resync = false;
+        var elapsedSeconds = (now - anchorWall) / (double)swFreq;
+        var deficit = (long)(emulatedClkPerSecond * elapsedSeconds) - (totalCycles - anchorCycle);
+
+        var stepCap = Math.Max(1, emulatedClkPerSecond / 4);
+        var catastrophic = emulatedClkPerSecond * 4;
+
+        if (deficit > catastrophic)
+        {
+            resync = true;
+            return stepCap;
+        }
+
+        if (deficit > stepCap)
+            return stepCap;
+
+        return deficit < 0 ? 0 : deficit;
+    }
+
     public void Start()
     {
         _running = true;
@@ -142,38 +178,49 @@ public sealed partial class ViceEmulationGate : IEmulationGate
             // reliable and keeps the SID in sync naturally - at 100% speed the SID's sample
             // production equals the device's consumption, so the buffer self-levels.
             LastRegulator = PacingRegulator.Vsync;
-            advance(session, chunk);
+
+            var speed = Math.Clamp(session.LimiterRatePercent, 1.0, 100_000.0) / 100.0;
+            var emulatedClkPerSecond = (long)(frequencyHz * speed);
 
             long totalCycles;
             lock (session.SyncRoot)
                 totalCycles = session.Machine.Clock.TotalCycles;
 
-            var speed = Math.Clamp(session.LimiterRatePercent, 1.0, 100_000.0) / 100.0;
-            var emulatedClkPerSecond = frequencyHz * speed;
             var now = Stopwatch.GetTimestamp();
-
             if (!anchor.Primed)
             {
                 anchor.AnchorWall = now;
                 anchor.AnchorCycle = totalCycles;
                 anchor.Primed = true;
-                continue;
             }
 
-            var cyclesSinceAnchor = totalCycles - anchor.AnchorCycle;
-            var targetWall = anchor.AnchorWall + (long)(cyclesSinceAnchor / emulatedClkPerSecond * swFreq);
-            var maxDriftTicks = swFreq / 4; // 250 ms behind => resync rather than sprint
-
-            if (targetWall < now - maxDriftTicks)
+            // Advance the real-time cycle DEFICIT (self-correcting) plus one fine chunk of
+            // look-ahead, instead of a fixed chunk: cycles the worker could not advance in a
+            // tick persist in the deficit (the anchor stays put) and are caught up on following
+            // ticks, so the system sustains its own clock under per-cycle load (audio on)
+            // rather than silently throttling - the diagnosed fixed-chunk defect. The fine
+            // look-ahead chunk keeps the SID fed and, with SleepUntil below, paces steady state
+            // at ~ChunkHz. Mirrors the Semaphore gate's proven deficit pacer (PaceLimited).
+            var deficit = ComputeRealtimeDeficit(emulatedClkPerSecond, swFreq, anchor.AnchorWall, anchor.AnchorCycle, now, totalCycles, out var resync);
+            if (resync)
             {
-                // Fell far behind (host stall / debugger break): resync to now.
+                // Hopelessly behind (host stall / debugger break): re-anchor to now.
                 anchor.AnchorWall = now;
                 anchor.AnchorCycle = totalCycles;
             }
-            else
-            {
+
+            advance(session, deficit + chunk);
+
+            lock (session.SyncRoot)
+                totalCycles = session.Machine.Clock.TotalCycles;
+
+            // vsync: sleep until wall-clock reaches the time implied by emulated-cycle progress.
+            // Sleep only while ahead of that target; when still behind, skip the sleep so the
+            // next tick's deficit closes the gap (the self-correction).
+            var cyclesSinceAnchor = totalCycles - anchor.AnchorCycle;
+            var targetWall = anchor.AnchorWall + (long)(cyclesSinceAnchor / (double)emulatedClkPerSecond * swFreq);
+            if (targetWall > Stopwatch.GetTimestamp())
                 SleepUntil(targetWall);
-            }
 
             // Re-anchor about once per emulated second to bound double-precision drift.
             if (cyclesSinceAnchor > frequencyHz)
