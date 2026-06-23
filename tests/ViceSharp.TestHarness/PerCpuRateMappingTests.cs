@@ -68,4 +68,38 @@ public sealed class PerCpuRateMappingTests
         Assert.NotNull(grpc);
         Assert.Empty(grpc!.PerCpuRates);
     }
+
+    /// <summary>
+    /// FR: FR-IECMON-001, TR: TR-SYS-SCHED-001, TEST-IECMON-001.
+    /// Use case: the IEC monitor panel reads live line states from the host status over gRPC, so
+    ///   each line's signal, level, and pullers must survive the wire mapping.
+    /// Acceptance: GrpcHostMapping.Map copies every IecBusLineDto into the gRPC message's repeated
+    ///   iec_bus_lines field, preserving signal, level, and pullers.
+    /// </summary>
+    [Fact]
+    public void Map_PreservesIecBusLinesOntoTheWire()
+    {
+        var dto = new EmulatorStatusDto(
+            "session-3",
+            "Commodore 64",
+            EmulatorRunState.Running,
+            0,
+            new MachineStateDto(0, 0, 0, 0, 0, 0, 0))
+        {
+            IecBusLines = new[]
+            {
+                new IecBusLineDto("ATN", IsHigh: false, Pullers: "c64"),
+                new IecBusLineDto("DATA", IsHigh: true, Pullers: ""),
+            },
+        };
+
+        var grpc = GrpcHostMapping.Map(dto);
+
+        Assert.NotNull(grpc);
+        Assert.Equal(2, grpc!.IecBusLines.Count);
+        Assert.Equal("ATN", grpc.IecBusLines[0].Signal);
+        Assert.False(grpc.IecBusLines[0].IsHigh);
+        Assert.Equal("c64", grpc.IecBusLines[0].Pullers);
+        Assert.True(grpc.IecBusLines[1].IsHigh);
+    }
 }

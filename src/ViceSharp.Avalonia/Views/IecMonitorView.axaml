@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ViceSharp.Avalonia.ViewModels"
+             x:Class="ViceSharp.Avalonia.Views.IecMonitorView"
+             x:DataType="vm:IecMonitorViewModel"
+             IsVisible="{Binding HasBus}">
+    <!-- FR-IECMON-001 / FR-IECSPY-001: live IEC bus line states + activity. Collapses to nothing
+         when the session has no IEC bus (a bare C64), so it never disturbs the single-system layout. -->
+    <Border BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="4" Padding="8" Margin="4">
+        <StackPanel Spacing="4">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="IEC BUS" FontWeight="SemiBold" FontSize="12" />
+                <TextBlock Text="{Binding Activity}" FontSize="12" Foreground="#B0B8C4" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Transitions, StringFormat='{}{0} edges'}"
+                           FontSize="12" Foreground="#B0B8C4" VerticalAlignment="Center" />
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding Lines}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontFamily="Consolas,Menlo,monospace" FontSize="12" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>

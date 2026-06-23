@@ -167,12 +167,19 @@ message EmulatorStatusDto {
   int64 iec_bus_transition_count = 19;
   string iec_bus_activity_state = 20;
   repeated PerCpuRateDto per_cpu_rates = 21;
+  repeated IecBusLineDto iec_bus_lines = 22;
 }
 
 message PerCpuRateDto {
   string label = 1;
   double effective_clock_hz = 2;
   double effective_clock_percent = 3;
+}
+
+message IecBusLineDto {
+  string signal = 1;
+  bool is_high = 2;
+  string pullers = 3;
 }
 
 message CreateEmulatorSessionRequest {

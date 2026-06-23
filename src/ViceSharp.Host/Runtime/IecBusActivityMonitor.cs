@@ -62,6 +62,12 @@ public sealed class IecBusActivityMonitor
 
     public string ActivityState => IsActive ? "Active" : "Idle";
 
+    /// <summary>
+    /// Capture the bus's current per-line resolved state and pullers for the IEC monitor panel.
+    /// Pure observation; callers that race the emulation worker should hold the session lock.
+    /// </summary>
+    public BusSnapshot Snapshot() => _bus.Snapshot();
+
     private bool HasLowLine()
     {
         foreach (var signal in _bus.Signals)

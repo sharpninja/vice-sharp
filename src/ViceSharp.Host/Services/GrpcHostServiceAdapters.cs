@@ -856,6 +856,16 @@ internal static class GrpcHostMapping
             });
         }
 
+        foreach (var line in value.IecBusLines)
+        {
+            grpc.IecBusLines.Add(new GrpcContracts.IecBusLineDto
+            {
+                Signal = line.Signal,
+                IsHigh = line.IsHigh,
+                Pullers = line.Pullers
+            });
+        }
+
         return grpc;
     }
 

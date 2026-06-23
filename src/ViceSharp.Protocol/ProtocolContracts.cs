@@ -97,6 +97,10 @@ public sealed record MachineStateDto(byte A, byte X, byte Y, byte S, byte P, ush
 /// executed-cycle delta over wall time), and that as a percent of its own target clock.</summary>
 public sealed record PerCpuRateDto(string Label, double EffectiveClockHz, double EffectiveClockPercent);
 
+/// <summary>One IEC line's live state for the bus monitor: the signal name, its resolved level
+/// (high = released), and a display string of the endpoints pulling it low (empty when released).</summary>
+public sealed record IecBusLineDto(string Signal, bool IsHigh, string Pullers);
+
 public sealed record EmulatorStatusDto(
     string SessionId,
     string Architecture,
@@ -127,6 +131,13 @@ public sealed record EmulatorStatusDto(
     /// construction sites are unaffected; set via a <c>with</c> expression on the mapping path.
     /// </summary>
     public IReadOnlyList<PerCpuRateDto> PerCpuRates { get; init; } = Array.Empty<PerCpuRateDto>();
+
+    /// <summary>
+    /// Live IEC bus line states for the monitor panel - one entry per signal (ATN/CLK/DATA/SRQ)
+    /// with its resolved level and who is pulling it. Init-only with an empty default; populated
+    /// only for sessions that have a true-drive IEC bus.
+    /// </summary>
+    public IReadOnlyList<IecBusLineDto> IecBusLines { get; init; } = Array.Empty<IecBusLineDto>();
 }
 
 public static class EmulatorHost

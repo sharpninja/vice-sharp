@@ -19,6 +19,7 @@ public partial class MainWindow : Window
     private readonly ShellViewModel _shell;
     private readonly Persistence.SessionPersistence _persistence = new();
     private readonly StatusBarViewModel _statusBarViewModel = new();
+    private readonly IecMonitorViewModel _iecMonitorViewModel = new();
     private readonly AttachPanelView _attachPanel;
     private readonly VideoSurface _video;
     private DockPanel? _contentPanel;
@@ -59,6 +60,9 @@ public partial class MainWindow : Window
         // reusable PeripheralCardView / SidebarView land in S2.
         if (this.FindControl<Panel>("PART_StatusHost") is { } statusHost)
             statusHost.DataContext = _statusBarViewModel;
+
+        if (this.FindControl<Views.IecMonitorView>("PART_IecMonitor") is { } iecMonitor)
+            iecMonitor.DataContext = _iecMonitorViewModel;
         _sidebarHost = this.FindControl<ContentControl>("PART_SidebarHost");
         if (_sidebarHost is not null)
             _sidebarHost.Content = _attachPanel;
@@ -580,6 +584,7 @@ public partial class MainWindow : Window
     private void ApplyStatus(Protocol.EmulatorStatusDto? status, Protocol.RpcStatus rpcStatus)
     {
         _statusBarViewModel.ApplyStatus(status, rpcStatus);
+        _iecMonitorViewModel.ApplyStatus(status, rpcStatus);
         if (rpcStatus.IsSuccess && status is not null)
             _attachViewModel.ApplyStatus(status);
     }

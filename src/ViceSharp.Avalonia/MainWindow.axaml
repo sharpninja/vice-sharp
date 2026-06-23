@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:ViceSharp.Avalonia.ViewModels"
+        xmlns:views="using:ViceSharp.Avalonia.Views"
         mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="720"
         x:Class="ViceSharp.Avalonia.MainWindow"
         x:DataType="vm:AttachPanelViewModel"
@@ -232,6 +233,9 @@
              the stretched fill child and consumes the rest. Code-behind (ApplyContentLayout)
              flips the dock edge with DockSide and, on collapse, reorders so the display fills. -->
         <DockPanel x:Name="PART_ContentPanel" LastChildFill="True">
+            <!-- FR-IECMON-001: real-time IEC bus monitor. Collapsed (no docked space) unless the
+                 session has a true-drive IEC bus, so the single-system layout is unchanged. -->
+            <views:IecMonitorView x:Name="PART_IecMonitor" DockPanel.Dock="Top" />
             <ContentControl x:Name="PART_VideoHost" DockPanel.Dock="Right" />
             <ContentControl x:Name="PART_SidebarHost"
                             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />

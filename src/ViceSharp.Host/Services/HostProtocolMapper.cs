@@ -42,7 +42,31 @@ internal static class HostProtocolMapper
             session.IecBusActivity?.ActivityState ?? "Idle")
         {
             PerCpuRates = ToPerCpuRateDtos(session.PerCpuRates),
+            IecBusLines = ToIecBusLineDtos(session),
         };
+    }
+
+    private static IReadOnlyList<IecBusLineDto> ToIecBusLineDtos(EmulatorRuntimeSession session)
+    {
+        if (session.IecBusActivity is null)
+            return Array.Empty<IecBusLineDto>();
+
+        // Snapshot under the session lock so we do not race the emulation worker mutating the bus.
+        BusSnapshot snapshot;
+        lock (session.SyncRoot)
+            snapshot = session.IecBusActivity.Snapshot();
+
+        if (snapshot.Lines.Count == 0)
+            return Array.Empty<IecBusLineDto>();
+
+        var lines = new IecBusLineDto[snapshot.Lines.Count];
+        for (var i = 0; i < snapshot.Lines.Count; i++)
+        {
+            var line = snapshot.Lines[i];
+            lines[i] = new IecBusLineDto(line.Signal, line.IsHigh, string.Join(", ", line.Pullers));
+        }
+
+        return lines;
     }
 
     private static IReadOnlyList<PerCpuRateDto> ToPerCpuRateDtos(IReadOnlyList<CpuRateReading> readings)

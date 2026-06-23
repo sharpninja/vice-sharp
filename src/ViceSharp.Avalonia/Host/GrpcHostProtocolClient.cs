@@ -664,6 +664,12 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
                 .Select(r => new PerCpuRateDto(r.Label, r.EffectiveClockHz, r.EffectiveClockPercent))
                 .ToArray();
 
+        var iecBusLines = value.IecBusLines.Count == 0
+            ? (IReadOnlyList<IecBusLineDto>)Array.Empty<IecBusLineDto>()
+            : value.IecBusLines
+                .Select(l => new IecBusLineDto(l.Signal, l.IsHigh, l.Pullers))
+                .ToArray();
+
         return new EmulatorStatusDto(
             value.SessionId,
             value.Architecture,
@@ -687,6 +693,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             value.IecBusActivityState)
         {
             PerCpuRates = perCpuRates,
+            IecBusLines = iecBusLines,
         };
     }
 
