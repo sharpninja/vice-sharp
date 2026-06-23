@@ -209,6 +209,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             // during init); block briefly for it so frame writes have a stream.
             videoClient = AcceptOrThrow(videoListener, "video");
             videoStream = videoClient.GetStream();
+            videoListener.Stop(); // only one client connects; stop listening now
 
             // Audio connects asynchronously: ffmpeg may only open the audio input
             // after it has begun reading video, so blocking here could deadlock
@@ -299,6 +300,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
         {
             _audioClient = _audioAccept.Result;
             _audioStream = _audioClient.GetStream();
+            _audioListener?.Stop(); // only one client connects; stop listening now
             var connectedAudioStream = _audioStream;
             _audioWriter = new BackgroundByteWriter(
                 (b, n) => connectedAudioStream.Write(b, 0, n), AudioQueueCapacity, "vice-ffmpeg-audio");
@@ -480,7 +482,10 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
 
         // 1) Flush every queued frame/sample to the sockets (the background writers
         //    perform the actual writes), then close the sockets so ffmpeg sees EOF
-        //    on both inputs and -shortest finalises the muxer.
+        //    on both inputs and -shortest finalises the muxer. If a join times out
+        //    (ffmpeg stopped reading), closing the stream deliberately unblocks the
+        //    stuck writer - its pending Write throws and the writer thread exits -
+        //    rather than racing it; NetworkStream tolerates a write/dispose overlap.
         videoWriter?.CompleteAndJoin(ShutdownTimeout);
         audioWriter?.CompleteAndJoin(ShutdownTimeout);
 

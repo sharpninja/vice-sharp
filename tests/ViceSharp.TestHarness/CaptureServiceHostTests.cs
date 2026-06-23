@@ -721,6 +721,91 @@ public sealed class CaptureServiceHostTests
     }
 
     /// <summary>
+    /// FR-MED (review finding: concurrent/duplicate video capture).
+    /// Use case: a second StartCapture(Video) arrives while one is already active.
+    /// Acceptance: the second returns FailedPrecondition, registers no capture, and
+    /// the first capture stays active.
+    /// </summary>
+    [Fact]
+    public async Task StartCapture_Video_WhenAlreadyActive_ReturnsFailedPrecondition()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var captureService = new CaptureServiceHost(registry);
+        var dir1 = Path.Combine(Path.GetTempPath(), $"vice-v1-{Guid.NewGuid():N}");
+        var dir2 = Path.Combine(Path.GetTempPath(), $"vice-v2-{Guid.NewGuid():N}");
+
+        try
+        {
+            var first = await captureService.StartCaptureAsync(
+                new StartCaptureRequest(session.SessionId, CaptureKind.Video, dir1, "bmpseq"),
+                TestContext.Current.CancellationToken);
+            Assert.Equal(RpcStatusCode.Ok, first.Status.Code);
+
+            var second = await captureService.StartCaptureAsync(
+                new StartCaptureRequest(session.SessionId, CaptureKind.Video, dir2, "bmpseq"),
+                TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.FailedPrecondition, second.Status.Code);
+            Assert.Null(second.Capture);
+            Assert.True(session.IsVideoCaptureActive);
+
+            await captureService.StopCaptureAsync(
+                new StopCaptureRequest(session.SessionId, first.Capture!.CaptureId),
+                TestContext.Current.CancellationToken);
+        }
+        finally
+        {
+            if (Directory.Exists(dir1)) Directory.Delete(dir1, recursive: true);
+            if (Directory.Exists(dir2)) Directory.Delete(dir2, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR-MED (review finding: single audio tap not arbitrated).
+    /// Use case: a second audio-consuming capture starts while the tap is in use.
+    /// Acceptance: the second WAV capture returns FailedPrecondition, writes no
+    /// output file, and the first recording stays active.
+    /// </summary>
+    [Fact]
+    public async Task StartCapture_Audio_WhenAlreadyRecording_ReturnsFailedPrecondition()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        session.AudioCaptureTap = new CaptureAudioTap(downstream: null);
+        registry.Add(session);
+        var captureService = new CaptureServiceHost(registry);
+        var path1 = Path.Combine(Path.GetTempPath(), $"vice-a1-{Guid.NewGuid():N}.wav");
+        var path2 = Path.Combine(Path.GetTempPath(), $"vice-a2-{Guid.NewGuid():N}.wav");
+
+        try
+        {
+            var first = await captureService.StartCaptureAsync(
+                new StartCaptureRequest(session.SessionId, CaptureKind.Audio, path1, "wav"),
+                TestContext.Current.CancellationToken);
+            Assert.Equal(RpcStatusCode.Ok, first.Status.Code);
+
+            var second = await captureService.StartCaptureAsync(
+                new StartCaptureRequest(session.SessionId, CaptureKind.Audio, path2, "wav"),
+                TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.FailedPrecondition, second.Status.Code);
+            Assert.Null(second.Capture);
+            Assert.False(File.Exists(path2)); // rejected before the output file was created
+
+            await captureService.StopCaptureAsync(
+                new StopCaptureRequest(session.SessionId, first.Capture!.CaptureId),
+                TestContext.Current.CancellationToken);
+        }
+        finally
+        {
+            if (File.Exists(path1)) File.Delete(path1);
+            if (File.Exists(path2)) File.Delete(path2);
+        }
+    }
+
+    /// <summary>
     /// FR-MED (review finding: active captures not finalized on session close).
     /// Use case: a session with in-progress video AND audio captures is closed.
     /// Acceptance: EndAllCaptures finalises both (the recorders are disposed and the

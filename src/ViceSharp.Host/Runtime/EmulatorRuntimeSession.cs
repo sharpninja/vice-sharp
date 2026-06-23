@@ -237,21 +237,28 @@ public sealed class EmulatorRuntimeSession
     /// </summary>
     public void RecordVideoFrameIfActive(ReadOnlySpan<byte> bgra, int width, int height)
     {
+        // Snapshot the sink under the lock, then write OUTSIDE it: a sink whose
+        // bounded queue is saturated applies back-pressure (a blocking Enqueue), and
+        // that block must not be held under _captureSync or it would stall Begin/End.
+        IVideoCaptureSink? sink;
         lock (_captureSync)
         {
-            if (_videoCapture is null)
-                return;
-            try
-            {
-                _videoCapture.CaptureFrame(bgra, width, height);
-            }
-            catch
-            {
-                // A recorder fault (e.g. ffmpeg died, or a frame-size mismatch) must
-                // never propagate onto the emulation worker thread. Drop the frame;
-                // the recorder's own fault latch stops further writes and the user
-                // finalises via StopCapture (which runs off this thread).
-            }
+            sink = _videoCapture;
+        }
+
+        if (sink is null)
+            return;
+
+        try
+        {
+            sink.CaptureFrame(bgra, width, height);
+        }
+        catch
+        {
+            // A recorder fault (e.g. ffmpeg died, or a frame-size mismatch) must
+            // never propagate onto the emulation worker thread. Drop the frame;
+            // the recorder's own fault latch stops further writes and the user
+            // finalises via StopCapture (which runs off this thread).
         }
     }
 
@@ -264,13 +271,22 @@ public sealed class EmulatorRuntimeSession
     /// stream (FR-MED-004 muxed video+audio). The caller has already started the
     /// sink (e.g. launched ffmpeg) so it is ready to receive frames/samples.
     /// </summary>
+    /// <remarks>
+    /// Throws <see cref="InvalidOperationException"/> when a video capture is
+    /// already active, or when a muxed audio track is requested but the audio tap
+    /// is already in use (atomic conflict guard for concurrent StartCapture calls).
+    /// </remarks>
     public void BeginVideoCapture(string captureId, IVideoCaptureSink sink, IAudioRecorder? audioTrack = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(captureId);
         ArgumentNullException.ThrowIfNull(sink);
         lock (_captureSync)
         {
-            EndVideoCaptureCore();
+            if (_videoCapture is not null)
+                throw new InvalidOperationException("A video capture is already active for this session.");
+            if (audioTrack is not null && AudioCaptureTap is { IsRecording: true })
+                throw new InvalidOperationException("Audio is already being recorded for this session.");
+
             _videoCapture = sink;
             _videoCaptureId = captureId;
 
@@ -285,22 +301,30 @@ public sealed class EmulatorRuntimeSession
     /// <summary>
     /// Finalises the active video capture (detaching any audio track from the tap
     /// and disposing the sink, which flushes/closes an ffmpeg recorder) and
-    /// returns the number of frames it wrote (0 when none was active).
+    /// returns the number of frames it wrote (0 when none was active). The blocking
+    /// dispose (writer join / ffmpeg wait) runs OFF <c>_captureSync</c>.
     /// </summary>
     public int EndVideoCapture()
     {
+        IVideoCaptureSink? sink;
+        int frames;
         lock (_captureSync)
         {
-            return EndVideoCaptureCore();
+            sink = DetachVideoLocked(out frames);
         }
+
+        sink?.Dispose();
+        return frames;
     }
 
-    // Must be called under _captureSync.
-    private int EndVideoCaptureCore()
+    // Detaches the active video sink + its audio track under _captureSync, returning
+    // the sink for the caller to Dispose OFF the lock. Returns null when none active.
+    private IVideoCaptureSink? DetachVideoLocked(out int frames)
     {
-        var frames = _videoCapture?.FrameCount ?? 0;
+        var sink = _videoCapture;
+        frames = sink?.FrameCount ?? 0;
 
-        // Detach the audio track from the tap BEFORE disposing the sink so no
+        // Detach the audio track from the tap BEFORE the sink is disposed so no
         // further samples are written into a half-closed ffmpeg recorder.
         if (_videoAudioTrack is not null)
         {
@@ -308,10 +332,9 @@ public sealed class EmulatorRuntimeSession
             _videoAudioTrack = null;
         }
 
-        _videoCapture?.Dispose();
         _videoCapture = null;
         _videoCaptureId = null;
-        return frames;
+        return sink;
     }
 
     /// <summary>
@@ -333,6 +356,11 @@ public sealed class EmulatorRuntimeSession
 
         lock (_captureSync)
         {
+            // Atomic conflict guard: only one recorder may own the tap at a time
+            // (a WAV recording and a muxed-video audio track cannot coexist).
+            if (_audioRecorder is not null || tap.IsRecording)
+                throw new InvalidOperationException("Audio is already being recorded for this session.");
+
             _audioRecorder = recorder;
             _audioStream = stream;
             _audioCaptureId = captureId;
@@ -343,41 +371,55 @@ public sealed class EmulatorRuntimeSession
     /// <summary>
     /// Finalises the active WAV recording: detaches it from the tap, patches the
     /// RIFF/data sizes, and closes the output stream. Returns the number of PCM
-    /// data bytes written (0 when none was active).
+    /// data bytes written (0 when none was active). The blocking dispose (writer
+    /// join) runs OFF <c>_captureSync</c>.
     /// </summary>
     public long EndAudioCapture()
     {
+        WavAudioRecorder? recorder;
+        Stream? stream;
         lock (_captureSync)
         {
-            return EndAudioCaptureCore();
+            (recorder, stream) = DetachAudioLocked();
         }
+
+        recorder?.Dispose();   // off-lock: Stop() flushes + joins the writer
+        stream?.Dispose();
+        return recorder?.DataBytesWritten ?? 0;
     }
 
-    // Must be called under _captureSync.
-    private long EndAudioCaptureCore()
+    // Detaches the active WAV recorder + stream under _captureSync, returning them
+    // for the caller to Dispose OFF the lock. Returns (null, null) when none active.
+    private (WavAudioRecorder? Recorder, Stream? Stream) DetachAudioLocked()
     {
         AudioCaptureTap?.DetachRecorder();
-        long bytes = _audioRecorder?.DataBytesWritten ?? 0;
-        _audioRecorder?.Dispose();   // Stop() patches header sizes
-        _audioStream?.Dispose();
+        var recorder = _audioRecorder;
+        var stream = _audioStream;
         _audioRecorder = null;
         _audioStream = null;
         _audioCaptureId = null;
-        return bytes;
+        return (recorder, stream);
     }
 
     /// <summary>
     /// Finalises any in-progress video AND audio capture. Called when the session
     /// is closed/removed so an active ffmpeg process or open file handle is never
-    /// leaked on teardown.
+    /// leaked on teardown. The blocking disposes run OFF <c>_captureSync</c>.
     /// </summary>
     public void EndAllCaptures()
     {
+        IVideoCaptureSink? sink;
+        WavAudioRecorder? recorder;
+        Stream? stream;
         lock (_captureSync)
         {
-            EndVideoCaptureCore();
-            EndAudioCaptureCore();
+            sink = DetachVideoLocked(out _);
+            (recorder, stream) = DetachAudioLocked();
         }
+
+        sink?.Dispose();
+        recorder?.Dispose();
+        stream?.Dispose();
     }
 
     /// <summary>

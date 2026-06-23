@@ -110,22 +110,26 @@ public sealed class CaptureServiceHost : ICaptureService
     private static StartCaptureResponse StartVideoCapture(
         EmulatorRuntimeSession session, StartCaptureRequest request, string format, string captureId)
     {
+        // Reject early if a video capture is already active (the atomic backstop for
+        // the concurrent-start race is in BeginVideoCapture).
+        if (session.IsVideoCaptureActive)
+            return new StartCaptureResponse(
+                RpcStatus.FailedPrecondition("A video capture is already active for this session."), null);
+
         // FR-MED-002: numbered-BMP sequence (no external tooling). TargetPath is a directory.
         if (format is "" or "bmp" or "bmpseq")
         {
+            FrameSequenceCapture sink;
             try
             {
-                var sink = new FrameSequenceCapture(request.TargetPath, ParseFrameMode(request.Options));
-                lock (session.SyncRoot)
-                {
-                    session.BeginVideoCapture(captureId, sink);
-                    return RegisterCapture(session, request, captureId);
-                }
+                sink = new FrameSequenceCapture(request.TargetPath, ParseFrameMode(request.Options));
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
             {
                 return new StartCaptureResponse(RpcStatus.InvalidArgument($"Could not start capture: {ex.Message}"), null);
             }
+
+            return RegisterVideo(session, request, captureId, sink, audioTrack: null);
         }
 
         // FR-MED-004: muxed video+audio via external ffmpeg (mp4/mkv/avi).
@@ -149,6 +153,12 @@ public sealed class CaptureServiceHost : ICaptureService
                 frameRate = (session.Architecture as IProfiledArchitectureDescriptor)?.MachineProfile.RefreshRateHz ?? 50.0;
                 includeAudio = session.AudioCaptureTap is not null;
             }
+
+            // Muxed video needs the audio tap; reject if it is already in use (a WAV
+            // recording, or another muxed capture) before launching ffmpeg.
+            if (includeAudio && session.AudioCaptureTap is { IsRecording: true })
+                return new StartCaptureResponse(
+                    RpcStatus.FailedPrecondition("Audio is already being recorded for this session."), null);
 
             FfmpegVideoRecorder recorder;
             try
@@ -176,15 +186,33 @@ public sealed class CaptureServiceHost : ICaptureService
                     RpcStatus.InvalidArgument($"Could not start ffmpeg video capture: {ex.Message}"), null);
             }
 
-            lock (session.SyncRoot)
-            {
-                session.BeginVideoCapture(captureId, recorder, includeAudio ? recorder : null);
-                return RegisterCapture(session, request, captureId);
-            }
+            return RegisterVideo(session, request, captureId, recorder, includeAudio ? recorder : null);
         }
 
         return new StartCaptureResponse(
             RpcStatus.InvalidArgument($"Unsupported video format '{request.Format}'. Use bmpseq, mp4, mkv or avi."), null);
+    }
+
+    // Registers the (already-started) sink as the session's video capture. On a
+    // concurrent-start conflict BeginVideoCapture throws; the rejected sink is
+    // disposed OFF the session lock and FailedPrecondition is returned.
+    private static StartCaptureResponse RegisterVideo(
+        EmulatorRuntimeSession session, StartCaptureRequest request, string captureId,
+        IVideoCaptureSink sink, IAudioRecorder? audioTrack)
+    {
+        try
+        {
+            lock (session.SyncRoot)
+            {
+                session.BeginVideoCapture(captureId, sink, audioTrack);
+                return RegisterCapture(session, request, captureId);
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            sink.Dispose();
+            return new StartCaptureResponse(RpcStatus.FailedPrecondition(ex.Message), null);
+        }
     }
 
     private static StartCaptureResponse StartAudioCapture(
@@ -197,6 +225,12 @@ public sealed class CaptureServiceHost : ICaptureService
         if (session.AudioCaptureTap is null)
             return new StartCaptureResponse(
                 RpcStatus.Unavailable("This session has no live audio path to record."), null);
+
+        // Reject early if the audio tap is already in use (e.g. a muxed-video
+        // recording) before creating the output file.
+        if (session.AudioCaptureTap.IsRecording)
+            return new StartCaptureResponse(
+                RpcStatus.FailedPrecondition("Audio is already being recorded for this session."), null);
 
         FileStream? stream = null;
         WavAudioRecorder? recorder = null;
@@ -212,6 +246,13 @@ public sealed class CaptureServiceHost : ICaptureService
                 session.BeginAudioCapture(captureId, recorder, stream);
                 return RegisterCapture(session, request, captureId);
             }
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Lost the concurrent-start race for the tap; release and reject.
+            recorder?.Dispose();
+            stream?.Dispose();
+            return new StartCaptureResponse(RpcStatus.FailedPrecondition(ex.Message), null);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
         {
@@ -267,30 +308,38 @@ public sealed class CaptureServiceHost : ICaptureService
         if (!_registry.TryGet(request.SessionId, out var session))
             return ValueTask.FromResult(new StopCaptureResponse(HostProtocolMapper.MissingSessionStatus(request.SessionId), null));
 
+        CaptureSessionDto stopped;
+        bool wasActive;
         lock (session.SyncRoot)
         {
             if (!session.CaptureSessions.TryGetValue(request.CaptureId, out var capture))
                 return ValueTask.FromResult(new StopCaptureResponse(RpcStatus.NotFound($"Capture '{request.CaptureId}' was not found."), null));
 
-            // Finalise the underlying recorder only on the active -> inactive
-            // transition (a repeat Stop must not tear down a different live capture).
-            if (capture.IsActive)
-            {
-                switch (capture.Kind)
-                {
-                    case CaptureKind.Video:
-                        session.EndVideoCapture();
-                        break;
-                    case CaptureKind.Audio:
-                        session.EndAudioCapture();
-                        break;
-                }
-            }
-
-            var stopped = capture with { IsActive = false };
+            // Mark inactive immediately under the lock so the capture map is always
+            // consistent even if the off-lock finalisation below throws.
+            wasActive = capture.IsActive;
+            stopped = capture with { IsActive = false };
             session.CaptureSessions[request.CaptureId] = stopped;
-            return ValueTask.FromResult(new StopCaptureResponse(RpcStatus.Ok(), stopped));
         }
+
+        // Finalise the underlying recorder OUTSIDE session.SyncRoot - the writer
+        // flush/join and ffmpeg wait can block for seconds and must not stall other
+        // RPCs on the session. Only on the active -> inactive transition (a repeat
+        // Stop must not tear down a different live capture).
+        if (wasActive)
+        {
+            switch (stopped.Kind)
+            {
+                case CaptureKind.Video:
+                    session.EndVideoCapture();
+                    break;
+                case CaptureKind.Audio:
+                    session.EndAudioCapture();
+                    break;
+            }
+        }
+
+        return ValueTask.FromResult(new StopCaptureResponse(RpcStatus.Ok(), stopped));
     }
 
     public async ValueTask<CaptureFrameResponse> CaptureFrameAsync(
