@@ -98,3 +98,6 @@ AGENTS-README-FIRST.yaml
 AGENTS-README-FIRST.yaml.deleted-*
 package-lock.json
 tools/aiunit-grok-claude-shim/publish/
+
+# MCP plugin transient cache (session state, current-turn, locks, failsafe). Never commit.
+/cache/

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ViceSharp.AiReview.Tests run settings. A headless Grok code/project review can run
+  for many minutes (per-strategy TimeoutSeconds is 1800s in appsettings.aiunit.json),
+  so raise the VSTest session timeout above that bridge timeout to keep the test host
+  from killing a long review. Wired via RunSettingsFilePath in the .csproj, so a
+  plain `dotnet test` picks it up with no explicit settings flag.
+-->
+<RunSettings>
+  <RunConfiguration>
+    <!-- 40 minutes (ms), comfortably above the 1800s strategy timeout. -->
+    <TestSessionTimeout>2400000</TestSessionTimeout>
+  </RunConfiguration>
+</RunSettings>

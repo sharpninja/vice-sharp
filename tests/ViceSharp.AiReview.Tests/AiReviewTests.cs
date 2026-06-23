@@ -1,5 +1,4 @@
 using SharpNinja.AiUnit.Review;
-using Xunit.Abstractions;
 
 namespace ViceSharp.AiReview.Tests;
 
@@ -9,8 +8,9 @@ namespace ViceSharp.AiReview.Tests;
 /// The <see cref="AiCodeReviewAttribute"/> / <see cref="AiProjectReviewAttribute"/>
 /// data attributes run the configured review agent (the <c>grok</c> strategy in
 /// appsettings.aiunit.json, driven through the local claude-protocol shim under
-/// tools/aiunit-grok-claude-shim) at xUnit discovery and feed the decorated
-/// theory <c>(prompt, resultJson)</c>. aiUnit's review executor never throws: a
+/// tools/aiunit-grok-claude-shim) at test execution (the theories set
+/// DisableDiscoveryEnumeration so the agent never runs during xUnit discovery) and
+/// feed the decorated theory <c>(prompt, resultJson)</c>. aiUnit's review executor never throws: a
 /// missing or failing agent yields a normalized <c>status:"error"</c> JSON.
 /// These theories therefore assert NOTHING that can fail - they only persist the
 /// findings to <see cref="ReviewLog"/>. Per the operator contract: do not fail
@@ -71,7 +71,7 @@ public sealed class AiReviewTests
 
     public AiReviewTests(ITestOutputHelper output) => _output = output;
 
-    [Theory]
+    [Theory(DisableDiscoveryEnumeration = true)]
     [AiCodeReview(
         RequirementsGovernancePreamble +
         "Perform a code-quality, correctness, and security review of the ViceSharp media-capture " +
@@ -91,7 +91,7 @@ public sealed class AiReviewTests
         // Report-only gate: intentionally no failing assertions.
     }
 
-    [Theory]
+    [Theory(DisableDiscoveryEnumeration = true)]
     [AiProjectReview(
         RequirementsGovernancePreamble +
         "Perform a high-level project-health and architecture review of ViceSharp (a C# .NET 10 " +

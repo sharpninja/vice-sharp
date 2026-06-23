@@ -4,21 +4,26 @@
     ViceSharp.AiReview.Tests: SharpNinja.aiUnit AI Code Review + AI Project Review
     integration tests. The [Theory] rows run the configured review agent (the
     "grok" strategy in appsettings.aiunit.json, driven through the local
-    claude-protocol shim under tools/aiunit-grok-claude-shim) at xUnit discovery
-    via aiUnit's review executor, which never throws: a missing or failing agent
+    claude-protocol shim under tools/aiunit-grok-claude-shim) at test execution
+    (the theories set DisableDiscoveryEnumeration so the agent never runs during
+    xUnit discovery) via aiUnit's review executor, which never throws: a missing or failing agent
     yields a normalized status:"error" findings JSON. The test bodies persist that
     JSON to AiReviewLogs/ and assert nothing that can fail the run, per the
     operator contract "do not fail the test, write the output to a log".
 
-    Kept as a SEPARATE project from ViceSharp.TestHarness because:
-      * aiUnit targets xUnit v2 while the harness uses xUnit v3 (incompatible in
-        one project), and
-      * the slow, host-bound AI review calls must not gate the focused unit suite.
+    Kept as a SEPARATE project from ViceSharp.TestHarness because the slow,
+    host-bound AI review calls must not gate the focused unit suite. aiUnit 2.0.0
+    targets xUnit v3 (same major as the harness), so the prior v2/v3 incompatibility
+    no longer applies; the split is now purely about keeping the AI gate out of the
+    fast unit run.
 
-    Opts out of central package management (the repo pins xUnit v3) and relaxes
-    warnings-as-errors so the aiUnit/xUnit v2 stack restores cleanly here.
+    Opts out of central package management because it pins a locally vendored aiUnit
+    prerelease (2.0.0-beta.20, restored from nuget-local) plus its own xUnit v3 runner
+    versions, and relaxes warnings-as-errors so the aiUnit stack restores cleanly here.
   -->
   <PropertyGroup>
+    <!-- xUnit v3 test projects run as executables. -->
+    <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -27,14 +32,17 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <!-- Do not let the focused unit gate accidentally pick these slow AI tests up. -->
     <IsPublishable>false</IsPublishable>
+    <!-- Auto-apply the long session timeout so a headless Grok review is not killed
+         by the default VSTest host; no explicit settings flag on dotnet test needed. -->
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="SharpNinja.aiUnit" Version="0.11.0" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageReference Include="SharpNinja.aiUnit" Version="2.0.0-beta.20" />
+    <PackageReference Include="xunit.v3" Version="2.0.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup>
