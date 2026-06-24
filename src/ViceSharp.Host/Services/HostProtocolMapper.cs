@@ -56,7 +56,18 @@ internal static class HostProtocolMapper
         lock (session.SyncRoot)
             snapshot = session.IecBusActivity.Snapshot();
 
-        if (snapshot.Lines.Count == 0)
+        return BuildIecBusLines(snapshot);
+    }
+
+    /// <summary>
+    /// Maps a bus snapshot to the monitor's line DTOs, but only when a peripheral actually shares
+    /// the bus (host + >=1 device). A single-system C64 has just the host endpoint, so there is no
+    /// inter-system IEC traffic to show - returns empty so the panel hides rather than showing
+    /// idle ghost lines.
+    /// </summary>
+    internal static IReadOnlyList<IecBusLineDto> BuildIecBusLines(BusSnapshot snapshot)
+    {
+        if (snapshot.Lines.Count == 0 || snapshot.Endpoints.Count < 2)
             return Array.Empty<IecBusLineDto>();
 
         var lines = new IecBusLineDto[snapshot.Lines.Count];

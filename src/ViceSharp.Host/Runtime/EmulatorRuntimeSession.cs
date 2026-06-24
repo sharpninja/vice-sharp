@@ -43,6 +43,7 @@ public sealed class EmulatorRuntimeSession
     // burned-in stats land only in the recording, never on the live presented frame.
     private byte[]? _overlayFrame;
     private DateTimeOffset _captureStartUtc;
+    private long _captureStartCycle;
 
     /// <summary>When true (default), an active video capture has a live-stats overlay burned in
     /// (rate, fps, emulated-vs-wall time, cycle) for debugging pacing/recorder behaviour.</summary>
@@ -305,7 +306,9 @@ public sealed class EmulatorRuntimeSession
     {
         var master = Architecture.MasterClockHz;
         var pct = master > 0 ? EffectiveClockHz / master * 100.0 : 0.0;
-        var emuSeconds = master > 0 ? _committedCycle / (double)master : 0.0;
+        // Emulated seconds SINCE capture start (not since boot) so EMU vs WALL reads the pace
+        // over the recording: EMU < WALL means the run is behind real time.
+        var emuSeconds = master > 0 ? (_committedCycle - _captureStartCycle) / (double)master : 0.0;
         var wallSeconds = (DateTimeOffset.UtcNow - _captureStartUtc).TotalSeconds;
         var inv = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -345,6 +348,7 @@ public sealed class EmulatorRuntimeSession
             _videoCapture = sink;
             _videoCaptureId = captureId;
             _captureStartUtc = DateTimeOffset.UtcNow;
+            _captureStartCycle = _committedCycle;
 
             if (audioTrack is not null && AudioCaptureTap is not null)
             {
