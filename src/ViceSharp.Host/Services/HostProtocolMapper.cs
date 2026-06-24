@@ -1,4 +1,5 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 
@@ -48,7 +49,11 @@ internal static class HostProtocolMapper
 
     private static IReadOnlyList<IecBusLineDto> ToIecBusLineDtos(EmulatorRuntimeSession session)
     {
-        if (session.IecBusActivity is null)
+        // The monitor panel is only meaningful for a true-drive rig - a real second CPU sharing
+        // the IEC bus (a CoordinatorMachine with a live bus). A single-system C64 has the drive
+        // endpoint baked into its always-on bus even with only a virtual/trap drive, so endpoint
+        // count alone can't tell them apart; key off the rig type so the panel hides otherwise.
+        if (session.IecBusActivity is null || session.Machine is not CoordinatorMachine { IecBus: not null })
             return Array.Empty<IecBusLineDto>();
 
         // Snapshot under the session lock so we do not race the emulation worker mutating the bus.
