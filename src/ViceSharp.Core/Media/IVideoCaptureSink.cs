@@ -15,6 +15,13 @@ public interface IVideoCaptureSink : IDisposable
     int FrameCount { get; }
 
     /// <summary>
+    /// Frames dropped under back-pressure (0 for sinks that never drop). A non-zero count means
+    /// the recording omits frames, which - since each survivor is tagged at the nominal frame
+    /// rate - compresses the clip's timeline and makes it play faster than real time.
+    /// </summary>
+    long DroppedFrameCount => 0;
+
+    /// <summary>
     /// Persist one BGRA8888 frame (row-major, top-down, length = width*height*4).
     /// Implementations silently ignore frames once disposed so late frames from
     /// the emulation pipeline cannot corrupt a closed capture.

@@ -121,6 +121,10 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
         get { lock (_sync) { return _frameCount; } }
     }
 
+    /// <summary>Frames dropped by the background video writer under back-pressure (compresses
+    /// the clip timeline, since each survivor is tagged at the nominal frame rate).</summary>
+    public long DroppedFrameCount => _videoWriter?.DroppedCount ?? 0;
+
     /// <summary>The container format being written.</summary>
     public FfmpegVideoFormat Format => _format;
 

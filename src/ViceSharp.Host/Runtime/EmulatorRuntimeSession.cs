@@ -39,6 +39,15 @@ public sealed class EmulatorRuntimeSession
     private Stream? _audioStream;
     private string? _audioCaptureId;
 
+    // Capture stats overlay (FR-MEDOVL-001): a reusable buffer the overlay is drawn into so the
+    // burned-in stats land only in the recording, never on the live presented frame.
+    private byte[]? _overlayFrame;
+    private DateTimeOffset _captureStartUtc;
+
+    /// <summary>When true (default), an active video capture has a live-stats overlay burned in
+    /// (rate, fps, emulated-vs-wall time, cycle) for debugging pacing/recorder behaviour.</summary>
+    public bool CaptureStatsOverlayEnabled { get; set; } = true;
+
     public EmulatorRuntimeSession(
         string sessionId,
         IArchitectureDescriptor architecture,
@@ -261,9 +270,24 @@ public sealed class EmulatorRuntimeSession
         if (sink is null)
             return;
 
+        // Burn the live-stats overlay into a private copy so the recording carries the numbers
+        // while the presented frame stays clean. The byte writer copies on enqueue, so one
+        // reused buffer is safe on this single worker thread.
+        var outBytes = bgra;
+        if (CaptureStatsOverlayEnabled && width > 0 && height > 0 && bgra.Length >= width * height * 4)
+        {
+            if (_overlayFrame is null || _overlayFrame.Length < bgra.Length)
+                _overlayFrame = new byte[bgra.Length];
+
+            bgra.CopyTo(_overlayFrame);
+            var view = _overlayFrame.AsSpan(0, bgra.Length);
+            StatsOverlayRenderer.Draw(view, width, height, BuildCaptureOverlayLines(sink));
+            outBytes = view;
+        }
+
         try
         {
-            sink.CaptureFrame(bgra, width, height);
+            sink.CaptureFrame(outBytes, width, height);
         }
         catch
         {
@@ -272,6 +296,25 @@ public sealed class EmulatorRuntimeSession
             // the recorder's own fault latch stops further writes and the user
             // finalises via StopCapture (which runs off this thread).
         }
+    }
+
+    // Live-stats overlay lines for the capture. EMU vs WALL seconds at capture time is the key
+    // pair: if the emulator runs faster than real time, EMU outpaces WALL (a pacing bug); if they
+    // track but a clip still plays fast, the container fps tag is wrong (a recorder bug).
+    private IReadOnlyList<string> BuildCaptureOverlayLines(IVideoCaptureSink sink)
+    {
+        var master = Architecture.MasterClockHz;
+        var pct = master > 0 ? EffectiveClockHz / master * 100.0 : 0.0;
+        var emuSeconds = master > 0 ? _committedCycle / (double)master : 0.0;
+        var wallSeconds = (DateTimeOffset.UtcNow - _captureStartUtc).TotalSeconds;
+        var inv = System.Globalization.CultureInfo.InvariantCulture;
+
+        return new[]
+        {
+            string.Format(inv, "RATE {0:0}% FPS {1:0.0}", pct, MeasuredFramesPerSecond),
+            string.Format(inv, "EMU {0:0.0}S WALL {1:0.0}S", emuSeconds, wallSeconds),
+            string.Format(inv, "FRM {0} DROP {1}", sink.FrameCount, sink.DroppedFrameCount),
+        };
     }
 
     /// <summary>
@@ -301,6 +344,7 @@ public sealed class EmulatorRuntimeSession
 
             _videoCapture = sink;
             _videoCaptureId = captureId;
+            _captureStartUtc = DateTimeOffset.UtcNow;
 
             if (audioTrack is not null && AudioCaptureTap is not null)
             {
