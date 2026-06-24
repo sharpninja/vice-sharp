@@ -54,6 +54,14 @@ public sealed class FfmpegEncodingTests
         Assert.Contains("50.125", args);
         Assert.Contains("tcp://127.0.0.1:5001", args);
 
+        // Wall-clock input timestamps so a dropped frame leaves a real time gap (the CFR output
+        // duplicate-fills it) instead of compressing the timeline and playing fast. Must be an
+        // input option (before -i).
+        Assert.Contains("-use_wallclock_as_timestamps", args);
+        Assert.True(joined.IndexOf("-use_wallclock_as_timestamps", StringComparison.Ordinal)
+                  < joined.IndexOf("tcp://127.0.0.1:5001", StringComparison.Ordinal),
+            "wall-clock stamping must precede the video input");
+
         // Audio input: s16le mono 44100 over the second socket.
         Assert.Contains("s16le", args);
         Assert.Contains("44100", args);

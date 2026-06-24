@@ -118,11 +118,16 @@ public static class FfmpegArgumentBuilder
             "-f", "rawvideo",
             "-pixel_format", "bgra",
             "-framerate", fps,
-            "-r", fps,
             "-s", $"{width}x{height}",
             "-analyzeduration", "0",
             "-probesize", "32",
             "-thread_queue_size", "512",
+            // Stamp each raw frame with its arrival wall-clock time. When the background video
+            // writer drops a frame under back-pressure, that leaves a real TIME gap which the
+            // constant-frame-rate output (-r below) duplicate-fills - so a drop becomes a brief
+            // stutter at the correct speed instead of compressing the clip timeline and making
+            // playback run fast (BUG: synthetic 1/fps PTS + dropWhenFull sped recordings up).
+            "-use_wallclock_as_timestamps", "1",
             "-i", $"tcp://127.0.0.1:{videoPort}",
         };
 
