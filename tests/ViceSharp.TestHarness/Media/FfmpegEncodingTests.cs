@@ -71,6 +71,8 @@ public sealed class FfmpegEncodingTests
         Assert.Contains("mp4", args);
         Assert.Contains("libx264", args);
         Assert.Contains("aac", args);
+        AssertOptionValue(args, "-preset", "ultrafast");
+        AssertOptionValue(args, "-tune", "zerolatency");
         Assert.Contains("yuv420p", args);
         Assert.Contains("-y", args);
         Assert.Contains("-shortest", args);
@@ -96,6 +98,25 @@ public sealed class FfmpegEncodingTests
         Assert.Contains("libmp3lame", args);
         // AVI/mpeg4 path declares no forced output pixel format.
         Assert.DoesNotContain("yuv420p", args);
+        Assert.DoesNotContain("-preset", args);
+        Assert.DoesNotContain("-tune", args);
+    }
+
+    [Fact]
+    public void Build_HardwareH264Codec_DoesNotUseSoftwareX264PresetOptions()
+    {
+        var hardwareH264 = new FfmpegVideoFormat("mp4-nvenc", "mp4", "h264_nvenc", "aac", "yuv420p");
+
+        var args = FfmpegArgumentBuilder.Build(
+            hardwareH264,
+            width: 384, height: 272, frameRate: 50,
+            videoPort: 6501, includeAudio: false, audioPort: 0,
+            sampleRate: 44100, channels: 1,
+            outputPath: "out.mp4");
+
+        Assert.Contains("h264_nvenc", args);
+        Assert.DoesNotContain("-preset", args);
+        Assert.DoesNotContain("-tune", args);
     }
 
     [Fact]
@@ -151,5 +172,22 @@ public sealed class FfmpegEncodingTests
         {
             Environment.SetEnvironmentVariable(FfmpegLocator.OverrideEnvironmentVariable, previous);
         }
+    }
+
+    private static void AssertOptionValue(IReadOnlyList<string> args, string option, string expectedValue)
+    {
+        var optionIndex = -1;
+        for (var i = 0; i < args.Count; i++)
+        {
+            if (args[i] == option)
+            {
+                optionIndex = i;
+                break;
+            }
+        }
+
+        Assert.True(optionIndex >= 0, $"Missing ffmpeg option '{option}'.");
+        Assert.True(optionIndex + 1 < args.Count, $"Missing value for ffmpeg option '{option}'.");
+        Assert.Equal(expectedValue, args[optionIndex + 1]);
     }
 }

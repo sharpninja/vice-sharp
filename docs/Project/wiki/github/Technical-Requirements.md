@@ -55,6 +55,13 @@
 - [x] Lockstep and checkpoint suites continue to pass after performance optimizations. (evidence: lockstep/checkpoint gate => 333 passed, 0 failed, 0 skipped)
 - [x] Optimizations do not change public observable machine state signatures or behavior contracts. (evidence: PR #3 keeps public API signatures stable and correctness gates green)
 
+## TR-CPU-TICK-001
+
+**Per-instance CPU executed-cycle counter and target clock** — ICpu exposes ExecutedCycles and TargetClockHz per instance; MachineState carries a per-CPU breakdown; UpdatePerformanceCounters uses the primary CPU executed cycles divided by its target clock.
+**Acceptance Criteria:**
+- [ ] ICpu exposes a per-instance ExecutedCycles counter and TargetClockHz.
+- [ ] MachineState carries a per-CPU breakdown (id, executedCycles, targetHz) for host and peripheral CPUs.
+
 ## TR-CYCLE-001
 
 **VIC-II cycle counter frame-periodic** — Managed VIC-II CycleCounter advances by exactly 19,656 per PAL frame. VICE vicii-cycle.c:576-598.
@@ -109,6 +116,18 @@
 ## TR-IECTRACE-001
 
 **IEC trace recorder (edge + step marks)** — IecBusTraceRecorder subscribes to bus.LineChanged, cycle-stamps each edge from SystemClock plus a sample per step boundary, into a bounded ring; re-derives deterministically after rewind; inactive unless the monitor is open.
+
+## TR-MED-FFMPEG-001
+
+**FfmpegVideoRecorder over two loopback TCP sockets** — External ffmpeg process fed raw BGRA + s16le via BackgroundByteWriter; mirrors VICE ffmpegexedrv. Pre-connect audio buffered + flushed.
+
+## TR-MED-SOUND-001
+
+**CaptureAudioTap + WavAudioRecorder** — Runtime-swappable tap in the SID->output path feeds a 16-bit PCM WAV recorder whose file writes run off the worker.
+
+## TR-MED-VIDEO-001
+
+**BMP-sequence sink with all/unique dedup, off-worker writes** — FrameSequenceCapture writes numbered 24-bit BMPs via a background queue; unique mode skips byte-identical consecutive frames.
 
 ## TR-PACESEL-STRAT-001
 
@@ -179,6 +198,13 @@
 **Acceptance Criteria:**
 - [x] EvaluateSound returns BackPressure at or over high-water, Advance below, NotTimingSource when inactive
 - [x] Gate Tick selects Sound/Vsync/Warp and exposes it via LastRegulator
+
+## TR-SYS-SCHED-001
+
+**Single-worker interleave scheduling with IEC bus-event sync** — One emulation worker interleaves systems with per-system deficit pacing and resynchronizes at InterSystemBus.LineChanged; lazy sync-on-IEC-access retained as the fine-grained backstop.
+**Acceptance Criteria:**
+- [ ] Each system advances on its own clock via a self-correcting deficit pacer.
+- [ ] Systems resync at LineChanged so IEC bus edges are observed in order before a read.
 
 ## TR-TAP-EDGE-001
 

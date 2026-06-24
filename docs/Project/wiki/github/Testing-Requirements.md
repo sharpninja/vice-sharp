@@ -11,6 +11,14 @@ Recorder tests with a fake stateful device verify per-tick chip-state capture an
 - [x] Snapshot deep-copies chip state across ring rotation
 
 
+## TEST-CPUTICK
+
+### TEST-CPUTICK-001
+
+Unit tests covering ExecutedCycles increments per executed (non-stolen) cycle, per-CPU rate = executed/elapsed/target, reset zeroes counters, and the status surface lists host and peripheral CPU rates distinctly.
+
+
+
 ## TEST-DRV
 
 ### TEST-DRV-001
@@ -79,6 +87,14 @@ With the live electrical model + true-drive, normal C64 idle CIA2 PA reads $47 a
 
 
 
+## TEST-IECHOTPLUG
+
+### TEST-IECHOTPLUG-001
+
+Tests that a drive attached mid-run answers on the bus, a detached drive removes its pulls and recomputes line states, and a renumbered drive answers its new device number.
+
+
+
 ## TEST-IECLOAD
 
 ### TEST-IECLOAD-001
@@ -108,6 +124,24 @@ Snapshot reports idle all-high/no-talkers; single puller -> line low + talker; m
 ### TEST-IECTRACE-001
 
 Edge capture order + cycle stamps; step-boundary marks; ring bound; rewind re-derivation equals original trace.
+
+
+
+## TEST-MED
+
+### TEST-MED-002
+
+FrameSequenceCapture unique-dedup, drop-on-mismatch, and host frames=unique routing.
+
+
+### TEST-MED-003
+
+WAV header/data correctness, after-stop ignore, concurrent-stop lock safety; CaptureAudioTap clamp/forward.
+
+
+### TEST-MED-004
+
+ffprobe-verified video+audio streams; Start failure cleanup; BackgroundByteWriter ordering/fault.
 
 
 
@@ -202,6 +236,14 @@ ViceGateSoundRegulatorTests (13) cover EvaluateSound outcomes and boundary, gate
 **Acceptance Criteria:**
 - [x] Back-pressure when queue at/over high-water advances zero cycles; below advances a chunk
 - [x] Warp selects Warp regulator even when audio buffer is full
+
+
+## TEST-SYSINDEP
+
+### TEST-SYSINDEP-001
+
+Tests that the drive CPU advances on its own clock (not host lockstep), IEC bus edges are observed by other systems before a read, per-system pacing sustains clock under load, and the true-drive LOAD parity test still passes.
+
 
 
 ## TEST-TAPE-RAMP

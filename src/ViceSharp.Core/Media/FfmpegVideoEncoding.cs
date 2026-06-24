@@ -159,6 +159,18 @@ public static class FfmpegArgumentBuilder
             "-b:v", videoBitrate.ToString(CultureInfo.InvariantCulture),
         });
 
+        // libx264/libx265 default to the "medium" preset, whose encode cost cannot keep up with a
+        // live 50 fps emulator feed: ffmpeg back-pressures, the video writer sheds frames, and
+        // (with CFR duplicate-fill) the emulator worker is starved of CPU. "ultrafast" +
+        // "zerolatency" make the encoder realtime-cheap so it never back-pressures the capture.
+        if (UsesRealtimeSoftwarePreset(format.VideoCodec))
+        {
+            args.Add("-preset");
+            args.Add("ultrafast");
+            args.Add("-tune");
+            args.Add("zerolatency");
+        }
+
         if (format.OutputPixelFormat is not null)
         {
             args.Add("-pix_fmt");
@@ -177,4 +189,9 @@ public static class FfmpegArgumentBuilder
         args.Add(outputPath);
         return args;
     }
+
+    private static bool UsesRealtimeSoftwarePreset(string videoCodec)
+        => string.Equals(videoCodec, "libx264", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(videoCodec, "libx264rgb", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(videoCodec, "libx265", StringComparison.OrdinalIgnoreCase);
 }

@@ -1,13 +1,5 @@
 # Functional Requirements (MCP Server)
 
-## [FR-DRVTRUE-001, [FR-DRVTRUE-001,
-
-Placeholder requirement backfilled for TODO link [FR-DRVTRUE-001,.
-
-## [FR-REMOTECTRL-001] [FR-REMOTECTRL-001]
-
-Placeholder requirement backfilled for TODO link [FR-REMOTECTRL-001].
-
 ## ARCH-TRUEDRIVE-1541-002 True-Drive 1541 IEC timing and motor ramp
 
 IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.
@@ -37,6 +29,15 @@ Each captured tick snapshots the full internal state of every stateful chip (VIC
 - [x] Captured state decodes into named register/field values
 - [x] The debug screen shows each chip's decoded state at the selected tick
 
+## FR-CPUTICK-001 Per-CPU independent tick counter and per-CPU speed metric
+
+Each CPU in the emulator keeps its own independent executed-cycle counter and the displayed speed is that CPU's executed-cycle rate versus its own target clock.
+**Acceptance Criteria:**
+- [ ] Each CPU ExecutedCycles increments once per executed cycle and not on a stolen or skipped cycle.
+- [ ] Per-CPU speed percent equals delta-executed over delta-wall over targetHz; the C64 primary reads about 95-100 percent at real time and the drive about 100 percent when running.
+- [ ] The status surface lists per-CPU rate entries for the host and each peripheral CPU distinctly.
+- [ ] Machine reset zeroes every CPU's executed-cycle counter.
+
 ## FR-DRV-005 IEC Serial Bus Protocol
 
 The emulator shall expose an active-low IEC serial bus with ATN, CLK, DATA, and SRQ line behavior that drives 1541/D64 operations and observable bus activity.
@@ -61,6 +62,14 @@ The host runtime shall expose emulator status telemetry for runtime state, timin
 - [ ] Host status responses include IEC activity derived from emulator bus traffic and safe for UI polling.
 - [ ] Status polling does not mutate emulator, drive, or bus state.
 
+## FR-IECHOTPLUG-001 Hot drive add and remove and live device renumber
+
+Drives can be turned on and off and have their device number changed at runtime without restarting the emulator.
+**Acceptance Criteria:**
+- [ ] A drive attached to a running session answers on the bus with no restart.
+- [ ] A detached drive's pull contributions are removed and line states recompute.
+- [ ] A drive's device number (8 to 11) can be changed at runtime and it answers the new number.
+
 ## FR-IECLOAD-001 True-drive 1541 LOAD over IEC
 
 A single-system C64 with a true-drive 1541 attached completes LOAD"*",8,1, LOAD"$",8 and SAVE over the IEC bus, talking to the drive's DOS ROM via the faithful serial electrical model.
@@ -72,6 +81,23 @@ Dedicated logic-analyzer panel showing a timing diagram of the IEC lines over em
 ## FR-IECSPY-001 IEC bus snapshot / spy
 
 At any instant the IEC bus can be snapshotted to read each line's level (ATN/CLK/DATA/SRQ), which endpoints are pulling each line low, and which devices are talking. Read-only; never perturbs bus state. DONE.
+
+## FR-MED-002 BMP frame-sequence video export (all / unique frames)
+
+Export video as a numbered 24-bit BMP sequence, writing every frame or only frames that differ from the previous one (frames=all|unique capture option).
+**Acceptance Criteria:**
+- [x] Unique mode skips consecutive byte-identical frames
+- [x] Frame files are written off the emulation worker thread
+
+## FR-MED-003 WAV sound recording tapped off the SID output
+
+Record the emulator's SID audio to a 16-bit PCM WAV file via a runtime-swappable tap installed in the SID -> output path.
+**Acceptance Criteria:**
+- [x] Output parses as valid RIFF/WAVE with data-chunk size matching samples
+
+## FR-MED-004 Muxed video+audio export via external ffmpeg
+
+Export emulator video and audio into a single muxed container (mp4/mkv/avi) by streaming raw BGRA + s16le PCM to an external ffmpeg process over loopback TCP, mirroring VICE ffmpegexedrv.
 
 ## FR-PACESEL-001 Selectable emulation pacing strategy
 
@@ -132,6 +158,15 @@ When the SID is the audio timing source, the VICE pacing gate paces the worker t
 - [x] Buffer has room => worker advances a chunk
 - [x] Warp skips both sound and vsync (highest precedence)
 - [x] No active audio device => falls through to the vsync regulator
+
+## FR-SYSINDEP-001 Independent per-system scheduling coupled only by the async IEC bus
+
+Each system (C64, each drive) runs on its own clock and the systems couple only through the asynchronous wired-OR IEC bus, replacing cycle-lockstep.
+**Acceptance Criteria:**
+- [ ] With a drive attached, the drive CPU advances on its own clock and is not stepped in cycle-lockstep per host instruction.
+- [ ] An IEC line transition is observed by every other endpoint's system before that system reads the line.
+- [ ] A real IEC transaction such as a directory or program load completes correctly under independent scheduling, at parity with the existing true-drive LOAD test.
+- [ ] Each system sustains about 100 percent of its own CPU clock under load including audio on, with no fixed-chunk under-throttle.
 
 ## FR-TICKHIST-001 Last-100-ticks time-travel debugger
 
