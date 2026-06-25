@@ -669,6 +669,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// returns whether a sprite pixel is visible at the supplied VIC
     /// pixel coordinate once the closed border window is applied.
     /// </summary>
+    /// <summary>
+    /// When true, simulates the canonical "side border opener" trick (cycle-55 $D016 toggle on
+    /// every scanline) by forcing the left/right border-open predicates to true regardless of
+    /// whether the flip-flop was actually defeated. Visually identical to running the real
+    /// 6502 raster IRQ that opens the side borders; intended for game code that wants to display
+    /// sprites in the side borders without hand-coding the IRQ handler. Off by default.
+    /// </summary>
+    public bool AllowSpritesInBorder { get; set; }
+
     public bool CanRenderSpritePixelAt(int xVicPixel, int rasterLine)
     {
         if (IsRasterLineVerticalBorderActive(rasterLine))
@@ -681,11 +690,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return false;
         }
 
-        int leftBorderPixel = IsRasterLineLeftBorderOpen(rasterLine)
+        int leftBorderPixel = (IsRasterLineLeftBorderOpen(rasterLine) || AllowSpritesInBorder)
             ? 0
             : LeftBorderPixel;
 
-        int rightBorderEndPixel = IsRasterLineRightBorderOpen(rasterLine)
+        int rightBorderEndPixel = (IsRasterLineRightBorderOpen(rasterLine) || AllowSpritesInBorder)
             ? VideoRenderer.ScreenWidth
             : RightBorderEndPixel;
 
