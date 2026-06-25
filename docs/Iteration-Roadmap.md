@@ -12,7 +12,7 @@
 - Comprehensive documentation and GraphRAG knowledge base
 - Determinism test harness (empty machine, bit-exact snapshots)
 
-**Exit criteria:** `dotnet test` passes, NativeAOT console app starts and exits cleanly, all docs written.
+**Exit criteria:** `dotnet test` passes, the managed console app starts and exits cleanly, all docs written.
 
 ## Iteration 1 — C64 (MVP) ✅ COMPLETED
 

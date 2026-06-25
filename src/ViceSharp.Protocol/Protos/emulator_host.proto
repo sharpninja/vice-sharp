@@ -81,6 +81,14 @@ service CaptureService {
   rpc ListCaptures(SessionRequest) returns (ListCapturesResponse);
 }
 
+service DiagnosticsService {
+  rpc GetHostInfo(EmptyRequest) returns (GetHostInfoResponse);
+  rpc ListSessions(EmptyRequest) returns (ListSessionsResponse);
+  rpc GetCurrentSession(EmptyRequest) returns (GetCurrentSessionResponse);
+  rpc GetPerformanceSnapshot(PerformanceSnapshotRequest) returns (PerformanceSnapshotResponse);
+  rpc WatchPerformance(WatchPerformanceRequest) returns (stream PerformanceSnapshotResponse);
+}
+
 message RpcStatus {
   RpcStatusCode code = 1;
   string message = 2;
@@ -197,6 +205,9 @@ message CreateEmulatorSessionRequest {
 
 message SessionRequest {
   string session_id = 1;
+}
+
+message EmptyRequest {
 }
 
 message StepFrameRequest {
@@ -710,4 +721,85 @@ message GetCaptureCapabilitiesResponse {
 message ListCapturesResponse {
   RpcStatus status = 1;
   repeated CaptureSessionDto captures = 2;
+}
+
+message HostInfoDto {
+  int32 process_id = 1;
+  string endpoint = 2;
+  string protocol_package = 3;
+  string protocol_version = 4;
+  string app_version = 5;
+  string build_sha = 6;
+  string started_at_utc = 7;
+}
+
+message SessionSummaryDto {
+  string session_id = 1;
+  string display_name = 2;
+  string architecture = 3;
+  EmulatorRunState run_state = 4;
+  int64 cycle = 5;
+  int64 frame_count = 6;
+  string current_media = 7;
+}
+
+message ProcessDiagnosticsDto {
+  int64 total_processor_time_ms = 1;
+  int64 working_set_bytes = 2;
+  int64 private_memory_bytes = 3;
+  int64 managed_memory_bytes = 4;
+  int32 gen0_collections = 5;
+  int32 gen1_collections = 6;
+  int32 gen2_collections = 7;
+  int32 thread_count = 8;
+}
+
+message PumpDiagnosticsDto {
+  bool worker_alive = 1;
+  int32 active_session_count = 2;
+  string last_tick_at_utc = 3;
+}
+
+message UiDiagnosticsDto {
+  string current_session_id = 1;
+  string last_status_update_utc = 2;
+  string last_frame_update_utc = 3;
+}
+
+message PerformanceSnapshotDto {
+  HostInfoDto host_info = 1;
+  EmulatorStatusDto emulator_status = 2;
+  ProcessDiagnosticsDto process = 3;
+  PumpDiagnosticsDto pump = 4;
+  UiDiagnosticsDto ui = 5;
+}
+
+message PerformanceSnapshotRequest {
+  string session_id = 1;
+  int32 interval_ms = 2;
+}
+
+message WatchPerformanceRequest {
+  string session_id = 1;
+  int32 interval_ms = 2;
+}
+
+message GetHostInfoResponse {
+  RpcStatus status = 1;
+  HostInfoDto host_info = 2;
+}
+
+message ListSessionsResponse {
+  RpcStatus status = 1;
+  repeated SessionSummaryDto sessions = 2;
+}
+
+message GetCurrentSessionResponse {
+  RpcStatus status = 1;
+  SessionSummaryDto session = 2;
+}
+
+message PerformanceSnapshotResponse {
+  RpcStatus status = 1;
+  PerformanceSnapshotDto snapshot = 2;
 }

@@ -286,7 +286,7 @@ The benchmark harness builds a real-ROM C64 PAL machine through `ArchitectureBui
 ### Traceability
 
 - **Related FR Area(s):** FR-PERF-RUNFRAME-001
-- **Related TR Area(s):** TR-CORE-CYCLE-001, TR-CORE-DET-001, TR-PERF-ALLOC-001, TR-PERF-AOT-001
+- **Related TR Area(s):** TR-CORE-CYCLE-001, TR-CORE-DET-001, TR-PERF-ALLOC-001
 
 ---
 
@@ -335,6 +335,40 @@ Host lifecycle, status, media, state, capture, diagnostics, and session ownershi
 ### Traceability
 
 - **Related FR Area(s):** FR-HOST, FR-CFG
+
+---
+
+## TEST-HOST-DIAG-001: Diagnostics Host Attach Tests
+
+**ID:** TEST-HOST-DIAG-001
+**Title:** Diagnostics Host Attach Tests
+**Priority:** P0 -- Critical
+
+### Condition
+
+Diagnostics protocol descriptors, session enumeration, host info, current UI session resolution, performance snapshots, streaming snapshots, attach file lifecycle, and development-scoped reflection are verified with red-first unit and in-process gRPC tests.
+
+### Traceability
+
+- **Related FR Area(s):** FR-HOST-DIAG-001
+- **Related TR Area(s):** TR-HOST-DIAG-001, TR-HOST-DIAG-002, TR-HOST-DIAG-003, TR-HOST-DIAG-004
+
+---
+
+## TEST-UI-DIAG-001: UI Debug Attach Info Tests
+
+**ID:** TEST-UI-DIAG-001
+**Title:** UI Debug Attach Info Tests
+**Priority:** P1 -- Important
+
+### Condition
+
+The Avalonia shell exposes a Copy Debug Attach Info command and formats endpoint, current session id, app version, attach JSON, and latest status for clipboard use.
+
+### Traceability
+
+- **Related FR Area(s):** FR-HOST-DIAG-001, FR-UI
+- **Related TR Area(s):** TR-HOST-DIAG-002, TR-HOST-DIAG-003
 
 ---
 

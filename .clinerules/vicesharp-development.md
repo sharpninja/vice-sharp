@@ -5,7 +5,7 @@ Project specific rules for ViceSharp Commodore emulator development. Follow thes
 - Build after every change, ensure zero errors and zero warnings
 - Follow Public API specification exactly
 - Implement interfaces in batch order: Abstractions → Core → Chips → Architectures
-- Verify NativeAOT compatibility for all non-test code
+- Keep the per-cycle hot path free of reflection and avoid unnecessary allocations
 - Zero allocations on hot path (cycle execution)
 - All state is plain structs/records, no base classes
 

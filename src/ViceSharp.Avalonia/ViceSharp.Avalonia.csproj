@@ -9,10 +9,9 @@
     <ApplicationIcon>Assets\vicesharp.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!-- BUG-THROTTLE-001: JIT build (NativeAOT disabled). Background (concurrent)
-         workstation GC keeps gen2 collections off the stop-the-world path so the
-         emulation worker thread is not stalled; tiered PGO lets the JIT re-optimise
-         the hot cycle loop at runtime. -->
+    <!-- BUG-THROTTLE-001: Background (concurrent) workstation GC keeps gen2
+         collections off the stop-the-world path so the emulation worker thread is
+         not stalled; tiered PGO lets the JIT re-optimise the hot cycle loop at runtime. -->
     <ServerGarbageCollection>false</ServerGarbageCollection>
     <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
     <TieredCompilation>true</TieredCompilation>
@@ -39,14 +38,12 @@
 
   <!-- UI-REMOTECTRL-001: embeddable Avalonia visual-tree inspection/control
        server over gRPC. Debug-only dev tooling, disabled at runtime by default
-       (opt-in via VICESHARP_REMOTECONTROL_* env switches). Excluded from the
-       NativeAOT/trimmed publish that feeds the MSI: the gRPC server SDK is not
-       trim/AOT-safe (IL2104 + ilc failure), and it is not needed in a shipped
-       build. The REMOTECONTROL define gates the wiring in App.axaml.cs. -->
-  <PropertyGroup Condition="'$(PublishAot)' != 'true'">
+       (opt-in via VICESHARP_REMOTECONTROL_* env switches). The REMOTECONTROL
+       define gates the wiring in App.axaml.cs. -->
+  <PropertyGroup>
     <DefineConstants>$(DefineConstants);REMOTECONTROL</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="'$(PublishAot)' != 'true'">
+  <ItemGroup>
     <PackageReference Include="SharpNinja.Avalonia.RemoteControl.Server" />
   </ItemGroup>
 

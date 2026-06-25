@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
@@ -13,7 +14,7 @@ namespace ViceSharp.Avalonia;
 public partial class MainWindow : Window
 {
     private readonly IHostProtocolClient _hostClient;
-    private readonly IAsyncDisposable? _localHost;
+    private readonly InProcessGrpcHost? _localHost;
     private readonly ILocalVideoFrameSource? _localVideoFrameSource;
     private readonly AttachPanelViewModel _attachViewModel;
     private readonly ShellViewModel _shell;
@@ -34,6 +35,8 @@ public partial class MainWindow : Window
         _hostClient = hostConnection.Client;
         _localHost = hostConnection.LocalHost;
         _localVideoFrameSource = hostConnection.VideoFrameSource;
+        if (_hostClient is GrpcHostProtocolClient grpcClient)
+            grpcClient.SessionIdChanged += OnHostClientSessionIdChanged;
         _attachViewModel = new AttachPanelViewModel(_hostClient);
         _shell = new ShellViewModel(_hostClient, _attachViewModel);
         DataContext = _attachViewModel;
@@ -187,6 +190,9 @@ public partial class MainWindow : Window
 
     protected override async void OnClosed(EventArgs e)
     {
+        if (_hostClient is GrpcHostProtocolClient grpcClient)
+            grpcClient.SessionIdChanged -= OnHostClientSessionIdChanged;
+
         if (_hostClient is IDisposable disposableClient)
             disposableClient.Dispose();
 
@@ -496,6 +502,26 @@ public partial class MainWindow : Window
     private void OnMenuOpenMonitor(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => OpenMonitorWindow();
 
+    private async void OnMenuCopyDebugAttachInfo(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        try
+        {
+            var response = await _hostClient.GetStatusAsync().ConfigureAwait(true);
+            ApplyStatus(response.EmulatorStatus, response.Status);
+            var attachJson = _localHost is null
+                ? string.Empty
+                : await _localHost.ReadDebugAttachInfoAsync().ConfigureAwait(true);
+            var text = DebugAttachInfoProvider.BuildClipboardText(attachJson, response.EmulatorStatus);
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+            if (clipboard is not null)
+                await clipboard.SetTextAsync(text).ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
     private void OnMenuAbout(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
         var about = new Window
@@ -554,7 +580,10 @@ public partial class MainWindow : Window
                 }
 
                 if (!string.IsNullOrWhiteSpace(sessionId))
+                {
                     _video.UpdateFrom(_localVideoFrameSource, sessionId);
+                    _localHost?.DiagnosticsState.MarkFrameUpdated();
+                }
                 return;
             }
 
@@ -574,6 +603,7 @@ public partial class MainWindow : Window
         {
             var response = await _hostClient.GetStatusAsync().ConfigureAwait(true);
             ApplyStatus(response.EmulatorStatus, response.Status);
+            _localHost?.DiagnosticsState.MarkStatusUpdated();
         }
         catch
         {
@@ -587,6 +617,26 @@ public partial class MainWindow : Window
         _iecMonitorViewModel.ApplyStatus(status, rpcStatus);
         if (rpcStatus.IsSuccess && status is not null)
             _attachViewModel.ApplyStatus(status);
+    }
+
+    private async void OnHostClientSessionIdChanged(object? sender, string sessionId)
+    {
+        try
+        {
+            await UpdateDiagnosticsSessionAsync(sessionId).ConfigureAwait(true);
+        }
+        catch
+        {
+            // Diagnostics metadata must not destabilize the UI.
+        }
+    }
+
+    private async Task UpdateDiagnosticsSessionAsync(string sessionId)
+    {
+        if (_localHost is null || string.IsNullOrWhiteSpace(sessionId))
+            return;
+
+        await _localHost.UpdateCurrentSessionAsync(sessionId).ConfigureAwait(true);
     }
 
     private async void OnVideoKeyDown(object? sender, KeyEventArgs e)
@@ -735,6 +785,6 @@ public partial class MainWindow : Window
 
     private sealed record HostConnection(
         IHostProtocolClient Client,
-        IAsyncDisposable? LocalHost,
+        InProcessGrpcHost? LocalHost,
         ILocalVideoFrameSource? VideoFrameSource = null);
 }

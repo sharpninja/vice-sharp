@@ -247,6 +247,7 @@ public sealed class X64ScVariantLockstepTests
         try
         {
             AttachDiskToManagedDrive(machine, 8, diskImage);
+            ViceNativeBridge.ResetMachine(native);
             ViceNativeBridge.AttachDisk(native, 8, 0, diskPath);
 
             machine.Reset();
@@ -488,6 +489,7 @@ public sealed class X64ScVariantLockstepTests
         try
         {
             AttachDiskToManagedDrive(machine, 8, diskImage);
+            ViceNativeBridge.ResetMachine(native);
             ViceNativeBridge.AttachDisk(native, 8, 0, diskPath);
 
             machine.Reset();
@@ -1407,15 +1409,31 @@ public sealed class X64ScVariantLockstepTests
         var image = new D64Image();
         image.Format();
 
+        var directory = image.GetSector(18, 1);
+        directory[0] = 0x00;
+        directory[1] = 0xFF;
+        directory[2] = 0x82;
+        directory[3] = 17;
+        directory[4] = 0;
+        "LOCKSTEP"u8.CopyTo(directory[5..]);
+        directory.Slice(13, 8).Fill(0xA0);
+
+        var file = image.GetSector(17, 0);
+        file[0] = 0x00;
+        file[1] = 0xFF;
         for (var offset = 0; offset < 256; offset++)
-            image.WriteSectorByte(18, 1, offset, (byte)(255 - offset));
+            file[offset] = (byte)(255 - offset);
+        file[0] = 0x00;
+        file[1] = 0xFF;
 
         return image.ToArray();
     }
 
     private static string WriteTempD64Image(byte[] diskImage)
     {
-        var path = Path.Combine(Path.GetTempPath(), $"vice-sharp-{Guid.NewGuid():N}.d64");
+        var directory = Path.Combine(AppContext.BaseDirectory, "d64-attach-temp");
+        Directory.CreateDirectory(directory);
+        var path = Path.Combine(directory, $"vice-sharp-{Guid.NewGuid():N}.d64");
         File.WriteAllBytes(path, diskImage);
         return path;
     }

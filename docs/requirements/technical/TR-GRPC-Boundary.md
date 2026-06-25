@@ -43,7 +43,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 7. **Artifact Shape:** Snapshots, screenshots, and media payloads use bounded byte payloads or host-owned artifact handles with checksums.
 8. **Backpressure:** Remote video may drop stale committed frames; audio preserves order or reports explicit drops; neither policy can mutate emulation state.
 9. **Error Model:** All services return structured error codes, messages, and recoverability hints without leaking implementation exceptions across the boundary.
-10. **AoT Compatibility:** Generated clients, explicit service registration, and serializer configuration must be compatible with .NET 10 NativeAOT and trimming.
+10. **Generated Contract Safety:** Generated clients, explicit service registration, and serializer configuration must avoid runtime contract discovery on hot paths.
 11. **Default Exposure:** The host listens on a local endpoint by default. Remote access requires explicit configuration.
 12. **Local Renderer Boundary:** The in-process Avalonia host may bind a dedicated render surface directly to a local emulator/frame source. The binding is owned by the host/composition layer, not ViewModels, and is limited to frame presentation data.
 
@@ -55,7 +55,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 4. An integration test can start the host, connect a remote UI client, receive a frame stream, submit input, request a screenshot, and shut down cleanly.
 5. Architecture tests enforce that only host/composition assemblies reference both concrete core assemblies and boundary service implementations.
 6. Streaming tests verify that client disconnects, slow frame consumers, and reconnects do not mutate emulator state.
-7. NativeAOT publish validation includes the host and at least one reference UI client.
+7. Release validation includes the host and at least one reference UI client.
 8. An in-process Avalonia rendering test can bind the host-owned render surface to a local frame source without introducing `ViceSharp.Core` or runtime-internal references into ViewModels.
 
 ### Verification Method
@@ -65,7 +65,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 - Host/UI integration smoke tests over a loopback gRPC channel for control and remote-output behavior.
 - Local renderer boundary tests for the host-owned Avalonia render surface.
 - Streaming backpressure and reconnect tests.
-- NativeAOT publish validation for host and reference UI client.
+- Release publish validation for host and reference UI client.
 
 ### Related FRs
 
@@ -80,7 +80,6 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 
 - TR-LIB-001 (Library-first design keeps core embeddable inside the host)
 - TR-MVVM-001 (UI ViewModels remain isolated from concrete core types)
-- TR-AOT-001 (Generated contracts and host services must be AoT compatible)
 - TR-PLAT-001 (The boundary must support desktop hosts across target platforms)
 
 ### Design Decisions

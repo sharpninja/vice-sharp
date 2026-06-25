@@ -17,11 +17,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PublishAot>true</PublishAot>
-    <TrimMode>full</TrimMode>
-    <TrimmerDefaultAction>link</TrimmerDefaultAction>
-    <DebuggerSupport>false</DebuggerSupport>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
 </Project>

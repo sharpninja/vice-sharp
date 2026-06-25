@@ -36,6 +36,8 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
     public string SessionId => _sessionId;
 
+    public event EventHandler<string>? SessionIdChanged;
+
     public bool TrueDrive => _trueDrive;
 
     public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
@@ -61,7 +63,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
                 // Best-effort; the new session is created fresh regardless.
             }
 
-            _sessionId = string.Empty;
+            SetSessionId(string.Empty);
         }
 
         return ValueTask.CompletedTask;
@@ -569,7 +571,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         if (!status.IsSuccess)
             throw new InvalidOperationException(status.Message);
 
-        _sessionId = response.SessionId;
+        SetSessionId(response.SessionId);
         var started = await _hostClient.StartAsync(
             new GrpcContracts.SessionRequest { SessionId = _sessionId },
             cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -578,6 +580,15 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             throw new InvalidOperationException(startedStatus.Message);
 
         return _sessionId;
+    }
+
+    private void SetSessionId(string sessionId)
+    {
+        if (StringComparer.Ordinal.Equals(_sessionId, sessionId))
+            return;
+
+        _sessionId = sessionId;
+        SessionIdChanged?.Invoke(this, sessionId);
     }
 
     private GrpcContracts.SessionRequest CreateSessionRequest()

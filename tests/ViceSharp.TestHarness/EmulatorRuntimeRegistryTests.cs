@@ -334,6 +334,31 @@ public sealed class EmulatorRuntimeRegistryTests
         }
     }
 
+    /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-001 / TEST-HOST-DIAG-001.
+    /// Use case: diagnostics session enumeration reads the registry without
+    /// creating a probe session and without exposing a live mutable collection.
+    /// Acceptance: Snapshot returns all sessions present at the time it is
+    /// called, and later registry removals do not mutate the returned array.
+    /// </summary>
+    [Fact]
+    public void Snapshot_ReturnsAllSessionsWithoutMutatingRegistry()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var first = CreateSession("diag-first");
+        var second = CreateSession("diag-second");
+        registry.Add(first);
+        registry.Add(second);
+
+        var snapshot = registry.Snapshot();
+        Assert.Equal(["diag-first", "diag-second"], snapshot.Select(session => session.SessionId).Order());
+
+        Assert.True(registry.Remove(first.SessionId));
+        Assert.Equal(["diag-first", "diag-second"], snapshot.Select(session => session.SessionId).Order());
+        Assert.False(registry.TryGet(first.SessionId, out _));
+        Assert.True(registry.TryGet(second.SessionId, out _));
+    }
+
     private static EmulatorRuntimeSession CreateSession(string? sessionId = null)
     {
         var factory = new DefaultEmulatorRuntimeFactory(

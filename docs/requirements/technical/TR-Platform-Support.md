@@ -49,7 +49,7 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 
 1. The emulation core library (`ViceSharp.Core`) compiles and runs on all 6 target RIDs without conditional compilation (`#if`).
 2. The CI/CD pipeline builds and tests on Windows x64, Ubuntu x64, and macOS ARM64.
-3. NativeAOT publish succeeds on all 6 target RIDs (per TR-AOT-001).
+3. Release publish succeeds on all supported target RIDs.
 4. Audio output plays correctly on all three OS platforms (verified by manual testing and automated A/V sync tests).
 5. Input devices (keyboard, gamepad) are recognized on all platforms.
 6. The Lorenz test suite passes on all platforms (same pass rate).
@@ -59,11 +59,10 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 
 - Multi-platform CI matrix (GitHub Actions for Windows/Linux/macOS).
 - Cross-platform integration tests running a subset of the Lorenz test suite.
-- NativeAOT publish smoke test on each target RID.
+- Release publish smoke test on each target RID.
 
 ### Related TRs
 
-- TR-AOT-001 (NativeAOT publish targets all platforms)
 - TR-SIMD-001 (SIMD support differs between x64 SSE/AVX and ARM64 NEON)
 - TR-LIB-001 (Core library is platform-agnostic)
 - TR-MEDIA-001 (FFmpeg native libraries are platform-specific)

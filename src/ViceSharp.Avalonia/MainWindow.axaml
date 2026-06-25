@@ -65,6 +65,7 @@
                 <MenuItem Header="Step frame" Click="OnStepFrame" />
                 <Separator />
                 <MenuItem Header="Open monitor" Click="OnMenuOpenMonitor" />
+                <MenuItem Header="Copy Debug Attach Info" Click="OnMenuCopyDebugAttachInfo" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About ViceSharp" Click="OnMenuAbout" />

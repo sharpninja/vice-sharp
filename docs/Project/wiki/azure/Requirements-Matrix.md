@@ -119,7 +119,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-VIC-010 | Tracked | Functional-Requirements.md |
 | TR-ADHOC-YAML-001 | Tracked | Technical-Requirements.md |
 | TR-ALLOC-001 | Tracked | Technical-Requirements.md |
-| TR-AOT-001 | Tracked | Technical-Requirements.md |
 | TR-BUILD-001 | Tracked | Technical-Requirements.md |
 | TR-CYCLE-001 | Tracked | Technical-Requirements.md |
 | TR-DET-001 | Tracked | Technical-Requirements.md |
@@ -217,7 +216,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MED-VIDEO-001 | Tracked | Technical-Requirements.md |
 | TR-PACESEL-STRAT-001 | Tracked | Technical-Requirements.md |
 | TR-PERF-ALLOC-001 | Tracked | Technical-Requirements.md |
-| TR-PERF-AOT-001 | Tracked | Technical-Requirements.md |
 | TR-PUBSUB-PERF-001 | Tracked | Technical-Requirements.md |
 | TR-REMOTECTRL-001 | Tracked | Technical-Requirements.md |
 | TR-REMOTECTRL-SERVER-001 | Tracked | Technical-Requirements.md |

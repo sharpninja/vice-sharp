@@ -465,7 +465,7 @@ Phase 1 complete:
 dotnet build .\ViceSharp.slnx --nologo
 dotnet test .\ViceSharp.slnx --nologo
 dotnet test .\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj --nologo --filter "FullyQualifiedName~X64ScVariantLockstepTests"
-dotnet publish .\src\ViceSharp.Console\ViceSharp.Console.csproj -c Release -r win-x64 --self-contained /p:PublishAot=true
+dotnet publish .\src\ViceSharp.Console\ViceSharp.Console.csproj -c Release -r win-x64 --self-contained /p:PublishReadyToRun=true
 git diff --check
 ```
 

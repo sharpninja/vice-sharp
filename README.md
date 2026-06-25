@@ -1,8 +1,8 @@
 # ViceSharp
 
-A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10 with NativeAOT support.
+A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10.
 
-> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, verified by an automated per-cycle diff harness across the no-cartridge C64 family (322 x64sc lockstep cases; full suite 1841 passing, 0 failing). See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
+> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, and the current validation baseline is `2092 passed / 5 skipped / 0 failed` in `ViceSharp.TestHarness`. See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
 
 ## User documentation
 
-- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, what works today
+- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, capture, diagnostics attach, what works today
 - [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) - binary + flag mapping, behaviour caveats, performance / accuracy, bug compatibility
 - [docs/ROMs.md](docs/ROMs.md) - legal ROM options, environment variable, directory layout
 - [docs/](docs/README.md) - full documentation index (architecture, public API, iteration plans, diagrams)
@@ -34,14 +34,13 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
 ## Status
 
 ✅ **Iteration 0 (Foundations)** — Complete. All core primitives implemented, lock-free and zero allocation.
-✅ **Iteration 1 (C64 Bringup)** — **Complete (Phase 1 closed 2026-05-31; chip-glue boundary closeout 2026-06-14)**:
-  - Full suite green: 1841 passed / 1 skipped / 0 failed (the single skip is the `VICESHARP_CLOCK_BENCH`-gated perf benchmark, which passes on demand)
-  - x64sc lockstep: 322 passed (10-frame depth across no-cart variants)
+✅ **Iteration 1 (C64 Bringup)** — **Complete (Phase 1 closed 2026-05-31; diagnostics/attach surface updated 2026-06-25)**:
+  - Full `ViceSharp.TestHarness` suite green: 2092 passed / 5 skipped / 0 failed (skips are opt-in clock-throughput benchmarks)
+  - x64sc lockstep and D64 attach paths are covered across deterministic no-cartridge variants
   - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
-  - Snapshot/capture/input/testbench/launcher all closed: see `docs/handoff.md`
-  - Closeout remediation: `ARCH-CHIPGLUE-001` moved all C64/C1541 board and device glue into Core machine/device adapters so reusable chip cores stay machine-agnostic. Two post-slice stabilizations followed: the gRPC keyboard-matrix integration test now configures CIA1 DDRB before scanning (Mos6526 reports DDR-gated port pins), and a lock-free `LockFreePubSub` torn-struct race was fixed.
-  - The single skipped test is an opt-in clock-throughput benchmark (`VICESHARP_CLOCK_BENCH=1`), not a functional gap.
-  - Post-Phase 1 deferrals: PERF-BENCHMARK-001 native baseline, advanced cartridge mappers, cross-platform host shells, 8580 SID filter deepening, wiki publishing automation. See handoff.md.
+  - Snapshot/capture/input/testbench/launcher surfaces are in place, including gRPC capture and diagnostics services
+  - Desktop packaging is self-contained JIT + ReadyToRun through Nuke `PublishMsi`; native ahead-of-time publishing is no longer a project requirement
+  - External debuggers can attach deterministically through `%LOCALAPPDATA%\ViceSharp\debug-attach.json` and `DiagnosticsService`
 
 Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
@@ -54,7 +53,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-31` at HEAD `32880a4` (Phase 1 marathon close - all six original deferral items pulled back into scope and shipped; see `docs/handoff.md`). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). AOT publish: gate green via YamlStream representation-model rewrite. Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. 8580 SID: real Chamberlin SVF on linear cutoff curve. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-31` at HEAD `32880a4` (Phase 1 marathon close - all six original deferral items pulled back into scope and shipped; see `docs/handoff.md`). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. 8580 SID: real Chamberlin SVF on linear cutoff curve. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
 
 **Legend** — State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -152,7 +151,12 @@ build.cmd Compile     # Windows
 | `Compile` | Build with TreatWarningsAsErrors |
 | `Test` | Run unit tests (excludes determinism and the on-demand aiUnit AI reviews) |
 | `DeterminismTest` | Run determinism verification tests |
-| `PublishAot` | Publish NativeAOT console app |
+| `RunConsole` | Run the console reference shell |
+| `RunAvalonia` | Run the Avalonia desktop UI |
+| `PublishWiki` | Generate requirements wiki exports |
+| `PublishMsi` | Publish the self-contained desktop app and package `artifacts/installer/ViceSharp.msi` |
+| `InstallMsi` | Install the locally built MSI |
+| `PublishWinget` | Generate winget package metadata for the MSI |
 | `CiAzure` | Full Azure DevOps CI pipeline |
 | `CiGitHub` | Full GitHub Actions CI pipeline |
 
@@ -165,7 +169,7 @@ ViceSharp is designed as a **library-first emulator**:
 - **ViceSharp.Chips** — CPU (6502/6510/8502), VIC-II, SID, CIA, VIA, PLA
 - **ViceSharp.Architectures** — machine definitions (C64, VIC-20, C128, PET, Plus/4)
 - **ViceSharp.SourceGen** — Roslyn source generator for device registration boilerplate
-- **ViceSharp.Console** — NativeAOT reference shell
+- **ViceSharp.Console** — command-line reference shell
 - **ViceSharp.Avalonia** — Avalonia 12.x desktop UI
 
 Key design principles:
@@ -173,7 +177,7 @@ Key design principles:
 - **POCO model** — all state is plain C# structs/records, no base classes
 - **Mutation queue** — all state changes flow through an auditable queue
 - **Deterministic** — bit-exact replay given identical inputs
-- **NativeAOT compatible** — no reflection on the hot path
+- **Reflection-light hot path** — no runtime reflection in per-cycle emulation
 
 See [docs/Architecture.md](docs/Architecture.md) for the full design.
 
@@ -194,5 +198,4 @@ ViceSharp is a derivative work of VICE, which is also licensed under GPL-2.0-or-
 1. Fork on Azure DevOps (`dev.azure.com/McpServer/VICE-Sharp`)
 2. Follow the Byrd Development Process: tests first, then implementation
 3. All tests must pass before submitting a PR
-4. NativeAOT compatibility is required for all non-test assemblies
-5. Optional: run the aiUnit AI Code Review / Project Review before a PR (see [docs/AI-Review.md](docs/AI-Review.md))
+4. Optional: run the aiUnit AI Code Review / Project Review before a PR (see [docs/AI-Review.md](docs/AI-Review.md))

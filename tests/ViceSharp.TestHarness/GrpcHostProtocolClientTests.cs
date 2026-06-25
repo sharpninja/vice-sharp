@@ -297,4 +297,27 @@ public sealed class GrpcHostProtocolClientTests
     {
         Assert.Throws<ArgumentNullException>(() => new GrpcHostProtocolClient(null!));
     }
+
+    /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-002 / TEST-UI-DIAG-001.
+    /// Use case: the UI diagnostics bridge needs to update current-session
+    /// state when the gRPC client lazily creates or recreates a session.
+    /// Acceptance: SessionIdChanged is raised with the new non-empty session id.
+    /// </summary>
+    [Fact]
+    public async Task SessionIdChanged_RaisesWhenCurrentSessionChanges()
+    {
+        await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+        using var client = new GrpcHostProtocolClient(host.Endpoint);
+        var eventInfo = typeof(GrpcHostProtocolClient).GetEvent("SessionIdChanged");
+        Assert.NotNull(eventInfo);
+        string? observed = null;
+        EventHandler<string> handler = (_, sessionId) => observed = sessionId;
+        eventInfo.AddEventHandler(client, handler);
+
+        await client.GetStatusAsync(TestContext.Current.CancellationToken);
+
+        Assert.False(string.IsNullOrWhiteSpace(observed));
+        Assert.Equal(client.SessionId, observed);
+    }
 }

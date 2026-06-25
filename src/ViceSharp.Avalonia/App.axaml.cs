@@ -17,9 +17,8 @@ public partial class App : Application
 #if REMOTECONTROL
     // UI-REMOTECTRL-001: keep the lifetime registration + provider alive for the
     // process lifetime so the embedded remote-control server is started on
-    // Avalonia startup and stopped on exit. Debug-only dev tooling; excluded
-    // from the NativeAOT/trimmed MSI publish (the gRPC server SDK is not
-    // trim/AOT-safe).
+    // Avalonia startup and stopped on exit. Debug-only dev tooling, disabled
+    // at runtime by default unless explicitly enabled through configuration.
     private IServiceProvider? _remoteControlServices;
     private IDisposable? _remoteControlLifetime;
 #endif

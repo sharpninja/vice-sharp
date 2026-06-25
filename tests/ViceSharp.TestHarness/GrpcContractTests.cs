@@ -29,6 +29,35 @@ public sealed class GrpcContractTests
     }
 
     /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-001 / TEST-HOST-DIAG-001.
+    /// Use case: local tools such as grpcurl must discover a read-only
+    /// diagnostics service without reading repository source.
+    /// Acceptance: the generated service descriptor exists with the host-info,
+    /// session-list, current-session, snapshot, and streaming snapshot RPCs.
+    /// </summary>
+    [Fact]
+    public void DiagnosticsServiceDescriptor_IsGeneratedWithDiscoveryRpcSurface()
+    {
+        var serviceType = DiagnosticsReflectionTestHelpers.RequiredType(
+            "ViceSharp.Protocol.Grpc.DiagnosticsService, ViceSharp.Protocol");
+        var descriptor = serviceType.GetProperty("Descriptor")?.GetValue(null);
+        Assert.NotNull(descriptor);
+        Assert.Equal("vice_sharp.v1.DiagnosticsService", descriptor.GetType().GetProperty("FullName")?.GetValue(descriptor));
+
+        var methods = Assert.IsAssignableFrom<System.Collections.IEnumerable>(
+                descriptor.GetType().GetProperty("Methods")?.GetValue(descriptor))
+            .Cast<object>()
+            .Select(method => method.GetType().GetProperty("Name")?.GetValue(method)?.ToString())
+            .ToArray();
+
+        Assert.Contains("GetHostInfo", methods);
+        Assert.Contains("ListSessions", methods);
+        Assert.Contains("GetCurrentSession", methods);
+        Assert.Contains("GetPerformanceSnapshot", methods);
+        Assert.Contains("WatchPerformance", methods);
+    }
+
+    /// <summary>
     /// FR: FR-HOST-001, TR: TR-GRPC-BOUNDARY-001.
     /// Use case: The committed protobuf source must continue to declare the
     /// full set of services, RPCs and message fields that the generated gRPC
@@ -94,6 +123,31 @@ public sealed class GrpcContractTests
         Assert.Contains("rpc WriteMemory", proto);
         Assert.Contains("MonitorReadMemoryRequest", proto);
         Assert.Contains("MonitorMemoryWriteResponse", proto);
+    }
+
+    /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-001 / TEST-HOST-DIAG-001.
+    /// Use case: the diagnostics snapshot contract must support callers that
+    /// know a specific session id and callers that want the current UI session.
+    /// Acceptance: the proto source declares optional-session performance
+    /// snapshot messages plus host, process, pump, and UI diagnostic counters.
+    /// </summary>
+    [Fact]
+    public void DiagnosticsSnapshotMessages_ExposeOptionalSessionAndPerformanceShape()
+    {
+        var repoRoot = RepoRoot;
+        var protoPath = Path.Combine(repoRoot, "src", "ViceSharp.Protocol", ViceSharpProtocol.ProtoFile.Replace('/', Path.DirectorySeparatorChar));
+        var proto = File.ReadAllText(protoPath);
+
+        Assert.Contains("message PerformanceSnapshotRequest", proto);
+        Assert.Contains("string session_id = 1", proto);
+        Assert.Contains("message PerformanceSnapshotResponse", proto);
+        Assert.Contains("message HostInfoDto", proto);
+        Assert.Contains("message SessionSummaryDto", proto);
+        Assert.Contains("message ProcessDiagnosticsDto", proto);
+        Assert.Contains("message PumpDiagnosticsDto", proto);
+        Assert.Contains("message UiDiagnosticsDto", proto);
+        Assert.Contains("EmulatorStatusDto emulator_status", proto);
     }
 
     private static string RepoRoot

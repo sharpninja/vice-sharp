@@ -82,13 +82,6 @@ sealed partial class Build : NukeBuild
                 .SetFilter("Category=Determinism"));
         });
 
-    Target PublishAot => _ => _
-        .DependsOn(Clean, Restore)
-        .Executes(() =>
-        {
-            Serilog.Log.Information("PublishAot target — no publishable projects yet");
-        });
-
     Target RomFetch => _ => _
         .Executes(() =>
         {
@@ -195,7 +188,7 @@ sealed partial class Build : NukeBuild
     [Parameter("Winget package identifier (publisher.identifier). Default sharpninja.ViceSharp.")]
     readonly string WingetPackageId = "sharpninja.ViceSharp";
 
-    [Parameter("Runtime identifier for the AOT publish that feeds PublishMsi. Default win-x64.")]
+    [Parameter("Runtime identifier for the desktop publish that feeds PublishMsi. Default win-x64.")]
     readonly string MsiRuntimeIdentifier = "win-x64";
 
     AbsolutePath AvaloniaProject => RootDirectory / "src" / "ViceSharp.Avalonia" / "ViceSharp.Avalonia.csproj";
@@ -212,27 +205,22 @@ sealed partial class Build : NukeBuild
     AbsolutePath WingetOutputDir => ArtifactsDirectory / "winget";
 
     /// <summary>
-    /// Publish the ViceSharp.Avalonia desktop GUI as a NativeAOT,
-    /// self-contained, trimmed, single-file Windows binary, then pack it
-    /// into a per-machine MSI via the WixToolset.Sdk wixproj at
-    /// installer/. The MSI lands at artifacts/installer/ViceSharp.msi
-    /// with version <see cref="MsiVersion"/>. AOT publish collapses the
-    /// previously-needed 391-file publish tree down to one native exe
-    /// plus a handful of native dependencies (Skia, HarfBuzz, ANGLE),
-    /// so the MSI is a fraction of the non-AOT footprint.
+    /// Publish the ViceSharp.Avalonia desktop GUI as a self-contained
+    /// Windows desktop application, then pack it into a per-machine MSI via
+    /// the WixToolset.Sdk wixproj at installer/. The MSI lands at
+    /// artifacts/installer/ViceSharp.msi with version <see cref="MsiVersion"/>.
     /// </summary>
     Target PublishMsi => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
             // Step 1: self-contained JIT publish of ViceSharp.Avalonia.
-            // NativeAOT was disabled deliberately (BUG-THROTTLE-001): the tiered
-            // JIT + dynamic PGO runs the dispatch-heavy cycle-accurate emulation
-            // measurably faster than trimmed AOT (the per-cycle instruction stepping
-            // cost that AOT could not optimise away), and a low-pause background GC
-            // (set in the .csproj) keeps the worker from stalling. ReadyToRun gives
-            // a fast cold start while the JIT still re-optimises hot paths at runtime.
-            // No trimming: it would risk Avalonia/gRPC reflection without AOT's safety.
+            // Tiered JIT + dynamic PGO runs the dispatch-heavy cycle-accurate
+            // emulation measurably faster than trimmed native publishing, and a
+            // low-pause background GC (set in the .csproj) keeps the worker from
+            // stalling. ReadyToRun gives a fast cold start while the JIT still
+            // re-optimises hot paths at runtime. No trimming: it would risk
+            // Avalonia/gRPC reflection-heavy infrastructure.
             Serilog.Log.Information("Publishing ViceSharp.Avalonia (self-contained JIT + ReadyToRun, {Rid}) -> {Out}",
                 MsiRuntimeIdentifier, AvaloniaPublishDir);
             DotNetPublish(s => s
@@ -240,7 +228,6 @@ sealed partial class Build : NukeBuild
                 .SetConfiguration("Release")
                 .SetRuntime(MsiRuntimeIdentifier)
                 .SetSelfContained(true)
-                .SetProperty("PublishAot", "false")
                 .SetProperty("PublishTrimmed", "false")
                 .SetProperty("PublishReadyToRun", "true")
                 .SetProperty("PublishSingleFile", "false")

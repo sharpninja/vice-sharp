@@ -3,6 +3,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using ViceSharp.Host.Diagnostics;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 using HostMap = ViceSharp.Host.Services.GrpcHostMapping;
@@ -17,6 +18,7 @@ public static class GrpcHostServiceAdapters
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddGrpc();
+        services.AddGrpcReflection();
         services.AddSingleton<EmulatorRuntimeRegistry>();
         services.AddSingleton<IEmulatorRuntimeFactory, DefaultEmulatorRuntimeFactory>();
         services.AddSingleton<EmulatorHostService>();
@@ -27,6 +29,8 @@ public static class GrpcHostServiceAdapters
         services.AddSingleton<MonitorServiceHost>();
         services.AddSingleton<SnapshotServiceHost>();
         services.AddSingleton<CaptureServiceHost>();
+        services.AddSingleton<HostDiagnosticsState>();
+        services.AddSingleton<DiagnosticsServiceHost>();
         services.AddSingleton<ILocalVideoFrameSource, LocalVideoFrameSource>();
         // Host-owned emulation worker thread (docs/Decoupling.md): advances Running
         // sessions in real time off the UI thread. GetFrameAsync is a pure pull.
@@ -40,6 +44,7 @@ public static class GrpcHostServiceAdapters
         services.AddSingleton<IMonitorService>(provider => provider.GetRequiredService<MonitorServiceHost>());
         services.AddSingleton<ISnapshotService>(provider => provider.GetRequiredService<SnapshotServiceHost>());
         services.AddSingleton<ICaptureService>(provider => provider.GetRequiredService<CaptureServiceHost>());
+        services.AddSingleton<IDiagnosticsService>(provider => provider.GetRequiredService<DiagnosticsServiceHost>());
         return services;
     }
 
@@ -55,7 +60,75 @@ public static class GrpcHostServiceAdapters
         endpoints.MapGrpcService<GrpcMonitorServiceHost>();
         endpoints.MapGrpcService<GrpcSnapshotServiceHost>();
         endpoints.MapGrpcService<GrpcCaptureServiceHost>();
+        endpoints.MapGrpcService<GrpcDiagnosticsServiceHost>();
         return endpoints;
+    }
+}
+
+public sealed class GrpcDiagnosticsServiceHost : GrpcContracts.DiagnosticsService.DiagnosticsServiceBase
+{
+    private readonly IDiagnosticsService _inner;
+
+    public GrpcDiagnosticsServiceHost(IDiagnosticsService inner)
+    {
+        _inner = inner;
+    }
+
+    public override async Task<GrpcContracts.GetHostInfoResponse> GetHostInfo(
+        GrpcContracts.EmptyRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.GetHostInfoAsync(context.CancellationToken).ConfigureAwait(false);
+        return new GrpcContracts.GetHostInfoResponse
+        {
+            Status = HostMap.Map(response.Status),
+            HostInfo = HostMap.Map(response.HostInfo)
+        };
+    }
+
+    public override async Task<GrpcContracts.ListSessionsResponse> ListSessions(
+        GrpcContracts.EmptyRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.ListSessionsAsync(context.CancellationToken).ConfigureAwait(false);
+        var grpc = new GrpcContracts.ListSessionsResponse { Status = HostMap.Map(response.Status) };
+        grpc.Sessions.AddRange(response.Sessions.Select(HostMap.Map));
+        return grpc;
+    }
+
+    public override async Task<GrpcContracts.GetCurrentSessionResponse> GetCurrentSession(
+        GrpcContracts.EmptyRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.GetCurrentSessionAsync(context.CancellationToken).ConfigureAwait(false);
+        return new GrpcContracts.GetCurrentSessionResponse
+        {
+            Status = HostMap.Map(response.Status),
+            Session = HostMap.Map(response.Session)
+        };
+    }
+
+    public override async Task<GrpcContracts.PerformanceSnapshotResponse> GetPerformanceSnapshot(
+        GrpcContracts.PerformanceSnapshotRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.GetPerformanceSnapshotAsync(
+            new PerformanceSnapshotRequest(request.SessionId, request.IntervalMs),
+            context.CancellationToken).ConfigureAwait(false);
+        return HostMap.Map(response);
+    }
+
+    public override async Task WatchPerformance(
+        GrpcContracts.WatchPerformanceRequest request,
+        IServerStreamWriter<GrpcContracts.PerformanceSnapshotResponse> responseStream,
+        ServerCallContext context)
+    {
+        await foreach (var response in _inner.WatchPerformanceAsync(
+                           new WatchPerformanceRequest(request.SessionId, request.IntervalMs),
+                           context.CancellationToken).ConfigureAwait(false))
+        {
+            await responseStream.WriteAsync(HostMap.Map(response), context.CancellationToken).ConfigureAwait(false);
+        }
     }
 }
 
@@ -883,6 +956,108 @@ internal static class GrpcHostMapping
             IsReadOnly = value.IsReadOnly,
             AppliedToRuntime = value.AppliedToRuntime,
             Error = value.Error
+        };
+    }
+
+    public static GrpcContracts.HostInfoDto? Map(HostInfoDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.HostInfoDto
+        {
+            ProcessId = value.ProcessId,
+            Endpoint = value.Endpoint,
+            ProtocolPackage = value.ProtocolPackage,
+            ProtocolVersion = value.ProtocolVersion,
+            AppVersion = value.AppVersion,
+            BuildSha = value.BuildSha,
+            StartedAtUtc = value.StartedAtUtc.ToString("O")
+        };
+    }
+
+    public static GrpcContracts.SessionSummaryDto? Map(SessionSummaryDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.SessionSummaryDto
+        {
+            SessionId = value.SessionId,
+            DisplayName = value.DisplayName,
+            Architecture = value.Architecture,
+            RunState = (GrpcContracts.EmulatorRunState)(int)value.RunState,
+            Cycle = value.Cycle,
+            FrameCount = value.FrameCount,
+            CurrentMedia = value.CurrentMedia
+        };
+    }
+
+    public static GrpcContracts.PerformanceSnapshotResponse Map(PerformanceSnapshotResponse value)
+    {
+        return new GrpcContracts.PerformanceSnapshotResponse
+        {
+            Status = Map(value.Status),
+            Snapshot = Map(value.Snapshot)
+        };
+    }
+
+    public static GrpcContracts.PerformanceSnapshotDto? Map(PerformanceSnapshotDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.PerformanceSnapshotDto
+        {
+            HostInfo = Map(value.HostInfo),
+            EmulatorStatus = Map(value.EmulatorStatus),
+            Process = Map(value.Process),
+            Pump = Map(value.Pump),
+            Ui = Map(value.Ui)
+        };
+    }
+
+    public static GrpcContracts.ProcessDiagnosticsDto? Map(ProcessDiagnosticsDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.ProcessDiagnosticsDto
+        {
+            TotalProcessorTimeMs = value.TotalProcessorTimeMs,
+            WorkingSetBytes = value.WorkingSetBytes,
+            PrivateMemoryBytes = value.PrivateMemoryBytes,
+            ManagedMemoryBytes = value.ManagedMemoryBytes,
+            Gen0Collections = value.Gen0Collections,
+            Gen1Collections = value.Gen1Collections,
+            Gen2Collections = value.Gen2Collections,
+            ThreadCount = value.ThreadCount
+        };
+    }
+
+    public static GrpcContracts.PumpDiagnosticsDto? Map(PumpDiagnosticsDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.PumpDiagnosticsDto
+        {
+            WorkerAlive = value.WorkerAlive,
+            ActiveSessionCount = value.ActiveSessionCount,
+            LastTickAtUtc = value.LastTickAtUtc.ToString("O")
+        };
+    }
+
+    public static GrpcContracts.UiDiagnosticsDto? Map(UiDiagnosticsDto? value)
+    {
+        if (value is null)
+            return null;
+
+        return new GrpcContracts.UiDiagnosticsDto
+        {
+            CurrentSessionId = value.CurrentSessionId,
+            LastStatusUpdateUtc = value.LastStatusUpdateUtc.ToString("O"),
+            LastFrameUpdateUtc = value.LastFrameUpdateUtc.ToString("O")
         };
     }
 

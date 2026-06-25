@@ -195,7 +195,29 @@ From the Avalonia desktop UI, the **Snapshot** menu exports emulator output:
 
 Everything is also driveable over the gRPC `CaptureService` (capability discovery, screenshot, start/stop, and listing active captures). Muxed video and WAV sound need a live audio device; headless hosts export screenshots and the BMP sequence only.
 
-## 8. Troubleshooting
+## 8. Diagnostics and debug attach
+
+When the Avalonia app starts its in-process gRPC host, it publishes a local attach file:
+
+```text
+%LOCALAPPDATA%\ViceSharp\debug-attach.json
+```
+
+The file records the process id, gRPC endpoint, protocol package, app version, current UI session id, auth mode, and timestamps. It is rewritten when the current UI session changes and is removed on clean shutdown.
+
+For human debugging, use the Debug menu's **Copy Debug Attach Info** item. It copies the same attach information plus a current status summary.
+
+For tool debugging, read `debug-attach.json` and call the diagnostics service directly. Development builds or `VICESHARP_GRPC_REFLECTION=1` enable gRPC reflection, so `grpcurl` can discover the service surface:
+
+```pwsh
+$attach = Get-Content "$env:LOCALAPPDATA\ViceSharp\debug-attach.json" | ConvertFrom-Json
+grpcurl -plaintext $attach.endpoint list
+grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/GetPerformanceSnapshot
+```
+
+`GetPerformanceSnapshot` defaults to the current UI session when `session_id` is omitted. Explicit unknown session ids return `NotFound`.
+
+## 9. Troubleshooting
 
 **`Failed to load multi-system YAML: ...`** — the loader is strict about schema. Re-check `kind:` (case-sensitive: `C64`, `C1541`), `busAttachments:` references resolve to a `buses:` entry, and `deviceNumber:` is 8..11.
 

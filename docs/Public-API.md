@@ -1,6 +1,6 @@
 # ViceSharp Public API Reference
 
-This document describes the 33+ public interfaces defined in `ViceSharp.Abstractions`. All interfaces are designed for NativeAOT compatibility: no reflection on the hot path, no base classes, and all members are explicitly defined for source-generator discovery.
+This document describes the 33+ public interfaces defined in `ViceSharp.Abstractions`. The interfaces are explicit and trim-aware: no reflection on the hot path, no base classes, and all members are explicitly defined for source-generator discovery. Current application packaging is self-contained managed code with ReadyToRun, not native ahead-of-time publishing.
 
 ---
 

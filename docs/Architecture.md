@@ -9,7 +9,7 @@ ViceSharp is a **library-first** emulator: the emulation engine is a set of comp
 1. **POCO model** — All emulator state lives in plain C# structs and records. No base classes, no ORM, no serialization attributes on hot-path types.
 2. **Zero-allocation hot path** — The per-cycle emulation loop allocates zero managed objects. All transient data uses stack allocation, spans, or arena-pooled buffers.
 3. **Deterministic** — Given identical initial state and input sequence, execution is bit-exact reproducible. This enables snapshot comparison, replay, and regression testing.
-4. **NativeAOT compatible** — No reflection on the hot path. Source generators replace runtime discovery. All emulation assemblies pass trim analysis cleanly.
+4. **Trim-aware managed runtime** — No reflection on the hot path. Source generators replace runtime discovery where useful. Supported desktop packaging is self-contained JIT + ReadyToRun rather than native ahead-of-time publishing.
 5. **MVVM** — ViewModels reference only `ViceSharp.Abstractions`. Views contain zero logic. The emulation engine has no UI dependencies.
 6. **Host/UI boundary** — UI control, media, session, input, snapshot, capture, and diagnostic operations communicate with `ViceSharp.Hosting` through versioned gRPC services or narrow gRPC-backed client abstractions. The host owns emulator sessions, devices, media, snapshots, diagnostics, and local render-source composition.
 
@@ -32,7 +32,7 @@ ViceSharp.Abstractions     33+ interfaces, value types, attributes
     |
     +-- ViceSharp.Protocol     gRPC/protobuf contracts and generated client/server types
     |
-    +-- ViceSharp.Console      NativeAOT reference shell
+    +-- ViceSharp.Console      CLI/reference shell
     |
     +-- ViceSharp.Avalonia     Desktop UI (Avalonia 12.x)
     |

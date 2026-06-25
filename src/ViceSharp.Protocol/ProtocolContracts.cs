@@ -263,6 +263,98 @@ public sealed record EmulatorCommandResponse(
     RpcStatus Status,
     EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
 
+public static class DiagnosticsService
+{
+    public const string ServiceName = "vice_sharp.v1.DiagnosticsService";
+    public const string GetHostInfo = "GetHostInfo";
+    public const string ListSessions = "ListSessions";
+    public const string GetCurrentSession = "GetCurrentSession";
+    public const string GetPerformanceSnapshot = "GetPerformanceSnapshot";
+    public const string WatchPerformance = "WatchPerformance";
+}
+
+public interface IDiagnosticsService
+{
+    ValueTask<GetHostInfoResponse> GetHostInfoAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<ListSessionsResponse> ListSessionsAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<GetCurrentSessionResponse> GetCurrentSessionAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<PerformanceSnapshotResponse> GetPerformanceSnapshotAsync(
+        PerformanceSnapshotRequest request,
+        CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<PerformanceSnapshotResponse> WatchPerformanceAsync(
+        WatchPerformanceRequest request,
+        CancellationToken cancellationToken = default);
+}
+
+public sealed record HostInfoDto(
+    int ProcessId,
+    string Endpoint,
+    string ProtocolPackage,
+    string ProtocolVersion,
+    string AppVersion,
+    string BuildSha,
+    DateTimeOffset StartedAtUtc);
+
+public sealed record SessionSummaryDto(
+    string SessionId,
+    string DisplayName,
+    string Architecture,
+    EmulatorRunState RunState,
+    long Cycle,
+    long FrameCount,
+    string CurrentMedia);
+
+public sealed record ProcessDiagnosticsDto(
+    long TotalProcessorTimeMs,
+    long WorkingSetBytes,
+    long PrivateMemoryBytes,
+    long ManagedMemoryBytes,
+    int Gen0Collections,
+    int Gen1Collections,
+    int Gen2Collections,
+    int ThreadCount);
+
+public sealed record PumpDiagnosticsDto(
+    bool WorkerAlive,
+    int ActiveSessionCount,
+    DateTimeOffset LastTickAtUtc);
+
+public sealed record UiDiagnosticsDto(
+    string CurrentSessionId,
+    DateTimeOffset LastStatusUpdateUtc,
+    DateTimeOffset LastFrameUpdateUtc);
+
+public sealed record PerformanceSnapshotDto(
+    HostInfoDto HostInfo,
+    EmulatorStatusDto? EmulatorStatus,
+    ProcessDiagnosticsDto Process,
+    PumpDiagnosticsDto Pump,
+    UiDiagnosticsDto Ui);
+
+public sealed record PerformanceSnapshotRequest(string SessionId = "", int IntervalMs = 1000);
+
+public sealed record WatchPerformanceRequest(string SessionId = "", int IntervalMs = 1000);
+
+public sealed record GetHostInfoResponse(
+    RpcStatus Status,
+    HostInfoDto? HostInfo) : IRpcResponse;
+
+public sealed record ListSessionsResponse(
+    RpcStatus Status,
+    IReadOnlyList<SessionSummaryDto> Sessions) : IRpcResponse;
+
+public sealed record GetCurrentSessionResponse(
+    RpcStatus Status,
+    SessionSummaryDto? Session) : IRpcResponse;
+
+public sealed record PerformanceSnapshotResponse(
+    RpcStatus Status,
+    PerformanceSnapshotDto? Snapshot) : IRpcResponse;
+
 public static class SettingsService
 {
     public const string ServiceName = "vice_sharp.v1.SettingsService";

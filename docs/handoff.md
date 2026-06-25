@@ -133,24 +133,11 @@ Wiki export: `docs/requirements/requirements-wiki-documents.zip` (regenerated at
 dotnet build ViceSharp.slnx --nologo               # OK, 0 warnings, 0 errors
 dotnet test ViceSharp.slnx --nologo                # 1641 / 2 skip / 0 fail
 dotnet test --filter "FullyQualifiedName~X64ScVariantLockstepTests"  # 322 / 0 fail
+dotnet publish src\ViceSharp.Console\ViceSharp.Console.csproj -c Release -r win-x64 --self-contained /p:PublishReadyToRun=true  # supported packaging path
 git diff --check                                   # clean
-dotnet publish src\ViceSharp.Console\... PublishAot=true   # FAILS (pre-existing)
 ```
 
-**Pre-existing AOT publish failure:** the ARCH-ADHOCMACHINE-001 YAML loader pulls in YamlDotNet 17.1.0 which uses reflection emit and is not NativeAOT-compatible. Errors:
-- IL2104 / IL3053 on YamlDotNet during ilc native code generation
-- This is a pre-existing condition acknowledged in `src/ViceSharp.Architectures/Adhoc/AdhocMachineYamlLoader.cs` (the file itself comments that "YamlDotNet's default deserializer uses reflection emit, which is incompatible with NativeAOT"). The Phase 1 plan listed `dotnet publish ... PublishAot=true` aspirationally.
-- Non-AOT publish (`dotnet publish -c Release` without PublishAot) is unaffected.
-
-**Mitigation path (for the ARCH-ADHOCMACHINE-001 follow-up):**
-
-YamlDotNet 15+ ships a source-generator mode (`[YamlStaticContext]`) that pre-bakes serializer code at compile time, which eliminates most of the reflection-emit IL2104/IL3053 warnings. Still incomplete for edge cases (polymorphism, arbitrary object fields). For fully AOT-safe YAML the followup also needs:
-- A `[YamlStaticContext]`-annotated partial context type in ViceSharp.Architectures that lists every YAML-bound DTO used by the ad-hoc machine schema.
-- Replace `new DeserializerBuilder().Build()` in `AdhocMachineYamlLoader` with the static-context deserializer.
-- Either `rd.xml` runtime-directives or `[DynamicallyAccessedMembers]` annotations on every type the schema can reach polymorphically.
-- Trim-test under the existing test harness (publish + smoke).
-
-Until that lands, treat AOT publish as a post-Phase 1 gate on ARCH-ADHOCMACHINE-001 closeout.
+Native ahead-of-time publishing is no longer a project requirement. Use the supported self-contained managed/ReadyToRun packaging path for console and desktop publish validation.
 
 ## Files of note added this session
 

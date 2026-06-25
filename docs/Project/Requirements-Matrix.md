@@ -119,7 +119,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-VIC-010 | Tracked | Functional-Requirements.md |
 | TR-ADHOC-YAML-001 | Tracked | Technical-Requirements.md |
 | TR-ALLOC-001 | Tracked | Technical-Requirements.md |
-| TR-AOT-001 | Tracked | Technical-Requirements.md |
 | TR-BUILD-001 | Tracked | Technical-Requirements.md |
 | TR-CYCLE-001 | Tracked | Technical-Requirements.md |
 | TR-DET-001 | Tracked | Technical-Requirements.md |

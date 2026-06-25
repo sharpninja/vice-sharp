@@ -29,14 +29,14 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 
 1. **Nuke Build Project:**
    - The `_build` project is a .NET console application using the Nuke framework.
-   - Build targets include: `Clean`, `Restore`, `Compile`, `Test`, `Pack`, `Publish`, `PublishAot`, `IntegrationTest`, `BenchmarkRun`.
+   - Build targets include: `Clean`, `Restore`, `Compile`, `Test`, `Pack`, `Publish`, `IntegrationTest`, `BenchmarkRun`.
    - Target dependencies form a DAG (directed acyclic graph) with correct ordering.
    - The build can be executed locally via `nuke` CLI or `dotnet run --project _build`.
 
 2. **Azure DevOps Pipeline (Primary):**
    - YAML pipeline (`azure-pipelines.yml`) triggers on `main` and `release/*` branches.
    - PR validation runs `Compile` + `Test` targets.
-   - CI builds run `Compile` + `Test` + `Pack` + `PublishAot` targets.
+   - CI builds run `Compile` + `Test` + `Pack` targets.
    - Release builds additionally publish NuGet packages to the Azure DevOps Artifacts feed.
    - Multi-platform matrix: Windows x64, Ubuntu x64, macOS ARM64.
 
@@ -55,7 +55,6 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
    - `BenchmarkRun`: Executes BenchmarkDotNet benchmarks and archives results.
    - `Pack`: Creates NuGet packages for `ViceSharp.Abstractions` and `ViceSharp.Core`.
    - `Publish`: Publishes framework-dependent binaries.
-   - `PublishAot`: Publishes NativeAOT binaries for all target RIDs (per TR-AOT-001).
 
 5. **Versioning:**
    - Version is derived from a `.version` file and Git tags (GitVersion or Nerdbank.GitVersioning).
@@ -66,12 +65,11 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 
 1. `nuke Compile` succeeds locally on Windows, Linux, and macOS.
 2. `nuke Test` runs all unit tests and reports results in a structured format (TRX or JUnit XML).
-3. `nuke PublishAot` produces native binaries for at least `win-x64`, `linux-x64`, and `osx-arm64`.
-4. The Azure DevOps pipeline completes a full CI build (Compile + Test + Pack + PublishAot) in under 15 minutes.
-5. The GitHub Actions pipeline completes PR validation (Compile + Test) in under 10 minutes.
-6. NuGet packages are versioned correctly with pre-release suffixes for non-release branches.
-7. Test coverage reports are generated and uploaded as pipeline artifacts.
-8. Build failures produce clear, actionable error messages with the failing target and step identified.
+3. The Azure DevOps pipeline completes a full CI build (Compile + Test + Pack) in under 15 minutes.
+4. The GitHub Actions pipeline completes PR validation (Compile + Test) in under 10 minutes.
+5. NuGet packages are versioned correctly with pre-release suffixes for non-release branches.
+6. Test coverage reports are generated and uploaded as pipeline artifacts.
+7. Build failures produce clear, actionable error messages with the failing target and step identified.
 
 ### Verification Method
 
@@ -82,7 +80,6 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 
 ### Related TRs
 
-- TR-AOT-001 (PublishAot target validates AoT compatibility)
 - TR-PLAT-001 (Multi-platform build matrix)
 
 ### Design Decisions
