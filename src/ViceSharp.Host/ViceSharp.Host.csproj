@@ -1,7 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <!-- winmm waveOut P/Invoke (WinMmAudioBackend) uses [LibraryImport] +
+         unsafe spans over pinned native buffers. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" />
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
     <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
     <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" />

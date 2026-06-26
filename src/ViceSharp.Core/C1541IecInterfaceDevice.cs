@@ -8,21 +8,36 @@ namespace ViceSharp.Core;
 /// </summary>
 public sealed class C1541IecInterfaceDevice : IDevice
 {
-    private readonly byte _addressBits;
+    private byte _addressBits;
     private byte _portBOutput;
+    private int _deviceNumber;
 
     public C1541IecInterfaceDevice(int deviceNumber = 8)
     {
-        if (deviceNumber is < 8 or > 11)
-            throw new ArgumentOutOfRangeException(nameof(deviceNumber), "Device number must be 8..11.");
-
-        DeviceNumber = deviceNumber;
-        _addressBits = (byte)(((deviceNumber - 8) & 0x03) << 5);
+        DeviceNumber = deviceNumber; // validates + computes the address jumper bits
     }
 
     public DeviceId Id => new(0x1400);
     public string Name => $"1541 IEC Interface #{DeviceNumber}";
-    public int DeviceNumber { get; }
+
+    /// <summary>
+    /// The drive's IEC device number (8..11). Settable at runtime to renumber a live drive:
+    /// the setter recomputes the VIA1 PortB device-address jumper bits (bits 5-6) that the 1541
+    /// DOS reads to decide which TALK/LISTEN addresses it answers, so a renumber takes effect
+    /// without rebuilding the drive (the DOS re-reads the bits on its next ATN turnaround/reset).
+    /// </summary>
+    public int DeviceNumber
+    {
+        get => _deviceNumber;
+        set
+        {
+            if (value is < 8 or > 11)
+                throw new ArgumentOutOfRangeException(nameof(value), "Device number must be 8..11.");
+
+            _deviceNumber = value;
+            _addressBits = (byte)(((value - 8) & 0x03) << 5);
+        }
+    }
 
     /// <summary>
     /// Connects this 1541 IEC interface to the drive's VIA1 and IEC endpoint.

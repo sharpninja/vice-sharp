@@ -175,6 +175,88 @@ public sealed class WavAudioRecorderTests
         bytes[27].Should().Be(0x00);
     }
 
+    /// <summary>
+    /// FR-MED-003 (review finding CONCURRENCY-WAV-STREAM).
+    /// Use case: the SID worker may attempt a WriteSamples batch as the RPC thread
+    /// finalises the recording. Per the IAudioRecorder contract, writes after Stop
+    /// are silently ignored (not an exception, no extra bytes).
+    /// Acceptance: WriteSamples after Stop throws nothing and adds no data.
+    /// </summary>
+    [Fact]
+    public void WriteSamples_AfterStop_IsSilentlyIgnored()
+    {
+        using var ms = new MemoryStream();
+        var recorder = new WavAudioRecorder(ms, sampleRate: 44100, channels: 1);
+        recorder.WriteSamples(new short[100]);
+        recorder.Stop();
+        var lengthAfterStop = ms.Length;
+
+        var ex = Record.Exception(() => recorder.WriteSamples(new short[50]));
+
+        ex.Should().BeNull("writes after Stop are silently ignored per IAudioRecorder");
+        ms.Length.Should().Be(lengthAfterStop, "no bytes are written after Stop");
+        ReadLeUInt32(ms.ToArray(), 40).Should().Be(200u, "data-chunk size is unchanged after Stop");
+    }
+
+    /// <summary>
+    /// FR-MED-003: Stop is idempotent (a second Stop must not double-patch or throw).
+    /// </summary>
+    [Fact]
+    public void Stop_IsIdempotent()
+    {
+        using var ms = new MemoryStream();
+        var recorder = new WavAudioRecorder(ms, sampleRate: 44100, channels: 1);
+        recorder.WriteSamples(new short[100]);
+        recorder.Stop();
+
+        var ex = Record.Exception(() => recorder.Stop());
+
+        ex.Should().BeNull();
+        ReadLeUInt32(ms.ToArray(), 4).Should().Be(236u, "RIFF size stays correct after a repeat Stop");
+    }
+
+    /// <summary>
+    /// FR-MED-003 (review finding CONCURRENCY-WAV-STREAM).
+    /// Use case: Stop races an in-flight WriteSamples from the worker thread. The
+    /// recorder must serialise stream access so neither corrupts the file.
+    /// Acceptance: the writer never throws and the finalised file's data-chunk
+    /// size exactly matches the bytes actually written (header + data consistent).
+    /// </summary>
+    [Fact]
+    public void Stop_ConcurrentWithWriteSamples_IsLockSafeAndConsistent()
+    {
+        using var ms = new MemoryStream();
+        var recorder = new WavAudioRecorder(ms, sampleRate: 44100, channels: 1);
+        var samples = new short[256];
+        var run = true;
+        Exception? writerEx = null;
+
+        var writer = new System.Threading.Thread(() =>
+        {
+            try
+            {
+                while (System.Threading.Volatile.Read(ref run))
+                    recorder.WriteSamples(samples);
+            }
+            catch (Exception e)
+            {
+                writerEx = e;
+            }
+        });
+
+        writer.Start();
+        System.Threading.Thread.Sleep(25);
+        recorder.Stop();
+        System.Threading.Volatile.Write(ref run, false);
+        writer.Join();
+
+        writerEx.Should().BeNull("WriteSamples must be lock-safe against Stop and ignore post-Stop writes");
+        var bytes = ms.ToArray();
+        var dataBytes = ReadLeUInt32(bytes, 40);
+        ((uint)(bytes.Length - 44)).Should().Be(dataBytes, "data-chunk size matches the actual payload after a concurrent Stop");
+        ReadLeUInt32(bytes, 4).Should().Be(36u + dataBytes, "RIFF size = 36 + dataBytes");
+    }
+
     private static string ReadAscii(byte[] data, int offset, int length) =>
         Encoding.ASCII.GetString(data, offset, length);
 

@@ -3,7 +3,9 @@ namespace ViceSharp.Core.Media;
 using System;
 using System.Buffers.Binary;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 /// <summary>
 /// FR/TR: FR-MED-003 (BACKFILL-MEDIA WAV audio recording).
@@ -32,8 +34,15 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
     private readonly int _sampleRate;
     private readonly int _channels;
     private readonly long _headerStartPosition;
-    private uint _dataBytesWritten;
-    private bool _stopped;
+    // The actual file writes run on a background thread (off the emulation worker);
+    // the worker only converts to LE16 in a reused scratch and enqueues a copy. The
+    // single writer thread is the sole writer of the data region, and Stop joins it
+    // before patching the header, so there is no concurrent _output access.
+    private readonly BackgroundByteWriter _writer;
+    private byte[] _scratch = [];
+    private uint _dataBytesWritten;     // written only by the background writer thread
+    private volatile bool _stopped;
+    private int _stopGuard;             // Interlocked latch for idempotent Stop
     private bool _disposed;
 
     /// <summary>
@@ -57,6 +66,13 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
         _headerStartPosition = output.Position;
 
         WritePlaceholderHeader();
+
+        // Header is written synchronously above; the data region is appended by the
+        // background writer, which also tracks the byte count.
+        _writer = new BackgroundByteWriter(
+            (b, n) => { _output.Write(b, 0, n); _dataBytesWritten += (uint)n; },
+            capacity: 64,
+            "vice-wav-writer");
     }
 
     /// <summary>Sample rate in Hz as written to the fmt chunk.</summary>
@@ -74,29 +90,28 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
     /// </summary>
     public void WriteSamples(ReadOnlySpan<short> samples)
     {
-        if (_stopped) throw new InvalidOperationException("Cannot write samples after Stop.");
-        if (samples.IsEmpty) return;
+        // Writes after Stop are silently ignored (per IAudioRecorder), so a late
+        // worker batch racing finalisation can never corrupt the file.
+        if (samples.IsEmpty || _stopped) return;
 
-        Span<byte> buffer = stackalloc byte[2];
-        // Use a small chunk of the heap for larger writes to avoid one
-        // stream call per sample.
-        const int ChunkBytes = 4096;
-        byte[] chunk = new byte[ChunkBytes];
-        int filled = 0;
+        // Convert to LE16 in the reused scratch (single producer = the worker), then
+        // enqueue a pooled copy for the background writer - no per-call allocation.
+        int byteLen = samples.Length * BytesPerSample;
+        if (_scratch.Length < byteLen)
+            _scratch = new byte[byteLen];
 
-        foreach (var s in samples)
+        var dst = _scratch.AsSpan(0, byteLen);
+        if (BitConverter.IsLittleEndian)
         {
-            BinaryPrimitives.WriteInt16LittleEndian(buffer, s);
-            chunk[filled++] = buffer[0];
-            chunk[filled++] = buffer[1];
-            if (filled == ChunkBytes)
-            {
-                _output.Write(chunk, 0, filled);
-                filled = 0;
-            }
+            MemoryMarshal.AsBytes(samples).CopyTo(dst);
         }
-        if (filled > 0) _output.Write(chunk, 0, filled);
-        _dataBytesWritten += (uint)(samples.Length * BytesPerSample);
+        else
+        {
+            for (var i = 0; i < samples.Length; i++)
+                BinaryPrimitives.WriteInt16LittleEndian(dst.Slice(i * 2, 2), samples[i]);
+        }
+
+        _writer.Enqueue(dst);
     }
 
     /// <summary>
@@ -105,8 +120,13 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
     /// </summary>
     public void Stop()
     {
-        if (_stopped) return;
+        // Idempotent: only the first caller finalises.
+        if (Interlocked.Exchange(ref _stopGuard, 1) != 0) return;
         _stopped = true;
+
+        // Flush every queued batch and join the writer, so the data region is
+        // complete and this thread is now the sole writer of _output.
+        _writer.CompleteAndJoin(TimeSpan.FromSeconds(10));
 
         long endPosition = _output.Position;
 
@@ -125,6 +145,8 @@ public sealed class WavAudioRecorder : ViceSharp.Abstractions.IAudioRecorder
         // Restore position to end so any further (out-of-band) writes append.
         _output.Seek(endPosition, SeekOrigin.Begin);
         _output.Flush();
+
+        _writer.Dispose();
     }
 
     /// <summary>Stops the recorder (patching final sizes). Stream is not closed.</summary>

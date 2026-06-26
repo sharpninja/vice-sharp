@@ -574,6 +574,20 @@ public sealed class AvaloniaBoundaryTests
 
         public string SessionId => "test-session";
 
+        public bool TrueDrive { get; private set; }
+
+        public int? TrueDriveDevice { get; private set; }
+
+        public string? TrueDriveDiskImagePath { get; private set; }
+
+        public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
+        {
+            TrueDrive = enabled;
+            TrueDriveDevice = driveDevice;
+            TrueDriveDiskImagePath = diskImagePath;
+            return ValueTask.CompletedTask;
+        }
+
         public MediaSlot? AttachedSlot { get; private set; }
 
         public string? AttachedPath { get; private set; }
@@ -815,10 +829,85 @@ public sealed class AvaloniaBoundaryTests
             return ValueTask.FromResult(new MonitorCommandResponse(RpcStatus.NotImplemented("No monitor."), string.Empty, CreateStatus()));
         }
 
+        public ValueTask<MonitorRegistersResponse> ReadRegistersAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorRegistersResponse(RpcStatus.NotImplemented("No monitor."), null, CreateStatus()));
+        }
+
+        public ValueTask<MonitorMemoryResponse> ReadMemoryAsync(int address, int length, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorMemoryResponse(RpcStatus.NotImplemented("No monitor."), address, System.Array.Empty<byte>(), CreateStatus()));
+        }
+
+        public ValueTask<MonitorDisassemblyResponse> DisassembleAsync(int address, int count, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorDisassemblyResponse(RpcStatus.NotImplemented("No monitor."), System.Array.Empty<MonitorDisassemblyLineDto>(), CreateStatus()));
+        }
+
+        public ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new GetTickHistoryResponse(RpcStatus.NotImplemented("No monitor."), System.Array.Empty<TickHistoryEntryDto>()));
+        }
+
+        public ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(int tickIndex, int address, int length, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new MonitorMemoryResponse(RpcStatus.NotImplemented("No monitor."), address, System.Array.Empty<byte>(), CreateStatus()));
+        }
+
+        public ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(int tickIndex, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new GetChipStateAtTickResponse(RpcStatus.NotImplemented("No monitor."), System.Array.Empty<ChipStateDto>()));
+        }
+
         public ValueTask<GetVideoFrameResponse> GetFrameAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             return ValueTask.FromResult(new GetVideoFrameResponse(RpcStatus.Unavailable("No frame."), null));
+        }
+
+        public ValueTask<CaptureFrameResponse> CaptureFrameAsync(string filePath, string format = "png", CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new CaptureFrameResponse(RpcStatus.Unavailable("No capture."), null));
+        }
+
+        public ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new GetCaptureCapabilitiesResponse(
+                RpcStatus.Unavailable("No capture."), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<CaptureVideoFormatDto>()));
+        }
+
+        public ValueTask<StartCaptureResponse> StartCaptureAsync(
+            CaptureKind kind,
+            string targetPath,
+            string format = "",
+            IReadOnlyDictionary<string, string>? options = null,
+            CancellationToken cancellationToken = default,
+            bool captureMicrophone = false,
+            string microphoneDevice = "",
+            string microphoneInputFormat = "")
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new StartCaptureResponse(RpcStatus.Unavailable("No capture."), null));
+        }
+
+        public ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new StopCaptureResponse(RpcStatus.Unavailable("No capture."), null));
+        }
+
+        public ValueTask<ListCapturesResponse> ListCapturesAsync(CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return ValueTask.FromResult(new ListCapturesResponse(RpcStatus.Unavailable("No capture."), Array.Empty<CaptureSessionDto>()));
         }
 
         private ValueTask<EmulatorCommandResponse> CommandAsync(

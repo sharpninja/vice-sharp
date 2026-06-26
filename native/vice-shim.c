@@ -639,6 +639,15 @@ VICE_SHIM_API int vice_machine_attach_disk(void *machine, unsigned int unit, uns
         return -2;
     }
 
+    {
+        char resource_name[32];
+        snprintf(resource_name, sizeof(resource_name), "FileSystemDevice%u", unit);
+        if (resources_set_int(resource_name, ATTACH_DEVICE_FS) < 0) {
+            LeaveCriticalSection(&g_state_lock);
+            return -5;
+        }
+    }
+
     result = file_system_attach_disk(unit, drive, path);
     LeaveCriticalSection(&g_state_lock);
     return result;
@@ -1571,4 +1580,3 @@ VICE_SHIM_API size_t vice_sid_render_samples(void *machine, int16_t *buffer, siz
 
     return rendered;
 }
-

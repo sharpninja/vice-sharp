@@ -417,7 +417,7 @@ public sealed class VideoSurfaceIntegrationTests
             for (var charRow = 0; charRow < 8; charRow++)
             {
                 var glyph = characterRom[(screenCode * 8) + charRow];
-                var rasterLine = vic.UpperBorderStart + (row * 8) - vic.YScroll + charRow;
+                var rasterLine = FirstVisibleBadLine(vic) + (row * 8) + charRow;
                 var y = VideoRenderer.RasterLineToFrameY(rasterLine);
 
                 for (var charColumn = 0; charColumn < 8; charColumn++)
@@ -616,6 +616,9 @@ public sealed class VideoSurfaceIntegrationTests
         var color = VicPalette.Colors[paletteIndex & 0x0F];
         return 0xFF000000u | color.B | ((uint)color.G << 8) | ((uint)color.R << 16);
     }
+
+    private static int FirstVisibleBadLine(Mos6569 vic)
+        => vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 0x07) + 8) & 0x07);
 
     private class FrameAnalysis
     {

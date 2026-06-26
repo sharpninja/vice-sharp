@@ -6,5 +6,74 @@
 
     <Application.Styles>
         <FluentTheme />
+
+        <!-- FR-SIDEBARUI-001: traditional bordered folder-tabs (not the flat Metro/Fluent
+             style). The selected tab is a box with top corners that connects to a bordered
+             content area; the Fluent selected-underline is replaced by the box. The sidebar
+             TabControl is the only one in the app, so these globals are safe. -->
+        <Style Selector="TabControl">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="ItemsPanel">
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <DockPanel>
+                        <ItemsPresenter Name="PART_ItemsPresenter" DockPanel.Dock="Top"
+                                        ItemsPanel="{TemplateBinding ItemsPanel}" />
+                        <Border BorderBrush="#4A4E56" BorderThickness="1" Background="#1F2227">
+                            <ContentPresenter Name="PART_SelectedContentHost"
+                                              Content="{TemplateBinding SelectedContent}"
+                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                        </Border>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="TabItem">
+            <Setter Property="Background" Value="#2A2E34" />
+            <Setter Property="Foreground" Value="#B0B8C4" />
+            <Setter Property="BorderBrush" Value="#4A4E56" />
+            <Setter Property="BorderThickness" Value="1,1,1,0" />
+            <Setter Property="CornerRadius" Value="5,5,0,0" />
+            <Setter Property="Padding" Value="11,5" />
+            <Setter Property="Margin" Value="0,0,2,-1" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="PART_Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter Content="{TemplateBinding Header}"
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!-- Selected tab: matches the content background and overlaps the content border's
+             top edge (Margin bottom -1) for the classic "connected" look. -->
+        <Style Selector="TabItem:selected">
+            <Setter Property="Background" Value="#1F2227" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="ZIndex" Value="1" />
+        </Style>
+
+        <Style Selector="TabItem:pointerover /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#34383F" />
+        </Style>
+
+        <Style Selector="TabItem:selected:pointerover /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#1F2227" />
+        </Style>
     </Application.Styles>
 </Application>

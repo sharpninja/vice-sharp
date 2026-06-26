@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using System.Text.Json;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.Git;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -63,7 +65,9 @@ sealed partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetNoRestore(true)
                 .SetNoBuild(true)
-                .SetFilter("Category!=Determinism"));
+                // Exclude Determinism (its own target) and the slow, host-bound,
+                // non-deterministic aiUnit AI reviews (run on demand via AiReview target).
+                .SetFilter("Category!=Determinism&Category!=AiReview"));
         });
 
     Target DeterminismTest => _ => _
@@ -76,13 +80,6 @@ sealed partial class Build : NukeBuild
                 .SetNoRestore(true)
                 .SetNoBuild(true)
                 .SetFilter("Category=Determinism"));
-        });
-
-    Target PublishAot => _ => _
-        .DependsOn(Clean, Restore)
-        .Executes(() =>
-        {
-            Serilog.Log.Information("PublishAot target — no publishable projects yet");
         });
 
     Target RomFetch => _ => _
@@ -136,13 +133,62 @@ sealed partial class Build : NukeBuild
 
     // ---- MSI / winget pipeline ----------------------------------------------
 
-    [Parameter("Semantic version stamped into the MSI ProductVersion and winget manifests. Default 0.1.0.2.")]
-    readonly string MsiVersion = "0.1.0.2";
+    [Parameter("Override the MSI/winget ProductVersion. Default: GitVersion {Major}.{Minor}.{CommitsSinceVersionSource}.")]
+    readonly string MsiVersionOverride = null!;
+
+    string? _msiVersionCache;
+
+    /// <summary>
+    /// MSI/winget ProductVersion, derived from GitVersion so each build past a
+    /// new commit gets a fresh, upgradeable version (0.1.&lt;commitHeight&gt;).
+    /// Falls back to the git commit count if GitVersion is unavailable. The WiX
+    /// MajorUpgrade (AllowSameVersionUpgrades) makes same-version redeploys
+    /// reinstall. Override with --msi-version-override.
+    /// </summary>
+    string MsiVersion => _msiVersionCache ??= ResolveMsiVersion();
+
+    string ResolveMsiVersion()
+    {
+        if (!string.IsNullOrWhiteSpace(MsiVersionOverride))
+            return MsiVersionOverride;
+
+        // Primary: GitVersion (the repo's chosen versioning tool).
+        try
+        {
+            var json = string.Join(
+                "\n",
+                ProcessTasks.StartProcess(
+                        "dotnet-gitversion",
+                        $"/targetpath \"{RootDirectory}\" /output json",
+                        logOutput: false)
+                    .AssertZeroExitCode()
+                    .Output.Select(o => o.Text));
+            using var doc = JsonDocument.Parse(json);
+            var r = doc.RootElement;
+            var version =
+                $"{r.GetProperty("Major").GetInt32()}." +
+                $"{r.GetProperty("Minor").GetInt32()}." +
+                $"{r.GetProperty("CommitsSinceVersionSource").GetInt32()}";
+            Serilog.Log.Information("MSI version from GitVersion: {Version}", version);
+            return version;
+        }
+        catch (Exception ex)
+        {
+            // Fallback: git commit height - monotonic and always available.
+            Serilog.Log.Warning("GitVersion unavailable ({Message}); using git commit-count fallback", ex.Message);
+            var count = string.Concat(
+                    ProcessTasks.StartProcess("git", "rev-list --count HEAD", RootDirectory, logOutput: false)
+                        .AssertZeroExitCode()
+                        .Output.Select(o => o.Text))
+                .Trim();
+            return $"0.1.{(string.IsNullOrWhiteSpace(count) ? "0" : count)}";
+        }
+    }
 
     [Parameter("Winget package identifier (publisher.identifier). Default sharpninja.ViceSharp.")]
     readonly string WingetPackageId = "sharpninja.ViceSharp";
 
-    [Parameter("Runtime identifier for the AOT publish that feeds PublishMsi. Default win-x64.")]
+    [Parameter("Runtime identifier for the desktop publish that feeds PublishMsi. Default win-x64.")]
     readonly string MsiRuntimeIdentifier = "win-x64";
 
     AbsolutePath AvaloniaProject => RootDirectory / "src" / "ViceSharp.Avalonia" / "ViceSharp.Avalonia.csproj";
@@ -159,43 +205,33 @@ sealed partial class Build : NukeBuild
     AbsolutePath WingetOutputDir => ArtifactsDirectory / "winget";
 
     /// <summary>
-    /// Publish the ViceSharp.Avalonia desktop GUI as a NativeAOT,
-    /// self-contained, trimmed, single-file Windows binary, then pack it
-    /// into a per-machine MSI via the WixToolset.Sdk wixproj at
-    /// installer/. The MSI lands at artifacts/installer/ViceSharp.msi
-    /// with version <see cref="MsiVersion"/>. AOT publish collapses the
-    /// previously-needed 391-file publish tree down to one native exe
-    /// plus a handful of native dependencies (Skia, HarfBuzz, ANGLE),
-    /// so the MSI is a fraction of the non-AOT footprint.
+    /// Publish the ViceSharp.Avalonia desktop GUI as a self-contained
+    /// Windows desktop application, then pack it into a per-machine MSI via
+    /// the WixToolset.Sdk wixproj at installer/. The MSI lands at
+    /// artifacts/installer/ViceSharp.msi with version <see cref="MsiVersion"/>.
     /// </summary>
     Target PublishMsi => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
-            // Step 1: AOT + trimmed + self-contained publish of
-            // ViceSharp.Avalonia. PublishAot=true implies PublishTrimmed
-            // (full trim) and produces a single native exe; the only
-            // sibling files are the unmanaged native libraries Avalonia
-            // calls into (libSkiaSharp, libHarfBuzzSharp, av_libglesv2,
-            // aspnetcorev2_inprocess) which cannot be inlined.
-            Serilog.Log.Information("Publishing ViceSharp.Avalonia (AOT + trimmed + self-contained, {Rid}) -> {Out}",
+            // Step 1: self-contained JIT publish of ViceSharp.Avalonia.
+            // Tiered JIT + dynamic PGO runs the dispatch-heavy cycle-accurate
+            // emulation measurably faster than trimmed native publishing, and a
+            // low-pause background GC (set in the .csproj) keeps the worker from
+            // stalling. ReadyToRun gives a fast cold start while the JIT still
+            // re-optimises hot paths at runtime. No trimming: it would risk
+            // Avalonia/gRPC reflection-heavy infrastructure.
+            Serilog.Log.Information("Publishing ViceSharp.Avalonia (self-contained JIT + ReadyToRun, {Rid}) -> {Out}",
                 MsiRuntimeIdentifier, AvaloniaPublishDir);
             DotNetPublish(s => s
                 .SetProject(AvaloniaProject)
                 .SetConfiguration("Release")
                 .SetRuntime(MsiRuntimeIdentifier)
                 .SetSelfContained(true)
-                .SetProperty("PublishAot", "true")
-                .SetProperty("PublishTrimmed", "true")
-                .SetProperty("TrimMode", "full")
-                // PublishSingleFile is mutually exclusive with PublishAot
-                // (AOT already produces a single native exe; setting both
-                // triggers NETSDK1191). Leave SingleFile off.
+                .SetProperty("PublishTrimmed", "false")
+                .SetProperty("PublishReadyToRun", "true")
                 .SetProperty("PublishSingleFile", "false")
-                // Strip managed PDBs / XML doc files at publish time; the
-                // native libSkiaSharp.pdb and libHarfBuzzSharp.pdb that
-                // come from the SkiaSharp / HarfBuzz NuGet packages are
-                // pruned in step 1b below.
+                // Strip managed PDBs / XML doc files at publish time.
                 .SetProperty("DebugType", "none")
                 .SetProperty("DebugSymbols", "false")
                 .SetProperty("DocumentationFile", string.Empty)

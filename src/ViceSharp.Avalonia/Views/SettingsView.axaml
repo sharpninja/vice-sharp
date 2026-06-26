@@ -1,0 +1,145 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ViceSharp.Avalonia.ViewModels"
+             xmlns:p="using:ViceSharp.Protocol"
+             x:Class="ViceSharp.Avalonia.Views.SettingsView"
+             x:DataType="vm:AttachPanelViewModel">
+    <!-- FR-UISETTINGS-001 / TR-UIAXAML-VIEWS-001: settings panel as a reusable
+         AXAML UserControl bound to AttachPanelViewModel. -->
+    <UserControl.Styles>
+        <Style Selector="TextBlock.section">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TextBlock.rowlabel">
+            <Setter Property="Width" Value="78" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBlock.hint">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="#B0B8C4" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style Selector="ComboBox.row">
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="10,0,10,10" Spacing="10">
+
+            <StackPanel Spacing="7">
+                <TextBlock Classes="section" Text="Machine" />
+                <ComboBox Classes="row" ItemsSource="{Binding MachineProfiles}"
+                          SelectedItem="{Binding SelectedMachineProfile, Mode=TwoWay}"
+                          DisplayMemberBinding="{Binding DisplayName}" />
+                <TextBlock Classes="hint" Text="{Binding SelectedMachineProfile.StatusText}" />
+            </StackPanel>
+
+            <StackPanel Spacing="7">
+                <TextBlock Classes="section" Text="Limiter" />
+                <TextBlock FontSize="13" FontWeight="SemiBold"
+                           Text="{Binding LimiterRatePercent, StringFormat='Target {0:0}%'}" />
+                <Slider Minimum="1" Maximum="1000" TickFrequency="10" IsSnapToTickEnabled="True"
+                        Value="{Binding LimiterRatePercent, Mode=TwoWay}" />
+                <CheckBox Content="Warp Mode (Alt+W)" IsChecked="{Binding IsWarpMode, Mode=TwoWay}" />
+                <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="OrangeRed" TextWrapping="Wrap"
+                           Text="Warp = uncapped speed (same as VICE -warp). Use with dotTrace for profiling." />
+                <TextBlock FontSize="13" FontWeight="SemiBold" Text="Pacing strategy" />
+                <ComboBox Classes="row" ItemsSource="{Binding PacingStrategies}"
+                          SelectedItem="{Binding SelectedPacingStrategy, Mode=TwoWay}" />
+                <TextBlock FontSize="11" Foreground="#9AA0A6" TextWrapping="Wrap"
+                           Text="Semaphore: high-res timer releases the worker. VICE: faithful sound back-pressure + vsync." />
+            </StackPanel>
+
+            <StackPanel Spacing="7">
+                <TextBlock Classes="section" Text="Display" />
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Renderer" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding RendererModes}"
+                              SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" />
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Scale" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding DisplayScales}"
+                              SelectedItem="{Binding SelectedDisplayScale, Mode=TwoWay}" />
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Crop" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding CropModes}"
+                              SelectedItem="{Binding SelectedCropMode, Mode=TwoWay}" />
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Aspect" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding AspectModes}"
+                              SelectedItem="{Binding SelectedAspectMode, Mode=TwoWay}" />
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Palette" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding PaletteModes}"
+                              SelectedItem="{Binding SelectedPalette, Mode=TwoWay}" />
+                </DockPanel>
+            </StackPanel>
+
+            <StackPanel Spacing="7">
+                <TextBlock Classes="section" Text="Audio / Input / Resources" />
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Audio" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding AudioModes}"
+                              SelectedItem="{Binding SelectedAudioMode, Mode=TwoWay}" />
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Input" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding InputModes}"
+                              SelectedItem="{Binding SelectedInputMode, Mode=TwoWay}" />
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Primary" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding PrimaryJoystickPorts}"
+                              SelectedItem="{Binding SelectedPrimaryJoystickPort, Mode=TwoWay}" />
+                </DockPanel>
+                <CheckBox Content="Swap joystick ports" IsChecked="{Binding SwapJoystickPorts, Mode=TwoWay}" />
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Resources" DockPanel.Dock="Left" />
+                    <ComboBox Classes="row" ItemsSource="{Binding ResourceModes}"
+                              SelectedItem="{Binding SelectedResourceMode, Mode=TwoWay}" />
+                </DockPanel>
+                <TextBlock Classes="section" Text="Persistence" Margin="0,6,0,0" />
+                <CheckBox Content="Save settings on exit"
+                          IsChecked="{Binding SaveSettingsOnExit, Mode=TwoWay}" />
+                <CheckBox Content="Save transient values on exit (attached disks, keyboard map)"
+                          IsChecked="{Binding SaveTransientValuesOnExit, Mode=TwoWay}" />
+            </StackPanel>
+
+            <!-- FR-SIDEBARUI-001: action buttons wrap to new rows when the panel is narrow. -->
+            <WrapPanel Orientation="Horizontal">
+                <Button Content="Validate" Padding="9,5" Margin="0,0,6,6" Click="OnValidate" />
+                <Button Content="Apply" Padding="9,5" Margin="0,0,6,6" Click="OnApply"
+                        IsEnabled="{Binding HasPendingSettingsChanges}" />
+                <Button Content="Revert" Padding="9,5" Margin="0,0,6,6" Click="OnRevert"
+                        IsEnabled="{Binding HasPendingSettingsChanges}" />
+                <Button Content="Apply + Restart" Padding="9,5" Margin="0,0,6,6" Click="OnApplyRestart" />
+            </WrapPanel>
+
+            <StackPanel Spacing="5" IsVisible="{Binding HasSettingsValidationResults}">
+                <TextBlock Classes="section" Text="Validation" />
+                <ItemsControl ItemsSource="{Binding SettingsValidationResults}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="p:SettingsResourceValidationDto">
+                            <StackPanel Orientation="Horizontal" Margin="0,1">
+                                <TextBlock FontSize="12" FontWeight="SemiBold" Text="{Binding ResourceKey}" />
+                                <TextBlock FontSize="12" Text=": " />
+                                <TextBlock FontSize="12" TextWrapping="Wrap" Text="{Binding Message}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <TextBlock Classes="hint" Text="{Binding SettingsStatusText}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -67,18 +67,27 @@ public sealed class SettingsServiceHost : ISettingsService
 
     private readonly EmulatorRuntimeRegistry _registry;
     private readonly IEmulatorRuntimeFactory _runtimeFactory;
+    private readonly EmulationPumpService? _pump;
 
     public SettingsServiceHost(EmulatorRuntimeRegistry registry)
-        : this(registry, new DefaultEmulatorRuntimeFactory())
+        : this(registry, new DefaultEmulatorRuntimeFactory(), null)
     {
     }
 
     public SettingsServiceHost(EmulatorRuntimeRegistry registry, IEmulatorRuntimeFactory runtimeFactory)
+        : this(registry, runtimeFactory, null)
+    {
+    }
+
+    // DI resolves this constructor (all parameters are registered singletons), wiring the
+    // emulation pump so a pacing-strategy change applies live to the global gate.
+    public SettingsServiceHost(EmulatorRuntimeRegistry registry, IEmulatorRuntimeFactory runtimeFactory, EmulationPumpService? pump)
     {
         ArgumentNullException.ThrowIfNull(registry);
         ArgumentNullException.ThrowIfNull(runtimeFactory);
         _registry = registry;
         _runtimeFactory = runtimeFactory;
+        _pump = pump;
     }
 
     public ValueTask<ListSettingsProfilesResponse> ListProfilesAsync(
@@ -142,6 +151,13 @@ public sealed class SettingsServiceHost : ISettingsService
         lock (session.SyncRoot)
         {
             var diagnostics = new List<SettingApplyDiagnosticDto>();
+
+            // The pacing strategy is global (the pump owns the one gate) and applies live,
+            // independent of any session restart, so handle it up front - it then carries
+            // through both the restart and the live branch below.
+            if (request.Limiter is not null)
+                ApplyPacingStrategy(session, request.Limiter.PacingStrategy, diagnostics);
+
             var currentProfileId = HostProtocolMapper.ToSettingsDto(session).ProfileId;
             var requestedProfileId = string.IsNullOrWhiteSpace(request.ProfileId)
                 ? currentProfileId
@@ -372,6 +388,7 @@ public sealed class SettingsServiceHost : ISettingsService
             RunState = current.RunState,
             LimiterRatePercent = limiterRatePercent,
             LimiterEnabled = limiterEnabled,
+            PacingStrategy = current.PacingStrategy,
             DisplaySettings = display,
             InputSettings = input,
             AudioSettings = audio,
@@ -379,6 +396,24 @@ public sealed class SettingsServiceHost : ISettingsService
             SelectedKeyboardMapId = input.KeyboardMapId,
             SelectedKeyboardMap = selectedKeyboardMap
         };
+    }
+
+    // Apply a requested pacing strategy to the global emulation pump (live) and mirror it
+    // on the session so GetSettings round-trips it. No-op when unchanged.
+    private void ApplyPacingStrategy(EmulatorRuntimeSession session, string? requestedStrategy, List<SettingApplyDiagnosticDto> diagnostics)
+    {
+        var strategyId = EmulationGateStrategies.Normalize(requestedStrategy);
+        if (string.Equals(session.PacingStrategy, strategyId, StringComparison.Ordinal))
+            return;
+
+        session.PacingStrategy = strategyId;
+        _pump?.SetStrategy(strategyId);
+        diagnostics.Add(new SettingApplyDiagnosticDto(
+            "limiter.pacingStrategy",
+            SettingApplyScope.Live,
+            true,
+            false,
+            $"Pacing strategy switched to '{EmulationGateStrategies.DisplayName(strategyId)}'."));
     }
 
     private static void AddLimiterDiagnostic(

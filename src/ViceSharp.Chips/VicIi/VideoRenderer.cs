@@ -193,8 +193,7 @@ public sealed class VideoRenderer
                 }
 
                 var screenIndex = screenRow * columns + col;
-                byte charCode = _vic.ReadVideoMemory((ushort)(_vic.ScreenMemoryBase + screenIndex));
-                byte colorCode = _vic.ReadVideoMemory((ushort)(0xD800 + screenIndex));
+                ReadMatrixCell(screenRow, col, screenIndex, out var charCode, out var colorCode);
                 byte charData = ReadCharacterRow(charCode, charRow);
                 uint fgPixel = Palette[colorCode & 0x0F];
                 var pixelsInCell = Math.Min(8, displayEnd - x);
@@ -258,11 +257,7 @@ public sealed class VideoRenderer
         int charX = screenX % 8;
         int screenIndex = screenRow * columns + col;
 
-        ushort screenAddr = (ushort)(_vic.ScreenMemoryBase + screenIndex);
-        byte charCode = _vic.ReadVideoMemory(screenAddr);
-
-        ushort colorAddr = (ushort)(0xD800 + screenIndex);
-        byte colorCode = _vic.ReadVideoMemory(colorAddr);
+        ReadMatrixCell(screenRow, col, screenIndex, out var charCode, out var colorCode);
 
         // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008 /
         // TEST-VIC-001: follow the VICE vicii-draw-cycle.c mode color table.
@@ -276,6 +271,18 @@ public sealed class VideoRenderer
             Mos6569.VicIIDisplayMode.MulticolorBitmap => RenderMulticolorBitmapPixel(screenIndex, screenCode: charCode, colorCode, charRow, charX, bgPixel),
             _ => new PixelSample(Palette[0], _vic.IsGraphicsPixelForegroundForSpritePriority(x, rasterLine)),
         };
+    }
+
+    private void ReadMatrixCell(int row, int col, int screenIndex, out byte screenCode, out byte colorCode)
+    {
+        if (_vic.TryReadRenderMatrixCell(row, col, out screenCode, out colorCode))
+            return;
+
+        if (_vic.TryReadVideoMatrixLatch(col, out screenCode, out colorCode))
+            return;
+
+        screenCode = _vic.ReadVideoMemory((ushort)(_vic.ScreenMemoryBase + screenIndex));
+        colorCode = _vic.ReadVideoMemory((ushort)(0xD800 + screenIndex));
     }
 
     private PixelSample RenderStandardTextPixel(byte charCode, byte colorCode, int charRow, int charX, uint bgPixel)

@@ -13,6 +13,6 @@
 - The measured `RunFrame()` loop reports `0` bytes allocated on the current thread.
 - Public signatures for `IMachine`, `IVideoChip`, `IAudioChip`, `IBus`, `IKeyboardMatrix`, `ArchitectureBuilder`, and `C64MachineProfiles` remain unchanged.
 
-**Technical Requirements:** TR-CORE-CYCLE-001, TR-CORE-DET-001, TR-PERF-ALLOC-001, TR-PERF-AOT-001
+**Technical Requirements:** TR-CORE-CYCLE-001, TR-CORE-DET-001, TR-PERF-ALLOC-001
 
 **Test Requirements:** TEST-PERF-RUNFRAME-001, TEST-X64SC-LOCKSTEP-001

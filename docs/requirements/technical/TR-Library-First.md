@@ -65,7 +65,6 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 ### Related TRs
 
 - TR-PLAT-001 (Platform-agnostic core enables cross-platform UI shells)
-- TR-AOT-001 (NativeAOT publishing of the library)
 - TR-MVVM-001 (UI shells use MVVM pattern on top of the library)
 - TR-GRPC-BOUNDARY-001 (Host/UI process boundary preserves core library ownership)
 

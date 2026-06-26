@@ -12,6 +12,8 @@ public partial class Sid8580 : Sid6581
 {
     public Sid8580(IBus bus) : base(bus) { }
 
+    public Sid8580(IBus bus, IAudioBackend? audioBackend) : base(bus, audioBackend) { }
+
     // 8580 has a small DC offset on the mixer output. resid models this
     // as a constant subtracted from the final mix; with the 8580 die's
     // cleaner output stage the offset is small but observable.

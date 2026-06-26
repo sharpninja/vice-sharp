@@ -8,8 +8,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace></RootNamespace>
     <NoWarn>CS0649;CS0169</NoWarn>
-    <!-- Nuke build project is not AoT-compatible -->
-    <IsAotCompatible>false</IsAotCompatible>
     <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
     <IsPackable>false</IsPackable>
     <NukeTelemetryVersion>1</NukeTelemetryVersion>

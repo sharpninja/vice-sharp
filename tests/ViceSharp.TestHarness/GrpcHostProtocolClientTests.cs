@@ -46,6 +46,35 @@ public sealed class GrpcHostProtocolClientTests
     }
 
     /// <summary>
+    /// FR: FR-DRVTRUE-001, TR: TR-GRPC-BOUNDARY-001, TEST-DRVTRUE-001.
+    /// Use case: Selecting True Drive must carry the choice over the protocol and
+    /// (because true-drive is a machine-config change) recreate the session so
+    /// the host rebuilds it; the next call must succeed against the new session.
+    /// Acceptance: After a session is bootstrapped, SetTrueDriveAsync(true) sets
+    /// the client's TrueDrive flag and drops the current session; the next
+    /// GetStatusAsync returns Ok with a new (different) session id.
+    /// </summary>
+    [Fact]
+    public async Task SetTrueDriveAsync_RecreatesSessionOverProtocol()
+    {
+        await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+        using var client = new GrpcHostProtocolClient(host.Endpoint);
+
+        await client.GetStatusAsync(TestContext.Current.CancellationToken);
+        var firstSession = client.SessionId;
+        Assert.False(string.IsNullOrWhiteSpace(firstSession));
+        Assert.False(client.TrueDrive);
+
+        await client.SetTrueDriveAsync(true, 8, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.True(client.TrueDrive);
+
+        var afterToggle = await client.GetStatusAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(RpcStatusCode.Ok, afterToggle.Status.Code);
+        Assert.False(string.IsNullOrWhiteSpace(client.SessionId));
+        Assert.NotEqual(firstSession, client.SessionId);
+    }
+
+    /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 GrpcHostProtocolClient).
     /// Use case: Once the client has bootstrapped a session, subsequent
     /// calls must reuse the same session id rather than creating a new
@@ -267,5 +296,28 @@ public sealed class GrpcHostProtocolClientTests
     public void Constructor_NullEndpoint_Throws()
     {
         Assert.Throws<ArgumentNullException>(() => new GrpcHostProtocolClient(null!));
+    }
+
+    /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-002 / TEST-UI-DIAG-001.
+    /// Use case: the UI diagnostics bridge needs to update current-session
+    /// state when the gRPC client lazily creates or recreates a session.
+    /// Acceptance: SessionIdChanged is raised with the new non-empty session id.
+    /// </summary>
+    [Fact]
+    public async Task SessionIdChanged_RaisesWhenCurrentSessionChanges()
+    {
+        await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+        using var client = new GrpcHostProtocolClient(host.Endpoint);
+        var eventInfo = typeof(GrpcHostProtocolClient).GetEvent("SessionIdChanged");
+        Assert.NotNull(eventInfo);
+        string? observed = null;
+        EventHandler<string> handler = (_, sessionId) => observed = sessionId;
+        eventInfo.AddEventHandler(client, handler);
+
+        await client.GetStatusAsync(TestContext.Current.CancellationToken);
+
+        Assert.False(string.IsNullOrWhiteSpace(observed));
+        Assert.Equal(client.SessionId, observed);
     }
 }

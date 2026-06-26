@@ -21,7 +21,14 @@ public sealed class X64ScVariantLockstepTests
     private const int BasicReadyMaxFrames = 180;
     private const int SelectedD64LockstepSeconds = 30;
     private const string SelectedD64EnvironmentVariable = "VICESHARP_SELECTED_D64";
+    private const string SelectedD64RunGateEnvironmentVariable = "VICESHARP_RUN_SELECTED_D64";
     private const string SelectedD64DefaultFileName = "frostpoint.d64";
+    private static readonly string[] RepositoryD64FixtureFileNames =
+    [
+        "Elise.d64",
+        "frostpoint.d64",
+        "pieces_of_light.d64",
+    ];
 
     private static string[] RequiredSelectors => C64MachineProfiles.All.Select(profile => profile.Id).ToArray();
     private static string[] NoCartridgeBootSelectors => C64MachineProfiles.All
@@ -247,6 +254,7 @@ public sealed class X64ScVariantLockstepTests
         try
         {
             AttachDiskToManagedDrive(machine, 8, diskImage);
+            ViceNativeBridge.ResetMachine(native);
             ViceNativeBridge.AttachDisk(native, 8, 0, diskPath);
 
             machine.Reset();
@@ -376,13 +384,35 @@ public sealed class X64ScVariantLockstepTests
 
     /// <summary>
     /// FR: BACKFILL-LOCKSTEP-001, FR: ARCH-TRUEDRIVE-1541-002, TR: TR-CYCLE-001.
+    /// Use case: D64 media used as parity-test inputs must be committed with the
+    /// test harness rather than depending on a developer's Downloads directory.
+    /// Acceptance: Every repository D64 fixture exists and is a canonical
+    /// 35-track 174,848-byte disk image.
+    /// </summary>
+    [Fact]
+    public void RepositoryD64Fixtures_ArePresentAndCanonical35TrackImages()
+    {
+        foreach (var fileName in RepositoryD64FixtureFileNames)
+        {
+            var path = ResolveRepoD64FixturePath(fileName);
+
+            File.Exists(path).Should().BeTrue($"repository D64 fixture {fileName} should exist at {path}");
+            new FileInfo(path).Length.Should().Be(
+                D64Image.DiskSize35Track,
+                $"{fileName} should be a canonical 35-track D64 test artifact");
+        }
+    }
+
+    /// <summary>
+    /// FR: BACKFILL-LOCKSTEP-001, FR: ARCH-TRUEDRIVE-1541-002, TR: TR-CYCLE-001.
     /// Use case: The final selected-media x64sc gate must keep the managed
     /// PAL C64 in CPU lockstep with native VICE for a full 30 seconds while
     /// the selected D64 image is attached to drive 8 on both machines.
-    /// Acceptance: With <c>VICESHARP_SELECTED_D64</c> pointing at the selected
-    /// image, or the workstation default <c>Downloads\frostpoint.d64</c>
-    /// present, the validator reports success after exactly
-    /// NominalClockHz*30 cycles with zero skipped coverage in this environment.
+    /// Acceptance: With <c>VICESHARP_SELECTED_D64</c> explicitly pointing at a
+    /// selected image, or <c>VICESHARP_RUN_SELECTED_D64=1</c> enabling the
+    /// repository <c>frostpoint.d64</c> fixture, the validator reports success
+    /// after exactly NominalClockHz*30 cycles with zero skipped coverage in
+    /// this environment.
     /// </summary>
     [ViceFact]
     public void SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal()
@@ -391,7 +421,7 @@ public sealed class X64ScVariantLockstepTests
         if (selectedD64Path is null)
         {
             Assert.Skip(
-                $"Set {SelectedD64EnvironmentVariable} to the selected D64 image, or place {SelectedD64DefaultFileName} in the user Downloads folder.");
+                $"Set {SelectedD64EnvironmentVariable} to a selected D64 image, or set {SelectedD64RunGateEnvironmentVariable}=1 to run this long selected-media gate against the repository fixture.");
         }
 
         var profile = C64MachineProfiles.C64Pal;
@@ -488,6 +518,7 @@ public sealed class X64ScVariantLockstepTests
         try
         {
             AttachDiskToManagedDrive(machine, 8, diskImage);
+            ViceNativeBridge.ResetMachine(native);
             ViceNativeBridge.AttachDisk(native, 8, 0, diskPath);
 
             machine.Reset();
@@ -1407,15 +1438,31 @@ public sealed class X64ScVariantLockstepTests
         var image = new D64Image();
         image.Format();
 
+        var directory = image.GetSector(18, 1);
+        directory[0] = 0x00;
+        directory[1] = 0xFF;
+        directory[2] = 0x82;
+        directory[3] = 17;
+        directory[4] = 0;
+        "LOCKSTEP"u8.CopyTo(directory[5..]);
+        directory.Slice(13, 8).Fill(0xA0);
+
+        var file = image.GetSector(17, 0);
+        file[0] = 0x00;
+        file[1] = 0xFF;
         for (var offset = 0; offset < 256; offset++)
-            image.WriteSectorByte(18, 1, offset, (byte)(255 - offset));
+            file[offset] = (byte)(255 - offset);
+        file[0] = 0x00;
+        file[1] = 0xFF;
 
         return image.ToArray();
     }
 
     private static string WriteTempD64Image(byte[] diskImage)
     {
-        var path = Path.Combine(Path.GetTempPath(), $"vice-sharp-{Guid.NewGuid():N}.d64");
+        var directory = Path.Combine(AppContext.BaseDirectory, "d64-attach-temp");
+        Directory.CreateDirectory(directory);
+        var path = Path.Combine(directory, $"vice-sharp-{Guid.NewGuid():N}.d64");
         File.WriteAllBytes(path, diskImage);
         return path;
     }
@@ -1431,12 +1478,37 @@ public sealed class X64ScVariantLockstepTests
             return configuredPath;
         }
 
-        var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        if (string.IsNullOrWhiteSpace(profilePath))
+        if (!SelectedD64RunGateEnabled())
             return null;
 
-        var workstationDefault = Path.Combine(profilePath, "Downloads", SelectedD64DefaultFileName);
-        return File.Exists(workstationDefault) ? workstationDefault : null;
+        var fixturePath = ResolveRepoD64FixturePath(SelectedD64DefaultFileName);
+        File.Exists(fixturePath).Should().BeTrue(
+            $"{SelectedD64DefaultFileName} should be committed under the repository D64 fixture directory");
+        return fixturePath;
+    }
+
+    private static bool SelectedD64RunGateEnabled()
+    {
+        var value = Environment.GetEnvironmentVariable(SelectedD64RunGateEnvironmentVariable);
+        return string.Equals(value, "1", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(value, "true", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(value, "yes", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string ResolveRepoD64FixturePath(string fileName)
+    {
+        var outputPath = Path.Combine(AppContext.BaseDirectory, "Fixtures", "D64", fileName);
+        if (File.Exists(outputPath))
+            return outputPath;
+
+        var sourceDirectory = typeof(X64ScVariantLockstepTests).Assembly
+            .GetCustomAttributes<AssemblyMetadataAttribute>()
+            .FirstOrDefault(attribute => attribute.Key == "TestHarnessSourceDirectory")
+            ?.Value;
+
+        return string.IsNullOrWhiteSpace(sourceDirectory)
+            ? outputPath
+            : Path.Combine(sourceDirectory, "Fixtures", "D64", fileName);
     }
 
     private static bool TryCreateRequiredDeterministicCartridge(

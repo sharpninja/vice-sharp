@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using ViceSharp.Host.Services;
 using ViceSharp.Protocol;
 
 namespace ViceSharp.Avalonia;
@@ -11,6 +12,7 @@ namespace ViceSharp.Avalonia;
 public sealed class VideoSurface : Control
 {
     private readonly WriteableBitmap _bitmap;
+    private byte[]? _scratch;
 
     // VICE PAL dimensions: 384x272 visible area, 4:3 aspect ratio
     public const int SourceWidth = 384;
@@ -47,6 +49,52 @@ public sealed class VideoSurface : Control
             {
                 dst[i] = 0xFF000000;
             }
+        }
+    }
+
+    /// <summary>
+    /// In-process zero-allocation render path (BUG-THROTTLE-001 / FR-1132): pull the
+    /// emulation thread's latest published frame straight into this control's
+    /// WriteableBitmap via a lock-free copy. No per-frame allocation and no emulation
+    /// lock, so the UI render tick cannot stall the emulation worker thread.
+    /// </summary>
+    public bool UpdateFrom(ILocalVideoFrameSource source, string sessionId)
+    {
+        const int widthBytes = SourceWidth * 4;
+        try
+        {
+            using var fb = _bitmap.Lock();
+            unsafe
+            {
+                if (fb.RowBytes == widthBytes)
+                {
+                    // Contiguous: copy the published frame directly into the bitmap.
+                    var dest = new Span<byte>((void*)fb.Address, widthBytes * SourceHeight);
+                    if (!source.TryCopyFrameInto(sessionId, dest, out _, out _, out _))
+                        return false;
+                }
+                else
+                {
+                    // Padded rows: copy into a reused scratch buffer, then blit per row.
+                    _scratch ??= new byte[widthBytes * SourceHeight];
+                    if (!source.TryCopyFrameInto(sessionId, _scratch, out _, out _, out _))
+                        return false;
+
+                    fixed (byte* pSrc = _scratch)
+                    {
+                        var dst = (byte*)fb.Address;
+                        for (var y = 0; y < SourceHeight; y++)
+                            Buffer.MemoryCopy(pSrc + (y * widthBytes), dst + (y * fb.RowBytes), widthBytes, widthBytes);
+                    }
+                }
+            }
+
+            InvalidateVisual();
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 

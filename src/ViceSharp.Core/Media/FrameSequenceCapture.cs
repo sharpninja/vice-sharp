@@ -18,10 +18,19 @@ using System.IO;
 /// zero-padded to 6 digits). Disposing the session silently ignores
 /// any subsequent frames.
 /// </summary>
-public sealed class FrameSequenceCapture : IDisposable
+public sealed class FrameSequenceCapture : IVideoCaptureSink
 {
     private readonly string _outputDir;
-    private int _frameIndex;
+    private readonly FrameSequenceMode _mode;
+    // The BMP file writes run on a background thread (off the emulation worker);
+    // the worker only deduplicates + enqueues a copy of each accepted frame.
+    private readonly BackgroundByteWriter _writer;
+    private byte[]? _lastWrittenFrame;
+    private int _frameWidth;
+    private int _frameHeight;
+    private int _fileIndex;        // written by the background thread (file naming)
+    private int _acceptedCount;    // frames enqueued (the public FrameCount)
+    private int _framesConsidered;
     private bool _disposed;
 
     /// <summary>
@@ -30,18 +39,32 @@ public sealed class FrameSequenceCapture : IDisposable
     /// it does not already exist.
     /// </summary>
     /// <param name="outputDirectory">Target directory for BMP artifacts.</param>
-    public FrameSequenceCapture(string outputDirectory)
+    /// <param name="mode">
+    /// <see cref="FrameSequenceMode.AllFrames"/> writes every submitted frame;
+    /// <see cref="FrameSequenceMode.UniqueFrames"/> skips a frame that is
+    /// byte-identical to the previously written one (collapsing static screens to
+    /// a compact, contiguously-numbered set of distinct frames).
+    /// </param>
+    public FrameSequenceCapture(string outputDirectory, FrameSequenceMode mode = FrameSequenceMode.AllFrames)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(outputDirectory);
         _outputDir = outputDirectory;
+        _mode = mode;
         Directory.CreateDirectory(outputDirectory);
+        _writer = new BackgroundByteWriter(WriteFrameFile, capacity: 16, "vice-bmpseq-writer");
     }
 
     /// <summary>Target directory for captured BMP frames.</summary>
     public string OutputDirectory => _outputDir;
 
-    /// <summary>Total number of frames written so far.</summary>
-    public int FrameCount => _frameIndex;
+    /// <summary>Whether every frame is written or only distinct (deduplicated) frames.</summary>
+    public FrameSequenceMode Mode => _mode;
+
+    /// <summary>Total number of frames accepted for writing (one BMP each).</summary>
+    public int FrameCount => _acceptedCount;
+
+    /// <summary>Total number of frames submitted (including ones skipped as duplicates).</summary>
+    public int FramesConsidered => _framesConsidered;
 
     /// <summary>
     /// Persists a single BGRA frame as the next numbered BMP file in
@@ -55,23 +78,49 @@ public sealed class FrameSequenceCapture : IDisposable
     /// <param name="height">Frame height in pixels (positive).</param>
     public void CaptureFrame(ReadOnlySpan<byte> bgra, int width, int height)
     {
-        if (_disposed) return;
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
+        if (_disposed || width <= 0 || height <= 0) return;
 
-        var expectedLength = checked(width * height * 4);
-        if (bgra.Length != expectedLength)
-            throw new ArgumentException("BGRA frame length does not match width and height.", nameof(bgra));
+        // A frame whose size does not match its geometry is dropped rather than
+        // thrown on the emulation worker's hot path.
+        if (bgra.Length != checked(width * height * 4)) return;
 
-        _frameIndex++;
-        var path = Path.Combine(_outputDir, $"frame_{_frameIndex:D6}.bmp");
-        WriteBmp(path, bgra, width, height);
+        _framesConsidered++;
+
+        // Unique mode collapses runs of identical frames (e.g. a static screen) by
+        // skipping any frame byte-identical to the previously written one.
+        if (_mode == FrameSequenceMode.UniqueFrames)
+        {
+            if (_lastWrittenFrame is not null && bgra.SequenceEqual(_lastWrittenFrame))
+                return;
+
+            if (_lastWrittenFrame is null || _lastWrittenFrame.Length != bgra.Length)
+                _lastWrittenFrame = new byte[bgra.Length];
+            bgra.CopyTo(_lastWrittenFrame);
+        }
+
+        // Geometry is constant per session; the background writer reads it when it
+        // serialises each enqueued frame.
+        _frameWidth = width;
+        _frameHeight = height;
+        _acceptedCount++;
+        _writer.Enqueue(bgra);
     }
 
-    /// <summary>Marks the session as closed. Subsequent frames are ignored.</summary>
+    // Runs on the background writer thread: serialise one enqueued frame as the
+    // next numbered BMP.
+    private void WriteFrameFile(byte[] buffer, int length)
+    {
+        var index = ++_fileIndex;
+        var path = Path.Combine(_outputDir, $"frame_{index:D6}.bmp");
+        WriteBmp(path, buffer.AsSpan(0, length), _frameWidth, _frameHeight);
+    }
+
+    /// <summary>Marks the session as closed, flushes pending frames, and stops.</summary>
     public void Dispose()
     {
+        if (_disposed) return;
         _disposed = true;
+        _writer.Dispose();
     }
 
     private static void WriteBmp(string path, ReadOnlySpan<byte> bgra, int width, int height)

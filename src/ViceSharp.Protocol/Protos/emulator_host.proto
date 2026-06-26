@@ -59,6 +59,9 @@ service MonitorService {
   rpc RemoveBreakpoint(MonitorBreakpointRequest) returns (MonitorBreakpointsResponse);
   rpc ReadMemory(MonitorReadMemoryRequest) returns (MonitorMemoryResponse);
   rpc WriteMemory(MonitorWriteMemoryRequest) returns (MonitorMemoryWriteResponse);
+  rpc GetTickHistory(SessionRequest) returns (GetTickHistoryResponse);
+  rpc ReadMemoryAtTick(ReadMemoryAtTickRequest) returns (MonitorMemoryResponse);
+  rpc GetChipStateAtTick(GetChipStateAtTickRequest) returns (GetChipStateAtTickResponse);
 }
 
 service SnapshotService {
@@ -67,9 +70,23 @@ service SnapshotService {
 }
 
 service CaptureService {
+  // Discover the screenshot / sound / video formats this host supports.
+  rpc GetCaptureCapabilities(SessionRequest) returns (GetCaptureCapabilitiesResponse);
+  // One-shot screenshot.
+  rpc CaptureFrame(CaptureFrameRequest) returns (CaptureFrameResponse);
+  // Continuous sound / video recording.
   rpc StartCapture(StartCaptureRequest) returns (StartCaptureResponse);
   rpc StopCapture(StopCaptureRequest) returns (StopCaptureResponse);
-  rpc CaptureFrame(CaptureFrameRequest) returns (CaptureFrameResponse);
+  // List the captures active (or recently completed) for a session.
+  rpc ListCaptures(SessionRequest) returns (ListCapturesResponse);
+}
+
+service DiagnosticsService {
+  rpc GetHostInfo(EmptyRequest) returns (GetHostInfoResponse);
+  rpc ListSessions(EmptyRequest) returns (ListSessionsResponse);
+  rpc GetCurrentSession(EmptyRequest) returns (GetCurrentSessionResponse);
+  rpc GetPerformanceSnapshot(PerformanceSnapshotRequest) returns (PerformanceSnapshotResponse);
+  rpc WatchPerformance(WatchPerformanceRequest) returns (stream PerformanceSnapshotResponse);
 }
 
 message RpcStatus {
@@ -157,15 +174,40 @@ message EmulatorStatusDto {
   bool iec_bus_active = 18;
   int64 iec_bus_transition_count = 19;
   string iec_bus_activity_state = 20;
+  repeated PerCpuRateDto per_cpu_rates = 21;
+  repeated IecBusLineDto iec_bus_lines = 22;
+}
+
+message PerCpuRateDto {
+  string label = 1;
+  double effective_clock_hz = 2;
+  double effective_clock_percent = 3;
+}
+
+message IecBusLineDto {
+  string signal = 1;
+  bool is_high = 2;
+  string pullers = 3;
 }
 
 message CreateEmulatorSessionRequest {
   string architecture_id = 1;
   string display_name = 2;
+  // FR-DRVTRUE-001: when true (and a C64 architecture is selected) the host
+  // builds a cycle-accurate true-drive rig (C64 + emulated 1541 over IEC) for
+  // true_drive_device. Default false keeps the simulated-drive path / parity.
+  bool true_drive = 3;
+  int32 true_drive_device = 4;
+  // Host-readable D64 path inserted into the true-drive 1541 at build time so a
+  // disk attached before enabling True Drive survives the session rebuild.
+  string true_drive_disk_image_path = 5;
 }
 
 message SessionRequest {
   string session_id = 1;
+}
+
+message EmptyRequest {
 }
 
 message StepFrameRequest {
@@ -225,6 +267,7 @@ message SettingsProfileDto {
 message LimiterSettingsDto {
   double rate_percent = 1;
   bool is_enabled = 2;
+  string pacing_strategy = 3;
 }
 
 message DisplaySettingsDto {
@@ -546,6 +589,52 @@ message MonitorMemoryWriteResponse {
   EmulatorStatusDto emulator_status = 4;
 }
 
+message TickHistoryEntryDto {
+  int32 index = 1;
+  uint32 instruction_address = 2;
+  uint32 opcode = 3;
+  uint32 a = 4;
+  uint32 x = 5;
+  uint32 y = 6;
+  uint32 s = 7;
+  uint32 p = 8;
+  uint32 pc = 9;
+  int32 write_count = 10;
+}
+
+message GetTickHistoryResponse {
+  RpcStatus status = 1;
+  repeated TickHistoryEntryDto ticks = 2;
+}
+
+message ReadMemoryAtTickRequest {
+  string session_id = 1;
+  int32 tick_index = 2;
+  int32 address = 3;
+  int32 length = 4;
+}
+
+message ChipStateFieldDto {
+  string name = 1;
+  int32 value = 2;
+  int32 width = 3;
+}
+
+message ChipStateDto {
+  string chip_name = 1;
+  repeated ChipStateFieldDto fields = 2;
+}
+
+message GetChipStateAtTickRequest {
+  string session_id = 1;
+  int32 tick_index = 2;
+}
+
+message GetChipStateAtTickResponse {
+  RpcStatus status = 1;
+  repeated ChipStateDto chips = 2;
+}
+
 message SnapshotDto {
   string format = 1;
   uint64 cycle = 2;
@@ -584,6 +673,11 @@ message StartCaptureRequest {
   string session_id = 1;
   CaptureKind kind = 2;
   string target_path = 3;
+  string format = 4;                // sound/video format or video driver id (e.g. "wav", "ffmpeg", "bmpseq", "zmbv")
+  map<string, string> options = 5;  // driver options (e.g. container, video_codec, audio_codec, bitrate)
+  bool capture_microphone = 6;       // mux the host microphone into ffmpeg video captures for narration
+  string microphone_device = 7;      // optional ffmpeg audio input device; default OS microphone when empty
+  string microphone_input_format = 8;// optional ffmpeg input format override (e.g. wasapi, dshow, pulse, avfoundation)
 }
 
 message StopCaptureRequest {
@@ -594,6 +688,7 @@ message StopCaptureRequest {
 message CaptureFrameRequest {
   string session_id = 1;
   string file_path = 2;
+  string format = 3; // "png" (default), "bmp"
 }
 
 message StartCaptureResponse {
@@ -609,4 +704,106 @@ message StopCaptureResponse {
 message CaptureFrameResponse {
   RpcStatus status = 1;
   CaptureArtifactDto artifact = 2;
+}
+
+message CaptureVideoFormatDto {
+  string id = 1;                    // driver id: "bmpseq", "ffmpeg", "zmbv"
+  string container = 2;             // "mp4", "mkv", "avi"; empty for a frame sequence
+  repeated string video_codecs = 3;
+  repeated string audio_codecs = 4;
+  bool requires_ffmpeg = 5;
+  bool supports_microphone = 6;
+}
+
+message GetCaptureCapabilitiesResponse {
+  RpcStatus status = 1;
+  repeated string screenshot_formats = 2;           // e.g. "png", "bmp"
+  repeated string audio_formats = 3;                // e.g. "wav"
+  repeated CaptureVideoFormatDto video_formats = 4;
+}
+
+message ListCapturesResponse {
+  RpcStatus status = 1;
+  repeated CaptureSessionDto captures = 2;
+}
+
+message HostInfoDto {
+  int32 process_id = 1;
+  string endpoint = 2;
+  string protocol_package = 3;
+  string protocol_version = 4;
+  string app_version = 5;
+  string build_sha = 6;
+  string started_at_utc = 7;
+}
+
+message SessionSummaryDto {
+  string session_id = 1;
+  string display_name = 2;
+  string architecture = 3;
+  EmulatorRunState run_state = 4;
+  int64 cycle = 5;
+  int64 frame_count = 6;
+  string current_media = 7;
+}
+
+message ProcessDiagnosticsDto {
+  int64 total_processor_time_ms = 1;
+  int64 working_set_bytes = 2;
+  int64 private_memory_bytes = 3;
+  int64 managed_memory_bytes = 4;
+  int32 gen0_collections = 5;
+  int32 gen1_collections = 6;
+  int32 gen2_collections = 7;
+  int32 thread_count = 8;
+}
+
+message PumpDiagnosticsDto {
+  bool worker_alive = 1;
+  int32 active_session_count = 2;
+  string last_tick_at_utc = 3;
+}
+
+message UiDiagnosticsDto {
+  string current_session_id = 1;
+  string last_status_update_utc = 2;
+  string last_frame_update_utc = 3;
+}
+
+message PerformanceSnapshotDto {
+  HostInfoDto host_info = 1;
+  EmulatorStatusDto emulator_status = 2;
+  ProcessDiagnosticsDto process = 3;
+  PumpDiagnosticsDto pump = 4;
+  UiDiagnosticsDto ui = 5;
+}
+
+message PerformanceSnapshotRequest {
+  string session_id = 1;
+  int32 interval_ms = 2;
+}
+
+message WatchPerformanceRequest {
+  string session_id = 1;
+  int32 interval_ms = 2;
+}
+
+message GetHostInfoResponse {
+  RpcStatus status = 1;
+  HostInfoDto host_info = 2;
+}
+
+message ListSessionsResponse {
+  RpcStatus status = 1;
+  repeated SessionSummaryDto sessions = 2;
+}
+
+message GetCurrentSessionResponse {
+  RpcStatus status = 1;
+  SessionSummaryDto session = 2;
+}
+
+message PerformanceSnapshotResponse {
+  RpcStatus status = 1;
+  PerformanceSnapshotDto snapshot = 2;
 }

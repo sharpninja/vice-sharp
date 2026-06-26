@@ -215,6 +215,84 @@ public sealed class FrameSequenceCaptureTests : IDisposable
         Path.GetFileName(bmps[0]).Should().Be("frame_000001.bmp");
     }
 
+    /// <summary>
+    /// FR-MED-002 (unique-frames export).
+    /// Use case: recording a largely-static screen, the user chooses "unique
+    /// frames" so runs of identical frames collapse to a single BMP.
+    /// Acceptance: feeding red, red, green, green, red in UniqueFrames mode writes
+    /// exactly three contiguously-numbered BMPs (red, green, red); FrameCount is 3
+    /// while FramesConsidered is 5.
+    /// </summary>
+    [Fact]
+    public void UniqueFramesMode_SkipsConsecutiveDuplicates()
+    {
+        const int width = 2, height = 2;
+        var red = MakeSolidFrame(width, height, b: 0x00, g: 0x00, r: 0xFF);
+        var green = MakeSolidFrame(width, height, b: 0x00, g: 0xFF, r: 0x00);
+
+        FrameSequenceCapture capture;
+        using (capture = new FrameSequenceCapture(_tempDir, FrameSequenceMode.UniqueFrames))
+        {
+            capture.CaptureFrame(red, width, height);
+            capture.CaptureFrame(red, width, height);   // duplicate -> skipped
+            capture.CaptureFrame(green, width, height);
+            capture.CaptureFrame(green, width, height); // duplicate -> skipped
+            capture.CaptureFrame(red, width, height);   // differs from previous (green) -> written
+        }
+
+        capture.Mode.Should().Be(FrameSequenceMode.UniqueFrames);
+        capture.FrameCount.Should().Be(3);
+        capture.FramesConsidered.Should().Be(5);
+
+        var bmps = Directory.GetFiles(_tempDir, "*.bmp").OrderBy(p => p).ToArray();
+        bmps.Should().HaveCount(3);
+        Path.GetFileName(bmps[0]).Should().Be("frame_000001.bmp");
+        Path.GetFileName(bmps[1]).Should().Be("frame_000002.bmp");
+        Path.GetFileName(bmps[2]).Should().Be("frame_000003.bmp");
+    }
+
+    /// <summary>
+    /// FR-MED-002 (all-frames is the default).
+    /// Acceptance: in the default mode, consecutive identical frames are all
+    /// written (no deduplication), so three identical frames yield three files.
+    /// </summary>
+    [Fact]
+    public void AllFramesMode_WritesConsecutiveDuplicates()
+    {
+        const int width = 2, height = 2;
+        var frame = MakeSolidFrame(width, height, b: 0x11, g: 0x22, r: 0x33);
+
+        using (var capture = new FrameSequenceCapture(_tempDir)) // default AllFrames
+        {
+            capture.CaptureFrame(frame, width, height);
+            capture.CaptureFrame(frame, width, height);
+            capture.CaptureFrame(frame, width, height);
+            capture.Mode.Should().Be(FrameSequenceMode.AllFrames);
+            capture.FrameCount.Should().Be(3);
+        }
+
+        Directory.GetFiles(_tempDir, "*.bmp").Should().HaveCount(3);
+    }
+
+    /// <summary>
+    /// FR-MED-002 (review finding: throw on worker path for invalid frames).
+    /// Use case: a mismatched-size frame must be dropped, never thrown, on the
+    /// emulation worker's hot path.
+    /// Acceptance: a wrong-sized frame produces no exception, no BMP, and does not
+    /// advance the frame count.
+    /// </summary>
+    [Fact]
+    public void WrongSizedFrame_IsDroppedNotThrown()
+    {
+        using var capture = new FrameSequenceCapture(_tempDir);
+
+        var ex = Record.Exception(() => capture.CaptureFrame(new byte[10], width: 4, height: 4));
+
+        ex.Should().BeNull("a size mismatch is dropped, not thrown, on the worker path");
+        capture.FrameCount.Should().Be(0);
+        Directory.GetFiles(_tempDir, "*.bmp").Should().BeEmpty();
+    }
+
     private static byte[] MakeSolidFrame(int width, int height, byte b, byte g, byte r)
     {
         var buf = new byte[width * height * 4];

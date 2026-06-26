@@ -13,6 +13,14 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
 
     public string SessionId => string.Empty;
 
+    public bool TrueDrive => false;
+
+    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.CompletedTask;
+    }
+
     public ValueTask<GetEmulatorStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -142,10 +150,85 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
         return ValueTask.FromResult(new MonitorCommandResponse(_disconnectedStatus, string.Empty, null));
     }
 
+    public ValueTask<MonitorRegistersResponse> ReadRegistersAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorRegistersResponse(_disconnectedStatus, null, null));
+    }
+
+    public ValueTask<MonitorMemoryResponse> ReadMemoryAsync(int address, int length, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorMemoryResponse(_disconnectedStatus, address, Array.Empty<byte>(), null));
+    }
+
+    public ValueTask<MonitorDisassemblyResponse> DisassembleAsync(int address, int count, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorDisassemblyResponse(_disconnectedStatus, Array.Empty<MonitorDisassemblyLineDto>(), null));
+    }
+
+    public ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new GetTickHistoryResponse(_disconnectedStatus, Array.Empty<TickHistoryEntryDto>()));
+    }
+
+    public ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(int tickIndex, int address, int length, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new MonitorMemoryResponse(_disconnectedStatus, address, Array.Empty<byte>(), null));
+    }
+
+    public ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(int tickIndex, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new GetChipStateAtTickResponse(_disconnectedStatus, Array.Empty<ChipStateDto>()));
+    }
+
     public ValueTask<GetVideoFrameResponse> GetFrameAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         return ValueTask.FromResult(new GetVideoFrameResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<CaptureFrameResponse> CaptureFrameAsync(string filePath, string format = "png", CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new CaptureFrameResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new GetCaptureCapabilitiesResponse(
+            _disconnectedStatus, Array.Empty<string>(), Array.Empty<string>(), Array.Empty<CaptureVideoFormatDto>()));
+    }
+
+    public ValueTask<StartCaptureResponse> StartCaptureAsync(
+        CaptureKind kind,
+        string targetPath,
+        string format = "",
+        IReadOnlyDictionary<string, string>? options = null,
+        CancellationToken cancellationToken = default,
+        bool captureMicrophone = false,
+        string microphoneDevice = "",
+        string microphoneInputFormat = "")
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new StartCaptureResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new StopCaptureResponse(_disconnectedStatus, null));
+    }
+
+    public ValueTask<ListCapturesResponse> ListCapturesAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new ListCapturesResponse(_disconnectedStatus, Array.Empty<CaptureSessionDto>()));
     }
 
     private ValueTask<EmulatorCommandResponse> CommandAsync(CancellationToken cancellationToken)

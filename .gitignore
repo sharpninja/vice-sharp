@@ -3,6 +3,9 @@ bin/
 obj/
 artifacts/
 .dotnet-home/
+
+## aiUnit per-review run logs (generated). Saved reviews live in docs/reviews/ (tracked).
+**/aiunit-results/
 *.user
 *.suo
 *.userosscache
@@ -15,6 +18,10 @@ artifacts/
 !**/[Pp]ackages/build/
 *.nuget.props
 *.nuget.targets
+# Vendored SharpNinja.Avalonia.RemoteControl.* feed (UI-REMOTECTRL-001): tracked
+# on purpose so restore is reproducible on Azure DevOps/CI without the sibling repo.
+!nuget-local/
+!nuget-local/*.nupkg
 
 ## Build results
 [Dd]ebug/
@@ -87,4 +94,10 @@ docs/todo.yaml
 
 agents-readme-first.yaml
 AGENTS-README-FIRST.yaml
-package-lock.json  
+# MCP marker rotation backups (contain rotated API keys/HMAC - never commit).
+AGENTS-README-FIRST.yaml.deleted-*
+package-lock.json
+tools/aiunit-grok-claude-shim/publish/
+
+# MCP plugin transient cache (session state, current-turn, locks, failsafe). Never commit.
+/cache/

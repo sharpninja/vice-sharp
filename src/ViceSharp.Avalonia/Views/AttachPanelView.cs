@@ -15,7 +15,6 @@ public sealed class AttachPanelView : UserControl
     private static readonly Thickness PanelPadding = new(10);
     private static readonly Thickness SlotPadding = new(8);
     private static readonly IBrush SlotBorderBrush = new SolidColorBrush(Color.FromRgb(74, 78, 86));
-    private static readonly IBrush ErrorBrush = new SolidColorBrush(Color.FromRgb(185, 57, 57));
 
     public AttachPanelView(AttachPanelViewModel viewModel)
     {
@@ -27,7 +26,13 @@ public sealed class AttachPanelView : UserControl
 
     public AttachPanelViewModel ViewModel { get; }
 
-    public Func<AttachSlotViewModel, Task<string?>>? PickFileAsync { get; set; }
+    /// <summary>Media file picker; forwarded to the view-model so the reusable
+    /// <see cref="PeripheralCardView"/> can request an attach (FR-UIPERIPHERAL-001).</summary>
+    public Func<AttachSlotViewModel, Task<string?>>? PickFileAsync
+    {
+        get => ViewModel.FilePicker;
+        set => ViewModel.FilePicker = value;
+    }
 
     public Func<Task<string?>>? PickKeyboardMapFileAsync { get; set; }
 
@@ -37,12 +42,11 @@ public sealed class AttachPanelView : UserControl
     {
         var root = new DockPanel
         {
-            // MinWidth + MaxWidth previously clamped the sidebar to 260..360;
-            // the new compact slot layout works as low as ~210 and the host
-            // grid lets the user drag wider via the splitter, so loosen the
-            // bounds so horizontal space tracks the host column.
+            // The sidebar stretches to fill the width the aspect-sized emulator display leaves
+            // (MainWindow.ApplyContentLayout). Keep only a minimum so it stays usable when
+            // narrow; NO MaxWidth, or the panel would stop short of the display and leave a gap.
             MinWidth = 210,
-            MaxWidth = 480,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
             Background = new SolidColorBrush(Color.FromRgb(31, 34, 39))
         };
 
@@ -59,15 +63,8 @@ public sealed class AttachPanelView : UserControl
             FontWeight = FontWeight.SemiBold
         });
 
-        var dockControls = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            Spacing = 6
-        };
-        dockControls.Children.Add(CreateDockButton("Left", () => ViewModel.DockLeft()));
-        dockControls.Children.Add(CreateDockButton("Right", () => ViewModel.DockRight()));
-        header.Children.Add(dockControls);
-
+        // Dock side is now controlled by the shell's single side-toggle button
+        // (FR-UIFLYOUT-001); the panel no longer owns Left/Right buttons.
         var status = new TextBlock
         {
             Text = ViewModel.StatusText,
@@ -82,66 +79,33 @@ public sealed class AttachPanelView : UserControl
         };
         header.Children.Add(status);
 
-        var tabs = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            Spacing = 6
-        };
-        tabs.Children.Add(CreateTabButton("Peripherals", () => ViewModel.ShowPeripherals()));
-        tabs.Children.Add(CreateTabButton("Settings", () => ViewModel.ShowSettings()));
-        tabs.Children.Add(CreateTabButton("Monitor", () => ViewModel.ShowMonitor()));
-        header.Children.Add(tabs);
-
+        // FR-SIDEBARUI-001: the sidebar stretches to fill the width the aspect-sized emulator
+        // display leaves unused (MainWindow.ApplyContentLayout), so there is no in-panel
+        // splitter or collapse handle; the status-bar toggle collapses the whole pane.
         DockPanel.SetDock(header, Dock.Top);
         root.Children.Add(header);
 
-        var content = new ContentControl
+        // FR-SIDEBARUI-001: real TabControl for the sidebar sections. SelectedIndex tracks the
+        // SidebarTab enum order (Peripherals=0, Settings=1, Monitor=2, History=3).
+        var tabs = new TabControl { Padding = new Thickness(0) };
+        tabs.Items.Add(new TabItem { Header = "Peripherals", Content = CreatePeripheralsPanel() });
+        tabs.Items.Add(new TabItem { Header = "Settings", Content = new SettingsView { DataContext = ViewModel } });
+        tabs.Items.Add(new TabItem { Header = "Monitor", Content = CreateMonitorPanel(includePopOut: true) });
+        tabs.Items.Add(new TabItem { Header = "History", Content = new TickHistoryView { DataContext = ViewModel.TickHistory } });
+        tabs.SelectedIndex = (int)ViewModel.ActiveTab;
+        tabs.SelectionChanged += (_, _) =>
         {
-            Content = CreateActiveTabContent()
+            if (tabs.SelectedIndex >= 0)
+                ViewModel.ActiveTab = (SidebarTab)tabs.SelectedIndex;
         };
-
         ViewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(AttachPanelViewModel.ActiveTab))
-                content.Content = CreateActiveTabContent();
+                tabs.SelectedIndex = (int)ViewModel.ActiveTab;
         };
 
-        root.Children.Add(content);
+        root.Children.Add(tabs);
         return root;
-    }
-
-    private Button CreateDockButton(string label, Action action)
-    {
-        var button = new Button
-        {
-            Content = label,
-            Padding = new Thickness(10, 5),
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
-        button.Click += (_, _) => action();
-        return button;
-    }
-
-    private Button CreateTabButton(string label, Action action)
-    {
-        var button = new Button
-        {
-            Content = label,
-            Padding = new Thickness(7, 4),
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
-        button.Click += (_, _) => action();
-        return button;
-    }
-
-    private Control CreateActiveTabContent()
-    {
-        return ViewModel.ActiveTab switch
-        {
-            SidebarTab.Settings => CreateSettingsPanel(),
-            SidebarTab.Monitor => CreateMonitorPanel(includePopOut: true),
-            _ => CreatePeripheralsPanel()
-        };
     }
 
     private Control CreatePeripheralsPanel()
@@ -154,8 +118,17 @@ public sealed class AttachPanelView : UserControl
 
         stack.Children.Add(CreateKeyboardMapPanel());
 
-        foreach (var slot in ViewModel.Slots)
-            stack.Children.Add(CreateSlotPanel(slot));
+        // FR-UIPERIPHERAL-001: every peripheral is rendered by the single
+        // reusable PeripheralCardView, bound per slot via the ItemsControl.
+        var cards = new ItemsControl
+        {
+            ItemsSource = ViewModel.Slots,
+            ItemsPanel = new FuncTemplate<Panel?>(() => new StackPanel { Spacing = 8 }),
+            ItemTemplate = new FuncDataTemplate<AttachSlotViewModel>(
+                (_, _) => new PeripheralCardView { Panel = ViewModel },
+                supportsRecycling: true)
+        };
+        stack.Children.Add(cards);
 
         return new ScrollViewer { Content = stack };
     }
@@ -228,372 +201,6 @@ public sealed class AttachPanelView : UserControl
         return panel;
     }
 
-    private Control CreateSettingsPanel()
-    {
-        var stack = new StackPanel
-        {
-            Margin = new Thickness(10, 0, 10, 10),
-            Spacing = 10
-        };
-
-        stack.Children.Add(CreateProfileSection());
-        stack.Children.Add(CreateLimiterSection());
-        stack.Children.Add(CreateDisplaySection());
-        stack.Children.Add(CreateStatusSection());
-        stack.Children.Add(CreateSettingsActionRow());
-        stack.Children.Add(CreateSettingsValidationPanel());
-
-        var status = new TextBlock
-        {
-            Text = ViewModel.SettingsStatusText,
-            FontSize = 12,
-            Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
-            TextWrapping = TextWrapping.Wrap
-        };
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.SettingsStatusText))
-                status.Text = ViewModel.SettingsStatusText;
-        };
-        stack.Children.Add(status);
-
-        return new ScrollViewer { Content = stack };
-    }
-
-    private Control CreateProfileSection()
-    {
-        var stack = CreateSection("Machine");
-        var selector = new ComboBox
-        {
-            ItemsSource = ViewModel.MachineProfiles,
-            SelectedItem = ViewModel.SelectedMachineProfile,
-            MinHeight = 30,
-            ItemTemplate = new FuncDataTemplate<MachineProfileOption>((profile, _) => new TextBlock
-            {
-                Text = profile?.DisplayName ?? string.Empty
-            })
-        };
-        selector.SelectionChanged += (_, _) =>
-        {
-            if (selector.SelectedItem is MachineProfileOption profile)
-                ViewModel.SelectedMachineProfile = profile;
-        };
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.SelectedMachineProfile))
-                selector.SelectedItem = ViewModel.SelectedMachineProfile;
-        };
-        stack.Children.Add(selector);
-        var status = new TextBlock
-        {
-            Text = ViewModel.SelectedMachineProfile.StatusText,
-            FontSize = 12,
-            Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
-            TextWrapping = TextWrapping.Wrap
-        };
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.SelectedMachineProfile))
-                status.Text = ViewModel.SelectedMachineProfile.StatusText;
-        };
-        stack.Children.Add(status);
-        return stack;
-    }
-
-    private Control CreateLimiterSection()
-    {
-        var stack = CreateSection("Limiter");
-        var limiter = new TextBlock
-        {
-            Text = $"Target {ViewModel.LimiterRatePercent:0}% ({AttachPanelViewModel.LimiterMinimumPercent:0}-{AttachPanelViewModel.LimiterMaximumPercent:0}%)",
-            FontSize = 13,
-            FontWeight = FontWeight.SemiBold
-        };
-        stack.Children.Add(limiter);
-        var slider = new Slider
-        {
-            Minimum = AttachPanelViewModel.LimiterMinimumPercent,
-            Maximum = AttachPanelViewModel.LimiterMaximumPercent,
-            Value = ViewModel.LimiterRatePercent,
-            TickFrequency = 10,
-            IsSnapToTickEnabled = true
-        };
-        slider.PropertyChanged += (_, args) =>
-        {
-            if (args.Property == RangeBase.ValueProperty)
-            {
-                ViewModel.LimiterRatePercent = slider.Value;
-                limiter.Text = $"Target {ViewModel.LimiterRatePercent:0}% ({AttachPanelViewModel.LimiterMinimumPercent:0}-{AttachPanelViewModel.LimiterMaximumPercent:0}%)";
-            }
-        };
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.LimiterRatePercent))
-            {
-                slider.Value = ViewModel.LimiterRatePercent;
-                limiter.Text = $"Target {ViewModel.LimiterRatePercent:0}% ({AttachPanelViewModel.LimiterMinimumPercent:0}-{AttachPanelViewModel.LimiterMaximumPercent:0}%)";
-            }
-        };
-        stack.Children.Add(slider);
-        // Dedicated Warp toggle for VICE-like uncapped speed (ideal for profiling with dotTrace)
-        stack.Children.Add(CreateBooleanRow(
-            "Warp Mode (Alt+W)",
-            () => ViewModel.IsWarpMode,
-            value => ViewModel.IsWarpMode = value,
-            nameof(AttachPanelViewModel.IsWarpMode)));
-
-        var warpNote = new TextBlock
-        {
-            Text = "Warp = uncapped speed (same as VICE -warp). Use with dotTrace for profiling.",
-            FontSize = 11,
-            Foreground = Brushes.OrangeRed,
-            FontWeight = FontWeight.SemiBold
-        };
-        stack.Children.Add(warpNote);
-        return stack;
-    }
-
-    private Control CreateDisplaySection()
-    {
-        var stack = CreateSection("Display");
-        stack.Children.Add(CreateComboRow(
-            "Renderer",
-            ViewModel.RendererModes,
-            () => ViewModel.SelectedRenderer,
-            value => ViewModel.SelectedRenderer = value,
-            nameof(AttachPanelViewModel.SelectedRenderer)));
-        stack.Children.Add(CreateComboRow(
-            "Scale",
-            ViewModel.DisplayScales,
-            () => ViewModel.SelectedDisplayScale,
-            value => ViewModel.SelectedDisplayScale = value,
-            nameof(AttachPanelViewModel.SelectedDisplayScale)));
-        stack.Children.Add(CreateComboRow(
-            "Crop",
-            ViewModel.CropModes,
-            () => ViewModel.SelectedCropMode,
-            value => ViewModel.SelectedCropMode = value,
-            nameof(AttachPanelViewModel.SelectedCropMode)));
-        stack.Children.Add(CreateComboRow(
-            "Aspect",
-            ViewModel.AspectModes,
-            () => ViewModel.SelectedAspectMode,
-            value => ViewModel.SelectedAspectMode = value,
-            nameof(AttachPanelViewModel.SelectedAspectMode)));
-        stack.Children.Add(CreateComboRow(
-            "Palette",
-            ViewModel.PaletteModes,
-            () => ViewModel.SelectedPalette,
-            value => ViewModel.SelectedPalette = value,
-            nameof(AttachPanelViewModel.SelectedPalette)));
-        return stack;
-    }
-
-    private Control CreateStatusSection()
-    {
-        var stack = CreateSection("Audio / Input / Resources");
-        stack.Children.Add(CreateComboRow(
-            "Audio",
-            ViewModel.AudioModes,
-            () => ViewModel.SelectedAudioMode,
-            value => ViewModel.SelectedAudioMode = value,
-            nameof(AttachPanelViewModel.SelectedAudioMode)));
-        stack.Children.Add(CreateComboRow(
-            "Input",
-            ViewModel.InputModes,
-            () => ViewModel.SelectedInputMode,
-            value => ViewModel.SelectedInputMode = value,
-            nameof(AttachPanelViewModel.SelectedInputMode)));
-        stack.Children.Add(CreateComboRow(
-            "Primary",
-            ViewModel.PrimaryJoystickPorts,
-            () => ViewModel.SelectedPrimaryJoystickPort,
-            value => ViewModel.SelectedPrimaryJoystickPort = value,
-            nameof(AttachPanelViewModel.SelectedPrimaryJoystickPort)));
-        stack.Children.Add(CreateBooleanRow(
-            "Swap ports",
-            () => ViewModel.SwapJoystickPorts,
-            value => ViewModel.SwapJoystickPorts = value,
-            nameof(AttachPanelViewModel.SwapJoystickPorts)));
-        stack.Children.Add(CreateComboRow(
-            "Resources",
-            ViewModel.ResourceModes,
-            () => ViewModel.SelectedResourceMode,
-            value => ViewModel.SelectedResourceMode = value,
-            nameof(AttachPanelViewModel.SelectedResourceMode)));
-        return stack;
-    }
-
-    private Control CreateSettingsActionRow()
-    {
-        var buttons = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            Spacing = 6
-        };
-
-        var apply = CreateSettingsButton("Apply", async () => await ViewModel.ApplySettingsAsync(restartRequired: false).ConfigureAwait(true));
-        var validate = CreateSettingsButton("Validate", async () => await ViewModel.ValidateSettingsAsync().ConfigureAwait(true));
-        var revert = CreateSettingsButton("Revert", () =>
-        {
-            ViewModel.RevertSettings();
-            return Task.CompletedTask;
-        });
-        var restart = CreateSettingsButton("Apply + Restart", async () => await ViewModel.ApplySettingsAsync(restartRequired: true).ConfigureAwait(true));
-
-        void RefreshEnabled()
-        {
-            apply.IsEnabled = ViewModel.HasPendingSettingsChanges;
-            revert.IsEnabled = ViewModel.HasPendingSettingsChanges;
-            restart.IsEnabled = ViewModel.HasPendingSettingsChanges || ViewModel.RequiresRestart;
-        }
-
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName is nameof(AttachPanelViewModel.HasPendingSettingsChanges) or nameof(AttachPanelViewModel.RequiresRestart))
-                RefreshEnabled();
-        };
-        RefreshEnabled();
-
-        buttons.Children.Add(validate);
-        buttons.Children.Add(apply);
-        buttons.Children.Add(revert);
-        buttons.Children.Add(restart);
-        return buttons;
-    }
-
-    private Control CreateSettingsValidationPanel()
-    {
-        var stack = new StackPanel { Spacing = 5 };
-        var header = new TextBlock
-        {
-            Text = "Validation",
-            FontSize = 13,
-            FontWeight = FontWeight.SemiBold,
-            IsVisible = ViewModel.HasSettingsValidationResults
-        };
-        stack.Children.Add(header);
-
-        var results = new ItemsControl
-        {
-            ItemsSource = ViewModel.SettingsValidationResults,
-            IsVisible = ViewModel.HasSettingsValidationResults,
-            ItemTemplate = new FuncDataTemplate<SettingsResourceValidationDto>((resource, _) =>
-            {
-                var brush = resource is { IsValid: false }
-                    ? ErrorBrush
-                    : new SolidColorBrush(Color.FromRgb(124, 183, 136));
-                return new TextBlock
-                {
-                    Text = resource is null
-                        ? string.Empty
-                        : $"{resource.ResourceKey}: {resource.Message}",
-                    Foreground = brush,
-                    FontSize = 12,
-                    TextWrapping = TextWrapping.Wrap,
-                    Margin = new Thickness(0, 1)
-                };
-            })
-        };
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.HasSettingsValidationResults))
-            {
-                header.IsVisible = ViewModel.HasSettingsValidationResults;
-                results.IsVisible = ViewModel.HasSettingsValidationResults;
-            }
-        };
-        stack.Children.Add(results);
-        return stack;
-    }
-
-    private Button CreateSettingsButton(string label, Func<Task> action)
-    {
-        var button = new Button
-        {
-            Content = label,
-            Padding = new Thickness(9, 5),
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
-        button.Click += async (_, _) => await action().ConfigureAwait(true);
-        return button;
-    }
-
-    private StackPanel CreateSection(string title)
-    {
-        var stack = new StackPanel
-        {
-            Spacing = 7,
-            Margin = new Thickness(0, 0, 0, 2)
-        };
-        stack.Children.Add(new TextBlock
-        {
-            Text = title,
-            FontSize = 14,
-            FontWeight = FontWeight.SemiBold
-        });
-        return stack;
-    }
-
-    private Control CreateComboRow(
-        string label,
-        IEnumerable<string> items,
-        Func<string> getValue,
-        Action<string> setValue,
-        string propertyName)
-    {
-        var row = new DockPanel { LastChildFill = true };
-        var text = new TextBlock
-        {
-            Text = label,
-            Width = 78,
-            VerticalAlignment = VerticalAlignment.Center,
-            FontSize = 12
-        };
-        DockPanel.SetDock(text, Dock.Left);
-        row.Children.Add(text);
-
-        var combo = new ComboBox
-        {
-            ItemsSource = items,
-            SelectedItem = getValue(),
-            MinHeight = 30,
-            FontSize = 12
-        };
-        combo.SelectionChanged += (_, _) =>
-        {
-            if (combo.SelectedItem is string value)
-                setValue(value);
-        };
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == propertyName)
-                combo.SelectedItem = getValue();
-        };
-        row.Children.Add(combo);
-        return row;
-    }
-
-    private Control CreateBooleanRow(
-        string label,
-        Func<bool> getValue,
-        Action<bool> setValue,
-        string propertyName)
-    {
-        var checkBox = new CheckBox
-        {
-            Content = label,
-            IsChecked = getValue(),
-            FontSize = 12
-        };
-        checkBox.Click += (_, _) => setValue(checkBox.IsChecked == true);
-        ViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == propertyName)
-                checkBox.IsChecked = getValue();
-        };
-        return checkBox;
-    }
 
     public Control CreateMonitorPanel(bool includePopOut)
     {
@@ -641,15 +248,13 @@ public sealed class AttachPanelView : UserControl
         };
         stack.Children.Add(command);
 
-        var buttons = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            Spacing = 6
-        };
+        // FR-SIDEBARUI-001: action buttons wrap when the panel is narrow.
+        var buttons = new WrapPanel { Orientation = Orientation.Horizontal };
         var run = new Button
         {
             Content = "Run",
-            Padding = new Thickness(9, 5)
+            Padding = new Thickness(9, 5),
+            Margin = new Thickness(0, 0, 6, 6)
         };
         run.Click += async (_, _) =>
         {
@@ -663,7 +268,8 @@ public sealed class AttachPanelView : UserControl
             var pop = new Button
             {
                 Content = "Pop out",
-                Padding = new Thickness(9, 5)
+                Padding = new Thickness(9, 5),
+                Margin = new Thickness(0, 0, 6, 6)
             };
             pop.Click += (_, _) => PopOutMonitorRequested?.Invoke();
             buttons.Children.Add(pop);
@@ -671,181 +277,6 @@ public sealed class AttachPanelView : UserControl
 
         stack.Children.Add(buttons);
         return stack;
-    }
-
-    private Control CreateSlotPanel(AttachSlotViewModel slot)
-    {
-        var panel = new Border
-        {
-            BorderBrush = SlotBorderBrush,
-            BorderThickness = new Thickness(1),
-            CornerRadius = new CornerRadius(6),
-            Padding = new Thickness(7, 6),
-            Background = new SolidColorBrush(Color.FromRgb(39, 43, 49))
-        };
-
-        var stack = new StackPanel { Spacing = 5 };
-        panel.Child = stack;
-
-        // Compact title row: slot name | media kind chip | read-only checkbox
-        // on the far right. Read-only used to be its own row; folding it into
-        // the header reclaims a row of vertical space and uses the otherwise
-        // empty horizontal expanse to the right of the title.
-        var titleRow = new Grid();
-        titleRow.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-        titleRow.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-        titleRow.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-
-        var title = new TextBlock
-        {
-            Text = slot.Title,
-            FontSize = 13,
-            FontWeight = FontWeight.SemiBold,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        Grid.SetColumn(title, 0);
-        titleRow.Children.Add(title);
-
-        var kind = new TextBlock
-        {
-            Text = slot.MediaKind,
-            FontSize = 11,
-            Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(6, 0)
-        };
-        Grid.SetColumn(kind, 1);
-        titleRow.Children.Add(kind);
-
-        var readOnly = new CheckBox
-        {
-            Content = "RO",
-            FontSize = 11,
-            MinHeight = 20,
-            Padding = new Thickness(3, 0, 0, 0),
-            IsChecked = slot.IsReadOnly
-        };
-        ToolTip.SetTip(readOnly, "Read only");
-        Grid.SetColumn(readOnly, 2);
-        titleRow.Children.Add(readOnly);
-
-        stack.Children.Add(titleRow);
-
-        var status = new TextBlock
-        {
-            Text = slot.StatusText,
-            FontSize = 11,
-            TextWrapping = TextWrapping.Wrap
-        };
-        stack.Children.Add(status);
-
-        TextBlock? iecActivity = null;
-        if (slot.Slot is MediaSlot.Drive8 or MediaSlot.Drive9)
-        {
-            iecActivity = new TextBlock
-            {
-                Text = slot.IecActivityText,
-                FontSize = 11,
-                Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
-                TextWrapping = TextWrapping.Wrap
-            };
-            stack.Children.Add(iecActivity);
-        }
-
-        var error = new TextBlock
-        {
-            Text = slot.ValidationError,
-            FontSize = 11,
-            Foreground = ErrorBrush,
-            TextWrapping = TextWrapping.Wrap
-        };
-        stack.Children.Add(error);
-
-        readOnly.Click += (_, _) => slot.IsReadOnly = readOnly.IsChecked == true;
-        slot.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachSlotViewModel.StatusText))
-                status.Text = slot.StatusText;
-            else if (args.PropertyName == nameof(AttachSlotViewModel.IecActivityText) && iecActivity is not null)
-                iecActivity.Text = slot.IecActivityText;
-            else if (args.PropertyName == nameof(AttachSlotViewModel.ValidationError))
-                error.Text = slot.ValidationError;
-            else if (args.PropertyName == nameof(AttachSlotViewModel.IsReadOnly))
-                readOnly.IsChecked = slot.IsReadOnly;
-        };
-
-        // Buttons row uses a Grid with equal star columns so the Attach +
-        // Eject buttons stretch to fill the full slot width instead of
-        // floating left with empty space on the right.
-        var buttons = new Grid
-        {
-            ColumnDefinitions =
-            {
-                new ColumnDefinition(GridLength.Star),
-                new ColumnDefinition(new GridLength(4, GridUnitType.Pixel)),
-                new ColumnDefinition(GridLength.Star)
-            }
-        };
-
-        var attach = new Button
-        {
-            Content = "Attach",
-            Padding = new Thickness(7, 4),
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            HorizontalContentAlignment = HorizontalAlignment.Center,
-            FontSize = 12
-        };
-        attach.Click += async (_, _) => await AttachFromPickerAsync(slot).ConfigureAwait(true);
-        Grid.SetColumn(attach, 0);
-        buttons.Children.Add(attach);
-
-        var eject = new Button
-        {
-            Content = "Eject",
-            Padding = new Thickness(7, 4),
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            HorizontalContentAlignment = HorizontalAlignment.Center,
-            FontSize = 12
-        };
-        eject.Click += async (_, _) => await ViewModel.EjectAsync(slot).ConfigureAwait(true);
-        Grid.SetColumn(eject, 2);
-        buttons.Children.Add(eject);
-
-        stack.Children.Add(buttons);
-
-        var recent = new ComboBox
-        {
-            PlaceholderText = "Recent",
-            ItemsSource = slot.RecentFiles,
-            FontSize = 11,
-            MinHeight = 24,
-            HorizontalAlignment = HorizontalAlignment.Stretch
-        };
-        recent.SelectionChanged += async (_, _) =>
-        {
-            if (recent.SelectedItem is string filePath)
-            {
-                recent.SelectedItem = null;
-                await ViewModel.AttachAsync(slot, filePath).ConfigureAwait(true);
-            }
-        };
-        stack.Children.Add(recent);
-
-        return panel;
-    }
-
-    private async Task AttachFromPickerAsync(AttachSlotViewModel slot)
-    {
-        if (PickFileAsync is null)
-        {
-            slot.MarkError("File picker is unavailable.");
-            return;
-        }
-
-        var filePath = await PickFileAsync(slot).ConfigureAwait(true);
-        if (!string.IsNullOrWhiteSpace(filePath))
-            await ViewModel.AttachAsync(slot, filePath).ConfigureAwait(true);
     }
 
     private async Task SelectCustomKeyboardMapAsync()

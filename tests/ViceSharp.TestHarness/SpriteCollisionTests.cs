@@ -296,10 +296,8 @@ public sealed class SpriteCollisionTests
     {
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = x - vic.LeftBorderPixel;
-        int visLine = rasterLine - vic.UpperBorderStart;
-        int screenLine = visLine + vic.YScroll;
-        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
-        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int screenLine = rasterLine - FirstVisibleBadLine(vic);
+        int screenRow = screenLine / 8;
         int col = screenX / 8;
         int charRow = screenLine & 7;
         int screenIndex = screenRow * columns + col;
@@ -314,10 +312,8 @@ public sealed class SpriteCollisionTests
     {
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = x - vic.LeftBorderPixel;
-        int visLine = rasterLine - vic.UpperBorderStart;
-        int screenLine = visLine + vic.YScroll;
-        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
-        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int screenLine = rasterLine - FirstVisibleBadLine(vic);
+        int screenRow = screenLine / 8;
         int col = screenX / 8;
         int charRow = screenLine & 7;
         int screenIndex = screenRow * columns + col;
@@ -383,10 +379,8 @@ public sealed class SpriteCollisionTests
         const int TestVicX = 96; // inside left border + some chars
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = TestVicX - vic.LeftBorderPixel;
-        int visLine = TestRaster - vic.UpperBorderStart;
-        int screenLine = visLine + vic.YScroll;
-        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
-        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int screenLine = TestRaster - FirstVisibleBadLine(vic);
+        int screenRow = screenLine / 8;
         int col = screenX / 8;
         int charX = screenX % 8; // 0
         int charRow = screenLine & 7;
@@ -421,4 +415,7 @@ public sealed class SpriteCollisionTests
         // Acceptance: must match VICE (px & 0x2) semantics for the invalid ECM case
         Assert.Equal(expectedPriBit, actual);
     }
+
+    private static int FirstVisibleBadLine(Mos6569 vic)
+        => vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 0x07) + 8) & 0x07);
 }

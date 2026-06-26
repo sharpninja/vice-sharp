@@ -1,4 +1,5 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
 
@@ -39,7 +40,60 @@ internal static class HostProtocolMapper
             session.LastHostAutomationError ?? string.Empty,
             session.IecBusActivity?.IsActive == true,
             session.IecBusActivity?.TransitionCount ?? 0,
-            session.IecBusActivity?.ActivityState ?? "Idle");
+            session.IecBusActivity?.ActivityState ?? "Idle")
+        {
+            PerCpuRates = ToPerCpuRateDtos(session.PerCpuRates),
+            IecBusLines = ToIecBusLineDtos(session),
+        };
+    }
+
+    private static IReadOnlyList<IecBusLineDto> ToIecBusLineDtos(EmulatorRuntimeSession session)
+    {
+        // The monitor panel is only meaningful for a true-drive rig - a real second CPU sharing
+        // the IEC bus (a CoordinatorMachine with a live bus). A single-system C64 has the drive
+        // endpoint baked into its always-on bus even with only a virtual/trap drive, so endpoint
+        // count alone can't tell them apart; key off the rig type so the panel hides otherwise.
+        if (session.IecBusActivity is null || session.Machine is not CoordinatorMachine { IecBus: not null })
+            return Array.Empty<IecBusLineDto>();
+
+        // Snapshot under the session lock so we do not race the emulation worker mutating the bus.
+        BusSnapshot snapshot;
+        lock (session.SyncRoot)
+            snapshot = session.IecBusActivity.Snapshot();
+
+        return BuildIecBusLines(snapshot);
+    }
+
+    /// <summary>
+    /// Maps a bus snapshot to the monitor's line DTOs, but only when a peripheral actually shares
+    /// the bus (host + >=1 device). A single-system C64 has just the host endpoint, so there is no
+    /// inter-system IEC traffic to show - returns empty so the panel hides rather than showing
+    /// idle ghost lines.
+    /// </summary>
+    internal static IReadOnlyList<IecBusLineDto> BuildIecBusLines(BusSnapshot snapshot)
+    {
+        if (snapshot.Lines.Count == 0 || snapshot.Endpoints.Count < 2)
+            return Array.Empty<IecBusLineDto>();
+
+        var lines = new IecBusLineDto[snapshot.Lines.Count];
+        for (var i = 0; i < snapshot.Lines.Count; i++)
+        {
+            var line = snapshot.Lines[i];
+            lines[i] = new IecBusLineDto(line.Signal, line.IsHigh, string.Join(", ", line.Pullers));
+        }
+
+        return lines;
+    }
+
+    private static IReadOnlyList<PerCpuRateDto> ToPerCpuRateDtos(IReadOnlyList<CpuRateReading> readings)
+    {
+        if (readings.Count == 0)
+            return Array.Empty<PerCpuRateDto>();
+
+        var dtos = new PerCpuRateDto[readings.Count];
+        for (var i = 0; i < readings.Count; i++)
+            dtos[i] = new PerCpuRateDto(readings[i].Label, readings[i].EffectiveClockHz, readings[i].EffectiveClockPercent);
+        return dtos;
     }
 
     public static MachineStateDto ToMachineStateDto(MachineState state)
@@ -68,7 +122,7 @@ internal static class HostProtocolMapper
 
         return new SessionSettingsDto(
             profileId,
-            new LimiterSettingsDto(session.LimiterRatePercent, session.LimiterEnabled),
+            new LimiterSettingsDto(session.LimiterRatePercent, session.LimiterEnabled, session.PacingStrategy),
             session.DisplaySettings,
             session.InputSettings,
             session.AudioSettings,

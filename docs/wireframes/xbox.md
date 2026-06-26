@@ -5,7 +5,7 @@ Tracking: `PLATFORM-CROSS-001` Phase 1. Reference: [desktop-windows.md](desktop-
 Xbox One and Xbox Series host the ViceSharp shell as a **UWP** app (Xbox doesn't yet support WinUI 3 or full .NET 10 desktop). The runtime constraint is therefore:
 
 - UI framework: UWP XAML (10-foot styled, high-contrast safe).
-- Runtime: UWP CoreCLR (no NativeAOT on Xbox today).
+- Runtime: UWP CoreCLR managed runtime for Xbox deployment.
 - Input: Gamepad-first; USB keyboard / mouse / chatpad supported; touch not applicable.
 - Memory budget: Game mode grants ~5 GB (Series X) / 1 GB (One S) - we ship as a "general purpose" app for now, capped at ~1 GB to keep certification cheap.
 

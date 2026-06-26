@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ViceSharp.Avalonia.ViewModels"
+             x:Class="ViceSharp.Avalonia.Views.TickHistoryView"
+             x:DataType="vm:TickHistoryViewModel">
+    <!-- FR-TICKHIST-001: last-100-ticks panel + paused click-through debug screen. -->
+    <DockPanel LastChildFill="True" Margin="8">
+        <StackPanel DockPanel.Dock="Top" Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="Last 100 ticks" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <Button Name="RefreshButton" Content="Refresh" Padding="8,3" Click="OnRefresh" />
+                <Button Name="BackButton" Content="Back to list" Padding="8,3" Click="OnBack"
+                        IsVisible="{Binding IsDebugVisible}" />
+            </StackPanel>
+            <TextBlock Text="{Binding StatusText}" FontSize="12" Foreground="#B0B8C4" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!-- Tick list (newest first). Selecting a tick while paused opens the debug screen. -->
+        <ListBox Name="TickList" ItemsSource="{Binding Ticks}" SelectedItem="{Binding SelectedTick}"
+                 SelectionChanged="OnTickSelected"
+                 FontFamily="Cascadia Mono,Consolas,monospace" FontSize="12"
+                 IsVisible="{Binding !IsDebugVisible}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:TickRowViewModel">
+                    <TextBlock Text="{Binding Display}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Debug screen: the selected tick's registers, scrollable chip state + searchable
+             reconstructed memory dump. -->
+        <DockPanel LastChildFill="True" IsVisible="{Binding IsDebugVisible}">
+            <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,6">
+                <TextBlock Text="{Binding DebugTitle}" FontSize="13" FontWeight="SemiBold" />
+
+                <!-- FR-TICKHIST-001: step through ticks (First / Back / Next / Last). -->
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <Button Content="⏮" Padding="9,2" FontSize="13" Click="OnNavFirst"
+                            IsEnabled="{Binding CanNavigatePrevious}" ToolTip.Tip="First tick" />
+                    <Button Content="◀" Padding="9,2" FontSize="13" Click="OnNavPrevious"
+                            IsEnabled="{Binding CanNavigatePrevious}" ToolTip.Tip="Back (older tick)" />
+                    <Button Content="▶" Padding="9,2" FontSize="13" Click="OnNavNext"
+                            IsEnabled="{Binding CanNavigateNext}" ToolTip.Tip="Next (newer tick)" />
+                    <Button Content="⏭" Padding="9,2" FontSize="13" Click="OnNavLast"
+                            IsEnabled="{Binding CanNavigateNext}" ToolTip.Tip="Last tick" />
+                </StackPanel>
+
+                <Border Background="#1B1F24" CornerRadius="4" Padding="8">
+                    <TextBlock Text="{Binding RegistersText}"
+                               FontFamily="Cascadia Mono,Consolas,monospace" FontSize="12" />
+                </Border>
+
+                <!-- FR-SIDEBARUI-001: chip cards in a bounded scroller. -->
+                <TextBlock Text="Chip state" FontSize="12" FontWeight="SemiBold" />
+                <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding ChipStates}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ChipStateGroupViewModel">
+                                <Border Background="#15191E" CornerRadius="4" Padding="8" Margin="0,2">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding ChipName}" FontWeight="SemiBold" FontSize="12" Foreground="#7FD0FF" />
+                                        <TextBlock Text="{Binding FieldsText}" TextWrapping="Wrap"
+                                                   FontFamily="Cascadia Mono,Consolas,monospace" FontSize="11" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- FR-TICKHIST-001: searchable memory dump (hex / decimal / string). -->
+                <TextBlock Text="Memory at this tick" FontSize="12" FontWeight="SemiBold" />
+                <DockPanel LastChildFill="True">
+                    <ComboBox DockPanel.Dock="Right" Width="118" Margin="6,0,0,0" MinHeight="28"
+                              ItemsSource="{Binding MemorySearchKinds}"
+                              SelectedItem="{Binding SelectedSearchKind, Mode=TwoWay}" />
+                    <Button DockPanel.Dock="Right" Content="Find" Padding="8,3" Click="OnSearch" />
+                    <TextBox Name="SearchBox" Text="{Binding SearchQuery, Mode=TwoWay}"
+                             PlaceholderText="Search memory" MinHeight="28"
+                             KeyDown="OnSearchKeyDown"
+                             FontFamily="Cascadia Mono,Consolas,monospace" />
+                </DockPanel>
+                <TextBlock Text="{Binding SearchStatus}" FontSize="11" Foreground="#B0B8C4" TextWrapping="Wrap" />
+            </StackPanel>
+            <ListBox Name="MemoryDumpList" ItemsSource="{Binding MemoryDump}"
+                     SelectedIndex="{Binding MatchLineIndex, Mode=TwoWay}"
+                     FontFamily="Cascadia Mono,Consolas,monospace" FontSize="12" />
+        </DockPanel>
+    </DockPanel>
+</UserControl>

@@ -19,6 +19,7 @@
     <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/ViceSharp.AiReview.Tests/ViceSharp.AiReview.Tests.csproj" />
     <Project Path="tests/ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj" />
     <Project Path="tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj" />
   </Folder>

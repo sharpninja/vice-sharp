@@ -2,9 +2,245 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="using:ViceSharp.Avalonia.ViewModels"
+        xmlns:views="using:ViceSharp.Avalonia.Views"
+        mc:Ignorable="d" d:DesignWidth="1120" d:DesignHeight="720"
         x:Class="ViceSharp.Avalonia.MainWindow"
+        x:DataType="vm:AttachPanelViewModel"
         Icon="/Assets/vicesharp-icon.png"
-        Title="ViceSharp.Avalonia">
-    Welcome to Avalonia!
+        Title="ViceSharp">
+    <!-- UI-REDESIGN S1 (FR-UIFLYOUT-001, FR-UIMENUBAR-001 skeleton, TR-UIAXAML-VIEWS-001):
+         declarative shell = Menu (top) + transport/status bar (bottom) +
+         SplitView flyout (pane = sidebar host, content = video host). The single
+         side-toggle button flips the flyout edge; the menu structure is filled
+         out in S5. Hosts are populated from code-behind to keep the existing
+         host-client / video / timer wiring intact while the views migrate. -->
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top" x:Name="PART_Menu">
+            <MenuItem Header="_File">
+                <MenuItem Header="Smart attach disk/tape..." Click="OnMenuSmartAttach" />
+                <Separator />
+                <MenuItem Header="Attach disk image">
+                    <MenuItem Header="Drive 8..." Click="OnMenuAttachDrive8" />
+                    <MenuItem Header="Drive 9..." Click="OnMenuAttachDrive9" />
+                </MenuItem>
+                <MenuItem Header="Detach disk">
+                    <MenuItem Header="Drive 8" Click="OnMenuDetachDrive8" />
+                    <MenuItem Header="Drive 9" Click="OnMenuDetachDrive9" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Reset">
+                    <MenuItem Header="Soft (warm)" Click="OnMenuWarmReset" />
+                    <MenuItem Header="Hard (cold)" Click="OnMenuColdReset" />
+                </MenuItem>
+                <MenuItem Header="Autostart drive 8" Click="OnRunDrive8" />
+                <Separator />
+                <MenuItem Header="E_xit" Click="OnMenuExit" />
+            </MenuItem>
+            <MenuItem Header="_Snapshot">
+                <MenuItem Header="Save screenshot..." Click="OnMenuSaveScreenshot" />
+                <Separator />
+                <MenuItem Header="Record sound..." Click="OnMenuRecordSound" />
+                <MenuItem Header="Record video">
+                    <MenuItem Header="MP4 + sound..." Click="OnMenuRecordVideoMp4" />
+                    <MenuItem Header="MP4 + sound + microphone..." Click="OnMenuRecordVideoMp4WithMicrophone" />
+                    <MenuItem Header="BMP sequence (all frames)..." Click="OnMenuRecordVideoBmpAll" />
+                    <MenuItem Header="BMP sequence (unique frames)..." Click="OnMenuRecordVideoBmpUnique" />
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Settings">
+                <MenuItem Header="Settings..." Click="OnMenuShowSettings" />
+                <Separator />
+                <MenuItem Header="Warp mode" Click="OnMenuToggleWarp" />
+                <MenuItem Header="True Drive">
+                    <MenuItem Header="Drive 8" Click="OnMenuTrueDrive8" />
+                    <MenuItem Header="Drive 9" Click="OnMenuTrueDrive9" />
+                </MenuItem>
+                <MenuItem Header="Swap joystick ports" Click="OnMenuSwapJoysticks" />
+            </MenuItem>
+            <MenuItem Header="_Debug">
+                <MenuItem Header="Pause" Click="OnMenuPause" />
+                <MenuItem Header="Resume" Click="OnMenuResume" />
+                <Separator />
+                <MenuItem Header="Step cycle" Click="OnStepCycle" />
+                <MenuItem Header="Step frame" Click="OnStepFrame" />
+                <Separator />
+                <MenuItem Header="Open monitor" Click="OnMenuOpenMonitor" />
+                <MenuItem Header="Copy Debug Attach Info" Click="OnMenuCopyDebugAttachInfo" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="About ViceSharp" Click="OnMenuAbout" />
+            </MenuItem>
+        </Menu>
+
+        <Border DockPanel.Dock="Bottom" MinHeight="34" Background="#1A1C20">
+            <DockPanel LastChildFill="True">
+                <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Spacing="4" Margin="6,4"
+                            VerticalAlignment="Center">
+                    <Button x:Name="PART_SidebarToggle" Content="☰" Padding="8,3" MinHeight="24"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            ToolTip.Tip="Show/hide sidebar" Click="OnToggleSidebar" />
+                    <Button x:Name="PART_DockSideToggle" Content="⇄" Padding="8,3" MinHeight="24"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            ToolTip.Tip="Move sidebar left/right" Click="OnToggleDockSide" />
+                </StackPanel>
+                <!-- Status fields split into cells laid out as a two-row grid
+                     (4 columns x 2 rows). Docked Left so it keeps its size and the
+                     transport WrapPanel (fill child) consumes the remaining width.
+                     The grid collapses to a single error line on a failed poll. -->
+                <Panel x:Name="PART_StatusHost" DockPanel.Dock="Left"
+                       x:DataType="vm:StatusBarViewModel" Margin="8,3">
+                    <Panel.Styles>
+                        <Style Selector="Border.statusCell">
+                            <Setter Property="Background" Value="#232730" />
+                            <Setter Property="CornerRadius" Value="3" />
+                            <Setter Property="Margin" Value="2,1" />
+                            <Setter Property="Padding" Value="7,2" />
+                            <Setter Property="MinWidth" Value="74" />
+                        </Style>
+                        <Style Selector="Border.statusCell TextBlock.lbl">
+                            <Setter Property="FontSize" Value="9" />
+                            <Setter Property="Foreground" Value="#7A8290" />
+                        </Style>
+                        <Style Selector="Border.statusCell TextBlock.val">
+                            <Setter Property="FontSize" Value="12" />
+                            <Setter Property="Foreground" Value="#E2E8F0" />
+                            <Setter Property="FontFamily" Value="Cascadia Mono,Consolas,monospace" />
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                        </Style>
+                    </Panel.Styles>
+
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto"
+                          VerticalAlignment="Center"
+                          ToolTip.Tip="{Binding StatusText}"
+                          IsVisible="{Binding !HasError}">
+                        <Border Grid.Row="0" Grid.Column="0" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="POWER" />
+                                <TextBlock Classes="val" Text="{Binding Power}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="1" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="RUN" />
+                                <TextBlock Classes="val" Text="{Binding Run}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="2" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="LIMITER" />
+                                <TextBlock Classes="val" Text="{Binding Limiter}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="3" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="FPS" />
+                                <TextBlock Classes="val" Text="{Binding Fps}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="0" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="CLOCK" />
+                                <TextBlock Classes="val" Text="{Binding Clock}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="CYCLE" />
+                                <TextBlock Classes="val" Text="{Binding Cycle}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="PC" />
+                                <TextBlock Classes="val" Text="{Binding Pc}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3" Classes="statusCell">
+                            <StackPanel>
+                                <TextBlock Classes="lbl" Text="IEC" />
+                                <TextBlock Classes="val" Text="{Binding Iec}" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Per-CPU rates: one entry per CPU (host + each drive), shown only on
+                             multi-CPU rigs so a bare C64 keeps the compact two-row layout. -->
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Classes="statusCell"
+                                IsVisible="{Binding HasPerCpuRates}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Classes="lbl" Text="CPUS" VerticalAlignment="Center" />
+                                <ItemsControl ItemsSource="{Binding PerCpuRates}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" Spacing="8" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Classes="val" Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <TextBlock VerticalAlignment="Center" Margin="2,0" FontSize="12"
+                               Foreground="#FF8A8A" TextTrimming="CharacterEllipsis"
+                               Text="{Binding ErrorText}"
+                               IsVisible="{Binding HasError}" />
+                </Panel>
+                <!-- Master audio: mute toggle + volume slider, stacked, between the
+                     status grid and the transport controls. Bound to AttachPanelViewModel,
+                     which drives the process-wide MasterAudioControl. -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Spacing="2"
+                            VerticalAlignment="Center" Margin="6,3" Width="124">
+                    <ToggleButton IsChecked="{Binding Muted}" Content="Mute"
+                                  Padding="6,1" MinHeight="20" FontSize="11"
+                                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                  ToolTip.Tip="Mute emulator audio" />
+                    <Slider Minimum="0" Maximum="100" Value="{Binding MasterVolumePercent}"
+                            MinHeight="0" Padding="0" TickFrequency="10"
+                            ToolTip.Tip="Master volume" />
+                </StackPanel>
+                <!-- Transport controls: the fill child, so they consume the unused
+                     bar width left of the right edge. Right-aligned and measured
+                     against that whole leftover, so they sit in one row when there
+                     is room and only wrap to further rows when the bar gets narrow.
+                     WrapPanel has no Spacing, so each button carries its own
+                     right/bottom margin for the inter-row gap. -->
+                <WrapPanel Orientation="Horizontal" Margin="6,4"
+                           HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <!-- Visible only while a video recording is active (toggled from
+                         code-behind via RefreshRecordingIndicator); one click stops it.
+                         A discoverable alternative to re-invoking the Snapshot menu. -->
+                    <Button x:Name="PART_StopRecording" Content="⏹ Stop recording"
+                            Padding="9,3" MinHeight="24" Margin="0,0,8,4" IsVisible="False"
+                            Background="#C0392B" Foreground="White" FontWeight="SemiBold"
+                            ToolTip.Tip="Stop the active video recording" Click="OnStopRecording" />
+                    <Button Content="Pause" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuPause" />
+                    <Button Content="Resume" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuResume" />
+                    <Button Content="+1 cyc" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnStepCycle" />
+                    <Button Content="+1 frm" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnStepFrame" />
+                    <Button Content="-1 cyc" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnRewindCycle" />
+                    <Button Content="-1 frm" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnRewindFrame" />
+                    <Button Content="Cold" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuColdReset" />
+                    <Button Content="Warm" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnMenuWarmReset" />
+                    <Button Content="Run 8" Padding="7,3" MinHeight="24" Margin="0,0,4,4" Click="OnRunDrive8" />
+                </WrapPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Emulator display is a control docked to the right, aspect-sized by
+             VideoSurface.MeasureOverride so it takes only the width it needs; the sidebar is
+             the stretched fill child and consumes the rest. Code-behind (ApplyContentLayout)
+             flips the dock edge with DockSide and, on collapse, reorders so the display fills. -->
+        <DockPanel x:Name="PART_ContentPanel" LastChildFill="True">
+            <!-- FR-IECMON-001: real-time IEC bus monitor. Collapsed (no docked space) unless the
+                 session has a true-drive IEC bus, so the single-system layout is unchanged. -->
+            <views:IecMonitorView x:Name="PART_IecMonitor" DockPanel.Dock="Top" />
+            <ContentControl x:Name="PART_VideoHost" DockPanel.Dock="Right" />
+            <ContentControl x:Name="PART_SidebarHost"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+        </DockPanel>
+    </DockPanel>
 </Window>

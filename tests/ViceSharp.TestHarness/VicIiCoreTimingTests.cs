@@ -325,6 +325,7 @@ public sealed class VicIiCoreTimingTests
         public ushort PC { get; set; }
         public byte Flags { get; set; }
         public long TickCount { get; private set; }
+        public long ExecutedCycles => TickCount;
         public bool CanStealCurrentCycle => true;
         public bool CanForceStealCurrentCycle => false;
 

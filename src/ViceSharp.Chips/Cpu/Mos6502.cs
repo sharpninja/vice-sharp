@@ -31,6 +31,11 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     }
     public byte Flags { get => P; set => P = value; }
     public byte P;
+
+    // FR-CPUTICK-001: this CPU's own executed-cycle counter (incremented per Tick()).
+    private long _executedCycles;
+    public long ExecutedCycles => _executedCycles;
+
     public bool IsInstructionBoundary => !_suppressBootstrapBoundary && _cycle == 0;
     public int DebugCycle => _cycle;
     public byte DebugOpcode => _opcode;
@@ -111,6 +116,16 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     public Func<ushort, bool>? ShouldDeferAbsoluteStore { get; set; }
     public Func<ushort, bool>? ShouldDelayNextFetchAfterWrite { get; set; }
 
+    /// <summary>
+    /// Optional KERNAL-trap hook (the VICE serial-trap equivalent). Invoked at
+    /// each instruction boundary with the address about to be fetched. If it
+    /// returns true the trapped instruction is skipped: the handler has already
+    /// mutated registers/memory and set <see cref="PC"/> to the routine's resume
+    /// address. Used to service virtual (non-true-drive) disk I/O without
+    /// bit-banging the IEC bus. Null on true-drive and cycle-parity rigs.
+    /// </summary>
+    public Func<ushort, bool>? SerialTrapHook { get; set; }
+
     public Mos6502(IBus bus)
     {
         _bus = bus;
@@ -122,6 +137,8 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     }
 
     private byte _opcode;
+    private ushort _currentInstructionPc; // fetch address of the in-flight instruction (for the completed-instruction publish)
+    private bool _instructionExecuted; // guards the instruction-completed publish against the first (pre-fetch) boundary
     private int _cycle;
     private int _bootstrapCycles;
     private bool _suppressBootstrapBoundary;
@@ -154,6 +171,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
     public void Tick()
     {
+        // Per-CPU executed-cycle counter (FR-CPUTICK-001): Tick() is invoked once per
+        // cycle this CPU actually executes - the clock skips it on stolen cycles - so a
+        // simple increment here counts executed cycles only, independently of the shared
+        // system clock and of any other CPU in the rig.
+        _executedCycles++;
+
         var fetchingBranchTarget = false;
         var fetchingCallTarget = false;
         if (_suppressBootstrapBoundary)
@@ -200,9 +223,34 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
         if (_cycle == 0)
         {
+            // Instruction boundary: the previous instruction has fully executed.
+            // Publish it (opcode + post-execution registers) for diagnostic / pacing
+            // subscribers. Gated on a live subscriber so an unobserved run pays only
+            // a null + count check per instruction; pure notification, so cycle parity
+            // is unaffected.
+            if (_instructionExecuted && _pubSub is { SubscriptionCount: > 0 })
+            {
+                _pubSub.Publish(
+                    CpuInstructionCompletedEvent.Topic,
+                    new CpuInstructionCompletedEvent(_currentInstructionPc, _opcode, A, X, Y, S, P, _pc));
+            }
+
             _instructionPC = _pc;
             _visiblePC = _instructionPC;
+            _currentInstructionPc = _pc; // the instruction about to be fetched here
+
+            // KERNAL serial-bus trap (VICE virtual device traps). If a trap fires
+            // it has set PC to the routine's resume address; skip the trapped
+            // instruction and re-fetch from there on the next cycle. The hook is
+            // a no-op (returns false) unless a virtual disk is being addressed,
+            // so cycle-accurate behaviour is unchanged in every other case.
+            if (SerialTrapHook is not null && SerialTrapHook(_pc))
+            {
+                return;
+            }
+
             _opcode = Read(_pc++);
+            _instructionExecuted = true; // a real instruction has now been fetched/executed
             _cycle = GetCycleCount(_opcode);
             _stagedMemoryReadCompleted = false;
             _delayNextFetch = false;
@@ -928,6 +976,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
     public void Reset()
     {
+        _executedCycles = 0;
         A = 0;
         X = 0;
         Y = 0;

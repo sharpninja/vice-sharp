@@ -93,6 +93,14 @@ public enum SettingsResourceKind
 
 public sealed record MachineStateDto(byte A, byte X, byte Y, byte S, byte P, ushort Pc, long Cycle);
 
+/// <summary>One CPU's speed entry on the status surface: its label, its effective rate (its own
+/// executed-cycle delta over wall time), and that as a percent of its own target clock.</summary>
+public sealed record PerCpuRateDto(string Label, double EffectiveClockHz, double EffectiveClockPercent);
+
+/// <summary>One IEC line's live state for the bus monitor: the signal name, its resolved level
+/// (high = released), and a display string of the endpoints pulling it low (empty when released).</summary>
+public sealed record IecBusLineDto(string Signal, bool IsHigh, string Pullers);
+
 public sealed record EmulatorStatusDto(
     string SessionId,
     string Architecture,
@@ -116,6 +124,20 @@ public sealed record EmulatorStatusDto(
     string IecBusActivityState = "Idle")
 {
     public double MeasuredFramesPerSecond => MeasuredFps;
+
+    /// <summary>
+    /// Per-CPU speed entries - one per CPU in the rig (host first, then each peripheral CPU) so
+    /// the status surface lists each distinctly. Init-only with an empty default so existing
+    /// construction sites are unaffected; set via a <c>with</c> expression on the mapping path.
+    /// </summary>
+    public IReadOnlyList<PerCpuRateDto> PerCpuRates { get; init; } = Array.Empty<PerCpuRateDto>();
+
+    /// <summary>
+    /// Live IEC bus line states for the monitor panel - one entry per signal (ATN/CLK/DATA/SRQ)
+    /// with its resolved level and who is pulling it. Init-only with an empty default; populated
+    /// only for sessions that have a true-drive IEC bus.
+    /// </summary>
+    public IReadOnlyList<IecBusLineDto> IecBusLines { get; init; } = Array.Empty<IecBusLineDto>();
 }
 
 public static class EmulatorHost
@@ -205,7 +227,12 @@ public interface IEmulatorHost
         CancellationToken cancellationToken = default);
 }
 
-public sealed record CreateEmulatorSessionRequest(string ArchitectureId = "minimal", string DisplayName = "");
+public sealed record CreateEmulatorSessionRequest(
+    string ArchitectureId = "minimal",
+    string DisplayName = "",
+    bool TrueDrive = false,
+    int TrueDriveDevice = 8,
+    string TrueDriveDiskImagePath = "");
 
 public sealed record SessionRequest(string SessionId);
 
@@ -235,6 +262,98 @@ public sealed record GetEmulatorStatusResponse(
 public sealed record EmulatorCommandResponse(
     RpcStatus Status,
     EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
+
+public static class DiagnosticsService
+{
+    public const string ServiceName = "vice_sharp.v1.DiagnosticsService";
+    public const string GetHostInfo = "GetHostInfo";
+    public const string ListSessions = "ListSessions";
+    public const string GetCurrentSession = "GetCurrentSession";
+    public const string GetPerformanceSnapshot = "GetPerformanceSnapshot";
+    public const string WatchPerformance = "WatchPerformance";
+}
+
+public interface IDiagnosticsService
+{
+    ValueTask<GetHostInfoResponse> GetHostInfoAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<ListSessionsResponse> ListSessionsAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<GetCurrentSessionResponse> GetCurrentSessionAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<PerformanceSnapshotResponse> GetPerformanceSnapshotAsync(
+        PerformanceSnapshotRequest request,
+        CancellationToken cancellationToken = default);
+
+    IAsyncEnumerable<PerformanceSnapshotResponse> WatchPerformanceAsync(
+        WatchPerformanceRequest request,
+        CancellationToken cancellationToken = default);
+}
+
+public sealed record HostInfoDto(
+    int ProcessId,
+    string Endpoint,
+    string ProtocolPackage,
+    string ProtocolVersion,
+    string AppVersion,
+    string BuildSha,
+    DateTimeOffset StartedAtUtc);
+
+public sealed record SessionSummaryDto(
+    string SessionId,
+    string DisplayName,
+    string Architecture,
+    EmulatorRunState RunState,
+    long Cycle,
+    long FrameCount,
+    string CurrentMedia);
+
+public sealed record ProcessDiagnosticsDto(
+    long TotalProcessorTimeMs,
+    long WorkingSetBytes,
+    long PrivateMemoryBytes,
+    long ManagedMemoryBytes,
+    int Gen0Collections,
+    int Gen1Collections,
+    int Gen2Collections,
+    int ThreadCount);
+
+public sealed record PumpDiagnosticsDto(
+    bool WorkerAlive,
+    int ActiveSessionCount,
+    DateTimeOffset LastTickAtUtc);
+
+public sealed record UiDiagnosticsDto(
+    string CurrentSessionId,
+    DateTimeOffset LastStatusUpdateUtc,
+    DateTimeOffset LastFrameUpdateUtc);
+
+public sealed record PerformanceSnapshotDto(
+    HostInfoDto HostInfo,
+    EmulatorStatusDto? EmulatorStatus,
+    ProcessDiagnosticsDto Process,
+    PumpDiagnosticsDto Pump,
+    UiDiagnosticsDto Ui);
+
+public sealed record PerformanceSnapshotRequest(string SessionId = "", int IntervalMs = 1000);
+
+public sealed record WatchPerformanceRequest(string SessionId = "", int IntervalMs = 1000);
+
+public sealed record GetHostInfoResponse(
+    RpcStatus Status,
+    HostInfoDto? HostInfo) : IRpcResponse;
+
+public sealed record ListSessionsResponse(
+    RpcStatus Status,
+    IReadOnlyList<SessionSummaryDto> Sessions) : IRpcResponse;
+
+public sealed record GetCurrentSessionResponse(
+    RpcStatus Status,
+    SessionSummaryDto? Session) : IRpcResponse;
+
+public sealed record PerformanceSnapshotResponse(
+    RpcStatus Status,
+    PerformanceSnapshotDto? Snapshot) : IRpcResponse;
 
 public static class SettingsService
 {
@@ -272,7 +391,7 @@ public sealed record SettingsProfileDto(
     bool IsAvailable,
     string Description = "");
 
-public sealed record LimiterSettingsDto(double RatePercent = 100, bool IsEnabled = true);
+public sealed record LimiterSettingsDto(double RatePercent = 100, bool IsEnabled = true, string PacingStrategy = "vice");
 
 public sealed record DisplaySettingsDto(
     string Renderer = "host",
@@ -543,6 +662,9 @@ public static class MonitorService
     public const string RemoveBreakpoint = "RemoveBreakpoint";
     public const string ReadMemory = "ReadMemory";
     public const string WriteMemory = "WriteMemory";
+    public const string GetTickHistory = "GetTickHistory";
+    public const string ReadMemoryAtTick = "ReadMemoryAtTick";
+    public const string GetChipStateAtTick = "GetChipStateAtTick";
 }
 
 public interface IMonitorService
@@ -577,6 +699,22 @@ public interface IMonitorService
 
     ValueTask<MonitorMemoryWriteResponse> WriteMemoryAsync(
         MonitorWriteMemoryRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: the last captured CPU instructions (ticks).</summary>
+    ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: a memory window reconstructed as it was at a past tick
+    /// (current paused memory with later ticks' write-deltas reverse-applied).</summary>
+    ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(
+        ReadMemoryAtTickRequest request,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Time-travel debugger: each chip's decoded full state as captured at a past tick.</summary>
+    ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(
+        GetChipStateAtTickRequest request,
         CancellationToken cancellationToken = default);
 }
 
@@ -631,6 +769,34 @@ public sealed record MonitorMemoryWriteResponse(
     int BytesWritten,
     EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
 
+public sealed record TickHistoryEntryDto(
+    int Index,
+    int InstructionAddress,
+    int Opcode,
+    int A,
+    int X,
+    int Y,
+    int S,
+    int P,
+    int Pc,
+    int WriteCount);
+
+public sealed record GetTickHistoryResponse(
+    RpcStatus Status,
+    IReadOnlyList<TickHistoryEntryDto> Ticks) : IRpcResponse;
+
+public sealed record ReadMemoryAtTickRequest(string SessionId, int TickIndex, int Address, int Length);
+
+public sealed record ChipStateFieldDto(string Name, int Value, int Width);
+
+public sealed record ChipStateDto(string ChipName, IReadOnlyList<ChipStateFieldDto> Fields);
+
+public sealed record GetChipStateAtTickRequest(string SessionId, int TickIndex);
+
+public sealed record GetChipStateAtTickResponse(
+    RpcStatus Status,
+    IReadOnlyList<ChipStateDto> Chips) : IRpcResponse;
+
 public static class SnapshotService
 {
     public const string ServiceName = "vice_sharp.v1.SnapshotService";
@@ -664,13 +830,19 @@ public sealed record RestoreSnapshotResponse(
 public static class CaptureService
 {
     public const string ServiceName = "vice_sharp.v1.CaptureService";
+    public const string GetCaptureCapabilities = "GetCaptureCapabilities";
     public const string StartCapture = "StartCapture";
     public const string StopCapture = "StopCapture";
     public const string CaptureFrame = "CaptureFrame";
+    public const string ListCaptures = "ListCaptures";
 }
 
 public interface ICaptureService
 {
+    ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
+
     ValueTask<StartCaptureResponse> StartCaptureAsync(
         StartCaptureRequest request,
         CancellationToken cancellationToken = default);
@@ -682,6 +854,10 @@ public interface ICaptureService
     ValueTask<CaptureFrameResponse> CaptureFrameAsync(
         CaptureFrameRequest request,
         CancellationToken cancellationToken = default);
+
+    ValueTask<ListCapturesResponse> ListCapturesAsync(
+        SessionRequest request,
+        CancellationToken cancellationToken = default);
 }
 
 public sealed record CaptureSessionDto(
@@ -692,11 +868,38 @@ public sealed record CaptureSessionDto(
 
 public sealed record CaptureArtifactDto(string FilePath, string Format, long Cycle);
 
-public sealed record StartCaptureRequest(string SessionId, CaptureKind Kind, string TargetPath);
+public sealed record StartCaptureRequest(
+    string SessionId,
+    CaptureKind Kind,
+    string TargetPath,
+    string Format = "",
+    IReadOnlyDictionary<string, string>? Options = null,
+    bool CaptureMicrophone = false,
+    string MicrophoneDevice = "",
+    string MicrophoneInputFormat = "");
+
+/// <summary>One selectable video-recording driver and the codecs it offers (x64sc parity).</summary>
+public sealed record CaptureVideoFormatDto(
+    string Id,
+    string Container,
+    IReadOnlyList<string> VideoCodecs,
+    IReadOnlyList<string> AudioCodecs,
+    bool RequiresFfmpeg,
+    bool SupportsMicrophone = false);
+
+public sealed record GetCaptureCapabilitiesResponse(
+    RpcStatus Status,
+    IReadOnlyList<string> ScreenshotFormats,
+    IReadOnlyList<string> AudioFormats,
+    IReadOnlyList<CaptureVideoFormatDto> VideoFormats) : IRpcResponse;
+
+public sealed record ListCapturesResponse(
+    RpcStatus Status,
+    IReadOnlyList<CaptureSessionDto> Captures) : IRpcResponse;
 
 public sealed record StopCaptureRequest(string SessionId, string CaptureId);
 
-public sealed record CaptureFrameRequest(string SessionId, string FilePath);
+public sealed record CaptureFrameRequest(string SessionId, string FilePath, string Format = "png");
 
 public sealed record StartCaptureResponse(
     RpcStatus Status,

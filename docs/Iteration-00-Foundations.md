@@ -60,7 +60,7 @@ Each phase follows the Byrd Development Process:
 - Media capture interfaces with stub implementations
 
 #### Batch 15: Apps, ROM Fetch, Determinism, CI/CD
-- Console app (NativeAOT target)
+- Console app (managed reference shell)
 - Avalonia desktop app shell
 - ROM fetch tool
 - Determinism test (empty machine snapshot comparison)
@@ -70,7 +70,7 @@ Each phase follows the Byrd Development Process:
 
 - [ ] `dotnet build ViceSharp.slnx` succeeds with zero warnings
 - [ ] `dotnet test ViceSharp.slnx` — all tests pass
-- [ ] NativeAOT console app publishes and runs (starts, prints version, exits)
+- [ ] Console app publishes and runs using the supported managed packaging path (starts, prints version, exits)
 - [ ] Avalonia app launches showing an empty display surface
 - [ ] Determinism test: two independent empty-machine snapshots are byte-identical
 - [ ] All 33+ interfaces are mockable (NSubstitute test validates each)

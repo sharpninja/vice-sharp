@@ -2,7 +2,9 @@ namespace ViceSharp.TestHarness;
 
 using System.Collections.Specialized;
 using System.ComponentModel;
+using NSubstitute;
 using ViceSharp.Avalonia.Host;
+using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Avalonia.ViewModels;
 using ViceSharp.Protocol;
 using Xunit;
@@ -176,6 +178,112 @@ public sealed class AttachPanelViewModelTests
         Assert.True(viewModel.RequiresRestart);
         Assert.Contains(nameof(viewModel.HasPendingSettingsChanges), changes);
         Assert.Contains(nameof(viewModel.RequiresRestart), changes);
+    }
+
+    /// <summary>
+    /// FR-PACESEL-001 / TR-PACESEL-STRAT-001 / TEST-PACESEL-001.
+    /// Use case: The pacing strategy applies live (the pump swaps its gate), so changing it
+    /// must mark a pending settings change but NOT require a session restart.
+    /// Acceptance: Setting SelectedPacingStrategy to "Semaphore" flags HasPendingSettingsChanges
+    /// true and leaves RequiresRestart false.
+    /// </summary>
+    [Fact]
+    public void LiveSettingChange_PacingStrategy_FlagsPendingNotRestart()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+        viewModel.SelectedPacingStrategy = "Semaphore";
+
+        Assert.True(viewModel.HasPendingSettingsChanges);
+        Assert.False(viewModel.RequiresRestart);
+    }
+
+    /// <summary>
+    /// FR-SIDEBARUI-001 / TR-SIDEBARUI-LAYOUT-001 / TEST-SIDEBARUI-001.
+    /// Use case: the sidebar resize splitter sits on the INNER edge facing the video, so it
+    ///   flips side with the panel's anchor.
+    /// Acceptance: anchored Left gives SplitterDock Right; anchored Right gives Dock Left;
+    ///   switching anchors raises PropertyChanged for SplitterDock.
+    /// </summary>
+    [Fact]
+    public void Splitter_Dock_TracksAnchorSide()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+        viewModel.DockLeft();
+        Assert.Equal(global::Avalonia.Controls.Dock.Right, viewModel.SplitterDock);
+
+        var changes = TrackPropertyChanges(viewModel);
+        viewModel.DockRight();
+
+        Assert.Equal(global::Avalonia.Controls.Dock.Left, viewModel.SplitterDock);
+        Assert.Contains(nameof(viewModel.SplitterDock), changes);
+    }
+
+    /// <summary>
+    /// FR-SIDEBARUI-001 / TR-SIDEBARUI-LAYOUT-001 / TEST-SIDEBARUI-001.
+    /// Use case: dragging the inner-edge splitter resizes the sidebar pane width (bound to
+    ///   SplitView.OpenPaneLength), clamped to a sensible range. The drag direction respects
+    ///   the anchor: the splitter is on the pane's right edge when anchored Left (rightward
+    ///   drag widens) and its left edge when anchored Right (rightward drag narrows).
+    /// Acceptance: SidebarWidth starts at the default; a +40 drag widens to 300 when anchored
+    ///   Left and narrows back to 260 when anchored Right; extreme drags clamp to
+    ///   [SidebarMinWidth, SidebarMaxWidth].
+    /// </summary>
+    [Fact]
+    public void Splitter_ResizeSidebar_RespectsAnchorAndClamps()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        Assert.Equal(260d, viewModel.SidebarWidth);
+
+        viewModel.DockLeft();
+        viewModel.ResizeSidebar(40);
+        Assert.Equal(300d, viewModel.SidebarWidth);
+
+        viewModel.DockRight();
+        viewModel.ResizeSidebar(40);
+        Assert.Equal(260d, viewModel.SidebarWidth);
+
+        viewModel.DockLeft();
+        viewModel.ResizeSidebar(100000);
+        Assert.Equal(AttachPanelViewModel.SidebarMaxWidth, viewModel.SidebarWidth);
+
+        viewModel.ResizeSidebar(-100000);
+        Assert.Equal(AttachPanelViewModel.SidebarMinWidth, viewModel.SidebarWidth);
+    }
+
+    /// <summary>
+    /// FR-AUDIOOUT-001 / TR-AUDIOOUT-MASTER-001 / TEST-AUDIOOUT-001.
+    /// Use case: the status-bar mute toggle and volume slider drive the process-wide master
+    ///   output level (MasterAudioControl), which the audio backend applies to its samples.
+    /// Acceptance: setting MasterVolumePercent scales MasterAudioControl.Volume (percent/100);
+    ///   toggling Muted sets MasterAudioControl.Muted so EffectiveGain is 0 while muted and the
+    ///   stored volume returns when unmuted.
+    /// </summary>
+    [Fact]
+    public void AudioControls_MuteAndVolume_DriveMasterAudioControl()
+    {
+        try
+        {
+            global::ViceSharp.Host.Audio.MasterAudioControl.Muted = false;
+            global::ViceSharp.Host.Audio.MasterAudioControl.Volume = 1f;
+            var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+            viewModel.MasterVolumePercent = 40;
+            Assert.Equal(0.40f, global::ViceSharp.Host.Audio.MasterAudioControl.Volume, 2);
+
+            viewModel.Muted = true;
+            Assert.True(global::ViceSharp.Host.Audio.MasterAudioControl.Muted);
+            Assert.Equal(0f, global::ViceSharp.Host.Audio.MasterAudioControl.EffectiveGain);
+
+            viewModel.Muted = false;
+            Assert.Equal(0.40f, global::ViceSharp.Host.Audio.MasterAudioControl.EffectiveGain, 2);
+        }
+        finally
+        {
+            global::ViceSharp.Host.Audio.MasterAudioControl.Muted = false;
+            global::ViceSharp.Host.Audio.MasterAudioControl.Volume = 1f;
+        }
     }
 
     /// <summary>
@@ -528,6 +636,577 @@ public sealed class AttachPanelViewModelTests
         viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 12), RpcStatus.Ok());
 
         Assert.Contains("IEC Idle", viewModel.StatusText);
+    }
+
+    /// <summary>
+    /// FR: FR-UI-002, TR: TR-UI-SHELL-001, TEST-UI-001.
+    /// Use case: the status bar splits its runtime text into individual cells laid out
+    ///   in a two-row grid, so each field is exposed as its own bare value (label lives
+    ///   in the view) rather than only as one concatenated string.
+    /// Acceptance: a successful ApplyStatus populates Power/Run/Limiter/Fps/Clock/Cycle/
+    ///   Pc/Iec with the bare values and leaves ErrorText empty; a failed poll routes the
+    ///   message to ErrorText so the cells can collapse to a single error line.
+    /// </summary>
+    [Fact]
+    public void StatusBarViewModel_ExposesPerFieldCells_ForTwoRowGrid()
+    {
+        var viewModel = new StatusBarViewModel();
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: true, transitionCount: 12), RpcStatus.Ok());
+
+        Assert.Equal("On", viewModel.Power);
+        Assert.Equal("Running", viewModel.Run);
+        Assert.Equal("100%", viewModel.Limiter);
+        Assert.Equal("50.0", viewModel.Fps);
+        Assert.Equal("1.000 MHz (100%)", viewModel.Clock);
+        Assert.Equal("1234", viewModel.Cycle);
+        Assert.Equal("C000", viewModel.Pc);
+        Assert.Equal("Active", viewModel.Iec);
+        Assert.Empty(viewModel.ErrorText);
+
+        viewModel.ApplyStatus(null, RpcStatus.Unavailable("host down"));
+
+        Assert.Equal("host down", viewModel.ErrorText);
+    }
+
+    /// <summary>
+    /// FR: FR-CPUTICK-001, TR: TR-CPU-TICK-001, TEST-CPUTICK-001 (AC3 display).
+    /// Use case: a true-drive rig (C64 + 1541) must show each CPU's own speed on the status bar
+    ///   so the user sees the host and the drive running at their own rates; a bare C64 should
+    ///   not add a redundant row (its single CPU is the headline Clock).
+    /// Acceptance: a status with more than one PerCpuRate exposes one compact formatted row per
+    ///   CPU (label shortened + percent) and folds them into StatusText; a single-CPU status
+    ///   leaves PerCpuRates empty.
+    /// </summary>
+    [Fact]
+    public void StatusBarViewModel_ListsPerCpuRows_OnlyForMultiCpuRigs()
+    {
+        var viewModel = new StatusBarViewModel();
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 0), RpcStatus.Ok());
+        Assert.Empty(viewModel.PerCpuRates);
+
+        var rig = CreateStatus(iecActive: true, transitionCount: 5) with
+        {
+            PerCpuRates = new[]
+            {
+                new PerCpuRateDto("Commodore 64 PAL", 970_000d, 98d),
+                new PerCpuRateDto("C1541", 1_000_000d, 100d),
+            },
+        };
+        viewModel.ApplyStatus(rig, RpcStatus.Ok());
+
+        Assert.Equal(2, viewModel.PerCpuRates.Count);
+        Assert.Equal("C64 98%", viewModel.PerCpuRates[0]);
+        Assert.Equal("1541 100%", viewModel.PerCpuRates[1]);
+        Assert.Contains("CPUs C64 98%, 1541 100%", viewModel.StatusText);
+    }
+
+    /// <summary>
+    /// FR: FR-UIFLYOUT-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIFLYOUT-001.
+    /// Use case: The shell replaces the separate Left/Right dock buttons with a
+    /// single icon that flips the flyout side, so the view-model must expose a
+    /// single ToggleDockSide that alternates Left and Right.
+    /// Acceptance: From the default Left, ToggleDockSide makes DockSide Right and
+    /// a second call returns it to Left; each flip raises PropertyChanged for
+    /// DockSide and the derived PanePlacement.
+    /// </summary>
+    [Fact]
+    public void ToggleDockSide_FlipsLeftRight()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var changes = TrackPropertyChanges(viewModel);
+
+        Assert.Equal(AttachDockSide.Left, viewModel.DockSide);
+
+        viewModel.ToggleDockSide();
+        Assert.Equal(AttachDockSide.Right, viewModel.DockSide);
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Right, viewModel.PanePlacement);
+        Assert.Contains(nameof(viewModel.DockSide), changes);
+        Assert.Contains(nameof(viewModel.PanePlacement), changes);
+
+        changes.Clear();
+        viewModel.ToggleDockSide();
+        Assert.Equal(AttachDockSide.Left, viewModel.DockSide);
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Left, viewModel.PanePlacement);
+        Assert.Contains(nameof(viewModel.DockSide), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-UIFLYOUT-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIFLYOUT-001.
+    /// Use case: The sidebar is a flyout whose open/closed state the shell binds
+    /// to SplitView.IsPaneOpen; the view-model must default to open and offer a
+    /// ToggleSidebar that flips the state with notification.
+    /// Acceptance: IsPaneOpen defaults to true; ToggleSidebar flips it to false
+    /// then back to true, raising PropertyChanged(IsPaneOpen) on each flip.
+    /// </summary>
+    [Fact]
+    public void ToggleSidebar_TogglesIsPaneOpen()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var changes = TrackPropertyChanges(viewModel);
+
+        Assert.True(viewModel.IsPaneOpen);
+
+        viewModel.ToggleSidebar();
+        Assert.False(viewModel.IsPaneOpen);
+        Assert.Contains(nameof(viewModel.IsPaneOpen), changes);
+
+        changes.Clear();
+        viewModel.ToggleSidebar();
+        Assert.True(viewModel.IsPaneOpen);
+        Assert.Contains(nameof(viewModel.IsPaneOpen), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-UIFLYOUT-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIFLYOUT-001.
+    /// Use case: The AXAML shell binds SplitView.PanePlacement to the view-model
+    /// so the flyout renders on the correct edge; the mapping from the
+    /// dock-side enum to the Avalonia placement must be deterministic.
+    /// Acceptance: Left maps to SplitViewPanePlacement.Left and Right maps to
+    /// SplitViewPanePlacement.Right, both consistent with DockSide.
+    /// </summary>
+    [Fact]
+    public void PanePlacement_MatchesDockSide()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+
+        viewModel.DockLeft();
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Left, viewModel.PanePlacement);
+
+        viewModel.DockRight();
+        Assert.Equal(global::Avalonia.Controls.SplitViewPanePlacement.Right, viewModel.PanePlacement);
+    }
+
+    /// <summary>
+    /// FR: FR-UIPERIPHERAL-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIPERIPHERAL-001.
+    /// Use case: A single reusable card template renders every peripheral; its
+    /// drive-only affordances (IEC activity, True Drive toggle) are gated on
+    /// SupportsTrueDrive so the same template adapts per slot kind, and Drive 8
+    /// defaults to the VICE-faithful True Drive path.
+    /// Acceptance: Drive 8 and Drive 9 report SupportsTrueDrive true while Tape
+    /// and Cartridge report false; Drive 8 TrueDrive defaults true, Drive 9 defaults
+    /// false, and toggling it raises PropertyChanged so the card checkbox stays in sync.
+    /// </summary>
+    [Fact]
+    public void PeripheralCard_BindingSurface_TrueDrivePerSlotKind()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+        var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);
+        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);
+        var cartridge = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Cartridge);
+
+        Assert.True(drive8.SupportsTrueDrive);
+        Assert.True(drive9.SupportsTrueDrive);
+        Assert.False(tape.SupportsTrueDrive);
+        Assert.False(cartridge.SupportsTrueDrive);
+
+        Assert.True(drive8.TrueDrive);
+        Assert.False(drive9.TrueDrive);
+        var changes = TrackPropertyChanges(drive8);
+        drive8.TrueDrive = false;
+        Assert.False(drive8.TrueDrive);
+        Assert.Contains(nameof(drive8.TrueDrive), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-UIPERIPHERAL-001, TR: TR-MVVM-001, TEST-UIPERIPHERAL-001.
+    /// Use case: The reusable card's Attach button routes through the panel
+    /// view-model's host-backed picker pipeline rather than owning the dialog,
+    /// so the card stays presentation-only.
+    /// Acceptance: With no FilePicker set, AttachFromPickerAsync surfaces an
+    /// inline "File picker is unavailable." error; with a picker that returns a
+    /// path the attach is routed to the host (observed here as the disconnected
+    /// host reporting a validation error on the slot).
+    /// </summary>
+    [Fact]
+    public async Task AttachFromPicker_RoutesThroughHostAttachPipeline()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+
+        await viewModel.AttachFromPickerAsync(drive8, TestContext.Current.CancellationToken);
+        Assert.True(drive8.HasValidationError);
+        Assert.Equal("File picker is unavailable.", drive8.ValidationError);
+
+        var pickerInvoked = false;
+        viewModel.FilePicker = _ =>
+        {
+            pickerInvoked = true;
+            return Task.FromResult<string?>(@"C:\does-not-exist\demo.d64");
+        };
+
+        await viewModel.AttachFromPickerAsync(drive8, TestContext.Current.CancellationToken);
+        Assert.True(pickerInvoked);
+        Assert.True(drive8.HasValidationError);
+    }
+
+    /// <summary>
+    /// FR: FR-DRVTRUE-001 / FR-IECLOAD-001 / BUG-THROTTLE-001, TR: TR-MVVM-001.
+    /// Use case: attaching a D64 to the default Drive 8 slot must rebuild the
+    ///   host as a true-drive rig with that disk inserted, matching the VICE
+    ///   reference path instead of staying on the simulated drive.
+    /// Acceptance: AttachAsync sends the media payload, marks the slot attached,
+    ///   and calls SetTrueDriveAsync(true, 8, attachedPath).
+    /// </summary>
+    [Fact]
+    public async Task AttachAsync_Drive8DefaultTrueDrive_RebuildsSessionWithAttachedDisk()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        var filePath = Path.Combine(Path.GetTempPath(), $"vicesharp-attach-{Guid.NewGuid():N}.d64");
+        await File.WriteAllBytesAsync(filePath, [0x56, 0x49, 0x43, 0x45], TestContext.Current.CancellationToken);
+        try
+        {
+            host.AttachMediaAsync(
+                    MediaSlot.Drive8,
+                    filePath,
+                    Arg.Any<bool>(),
+                    Arg.Any<byte[]>(),
+                    Path.GetFileName(filePath),
+                    Arg.Any<CancellationToken>())
+                .Returns(new ValueTask<AttachMediaResponse>(new AttachMediaResponse(
+                    RpcStatus.Ok(),
+                    new MediaAttachmentDto(
+                        MediaSlot.Drive8,
+                        filePath,
+                        Path.GetFileName(filePath),
+                        IsAttached: true,
+                        IsReadOnly: false,
+                        AppliedToRuntime: true))));
+            host.SetTrueDriveAsync(true, 8, filePath, Arg.Any<CancellationToken>())
+                .Returns(ValueTask.CompletedTask);
+            var viewModel = new AttachPanelViewModel(host);
+            var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+
+            await viewModel.AttachAsync(drive8, filePath, TestContext.Current.CancellationToken);
+
+            Assert.True(drive8.TrueDrive);
+            Assert.True(drive8.IsAttached);
+            await host.Received(1).SetTrueDriveAsync(true, 8, filePath, Arg.Any<CancellationToken>());
+        }
+        finally
+        {
+            try { File.Delete(filePath); } catch { /* best effort */ }
+        }
+    }
+
+    /// <summary>
+    /// FR: FR-UISETTINGS-001, TR: TR-UIAXAML-VIEWS-001, TEST-UISETTINGS-001.
+    /// Use case: The SettingsView UserControl binds its combo boxes two-way to
+    /// the view-model's selection properties; changing one must stage a pending
+    /// change, and Revert must restore the last applied local state so the
+    /// settings form behaves predictably without a host round-trip.
+    /// Acceptance: Changing SelectedRenderer and SelectedPalette flips
+    /// HasPendingSettingsChanges true and raises PropertyChanged for the
+    /// selections; RevertSettings restores the original values and clears the
+    /// pending flag.
+    /// </summary>
+    [Fact]
+    public void SettingsSelections_StagePendingChange_AndRevertRestores()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var originalRenderer = viewModel.SelectedRenderer;
+        var originalPalette = viewModel.SelectedPalette;
+        var changes = TrackPropertyChanges(viewModel);
+
+        viewModel.SelectedRenderer = "Software";
+        viewModel.SelectedPalette = "Amber";
+
+        Assert.Equal("Software", viewModel.SelectedRenderer);
+        Assert.Equal("Amber", viewModel.SelectedPalette);
+        Assert.True(viewModel.HasPendingSettingsChanges);
+        Assert.Contains(nameof(viewModel.SelectedRenderer), changes);
+        Assert.Contains(nameof(viewModel.SelectedPalette), changes);
+
+        viewModel.RevertSettings();
+
+        Assert.Equal(originalRenderer, viewModel.SelectedRenderer);
+        Assert.Equal(originalPalette, viewModel.SelectedPalette);
+        Assert.False(viewModel.HasPendingSettingsChanges);
+    }
+
+    /// <summary>
+    /// FR: FR-DRVLED-001, TR: TR-UIAXAML-VIEWS-001, TEST-DRVLED-001.
+    /// Use case: The peripheral card shows a per-drive activity LED. The LED is
+    /// a VM-level state that lights for drives during IEC activity (simulated
+    /// proxy) and can be set faithfully from VIA2 PB3 telemetry (true-drive),
+    /// but never lights for non-drive slots.
+    /// Acceptance: SetIecActivity(true) lights Drive 8's LedOn and raises
+    /// PropertyChanged; the Tape slot never lights; SetDriveLed(true) lights a
+    /// drive and is a no-op on a non-drive slot.
+    /// </summary>
+    [Fact]
+    public void DriveLed_LightsForDrivesOnly()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+        var tape = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);
+        var changes = TrackPropertyChanges(drive8);
+
+        drive8.SetIecActivity(true);
+        Assert.True(drive8.LedOn);
+        Assert.Contains(nameof(drive8.LedOn), changes);
+
+        drive8.SetIecActivity(false);
+        Assert.False(drive8.LedOn);
+
+        tape.SetIecActivity(true);
+        Assert.False(tape.LedOn);
+
+        drive8.SetDriveLed(true);
+        Assert.True(drive8.LedOn);
+
+        tape.SetDriveLed(true);
+        Assert.False(tape.LedOn);
+    }
+
+    /// <summary>
+    /// FR: FR-UISETTINGS-001, TR: TR-UIAXAML-VIEWS-001, TEST-UISETTINGS-001.
+    /// Use case: The Settings Warp checkbox binds to the derived IsWarpMode; when
+    /// a Revert (or host settings load) changes the underlying limiter state, the
+    /// checkbox must update, which requires PropertyChanged for the derived
+    /// IsWarpMode (not only LimiterEnabled).
+    /// Acceptance: With Warp turned on locally, RevertSettings restores the
+    /// limiter, sets IsWarpMode back to false, and raises PropertyChanged for
+    /// IsWarpMode so the bound checkbox refreshes.
+    /// </summary>
+    [Fact]
+    public void RevertSettings_RaisesIsWarpModeNotification()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        viewModel.IsWarpMode = true;
+        Assert.True(viewModel.IsWarpMode);
+
+        var changes = TrackPropertyChanges(viewModel);
+        viewModel.RevertSettings();
+
+        Assert.False(viewModel.IsWarpMode);
+        Assert.Contains(nameof(viewModel.IsWarpMode), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-DRVTRUE-001, TR: TR-MVVM-001, TEST-DRVTRUE-001.
+    /// Use case: Toggling a drive's True Drive (from the card checkbox or the
+    /// menu) must drive the host to rebuild the session as a true-drive rig for
+    /// that device; because only one true-drive rig is supported, enabling one
+    /// drive disables the other.
+    /// Acceptance: Setting Drive 8 TrueDrive routes SetTrueDriveAsync(true, 8);
+    /// then setting Drive 9 TrueDrive turns Drive 8 off and routes
+    /// SetTrueDriveAsync(true, 9); clearing it routes SetTrueDriveAsync(false, _).
+    /// </summary>
+    [Fact]
+    public async Task TrueDriveToggle_DrivesHostSessionAndIsSingleSelection()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        host.SetTrueDriveAsync(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(ValueTask.CompletedTask);
+        var viewModel = new AttachPanelViewModel(host);
+        var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+        var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);
+
+        Assert.True(drive8.TrueDrive);
+        drive8.TrueDrive = false;
+        await host.Received(1).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+
+        drive9.TrueDrive = true;
+        Assert.False(drive8.TrueDrive); // single true-drive
+        await host.Received(1).SetTrueDriveAsync(true, 9, Arg.Any<string?>(), Arg.Any<CancellationToken>());
+
+        drive9.TrueDrive = false;
+        await host.Received(2).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// FR: FR-INP-001 / FR-CFG-006, TR: TR-MVVM-001.
+    /// Use case: After the user picks a keyboard map the host round-trips a fresh
+    /// KeyboardMapDto (IsSelected = true). The bound ComboBox can only show the
+    /// selection when SelectedKeyboardMap is the SAME instance present in the
+    /// KeyboardMaps source; a foreign instance leaves the combo blank (the reported
+    /// regression: the combo briefly shows the pick then blanks).
+    /// Acceptance: After SelectKeyboardMapAsync, SelectedKeyboardMap has the chosen
+    /// Id and is reference-contained in KeyboardMaps.
+    /// </summary>
+    [Fact]
+    public async Task SelectKeyboardMap_SelectsListInstance_SoComboDoesNotBlank()
+    {
+        var host = CreateKeyboardMapHost();
+        var viewModel = new AttachPanelViewModel(host);
+        await viewModel.RefreshKeyboardMapsAsync(TestContext.Current.CancellationToken);
+
+        await viewModel.SelectKeyboardMapAsync("c64:gtk3_sym", TestContext.Current.CancellationToken);
+
+        Assert.NotNull(viewModel.SelectedKeyboardMap);
+        Assert.Equal("c64:gtk3_sym", viewModel.SelectedKeyboardMap!.Id);
+        Assert.Contains(viewModel.SelectedKeyboardMap, viewModel.KeyboardMaps);
+    }
+
+    /// <summary>
+    /// FR: FR-INP-001 / FR-CFG-006, TR: TR-MVVM-001.
+    /// Use case: On startup the persisted keyboard map id must be restored as the
+    /// active selection and stay visible in the combo (the reported regression: the
+    /// selection reverted to the first map after restart).
+    /// Acceptance: After ApplyPersistedTransientAsync with a saved id,
+    /// SelectedKeyboardMap has that id and is reference-contained in KeyboardMaps.
+    /// </summary>
+    [Fact]
+    public async Task RestorePersistedTransient_RestoresKeyboardMapSelection()
+    {
+        var host = CreateKeyboardMapHost();
+        var viewModel = new AttachPanelViewModel(host);
+        await viewModel.RefreshKeyboardMapsAsync(TestContext.Current.CancellationToken);
+
+        await viewModel.ApplyPersistedTransientAsync(
+            new PersistedTransient([], "c64:keyrah", null),
+            TestContext.Current.CancellationToken);
+
+        Assert.NotNull(viewModel.SelectedKeyboardMap);
+        Assert.Equal("c64:keyrah", viewModel.SelectedKeyboardMap!.Id);
+        Assert.Contains(viewModel.SelectedKeyboardMap, viewModel.KeyboardMaps);
+    }
+
+    /// <summary>
+    /// FR: FR-DRVTRUE-001 / FR-IECLOAD-001, TR: TR-MVVM-001, TEST-DRVTRUE-001.
+    /// Use case: Drive 8 now defaults to the VICE-faithful True Drive path, but a
+    /// persisted session that explicitly saved TrueDrive=false must restore that
+    /// off state instead of silently re-enabling the rig.
+    /// Acceptance: ApplyPersistedTransientAsync clears Drive 8 TrueDrive and asks
+    /// the host to rebuild with true-drive disabled.
+    /// </summary>
+    [Fact]
+    public async Task RestorePersistedTransient_Drive8False_DisablesDefaultTrueDrive()
+    {
+        var filePath = Path.Combine(Path.GetTempPath(), $"vicesharp-{Guid.NewGuid():N}.d64");
+        await File.WriteAllBytesAsync(filePath, [0x56, 0x49, 0x43, 0x45], TestContext.Current.CancellationToken);
+        try
+        {
+            var host = CreateTransientRestoreHost(filePath);
+            var viewModel = new AttachPanelViewModel(host);
+            var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+            Assert.True(drive8.TrueDrive);
+
+            await viewModel.ApplyPersistedTransientAsync(
+                new PersistedTransient(
+                    [new PersistedAttachment(nameof(MediaSlot.Drive8), filePath, IsReadOnly: false, TrueDrive: false)],
+                    KeyboardMapId: null,
+                    KeyboardMapSourcePath: null),
+                TestContext.Current.CancellationToken);
+
+            Assert.False(drive8.TrueDrive);
+            await host.Received(1).SetTrueDriveAsync(false, 8, null, Arg.Any<CancellationToken>());
+            await host.DidNotReceive().SetTrueDriveAsync(true, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
+    /// <summary>
+    /// FR: FR-DRVTRUE-001 / FR-IECLOAD-001, TR: TR-MVVM-001, TEST-DRVTRUE-001.
+    /// Use case: A saved VICE-like Drive 8 true-drive session must restore as a
+    /// true-drive rig with the D64 already inserted, so LOAD goes through the
+    /// emulated 1541 instead of an empty rebuilt session.
+    /// Acceptance: ApplyPersistedTransientAsync calls SetTrueDriveAsync(true, 8,
+    /// attachedPath) even when Drive 8 already defaults to TrueDrive=true.
+    /// </summary>
+    [Fact]
+    public async Task RestorePersistedTransient_Drive8True_RebuildsWithAttachedDiskPath()
+    {
+        var filePath = Path.Combine(Path.GetTempPath(), $"vicesharp-{Guid.NewGuid():N}.d64");
+        await File.WriteAllBytesAsync(filePath, [0x56, 0x49, 0x43, 0x45], TestContext.Current.CancellationToken);
+        try
+        {
+            var host = CreateTransientRestoreHost(filePath);
+            var viewModel = new AttachPanelViewModel(host);
+            var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+            Assert.True(drive8.TrueDrive);
+
+            await viewModel.ApplyPersistedTransientAsync(
+                new PersistedTransient(
+                    [new PersistedAttachment(nameof(MediaSlot.Drive8), filePath, IsReadOnly: false, TrueDrive: true)],
+                    KeyboardMapId: null,
+                    KeyboardMapSourcePath: null),
+                TestContext.Current.CancellationToken);
+
+            Assert.True(drive8.TrueDrive);
+            Assert.True(drive8.IsAttached);
+            Assert.Equal(filePath, drive8.FilePath);
+            await host.Received(1).SetTrueDriveAsync(true, 8, filePath, Arg.Any<CancellationToken>());
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
+    private static KeyboardMapDto[] BuildKeyboardMaps() =>
+    [
+        new KeyboardMapDto("c64:gtk3_pos", "GTK3 pos", "c64", "builtin", "", true, true),
+        new KeyboardMapDto("c64:gtk3_sym", "GTK3 sym", "c64", "builtin", "", false, true),
+        new KeyboardMapDto("c64:keyrah", "GTK3 keyrah", "c64", "builtin", "", false, true),
+    ];
+
+    private static IHostProtocolClient CreateKeyboardMapHost()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        var maps = BuildKeyboardMaps();
+
+        host.ListKeyboardMapsAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListKeyboardMapsResponse>(new ListKeyboardMapsResponse(RpcStatus.Ok(), maps)));
+
+        // RefreshAsync (invoked from ApplyPersistedTransientAsync) lists media and
+        // settings; return minimal Ok responses so the restore path runs end-to-end.
+        host.ListMediaAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListMediaResponse>(new ListMediaResponse(RpcStatus.Ok(), [])));
+        host.ListSettingsProfilesAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListSettingsProfilesResponse>(new ListSettingsProfilesResponse(RpcStatus.Ok(), [])));
+        host.GetSettingsAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<GetSettingsResponse>(new GetSettingsResponse(RpcStatus.Ok(), null)));
+
+        // The real host returns a FRESH KeyboardMapDto (IsSelected = true) for the
+        // chosen id - a different instance than the one in the list.
+        host.SetKeyboardMapAsync(
+                Arg.Any<string>(),
+                Arg.Any<byte[]?>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                var id = call.ArgAt<string>(0);
+                var template = maps.FirstOrDefault(map => map.Id == id) ?? maps[0];
+                return new ValueTask<KeyboardMapResponse>(new KeyboardMapResponse(
+                    RpcStatus.Ok(),
+                    new KeyboardMapDto(id, template.DisplayName, "c64", "builtin", "", true, true)));
+            });
+
+        return host;
+    }
+
+    private static IHostProtocolClient CreateTransientRestoreHost(string filePath)
+    {
+        var host = CreateKeyboardMapHost();
+        var attachment = new MediaAttachmentDto(
+            MediaSlot.Drive8,
+            filePath,
+            Path.GetFileName(filePath),
+            IsAttached: true,
+            IsReadOnly: false,
+            AppliedToRuntime: true);
+
+        host.AttachMediaAsync(
+                MediaSlot.Drive8,
+                filePath,
+                Arg.Any<bool>(),
+                Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<AttachMediaResponse>(new AttachMediaResponse(RpcStatus.Ok(), attachment)));
+        host.ListMediaAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListMediaResponse>(new ListMediaResponse(RpcStatus.Ok(), [attachment])));
+        host.SetTrueDriveAsync(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(ValueTask.CompletedTask);
+
+        return host;
     }
 
     private static List<string> TrackPropertyChanges(INotifyPropertyChanged source)

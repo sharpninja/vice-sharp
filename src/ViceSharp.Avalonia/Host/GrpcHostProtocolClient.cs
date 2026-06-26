@@ -14,7 +14,11 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     private readonly GrpcContracts.InputService.InputServiceClient _inputClient;
     private readonly GrpcContracts.SettingsService.SettingsServiceClient _settingsClient;
     private readonly GrpcContracts.MonitorService.MonitorServiceClient _monitorClient;
+    private readonly GrpcContracts.CaptureService.CaptureServiceClient _captureClient;
     private string _sessionId;
+    private bool _trueDrive;
+    private int _trueDriveDevice = 8;
+    private string _trueDriveDiskImagePath = string.Empty;
 
     public GrpcHostProtocolClient(Uri endpoint, string sessionId = "")
     {
@@ -26,10 +30,44 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         _inputClient = new GrpcContracts.InputService.InputServiceClient(_channel);
         _settingsClient = new GrpcContracts.SettingsService.SettingsServiceClient(_channel);
         _monitorClient = new GrpcContracts.MonitorService.MonitorServiceClient(_channel);
+        _captureClient = new GrpcContracts.CaptureService.CaptureServiceClient(_channel);
         _sessionId = sessionId;
     }
 
     public string SessionId => _sessionId;
+
+    public event EventHandler<string>? SessionIdChanged;
+
+    public bool TrueDrive => _trueDrive;
+
+    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
+    {
+        var disk = diskImagePath ?? string.Empty;
+        if (_trueDrive == enabled && _trueDriveDevice == driveDevice && _trueDriveDiskImagePath == disk)
+            return ValueTask.CompletedTask;
+
+        _trueDrive = enabled;
+        _trueDriveDevice = driveDevice;
+        _trueDriveDiskImagePath = disk;
+
+        // True-drive is a machine-config choice: drop the current session so the
+        // next EnsureSessionAsync rebuilds the rig with the new selection.
+        if (!string.IsNullOrWhiteSpace(_sessionId))
+        {
+            try
+            {
+                _hostClient.Shutdown(new GrpcContracts.SessionRequest { SessionId = _sessionId });
+            }
+            catch
+            {
+                // Best-effort; the new session is created fresh regardless.
+            }
+
+            SetSessionId(string.Empty);
+        }
+
+        return ValueTask.CompletedTask;
+    }
 
     public async ValueTask<GetEmulatorStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
     {
@@ -324,6 +362,80 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             MapStatusDto(response.EmulatorStatus));
     }
 
+    public async ValueTask<MonitorRegistersResponse> ReadRegistersAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _monitorClient.ReadRegistersAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new MonitorRegistersResponse(
+            MapStatus(response.Status),
+            MapMachineState(response.Registers),
+            MapStatusDto(response.EmulatorStatus));
+    }
+
+    public async ValueTask<MonitorMemoryResponse> ReadMemoryAsync(int address, int length, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _monitorClient.ReadMemoryAsync(
+            new GrpcContracts.MonitorReadMemoryRequest { SessionId = sessionId, Address = (uint)address, Length = (uint)length },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new MonitorMemoryResponse(
+            MapStatus(response.Status),
+            (int)response.Address,
+            response.Data.ToByteArray(),
+            MapStatusDto(response.EmulatorStatus));
+    }
+
+    public async ValueTask<MonitorDisassemblyResponse> DisassembleAsync(int address, int count, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _monitorClient.DisassembleAsync(
+            new GrpcContracts.MonitorDisassemblyRequest { SessionId = sessionId, Address = (uint)address, Count = (uint)count },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new MonitorDisassemblyResponse(
+            MapStatus(response.Status),
+            response.Lines.Select(MapDisassemblyLine).ToArray(),
+            MapStatusDto(response.EmulatorStatus));
+    }
+
+    public async ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _monitorClient.GetTickHistoryAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new GetTickHistoryResponse(MapStatus(response.Status), response.Ticks.Select(MapTickEntry).ToArray());
+    }
+
+    public async ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(int tickIndex, int address, int length, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _monitorClient.ReadMemoryAtTickAsync(
+            new GrpcContracts.ReadMemoryAtTickRequest { SessionId = sessionId, TickIndex = tickIndex, Address = address, Length = length },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new MonitorMemoryResponse(
+            MapStatus(response.Status),
+            (int)response.Address,
+            response.Data.ToByteArray(),
+            MapStatusDto(response.EmulatorStatus));
+    }
+
+    public async ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(int tickIndex, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _monitorClient.GetChipStateAtTickAsync(
+            new GrpcContracts.GetChipStateAtTickRequest { SessionId = sessionId, TickIndex = tickIndex },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new GetChipStateAtTickResponse(MapStatus(response.Status), response.Chips.Select(MapChipState).ToArray());
+    }
+
     public async ValueTask<GetVideoFrameResponse> GetFrameAsync(CancellationToken cancellationToken = default)
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
@@ -333,6 +445,104 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
         return new GetVideoFrameResponse(MapStatus(response.Status), response.Frame is null ? null : MapFrame(response.Frame));
     }
+
+    public async ValueTask<CaptureFrameResponse> CaptureFrameAsync(
+        string filePath,
+        string format = "png",
+        CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.CaptureFrameAsync(
+            new GrpcContracts.CaptureFrameRequest { SessionId = sessionId, FilePath = filePath, Format = format },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new CaptureFrameResponse(
+            MapStatus(response.Status),
+            response.Artifact is null
+                ? null
+                : new CaptureArtifactDto(response.Artifact.FilePath, response.Artifact.Format, response.Artifact.Cycle));
+    }
+
+    public async ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.GetCaptureCapabilitiesAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        var video = new CaptureVideoFormatDto[response.VideoFormats.Count];
+        for (var i = 0; i < video.Length; i++)
+        {
+            var v = response.VideoFormats[i];
+            video[i] = new CaptureVideoFormatDto(
+                v.Id, v.Container, v.VideoCodecs.ToArray(), v.AudioCodecs.ToArray(),
+                v.RequiresFfmpeg,
+                v.SupportsMicrophone);
+        }
+
+        return new GetCaptureCapabilitiesResponse(
+            MapStatus(response.Status),
+            response.ScreenshotFormats.ToArray(),
+            response.AudioFormats.ToArray(),
+            video);
+    }
+
+    public async ValueTask<StartCaptureResponse> StartCaptureAsync(
+        CaptureKind kind,
+        string targetPath,
+        string format = "",
+        IReadOnlyDictionary<string, string>? options = null,
+        CancellationToken cancellationToken = default,
+        bool captureMicrophone = false,
+        string microphoneDevice = "",
+        string microphoneInputFormat = "")
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var request = new GrpcContracts.StartCaptureRequest
+        {
+            SessionId = sessionId,
+            Kind = (GrpcContracts.CaptureKind)(int)kind,
+            TargetPath = targetPath,
+            Format = format,
+            CaptureMicrophone = captureMicrophone,
+            MicrophoneDevice = microphoneDevice,
+            MicrophoneInputFormat = microphoneInputFormat
+        };
+        if (options is not null)
+            foreach (var pair in options)
+                request.Options[pair.Key] = pair.Value;
+
+        var response = await _captureClient.StartCaptureAsync(request, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return new StartCaptureResponse(MapStatus(response.Status), MapCapture(response.Capture));
+    }
+
+    public async ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.StopCaptureAsync(
+            new GrpcContracts.StopCaptureRequest { SessionId = sessionId, CaptureId = captureId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+        return new StopCaptureResponse(MapStatus(response.Status), MapCapture(response.Capture));
+    }
+
+    public async ValueTask<ListCapturesResponse> ListCapturesAsync(CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _captureClient.ListCapturesAsync(
+            new GrpcContracts.SessionRequest { SessionId = sessionId },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        var captures = new CaptureSessionDto[response.Captures.Count];
+        for (var i = 0; i < captures.Length; i++)
+            captures[i] = MapCapture(response.Captures[i])!;
+
+        return new ListCapturesResponse(MapStatus(response.Status), captures);
+    }
+
+    private static CaptureSessionDto? MapCapture(GrpcContracts.CaptureSessionDto? capture)
+        => capture is null
+            ? null
+            : new CaptureSessionDto(capture.CaptureId, (CaptureKind)(int)capture.Kind, capture.TargetPath, capture.IsActive);
 
     public void Dispose()
     {
@@ -359,7 +569,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         var response = await _hostClient.CreateSessionAsync(
             new GrpcContracts.CreateEmulatorSessionRequest
             {
-                ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty
+                ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty,
+                TrueDrive = _trueDrive,
+                TrueDriveDevice = _trueDriveDevice,
+                TrueDriveDiskImagePath = _trueDriveDiskImagePath
             },
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
@@ -367,7 +580,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         if (!status.IsSuccess)
             throw new InvalidOperationException(status.Message);
 
-        _sessionId = response.SessionId;
+        SetSessionId(response.SessionId);
         var started = await _hostClient.StartAsync(
             new GrpcContracts.SessionRequest { SessionId = _sessionId },
             cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -376,6 +589,15 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             throw new InvalidOperationException(startedStatus.Message);
 
         return _sessionId;
+    }
+
+    private void SetSessionId(string sessionId)
+    {
+        if (StringComparer.Ordinal.Equals(_sessionId, sessionId))
+            return;
+
+        _sessionId = sessionId;
+        SessionIdChanged?.Invoke(this, sessionId);
     }
 
     private GrpcContracts.SessionRequest CreateSessionRequest()
@@ -456,6 +678,18 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
                 (ushort)value.MachineState.Pc,
                 value.MachineState.Cycle);
 
+        var perCpuRates = value.PerCpuRates.Count == 0
+            ? (IReadOnlyList<PerCpuRateDto>)Array.Empty<PerCpuRateDto>()
+            : value.PerCpuRates
+                .Select(r => new PerCpuRateDto(r.Label, r.EffectiveClockHz, r.EffectiveClockPercent))
+                .ToArray();
+
+        var iecBusLines = value.IecBusLines.Count == 0
+            ? (IReadOnlyList<IecBusLineDto>)Array.Empty<IecBusLineDto>()
+            : value.IecBusLines
+                .Select(l => new IecBusLineDto(l.Signal, l.IsHigh, l.Pullers))
+                .ToArray();
+
         return new EmulatorStatusDto(
             value.SessionId,
             value.Architecture,
@@ -476,8 +710,33 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             value.LastHostAutomationError,
             value.IecBusActive,
             value.IecBusTransitionCount,
-            value.IecBusActivityState);
+            value.IecBusActivityState)
+        {
+            PerCpuRates = perCpuRates,
+            IecBusLines = iecBusLines,
+        };
     }
+
+    private static MachineStateDto? MapMachineState(GrpcContracts.MachineStateDto? value)
+        => value is null
+            ? null
+            : new MachineStateDto(
+                (byte)value.A, (byte)value.X, (byte)value.Y, (byte)value.S, (byte)value.P, (ushort)value.Pc, value.Cycle);
+
+    private static MonitorDisassemblyLineDto MapDisassemblyLine(GrpcContracts.MonitorDisassemblyLineDto value)
+        => new((int)value.Address, value.InstructionBytes.ToByteArray(), value.Text, (int)value.Length, (int)value.NextAddress);
+
+    private static ChipStateDto MapChipState(GrpcContracts.ChipStateDto value)
+        => new(value.ChipName, value.Fields.Select(f => new ChipStateFieldDto(f.Name, f.Value, f.Width)).ToArray());
+
+    private static TickHistoryEntryDto MapTickEntry(GrpcContracts.TickHistoryEntryDto value)
+        => new(
+            value.Index,
+            (int)value.InstructionAddress,
+            (int)value.Opcode,
+            (int)value.A, (int)value.X, (int)value.Y, (int)value.S, (int)value.P,
+            (int)value.Pc,
+            value.WriteCount);
 
     private static InputStateDto? MapInputState(GrpcContracts.InputStateDto? inputState)
     {
@@ -539,7 +798,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
     private static LimiterSettingsDto MapLimiter(GrpcContracts.LimiterSettingsDto limiter)
     {
-        return new LimiterSettingsDto(limiter.RatePercent, limiter.IsEnabled);
+        return new LimiterSettingsDto(
+            limiter.RatePercent,
+            limiter.IsEnabled,
+            DefaultIfBlank(limiter.PacingStrategy, new LimiterSettingsDto().PacingStrategy));
     }
 
     private static DisplaySettingsDto MapDisplay(GrpcContracts.DisplaySettingsDto display)
@@ -597,7 +859,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
     private static GrpcContracts.LimiterSettingsDto MapLimiter(LimiterSettingsDto limiter)
     {
-        return new GrpcContracts.LimiterSettingsDto { RatePercent = limiter.RatePercent, IsEnabled = limiter.IsEnabled };
+        return new GrpcContracts.LimiterSettingsDto { RatePercent = limiter.RatePercent, IsEnabled = limiter.IsEnabled, PacingStrategy = limiter.PacingStrategy };
     }
 
     private static GrpcContracts.DisplaySettingsDto MapDisplay(DisplaySettingsDto display)

@@ -6,6 +6,12 @@ public sealed class HostKeyboardAutomation
 {
     private const int ReadyPromptStart = 0x0400;
     private const int ReadyPromptLength = 1000;
+    // C64 zero-page "cursor blink enable" flag ($CC): 0 while the screen editor is
+    // idle in the BASIC input loop flashing the cursor (i.e. ready for a keystroke),
+    // and non-zero during boot, LOAD, PRINT, and program execution when the cursor is
+    // suppressed. Autostart gates its LOAD/RUN keystrokes on this so keys are only
+    // injected once the prompt is truly ready (READY shown AND the cursor blinking).
+    private const int CursorBlinkEnableFlag = 0x00CC;
     private const int MaxReadyWaitFrames = 600;
     private const int InitialReadyDelayFrames = 12;
     private const int KeyPressFrames = 3;
@@ -68,7 +74,12 @@ public sealed class HostKeyboardAutomation
                 return;
             }
 
-            if (!ContainsBasicReadyPrompt(machine))
+            // Proceed only once the BASIC prompt is genuinely ready for input: the
+            // "READY." text is on screen AND the editor is flashing the cursor in its
+            // input loop. Checking the text alone fired RUN too early (while a prior
+            // READY lingered on screen or mid-LOAD), so the keystrokes were dropped and
+            // the program ran with a malformed line ("?SYNTAX ERROR" autostart race).
+            if (!ContainsBasicReadyPrompt(machine) || !IsCursorBlinking(machine))
             {
                 _readyWaitFrames++;
                 if (_readyWaitFrames > MaxReadyWaitFrames)
@@ -165,6 +176,11 @@ public sealed class HostKeyboardAutomation
         ReadOnlySpan<byte> asciiReady = "READY"u8;
         return screenCodes.IndexOf(screenCodeReady) >= 0 || screenCodes.IndexOf(asciiReady) >= 0;
     }
+
+    // True when the C64 screen editor is flashing the cursor in its BASIC input loop
+    // (zero-page $CC == 0), i.e. the prompt is idle and ready to accept a keystroke.
+    private static bool IsCursorBlinking(IMachine machine)
+        => machine.Bus.Peek(CursorBlinkEnableFlag) == 0;
 
     private void Fail(string message)
     {

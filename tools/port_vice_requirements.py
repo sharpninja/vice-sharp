@@ -991,7 +991,6 @@ def update_indexes() -> tuple[list[dict[str, str]], list[dict[str, str]], list[d
 
     quality = {
         "TR-CYCLE-001": "Accuracy / Fidelity",
-        "TR-AOT-001": "Deployment / Startup",
         "TR-ALLOC-001": "Performance / GC",
         "TR-SIMD-001": "Performance / Throughput",
         "TR-DET-001": "Correctness / Replay",
@@ -1001,7 +1000,7 @@ def update_indexes() -> tuple[list[dict[str, str]], list[dict[str, str]], list[d
         "TR-LIB-001": "Architecture / Reuse",
         "TR-MVVM-001": "Architecture / UI",
         "TR-GRPC-BOUNDARY-001": "Architecture / Boundary",
-        "TR-MEDIA-001": "Integration / AoT",
+        "TR-MEDIA-001": "Integration / Media",
         "TR-BUILD-001": "CI/CD / Build",
         "TR-HOST-STATUS-001": "Runtime Telemetry",
         "TR-INPUT-VKM-001": "Input Translation",
@@ -1042,7 +1041,7 @@ def update_indexes() -> tuple[list[dict[str, str]], list[dict[str, str]], list[d
         "",
         "## Architectural Constraints",
         "",
-        "1. Target runtime: .NET 10 with NativeAOT publication profile.",
+        "1. Target runtime: .NET 10 with JIT desktop publication profiles.",
         "2. Emulator core remains library-first and UI-independent.",
         "3. UI control, media, input, state, capture, diagnostics, and monitor operations cross the host boundary through gRPC-backed abstractions.",
         "4. The local Avalonia renderer may use only a host-owned direct frame surface for in-process presentation; ViewModels must not access runtime internals.",
@@ -1109,7 +1108,6 @@ def update_indexes() -> tuple[list[dict[str, str]], list[dict[str, str]], list[d
 
     tr_decisions = {
         "TR-CYCLE-001": ["DD-CLK-001 | Half-cycle/bus-phase clocking remains the target fidelity model.", "DD-REF-001 | VICE x64sc/reference traces are accepted as behavioral comparison targets."],
-        "TR-AOT-001": ["DD-AOT-001 | Use explicit registration/source generation over hot-path reflection."],
         "TR-ALLOC-001": ["DD-PERF-001 | Hot-path state favors structs, spans, and pooled buffers."],
         "TR-SIMD-001": ["DD-PERF-002 | Rendering/audio processing may use SIMD where it preserves determinism."],
         "TR-DET-001": ["DD-DET-001 | Same initial state plus same input sequence must produce bit-exact state/output."],
@@ -1119,7 +1117,7 @@ def update_indexes() -> tuple[list[dict[str, str]], list[dict[str, str]], list[d
         "TR-LIB-001": ["DD-ARCH-001 | Emulator core remains a reusable library with thin consumers."],
         "TR-MVVM-001": ["DD-UI-001 | Avalonia ViewModels depend on abstractions/client facades only."],
         "TR-GRPC-BOUNDARY-001": ["DD-HOST-001 | Host owns emulator sessions and all mutating control surfaces.", "DD-RENDER-001 | Local Avalonia rendering is a host-owned direct frame-source exception only."],
-        "TR-MEDIA-001": ["DD-MEDIA-001 | Capture/encoding stays behind AoT-compatible media abstractions."],
+        "TR-MEDIA-001": ["DD-MEDIA-001 | Capture/encoding stays behind explicit P/Invoke media abstractions."],
         "TR-BUILD-001": ["DD-BLD-001 | Build/test validation uses the solution and repository conventions."],
         "TR-HOST-STATUS-001": ["DD-HOST-002 | Runtime telemetry separates requested limiter target from measured effective speed."],
         "TR-INPUT-VKM-001": ["DD-INP-001 | Machine-specific keyboard translation resolves selected VICE VKM maps before matrix mutation."],
@@ -1224,7 +1222,7 @@ def mapping_for(fr_id: str) -> tuple[list[str], list[str]]:
         tr_ids = ["TR-DET-001", "TR-GRPC-BOUNDARY-001"]
         test_ids = ["TEST-INPUT-001"]
     elif fr_id.startswith("FR-MED"):
-        tr_ids = ["TR-MEDIA-001", "TR-GRPC-BOUNDARY-001", "TR-AOT-001"]
+        tr_ids = ["TR-MEDIA-001", "TR-GRPC-BOUNDARY-001"]
         test_ids = ["TEST-MED-001", "TEST-HOST-001"]
     elif fr_id.startswith("FR-MON"):
         tr_ids = ["TR-GRPC-BOUNDARY-001", "TR-MVVM-001"]

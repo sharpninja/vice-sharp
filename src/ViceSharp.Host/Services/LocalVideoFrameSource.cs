@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Protocol;
@@ -10,24 +7,35 @@ namespace ViceSharp.Host.Services;
 public interface ILocalVideoFrameSource
 {
     ValueTask<GetVideoFrameResponse> GetFrameAsync(string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Zero-allocation, lock-free frame read for in-process UI rendering: copies the
+    /// emulation thread's latest published frame directly into <paramref name="destination"/>
+    /// (e.g. a WriteableBitmap's locked buffer). Returns false when the session is
+    /// unknown, has no video chip, has not yet published a frame, or the destination
+    /// is too small. The UI never touches the emulation lock via this path, so the
+    /// render pull cannot stall the emulation thread (FR-1132, BUG-THROTTLE-001).
+    /// </summary>
+    bool TryCopyFrameInto(string sessionId, Span<byte> destination, out int width, out int height, out long cycle);
 }
 
+/// <summary>
+/// Pull-only video frame source: returns the latest committed framebuffer for a
+/// session WITHOUT advancing the machine. Per the decoupling design
+/// (docs/Decoupling.md), emulation is driven on the host's dedicated worker
+/// thread (<see cref="EmulationPumpService"/>), so the UI render loop never
+/// drives or blocks emulation.
+///
+/// The worker advances the CPU clock in sub-frame cycle slices, so to avoid
+/// tearing the pull returns the last COMPLETE frame the worker committed at the
+/// video chip's FrameCompleted boundary (<see cref="EmulatorRuntimeSession.CommitFrame"/>).
+/// Until the first frame completes (a freshly created or stopped session) it falls
+/// back to a live snapshot of the chip framebuffer. All copies happen under the
+/// session lock.
+/// </summary>
 public sealed class LocalVideoFrameSource : ILocalVideoFrameSource
 {
-    // BRANDING/PERF-DIAG: gated frame-pump instrumentation. When
-    // VICESHARP_FRAME_LOG=1, every 50 produced frames a line is appended to
-    // %TEMP%/vicesharp-frame-log.txt with the average per-call RunFrame time,
-    // the status-bar EffectiveClockPercent, and measured fps. Off by default
-    // (the env var is read once), so the hot path is unchanged in normal runs.
-    private static readonly bool FrameLogEnabled =
-        string.Equals(Environment.GetEnvironmentVariable("VICESHARP_FRAME_LOG"), "1", StringComparison.Ordinal);
-    private static readonly string FrameLogPath =
-        Path.Combine(Path.GetTempPath(), "vicesharp-frame-log.txt");
-
     private readonly EmulatorRuntimeRegistry _registry;
-    private readonly object _frameLogLock = new();
-    private long _loggedFrames;
-    private double _runFrameMsSum;
 
     public LocalVideoFrameSource(EmulatorRuntimeRegistry registry)
     {
@@ -44,37 +52,26 @@ public sealed class LocalVideoFrameSource : ILocalVideoFrameSource
         if (!_registry.TryGet(sessionId, out var session))
             return ValueTask.FromResult(new GetVideoFrameResponse(HostProtocolMapper.MissingSessionStatus(sessionId), null));
 
+        var videoChip = session.Machine.Devices.GetByRole(DeviceRole.VideoChip) as IVideoChip;
+        if (videoChip is null)
+            return ValueTask.FromResult(new GetVideoFrameResponse(RpcStatus.Unavailable("The session has no video chip."), null));
+
+        // Allocate the DTO buffer (the gRPC/remote contract returns a byte[]).
+        var frame = new byte[videoChip.FrameBuffer.Length];
+
+        // Lock-free: copy the emulation thread's last published frame. Never touches
+        // the emulation lock, so this cannot stall the worker.
+        if (session.TryCopyLatestFrameInto(frame, out var width, out var height, out var cycle))
+        {
+            return ValueTask.FromResult(new GetVideoFrameResponse(
+                RpcStatus.Ok(),
+                new VideoFrameDto(width, height, cycle, frame)));
+        }
+
+        // No frame published yet (freshly created / stopped session): snapshot the
+        // current live buffer so the caller still gets a valid frame.
         lock (session.SyncRoot)
         {
-            var runStart = FrameLogEnabled ? Stopwatch.GetTimestamp() : 0L;
-            if (session.RunState == EmulatorRunState.Running)
-            {
-                if (!session.LimiterEnabled)
-                {
-                    var deadline = Stopwatch.GetTimestamp() + Stopwatch.Frequency / 50;
-                    do
-                    {
-                        session.Machine.RunFrame();
-                        session.RecordFrame();
-                        session.AdvanceHostAutomationFrame();
-                    } while (Stopwatch.GetTimestamp() < deadline);
-                }
-                else
-                {
-                    session.Machine.RunFrame();
-                    session.RecordFrame();
-                    session.AdvanceHostAutomationFrame();
-                }
-            }
-
-            if (FrameLogEnabled && session.RunState == EmulatorRunState.Running)
-                LogFrameTiming(session, Stopwatch.GetElapsedTime(runStart).TotalMilliseconds);
-
-            var videoChip = session.Machine.Devices.GetByRole(DeviceRole.VideoChip) as IVideoChip;
-            if (videoChip is null)
-                return ValueTask.FromResult(new GetVideoFrameResponse(RpcStatus.Unavailable("The session has no video chip."), null));
-
-            var frame = new byte[videoChip.FrameBuffer.Length];
             videoChip.FrameBuffer.CopyTo(frame, 0);
             return ValueTask.FromResult(new GetVideoFrameResponse(
                 RpcStatus.Ok(),
@@ -82,35 +79,17 @@ public sealed class LocalVideoFrameSource : ILocalVideoFrameSource
         }
     }
 
-    private void LogFrameTiming(EmulatorRuntimeSession session, double runFrameMs)
+    public bool TryCopyFrameInto(string sessionId, Span<byte> destination, out int width, out int height, out long cycle)
     {
-        const int flushEvery = 50;
-        lock (_frameLogLock)
-        {
-            _loggedFrames++;
-            _runFrameMsSum += runFrameMs;
-            if (_loggedFrames % flushEvery != 0)
-                return;
+        width = 0;
+        height = 0;
+        cycle = 0;
 
-            var avgRunFrameMs = _runFrameMsSum / flushEvery;
-            _runFrameMsSum = 0;
+        if (!_registry.TryGet(sessionId, out var session))
+            return false;
 
-            var nominalClockHz = session.Architecture.MasterClockHz;
-            var effectiveClockPercent = nominalClockHz > 0
-                ? session.EffectiveClockHz / nominalClockHz * 100.0
-                : 0.0;
-
-            var line = string.Create(CultureInfo.InvariantCulture,
-                $"frames={_loggedFrames} arch=\"{session.Architecture.MachineName}\" limiter={session.LimiterEnabled} rate={session.LimiterRatePercent:0} avgRunFrameMs={avgRunFrameMs:0.000} budgetMs={1000.0 / 50.125:0.00} effClockPercent={effectiveClockPercent:0.0} fps={session.MeasuredFramesPerSecond:0.0} nominalMHz={nominalClockHz / 1e6:0.000}{Environment.NewLine}");
-
-            try
-            {
-                File.AppendAllText(FrameLogPath, line);
-            }
-            catch
-            {
-                // Diagnostics only; never let logging affect the frame pump.
-            }
-        }
+        // Lock-free read of the emulation thread's published frame straight into the
+        // caller's buffer (e.g. the WriteableBitmap). No allocation, no lock.
+        return session.TryCopyLatestFrameInto(destination, out width, out height, out cycle);
     }
 }

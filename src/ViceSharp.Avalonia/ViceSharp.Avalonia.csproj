@@ -9,6 +9,13 @@
     <ApplicationIcon>Assets\vicesharp.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- BUG-THROTTLE-001: Background (concurrent) workstation GC keeps gen2
+         collections off the stop-the-world path so the emulation worker thread is
+         not stalled; tiered PGO lets the JIT re-optimise the hot cycle loop at runtime. -->
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <TieredCompilation>true</TieredCompilation>
+    <TieredPGO>true</TieredPGO>
     <!--
       PLATFORM-CROSS-001: This desktop exe is also referenced by the iOS /
       Android host shells for the shared App/MainWindow types. Without this
@@ -27,6 +34,17 @@
     <PackageReference Include="Avalonia.Themes.Fluent" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
     <PackageReference Include="Grpc.Net.Client" />
+  </ItemGroup>
+
+  <!-- UI-REMOTECTRL-001: embeddable Avalonia visual-tree inspection/control
+       server over gRPC. Debug-only dev tooling, disabled at runtime by default
+       (opt-in via VICESHARP_REMOTECONTROL_* env switches). The REMOTECONTROL
+       define gates the wiring in App.axaml.cs. -->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);REMOTECONTROL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SharpNinja.Avalonia.RemoteControl.Server" />
   </ItemGroup>
 
   <ItemGroup>

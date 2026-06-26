@@ -178,7 +178,7 @@ public sealed class ChipGlueBoundaryTests
             "CreateC64Cia",
             "src", "ViceSharp.Core", "ArchitectureBuilder.cs");
         AssertSourceContains(
-            "new Sid6581(bus) { BaseAddress = 0xD400 }",
+            "new Sid6581(bus, audioBackend) { BaseAddress = 0xD400 }",
             "src", "ViceSharp.Core", "ArchitectureBuilder.cs");
         AssertSourceContains(
             "_pla.WriteDataDirection(0x2F)",

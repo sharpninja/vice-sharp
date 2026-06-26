@@ -5,6 +5,7 @@ using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Cpu;
 using ViceSharp.Chips.Pla;
 using ViceSharp.Chips.IEC;
+using ViceSharp.Chips.Serial;
 using ViceSharp.Chips.Tape;
 using ViceSharp.Core.Wiring;
 using ViceSharp.RomFetch;
@@ -18,12 +19,19 @@ namespace ViceSharp.Core;
 public sealed class ArchitectureBuilder : IArchitectureBuilder
 {
     private readonly IRomProvider? _romProvider;
+    private readonly IAudioBackend? _audioBackend;
 
     public ArchitectureBuilder() { }
 
-    public ArchitectureBuilder(IRomProvider romProvider)
+    public ArchitectureBuilder(IAudioBackend? audioBackend)
+    {
+        _audioBackend = audioBackend;
+    }
+
+    public ArchitectureBuilder(IRomProvider romProvider, IAudioBackend? audioBackend = null)
     {
         _romProvider = romProvider;
+        _audioBackend = audioBackend;
     }
 
     /// <inheritdoc />
@@ -53,9 +61,21 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         deviceRegistry.Add(ram, DeviceRole.SystemRam);
         deviceRegistry.Add(cpu, DeviceRole.Cpu);
 
-        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
+        var pubSub = ConnectMachinePubSub(bus, cpu);
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, pubSub);
         machine.Reset();
         return machine;
+    }
+
+    // Wire one machine pub/sub: the CPU publishes instruction-completed events and the bus
+    // publishes memory-write events on it, both gated on a live subscriber. The host's
+    // tick-history recorder subscribes for the time-travel debugger.
+    private static LockFreePubSub ConnectMachinePubSub(BasicBus bus, Mos6502 cpu)
+    {
+        var pubSub = new LockFreePubSub();
+        cpu.ConnectPubSub(pubSub);
+        bus.ConnectPubSub(pubSub);
+        return pubSub;
     }
 
     private IMachine BuildC64Machine(IArchitectureDescriptor descriptor)
@@ -79,7 +99,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var cia2Connected = profile?.SystemCore.Cia2Connected ?? true;
         var cia2 = cia2Connected ? CreateC64Cia(bus, nmiLine, 0xDD00, descriptor.MasterClockHz) : null;
         var pla = new Mos906114(bus);
-        var sid = CreateSid(bus, profile);
+        var sid = CreateSid(bus, profile, _audioBackend, descriptor.MasterClockHz);
         var defaultCartridgeMappingMode = ResolveDefaultCartridgeMappingMode(profile);
         var cia2PortAInputMask = ResolveCia2PortAInputMask(profile);
         var memory = new C64MemoryMap(
@@ -99,6 +119,19 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var cia2Interface = cia2Connected ? new C64Cia2InterfaceDevice() : null;
         var drive8 = iecBusConnected ? new IecDrive(8) : null;
         var drive9 = iecBusConnected ? new IecDrive(9) : null;
+
+        // DD-IEC-1: the IEC serial bus is always present on a C64 (it hangs off
+        // CIA2), independent of whether a drive is attached. Create it once and
+        // attach the drives so the bus, spy and activity monitor observe the
+        // real machine bus. CIA2 is intentionally NOT routed to the live bus
+        // here - that read (with the faithful electrical model) is parity-gated
+        // and lands separately; until then CIA2 keeps its native-matching mask.
+        var iecBus = iecBusConnected ? IecInterSystemBus.Create() : null;
+        if (iecBus is not null)
+        {
+            drive8?.ConnectIecBus(iecBus);
+            drive9?.ConnectIecBus(iecBus);
+        }
         var datasette = profile?.SystemCore.TapePortConnected == false ? null : new Datasette();
         var datasetteCia1FlagBinding = datasette is null
             ? null
@@ -153,6 +186,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             deviceRegistry.Add(cia2, DeviceRole.Cia2);
         if (cia2Interface is not null)
             deviceRegistry.Add(cia2Interface);
+        if (iecBus is not null)
+            deviceRegistry.Add(new IecBusDevice(iecBus));
         deviceRegistry.Add(pla, DeviceRole.Pla);
         deviceRegistry.Add(sid, DeviceRole.AudioChip);
         if (drive8 is not null)
@@ -164,8 +199,27 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         if (datasetteCia1FlagBinding is not null)
             deviceRegistry.Add(datasetteCia1FlagBinding);
 
-        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu);
+        // KERNAL serial-bus traps (VICE virtual device traps): service LOAD/$ on
+        // the simulated drive when True Drive is OFF. The hook declines unless the
+        // addressed drive has a disk, so it is inert on parity rigs and on the
+        // true-drive host C64 (whose disk lives in the emulated 1541, not here).
+        KernalSerialTrap? serialTrap = null;
+        if (drive8 is not null || drive9 is not null)
+        {
+            var virtualDrives = new VirtualDriveServer(device => device switch
+            {
+                8 => drive8?.DiskImage,
+                9 => drive9?.DiskImage,
+                _ => null
+            });
+            serialTrap = new KernalSerialTrap(cpu, bus, virtualDrives);
+            cpu.SerialTrapHook = serialTrap.TryHandle;
+        }
+
+        var pubSub = ConnectMachinePubSub(bus, cpu);
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, pubSub);
         machine.Reset();
+        serialTrap?.Reset();
         return machine;
     }
 
@@ -351,15 +405,19 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         return vic;
     }
 
-    private static Sid6581 CreateSid(IBus bus, IMachineProfile? profile)
+    private static Sid6581 CreateSid(IBus bus, IMachineProfile? profile, IAudioBackend? audioBackend, double masterClockHz)
     {
-        if (profile is not null &&
-            profile.SidModel.Contains("8580", StringComparison.OrdinalIgnoreCase))
-        {
-            return new Sid8580(bus) { BaseAddress = 0xD400 };
-        }
+        var sid = profile is not null &&
+                  profile.SidModel.Contains("8580", StringComparison.OrdinalIgnoreCase)
+            ? new Sid8580(bus, audioBackend) { BaseAddress = 0xD400 }
+            : new Sid6581(bus, audioBackend) { BaseAddress = 0xD400 };
 
-        return new Sid6581(bus) { BaseAddress = 0xD400 };
+        // Drive live-audio emission at 44.1 kHz only when a backend is present;
+        // otherwise the SID never touches the audio path (parity-preserving).
+        if (audioBackend is not null)
+            sid.ConfigureAudioClock(masterClockHz);
+
+        return sid;
     }
 }
 
@@ -373,6 +431,7 @@ internal sealed class Machine : IMachine
     private readonly IDeviceRegistry _devices;
     private readonly IArchitectureDescriptor _architecture;
     private readonly Mos6502 _cpu;
+    private readonly IPubSub? _pubSub;
     private readonly int _frameCycles;
 
     public Machine(
@@ -380,13 +439,15 @@ internal sealed class Machine : IMachine
         IBus bus,
         IClock clock,
         IDeviceRegistry deviceRegistry,
-        Mos6502 cpu)
+        Mos6502 cpu,
+        IPubSub? pubSub = null)
     {
         _architecture = architecture;
         _bus = bus;
         _clock = clock;
         _devices = deviceRegistry;
         _cpu = cpu;
+        _pubSub = pubSub;
         _frameCycles = architecture is IProfiledArchitectureDescriptor profiled
             ? profiled.MachineProfile.CyclesPerLine * profiled.MachineProfile.RasterLines
             : architecture.VideoStandard == VideoStandard.Ntsc ? 263 * 65 : 312 * 63;
@@ -396,6 +457,8 @@ internal sealed class Machine : IMachine
     public IClock Clock => _clock;
     public IDeviceRegistry Devices => _devices;
     public IArchitectureDescriptor Architecture => _architecture;
+    public IPubSub? PubSub => _pubSub;
+    public ICpu? PrimaryCpu => _cpu;
 
     public void RunFrame() => _clock.Step(_frameCycles);
 

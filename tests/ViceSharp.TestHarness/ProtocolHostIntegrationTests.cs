@@ -268,7 +268,8 @@ public sealed class ProtocolHostIntegrationTests
         Assert.NotNull(reset.EmulatorStatus);
         Assert.Equal(0, reset.EmulatorStatus.Cycle);
         Assert.Equal(0, reset.EmulatorStatus.FrameCount);
-        Assert.Equal(EmulatorRunState.Stopped, reset.EmulatorStatus.RunState);
+        // A reset reboots the machine running (like real hardware), not halted.
+        Assert.Equal(EmulatorRunState.Running, reset.EmulatorStatus.RunState);
     }
 
     /// <summary>
@@ -698,10 +699,10 @@ public sealed class ProtocolHostIntegrationTests
     {
         var registry = new EmulatorRuntimeRegistry();
         var machine = MachineTestFactory.CreateC64Machine();
-        var iecBus = IecInterSystemBus.Create();
+        // The C64 build wires its drives to its always-on IEC bus, so monitor
+        // that bus (the drives are already connected) rather than a separate one.
+        var iecBus = machine.Devices.All.OfType<IecBusDevice>().Single().Bus;
         var monitor = new IecBusActivityMonitor(iecBus);
-        foreach (var drive in machine.Devices.All.OfType<IecDrive>())
-            drive.ConnectIecBus(iecBus);
         var session = new EmulatorRuntimeSession("test-session", machine.Architecture, machine, monitor);
         registry.Add(session);
         var emulatorHost = new EmulatorHostService(registry, new DefaultEmulatorRuntimeFactory());

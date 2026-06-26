@@ -521,7 +521,10 @@ public sealed class GrpcHostServiceAdaptersTests
             {
                 SessionId = "s",
                 Kind = GrpcContracts.CaptureKind.Video,
-                TargetPath = "out.mp4"
+                TargetPath = "out.mp4",
+                CaptureMicrophone = true,
+                MicrophoneDevice = "USB Mic",
+                MicrophoneInputFormat = "dshow"
             },
             CreateContext());
 
@@ -532,6 +535,9 @@ public sealed class GrpcHostServiceAdaptersTests
         Assert.True(response.Capture.IsActive);
         Assert.Equal(CaptureKind.Video, fake.LastStartRequest!.Kind);
         Assert.Equal("out.mp4", fake.LastStartRequest.TargetPath);
+        Assert.True(fake.LastStartRequest.CaptureMicrophone);
+        Assert.Equal("USB Mic", fake.LastStartRequest.MicrophoneDevice);
+        Assert.Equal("dshow", fake.LastStartRequest.MicrophoneInputFormat);
     }
 
     /// <summary>
@@ -837,6 +843,15 @@ public sealed class GrpcHostServiceAdaptersTests
 
         public ValueTask<MonitorMemoryWriteResponse> WriteMemoryAsync(MonitorWriteMemoryRequest request, CancellationToken cancellationToken = default)
             => ValueTask.FromResult(WriteMemoryResponse);
+
+        public ValueTask<GetTickHistoryResponse> GetTickHistoryAsync(SessionRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(new GetTickHistoryResponse(RpcStatus.Ok(), System.Array.Empty<TickHistoryEntryDto>()));
+
+        public ValueTask<MonitorMemoryResponse> ReadMemoryAtTickAsync(ReadMemoryAtTickRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(ReadMemoryResponse);
+
+        public ValueTask<GetChipStateAtTickResponse> GetChipStateAtTickAsync(GetChipStateAtTickRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(new GetChipStateAtTickResponse(RpcStatus.Ok(), System.Array.Empty<ChipStateDto>()));
     }
 
     private sealed class FakeSnapshotService : ISnapshotService
@@ -862,7 +877,15 @@ public sealed class GrpcHostServiceAdaptersTests
         public CaptureFrameResponse FrameResponse { get; set; } =
             new(RpcStatus.Ok(), null);
 
+        public GetCaptureCapabilitiesResponse CapabilitiesResponse { get; set; } =
+            new(RpcStatus.Ok(), ["png", "bmp"], ["wav"], System.Array.Empty<CaptureVideoFormatDto>());
+        public ListCapturesResponse ListResponse { get; set; } =
+            new(RpcStatus.Ok(), System.Array.Empty<CaptureSessionDto>());
+
         public StartCaptureRequest? LastStartRequest { get; private set; }
+
+        public ValueTask<GetCaptureCapabilitiesResponse> GetCaptureCapabilitiesAsync(SessionRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(CapabilitiesResponse);
 
         public ValueTask<StartCaptureResponse> StartCaptureAsync(StartCaptureRequest request, CancellationToken cancellationToken = default)
         {
@@ -875,5 +898,8 @@ public sealed class GrpcHostServiceAdaptersTests
 
         public ValueTask<CaptureFrameResponse> CaptureFrameAsync(CaptureFrameRequest request, CancellationToken cancellationToken = default)
             => ValueTask.FromResult(FrameResponse);
+
+        public ValueTask<ListCapturesResponse> ListCapturesAsync(SessionRequest request, CancellationToken cancellationToken = default)
+            => ValueTask.FromResult(ListResponse);
     }
 }

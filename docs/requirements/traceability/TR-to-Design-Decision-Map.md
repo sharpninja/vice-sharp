@@ -27,19 +27,6 @@ This map links Technical Requirements to Vice-Sharp architecture decisions and s
 
 ---
 
-## TR-AOT-001: Full NativeAOT Compatibility with Zero Reflection on Hot Path
-
-| Decision ID | Decision |
-|-------------|----------|
-| DD-AOT-001 | Use explicit registration/source generation over hot-path reflection. |
-
-**Architecture Sources**
-
-- `docs/Architecture.md`
-- `docs/requirements/technical/TR-AoT-Compilation.md`
-
----
-
 ## TR-BUILD-001: Nuke Build System with Dual CI/CD Pipelines
 
 | Decision ID | Decision |
@@ -149,11 +136,11 @@ This map links Technical Requirements to Vice-Sharp architecture decisions and s
 
 ---
 
-## TR-MEDIA-001: FFmpeg Integration via P/Invoke with NativeAOT Compatibility
+## TR-MEDIA-001: FFmpeg Integration via P/Invoke with Multiple Format Support
 
 | Decision ID | Decision |
 |-------------|----------|
-| DD-MEDIA-001 | Capture/encoding stays behind AoT-compatible media abstractions. |
+| DD-MEDIA-001 | Capture/encoding stays behind explicit P/Invoke media abstractions. |
 
 **Architecture Sources**
 

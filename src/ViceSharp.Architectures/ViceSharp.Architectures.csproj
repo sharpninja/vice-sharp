@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="YamlDotNet" />
-    <!-- Source generator for the [YamlStaticContext]/[YamlSerializable] AOT-safe,
+    <!-- Source generator for the [YamlStaticContext]/[YamlSerializable]
          reflection-free serializer (MachineDefinitionYamlContext). Analyzer-only;
          not a runtime dependency. -->
     <PackageReference Include="Vecc.YamlDotNet.Analyzers.StaticGenerator" PrivateAssets="all" />
@@ -19,9 +19,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PublishAot>true</PublishAot>
-    <TrimMode>full</TrimMode>
-    <TrimmerDefaultAction>link</TrimmerDefaultAction>
   </PropertyGroup>
 
 </Project>

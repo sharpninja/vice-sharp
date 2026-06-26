@@ -1,6 +1,6 @@
 # ViceSharp Public API Reference
 
-This document describes the 33+ public interfaces defined in `ViceSharp.Abstractions`. All interfaces are designed for NativeAOT compatibility: no reflection on the hot path, no base classes, and all members are explicitly defined for source-generator discovery.
+This document describes the 33+ public interfaces defined in `ViceSharp.Abstractions`. The interfaces are explicit and trim-aware: no reflection on the hot path, no base classes, and all members are explicitly defined for source-generator discovery. Current application packaging is self-contained managed code with ReadyToRun, not native ahead-of-time publishing.
 
 ---
 
@@ -652,121 +652,91 @@ public interface IInputEvent
 
 ## Media Interfaces
 
-These interfaces support capturing emulator output for screenshots, video, and audio recording.
-
-### `IScreenshotCapture`
-
-**Assembly:** `ViceSharp.Abstractions`
-
-Captures a single video frame as a still image (PNG or BMP). Operates on the committed frame buffer, never blocking the emulation thread.
-
-```csharp
-/// <summary>
-/// Captures a single frame as a still image from the current IFrameSink.
-/// Operates on the committed (front) frame buffer.
-/// </summary>
-public interface IScreenshotCapture
-{
-    /// <summary>Captures the current frame to the specified file path.</summary>
-    Task CaptureAsync(string filePath, ImageFormat format);
-
-    /// <summary>Captures the current frame to a byte buffer.</summary>
-    Task<ReadOnlyMemory<byte>> CaptureToMemoryAsync(ImageFormat format);
-}
-```
-
-### `IVideoRecorder`
-
-**Assembly:** `ViceSharp.Abstractions`
-
-Records a continuous stream of video frames to a container format (MP4 via FFmpeg). Designed for NativeAOT compatibility using P/Invoke rather than managed wrappers.
-
-```csharp
-/// <summary>
-/// Records continuous video output to a container format.
-/// Uses FFmpeg via P/Invoke for NativeAOT compatibility.
-/// </summary>
-public interface IVideoRecorder
-{
-    /// <summary>Begins recording to the specified output path.</summary>
-    void Start(string outputPath, VideoRecordingOptions options);
-
-    /// <summary>Submits a frame for encoding.</summary>
-    void SubmitFrame(ReadOnlySpan<byte> pixelData, FrameMetadata metadata);
-
-    /// <summary>Stops recording and finalizes the output file.</summary>
-    Task StopAsync();
-
-    /// <summary>True if currently recording.</summary>
-    bool IsRecording { get; }
-
-    /// <summary>Total frames recorded in the current session.</summary>
-    long RecordedFrameCount { get; }
-}
-```
+Media export is built from two small abstractions plus concrete recorders in
+`ViceSharp.Core.Media` / `ViceSharp.Core.Capture`, all driven by the host's gRPC
+`CaptureService`. Capture operates on the committed frame buffer and the SID audio
+tap, never blocking the emulation thread's lock-free UI read path.
 
 ### `IAudioRecorder`
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Records the audio output stream to WAV or FLAC format. Taps the same sample stream that feeds `IAudioBackend`.
+A persistent audio sink that captures the emulator's PCM stream to a file. Fed
+int16 samples by `CaptureAudioTap` (which clamps and scales the SID float output).
+Implemented by `WavAudioRecorder` (RIFF/WAVE 16-bit PCM) and by
+`FfmpegVideoRecorder` (its audio track).
 
 ```csharp
 /// <summary>
-/// Records the audio output stream to WAV or FLAC.
-/// Taps the sample stream feeding IAudioBackend without affecting playback.
+/// Persistent audio sink: writes a container header on construction, appends
+/// signed-16 PCM on WriteSamples, and finalises on Stop. Dispose == Stop.
 /// </summary>
-public interface IAudioRecorder
+public interface IAudioRecorder : IDisposable
 {
-    /// <summary>Begins recording to the specified output path.</summary>
-    void Start(string outputPath, AudioRecordingOptions options);
+    int SampleRate { get; }   // e.g. 44100
+    int Channels { get; }     // 1 = mono, 2 = stereo
 
-    /// <summary>Submits a buffer of samples for recording.</summary>
-    void SubmitSamples(ReadOnlySpan<float> samples);
+    /// <summary>Append signed 16-bit PCM (stereo interleaved L,R,L,R...).</summary>
+    void WriteSamples(ReadOnlySpan<short> samples);
 
-    /// <summary>Stops recording and finalizes the output file.</summary>
-    Task StopAsync();
-
-    /// <summary>True if currently recording.</summary>
-    bool IsRecording { get; }
-
-    /// <summary>Duration of recorded audio in milliseconds.</summary>
-    long RecordedDurationMs { get; }
+    /// <summary>Finalise the recording (patch header sizes, flush).</summary>
+    void Stop();
 }
 ```
 
-### `IMediaCaptureSession`
+### `IVideoCaptureSink`
 
-**Assembly:** `ViceSharp.Abstractions`
+**Assembly:** `ViceSharp.Core.Media`
 
-Coordinates synchronized audio and video recording. Ensures A/V streams start and stop together with aligned timestamps.
+A continuous video sink the emulation worker tees each committed BGRA frame into.
+Implemented by `FrameSequenceCapture` (numbered BMPs) and `FfmpegVideoRecorder`
+(muxed container), so the runtime session drives either through one surface.
 
 ```csharp
-/// <summary>
-/// Coordinates synchronized audio and video recording.
-/// Ensures both streams use aligned timestamps for correct A/V sync.
-/// </summary>
-public interface IMediaCaptureSession
+public interface IVideoCaptureSink : IDisposable
 {
-    /// <summary>Begins a coordinated A/V recording session.</summary>
-    void Start(string basePath, MediaCaptureOptions options);
+    int FrameCount { get; }
 
-    /// <summary>Stops all active recordings and finalizes output files.</summary>
-    Task StopAsync();
-
-    /// <summary>Takes a screenshot without interrupting an active recording.</summary>
-    Task CaptureScreenshotAsync(string filePath, ImageFormat format);
-
-    /// <summary>Access to the underlying video recorder.</summary>
-    IVideoRecorder VideoRecorder { get; }
-
-    /// <summary>Access to the underlying audio recorder.</summary>
-    IAudioRecorder AudioRecorder { get; }
-
-    /// <summary>True if any recording is currently active.</summary>
-    bool IsActive { get; }
+    /// <summary>Persist one BGRA8888 frame (length == width*height*4).</summary>
+    void CaptureFrame(ReadOnlySpan<byte> bgra, int width, int height);
 }
 ```
+
+### Concrete recorders (`ViceSharp.Core.Media` / `ViceSharp.Core.Capture`)
+
+| Type | Role |
+|------|------|
+| `FrameCapture` | One-shot screenshot encode (`CaptureBgraAsync`, png/bmp). |
+| `FrameSequenceCapture` | Numbered 24-bit BMP sequence; `FrameSequenceMode.AllFrames` or `UniqueFrames` (skips consecutive byte-identical frames). |
+| `WavAudioRecorder` | RIFF/WAVE 16-bit PCM recorder. |
+| `CaptureAudioTap` | `IAudioBackend` installed in the SID -> output path with a runtime-swappable `IAudioRecorder` slot; transparent pass-through when idle. |
+| `FfmpegVideoRecorder` | Muxed video+audio via an external `ffmpeg` process. Implements both `IVideoCaptureSink` and `IAudioRecorder`; streams raw BGRA + s16le over two loopback TCP sockets (mirrors VICE `ffmpegexedrv`). |
+| `FfmpegLocator` / `FfmpegVideoFormats` | Locate `ffmpeg` (PATH / `VICESHARP_FFMPEG`); the mp4 / mkv / avi container table. |
+
+### gRPC `CaptureService` (control surface)
+
+**Assembly:** `ViceSharp.Protocol` (contracts), `ViceSharp.Host` (`CaptureServiceHost`)
+
+The client-facing API (`ICaptureService` / `IHostProtocolClient`):
+
+```csharp
+// Discover what this host can encode (screenshot/audio formats + ffmpeg video formats).
+GetCaptureCapabilitiesAsync(SessionRequest) -> { ScreenshotFormats, AudioFormats, VideoFormats }
+
+// One-shot screenshot (format: "png" | "bmp").
+CaptureFrameAsync(CaptureFrameRequest{ SessionId, FilePath, Format })
+
+// Start/stop a recording. Kind = Screenshot | Video | Audio.
+//   Video  Format: "bmpseq" (Options { "frames": "all" | "unique" }), or "mp4"/"mkv"/"avi" (ffmpeg)
+//   Audio  Format: "wav"
+StartCaptureAsync(StartCaptureRequest{ SessionId, Kind, TargetPath, Format, Options })
+StopCaptureAsync(StopCaptureRequest{ SessionId, CaptureId })
+
+// Enumerate active captures for a session.
+ListCapturesAsync(SessionRequest) -> CaptureSessionDto[]
+```
+
+`GetCaptureCapabilities` advertises the ffmpeg containers (each `CaptureVideoFormatDto.RequiresFfmpeg = true`) only when an ffmpeg binary is located; muxed video and WAV sound additionally require a live audio device.
 
 ---
 

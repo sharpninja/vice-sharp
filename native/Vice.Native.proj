@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <NativeLibs>$(OutDir)native</NativeLibs>
-    <BuildNativeCommand Condition="'$(OS)' == 'Windows_NT'">powershell -ExecutionPolicy Bypass -File .\build-vice-shim.ps1</BuildNativeCommand>
+    <BuildNativeCommand Condition="'$(OS)' == 'Windows_NT'">pwsh.exe -NoProfile -ExecutionPolicy Bypass -File .\build-vice-shim.ps1</BuildNativeCommand>
     <BuildNativeCommand Condition="'$(OS)' != 'Windows_NT'">bash ./build-vice-shim.sh</BuildNativeCommand>
   </PropertyGroup>
 

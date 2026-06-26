@@ -19,7 +19,7 @@
 
 ### Description
 
-Given the same initial machine state (snapshot) and the same sequence of input events (keyboard, joystick, timing), the emulator shall produce bit-exact identical output (video frames, audio samples, final machine state) across all runs, all platforms, and all compilation modes (Debug, Release, NativeAOT).
+Given the same initial machine state (snapshot) and the same sequence of input events (keyboard, joystick, timing), the emulator shall produce bit-exact identical output (video frames, audio samples, final machine state) across all runs, all platforms, and supported compilation modes (Debug and Release).
 
 ### Rationale
 
@@ -38,7 +38,7 @@ Determinism is a foundational requirement for: (1) snapshot-based replay (FR-SNP
 
 1. A "replay determinism" test loads a snapshot, replays 10 million cycles of recorded input, and compares the final state hash: the hash must be identical across 100 consecutive runs.
 2. The same test produces identical hashes on Windows x64, Linux x64, macOS ARM64, and Linux ARM64.
-3. The same test produces identical hashes for Debug, Release, and NativeAOT builds.
+3. The same test produces identical hashes for Debug and Release builds.
 4. Video frame checksums (CRC32 of raw pixel data) match for every frame between two runs of the same replay.
 5. Audio sample checksums match for every audio buffer between two runs of the same replay.
 6. The `[Deterministic]` custom attribute is applied to all emulation-core methods, and a Roslyn analyzer verifies no non-deterministic operations are used.

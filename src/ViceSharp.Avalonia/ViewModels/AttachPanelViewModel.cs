@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using ViceSharp.Avalonia.Host;
+using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Protocol;
 
 namespace ViceSharp.Avalonia.ViewModels;
@@ -11,6 +13,11 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     private readonly IHostProtocolClient _hostClient;
     private AttachDockSide _dockSide = AttachDockSide.Left;
+    private bool _isPaneOpen = true;
+    private double _sidebarWidth = 260;
+    private bool _muted;
+    private double _masterVolumePercent = 100;
+    private bool _applyingTrueDrive;
     private SidebarTab _activeTab = SidebarTab.Peripherals;
     private string _statusText = "Disconnected";
     private KeyboardMapDto? _selectedKeyboardMap;
@@ -28,6 +35,9 @@ public sealed class AttachPanelViewModel : ObservableObject
     private string _selectedPrimaryJoystickPort = "Joystick 2";
     private bool _swapJoystickPorts;
     private string _selectedResourceMode = "Auto detect";
+    private string _selectedPacingStrategy = "VICE";
+    private bool _saveSettingsOnExit;
+    private bool _saveTransientValuesOnExit;
     private string _settingsStatusText = "Settings will load from the connected host.";
     private bool _hasPendingSettingsChanges;
     private bool _requiresRestart;
@@ -39,10 +49,11 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         ArgumentNullException.ThrowIfNull(hostClient);
         _hostClient = hostClient;
+        TickHistory = new TickHistoryViewModel(hostClient);
 
         Slots =
         [
-            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64"]),
+            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64"], trueDrive: true),
             new AttachSlotViewModel(MediaSlot.Drive9, "Drive 9", "Disk", ["*.d64", "*.g64"]),
             new AttachSlotViewModel(MediaSlot.Tape, "Tape", "Tape", ["*.tap"]),
             new AttachSlotViewModel(MediaSlot.Cartridge, "Cartridge", "Cart", ["*.crt", "*.bin", "*.rom"])
@@ -56,7 +67,24 @@ public sealed class AttachPanelViewModel : ObservableObject
         ];
         _selectedMachineProfile = MachineProfiles[0];
         _appliedSettings = CaptureSettings();
+
+        // FR-DRVTRUE-001: when a drive's True Drive toggle flips (from the card
+        // checkbox or the menu), drive the host to (re)build the session as a
+        // true-drive rig. Only one true-drive rig is supported at a time, so
+        // enabling one drive disables the other.
+        foreach (var slot in Slots)
+        {
+            if (slot.SupportsTrueDrive)
+                slot.PropertyChanged += OnSlotPropertyChanged;
+        }
     }
+
+    /// <summary>
+    /// Host-supplied file picker used by <see cref="AttachFromPickerAsync"/> so a
+    /// reusable peripheral card can request an attach without owning the dialog.
+    /// Set by the shell (the Avalonia window provides the StorageProvider).
+    /// </summary>
+    public Func<AttachSlotViewModel, Task<string?>>? FilePicker { get; set; }
 
     public ObservableCollection<AttachSlotViewModel> Slots { get; }
 
@@ -84,16 +112,114 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     public IReadOnlyList<string> ResourceModes { get; } = ["Auto detect", "Use configured paths", "Missing resources"];
 
+    public IReadOnlyList<string> PacingStrategies { get; } = ["Semaphore", "VICE"];
+
     public AttachDockSide DockSide
     {
         get => _dockSide;
-        private set => SetProperty(ref _dockSide, value);
+        private set
+        {
+            if (SetProperty(ref _dockSide, value))
+            {
+                OnPropertyChanged(nameof(PanePlacement));
+                OnPropertyChanged(nameof(SplitterDock));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Which edge of the sidebar the resize splitter sits on - the INNER edge facing the
+    /// video: Right when the panel is anchored Left, Left when anchored Right.
+    /// </summary>
+    public global::Avalonia.Controls.Dock SplitterDock =>
+        _dockSide == AttachDockSide.Left
+            ? global::Avalonia.Controls.Dock.Right
+            : global::Avalonia.Controls.Dock.Left;
+
+    /// <summary>Smallest / largest sidebar pane width the splitter allows (bound to OpenPaneLength).</summary>
+    public const double SidebarMinWidth = 200;
+    public const double SidebarMaxWidth = 560;
+
+    /// <summary>
+    /// Resizable sidebar pane width, bound to <c>SplitView.OpenPaneLength</c>. Dragging the
+    /// inner-edge splitter adjusts it within [<see cref="SidebarMinWidth"/>, <see cref="SidebarMaxWidth"/>].
+    /// </summary>
+    public double SidebarWidth
+    {
+        get => _sidebarWidth;
+        private set => SetProperty(ref _sidebarWidth, System.Math.Clamp(value, SidebarMinWidth, SidebarMaxWidth));
+    }
+
+    /// <summary>
+    /// Apply a horizontal drag delta from the inner-edge splitter. When anchored Left the
+    /// splitter is on the pane's right edge, so a rightward (positive) drag widens; anchored
+    /// Right it is on the left edge, so a rightward drag narrows.
+    /// </summary>
+    public void ResizeSidebar(double deltaX) =>
+        SidebarWidth += _dockSide == AttachDockSide.Left ? deltaX : -deltaX;
+
+    /// <summary>
+    /// Mutes the emulator's audio output (the status-bar mute toggle). Drives the process-wide
+    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/> the audio backend reads.
+    /// </summary>
+    public bool Muted
+    {
+        get => _muted;
+        set
+        {
+            if (SetProperty(ref _muted, value))
+                global::ViceSharp.Host.Audio.MasterAudioControl.Muted = value;
+        }
+    }
+
+    /// <summary>
+    /// Master output volume as a percentage 0-100 (the status-bar volume slider). Drives
+    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/>.Volume (percent / 100).
+    /// </summary>
+    public double MasterVolumePercent
+    {
+        get => _masterVolumePercent;
+        set
+        {
+            var clamped = System.Math.Clamp(value, 0, 100);
+            if (SetProperty(ref _masterVolumePercent, clamped))
+                global::ViceSharp.Host.Audio.MasterAudioControl.Volume = (float)(clamped / 100.0);
+        }
+    }
+
+    /// <summary>
+    /// Avalonia <c>SplitView.PanePlacement</c> value derived from
+    /// <see cref="DockSide"/>: Left maps to the left edge, Right to the right.
+    /// Lets the AXAML shell bind the flyout side without a converter.
+    /// </summary>
+    public global::Avalonia.Controls.SplitViewPanePlacement PanePlacement =>
+        _dockSide == AttachDockSide.Left
+            ? global::Avalonia.Controls.SplitViewPanePlacement.Left
+            : global::Avalonia.Controls.SplitViewPanePlacement.Right;
+
+    /// <summary>
+    /// Whether the sidebar flyout pane is open. Bound to
+    /// <c>SplitView.IsPaneOpen</c>; the single toggle button flips it.
+    /// </summary>
+    public bool IsPaneOpen
+    {
+        get => _isPaneOpen;
+        set => SetProperty(ref _isPaneOpen, value);
     }
 
     public SidebarTab ActiveTab
     {
         get => _activeTab;
-        set => SetProperty(ref _activeTab, value);
+        set
+        {
+            if (SetProperty(ref _activeTab, value) && value == SidebarTab.History)
+            {
+                // BUG-TICKHIST-PERF-001: selecting History arms the opt-in recorder (the
+                // refresh hits GetTickHistory, which enables capture host-side). Leaving the
+                // tab unopened keeps the recorder off so emulation runs at full speed.
+                _ = TickHistory.RefreshAsync();
+            }
+        }
     }
 
     public string StatusText
@@ -214,6 +340,13 @@ public sealed class AttachPanelViewModel : ObservableObject
         set => SetSettingsProperty(ref _selectedResourceMode, value);
     }
 
+    /// <summary>Emulation pacing strategy ("Semaphore" | "VICE"). Applies live.</summary>
+    public string SelectedPacingStrategy
+    {
+        get => _selectedPacingStrategy;
+        set => SetSettingsProperty(ref _selectedPacingStrategy, value);
+    }
+
     public string SettingsStatusText
     {
         get => _settingsStatusText;
@@ -250,11 +383,24 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     public void DockRight() => DockSide = AttachDockSide.Right;
 
+    /// <summary>Flip the sidebar flyout between the left and right edges.
+    /// Backs the single side-toggle icon button (FR-UIFLYOUT-001).</summary>
+    public void ToggleDockSide() =>
+        DockSide = _dockSide == AttachDockSide.Left ? AttachDockSide.Right : AttachDockSide.Left;
+
+    /// <summary>Open or close the sidebar flyout pane (FR-UIFLYOUT-001).</summary>
+    public void ToggleSidebar() => IsPaneOpen = !IsPaneOpen;
+
     public void ShowPeripherals() => ActiveTab = SidebarTab.Peripherals;
 
     public void ShowSettings() => ActiveTab = SidebarTab.Settings;
 
     public void ShowMonitor() => ActiveTab = SidebarTab.Monitor;
+
+    public void ShowHistory() => ActiveTab = SidebarTab.History;
+
+    /// <summary>The "last 100 ticks" time-travel debugger panel view-model.</summary>
+    public TickHistoryViewModel TickHistory { get; }
 
     public async Task RefreshAsync(CancellationToken cancellationToken = default)
     {
@@ -286,6 +432,9 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         foreach (var slot in Slots)
             slot.SetIecActivity(status.IecBusActive);
+
+        // The time-travel debugger only allows inspecting a tick while paused.
+        TickHistory.IsPaused = status.RunState == EmulatorRunState.Paused;
     }
 
     public async Task AttachAsync(AttachSlotViewModel slot, string filePath, CancellationToken cancellationToken = default)
@@ -321,9 +470,91 @@ public sealed class AttachPanelViewModel : ObservableObject
         }
 
         if (response.Attachment is not null)
+        {
             slot.ApplyAttachment(response.Attachment, filePath);
+            if (slot.SupportsTrueDrive && slot.TrueDrive)
+            {
+                _applyingTrueDrive = true;
+                try
+                {
+                    await ApplyTrueDriveSelectionAsync(slot, cancellationToken).ConfigureAwait(true);
+                }
+                finally
+                {
+                    _applyingTrueDrive = false;
+                }
+
+                StatusText = $"Attached; True Drive enabled for {slot.Title} (session restarted)";
+                return;
+            }
+        }
 
         StatusText = "Attached";
+    }
+
+    /// <summary>
+    /// Show the host file picker for <paramref name="slot"/> and attach the
+    /// chosen file. Backs the reusable peripheral card's Attach button
+    /// (FR-UIPERIPHERAL-001). No-op with an inline error if no picker is set.
+    /// </summary>
+    public async Task AttachFromPickerAsync(AttachSlotViewModel slot, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(slot);
+
+        if (FilePicker is null)
+        {
+            slot.MarkError("File picker is unavailable.");
+            return;
+        }
+
+        var filePath = await FilePicker(slot).ConfigureAwait(true);
+        if (!string.IsNullOrWhiteSpace(filePath))
+            await AttachAsync(slot, filePath, cancellationToken).ConfigureAwait(true);
+    }
+
+    private async void OnSlotPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(AttachSlotViewModel.TrueDrive) || sender is not AttachSlotViewModel changed)
+            return;
+        if (_applyingTrueDrive)
+            return;
+
+        _applyingTrueDrive = true;
+        try
+        {
+            var active = Slots.FirstOrDefault(slot => slot.SupportsTrueDrive && slot.TrueDrive);
+            await ApplyTrueDriveSelectionAsync(active, CancellationToken.None).ConfigureAwait(true);
+            StatusText = active is not null
+                ? $"True Drive enabled for {active.Title} (session restarted)"
+                : "True Drive disabled (session restarted)";
+        }
+        catch (Exception ex)
+        {
+            StatusText = ex.Message;
+        }
+        finally
+        {
+            _applyingTrueDrive = false;
+        }
+    }
+
+    private async Task ApplyTrueDriveSelectionAsync(AttachSlotViewModel? active, CancellationToken cancellationToken)
+    {
+        // Single true-drive rig: enabling one drive disables the other.
+        if (active is not null)
+        {
+            foreach (var other in Slots)
+            {
+                if (other.SupportsTrueDrive && !ReferenceEquals(other, active) && other.TrueDrive)
+                    other.TrueDrive = false;
+            }
+        }
+
+        var device = active?.Slot == MediaSlot.Drive9 ? 9 : 8;
+        // Carry the already-attached disk so the rebuilt true-drive session boots with it
+        // inserted (the rig loads the D64 at build time).
+        var diskPath = active is { IsAttached: true } ? active.FilePath : null;
+        await _hostClient.SetTrueDriveAsync(active is not null, device, diskPath, cancellationToken).ConfigureAwait(true);
     }
 
     public async Task EjectAsync(AttachSlotViewModel slot, CancellationToken cancellationToken = default)
@@ -471,12 +702,27 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         if (response.KeyboardMap is not null)
         {
-            _selectedKeyboardMap = response.KeyboardMap;
+            // Select the instance actually present in KeyboardMaps (matched by Id) so
+            // the bound ComboBox can display it. The host returns a fresh DTO with
+            // IsSelected = true, which value-mismatches every list item (IsSelected =
+            // false) and would blank the combo. Custom maps not in the list are added.
+            _selectedKeyboardMap = ResolveKeyboardMapInstance(response.KeyboardMap);
             OnPropertyChanged(nameof(SelectedKeyboardMap));
             KeyboardMapStatus = string.IsNullOrWhiteSpace(response.KeyboardMap.Error)
                 ? $"Using {response.KeyboardMap.DisplayName}"
                 : response.KeyboardMap.Error;
         }
+    }
+
+    private KeyboardMapDto ResolveKeyboardMapInstance(KeyboardMapDto map)
+    {
+        var existing = KeyboardMaps.FirstOrDefault(
+            candidate => string.Equals(candidate.Id, map.Id, StringComparison.OrdinalIgnoreCase));
+        if (existing is not null)
+            return existing;
+
+        KeyboardMaps.Add(map);
+        return map;
     }
 
     private bool SetSettingsProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = "")
@@ -551,9 +797,11 @@ public sealed class AttachPanelViewModel : ObservableObject
         _selectedPrimaryJoystickPort = FromInputPort(settings.Input.PrimaryJoystickPort);
         _swapJoystickPorts = settings.Input.SwapJoystickPorts;
         _selectedResourceMode = FromResourceModeId(settings.Resources?.Mode ?? new ResourceSettingsDto().Mode);
+        _selectedPacingStrategy = FromPacingStrategyId(settings.Limiter.PacingStrategy);
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
+        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp checkbox in sync
         OnPropertyChanged(nameof(SelectedMachineProfile));
         OnPropertyChanged(nameof(SelectedRenderer));
         OnPropertyChanged(nameof(SelectedDisplayScale));
@@ -565,13 +813,14 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedPrimaryJoystickPort));
         OnPropertyChanged(nameof(SwapJoystickPorts));
         OnPropertyChanged(nameof(SelectedResourceMode));
+        OnPropertyChanged(nameof(SelectedPacingStrategy));
     }
 
     private UpdateSettingsRequest CreateUpdateSettingsRequest(bool restartSession)
     {
         return new UpdateSettingsRequest(
             _hostClient.SessionId,
-            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled),
+            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled, ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
                 ToPaletteId(SelectedPalette),
@@ -595,7 +844,7 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         return new ValidateSettingsResourcesRequest(
             _hostClient.SessionId,
-            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled),
+            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled, ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
                 ToPaletteId(SelectedPalette),
@@ -803,6 +1052,12 @@ public sealed class AttachPanelViewModel : ObservableObject
         return inputPort == InputPort.Joystick1 ? "Joystick 1" : "Joystick 2";
     }
 
+    private static string ToPacingStrategyId(string strategy)
+        => string.Equals(strategy, "VICE", StringComparison.OrdinalIgnoreCase) ? "vice" : "semaphore";
+
+    private static string FromPacingStrategyId(string id)
+        => string.Equals(id, "semaphore", StringComparison.OrdinalIgnoreCase) ? "Semaphore" : "VICE";
+
     private static bool IsRestartRelevant(string propertyName)
     {
         return propertyName is nameof(SelectedMachineProfile) or nameof(SelectedResourceMode);
@@ -823,7 +1078,8 @@ public sealed class AttachPanelViewModel : ObservableObject
             SelectedInputMode,
             SelectedPrimaryJoystickPort,
             SwapJoystickPorts,
-            SelectedResourceMode);
+            SelectedResourceMode,
+            SelectedPacingStrategy);
     }
 
     private void RestoreSettings(SettingsSnapshot snapshot)
@@ -841,9 +1097,11 @@ public sealed class AttachPanelViewModel : ObservableObject
         _selectedPrimaryJoystickPort = snapshot.PrimaryJoystickPort;
         _swapJoystickPorts = snapshot.SwapJoystickPorts;
         _selectedResourceMode = snapshot.ResourceMode;
+        _selectedPacingStrategy = snapshot.PacingStrategy;
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
+        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp checkbox in sync
         OnPropertyChanged(nameof(SelectedMachineProfile));
         OnPropertyChanged(nameof(SelectedRenderer));
         OnPropertyChanged(nameof(SelectedDisplayScale));
@@ -855,6 +1113,148 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedPrimaryJoystickPort));
         OnPropertyChanged(nameof(SwapJoystickPorts));
         OnPropertyChanged(nameof(SelectedResourceMode));
+        OnPropertyChanged(nameof(SelectedPacingStrategy));
+    }
+
+    // ---- Save-on-exit toggles + persistence capture/apply --------------------
+
+    /// <summary>Persist the Settings tab to vice-sharp.ini on exit (user toggle).</summary>
+    public bool SaveSettingsOnExit
+    {
+        get => _saveSettingsOnExit;
+        set => SetProperty(ref _saveSettingsOnExit, value);
+    }
+
+    /// <summary>Persist transient session state (attached media + keyboard map) on exit (user toggle).</summary>
+    public bool SaveTransientValuesOnExit
+    {
+        get => _saveTransientValuesOnExit;
+        set => SetProperty(ref _saveTransientValuesOnExit, value);
+    }
+
+    /// <summary>Capture the current Settings-tab values for persistence.</summary>
+    public PersistedSettings CapturePersistedSettings() => new(
+        LimiterRatePercent,
+        LimiterEnabled,
+        SelectedMachineProfile.Id,
+        SelectedRenderer,
+        SelectedDisplayScale,
+        SelectedCropMode,
+        SelectedAspectMode,
+        SelectedPalette,
+        SelectedAudioMode,
+        SelectedInputMode,
+        SelectedPrimaryJoystickPort,
+        SwapJoystickPorts,
+        SelectedResourceMode,
+        (int)DockSide,
+        SelectedPacingStrategy,
+        MasterVolumePercent,
+        Muted);
+
+    /// <summary>Capture the current transient state (attached media + keyboard map).</summary>
+    public PersistedTransient CapturePersistedTransient()
+    {
+        var attachments = Slots
+            .Where(slot => slot.IsAttached && !string.IsNullOrWhiteSpace(slot.FilePath))
+            .Select(slot => new PersistedAttachment(slot.Slot.ToString(), slot.FilePath, slot.IsReadOnly, slot.TrueDrive))
+            .ToList();
+
+        return new PersistedTransient(attachments, SelectedKeyboardMap?.Id, SelectedKeyboardMap?.SourcePath);
+    }
+
+    /// <summary>Apply persisted Settings-tab values and push them to the host.</summary>
+    public async Task ApplyPersistedSettingsAsync(PersistedSettings settings, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        LimiterRatePercent = Math.Clamp(settings.LimiterRatePercent, LimiterMinimumPercent, LimiterMaximumPercent);
+        LimiterEnabled = settings.LimiterEnabled;
+        SelectedMachineProfile = MachineProfiles.FirstOrDefault(
+            profile => string.Equals(profile.Id, settings.MachineProfileId, StringComparison.OrdinalIgnoreCase)) ?? SelectedMachineProfile;
+        SelectedRenderer = settings.Renderer;
+        SelectedDisplayScale = settings.DisplayScale;
+        SelectedCropMode = settings.CropMode;
+        SelectedAspectMode = settings.AspectMode;
+        SelectedPalette = settings.Palette;
+        SelectedAudioMode = settings.AudioMode;
+        SelectedInputMode = settings.InputMode;
+        SelectedPrimaryJoystickPort = settings.PrimaryJoystickPort;
+        SwapJoystickPorts = settings.SwapJoystickPorts;
+        SelectedResourceMode = settings.ResourceMode;
+        SelectedPacingStrategy = settings.PacingStrategy;
+        MasterVolumePercent = settings.MasterVolumePercent;
+        Muted = settings.Muted;
+        if ((AttachDockSide)settings.DockSide == AttachDockSide.Right)
+            DockRight();
+        else
+            DockLeft();
+
+        await ApplySettingsAsync(RequiresRestart, cancellationToken).ConfigureAwait(true);
+    }
+
+    /// <summary>Re-apply persisted transient state: attached media + true-drive, then the keyboard map last.</summary>
+    public async Task ApplyPersistedTransientAsync(PersistedTransient transient, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(transient);
+
+        foreach (var attachment in transient.Attachments)
+        {
+            if (string.IsNullOrWhiteSpace(attachment.FilePath) || !File.Exists(attachment.FilePath))
+                continue;
+            if (!Enum.TryParse<MediaSlot>(attachment.Slot, out var slot))
+                continue;
+
+            await _hostClient.AttachMediaAsync(slot, attachment.FilePath, attachment.IsReadOnly, cancellationToken).ConfigureAwait(true);
+        }
+
+        await RefreshAsync(cancellationToken).ConfigureAwait(true);
+
+        var driveAttachments = transient.Attachments
+            .Where(attachment => Enum.TryParse<MediaSlot>(attachment.Slot, out var slot)
+                && slot is MediaSlot.Drive8 or MediaSlot.Drive9)
+            .ToArray();
+        if (driveAttachments.Length > 0)
+        {
+            var activeAttachment = driveAttachments.FirstOrDefault(attachment => attachment.TrueDrive);
+            AttachSlotViewModel? activeSlot = null;
+
+            _applyingTrueDrive = true;
+            try
+            {
+                foreach (var slot in Slots.Where(slot => slot.SupportsTrueDrive))
+                {
+                    var isActive = activeAttachment is not null
+                        && string.Equals(slot.Slot.ToString(), activeAttachment.Slot, StringComparison.Ordinal);
+                    slot.TrueDrive = isActive;
+                    if (isActive)
+                        activeSlot = slot;
+                }
+
+                await ApplyTrueDriveSelectionAsync(activeSlot, cancellationToken).ConfigureAwait(true);
+            }
+            finally
+            {
+                _applyingTrueDrive = false;
+            }
+        }
+
+        // Restore the keyboard map LAST. RefreshAsync (and a true-drive session
+        // rebuild) re-list the keyboard maps and reset the selection to the host
+        // default, so applying it earlier was immediately clobbered (symptom: the
+        // keyboard map reverted to the first entry after restart).
+        if (!string.IsNullOrWhiteSpace(transient.KeyboardMapId))
+        {
+            if (!string.IsNullOrWhiteSpace(transient.KeyboardMapSourcePath) && File.Exists(transient.KeyboardMapSourcePath))
+            {
+                var payload = await File.ReadAllBytesAsync(transient.KeyboardMapSourcePath, cancellationToken).ConfigureAwait(true);
+                await SelectCustomKeyboardMapAsync(transient.KeyboardMapSourcePath, payload, cancellationToken).ConfigureAwait(true);
+            }
+            else
+            {
+                await SelectKeyboardMapAsync(transient.KeyboardMapId, cancellationToken).ConfigureAwait(true);
+            }
+        }
     }
 }
 
@@ -873,11 +1273,13 @@ internal sealed record SettingsSnapshot(
     string InputMode,
     string PrimaryJoystickPort,
     bool SwapJoystickPorts,
-    string ResourceMode);
+    string ResourceMode,
+    string PacingStrategy);
 
 public enum SidebarTab
 {
     Peripherals,
     Settings,
-    Monitor
+    Monitor,
+    History
 }

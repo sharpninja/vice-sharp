@@ -249,6 +249,41 @@ The host shall expose runtime telemetry and machine-control state needed by emul
 
 ---
 
+## FR-HOST-DIAG-001: Self-Describing Host Diagnostics Attach
+
+**ID:** FR-HOST-DIAG-001
+**Title:** Self-Describing Host Diagnostics Attach
+**Priority:** P0 -- Critical
+**Iteration:** 1
+
+### Description
+
+The host shall expose a read-only diagnostics surface that allows humans and external tools to discover the running host, active UI session, session list, and current performance state without scanning ports, reading source code, using UI automation, or creating throwaway probe sessions.
+
+### Acceptance Criteria
+
+1. A local diagnostics client can discover host process metadata, endpoint, protocol package, and version.
+2. A local diagnostics client can list live emulator sessions without mutating the registry or creating a new session.
+3. A local diagnostics client can identify the session currently bound to the UI.
+4. A local diagnostics client can request a performance snapshot with an explicit session id or omit the session id to use the current UI session.
+5. The desktop app publishes deterministic debug attach metadata under `%LOCALAPPDATA%\ViceSharp\debug-attach.json` and removes it best-effort on clean shutdown.
+6. The desktop UI exposes a Copy Debug Attach Info command containing endpoint, active session, app version, and current status.
+7. The diagnostics surface remains read-only and loopback/development scoped.
+
+### Source References
+
+- `docs/Architecture.md`: host/UI boundary and observability sections.
+- `native/vice/vice/doc/vice.texi`: monitor/debug status behavior and host diagnostics as user-facing observability.
+
+### Traceability
+
+- **Interfaces:** `DiagnosticsService`, `HostDiagnosticsState`, `DebugAttachFilePublisher`, `DebugAttachInfoProvider`
+- **Related FRs:** FR-HOST-005, FR-HOST-006, FR-UI-001, FR-UI-002
+- **Technical Requirements:** TR-HOST-DIAG-001, TR-HOST-DIAG-002, TR-HOST-DIAG-003, TR-HOST-DIAG-004
+- **Test Requirements:** TEST-HOST-DIAG-001, TEST-UI-DIAG-001
+
+---
+
 ## FR-UI-002: Emulator Status and Machine Control Bar
 
 **ID:** FR-UI-002

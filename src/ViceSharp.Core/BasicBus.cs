@@ -11,6 +11,14 @@ public sealed class BasicBus : IBus
     private List<IAddressSpace> _devices = new();
     private readonly object _lock = new();
     private C64MemoryMap? _singleC64MemoryMap;
+    private IPubSub? _pubSub;
+
+    /// <summary>
+    /// Connect the machine pub/sub so each write publishes a <see cref="MemoryWriteEvent"/>
+    /// (gated on <see cref="IPubSub.SubscriptionCount"/>: zero cost when nobody listens) for
+    /// the time-travel debugger's write-delta capture.
+    /// </summary>
+    public void ConnectPubSub(IPubSub pubSub) => _pubSub = pubSub;
 
     // PERF-BUS-001: Read/Write/Peek run on the single emulation thread (SystemClock);
     // no lock needed here. RegisterDevice/UnregisterDevice retain their lock for
@@ -33,6 +41,11 @@ public sealed class BasicBus : IBus
 
     public void Write(ushort address, byte value)
     {
+        // Time-travel capture: record the pre-write byte so the write can be undone later.
+        // Gated on a live subscriber so an unobserved run pays only a null/count check.
+        if (_pubSub is { SubscriptionCount: > 0 })
+            _pubSub.Publish(MemoryWriteEvent.Topic, new MemoryWriteEvent(address, Peek(address), value));
+
         if (_singleC64MemoryMap is { } c64MemoryMap)
         {
             c64MemoryMap.Write(address, value);

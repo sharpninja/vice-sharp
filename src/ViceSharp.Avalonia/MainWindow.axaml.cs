@@ -1,6 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
@@ -14,42 +14,32 @@ namespace ViceSharp.Avalonia;
 public partial class MainWindow : Window
 {
     private readonly IHostProtocolClient _hostClient;
-    private readonly IAsyncDisposable? _localHost;
+    private readonly InProcessGrpcHost? _localHost;
     private readonly ILocalVideoFrameSource? _localVideoFrameSource;
     private readonly AttachPanelViewModel _attachViewModel;
+    private readonly ShellViewModel _shell;
+    private readonly Persistence.SessionPersistence _persistence = new();
     private readonly StatusBarViewModel _statusBarViewModel = new();
+    private readonly IecMonitorViewModel _iecMonitorViewModel = new();
     private readonly AttachPanelView _attachPanel;
     private readonly VideoSurface _video;
-    private readonly DockPanel _root = new();
-    private readonly Grid _layout = new();
-    private readonly TextBlock _statusText = new();
-    private DockPanel? _sidebarHost;
-    private bool _sidebarCollapsed;
+    private DockPanel? _contentPanel;
+    private ContentControl? _sidebarHost;
+    private ContentControl? _videoHost;
 
     public MainWindow()
     {
         InitializeComponent();
-        Title = "ViceSharp";
-        Width = 1120;
-        Height = 720;
-        MinWidth = 780;
-        MinHeight = 520;
 
         var hostConnection = CreateHostClient();
         _hostClient = hostConnection.Client;
         _localHost = hostConnection.LocalHost;
         _localVideoFrameSource = hostConnection.VideoFrameSource;
+        if (_hostClient is GrpcHostProtocolClient grpcClient)
+            grpcClient.SessionIdChanged += OnHostClientSessionIdChanged;
         _attachViewModel = new AttachPanelViewModel(_hostClient);
-        _attachViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AttachPanelViewModel.DockSide))
-                BuildLayout();
-        };
-        _statusBarViewModel.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(StatusBarViewModel.StatusText))
-                _statusText.Text = _statusBarViewModel.StatusText;
-        };
+        _shell = new ShellViewModel(_hostClient, _attachViewModel);
+        DataContext = _attachViewModel;
 
         _attachPanel = new AttachPanelView(_attachViewModel)
         {
@@ -57,29 +47,58 @@ public partial class MainWindow : Window
             PickKeyboardMapFileAsync = PickKeyboardMapFileAsync,
             PopOutMonitorRequested = OpenMonitorWindow
         };
+        // Fixed natural size; a Viewbox (set on PART_VideoHost below) scales it uniformly so
+        // the display control wraps the image tightly (no internal letterbox) and the sidebar
+        // can fill right up to it.
         _video = new VideoSurface
         {
-            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
-            VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch
+            Width = VideoSurface.SourceWidth,
+            Height = VideoSurface.SourceHeight
         };
         _video.KeyDown += OnVideoKeyDown;
         _video.KeyUp += OnVideoKeyUp;
 
-        var statusBar = CreateStatusBar();
-        DockPanel.SetDock(statusBar, Dock.Bottom);
-        _root.Children.Add(statusBar);
-        _root.Children.Add(_layout);
-        Content = _root;
-        BuildLayout();
+        // Inject the live views into the declarative shell's named hosts. The
+        // sidebar pane and video content stay code-behind-owned for now; the
+        // reusable PeripheralCardView / SidebarView land in S2.
+        if (this.FindControl<Panel>("PART_StatusHost") is { } statusHost)
+            statusHost.DataContext = _statusBarViewModel;
+
+        if (this.FindControl<Views.IecMonitorView>("PART_IecMonitor") is { } iecMonitor)
+            iecMonitor.DataContext = _iecMonitorViewModel;
+        _sidebarHost = this.FindControl<ContentControl>("PART_SidebarHost");
+        if (_sidebarHost is not null)
+            _sidebarHost.Content = _attachPanel;
+        _videoHost = this.FindControl<ContentControl>("PART_VideoHost");
+        if (_videoHost is not null)
+            _videoHost.Content = new Viewbox
+            {
+                Stretch = global::Avalonia.Media.Stretch.Uniform,
+                Child = _video
+            };
+        _contentPanel = this.FindControl<DockPanel>("PART_ContentPanel");
+
+        // The sidebar stretches to fill the width the aspect-sized display does not use.
+        // Re-flow when the sidebar is collapsed/opened or flipped to the other edge.
+        _attachViewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is nameof(AttachPanelViewModel.IsPaneOpen)
+                or nameof(AttachPanelViewModel.PanePlacement)
+                or nameof(AttachPanelViewModel.DockSide))
+            {
+                ApplyContentLayout();
+            }
+        };
+        ApplyContentLayout();
+
         Opened += (_, _) => _video.Focus();
 
-        _ = _attachViewModel.RefreshAsync();
+        _ = InitializeViewModelAsync();
 
         var renderTimer = new DispatcherTimer(
             TimeSpan.FromSeconds(1.0 / 50.0),
             DispatcherPriority.Render,
             async (_, _) => await RefreshFrameAsync().ConfigureAwait(true));
-
         renderTimer.Start();
 
         var statusTimer = new DispatcherTimer(
@@ -89,8 +108,91 @@ public partial class MainWindow : Window
         statusTimer.Start();
     }
 
+    // Lay out the content panel: the emulator display is docked to an edge and aspect-sized
+    // (VideoSurface.MeasureOverride), and the sidebar is the stretched fill (last) child that
+    // consumes the rest. Flipping DockSide moves the display's dock edge; collapsing hides the
+    // sidebar and reorders so the display becomes the fill child and covers the window.
+    private void ApplyContentLayout()
+    {
+        if (_contentPanel is null || _sidebarHost is null || _videoHost is null)
+            return;
+
+        if (_attachViewModel.IsPaneOpen)
+        {
+            _sidebarHost.IsVisible = true;
+            var sidebarLeft = _attachViewModel.DockSide == AttachDockSide.Left;
+            DockPanel.SetDock(_videoHost, sidebarLeft ? Dock.Right : Dock.Left);
+            MoveToFront(_videoHost); // display docked first; sidebar is last => fills/stretches
+        }
+        else
+        {
+            _sidebarHost.IsVisible = false;
+            MoveToFront(_sidebarHost); // display is last => fills the window
+        }
+    }
+
+    private void MoveToFront(Control child)
+    {
+        var children = _contentPanel!.Children;
+        var index = children.IndexOf(child);
+        if (index > 0)
+            children.Move(index, 0);
+    }
+
+    private async Task InitializeViewModelAsync()
+    {
+        await _attachViewModel.RefreshAsync().ConfigureAwait(true);
+
+        Persistence.PersistedState persisted;
+        try
+        {
+            persisted = _persistence.Load();
+        }
+        catch
+        {
+            return; // first run / unreadable config: nothing to restore
+        }
+
+        _attachViewModel.SaveSettingsOnExit = persisted.SaveSettingsOnExit;
+        _attachViewModel.SaveTransientValuesOnExit = persisted.SaveTransientValuesOnExit;
+
+        try
+        {
+            if (persisted.Settings is not null)
+                await _attachViewModel.ApplyPersistedSettingsAsync(persisted.Settings).ConfigureAwait(true);
+            if (persisted.Transient is not null)
+                await _attachViewModel.ApplyPersistedTransientAsync(persisted.Transient).ConfigureAwait(true);
+        }
+        catch
+        {
+            // Restoring persisted state must never break startup.
+        }
+    }
+
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        try
+        {
+            var state = new Persistence.PersistedState(
+                _attachViewModel.SaveSettingsOnExit,
+                _attachViewModel.SaveTransientValuesOnExit,
+                _attachViewModel.SaveSettingsOnExit ? _attachViewModel.CapturePersistedSettings() : null,
+                _attachViewModel.SaveTransientValuesOnExit ? _attachViewModel.CapturePersistedTransient() : null);
+            _persistence.Save(state);
+        }
+        catch
+        {
+            // Persistence must never block window close.
+        }
+
+        base.OnClosing(e);
+    }
+
     protected override async void OnClosed(EventArgs e)
     {
+        if (_hostClient is GrpcHostProtocolClient grpcClient)
+            grpcClient.SessionIdChanged -= OnHostClientSessionIdChanged;
+
         if (_hostClient is IDisposable disposableClient)
             disposableClient.Dispose();
 
@@ -120,195 +222,382 @@ public partial class MainWindow : Window
         }
     }
 
-    private void BuildLayout()
+    // ---- Shell commands (single side-toggle + flyout open/close) -------------
+
+    private void OnToggleSidebar(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
-        _layout.Children.Clear();
-        _layout.ColumnDefinitions.Clear();
+        _attachViewModel.ToggleSidebar();
+        _video.Focus();
+    }
 
-        if (_sidebarCollapsed)
+    private void OnToggleDockSide(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _attachViewModel.ToggleDockSide();
+        _video.Focus();
+    }
+
+    // ---- Menu + transport commands ------------------------------------------
+
+    private void OnMenuExit(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => Close();
+
+    private void OnMenuPause(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.PauseAsync().AsTask());
+
+    private void OnMenuResume(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.ResumeAsync().AsTask());
+
+    private void OnStepCycle(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.StepCycleAsync(1).AsTask());
+
+    private void OnStepFrame(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.StepFrameAsync(1).AsTask());
+
+    private void OnRewindCycle(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.RewindCycleAsync(1).AsTask());
+
+    private void OnRewindFrame(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.RewindFrameAsync(1).AsTask());
+
+    private void OnMenuColdReset(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.ColdResetAsync().AsTask());
+
+    private void OnMenuWarmReset(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.WarmResetAsync().AsTask());
+
+    private void OnRunDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RunCommandAsync(() => _shell.AutostartDrive8Async().AsTask());
+
+    private void OnMenuToggleWarp(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.ToggleWarpAsync();
+
+    private void OnMenuSwapJoysticks(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.SwapJoysticksAsync();
+
+    private async void OnMenuSaveScreenshot(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            if (_attachViewModel.DockSide == AttachDockSide.Left)
-            {
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(44, GridUnitType.Pixel));
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-                AddToColumn(CreateCollapsedSidebar(), 0);
-                AddToColumn(_video, 1);
-            }
-            else
-            {
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-                _layout.ColumnDefinitions.Add(new ColumnDefinition(44, GridUnitType.Pixel));
-                AddToColumn(_video, 0);
-                AddToColumn(CreateCollapsedSidebar(), 1);
-            }
+            Title = "Save screenshot",
+            SuggestedFileName = "vicesharp",
+            DefaultExtension = "png",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("PNG image") { Patterns = ["*.png"] },
+                new FilePickerFileType("BMP image") { Patterns = ["*.bmp"] }
+            ]
+        });
 
+        var path = file?.TryGetLocalPath();
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        var format = global::System.IO.Path.GetExtension(path).TrimStart('.').ToLowerInvariant();
+        if (format is not ("png" or "bmp"))
+            format = "png";
+
+        try
+        {
+            var response = await _shell.CaptureScreenshotAsync(path, format).ConfigureAwait(true);
+            if (!response.Status.IsSuccess)
+                ApplyStatus(null, response.Status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
+    private async void OnMenuRecordSound(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Toggle: stop an active recording, otherwise pick a target and start one.
+        if (_shell.IsRecordingSound)
+        {
+            await StopRecordingAsync(_shell.StopSoundRecordingAsync()).ConfigureAwait(true);
             return;
         }
 
-        // Narrower sidebar default (240 vs 300 prior). The slot panels reflow
-        // into compact horizontal layouts at this width; the splitter still
-        // lets the user widen the sidebar when needed.
-        if (_attachViewModel.DockSide == AttachDockSide.Left)
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(240, GridUnitType.Pixel));
-        else
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
 
-        _layout.ColumnDefinitions.Add(new ColumnDefinition(4, GridUnitType.Pixel));
-
-        if (_attachViewModel.DockSide == AttachDockSide.Left)
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-        else
-            _layout.ColumnDefinitions.Add(new ColumnDefinition(240, GridUnitType.Pixel));
-
-        var splitter = new GridSplitter
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Width = 4,
-            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
-            VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch
-        };
+            Title = "Record sound",
+            SuggestedFileName = "vicesharp",
+            DefaultExtension = "wav",
+            FileTypeChoices = [new FilePickerFileType("WAV audio") { Patterns = ["*.wav"] }]
+        });
 
-        if (_attachViewModel.DockSide == AttachDockSide.Left)
+        var path = file?.TryGetLocalPath();
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        try
         {
-            AddToColumn(CreateSidebarHost(), 0);
-            AddToColumn(splitter, 1);
-            AddToColumn(_video, 2);
+            var status = await _shell.StartSoundRecordingAsync(path).ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
         }
-        else
+        catch (Exception ex)
         {
-            AddToColumn(_video, 0);
-            AddToColumn(splitter, 1);
-            AddToColumn(CreateSidebarHost(), 2);
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
         }
     }
 
-    private Control CreateSidebarHost()
-    {
-        if (_sidebarHost is not null)
-            return _sidebarHost;
+    private async void OnMenuRecordVideoMp4(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => await RecordMuxedVideoAsync(captureMicrophone: false).ConfigureAwait(true);
 
-        var host = new DockPanel();
-        var collapse = new Button
+    private async void OnMenuRecordVideoMp4WithMicrophone(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => await RecordMuxedVideoAsync(captureMicrophone: true).ConfigureAwait(true);
+
+    private async global::System.Threading.Tasks.Task RecordMuxedVideoAsync(bool captureMicrophone)
+    {
+        // Toggle: stop an active recording, otherwise pick an output file and start
+        // a muxed MP4 (H.264 + AAC) recording with sound, via ffmpeg. The narration
+        // variant asks ffmpeg to add the host microphone as an extra mixed audio input.
+        if (_shell.IsRecordingVideo)
         {
-            Content = "☰",
-            Padding = new Thickness(8, 4),
-            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left,
-            Margin = new Thickness(8, 6, 8, 0)
+            await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = captureMicrophone
+                ? "Record video (MP4 + sound + microphone)"
+                : "Record video (MP4 + sound)",
+            SuggestedFileName = "vicesharp",
+            DefaultExtension = "mp4",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("MP4 video") { Patterns = ["*.mp4"] },
+                new FilePickerFileType("Matroska video") { Patterns = ["*.mkv"] },
+                new FilePickerFileType("AVI video") { Patterns = ["*.avi"] }
+            ]
+        });
+
+        var path = file?.TryGetLocalPath();
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        var format = global::System.IO.Path.GetExtension(path).TrimStart('.').ToLowerInvariant();
+        if (format is not ("mp4" or "mkv" or "avi"))
+            format = "mp4";
+
+        try
+        {
+            var status = await _shell.StartVideoRecordingAsync(
+                path, format, captureMicrophone: captureMicrophone).ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+
+        RefreshRecordingIndicator();
+    }
+
+    private void OnMenuRecordVideoBmpAll(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RecordBmpSequenceAsync(uniqueFrames: false);
+
+    private void OnMenuRecordVideoBmpUnique(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = RecordBmpSequenceAsync(uniqueFrames: true);
+
+    private async global::System.Threading.Tasks.Task RecordBmpSequenceAsync(bool uniqueFrames)
+    {
+        // Toggle: stop an active recording, otherwise pick an output folder and
+        // start a numbered-BMP frame sequence. "unique" deduplicates consecutive
+        // identical frames; "all" writes one BMP per emulated frame.
+        if (_shell.IsRecordingVideo)
+        {
+            await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+
+        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = uniqueFrames
+                ? "Choose output folder (unique BMP frames)"
+                : "Choose output folder (all BMP frames)",
+            AllowMultiple = false
+        });
+
+        var dir = folders.Count > 0 ? folders[0].TryGetLocalPath() : null;
+        if (string.IsNullOrWhiteSpace(dir))
+            return;
+
+        var options = new global::System.Collections.Generic.Dictionary<string, string>
+        {
+            ["frames"] = uniqueFrames ? "unique" : "all",
         };
-        collapse.Click += (_, _) =>
+
+        try
         {
-            _sidebarCollapsed = true;
-            BuildLayout();
+            var status = await _shell.StartVideoRecordingAsync(dir, "bmpseq", options).ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+
+        RefreshRecordingIndicator();
+    }
+
+    private async global::System.Threading.Tasks.Task StopRecordingAsync(ValueTask<Protocol.RpcStatus> stopOperation)
+    {
+        try
+        {
+            var status = await stopOperation.ConfigureAwait(true);
+            if (!status.IsSuccess)
+                ApplyStatus(null, status);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+        finally
+        {
+            // Whatever the outcome, reflect the live recording state on the toolbar
+            // Stop button (covers every stop path: MP4, BMP sequence, and sound).
+            RefreshRecordingIndicator();
+        }
+    }
+
+    // The toolbar Stop button: one obvious click to end a running video recording,
+    // without hunting back through the Snapshot menu's toggle. Stops the active
+    // video capture; the shell call is a safe no-op if nothing is recording.
+    private async void OnStopRecording(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
+
+    // Shows the Stop button while a video recording is active and hides it otherwise.
+    // ShellViewModel is not observable, so the menu/stop handlers call this after each
+    // start/stop instead of binding.
+    private void RefreshRecordingIndicator()
+    {
+        if (this.FindControl<global::Avalonia.Controls.Button>("PART_StopRecording") is { } stop)
+            stop.IsVisible = _shell.IsRecordingVideo;
+    }
+
+    private void OnMenuTrueDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _shell.ToggleTrueDrive(Protocol.MediaSlot.Drive8);
+
+    private void OnMenuTrueDrive9(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _shell.ToggleTrueDrive(Protocol.MediaSlot.Drive9);
+
+    private void OnMenuAttachDrive9(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.AttachAsync(Protocol.MediaSlot.Drive9);
+
+    private void OnMenuDetachDrive9(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.DetachAsync(Protocol.MediaSlot.Drive9);
+
+    private void OnMenuShowSettings(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _shell.ShowSettings();
+
+    private void OnMenuOpenMonitor(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => OpenMonitorWindow();
+
+    private async void OnMenuCopyDebugAttachInfo(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        try
+        {
+            var response = await _hostClient.GetStatusAsync().ConfigureAwait(true);
+            ApplyStatus(response.EmulatorStatus, response.Status);
+            var attachJson = _localHost is null
+                ? string.Empty
+                : await _localHost.ReadDebugAttachInfoAsync().ConfigureAwait(true);
+            var text = DebugAttachInfoProvider.BuildClipboardText(attachJson, response.EmulatorStatus);
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+            if (clipboard is not null)
+                await clipboard.SetTextAsync(text).ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+    }
+
+    private void OnMenuAbout(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var about = new Window
+        {
+            Title = "About ViceSharp",
+            Width = 360,
+            Height = 180,
+            CanResize = false,
+            Content = new TextBlock
+            {
+                Margin = new global::Avalonia.Thickness(16),
+                TextWrapping = global::Avalonia.Media.TextWrapping.Wrap,
+                Text = "ViceSharp\nA C# .NET 10 port of the VICE Commodore 64 emulator."
+            }
+        };
+        about.ShowDialog(this);
+    }
+
+    private void OnMenuSmartAttach(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.AttachAsync(Protocol.MediaSlot.Drive8);
+
+    private void OnMenuAttachDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.AttachAsync(Protocol.MediaSlot.Drive8);
+
+    private void OnMenuDetachDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => _ = _shell.DetachAsync(Protocol.MediaSlot.Drive8);
+
+    private async Task RunCommandAsync(Func<Task<Protocol.EmulatorCommandResponse>> action)
+    {
+        try
+        {
+            var response = await action().ConfigureAwait(true);
+            ApplyStatus(response.EmulatorStatus, response.Status);
             _video.Focus();
-        };
-        DockPanel.SetDock(collapse, Dock.Top);
-        host.Children.Add(collapse);
-        host.Children.Add(_attachPanel);
-        _sidebarHost = host;
-        return _sidebarHost;
-    }
-
-    private Control CreateCollapsedSidebar()
-    {
-        var panel = new Border
-        {
-            Background = new global::Avalonia.Media.SolidColorBrush(global::Avalonia.Media.Color.FromRgb(31, 34, 39)),
-            Child = new Button
-            {
-                Content = "☰",
-                Padding = new Thickness(8),
-                HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Center,
-                VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Top,
-                Margin = new Thickness(0, 8, 0, 0)
-            }
-        };
-        if (panel.Child is Button button)
-        {
-            button.Click += (_, _) =>
-            {
-                _sidebarCollapsed = false;
-                BuildLayout();
-                _video.Focus();
-            };
         }
-
-        return panel;
-    }
-
-    private Control CreateStatusBar()
-    {
-        var bar = new DockPanel
+        catch (Exception ex)
         {
-            MinHeight = 34,
-            Background = new global::Avalonia.Media.SolidColorBrush(global::Avalonia.Media.Color.FromRgb(26, 28, 32)),
-            LastChildFill = true
-        };
-
-        var controls = new StackPanel
-        {
-            Orientation = global::Avalonia.Layout.Orientation.Horizontal,
-            Spacing = 4,
-            Margin = new Thickness(8, 4)
-        };
-        controls.Children.Add(CreateStatusButton("Pause", () => _hostClient.PauseAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("Resume", () => _hostClient.ResumeAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("+1 cyc", () => _hostClient.StepCycleAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("+1 frm", () => _hostClient.StepFrameAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("-1 cyc", () => _hostClient.RewindCycleAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("-1 frm", () => _hostClient.RewindFrameAsync(1).AsTask()));
-        controls.Children.Add(CreateStatusButton("Cold", () => _hostClient.ColdResetAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("Warm", () => _hostClient.WarmResetAsync().AsTask()));
-        controls.Children.Add(CreateStatusButton("Run 8", () => _hostClient.ResetAndAutostartDrive8Async().AsTask()));
-        DockPanel.SetDock(controls, Dock.Right);
-        bar.Children.Add(controls);
-
-        _statusText.Margin = new Thickness(10, 7, 8, 4);
-        _statusText.FontSize = 12;
-        _statusText.Text = _statusBarViewModel.StatusText;
-        _statusText.TextTrimming = global::Avalonia.Media.TextTrimming.CharacterEllipsis;
-        bar.Children.Add(_statusText);
-
-        return bar;
-    }
-
-    private Button CreateStatusButton(string label, Func<Task<Protocol.EmulatorCommandResponse>> action)
-    {
-        var button = new Button
-        {
-            Content = label,
-            Padding = new Thickness(7, 3),
-            MinHeight = 24
-        };
-        button.Click += async (_, _) =>
-        {
-            try
-            {
-                var response = await action().ConfigureAwait(true);
-                ApplyStatus(response.EmulatorStatus, response.Status);
-                _video.Focus();
-            }
-            catch (Exception ex)
-            {
-                _statusText.Text = ex.Message;
-            }
-        };
-        return button;
-    }
-
-    private void AddToColumn(Control control, int column, int columnSpan = 1)
-    {
-        Grid.SetColumn(control, column);
-        Grid.SetColumnSpan(control, columnSpan);
-        _layout.Children.Add(control);
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
     }
 
     private async Task RefreshFrameAsync()
     {
         try
         {
-            var frame = _localVideoFrameSource is null
-                ? await _hostClient.GetFrameAsync().ConfigureAwait(true)
-                : await GetLocalFrameAsync().ConfigureAwait(true);
+            // In-process: zero-allocation, lock-free copy of the emulation thread's
+            // published frame straight into the render surface (BUG-THROTTLE-001 /
+            // FR-1132) - the UI render tick never touches the emulation lock.
+            if (_localVideoFrameSource is not null)
+            {
+                var sessionId = _hostClient.SessionId;
+                if (string.IsNullOrWhiteSpace(sessionId))
+                {
+                    await _hostClient.ListMediaAsync().ConfigureAwait(true);
+                    sessionId = _hostClient.SessionId;
+                }
 
+                if (!string.IsNullOrWhiteSpace(sessionId))
+                {
+                    _video.UpdateFrom(_localVideoFrameSource, sessionId);
+                    _localHost?.DiagnosticsState.MarkFrameUpdated();
+                }
+                return;
+            }
+
+            var frame = await _hostClient.GetFrameAsync().ConfigureAwait(true);
             if (frame.Status.IsSuccess)
                 _video.SetFrame(frame.Frame);
         }
@@ -324,6 +613,7 @@ public partial class MainWindow : Window
         {
             var response = await _hostClient.GetStatusAsync().ConfigureAwait(true);
             ApplyStatus(response.EmulatorStatus, response.Status);
+            _localHost?.DiagnosticsState.MarkStatusUpdated();
         }
         catch
         {
@@ -334,8 +624,29 @@ public partial class MainWindow : Window
     private void ApplyStatus(Protocol.EmulatorStatusDto? status, Protocol.RpcStatus rpcStatus)
     {
         _statusBarViewModel.ApplyStatus(status, rpcStatus);
+        _iecMonitorViewModel.ApplyStatus(status, rpcStatus);
         if (rpcStatus.IsSuccess && status is not null)
             _attachViewModel.ApplyStatus(status);
+    }
+
+    private async void OnHostClientSessionIdChanged(object? sender, string sessionId)
+    {
+        try
+        {
+            await UpdateDiagnosticsSessionAsync(sessionId).ConfigureAwait(true);
+        }
+        catch
+        {
+            // Diagnostics metadata must not destabilize the UI.
+        }
+    }
+
+    private async Task UpdateDiagnosticsSessionAsync(string sessionId)
+    {
+        if (_localHost is null || string.IsNullOrWhiteSpace(sessionId))
+            return;
+
+        await _localHost.UpdateCurrentSessionAsync(sessionId).ConfigureAwait(true);
     }
 
     private async void OnVideoKeyDown(object? sender, KeyEventArgs e)
@@ -343,13 +654,10 @@ public partial class MainWindow : Window
         // Warp toggle: Alt+W (or Ctrl+W as fallback), like classic VICE
         if ((e.Key == Key.W) && (e.KeyModifiers.HasFlag(KeyModifiers.Alt) || e.KeyModifiers.HasFlag(KeyModifiers.Control)))
         {
-            if (_attachViewModel is not null)
-            {
-                _attachViewModel.IsWarpMode = !_attachViewModel.IsWarpMode;
-                await _attachViewModel.ApplySettingsAsync(false).ConfigureAwait(true);
-                e.Handled = true;
-                return;
-            }
+            _attachViewModel.IsWarpMode = !_attachViewModel.IsWarpMode;
+            await _attachViewModel.ApplySettingsAsync(false).ConfigureAwait(true);
+            e.Handled = true;
+            return;
         }
 
         await SendKeyStateAsync(e, true).ConfigureAwait(true);
@@ -427,16 +735,6 @@ public partial class MainWindow : Window
         };
     }
 
-    private async ValueTask<Protocol.GetVideoFrameResponse> GetLocalFrameAsync()
-    {
-        if (string.IsNullOrWhiteSpace(_hostClient.SessionId))
-            await _hostClient.ListMediaAsync().ConfigureAwait(true);
-
-        return string.IsNullOrWhiteSpace(_hostClient.SessionId)
-            ? new Protocol.GetVideoFrameResponse(Protocol.RpcStatus.Unavailable("No emulator session is available."), null)
-            : await _localVideoFrameSource!.GetFrameAsync(_hostClient.SessionId).ConfigureAwait(true);
-    }
-
     private async Task<string?> PickMediaFileAsync(AttachSlotViewModel slot)
     {
         var topLevel = TopLevel.GetTopLevel(this);
@@ -497,6 +795,6 @@ public partial class MainWindow : Window
 
     private sealed record HostConnection(
         IHostProtocolClient Client,
-        IAsyncDisposable? LocalHost,
+        InProcessGrpcHost? LocalHost,
         ILocalVideoFrameSource? VideoFrameSource = null);
 }

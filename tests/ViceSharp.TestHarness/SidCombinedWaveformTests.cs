@@ -43,9 +43,10 @@ public sealed class SidCombinedWaveformTests
         // range and the per-waveform outputs visit non-trivial values.
         sid.Write(V1FreqLo, 0xFF);
         sid.Write(V1FreqHi, 0xFF);
-        // Pulse width = 0x0800 means pulse is HIGH when the top-byte phase
-        // is below 0x08 (small slice). Phases >= 0x08 give pulse-low (0x00),
-        // which lets the AND-mask tests observe the pulse-low case clearly.
+        // Pulse width = 0x0800 (12-bit) means pulse is HIGH when the 8-bit
+        // phase (bits 16-23 of the accumulator) is below 0x80 (PW >> 4).
+        // Phases >= 0x80 give pulse-low (0x00), which lets the AND-mask tests
+        // observe the pulse-low case clearly.
         sid.Write(V1PwLo, 0x00);
         sid.Write(V1PwHi, 0x08);
         // Attack=0, Decay=0 (fastest); Sustain=15 so envelope sits at 0xFF.
@@ -126,13 +127,14 @@ public sealed class SidCombinedWaveformTests
     [Fact]
     public void TriangleSawtooth_Combined_DiffersFromEachComponent()
     {
-        // 13062 extra ticks plus the 8 prime ticks puts the accumulator at
-        // 13070 * 0xFFFF = 0x33199B72, giving top-byte phase = 0x33.
-        // Triangle output at phase 0x33 = 0x33 << 1 = 0x66 (102);
+        // 13100 extra ticks plus the 8 prime ticks puts the accumulator at
+        // 13108 * 0xFFFF = 0x3333CCCC, giving 8-bit phase (bits 16-23) = 0x33
+        // (and far more than enough ticks for the attack envelope to settle
+        // at sustain). Triangle output at phase 0x33 = 0x33 << 1 = 0x66 (102);
         // sawtooth output = 0x33 (51); AND of the two = 0x22 (34). The
         // three values differ by 17 and 68 respectively, plenty of slack
         // for the /3 integer mixer and float conversion downstream.
-        const int Ticks = 13062;
+        const int Ticks = 13100;
 
         float triOnly = SampleAtPhase(Triangle, Ticks);
         float sawOnly = SampleAtPhase(Sawtooth, Ticks);
@@ -175,13 +177,14 @@ public sealed class SidCombinedWaveformTests
     [Fact]
     public void PulseSawtooth_Combined_IsAndMasked()
     {
-        // Pulse width = 0x0800 makes pulse HIGH when phase byte < 0x08.
-        // At 16384 ticks (phase = 0x3F) pulse is LOW: the AND of pulse=0x00
-        // and sawtooth=0x3F yields 0x00, so the combined voice output is
-        // silent. The mixed sample equals the digi DC baseline (volume DAC).
-        // Sawtooth alone at the same phase outputs 0x3F (clearly non-zero
-        // above baseline).
-        const int Ticks = 16384;
+        // Pulse width = 0x0800 makes pulse HIGH when the 8-bit phase < 0x80
+        // (PW >> 4). At 16569 extra ticks the accumulator is 16577 * 0xFFFF =
+        // 0x40C0BF3F, giving phase = 0xC0: pulse is LOW, so the AND of
+        // pulse=0x00 and sawtooth=0xC0 yields 0x00 and the combined voice
+        // output is silent (the mixed sample equals the volume-DAC baseline).
+        // Sawtooth alone at the same phase outputs 0xC0 (clearly non-zero
+        // above baseline, with the envelope long since at sustain).
+        const int Ticks = 16569;
 
         float baseline = SampleAtPhase(0x00, Ticks); // no waveform bits = DAC-only baseline
         float combined = SampleAtPhase((byte)(Pulse | Sawtooth), Ticks);

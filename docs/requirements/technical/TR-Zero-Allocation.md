@@ -53,7 +53,6 @@ A single C64 frame at PAL timing requires approximately 19,656 CPU cycles (312 l
 
 ### Related TRs
 
-- TR-AOT-001 (Struct types are inherently AoT-friendly)
 - TR-PUBSUB-001 (Zero allocations in the messaging system)
 - TR-SIMD-001 (SIMD operations on stack-allocated vectors)
 

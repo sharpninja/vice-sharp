@@ -227,6 +227,25 @@ public sealed class MediaServiceHost : IMediaService
         byte[] payload,
         out string error)
     {
+        // True-drive rig: the emulated 1541 lives in a coordinator peripheral
+        // machine (not the host's devices), so mount the D64 into its drive
+        // mechanism directly.
+        var mechanism = FindTrueDriveMechanism(session);
+        if (mechanism is not null)
+        {
+            try
+            {
+                mechanism.Mount(new D64DiskImageDevice(new D64Image(payload)));
+                error = string.Empty;
+                return true;
+            }
+            catch (ArgumentException ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+        }
+
         var driveNumber = ToDriveNumber(slot);
         var drive = session.Machine.Devices.All
             .OfType<IFloppyDrive>()
@@ -253,6 +272,13 @@ public sealed class MediaServiceHost : IMediaService
 
     private static bool TryDetachDiskFromRuntime(EmulatorRuntimeSession session, MediaSlot slot)
     {
+        var mechanism = FindTrueDriveMechanism(session);
+        if (mechanism is not null)
+        {
+            mechanism.Mount(null);
+            return true;
+        }
+
         var driveNumber = ToDriveNumber(slot);
         var drive = session.Machine.Devices.All
             .OfType<IFloppyDrive>()
@@ -263,6 +289,18 @@ public sealed class MediaServiceHost : IMediaService
         drive.EjectDisk();
         return true;
     }
+
+    /// <summary>
+    /// The true-drive 1541 mechanism in a coordinator rig session, or null for a
+    /// simulated-drive session. The rig currently hosts a single 1541.
+    /// </summary>
+    private static C1541DriveMechanismDevice? FindTrueDriveMechanism(EmulatorRuntimeSession session)
+        => session.Machine is CoordinatorMachine coord
+            ? coord.Coordinator.Systems
+                .SelectMany(machine => machine.Devices.All)
+                .OfType<C1541DriveMechanismDevice>()
+                .FirstOrDefault()
+            : null;
 
     private static bool TryApplyTapeToRuntime(
         EmulatorRuntimeSession session,

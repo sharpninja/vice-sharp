@@ -19,7 +19,7 @@
 
 ### Description
 
-Performance-critical rendering and audio processing paths shall use SIMD (Single Instruction, Multiple Data) intrinsics to process multiple pixels or audio samples in parallel. The CPU core shall use generic specialization (constrained generics with `where T : struct`) to allow the JIT/AoT compiler to generate specialized machine code for different CPU variants (6502, 6510, 8502) without virtual dispatch overhead.
+Performance-critical rendering and audio processing paths shall use SIMD (Single Instruction, Multiple Data) intrinsics to process multiple pixels or audio samples in parallel. The CPU core shall use generic specialization (constrained generics with `where T : struct`) to allow the JIT compiler to generate specialized machine code for different CPU variants (6502, 6510, 8502) without virtual dispatch overhead.
 
 ### Rationale
 
@@ -40,7 +40,7 @@ SIMD can process 4-16 pixels or audio samples per instruction, providing 4-16x t
 3. **Generic Specialization for CPU:**
    - The CPU core is implemented as `CpuCore<TBus>` where `TBus : struct, IBus`.
    - Different bus implementations (C64Bus, C128Bus, Vic20Bus) provide specialized memory access without virtual dispatch.
-   - The JIT/AoT compiler generates separate native code for each `TBus` instantiation.
+   - The JIT compiler generates specialized code for each `TBus` instantiation.
 
 4. **Platform Detection:**
    - SIMD support is detected at startup via `System.Runtime.Intrinsics.X86.Sse2.IsSupported`, `Avx2.IsSupported`, `System.Runtime.Intrinsics.Arm.AdvSimd.IsSupported`.
@@ -54,7 +54,7 @@ SIMD can process 4-16 pixels or audio samples per instruction, providing 4-16x t
 3. Generic specialization eliminates all virtual/interface dispatch from the CPU decode-execute loop (verified by JIT disassembly inspection).
 4. Scalar fallback paths produce bit-identical output to SIMD paths (verified by determinism tests).
 5. All SIMD code compiles and runs correctly on: x64 (SSE2 minimum, AVX2 optional), ARM64 (NEON/AdvSIMD).
-6. NativeAOT compilation produces specialized code for each generic instantiation (no shared generic fallback).
+6. Release builds preserve specialized code paths for each generic instantiation (no shared hot-path fallback).
 
 ### Verification Method
 
@@ -66,7 +66,6 @@ SIMD can process 4-16 pixels or audio samples per instruction, providing 4-16x t
 ### Related TRs
 
 - TR-ALLOC-001 (SIMD operates on stack-allocated vectors, no heap allocation)
-- TR-AOT-001 (SIMD intrinsics are AoT-compatible; generic specialization requires AoT to monomorphize)
 - TR-DET-001 (Scalar and SIMD must produce identical results for determinism)
 
 ### Design Decisions

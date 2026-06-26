@@ -17,7 +17,6 @@ This document indexes ViceSharp Technical Requirements (TRs). TRs define archite
 
 | Document | Quality Attribute | TR ID(s) |
 |----------|-------------------|----------|
-| TR-AoT-Compilation.md | Deployment / Startup | TR-AOT-001 |
 | TR-Build-System.md | CI/CD / Build | TR-BUILD-001 |
 | TR-Cycle-Accuracy.md | Accuracy / Fidelity | TR-CYCLE-001 |
 | TR-Determinism.md | Correctness / Replay | TR-DET-001 |
@@ -26,7 +25,7 @@ This document indexes ViceSharp Technical Requirements (TRs). TRs define archite
 | TR-Input-VKM.md | Input Translation | TR-INPUT-VKM-001 |
 | TR-Library-First.md | Architecture / Reuse | TR-LIB-001 |
 | TR-MVVM.md | Architecture / UI | TR-MVVM-001 |
-| TR-Media-Encoding.md | Integration / AoT | TR-MEDIA-001 |
+| TR-Media-Encoding.md | Integration / Media | TR-MEDIA-001 |
 | TR-Platform-Support.md | Portability | TR-PLAT-001 |
 | TR-PubSub-Performance.md | Performance / Messaging | TR-PUBSUB-001 |
 | TR-SIMD-Intrinsics.md | Performance / Throughput | TR-SIMD-001 |
@@ -40,7 +39,6 @@ This document indexes ViceSharp Technical Requirements (TRs). TRs define archite
 | TR ID | Title | Quality Attribute |
 |-------|-------|-------------------|
 | TR-ALLOC-001 | Zero Managed Allocations Per Emulation Cycle on Hot Path | Performance / GC |
-| TR-AOT-001 | Full NativeAOT Compatibility with Zero Reflection on Hot Path | Deployment / Startup |
 | TR-BUILD-001 | Nuke Build System with Dual CI/CD Pipelines | CI/CD / Build |
 | TR-CYCLE-001 | Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior | Accuracy / Fidelity |
 | TR-DET-001 | Bit-Exact Reproducibility Given Same Initial State and Inputs | Correctness / Replay |
@@ -48,7 +46,7 @@ This document indexes ViceSharp Technical Requirements (TRs). TRs define archite
 | TR-HOST-STATUS-001 | Measured Emulator Runtime Telemetry | Runtime Telemetry |
 | TR-INPUT-VKM-001 | VICE VKM Parser and Selected Map Resolver | Input Translation |
 | TR-LIB-001 | Emulator Core as a Reusable Library with UI Shells as Thin Consumers | Architecture / Reuse |
-| TR-MEDIA-001 | FFmpeg Integration via P/Invoke with NativeAOT Compatibility | Integration / AoT |
+| TR-MEDIA-001 | FFmpeg Integration via P/Invoke with Multiple Format Support | Integration / Media |
 | TR-MVVM-001 | Strict MVVM Separation -- ViewModels Reference Abstractions Only, Views Contain Zero Logic | Architecture / UI |
 | TR-PLAT-001 | Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64 | Portability |
 | TR-PUBSUB-001 | <50ns Publish, <100ns Deliver, 0 Allocations Per Frame | Performance / Messaging |
@@ -59,7 +57,7 @@ This document indexes ViceSharp Technical Requirements (TRs). TRs define archite
 
 ## Architectural Constraints
 
-1. Target runtime: .NET 10 with NativeAOT publication profile.
+1. Target runtime: .NET 10 with JIT desktop publication profiles.
 2. Emulator core remains library-first and UI-independent.
 3. UI control, media, input, state, capture, diagnostics, and monitor operations cross the host boundary through gRPC-backed abstractions.
 4. The local Avalonia renderer may use only a host-owned direct frame surface for in-process presentation; ViewModels must not access runtime internals.

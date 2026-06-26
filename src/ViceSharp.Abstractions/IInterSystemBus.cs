@@ -24,6 +24,49 @@ public interface IInterSystemBus
 
     /// <summary>Fired when a line transitions (any endpoint pull or release changing the resolved state).</summary>
     event EventHandler<BusEdgeEventArgs>? LineChanged;
+
+    /// <summary>
+    /// Capture a read-only snapshot of the whole bus at this instant: every
+    /// line's resolved level and which attached endpoints are pulling it low
+    /// (i.e. who is "talking"), plus the list of all attached endpoints. Pure
+    /// observation - taking a snapshot never changes bus state.
+    /// </summary>
+    BusSnapshot Snapshot();
+}
+
+/// <summary>
+/// Point-in-time view of an <see cref="IInterSystemBus"/>: the state of every
+/// line and which endpoints are asserting it. Used to spy on bus traffic
+/// (e.g. an IEC transfer) without perturbing it.
+/// </summary>
+public sealed class BusSnapshot
+{
+    public BusSnapshot(string busName, IReadOnlyList<BusLineSnapshot> lines, IReadOnlyList<string> endpoints)
+    {
+        BusName = busName;
+        Lines = lines;
+        Endpoints = endpoints;
+    }
+
+    /// <summary>The bus this snapshot was taken from (e.g. "IEC").</summary>
+    public string BusName { get; }
+
+    /// <summary>Per-line resolved level and the endpoints pulling each line low.</summary>
+    public IReadOnlyList<BusLineSnapshot> Lines { get; }
+
+    /// <summary>Names of every endpoint currently attached to the bus.</summary>
+    public IReadOnlyList<string> Endpoints { get; }
+
+    /// <summary>Endpoints pulling at least one line low - i.e. devices actively driving the bus.</summary>
+    public IReadOnlyList<string> TalkingEndpoints =>
+        Lines.SelectMany(line => line.Pullers).Distinct().ToList();
+}
+
+/// <summary>One line within a <see cref="BusSnapshot"/>.</summary>
+public readonly record struct BusLineSnapshot(string Signal, bool IsHigh, IReadOnlyList<string> Pullers)
+{
+    /// <summary>True when at least one endpoint is pulling this line low.</summary>
+    public bool IsAsserted => !IsHigh;
 }
 
 /// <summary>An endpoint handle for an attached system on an IInterSystemBus.</summary>

@@ -11,13 +11,16 @@ public sealed class AttachSlotViewModel : ObservableObject
     private bool _isAttached;
     private bool _isReadOnly;
     private bool _isIecBusActive;
+    private bool _trueDrive;
+    private bool _ledOn;
 
-    public AttachSlotViewModel(MediaSlot slot, string title, string mediaKind, string[] filePatterns)
+    public AttachSlotViewModel(MediaSlot slot, string title, string mediaKind, string[] filePatterns, bool trueDrive = false)
     {
         Slot = slot;
         Title = title;
         MediaKind = mediaKind;
         FilePatterns = filePatterns;
+        _trueDrive = trueDrive && SupportsTrueDrive;
     }
 
     public MediaSlot Slot { get; }
@@ -62,6 +65,23 @@ public sealed class AttachSlotViewModel : ObservableObject
         set => SetProperty(ref _isReadOnly, value);
     }
 
+    /// <summary>True for IEC drive slots that can switch between a simulated
+    /// (buffered) and an emulated (true-drive) 1541 - i.e. where the True Drive
+    /// toggle applies.</summary>
+    public bool SupportsTrueDrive => Slot is MediaSlot.Drive8 or MediaSlot.Drive9;
+
+    /// <summary>
+    /// When true, this drive runs as a cycle-accurate emulated 1541 (6502 + VIA
+    /// + DOS ROM over the IEC bus); when false, a lightweight simulated drive
+    /// serves sectors directly. Mirrors VICE's per-unit
+    /// DriveTrueEmulation / the Fidelity TrueDevice vs Buffered selector.
+    /// </summary>
+    public bool TrueDrive
+    {
+        get => _trueDrive;
+        set => SetProperty(ref _trueDrive, value);
+    }
+
     public bool IsIecBusActive
     {
         get => _isIecBusActive;
@@ -73,6 +93,30 @@ public sealed class AttachSlotViewModel : ObservableObject
     }
 
     public string IecActivityText => IsIecBusActive ? "IEC Active" : "IEC Idle";
+
+    /// <summary>
+    /// FR-DRVLED-001: per-drive activity LED. Today it tracks IEC bus activity as
+    /// a stand-in (<see cref="SetIecActivity"/>); <see cref="SetDriveLed"/> is the
+    /// hook for the faithful VIA2 port B bit 3 source (the 1541 DOS ROM LED) once
+    /// per-drive true-drive telemetry is plumbed through the host. Only drives
+    /// (<see cref="SupportsTrueDrive"/>) ever light.
+    /// </summary>
+    public bool LedOn
+    {
+        get => _ledOn;
+        private set => SetProperty(ref _ledOn, value);
+    }
+
+    /// <summary>
+    /// Set the faithful drive LED state (VIA2 PB3) from host telemetry when the
+    /// true-drive 1541 is active. No-op for non-drive slots. Not yet driven by a
+    /// production caller (true-drive LED telemetry is a follow-up).
+    /// </summary>
+    public void SetDriveLed(bool on)
+    {
+        if (Slot is MediaSlot.Drive8 or MediaSlot.Drive9)
+            LedOn = on;
+    }
 
     public void ApplyAttachment(MediaAttachmentDto attachment, string recentFilePath = "")
     {
@@ -132,5 +176,10 @@ public sealed class AttachSlotViewModel : ObservableObject
             isActive = false;
 
         IsIecBusActive = isActive;
+
+        // Simulated-drive proxy for the activity LED: light it while the drive
+        // is using the IEC bus. The faithful VIA2 PB3 source (SetDriveLed)
+        // overrides this when true-drive telemetry is available.
+        LedOn = isActive;
     }
 }

@@ -251,4 +251,74 @@ public sealed class InProcessGrpcHostTests
 
         Assert.Same(first, second);
     }
+
+    /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-003 / TEST-HOST-DIAG-001.
+    /// Use case: the app publishes deterministic attach metadata as soon as
+    /// the in-process host endpoint is known.
+    /// Acceptance: StartAsync can be configured with a debug attach path and
+    /// writes a JSON file containing the selected endpoint.
+    /// </summary>
+    [Fact]
+    public async Task StartAsync_PublishesDebugAttachEndpointWhenPublisherConfigured()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "vicesharp-diagnostics-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        var path = Path.Combine(directory, "debug-attach.json");
+        var method = typeof(InProcessGrpcHost).GetMethod("StartAsync", [typeof(CancellationToken), typeof(string)]);
+        Assert.NotNull(method);
+        var startResult = method.Invoke(null, [TestContext.Current.CancellationToken, path]);
+        Assert.NotNull(startResult);
+        await using var host = (InProcessGrpcHost)await DiagnosticsReflectionTestHelpers.AwaitAsync(startResult);
+
+        var json = await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken);
+        Assert.Contains(host.Endpoint.ToString(), json);
+    }
+
+    /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-004 / TEST-HOST-DIAG-001.
+    /// Use case: production/default local hosts should not expose reflection
+    /// unless explicitly requested.
+    /// Acceptance: ReflectionEnabled is false when no reflection switch is set.
+    /// </summary>
+    [Fact]
+    public async Task Reflection_IsDisabledByDefault()
+    {
+        await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+        var property = typeof(InProcessGrpcHost).GetProperty("ReflectionEnabled");
+        Assert.NotNull(property);
+
+        Assert.False((bool)Assert.IsType<bool>(property.GetValue(host)));
+    }
+
+    /// <summary>
+    /// FR-HOST-DIAG-001 / TR-HOST-DIAG-001 / TR-HOST-DIAG-004 / TEST-HOST-DIAG-001.
+    /// Use case: grpcurl and generic inspectors can discover the diagnostics
+    /// service in development.
+    /// Acceptance: enabling VICESHARP_GRPC_REFLECTION marks reflection enabled
+    /// and the diagnostics service descriptor exists.
+    /// </summary>
+    [Fact]
+    public async Task Reflection_ListsDiagnosticsServiceWhenEnabled()
+    {
+        var previous = Environment.GetEnvironmentVariable("VICESHARP_GRPC_REFLECTION");
+        Environment.SetEnvironmentVariable("VICESHARP_GRPC_REFLECTION", "1");
+        try
+        {
+            await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+            var property = typeof(InProcessGrpcHost).GetProperty("ReflectionEnabled");
+            Assert.NotNull(property);
+
+            Assert.True((bool)Assert.IsType<bool>(property.GetValue(host)));
+            var serviceType = DiagnosticsReflectionTestHelpers.RequiredType(
+                "ViceSharp.Protocol.Grpc.DiagnosticsService, ViceSharp.Protocol");
+            var descriptor = serviceType.GetProperty("Descriptor")?.GetValue(null);
+            Assert.NotNull(descriptor);
+            Assert.Equal("vice_sharp.v1.DiagnosticsService", descriptor.GetType().GetProperty("FullName")?.GetValue(descriptor));
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("VICESHARP_GRPC_REFLECTION", previous);
+        }
+    }
 }

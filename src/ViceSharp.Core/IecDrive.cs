@@ -46,6 +46,13 @@ public sealed class IecDrive : IClockedDevice, IAddressSpace, IFloppyDrive
 
     // Disk image support
     private D64Image? _diskImage;
+
+    /// <summary>
+    /// The currently inserted disk image, or null when empty. Read by the
+    /// KERNAL serial trap (host-side vdrive) to service LOAD when True Drive is
+    /// OFF; resolved lazily at open time so runtime insert/eject is honoured.
+    /// </summary>
+    public D64Image? DiskImage => _diskImage;
     
     public IecDrive(byte driveNumber, D64Image? diskImage = null)
     {

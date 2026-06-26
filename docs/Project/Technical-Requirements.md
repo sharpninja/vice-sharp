@@ -2,7 +2,7 @@
 
 ## TR-ADHOC-YAML-001
 
-**Ad-hoc machine YAML loader (YamlDotNet, AOT-opt-in)** — AdhocMachineYamlLoader shall parse YAML via YamlDotNet 17.x and emit field-path-tagged AdhocMachineValidationException on schema mismatches. The loader is marked RequiresDynamicCode/RequiresUnreferencedCode and is invoked only behind the Console --machine-yaml flag with a scoped UnconditionalSuppressMessage; the AOT-clean default path is untouched. AdhocMachineBlueprint.BuildMachine(IArchitectureBuilder) materialises chips (Mos6502, Mos6526, Mos6569, Sid6581) and RAM/ROM regions on the supplied bus and clock. AdhocMachine implements IMachine.Reset (clocks reset, devices reset) and GetState (default MachineState until a designated CPU role is added to the schema).
+**Ad-hoc machine YAML loader (YamlDotNet, dynamic-code opt-in)** — AdhocMachineYamlLoader shall parse YAML via YamlDotNet 17.x and emit field-path-tagged AdhocMachineValidationException on schema mismatches. The loader is marked RequiresDynamicCode/RequiresUnreferencedCode and is invoked only behind the Console --machine-yaml flag with a scoped UnconditionalSuppressMessage; the default path is untouched. AdhocMachineBlueprint.BuildMachine(IArchitectureBuilder) materialises chips (Mos6502, Mos6526, Mos6569, Sid6581) and RAM/ROM regions on the supplied bus and clock. AdhocMachine implements IMachine.Reset (clocks reset, devices reset) and GetState (default MachineState until a designated CPU role is added to the schema).
 
 ## TR-ALLOC-001
 
@@ -49,7 +49,6 @@ A single C64 frame at PAL timing requires approximately 19,656 CPU cycles (312 l
 
 ### Related TRs
 
-- TR-AOT-001 (Struct types are inherently AoT-friendly)
 - TR-PUBSUB-001 (Zero allocations in the messaging system)
 - TR-SIMD-001 (SIMD operations on stack-allocated vectors)
 
@@ -59,59 +58,6 @@ A single C64 frame at PAL timing requires approximately 19,656 CPU cycles (312 l
 - The frame buffer is a pre-allocated `byte[]` (or native memory) reused every frame.
 - Audio sample buffers are pre-allocated ring buffers sized for the maximum samples-per-frame.
 - Event payloads use a tagged union (`readonly struct EventPayload`) with an inline fixed buffer for small data.
-
-## TR-AOT-001
-
-**Full NativeAOT Compatibility with Zero Reflection on Hot Path** — ## TR-AOT-001: NativeAOT Compatible, No Reflection on Hot Path
-
-**ID:** TR-AOT-001
-**Title:** Full NativeAOT Compatibility with Zero Reflection on Hot Path
-**Priority:** P0 -- Critical
-**Category:** Deployment / Performance
-
-### Description
-
-All ViceSharp assemblies shall be fully compatible with .NET NativeAOT publication. This means no use of runtime reflection, `System.Reflection.Emit`, or dynamic code generation on the emulation hot path. All assemblies shall pass the NativeAOT trim analysis without warnings. Source generators shall be used where compile-time code generation is needed.
-
-### Rationale
-
-NativeAOT provides sub-50ms startup time, reduced memory footprint, and ahead-of-time optimization of hot paths. Reflection-based patterns are incompatible with NativeAOT's static compilation model and would cause runtime failures or require expensive fallback paths.
-
-### Technical Specification
-
-1. **Trim Analysis:** Every assembly in the solution shall pass `dotnet publish` with `<PublishTrimmed>true</PublishTrimmed>` and `<TrimmerSingleWarn>false</TrimmerSingleWarn>` producing zero trim warnings.
-2. **No Reflection Hot Path:** The emulation loop (clock tick, CPU decode/execute, VIC-II render, SID sample, CIA tick) shall not invoke any `System.Reflection` APIs.
-3. **Source Generators:** Opcode dispatch tables, device registration, and configuration binding shall use Roslyn source generators instead of reflection-based discovery.
-4. **DynamicDependency Annotations:** Where trim-sensitive patterns exist in non-hot code paths (configuration, plugin loading), `[DynamicDependency]` and `[DynamicallyAccessedMembers]` annotations shall preserve required metadata.
-5. **No System.Linq.Expressions:** Expression trees compile via reflection emit and are not AoT-safe. Use direct delegates or source-generated alternatives.
-
-### Acceptance Criteria
-
-1. `dotnet publish -c Release -r win-x64 --self-contained /p:PublishAot=true` succeeds for all published assemblies with zero trim analysis warnings.
-2. `dotnet publish -c Release -r linux-x64 --self-contained /p:PublishAot=true` succeeds with zero warnings.
-3. `dotnet publish -c Release -r osx-arm64 --self-contained /p:PublishAot=true` succeeds with zero warnings.
-4. The emulation hot loop contains zero calls to `System.Reflection` namespace types (verified by IL analysis).
-5. Application startup time is under 100ms on reference hardware (NativeAOT-published binary).
-6. All opcode dispatch uses compile-time generated jump tables (source generator output).
-7. DI container registration does not use assembly scanning; all registrations are explicit or source-generated.
-
-### Verification Method
-
-- CI pipeline includes a NativeAOT publish step that fails on any trim warning.
-- IL scanning tool (custom Roslyn analyzer) detects `System.Reflection` usage on annotated hot-path methods.
-- Startup time benchmark included in the performance test suite.
-
-### Related TRs
-
-- TR-ALLOC-001 (Zero allocations -- struct types are inherently AoT-friendly)
-- TR-SIMD-001 (SIMD intrinsics are AoT-compatible)
-- TR-MEDIA-001 (FFmpeg P/Invoke must be AoT-compatible)
-
-### Design Decisions
-
-- Opcode decoder is a source-generated `switch` expression over all 256 opcodes, not a delegate array populated by reflection.
-- Configuration binding uses a source generator that emits strongly-typed binders.
-- Plugin/extension loading (if needed) uses `AssemblyLoadContext` with explicit type loading, not assembly scanning.
 
 ## TR-BUILD-001
 
@@ -134,14 +80,14 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 
 1. **Nuke Build Project:**
    - The `_build` project is a .NET console application using the Nuke framework.
-   - Build targets include: `Clean`, `Restore`, `Compile`, `Test`, `Pack`, `Publish`, `PublishAot`, `IntegrationTest`, `BenchmarkRun`.
+   - Build targets include: `Clean`, `Restore`, `Compile`, `Test`, `Pack`, `Publish`, `IntegrationTest`, `BenchmarkRun`.
    - Target dependencies form a DAG (directed acyclic graph) with correct ordering.
    - The build can be executed locally via `nuke` CLI or `dotnet run --project _build`.
 
 2. **Azure DevOps Pipeline (Primary):**
    - YAML pipeline (`azure-pipelines.yml`) triggers on `main` and `release/*` branches.
    - PR validation runs `Compile` + `Test` targets.
-   - CI builds run `Compile` + `Test` + `Pack` + `PublishAot` targets.
+   - CI builds run `Compile` + `Test` + `Pack` targets.
    - Release builds additionally publish NuGet packages to the Azure DevOps Artifacts feed.
    - Multi-platform matrix: Windows x64, Ubuntu x64, macOS ARM64.
 
@@ -160,7 +106,6 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
    - `BenchmarkRun`: Executes BenchmarkDotNet benchmarks and archives results.
    - `Pack`: Creates NuGet packages for `ViceSharp.Abstractions` and `ViceSharp.Core`.
    - `Publish`: Publishes framework-dependent binaries.
-   - `PublishAot`: Publishes NativeAOT binaries for all target RIDs (per TR-AOT-001).
 
 5. **Versioning:**
    - Version is derived from a `.version` file and Git tags (GitVersion or Nerdbank.GitVersioning).
@@ -171,12 +116,11 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 
 1. `nuke Compile` succeeds locally on Windows, Linux, and macOS.
 2. `nuke Test` runs all unit tests and reports results in a structured format (TRX or JUnit XML).
-3. `nuke PublishAot` produces native binaries for at least `win-x64`, `linux-x64`, and `osx-arm64`.
-4. The Azure DevOps pipeline completes a full CI build (Compile + Test + Pack + PublishAot) in under 15 minutes.
-5. The GitHub Actions pipeline completes PR validation (Compile + Test) in under 10 minutes.
-6. NuGet packages are versioned correctly with pre-release suffixes for non-release branches.
-7. Test coverage reports are generated and uploaded as pipeline artifacts.
-8. Build failures produce clear, actionable error messages with the failing target and step identified.
+3. The Azure DevOps pipeline completes a full CI build (Compile + Test + Pack) in under 15 minutes.
+4. The GitHub Actions pipeline completes PR validation (Compile + Test) in under 10 minutes.
+5. NuGet packages are versioned correctly with pre-release suffixes for non-release branches.
+6. Test coverage reports are generated and uploaded as pipeline artifacts.
+7. Build failures produce clear, actionable error messages with the failing target and step identified.
 
 ### Verification Method
 
@@ -187,7 +131,6 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 
 ### Related TRs
 
-- TR-AOT-001 (PublishAot target validates AoT compatibility)
 - TR-PLAT-001 (Multi-platform build matrix)
 
 ### Design Decisions
@@ -277,7 +220,7 @@ Many C64 programs rely on exact cycle timing for visual effects (raster bars, FL
 
 ### Description
 
-Given the same initial machine state (snapshot) and the same sequence of input events (keyboard, joystick, timing), the emulator shall produce bit-exact identical output (video frames, audio samples, final machine state) across all runs, all platforms, and all compilation modes (Debug, Release, NativeAOT).
+Given the same initial machine state (snapshot) and the same sequence of input events (keyboard, joystick, timing), the emulator shall produce bit-exact identical output (video frames, audio samples, final machine state) across all runs, all platforms, and supported compilation modes (Debug and Release).
 
 ### Rationale
 
@@ -296,7 +239,7 @@ Determinism is a foundational requirement for: (1) snapshot-based replay (FR-SNP
 
 1. A "replay determinism" test loads a snapshot, replays 10 million cycles of recorded input, and compares the final state hash: the hash must be identical across 100 consecutive runs.
 2. The same test produces identical hashes on Windows x64, Linux x64, macOS ARM64, and Linux ARM64.
-3. The same test produces identical hashes for Debug, Release, and NativeAOT builds.
+3. The same test produces identical hashes for Debug and Release builds.
 4. Video frame checksums (CRC32 of raw pixel data) match for every frame between two runs of the same replay.
 5. Audio sample checksums match for every audio buffer between two runs of the same replay.
 6. The `[Deterministic]` custom attribute is applied to all emulation-core methods, and a Roslyn analyzer verifies no non-deterministic operations are used.
@@ -371,7 +314,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 7. **Artifact Shape:** Snapshots, screenshots, and media payloads use bounded byte payloads or host-owned artifact handles with checksums.
 8. **Backpressure:** Remote video may drop stale committed frames; audio preserves order or reports explicit drops; neither policy can mutate emulation state.
 9. **Error Model:** All services return structured error codes, messages, and recoverability hints without leaking implementation exceptions across the boundary.
-10. **AoT Compatibility:** Generated clients, explicit service registration, and serializer configuration must be compatible with .NET 10 NativeAOT and trimming.
+10. **Generated Contract Safety:** Generated clients, explicit service registration, and serializer configuration must avoid runtime contract discovery on hot paths.
 11. **Default Exposure:** The host listens on a local endpoint by default. Remote access requires explicit configuration.
 12. **Local Renderer Boundary:** The in-process Avalonia host may bind a dedicated render surface directly to a local emulator/frame source. The binding is owned by the host/composition layer, not ViewModels, and is limited to frame presentation data.
 
@@ -383,7 +326,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 4. An integration test can start the host, connect a remote UI client, receive a frame stream, submit input, request a screenshot, and shut down cleanly.
 5. Architecture tests enforce that only host/composition assemblies reference both concrete core assemblies and boundary service implementations.
 6. Streaming tests verify that client disconnects, slow frame consumers, and reconnects do not mutate emulator state.
-7. NativeAOT publish validation includes the host and at least one reference UI client.
+7. Release validation includes the host and at least one reference UI client.
 8. An in-process Avalonia rendering test can bind the host-owned render surface to a local frame source without introducing `ViceSharp.Core` or runtime-internal references into ViewModels.
 
 ### Verification Method
@@ -393,7 +336,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 - Host/UI integration smoke tests over a loopback gRPC channel for control and remote-output behavior.
 - Local renderer boundary tests for the host-owned Avalonia render surface.
 - Streaming backpressure and reconnect tests.
-- NativeAOT publish validation for host and reference UI client.
+- Release publish validation for host and reference UI client.
 
 ### Related FRs
 
@@ -408,7 +351,6 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 
 - TR-LIB-001 (Library-first design keeps core embeddable inside the host)
 - TR-MVVM-001 (UI ViewModels remain isolated from concrete core types)
-- TR-AOT-001 (Generated contracts and host services must be AoT compatible)
 - TR-PLAT-001 (The boundary must support desktop hosts across target platforms)
 
 ### Design Decisions
@@ -578,7 +520,6 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 ### Related TRs
 
 - TR-PLAT-001 (Platform-agnostic core enables cross-platform UI shells)
-- TR-AOT-001 (NativeAOT publishing of the library)
 - TR-MVVM-001 (UI shells use MVVM pattern on top of the library)
 - TR-GRPC-BOUNDARY-001 (Host/UI process boundary preserves core library ownership)
 
@@ -591,31 +532,31 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 
 ## TR-MEDIA-001
 
-**FFmpeg Integration via P/Invoke with NativeAOT Compatibility** — ## TR-MEDIA-001: FFmpeg P/Invoke, AoT Compatible, Multiple Format Support
+**FFmpeg Integration via P/Invoke with Multiple Format Support** — ## TR-MEDIA-001: FFmpeg P/Invoke, Multiple Format Support
 
 **ID:** TR-MEDIA-001
-**Title:** FFmpeg Integration via P/Invoke with NativeAOT Compatibility
+**Title:** FFmpeg Integration via P/Invoke with Multiple Format Support
 **Priority:** P1 -- Important
 **Category:** Integration
 
 ### Description
 
-Video and audio encoding shall use FFmpeg libraries (libavcodec, libavformat, libavutil, libswscale, libswresample) accessed via P/Invoke. The FFmpeg bindings shall be NativeAOT-compatible (no reflection, no dynamic assembly loading). Multiple output formats shall be supported through FFmpeg's codec infrastructure.
+Video and audio encoding shall use FFmpeg libraries (libavcodec, libavformat, libavutil, libswscale, libswresample) accessed via P/Invoke. The FFmpeg bindings shall avoid dynamic assembly loading and runtime discovery on hot paths. Multiple output formats shall be supported through FFmpeg's codec infrastructure.
 
 ### Rationale
 
-FFmpeg is the industry standard for media encoding/decoding, supports all required formats (H.264, FLAC, WAV, MP4, AVI), and is available on all target platforms. P/Invoke is the most AoT-friendly interop mechanism in .NET.
+FFmpeg is the industry standard for media encoding/decoding, supports all required formats (H.264, FLAC, WAV, MP4, AVI), and is available on all target platforms. P/Invoke keeps the integration explicit and avoids reflection-heavy media bindings.
 
 ### Technical Specification
 
 1. **P/Invoke Bindings:**
-   - All FFmpeg function calls use `[DllImport]` or `[LibraryImport]` (source-generated, preferred for AoT) attributes.
+   - All FFmpeg function calls use `[DllImport]` or `[LibraryImport]` (source-generated where possible) attributes.
    - Bindings are auto-generated from FFmpeg C headers using a code generator tool.
    - Pointer-heavy FFmpeg APIs are wrapped in safe C# abstractions that manage lifetime.
 
-2. **NativeAOT Compatibility:**
+2. **Interop Safety:**
    - All P/Invoke declarations use `[LibraryImport]` (compile-time marshaling) instead of `[DllImport]` where possible.
-   - No `Marshal.GetDelegateForFunctionPointer()` usage (incompatible with AoT).
+   - No dynamically generated delegate binding in hot capture paths.
    - Callback functions passed to FFmpeg use `[UnmanagedCallersOnly]` static methods.
 
 3. **Library Loading:**
@@ -636,7 +577,7 @@ FFmpeg is the industry standard for media encoding/decoding, supports all requir
 
 ### Acceptance Criteria
 
-1. `[LibraryImport]` source-generated P/Invoke compiles and runs under NativeAOT on all target platforms.
+1. `[LibraryImport]` source-generated P/Invoke compiles and runs on all target platforms.
 2. Video recording to H.264/MP4 produces valid output (playable by VLC and browser HTML5 video).
 3. Audio recording to WAV and FLAC produces valid output (playable by standard audio players).
 4. Synchronized A/V recording produces an MP4 with correct A/V sync (per FR-MED-004).
@@ -646,7 +587,7 @@ FFmpeg is the industry standard for media encoding/decoding, supports all requir
 
 ### Verification Method
 
-- NativeAOT publish and execution test with FFmpeg recording.
+- Release publish and execution test with FFmpeg recording.
 - Media file validation tests using FFprobe to verify codec, container, and sync.
 - Memory leak test using native memory profiling during extended recording.
 - Graceful degradation test with FFmpeg libraries removed from the search path.
@@ -657,13 +598,12 @@ FFmpeg is the industry standard for media encoding/decoding, supports all requir
 
 ### Related TRs
 
-- TR-AOT-001 (P/Invoke bindings must be AoT-compatible)
 - TR-ALLOC-001 (Frame data transfer uses pinned/native buffers, not managed arrays)
 - TR-PLAT-001 (FFmpeg libraries are platform-specific binaries)
 
 ### Design Decisions
 
-- `[LibraryImport]` (source-generated) is strongly preferred over `[DllImport]` (runtime-generated) for AoT compatibility.
+- `[LibraryImport]` (source-generated) is strongly preferred over `[DllImport]` for explicit marshalling.
 - FFmpeg bindings are isolated in a separate assembly (`ViceSharp.Media.FFmpeg`) so the core library has no FFmpeg dependency.
 - The media encoding pipeline runs on a dedicated thread (producer-consumer pattern with the emulation thread), not on the emulation hot path.
 - Frame data is copied to a native-memory staging buffer before handoff to FFmpeg, decoupling the emulation frame buffer from the encoder.
@@ -799,7 +739,7 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 
 1. The emulation core library (`ViceSharp.Core`) compiles and runs on all 6 target RIDs without conditional compilation (`#if`).
 2. The CI/CD pipeline builds and tests on Windows x64, Ubuntu x64, and macOS ARM64.
-3. NativeAOT publish succeeds on all 6 target RIDs (per TR-AOT-001).
+3. Release publish succeeds on all supported target RIDs.
 4. Audio output plays correctly on all three OS platforms (verified by manual testing and automated A/V sync tests).
 5. Input devices (keyboard, gamepad) are recognized on all platforms.
 6. The Lorenz test suite passes on all platforms (same pass rate).
@@ -809,11 +749,10 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 
 - Multi-platform CI matrix (GitHub Actions for Windows/Linux/macOS).
 - Cross-platform integration tests running a subset of the Lorenz test suite.
-- NativeAOT publish smoke test on each target RID.
+- Release publish smoke test on each target RID.
 
 ### Related TRs
 
-- TR-AOT-001 (NativeAOT publish targets all platforms)
 - TR-SIMD-001 (SIMD support differs between x64 SSE/AVX and ARM64 NEON)
 - TR-LIB-001 (Core library is platform-agnostic)
 - TR-MEDIA-001 (FFmpeg native libraries are platform-specific)
@@ -946,7 +885,7 @@ Related: FR-SID-001, FR-SID-004, TEST-SID-001.
 
 ### Description
 
-Performance-critical rendering and audio processing paths shall use SIMD (Single Instruction, Multiple Data) intrinsics to process multiple pixels or audio samples in parallel. The CPU core shall use generic specialization (constrained generics with `where T : struct`) to allow the JIT/AoT compiler to generate specialized machine code for different CPU variants (6502, 6510, 8502) without virtual dispatch overhead.
+Performance-critical rendering and audio processing paths shall use SIMD (Single Instruction, Multiple Data) intrinsics to process multiple pixels or audio samples in parallel. The CPU core shall use generic specialization (constrained generics with `where T : struct`) to allow the JIT compiler to generate specialized machine code for different CPU variants (6502, 6510, 8502) without virtual dispatch overhead.
 
 ### Rationale
 
@@ -967,7 +906,7 @@ SIMD can process 4-16 pixels or audio samples per instruction, providing 4-16x t
 3. **Generic Specialization for CPU:**
    - The CPU core is implemented as `CpuCore<TBus>` where `TBus : struct, IBus`.
    - Different bus implementations (C64Bus, C128Bus, Vic20Bus) provide specialized memory access without virtual dispatch.
-   - The JIT/AoT compiler generates separate native code for each `TBus` instantiation.
+   - The JIT compiler generates specialized code for each `TBus` instantiation.
 
 4. **Platform Detection:**
    - SIMD support is detected at startup via `System.Runtime.Intrinsics.X86.Sse2.IsSupported`, `Avx2.IsSupported`, `System.Runtime.Intrinsics.Arm.AdvSimd.IsSupported`.
@@ -981,7 +920,7 @@ SIMD can process 4-16 pixels or audio samples per instruction, providing 4-16x t
 3. Generic specialization eliminates all virtual/interface dispatch from the CPU decode-execute loop (verified by JIT disassembly inspection).
 4. Scalar fallback paths produce bit-identical output to SIMD paths (verified by determinism tests).
 5. All SIMD code compiles and runs correctly on: x64 (SSE2 minimum, AVX2 optional), ARM64 (NEON/AdvSIMD).
-6. NativeAOT compilation produces specialized code for each generic instantiation (no shared generic fallback).
+6. Release builds preserve specialized code paths for each generic instantiation (no shared hot-path fallback).
 
 ### Verification Method
 
@@ -993,7 +932,6 @@ SIMD can process 4-16 pixels or audio samples per instruction, providing 4-16x t
 ### Related TRs
 
 - TR-ALLOC-001 (SIMD operates on stack-allocated vectors, no heap allocation)
-- TR-AOT-001 (SIMD intrinsics are AoT-compatible; generic specialization requires AoT to monomorphize)
 - TR-DET-001 (Scalar and SIMD must produce identical results for determinism)
 
 ### Design Decisions
