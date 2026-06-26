@@ -8,8 +8,8 @@ using ViceSharp.Host.Runtime;
 using Xunit;
 
 /// <summary>
-/// Drive-8 autostart keyboard automation. The host injects the autostart program and
-/// presses RUN only once the C64 BASIC prompt is genuinely ready for input: the
+/// Drive-8 autostart keyboard automation. The host types LOAD/RUN only once the
+/// C64 BASIC prompt is genuinely ready for input: the
 /// "READY." text is on screen AND the editor is flashing the cursor in its input loop
 /// (zero-page $CC == 0). Checking the text alone raced the boot/LOAD and dropped the
 /// keystrokes ("?SYNTAX ERROR" on autostart).
@@ -51,7 +51,7 @@ public sealed class HostKeyboardAutomationTests
     /// loading - the cursor is not yet flashing - even though stale "READY" text is
     /// already on the screen.
     /// Acceptance: with READY present but the cursor-blink flag ($CC) non-zero, the
-    /// automation stays in its waiting phase, never applies the ready (load+RUN) action,
+    /// automation stays in its waiting phase, never applies the ready action,
     /// and reports no error.
     /// </summary>
     [Fact]
@@ -73,9 +73,9 @@ public sealed class HostKeyboardAutomationTests
     /// FR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 autostart), TR: TR-MVVM-001,
     /// TEST-HOSTUI-001.
     /// Use case: once the BASIC prompt is genuinely ready - READY shown and the cursor
-    /// flashing - drive-8 autostart proceeds to inject the program and press RUN.
+    /// flashing - drive-8 autostart proceeds with its configured ready action.
     /// Acceptance: with READY present and the cursor-blink flag ($CC) zero, the
-    /// automation leaves its waiting phase and applies the ready (load+RUN) action.
+    /// automation leaves its waiting phase and applies the ready action.
     /// </summary>
     [Fact]
     public void Autostart_ReadyAndCursorBlinking_AppliesReadyAction()

@@ -7,7 +7,7 @@ public interface IHostProtocolClient
     string SessionId { get; }
 
     /// <summary>Whether the current/next session runs the cycle-accurate
-    /// true-drive 1541 (FR-DRVTRUE-001). Default false (simulated drive).</summary>
+    /// true-drive 1541 (FR-DRVTRUE-001).</summary>
     bool TrueDrive { get; }
 
     /// <summary>

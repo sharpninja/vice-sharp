@@ -1,3 +1,71 @@
+# 2026-06-25/26 VICE pacing, true-drive load, and renderer handoff
+
+**Branch:** `codex/iec-timetravel-debugger`
+**Base before wrap-up:** `dbca07d5818a3e9133798dbb6dea70b0a6e84f5d`
+**Status at handoff write:** Ready for commit after retained-evidence focused validation.
+
+## What changed
+
+- Restored VICE pacing semantics so the VICE gate uses live audio back-pressure as the primary regulator before falling back to vsync.
+- Changed `Run 8` autostart to type `LOAD"*",8,1` and `RUN` through C64 keyboard automation instead of host-preloading the first PRG into BASIC RAM.
+- Made Drive 8 default to the VICE-faithful true-drive path, with attach and persisted restore carrying the D64 path into the rebuilt true-drive session.
+- Preserved the user-visible ability to restore persisted true-drive false state even though Drive 8 now defaults true.
+- Added durable D64 fixtures under `tests/ViceSharp.TestHarness/Fixtures/D64/` for lockstep and media tests.
+- Added semaphore pacing coverage and updated pacing strategy tests so VICE is the default UI/host strategy and warp remains uncapped.
+- Updated VIC-II/display/video tests and renderer paths for the observed y-offset/artifact regressions.
+- Updated FFmpeg recorder tests for deterministic frame-rate evidence.
+
+## Validation evidence
+
+Retained evidence directory:
+
+`F:\GitHub\vice-sharp\TestResults\wrapup-20260626T213900`
+
+Focused validation command is recorded in `command.txt` and produced:
+
+- `focused.trx`
+- `console.log`
+- `vstest.diag.log`
+- `vstest.diag.host.26-06-25_21-39-22_44959_5.log`
+- `vstest.diag.datacollector.26-06-25_21-39-21_81947_5.log`
+- `git-diff-check.log`
+
+Result:
+
+```text
+Passed: 189
+Failed: 0
+Skipped: 0
+ExitCode: 0
+```
+
+`git diff --check` also completed with exit code 0 and is captured in `git-diff-check.log`.
+
+## Red-first evidence retained in session history
+
+Earlier targeted red tests failed before implementation as expected:
+
+- `WarpModeTests.ViceGate_Tick_WithAudioTimingSource_UsesSoundRegulator`: expected `Sound`, actual `Vsync`.
+- `HostMediaSimulatedLoadTests.ResetAndAutostartDrive8_TypesLoadCommandInsteadOfPreloadingRun`: expected first typed key `L`, actual `R`.
+- Drive 8 default true-drive tests failed before the UI default/rebuild change.
+
+The same focused areas later passed in targeted runs and in the retained 189-test wrap-up run.
+
+## Full harness limitation
+
+The prior full harness run was stopped after no observable progress. The best retained blame sequence evidence points at:
+
+`ViceSharp.TestHarness.X64ScVariantLockstepTests.SelectedD64_PostKernalCloseStateMatchesNative_ForC64Pal`
+
+as the incomplete test in the blame sequence artifacts. A future full-suite run should always use a stable results directory, TRX, `--diag`, `--blame-hang`, and dump collection.
+
+## Next useful checks
+
+- Re-run the installed MSI against the same two user videos after deployment.
+- If full-suite proof is required, run the full harness with retained diagnostics and a hang timeout; do not run it as console-only evidence.
+
+---
+
 # ViceSharp - Phase 1 Closeout Handoff
 
 **Date:** 2026-05-31 (marathon pull-in complete)

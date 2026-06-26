@@ -345,16 +345,13 @@ public sealed class EmulatorHostService : IEmulatorHost
 
         if (!drive8.HasDisk)
         {
-            return new EmulatorCommandResponse(
-                RpcStatus.FailedPrecondition("ResetAndAutostartDrive8 requires an attached disk in drive 8."),
-                HostProtocolMapper.ToStatusDto(session));
-        }
-
-        if (!TryReadDrive8AutostartProgram(drive8, attachment, out var program, out var programError))
-        {
-            return new EmulatorCommandResponse(
-                RpcStatus.FailedPrecondition(programError),
-                HostProtocolMapper.ToStatusDto(session));
+            var hasAppliedAttachment = attachment is { IsAttached: true, AppliedToRuntime: true };
+            if (!hasAppliedAttachment)
+            {
+                return new EmulatorCommandResponse(
+                    RpcStatus.FailedPrecondition("ResetAndAutostartDrive8 requires an attached disk in drive 8."),
+                    HostProtocolMapper.ToStatusDto(session));
+            }
         }
 
         if (!session.Machine.Devices.All.OfType<IMachineKeyboardInput>().Any())
@@ -368,58 +365,8 @@ public sealed class EmulatorHostService : IEmulatorHost
         session.RunState = EmulatorRunState.Running;
         session.PowerState = "On";
         session.ResetPerformanceCounters();
-        session.StartHostKeyboardAutomation(HostKeyboardAutomation.CreateC64Drive8Autostart(
-            machine => LoadAutostartProgramIntoBasic(machine, program!)));
+        session.StartHostKeyboardAutomation(HostKeyboardAutomation.CreateC64Drive8Autostart());
 
         return new EmulatorCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session));
-    }
-
-    private static bool TryReadDrive8AutostartProgram(
-        IFloppyDrive drive,
-        MediaAttachmentDto? attachment,
-        out D64ProgramFile? program,
-        out string error)
-    {
-        program = null;
-
-        if (attachment is null || !attachment.IsAttached)
-        {
-            error = "ResetAndAutostartDrive8 requires an attached D64 media record in drive 8.";
-            return false;
-        }
-
-        if (drive is not IecDrive iecDrive)
-        {
-            error = "ResetAndAutostartDrive8 requires runtime IEC drive 8 media access.";
-            return false;
-        }
-
-        if (iecDrive.TryReadFirstProgram(out program, out error))
-            return true;
-
-        error = $"ResetAndAutostartDrive8 could not find a runnable PRG in drive 8 media. {error}";
-        return false;
-    }
-
-    private static string? LoadAutostartProgramIntoBasic(IMachine machine, D64ProgramFile program)
-    {
-        var endAddress = program.LoadAddress + program.Payload.Length;
-        if (program.Payload.Length == 0 || endAddress > 0x10000)
-            return $"PRG '{program.FileName}' does not fit in C64 address space.";
-
-        for (var offset = 0; offset < program.Payload.Length; offset++)
-            machine.Bus.Write((ushort)(program.LoadAddress + offset), program.Payload[offset]);
-
-        SetBasicPointer(machine, 0x2B, program.LoadAddress);
-        SetBasicPointer(machine, 0x2D, (ushort)endAddress);
-        SetBasicPointer(machine, 0x2F, (ushort)endAddress);
-        SetBasicPointer(machine, 0x31, (ushort)endAddress);
-        return null;
-    }
-
-    private static void SetBasicPointer(IMachine machine, ushort address, ushort value)
-    {
-        machine.Bus.Write(address, (byte)value);
-        machine.Bus.Write((ushort)(address + 1), (byte)(value >> 8));
     }
 }

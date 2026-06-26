@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
+using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
 using ViceSharp.Chips.IEC;
 using ViceSharp.Core;
@@ -75,7 +76,63 @@ public sealed class HostMediaSimulatedLoadTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-DRV-001 / FR-IECLOAD-001 / BUG-THROTTLE-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: the host "Run 8" command must exercise the C64 KERNAL LOAD path,
+    ///   not preload PRG bytes from the D64 and then type RUN. That keeps disk I/O,
+    ///   loader timing, SID music timing, and demos aligned with VICE.
+    /// Acceptance: after ResetAndAutostartDrive8 arms host automation at a READY
+    ///   prompt, the first pressed key is "L" from LOAD"*",8,1 rather than "R".
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task ResetAndAutostartDrive8_TypesLoadCommandInsteadOfPreloadingRun()
+    {
+        var drive = new IecDrive(8);
+        drive.InsertDisk(CreateMinimalLoadableD64().ToArray());
+        var bus = new AutostartMemoryBus();
+        bus.SetBasicReady();
+        var keyboard = new RecordingKeyboard();
+        var machine = new AutostartTestMachine(bus, drive, keyboard);
+        var session = new EmulatorRuntimeSession(
+            "autostart-session",
+            MinimalHostArchitectureDescriptor.Instance,
+            machine)
+        {
+            RunState = EmulatorRunState.Running,
+            PowerState = "On"
+        };
+        session.MediaAttachments[MediaSlot.Drive8] = new MediaAttachmentDto(
+            MediaSlot.Drive8,
+            "test.d64",
+            "test.d64",
+            IsAttached: true,
+            IsReadOnly: true,
+            AppliedToRuntime: true);
+        var registry = new EmulatorRuntimeRegistry();
+        registry.Add(session);
+        var host = new EmulatorHostService(registry, new ThrowingRuntimeFactory());
+
+        var response = await host.ResetAndAutostartDrive8Async(
+            new ResetAndAutostartDrive8Request(session.SessionId),
+            TestContext.Current.CancellationToken);
+
+        response.Status.IsSuccess.Should().BeTrue();
+        for (var frame = 0; frame < 40 && keyboard.PressedKeys.Count == 0; frame++)
+            session.AdvanceHostAutomationFrame();
+
+        keyboard.PressedKeys.Should().NotBeEmpty();
+        keyboard.PressedKeys[0].Should().Be("L");
+    }
+
     private static string WriteMinimalLoadableD64()
+    {
+        var image = CreateMinimalLoadableD64();
+        var path = Path.Combine(Path.GetTempPath(), $"vicesharp-hostmedia-{Guid.NewGuid():N}.d64");
+        File.WriteAllBytes(path, image.ToArray());
+        return path;
+    }
+
+    private static D64Image CreateMinimalLoadableD64()
     {
         var image = new D64Image(new byte[D64Image.DiskSize35Track]);
         image.Format();
@@ -96,8 +153,102 @@ public sealed class HostMediaSimulatedLoadTests
         file[1] = (byte)(2 + payload.Length - 1);
         payload.CopyTo(file.Slice(2));
 
-        var path = Path.Combine(Path.GetTempPath(), $"vicesharp-hostmedia-{Guid.NewGuid():N}.d64");
-        File.WriteAllBytes(path, image.ToArray());
-        return path;
+        return image;
+    }
+
+    private sealed class AutostartMemoryBus : IBus
+    {
+        private const int ReadyPromptStart = 0x0400;
+        private const int CursorBlinkEnableFlag = 0x00CC;
+        private readonly byte[] _memory = new byte[0x10000];
+
+        public byte Read(ushort address) => _memory[address];
+
+        public void Write(ushort address, byte value) => _memory[address] = value;
+
+        public byte Peek(ushort address) => _memory[address];
+
+        public void RegisterDevice(IAddressSpace device)
+        {
+        }
+
+        public void UnregisterDevice(IAddressSpace device)
+        {
+        }
+
+        public void SetBasicReady()
+        {
+            ReadOnlySpan<byte> ready = [18, 5, 1, 4, 25];
+            for (var i = 0; i < ready.Length; i++)
+                _memory[ReadyPromptStart + i] = ready[i];
+            _memory[CursorBlinkEnableFlag] = 0;
+        }
+    }
+
+    private sealed class AutostartTestMachine(
+        IBus bus,
+        IFloppyDrive drive,
+        IMachineKeyboardInput keyboard) : IMachine
+    {
+        private readonly AutostartDeviceRegistry _devices = new(drive, keyboard);
+
+        public IBus Bus => bus;
+
+        public IClock Clock { get; } = new SystemClock(1_000_000);
+
+        public IDeviceRegistry Devices => _devices;
+
+        public IArchitectureDescriptor Architecture => MinimalHostArchitectureDescriptor.Instance;
+
+        public void RunFrame() => Clock.Step(20_000);
+
+        public void StepInstruction() => Clock.Step();
+
+        public MachineState GetState() => new() { Cycle = Clock.TotalCycles };
+
+        public void Reset() => Clock.Reset();
+    }
+
+    private sealed class AutostartDeviceRegistry(IFloppyDrive drive, IMachineKeyboardInput keyboard) : IDeviceRegistry
+    {
+        private readonly IDevice[] _devices = [drive, keyboard];
+
+        public IReadOnlyList<IDevice> All => _devices;
+
+        public int Count => _devices.Length;
+
+        public IDevice? GetById(DeviceId id) => _devices.FirstOrDefault(device => device.Id == id);
+
+        public IReadOnlyList<T> GetAll<T>()
+            where T : IDevice
+            => _devices.OfType<T>().ToArray();
+
+        public IDevice? GetByRole(DeviceRole role) => null;
+    }
+
+    private sealed class RecordingKeyboard : IMachineKeyboardInput
+    {
+        public DeviceId Id => new(0xB001);
+
+        public string Name => "Recording Keyboard";
+
+        public List<string> PressedKeys { get; } = new();
+
+        public bool SetKeyState(string key, bool pressed)
+        {
+            if (pressed)
+                PressedKeys.Add(key);
+            return true;
+        }
+
+        public void Reset()
+        {
+        }
+    }
+
+    private sealed class ThrowingRuntimeFactory : IEmulatorRuntimeFactory
+    {
+        public EmulatorRuntimeSession Create(CreateEmulatorSessionRequest request)
+            => throw new NotSupportedException("This test registers its session directly.");
     }
 }

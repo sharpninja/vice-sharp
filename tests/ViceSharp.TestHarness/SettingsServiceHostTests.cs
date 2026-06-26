@@ -221,6 +221,7 @@ public sealed class SettingsServiceHostTests
     {
         var registry = new EmulatorRuntimeRegistry();
         var session = CreateMinimalSession();
+        session.PacingStrategy = "semaphore";
         registry.Add(session);
         using var pump = new EmulationPumpService(registry, EmulationGateStrategies.CreateGate("semaphore"));
         var settingsService = new SettingsServiceHost(registry, new DefaultEmulatorRuntimeFactory(), pump);

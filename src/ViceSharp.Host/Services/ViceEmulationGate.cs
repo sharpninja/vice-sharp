@@ -171,12 +171,26 @@ public sealed partial class ViceEmulationGate : IEmulationGate
                 continue;
             }
 
-            // vsync (vsync.c): run a chunk, then sleep so wall-clock tracks emulated-cycle
-            // progress - a true 100% pace. The sound-as-timing-source regulator (sound.c
-            // sound_flush; see EvaluateSound) is intentionally NOT the pacer here: in this
-            // WinMm setup its buffer back-pressure over-throttled to ~23% real-time. vsync is
-            // reliable and keeps the SID in sync naturally - at 100% speed the SID's sample
-            // production equals the device's consumption, so the buffer self-levels.
+            IAudioChip? audioChip;
+            lock (session.SyncRoot)
+                audioChip = session.Machine.Devices.GetByRole(DeviceRole.AudioChip) as IAudioChip;
+
+            var soundAction = EvaluateSound(audioChip, HighWaterSamples);
+            if (soundAction != SoundAction.NotTimingSource)
+            {
+                LastRegulator = PacingRegulator.Sound;
+                if (soundAction == SoundAction.BackPressure)
+                {
+                    WaitForSoundBufferRoom(audioChip!);
+                    continue;
+                }
+
+                advance(session, chunk);
+                continue;
+            }
+
+            // vsync (vsync.c): when sound is not the timing source, run a chunk then sleep so
+            // wall-clock tracks emulated-cycle progress - a true 100% pace.
             LastRegulator = PacingRegulator.Vsync;
 
             var speed = Math.Clamp(session.LimiterRatePercent, 1.0, 100_000.0) / 100.0;
@@ -247,6 +261,16 @@ public sealed partial class ViceEmulationGate : IEmulationGate
                 Thread.Sleep(1); // ~1 ms with the raised timer resolution; yields the CPU
             else
                 Thread.SpinWait(64); // final sub-millisecond only
+        }
+    }
+
+    private void WaitForSoundBufferRoom(IAudioChip audioChip)
+    {
+        while (_running
+            && audioChip.IsAudioTimingSource
+            && audioChip.QueuedSampleCount >= HighWaterSamples)
+        {
+            Thread.Sleep(1);
         }
     }
 

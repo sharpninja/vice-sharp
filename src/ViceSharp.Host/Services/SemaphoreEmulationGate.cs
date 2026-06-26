@@ -16,7 +16,7 @@ namespace ViceSharp.Host.Services;
 /// </summary>
 public sealed partial class SemaphoreEmulationGate : IEmulationGate
 {
-    private const double PacingHz = 1000.0;
+    private const double PacingHz = 500.0;
     private const long WarpBurstMultiplier = 64;
 
     private const uint CreateWaitableTimerHighResolution = 0x00000002;
@@ -126,35 +126,97 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
             anchor.Primed = true;
         }
 
-        var elapsedSeconds = (now - anchor.AnchorWall) / (double)swFreq;
-        var deficit = (long)(frequencyHz * elapsedSeconds) - (totalCycles - anchor.AnchorCycle);
+        var cyclesToAdvance = ComputeLimitedAdvanceCycles(
+            frequencyHz,
+            session.LimiterRatePercent,
+            swFreq,
+            anchor.AnchorWall,
+            anchor.AnchorCycle,
+            now,
+            totalCycles,
+            out var resync);
 
+        // Advance the real-time deficit plus one paced quantum. The fixed quantum keeps
+        // the host/drive protocol path fed even when the persistent anchor says the master
+        // clock is exactly on pace, while the deficit term still catches up timer jitter.
         // Bound one Step's wall time (~250 ms emulated) so the lock is not held too long;
         // carry the remainder forward (anchor stays put) so cycles are never dropped and
         // the worker reaches 100% even under irregular wakeups. Only a catastrophic gap
         // (debugger break / sleep) is resynced rather than caught up.
-        var stepCap = Math.Max(1, frequencyHz / 4);
-        var catastrophic = frequencyHz * 4;
-
-        if (deficit > catastrophic)
+        if (resync)
         {
             anchor.AnchorWall = now;
             anchor.AnchorCycle = totalCycles;
-            deficit = stepCap;
-        }
-        else if (deficit > stepCap)
-        {
-            deficit = stepCap;
         }
 
-        if (deficit > 0)
-            advance(session, deficit);
+        if (cyclesToAdvance > 0)
+            advance(session, cyclesToAdvance);
+    }
+
+    internal static long ComputeLimitedAdvanceCycles(
+        long frequencyHz,
+        double limiterRatePercent,
+        long swFreq,
+        long anchorWall,
+        long anchorCycle,
+        long now,
+        long totalCycles,
+        out bool resync)
+    {
+        var deficit = ComputeRealtimeDeficit(
+            frequencyHz,
+            limiterRatePercent,
+            swFreq,
+            anchorWall,
+            anchorCycle,
+            now,
+            totalCycles,
+            out resync);
+
+        return deficit + ComputePacedQuantumCycles(frequencyHz, limiterRatePercent);
+    }
+
+    internal static long ComputeRealtimeDeficit(
+        long frequencyHz,
+        double limiterRatePercent,
+        long swFreq,
+        long anchorWall,
+        long anchorCycle,
+        long now,
+        long totalCycles,
+        out bool resync)
+    {
+        resync = false;
+        var speed = Math.Clamp(limiterRatePercent, 1.0, 100_000.0) / 100.0;
+        var emulatedClkPerSecond = Math.Max(1, (long)(frequencyHz * speed));
+        var elapsedSeconds = (now - anchorWall) / (double)swFreq;
+        var deficit = (long)(emulatedClkPerSecond * elapsedSeconds) - (totalCycles - anchorCycle);
+
+        var stepCap = Math.Max(1, emulatedClkPerSecond / 4);
+        var catastrophic = emulatedClkPerSecond * 4;
+
+        if (deficit > catastrophic)
+        {
+            resync = true;
+            return stepCap;
+        }
+
+        if (deficit > stepCap)
+            return stepCap;
+
+        return deficit < 0 ? 0 : deficit;
     }
 
     private static long WarpSliceCycles(EmulatorRuntimeSession session)
     {
         lock (session.SyncRoot)
             return Math.Max(1, (long)(session.Machine.Clock.FrequencyHz / PacingHz)) * WarpBurstMultiplier;
+    }
+
+    private static long ComputePacedQuantumCycles(long frequencyHz, double limiterRatePercent)
+    {
+        var speed = Math.Clamp(limiterRatePercent, 1.0, 100_000.0) / 100.0;
+        return Math.Max(1, (long)(frequencyHz * speed / PacingHz));
     }
 
     private void TimerLoop()

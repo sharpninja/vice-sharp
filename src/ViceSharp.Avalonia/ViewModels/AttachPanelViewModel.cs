@@ -35,7 +35,7 @@ public sealed class AttachPanelViewModel : ObservableObject
     private string _selectedPrimaryJoystickPort = "Joystick 2";
     private bool _swapJoystickPorts;
     private string _selectedResourceMode = "Auto detect";
-    private string _selectedPacingStrategy = "Semaphore";
+    private string _selectedPacingStrategy = "VICE";
     private bool _saveSettingsOnExit;
     private bool _saveTransientValuesOnExit;
     private string _settingsStatusText = "Settings will load from the connected host.";
@@ -53,7 +53,7 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         Slots =
         [
-            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64"]),
+            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64"], trueDrive: true),
             new AttachSlotViewModel(MediaSlot.Drive9, "Drive 9", "Disk", ["*.d64", "*.g64"]),
             new AttachSlotViewModel(MediaSlot.Tape, "Tape", "Tape", ["*.tap"]),
             new AttachSlotViewModel(MediaSlot.Cartridge, "Cartridge", "Cart", ["*.crt", "*.bin", "*.rom"])
@@ -470,7 +470,24 @@ public sealed class AttachPanelViewModel : ObservableObject
         }
 
         if (response.Attachment is not null)
+        {
             slot.ApplyAttachment(response.Attachment, filePath);
+            if (slot.SupportsTrueDrive && slot.TrueDrive)
+            {
+                _applyingTrueDrive = true;
+                try
+                {
+                    await ApplyTrueDriveSelectionAsync(slot, cancellationToken).ConfigureAwait(true);
+                }
+                finally
+                {
+                    _applyingTrueDrive = false;
+                }
+
+                StatusText = $"Attached; True Drive enabled for {slot.Title} (session restarted)";
+                return;
+            }
+        }
 
         StatusText = "Attached";
     }
@@ -505,22 +522,8 @@ public sealed class AttachPanelViewModel : ObservableObject
         _applyingTrueDrive = true;
         try
         {
-            // Single true-drive rig: enabling one drive disables the other.
-            if (changed.TrueDrive)
-            {
-                foreach (var other in Slots)
-                {
-                    if (other.SupportsTrueDrive && !ReferenceEquals(other, changed) && other.TrueDrive)
-                        other.TrueDrive = false;
-                }
-            }
-
             var active = Slots.FirstOrDefault(slot => slot.SupportsTrueDrive && slot.TrueDrive);
-            var device = active?.Slot == MediaSlot.Drive9 ? 9 : 8;
-            // Carry the already-attached disk so the rebuilt true-drive session
-            // boots with it inserted (the rig loads the D64 at build time).
-            var diskPath = active is { IsAttached: true } ? active.FilePath : null;
-            await _hostClient.SetTrueDriveAsync(active is not null, device, diskPath).ConfigureAwait(true);
+            await ApplyTrueDriveSelectionAsync(active, CancellationToken.None).ConfigureAwait(true);
             StatusText = active is not null
                 ? $"True Drive enabled for {active.Title} (session restarted)"
                 : "True Drive disabled (session restarted)";
@@ -533,6 +536,25 @@ public sealed class AttachPanelViewModel : ObservableObject
         {
             _applyingTrueDrive = false;
         }
+    }
+
+    private async Task ApplyTrueDriveSelectionAsync(AttachSlotViewModel? active, CancellationToken cancellationToken)
+    {
+        // Single true-drive rig: enabling one drive disables the other.
+        if (active is not null)
+        {
+            foreach (var other in Slots)
+            {
+                if (other.SupportsTrueDrive && !ReferenceEquals(other, active) && other.TrueDrive)
+                    other.TrueDrive = false;
+            }
+        }
+
+        var device = active?.Slot == MediaSlot.Drive9 ? 9 : 8;
+        // Carry the already-attached disk so the rebuilt true-drive session boots with it
+        // inserted (the rig loads the D64 at build time).
+        var diskPath = active is { IsAttached: true } ? active.FilePath : null;
+        await _hostClient.SetTrueDriveAsync(active is not null, device, diskPath, cancellationToken).ConfigureAwait(true);
     }
 
     public async Task EjectAsync(AttachSlotViewModel slot, CancellationToken cancellationToken = default)
@@ -1034,7 +1056,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         => string.Equals(strategy, "VICE", StringComparison.OrdinalIgnoreCase) ? "vice" : "semaphore";
 
     private static string FromPacingStrategyId(string id)
-        => string.Equals(id, "vice", StringComparison.OrdinalIgnoreCase) ? "VICE" : "Semaphore";
+        => string.Equals(id, "semaphore", StringComparison.OrdinalIgnoreCase) ? "Semaphore" : "VICE";
 
     private static bool IsRestartRelevant(string propertyName)
     {
@@ -1188,13 +1210,33 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         await RefreshAsync(cancellationToken).ConfigureAwait(true);
 
-        // Re-apply true-drive selections through the existing per-slot toggle path;
-        // its observer rebuilds the session as a true-drive rig with the disk.
-        foreach (var attachment in transient.Attachments.Where(a => a.TrueDrive))
+        var driveAttachments = transient.Attachments
+            .Where(attachment => Enum.TryParse<MediaSlot>(attachment.Slot, out var slot)
+                && slot is MediaSlot.Drive8 or MediaSlot.Drive9)
+            .ToArray();
+        if (driveAttachments.Length > 0)
         {
-            var slot = Slots.FirstOrDefault(s => s.Slot.ToString() == attachment.Slot);
-            if (slot is { SupportsTrueDrive: true } && !slot.TrueDrive)
-                slot.TrueDrive = true;
+            var activeAttachment = driveAttachments.FirstOrDefault(attachment => attachment.TrueDrive);
+            AttachSlotViewModel? activeSlot = null;
+
+            _applyingTrueDrive = true;
+            try
+            {
+                foreach (var slot in Slots.Where(slot => slot.SupportsTrueDrive))
+                {
+                    var isActive = activeAttachment is not null
+                        && string.Equals(slot.Slot.ToString(), activeAttachment.Slot, StringComparison.Ordinal);
+                    slot.TrueDrive = isActive;
+                    if (isActive)
+                        activeSlot = slot;
+                }
+
+                await ApplyTrueDriveSelectionAsync(activeSlot, cancellationToken).ConfigureAwait(true);
+            }
+            finally
+            {
+                _applyingTrueDrive = false;
+            }
         }
 
         // Restore the keyboard map LAST. RefreshAsync (and a true-drive session

@@ -30,7 +30,7 @@ public sealed record PersistedSettings(
     bool SwapJoystickPorts,
     string ResourceMode,
     int DockSide,
-    string PacingStrategy = "Semaphore",
+    string PacingStrategy = "VICE",
     double MasterVolumePercent = 100,
     bool Muted = false);
 

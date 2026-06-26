@@ -64,14 +64,18 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     private bool _stopped;
     private bool _faulted;
 
-    // Bounded queue depth. The writers are DROP-ON-FULL (see Start/EnsureAudioStream):
-    // the emulation worker must never block on a stalled ffmpeg socket, so a full
-    // queue drops the overflow rather than freezing the emulator. The video depth is
-    // sized to absorb ffmpeg's startup window (output open + header) without dropping
-    // a normal recording's first frames. ~32 BGRA frames (~13 MB at 384x272) / 64
-    // audio batches.
+    // Bounded queue depth. Recording must be lossless: a dropped frame or audio batch
+    // compresses the captured timeline because ffmpeg timestamps survivors at the
+    // nominal frame/sample rate. Back-pressure can slow emulation during capture, but
+    // it must not let the artifact lie about actual timing.
     private const int VideoQueueCapacity = 32;
     private const int AudioQueueCapacity = 64;
+
+    /// <summary>Recording video payloads are lossless; back-pressure blocks instead of dropping frames.</summary>
+    public const bool VideoWriterDropsWhenFull = false;
+
+    /// <summary>Recording audio payloads are lossless; back-pressure blocks instead of dropping batches.</summary>
+    public const bool AudioWriterDropsWhenFull = false;
 
     /// <summary>How long to wait for ffmpeg to connect back to each socket.</summary>
     private static readonly TimeSpan ConnectTimeout = TimeSpan.FromSeconds(15);
@@ -244,7 +248,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
                 _audioAccept = audioAccept;
                 _videoWriter = new BackgroundByteWriter(
                     (b, n) => connectedVideoStream.Write(b, 0, n), VideoQueueCapacity, "vice-ffmpeg-video",
-                    dropWhenFull: true);
+                    dropWhenFull: VideoWriterDropsWhenFull);
             }
         }
         catch
@@ -317,7 +321,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             var connectedAudioStream = _audioStream;
             _audioWriter = new BackgroundByteWriter(
                 (b, n) => connectedAudioStream.Write(b, 0, n), AudioQueueCapacity, "vice-ffmpeg-audio",
-                dropWhenFull: true);
+                dropWhenFull: AudioWriterDropsWhenFull);
 
             // Flush audio captured before the connection completed.
             if (_pendingAudioLen > 0)
@@ -387,8 +391,8 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             _frameCount++;
         }
 
-        // Copy + enqueue happen OUTSIDE _sync: the (rare) back-pressure block when
-        // the writer is saturated never holds the operational lock.
+        // Copy + enqueue happen OUTSIDE _sync: the (rare) lossless back-pressure block
+        // when the writer is saturated never holds the operational lock.
         writer.Enqueue(bgra);
     }
 

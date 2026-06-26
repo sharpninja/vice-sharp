@@ -472,28 +472,31 @@ public sealed class ViceArgsParserTests
     /// launcher dispatch sets the CPU PC to the PRG load address.
     /// </summary>
     [Fact]
-    public void ProcessSmoke_ViceTestbenchStyle_DebugCart_Prg_ExitCode()
+    public async Task ProcessSmoke_ViceTestbenchStyle_DebugCart_Prg_ExitCode()
     {
         var prgPath = Path.Combine(Path.GetTempPath(), $"vicesharp-debugcart-{Guid.NewGuid():N}.prg");
-        File.WriteAllBytes(
-            prgPath,
-            [
-                0x00, 0xC0,
-                0xA9, 0x2A,
-                0x8D, 0xFF, 0xD7,
-                0x4C, 0x07, 0xC0
-            ]);
+        try
+        {
+            File.WriteAllBytes(
+                prgPath,
+                [
+                    0x00, 0xC0,
+                    0xA9, 0x2A,
+                    0x8D, 0xFF, 0xD7,
+                    0x4C, 0x07, 0xC0
+                ]);
 
-        var psi = CreateConsoleStartInfo($"-debugcart -limitcycles 100000 {Quote(prgPath)}");
+            var psi = CreateConsoleStartInfo($"-debugcart -limitcycles 100000 {Quote(prgPath)}");
+            var result = await RunConsoleProcessAsync(psi, TimeSpan.FromSeconds(20));
 
-        using var process = System.Diagnostics.Process.Start(psi)!;
-        var stdout = process.StandardOutput.ReadToEnd();
-        var stderr = process.StandardError.ReadToEnd();
-
-        Assert.True(process.WaitForExit(20_000), $"Console process did not exit. stdout={stdout} stderr={stderr}");
-        Assert.Equal(0x2A, process.ExitCode);
-        Assert.Contains("DebugCart", stdout);
-        Assert.Contains("PRG dispatch PC set", stdout);
+            Assert.Equal(0x2A, result.ExitCode);
+            Assert.Contains("DebugCart", result.StandardOutput);
+            Assert.Contains("PRG dispatch PC set", result.StandardOutput);
+        }
+        finally
+        {
+            try { if (File.Exists(prgPath)) File.Delete(prgPath); } catch { /* best effort */ }
+        }
     }
 
     // =====================================================================
@@ -532,17 +535,84 @@ public sealed class ViceArgsParserTests
     /// and no ROM/PRG. Should exit 0 (ROM-less C64, 100 cycles, no $D7FF write).
     /// </summary>
     [Fact]
-    public void ProcessSmoke_RomLess_DebugCart_LimitCycles_ExitsZero()
+    public async Task ProcessSmoke_RomLess_DebugCart_LimitCycles_ExitsZero()
     {
         var psi = CreateConsoleStartInfo("-debugcart -limitcycles 100");
+        var result = await RunConsoleProcessAsync(psi, TimeSpan.FromSeconds(20));
 
-        using var process = System.Diagnostics.Process.Start(psi)!;
-        var stdout = process.StandardOutput.ReadToEnd();
-        var stderr = process.StandardError.ReadToEnd();
-
-        Assert.True(process.WaitForExit(20_000), $"Console process did not exit. stdout={stdout} stderr={stderr}");
-        Assert.Equal(0, process.ExitCode);
+        Assert.Equal(0, result.ExitCode);
     }
+
+    private static async Task<ConsoleProcessResult> RunConsoleProcessAsync(
+        System.Diagnostics.ProcessStartInfo startInfo,
+        TimeSpan timeout)
+    {
+        using var process = System.Diagnostics.Process.Start(startInfo)
+            ?? throw new InvalidOperationException($"Could not start {startInfo.FileName}.");
+
+        var stdoutTask = process.StandardOutput.ReadToEndAsync();
+        var stderrTask = process.StandardError.ReadToEndAsync();
+
+        if (!await WaitForExitWithinAsync(process, timeout))
+        {
+            try
+            {
+                if (!process.HasExited)
+                    process.Kill(entireProcessTree: true);
+            }
+            catch
+            {
+                // The process may have exited between HasExited and Kill.
+            }
+
+            _ = await WaitForExitWithinAsync(process, TimeSpan.FromSeconds(5));
+
+            var stdout = await ReadProcessOutputAsync(stdoutTask);
+            var stderr = await ReadProcessOutputAsync(stderrTask);
+            throw new TimeoutException(
+                $"Console process did not exit within {timeout.TotalSeconds:F0}s. stdout={stdout} stderr={stderr}");
+        }
+
+        return new ConsoleProcessResult(
+            process.ExitCode,
+            await ReadProcessOutputAsync(stdoutTask),
+            await ReadProcessOutputAsync(stderrTask));
+    }
+
+    private static async Task<bool> WaitForExitWithinAsync(System.Diagnostics.Process process, TimeSpan timeout)
+    {
+        using var cts = new CancellationTokenSource(timeout);
+        try
+        {
+            await process.WaitForExitAsync(cts.Token);
+            return true;
+        }
+        catch (OperationCanceledException) when (cts.IsCancellationRequested)
+        {
+            return false;
+        }
+    }
+
+    private static async Task<string> ReadProcessOutputAsync(Task<string> outputTask)
+    {
+        var completed = await Task.WhenAny(outputTask, Task.Delay(TimeSpan.FromSeconds(5)));
+        if (!ReferenceEquals(completed, outputTask))
+            return "<stream read timed out>";
+
+        try
+        {
+            return await outputTask;
+        }
+        catch (Exception ex)
+        {
+            return $"<stream read failed: {ex.GetType().Name}: {ex.Message}>";
+        }
+    }
+
+    private readonly record struct ConsoleProcessResult(
+        int ExitCode,
+        string StandardOutput,
+        string StandardError);
 
     private static System.Diagnostics.ProcessStartInfo CreateConsoleStartInfo(string arguments)
     {

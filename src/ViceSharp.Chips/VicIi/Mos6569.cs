@@ -64,6 +64,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private byte _refreshCounter;
     private readonly byte[] _videoBuffer = new byte[40];
     private readonly byte[] _colorBuffer = new byte[40];
+    private readonly bool[] _videoBufferDisplayValid = new bool[40];
+    private readonly byte[] _renderMatrixBuffer = new byte[25 * 40];
+    private readonly byte[] _renderColorBuffer = new byte[25 * 40];
+    private readonly bool[] _renderMatrixRowValid = new bool[25];
     private ushort _videoCounter;
     private byte _rowCounter;
     private int _videoMatrixLineIndex;
@@ -753,6 +757,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public byte YScroll => (byte)(_registers[0x11] & 0x07);
 
+    private int FirstVisibleBadLine
+    {
+        get
+        {
+            int offset = (YScroll - (UpperBorderStart & 0x07) + 8) & 0x07;
+            return UpperBorderStart + offset;
+        }
+    }
+
     /// <summary>
     /// Maps a raster line to the display cell consumed by the simplified
     /// whole-line renderer. VICE C64SC uses bad-line timing plus
@@ -765,13 +778,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         row = 0;
         charRow = 0;
 
-        int visibleLine = rasterLine - UpperBorderStart;
-        if (visibleLine < 0 || rasterLine >= LowerBorderStart)
+        if (rasterLine < UpperBorderStart || rasterLine >= LowerBorderStart)
         {
             return false;
         }
 
-        int screenLine = visibleLine + YScroll;
+        int screenLine = rasterLine - FirstVisibleBadLine;
         int rowCount = Math.Max((LowerBorderStart - UpperBorderStart) / 8, 1);
         if (screenLine < 0 || screenLine >= rowCount * 8)
         {
@@ -879,6 +891,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             {
                 _rowCounter = 0;
                 _idleState = false;
+                CaptureRenderMatrixRowForCurrentLine();
             }
         }
 
@@ -1023,6 +1036,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _refreshCounter = 0;
         Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
         Array.Clear(_colorBuffer, 0, _colorBuffer.Length);
+        Array.Clear(_videoBufferDisplayValid, 0, _videoBufferDisplayValid.Length);
+        Array.Clear(_renderMatrixBuffer, 0, _renderMatrixBuffer.Length);
+        Array.Clear(_renderColorBuffer, 0, _renderColorBuffer.Length);
+        Array.Clear(_renderMatrixRowValid, 0, _renderMatrixRowValid.Length);
         _videoCounter = 0;
         _vcBase = 0;
         _rowCounter = 0;
@@ -1136,6 +1153,27 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     {
         if (CurrentRasterLine == LowerBorderStart)
             _verticalBorderNextActive = true;
+    }
+
+    private void CaptureRenderMatrixRowForCurrentLine()
+    {
+        if (!TryMapRasterLineToDisplayCell(CurrentRasterLine, out var row, out var charRow) ||
+            charRow != 0 ||
+            (uint)row >= (uint)_renderMatrixRowValid.Length)
+        {
+            return;
+        }
+
+        int columns = Columns == ColumnMode.Wide40 ? 40 : 38;
+        int rowOffset = row * 40;
+        for (var col = 0; col < columns; col++)
+        {
+            int screenIndex = (row * columns) + col;
+            _renderMatrixBuffer[rowOffset + col] = ReadVideoMemory((ushort)(ScreenMemoryBase + screenIndex));
+            _renderColorBuffer[rowOffset + col] = (byte)(ReadVideoMemory((ushort)(0xD800 + screenIndex)) & 0x0F);
+        }
+
+        _renderMatrixRowValid[row] = true;
     }
 
     private int LeftBorderCheckCycle => Csel ? 17 : 18;
@@ -1624,6 +1662,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         var index = NormalizeVideoMatrixSlot(slot);
         _videoBuffer[index] = matrixByte;
         _colorBuffer[index] = (byte)(colorNibble & 0x0F);
+        _videoBufferDisplayValid[index] = true;
     }
 
     public void LatchVideoMatrixPrefetch(int slot, byte cpuRamValue)
@@ -1631,11 +1670,46 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         var index = NormalizeVideoMatrixSlot(slot);
         _videoBuffer[index] = 0xFF;
         _colorBuffer[index] = (byte)(cpuRamValue & 0x0F);
+        _videoBufferDisplayValid[index] = false;
     }
 
     public byte PeekVideoMatrixLatch(int slot) => _videoBuffer[NormalizeVideoMatrixSlot(slot)];
 
     public byte PeekColorMatrixLatch(int slot) => _colorBuffer[NormalizeVideoMatrixSlot(slot)];
+
+    /// <summary>
+    /// Reads a real matrix-fetch vbuf/cbuf latch for the current VIC row.
+    /// Prefetch seed slots are intentionally excluded from this display-facing
+    /// helper; <see cref="PeekVideoMatrixLatch"/> still exposes those raw values.
+    /// </summary>
+    public bool TryReadVideoMatrixLatch(int slot, out byte matrixByte, out byte colorNibble)
+    {
+        var index = NormalizeVideoMatrixSlot(slot);
+        matrixByte = _videoBuffer[index];
+        colorNibble = _colorBuffer[index];
+        return _videoBufferDisplayValid[index];
+    }
+
+    /// <summary>
+    /// Reads the row-stable matrix/color snapshot captured at the bad-line
+    /// fetch boundary for the whole-line renderer.
+    /// </summary>
+    public bool TryReadRenderMatrixCell(int row, int column, out byte screenCode, out byte colorNibble)
+    {
+        screenCode = 0;
+        colorNibble = 0;
+        if ((uint)row >= (uint)_renderMatrixRowValid.Length ||
+            (uint)column >= 40 ||
+            !_renderMatrixRowValid[row])
+        {
+            return false;
+        }
+
+        var index = (row * 40) + column;
+        screenCode = _renderMatrixBuffer[index];
+        colorNibble = _renderColorBuffer[index];
+        return true;
+    }
 
     /// <inheritdoc />
     public byte Peek(ushort offset)

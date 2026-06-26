@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.VicIi;
+using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
@@ -15,6 +17,8 @@ using Xunit;
 /// </summary>
 public sealed class VicDisplayGeometryTests
 {
+    private const ushort ScreenControl1 = 0xD011;
+
     /// <summary>
     /// FR-VIC-002 / TR-VIC-EDGE-004.
     /// Use case: after the C64 boots to the steady READY screen the rendered PAL
@@ -57,6 +61,57 @@ public sealed class VicDisplayGeometryTests
         Assert.NotEqual(topBorder, screen);
     }
 
+    /// <summary>
+    /// FR-VIC-002 / TR-VIC-EDGE-004 / BUG-RENDER-YOFFSET-001.
+    /// Use case: the normal C64 display mode ($D011=$1B: DEN/RSEL/YSCROLL=3)
+    ///   opens the 25-row display on raster line 51, which is also the first
+    ///   matching badline for YSCROLL=3.
+    /// Acceptance: the first three display lines map to character rows 0, 1, and
+    ///   2, not rows 3, 4, and 5. This pins the y-offset bug seen in the supplied
+    ///   ViceSharp capture.
+    /// </summary>
+    [Fact]
+    public void DisplayCellMapper_NormalC64Scroll_StartsAtFirstCharacterRow()
+    {
+        var vic = BuildVic();
+        vic.Write(ScreenControl1, 0x1B);
+
+        Assert.True(vic.TryMapRasterLineToDisplayCell(vic.UpperBorderStart, out var firstRow, out var firstCharRow));
+        Assert.Equal(0, firstRow);
+        Assert.Equal(0, firstCharRow);
+
+        Assert.True(vic.TryMapRasterLineToDisplayCell(vic.UpperBorderStart + 7, out var seventhRow, out var seventhCharRow));
+        Assert.Equal(0, seventhRow);
+        Assert.Equal(7, seventhCharRow);
+
+        Assert.True(vic.TryMapRasterLineToDisplayCell(vic.UpperBorderStart + 8, out var secondRow, out var secondCharRow));
+        Assert.Equal(1, secondRow);
+        Assert.Equal(0, secondCharRow);
+    }
+
+    /// <summary>
+    /// FR-VIC-002 / TR-VIC-EDGE-004 / BUG-RENDER-YOFFSET-001.
+    /// Use case: when YSCROLL does not match the line where the vertical border
+    ///   opens, VICE waits for the first badline at or after the open line before
+    ///   row 0 display data is available.
+    /// Acceptance: with YSCROLL=0, raster 51 is not mapped to row 0; raster 56 is
+    ///   the first mapped row-0/char-row-0 line.
+    /// </summary>
+    [Fact]
+    public void DisplayCellMapper_WaitsForFirstVisibleBadlineForFineScroll()
+    {
+        var vic = BuildVic();
+        vic.Write(ScreenControl1, 0x18);
+
+        Assert.False(vic.TryMapRasterLineToDisplayCell(vic.UpperBorderStart, out _, out _));
+
+        var firstBadline = vic.UpperBorderStart + 5;
+        Assert.Equal(0, firstBadline & 0x07);
+        Assert.True(vic.TryMapRasterLineToDisplayCell(firstBadline, out var row, out var charRow));
+        Assert.Equal(0, row);
+        Assert.Equal(0, charRow);
+    }
+
     private static bool ContainsReady(IMachine machine)
     {
         var screen = new byte[1000];
@@ -79,4 +134,6 @@ public sealed class VicDisplayGeometryTests
 
         return counts.OrderByDescending(kv => kv.Value).First().Key;
     }
+
+    private static Mos6569 BuildVic() => new(new BasicBus(), new InterruptLine(InterruptType.Irq));
 }

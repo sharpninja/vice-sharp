@@ -14,6 +14,20 @@ using Xunit;
 /// </summary>
 public sealed class FfmpegVideoRecorderTests
 {
+    /// <summary>
+    /// FR-MED-004 / TR-MEDIA-VIDEO-FFMPEG-001 / TEST-MEDIA-VIDEO-001.
+    /// Use case: a muxed recording is evidence of emulator timing. Its writer queues must
+    ///   apply lossless back-pressure instead of silently dropping frames or audio batches,
+    ///   because drops compress the captured timeline and make video/music appear too fast.
+    /// Acceptance: the ffmpeg recorder configures both streams with drop-on-full disabled.
+    /// </summary>
+    [Fact]
+    public void RecordingWriters_UseLosslessBackPressurePolicy()
+    {
+        Assert.False(FfmpegVideoRecorder.VideoWriterDropsWhenFull);
+        Assert.False(FfmpegVideoRecorder.AudioWriterDropsWhenFull);
+    }
+
     [Fact]
     public void Record_Mp4_ProducesFileWithVideoAndAudioStreams()
     {

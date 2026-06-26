@@ -144,7 +144,7 @@ public sealed class EmulatorRuntimeSession
     /// limiter settings. The active gate lives on the global emulation pump; this mirrors
     /// the choice so GetSettings round-trips it.
     /// </summary>
-    public string PacingStrategy { get; set; } = "semaphore";
+    public string PacingStrategy { get; set; } = "vice";
 
     public DisplaySettingsDto DisplaySettings { get; set; } = new();
 

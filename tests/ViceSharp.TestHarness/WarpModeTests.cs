@@ -1,5 +1,6 @@
 namespace ViceSharp.TestHarness;
 
+using ViceSharp.Abstractions;
 using ViceSharp.Core;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
@@ -157,6 +158,50 @@ public sealed class WarpModeTests
         }
     }
 
+    /// <summary>
+    /// FR: FR-PACESEL-001 / BUG-THROTTLE-001, TR: TR-CYCLE-PACE-001.
+    /// Use case: VICE pacing uses the live sound device as the primary timing
+    ///   source when a SID backend is active, matching VICE sound.c back-pressure
+    ///   semantics instead of falling through to vsync.
+    /// Acceptance: with a live audio timing source that still has queue room,
+    ///   ViceEmulationGate.Tick advances one chunk through the Sound regulator.
+    /// </summary>
+    [Fact]
+    public void ViceGate_Tick_WithAudioTimingSource_UsesSoundRegulator()
+    {
+        var audio = new TestAudioChip { IsTimingSource = true, QueuedSamples = 0 };
+        var machine = new AudioTimingTestMachine(audio);
+        var session = new EmulatorRuntimeSession(
+            "audio-session",
+            MinimalHostArchitectureDescriptor.Instance,
+            machine)
+        {
+            RunState = EmulatorRunState.Running,
+            LimiterEnabled = true
+        };
+        var registry = new EmulatorRuntimeRegistry();
+        registry.Add(session);
+
+        using var gate = new ViceEmulationGate();
+        gate.Start();
+
+        var advanceCalls = 0;
+        long requestedCycles = 0;
+        var ran = gate.Tick(registry, (target, cycles) =>
+        {
+            advanceCalls++;
+            requestedCycles = cycles;
+            target.Machine.Clock.Step(cycles);
+            return cycles;
+        });
+        gate.Stop();
+
+        Assert.True(ran);
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
+        Assert.Equal(1, advanceCalls);
+        Assert.True(requestedCycles > 0);
+    }
+
     private static EmulatorRuntimeSession CreateMinimalSession()
     {
         var factory = new DefaultEmulatorRuntimeFactory(
@@ -183,5 +228,76 @@ public sealed class WarpModeTests
             TestContext.Current.CancellationToken);
 
         return (registry, created.SessionId);
+    }
+
+    private sealed class AudioTimingTestMachine(IAudioChip audioChip) : IMachine
+    {
+        private readonly TestDeviceRegistry _devices = new(audioChip);
+
+        public IBus Bus { get; } = new BasicBus();
+
+        public IClock Clock { get; } = new SystemClock(1_000_000);
+
+        public IDeviceRegistry Devices => _devices;
+
+        public IArchitectureDescriptor Architecture => MinimalHostArchitectureDescriptor.Instance;
+
+        public void RunFrame() => Clock.Step(20_000);
+
+        public void StepInstruction() => Clock.Step();
+
+        public MachineState GetState() => new() { Cycle = Clock.TotalCycles };
+
+        public void Reset() => Clock.Reset();
+    }
+
+    private sealed class TestDeviceRegistry(IAudioChip audioChip) : IDeviceRegistry
+    {
+        private readonly IDevice[] _devices = [audioChip];
+
+        public IReadOnlyList<IDevice> All => _devices;
+
+        public int Count => _devices.Length;
+
+        public IDevice? GetById(DeviceId id) => _devices.FirstOrDefault(device => device.Id == id);
+
+        public IReadOnlyList<T> GetAll<T>()
+            where T : IDevice
+            => _devices.OfType<T>().ToArray();
+
+        public IDevice? GetByRole(DeviceRole role) => role == DeviceRole.AudioChip ? audioChip : null;
+    }
+
+    private sealed class TestAudioChip : IAudioChip
+    {
+        public DeviceId Id => new(0xA001);
+
+        public string Name => "Test Audio";
+
+        public byte MasterVolume { get; set; }
+
+        public int ChannelCount => 1;
+
+        public int QueuedSamples { get; set; }
+
+        public bool IsTimingSource { get; set; }
+
+        public int QueuedSampleCount => QueuedSamples;
+
+        public bool IsAudioTimingSource => IsTimingSource;
+
+        public uint ClockDivisor => 1;
+
+        public ClockPhase Phase => ClockPhase.Phi2;
+
+        public float GenerateSample() => 0;
+
+        public void Tick()
+        {
+        }
+
+        public void Reset()
+        {
+        }
     }
 }

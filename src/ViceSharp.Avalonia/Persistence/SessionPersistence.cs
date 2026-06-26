@@ -111,7 +111,7 @@ public sealed class SessionPersistence
             ReadString(map, KeyResourceMode, "Auto detect"),
             ReadInt(map, KeyDockSide, 0))
         {
-            PacingStrategy = ReadString(map, KeyPacingStrategy, "Semaphore"),
+            PacingStrategy = ReadString(map, KeyPacingStrategy, "VICE"),
             MasterVolumePercent = ReadDouble(map, KeyMasterVolume, 100),
             Muted = ReadBool(map, KeyMuted),
         };

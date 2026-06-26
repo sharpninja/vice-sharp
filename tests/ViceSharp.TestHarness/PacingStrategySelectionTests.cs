@@ -31,26 +31,29 @@ public sealed class PacingStrategySelectionTests
 
     /// <summary>
     /// FR-PACESEL-001 / TR-PACESEL-STRAT-001.
-    /// Use case: an unrecognized id must not crash; it falls back to the default gate.
-    /// Acceptance: CreateGate("bogus").Name == "Semaphore".
+    /// Use case: an unrecognized id must not crash; it falls back to the VICE-style
+    ///   default gate so a missing/persisted-bad setting cannot make the emulator
+    ///   outrun the audio/video timing observed in the supplied captures.
+    /// Acceptance: CreateGate("bogus").Name == "VICE".
     /// </summary>
     [Fact]
-    public void CreateGate_Unknown_DefaultsToSemaphore()
-        => Assert.Equal("Semaphore", EmulationGateStrategies.CreateGate("bogus").Name);
+    public void CreateGate_Unknown_DefaultsToVice()
+        => Assert.Equal("VICE", EmulationGateStrategies.CreateGate("bogus").Name);
 
     /// <summary>
     /// FR-PACESEL-001 / TR-PACESEL-STRAT-001.
-    /// Use case: a null id (no stored setting) falls back to the default gate.
-    /// Acceptance: CreateGate(null).Name == "Semaphore".
+    /// Use case: a null id (no stored setting) falls back to the VICE-style
+    ///   default gate.
+    /// Acceptance: CreateGate(null).Name == "VICE".
     /// </summary>
     [Fact]
-    public void CreateGate_Null_DefaultsToSemaphore()
-        => Assert.Equal("Semaphore", EmulationGateStrategies.CreateGate(null).Name);
+    public void CreateGate_Null_DefaultsToVice()
+        => Assert.Equal("VICE", EmulationGateStrategies.CreateGate(null).Name);
 
     /// <summary>
     /// FR-PACESEL-001 / TR-PACESEL-STRAT-001.
     /// Use case: display names and ids from any source must canonicalize to a stored id,
-    ///   with unknown/null defaulting to "semaphore".
+    ///   with unknown/null defaulting to "vice".
     /// Acceptance: Normalize maps each input to the expected stored id.
     /// </summary>
     [Theory]
@@ -58,21 +61,23 @@ public sealed class PacingStrategySelectionTests
     [InlineData("vice", "vice")]
     [InlineData("Semaphore", "semaphore")]
     [InlineData("semaphore", "semaphore")]
-    [InlineData("bogus", "semaphore")]
-    [InlineData(null, "semaphore")]
+    [InlineData("bogus", "vice")]
+    [InlineData(null, "vice")]
     public void Normalize_CanonicalizesToStoredId(string? input, string expected)
         => Assert.Equal(expected, EmulationGateStrategies.Normalize(input));
 
     /// <summary>
     /// FR-PACESEL-001 / TR-PACESEL-STRAT-001.
     /// Use case: a stored id is rendered as the gate's display name for the UI/status.
-    /// Acceptance: DisplayName maps "vice" to "VICE" and everything else to "Semaphore".
+    /// Acceptance: DisplayName maps "vice" and unknown/null to "VICE"; explicit
+    ///   "semaphore" maps to "Semaphore".
     /// </summary>
     [Theory]
     [InlineData("vice", "VICE")]
     [InlineData("semaphore", "Semaphore")]
-    [InlineData("bogus", "Semaphore")]
-    public void DisplayName_MapsIdToGateName(string id, string expected)
+    [InlineData("bogus", "VICE")]
+    [InlineData(null, "VICE")]
+    public void DisplayName_MapsIdToGateName(string? id, string expected)
         => Assert.Equal(expected, EmulationGateStrategies.DisplayName(id));
 
     /// <summary>
@@ -126,17 +131,18 @@ public sealed class PacingStrategySelectionTests
 
     /// <summary>
     /// FR-PACESEL-001 / TR-PACESEL-STRAT-001.
-    /// Use case: an unknown strategy name must not crash the pump; it resolves to default.
-    /// Acceptance: SetStrategy("bogus") leaves GateName == "Semaphore".
+    /// Use case: an unknown strategy name must not crash the pump; it resolves to
+    ///   the VICE-style default.
+    /// Acceptance: SetStrategy("bogus") leaves GateName == "VICE".
     /// </summary>
     [Fact]
-    public void SetStrategy_UnknownName_DefaultsToSemaphore()
+    public void SetStrategy_UnknownName_DefaultsToVice()
     {
         var registry = new EmulatorRuntimeRegistry();
-        using var pump = new EmulationPumpService(registry, EmulationGateStrategies.CreateGate("vice"));
+        using var pump = new EmulationPumpService(registry, EmulationGateStrategies.CreateGate("semaphore"));
 
         pump.SetStrategy("bogus");
 
-        Assert.Equal("Semaphore", pump.GateName);
+        Assert.Equal("VICE", pump.GateName);
     }
 }

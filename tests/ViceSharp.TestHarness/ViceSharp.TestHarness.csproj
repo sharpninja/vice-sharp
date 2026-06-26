@@ -43,6 +43,10 @@
     <PackageReference Include="Avalonia.Headless.XUnit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Fixtures\D64\*.d64" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <Target Name="BuildViceNative"
           BeforeTargets="Build"
           Condition="'$(DesignTimeBuild)' != 'true' and Exists('$(ViceNativeProject)')">

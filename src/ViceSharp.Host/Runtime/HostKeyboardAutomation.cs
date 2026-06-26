@@ -9,8 +9,8 @@ public sealed class HostKeyboardAutomation
     // C64 zero-page "cursor blink enable" flag ($CC): 0 while the screen editor is
     // idle in the BASIC input loop flashing the cursor (i.e. ready for a keystroke),
     // and non-zero during boot, LOAD, PRINT, and program execution when the cursor is
-    // suppressed. Autostart gates RUN on this so keys are only injected once the
-    // prompt is truly ready (READY shown AND the cursor blinking).
+    // suppressed. Autostart gates its LOAD/RUN keystrokes on this so keys are only
+    // injected once the prompt is truly ready (READY shown AND the cursor blinking).
     private const int CursorBlinkEnableFlag = 0x00CC;
     private const int MaxReadyWaitFrames = 600;
     private const int InitialReadyDelayFrames = 12;

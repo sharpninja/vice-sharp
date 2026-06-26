@@ -141,9 +141,9 @@ public sealed class ShellViewModelTests
         var drive8 = panel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
         var tape = panel.Slots.Single(slot => slot.Slot == MediaSlot.Tape);
 
-        Assert.False(drive8.TrueDrive);
-        shell.ToggleTrueDrive(MediaSlot.Drive8);
         Assert.True(drive8.TrueDrive);
+        shell.ToggleTrueDrive(MediaSlot.Drive8);
+        Assert.False(drive8.TrueDrive);
 
         shell.ToggleTrueDrive(MediaSlot.Tape);
         Assert.False(tape.TrueDrive);

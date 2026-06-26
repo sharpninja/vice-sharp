@@ -184,7 +184,7 @@ public sealed class AttachPanelViewModelTests
     /// FR-PACESEL-001 / TR-PACESEL-STRAT-001 / TEST-PACESEL-001.
     /// Use case: The pacing strategy applies live (the pump swaps its gate), so changing it
     /// must mark a pending settings change but NOT require a session restart.
-    /// Acceptance: Setting SelectedPacingStrategy to "VICE" flags HasPendingSettingsChanges
+    /// Acceptance: Setting SelectedPacingStrategy to "Semaphore" flags HasPendingSettingsChanges
     /// true and leaves RequiresRestart false.
     /// </summary>
     [Fact]
@@ -192,7 +192,7 @@ public sealed class AttachPanelViewModelTests
     {
         var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
 
-        viewModel.SelectedPacingStrategy = "VICE";
+        viewModel.SelectedPacingStrategy = "Semaphore";
 
         Assert.True(viewModel.HasPendingSettingsChanges);
         Assert.False(viewModel.RequiresRestart);
@@ -782,11 +782,11 @@ public sealed class AttachPanelViewModelTests
     /// FR: FR-UIPERIPHERAL-001, TR: TR-UIAXAML-VIEWS-001, TEST-UIPERIPHERAL-001.
     /// Use case: A single reusable card template renders every peripheral; its
     /// drive-only affordances (IEC activity, True Drive toggle) are gated on
-    /// SupportsTrueDrive so the same template adapts per slot kind, and True
-    /// Drive is a settable binding surface that defaults off.
+    /// SupportsTrueDrive so the same template adapts per slot kind, and Drive 8
+    /// defaults to the VICE-faithful True Drive path.
     /// Acceptance: Drive 8 and Drive 9 report SupportsTrueDrive true while Tape
-    /// and Cartridge report false; TrueDrive defaults false and toggling it
-    /// raises PropertyChanged so the card checkbox stays in sync.
+    /// and Cartridge report false; Drive 8 TrueDrive defaults true, Drive 9 defaults
+    /// false, and toggling it raises PropertyChanged so the card checkbox stays in sync.
     /// </summary>
     [Fact]
     public void PeripheralCard_BindingSurface_TrueDrivePerSlotKind()
@@ -802,10 +802,11 @@ public sealed class AttachPanelViewModelTests
         Assert.False(tape.SupportsTrueDrive);
         Assert.False(cartridge.SupportsTrueDrive);
 
-        Assert.False(drive8.TrueDrive);
-        var changes = TrackPropertyChanges(drive8);
-        drive8.TrueDrive = true;
         Assert.True(drive8.TrueDrive);
+        Assert.False(drive9.TrueDrive);
+        var changes = TrackPropertyChanges(drive8);
+        drive8.TrueDrive = false;
+        Assert.False(drive8.TrueDrive);
         Assert.Contains(nameof(drive8.TrueDrive), changes);
     }
 
@@ -839,6 +840,55 @@ public sealed class AttachPanelViewModelTests
         await viewModel.AttachFromPickerAsync(drive8, TestContext.Current.CancellationToken);
         Assert.True(pickerInvoked);
         Assert.True(drive8.HasValidationError);
+    }
+
+    /// <summary>
+    /// FR: FR-DRVTRUE-001 / FR-IECLOAD-001 / BUG-THROTTLE-001, TR: TR-MVVM-001.
+    /// Use case: attaching a D64 to the default Drive 8 slot must rebuild the
+    ///   host as a true-drive rig with that disk inserted, matching the VICE
+    ///   reference path instead of staying on the simulated drive.
+    /// Acceptance: AttachAsync sends the media payload, marks the slot attached,
+    ///   and calls SetTrueDriveAsync(true, 8, attachedPath).
+    /// </summary>
+    [Fact]
+    public async Task AttachAsync_Drive8DefaultTrueDrive_RebuildsSessionWithAttachedDisk()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        var filePath = Path.Combine(Path.GetTempPath(), $"vicesharp-attach-{Guid.NewGuid():N}.d64");
+        await File.WriteAllBytesAsync(filePath, [0x56, 0x49, 0x43, 0x45], TestContext.Current.CancellationToken);
+        try
+        {
+            host.AttachMediaAsync(
+                    MediaSlot.Drive8,
+                    filePath,
+                    Arg.Any<bool>(),
+                    Arg.Any<byte[]>(),
+                    Path.GetFileName(filePath),
+                    Arg.Any<CancellationToken>())
+                .Returns(new ValueTask<AttachMediaResponse>(new AttachMediaResponse(
+                    RpcStatus.Ok(),
+                    new MediaAttachmentDto(
+                        MediaSlot.Drive8,
+                        filePath,
+                        Path.GetFileName(filePath),
+                        IsAttached: true,
+                        IsReadOnly: false,
+                        AppliedToRuntime: true))));
+            host.SetTrueDriveAsync(true, 8, filePath, Arg.Any<CancellationToken>())
+                .Returns(ValueTask.CompletedTask);
+            var viewModel = new AttachPanelViewModel(host);
+            var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+
+            await viewModel.AttachAsync(drive8, filePath, TestContext.Current.CancellationToken);
+
+            Assert.True(drive8.TrueDrive);
+            Assert.True(drive8.IsAttached);
+            await host.Received(1).SetTrueDriveAsync(true, 8, filePath, Arg.Any<CancellationToken>());
+        }
+        finally
+        {
+            try { File.Delete(filePath); } catch { /* best effort */ }
+        }
     }
 
     /// <summary>
@@ -955,15 +1005,16 @@ public sealed class AttachPanelViewModelTests
         var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
         var drive9 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive9);
 
-        drive8.TrueDrive = true;
-        await host.Received(1).SetTrueDriveAsync(true, 8, Arg.Any<string?>(), Arg.Any<CancellationToken>());
+        Assert.True(drive8.TrueDrive);
+        drive8.TrueDrive = false;
+        await host.Received(1).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
 
         drive9.TrueDrive = true;
         Assert.False(drive8.TrueDrive); // single true-drive
         await host.Received(1).SetTrueDriveAsync(true, 9, Arg.Any<string?>(), Arg.Any<CancellationToken>());
 
         drive9.TrueDrive = false;
-        await host.Received(1).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+        await host.Received(2).SetTrueDriveAsync(false, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
     }
 
     /// <summary>
@@ -1014,6 +1065,81 @@ public sealed class AttachPanelViewModelTests
         Assert.Contains(viewModel.SelectedKeyboardMap, viewModel.KeyboardMaps);
     }
 
+    /// <summary>
+    /// FR: FR-DRVTRUE-001 / FR-IECLOAD-001, TR: TR-MVVM-001, TEST-DRVTRUE-001.
+    /// Use case: Drive 8 now defaults to the VICE-faithful True Drive path, but a
+    /// persisted session that explicitly saved TrueDrive=false must restore that
+    /// off state instead of silently re-enabling the rig.
+    /// Acceptance: ApplyPersistedTransientAsync clears Drive 8 TrueDrive and asks
+    /// the host to rebuild with true-drive disabled.
+    /// </summary>
+    [Fact]
+    public async Task RestorePersistedTransient_Drive8False_DisablesDefaultTrueDrive()
+    {
+        var filePath = Path.Combine(Path.GetTempPath(), $"vicesharp-{Guid.NewGuid():N}.d64");
+        await File.WriteAllBytesAsync(filePath, [0x56, 0x49, 0x43, 0x45], TestContext.Current.CancellationToken);
+        try
+        {
+            var host = CreateTransientRestoreHost(filePath);
+            var viewModel = new AttachPanelViewModel(host);
+            var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+            Assert.True(drive8.TrueDrive);
+
+            await viewModel.ApplyPersistedTransientAsync(
+                new PersistedTransient(
+                    [new PersistedAttachment(nameof(MediaSlot.Drive8), filePath, IsReadOnly: false, TrueDrive: false)],
+                    KeyboardMapId: null,
+                    KeyboardMapSourcePath: null),
+                TestContext.Current.CancellationToken);
+
+            Assert.False(drive8.TrueDrive);
+            await host.Received(1).SetTrueDriveAsync(false, 8, null, Arg.Any<CancellationToken>());
+            await host.DidNotReceive().SetTrueDriveAsync(true, Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
+    /// <summary>
+    /// FR: FR-DRVTRUE-001 / FR-IECLOAD-001, TR: TR-MVVM-001, TEST-DRVTRUE-001.
+    /// Use case: A saved VICE-like Drive 8 true-drive session must restore as a
+    /// true-drive rig with the D64 already inserted, so LOAD goes through the
+    /// emulated 1541 instead of an empty rebuilt session.
+    /// Acceptance: ApplyPersistedTransientAsync calls SetTrueDriveAsync(true, 8,
+    /// attachedPath) even when Drive 8 already defaults to TrueDrive=true.
+    /// </summary>
+    [Fact]
+    public async Task RestorePersistedTransient_Drive8True_RebuildsWithAttachedDiskPath()
+    {
+        var filePath = Path.Combine(Path.GetTempPath(), $"vicesharp-{Guid.NewGuid():N}.d64");
+        await File.WriteAllBytesAsync(filePath, [0x56, 0x49, 0x43, 0x45], TestContext.Current.CancellationToken);
+        try
+        {
+            var host = CreateTransientRestoreHost(filePath);
+            var viewModel = new AttachPanelViewModel(host);
+            var drive8 = viewModel.Slots.Single(slot => slot.Slot == MediaSlot.Drive8);
+            Assert.True(drive8.TrueDrive);
+
+            await viewModel.ApplyPersistedTransientAsync(
+                new PersistedTransient(
+                    [new PersistedAttachment(nameof(MediaSlot.Drive8), filePath, IsReadOnly: false, TrueDrive: true)],
+                    KeyboardMapId: null,
+                    KeyboardMapSourcePath: null),
+                TestContext.Current.CancellationToken);
+
+            Assert.True(drive8.TrueDrive);
+            Assert.True(drive8.IsAttached);
+            Assert.Equal(filePath, drive8.FilePath);
+            await host.Received(1).SetTrueDriveAsync(true, 8, filePath, Arg.Any<CancellationToken>());
+        }
+        finally
+        {
+            File.Delete(filePath);
+        }
+    }
+
     private static KeyboardMapDto[] BuildKeyboardMaps() =>
     [
         new KeyboardMapDto("c64:gtk3_pos", "GTK3 pos", "c64", "builtin", "", true, true),
@@ -1054,6 +1180,31 @@ public sealed class AttachPanelViewModelTests
                     RpcStatus.Ok(),
                     new KeyboardMapDto(id, template.DisplayName, "c64", "builtin", "", true, true)));
             });
+
+        return host;
+    }
+
+    private static IHostProtocolClient CreateTransientRestoreHost(string filePath)
+    {
+        var host = CreateKeyboardMapHost();
+        var attachment = new MediaAttachmentDto(
+            MediaSlot.Drive8,
+            filePath,
+            Path.GetFileName(filePath),
+            IsAttached: true,
+            IsReadOnly: false,
+            AppliedToRuntime: true);
+
+        host.AttachMediaAsync(
+                MediaSlot.Drive8,
+                filePath,
+                Arg.Any<bool>(),
+                Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<AttachMediaResponse>(new AttachMediaResponse(RpcStatus.Ok(), attachment)));
+        host.ListMediaAsync(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<ListMediaResponse>(new ListMediaResponse(RpcStatus.Ok(), [attachment])));
+        host.SetTrueDriveAsync(Arg.Any<bool>(), Arg.Any<int>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(ValueTask.CompletedTask);
 
         return host;
     }

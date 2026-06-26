@@ -391,7 +391,7 @@ public sealed record SettingsProfileDto(
     bool IsAvailable,
     string Description = "");
 
-public sealed record LimiterSettingsDto(double RatePercent = 100, bool IsEnabled = true, string PacingStrategy = "semaphore");
+public sealed record LimiterSettingsDto(double RatePercent = 100, bool IsEnabled = true, string PacingStrategy = "vice");
 
 public sealed record DisplaySettingsDto(
     string Renderer = "host",

@@ -14,12 +14,13 @@ public sealed class AttachSlotViewModel : ObservableObject
     private bool _trueDrive;
     private bool _ledOn;
 
-    public AttachSlotViewModel(MediaSlot slot, string title, string mediaKind, string[] filePatterns)
+    public AttachSlotViewModel(MediaSlot slot, string title, string mediaKind, string[] filePatterns, bool trueDrive = false)
     {
         Slot = slot;
         Title = title;
         MediaKind = mediaKind;
         FilePatterns = filePatterns;
+        _trueDrive = trueDrive && SupportsTrueDrive;
     }
 
     public MediaSlot Slot { get; }
@@ -71,8 +72,8 @@ public sealed class AttachSlotViewModel : ObservableObject
 
     /// <summary>
     /// When true, this drive runs as a cycle-accurate emulated 1541 (6502 + VIA
-    /// + DOS ROM over the IEC bus); when false (default), a lightweight
-    /// simulated drive serves sectors directly. Mirrors VICE's per-unit
+    /// + DOS ROM over the IEC bus); when false, a lightweight simulated drive
+    /// serves sectors directly. Mirrors VICE's per-unit
     /// DriveTrueEmulation / the Fidelity TrueDevice vs Buffered selector.
     /// </summary>
     public bool TrueDrive

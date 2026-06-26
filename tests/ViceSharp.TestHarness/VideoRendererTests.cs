@@ -332,11 +332,45 @@ public sealed class VideoRendererTests
 
         renderer.RenderFullFrame();
 
-        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int y = VideoRenderer.RasterLineToFrameY(FirstVisibleBadLine(vic));
         int x = vic.LeftBorderPixel;
         Assert.Equal(ToBgra(0x03), ReadPixel(renderer.FrameBuffer, x - 1, y));
         Assert.Equal(ToBgra(0x04), ReadPixel(renderer.FrameBuffer, x, y));
         Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, x + 1, y));
+    }
+
+    /// <summary>
+    /// FR: FR-VIC-002, FR-VIC-008, TR: TR-CYCLE-001, TEST: TEST-VIC-001.
+    /// Use case: A bad-line matrix fetch latches the screen code and Color
+    /// RAM nibble before the scanline is rendered. Raster demos may rewrite
+    /// the backing memory or $D018 later; the rendered character cell must
+    /// still use the latched vbuf/cbuf values for that row.
+    /// Acceptance: After slot 0 is latched as character 1 / colour 4 and
+    /// screen RAM is overwritten with character 2 / colour 7 before render,
+    /// the foreground pixel is still drawn in colour 4 from character 1.
+    /// </summary>
+    [Fact]
+    public void RenderFullFrame_StandardTextUsesLatchedMatrixCellInsteadOfLateMemoryRead()
+    {
+        var (bus, ram, irq) = CreateTestMachine();
+        var vic = new Mos6569(bus, irq);
+        var renderer = new VideoRenderer(vic, bus);
+
+        ConfigureStandardScreen(vic);
+
+        int x = vic.LeftBorderPixel;
+        int rasterLine = FirstVisibleBadLine(vic);
+        int y = VideoRenderer.RasterLineToFrameY(rasterLine);
+
+        vic.LatchVideoMatrixFetch(slot: 0, matrixByte: 0x01, colorNibble: 0x04);
+        ram.Write(vic.ScreenMemoryBase, 0x02);
+        ram.Write(0xD800, 0x07);
+        ram.Write((ushort)(vic.CharacterBase + 0x01 * 8), 0x80);
+        ram.Write((ushort)(vic.CharacterBase + 0x02 * 8), 0x00);
+
+        renderer.RenderFullFrame();
+
+        Assert.Equal(ToBgra(0x04), ReadPixel(renderer.FrameBuffer, x, y));
     }
 
     /// <summary>
@@ -363,7 +397,7 @@ public sealed class VideoRendererTests
 
         renderer.RenderFullFrame();
 
-        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int y = VideoRenderer.RasterLineToFrameY(FirstVisibleBadLine(vic));
         int x = vic.LeftBorderPixel;
         Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, x, y));
         Assert.Equal(ToBgra(0x02), ReadPixel(renderer.FrameBuffer, x + 2, y));
@@ -394,7 +428,7 @@ public sealed class VideoRendererTests
 
         renderer.RenderFullFrame();
 
-        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int y = VideoRenderer.RasterLineToFrameY(FirstVisibleBadLine(vic));
         int x = vic.LeftBorderPixel;
         Assert.Equal(ToBgra(0x04), ReadPixel(renderer.FrameBuffer, x, y));
         Assert.Equal(ToBgra(0x07), ReadPixel(renderer.FrameBuffer, x + 1, y));
@@ -420,7 +454,7 @@ public sealed class VideoRendererTests
 
         renderer.RenderFullFrame();
 
-        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int y = VideoRenderer.RasterLineToFrameY(FirstVisibleBadLine(vic));
         int x = vic.LeftBorderPixel;
         Assert.Equal(ToBgra(0x0A), ReadPixel(renderer.FrameBuffer, x, y));
         Assert.Equal(ToBgra(0x05), ReadPixel(renderer.FrameBuffer, x + 1, y));
@@ -449,7 +483,7 @@ public sealed class VideoRendererTests
 
         renderer.RenderFullFrame();
 
-        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int y = VideoRenderer.RasterLineToFrameY(FirstVisibleBadLine(vic));
         int x = vic.LeftBorderPixel;
         Assert.Equal(ToBgra(0x06), ReadPixel(renderer.FrameBuffer, x, y));
         Assert.Equal(ToBgra(0x0A), ReadPixel(renderer.FrameBuffer, x + 2, y));
@@ -481,7 +515,7 @@ public sealed class VideoRendererTests
 
         renderer.RenderFullFrame();
 
-        int y = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
+        int y = VideoRenderer.RasterLineToFrameY(FirstVisibleBadLine(vic));
         Assert.Equal(ToBgra(0x00), ReadPixel(renderer.FrameBuffer, vic.LeftBorderPixel, y));
     }
 
@@ -935,10 +969,8 @@ public sealed class VideoRendererTests
     {
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = x - vic.LeftBorderPixel;
-        int visLine = rasterLine - vic.UpperBorderStart;
-        int screenLine = visLine + vic.YScroll;
-        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
-        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int screenLine = rasterLine - FirstVisibleBadLine(vic);
+        int screenRow = screenLine / 8;
         int col = screenX / 8;
         int charX = screenX % 8;
         int charRow = screenLine & 7;
@@ -954,16 +986,17 @@ public sealed class VideoRendererTests
     {
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = x - vic.LeftBorderPixel;
-        int visLine = rasterLine - vic.UpperBorderStart;
-        int screenLine = visLine + vic.YScroll;
-        int screenRowCount = Math.Max((vic.LowerBorderStart - vic.UpperBorderStart) / 8, 1);
-        int screenRow = Math.Max((screenLine / 8) % screenRowCount, 0);
+        int screenLine = rasterLine - FirstVisibleBadLine(vic);
+        int screenRow = screenLine / 8;
         int col = screenX / 8;
         int charRow = screenLine & 7;
         int screenIndex = screenRow * columns + col;
 
         ram.Write((ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow), bitmapByte);
     }
+
+    private static int FirstVisibleBadLine(Mos6569 vic)
+        => vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 0x07) + 8) & 0x07);
 
     private static uint ToBgra(int paletteIndex)
     {

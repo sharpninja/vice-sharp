@@ -74,7 +74,7 @@ public sealed class RemoteControlUiInspectionTests
             node => node.TypeName == "Button",
             "the reusable card renders its Attach/Eject buttons");
 
-        slot.TrueDrive.Should().BeFalse();
+        slot.TrueDrive.Should().BeTrue();
 
         var mutation = new RemoteControlPropertyMutationService(
             provider,
@@ -82,10 +82,10 @@ public sealed class RemoteControlUiInspectionTests
             new InlineRemoteControlDispatcher(),
             NullLogger<RemoteControlPropertyMutationService>.Instance);
 
-        var result = await mutation.SetPropertyAsync(toggle!.Id, nameof(CheckBox.IsChecked), "true");
+        var result = await mutation.SetPropertyAsync(toggle!.Id, nameof(CheckBox.IsChecked), "false");
 
         result.Succeeded.Should().BeTrue("IsChecked is allow-listed for mutation");
-        slot.TrueDrive.Should().BeTrue(
+        slot.TrueDrive.Should().BeFalse(
             "driving the True Drive checkbox via RemoteControl must flow through the two-way binding to the view-model");
     }
 }
