@@ -753,11 +753,12 @@ public sealed class GrpcCaptureServiceHost : GrpcContracts.CaptureService.Captur
         foreach (var v in response.VideoFormats)
         {
             var dto = new GrpcContracts.CaptureVideoFormatDto
-            {
-                Id = v.Id,
-                Container = v.Container,
-                RequiresFfmpeg = v.RequiresFfmpeg
-            };
+                {
+                    Id = v.Id,
+                    Container = v.Container,
+                    RequiresFfmpeg = v.RequiresFfmpeg,
+                    SupportsMicrophone = v.SupportsMicrophone
+                };
             dto.VideoCodecs.AddRange(v.VideoCodecs);
             dto.AudioCodecs.AddRange(v.AudioCodecs);
             grpc.VideoFormats.Add(dto);
@@ -790,7 +791,10 @@ public sealed class GrpcCaptureServiceHost : GrpcContracts.CaptureService.Captur
                 (CaptureKind)(int)request.Kind,
                 request.TargetPath,
                 request.Format,
-                request.Options.Count == 0 ? null : new Dictionary<string, string>(request.Options)),
+                request.Options.Count == 0 ? null : new Dictionary<string, string>(request.Options),
+                request.CaptureMicrophone,
+                request.MicrophoneDevice,
+                request.MicrophoneInputFormat),
             context.CancellationToken).ConfigureAwait(false);
         return new GrpcContracts.StartCaptureResponse { Status = HostMap.Map(response.Status), Capture = Map(response.Capture) };
     }

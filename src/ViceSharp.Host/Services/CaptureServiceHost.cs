@@ -60,7 +60,10 @@ public sealed class CaptureServiceHost : ICaptureService
 
         var formats = new List<CaptureVideoFormatDto>(SupportedVideoFormats);
         foreach (var f in FfmpegVideoFormats.All)
-            formats.Add(new CaptureVideoFormatDto(f.Id, f.Container, [f.VideoCodec], [f.AudioCodec], RequiresFfmpeg: true));
+            formats.Add(new CaptureVideoFormatDto(
+                f.Id, f.Container, [f.VideoCodec], [f.AudioCodec],
+                RequiresFfmpeg: true,
+                SupportsMicrophone: true));
         return formats;
     }
 
@@ -119,6 +122,11 @@ public sealed class CaptureServiceHost : ICaptureService
         // FR-MED-002: numbered-BMP sequence (no external tooling). TargetPath is a directory.
         if (format is "" or "bmp" or "bmpseq")
         {
+            if (WantsMicrophone(request))
+                return new StartCaptureResponse(
+                    RpcStatus.InvalidArgument("Microphone narration is only supported for ffmpeg video formats: mp4, mkv, or avi."),
+                    null);
+
             FrameSequenceCapture sink;
             try
             {
@@ -144,6 +152,7 @@ public sealed class CaptureServiceHost : ICaptureService
             int width, height;
             double frameRate;
             bool includeAudio;
+            var microphoneInput = ResolveMicrophoneInput(request);
             lock (session.SyncRoot)
             {
                 if (session.Machine.Devices.GetByRole(DeviceRole.VideoChip) is not IVideoChip videoChip)
@@ -167,7 +176,7 @@ public sealed class CaptureServiceHost : ICaptureService
                 // so a slow/failed start never stalls other RPCs on the session.
                 recorder = new FfmpegVideoRecorder(
                     ffmpegPath, videoFormat, width, height, frameRate, request.TargetPath, includeAudio,
-                    SidSampleRate, SidChannels);
+                    SidSampleRate, SidChannels, microphoneInput);
                 try
                 {
                     recorder.Start();
@@ -279,6 +288,73 @@ public sealed class CaptureServiceHost : ICaptureService
         }
 
         return FrameSequenceMode.AllFrames;
+    }
+
+    private static bool WantsMicrophone(StartCaptureRequest request)
+        => request.CaptureMicrophone
+           || !string.IsNullOrWhiteSpace(request.MicrophoneDevice)
+           || !string.IsNullOrWhiteSpace(request.MicrophoneInputFormat)
+           || TryGetBooleanOption(request.Options, "capture_microphone")
+           || TryGetBooleanOption(request.Options, "microphone")
+           || TryGetBooleanOption(request.Options, "include_microphone")
+           || HasOption(request.Options, "microphone_device")
+           || HasOption(request.Options, "microphone_input_format");
+
+    private static FfmpegMicrophoneInput? ResolveMicrophoneInput(StartCaptureRequest request)
+    {
+        if (!WantsMicrophone(request))
+            return null;
+
+        var inputFormat = FirstNonEmpty(
+            request.MicrophoneInputFormat,
+            GetOption(request.Options, "microphone_input_format"),
+            GetOption(request.Options, "microphone_format"));
+        var device = FirstNonEmpty(
+            request.MicrophoneDevice,
+            GetOption(request.Options, "microphone_device"),
+            GetOption(request.Options, "microphone"));
+        return FfmpegMicrophoneInput.Create(inputFormat, device);
+    }
+
+    private static bool TryGetBooleanOption(IReadOnlyDictionary<string, string>? options, string key)
+    {
+        var value = GetOption(options, key);
+        if (value is null)
+            return false;
+
+        value = value.Trim();
+        return value.Equals("true", StringComparison.OrdinalIgnoreCase)
+               || value.Equals("1", StringComparison.OrdinalIgnoreCase)
+               || value.Equals("yes", StringComparison.OrdinalIgnoreCase)
+               || value.Equals("on", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool HasOption(IReadOnlyDictionary<string, string>? options, string key)
+        => !string.IsNullOrWhiteSpace(GetOption(options, key));
+
+    private static string? GetOption(IReadOnlyDictionary<string, string>? options, string key)
+    {
+        if (options is null)
+            return null;
+
+        foreach (var kv in options)
+        {
+            if (kv.Key.Equals(key, StringComparison.OrdinalIgnoreCase))
+                return kv.Value;
+        }
+
+        return null;
+    }
+
+    private static string? FirstNonEmpty(params string?[] values)
+    {
+        foreach (var value in values)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+                return value;
+        }
+
+        return null;
     }
 
     private static StartCaptureResponse StartMetadataCapture(

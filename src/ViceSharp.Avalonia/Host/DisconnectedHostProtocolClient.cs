@@ -205,7 +205,15 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
             _disconnectedStatus, Array.Empty<string>(), Array.Empty<string>(), Array.Empty<CaptureVideoFormatDto>()));
     }
 
-    public ValueTask<StartCaptureResponse> StartCaptureAsync(CaptureKind kind, string targetPath, string format = "", IReadOnlyDictionary<string, string>? options = null, CancellationToken cancellationToken = default)
+    public ValueTask<StartCaptureResponse> StartCaptureAsync(
+        CaptureKind kind,
+        string targetPath,
+        string format = "",
+        IReadOnlyDictionary<string, string>? options = null,
+        CancellationToken cancellationToken = default,
+        bool captureMicrophone = false,
+        string microphoneDevice = "",
+        string microphoneInputFormat = "")
     {
         cancellationToken.ThrowIfCancellationRequested();
         return ValueTask.FromResult(new StartCaptureResponse(_disconnectedStatus, null));

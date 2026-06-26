@@ -91,9 +91,14 @@ public sealed class ShellViewModel
         string target,
         string format = "mp4",
         IReadOnlyDictionary<string, string>? options = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        bool captureMicrophone = false,
+        string microphoneDevice = "",
+        string microphoneInputFormat = "")
     {
-        var response = await _host.StartCaptureAsync(CaptureKind.Video, target, format, options, ct).ConfigureAwait(false);
+        var response = await _host.StartCaptureAsync(
+            CaptureKind.Video, target, format, options, ct,
+            captureMicrophone, microphoneDevice, microphoneInputFormat).ConfigureAwait(false);
         if (response.Status.IsSuccess && response.Capture is not null)
             _videoCaptureId = response.Capture.CaptureId;
         return response.Status;

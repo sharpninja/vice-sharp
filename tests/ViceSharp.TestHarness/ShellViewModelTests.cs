@@ -248,6 +248,46 @@ public sealed class ShellViewModelTests
     }
 
     /// <summary>
+    /// FR-MED-004 / FR-UIMENUBAR-001.
+    /// Use case: the narration menu starts the same muxed video capture but asks the
+    /// host control surface to include the microphone.
+    /// Acceptance: StartVideoRecordingAsync forwards captureMicrophone = true.
+    /// </summary>
+    [Fact]
+    public async Task VideoRecording_WithMicrophone_ForwardsNarrationFlag()
+    {
+        var (shell, host, _) = CreateShell();
+        var ct = TestContext.Current.CancellationToken;
+
+        host.StartCaptureAsync(
+                CaptureKind.Video,
+                "out.mp4",
+                "mp4",
+                Arg.Any<IReadOnlyDictionary<string, string>?>(),
+                Arg.Any<CancellationToken>(),
+                captureMicrophone: true,
+                microphoneDevice: "",
+                microphoneInputFormat: "")
+            .Returns(new ValueTask<StartCaptureResponse>(new StartCaptureResponse(
+                RpcStatus.Ok(), new CaptureSessionDto("vid-mic", CaptureKind.Video, "out.mp4", IsActive: true))));
+
+        var status = await shell.StartVideoRecordingAsync(
+            "out.mp4", "mp4", captureMicrophone: true, ct: ct);
+
+        Assert.True(status.IsSuccess);
+        Assert.True(shell.IsRecordingVideo);
+        await host.Received(1).StartCaptureAsync(
+            CaptureKind.Video,
+            "out.mp4",
+            "mp4",
+            Arg.Any<IReadOnlyDictionary<string, string>?>(),
+            Arg.Any<CancellationToken>(),
+            captureMicrophone: true,
+            microphoneDevice: "",
+            microphoneInputFormat: "");
+    }
+
+    /// <summary>
     /// FR: FR-MED-004, FR: FR-UIMENUBAR-001, TR: TR-MVVM-001, TEST-UIMENUBAR-001.
     /// Use case: clicking the toolbar Stop button when no recording is active (for
     /// instance if its visibility briefly lags the shell state) must be harmless.

@@ -474,7 +474,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         for (var i = 0; i < video.Length; i++)
         {
             var v = response.VideoFormats[i];
-            video[i] = new CaptureVideoFormatDto(v.Id, v.Container, v.VideoCodecs.ToArray(), v.AudioCodecs.ToArray(), v.RequiresFfmpeg);
+            video[i] = new CaptureVideoFormatDto(
+                v.Id, v.Container, v.VideoCodecs.ToArray(), v.AudioCodecs.ToArray(),
+                v.RequiresFfmpeg,
+                v.SupportsMicrophone);
         }
 
         return new GetCaptureCapabilitiesResponse(
@@ -489,7 +492,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         string targetPath,
         string format = "",
         IReadOnlyDictionary<string, string>? options = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        bool captureMicrophone = false,
+        string microphoneDevice = "",
+        string microphoneInputFormat = "")
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
         var request = new GrpcContracts.StartCaptureRequest
@@ -497,7 +503,10 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             SessionId = sessionId,
             Kind = (GrpcContracts.CaptureKind)(int)kind,
             TargetPath = targetPath,
-            Format = format
+            Format = format,
+            CaptureMicrophone = captureMicrophone,
+            MicrophoneDevice = microphoneDevice,
+            MicrophoneInputFormat = microphoneInputFormat
         };
         if (options is not null)
             foreach (var pair in options)

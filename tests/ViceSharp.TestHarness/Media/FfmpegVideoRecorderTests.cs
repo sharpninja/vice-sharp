@@ -29,6 +29,60 @@ public sealed class FfmpegVideoRecorderTests
     }
 
     [Fact]
+    public void MicrophoneInput_DshowDevice_AddsAudioPrefix()
+    {
+        var input = FfmpegMicrophoneInput.Create("dshow", "USB Mic");
+
+        Assert.Equal("dshow", input.InputFormat);
+        Assert.Equal("audio=USB Mic", input.Device);
+    }
+
+    [Fact]
+    public void Build_WithEmulatorAudioAndMicrophone_MixesBothAudioInputs()
+    {
+        var args = FfmpegArgumentBuilder.Build(
+            FfmpegVideoFormats.Mp4,
+            width: 64,
+            height: 64,
+            frameRate: 50.0,
+            videoPort: 12000,
+            includeAudio: true,
+            audioPort: 12001,
+            sampleRate: 44100,
+            channels: 1,
+            outputPath: "out.mp4",
+            microphoneInput: new FfmpegMicrophoneInput("wasapi", "default"));
+
+        var joined = string.Join("|", args);
+        Assert.Contains("|-f|wasapi|-thread_queue_size|512|-i|default|", joined);
+        Assert.Contains("|-filter_complex|[1:a][2:a]amix=inputs=2:duration=longest:dropout_transition=0[aout]|", joined);
+        Assert.Contains("|-map|0:v:0|-map|[aout]|", joined);
+    }
+
+    [Fact]
+    public void Build_WithMicrophoneOnly_MapsMicrophoneAudio()
+    {
+        var args = FfmpegArgumentBuilder.Build(
+            FfmpegVideoFormats.Mp4,
+            width: 64,
+            height: 64,
+            frameRate: 50.0,
+            videoPort: 12000,
+            includeAudio: false,
+            audioPort: 0,
+            sampleRate: 44100,
+            channels: 1,
+            outputPath: "out.mp4",
+            microphoneInput: new FfmpegMicrophoneInput("pulse", "default"));
+
+        var joined = string.Join("|", args);
+        Assert.DoesNotContain("-filter_complex", args);
+        Assert.Contains("|-f|pulse|-thread_queue_size|512|-i|default|", joined);
+        Assert.Contains("|-map|0:v:0|-map|1:a:0|", joined);
+        Assert.Contains("|-acodec|aac|", joined);
+    }
+
+    [Fact]
     public void Record_Mp4_ProducesFileWithVideoAndAudioStreams()
     {
         var ffmpeg = FfmpegLocator.Locate();

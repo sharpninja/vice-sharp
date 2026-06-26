@@ -22,6 +22,48 @@ public sealed record FfmpegVideoFormat(
     string? OutputPixelFormat);
 
 /// <summary>
+/// Optional live microphone input to mux into an ffmpeg video capture.
+/// </summary>
+/// <param name="InputFormat">ffmpeg input format such as wasapi, dshow, pulse, alsa, or avfoundation.</param>
+/// <param name="Device">ffmpeg device name. Empty caller input resolves to the platform default.</param>
+public sealed record FfmpegMicrophoneInput(string InputFormat, string Device)
+{
+    public static FfmpegMicrophoneInput Create(string? inputFormat, string? device)
+    {
+        var format = string.IsNullOrWhiteSpace(inputFormat)
+            ? DefaultInputFormat()
+            : inputFormat.Trim();
+        var selectedDevice = string.IsNullOrWhiteSpace(device)
+            ? DefaultDevice(format)
+            : device.Trim();
+
+        if (format.Equals("dshow", StringComparison.OrdinalIgnoreCase)
+            && !selectedDevice.StartsWith("audio=", StringComparison.OrdinalIgnoreCase))
+            selectedDevice = "audio=" + selectedDevice;
+
+        return new FfmpegMicrophoneInput(format, selectedDevice);
+    }
+
+    private static string DefaultInputFormat()
+    {
+        if (OperatingSystem.IsWindows())
+            return "wasapi";
+        if (OperatingSystem.IsMacOS())
+            return "avfoundation";
+        return "pulse";
+    }
+
+    private static string DefaultDevice(string inputFormat)
+    {
+        if (inputFormat.Equals("avfoundation", StringComparison.OrdinalIgnoreCase))
+            return ":default";
+        if (inputFormat.Equals("dshow", StringComparison.OrdinalIgnoreCase))
+            return "audio=default";
+        return "default";
+    }
+}
+
+/// <summary>
 /// The muxed video formats this host can drive through an external ffmpeg
 /// process. Kept small and broadly compatible; extend as needed for parity.
 /// </summary>
@@ -95,7 +137,8 @@ public static class FfmpegArgumentBuilder
         int channels,
         string outputPath,
         int videoBitrate = DefaultVideoBitrate,
-        int audioBitrate = DefaultAudioBitrate)
+        int audioBitrate = DefaultAudioBitrate,
+        FfmpegMicrophoneInput? microphoneInput = null)
     {
         ArgumentNullException.ThrowIfNull(format);
         ArgumentException.ThrowIfNullOrWhiteSpace(outputPath);
@@ -147,6 +190,27 @@ public static class FfmpegArgumentBuilder
             });
         }
 
+        if (microphoneInput is not null)
+        {
+            args.AddRange(new[]
+            {
+                "-f", microphoneInput.InputFormat,
+                "-thread_queue_size", "512",
+                "-i", microphoneInput.Device,
+            });
+        }
+
+        var microphoneIndex = includeAudio ? 2 : 1;
+        var hasAudioOutput = includeAudio || microphoneInput is not null;
+        if (includeAudio && microphoneInput is not null)
+        {
+            args.AddRange(new[]
+            {
+                "-filter_complex",
+                $"[1:a][{microphoneIndex}:a]amix=inputs=2:duration=longest:dropout_transition=0[aout]",
+            });
+        }
+
         // Output: overwrite, chosen container, finish with the shortest stream so
         // a clean Stop (both sockets closed) terminates muxing deterministically.
         args.AddRange(new[]
@@ -154,6 +218,21 @@ public static class FfmpegArgumentBuilder
             "-y",
             "-f", format.Container,
             "-shortest",
+            "-map", "0:v:0",
+        });
+
+        if (includeAudio && microphoneInput is not null)
+        {
+            args.AddRange(new[] { "-map", "[aout]" });
+        }
+        else if (hasAudioOutput)
+        {
+            var audioInputIndex = microphoneInput is null ? 1 : microphoneIndex;
+            args.AddRange(new[] { "-map", $"{audioInputIndex}:a:0" });
+        }
+
+        args.AddRange(new[]
+        {
             "-r", fps,
             "-vcodec", format.VideoCodec,
             "-b:v", videoBitrate.ToString(CultureInfo.InvariantCulture),
@@ -177,7 +256,7 @@ public static class FfmpegArgumentBuilder
             args.Add(format.OutputPixelFormat);
         }
 
-        if (includeAudio)
+        if (hasAudioOutput)
         {
             args.AddRange(new[]
             {

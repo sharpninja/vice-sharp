@@ -675,6 +675,9 @@ message StartCaptureRequest {
   string target_path = 3;
   string format = 4;                // sound/video format or video driver id (e.g. "wav", "ffmpeg", "bmpseq", "zmbv")
   map<string, string> options = 5;  // driver options (e.g. container, video_codec, audio_codec, bitrate)
+  bool capture_microphone = 6;       // mux the host microphone into ffmpeg video captures for narration
+  string microphone_device = 7;      // optional ffmpeg audio input device; default OS microphone when empty
+  string microphone_input_format = 8;// optional ffmpeg input format override (e.g. wasapi, dshow, pulse, avfoundation)
 }
 
 message StopCaptureRequest {
@@ -709,6 +712,7 @@ message CaptureVideoFormatDto {
   repeated string video_codecs = 3;
   repeated string audio_codecs = 4;
   bool requires_ffmpeg = 5;
+  bool supports_microphone = 6;
 }
 
 message GetCaptureCapabilitiesResponse {

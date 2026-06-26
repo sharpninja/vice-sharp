@@ -873,7 +873,10 @@ public sealed record StartCaptureRequest(
     CaptureKind Kind,
     string TargetPath,
     string Format = "",
-    IReadOnlyDictionary<string, string>? Options = null);
+    IReadOnlyDictionary<string, string>? Options = null,
+    bool CaptureMicrophone = false,
+    string MicrophoneDevice = "",
+    string MicrophoneInputFormat = "");
 
 /// <summary>One selectable video-recording driver and the codecs it offers (x64sc parity).</summary>
 public sealed record CaptureVideoFormatDto(
@@ -881,7 +884,8 @@ public sealed record CaptureVideoFormatDto(
     string Container,
     IReadOnlyList<string> VideoCodecs,
     IReadOnlyList<string> AudioCodecs,
-    bool RequiresFfmpeg);
+    bool RequiresFfmpeg,
+    bool SupportsMicrophone = false);
 
 public sealed record GetCaptureCapabilitiesResponse(
     RpcStatus Status,

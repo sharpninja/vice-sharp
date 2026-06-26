@@ -123,6 +123,10 @@ public sealed class GrpcContractTests
         Assert.Contains("rpc WriteMemory", proto);
         Assert.Contains("MonitorReadMemoryRequest", proto);
         Assert.Contains("MonitorMemoryWriteResponse", proto);
+        Assert.Contains("capture_microphone", proto);
+        Assert.Contains("microphone_device", proto);
+        Assert.Contains("microphone_input_format", proto);
+        Assert.Contains("supports_microphone", proto);
     }
 
     /// <summary>

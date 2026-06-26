@@ -140,7 +140,10 @@ public interface IHostProtocolClient
         string targetPath,
         string format = "",
         IReadOnlyDictionary<string, string>? options = null,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default,
+        bool captureMicrophone = false,
+        string microphoneDevice = "",
+        string microphoneInputFormat = "");
 
     /// <summary>Stop an active recording started with <see cref="StartCaptureAsync"/>.</summary>
     ValueTask<StopCaptureResponse> StopCaptureAsync(string captureId, CancellationToken cancellationToken = default);

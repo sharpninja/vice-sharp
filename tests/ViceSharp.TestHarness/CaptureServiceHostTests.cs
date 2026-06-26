@@ -619,6 +619,35 @@ public sealed class CaptureServiceHostTests
     }
 
     /// <summary>
+    /// FR-MED-004 / TR-MEDIA-VIDEO-FFMPEG-001.
+    /// Use case: microphone narration is a muxed ffmpeg feature, not a frame-sequence feature.
+    /// Acceptance: StartCapture(Video, bmpseq, captureMicrophone: true) is rejected early.
+    /// </summary>
+    [Fact]
+    public async Task StartCapture_BmpSequence_WithMicrophone_ReturnsInvalidArgument()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var captureService = new CaptureServiceHost(registry);
+        var dir = Path.Combine(Path.GetTempPath(), $"vice-sharp-mic-bmp-{Guid.NewGuid():N}");
+
+        var response = await captureService.StartCaptureAsync(
+            new StartCaptureRequest(
+                session.SessionId,
+                CaptureKind.Video,
+                dir,
+                "bmpseq",
+                CaptureMicrophone: true),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.InvalidArgument, response.Status.Code);
+        Assert.Contains("Microphone", response.Status.Message);
+        Assert.Null(response.Capture);
+        Assert.False(Directory.Exists(dir));
+    }
+
+    /// <summary>
     /// FR-MED-002 (unique-frames BMP export via capture options).
     /// Use case: a client records a BMP sequence with options { frames: unique }
     /// so runs of identical frames collapse to single BMPs.
@@ -690,7 +719,7 @@ public sealed class CaptureServiceHostTests
 
         Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
         Assert.Contains(response.VideoFormats, f => f.Id == "bmpseq" && !f.RequiresFfmpeg);
-        Assert.Contains(response.VideoFormats, f => f.Id == "mp4" && f.RequiresFfmpeg);
+        Assert.Contains(response.VideoFormats, f => f.Id == "mp4" && f.RequiresFfmpeg && f.SupportsMicrophone);
     }
 
     /// <summary>

@@ -349,9 +349,16 @@ public partial class MainWindow : Window
     }
 
     private async void OnMenuRecordVideoMp4(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => await RecordMuxedVideoAsync(captureMicrophone: false).ConfigureAwait(true);
+
+    private async void OnMenuRecordVideoMp4WithMicrophone(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => await RecordMuxedVideoAsync(captureMicrophone: true).ConfigureAwait(true);
+
+    private async global::System.Threading.Tasks.Task RecordMuxedVideoAsync(bool captureMicrophone)
     {
         // Toggle: stop an active recording, otherwise pick an output file and start
-        // a muxed MP4 (H.264 + AAC) recording with sound, via ffmpeg.
+        // a muxed MP4 (H.264 + AAC) recording with sound, via ffmpeg. The narration
+        // variant asks ffmpeg to add the host microphone as an extra mixed audio input.
         if (_shell.IsRecordingVideo)
         {
             await StopRecordingAsync(_shell.StopVideoRecordingAsync()).ConfigureAwait(true);
@@ -364,7 +371,9 @@ public partial class MainWindow : Window
 
         var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Record video (MP4 + sound)",
+            Title = captureMicrophone
+                ? "Record video (MP4 + sound + microphone)"
+                : "Record video (MP4 + sound)",
             SuggestedFileName = "vicesharp",
             DefaultExtension = "mp4",
             FileTypeChoices =
@@ -385,7 +394,8 @@ public partial class MainWindow : Window
 
         try
         {
-            var status = await _shell.StartVideoRecordingAsync(path, format).ConfigureAwait(true);
+            var status = await _shell.StartVideoRecordingAsync(
+                path, format, captureMicrophone: captureMicrophone).ConfigureAwait(true);
             if (!status.IsSuccess)
                 ApplyStatus(null, status);
         }

@@ -34,6 +34,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     private readonly int _height;
     private readonly double _frameRate;
     private readonly bool _includeAudio;
+    private readonly FfmpegMicrophoneInput? _microphoneInput;
     private readonly int _sampleRate;
     private readonly int _channels;
     private readonly string _outputPath;
@@ -92,7 +93,8 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
         string outputPath,
         bool includeAudio,
         int sampleRate = 44100,
-        int channels = 1)
+        int channels = 1,
+        FfmpegMicrophoneInput? microphoneInput = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(ffmpegPath);
         ArgumentNullException.ThrowIfNull(format);
@@ -108,6 +110,7 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
         _frameRate = frameRate;
         _outputPath = outputPath;
         _includeAudio = includeAudio;
+        _microphoneInput = microphoneInput;
         _sampleRate = sampleRate;
         _channels = channels;
         _expectedFrameBytes = checked(width * height * 4);
@@ -194,7 +197,8 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
             var argv = FfmpegArgumentBuilder.Build(
                 _format, _width, _height, _frameRate,
                 videoPort, _includeAudio, audioPort,
-                _sampleRate, _channels, _outputPath);
+                _sampleRate, _channels, _outputPath,
+                microphoneInput: _microphoneInput);
 
             var psi = new ProcessStartInfo
             {

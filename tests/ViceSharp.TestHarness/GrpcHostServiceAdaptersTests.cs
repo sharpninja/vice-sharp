@@ -521,7 +521,10 @@ public sealed class GrpcHostServiceAdaptersTests
             {
                 SessionId = "s",
                 Kind = GrpcContracts.CaptureKind.Video,
-                TargetPath = "out.mp4"
+                TargetPath = "out.mp4",
+                CaptureMicrophone = true,
+                MicrophoneDevice = "USB Mic",
+                MicrophoneInputFormat = "dshow"
             },
             CreateContext());
 
@@ -532,6 +535,9 @@ public sealed class GrpcHostServiceAdaptersTests
         Assert.True(response.Capture.IsActive);
         Assert.Equal(CaptureKind.Video, fake.LastStartRequest!.Kind);
         Assert.Equal("out.mp4", fake.LastStartRequest.TargetPath);
+        Assert.True(fake.LastStartRequest.CaptureMicrophone);
+        Assert.Equal("USB Mic", fake.LastStartRequest.MicrophoneDevice);
+        Assert.Equal("dshow", fake.LastStartRequest.MicrophoneInputFormat);
     }
 
     /// <summary>
