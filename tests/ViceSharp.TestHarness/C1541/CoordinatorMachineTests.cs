@@ -110,6 +110,38 @@ public sealed class CoordinatorMachineTests
     }
 
     /// <summary>
+    /// Acceptance: StepInstruction on the adapter is the production pump path,
+    /// so it must advance the host through the coordinator and keep the true
+    /// drive clock interleaved with host time even before an IEC access occurs.
+    /// </summary>
+    [Fact]
+    public void StepInstruction_AdvancesHostAndDrive()
+    {
+        var diskPath = WriteMinimalLoadableD64();
+        try
+        {
+            var (machine, drive) = BuildWiredRig(diskPath);
+
+            var hostBefore = machine.Clock.TotalCycles;
+            var driveBefore = drive.Clock.TotalCycles;
+            for (var i = 0; i < 100; i++)
+                machine.StepInstruction();
+
+            var hostAdvanced = machine.Clock.TotalCycles - hostBefore;
+            var driveAdvanced = drive.Clock.TotalCycles - driveBefore;
+
+            hostAdvanced.Should().BeGreaterThan(0);
+            driveAdvanced.Should().BeGreaterThan(0);
+            var ratio = driveAdvanced / (double)hostAdvanced;
+            ratio.Should().BeInRange(0.9, 1.2, "the 1541 clock should stay interleaved with PAL C64 host time");
+        }
+        finally
+        {
+            try { File.Delete(diskPath); } catch { /* best effort */ }
+        }
+    }
+
+    /// <summary>
     /// Acceptance: Driven purely through the IMachine surface (RunFrame +
     /// keyboard automation), LOAD"*",8,1 places the program at $0801.
     /// </summary>

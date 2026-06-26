@@ -17,11 +17,11 @@ using Xunit;
 /// <summary>
 /// TEST-SYSINDEP-001 (AC1, AC3) / FR-SYSINDEP-001 / TR-SYS-SCHED-001.
 /// Use case: the production emulation pump advances a true-drive rig by looping
-/// <see cref="CoordinatorMachine.StepInstruction"/> (one host instruction at a time), NOT by
-/// the per-host-cycle <see cref="SystemCoordinator.Step()"/> path the legacy LOAD test uses.
+/// <see cref="CoordinatorMachine.StepInstruction"/> (one host instruction at a time), while
+/// the adapter internally interleaves the coordinator one host cycle at a time.
 /// The drive 1541 must still complete a full cycle-accurate IEC LOAD through this path, with
 /// the drive CPU advancing on its OWN clock - coupled to the host only through the async IEC
-/// bus (lazy-sync on CIA2 access + ATN edges via LineChanged), not a per-instruction lockstep.
+/// bus (coordinator interleave, with lazy-sync on CIA2 access as a fine-grained backstop).
 /// This is the AC3 load-parity gate for the production path and proves AC1: the drive's own
 /// ExecutedCycles advance at the drive's clock, independently of the host instruction count.
 /// </summary>

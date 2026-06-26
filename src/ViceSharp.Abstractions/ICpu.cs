@@ -26,6 +26,11 @@ public interface ICpu : IClockedDevice
     long ExecutedCycles { get; }
 
     /// <summary>
+    /// True when the CPU is positioned at the boundary before fetching the next instruction.
+    /// </summary>
+    bool IsInstructionBoundary => true;
+
+    /// <summary>
     /// Execute single instruction at current PC.
     /// </summary>
     /// <returns>Number of cycles consumed</returns>
