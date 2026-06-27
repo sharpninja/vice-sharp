@@ -6,7 +6,8 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: FR-SID-003 (BACKFILL-SID-001 Slice 3).
+/// FR/TR: FR-SID-003 (BACKFILL-SID-001 Slice 3), FR-SID-014,
+/// TR-SID-EDGE-004, TEST-SID-002.
 /// Use case: SID waveform selection bits (CTRL bits 4-7: Triangle, Sawtooth,
 /// Pulse, Noise) are not a multiplexer; selecting two or more bits causes
 /// the SID to bitwise-AND the selected waveform outputs together, producing
@@ -165,14 +166,16 @@ public sealed class SidCombinedWaveformTests
     /// Use case: Pulse + Sawtooth is the canonical "fat lead" combined
     /// waveform on C64 (Commando, Last Ninja). When the pulse phase is
     /// high the AND with sawtooth passes the sawtooth value; when the
-    /// pulse phase is low the AND zeroes everything. The combined output
+    /// pulse phase is low the AND yields digital waveform zero. In the
+    /// reSID/VICE voice model, waveform zero is centered against the
+    /// die-specific DAC zero point before the envelope, so it is the negative
+    /// voice rail rather than silence. The combined output
     /// is therefore strictly less-than-or-equal to the sawtooth-only
-    /// output sample-by-sample (and zero whenever pulse is low).
+    /// output sample-by-sample.
     /// Acceptance: At a phase where pulse is low the combined sample
-    /// equals the $D418-DAC DC baseline (no voice contribution), even
-    /// though the sawtooth-only sample at that phase has a clearly
-    /// larger voice contribution above that baseline. FR-SID-010
-    /// volume-DAC offset is the floor here, not absolute zero.
+    /// is below the $D418-DAC DC baseline, because digital waveform zero is
+    /// centered into a signed negative voice contribution. The sawtooth-only
+    /// sample at that phase is clearly different from that baseline.
     /// </summary>
     [Fact]
     public void PulseSawtooth_Combined_IsAndMasked()
@@ -180,8 +183,9 @@ public sealed class SidCombinedWaveformTests
         // Pulse width = 0x0800 makes pulse HIGH when the 8-bit phase < 0x80
         // (PW >> 4). At 16569 extra ticks the accumulator is 16577 * 0xFFFF =
         // 0x40C0BF3F, giving phase = 0xC0: pulse is LOW, so the AND of
-        // pulse=0x00 and sawtooth=0xC0 yields 0x00 and the combined voice
-        // output is silent (the mixed sample equals the volume-DAC baseline).
+        // pulse=0x00 and sawtooth=0xC0 yields digital waveform 0x00. VICE/reSID
+        // centers selected waveform values before the envelope, so this is a
+        // negative voice sample rather than silence.
         // Sawtooth alone at the same phase outputs 0xC0 (clearly non-zero
         // above baseline, with the envelope long since at sustain).
         const int Ticks = 16569;
@@ -193,13 +197,52 @@ public sealed class SidCombinedWaveformTests
         float.IsNaN(combined).Should().BeFalse();
         float.IsNaN(sawOnly).Should().BeFalse();
 
-        // Pulse is LOW at this phase, so AND yields 0 voice contribution:
-        // the mixed sample equals the volume-DAC baseline.
-        System.Math.Abs(combined - baseline).Should().BeLessThan(1e-5f,
-            "Pulse+Sawtooth at a low-pulse phase ANDs voice to zero (sample == DAC baseline)");
-        // Sawtooth alone at that phase has a clearly non-zero voice contribution above baseline.
+        combined.Should().BeLessThan(baseline - 0.01f,
+            "Pulse+Sawtooth at a low-pulse phase ANDs to digital zero, which is the negative rail after waveform DAC centering");
+        // Sawtooth alone at that phase has a clearly non-zero voice contribution.
         System.Math.Abs(sawOnly - baseline).Should().BeGreaterThan(0.01f,
-            "control case: sawtooth alone at this phase must be clearly above DAC baseline");
+            "control case: sawtooth alone at this phase must be clearly away from the DAC baseline");
+    }
+
+    /// <summary>
+    /// FR/TR: FR-SID-003
+    /// Use case: The SID voice output stage is signed after waveform DAC
+    /// centering. A normal selected waveform must cross the $D418 baseline
+    /// during a phase sweep instead of remaining unipolar above it.
+    /// Acceptance: Triangle output produces both negative and positive
+    /// excursions relative to the no-waveform $D418 baseline, and remains
+    /// bounded inside the normalized audio range.
+    /// </summary>
+    [Fact]
+    public void TriangleWaveform_CrossesDigiBaselineOverPhaseSweep()
+    {
+        float baseline = SampleAtPhase(0x00, 0);
+
+        var sid = BuildPrimedSid();
+        sid.Write(V1Ctrl, (byte)(Triangle | Gate));
+        PrimeEnvelope(sid);
+
+        float min = float.PositiveInfinity;
+        float max = float.NegativeInfinity;
+        float maxAbs = 0;
+
+        for (int i = 0; i < FullPhaseSweepTicks; i++)
+        {
+            sid.Tick();
+            float sample = sid.GenerateSample();
+            float relative = sample - baseline;
+            if (relative < min) min = relative;
+            if (relative > max) max = relative;
+            float abs = System.Math.Abs(sample);
+            if (abs > maxAbs) maxAbs = abs;
+        }
+
+        min.Should().BeLessThan(-0.005f,
+            "selected waveform output must include the negative rail after waveform DAC centering");
+        max.Should().BeGreaterThan(0.005f,
+            "selected waveform output must still include positive excursions above the DAC baseline");
+        maxAbs.Should().BeLessThanOrEqualTo(1.0f,
+            "SID samples are normalized before they are submitted to the host audio backend");
     }
 
     /// <summary>

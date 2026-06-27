@@ -65,17 +65,19 @@ public sealed class FfmpegVideoRecorder : IVideoCaptureSink, IAudioRecorder
     private bool _stopped;
     private bool _faulted;
 
-    // Bounded queue depth. Recording must be lossless: a dropped frame or audio batch
-    // compresses the captured timeline because ffmpeg timestamps survivors at the
-    // nominal frame/sample rate. Back-pressure can slow emulation during capture, but
-    // it must not let the artifact lie about actual timing.
+    // Bounded queue depth. Video recording must not block the emulation worker: if
+    // ffmpeg stops draining the video socket, the queue drops overflow and reports
+    // the count so the emulator stays responsive. Emulator audio is different: a
+    // dropped PCM batch changes the soundtrack and shortens the audio stream, so it
+    // uses a much larger lossless queue and applies back-pressure only if ffmpeg is
+    // truly no longer draining.
     private const int VideoQueueCapacity = 32;
-    private const int AudioQueueCapacity = 64;
+    private const int AudioQueueCapacity = 8192;
 
-    /// <summary>Recording video payloads are lossless; back-pressure blocks instead of dropping frames.</summary>
-    public const bool VideoWriterDropsWhenFull = false;
+    /// <summary>Recording video payloads drop under back-pressure instead of freezing emulation.</summary>
+    public const bool VideoWriterDropsWhenFull = true;
 
-    /// <summary>Recording audio payloads are lossless; back-pressure blocks instead of dropping batches.</summary>
+    /// <summary>Recording audio payloads are lossless; dropping PCM corrupts the captured track.</summary>
     public const bool AudioWriterDropsWhenFull = false;
 
     /// <summary>How long to wait for ffmpeg to connect back to each socket.</summary>

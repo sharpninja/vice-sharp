@@ -103,15 +103,18 @@ internal static class HostProtocolMapper
 
     public static InputStateDto ToInputStateDto(EmulatorRuntimeSession session)
     {
-        var keys = session.KeyStates.Values
-            .OrderBy(key => key.Key, StringComparer.OrdinalIgnoreCase)
-            .ToArray();
-        var joysticks = session.JoystickStates
-            .OrderBy(pair => pair.Key)
-            .Select(pair => new JoystickPortStateDto(pair.Key, pair.Value))
-            .ToArray();
+        lock (session.InputStateSyncRoot)
+        {
+            var keys = session.KeyStates.Values
+                .OrderBy(key => key.Key, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+            var joysticks = session.JoystickStates
+                .OrderBy(pair => pair.Key)
+                .Select(pair => new JoystickPortStateDto(pair.Key, pair.Value))
+                .ToArray();
 
-        return new InputStateDto(keys, joysticks, session.SelectedKeyboardMap);
+            return new InputStateDto(keys, joysticks, session.SelectedKeyboardMap);
+        }
     }
 
     public static SessionSettingsDto ToSettingsDto(EmulatorRuntimeSession session)

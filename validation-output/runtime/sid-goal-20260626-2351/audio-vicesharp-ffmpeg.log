@@ -1,0 +1,19 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'F:\GitHub\vice-sharp\validation-output\runtime\sid-goal-20260626-2351\vicesharp-pieces-release-segmented.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf62.12.101
+  Duration: 00:00:44.08, start: 0.000000, bitrate: 1137 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 384x272, 958 kb/s, 50.12 fps, 50.12 tbr, 998531.00 tbn (default)
+    Metadata:
+      handler_name    : VideoHandler
+      encoder         : Lavc62.28.101 libx264
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, mono, fltp, 171 kb/s (default)
+    Metadata:
+      handler_name    : SoundHandler
+[AVFilterGraph @ 00000205f1e91c80] No option name near '/GitHub/vice-sharp/validation-output/runtime/sid-goal-20260626-2351/audio-vicesharp-astats.txt'
+[AVFilterGraph @ 00000205f1e91c80] Error parsing a filter description around:
+[AVFilterGraph @ 00000205f1e91c80] Error parsing filterchain 'astats=metadata=1:reset=1,ametadata=print:file=F:/GitHub/vice-sharp/validation-output/runtime/sid-goal-20260626-2351/audio-vicesharp-astats.txt' around:
+Error opening output file -.
+Error opening output files: Invalid argument

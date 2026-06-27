@@ -79,10 +79,10 @@ public sealed class HostMediaSimulatedLoadTests
     /// <summary>
     /// FR: FR-DRV-001 / FR-IECLOAD-001 / BUG-THROTTLE-001, TR: TR-GRPC-BOUNDARY-001.
     /// Use case: the host "Run 8" command must exercise the C64 KERNAL LOAD path,
-    ///   not preload PRG bytes from the D64 and then type RUN. That keeps disk I/O,
-    ///   loader timing, SID music timing, and demos aligned with VICE.
+    ///   not preload PRG bytes from the D64 and then type RUN. It must also avoid
+    ///   warp-mode physical-key drops by feeding the KERNAL keyboard buffer like VICE.
     /// Acceptance: after ResetAndAutostartDrive8 arms host automation at a READY
-    ///   prompt, the first pressed key is "L" from LOAD"*",8,1 rather than "R".
+    ///   prompt, the KERNAL keyboard buffer starts with LOAD"*",8,1 rather than RUN.
     /// </summary>
     [Fact]
     public async System.Threading.Tasks.Task ResetAndAutostartDrive8_TypesLoadCommandInsteadOfPreloadingRun()
@@ -117,11 +117,12 @@ public sealed class HostMediaSimulatedLoadTests
             TestContext.Current.CancellationToken);
 
         response.Status.IsSuccess.Should().BeTrue();
-        for (var frame = 0; frame < 40 && keyboard.PressedKeys.Count == 0; frame++)
+        for (var frame = 0; frame < 40 && bus.PendingKeyCount == 0; frame++)
             session.AdvanceHostAutomationFrame();
 
-        keyboard.PressedKeys.Should().NotBeEmpty();
-        keyboard.PressedKeys[0].Should().Be("L");
+        bus.PendingKeyCount.Should().Be(10);
+        bus.ReadKeyboardBuffer().Should().StartWith("LOAD\"*\",8,");
+        keyboard.PressedKeys.Should().BeEmpty("Auto 8 feeds the KERNAL keyboard buffer instead of physical key toggles");
     }
 
     private static string WriteMinimalLoadableD64()
@@ -183,6 +184,11 @@ public sealed class HostMediaSimulatedLoadTests
                 _memory[ReadyPromptStart + i] = ready[i];
             _memory[CursorBlinkEnableFlag] = 0;
         }
+
+        public int PendingKeyCount => _memory[0x00C6];
+
+        public string ReadKeyboardBuffer()
+            => new(_memory.Skip(0x0277).Take(PendingKeyCount).Select(b => (char)b).ToArray());
     }
 
     private sealed class AutostartTestMachine(

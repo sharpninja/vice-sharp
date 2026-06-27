@@ -47,6 +47,9 @@ public sealed class ShellViewModelTests
         return (new ShellViewModel(host, panel), host, panel);
     }
 
+    private static MediaAttachmentDto Attachment(MediaSlot slot, string path)
+        => new(slot, path, Path.GetFileName(path), IsAttached: true, IsReadOnly: false, AppliedToRuntime: true);
+
     /// <summary>
     /// FR: FR-MED-001, TR: TR-MEDIA-001, TEST-MED-001 (x64sc screenshot parity).
     /// Use case: the Snapshot -&gt; Save screenshot menu action must drive the host capture
@@ -213,6 +216,77 @@ public sealed class ShellViewModelTests
 
         await host.Received(1).AttachMediaAsync(
             MediaSlot.Drive8, Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// FR: FR-UIDROP-001, TR: TR-MVVM-001, TEST-UIDROP-001.
+    /// Use case: Dropping a disk image on the emulator display should attach it
+    /// to drive 8 and immediately reset/autostart it.
+    /// Acceptance: DropAndStartFileAsync(.d64) attaches Drive8 and invokes the
+    /// host ResetAndAutostartDrive8 command.
+    /// </summary>
+    [Fact]
+    public async Task DropAndStartFile_D64_AttachesDrive8AndAutostarts()
+    {
+        var (shell, host, panel) = CreateShell();
+        var path = @"C:\games\demo.d64";
+        host.AttachMediaAsync(MediaSlot.Drive8, path, Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<AttachMediaResponse>(
+                new AttachMediaResponse(RpcStatus.Ok(), Attachment(MediaSlot.Drive8, path))));
+
+        var status = await shell.DropAndStartFileAsync(path, TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, status.Code);
+        await host.Received(1).AttachMediaAsync(MediaSlot.Drive8, path, Arg.Any<bool>(), Arg.Any<CancellationToken>());
+        await host.Received(1).ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
+        await host.DidNotReceive().ColdResetAsync(Arg.Any<CancellationToken>());
+        Assert.Equal("Started demo.d64", panel.StatusText);
+    }
+
+    /// <summary>
+    /// FR: FR-UIDROP-001, TR: TR-MVVM-001, TEST-UIDROP-001.
+    /// Use case: Dropping a cartridge should attach the cartridge slot and reset
+    /// so the cartridge starts from reset state.
+    /// Acceptance: DropAndStartFileAsync(.crt) attaches Cartridge and invokes a
+    /// cold reset instead of Drive 8 autostart.
+    /// </summary>
+    [Fact]
+    public async Task DropAndStartFile_Crt_AttachesCartridgeAndColdResets()
+    {
+        var (shell, host, panel) = CreateShell();
+        var path = @"C:\games\fastload.CRT";
+        host.AttachMediaAsync(MediaSlot.Cartridge, path, Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<AttachMediaResponse>(
+                new AttachMediaResponse(RpcStatus.Ok(), Attachment(MediaSlot.Cartridge, path))));
+
+        var status = await shell.DropAndStartFileAsync(path, TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, status.Code);
+        await host.Received(1).AttachMediaAsync(MediaSlot.Cartridge, path, Arg.Any<bool>(), Arg.Any<CancellationToken>());
+        await host.Received(1).ColdResetAsync(Arg.Any<CancellationToken>());
+        await host.DidNotReceive().ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
+        Assert.Equal("Started fastload.CRT", panel.StatusText);
+    }
+
+    /// <summary>
+    /// FR: FR-UIDROP-001, TR: TR-MVVM-001, TEST-UIDROP-001.
+    /// Use case: Unsupported dropped files must not mutate emulator media state.
+    /// Acceptance: DropAndStartFileAsync(.txt) returns InvalidArgument and does
+    /// not call attach or reset host methods.
+    /// </summary>
+    [Fact]
+    public async Task DropAndStartFile_UnsupportedFile_ReturnsInvalidArgument()
+    {
+        var (shell, host, panel) = CreateShell();
+
+        var status = await shell.DropAndStartFileAsync(@"C:\notes\readme.txt", TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.InvalidArgument, status.Code);
+        Assert.Equal("Unsupported media file: readme.txt", panel.StatusText);
+        await host.DidNotReceive().AttachMediaAsync(
+            Arg.Any<MediaSlot>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
+        await host.DidNotReceive().ColdResetAsync(Arg.Any<CancellationToken>());
+        await host.DidNotReceive().ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
     }
 
     /// <summary>

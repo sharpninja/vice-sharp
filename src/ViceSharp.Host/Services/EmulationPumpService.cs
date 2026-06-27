@@ -102,7 +102,7 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
         _workerThread = new Thread(Loop)
         {
             IsBackground = true,
-            Name = "ViceSharp.Emulation",
+            Name = "ViceSharp.Emulation.Pump",
             // Mostly blocks in the gate; raise priority so a busy foreground GUI cannot
             // starve it of CPU when the gate releases it.
             Priority = ThreadPriority.AboveNormal,

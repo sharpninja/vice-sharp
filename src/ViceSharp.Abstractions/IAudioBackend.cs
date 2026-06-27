@@ -12,6 +12,12 @@ public interface IAudioBackend
     /// <summary>Number of samples currently queued for playback.</summary>
     int QueuedSampleCount { get; }
 
+    /// <summary>
+    /// Number of additional samples the playback device can accept without blocking.
+    /// Backends that do not expose finite device space report a large value.
+    /// </summary>
+    int AvailableSampleCount => int.MaxValue;
+
     /// <summary>Pauses audio playback without discarding buffered data.</summary>
     void Pause();
 

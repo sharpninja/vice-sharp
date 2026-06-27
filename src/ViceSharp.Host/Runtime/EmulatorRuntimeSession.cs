@@ -98,6 +98,8 @@ public sealed class EmulatorRuntimeSession
 
     public object SyncRoot { get; } = new();
 
+    public object InputStateSyncRoot { get; } = new();
+
     public Dictionary<MediaSlot, MediaAttachmentDto> MediaAttachments { get; } = new();
 
     public Dictionary<string, KeyStateDto> KeyStates { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -139,6 +141,8 @@ public sealed class EmulatorRuntimeSession
 
     public bool LimiterEnabled { get; set; } = true;
 
+    public bool IsWarpMode => !LimiterEnabled;
+
     /// <summary>
     /// Selected emulation pacing strategy id ("semaphore" | "vice"), surfaced in the
     /// limiter settings. The active gate lives on the global emulation pump; this mirrors
@@ -174,6 +178,23 @@ public sealed class EmulatorRuntimeSession
     public HostKeyboardAutomation? HostKeyboardAutomation { get; private set; }
 
     public string? LastHostAutomationError { get; private set; }
+
+    public void SetLimiter(double ratePercent, bool enabled)
+    {
+        var changed = LimiterRatePercent != ratePercent || LimiterEnabled != enabled;
+        LimiterRatePercent = ratePercent;
+        LimiterEnabled = enabled;
+
+        if (changed)
+            PublishWarpModeStatus();
+    }
+
+    public void PublishWarpModeStatus()
+    {
+        Machine.PubSub?.Publish(
+            WarpModeEvent.Topic,
+            new WarpModeEvent(IsWarpMode, LimiterEnabled, LimiterRatePercent, Machine.GetState().Cycle));
+    }
 
     public void StartHostKeyboardAutomation(HostKeyboardAutomation automation)
     {
@@ -511,13 +532,9 @@ public sealed class EmulatorRuntimeSession
         return true;
     }
 
-    // FR-CPUTICK-001: the headline rate is the PRIMARY CPU's own executed-cycle rate
-    // (ExecutedCycles per wall-second, divided by its clock for percent), not the system
-    // clock - so a multi-CPU rig (host + drive, C128 8502 + Z80) measures the right CPU and
-    // is not conflated by peripheral cycles. Falls back to the system clock if a machine has
-    // no CPU. The C64 6510 is BA-halted on VIC badlines, so this reads slightly under 100%
-    // at real time (faithful per-CPU duty).
-    private long PrimaryCpuExecutedCycles => Machine.PrimaryCpu?.ExecutedCycles ?? Machine.GetState().Cycle;
+    // Headline speed is emulated machine time. At real PAL speed this should read ~100%
+    // while the VIC-II may still steal 6510 cycles; CPU duty belongs in PerCpuRates.
+    private long MachineCycle => Machine.GetState().Cycle;
 
     public void ResetPerformanceCounters() => ResetPerformanceCounters(DateTimeOffset.UtcNow);
 
@@ -528,7 +545,7 @@ public sealed class EmulatorRuntimeSession
         EffectiveClockHz = 0;
         PerCpuRates = Array.Empty<CpuRateReading>();
         _lastPerformanceSampleTime = now;
-        _lastPerformanceSampleCycle = PrimaryCpuExecutedCycles;
+        _lastPerformanceSampleCycle = MachineCycle;
         _lastPerformanceSampleFrameCount = FrameCount;
         _lastPerCpuExecuted = SnapshotCpuExecuted();
     }
@@ -541,7 +558,7 @@ public sealed class EmulatorRuntimeSession
         if (elapsed < 0.25)
             return;
 
-        var executed = PrimaryCpuExecutedCycles;
+        var executed = MachineCycle;
         var cycleDelta = Math.Max(0, executed - _lastPerformanceSampleCycle);
         var frameDelta = Math.Max(0, FrameCount - _lastPerformanceSampleFrameCount);
 

@@ -13,9 +13,9 @@ using Xunit;
 /// FR-SNDREG-001 / TR-SNDREG-GATE-001 / TEST-SNDREG-001.
 /// The VICE pacing strategy's regulator 1 (sound-buffer back-pressure, faithful to
 /// VICE sound.c sound_flush): when the audio device is the timing source the emulation
-/// worker paces to the device draining its sample buffer - it blocks (advances nothing)
-/// while the buffer is at/over the high-water mark and resumes as it drains. Precedence
-/// is warp (skip all) -> sound (when audio is the timing source) -> vsync (otherwise).
+/// worker advances to the next sync chunk and the audio backend blocks only when a completed
+/// sound fragment is written to a full device queue. Precedence is warp (skip all) -> sound
+/// (when audio is the timing source) -> vsync (otherwise).
 /// </summary>
 public sealed class ViceGateSoundRegulatorTests
 {
@@ -24,12 +24,12 @@ public sealed class ViceGateSoundRegulatorTests
     // ---- EvaluateSound: the pure regulator-1 decision ----
 
     /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: with no audio chip, sound is not the timing source.
-    /// Acceptance: EvaluateSound(null, ...) == NotTimingSource.</summary>
+    /// Acceptance: EvaluateSound(null) == NotTimingSource.</summary>
     [Fact]
     public void EvaluateSound_NullChip_ReturnsNotTimingSource()
         => Assert.Equal(
             ViceEmulationGate.SoundAction.NotTimingSource,
-            ViceEmulationGate.EvaluateSound(null, 2048));
+            ViceEmulationGate.EvaluateSound(null));
 
     /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a chip that is not emitting (no backend / clock unconfigured) is
     /// not the timing source. Acceptance: inactive chip => NotTimingSource.</summary>
@@ -39,57 +39,57 @@ public sealed class ViceGateSoundRegulatorTests
         var chip = new FakeAudioChip { IsAudioTimingSource = false, QueuedSampleCount = 0 };
         Assert.Equal(
             ViceEmulationGate.SoundAction.NotTimingSource,
-            ViceEmulationGate.EvaluateSound(chip, 2048));
+            ViceEmulationGate.EvaluateSound(chip));
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: an active chip whose device buffer has room must keep running.
-    /// Acceptance: queued below high-water => Advance.</summary>
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: an active audio chip is
+    /// the timing source. Acceptance: timing source => Advance.</summary>
     [Fact]
-    public void EvaluateSound_ActiveChipBelowHighWater_ReturnsAdvance()
+    public void EvaluateSound_ActiveChipWithFragmentSpace_ReturnsAdvance()
     {
-        var chip = new FakeAudioChip { IsAudioTimingSource = true, QueuedSampleCount = 2047 };
+        var chip = new FakeAudioChip { IsAudioTimingSource = true, AvailableSamples = 256, AudioFragmentSampleCount = 256 };
         Assert.Equal(
             ViceEmulationGate.SoundAction.Advance,
-            ViceEmulationGate.EvaluateSound(chip, 2048));
+            ViceEmulationGate.EvaluateSound(chip));
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a full device buffer back-pressures the CPU. Acceptance: queued
-    /// exactly at the high-water mark => BackPressure (boundary is inclusive).</summary>
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: VICE produces sound before
+    /// checking device space. Acceptance: pre-flush device space below fragment size still => Advance.</summary>
     [Fact]
-    public void EvaluateSound_ActiveChipAtHighWater_ReturnsBackPressure()
+    public void EvaluateSound_ActiveChipWithoutFragmentSpace_ReturnsAdvance()
     {
-        var chip = new FakeAudioChip { IsAudioTimingSource = true, QueuedSampleCount = 2048 };
+        var chip = new FakeAudioChip { IsAudioTimingSource = true, AvailableSamples = 255, AudioFragmentSampleCount = 256 };
         Assert.Equal(
-            ViceEmulationGate.SoundAction.BackPressure,
-            ViceEmulationGate.EvaluateSound(chip, 2048));
+            ViceEmulationGate.SoundAction.Advance,
+            ViceEmulationGate.EvaluateSound(chip));
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: an over-full device buffer back-pressures the CPU.
-    /// Acceptance: queued above the high-water mark => BackPressure.</summary>
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: VICE must not block before
+    /// a completed fragment is produced. Acceptance: no pre-flush device space still => Advance.</summary>
     [Fact]
-    public void EvaluateSound_ActiveChipAboveHighWater_ReturnsBackPressure()
+    public void EvaluateSound_ActiveChipWithNoSpace_ReturnsAdvance()
     {
-        var chip = new FakeAudioChip { IsAudioTimingSource = true, QueuedSampleCount = 9000 };
+        var chip = new FakeAudioChip { IsAudioTimingSource = true, AvailableSamples = 0, AudioFragmentSampleCount = 256 };
         Assert.Equal(
-            ViceEmulationGate.SoundAction.BackPressure,
-            ViceEmulationGate.EvaluateSound(chip, 2048));
+            ViceEmulationGate.SoundAction.Advance,
+            ViceEmulationGate.EvaluateSound(chip));
     }
 
     // ---- Gate.Tick: regulator selection + back-pressure effect ----
 
     /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001 / TEST-SNDREG-001.
-    /// Use case: even when the SID is the audio timing source the gate paces via vsync, not
-    ///   sound back-pressure - the sound-buffer regulator over-throttled (~23% real-time) in
-    ///   the WinMm setup, so vsync (cycle-progress -> wall-clock) is the pacer and holds 100%.
-    /// Acceptance: with an active audio chip whose buffer is full, Tick still ADVANCES the
-    ///   clock (never blocks) and LastRegulator == Vsync.</summary>
+    /// Use case: when the SID is the audio timing source and the device currently reports no
+    ///   free space, the gate must still advance to the sound-flush boundary instead of
+    ///   pre-blocking before a fragment exists.
+    /// Acceptance: Tick selects Sound and advances cycles.</summary>
     [Fact]
-    public void Tick_AudioTimingSource_PacesViaVsync_NotSoundBackPressure()
+    public void Tick_AudioTimingSourceWithoutFragmentSpace_AdvancesToSoundFlushBoundary()
     {
         var chip = new FakeAudioChip
         {
             IsAudioTimingSource = true,
-            QueuedSampleCount = ViceEmulationGate.HighWaterSamples + 5000, // full buffer is ignored
+            AudioFragmentSampleCount = 256,
+            AvailableSamples = 0,
         };
         var (registry, session) = BuildSession(chip, limiterEnabled: true);
         using var gate = new ViceEmulationGate();
@@ -100,8 +100,8 @@ public sealed class ViceGateSoundRegulatorTests
         gate.Stop();
 
         Assert.True(ran, "the gate reported no running session");
-        Assert.True(session.Machine.Clock.TotalCycles > before, "VICE did not advance under vsync (a full audio buffer must not block it)");
-        Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
+        Assert.True(session.Machine.Clock.TotalCycles > before, "sound regulator pre-blocked before the audio flush boundary");
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
     }
 
     /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: with no audio device the gate falls through to the vsync
@@ -128,7 +128,7 @@ public sealed class ViceGateSoundRegulatorTests
     [Fact]
     public void Tick_WarpIgnoresSoundBackPressure_SelectsWarp()
     {
-        var chip = new FakeAudioChip { IsAudioTimingSource = true, QueuedSampleCount = 999_999 };
+        var chip = new FakeAudioChip { IsAudioTimingSource = true, AvailableSamples = 0 };
         var (registry, session) = BuildSession(chip, limiterEnabled: false);
         using var gate = new ViceEmulationGate();
         gate.Start();
@@ -142,7 +142,7 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.Equal(ViceEmulationGate.PacingRegulator.Warp, gate.LastRegulator);
     }
 
-    // ---- SID-side wiring: IsAudioTimingSource + QueuedSampleCount ----
+    // ---- SID-side wiring: IsAudioTimingSource + backend state ----
 
     /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: a SID with no backend is silent and not a timing source.
     /// Acceptance: IsAudioTimingSource false, QueuedSampleCount 0.</summary>
@@ -173,14 +173,25 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.True(sid.IsAudioTimingSource);
     }
 
-    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: the SID surfaces the backend's queue depth so the gate can
-    /// back-pressure on it. Acceptance: QueuedSampleCount mirrors the backend.</summary>
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: the SID still surfaces the
+    /// backend's queued samples for diagnostics. Acceptance: QueuedSampleCount mirrors the backend.</summary>
     [Fact]
     public void Sid_QueuedSampleCount_ReflectsBackend()
     {
         var backend = new FakeAudioBackend { QueuedSampleCount = 1234 };
         var sid = new Sid6581(new BasicBus(), backend);
         Assert.Equal(1234, sid.QueuedSampleCount);
+    }
+
+    /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: the SID surfaces backend
+    /// device space so diagnostics can see the VICE sound_flush write-side timing state.
+    /// Acceptance: AvailableSampleCount mirrors the backend.</summary>
+    [Fact]
+    public void Sid_AvailableSampleCount_ReflectsBackend()
+    {
+        var backend = new FakeAudioBackend { AvailableSampleCount = 512 };
+        var sid = new Sid6581(new BasicBus(), backend);
+        Assert.Equal(512, sid.AvailableSampleCount);
     }
 
     // ---- helpers ----
@@ -221,6 +232,10 @@ public sealed class ViceGateSoundRegulatorTests
         public byte MasterVolume { get; set; }
         public int ChannelCount => 1;
         public int QueuedSampleCount { get; set; }
+        public int AvailableSamples { get; set; } = int.MaxValue;
+        public Func<int>? AvailableSampleCountProvider { get; set; }
+        public int AvailableSampleCount => AvailableSampleCountProvider?.Invoke() ?? AvailableSamples;
+        public int AudioFragmentSampleCount { get; set; } = 256;
         public bool IsAudioTimingSource { get; set; }
         public float GenerateSample() => 0f;
         public void Tick() { }
@@ -230,6 +245,7 @@ public sealed class ViceGateSoundRegulatorTests
     private sealed class FakeAudioBackend : IAudioBackend
     {
         public int QueuedSampleCount { get; set; }
+        public int AvailableSampleCount { get; set; } = int.MaxValue;
         public void SubmitSamples(ReadOnlySpan<float> samples) { }
         public void Pause() { }
         public void Resume() { }

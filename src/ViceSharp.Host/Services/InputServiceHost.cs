@@ -27,7 +27,7 @@ public sealed class InputServiceHost : IInputService
         if (string.IsNullOrWhiteSpace(request.Key))
             return ValueTask.FromResult(new InputCommandResponse(RpcStatus.InvalidArgument("Key is required."), null));
 
-        lock (session.SyncRoot)
+        lock (session.InputStateSyncRoot)
         {
             var appliedToRuntime = ApplyKeyStateToRuntime(session, request.Key, request.IsPressed);
             session.KeyStates[request.Key] = new KeyStateDto(
@@ -53,7 +53,7 @@ public sealed class InputServiceHost : IInputService
         if (!IsJoystickInputPort(request.Port))
             return ValueTask.FromResult(new InputCommandResponse(RpcStatus.InvalidArgument("Keyboard is not a joystick port."), null));
 
-        lock (session.SyncRoot)
+        lock (session.InputStateSyncRoot)
         {
             var appliedToRuntime = ApplyJoystickStateToRuntime(session, request.Port, request.DirectionMask, request.FireButton);
             session.JoystickStates[request.Port] = new JoystickStateDto(request.DirectionMask, request.FireButton, appliedToRuntime);
@@ -70,7 +70,7 @@ public sealed class InputServiceHost : IInputService
         if (!_registry.TryGet(request.SessionId, out var session))
             return ValueTask.FromResult(new GetInputStateResponse(HostProtocolMapper.MissingSessionStatus(request.SessionId), null));
 
-        lock (session.SyncRoot)
+        lock (session.InputStateSyncRoot)
         {
             return ValueTask.FromResult(new GetInputStateResponse(RpcStatus.Ok(), HostProtocolMapper.ToInputStateDto(session)));
         }

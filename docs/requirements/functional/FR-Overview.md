@@ -17,7 +17,7 @@ This document serves as the master index for all ViceSharp Functional Requiremen
 
 | Document | Subsystem | FR Range |
 |----------|-----------|----------|
-| FR-Audio-SID.md | Audio (SID) | FR-SID-001 .. FR-SID-012 |
+| FR-Audio-SID.md | Audio (SID) | FR-SID-001 .. FR-SID-014 |
 | FR-CPU-Emulation.md | CPU | FR-CPU-001 .. FR-CPU-005 |
 | FR-Cartridges.md | Cartridges | FR-CRT-001 .. FR-CRT-005 |
 | FR-Configuration-Resources.md | Configuration / Resources | FR-CFG-001 .. FR-CFG-008 |
@@ -120,6 +120,8 @@ This document serves as the master index for all ViceSharp Functional Requiremen
 | FR-SID-010 | Direct Digital Sample Playback via Volume Register | `IAudioChip` | 2 |
 | FR-SID-011 | External Audio Input | `IAudioChip` | 3 |
 | FR-SID-012 | Dual-SID (Stereo SID) Configuration | `IAudioChip`, `IAddressSpace` | 3 |
+| FR-SID-013 | SID Audio Backend Wiring | `IAudioChip`, `IAudioBackend` | 2 |
+| FR-SID-014 | VICE-Compatible Signed SID Voice Output and Demo Pacing | `IAudioChip`, `IAudioBackend` | 1 |
 | FR-SNP-001 | Save Complete Machine State to Snapshot | `ISnapshotManager` | 1 |
 | FR-SNP-002 | Load Machine State from Snapshot | `ISnapshotManager` | 1 |
 | FR-SNP-003 | Deterministic Input Replay | `ISnapshotManager`, `IReplayEngine` | 2 |

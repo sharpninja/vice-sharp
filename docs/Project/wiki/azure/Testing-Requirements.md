@@ -197,6 +197,14 @@ RewindCycle/RewindFrame restore exact prior state; step-then-rewind round-trips;
 
 
 
+## TEST-SID
+
+### TEST-SID-002
+
+Focused SID tests verify signed waveform centering and PCM equivalency; runtime capture verifies Pieces of Light at PAL pacing before and after Space exits the first segment.
+
+
+
 ## TEST-SIDAUDIO
 
 ### TEST-SIDAUDIO-001

@@ -23,8 +23,7 @@ public sealed class HostKeyboardAutomationTests
     // no keyboard device: the readiness gate is exercised before any key is pressed.
     private static IMachine MachineWithMemory(byte[] memory)
     {
-        var bus = Substitute.For<IBus>();
-        bus.Peek(Arg.Any<ushort>()).Returns(call => memory[(ushort)call[0]]);
+        var bus = new MemoryBus(memory);
         var devices = Substitute.For<IDeviceRegistry>();
         devices.All.Returns(Array.Empty<IDevice>());
         var machine = Substitute.For<IMachine>();
@@ -88,5 +87,45 @@ public sealed class HostKeyboardAutomationTests
             automation.AdvanceFrame(machine);
 
         Assert.True(applied);
+    }
+
+    /// <summary>
+    /// FR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 autostart), TR: TR-MVVM-001,
+    /// TEST-HOSTUI-001.
+    /// Use case: Auto 8 must not lose physical key transitions while warp mode runs.
+    /// Acceptance: once BASIC is ready, autostart feeds the KERNAL keyboard buffer
+    /// with the LOAD command bytes instead of relying on frame-paced key down/up events.
+    /// </summary>
+    [Fact]
+    public void Autostart_ReadyAndCursorBlinking_FeedsKernalKeyboardBuffer()
+    {
+        var memory = MemoryWithReady(cursorBlinkFlag: 0);
+        var machine = MachineWithMemory(memory);
+        var automation = HostKeyboardAutomation.CreateC64Drive8Autostart();
+
+        for (var i = 0; i < 30; i++)
+            automation.AdvanceFrame(machine);
+
+        Assert.Equal(10, memory[0x00C6]);
+        Assert.Equal(
+            [(byte)'L', (byte)'O', (byte)'A', (byte)'D', (byte)'"', (byte)'*', (byte)'"', (byte)',', (byte)'8', (byte)','],
+            memory[0x0277..0x0281]);
+    }
+
+    private sealed class MemoryBus(byte[] memory) : IBus
+    {
+        public byte Read(ushort address) => memory[address];
+
+        public void Write(ushort address, byte value) => memory[address] = value;
+
+        public byte Peek(ushort address) => memory[address];
+
+        public void RegisterDevice(IAddressSpace device)
+        {
+        }
+
+        public void UnregisterDevice(IAddressSpace device)
+        {
+        }
     }
 }

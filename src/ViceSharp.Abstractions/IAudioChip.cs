@@ -16,11 +16,24 @@ public interface IAudioChip : IClockedDevice
 
     /// <summary>
     /// Samples submitted to the audio device but not yet played, i.e. the device's
-    /// pending-playback queue depth. The pacing gate's sound back-pressure regulator
-    /// reads this to throttle the emulation worker to the rate the device drains it.
+    /// pending-playback queue depth. This is retained as diagnostics; sound pacing
+    /// uses <see cref="AvailableSampleCount"/> so it follows VICE's buffer-space gate.
     /// Defaults to 0 for chips with no live audio backend.
     /// </summary>
     int QueuedSampleCount => 0;
+
+    /// <summary>
+    /// Samples the live audio backend can accept without blocking. VICE uses
+    /// sound-driver buffer space, rounded to whole fragments, as the timing gate.
+    /// Defaults to a large value for chips with no finite live backend.
+    /// </summary>
+    int AvailableSampleCount => int.MaxValue;
+
+    /// <summary>
+    /// Native sound fragment size in samples. VICE only flushes whole fragments
+    /// and waits until the device has room for at least one fragment.
+    /// </summary>
+    int AudioFragmentSampleCount => 256;
 
     /// <summary>
     /// True when this chip is actively streaming samples to an audio device (a backend is

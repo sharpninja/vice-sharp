@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.Persistence;
+using ViceSharp.Abstractions;
 using ViceSharp.Protocol;
 
 namespace ViceSharp.Avalonia.ViewModels;
@@ -41,6 +42,7 @@ public sealed class AttachPanelViewModel : ObservableObject
     private string _settingsStatusText = "Settings will load from the connected host.";
     private bool _hasPendingSettingsChanges;
     private bool _requiresRestart;
+    private bool _refreshingSettingsFromHost;
     private SettingsSnapshot _appliedSettings;
     private string _monitorOutput = "Monitor ready.";
     private string _monitorCommand = "r";
@@ -228,6 +230,12 @@ public sealed class AttachPanelViewModel : ObservableObject
         private set => SetProperty(ref _statusText, value);
     }
 
+    public void ReportStatus(string message)
+    {
+        if (!string.IsNullOrWhiteSpace(message))
+            StatusText = message;
+    }
+
     public KeyboardMapDto? SelectedKeyboardMap
     {
         get => _selectedKeyboardMap;
@@ -277,7 +285,13 @@ public sealed class AttachPanelViewModel : ObservableObject
     public MachineProfileOption SelectedMachineProfile
     {
         get => _selectedMachineProfile;
-        set => SetSettingsProperty(ref _selectedMachineProfile, value);
+        set
+        {
+            if (value is null)
+                return;
+
+            SetSettingsProperty(ref _selectedMachineProfile, value);
+        }
     }
 
     public string SelectedRenderer
@@ -730,6 +744,9 @@ public sealed class AttachPanelViewModel : ObservableObject
         if (!SetProperty(ref field, value, propertyName))
             return false;
 
+        if (_refreshingSettingsFromHost)
+            return true;
+
         HasPendingSettingsChanges = !CaptureSettings().Equals(_appliedSettings);
         RequiresRestart = HasPendingSettingsChanges && IsRestartRelevant(propertyName);
         if (SettingsValidationResults.Count > 0)
@@ -745,19 +762,27 @@ public sealed class AttachPanelViewModel : ObservableObject
         var profiles = await _hostClient.ListSettingsProfilesAsync(cancellationToken).ConfigureAwait(true);
         if (profiles.Status.IsSuccess && profiles.Profiles.Count > 0)
         {
-            MachineProfiles.Clear();
-            foreach (var profile in profiles.Profiles)
+            _refreshingSettingsFromHost = true;
+            try
             {
-                MachineProfiles.Add(new MachineProfileOption(
-                    profile.Id,
-                    profile.DisplayName,
-                    string.IsNullOrWhiteSpace(profile.Description) ? profile.Machine : profile.Description,
-                    false));
-            }
+                MachineProfiles.Clear();
+                foreach (var profile in profiles.Profiles)
+                {
+                    MachineProfiles.Add(new MachineProfileOption(
+                        profile.Id,
+                        profile.DisplayName,
+                        string.IsNullOrWhiteSpace(profile.Description) ? profile.Machine : profile.Description,
+                        false));
+                }
 
-            var selectedProfile = profiles.Profiles.FirstOrDefault(profile => profile.IsCurrent) ?? profiles.Profiles[0];
-            _selectedMachineProfile = MachineProfiles.First(profile => profile.Id == selectedProfile.Id);
-            OnPropertyChanged(nameof(SelectedMachineProfile));
+                var selectedProfile = profiles.Profiles.FirstOrDefault(profile => profile.IsCurrent) ?? profiles.Profiles[0];
+                _selectedMachineProfile = MachineProfiles.First(profile => profile.Id == selectedProfile.Id);
+                OnPropertyChanged(nameof(SelectedMachineProfile));
+            }
+            finally
+            {
+                _refreshingSettingsFromHost = false;
+            }
         }
         else if (!profiles.Status.IsSuccess)
         {
@@ -773,11 +798,20 @@ public sealed class AttachPanelViewModel : ObservableObject
             return;
         }
 
-        ApplySettingsFromHost(settings.Settings);
-        _appliedSettings = CaptureSettings();
-        HasPendingSettingsChanges = false;
-        RequiresRestart = false;
-        ReplaceSettingsValidationResults([]);
+        _refreshingSettingsFromHost = true;
+        try
+        {
+            ApplySettingsFromHost(settings.Settings);
+            _appliedSettings = CaptureSettings();
+            HasPendingSettingsChanges = false;
+            RequiresRestart = false;
+            ReplaceSettingsValidationResults([]);
+        }
+        finally
+        {
+            _refreshingSettingsFromHost = false;
+        }
+
         SettingsStatusText = "Settings loaded from host.";
     }
 
@@ -816,6 +850,16 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedPacingStrategy));
     }
 
+    public void ApplyWarpMode(WarpModeEvent warpMode)
+    {
+        _limiterRatePercent = Math.Clamp(warpMode.LimiterRatePercent, LimiterMinimumPercent, LimiterMaximumPercent);
+        _limiterEnabled = warpMode.LimiterEnabled;
+
+        OnPropertyChanged(nameof(LimiterRatePercent));
+        OnPropertyChanged(nameof(LimiterEnabled));
+        OnPropertyChanged(nameof(IsWarpMode));
+    }
+
     private UpdateSettingsRequest CreateUpdateSettingsRequest(bool restartSession)
     {
         return new UpdateSettingsRequest(
@@ -834,7 +878,7 @@ public sealed class AttachPanelViewModel : ObservableObject
                 ToInputPort(SelectedPrimaryJoystickPort),
                 SwapJoystickPorts,
                 ToInputModeId(SelectedInputMode)),
-            SelectedMachineProfile.Id,
+            GetSelectedMachineProfileId(),
             restartSession,
             new AudioSettingsDto(ToAudioModeId(SelectedAudioMode)),
             new ResourceSettingsDto(ToResourceModeId(SelectedResourceMode)));
@@ -1068,7 +1112,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         return new SettingsSnapshot(
             LimiterRatePercent,
             LimiterEnabled,
-            SelectedMachineProfile.Id,
+            GetSelectedMachineProfileId(),
             SelectedRenderer,
             SelectedDisplayScale,
             SelectedCropMode,
@@ -1116,6 +1160,14 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedPacingStrategy));
     }
 
+    private string GetSelectedMachineProfileId()
+    {
+        if (_selectedMachineProfile is not null)
+            return _selectedMachineProfile.Id;
+
+        return MachineProfiles.FirstOrDefault()?.Id ?? "c64";
+    }
+
     // ---- Save-on-exit toggles + persistence capture/apply --------------------
 
     /// <summary>Persist the Settings tab to vice-sharp.ini on exit (user toggle).</summary>
@@ -1136,7 +1188,7 @@ public sealed class AttachPanelViewModel : ObservableObject
     public PersistedSettings CapturePersistedSettings() => new(
         LimiterRatePercent,
         LimiterEnabled,
-        SelectedMachineProfile.Id,
+        GetSelectedMachineProfileId(),
         SelectedRenderer,
         SelectedDisplayScale,
         SelectedCropMode,

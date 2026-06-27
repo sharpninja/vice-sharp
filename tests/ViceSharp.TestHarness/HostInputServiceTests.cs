@@ -68,6 +68,64 @@ public sealed class HostInputServiceTests
     }
 
     /// <summary>
+    /// FR: FR-HOST-004, FR: FR-INP-001, TR: TR-GRPC-BOUNDARY-001.
+    /// Use case: keyboard RPCs must remain responsive while the emulation pump owns
+    /// the coarse session lock for CPU/audio work.
+    /// Acceptance: <c>SetKeyStateAsync</c> completes without waiting for
+    /// <c>SyncRoot</c> and still applies the runtime key latch.
+    /// </summary>
+    [Fact]
+    public async Task SetKeyState_DoesNotWaitForSessionSyncRoot()
+    {
+        var keyboard = new RecordingMachineKeyboardInput();
+        var registry = new EmulatorRuntimeRegistry();
+        var session = new EmulatorRuntimeSession(
+            "test-session",
+            MinimalHostArchitectureDescriptor.Instance,
+            new FakeMachine(new FakeDeviceRegistry(keyboard)));
+        registry.Add(session);
+        var service = new InputServiceHost(registry);
+
+        using var lockEntered = new ManualResetEventSlim();
+        using var releaseLock = new ManualResetEventSlim();
+        var lockHolder = Task.Run(() =>
+        {
+            lock (session.SyncRoot)
+            {
+                lockEntered.Set();
+                releaseLock.Wait(TestContext.Current.CancellationToken);
+            }
+        }, TestContext.Current.CancellationToken);
+
+        Assert.True(lockEntered.Wait(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken));
+        try
+        {
+            var setKey = service.SetKeyStateAsync(
+                    new SetKeyStateRequest("test-session", "A", true, "A", "A", 0),
+                    TestContext.Current.CancellationToken)
+                .AsTask();
+
+            var completed = await Task.WhenAny(
+                setKey,
+                Task.Delay(TimeSpan.FromMilliseconds(250), TestContext.Current.CancellationToken));
+
+            Assert.Same(setKey, completed);
+            var response = await setKey;
+            Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+            Assert.Contains(response.InputState!.Keys, key =>
+                key.Key == "A" &&
+                key.IsPressed &&
+                key.AppliedToRuntime);
+            Assert.Equal([new KeyTransition("A", true)], keyboard.Transitions);
+        }
+        finally
+        {
+            releaseLock.Set();
+            await lockHolder.WaitAsync(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
+        }
+    }
+
+    /// <summary>
     /// FR: FR-INP-001, FR: FR-CIA-003, TR: TR-CYCLE-001.
     /// Use case: Pressing Space through the InputServiceHost must drive
     /// the CIA1 keyboard matrix so the standard CIA1 scan reads the

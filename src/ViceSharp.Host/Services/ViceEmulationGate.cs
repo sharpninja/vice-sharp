@@ -14,11 +14,11 @@ namespace ViceSharp.Host.Services;
 ///
 ///  1. Sound-buffer back-pressure (sound.c sound_flush): when the audio device is the
 ///     timing source (the SID has a live backend and a configured audio clock), the
-///     emulator thread blocks while the device's sample buffer is at/over its high-water
-///     mark and resumes as the device drains it, so the fixed cycle:sample ratio paces the
-///     CPU. Enabled now that the SID emits at the correct phi2 rate (BUG-SIDAUDIO-001 fixed;
-///     the sample rate was always 44.1 kHz - only pitch was wrong). Takes precedence over
-///     vsync: when sound is the timing source, vsync is skipped for that session.
+///     emulator advances to the next sync point and the audio backend blocks only when
+///     a completed sound fragment is written to a full device queue. This matches VICE's
+///     sound_flush loop: produce sound first, then write a whole fragment when one fits,
+///     otherwise retry after a 1 ms sleep. Takes precedence over vsync: when sound is the
+///     timing source, vsync is skipped for that session.
 ///
 ///  2. vsync (vsync.c set_timer_speed / vsync_do_vsync): precompute emulated_clk_per_second
 ///     = master clock x speed, then convert the emulated-cycle delta since the anchor into
@@ -38,11 +38,6 @@ public sealed partial class ViceEmulationGate : IEmulationGate
     // 1 ms granularity that plays cleanly - while the SleepUntil deadline keeps the pace at 100%.
     private const double ChunkHz = 500.0;
     private const long WarpBurstMultiplier = 64;
-
-    // ~46 ms of audio at 44.1 kHz (~2.3 PAL frames): enough buffer to ride out scheduling
-    // jitter without underruns, low enough latency to feel responsive, and well under the
-    // WinMm ~32K-sample ceiling where SubmitSamples would start dropping batches.
-    internal const int HighWaterSamples = 2048;
 
     private readonly ConditionalWeakTable<EmulatorRuntimeSession, Anchor> _anchors = new();
     private volatile bool _running;
@@ -68,26 +63,22 @@ public sealed partial class ViceEmulationGate : IEmulationGate
         /// <summary>No live audio: the gate should fall through to vsync.</summary>
         NotTimingSource,
 
-        /// <summary>The device buffer has room: emit one more chunk of samples.</summary>
+        /// <summary>Sound is the timing source: advance and let the audio write block if needed.</summary>
         Advance,
-
-        /// <summary>The device buffer is full: block the worker until it drains.</summary>
-        BackPressure,
     }
 
     /// <summary>
     /// Regulator 1 decision: given the session's audio chip, decide whether sound is the
-    /// timing source and, if so, whether the device buffer has room (advance) or is full
-    /// (back-pressure). Pure - the caller performs the advance / block.
+    /// timing source. VICE produces sound before checking output capacity; the backend write
+    /// performs the fragment-space wait if a completed fragment cannot be accepted.
+    /// Pure - the caller performs the advance.
     /// </summary>
-    internal static SoundAction EvaluateSound(IAudioChip? chip, int highWaterSamples)
+    internal static SoundAction EvaluateSound(IAudioChip? chip)
     {
         if (chip is null || !chip.IsAudioTimingSource)
             return SoundAction.NotTimingSource;
 
-        return chip.QueuedSampleCount >= highWaterSamples
-            ? SoundAction.BackPressure
-            : SoundAction.Advance;
+        return SoundAction.Advance;
     }
 
     /// <summary>
@@ -175,16 +166,10 @@ public sealed partial class ViceEmulationGate : IEmulationGate
             lock (session.SyncRoot)
                 audioChip = session.Machine.Devices.GetByRole(DeviceRole.AudioChip) as IAudioChip;
 
-            var soundAction = EvaluateSound(audioChip, HighWaterSamples);
+            var soundAction = EvaluateSound(audioChip);
             if (soundAction != SoundAction.NotTimingSource)
             {
                 LastRegulator = PacingRegulator.Sound;
-                if (soundAction == SoundAction.BackPressure)
-                {
-                    WaitForSoundBufferRoom(audioChip!);
-                    continue;
-                }
-
                 advance(session, chunk);
                 continue;
             }
@@ -261,16 +246,6 @@ public sealed partial class ViceEmulationGate : IEmulationGate
                 Thread.Sleep(1); // ~1 ms with the raised timer resolution; yields the CPU
             else
                 Thread.SpinWait(64); // final sub-millisecond only
-        }
-    }
-
-    private void WaitForSoundBufferRoom(IAudioChip audioChip)
-    {
-        while (_running
-            && audioChip.IsAudioTimingSource
-            && audioChip.QueuedSampleCount >= HighWaterSamples)
-        {
-            Thread.Sleep(1);
         }
     }
 

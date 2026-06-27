@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ViceSharp.Abstractions;
 using ViceSharp.Protocol;
 
 namespace ViceSharp.Avalonia.ViewModels;
@@ -25,6 +26,8 @@ public sealed class StatusBarViewModel : ObservableObject
     private string _iec = "Idle";
     private string _errorText = string.Empty;
     private string _statusText = "Power ? | Run ? | Limiter 100% | FPS 0.0 | Clock 0.000 MHz | Cycle 0 | PC 0000 | IEC Idle";
+    private bool _hasWarpModeEvent;
+    private string _warpModeLimiter = "100%";
 
     public string Power { get => _power; private set => SetProperty(ref _power, value); }
     public string Run { get => _run; private set => SetProperty(ref _run, value); }
@@ -89,9 +92,10 @@ public sealed class StatusBarViewModel : ObservableObject
 
         Power = $"{status.PowerState}";
         Run = $"{status.RunState}";
-        Limiter = status.LimiterRatePercent > 0 && status.LimiterRatePercent < 1000
-            ? $"{status.LimiterRatePercent:0}%"
-            : "WARP";
+        if (!_hasWarpModeEvent)
+            Limiter = FormatLimiter(IsWarpMode(status.LimiterRatePercent), status.LimiterRatePercent);
+        else
+            Limiter = _warpModeLimiter;
         Fps = $"{status.MeasuredFramesPerSecond:0.0}";
         Clock = $"{clockMhz:0.000} MHz ({status.EffectiveClockPercent:0}%)";
         Cycle = $"{status.Cycle}";
@@ -104,6 +108,23 @@ public sealed class StatusBarViewModel : ObservableObject
             ? status.PerCpuRates.Select(r => $"{ShortCpuLabel(r.Label)} {r.EffectiveClockPercent:0}%").ToArray()
             : Array.Empty<string>();
 
+        StatusText =
+            $"Power {Power} | Run {Run} | Limiter {Limiter} | " +
+            $"FPS {Fps} | Clock {Clock} | " +
+            $"Cycle {Cycle} | PC {Pc} | IEC {Iec}" +
+            (PerCpuRates.Count > 0 ? $" | CPUs {string.Join(", ", PerCpuRates)}" : string.Empty);
+    }
+
+    public void ResetWarpModeEvent()
+    {
+        _hasWarpModeEvent = false;
+    }
+
+    public void ApplyWarpMode(WarpModeEvent warpMode)
+    {
+        _hasWarpModeEvent = true;
+        _warpModeLimiter = FormatLimiter(warpMode.IsWarpMode, warpMode.LimiterRatePercent);
+        Limiter = _warpModeLimiter;
         StatusText =
             $"Power {Power} | Run {Run} | Limiter {Limiter} | " +
             $"FPS {Fps} | Clock {Clock} | " +
@@ -125,4 +146,10 @@ public sealed class StatusBarViewModel : ObservableObject
             return label[1..];
         return label;
     }
+
+    private static bool IsWarpMode(double limiterRatePercent) =>
+        limiterRatePercent <= 0;
+
+    private static string FormatLimiter(bool isWarpMode, double limiterRatePercent) =>
+        isWarpMode ? "WARP" : $"{limiterRatePercent:0}%";
 }

@@ -14,7 +14,10 @@
     <Platforms>x64</Platforms>
     <Platform>x64</Platform>
     <SuppressIces>ICE61</SuppressIces>
-    <DefineConstants>ProductVersion=$(ProductVersion);PublishedRoot=$(PublishedRoot)</DefineConstants>
+    <EnableDebugGrpc Condition="'$(EnableDebugGrpc)' == ''">false</EnableDebugGrpc>
+    <RemoteControlToken Condition="'$(RemoteControlToken)' == ''">vicesharp-debug-local</RemoteControlToken>
+    <RemoteControlPort Condition="'$(RemoteControlPort)' == ''">53535</RemoteControlPort>
+    <DefineConstants>ProductVersion=$(ProductVersion);PublishedRoot=$(PublishedRoot);EnableDebugGrpc=$(EnableDebugGrpc);RemoteControlToken=$(RemoteControlToken);RemoteControlPort=$(RemoteControlPort)</DefineConstants>
   </PropertyGroup>
 
   <!--

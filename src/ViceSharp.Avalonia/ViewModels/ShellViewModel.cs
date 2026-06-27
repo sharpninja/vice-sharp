@@ -146,6 +146,44 @@ public sealed class ShellViewModel
         return target is null ? Task.CompletedTask : Panel.AttachFromPickerAsync(target, ct);
     }
 
+    /// <summary>Attach and start supported media dropped on the emulator display.</summary>
+    public async Task<RpcStatus> DropAndStartFileAsync(string filePath, CancellationToken ct = default)
+    {
+        var target = FindDropTarget(filePath);
+        if (target is null)
+        {
+            var status = RpcStatus.InvalidArgument($"Unsupported media file: {Path.GetFileName(filePath)}");
+            Panel.ReportStatus(status.Message);
+            return status;
+        }
+
+        await Panel.AttachAsync(target, filePath, ct).ConfigureAwait(true);
+        if (!target.IsAttached)
+        {
+            var reason = string.IsNullOrWhiteSpace(target.ValidationError)
+                ? Panel.StatusText
+                : target.ValidationError;
+            var status = RpcStatus.FailedPrecondition(reason);
+            Panel.ReportStatus(status.Message);
+            return status;
+        }
+
+        RpcStatus startStatus;
+        if (target.Slot == MediaSlot.Drive8)
+        {
+            startStatus = (await _host.ResetAndAutostartDrive8Async(ct).ConfigureAwait(true)).Status;
+        }
+        else
+        {
+            startStatus = (await _host.ColdResetAsync(ct).ConfigureAwait(true)).Status;
+        }
+
+        Panel.ReportStatus(startStatus.IsSuccess
+            ? $"Started {Path.GetFileName(filePath)}"
+            : startStatus.Message);
+        return startStatus;
+    }
+
     /// <summary>Detach media from the given slot.</summary>
     public Task DetachAsync(MediaSlot slot, CancellationToken ct = default)
     {
@@ -177,4 +215,18 @@ public sealed class ShellViewModel
 
     private AttachSlotViewModel? FindSlot(MediaSlot slot)
         => Panel.Slots.FirstOrDefault(candidate => candidate.Slot == slot);
+
+    private AttachSlotViewModel? FindDropTarget(string filePath)
+    {
+        if (string.IsNullOrWhiteSpace(filePath))
+            return null;
+
+        var extension = Path.GetExtension(filePath);
+        if (string.IsNullOrWhiteSpace(extension))
+            return null;
+
+        var pattern = "*" + extension.ToLowerInvariant();
+        return Panel.Slots.FirstOrDefault(slot =>
+            slot.FilePatterns.Any(candidate => string.Equals(candidate, pattern, StringComparison.OrdinalIgnoreCase)));
+    }
 }

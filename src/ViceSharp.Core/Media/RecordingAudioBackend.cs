@@ -42,6 +42,9 @@ public sealed class RecordingAudioBackend : IAudioBackend
     public int QueuedSampleCount => _downstream?.QueuedSampleCount ?? 0;
 
     /// <inheritdoc/>
+    public int AvailableSampleCount => _downstream?.AvailableSampleCount ?? int.MaxValue;
+
+    /// <inheritdoc/>
     public void SubmitSamples(ReadOnlySpan<float> samples)
     {
         int processed = 0;

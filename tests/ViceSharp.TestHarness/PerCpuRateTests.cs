@@ -10,9 +10,9 @@ using Xunit;
 /// <summary>
 /// TEST-CPUTICK-001 (AC3 display) / FR-CPUTICK-001. The session measures a rate for EVERY CPU in
 /// the machine's roster - host and each peripheral - on its OWN clock, so the status surface can
-/// list each CPU's speed distinctly (and the C128's two CPUs later), not just the headline
-/// primary. Each reading is that CPU's executed-cycle delta over wall time and its percent of
-/// its own target clock.
+    /// list each CPU's speed distinctly (and the C128's two CPUs later), while the headline clock
+    /// remains emulated machine time. Each per-CPU reading is that CPU's executed-cycle delta over
+    /// wall time and its percent of its own target clock.
 /// </summary>
 public sealed class PerCpuRateTests
 {
@@ -24,7 +24,7 @@ public sealed class PerCpuRateTests
     ///   its own executed-cycle Hz and percent-of-its-own-clock.
     /// </summary>
     [Fact]
-    public void PerCpuRates_MeasureEachCpuOnItsOwnClock()
+    public void PerformanceCounters_UseMachineClockForHeadline_AndEachCpuForDuty()
     {
         var machine = new FakeMultiCpuMachine();
         var architecture = Substitute.For<IArchitectureDescriptor>();
@@ -33,10 +33,12 @@ public sealed class PerCpuRateTests
         var t0 = DateTimeOffset.UnixEpoch;
         session.ResetPerformanceCounters(t0);          // anchor both CPUs at 0
 
-        machine.HostExecuted = 500_000;                // host ran 500k...
+        machine.MachineCycle = 985_248;                // machine ran at full PAL speed
+        machine.HostExecuted = 500_000;                // host CPU was BA-halted / ran 500k...
         machine.DriveExecuted = 400_000;               // ...drive ran 400k over one wall second
         session.UpdatePerformanceCounters(t0.AddSeconds(1.0));
 
+        Assert.Equal(985_248d, session.EffectiveClockHz);
         Assert.Equal(2, session.PerCpuRates.Count);
 
         var host = session.PerCpuRates[0];
@@ -63,6 +65,7 @@ public sealed class PerCpuRateTests
 
         public long HostExecuted { get; set; }
         public long DriveExecuted { get; set; }
+        public long MachineCycle { get; set; }
 
         // Explicit roster (host + drive) the session measures per-CPU rates from.
         public IReadOnlyList<CpuInfo> CpuInfos => new[]
@@ -78,7 +81,7 @@ public sealed class PerCpuRateTests
         public IArchitectureDescriptor Architecture => null!;
         public void RunFrame() { }
         public void StepInstruction() { }
-        public MachineState GetState() => default;
+        public MachineState GetState() => new() { Cycle = MachineCycle };
         public void Reset() { }
     }
 }

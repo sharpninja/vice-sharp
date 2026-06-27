@@ -6,6 +6,9 @@ public sealed class HostKeyboardAutomation
 {
     private const int ReadyPromptStart = 0x0400;
     private const int ReadyPromptLength = 1000;
+    private const int KernalKeyboardBufferStart = 0x0277;
+    private const int KernalKeyboardBufferCount = 0x00C6;
+    private const int KernalKeyboardBufferSize = 10;
     // C64 zero-page "cursor blink enable" flag ($CC): 0 while the screen editor is
     // idle in the BASIC input loop flashing the cursor (i.e. ready for a keystroke),
     // and non-zero during boot, LOAD, PRINT, and program execution when the cursor is
@@ -14,29 +17,26 @@ public sealed class HostKeyboardAutomation
     private const int CursorBlinkEnableFlag = 0x00CC;
     private const int MaxReadyWaitFrames = 600;
     private const int InitialReadyDelayFrames = 12;
-    private const int KeyPressFrames = 3;
-    private const int KeyReleaseFrames = 3;
 
-    private static readonly string[] Drive8AutostartSequence =
+    private static readonly byte[] Drive8AutostartSequence =
     [
-        "L", "O", "A", "D", "\"", "*", "\"", ",", "8", ",", "1", "Return",
-        "R", "U", "N", "Return"
+        (byte)'L', (byte)'O', (byte)'A', (byte)'D', (byte)'"', (byte)'*', (byte)'"', (byte)',', (byte)'8', (byte)',', (byte)'1', 13,
+        (byte)'R', (byte)'U', (byte)'N', 13
     ];
-    private static readonly string[] RunSequence = ["R", "U", "N", "Return"];
+    private static readonly byte[] RunSequence = [(byte)'R', (byte)'U', (byte)'N', 13];
 
-    private readonly IReadOnlyList<string> _keySequence;
+    private readonly IReadOnlyList<byte> _keySequence;
     private readonly bool _waitForBasicReady;
     private readonly Func<IMachine, string?>? _readyAction;
     private AutomationPhase _phase;
     private int _keyIndex;
     private int _frameDelay;
     private int _readyWaitFrames;
-    private string? _pressedKey;
     private bool _readyActionApplied;
 
     private HostKeyboardAutomation(
         string description,
-        IReadOnlyList<string> keySequence,
+        IReadOnlyList<byte> keySequence,
         bool waitForBasicReady,
         Func<IMachine, string?>? readyAction = null)
     {
@@ -44,12 +44,12 @@ public sealed class HostKeyboardAutomation
         _keySequence = keySequence;
         _waitForBasicReady = waitForBasicReady;
         _readyAction = readyAction;
-        _phase = waitForBasicReady ? AutomationPhase.WaitingForReady : AutomationPhase.Pressing;
+        _phase = waitForBasicReady ? AutomationPhase.WaitingForReady : AutomationPhase.FeedingKeyboardBuffer;
     }
 
     public string Description { get; }
 
-    public bool IsActive => _phase is AutomationPhase.WaitingForReady or AutomationPhase.Pressing or AutomationPhase.Releasing;
+    public bool IsActive => _phase is AutomationPhase.WaitingForReady or AutomationPhase.FeedingKeyboardBuffer;
 
     public string? LastError { get; private set; }
 
@@ -100,7 +100,7 @@ public sealed class HostKeyboardAutomation
                 _readyActionApplied = true;
             }
 
-            _phase = AutomationPhase.Pressing;
+            _phase = AutomationPhase.FeedingKeyboardBuffer;
             _frameDelay = InitialReadyDelayFrames;
             return;
         }
@@ -111,14 +111,7 @@ public sealed class HostKeyboardAutomation
             return;
         }
 
-        var keyboard = machine.Devices.All.OfType<IMachineKeyboardInput>().FirstOrDefault();
-        if (keyboard is null)
-        {
-            Fail("The current machine does not expose runtime keyboard input.");
-            return;
-        }
-
-        if (_phase == AutomationPhase.Pressing)
+        if (_phase == AutomationPhase.FeedingKeyboardBuffer)
         {
             if (_keyIndex >= _keySequence.Count)
             {
@@ -126,28 +119,38 @@ public sealed class HostKeyboardAutomation
                 return;
             }
 
-            var key = _keySequence[_keyIndex];
-            if (!keyboard.SetKeyState(key, pressed: true))
+            if (!TryFeedKernalKeyboardBuffer(machine, out var error))
             {
-                Fail($"The selected keyboard map could not resolve '{key}'.");
+                Fail(error);
                 return;
             }
-
-            _pressedKey = key;
-            _phase = AutomationPhase.Releasing;
-            _frameDelay = KeyPressFrames;
-            return;
         }
+    }
 
-        if (_phase == AutomationPhase.Releasing)
+    private bool TryFeedKernalKeyboardBuffer(IMachine machine, out string error)
+    {
+        error = string.Empty;
+        try
         {
-            if (_pressedKey is not null)
-                keyboard.SetKeyState(_pressedKey, pressed: false);
+            var pending = machine.Bus.Peek(KernalKeyboardBufferCount);
+            if (pending != 0)
+                return true;
 
-            _pressedKey = null;
-            _keyIndex++;
-            _phase = _keyIndex >= _keySequence.Count ? AutomationPhase.Complete : AutomationPhase.Pressing;
-            _frameDelay = KeyReleaseFrames;
+            var count = Math.Min(KernalKeyboardBufferSize, _keySequence.Count - _keyIndex);
+            for (var i = 0; i < count; i++)
+                machine.Bus.Write((ushort)(KernalKeyboardBufferStart + i), _keySequence[_keyIndex + i]);
+
+            machine.Bus.Write(KernalKeyboardBufferCount, (byte)count);
+            _keyIndex += count;
+            if (_keyIndex >= _keySequence.Count)
+                _phase = AutomationPhase.Complete;
+
+            return true;
+        }
+        catch (NotSupportedException ex)
+        {
+            error = $"The current machine bus cannot feed the KERNAL keyboard buffer: {ex.Message}";
+            return false;
         }
     }
 
@@ -193,8 +196,7 @@ public sealed class HostKeyboardAutomation
     private enum AutomationPhase
     {
         WaitingForReady,
-        Pressing,
-        Releasing,
+        FeedingKeyboardBuffer,
         Complete,
         Faulted
     }

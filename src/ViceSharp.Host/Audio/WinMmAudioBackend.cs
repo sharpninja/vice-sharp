@@ -10,12 +10,12 @@ namespace ViceSharp.Host.Audio;
 /// <c>winmm.dll</c> <c>waveOut</c> API via source-generated P/Invoke
 /// (<see cref="LibraryImportAttribute"/>), so it is fully NativeAOT/trim safe
 /// and needs no bundled native library. SID float samples are converted to
-/// 16-bit mono PCM and streamed through a small pool of double-buffered
-/// <c>WAVEHDR</c> blocks; if the device queue is full (the emulator briefly
-/// ran ahead of real time, e.g. in warp) the newest block is dropped rather
-/// than allowed to accumulate unbounded latency. All native calls are guarded
-/// so a machine with no audio device degrades to a silent no-op instead of
-/// throwing.
+/// 16-bit mono PCM and written into one looping WaveOut ring buffer. Free
+/// space is calculated from <c>waveOutGetPosition</c> against the write cursor,
+/// matching VICE's WMM driver so audio back-pressure reflects samples Windows
+/// has actually played rather than whether a submitted header has returned.
+/// All native calls are guarded so a machine with no audio device degrades to
+/// a silent no-op instead of throwing.
 ///
 /// Blittable structs are read/written with <see cref="Unsafe"/> rather than
 /// <see cref="Marshal"/> struct marshalling, which keeps the whole type clear
@@ -25,14 +25,24 @@ namespace ViceSharp.Host.Audio;
 public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposable
 {
     private const int SampleRate = 44100;
-    private const int BufferCount = 8;
-    // Largest submission we accept into a single WAVEHDR block. The SID flushes
-    // in batches of 256 floats; 4096 samples (8 KiB) leaves generous headroom.
-    private const int MaxSamplesPerBuffer = 4096;
+    private const int BytesPerSample = 2;
+    private const int FragmentSampleCount = 256;
+    private const int BufferFragmentCount = 8;
+    private const int BufferSampleCount = FragmentSampleCount * BufferFragmentCount;
+    private const int BufferBytes = BufferSampleCount * BytesPerSample;
+    private const int FragmentBytes = FragmentSampleCount * BytesPerSample;
+    private const int QueueFullPollMilliseconds = 1;
+
+    /// <summary>Live Windows audio waits for a buffer instead of dropping PCM when the device queue is full.</summary>
+    internal const bool DropsSamplesWhenDeviceQueueFull = false;
 
     private const uint WaveMapper = 0xFFFFFFFF;
     private const uint CallbackNull = 0x0000_0000;
+    private const uint WaveAllowSync = 0x0000_0002;
     private const uint WhdrDone = 0x0000_0001;
+    private const uint WhdrBeginLoop = 0x0000_0004;
+    private const uint WhdrEndLoop = 0x0000_0008;
+    private const uint TimeBytes = 0x0000_0004;
     private const uint MmsyserrNoerror = 0;
 
     private static readonly int HeaderSize = Unsafe.SizeOf<WaveHdr>();
@@ -40,10 +50,11 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
     private readonly object _lock = new();
 
     private IntPtr _handle;
-    private IntPtr[] _headerPtrs = Array.Empty<IntPtr>();
-    private IntPtr[] _dataPtrs = Array.Empty<IntPtr>();
-    private bool[] _inFlight = Array.Empty<bool>();
-    private int[] _bufferSamples = Array.Empty<int>();
+    private IntPtr _headerPtr;
+    private IntPtr _dataPtr;
+    private bool _headerPrepared;
+    private int _writeCursorBytes;
+    private int _playCursorSubtractBytes;
     private bool _disabled;
     private bool _paused;
     private bool _disposed;
@@ -80,24 +91,18 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
             cbSize = 0
         };
 
-        var result = waveOutOpen(out _handle, WaveMapper, in format, IntPtr.Zero, IntPtr.Zero, CallbackNull);
+        var result = waveOutOpen(out _handle, WaveMapper, in format, IntPtr.Zero, IntPtr.Zero, CallbackNull | WaveAllowSync);
         if (result != MmsyserrNoerror)
         {
             _disabled = true;
             return;
         }
 
-        _headerPtrs = new IntPtr[BufferCount];
-        _dataPtrs = new IntPtr[BufferCount];
-        _inFlight = new bool[BufferCount];
-        _bufferSamples = new int[BufferCount];
-
-        for (var i = 0; i < BufferCount; i++)
-        {
-            _dataPtrs[i] = Marshal.AllocHGlobal(MaxSamplesPerBuffer * 2);
-            _headerPtrs[i] = Marshal.AllocHGlobal(HeaderSize);
-            Unsafe.Write((void*)_headerPtrs[i], default(WaveHdr));
-        }
+        _dataPtr = Marshal.AllocHGlobal(BufferBytes);
+        _headerPtr = Marshal.AllocHGlobal(HeaderSize);
+        new Span<byte>((void*)_dataPtr, BufferBytes).Clear();
+        Unsafe.Write((void*)_headerPtr, default(WaveHdr));
+        _writeCursorBytes = BufferBytes - FragmentBytes;
     }
 
     public void SubmitSamples(ReadOnlySpan<float> samples)
@@ -105,45 +110,13 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
         if (_disabled || samples.IsEmpty)
             return;
 
-        lock (_lock)
+        while (!samples.IsEmpty)
         {
-            if (_disabled || _disposed || _paused)
+            var sampleCount = Math.Min(samples.Length, BufferSampleCount);
+            if (!WaitAndSubmitBuffer(samples[..sampleCount]))
                 return;
 
-            RecycleCompletedBuffers();
-
-            var slot = FindFreeSlot();
-            if (slot < 0)
-                return; // device queue full: drop rather than build latency
-
-            var sampleCount = Math.Min(samples.Length, MaxSamplesPerBuffer);
-            var bytes = sampleCount * 2;
-
-            var dest = new Span<byte>((void*)_dataPtrs[slot], bytes);
-            // Apply the app's master output level (mute/volume) during conversion so
-            // silence/attenuation costs nothing extra and the sample timing is preserved.
-            AudioSampleConverter.ConvertToPcm16(
-                samples[..sampleCount], dest, MasterAudioControl.EffectiveGain);
-
-            var header = new WaveHdr
-            {
-                lpData = _dataPtrs[slot],
-                dwBufferLength = (uint)bytes,
-                dwFlags = 0
-            };
-            Unsafe.Write((void*)_headerPtrs[slot], header);
-
-            var size = (uint)HeaderSize;
-            if (waveOutPrepareHeader(_handle, _headerPtrs[slot], size) != MmsyserrNoerror)
-                return;
-            if (waveOutWrite(_handle, _headerPtrs[slot], size) != MmsyserrNoerror)
-            {
-                waveOutUnprepareHeader(_handle, _headerPtrs[slot], size);
-                return;
-            }
-
-            _inFlight[slot] = true;
-            _bufferSamples[slot] = sampleCount;
+            samples = samples[sampleCount..];
         }
     }
 
@@ -156,15 +129,21 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
 
             lock (_lock)
             {
-                RecycleCompletedBuffers();
-                var total = 0;
-                for (var i = 0; i < _inFlight.Length; i++)
-                {
-                    if (_inFlight[i])
-                        total += _bufferSamples[i];
-                }
+                return (BufferBytes - GetAvailableBytesLocked()) / BytesPerSample;
+            }
+        }
+    }
 
-                return total;
+    public int AvailableSampleCount
+    {
+        get
+        {
+            if (_disabled)
+                return int.MaxValue;
+
+            lock (_lock)
+            {
+                return GetAvailableBytesLocked() / BytesPerSample;
             }
         }
     }
@@ -207,38 +186,150 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
             if (_disposed)
                 return;
             waveOutReset(_handle);
-            RecycleCompletedBuffers();
+            UnprepareHeaderLocked();
+            new Span<byte>((void*)_dataPtr, BufferBytes).Clear();
+            _writeCursorBytes = BufferBytes - FragmentBytes;
+            _playCursorSubtractBytes = 0;
             _paused = false;
         }
     }
 
-    private int FindFreeSlot()
+    private bool WaitAndSubmitBuffer(ReadOnlySpan<float> samples)
     {
-        for (var i = 0; i < _inFlight.Length; i++)
+        var requiredBytes = samples.Length * BytesPerSample;
+        while (true)
         {
-            if (!_inFlight[i])
-                return i;
-        }
+            lock (_lock)
+            {
+                if (_disabled || _disposed || _paused)
+                    return false;
 
-        return -1;
+                if (!EnsureLoopingBufferLocked())
+                    return false;
+
+                if (GetAvailableBytesLocked() >= requiredBytes)
+                {
+                    WriteSamplesLocked(samples);
+                    return true;
+                }
+            }
+
+            Thread.Sleep(QueueFullPollMilliseconds);
+        }
     }
 
-    private void RecycleCompletedBuffers()
+    private bool EnsureLoopingBufferLocked()
     {
-        var size = (uint)HeaderSize;
-        for (var i = 0; i < _inFlight.Length; i++)
-        {
-            if (!_inFlight[i])
-                continue;
+        var flags = _headerPrepared ? Unsafe.Read<WaveHdr>((void*)_headerPtr).dwFlags : WhdrDone;
+        if (_headerPrepared && (flags & WhdrDone) == 0)
+            return true;
 
-            var flags = Unsafe.Read<WaveHdr>((void*)_headerPtrs[i]).dwFlags;
-            if ((flags & WhdrDone) != 0)
-            {
-                waveOutUnprepareHeader(_handle, _headerPtrs[i], size);
-                _inFlight[i] = false;
-                _bufferSamples[i] = 0;
-            }
+        waveOutReset(_handle);
+        UnprepareHeaderLocked();
+        new Span<byte>((void*)_dataPtr, BufferBytes).Clear();
+        _writeCursorBytes = BufferBytes - FragmentBytes;
+        _playCursorSubtractBytes = 0;
+
+        var header = new WaveHdr
+        {
+            lpData = _dataPtr,
+            dwBufferLength = BufferBytes,
+            dwFlags = WhdrBeginLoop | WhdrEndLoop,
+            dwLoops = 0x7fff_ffff
+        };
+        Unsafe.Write((void*)_headerPtr, header);
+
+        var size = (uint)HeaderSize;
+        if (waveOutPrepareHeader(_handle, _headerPtr, size) != MmsyserrNoerror)
+            return false;
+        _headerPrepared = true;
+
+        if (waveOutWrite(_handle, _headerPtr, size) != MmsyserrNoerror)
+        {
+            UnprepareHeaderLocked();
+            return false;
         }
+
+        return true;
+    }
+
+    private void WriteSamplesLocked(ReadOnlySpan<float> samples)
+    {
+        var firstSamples = Math.Min(samples.Length, (BufferBytes - _writeCursorBytes) / BytesPerSample);
+        if (firstSamples > 0)
+        {
+            var firstDest = new Span<byte>((void*)IntPtr.Add(_dataPtr, _writeCursorBytes), firstSamples * BytesPerSample);
+            AudioSampleConverter.ConvertToPcm16(samples[..firstSamples], firstDest, MasterAudioControl.EffectiveGain);
+        }
+
+        var remaining = samples[firstSamples..];
+        if (!remaining.IsEmpty)
+        {
+            var secondDest = new Span<byte>((void*)_dataPtr, remaining.Length * BytesPerSample);
+            AudioSampleConverter.ConvertToPcm16(remaining, secondDest, MasterAudioControl.EffectiveGain);
+        }
+
+        _writeCursorBytes = (_writeCursorBytes + samples.Length * BytesPerSample) % BufferBytes;
+    }
+
+    private int GetAvailableBytesLocked()
+    {
+        if (_disposed || _paused || _headerPtr == IntPtr.Zero)
+            return 0;
+
+        var flags = _headerPrepared ? Unsafe.Read<WaveHdr>((void*)_headerPtr).dwFlags : WhdrDone;
+        if (!_headerPrepared || (flags & WhdrDone) != 0)
+            return BufferBytes;
+
+        return TryGetPlayCursorBytesLocked(out var playCursor)
+            ? ComputeAvailableBytes(_writeCursorBytes, playCursor, BufferBytes)
+            : 0;
+    }
+
+    private bool TryGetPlayCursorBytesLocked(out int playCursor)
+    {
+        var time = new MmTime { wType = TimeBytes };
+        if (waveOutGetPosition(_handle, ref time, (uint)Unsafe.SizeOf<MmTime>()) != MmsyserrNoerror)
+        {
+            playCursor = 0;
+            return false;
+        }
+
+        playCursor = NormalizePlayCursor(time.cb, ref _playCursorSubtractBytes, BufferBytes);
+        return true;
+    }
+
+    internal static int NormalizePlayCursor(uint reportedBytes, ref int subtractBytes, int bufferBytes)
+    {
+        var cursor = (long)reportedBytes - subtractBytes;
+        if (cursor >= bufferBytes)
+        {
+            subtractBytes += (int)(cursor / bufferBytes) * bufferBytes;
+            cursor %= bufferBytes;
+        }
+
+        if (cursor < 0)
+            cursor = 0;
+
+        return (int)cursor;
+    }
+
+    internal static int ComputeAvailableBytes(int writeCursorBytes, int playCursorBytes, int bufferBytes)
+    {
+        var used = writeCursorBytes - playCursorBytes;
+        if (used < 0)
+            used += bufferBytes;
+
+        return bufferBytes - used;
+    }
+
+    private void UnprepareHeaderLocked()
+    {
+        if (!_headerPrepared)
+            return;
+
+        waveOutUnprepareHeader(_handle, _headerPtr, (uint)HeaderSize);
+        _headerPrepared = false;
     }
 
     public void Dispose()
@@ -252,33 +343,22 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
             if (!_disabled && _handle != IntPtr.Zero)
             {
                 waveOutReset(_handle);
-                var size = (uint)HeaderSize;
-                for (var i = 0; i < _headerPtrs.Length; i++)
-                {
-                    if (_inFlight[i])
-                        waveOutUnprepareHeader(_handle, _headerPtrs[i], size);
-                }
-
+                UnprepareHeaderLocked();
                 waveOutClose(_handle);
                 _handle = IntPtr.Zero;
             }
 
-            foreach (var ptr in _headerPtrs)
+            if (_headerPtr != IntPtr.Zero)
             {
-                if (ptr != IntPtr.Zero)
-                    Marshal.FreeHGlobal(ptr);
+                Marshal.FreeHGlobal(_headerPtr);
+                _headerPtr = IntPtr.Zero;
             }
 
-            foreach (var ptr in _dataPtrs)
+            if (_dataPtr != IntPtr.Zero)
             {
-                if (ptr != IntPtr.Zero)
-                    Marshal.FreeHGlobal(ptr);
+                Marshal.FreeHGlobal(_dataPtr);
+                _dataPtr = IntPtr.Zero;
             }
-
-            _headerPtrs = Array.Empty<IntPtr>();
-            _dataPtrs = Array.Empty<IntPtr>();
-            _inFlight = Array.Empty<bool>();
-            _bufferSamples = Array.Empty<int>();
         }
     }
 
@@ -307,6 +387,14 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
         public IntPtr reserved;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MmTime
+    {
+        public uint wType;
+        public uint cb;
+        public uint reserved;
+    }
+
     [LibraryImport("winmm.dll")]
     private static partial uint waveOutOpen(out IntPtr phwo, uint deviceId, in WaveFormatEx format, IntPtr callback, IntPtr instance, uint flags);
 
@@ -315,6 +403,9 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
 
     [LibraryImport("winmm.dll")]
     private static partial uint waveOutWrite(IntPtr hwo, IntPtr header, uint size);
+
+    [LibraryImport("winmm.dll")]
+    private static partial uint waveOutGetPosition(IntPtr hwo, ref MmTime time, uint size);
 
     [LibraryImport("winmm.dll")]
     private static partial uint waveOutUnprepareHeader(IntPtr hwo, IntPtr header, uint size);

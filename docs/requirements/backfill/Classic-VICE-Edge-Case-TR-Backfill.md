@@ -304,6 +304,25 @@ The repeatable scanner reviewed 812 C/C++/header/inc files under `native/vice/vi
 
 **Traceability:** FR-SID-001, FR-SID-004, TEST-SID-001.
 
+### TR-SID-EDGE-004: reSID Waveform DAC Centering and Normalized Mix Scale
+
+**ID:** TR-SID-EDGE-004
+
+**Phase 1:** Required for VICE-compatible SID pacing and Pieces of Light runtime validation.
+
+**Behavior Summary:** SID waveform output must be centered against the chip model's floating DAC zero level before envelope multiplication, then mixed with a scale that preserves audible amplitude without saturating the host stream. Incorrect unsigned voice mixing drains or fills host audio buffers at a rate that makes SID-paced demos run too fast after segment transitions.
+
+**Affected Machine/Profile:** C64 MOS6581 and MOS8580 SID profiles using real-time host audio back-pressure.
+
+**Source References:**
+
+- `native/vice/vice/src/resid/wave.cc` models waveform output and DAC-zero behavior.
+- `native/vice/vice/src/resid/sid.cc` mixes SID voice output into host samples.
+
+**Acceptance Expectation:** Focused SID waveform tests prove model-specific baseline crossing, PCM equivalency tests remain deterministic, and runtime Pieces of Light capture holds near 100% before and after the first-segment Space transition.
+
+**Traceability:** FR-SID-014, TEST-SID-002.
+
 ### TR-IEC-EDGE-001: IEC ATN, EOI, ACK, NACK, and Bit Timeout Timing
 
 **ID:** TR-IEC-EDGE-001

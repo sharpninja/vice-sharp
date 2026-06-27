@@ -15,6 +15,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     private readonly GrpcContracts.SettingsService.SettingsServiceClient _settingsClient;
     private readonly GrpcContracts.MonitorService.MonitorServiceClient _monitorClient;
     private readonly GrpcContracts.CaptureService.CaptureServiceClient _captureClient;
+    private readonly SemaphoreSlim _sessionGate = new(1, 1);
     private string _sessionId;
     private bool _trueDrive;
     private int _trueDriveDevice = 8;
@@ -559,6 +560,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         }
 
         _channel.Dispose();
+        _sessionGate.Dispose();
     }
 
     private async ValueTask<string> EnsureSessionAsync(CancellationToken cancellationToken)
@@ -566,29 +568,40 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         if (!string.IsNullOrWhiteSpace(_sessionId))
             return _sessionId;
 
-        var response = await _hostClient.CreateSessionAsync(
-            new GrpcContracts.CreateEmulatorSessionRequest
-            {
-                ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty,
-                TrueDrive = _trueDrive,
-                TrueDriveDevice = _trueDriveDevice,
-                TrueDriveDiskImagePath = _trueDriveDiskImagePath
-            },
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+        await _sessionGate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(_sessionId))
+                return _sessionId;
 
-        var status = MapStatus(response.Status);
-        if (!status.IsSuccess)
-            throw new InvalidOperationException(status.Message);
+            var response = await _hostClient.CreateSessionAsync(
+                new GrpcContracts.CreateEmulatorSessionRequest
+                {
+                    ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty,
+                    TrueDrive = _trueDrive,
+                    TrueDriveDevice = _trueDriveDevice,
+                    TrueDriveDiskImagePath = _trueDriveDiskImagePath
+                },
+                cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        SetSessionId(response.SessionId);
-        var started = await _hostClient.StartAsync(
-            new GrpcContracts.SessionRequest { SessionId = _sessionId },
-            cancellationToken: cancellationToken).ConfigureAwait(false);
-        var startedStatus = MapStatus(started.Status);
-        if (!startedStatus.IsSuccess)
-            throw new InvalidOperationException(startedStatus.Message);
+            var status = MapStatus(response.Status);
+            if (!status.IsSuccess)
+                throw new InvalidOperationException(status.Message);
 
-        return _sessionId;
+            SetSessionId(response.SessionId);
+            var started = await _hostClient.StartAsync(
+                new GrpcContracts.SessionRequest { SessionId = response.SessionId },
+                cancellationToken: cancellationToken).ConfigureAwait(false);
+            var startedStatus = MapStatus(started.Status);
+            if (!startedStatus.IsSuccess)
+                throw new InvalidOperationException(startedStatus.Message);
+
+            return response.SessionId;
+        }
+        finally
+        {
+            _sessionGate.Release();
+        }
     }
 
     private void SetSessionId(string sessionId)

@@ -1,10 +1,54 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        
-
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ViceSharp Avalonia (source, Debug gRPC)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build ViceSharp.Avalonia Debug",
+      "program": "${workspaceFolder}/src/ViceSharp.Avalonia/bin/Debug/net10.0/ViceSharp.Avalonia.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "env": {
+        "VICESHARP_GRPC_REFLECTION": "1",
+        "VICESHARP_REMOTECONTROL_ENABLE": "1",
+        "VICESHARP_REMOTECONTROL_TOKEN": "vicesharp-debug-local",
+        "VICESHARP_REMOTECONTROL_HOST": "127.0.0.1",
+        "VICESHARP_REMOTECONTROL_PORT": "53535",
+        "VICESHARP_REMOTECONTROL_ALLOW_ACTIONS": "1",
+        "VICESHARP_REMOTECONTROL_ALLOW_FRAMES": "1",
+        "VICESHARP_REMOTECONTROL_ALLOW_INPUT": "1"
+      }
+    },
+    {
+      "name": "ViceSharp Installed App (Debug gRPC)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "C:/Program Files/ViceSharp/ViceSharp.Avalonia.exe",
+      "args": [],
+      "cwd": "C:/Program Files/ViceSharp",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "justMyCode": false,
+      "env": {
+        "VICESHARP_GRPC_REFLECTION": "1",
+        "VICESHARP_REMOTECONTROL_ENABLE": "1",
+        "VICESHARP_REMOTECONTROL_TOKEN": "vicesharp-debug-local",
+        "VICESHARP_REMOTECONTROL_HOST": "127.0.0.1",
+        "VICESHARP_REMOTECONTROL_PORT": "53535",
+        "VICESHARP_REMOTECONTROL_ALLOW_ACTIONS": "1",
+        "VICESHARP_REMOTECONTROL_ALLOW_FRAMES": "1",
+        "VICESHARP_REMOTECONTROL_ALLOW_INPUT": "1"
+      }
+    },
+    {
+      "name": "Attach to ViceSharp.Avalonia",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickProcess}",
+      "justMyCode": false
+    }
+  ]
 }

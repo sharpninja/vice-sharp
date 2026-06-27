@@ -191,10 +191,22 @@ sealed partial class Build : NukeBuild
     [Parameter("Runtime identifier for the desktop publish that feeds PublishMsi. Default win-x64.")]
     readonly string MsiRuntimeIdentifier = "win-x64";
 
+    [Parameter("Disable AOT-style MSI publish outputs. Values: auto, true, false. Default auto (true for Debug, false otherwise).")]
+    readonly string MsiAotDisabled = "auto";
+
+    [Parameter("Enable both debug gRPC surfaces in the installed MSI environment. Values: auto, true, false. Default auto (true for Debug, false otherwise).")]
+    readonly string MsiEnableDebugGrpc = "auto";
+
+    [Parameter("Bearer token installed for the Avalonia RemoteControl debug gRPC surface when --msi-enable-debug-grpc is true.")]
+    readonly string MsiRemoteControlToken = "vicesharp-debug-local";
+
+    [Parameter("Loopback port installed for the Avalonia RemoteControl debug gRPC surface when --msi-enable-debug-grpc is true.")]
+    readonly int MsiRemoteControlPort = 53535;
+
     AbsolutePath AvaloniaProject => RootDirectory / "src" / "ViceSharp.Avalonia" / "ViceSharp.Avalonia.csproj";
 
     AbsolutePath AvaloniaPublishDir =>
-        RootDirectory / "src" / "ViceSharp.Avalonia" / "bin" / "Release" / "net10.0" / MsiRuntimeIdentifier / "publish";
+        RootDirectory / "src" / "ViceSharp.Avalonia" / "bin" / Configuration / "net10.0" / MsiRuntimeIdentifier / "publish";
 
     AbsolutePath InstallerProject => RootDirectory / "installer" / "ViceSharp.Installer.wixproj";
 
@@ -214,26 +226,45 @@ sealed partial class Build : NukeBuild
         .DependsOn(Restore)
         .Executes(() =>
         {
+            var isDebugMsi = string.Equals(Configuration, "Debug", StringComparison.OrdinalIgnoreCase);
+            var aotDisabled = ResolveAutoBoolean(MsiAotDisabled, isDebugMsi, nameof(MsiAotDisabled));
+            var enableDebugGrpc = ResolveAutoBoolean(MsiEnableDebugGrpc, isDebugMsi, nameof(MsiEnableDebugGrpc));
+            if (enableDebugGrpc)
+            {
+                if (string.IsNullOrWhiteSpace(MsiRemoteControlToken))
+                    throw new InvalidOperationException("MsiRemoteControlToken must be non-empty when debug gRPC surfaces are enabled.");
+                if (MsiRemoteControlToken.Contains(';', StringComparison.Ordinal))
+                    throw new InvalidOperationException("MsiRemoteControlToken cannot contain ';' because WiX DefineConstants uses ';' separators.");
+                if (MsiRemoteControlPort <= 0 || MsiRemoteControlPort > 65535)
+                    throw new InvalidOperationException("MsiRemoteControlPort must be in the range 1..65535.");
+            }
+
             // Step 1: self-contained JIT publish of ViceSharp.Avalonia.
-            // Tiered JIT + dynamic PGO runs the dispatch-heavy cycle-accurate
-            // emulation measurably faster than trimmed native publishing, and a
-            // low-pause background GC (set in the .csproj) keeps the worker from
-            // stalling. ReadyToRun gives a fast cold start while the JIT still
-            // re-optimises hot paths at runtime. No trimming: it would risk
-            // Avalonia/gRPC reflection-heavy infrastructure.
-            Serilog.Log.Information("Publishing ViceSharp.Avalonia (self-contained JIT + ReadyToRun, {Rid}) -> {Out}",
-                MsiRuntimeIdentifier, AvaloniaPublishDir);
+            // Native AOT stays disabled so the debug gRPC surfaces and debugger
+            // attach path remain usable, but the MSI payload is trimmed and
+            // single-file so installed startup does not crawl through hundreds of
+            // separate framework/package assemblies.
+            Serilog.Log.Information(
+                "Publishing ViceSharp.Avalonia ({Configuration}, self-contained trimmed single-file JIT, ReadyToRun={ReadyToRun}, DebugGrpc={DebugGrpc}, {Rid}) -> {Out}",
+                Configuration,
+                !aotDisabled,
+                enableDebugGrpc,
+                MsiRuntimeIdentifier,
+                AvaloniaPublishDir);
             DotNetPublish(s => s
                 .SetProject(AvaloniaProject)
-                .SetConfiguration("Release")
+                .SetConfiguration(Configuration)
                 .SetRuntime(MsiRuntimeIdentifier)
                 .SetSelfContained(true)
-                .SetProperty("PublishTrimmed", "false")
-                .SetProperty("PublishReadyToRun", "true")
-                .SetProperty("PublishSingleFile", "false")
-                // Strip managed PDBs / XML doc files at publish time.
-                .SetProperty("DebugType", "none")
-                .SetProperty("DebugSymbols", "false")
+                .SetProperty("PublishAot", "false")
+                .SetProperty("PublishTrimmed", "true")
+                .SetProperty("TrimMode", "partial")
+                .SetProperty("ILLinkTreatWarningsAsErrors", "false")
+                .SetProperty("PublishReadyToRun", aotDisabled ? "false" : "true")
+                .SetProperty("PublishSingleFile", "true")
+                .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
+                .SetProperty("DebugType", isDebugMsi ? "portable" : "none")
+                .SetProperty("DebugSymbols", isDebugMsi ? "true" : "false")
                 .SetProperty("DocumentationFile", string.Empty)
                 .SetProperty("GenerateDocumentationFile", "false")
                 .SetProperty("CopyDocumentationFilesFromPackages", "false"));
@@ -249,7 +280,9 @@ sealed partial class Build : NukeBuild
             // big ticket items (libSkiaSharp.pdb ~84 MB,
             // libHarfBuzzSharp.pdb ~21 MB) and end users never attach a
             // debugger from Program Files.
-            string[] excludeGlobs = ["**/*.pdb", "**/*.xml", "**/*.dbg", "**/createdump.exe"];
+            string[] excludeGlobs = isDebugMsi
+                ? ["**/*.xml", "**/*.dbg", "**/createdump.exe"]
+                : ["**/*.pdb", "**/*.xml", "**/*.dbg", "**/createdump.exe"];
             long deletedBytes = 0;
             int deletedCount = 0;
             foreach (var glob in excludeGlobs)
@@ -267,22 +300,29 @@ sealed partial class Build : NukeBuild
 
             // Step 2: build the WiX installer project.
             InstallerOutputDir.CreateOrCleanDirectory();
-            Serilog.Log.Information("Building installer wixproj with PublishedRoot={Root}", AvaloniaPublishDir);
+            Serilog.Log.Information(
+                "Building installer wixproj with PublishedRoot={Root}, DebugGrpc={DebugGrpc}, RemoteControlPort={RemoteControlPort}",
+                AvaloniaPublishDir,
+                enableDebugGrpc,
+                MsiRemoteControlPort);
             DotNetBuild(s => s
                 .SetProjectFile(InstallerProject)
-                .SetConfiguration("Release")
+                .SetConfiguration(Configuration)
                 .SetProperty("ProductVersion", MsiVersion)
-                .SetProperty("PublishedRoot", AvaloniaPublishDir));
+                .SetProperty("PublishedRoot", AvaloniaPublishDir)
+                .SetProperty("EnableDebugGrpc", enableDebugGrpc ? "true" : "false")
+                .SetProperty("RemoteControlToken", enableDebugGrpc ? MsiRemoteControlToken : string.Empty)
+                .SetProperty("RemoteControlPort", enableDebugGrpc ? MsiRemoteControlPort.ToString(System.Globalization.CultureInfo.InvariantCulture) : string.Empty));
 
             // Step 3: copy the produced MSI to artifacts/installer/.
-            var built = (RootDirectory / "installer" / "bin" / "x64" / "Release" / "en-US")
+            var built = (RootDirectory / "installer" / "bin" / "x64" / Configuration / "en-US")
                 .GlobFiles("*.msi").FirstOrDefault();
             if (built is null || !built.FileExists())
-                built = (RootDirectory / "installer" / "bin" / "x64" / "Release")
+                built = (RootDirectory / "installer" / "bin" / "x64" / Configuration)
                     .GlobFiles("*.msi").FirstOrDefault();
             if (built is null || !built.FileExists())
                 throw new InvalidOperationException(
-                    "WiX did not produce an MSI under installer/bin/x64/Release. Check the wixproj build log.");
+                    $"WiX did not produce an MSI under installer/bin/x64/{Configuration}. Check the wixproj build log.");
 
             built.CopyToDirectory(InstallerOutputDir, ExistsPolicy.FileOverwrite);
             var dest = InstallerOutputDir / built.Name;
@@ -291,6 +331,18 @@ sealed partial class Build : NukeBuild
 
             Serilog.Log.Information("MSI ready: {Path} ({Size:N0} bytes)", MsiOutputPath, new System.IO.FileInfo(MsiOutputPath).Length);
         });
+
+    static bool ResolveAutoBoolean(string value, bool autoValue, string parameterName)
+    {
+        if (string.IsNullOrWhiteSpace(value) || string.Equals(value, "auto", StringComparison.OrdinalIgnoreCase))
+            return autoValue;
+        if (bool.TryParse(value, out var parsed))
+            return parsed;
+        if (value is "1" or "0")
+            return value == "1";
+
+        throw new InvalidOperationException($"{parameterName} must be auto, true, false, 1, or 0.");
+    }
 
     /// <summary>
     /// Install the most recent PublishMsi output silently via msiexec.

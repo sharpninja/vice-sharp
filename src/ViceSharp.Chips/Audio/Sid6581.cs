@@ -19,10 +19,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     public byte MasterVolume { get => _volume; set => _volume = value; }
 
     /// <summary>
-    /// Pending-playback depth of the attached audio backend (0 when none). The pacing
-    /// gate's sound back-pressure regulator throttles the worker on this.
+    /// Pending-playback depth of the attached audio backend (0 when none).
     /// </summary>
     public int QueuedSampleCount => _audioBackend?.QueuedSampleCount ?? 0;
+
+    /// <summary>Free playback-buffer space exposed by the attached audio backend.</summary>
+    public int AvailableSampleCount => _audioBackend?.AvailableSampleCount ?? int.MaxValue;
+
+    /// <summary>SID batches samples in the same 256-sample fragment size VICE flushes.</summary>
+    public int AudioFragmentSampleCount => _sampleBuffer.Length;
 
     /// <summary>
     /// True once a backend is attached AND <see cref="ConfigureAudioClock"/> has run
@@ -50,10 +55,20 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // test bit in CTRL (bit 3) reseeds the LFSR to that state.
     private const uint NoiseLfsrMask = 0x007F_FFFF;
     private const uint NoiseLfsrInitial = NoiseLfsrMask;
+    private const float VoiceOutputScale = 2048.0f;
     // Bit 19 of the 24-bit accumulator (the implementation stores the
     // 24-bit value in a uint; the upper byte is the phase output).
     private const uint NoiseClockBit = 1u << 19;
     private uint _noiseLfsr = NoiseLfsrInitial;
+
+    /// <summary>
+    /// The die-specific waveform DAC zero point, scaled from reSID's 12-bit
+    /// voice model down to this implementation's 8-bit waveform samples.
+    /// Selected waveform output is centered around this point before the
+    /// envelope is applied; a digital waveform value of zero is therefore the
+    /// negative rail, not silence.
+    /// </summary>
+    protected virtual int WaveZeroLevel => 0x38;
 
     /// <summary>
     /// FR-SID-009 ac.1: advance the 23-bit noise LFSR one step. The
@@ -197,7 +212,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             }
 
             prevOutput = sample;
-            int envelopeAdjusted = (sample * voice.Envelope) >> 8;
+            int envelopeAdjusted = selectedCount == 0
+                ? 0
+                : ((sample - WaveZeroLevel) * voice.Envelope) >> 8;
 
             if (i == 0) voiceOutputs0 = envelopeAdjusted;
             else if (i == 1) voiceOutputs1 = envelopeAdjusted;
@@ -216,9 +233,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // normal voice output dominant while still letting per-write volume
         // changes register as audible amplitude.
         float volumeFraction = _volume / 15.0f;
-        float voiceMix = (filteredOutput / 3) * volumeFraction / 255.0f;
+        float voiceMix = filteredOutput * volumeFraction / VoiceOutputScale;
         float digiDcOffset = volumeFraction * DigiDcOffset;
-        return voiceMix + digiDcOffset;
+        return Math.Clamp(voiceMix + digiDcOffset, -1.0f, 1.0f);
     }
 
     /// <summary>
@@ -401,7 +418,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // Audio sample-rate downconversion. The SID is clocked (Tick) at
     // masterClockHz / ClockDivisor; output runs at SamplingRate (44.1 kHz).
     // _audioTicksPerSample is how many Tick()s elapse per emitted sample
-    // (e.g. PAL: (985248/16)/44100 ~= 1.396). A fractional accumulator emits
+    // (e.g. PAL: (985248/1)/44100 ~= 22.34). A fractional accumulator emits
     // one sample whenever it crosses that threshold, sampling the evolving
     // synthesis state. Zero (the default) disables emission entirely - so a
     // SID built without an audio backend behaves exactly as before and never

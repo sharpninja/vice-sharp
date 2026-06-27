@@ -138,4 +138,37 @@ public sealed class AppIconTests
         wxs.Should().Contain("ARPPRODUCTICON", "the MSI must show the product icon in Add/Remove Programs");
         wxs.Should().Contain("ProductIcon.ico", "the MSI Icon element id (with .ico extension) must be defined and referenced");
     }
+
+    [Fact]
+    public void Installer_DebugGrpcEnvironment_IsConditional()
+    {
+        var wxs = File.ReadAllText(PathUnder("installer", "ViceSharp.wxs"));
+        wxs.Should().Contain("$(var.EnableDebugGrpc)", "debugger gRPC environment must be opt-in from the Nuke MSI target");
+        wxs.Should().Contain("VICESHARP_GRPC_REFLECTION", "the host/control gRPC surface must be reflection-enabled for debug attach");
+        wxs.Should().Contain("VICESHARP_REMOTECONTROL_ENABLE", "the Avalonia RemoteControl gRPC surface must be started for debug attach");
+        wxs.Should().Contain("VICESHARP_REMOTECONTROL_TOKEN", "RemoteControl must remain token-gated even in debug MSI builds");
+        wxs.Should().Contain("VICESHARP_REMOTECONTROL_PORT", "RemoteControl attach tooling needs a deterministic loopback port");
+
+        var wixproj = File.ReadAllText(PathUnder("installer", "ViceSharp.Installer.wixproj"));
+        wixproj.Should().Contain("EnableDebugGrpc=$(EnableDebugGrpc)", "WiX must receive the debug surface switch from Nuke");
+        wixproj.Should().Contain("RemoteControlToken=$(RemoteControlToken)", "WiX must receive the token selected by Nuke");
+        wixproj.Should().Contain("RemoteControlPort=$(RemoteControlPort)", "WiX must receive the port selected by Nuke");
+    }
+
+    [Fact]
+    public void Build_PublishMsi_UsesConfigurationAndCanDisableAot()
+    {
+        var build = File.ReadAllText(PathUnder("build", "Build.cs"));
+        build.Should().Contain(".SetConfiguration(Configuration)", "PublishMsi must honor the requested Debug/Release configuration");
+        build.Should().Contain("MsiAotDisabled", "the MSI target must expose an explicit AOT disable switch");
+        build.Should().Contain(".SetProperty(\"PublishAot\", \"false\")", "native AOT must stay disabled for MSI publishing");
+        build.Should().Contain(".SetProperty(\"PublishTrimmed\", \"true\")", "MSI publishing must trim the installed payload for startup");
+        build.Should().Contain(".SetProperty(\"TrimMode\", \"partial\")", "MSI trimming must use the safer partial trim mode for Avalonia/gRPC");
+        build.Should().Contain(".SetProperty(\"ILLinkTreatWarningsAsErrors\", \"false\")", "trim warnings should stay visible without blocking diagnostic MSI publishing");
+        build.Should().Contain(".SetProperty(\"PublishSingleFile\", \"true\")", "MSI publishing must bundle managed payload into a single-file app for startup");
+        build.Should().Contain(".SetProperty(\"IncludeNativeLibrariesForSelfExtract\", \"true\")", "single-file MSI publishing must include native dependencies");
+        build.Should().Contain(".SetProperty(\"PublishReadyToRun\", aotDisabled ? \"false\" : \"true\")", "Debug diagnostic MSI builds must be able to disable ReadyToRun");
+        build.Should().Contain(".SetProperty(\"DebugSymbols\", isDebugMsi ? \"true\" : \"false\")", "Debug MSI builds must preserve debugger symbols");
+        build.Should().Contain("MsiEnableDebugGrpc", "the MSI target must expose the debug gRPC surface switch");
+    }
 }

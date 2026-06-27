@@ -61,6 +61,7 @@ This map groups Functional Requirements by planned implementation iteration.
 | FR-SID-004 | 6581 SID Filter Emulation | Audio (SID) |
 | FR-SID-006 | ADSR Envelope Generator | Audio (SID) |
 | FR-SID-009 | Noise Waveform Linear Feedback Shift Register | Audio (SID) |
+| FR-SID-014 | VICE-Compatible Signed SID Voice Output and Demo Pacing | Audio (SID) |
 | FR-SNP-001 | Save Complete Machine State to Snapshot | Snapshot / Replay |
 | FR-SNP-002 | Load Machine State from Snapshot | Snapshot / Replay |
 | FR-UI-001 | Dockable Host UI Control Client | Host / UI Boundary |
@@ -106,6 +107,7 @@ This map groups Functional Requirements by planned implementation iteration.
 | FR-SID-007 | Ring Modulation | Audio (SID) |
 | FR-SID-008 | Hard Sync (Oscillator Synchronization) | Audio (SID) |
 | FR-SID-010 | Direct Digital Sample Playback via Volume Register | Audio (SID) |
+| FR-SID-013 | SID Audio Backend Wiring | Audio (SID) |
 | FR-SNP-003 | Deterministic Input Replay | Snapshot / Replay |
 | FR-TAP-001 | Datasette Motor Control | Tape / Datasette |
 | FR-TAP-002 | TAP File Format Support (v0 and v1) | Tape / Datasette |

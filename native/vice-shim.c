@@ -105,6 +105,7 @@ static int vice_shim_cartridge_type_for(const vice_machine_t *instance, int leng
 static void vice_shim_detach_cartridge_locked(void);
 static int vice_shim_write_temp_file(const uint8_t *data, int length, char *path, size_t path_size);
 static uint16_t vice_shim_read_cia_timer(cia_context_t *cia, ciat_t *timer);
+static void vice_shim_set_current_thread_description(const wchar_t *description);
 
 static BOOL CALLBACK vice_shim_initialize_sync(PINIT_ONCE init_once, PVOID parameter, PVOID *context)
 {
@@ -257,6 +258,8 @@ static unsigned __stdcall vice_shim_worker_main(void *parameter)
 {
     (void)parameter;
 
+    vice_shim_set_current_thread_description(L"ViceSharp.NativeViceShim");
+
     maincpu_mainloop();
 
     EnterCriticalSection(&g_state_lock);
@@ -266,6 +269,26 @@ static unsigned __stdcall vice_shim_worker_main(void *parameter)
     LeaveCriticalSection(&g_state_lock);
 
     return 0;
+}
+
+typedef HRESULT (WINAPI *vice_shim_set_thread_description_fn)(HANDLE thread, PCWSTR description);
+
+static void vice_shim_set_current_thread_description(const wchar_t *description)
+{
+    HMODULE kernel32;
+    vice_shim_set_thread_description_fn set_thread_description;
+
+    kernel32 = GetModuleHandleW(L"Kernel32.dll");
+    if (kernel32 == NULL) {
+        return;
+    }
+
+    set_thread_description = (vice_shim_set_thread_description_fn)GetProcAddress(kernel32, "SetThreadDescription");
+    if (set_thread_description == NULL) {
+        return;
+    }
+
+    (void)set_thread_description(GetCurrentThread(), description);
 }
 
 static int vice_shim_stop_worker(void *machine)

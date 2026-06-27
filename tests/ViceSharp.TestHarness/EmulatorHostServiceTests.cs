@@ -383,13 +383,12 @@ public sealed class EmulatorHostServiceTests
     /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 EmulatorHostService).
     /// Use case: A client invokes SetLimiterRate with an
-    /// out-of-bounds rate (zero, negative, above the ceiling, or NaN).
+    /// out-of-bounds rate (negative, above the ceiling, or NaN).
     /// Acceptance: The host returns InvalidArgument with a null
     /// status payload, regardless of whether the session exists, so
     /// the caller learns of the bad request deterministically.
     /// </summary>
     [Theory]
-    [InlineData(0)]
     [InlineData(-1)]
     [InlineData(2000)]
     [InlineData(double.NaN)]
@@ -409,7 +408,7 @@ public sealed class EmulatorHostServiceTests
     /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 EmulatorHostService).
     /// Use case: A client invokes SetLimiterRate against a valid
-    /// session with a rate inside the legal (0, 1000] range.
+    /// session with a positive rate inside the legal range.
     /// Acceptance: The host returns Ok with a non-null status payload
     /// reporting the new effective limiter rate.
     /// </summary>
@@ -426,6 +425,35 @@ public sealed class EmulatorHostServiceTests
         Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
         Assert.NotNull(response.EmulatorStatus);
         Assert.Equal(75.0, response.EmulatorStatus!.LimiterRatePercent);
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: gRPC debuggers need a live warp toggle that does not require
+    /// a session reset or the broader settings RPC.
+    /// Acceptance: SetLimiterRate(0) disables the limiter and reports the
+    /// status warp signal; a later positive SetLimiterRate re-enables the limiter.
+    /// </summary>
+    [Fact]
+    public async Task SetLimiterRateAsync_ZeroTogglesWarpWithoutReset()
+    {
+        var service = CreateService();
+        var sessionId = await CreateSessionAsync(service);
+
+        var warp = await service.SetLimiterRateAsync(
+            new SetLimiterRateRequest(sessionId, 0),
+            TestContext.Current.CancellationToken);
+        var limited = await service.SetLimiterRateAsync(
+            new SetLimiterRateRequest(sessionId, 75),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, warp.Status.Code);
+        Assert.NotNull(warp.EmulatorStatus);
+        Assert.Equal(0, warp.EmulatorStatus!.LimiterRatePercent);
+
+        Assert.Equal(RpcStatusCode.Ok, limited.Status.Code);
+        Assert.NotNull(limited.EmulatorStatus);
+        Assert.Equal(75, limited.EmulatorStatus!.LimiterRatePercent);
     }
 
     /// <summary>

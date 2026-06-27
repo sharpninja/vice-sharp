@@ -6,6 +6,7 @@ using NSubstitute;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Avalonia.ViewModels;
+using ViceSharp.Abstractions;
 using ViceSharp.Protocol;
 using Xunit;
 
@@ -178,6 +179,30 @@ public sealed class AttachPanelViewModelTests
         Assert.True(viewModel.RequiresRestart);
         Assert.Contains(nameof(viewModel.HasPendingSettingsChanges), changes);
         Assert.Contains(nameof(viewModel.RequiresRestart), changes);
+    }
+
+    /// <summary>
+    /// FR: FR-Host-UI-Boundary, TR: TR-MVVM-001.
+    /// Use case: Avalonia ComboBox can briefly push null while its ItemsSource is
+    /// being replaced from host settings; the view-model must keep a valid profile
+    /// so startup/debug refresh cannot fault while recomputing settings state.
+    /// Acceptance: Setting SelectedMachineProfile to null is ignored, does not mark
+    /// settings dirty, and persistence capture still has the original profile id.
+    /// </summary>
+    [Fact]
+    public void SelectedMachineProfile_TransientNullSelection_IsIgnored()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var selectedProfile = viewModel.SelectedMachineProfile;
+        var changes = TrackPropertyChanges(viewModel);
+
+        viewModel.SelectedMachineProfile = null!;
+
+        Assert.Same(selectedProfile, viewModel.SelectedMachineProfile);
+        Assert.False(viewModel.HasPendingSettingsChanges);
+        Assert.False(viewModel.RequiresRestart);
+        Assert.DoesNotContain(nameof(viewModel.SelectedMachineProfile), changes);
+        Assert.Equal(selectedProfile.Id, viewModel.CapturePersistedSettings().MachineProfileId);
     }
 
     /// <summary>
@@ -580,6 +605,29 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: Warp mode status is driven by emulator pub/sub events, not inferred
+    /// only from the last polled host status.
+    /// Acceptance: applying a WarpModeEvent updates limiter fields and the derived Warp
+    /// checkbox without staging a settings change.
+    /// </summary>
+    [Fact]
+    public void ApplyWarpMode_UpdatesLimiterFieldsWithoutMarkingSettingsPending()
+    {
+        var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
+        var changes = TrackPropertyChanges(viewModel);
+
+        viewModel.ApplyWarpMode(new WarpModeEvent(true, false, 100, 1234));
+
+        Assert.False(viewModel.LimiterEnabled);
+        Assert.True(viewModel.IsWarpMode);
+        Assert.Equal(100, viewModel.LimiterRatePercent);
+        Assert.False(viewModel.HasPendingSettingsChanges);
+        Assert.Contains(nameof(viewModel.LimiterEnabled), changes);
+        Assert.Contains(nameof(viewModel.IsWarpMode), changes);
+    }
+
+    /// <summary>
     /// FR: FR-UI-003, FR: FR-HOST-006, TR: TR-UI-SHELL-001, TEST-UI-001.
     /// Use case: The peripherals tab must show IEC active/idle state on
     /// drive slots using the same host status telemetry as the status bar.
@@ -700,6 +748,51 @@ public sealed class AttachPanelViewModelTests
         Assert.Equal("C64 98%", viewModel.PerCpuRates[0]);
         Assert.Equal("1541 100%", viewModel.PerCpuRates[1]);
         Assert.Contains("CPUs C64 98%, 1541 100%", viewModel.StatusText);
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: the app status bar uses published Warp events as the authoritative
+    /// local Warp indicator once a session has published one.
+    /// Acceptance: a WarpModeEvent drives the limiter cell to WARP and later status
+    /// polls do not overwrite it until the event state is reset for a new session.
+    /// </summary>
+    [Fact]
+    public void StatusBarViewModel_ApplyWarpModeEventOverridesPolledLimiterUntilReset()
+    {
+        var viewModel = new StatusBarViewModel();
+        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 0), RpcStatus.Ok());
+        Assert.Equal("100%", viewModel.Limiter);
+
+        viewModel.ApplyWarpMode(new WarpModeEvent(true, false, 100, 1234));
+        Assert.Equal("WARP", viewModel.Limiter);
+        Assert.Contains("Limiter WARP", viewModel.StatusText);
+
+        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 0), RpcStatus.Ok());
+        Assert.Equal("WARP", viewModel.Limiter);
+
+        viewModel.ResetWarpModeEvent();
+        viewModel.ApplyStatus(CreateStatus(iecActive: false, transitionCount: 0), RpcStatus.Ok());
+        Assert.Equal("100%", viewModel.Limiter);
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: A 1000% limiter target must not be labeled as Warp because the
+    /// runtime gates still pace it as a limited target.
+    /// Acceptance: Status polling formats a limiter-enabled 1000% target as 1000%.
+    /// </summary>
+    [Fact]
+    public void StatusBarViewModel_LimiterMaximumRateDisplaysAsLimitedRate()
+    {
+        var viewModel = new StatusBarViewModel();
+
+        viewModel.ApplyStatus(
+            CreateStatus(iecActive: false, transitionCount: 0) with { LimiterRatePercent = 1000 },
+            RpcStatus.Ok());
+
+        Assert.Equal("1000%", viewModel.Limiter);
+        Assert.Contains("Limiter 1000%", viewModel.StatusText);
     }
 
     /// <summary>

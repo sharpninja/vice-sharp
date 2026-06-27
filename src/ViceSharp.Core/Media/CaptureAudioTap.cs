@@ -48,6 +48,9 @@ public sealed class CaptureAudioTap : IAudioBackend
     /// <inheritdoc/>
     public int QueuedSampleCount => _downstream?.QueuedSampleCount ?? 0;
 
+    /// <inheritdoc/>
+    public int AvailableSampleCount => _downstream?.AvailableSampleCount ?? int.MaxValue;
+
     /// <summary>True while a recorder is attached (a recording is in progress).</summary>
     public bool IsRecording
     {

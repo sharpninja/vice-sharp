@@ -254,6 +254,7 @@ public sealed class SettingsServiceHost : ISettingsService
                 }
 
                 _registry.Replace(restarted);
+                restarted.PublishWarpModeStatus();
                 return ValueTask.FromResult(new UpdateSettingsResponse(
                     RpcStatus.Ok(),
                     HostProtocolMapper.ToSettingsDto(restarted),
@@ -262,8 +263,7 @@ public sealed class SettingsServiceHost : ISettingsService
 
             if (request.Limiter is not null)
             {
-                session.LimiterRatePercent = request.Limiter.RatePercent;
-                session.LimiterEnabled = request.Limiter.IsEnabled;
+                session.SetLimiter(request.Limiter.RatePercent, request.Limiter.IsEnabled);
                 AddLimiterDiagnostic(request, diagnostics);
             }
 
@@ -408,6 +408,7 @@ public sealed class SettingsServiceHost : ISettingsService
 
         session.PacingStrategy = strategyId;
         _pump?.SetStrategy(strategyId);
+        session.PublishWarpModeStatus();
         diagnostics.Add(new SettingApplyDiagnosticDto(
             "limiter.pacingStrategy",
             SettingApplyScope.Live,
@@ -493,14 +494,14 @@ public sealed class SettingsServiceHost : ISettingsService
         var resources = new List<SettingsResourceValidationDto>();
 
         if (limiter is not null &&
-            (!double.IsFinite(limiter.RatePercent) || limiter.RatePercent <= 0 || limiter.RatePercent > 1000))
+            (!double.IsFinite(limiter.RatePercent) || limiter.RatePercent < 0 || limiter.RatePercent > 1000))
         {
             resources.Add(new SettingsResourceValidationDto(
                 "limiter.ratePercent",
                 SettingsResourceKind.Display,
                 false,
                 false,
-                "Limiter rate percent must be between 0 and 1000."));
+                "Limiter rate percent must be between 0 and 1000; 0 enters warp mode."));
         }
 
         if (display is not null)

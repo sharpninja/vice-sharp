@@ -136,6 +136,13 @@
 - [x] The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes)
 - [x] BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark. (evidence: BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation)
 
+## TR-PERF-AOT-001
+
+**NativeAOT-Compatible RunFrame Hot Path** — RunFrame hot-path implementation must remain compatible with NativeAOT constraints: no new reflection, expression trees, dynamic code generation, or LINQ allocations on the hot call graph.
+**Acceptance Criteria:**
+- [x] Performance optimizations introduce no reflection, expression trees, or dynamic code generation in the RunFrame call graph. (evidence: Code review of PR #3 optimized BasicBus and VideoRenderer with direct/static paths only)
+- [x] Performance optimizations avoid LINQ and closure allocation in the measured RunFrame hot path. (evidence: PR #3 uses loops and span fills in hot path; RunFramePerfProbe reports allocated=0 bytes)
+
 ## TR-PUBSUB-PERF-001
 
 **High-Performance Zero-Allocation Pub/Sub** — ViceSharp shall implement the internal Pub/Sub interconnect with fixed-capacity message storage, 64-byte inline payloads, a MessageKind discriminant, preallocated subscriber route arrays, synchronous publish/delivery, no boxing, and zero managed heap allocation on the steady-state hot path.
@@ -173,6 +180,10 @@
 **Acceptance Criteria:**
 - [x] CollapseExpanderDock is Dock.Right when DockSide is Left and Dock.Left when DockSide is Right
 - [x] Changing DockSide raises PropertyChanged for CollapseExpanderDock and CollapseGlyph
+
+## TR-SID-EDGE-004
+
+**reSID waveform DAC centering and normalized mix scale** — Sid6581 and Sid8580 subtract the model-specific waveform zero level before ADSR envelope application, preserve no-waveform silence relative to the D418 baseline, and normalize mixed output before host audio submission.
 
 ## TR-SNAPFULL-001
 

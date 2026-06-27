@@ -30,6 +30,8 @@ This map links Functional Requirements to the ViceSharp interfaces or host servi
 | FR-SID-010 | Direct Digital Sample Playback via Volume Register | `IAudioChip` |
 | FR-SID-011 | External Audio Input | `IAudioChip` |
 | FR-SID-012 | Dual-SID (Stereo SID) Configuration | `IAudioChip`, `IAddressSpace` |
+| FR-SID-013 | SID Audio Backend Wiring | `IAudioChip`, `IAudioBackend` |
+| FR-SID-014 | VICE-Compatible Signed SID Voice Output and Demo Pacing | `IAudioChip`, `IAudioBackend` |
 ---
 
 ## CPU

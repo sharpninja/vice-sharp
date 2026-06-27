@@ -30,7 +30,7 @@ public sealed class WarpModeTests
     /// <summary>
     /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
     /// Use case: The status bar must display "WARP" when warp mode is active.
-    ///   MainWindow.ApplyStatus() shows WARP when LimiterRatePercent is 0 or >= 1000.
+    ///   MainWindow.ApplyStatus() shows WARP when LimiterRatePercent is 0.
     /// Acceptance: ToStatusDto emits LimiterRatePercent = 0 when LimiterEnabled = false,
     ///   regardless of the stored rate, so the status bar can detect the warp signal.
     /// </summary>
@@ -44,6 +44,21 @@ public sealed class WarpModeTests
         var dto = HostProtocolMapper.ToStatusDto(session);
 
         Assert.Equal(0, dto.LimiterRatePercent);
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: The 1000% limiter target is still a limiter target, not VICE warp.
+    /// Acceptance: A limiter-enabled session at 1000% does not publish/report Warp mode.
+    /// </summary>
+    [Fact]
+    public void IsWarpMode_WhenLimiterEnabledAtMaximumRate_IsFalse()
+    {
+        var session = CreateMinimalSession();
+        session.LimiterEnabled = true;
+        session.LimiterRatePercent = 1000;
+
+        Assert.False(session.IsWarpMode);
     }
 
     /// <summary>
@@ -118,6 +133,87 @@ public sealed class WarpModeTests
 
         Assert.Equal("VICE", vice.GateName);
         Assert.Equal("Semaphore", semaphore.GateName);
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: emulator-side Warp status is observable as a pub/sub event whenever the
+    /// limiter state changes.
+    /// Acceptance: disabling the limiter publishes an event that reports Warp active,
+    /// the raw limiter state, and the current machine cycle.
+    /// </summary>
+    [Fact]
+    public void SetLimiter_WhenLimiterDisabled_PublishesWarpModeEvent()
+    {
+        var session = CreatePubSubSession();
+        Assert.NotNull(session.Machine.PubSub);
+        var pubSub = session.Machine.PubSub;
+        WarpModeEvent observed = default;
+        var received = false;
+        var handle = pubSub.Subscribe<WarpModeEvent>(WarpModeEvent.Topic, e =>
+        {
+            observed = e;
+            received = true;
+        });
+
+        try
+        {
+            session.Machine.Clock.Step(42);
+            session.SetLimiter(100, enabled: false);
+        }
+        finally
+        {
+            pubSub.Unsubscribe(handle);
+        }
+
+        Assert.True(received);
+        Assert.True(observed.IsWarpMode);
+        Assert.False(observed.LimiterEnabled);
+        Assert.Equal(100, observed.LimiterRatePercent);
+        Assert.Equal(42, observed.Cycle);
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: starting or resuming the emulator establishes Warp status even when the
+    /// limiter did not change during the command.
+    /// Acceptance: StartAsync publishes the current Warp/limiter state after the session
+    /// enters Running.
+    /// </summary>
+    [Fact]
+    public async Task StartAsync_PublishesEstablishedWarpModeEvent()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreatePubSubSession();
+        registry.Add(session);
+        var host = new EmulatorHostService(registry, new DefaultEmulatorRuntimeFactory());
+        Assert.NotNull(session.Machine.PubSub);
+        var pubSub = session.Machine.PubSub;
+        WarpModeEvent observed = default;
+        var received = false;
+        var handle = pubSub.Subscribe<WarpModeEvent>(WarpModeEvent.Topic, e =>
+        {
+            observed = e;
+            received = true;
+        });
+
+        try
+        {
+            var response = await host.StartAsync(
+                new SessionRequest(session.SessionId),
+                TestContext.Current.CancellationToken);
+
+            Assert.True(response.Status.IsSuccess);
+        }
+        finally
+        {
+            pubSub.Unsubscribe(handle);
+        }
+
+        Assert.True(received);
+        Assert.False(observed.IsWarpMode);
+        Assert.True(observed.LimiterEnabled);
+        Assert.Equal(100, observed.LimiterRatePercent);
     }
 
     /// <summary>
@@ -211,6 +307,11 @@ public sealed class WarpModeTests
         return factory.Create(new CreateEmulatorSessionRequest());
     }
 
+    private static EmulatorRuntimeSession CreatePubSubSession() => new(
+        "warp-pubsub",
+        MinimalHostArchitectureDescriptor.Instance,
+        new PubSubTestMachine());
+
     private static async Task<(EmulatorRuntimeRegistry Registry, string SessionId)> CreateRunningSessionAsync()
     {
         var registry = new EmulatorRuntimeRegistry();
@@ -249,6 +350,42 @@ public sealed class WarpModeTests
         public MachineState GetState() => new() { Cycle = Clock.TotalCycles };
 
         public void Reset() => Clock.Reset();
+    }
+
+    private sealed class PubSubTestMachine : IMachine
+    {
+        public IBus Bus { get; } = new BasicBus();
+
+        public IClock Clock { get; } = new SystemClock(1_000_000);
+
+        public IDeviceRegistry Devices { get; } = new EmptyDeviceRegistry();
+
+        public IArchitectureDescriptor Architecture => MinimalHostArchitectureDescriptor.Instance;
+
+        public IPubSub PubSub { get; } = new LockFreePubSub();
+
+        public void RunFrame() => Clock.Step(20_000);
+
+        public void StepInstruction() => Clock.Step();
+
+        public MachineState GetState() => new() { Cycle = Clock.TotalCycles };
+
+        public void Reset() => Clock.Reset();
+    }
+
+    private sealed class EmptyDeviceRegistry : IDeviceRegistry
+    {
+        public IReadOnlyList<IDevice> All => [];
+
+        public int Count => 0;
+
+        public IDevice? GetById(DeviceId id) => null;
+
+        public IReadOnlyList<T> GetAll<T>()
+            where T : IDevice
+            => [];
+
+        public IDevice? GetByRole(DeviceRole role) => null;
     }
 
     private sealed class TestDeviceRegistry(IAudioChip audioChip) : IDeviceRegistry

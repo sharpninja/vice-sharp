@@ -190,6 +190,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-PUBSUB-001 | Tracked | Functional-Requirements.md |
 | FR-REMOTECTRL-001 | Tracked | Functional-Requirements.md |
 | FR-REVEXEC-001 | Tracked | Functional-Requirements.md |
+| FR-SID-013 | Tracked | Functional-Requirements.md |
+| FR-SID-014 | Tracked | Functional-Requirements.md |
 | FR-SIDAUDIO-001 | Tracked | Functional-Requirements.md |
 | FR-SIDEBARUI-001 | Tracked | Functional-Requirements.md |
 | FR-SNDREG-001 | Tracked | Functional-Requirements.md |
@@ -216,12 +218,14 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MED-VIDEO-001 | Tracked | Technical-Requirements.md |
 | TR-PACESEL-STRAT-001 | Tracked | Technical-Requirements.md |
 | TR-PERF-ALLOC-001 | Tracked | Technical-Requirements.md |
+| TR-PERF-AOT-001 | Tracked | Technical-Requirements.md |
 | TR-PUBSUB-PERF-001 | Tracked | Technical-Requirements.md |
 | TR-REMOTECTRL-001 | Tracked | Technical-Requirements.md |
 | TR-REMOTECTRL-SERVER-001 | Tracked | Technical-Requirements.md |
 | TR-REVEXEC-001 | Tracked | Technical-Requirements.md |
 | TR-SIDAUDIO-CLOCK-001 | Tracked | Technical-Requirements.md |
 | TR-SIDEBARUI-LAYOUT-001 | Tracked | Technical-Requirements.md |
+| TR-SID-EDGE-004 | Tracked | Technical-Requirements.md |
 | TR-SNAPFULL-001 | Tracked | Technical-Requirements.md |
 | TR-SNDREG-GATE-001 | Tracked | Technical-Requirements.md |
 | TR-SYS-SCHED-001 | Tracked | Technical-Requirements.md |
@@ -253,6 +257,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-PUBSUB-001 | Tracked | Testing-Requirements.md |
 | TEST-REMOTECTRL-001 | Tracked | Testing-Requirements.md |
 | TEST-REVEXEC-001 | Tracked | Testing-Requirements.md |
+| TEST-SID-002 | Tracked | Testing-Requirements.md |
 | TEST-SIDAUDIO-001 | Tracked | Testing-Requirements.md |
 | TEST-SIDEBARUI-001 | Tracked | Testing-Requirements.md |
 | TEST-SNAPFULL-001 | Tracked | Testing-Requirements.md |

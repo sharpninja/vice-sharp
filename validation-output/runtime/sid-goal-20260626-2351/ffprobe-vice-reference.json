@@ -1,0 +1,27 @@
+{
+    "programs": [
+
+    ],
+    "stream_groups": [
+
+    ],
+    "streams": [
+        {
+            "codec_name": "zmbv",
+            "codec_type": "video",
+            "r_frame_rate": "50/1",
+            "avg_frame_rate": "50/1"
+        },
+        {
+            "codec_name": "pcm_s16le",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0"
+        }
+    ],
+    "format": {
+        "duration": "60.800000"
+    }
+}

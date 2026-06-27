@@ -1,0 +1,11 @@
+[in#0 @ 000001bc47c341c0] non-interleaved AVI
+[aist#0:1/pcm_s16le @ 000001bc47cd2580] Guessed Channel Layout: stereo
+Input #0, avi, from 'C:\Users\kingd\Downloads\vice-video-2026062622582911.avi':
+  Duration: 00:01:00.80, start: 0.000000, bitrate: 1491 kb/s
+  Stream #0:0: Video: zmbv (ZMBV / 0x56424D5A), pal8, 384x272, 75 kb/s, 50 fps, 50 tbr, 50 tbn
+  Stream #0:1: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 48000 Hz, stereo, s16, 1536 kb/s
+[AVFilterGraph @ 000001bc47cfbd40] No option name near '/GitHub/vice-sharp/validation-output/runtime/sid-goal-20260626-2351/audio-vice-astats.txt'
+[AVFilterGraph @ 000001bc47cfbd40] Error parsing a filter description around:
+[AVFilterGraph @ 000001bc47cfbd40] Error parsing filterchain 'astats=metadata=1:reset=1,ametadata=print:file=F:/GitHub/vice-sharp/validation-output/runtime/sid-goal-20260626-2351/audio-vice-astats.txt' around:
+Error opening output file -.
+Error opening output files: Invalid argument

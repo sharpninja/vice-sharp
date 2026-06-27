@@ -274,6 +274,34 @@ public sealed class SettingsServiceHostTests
     }
 
     /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001.
+    /// Use case: Settings clients may use rate 0 as the same warp signal exposed by
+    /// status and SetLimiterRate.
+    /// Acceptance: UpdateSettings accepts rate 0 when the limiter is disabled and
+    /// reports the status warp signal on the running session.
+    /// </summary>
+    [Fact]
+    public async Task UpdateSettingsAsync_ZeroLimiterRateDisabled_AppliesWarpLive()
+    {
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateMinimalSession();
+        registry.Add(session);
+        var settingsService = new SettingsServiceHost(registry);
+
+        var response = await settingsService.UpdateSettingsAsync(
+            new UpdateSettingsRequest(session.SessionId, Limiter: new LimiterSettingsDto(0, false)),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, response.Status.Code);
+        Assert.NotNull(response.Settings);
+        Assert.False(response.Settings!.Limiter.IsEnabled);
+        Assert.Equal(0, HostProtocolMapper.ToStatusDto(session).LimiterRatePercent);
+        Assert.Contains(response.Diagnostics, diagnostic =>
+            string.Equals(diagnostic.Setting, "limiter.ratePercent", System.StringComparison.OrdinalIgnoreCase) &&
+            diagnostic.AppliedLive);
+    }
+
+    /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 Settings RPC).
     /// Use case: A client calls UpdateSettings with a profile id that
     /// is unknown to the host (neither the minimal-host descriptor nor

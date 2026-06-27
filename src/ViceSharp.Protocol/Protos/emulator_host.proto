@@ -236,6 +236,7 @@ message ResetAndAutostartDrive8Request {
 
 message SetLimiterRateRequest {
   string session_id = 1;
+  // 0 disables the limiter (VICE warp mode); positive values set and enable the limiter.
   double limiter_rate_percent = 2;
 }
 

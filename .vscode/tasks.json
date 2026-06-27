@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build ViceSharp.Avalonia Debug",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj",
+        "-c",
+        "Debug",
+        "--no-restore"
+      ],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

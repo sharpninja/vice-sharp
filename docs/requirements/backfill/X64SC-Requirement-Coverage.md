@@ -28,7 +28,7 @@ Each imported FR is classified for the x64sc backfill with one of these values:
 | C128 8502 mode | `FR-CPU-005` | Out Of x64sc Scope | none | C128 is imported but outside the x64sc target. |
 | Memory and PLA banking | `FR-MEM-001` to `FR-MEM-006` | x64sc Required | BACKFILL-CORE-001 | Includes Ultimax memory mode, VIC bank switching, color RAM, zero page, stack behavior, and definable system-core PLA/address-decoder policy assembled by `ArchitectureBuilder`. |
 | VIC-II rendering and timing | `FR-VIC-001` to `FR-VIC-010` | x64sc Required | BACKFILL-VIDEO-001 | Must cover PAL, NTSC, old NTSC, PAL-N, 6567, 6569, 6572, 8562, and 8565 timing. Border behavior includes closed-border sprite masking and opened-border sprite visibility from `FR-VIC-007`; sprite DMA timing must use model-specific VICE tables from `FR-VIC-010`. |
-| SID audio | `FR-SID-001` to `FR-SID-012` | x64sc Required | BACKFILL-SID-001 | Includes 6581, 8580, filter differences, digi playback, and multi-SID configuration where x64sc exposes it. |
+| SID audio | `FR-SID-001` to `FR-SID-014` | x64sc Required | BACKFILL-SID-001 | Includes 6581, 8580, filter differences, digi playback, multi-SID configuration where x64sc exposes it, backend audio wiring, and VICE-compatible signed-output pacing. |
 | CIA I/O | `FR-CIA-001` to `FR-CIA-007` | x64sc Required | BACKFILL-CORE-001 | Includes timers, TOD, keyboard matrix scanning, joystick reads, shift register, IRQ, and NMI behavior. |
 | VIA chip core | `FR-VIA-001` to `FR-VIA-003` | Shared Infrastructure | BACKFILL-MEDIA-001 | Required for drive-side behavior, not the C64 motherboard. |
 | VIC-20 VIA integration | `FR-VIA-004` | Out Of x64sc Scope | none | Belongs to xvic, not x64sc. |
@@ -57,7 +57,7 @@ The imported machine profile FRs do not yet assign standalone IDs for old PAL/NT
 | CPU | `TEST-CPU-001` |
 | Memory and banking | `TEST-MEM-001` |
 | VIC-II | `TEST-VIC-001` |
-| SID | `TEST-SID-001` |
+| SID | `TEST-SID-001`, `TEST-SID-002` |
 | CIA and keyboard matrix | `TEST-CIA-001` |
 | VIA and drive integration | `TEST-VIA-001`, `TEST-DRV-001` |
 | Tape | `TEST-TAP-001` |

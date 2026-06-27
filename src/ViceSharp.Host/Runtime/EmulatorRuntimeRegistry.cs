@@ -7,6 +7,8 @@ public sealed class EmulatorRuntimeRegistry
     private readonly Dictionary<string, EmulatorRuntimeSession> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private readonly object _syncRoot = new();
 
+    public event EventHandler<EmulatorRuntimeSession>? SessionChanged;
+
     public void Add(EmulatorRuntimeSession session)
     {
         ArgumentNullException.ThrowIfNull(session);
@@ -15,6 +17,8 @@ public sealed class EmulatorRuntimeRegistry
         {
             _sessions.Add(session.SessionId, session);
         }
+
+        OnSessionChanged(session);
     }
 
     /// <summary>Snapshot of all live sessions (for the emulation pump to iterate without holding the registry lock during frame work).</summary>
@@ -59,5 +63,9 @@ public sealed class EmulatorRuntimeRegistry
         {
             _sessions[session.SessionId] = session;
         }
+
+        OnSessionChanged(session);
     }
+
+    private void OnSessionChanged(EmulatorRuntimeSession session) => SessionChanged?.Invoke(this, session);
 }

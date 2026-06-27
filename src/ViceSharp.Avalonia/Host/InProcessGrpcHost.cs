@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
+using ViceSharp.Abstractions;
 using ViceSharp.Host.Diagnostics;
+using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
 
 namespace ViceSharp.Avalonia.Host;
@@ -83,6 +85,22 @@ public sealed class InProcessGrpcHost : IAsyncDisposable
         await _debugAttachFilePublisher.UpdateCurrentSessionAsync(sessionId, cancellationToken).ConfigureAwait(false);
     }
 
+    public IDisposable? SubscribeWarpMode(string sessionId, Action<WarpModeEvent> handler)
+    {
+        ArgumentNullException.ThrowIfNull(handler);
+
+        if (string.IsNullOrWhiteSpace(sessionId))
+            return null;
+
+        var registry = _app.Services.GetRequiredService<EmulatorRuntimeRegistry>();
+        var subscription = new LocalWarpModeSubscription(registry, sessionId, handler);
+        if (subscription.TryAttach())
+            return subscription;
+
+        subscription.Dispose();
+        return null;
+    }
+
     public Task<string> ReadDebugAttachInfoAsync(CancellationToken cancellationToken = default)
     {
         return _debugAttachFilePublisher.ReadAsync(cancellationToken);
@@ -101,5 +119,82 @@ public sealed class InProcessGrpcHost : IAsyncDisposable
         await _debugAttachFilePublisher.DisposeAsync().ConfigureAwait(false);
         await _app.StopAsync(timeout.Token).ConfigureAwait(false);
         await _app.DisposeAsync().ConfigureAwait(false);
+    }
+
+    private sealed class LocalWarpModeSubscription : IDisposable
+    {
+        private readonly EmulatorRuntimeRegistry _registry;
+        private readonly string _sessionId;
+        private readonly Action<WarpModeEvent> _handler;
+        private readonly object _syncRoot = new();
+        private IPubSub? _pubSub;
+        private SubscriptionHandle _handle = SubscriptionHandle.Invalid;
+        private bool _disposed;
+
+        public LocalWarpModeSubscription(
+            EmulatorRuntimeRegistry registry,
+            string sessionId,
+            Action<WarpModeEvent> handler)
+        {
+            _registry = registry;
+            _sessionId = sessionId;
+            _handler = handler;
+            _registry.SessionChanged += OnSessionChanged;
+        }
+
+        public bool TryAttach()
+        {
+            if (!_registry.TryGet(_sessionId, out var session))
+                return false;
+
+            Attach(session);
+            return _pubSub is not null;
+        }
+
+        public void Dispose()
+        {
+            lock (_syncRoot)
+            {
+                if (_disposed)
+                    return;
+
+                _disposed = true;
+                _registry.SessionChanged -= OnSessionChanged;
+                Detach();
+            }
+        }
+
+        private void OnSessionChanged(object? sender, EmulatorRuntimeSession session)
+        {
+            if (!string.Equals(session.SessionId, _sessionId, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            Attach(session);
+        }
+
+        private void Attach(EmulatorRuntimeSession session)
+        {
+            lock (_syncRoot)
+            {
+                if (_disposed)
+                    return;
+
+                Detach();
+                if (session.Machine.PubSub is not { } pubSub)
+                    return;
+
+                _pubSub = pubSub;
+                _handle = pubSub.Subscribe(WarpModeEvent.Topic, _handler);
+            }
+        }
+
+        private void Detach()
+        {
+            if (_pubSub is not null && _handle.IsValid)
+                _pubSub.Unsubscribe(_handle);
+
+            _pubSub = null;
+            _handle = SubscriptionHandle.Invalid;
+        }
     }
 }

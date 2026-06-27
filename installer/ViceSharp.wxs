@@ -76,9 +76,83 @@
              TypicalDefault="install">
       <ComponentGroupRef Id="HarvestedFiles" />
       <ComponentRef Id="StartMenuShortcut" />
+      <?if $(var.EnableDebugGrpc) = "true" ?>
+      <ComponentRef Id="DebugGrpcEnvironment" />
+      <?endif?>
     </Feature>
 
   </Package>
+
+  <?if $(var.EnableDebugGrpc) = "true" ?>
+  <Fragment>
+    <!--
+      Debug MSI only: make both gRPC debugger surfaces available to a freshly
+      launched installed app. The host/control gRPC surface already starts in
+      process and writes the debug-attach file; VICESHARP_GRPC_REFLECTION=1
+      enables grpcurl-style introspection. The Avalonia RemoteControl surface is
+      otherwise fail-closed unless ENABLE + TOKEN are present, so install a
+      loopback-only diagnostic token and fixed port for attach tooling.
+    -->
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="DebugGrpcEnvironment" Guid="*">
+        <Environment Id="EnvViceSharpGrpcReflection"
+                     Name="VICESHARP_GRPC_REFLECTION"
+                     Value="1"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <Environment Id="EnvViceSharpRemoteControlEnable"
+                     Name="VICESHARP_REMOTECONTROL_ENABLE"
+                     Value="1"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <Environment Id="EnvViceSharpRemoteControlToken"
+                     Name="VICESHARP_REMOTECONTROL_TOKEN"
+                     Value="$(var.RemoteControlToken)"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <Environment Id="EnvViceSharpRemoteControlHost"
+                     Name="VICESHARP_REMOTECONTROL_HOST"
+                     Value="127.0.0.1"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <Environment Id="EnvViceSharpRemoteControlPort"
+                     Name="VICESHARP_REMOTECONTROL_PORT"
+                     Value="$(var.RemoteControlPort)"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <Environment Id="EnvViceSharpRemoteControlActions"
+                     Name="VICESHARP_REMOTECONTROL_ALLOW_ACTIONS"
+                     Value="1"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <Environment Id="EnvViceSharpRemoteControlFrames"
+                     Name="VICESHARP_REMOTECONTROL_ALLOW_FRAMES"
+                     Value="1"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <Environment Id="EnvViceSharpRemoteControlInput"
+                     Name="VICESHARP_REMOTECONTROL_ALLOW_INPUT"
+                     Value="1"
+                     Action="set"
+                     Part="all"
+                     System="yes" />
+        <RegistryValue Root="HKLM"
+                       Key="Software\$(Manufacturer)\$(ProductName)\DebugGrpc"
+                       Name="enabled"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <?endif?>
 
   <Fragment>
     <!--

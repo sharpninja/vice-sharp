@@ -41,7 +41,7 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
         _timerThread = new Thread(TimerLoop)
         {
             IsBackground = true,
-            Name = "ViceSharp.EmulationTimer",
+            Name = "ViceSharp.Emulation.SemaphoreTimer",
             Priority = ThreadPriority.AboveNormal,
         };
         _timerThread.Start();

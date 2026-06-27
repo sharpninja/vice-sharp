@@ -80,6 +80,25 @@ Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external inpu
 
 ---
 
+## TEST-SID-002: VICE-Compatible SID Pacing Runtime Validation
+
+**ID:** TEST-SID-002
+**Title:** VICE-Compatible SID Pacing Runtime Validation
+**Priority:** P0 -- Critical
+
+### Condition
+
+SID waveform centering, PCM equivalency, and Pieces of Light runtime capture validation prove that live audio back-pressure paces the emulator like VICE before and after runtime segment transitions.
+
+### Traceability
+
+- **Related FR Area(s):** FR-SID
+- **Canonical FR IDs:** FR-SID-014
+- **Canonical TR IDs:** TR-SID-EDGE-004
+- **Evidence:** `SidCombinedWaveformTests`, `SidPcmEquivalencyTests`, `validation-output/runtime/sid-goal-20260626-2351/vicesharp-pieces-release-space-final.mp4`
+
+---
+
 ## TEST-CIA-001: CIA and Keyboard Matrix Tests
 
 **ID:** TEST-CIA-001

@@ -374,3 +374,62 @@ The emulator shall support configurations with two (or more) SID chips at config
 
 - **Interfaces:** `IAudioChip`, `IAddressSpace`
 - **Test Suite:** `DualSidTests`, `StereoRoutingTests`, `SidAddressMappingTests`
+
+---
+
+## FR-SID-013: SID Audio Backend Wiring
+
+**ID:** FR-SID-013
+**Title:** SID Audio Backend Wiring
+**Priority:** P1 -- Important
+**Iteration:** 2
+
+### Description
+
+The emulator shall wire SID sample production through the host audio backend without dropping, duplicating, or bypassing real-time audio buffers.
+
+### Acceptance Criteria
+
+1. SID sample production is delivered to the selected `IAudioBackend` implementation.
+2. Host audio backend writes preserve stream order and do not duplicate samples.
+3. Backend tests prove pause, resume, mute, and disposal paths do not leave stale SID audio buffers active.
+
+### Source References
+
+- `native/vice/vice/src/sound*.c`: VICE sound-device output and host audio buffer integration.
+
+### Traceability
+
+- **Interfaces:** `IAudioChip`, `IAudioBackend`
+- **Test Suite:** `SidAudioBackendTests`, `SidAudioWiringTests`
+
+---
+
+## FR-SID-014: VICE-Compatible Signed SID Voice Output and Demo Pacing
+
+**ID:** FR-SID-014
+**Title:** VICE-Compatible Signed SID Voice Output and Demo Pacing
+**Priority:** P0 -- Critical
+**Iteration:** 1
+
+### Description
+
+SID voice output shall be centered and scaled like VICE/reSID so live host audio back-pressure paces demos at the same rate as VICE across runtime segment transitions.
+
+### Acceptance Criteria
+
+1. Selected SID waveforms are centered around the model-specific DAC zero level before envelope multiplication.
+2. 6581 and 8580 models use distinct zero levels matching reSID behavior.
+3. The mixed PCM output remains normalized without flattening active voices.
+4. Runtime validation of the Pieces of Light demo remains near 100% before and after leaving the first segment with Space.
+
+### Source References
+
+- `native/vice/vice/src/resid/wave.cc`: reSID waveform output and DAC-zero behavior.
+- `native/vice/vice/src/resid/sid.cc`: reSID SID sample path and output centering.
+
+### Traceability
+
+- **Interfaces:** `IAudioChip`, `IAudioBackend`
+- **Test Suite:** `SidCombinedWaveformTests`, `SidPcmEquivalencyTests`
+- **Validation Evidence:** `validation-output/runtime/sid-goal-20260626-2351/vicesharp-pieces-release-space-final.mp4`

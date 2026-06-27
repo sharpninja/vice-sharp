@@ -60,6 +60,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private readonly Mos6526? _cia2;
     private readonly Mos906114 _pla;
     private readonly C64KeyboardMatrix _keyboard;
+    private readonly object _inputSync = new();
     private readonly Dictionary<byte, int> _keyboardKeyPressCounts = new();
     private readonly C64JoystickPort _joystickPort1;
     private readonly C64JoystickPort _joystickPort2;
@@ -540,7 +541,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (!_keyboardEnabled)
             return;
 
-        _keyboard.SetKey(keyCode, pressed);
+        lock (_inputSync)
+            _keyboard.SetKey(keyCode, pressed);
     }
 
     public bool SetKeyState(string key, bool pressed)
@@ -548,11 +550,14 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (!_keyboardEnabled)
             return false;
 
-        if (!_keyboardMap.TryResolve(key, out var keyCodes))
-            return false;
+        lock (_inputSync)
+        {
+            if (!_keyboardMap.TryResolve(key, out var keyCodes))
+                return false;
 
-        foreach (var keyCode in keyCodes)
-            ApplyMatrixKeyState(keyCode, pressed);
+            foreach (var keyCode in keyCodes)
+                ApplyMatrixKeyState(keyCode, pressed);
+        }
 
         return true;
     }
@@ -573,7 +578,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (fireButton)
             pressed |= C64JoystickPort.JoystickButtons.Fire;
 
-        port.State = pressed;
+        lock (_inputSync)
+            port.State = pressed;
         return true;
     }
 
@@ -581,16 +587,40 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     {
         ArgumentNullException.ThrowIfNull(keyboardMap);
 
-        _keyboardMap = keyboardMap;
-        _keyboardKeyPressCounts.Clear();
-        _keyboard.ClearKeys();
+        lock (_inputSync)
+        {
+            _keyboardMap = keyboardMap;
+            _keyboardKeyPressCounts.Clear();
+            _keyboard.ClearKeys();
+        }
     }
 
-    public bool IsRestorePressed => _keyboard.IsRestorePressed;
+    public bool IsRestorePressed
+    {
+        get
+        {
+            lock (_inputSync)
+                return _keyboard.IsRestorePressed;
+        }
+    }
 
-    public bool IsStopPressed => _keyboard.IsStopPressed;
+    public bool IsStopPressed
+    {
+        get
+        {
+            lock (_inputSync)
+                return _keyboard.IsStopPressed;
+        }
+    }
 
-    public bool IsShiftCbmPressed => _keyboard.IsShiftCbmPressed;
+    public bool IsShiftCbmPressed
+    {
+        get
+        {
+            lock (_inputSync)
+                return _keyboard.IsShiftCbmPressed;
+        }
+    }
 
     public bool KeyboardEnabled => _keyboardEnabled;
 
@@ -615,12 +645,14 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
     private byte ReadCia1PortA()
     {
-        return (byte)(_keyboard.ReadRowState() & _joystickPort2.ReadPortState());
+        lock (_inputSync)
+            return (byte)(_keyboard.ReadRowState() & _joystickPort2.ReadPortState());
     }
 
     private byte ReadCia1PortB()
     {
-        return (byte)(_keyboard.ReadColumnState() & _joystickPort1.ReadPortState());
+        lock (_inputSync)
+            return (byte)(_keyboard.ReadColumnState() & _joystickPort1.ReadPortState());
     }
 
     private byte ReadCia2PortA()

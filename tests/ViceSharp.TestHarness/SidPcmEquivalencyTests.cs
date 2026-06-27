@@ -7,7 +7,8 @@ using ViceSharp.Core;
 using Xunit;
 
 /// <summary>
-/// FR/TR: BACKFILL-SID-001 (reference-tolerant PCM equivalency vs native VICE).
+/// FR/TR: BACKFILL-SID-001, FR-SID-014, TR-SID-EDGE-004, TEST-SID-002
+/// (reference-tolerant PCM equivalency vs native VICE).
 /// Use case: Drive identical SID register stimulus to both managed Sid6581
 /// and native VICE; assert the rendered sample streams agree within tolerance.
 /// Bit-exact equivalence is impossible by design: FastSID (VICE shim default)

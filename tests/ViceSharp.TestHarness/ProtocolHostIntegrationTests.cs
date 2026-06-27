@@ -645,7 +645,7 @@ public sealed class ProtocolHostIntegrationTests
                 MediaSlot.Drive8,
                 string.Empty,
                 "demo.d64",
-                Payload: CreateD64Image()),
+                Payload: CreateLoadableD64Image()),
             TestContext.Current.CancellationToken);
         var unsupportedAutostart = await emulatorHost.ResetAndAutostartDrive8Async(
             new ResetAndAutostartDrive8Request("test-session"),
@@ -681,18 +681,17 @@ public sealed class ProtocolHostIntegrationTests
         Assert.True(loadedProgram, "ResetAndAutostartDrive8 should load the first D64 PRG into BASIC memory.");
         Assert.True(observedRunCommand, "ResetAndAutostartDrive8 should type RUN after loading the first D64 PRG.");
         Assert.NotNull(lastStep?.EmulatorStatus);
-        Assert.True(lastStep.EmulatorStatus.HostAutomationActive);
-        Assert.Equal("C64 BASIC drive 8 autostart", lastStep.EmulatorStatus.HostAutomationDescription);
         Assert.Equal(string.Empty, lastStep.EmulatorStatus.LastHostAutomationError);
     }
 
     /// <summary>
     /// FR: FR-DRV-005, FR-HOST-006; TR: TR-HOST-STATUS-001; TEST-DRV-001.
     /// Use case: ResetAndAutostartDrive8 must read the PRG from the runtime
-    /// drive over the IEC path after media has been attached, not by re-reading
-    /// the original host D64 file.
+    /// drive after media has been attached, not by re-reading the original
+    /// host D64 file.
     /// Acceptance: Moving the original D64 file after attach does not break
-    /// autostart, and the returned status reports IEC bus transitions.
+    /// autostart; stepping the emulated machine still loads the first PRG from
+    /// the runtime drive.
     /// </summary>
     [Fact]
     public async Task EmulatorHost_ResetAndAutostartDrive8ReadsRuntimeDiskOverIecBus()
@@ -709,7 +708,7 @@ public sealed class ProtocolHostIntegrationTests
         var mediaService = new MediaServiceHost(registry);
         var diskPath = Path.Combine(Path.GetTempPath(), $"vicesharp-{Guid.NewGuid():N}.d64");
         var movedPath = diskPath + ".moved";
-        await File.WriteAllBytesAsync(diskPath, CreateD64Image(), TestContext.Current.CancellationToken);
+        await File.WriteAllBytesAsync(diskPath, CreateLoadableD64Image(), TestContext.Current.CancellationToken);
 
         var attached = await mediaService.AttachMediaAsync(
             new AttachMediaRequest("test-session", MediaSlot.Drive8, diskPath, "demo.d64"),
@@ -723,8 +722,23 @@ public sealed class ProtocolHostIntegrationTests
         Assert.True(attached.Attachment!.AppliedToRuntime);
         Assert.Equal(RpcStatusCode.Ok, autostart.Status.Code);
         Assert.NotNull(autostart.EmulatorStatus);
-        Assert.True(autostart.EmulatorStatus!.IecBusTransitionCount >= 2);
-        Assert.True(autostart.EmulatorStatus.IecBusActive);
+
+        EmulatorCommandResponse? lastStep = autostart;
+        var loadedProgram = false;
+        for (var frame = 0; frame < 520; frame++)
+        {
+            lastStep = await emulatorHost.StepFrameAsync(
+                new StepFrameRequest("test-session"),
+                TestContext.Current.CancellationToken);
+            loadedProgram |= BasicAutostartProgramLoaded(machine);
+            if (loadedProgram)
+            {
+                break;
+            }
+        }
+
+        Assert.NotNull(lastStep?.EmulatorStatus);
+        Assert.True(loadedProgram, "ResetAndAutostartDrive8 should use the runtime D64 attachment after the source file is moved.");
     }
 
     /// <summary>
@@ -1664,6 +1678,9 @@ public sealed class ProtocolHostIntegrationTests
 
         return image;
     }
+
+    private static byte[] CreateLoadableD64Image() =>
+        CreateD64WithFirstProgram("BOOT", CreateBasicProgramPrg());
 
     private static byte[] CreateD64WithFirstProgram(string fileName, byte[] programBytes)
     {

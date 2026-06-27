@@ -74,6 +74,44 @@ public sealed class SidAudioWiringTests
     }
 
     [Fact]
+    public void WinMmAudioBackend_PreservesSamplesWhenDeviceQueueIsFull()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        WinMmAudioBackend.DropsSamplesWhenDeviceQueueFull.Should().BeFalse(
+            "live playback must not corrupt an otherwise-correct SID sample stream");
+    }
+
+    [Fact]
+    public void WinMmAudioBackend_RingSpaceTracksWaveOutPlayCursor()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        const int bufferBytes = 4096;
+
+        WinMmAudioBackend.ComputeAvailableBytes(writeCursorBytes: 512, playCursorBytes: 0, bufferBytes)
+            .Should().Be(3584, "bytes between play and write cursors are still queued for playback");
+        WinMmAudioBackend.ComputeAvailableBytes(writeCursorBytes: 128, playCursorBytes: 3584, bufferBytes)
+            .Should().Be(3456, "wrapped write cursors must still leave only played bytes writable");
+    }
+
+    [Fact]
+    public void WinMmAudioBackend_NormalizesWaveOutPositionAcrossRingWrap()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        var subtract = 0;
+
+        var cursor = WinMmAudioBackend.NormalizePlayCursor(9216, ref subtract, bufferBytes: 4096);
+
+        cursor.Should().Be(1024);
+        subtract.Should().Be(8192);
+    }
+
+    [Fact]
     public void WinMmAudioBackend_OpensAndAcceptsSamples_WithoutThrowing()
     {
         if (!OperatingSystem.IsWindows())

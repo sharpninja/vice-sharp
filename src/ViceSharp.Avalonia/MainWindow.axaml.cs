@@ -1,11 +1,13 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
+using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.ViewModels;
 using ViceSharp.Avalonia.Views;
+using ViceSharp.Abstractions;
 using ViceSharp.Host.Services;
 using Protocol = ViceSharp.Protocol;
 
@@ -23,6 +25,8 @@ public partial class MainWindow : Window
     private readonly IecMonitorViewModel _iecMonitorViewModel = new();
     private readonly AttachPanelView _attachPanel;
     private readonly VideoSurface _video;
+    private IDisposable? _warpModeSubscription;
+    private bool _videoRecordingHotkeyActive;
     private DockPanel? _contentPanel;
     private ContentControl? _sidebarHost;
     private ContentControl? _videoHost;
@@ -57,6 +61,7 @@ public partial class MainWindow : Window
         };
         _video.KeyDown += OnVideoKeyDown;
         _video.KeyUp += OnVideoKeyUp;
+        AddHandler(KeyDownEvent, OnGlobalKeyDown, RoutingStrategies.Tunnel);
 
         // Inject the live views into the declarative shell's named hosts. The
         // sidebar pane and video content stay code-behind-owned for now; the
@@ -71,11 +76,14 @@ public partial class MainWindow : Window
             _sidebarHost.Content = _attachPanel;
         _videoHost = this.FindControl<ContentControl>("PART_VideoHost");
         if (_videoHost is not null)
+        {
             _videoHost.Content = new Viewbox
             {
                 Stretch = global::Avalonia.Media.Stretch.Uniform,
                 Child = _video
             };
+            ConfigureVideoDropSurface(_videoHost);
+        }
         _contentPanel = this.FindControl<DockPanel>("PART_ContentPanel");
 
         // The sidebar stretches to fill the width the aspect-sized display does not use.
@@ -196,6 +204,9 @@ public partial class MainWindow : Window
         if (_hostClient is IDisposable disposableClient)
             disposableClient.Dispose();
 
+        _warpModeSubscription?.Dispose();
+        _warpModeSubscription = null;
+
         if (_localHost is not null)
             await _localHost.DisposeAsync().ConfigureAwait(false);
 
@@ -279,7 +290,7 @@ public partial class MainWindow : Window
         if (topLevel is null)
             return;
 
-        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        var file = await ShowSaveFilePickerAsync(topLevel, new FilePickerSaveOptions
         {
             Title = "Save screenshot",
             SuggestedFileName = "vicesharp",
@@ -324,7 +335,7 @@ public partial class MainWindow : Window
         if (topLevel is null)
             return;
 
-        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        var file = await ShowSaveFilePickerAsync(topLevel, new FilePickerSaveOptions
         {
             Title = "Record sound",
             SuggestedFileName = "vicesharp",
@@ -369,7 +380,7 @@ public partial class MainWindow : Window
         if (topLevel is null)
             return;
 
-        var file = await topLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        var file = await ShowSaveFilePickerAsync(topLevel, new FilePickerSaveOptions
         {
             Title = captureMicrophone
                 ? "Record video (MP4 + sound + microphone)"
@@ -428,7 +439,7 @@ public partial class MainWindow : Window
         if (topLevel is null)
             return;
 
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        var folders = await ShowOpenFolderPickerAsync(topLevel, new FolderPickerOpenOptions
         {
             Title = uniqueFrames
                 ? "Choose output folder (unique BMP frames)"
@@ -492,6 +503,98 @@ public partial class MainWindow : Window
     {
         if (this.FindControl<global::Avalonia.Controls.Button>("PART_StopRecording") is { } stop)
             stop.IsVisible = _shell.IsRecordingVideo;
+    }
+
+    private async Task<IStorageFile?> ShowSaveFilePickerAsync(TopLevel topLevel, FilePickerSaveOptions options)
+    {
+        if (!await PauseBeforeSystemPickerAsync().ConfigureAwait(true))
+            return null;
+
+        return await topLevel.StorageProvider.SaveFilePickerAsync(options).ConfigureAwait(true);
+    }
+
+    private async Task<IReadOnlyList<IStorageFile>> ShowOpenFilePickerAsync(TopLevel topLevel, FilePickerOpenOptions options)
+    {
+        if (!await PauseBeforeSystemPickerAsync().ConfigureAwait(true))
+            return [];
+
+        return await topLevel.StorageProvider.OpenFilePickerAsync(options).ConfigureAwait(true);
+    }
+
+    private async Task<IReadOnlyList<IStorageFolder>> ShowOpenFolderPickerAsync(TopLevel topLevel, FolderPickerOpenOptions options)
+    {
+        if (!await PauseBeforeSystemPickerAsync().ConfigureAwait(true))
+            return [];
+
+        return await topLevel.StorageProvider.OpenFolderPickerAsync(options).ConfigureAwait(true);
+    }
+
+    private void ConfigureVideoDropSurface(Control control)
+    {
+        DragDrop.SetAllowDrop(control, true);
+        control.AddHandler(DragDrop.DragOverEvent, OnVideoHostDragOver);
+        control.AddHandler(DragDrop.DropEvent, OnVideoHostDrop);
+    }
+
+    private static string? GetDroppedLocalFilePath(DragEventArgs e)
+    {
+        var files = e.DataTransfer.TryGetFiles();
+        if (files is null)
+            return null;
+
+        foreach (var item in files)
+        {
+            if (item is IStorageFile file)
+                return file.TryGetLocalPath();
+        }
+
+        return null;
+    }
+
+    private void OnVideoHostDragOver(object? sender, DragEventArgs e)
+    {
+        e.DragEffects = string.IsNullOrWhiteSpace(GetDroppedLocalFilePath(e))
+            ? DragDropEffects.None
+            : DragDropEffects.Copy;
+        e.Handled = true;
+    }
+
+    private async void OnVideoHostDrop(object? sender, DragEventArgs e)
+    {
+        e.Handled = true;
+        var path = GetDroppedLocalFilePath(e);
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        try
+        {
+            var status = await _shell.DropAndStartFileAsync(path).ConfigureAwait(true);
+            if (!status.IsSuccess && !string.IsNullOrWhiteSpace(status.Message))
+                _attachViewModel.ReportStatus(status.Message);
+        }
+        catch (Exception ex)
+        {
+            _attachViewModel.ReportStatus(ex.Message);
+        }
+        finally
+        {
+            _video.Focus();
+        }
+    }
+
+    private async Task<bool> PauseBeforeSystemPickerAsync()
+    {
+        try
+        {
+            var response = await _shell.PauseAsync().ConfigureAwait(true);
+            ApplyStatus(response.EmulatorStatus, response.Status);
+            return response.Status.IsSuccess;
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+            return false;
+        }
     }
 
     private void OnMenuTrueDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -646,7 +749,20 @@ public partial class MainWindow : Window
         if (_localHost is null || string.IsNullOrWhiteSpace(sessionId))
             return;
 
+        _warpModeSubscription?.Dispose();
+        _warpModeSubscription = null;
+        _statusBarViewModel.ResetWarpModeEvent();
         await _localHost.UpdateCurrentSessionAsync(sessionId).ConfigureAwait(true);
+        _warpModeSubscription = _localHost.SubscribeWarpMode(sessionId, OnWarpModePublished);
+    }
+
+    private void OnWarpModePublished(WarpModeEvent warpMode)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            _statusBarViewModel.ApplyWarpMode(warpMode);
+            _attachViewModel.ApplyWarpMode(warpMode);
+        });
     }
 
     private async void OnVideoKeyDown(object? sender, KeyEventArgs e)
@@ -661,6 +777,38 @@ public partial class MainWindow : Window
         }
 
         await SendKeyStateAsync(e, true).ConfigureAwait(true);
+    }
+
+    private async void OnGlobalKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (!IsVideoRecordingHotkey(e))
+            return;
+
+        e.Handled = true;
+        if (_videoRecordingHotkeyActive)
+            return;
+
+        _videoRecordingHotkeyActive = true;
+        try
+        {
+            await RecordMuxedVideoAsync(captureMicrophone: false).ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            ApplyStatus(null, Protocol.RpcStatus.Unavailable(ex.Message));
+        }
+        finally
+        {
+            _videoRecordingHotkeyActive = false;
+        }
+    }
+
+    private static bool IsVideoRecordingHotkey(KeyEventArgs e)
+    {
+        const KeyModifiers required = KeyModifiers.Control | KeyModifiers.Shift;
+        return e.Key == Key.R
+            && (e.KeyModifiers & required) == required
+            && (e.KeyModifiers & KeyModifiers.Alt) == 0;
     }
 
     private async void OnVideoKeyUp(object? sender, KeyEventArgs e)
@@ -749,7 +897,7 @@ public partial class MainWindow : Window
             }
         };
 
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        var files = await ShowOpenFilePickerAsync(topLevel, new FilePickerOpenOptions
         {
             AllowMultiple = false,
             FileTypeFilter = fileTypes,
@@ -765,7 +913,7 @@ public partial class MainWindow : Window
         if (topLevel is null)
             return null;
 
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        var files = await ShowOpenFilePickerAsync(topLevel, new FilePickerOpenOptions
         {
             AllowMultiple = false,
             FileTypeFilter =

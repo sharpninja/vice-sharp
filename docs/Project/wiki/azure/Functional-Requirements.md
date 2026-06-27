@@ -134,6 +134,14 @@ ViceSharp.Avalonia can expose its live Avalonia visual tree for remote inspectio
 
 The emulator can step backward by cycle and by frame, restoring exact prior state, so protocols can be watched forward and backward. Backed by a frame-granular snapshot ring and deterministic re-run.
 
+## FR-SID-013 SID audio backend wiring
+
+The emulator shall wire SID sample production through the host audio backend without dropping or duplicating real-time audio buffers.
+
+## FR-SID-014 VICE-compatible signed SID voice output and demo pacing
+
+SID voice output must be centered and scaled like VICE/reSID so live host audio back-pressure paces demos at the same rate as VICE across runtime segment transitions.
+
 ## FR-SIDAUDIO-001 SID plays at correct pitch
 
 The SID must tick at the phi2 master-clock rate so pitch, envelopes, noise and sync are correct (BUG-SIDAUDIO-001). It was registered as a slow device (ClockDivisor 16) while its accumulator advanced once per Tick, making everything 16x too slow.

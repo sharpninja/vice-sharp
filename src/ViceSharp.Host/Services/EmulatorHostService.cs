@@ -258,11 +258,11 @@ public sealed class EmulatorHostService : IEmulatorHost
         cancellationToken.ThrowIfCancellationRequested();
 
         if (!double.IsFinite(request.LimiterRatePercent) ||
-            request.LimiterRatePercent <= 0 ||
+            request.LimiterRatePercent < 0 ||
             request.LimiterRatePercent > 1000)
         {
             return ValueTask.FromResult(new EmulatorCommandResponse(
-                RpcStatus.InvalidArgument("LimiterRatePercent must be between 0 and 1000."),
+                RpcStatus.InvalidArgument("LimiterRatePercent must be between 0 and 1000; 0 enters warp mode."),
                 null));
         }
 
@@ -271,7 +271,16 @@ public sealed class EmulatorHostService : IEmulatorHost
 
         lock (session.SyncRoot)
         {
-            session.LimiterRatePercent = request.LimiterRatePercent;
+            if (request.LimiterRatePercent == 0)
+            {
+                var preservedRate = session.LimiterRatePercent > 0 ? session.LimiterRatePercent : 100;
+                session.SetLimiter(preservedRate, enabled: false);
+            }
+            else
+            {
+                session.SetLimiter(request.LimiterRatePercent, enabled: true);
+            }
+
             return ValueTask.FromResult(new EmulatorCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session)));
         }
     }
@@ -313,6 +322,8 @@ public sealed class EmulatorHostService : IEmulatorHost
         {
             session.PowerState = "On";
             session.RunState = runState;
+            if (runState == EmulatorRunState.Running)
+                session.PublishWarpModeStatus();
             return ValueTask.FromResult(new EmulatorCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session)));
         }
     }

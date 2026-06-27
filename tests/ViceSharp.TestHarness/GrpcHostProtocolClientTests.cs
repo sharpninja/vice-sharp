@@ -1,8 +1,10 @@
 namespace ViceSharp.TestHarness;
 
 using Grpc.Core;
+using Grpc.Net.Client;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Protocol;
+using GrpcContracts = ViceSharp.Protocol.Grpc;
 using Xunit;
 
 /// <summary>
@@ -98,6 +100,41 @@ public sealed class GrpcHostProtocolClientTests
         Assert.False(string.IsNullOrWhiteSpace(sessionAfterFirst));
         Assert.Equal(sessionAfterFirst, client.SessionId);
         Assert.Equal(sessionAfterFirst, secondResponse.EmulatorStatus!.SessionId);
+    }
+
+    /// <summary>
+    /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 GrpcHostProtocolClient).
+    /// Use case: Avalonia startup can call the lazy client from status and
+    /// frame refresh paths at the same time; those concurrent first-use calls
+    /// must not create multiple running emulator sessions.
+    /// Acceptance: Parallel GetStatusAsync calls on a fresh client all return
+    /// Ok for one shared session, and diagnostics reports exactly one host
+    /// session.
+    /// </summary>
+    [Fact]
+    public async Task GetStatusAsync_ConcurrentFirstUseCreatesSingleSession()
+    {
+        await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+        using var client = new GrpcHostProtocolClient(host.Endpoint);
+        using var diagnosticsChannel = GrpcChannel.ForAddress(host.Endpoint);
+        var diagnostics = new GrpcContracts.DiagnosticsService.DiagnosticsServiceClient(diagnosticsChannel);
+
+        var calls = Enumerable
+            .Range(0, 12)
+            .Select(_ => client.GetStatusAsync(TestContext.Current.CancellationToken).AsTask())
+            .ToArray();
+
+        var responses = await Task.WhenAll(calls);
+        var sessionId = client.SessionId;
+        var sessions = await diagnostics.ListSessionsAsync(
+            new GrpcContracts.EmptyRequest(),
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.False(string.IsNullOrWhiteSpace(sessionId));
+        Assert.All(responses, response => Assert.Equal(RpcStatusCode.Ok, response.Status.Code));
+        Assert.All(responses, response => Assert.Equal(sessionId, response.EmulatorStatus!.SessionId));
+        var session = Assert.Single(sessions.Sessions);
+        Assert.Equal(sessionId, session.SessionId);
     }
 
     /// <summary>

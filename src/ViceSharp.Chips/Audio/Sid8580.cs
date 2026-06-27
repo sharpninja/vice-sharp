@@ -19,6 +19,9 @@ public partial class Sid8580 : Sid6581
     // cleaner output stage the offset is small but observable.
     private const int DcOffset8580 = 0;
 
+    /// <inheritdoc />
+    protected override int WaveZeroLevel => 0x9E;
+
     /// <summary>
     /// FR-SID-003 / FR-SID-004 (BACKFILL-SID-001 8580 filter deepening).
     /// 8580 filter uses the same Chamberlin SVF topology as the 6581 in
