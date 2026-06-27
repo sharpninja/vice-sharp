@@ -1874,7 +1874,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         {
             _rasterIrqLine = (ushort)((_rasterIrqLine & 0x0FF) | ((value & 0x80) << 1));
             _rasterIrqCompareArmed = true;
+            byte previous11 = _registers[register];
             _registers[register] = value;
+            PublishModeChange(0x11, previous11, value);
             return;
         }
 
@@ -1907,15 +1909,47 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (register >= 0x20 && register <= 0x2E)
         {
             byte masked = (byte)(value & 0x0F);
+            byte previous20 = _registers[register];
             _registers[register] = masked;
             UpdateSpriteRegisters((ushort)register, masked);
+            PublishModeChange(register, previous20, masked);
             return;
         }
 
+        byte previousReg = _registers[register];
         _registers[register] = value;
 
         // VICE-style: Update sprite registers
         UpdateSpriteRegisters((ushort)register, value);
+        PublishModeChange(register, previousReg, value);
+    }
+
+    /// <summary>
+    /// Diagnostic seam: publishes a <see cref="VicModeChangeEvent"/> when a display-mode / border
+    /// register ($D011, $D016, $D018, $D020, $D021) actually changes value. Only real transitions
+    /// fire, so a host re-asserting the same mode every frame produces no traffic. Synchronous, so a
+    /// subscriber sees the live CPU state at the instant of the write.
+    /// </summary>
+    private void PublishModeChange(int register, byte oldValue, byte newValue)
+    {
+        if (_pubSub is null || oldValue == newValue)
+        {
+            return;
+        }
+
+        if (register is not (0x11 or 0x16 or 0x18 or 0x20 or 0x21))
+        {
+            return;
+        }
+
+        _pubSub.Publish(VicModeChangeEvent.Topic, new VicModeChangeEvent(
+            (byte)register,
+            oldValue,
+            newValue,
+            CurrentRasterLine,
+            (byte)((_registers[0x11] & 0x20) != 0 ? 1 : 0),   // BMM (bitmap mode)
+            (byte)((_registers[0x16] & 0x10) != 0 ? 1 : 0),   // MCM (multicolour)
+            (byte)((_registers[0x11] & 0x10) != 0 ? 1 : 0)));  // DEN (display enable)
     }
     
     private void UpdateSpriteRegisters(ushort offset, byte value)
