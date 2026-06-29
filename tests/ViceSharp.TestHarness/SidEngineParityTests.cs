@@ -30,8 +30,11 @@ public sealed class SidEngineParityTests
         (0xD40F, 0x20), // freq hi
         (0xD413, 0x49), // attack=4, decay=9
         (0xD414, 0xA0), // sustain=10, release=0
-        (0xD412, 0x21), // sawtooth + gate on
     ];
+
+    // Cycles to prime the SID to a known shared state before comparing: long
+    // enough for reSID's 0xaa powerup envelope to release to 0 (release=0).
+    private const int PrimeCycles = 12000;
 
     private readonly ITestOutputHelper _output;
 
@@ -141,6 +144,14 @@ public sealed class SidEngineParityTests
         sid.ConfigureAudioClock(PalMasterClockHz);
         foreach (var (addr, val) in Voice3Setup)
             sid.Write(addr, val);
+        // Prime to a known shared start (managed powers up at 0, reSID at
+        // accumulator 0x555555 / envelope 0xaa): TEST bit (gate off) holds the
+        // accumulator at 0 and lets the envelope release to 0, then release TEST
+        // and gate on so both sides begin attack from accumulator 0 / envelope 0.
+        sid.Write(0xD412, 0x28); // sawtooth + TEST, gate off
+        for (var i = 0; i < PrimeCycles; i++)
+            sid.Tick();
+        sid.Write(0xD412, 0x21); // sawtooth + gate on, TEST off
         return sid;
     }
 
@@ -149,5 +160,8 @@ public sealed class SidEngineParityTests
         ViceNativeBridge.ResetMachine(native);
         foreach (var (addr, val) in Voice3Setup)
             ViceNative.WriteMemory(native, addr, val);
+        ViceNative.WriteMemory(native, 0xD412, 0x28); // sawtooth + TEST, gate off
+        ViceNative.ClockSid(native, PrimeCycles);
+        ViceNative.WriteMemory(native, 0xD412, 0x21); // sawtooth + gate on, TEST off
     }
 }
