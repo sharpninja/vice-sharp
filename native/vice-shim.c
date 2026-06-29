@@ -1726,7 +1726,10 @@ VICE_SHIM_API void vice_sid_clock(void *machine, int cycles)
     EnterCriticalSection(&g_state_lock);
     if (vice_shim_is_active_machine(machine)) {
         /* sample_rate == cpu clock => exactly 1 cycle consumed per rendered
-           sample, so reSID advances `cycles` cycles cycle-exactly. */
+           sample, so reSID advances `cycles` cycles cycle-exactly (verified via
+           OSC3 = freq*N). NB: FAST and RESAMPLE sampling give the same envelope
+           timing here, so the sampling method is not the source of the ~156
+           cyc/step attack vs the reSID source's ~148-149. */
         if (vice_shim_ensure_sid_renderer_locked(cycles_per_sec, cycles_per_sec)) {
             int16_t scratch[256];
             int remaining = cycles;
