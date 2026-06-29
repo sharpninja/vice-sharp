@@ -397,18 +397,238 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public byte SustainRelease;
         public uint WaveformAccumulator;
         public uint PulseAccumulator;
-        public byte Envelope;
-        public EnvelopeState State;
+        public byte Envelope;          // display/readback mirror of Env.EnvelopeCounter
+        public EnvelopeState State;     // display mirror of Env.State
         public bool Gate;
         public bool Reset;
-        // 15-bit envelope-rate prescaler counter (0..32767). Ticks once per
-        // SID cycle. Reaching the per-stage threshold steps the envelope and
-        // resets the counter to 0. Critically, this counter is NEVER reset
-        // when the ATK/DCY/SUS/REL registers are written - that omission is
-        // the source of the famous SID ADSR bug (FR-SID-006): a write that
-        // lowers the threshold below the current counter forces the counter
-        // to wrap all 15 bits before the next step fires (~32k cycles stall).
-        public ushort EnvelopeRateCounter;
+        // Verbatim reSID EnvelopeGenerator (batched clock path). The managed
+        // SID is reSID-modelled, so the ADSR rate counter, exponential decay,
+        // and the ADSR delay bug come straight from reSID's envelope.cc/.h.
+        public ReSidEnvelope Env;
+    }
+
+    /// <summary>
+    /// Verbatim port of reSID's EnvelopeGenerator (envelope.cc / envelope.h),
+    /// batched clock(delta_t) path - the path the native lockstep oracle uses
+    /// via SAMPLE_FAST clock_fast. Ported field-for-field so managed ENV3 is
+    /// cycle-exact with native reSID (SidEngineParityTests). The 15-bit rate
+    /// counter is never reset on ATK/DCY/SUS/REL writes (the famous ADSR delay
+    /// bug, FR-SID-006); the exponential counter divides the decay/release clock
+    /// at envelope levels 255/93/54/26/14/6 to approximate an exponential.
+    /// </summary>
+    internal struct ReSidEnvelope
+    {
+        public enum EnvStateE : byte { Attack, DecaySustain, Release, Freezed }
+
+        // rate_counter_period[16] - reSID values (the actual comparison values).
+        private static readonly int[] RatePeriods =
+            { 8, 31, 62, 94, 148, 219, 266, 312, 391, 976, 1953, 3125, 3906, 11719, 19531, 31250 };
+        // sustain_level[16] - both nibbles of the 4-bit sustain value.
+        private static readonly byte[] SustainLevels =
+            { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff };
+
+        public int RateCounter;
+        public int RatePeriod;
+        public byte ExponentialCounter;
+        public byte ExponentialCounterPeriod;
+        public byte EnvelopeCounter;
+        public byte Env3;   // ENV3 ($1C) readback: envelope_counter sampled at clock start
+        public bool HoldZero;
+        public bool ResetRateCounter;
+        public byte Attack, Decay, Sustain, Release;
+        public byte Gate;
+        public EnvStateE State;
+        public EnvStateE NextState;
+        public int StatePipeline;
+        public int EnvelopePipeline;
+        public int ExponentialPipeline;
+
+        public void Reset()
+        {
+            EnvelopePipeline = 0;
+            ExponentialPipeline = 0;
+            StatePipeline = 0;
+            Attack = Decay = Sustain = Release = 0;
+            Gate = 0;
+            RateCounter = 0;
+            ExponentialCounter = 0;
+            ExponentialCounterPeriod = 1;
+            ResetRateCounter = false;
+            State = EnvStateE.Release;
+            NextState = EnvStateE.Release;
+            RatePeriod = RatePeriods[Release];
+            HoldZero = false;
+            EnvelopeCounter = 0;
+        }
+
+        public void WriteControl(byte control)
+        {
+            byte gateNext = (byte)(control & 0x01);
+            if (Gate == gateNext)
+                return;
+
+            NextState = gateNext != 0 ? EnvStateE.Attack : EnvStateE.Release;
+            if (NextState == EnvStateE.Attack)
+            {
+                // The decay register is "accidentally" activated during the first
+                // cycle of the attack phase.
+                State = EnvStateE.DecaySustain;
+                RatePeriod = RatePeriods[Decay];
+                StatePipeline = 2;
+                if (ResetRateCounter || ExponentialPipeline == 2)
+                    EnvelopePipeline = (ExponentialCounterPeriod == 1 || ExponentialPipeline == 2) ? 2 : 4;
+                else if (ExponentialPipeline == 1)
+                    StatePipeline = 3;
+            }
+            else
+            {
+                StatePipeline = EnvelopePipeline > 0 ? 3 : 2;
+            }
+            Gate = gateNext;
+        }
+
+        public void WriteAttackDecay(byte attackDecay)
+        {
+            Attack = (byte)((attackDecay >> 4) & 0x0f);
+            Decay = (byte)(attackDecay & 0x0f);
+            if (State == EnvStateE.Attack)
+                RatePeriod = RatePeriods[Attack];
+            else if (State == EnvStateE.DecaySustain)
+                RatePeriod = RatePeriods[Decay];
+        }
+
+        public void WriteSustainRelease(byte sustainRelease)
+        {
+            Sustain = (byte)((sustainRelease >> 4) & 0x0f);
+            Release = (byte)(sustainRelease & 0x0f);
+            if (State == EnvStateE.Release)
+                RatePeriod = RatePeriods[Release];
+        }
+
+        private void SetExponentialCounter()
+        {
+            switch (EnvelopeCounter)
+            {
+                case 0xff: ExponentialCounterPeriod = 1; break;
+                case 0x5d: ExponentialCounterPeriod = 2; break;
+                case 0x36: ExponentialCounterPeriod = 4; break;
+                case 0x1a: ExponentialCounterPeriod = 8; break;
+                case 0x0e: ExponentialCounterPeriod = 16; break;
+                case 0x06: ExponentialCounterPeriod = 30; break;
+                case 0x00:
+                    ExponentialCounterPeriod = 1;
+                    // When the envelope counter reaches zero it freezes there.
+                    HoldZero = true;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// reSID EnvelopeGenerator::clock() - single cycle. This is the path
+        /// SAMPLE_RESAMPLE / SAMPLE_INTERPOLATE use (the shim oracle defaults to
+        /// RESAMPLING), and it carries the envelope/state pipelines and the +1
+        /// rate-counter reset delay that the batched clock drops - which is why
+        /// the effective attack period is longer than rate_counter_period[attack].
+        /// </summary>
+        public void Clock()
+        {
+            // ENV3 is sampled at the first phase of the clock.
+            Env3 = EnvelopeCounter;
+
+            if (StatePipeline != 0)
+                StateChange();
+
+            // If the exponential counter period != 1, the envelope decrement is
+            // delayed one cycle. Only modeled for single-cycle clocking.
+            if (EnvelopePipeline != 0 && --EnvelopePipeline == 0)
+            {
+                if (!HoldZero)
+                {
+                    if (State == EnvStateE.Attack)
+                    {
+                        EnvelopeCounter = (byte)((EnvelopeCounter + 1) & 0xff);
+                        if (EnvelopeCounter == 0xff)
+                        {
+                            State = EnvStateE.DecaySustain;
+                            RatePeriod = RatePeriods[Decay];
+                        }
+                    }
+                    else if (State == EnvStateE.DecaySustain || State == EnvStateE.Release)
+                    {
+                        EnvelopeCounter = (byte)((EnvelopeCounter - 1) & 0xff);
+                    }
+                    SetExponentialCounter();
+                }
+            }
+
+            if (ExponentialPipeline != 0 && --ExponentialPipeline == 0)
+            {
+                ExponentialCounter = 0;
+                if ((State == EnvStateE.DecaySustain && EnvelopeCounter != SustainLevels[Sustain])
+                    || State == EnvStateE.Release)
+                {
+                    EnvelopePipeline = 1;
+                }
+            }
+            else if (ResetRateCounter)
+            {
+                RateCounter = 0;
+                ResetRateCounter = false;
+
+                if (State == EnvStateE.Attack)
+                {
+                    // The first attack step also resets the exponential counter.
+                    ExponentialCounter = 0;
+                    EnvelopePipeline = 2;
+                }
+                else
+                {
+                    if (!HoldZero && ++ExponentialCounter == ExponentialCounterPeriod)
+                        ExponentialPipeline = ExponentialCounterPeriod != 1 ? 2 : 1;
+                }
+            }
+
+            // ADSR delay bug: when the comparison value is below the current
+            // counter, the counter wraps at 0x8000 before the envelope steps.
+            if (RateCounter != RatePeriod)
+            {
+                RateCounter++;
+                if ((RateCounter & 0x8000) != 0)
+                    RateCounter = (RateCounter + 1) & 0x7fff;
+            }
+            else
+            {
+                ResetRateCounter = true;
+            }
+        }
+
+        private void StateChange()
+        {
+            StatePipeline--;
+            switch (NextState)
+            {
+                case EnvStateE.Attack:
+                    if (StatePipeline == 0)
+                    {
+                        State = EnvStateE.Attack;
+                        RatePeriod = RatePeriods[Attack];
+                        HoldZero = false;
+                    }
+                    break;
+                case EnvStateE.DecaySustain:
+                    break;
+                case EnvStateE.Release:
+                    if ((State == EnvStateE.Attack && StatePipeline == 0)
+                        || (State == EnvStateE.DecaySustain && StatePipeline == 1))
+                    {
+                        State = EnvStateE.Release;
+                        RatePeriod = RatePeriods[Release];
+                    }
+                    break;
+                case EnvStateE.Freezed:
+                    break;
+            }
+        }
     }
 
     private readonly IAudioBackend? _audioBackend;
@@ -432,6 +652,8 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         _bus = bus;
         _audioBackend = audioBackend;
+        for (var v = 0; v < _voices.Length; v++)
+            _voices[v].Env.Reset();
     }
 
     /// <summary>
@@ -581,96 +803,30 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     private void ProcessEnvelope(ref Voice voice)
     {
-        // Gate transitions select the state. Note: register writes to ATK/DCY/
-        // SUS/REL elsewhere in Write() do NOT touch voice.EnvelopeRateCounter
-        // - that omission is exactly the SID ADSR bug (FR-SID-006).
-        if (voice.Gate && voice.State == EnvelopeState.Idle)
+        // Advance the reSID envelope one master cycle (batched clock with
+        // delta_t = 1, matching the native oracle's SAMPLE_FAST clock_fast at
+        // 1:1). Gate transitions and rate changes are applied by Env.Write*
+        // from Write(); here we only clock and mirror the result for output,
+        // readback, and the debugger snapshot.
+        voice.Env.Clock();
+        voice.Envelope = voice.Env.EnvelopeCounter;
+        voice.State = voice.Env.State switch
         {
-            voice.State = EnvelopeState.Attack;
-            voice.Envelope = 0;
-            // Counter is left alone here too: matches hardware where the
-            // prescaler is a free-running 15-bit counter.
-        }
-        if (!voice.Gate && voice.State != EnvelopeState.Idle && voice.State != EnvelopeState.Release)
-        {
-            voice.State = EnvelopeState.Release;
-        }
-
-        if (voice.State == EnvelopeState.Idle)
-            return;
-
-        // Select threshold for the current stage.
-        ushort threshold = voice.State switch
-        {
-            EnvelopeState.Attack => GetAttackRates()[voice.AttackDecay >> 4],
-            EnvelopeState.Decay => GetDecayReleaseRates()[voice.AttackDecay & 0x0F],
-            EnvelopeState.Sustain => GetDecayReleaseRates()[voice.AttackDecay & 0x0F],
-            EnvelopeState.Release => GetDecayReleaseRates()[voice.SustainRelease & 0x0F],
-            _ => (ushort)0
+            ReSidEnvelope.EnvStateE.Attack => EnvelopeState.Attack,
+            ReSidEnvelope.EnvStateE.DecaySustain => EnvelopeState.Decay,
+            ReSidEnvelope.EnvStateE.Release => EnvelopeState.Release,
+            _ => EnvelopeState.Idle,
         };
-
-        // Tick the 15-bit prescaler. It wraps at 32768 (0..32767). This counter
-        // is NOT reset on rate-register writes; that is the ADSR bug.
-        voice.EnvelopeRateCounter = (ushort)((voice.EnvelopeRateCounter + 1) & 0x7FFF);
-
-        if (voice.EnvelopeRateCounter != threshold)
-            return;
-
-        // Threshold reached: reset prescaler and step the envelope.
-        voice.EnvelopeRateCounter = 0;
-
-        byte sustainLevel = (byte)((voice.SustainRelease >> 4) * 17);
-
-        switch (voice.State)
-        {
-            case EnvelopeState.Attack:
-                if (voice.Envelope < 255)
-                {
-                    voice.Envelope++;
-                }
-                if (voice.Envelope == 255)
-                {
-                    voice.State = EnvelopeState.Decay;
-                }
-                break;
-
-            case EnvelopeState.Decay:
-                if (voice.Envelope > sustainLevel)
-                {
-                    voice.Envelope--;
-                }
-                if (voice.Envelope <= sustainLevel)
-                {
-                    voice.State = EnvelopeState.Sustain;
-                }
-                break;
-
-            case EnvelopeState.Sustain:
-                // Track sustain-level changes downward; the level register can
-                // be lowered at any time.
-                if (voice.Envelope > sustainLevel)
-                {
-                    voice.Envelope--;
-                }
-                break;
-
-            case EnvelopeState.Release:
-                if (voice.Envelope > 0)
-                {
-                    voice.Envelope--;
-                }
-                if (voice.Envelope == 0)
-                {
-                    voice.State = EnvelopeState.Idle;
-                }
-                break;
-        }
     }
 
     public void Reset()
     {
         Array.Clear(_registers);
         Array.Clear(_voices);
+        // Array.Clear zeroes each Env to an invalid state (State=Attack,
+        // RatePeriod=0); restore the reSID power-on envelope state.
+        for (var v = 0; v < _voices.Length; v++)
+            _voices[v].Env.Reset();
         _filterCutoff = 0;
         _filterResonance = 0;
         _filterControl = 0;
@@ -691,8 +847,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 // bits 24-31 via >> 24 was the OSC3-readback twin of the BUG-SIDAUDIO
                 // accumulator bug, and made OSC3 read ~1/64 of the true value.)
                 return (byte)((_voices[2].WaveformAccumulator >> 16) & 0xFF);
-            case 0x1C: // ENV3: voice 3 envelope output
-                return _voices[2].Envelope;
+            case 0x1C: // ENV3: voice 3 envelope readback (reSID env3 = counter
+                       // sampled at the first phase of the cycle).
+                return _voices[2].Env.Env3;
             default:
                 return _registers[register];
         }
@@ -724,12 +881,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 case 4:
                     _voices[voiceIndex].Control = value;
                     _voices[voiceIndex].Gate = (value & 0x01) != 0;
+                    // reSID gate/state transition (attack on gate-on, release on gate-off).
+                    _voices[voiceIndex].Env.WriteControl(value);
                     break;
                 case 5:
                     _voices[voiceIndex].AttackDecay = value;
+                    _voices[voiceIndex].Env.WriteAttackDecay(value);
                     break;
                 case 6:
                     _voices[voiceIndex].SustainRelease = value;
+                    _voices[voiceIndex].Env.WriteSustainRelease(value);
                     break;
             }
         }

@@ -555,6 +555,8 @@ VICE_SHIM_API void vice_machine_destroy(void *machine)
     free(instance);
 }
 
+static void vice_shim_reset_sid_renderer_locked(void);
+
 VICE_SHIM_API void vice_machine_reset(void *machine)
 {
     if (g_debug_reset_calls < 8) {
@@ -615,6 +617,11 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
        managed Reset() which clears _registers[0x19] unconditionally. */
     vicii.irq_status = 0;
     vice_shim_reset_cpu_state_locked();
+    /* g_shim_sid_psid (the SID clock/render instance) is a global that outlives
+       individual machine instances; reset it so vice_sid_clock starts each
+       machine from a fresh reSID. Otherwise envelope/accumulator state leaks
+       across tests/sessions and makes SID lockstep order-dependent. */
+    vice_shim_reset_sid_renderer_locked();
     LeaveCriticalSection(&g_state_lock);
 }
 
@@ -1621,6 +1628,16 @@ static int vice_shim_ensure_sid_renderer_locked(int sample_rate_hz, int cycles_p
     g_shim_sid_speed = sample_rate_hz;
     g_shim_sid_cycles_per_sec = cycles_per_sec;
     return 1;
+}
+
+static void vice_shim_reset_sid_renderer_locked(void)
+{
+    if (g_shim_sid_psid != NULL) {
+        sid_sound_machine_close(g_shim_sid_psid);
+        g_shim_sid_psid = NULL;
+    }
+    g_shim_sid_speed = 0;
+    g_shim_sid_cycles_per_sec = 0;
 }
 
 static void vice_shim_sync_sid_registers_locked(void)
