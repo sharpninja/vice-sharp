@@ -686,8 +686,11 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // VICE-style: Read back current values (not just registers)
         switch (register)
         {
-            case 0x1B: // OSC3: upper 8 bits of voice 3 oscillator
-                return (byte)(_voices[2].WaveformAccumulator >> 24);
+            case 0x1B: // OSC3: upper 8 bits of the 24-bit voice-3 oscillator.
+                // Bits 16-23 - the same slice waveform generation uses. (Reading
+                // bits 24-31 via >> 24 was the OSC3-readback twin of the BUG-SIDAUDIO
+                // accumulator bug, and made OSC3 read ~1/64 of the true value.)
+                return (byte)((_voices[2].WaveformAccumulator >> 16) & 0xFF);
             case 0x1C: // ENV3: voice 3 envelope output
                 return _voices[2].Envelope;
             default:

@@ -1695,3 +1695,40 @@ VICE_SHIM_API uint8_t vice_sid_engine_read(void *machine, uint16_t addr)
 
     return value;
 }
+
+VICE_SHIM_API void vice_sid_clock(void *machine, int cycles)
+{
+    const int cycles_per_sec = 985248; /* C64 PAL */
+
+    if (machine == NULL || cycles <= 0) {
+        return;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        /* sample_rate == cpu clock => exactly 1 cycle consumed per rendered
+           sample, so reSID advances `cycles` cycles cycle-exactly. */
+        if (vice_shim_ensure_sid_renderer_locked(cycles_per_sec, cycles_per_sec)) {
+            int16_t scratch[256];
+            int remaining = cycles;
+
+            vice_shim_sync_sid_registers_locked();
+
+            while (remaining > 0) {
+                int n = remaining > 256 ? 256 : remaining;
+                CLOCK delta = (CLOCK)n;
+                sound_t *engines[1];
+                int got;
+                engines[0] = g_shim_sid_psid;
+                got = sid_sound_machine_calculate_samples(engines, scratch, n, 1, 1, &delta);
+                if (got <= 0) {
+                    break;
+                }
+                remaining -= got;
+            }
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+}

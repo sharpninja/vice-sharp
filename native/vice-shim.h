@@ -120,6 +120,14 @@ VICE_SHIM_API size_t vice_sid_render_samples(void* machine, int16_t* buffer, siz
 // main SID #0 read by vice_sid_get_state is never clocked). addr is 0x00-0x1f.
 VICE_SHIM_API uint8_t vice_sid_engine_read(void* machine, uint16_t addr);
 
+// Clock the shim's private reSID instance by exactly `cycles` CPU cycles using a
+// 1:1 (sample_rate == cpu_clock) renderer, so its internal ADSR/accumulator state
+// advances cycle-exactly - unlike vice_sid_render_samples, whose 44100 Hz
+// resampling advances ~22.34 cycles per sample and cannot be matched to an exact
+// cycle count. Syncs the current SID registers first. Use this for cycle-exact
+// SID lockstep against the managed Sid6581.
+VICE_SHIM_API void vice_sid_clock(void* machine, int cycles);
+
 struct vice_interrupt_state {
     uint8_t irq_asserted;
     uint8_t nmi_asserted;

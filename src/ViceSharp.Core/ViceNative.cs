@@ -153,6 +153,9 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_sid_engine_read")]
     public static partial byte ReadSidEngine(IntPtr instance, ushort addr);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_clock")]
+    public static partial void ClockSid(IntPtr instance, int cycles);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_interrupt_get_state")]
     public static partial void GetInterruptState(IntPtr instance, ref ViceInterruptState state);
 
