@@ -40,34 +40,49 @@ if [[ ! -f "$vice_root/configure" ]]; then
   ./autogen.sh
 fi
 
-if [[ ! -f "$vice_src/config.h" ]]; then
+# Configure flags the shim build requires. reSID is mandatory (the managed
+# Sid6581 is modelled on it) and fastsid must stay out of the build entirely.
+vice_configure_flags=(
+  --enable-option-checking=fatal
+  --enable-headlessui
+  --disable-arch
+  --disable-html-docs
+  --disable-pdf-docs
+  --disable-catweasel
+  --disable-hardsid
+  --disable-ethernet
+  --disable-midi
+  --disable-parsid
+  --disable-realdevice
+  --disable-rs232
+  --disable-openmp
+  --disable-ipv6
+  --with-resid
+  --without-flac
+  --without-gif
+  --without-lame
+  --without-mpg123
+  --without-portaudio
+  --without-vorbis
+  --without-libcurl
+  --without-libieee1284
+  --without-unzip-bin
+  --without-png
+)
+
+# Reconfigure when config.h is missing OR the flag set changed since the last
+# configure. Without the flag-change check a stale config.h (e.g. an older
+# fastsid build) would silently survive and the shim would link the wrong SID
+# engine. The marker records the exact flags config.h was last built with.
+vice_configure_marker="$vice_src/.vice-shim-configure-flags"
+if [[ ! -f "$vice_src/config.h" ]] \
+   || [[ ! -f "$vice_configure_marker" ]] \
+   || [[ "$(cat "$vice_configure_marker" 2>/dev/null)" != "${vice_configure_flags[*]}" ]]; then
+  echo "Configuring VICE (config.h missing or shim configure flags changed)."
   cd "$vice_root"
-  ./configure \
-    --enable-option-checking=fatal \
-    --enable-headlessui \
-    --disable-arch \
-    --disable-html-docs \
-    --disable-pdf-docs \
-    --disable-catweasel \
-    --disable-hardsid \
-    --disable-ethernet \
-    --disable-midi \
-    --disable-parsid \
-    --disable-realdevice \
-    --disable-rs232 \
-    --disable-openmp \
-    --disable-ipv6 \
-    --with-resid \
-    --without-flac \
-    --without-gif \
-    --without-lame \
-    --without-mpg123 \
-    --without-portaudio \
-    --without-vorbis \
-    --without-libcurl \
-    --without-libieee1284 \
-    --without-unzip-bin \
-    --without-png
+  rm -f "$vice_src/config.h"
+  ./configure "${vice_configure_flags[@]}"
+  printf '%s' "${vice_configure_flags[*]}" > "$vice_configure_marker"
 fi
 
 # Clean potentially malformed dependency maps that can be produced by previous
