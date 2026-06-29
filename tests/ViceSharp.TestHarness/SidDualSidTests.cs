@@ -68,16 +68,16 @@ public sealed class SidDualSidTests
         var primary = new Sid6581(bus) { BaseAddress = 0xD400 };
         var secondary = new Sid6581(bus) { BaseAddress = 0xD420 };
 
-        // Drive primary voice 3 with a high frequency so OSC3 readback
-        // advances quickly. Voice 3 lives at $D40E (FREQ LO), $D40F
-        // (FREQ HI) on the primary's window. The secondary's same
-        // registers live at $D42E / $D42F. We only write the primary.
-        // OSC3 latches the upper byte of voice 3's 24-bit phase
-        // accumulator, so the phase needs to advance past $1000000
-        // before any non-zero byte appears in OSC3. 512 ticks at
-        // freq $8000 reaches exactly $1000000.
+        // Drive primary voice 3 so OSC3 readback advances. Voice 3 lives at
+        // $D40E (FREQ LO), $D40F (FREQ HI) on the primary's window; the
+        // secondary's same registers live at $D42E / $D42F. We only write the
+        // primary. OSC3 latches the high byte (bits 16-23) of voice 3's 24-bit
+        // phase accumulator. Use freq $0100 so 512 ticks gives accumulator
+        // $020000 - a clear non-zero high byte ($02) that does NOT wrap the
+        // 24-bit accumulator (freq $8000 would wrap to exactly $1000000, i.e.
+        // 24-bit zero, making OSC3 read 0 and hiding the advance).
         primary.Write(0xD40E, 0x00);   // V3 FREQ LO
-        primary.Write(0xD40F, 0x80);   // V3 FREQ HI = $8000
+        primary.Write(0xD40F, 0x01);   // V3 FREQ HI = $0100
 
         for (var i = 0; i < 512; i++)
         {
@@ -85,11 +85,10 @@ public sealed class SidDualSidTests
             secondary.Tick();
         }
 
-        // OSC3 ($D41B for primary, $D43B for secondary) reads back the
-        // upper byte of voice 3's 24-bit phase accumulator. Primary
-        // accumulator = $8000 * 512 = $1000000, high byte = $01.
-        // Secondary accumulator should still be 0 - it never had a
-        // frequency written.
+        // OSC3 ($D41B for primary, $D43B for secondary) reads back the high byte
+        // (bits 16-23) of voice 3's 24-bit phase accumulator. Primary
+        // accumulator = $0100 * 512 = $020000, high byte = $02. Secondary
+        // accumulator should still be 0 - it never had a frequency written.
         var primaryOsc3 = primary.Read(0xD41B);
         var secondaryOsc3 = secondary.Read(0xD43B);
 
