@@ -1586,10 +1586,11 @@ VICE_SHIM_API void vice_interrupt_get_state(void *machine, struct vice_interrupt
  * we resync that register state into our private sound_t before each render
  * so register writes performed through vice_machine_write still take effect.
  *
- * Engine selection follows the configured SidEngine resource. In the build
- * used by the shim (--without-resid --with-fastsid) the engine is FastSID.
- * The cycle_based flag therefore is false, so we drive the renderer with a
- * fixed delta_t per sample request.
+ * Engine selection follows the configured SidEngine resource. The shim build
+ * defines HAVE_RESID and leaves HAVE_FASTSID undefined, so the engine is reSID.
+ * We drive the renderer one sample at a time with a fixed delta_t per request,
+ * which also clocks reSID's internal state (accumulator, ADSR envelope) so it
+ * can be read back via vice_sid_engine_read.
  */
 static sound_t *g_shim_sid_psid = NULL;
 static int g_shim_sid_speed = 0;
@@ -1678,4 +1679,19 @@ VICE_SHIM_API size_t vice_sid_render_samples(void *machine, int16_t *buffer, siz
     LeaveCriticalSection(&g_state_lock);
 
     return rendered;
+}
+
+VICE_SHIM_API uint8_t vice_sid_engine_read(void *machine, uint16_t addr)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        value = sid_sound_machine_read(g_shim_sid_psid, (uint16_t)(addr & 0x1f));
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
 }

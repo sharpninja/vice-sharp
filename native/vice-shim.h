@@ -114,6 +114,12 @@ VICE_SHIM_API void vice_sid_get_state(void* machine, struct vice_sid_state* stat
 // require sound_open() to have succeeded.
 VICE_SHIM_API size_t vice_sid_render_samples(void* machine, int16_t* buffer, size_t n, int delta_t_cycles);
 
+// Read a register straight from the shim's private, clocked reSID instance.
+// Returns engine-computed values such as OSC3 ($1b) and ENV3 ($1c) that only
+// exist once reSID has been clocked via vice_sid_render_samples (the headless
+// main SID #0 read by vice_sid_get_state is never clocked). addr is 0x00-0x1f.
+VICE_SHIM_API uint8_t vice_sid_engine_read(void* machine, uint16_t addr);
+
 struct vice_interrupt_state {
     uint8_t irq_asserted;
     uint8_t nmi_asserted;
