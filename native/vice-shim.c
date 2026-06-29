@@ -34,6 +34,7 @@
 #include "resources.h"
 #include "screenshot.h"
 #include "sid.h"
+#include "snapshot.h"
 #include "sid/sid-snapshot.h"
 #include "sysfile.h"
 #include "uiapi.h"
@@ -227,6 +228,13 @@ static int vice_shim_initialize_runtime_locked(void)
         return 0;
     }
 
+    /* This shim is an x64sc (cycle-exact) build: VIC-II uses viciisc/vicii-cycle.c
+       and the SC memory model. machine_class is a compile-time global that the link
+       resolved to plain VICE_MACHINE_C64; force it to C64SC so machine_get_name()
+       reports "C64SC" and snapshots are read/written with the x64sc machine identity
+       (matching real x64sc .vsf files). */
+    machine_class = VICE_MACHINE_C64SC;
+
     tick_init();
     maincpu_early_init();
     machine_setup_context();
@@ -234,6 +242,11 @@ static int vice_shim_initialize_runtime_locked(void)
     machine_early_init();
     sysfile_init(machine_name);
 
+    /* reSID is the canonical SID engine. The build defines HAVE_RESID and leaves
+       HAVE_FASTSID undefined, so resources_set_defaults() selects reSID (the only
+       compiled engine) via SID_ENGINE_DEFAULT -> SID_ENGINE_RESID. Do NOT set the
+       SidEngine resource explicitly: switching the engine a second time before
+       init_main wires up sound/SID fails. fastsid is excluded at the build level. */
     if (init_resources() < 0
         || init_cmdline_options() < 0
         || gfxoutput_early_init((int)help_requested) < 0
@@ -603,6 +616,69 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
     vicii.irq_status = 0;
     vice_shim_reset_cpu_state_locked();
     LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API int vice_machine_read_snapshot(void *machine, const char *path)
+{
+    if (path == NULL) {
+        return -1;
+    }
+
+    vice_shim_stop_worker(machine);
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    vice_machine_t *instance = (vice_machine_t *)machine;
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    /* Select the model so banked ROM/PLA config matches the snapshot's machine,
+       then let VICE restore CPU/mem/VIC/CIA/SID state directly from the .vsf
+       into maincpu_regs and the chip globals. Do NOT power up: that would wipe
+       the loaded state.
+
+       Set bootstrap_pending = 1 (NOT 0). When the worker re-enters
+       maincpu_mainloop on the next step, vice_shim_take_bootstrap_maincpu()
+       must return 1 so it IMPORT_REGISTERS() the snapshot-restored maincpu_regs
+       into the hosted CPU and clears only the micro-op state. Returning 0 makes
+       the mainloop fall back to machine_trigger_reset(), which zeroes the
+       architectural registers - i.e. it would discard the resumed state. */
+    c64model_set(instance->c64_model);
+    int result = machine_read_snapshot(path, 0);
+    g_bootstrap_pending = 1;
+
+    LeaveCriticalSection(&g_state_lock);
+    return result;
+}
+
+VICE_SHIM_API int vice_machine_write_snapshot(void *machine, const char *path)
+{
+    if (path == NULL) {
+        return -1;
+    }
+
+    vice_shim_stop_worker(machine);
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    /* save_roms=0, save_disks=0, event_mode=0: a plain machine state snapshot,
+       matching what x64sc writes from Snapshot > Save with default options. */
+    int result = machine_write_snapshot(path, 0, 0, 0);
+
+    LeaveCriticalSection(&g_state_lock);
+    return result;
+}
+
+VICE_SHIM_API int vice_snapshot_last_error(void)
+{
+    return snapshot_get_error();
 }
 
 VICE_SHIM_API int vice_machine_attach_cartridge(void *machine, const uint8_t *image, int length, int mapping_mode)

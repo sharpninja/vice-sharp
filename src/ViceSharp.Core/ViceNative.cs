@@ -51,6 +51,15 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_step_cycle")]
     public static partial void StepNative(IntPtr instance);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_read_snapshot", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial int ReadSnapshotNative(IntPtr instance, string path);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_write_snapshot", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial int WriteSnapshotNative(IntPtr instance, string path);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_snapshot_last_error")]
+    public static partial int SnapshotLastError();
+
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_cartridge")]
     private static partial int AttachCartridgeNative(IntPtr instance, byte* image, int length, int mappingMode);
 
@@ -449,6 +458,17 @@ public static unsafe partial class ViceNative
         }
 
         public void Step() => StepNative(_instance);
+
+        public int ReadSnapshot(string path)
+        {
+            var result = ReadSnapshotNative(_instance, path);
+            // Re-baseline so GetState().Cycle counts forward from the loaded
+            // state, mirroring Reset().
+            _cycleBaseline = ReadNativeCycle();
+            return result;
+        }
+
+        public int WriteSnapshot(string path) => WriteSnapshotNative(_instance, path);
 
         public void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
         {

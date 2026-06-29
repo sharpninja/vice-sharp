@@ -30,6 +30,14 @@ VICE_SHIM_API int vice_machine_set_keyboard_matrix_key(void* machine, int row, i
 VICE_SHIM_API void vice_machine_cia1_store(void* machine, uint8_t register_index, uint8_t value);
 VICE_SHIM_API uint8_t vice_machine_cia1_read(void* machine, uint8_t register_index);
 
+// Snapshot (VICE .vsf) load/save against the active machine. Returns 0 on
+// success; negative on shim-level error (-1 bad arg, -2 not active machine);
+// otherwise the underlying VICE machine_read/write_snapshot return value.
+VICE_SHIM_API int vice_machine_read_snapshot(void* machine, const char* path);
+VICE_SHIM_API int vice_machine_write_snapshot(void* machine, const char* path);
+// Last VICE snapshot error code (SNAPSHOT_* enum from snapshot.h); 0 = no error.
+VICE_SHIM_API int vice_snapshot_last_error(void);
+
 // CPU State
 VICE_SHIM_API uint8_t vice_cpu_get_a(void* machine);
 VICE_SHIM_API uint8_t vice_cpu_get_x(void* machine);

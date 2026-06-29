@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <None Update="Fixtures\D64\*.d64" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Fixtures\Vsf\*.vsf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <Target Name="BuildViceNative"

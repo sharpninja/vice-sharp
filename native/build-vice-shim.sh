@@ -57,8 +57,7 @@ if [[ ! -f "$vice_src/config.h" ]]; then
     --disable-rs232 \
     --disable-openmp \
     --disable-ipv6 \
-    --without-resid \
-    --with-fastsid \
+    --with-resid \
     --without-flac \
     --without-gif \
     --without-lame \

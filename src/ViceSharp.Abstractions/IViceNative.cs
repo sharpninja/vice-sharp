@@ -41,6 +41,19 @@ public interface IViceNative : IDisposable
     byte PeekRam(ushort address);
 
     /// <summary>
+    /// Load a VICE snapshot (.vsf) into the native machine, resuming it from the
+    /// staged state. The cycle counter is re-baselined so <see cref="GetState"/>
+    /// reports cycles elapsed since the load point. Returns 0 on success.
+    /// </summary>
+    int ReadSnapshot(string path);
+
+    /// <summary>
+    /// Write the current native machine state to a VICE snapshot (.vsf).
+    /// Returns 0 on success.
+    /// </summary>
+    int WriteSnapshot(string path);
+
+    /// <summary>
     /// Get current full machine state
     /// </summary>
     MachineState GetState();
