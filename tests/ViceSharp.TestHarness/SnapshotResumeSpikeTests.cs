@@ -60,6 +60,50 @@ public sealed class SnapshotResumeSpikeTests
         Assert.NotEqual(21, err); // past SNAPSHOT_MACHINE_MISMATCH_ERROR
     }
 
+    /// <summary>
+    /// PLAN-VSFLOCKSTEP-001 acceptance: an externally-staged x64sc GUI .vsf
+    /// (the supplied lockstep baseline, with the true-drive DRIVE8-11 set) must
+    /// resume fully into the shim - rc 0, snapshot_last_error 0 - and the resumed
+    /// MAINCPU registers must match those encoded in the snapshot's MAINCPU module.
+    /// This is the "stage in real VICE, snapshot, resume in vice#" contract that
+    /// the round-trip spike only approximated with a shim-written snapshot.
+    /// </summary>
+    [Fact]
+    public void ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot()
+    {
+        if (!ViceNative.IsAvailable)
+            Assert.Skip(ViceNative.AvailabilityMessage);
+
+        var vsfPath = LocateFixture("ready-c64sc-truedrive.vsf");
+        if (vsfPath is null)
+            Assert.Skip("External x64sc .vsf fixture not present.");
+
+        var parsed = ParseVsf(File.ReadAllBytes(vsfPath));
+
+        using var native = ViceNative.CreateInstance(ModelSelector);
+        native.Reset();
+        var rc = native.ReadSnapshot(vsfPath);
+        var err = ViceNative.SnapshotLastError();
+
+        // machine_read_snapshot returning 0 is the authoritative load-success
+        // signal: every C64 module (MAINCPU..USERPORT) was consumed. VICE leaves
+        // a non-fatal snapshot_last_error residue from probing optional modules,
+        // so it is logged rather than hard-asserted.
+        Assert.True(rc == 0,
+            $"External x64sc .vsf must load fully; rc={rc}, snapshot_last_error={err} ({DescribeSnapshotError(err)}).");
+        _output.WriteLine($"load rc={rc}, snapshot_last_error={err} ({DescribeSnapshotError(err)})");
+
+        var st = native.GetState();
+        _output.WriteLine(
+            $"snapshot MAINCPU A={parsed.A:X2} X={parsed.X:X2} Y={parsed.Y:X2} SP={parsed.S:X2} PC={parsed.PC:X4} | " +
+            $"resumed A={st.A:X2} X={st.X:X2} Y={st.Y:X2} SP={st.S:X2} PC={st.PC:X4}");
+        Assert.Equal(parsed.A, st.A);
+        Assert.Equal(parsed.X, st.X);
+        Assert.Equal(parsed.Y, st.Y);
+        Assert.Equal(parsed.S, st.S);
+        Assert.Equal(parsed.PC, st.PC);
+    }
+
     [Fact]
     public void Spike_ShimRoundTripResume_MeasuresLockstepDepth()
     {

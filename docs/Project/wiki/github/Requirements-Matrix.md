@@ -201,6 +201,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-UIMENUBAR-001 | Tracked | Functional-Requirements.md |
 | FR-UIPERIPHERAL-001 | Tracked | Functional-Requirements.md |
 | FR-UISETTINGS-001 | Tracked | Functional-Requirements.md |
+| FR-VSFLOCKSTEP-001 | Tracked | Functional-Requirements.md |
 | RUNTIME-TAPE-002 | Tracked | Functional-Requirements.md |
 | [TR-REMOTECTRL-SERVER-001] | Tracked | Technical-Requirements.md |
 | PERF-SPRITE-DMA-OPT-001 | Tracked | Technical-Requirements.md |
@@ -235,6 +236,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-TICKHIST-UI-001 | Tracked | Technical-Requirements.md |
 | TR-UIAXAML-001 | Tracked | Technical-Requirements.md |
 | TR-UIAXAML-VIEWS-001 | Tracked | Technical-Requirements.md |
+| TR-VSFLOCKSTEP-RESUME-001 | Tracked | Technical-Requirements.md |
 | TEST-CHIPSTATE-001 | Tracked | Testing-Requirements.md |
 | TEST-CPUTICK-001 | Tracked | Testing-Requirements.md |
 | TEST-DRVLED-001 | Tracked | Testing-Requirements.md |
@@ -273,3 +275,4 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-UISETTINGS-001 | Tracked | Testing-Requirements.md |
 | TEST-VIC-CHECKPOINT-001 | Tracked | Testing-Requirements.md |
 | TEST-VIC-RC-001 | Tracked | Testing-Requirements.md |
+| TEST-VSFLOCKSTEP-001 | Tracked | Testing-Requirements.md |

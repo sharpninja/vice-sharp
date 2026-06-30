@@ -47,7 +47,7 @@ index 5971a3c9d3..3ee311afbf 100644
  
  /* Skip cycle implementation */
 diff --git a/vice/src/mainc64cpu.c b/vice/src/mainc64cpu.c
-index 357b27452b..f14ea309a2 100644
+index 357b27452b..b94ee8587d 100644
 --- a/vice/src/mainc64cpu.c
 +++ b/vice/src/mainc64cpu.c
 @@ -56,6 +56,10 @@
@@ -99,6 +99,43 @@ index 357b27452b..f14ea309a2 100644
  
      while (1) {
  #define CPU_LOG_ID maincpu_log
+@@ -951,11 +985,31 @@ int maincpu_snapshot_read_module(snapshot_t *s)
+         || SMR_B(m, &sp) < 0
+         || SMR_W(m, &pc) < 0
+         || SMR_B(m, &status) < 0
+-        || SMR_DW_UINT(m, &last_opcode_info) < 0
+-        || SMR_DW_INT(m, &ane_log_level) < 0
+-        || SMR_DW_INT(m, &lxa_log_level) < 0
+-        || SMR_DW_INT(m, &maincpu_jammed) < 0
+-        || SMR_DW_INT(m, &maincpu_ba_low_flags) < 0) {
++        || SMR_DW_UINT(m, &last_opcode_info) < 0) {
++        goto fail;
++    }
++
++    /* ane/lxa logging levels (snapshot module v1.3) and maincpu_jammed (v1.4,
++       VICE commit 573f0f38a2 "save 'jammed' status into snapshot") were
++       inserted between last_opcode_info and maincpu_ba_low_flags. A snapshot
++       written by an older x64sc (module v1.2, e.g. a release build) lacks
++       them; reading them unconditionally misaligns ba_low_flags and the
++       interrupt sub-modules, raising SNAPSHOT_READ_OUT_OF_BOUNDS_ERROR. Guard
++       each addition by version so externally-staged/older .vsf files resume
++       cleanly while current snapshots are unaffected. ba_low_flags has existed
++       since v1.2 and is always the last field before the interrupt modules. */
++    if (!snapshot_version_is_smaller(major, minor, 1, 3)) {
++        if (SMR_DW_INT(m, &ane_log_level) < 0
++                || SMR_DW_INT(m, &lxa_log_level) < 0) {
++            goto fail;
++        }
++    }
++    if (!snapshot_version_is_smaller(major, minor, 1, 4)) {
++        if (SMR_DW_INT(m, &maincpu_jammed) < 0) {
++            goto fail;
++        }
++    }
++    if (SMR_DW_INT(m, &maincpu_ba_low_flags) < 0) {
+         goto fail;
+     }
+ 
 diff --git a/vice/src/vice-shim-runtime.h b/vice/src/vice-shim-runtime.h
 new file mode 100644
 index 0000000000..7cb833d571

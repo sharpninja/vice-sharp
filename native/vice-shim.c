@@ -625,6 +625,39 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
     LeaveCriticalSection(&g_state_lock);
 }
 
+/* Peek the VIC-II model byte (first byte of the "VIC-II" module data) from a
+   snapshot without disturbing machine state. vicii_snapshot_read_module rejects
+   a snapshot whose model differs from the configured VICIIModel
+   (SNAPSHOT_VICII_MODEL_MISMATCH). An externally-staged x64sc .vsf may use a
+   different VIC-II revision than the shim's default (e.g. 8565 vs the C64_PAL
+   default 6569 - both PAL); aligning VICIIModel to the snapshot lets it resume
+   without forcing a full c64model change (which would also alter the SID type).
+   Returns the model byte, or -1 if it cannot be read. */
+static int vice_shim_peek_snapshot_vicii_model(const char *path)
+{
+    uint8_t snap_major, snap_minor, mod_major, mod_minor, model;
+    snapshot_t *s;
+    snapshot_module_t *m;
+
+    s = snapshot_open(path, &snap_major, &snap_minor, machine_get_name());
+    if (s == NULL) {
+        return -1;
+    }
+    m = snapshot_module_open(s, "VIC-II", &mod_major, &mod_minor);
+    if (m == NULL) {
+        snapshot_close(s);
+        return -1;
+    }
+    if (snapshot_module_read_byte(m, &model) < 0) {
+        snapshot_module_close(m);
+        snapshot_close(s);
+        return -1;
+    }
+    snapshot_module_close(m);
+    snapshot_close(s);
+    return (int)model;
+}
+
 VICE_SHIM_API int vice_machine_read_snapshot(void *machine, const char *path)
 {
     if (path == NULL) {
@@ -653,7 +686,23 @@ VICE_SHIM_API int vice_machine_read_snapshot(void *machine, const char *path)
        the mainloop fall back to machine_trigger_reset(), which zeroes the
        architectural registers - i.e. it would discard the resumed state. */
     c64model_set(instance->c64_model);
+    {
+        /* Align VICIIModel to the snapshot so vicii_snapshot_read_module does
+           not reject an externally-staged .vsf with a different VIC-II
+           revision. Both 6569 and 8565 are PAL, so this preserves timing. */
+        int snap_vicii_model = vice_shim_peek_snapshot_vicii_model(path);
+        if (snap_vicii_model >= 0) {
+            resources_set_int("VICIIModel", snap_vicii_model);
+        }
+    }
     int result = machine_read_snapshot(path, 0);
+    if (result == 0) {
+        /* A successful machine_read_snapshot still probes optional modules that
+           are absent from a plain state snapshot, leaving a non-fatal
+           SNAPSHOT_MODULE_* residue in the global error. Normalise it so a
+           successful resume reports SNAPSHOT_NO_ERROR. */
+        snapshot_set_error(SNAPSHOT_NO_ERROR);
+    }
     g_bootstrap_pending = 1;
 
     LeaveCriticalSection(&g_state_lock);

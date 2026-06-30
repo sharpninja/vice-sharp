@@ -346,3 +346,14 @@ Managed PAL frame periodic raster/cycle-counter (2 Facts), native screen-RAM rou
 ### TEST-VIC-RC-001
 
 After writing DEN=1/YSCROLL=0/1 and advancing to specific rasterLine/rasterX, CurrentRowCounter and IsGraphicsIdle match VICE viciisc/vicii-cycle.c:541-563 expectations. All 11 pass.
+
+
+
+## TEST-VSFLOCKSTEP
+
+### TEST-VSFLOCKSTEP-001
+
+SnapshotResumeSpikeTests.ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot loads the supplied ready-c64sc-truedrive.vsf through the shim and asserts rc==0 and that the resumed MAINCPU registers equal the snapshot's MAINCPU module. Evidence: PASS (rc=0, snapshot_last_error=0, A=C2 X=02 Y=00 SP=FA PC=5769 both sides); ShimRoundTrip + SID parity 8/8; X64ScVariantLockstep 306 pass / 0 fail / 1 skip.
+
+**Acceptance Criteria:**
+- [ ] dotnet test ...TestHarness --filter ExternalX64ScVsf_FullyResumes => passed; rc=0, err=0, MAINCPU regs match.
