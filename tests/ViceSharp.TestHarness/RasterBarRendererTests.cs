@@ -251,6 +251,108 @@ public sealed class RasterBarRendererTests
         Assert.True(total >= 20, $"Expected to sample the bar region; got {total} lines.");
     }
 
+    /// <summary>
+    /// EMPIRICAL, non-lossy end-to-end proof (snapshot-gated). Captures VICE's REAL per-cycle
+    /// $D020 timeline for one frame of the live Pieces-of-Light bar segment (from the resumed
+    /// .vsf), then replays that exact timeline into a fresh managed VIC - bypassing the managed
+    /// emulation entirely, so injection lossiness cannot contaminate the result - and asserts the
+    /// managed RENDERED frame's border colour per line matches VICE's actual per-line border
+    /// across the whole bar region. This tests the real demo's writes AND the RasterX->pixel
+    /// phase; a vertical mis-placement or phase error would show as per-line mismatches.
+    /// </summary>
+    [Fact]
+    public void DemoBars_ReplayedViceTimeline_ManagedRendererMatchesVicePerLineBorder()
+    {
+        if (!ViceNative.IsAvailable) { Assert.Skip(ViceNative.AvailabilityMessage); return; }
+        var vsf = Array.Find(SnapshotCandidates, File.Exists);
+        if (vsf is null) { Assert.Skip("Staged demo .vsf snapshot not present."); return; }
+
+        const int firstBarLine = 212;
+        const int lastBarLine = 246;
+
+        using var native = ViceNative.CreateInstance("c64");
+        native.Reset();
+        Assert.True(native.ReadSnapshot(vsf) == 0, "snapshot must resume");
+
+        // Advance to a frame boundary (raster wraps to line 0).
+        int prev = native.GetVicState().RasterLine;
+        for (int i = 0; i < 30000; i++)
+        {
+            native.Step();
+            int l = native.GetVicState().RasterLine;
+            if (prev > 300 && l == 0) break;
+            prev = l;
+        }
+
+        // Capture one full frame of VICE's $D020 timeline (change events) + per-line border colour.
+        byte Border() => (byte)((native.GetVicState().Registers?[0x20] ?? 0) & 0x0F);
+        byte seed = Border();
+        var writes = new Dictionary<(int line, int cycle), byte>();
+        var nativeBorder = new Dictionary<int, byte>();
+        byte prevBorder = seed;
+        int startLine = native.GetVicState().RasterLine;
+        for (int i = 0; i < 20500; i++)
+        {
+            var v = native.GetVicState();
+            byte b = (byte)((v.Registers?[0x20] ?? 0) & 0x0F);
+            if (b != prevBorder) { writes[(v.RasterLine, v.RasterCycle)] = b; prevBorder = b; }
+            // Sample VICE's border at the SAME physical point the managed left-border pixel (8)
+            // shows: frame pixel 8 == (C-12)*8 -> VICE cycle 13. Sampling at cycle 0-1 would
+            // compare different cycles and manufacture a false 1-line offset.
+            if (v.RasterCycle == 13 && !nativeBorder.ContainsKey(v.RasterLine)) nativeBorder[v.RasterLine] = b;
+            native.Step();
+            if (i > 1000 && native.GetVicState().RasterLine == 0 && v.RasterLine > 300) break;
+        }
+
+        // Replay the exact timeline into a fresh managed VIC (no emulation, no injection).
+        var machine = MachineTestFactory.CreateC64Machine("c64");
+        machine.Reset();
+        var mvic = (Mos6569)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
+        mvic.Write(0xD020, seed);
+        // Two frames: warm up frame, then the replay frame that we read.
+        for (int f = 0; f < 2; f++)
+        {
+            for (int t = 0; t < VideoRenderer.PalCyclesPerLine * VideoRenderer.PalTotalLines + 4; t++)
+            {
+                int line = mvic.CurrentRasterLine;
+                int viceCycle = mvic.RasterX - 1; // managed RasterX == VICE cycle + 1
+                if (writes.TryGetValue((line, viceCycle), out var c))
+                    mvic.Write(0xD020, c);
+                mvic.Tick();
+            }
+        }
+
+        var fb = mvic.FrameBuffer;
+        var palette = Enumerable.Range(0, 16).Select(i => ExpectedBgra((byte)i)).ToArray();
+        byte ManagedBorder(int line)
+        {
+            int y = line - VideoRenderer.PalFirstVisibleRasterLine;
+            uint px = System.BitConverter.ToUInt32(fb, (y * VideoRenderer.ScreenWidth + 8) * 4);
+            int idx = Array.IndexOf(palette, px);
+            return (byte)(idx < 0 ? 0xFF : idx);
+        }
+
+        int match = 0, total = 0;
+        var mism = new List<string>();
+        for (int line = firstBarLine; line <= lastBarLine; line++)
+        {
+            if (!nativeBorder.TryGetValue(line, out var nc)) continue;
+            total++;
+            var mc = ManagedBorder(line);
+            if (mc == nc) match++;
+            else if (mism.Count < 10) mism.Add($"line {line}: VICE=${nc:X1} managed=${mc:X1}");
+        }
+
+        foreach (var m in mism) _output.WriteLine(m);
+        _output.WriteLine($"replayed-timeline per-line border match: {match}/{total} (start frame line {startLine})");
+        Assert.True(total >= 20, $"expected to sample the bar region; got {total} lines.");
+        // Non-lossy: the managed renderer, fed VICE's exact $D020 timeline, must reproduce VICE's
+        // per-line bar colours almost exactly. This is the empirical proof the bars render on the
+        // correct lines for the real demo (isolated from snapshot-injection emulation lossiness).
+        Assert.True(match * 100 >= total * 95,
+            $"Managed renderer reproduced VICE bars on only {match}/{total} bar lines (<95%).");
+    }
+
     private readonly ITestOutputHelper _output;
     public RasterBarRendererTests(ITestOutputHelper output) => _output = output;
 }
