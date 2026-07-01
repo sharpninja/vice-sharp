@@ -107,6 +107,58 @@ public sealed class RasterBarRendererTests
         Assert.Equal(expected, PixelAt(370));
     }
 
+    /// <summary>
+    /// The actual bug: a $D020 write near the END of a scanline (the cycle-stable raster
+    /// handler writes ahead of the beam) must colour the NEXT scanline, not the current one.
+    /// The old renderer sampled $D020 once at line-wrap and painted the whole current line the
+    /// final colour, so every bar appeared ~1 raster line too high. This drives the VIC across
+    /// several consecutive border lines, writes a distinct colour near the end of each, and
+    /// asserts each colour lands on the following line - the vertical placement that was wrong.
+    /// Pure unit test: no emulation/injection, so it isolates the renderer.
+    /// </summary>
+    [Fact]
+    public void EndOfLineBorderWrites_ColourTheNextScanline_NotTheCurrentOne()
+    {
+        var machine = MachineTestFactory.CreateC64Machine("c64");
+        machine.Reset();
+        var vic = (Mos6569)machine.Devices.GetByRole(DeviceRole.VideoChip)!;
+
+        // Upper-border lines (whole scanline is border), all visible.
+        int[] lines = { 24, 25, 26, 27, 28 };
+        byte[] colours = { 1, 3, 7, 10, 13 };
+        const int lateCycle = 60; // near end of line -> effect belongs to the next line
+
+        // Advance to just before the first line.
+        int guard = 0;
+        while (vic.CurrentRasterLine != lines[0] && guard++ < 200_000)
+            vic.Tick();
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            while (vic.CurrentRasterLine == lines[i] && vic.RasterX < lateCycle)
+                vic.Tick();
+            vic.Write(0xD020, colours[i]);
+            while (vic.CurrentRasterLine == lines[i])
+                vic.Tick();
+        }
+        // Render the last line by advancing one more.
+        while (vic.CurrentRasterLine == lines[^1] + 0 && guard++ < 200_000)
+            vic.Tick();
+
+        var fb = vic.FrameBuffer;
+        uint LeftBorder(int line)
+        {
+            int y = line - VideoRenderer.PalFirstVisibleRasterLine;
+            return System.BitConverter.ToUInt32(fb, (y * VideoRenderer.ScreenWidth + 8) * 4);
+        }
+
+        // Each late write on line L must colour line L+1 (the bar is NOT 1 line too high).
+        for (int i = 0; i < lines.Length - 1; i++)
+        {
+            Assert.Equal(ExpectedBgra(colours[i]), LeftBorder(lines[i] + 1));
+        }
+    }
+
     private static readonly string[] SnapshotCandidates =
     [
         @"F:\GitHub\vice-sharp\vice-snapshot-20260630171307.vsf",
