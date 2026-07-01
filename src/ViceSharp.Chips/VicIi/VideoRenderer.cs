@@ -167,7 +167,8 @@ public sealed class VideoRenderer
         uint borderPixel)
     {
         var pixels = MemoryMarshal.Cast<byte, uint>(line);
-        pixels.Fill(borderPixel);
+        // PLAN-VICRENDER-001: segmented border fill (mid-line $D020 changes) instead of one colour.
+        FillBorderSegmented(pixels);
 
         if (leftBorderOpen)
         {
@@ -492,7 +493,8 @@ public sealed class VideoRenderer
 
     private void DrawBorder(Span<byte> line, uint borderPixel)
     {
-        MemoryMarshal.Cast<byte, uint>(line).Fill(borderPixel);
+        // PLAN-VICRENDER-001: segmented border fill (mid-line $D020 changes) instead of one colour.
+        FillBorderSegmented(MemoryMarshal.Cast<byte, uint>(line));
     }
 
     private static void FillPixels(Span<uint> pixels, int start, int length, uint pixel)
@@ -503,6 +505,59 @@ public sealed class VideoRenderer
         }
 
         pixels.Slice(start, length).Fill(pixel);
+    }
+
+    // PLAN-VICRENDER-001: frame pixel 0 corresponds to ~RasterX 12 (the display window starts at
+    // frame pixel 24 = LeftBorderPixel, which is the first g-access at ~RasterX 15; 8 pixels per
+    // cycle). A $D020 write at in-line cycle C therefore takes effect from this frame pixel; a
+    // late-in-line write (RasterX ~60) maps past the right edge and so carries into the next line,
+    // which is exactly what places the raster bar on the correct scanline.
+    private const int FirstVisibleRasterX = 12;
+
+    private static int RasterXToFramePixel(int rasterX)
+    {
+        int px = (rasterX - FirstVisibleRasterX) * 8;
+        if (px < 0)
+        {
+            return 0;
+        }
+
+        return px > ScreenWidth ? ScreenWidth : px;
+    }
+
+    // PLAN-VICRENDER-001: fill the whole scanline with the border colour(s), honouring mid-line
+    // $D020 changes so cycle-stable raster bars render on the correct lines. Fast path (a single
+    // Fill) when the line had no mid-line change, which is the overwhelmingly common case.
+    private void FillBorderSegmented(Span<uint> pixels)
+    {
+        int count = _vic.BorderChangeCount;
+        if (count == 0)
+        {
+            // Fast path (no mid-line change): the whole line is the current border colour,
+            // identical to the pre-PLAN-VICRENDER-001 single-fill behaviour (zero change).
+            pixels.Fill(Palette[_vic.BorderColor & 0x0F]);
+            return;
+        }
+
+        uint colour = Palette[_vic.BorderEntryColour & 0x0F];
+        int x = 0;
+        for (int i = 0; i < count; i++)
+        {
+            _vic.GetBorderChange(i, out int rasterX, out byte c);
+            int px = RasterXToFramePixel(rasterX);
+            if (px > x)
+            {
+                FillPixels(pixels, x, px - x, colour);
+                x = px;
+            }
+
+            colour = Palette[c & 0x0F];
+        }
+
+        if (x < pixels.Length)
+        {
+            FillPixels(pixels, x, pixels.Length - x, colour);
+        }
     }
 
     /// <summary>

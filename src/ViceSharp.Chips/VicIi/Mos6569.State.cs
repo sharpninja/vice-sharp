@@ -36,6 +36,9 @@ public partial class Mos6569 : IStatefulDevice
         RasterX = inLineCycle;
         // 9-bit raster compare = $D012 | ($D011 bit7 << 8).
         _rasterIrqLine = (ushort)(_registers[0x12] | ((_registers[0x11] & 0x80) << 1));
+        // PLAN-VICRENDER-001: seed the border colour-change log from the injected register.
+        _borderEntryColour = _registers[0x20];
+        _borderChangeCount = 0;
     }
 
     public void CaptureState(Span<byte> destination)

@@ -294,6 +294,29 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             : BorderSide.Normal;
     }
     
+    // PLAN-VICRENDER-001: per-line border colour-change log. The renderer draws each scanline
+    // once at line-wrap; for cycle-stable raster bars the demo rewrites $D020 mid-line, so we
+    // record every mid-line change (its in-line cycle RasterX + new low-nibble colour) and let
+    // the renderer fill the line in segments instead of collapsing it to one colour.
+    private const int MaxLineColourChanges = 96;
+    private readonly short[] _borderChangeX = new short[MaxLineColourChanges];
+    private readonly byte[] _borderChangeColour = new byte[MaxLineColourChanges];
+    private int _borderChangeCount;
+    private byte _borderEntryColour;
+
+    /// <summary>PLAN-VICRENDER-001: count of mid-line $D020 changes on the line being rendered.</summary>
+    internal int BorderChangeCount => _borderChangeCount;
+
+    /// <summary>PLAN-VICRENDER-001: border colour ($D020 low nibble) active at the start of the line being rendered.</summary>
+    internal byte BorderEntryColour => _borderEntryColour;
+
+    /// <summary>PLAN-VICRENDER-001: the i-th mid-line $D020 change - its in-line cycle (RasterX) and new low-nibble colour.</summary>
+    internal void GetBorderChange(int index, out int rasterX, out byte colour)
+    {
+        rasterX = _borderChangeX[index];
+        colour = _borderChangeColour[index];
+    }
+
     /// <summary>
     /// Get border color from register $20
     /// </summary>
@@ -995,6 +1018,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             }
             else
                 _renderer.NotifyFrameCompleted();
+
+            // PLAN-VICRENDER-001: the log held the completed line's mid-line $D020 changes and
+            // has now been consumed by the render. The final colour becomes the next line's
+            // entry colour; reset the change log for the line just started.
+            _borderEntryColour = _registers[0x20];
+            _borderChangeCount = 0;
         }
         else
         {
@@ -1023,6 +1052,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         CurrentRasterLine = 0;
         RasterX = ResetRasterCycle;
         CycleCounter = 0;
+        // PLAN-VICRENDER-001: reset the per-line border colour-change log.
+        _borderEntryColour = 0;
+        _borderChangeCount = 0;
         _rasterIrqLine = 0;
         // Armed on reset: hardware fires the raster IRQ unconditionally when raster_line
         // matches raster_irq_line. Starting disarmed caused managed to skip the first
@@ -1907,6 +1939,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (register >= 0x20 && register <= 0x2E)
         {
             byte masked = (byte)(value & 0x0F);
+            // PLAN-VICRENDER-001: record mid-line border ($D020) colour changes with the cycle
+            // (RasterX) at which they occur, so the renderer can reproduce cycle-stable raster
+            // bars instead of drawing the whole scanline in the final colour.
+            if (register == 0x20 && masked != _registers[0x20] && _borderChangeCount < MaxLineColourChanges)
+            {
+                _borderChangeX[_borderChangeCount] = (short)RasterX;
+                _borderChangeColour[_borderChangeCount] = masked;
+                _borderChangeCount++;
+            }
             _registers[register] = masked;
             UpdateSpriteRegisters((ushort)register, masked);
             return;
