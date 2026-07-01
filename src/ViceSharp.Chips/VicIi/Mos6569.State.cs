@@ -18,6 +18,26 @@ public partial class Mos6569 : IStatefulDevice
 
     public int StateSize => VicRegisterBytes + VicInternalBytes;
 
+    /// <summary>
+    /// Snapshot-resume injection for cross-emulator lockstep diagnostics (PLAN-VSFLOCKSTEP):
+    /// seeds the 64-byte register file and the raster phase (line + in-line cycle) from an
+    /// external VICE snapshot so the managed VIC starts at the same point. The bad-line
+    /// allowance, video counters, and pipeline re-derive within a frame from the register
+    /// state and raster position, so this is sufficient to drive a self-correcting raster
+    /// engine. Not used on the per-cycle emulation hot path.
+    /// </summary>
+    public void InjectSnapshotState(ReadOnlySpan<byte> registers, ushort rasterLine, byte inLineCycle)
+    {
+        if (registers.Length < VicRegisterBytes)
+            throw new ArgumentException($"Expected at least {VicRegisterBytes} register bytes.", nameof(registers));
+
+        registers[..VicRegisterBytes].CopyTo(_registers);
+        CurrentRasterLine = (ushort)(rasterLine & 0x01FF);
+        RasterX = inLineCycle;
+        // 9-bit raster compare = $D012 | ($D011 bit7 << 8).
+        _rasterIrqLine = (ushort)(_registers[0x12] | ((_registers[0x11] & 0x80) << 1));
+    }
+
     public void CaptureState(Span<byte> destination)
     {
         _registers.AsSpan(0, VicRegisterBytes).CopyTo(destination);

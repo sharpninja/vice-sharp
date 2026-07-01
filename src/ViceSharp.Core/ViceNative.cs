@@ -524,7 +524,8 @@ public static unsafe partial class ViceNative
                 RasterCycle = state.RasterCycle,
                 BadLine = state.BadLine,
                 DisplayState = state.DisplayState,
-                SpriteDma = state.SpriteDma
+                SpriteDma = state.SpriteDma,
+                Registers = state.GetRegisters()
             };
         }
 

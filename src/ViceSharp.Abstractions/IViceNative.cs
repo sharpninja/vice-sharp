@@ -89,4 +89,12 @@ public readonly struct NativeVicState
     public byte BadLine { get; init; }
     public byte DisplayState { get; init; }
     public byte SpriteDma { get; init; }
+
+    /// <summary>
+    /// Snapshot of the 64-byte VIC-II register file ($D000-$D03F) as the native
+    /// shim sees it, with $D019 reflecting the live IRQ latch. Used to seed a
+    /// managed VIC for snapshot-resume lockstep diagnostics. May be null if the
+    /// binding did not populate it.
+    /// </summary>
+    public byte[]? Registers { get; init; }
 }

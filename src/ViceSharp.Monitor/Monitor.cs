@@ -67,7 +67,7 @@ public sealed class Monitor : IMonitor
             if (count <= 4)
             {
                 var op = _machine.Bus.Peek(s.PC);
-                results.Add($"{s.PC:X4}  {op:X2} {Disasm(s.PC, op)}");
+                results.Add($"{s.PC:X4}  {op:X2} {Mos6502Disassembler.Decode(s.PC, a => _machine.Bus.Peek(a))}");
             }
         }
         var f = _machine.GetState();
@@ -124,93 +124,19 @@ public sealed class Monitor : IMonitor
         {
             var pc = address;
             var op = _machine.Bus.Peek(pc);
-            var length = (byte)OpLen(op);
+            var length = Mos6502Disassembler.OpcodeLength(op);
             var bytes = new byte[length];
             for (var offset = 0; offset < length; offset++)
                 bytes[offset] = _machine.Bus.Peek((ushort)(pc + offset));
 
             var nextAddress = (ushort)(pc + length);
-            entries.Add(new DisassemblyEntry(pc, bytes, Disasm(pc, op), length, nextAddress));
+            entries.Add(new DisassemblyEntry(pc, bytes, Mos6502Disassembler.Decode(pc, a => _machine.Bus.Peek(a)), length, nextAddress));
             address = nextAddress;
         }
 
         return entries;
     }
 
-    private static int OpLen(byte op) => op switch
-    {
-        0x00 or 0x08 or 0x10 or 0x18 or 0x28 or 0x30 or 0x38 or 0x40 or 0x48 or 0x50 or 0x58 or 0x60 or 0x68 or 0x70 or 0x78 or 0x88 or 0x8A or 0x98 or 0x9A or 0xA8 or 0xAA or 0xB8 or 0xBA or 0xC8 or 0xCA or 0xD8 or 0xEA or 0xF8 => 1,
-        0x20 or 0x4C or 0x6C => 3,
-        _ => 2
-    };
-
-    private string Disasm(ushort pc, byte op)
-    {
-        var b = _machine.Bus;
-        var b1 = b.Peek((ushort)(pc + 1));
-        var b2 = b.Peek((ushort)(pc + 2));
-        return op switch
-        {
-            0x00 => "BRK", 0x08 => "PHP", 0x0A => "ASL A", 0x18 => "CLC", 0x28 => "PLP",
-            0x38 => "SEC", 0x40 => "RTI", 0x48 => "PHA", 0x4A => "LSR A", 0x58 => "CLI",
-            0x60 => "RTS", 0x68 => "PLA", 0x78 => "SEI", 0x88 => "DEY", 0x8A => "TXA",
-            0x98 => "TYA", 0x9A => "TXS", 0xA8 => "TAY", 0xAA => "TAX", 0xB8 => "CLV",
-            0xBA => "TSX", 0xC8 => "INY", 0xCA => "DEX", 0xD8 => "CLD", 0xEA => "NOP", 0xF8 => "SED",
-            0x10 => $"BPL ${pc + 2 + (sbyte)b1:X4}", 0x30 => $"BMI ${pc + 2 + (sbyte)b1:X4}",
-            0x50 => $"BVC ${pc + 2 + (sbyte)b1:X4}", 0x70 => $"BVS ${pc + 2 + (sbyte)b1:X4}",
-            0x90 => $"BCC ${pc + 2 + (sbyte)b1:X4}", 0xB0 => $"BCS ${pc + 2 + (sbyte)b1:X4}",
-            0xD0 => $"BNE ${pc + 2 + (sbyte)b1:X4}", 0xF0 => $"BEQ ${pc + 2 + (sbyte)b1:X4}",
-            0x20 => $"JSR ${b2:X2}{b1:X2}", 0x4C => $"JMP ${b2:X2}{b1:X2}", 0x6C => $"JMP (${b2:X2}{b1:X2})",
-            0x09 => $"ORA #${b1:X2}", 0x05 => $"ORA ${b1:X2}", 0x15 => $"ORA ${b1:X2},X",
-            0x19 => $"ORA ${b2:X2}{b1:X2},Y", 0x1D => $"ORA ${b2:X2}{b1:X2},X",
-            0x01 => $"ORA (${b1:X2},X)", 0x11 => $"ORA (${b1:X2}),Y",
-            0x29 => $"AND #${b1:X2}", 0x25 => $"AND ${b1:X2}", 0x35 => $"AND ${b1:X2},X",
-            0x39 => $"AND ${b2:X2}{b1:X2},Y", 0x3D => $"AND ${b2:X2}{b1:X2},X",
-            0x21 => $"AND (${b1:X2},X)", 0x31 => $"AND (${b1:X2}),Y",
-            0x49 => $"EOR #${b1:X2}", 0x45 => $"EOR ${b1:X2}", 0x55 => $"EOR ${b1:X2},X",
-            0x59 => $"EOR ${b2:X2}{b1:X2},Y", 0x5D => $"EOR ${b2:X2}{b1:X2},X",
-            0x41 => $"EOR (${b1:X2},X)", 0x51 => $"EOR (${b1:X2}),Y",
-            0x69 => $"ADC #${b1:X2}", 0x65 => $"ADC ${b1:X2}", 0x75 => $"ADC ${b1:X2},X",
-            0x79 => $"ADC ${b2:X2}{b1:X2},Y", 0x7D => $"ADC ${b2:X2}{b1:X2},X",
-            0x61 => $"ADC (${b1:X2},X)", 0x71 => $"ADC (${b1:X2}),Y",
-            0xA9 => $"LDA #${b1:X2}", 0xA5 => $"LDA ${b1:X2}", 0xB5 => $"LDA ${b1:X2},X",
-            0xB9 => $"LDA ${b2:X2}{b1:X2},Y", 0xBD => $"LDA ${b2:X2}{b1:X2},X",
-            0xA1 => $"LDA (${b1:X2},X)", 0xB1 => $"LDA (${b1:X2}),Y",
-            0x85 => $"STA ${b1:X2}", 0x95 => $"STA ${b1:X2},X",
-            0x99 => $"STA ${b2:X2}{b1:X2},Y", 0x9D => $"STA ${b2:X2}{b1:X2},X",
-            0x81 => $"STA (${b1:X2},X)", 0x91 => $"STA (${b1:X2}),Y",
-            0x86 => $"STX ${b1:X2}", 0x96 => $"STX ${b1:X2},Y",
-            0x84 => $"STY ${b1:X2}", 0x94 => $"STY ${b1:X2},X",
-            0xA2 => $"LDX #${b1:X2}", 0xA6 => $"LDX ${b1:X2}", 0xB6 => $"LDX ${b1:X2},Y",
-            0xAE => $"LDX ${b2:X2}{b1:X2}", 0xBE => $"LDX ${b2:X2}{b1:X2},Y",
-            0xA0 => $"LDY #${b1:X2}", 0xA4 => $"LDY ${b1:X2}", 0xB4 => $"LDY ${b1:X2},X",
-            0xAC => $"LDY ${b2:X2}{b1:X2}", 0xBC => $"LDY ${b2:X2}{b1:X2},X",
-            0x06 => $"ASL ${b1:X2}", 0x16 => $"ASL ${b1:X2},X",
-            0x0E => $"ASL ${b2:X2}{b1:X2}", 0x1E => $"ASL ${b2:X2}{b1:X2},X",
-            0x26 => $"ROL ${b1:X2}", 0x36 => $"ROL ${b1:X2},X",
-            0x2E => $"ROL ${b2:X2}{b1:X2}", 0x3E => $"ROL ${b2:X2}{b1:X2},X",
-            0x46 => $"LSR ${b1:X2}", 0x56 => $"LSR ${b1:X2},X",
-            0x4E => $"LSR ${b2:X2}{b1:X2}", 0x5E => $"LSR ${b2:X2}{b1:X2},X",
-            0x66 => $"ROR ${b1:X2}", 0x76 => $"ROR ${b1:X2},X",
-            0x6E => $"ROR ${b2:X2}{b1:X2}", 0x7E => $"ROR ${b2:X2}{b1:X2},X",
-            0xC1 => $"CMP (${b1:X2},X)", 0xC5 => $"CMP ${b1:X2}",
-            0xC9 => $"CMP #${b1:X2}", 0xCD => $"CMP ${b2:X2}{b1:X2}",
-            0xD1 => $"CMP (${b1:X2}),Y", 0xD5 => $"CMP ${b1:X2},X",
-            0xD9 => $"CMP ${b2:X2}{b1:X2},Y", 0xDD => $"CMP ${b2:X2}{b1:X2},X",
-            0xE0 => $"CPX #${b1:X2}", 0xE4 => $"CPX ${b1:X2}",
-            0xEC => $"CPX ${b2:X2}{b1:X2}",
-            0xC0 => $"CPY #${b1:X2}", 0xC4 => $"CPY ${b1:X2}",
-            0xCC => $"CPY ${b2:X2}{b1:X2}",
-            0x24 => $"BIT ${b1:X2}", 0x2C => $"BIT ${b2:X2}{b1:X2}",
-            0xE6 => $"INC ${b1:X2}", 0xF6 => $"INC ${b1:X2},X",
-            0xEE => $"INC ${b2:X2}{b1:X2}", 0xFE => $"INC ${b2:X2}{b1:X2},X",
-            0xC6 => $"DEC ${b1:X2}", 0xD6 => $"DEC ${b1:X2},X",
-            0xCE => $"DEC ${b2:X2}{b1:X2}", 0xDE => $"DEC ${b2:X2}{b1:X2},X",
-            0xE8 => "INX",
-            0x1A or 0x3A or 0x5A or 0x7A or 0xDA or 0xFA => "NOP",
-            _ => $".db ${op:X2}"
-        };
-    }
 
     private string AddBreakpoint(string[] parts)
     {
