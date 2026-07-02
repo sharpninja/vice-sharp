@@ -75,6 +75,14 @@ VICE_SHIM_API void vice_vic_get_state(void* machine, struct vice_vic_state* stat
 // Returns non-zero on success; fills buffer with BGRA (320x200 recommended). Authentic from native VICE vicii state.
 VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buffer, int length, int* width, int* height);
 
+// Per-pixel VIC oracle (PLAN-VICEPARITY-001 Phase 0 / TR-VIC-ORACLE-001): copy
+// the visible frame window from the viciisc raster draw buffer as raw VICE
+// palette indices, one byte per pixel (0x00-0x0F). vicii-draw-cycle.c writes
+// these indices 8 per cycle into vicii.dbuf; each line is flushed into the
+// canvas draw buffer by vicii_raster_draw_handler. Index-exact comparison is
+// palette-independent, which is what the VIC parity ACs assert.
+VICE_SHIM_API int vice_vic_capture_frame_indices(void* machine, uint8_t* buffer, int length, int* width, int* height);
+
 // Line pixel+pri snapshot at raster/draw boundary (for TR-VIC-EDGE-001 native ECM reinforcement, BACKFILL-VIDEO-001).
 // Returns non-zero on success; fills pri_buffer (0/1 per pixel) for the line using native vicii state (gbuf/pri logic per vicii-draw-cycle.c:196/224).
 // Checkpointed authentic pri_buffer for invalid ECM (pri preserved on COL_NONE pixels).

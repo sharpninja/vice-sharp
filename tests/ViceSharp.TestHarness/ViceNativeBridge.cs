@@ -133,6 +133,23 @@ public static class ViceNativeBridge
     }
 
     /// <summary>
+    /// PLAN-VICEPARITY-001 Phase 0 (P0-2) / TR-VIC-ORACLE-001. Per-pixel VIC
+    /// oracle: copies the visible frame from VICE's viciisc raster draw buffer
+    /// as raw palette indices (one byte per pixel, 0x00-0x0F). Index-exact
+    /// comparison is palette-independent; VIC parity ACs assert colour identity
+    /// against this buffer rather than an RGB conversion.
+    /// </summary>
+    /// <param name="machine">Native VICE machine handle.</param>
+    /// <param name="indexBuffer">Destination; must hold at least visible width * height bytes (384 * 272 PAL).</param>
+    /// <param name="width">Visible width reported by the native geometry.</param>
+    /// <param name="height">Visible height reported by the native geometry.</param>
+    /// <returns>True when the native raster draw buffer was copied.</returns>
+    public static bool TryCaptureVicFrameIndices(IntPtr machine, byte[] indexBuffer, out int width, out int height)
+    {
+        return ViceNative.CaptureVicFrameIndices(machine, indexBuffer, indexBuffer.Length, out width, out height) != 0;
+    }
+
+    /// <summary>
     /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 (display-mode native visible-frame extension; full buffer support) / 
     /// TR-VIC-EDGE-002 / TR-VIC-EDGE-006 (open-border + display-mode depth) / FR-VIC-002 / FR-VIC-003 / FR-VIC-005 / FR-VIC-008 / TEST-VIC-001.
     /// 

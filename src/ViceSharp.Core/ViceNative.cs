@@ -138,6 +138,14 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_capture_visible_frame")]
     public static partial int CaptureVisibleFrame(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
 
+    // Per-pixel VIC oracle (PLAN-VICEPARITY-001 Phase 0 / TR-VIC-ORACLE-001): the
+    // visible frame as raw VICE palette indices (one byte per pixel, 0x00-0x0F),
+    // copied from the viciisc raster draw buffer that vicii-draw-cycle.c fills
+    // 8 pixels per cycle. Index-exact comparison is palette-independent, so
+    // parity ACs compare colour identity rather than RGB conversion.
+    [LibraryImport(LibraryName, EntryPoint = "vice_vic_capture_frame_indices")]
+    public static partial int CaptureVicFrameIndices(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_graphics_priority_at_raster")]
     public static partial int GetGraphicsPriorityAtRaster(IntPtr instance, ushort rasterLine, [Out] byte[] buffer, int length);
 

@@ -47,6 +47,8 @@
 #include "vicii.h"
 #include "vice-shim-runtime.h"
 #include "viciisc/viciitypes.h"
+#include "palette.h"
+#include "videoarch.h" /* headless video_canvas_s for the frame oracle */
 
 int archdep_init(int *argc, char **argv);
 
@@ -1430,16 +1432,95 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
     LeaveCriticalSection(&g_state_lock);
 }
 
-// Full visible frame buffer copy for BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 (full buffer beyond 320x200 checkpoint) + TR-VIC-EDGE-002/006 (open-border/display depth).
-// Leverages existing vice-shim surface + vicii raster/line buffers (vicii_t raster + draw_buffer_ptr per viciitypes.h + vicii-cycle.c raster_draw_handler).
-// Supports 320x200 checkpoint (compat) or 384x272 full (VideoRenderer.ScreenWidth/Height + raster geometry) when caller buffer sized accordingly.
-// For invalid ECM: COL_NONE black gfx (vicii-draw-cycle.c:133-141/197-203) with pri preserved ( :196/224/401-428).
-// Authentic buffer copy path from vicii state for real native vs simulator expectations.
+/*
+ * Per-pixel VIC oracle (PLAN-VICEPARITY-001 Phase 0 / TR-VIC-ORACLE-001).
+ *
+ * vicii-draw-cycle.c draws 8 palette-indexed pixels per cycle into vicii.dbuf;
+ * vicii_raster_draw_handler flushes each completed line through
+ * raster_line_emulate -> draw_dummy into the canvas draw buffer at
+ * draw_buffer + line * frame_buffer_width + extra_offscreen_border_left
+ * (raster_draw_buffer_ptr_update, raster.c). The visible window is
+ * screen_leftborderwidth + VICII_SCREEN_XPIX + screen_rightborderwidth
+ * pixels wide and spans first_displayed_line..last_displayed_line.
+ *
+ * Resolves the visible window into *out_base (top-left pixel), *out_stride
+ * (frame buffer row width) and *out_w/*out_h. Caller must hold g_state_lock.
+ * Returns 0 when the draw buffer is not realized (headless canvas missing)
+ * or when the NTSC lower-border wrap layout is active (unsupported here).
+ */
+static int vice_shim_vic_visible_window_locked(const uint8_t **out_base, int *out_stride, int *out_w, int *out_h)
+{
+    unsigned int fbw;
+    unsigned int first_line;
+    unsigned int last_line;
+
+    if (vicii.raster.canvas == NULL
+        || vicii.raster.canvas->draw_buffer == NULL
+        || vicii.raster.canvas->draw_buffer->draw_buffer == NULL
+        || vicii.raster.geometry == NULL) {
+        return 0;
+    }
+
+    first_line = (unsigned int)vicii.first_displayed_line;
+    last_line = (unsigned int)vicii.last_displayed_line;
+    if (last_line >= vicii.raster.geometry->screen_size.height || last_line < first_line) {
+        /* NTSC lower-border wrap layout; not needed by the PAL oracle. */
+        return 0;
+    }
+
+    fbw = vicii.raster.geometry->screen_size.width
+          + vicii.raster.geometry->extra_offscreen_border_left
+          + vicii.raster.geometry->extra_offscreen_border_right;
+
+    *out_base = vicii.raster.canvas->draw_buffer->draw_buffer
+                + first_line * fbw
+                + vicii.raster.geometry->extra_offscreen_border_left;
+    *out_stride = (int)fbw;
+    *out_w = vicii.screen_leftborderwidth + VICII_SCREEN_XPIX + vicii.screen_rightborderwidth;
+    *out_h = (int)(last_line - first_line + 1);
+    return 1;
+}
+
+VICE_SHIM_API int vice_vic_capture_frame_indices(void *machine, uint8_t *buffer, int length, int *width, int *height)
+{
+    const uint8_t *base = NULL;
+    int stride = 0;
+    int w = 0;
+    int h = 0;
+    int row;
+    int ok = 0;
+
+    if (width) *width = 0;
+    if (height) *height = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)
+        && vice_shim_vic_visible_window_locked(&base, &stride, &w, &h)) {
+        if (width) *width = w;
+        if (height) *height = h;
+        if (buffer != NULL && length >= w * h) {
+            for (row = 0; row < h; row++) {
+                memcpy(buffer + (size_t)row * w, base + (size_t)row * stride, (size_t)w);
+            }
+            ok = 1;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return ok;
+}
+
+// Full visible frame as BGRA (presentation-level capture). The real path maps
+// the raster draw buffer's palette indices through the canvas palette; the
+// index endpoint above is the parity oracle. 320x200 selects the graphics
+// window (gfx_position), 384x272 the full visible canvas including borders.
 VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buffer, int length, int* width, int* height)
 {
     const int CheckpointW = 320;
     const int CheckpointH = 200;
-    const int FullW = 384; // matches VideoRenderer + raster full visible canvas (borders/open-border per TR-VIC-EDGE-002/006)
+    const int FullW = 384; // matches VideoRenderer + raster full visible canvas
     const int FullH = 272;
 
     int fullRequired = FullW * FullH * 4;
@@ -1448,11 +1529,13 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buf
     int w = CheckpointW;
     int h = CheckpointH;
     int required = checkpointRequired;
+    int full = 0;
     if (length >= fullRequired)
     {
         w = FullW;
         h = FullH;
         required = fullRequired;
+        full = 1;
     }
     else if (length < checkpointRequired)
     {
@@ -1475,28 +1558,53 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buf
         return 1;
     }
 
-    // Authentic from native VICE state (vicii.regs + raster/line buffers for full copy)
-    uint8_t d011 = vicii.regs[0x11];
-    uint8_t d016 = vicii.regs[0x16];
-    bool ecm = (d011 & 0x40) != 0;
-    bool bmm = (d011 & 0x20) != 0;
-    bool mcm = (d016 & 0x10) != 0;
-    bool is_invalid = ecm && (bmm || mcm);
+    {
+        const uint8_t *base = NULL;
+        int stride = 0;
+        int visW = 0;
+        int visH = 0;
+        const palette_t *pal = vicii.raster.canvas != NULL ? vicii.raster.canvas->palette : NULL;
 
-    if (is_invalid)
-    {
-        // Full buffer copy: COL_NONE black gfx per vicii-draw-cycle.c:133-141,197-203 (three invalid combos).
-        // pri preserved :196/224/401-428 even on black. Uses vicii raster (line buffers) for the canvas region (full 384x272 or checkpoint).
-        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-001/002/006 / FR-VIC-002/003/005/008 / TEST-VIC-001 + explore 019e6acc-29b8-77f1-a9cc-56499af366f9.
-        // (Implemented full vicii.raster.canvas copy follow-on from prior checkpoint surface comment.)
-        memset(buffer, 0, required);
-        for (int i = 3; i < required; i += 4) buffer[i] = 0xFF; // opaque
-        // (Minimal authentic copy leveraging vicii state/raster; full draw_buffer_ptr memcpy would be in follow-on if raster populated at capture point.)
-    }
-    else
-    {
-        memset(buffer, 0, required);
-        buffer[0] = 0xCC; buffer[1] = 0xCC; buffer[2] = 0xCC; buffer[3] = 0xFF;
+        if (!vice_shim_vic_visible_window_locked(&base, &stride, &visW, &visH)
+            || pal == NULL || pal->entries == NULL) {
+            LeaveCriticalSection(&g_state_lock);
+            return 0;
+        }
+
+        if (!full) {
+            /* Graphics window: gfx_position is in screen coordinates; the
+             * visible window starts at first_displayed_line and x 0 of the
+             * visible canvas maps to screen x extra-left already removed, so
+             * offset by the left border width and the gfx start line. */
+            int gfxTop = (int)vicii.raster.geometry->gfx_position.y - vicii.first_displayed_line;
+            if (gfxTop < 0 || gfxTop + CheckpointH > visH
+                || vicii.screen_leftborderwidth + CheckpointW > visW) {
+                LeaveCriticalSection(&g_state_lock);
+                return 0;
+            }
+            base += (size_t)gfxTop * stride + vicii.screen_leftborderwidth;
+            visW = CheckpointW;
+            visH = CheckpointH;
+        }
+        else if (visW != FullW || visH != FullH) {
+            LeaveCriticalSection(&g_state_lock);
+            return 0;
+        }
+
+        for (int row = 0; row < h; row++) {
+            const uint8_t *src = base + (size_t)row * stride;
+            uint8_t *dst = buffer + (size_t)row * w * 4;
+            for (int x = 0; x < w; x++) {
+                unsigned int idx = src[x];
+                if (idx >= pal->num_entries) {
+                    idx = 0;
+                }
+                dst[(x * 4) + 0] = pal->entries[idx].blue;
+                dst[(x * 4) + 1] = pal->entries[idx].green;
+                dst[(x * 4) + 2] = pal->entries[idx].red;
+                dst[(x * 4) + 3] = 0xFF;
+            }
+        }
     }
     LeaveCriticalSection(&g_state_lock);
     return 1;
