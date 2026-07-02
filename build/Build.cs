@@ -255,8 +255,34 @@ sealed partial class Build : NukeBuild
             var apiKey = Environment.GetEnvironmentVariable("NUGET_API_KEY");
             Assert.True(!string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
 
+            // PUBLISH-GATE: packages ship only from a tagged release commit
+            // carrying a FRESH minor version (vX.Y.0, first tag of that
+            // major.minor line). Guarantees published packages are exactly
+            // reproducible from a tag and each publish opens a new minor.
+            var headTags = Git("tag --points-at HEAD", logOutput: false)
+                .Select(o => o.Text.Trim())
+                .Where(t => System.Text.RegularExpressions.Regex.IsMatch(t, @"^v\d+\.\d+\.\d+$"))
+                .ToList();
+            Assert.True(headTags.Count == 1,
+                $"PublishNuget requires HEAD to carry exactly one release tag (vX.Y.Z); found: [{string.Join(", ", headTags)}]");
+
+            var releaseTag = headTags[0];
+            var parts = releaseTag.TrimStart('v').Split('.');
+            Assert.True(parts[2] == "0",
+                $"PublishNuget requires a fresh minor (vX.Y.0); tag {releaseTag} has a non-zero patch");
+
+            var sameMinorTags = Git($"tag --list v{parts[0]}.{parts[1]}.*", logOutput: false)
+                .Select(o => o.Text.Trim())
+                .Where(t => t.Length > 0)
+                .ToList();
+            Assert.True(sameMinorTags.Count == 1 && sameMinorTags[0] == releaseTag,
+                $"PublishNuget requires the minor to be fresh; existing v{parts[0]}.{parts[1]}.* tags: [{string.Join(", ", sameMinorTags)}]");
+
+            var expectedVersion = releaseTag.TrimStart('v');
             var packages = PackagesOutputDirectory.GlobFiles("*.nupkg");
             Assert.True(packages.Count > 0, $"no packages found in {PackagesOutputDirectory}");
+            Assert.True(packages.All(p => p.Name.EndsWith($".{expectedVersion}.nupkg", StringComparison.OrdinalIgnoreCase)),
+                $"packed versions do not match release tag {releaseTag}; repack from the tagged commit");
 
             foreach (var package in packages.OrderBy(p => p.Name))
             {
