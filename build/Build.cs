@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Nuke.Common;
@@ -259,8 +260,9 @@ sealed partial class Build : NukeBuild
             // carrying a FRESH minor version (vX.Y.0, first tag of that
             // major.minor line). Guarantees published packages are exactly
             // reproducible from a tag and each publish opens a new minor.
-            var headTags = Git("tag --points-at HEAD", logOutput: false)
-                .Select(o => o.Text.Trim())
+            var headTags = ProcessTasks.StartProcess("git", "tag --points-at HEAD", RootDirectory, logOutput: false)
+                .AssertZeroExitCode()
+                .Output.Select(o => o.Text.Trim())
                 .Where(t => System.Text.RegularExpressions.Regex.IsMatch(t, @"^v\d+\.\d+\.\d+$"))
                 .ToList();
             Assert.True(headTags.Count == 1,
@@ -271,8 +273,9 @@ sealed partial class Build : NukeBuild
             Assert.True(parts[2] == "0",
                 $"PublishNuget requires a fresh minor (vX.Y.0); tag {releaseTag} has a non-zero patch");
 
-            var sameMinorTags = Git($"tag --list v{parts[0]}.{parts[1]}.*", logOutput: false)
-                .Select(o => o.Text.Trim())
+            var sameMinorTags = ProcessTasks.StartProcess("git", $"tag --list v{parts[0]}.{parts[1]}.*", RootDirectory, logOutput: false)
+                .AssertZeroExitCode()
+                .Output.Select(o => o.Text.Trim())
                 .Where(t => t.Length > 0)
                 .ToList();
             Assert.True(sameMinorTags.Count == 1 && sameMinorTags[0] == releaseTag,
@@ -286,6 +289,9 @@ sealed partial class Build : NukeBuild
 
             foreach (var package in packages.OrderBy(p => p.Name))
             {
+                // A push error fails the target (DotNetNuGetPush throws on
+                // non-zero exit); indexing latency is handled by the monitor
+                // below and never fails the target.
                 DotNetNuGetPush(s => s
                     .SetTargetPath(package)
                     .SetSource(NugetSource)
@@ -293,7 +299,61 @@ sealed partial class Build : NukeBuild
                     .EnableSkipDuplicate());
             }
 
-            Serilog.Log.Information("Published {Count} packages to {Source}", packages.Count, NugetSource);
+            Serilog.Log.Information("Pushed {Count} packages to {Source}; monitoring indexing", packages.Count, NugetSource);
+
+            // Resolution monitor: poll the v3 flat container until every
+            // pushed id@version is queryable, up to 10 minutes. Timeout is
+            // reported, not fatal (nuget.org indexing latency is not a
+            // publish failure).
+            var packageIds = packages
+                .Select(p => p.NameWithoutExtension)
+                .Select(n => n.Substring(0, n.Length - expectedVersion.Length - 1))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var pending = new HashSet<string>(packageIds, StringComparer.OrdinalIgnoreCase);
+            var deadline = DateTime.UtcNow + TimeSpan.FromMinutes(10);
+            using var http = new System.Net.Http.HttpClient();
+
+            while (pending.Count > 0 && DateTime.UtcNow < deadline)
+            {
+                foreach (var id in pending.ToList())
+                {
+                    try
+                    {
+                        var url = $"https://api.nuget.org/v3-flatcontainer/{id.ToLowerInvariant()}/index.json";
+                        var json = http.GetStringAsync(url).GetAwaiter().GetResult();
+                        using var doc = JsonDocument.Parse(json);
+                        var found = doc.RootElement.GetProperty("versions").EnumerateArray()
+                            .Any(v => string.Equals(v.GetString(), expectedVersion, StringComparison.OrdinalIgnoreCase));
+                        if (found)
+                        {
+                            pending.Remove(id);
+                            Serilog.Log.Information("Resolved on nuget.org: {Id} {Version}", id, expectedVersion);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // 404 until first indexing; transient errors retry on
+                        // the next sweep.
+                    }
+                }
+
+                if (pending.Count > 0)
+                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(20));
+            }
+
+            if (pending.Count == 0)
+            {
+                Serilog.Log.Information("All {Count} packages resolved on nuget.org at {Version}", packageIds.Count, expectedVersion);
+            }
+            else
+            {
+                Serilog.Log.Warning(
+                    "Publish succeeded but {Count} package(s) not yet resolvable after 10 minutes (indexing latency): {Ids}",
+                    pending.Count,
+                    string.Join(", ", pending.OrderBy(i => i)));
+            }
         });
 
     /// <summary>
