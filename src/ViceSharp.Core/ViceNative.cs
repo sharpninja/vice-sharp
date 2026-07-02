@@ -156,6 +156,33 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_sid_clock")]
     public static partial void ClockSid(IntPtr instance, int cycles);
 
+    // Single-cycle reSID oracle (PLAN-VICEPARITY-001 Phase 0). Unlike vice_sid_clock,
+    // which batches through clock(delta_t) and drops the envelope/waveform single-cycle
+    // pipelines, the exact API drives reSID::SID::clock() one cycle at a time so managed
+    // parity tests can assert bit-exact equality. Open syncs registers once; afterwards
+    // drive writes through SidExactWrite only (a re-sync would clobber pipeline state).
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_open")]
+    public static partial int SidExactOpen(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_reset")]
+    public static partial void SidExactReset(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_clock")]
+    public static partial int SidExactClock(IntPtr instance, int cycles);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_write")]
+    public static partial void SidExactWrite(IntPtr instance, ushort addr, byte value);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_read")]
+    public static partial byte SidExactRead(IntPtr instance, ushort addr);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_output")]
+    public static partial short SidExactOutput(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_get_state")]
+    public static partial void SidExactGetState(IntPtr instance, ref ViceSidExactState state);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_interrupt_get_state")]
     public static partial void GetInterruptState(IntPtr instance, ref ViceInterruptState state);
 
@@ -294,6 +321,76 @@ public static unsafe partial class ViceNative
             fixed (byte* envelopes = Envelopes)
             {
                 return new ReadOnlySpan<byte>(envelopes, 3).ToArray();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Full reSID internal state exported by the single-cycle oracle
+    /// (vice_sid_exact_get_state). Field order and packing mirror
+    /// struct vice_sid_exact_state in vice-shim.h byte for byte.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ViceSidExactState
+    {
+        public fixed byte Registers[32];
+        public fixed uint Accumulator[3];
+        public fixed uint ShiftRegister[3];
+        public fixed uint ShiftRegisterReset[3];
+        public fixed uint ShiftPipeline[3];
+        public fixed uint FloatingOutputTtl[3];
+        public fixed ushort PulseOutput[3];
+        public fixed ushort RateCounter[3];
+        public fixed ushort RateCounterPeriod[3];
+        public fixed ushort ExponentialCounter[3];
+        public fixed ushort ExponentialCounterPeriod[3];
+        public fixed byte EnvelopeCounter[3];
+        public fixed byte EnvelopeState[3];
+        public fixed byte HoldZero[3];
+        public fixed byte EnvelopePipeline[3];
+        public byte BusValue;
+        public uint BusValueTtl;
+        public byte WritePipeline;
+        public byte WriteAddress;
+        public byte VoiceMask;
+
+        public readonly byte[] GetRegisters()
+        {
+            fixed (byte* registers = Registers)
+            {
+                return new ReadOnlySpan<byte>(registers, 32).ToArray();
+            }
+        }
+
+        public readonly uint[] GetAccumulators()
+        {
+            fixed (uint* accumulator = Accumulator)
+            {
+                return new ReadOnlySpan<uint>(accumulator, 3).ToArray();
+            }
+        }
+
+        public readonly uint[] GetShiftRegisters()
+        {
+            fixed (uint* shiftRegister = ShiftRegister)
+            {
+                return new ReadOnlySpan<uint>(shiftRegister, 3).ToArray();
+            }
+        }
+
+        public readonly byte[] GetEnvelopeCounters()
+        {
+            fixed (byte* envelopeCounter = EnvelopeCounter)
+            {
+                return new ReadOnlySpan<byte>(envelopeCounter, 3).ToArray();
+            }
+        }
+
+        public readonly ushort[] GetRateCounters()
+        {
+            fixed (ushort* rateCounter = RateCounter)
+            {
+                return new ReadOnlySpan<ushort>(rateCounter, 3).ToArray();
             }
         }
     }

@@ -136,29 +136,75 @@ index 357b27452b..b94ee8587d 100644
          goto fail;
      }
  
-diff --git a/vice/src/vice-shim-runtime.h b/vice/src/vice-shim-runtime.h
-new file mode 100644
-index 0000000000..7cb833d571
---- /dev/null
-+++ b/vice/src/vice-shim-runtime.h
-@@ -0,0 +1,20 @@
-+#ifndef VICE_SHIM_RUNTIME_H
-+#define VICE_SHIM_RUNTIME_H
+diff --git a/vice/src/sid/resid.cc b/vice/src/sid/resid.cc
+index b68421226c..59115874f4 100644
+--- a/vice/src/sid/resid.cc
++++ b/vice/src/sid/resid.cc
+@@ -449,4 +449,67 @@ sid_engine_t resid_hooks =
+     resid_state_write
+ };
+ 
++/* ------------------------------------------------------------------------- */
++/* VICE-Sharp hosted shim: single-cycle oracle entry points.
++ *
++ * The shim's managed parity harness needs reSID clocked one cycle at a time
++ * (reSID::SID::clock() with the single-cycle envelope/waveform pipelines).
++ * The sound-machine layer only exposes the batched clock(delta_t) path, which
++ * by reSID's own comment drops pipelined envelope decrements. These helpers
++ * are internal to the shim DLL (not dllexported); vice-shim.c wraps them with
++ * machine-handle plumbing and locking. */
 +
-+/*
-+ * ViceSharp hosted-runtime hooks. Implemented in native/vice-shim.c and linked
-+ * into vice_x64.dll. Only referenced when the CPU cores are compiled with
-+ * -DVICE_SHIM_HOSTED (see native/build-vice-shim.sh). See
-+ * native/patches/vice-shim-runtime.prompt.md for the canonical spec.
-+ */
++int resid_shim_clock_exact(sound_t *psid, int cycles)
++{
++    int i;
 +
-+/* Called once per CPU cycle from the hosted CLK_INC(). Returns nonzero when the
-+   host has asked the CPU to stop at this cycle boundary. */
-+int vice_shim_cycle_checkpoint(void);
++    if (psid == NULL || psid->sid == NULL || cycles < 0) {
++        return 0;
++    }
++    for (i = 0; i < cycles; i++) {
++        psid->sid->clock();
++    }
++    return cycles;
++}
 +
-+/* Returns nonzero when the host has queued a CPU bootstrap (adopt host-provided
-+   registers instead of performing the normal power-on reset). Consumes the
-+   pending flag. */
-+int vice_shim_take_bootstrap_maincpu(void);
++uint8_t resid_shim_read(sound_t *psid, uint16_t addr)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return 0;
++    }
++    return psid->sid->read((reSID::reg8)(addr & 0x1f));
++}
 +
-+#endif
++void resid_shim_write(sound_t *psid, uint16_t addr, uint8_t value)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return;
++    }
++    psid->sid->write((reSID::reg8)(addr & 0x1f), value);
++}
++
++int resid_shim_output(sound_t *psid)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return 0;
++    }
++    return psid->sid->output();
++}
++
++void resid_shim_reset(sound_t *psid)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return;
++    }
++    psid->sid->reset();
++}
++
++void resid_shim_state_read(sound_t *psid, sid_snapshot_state_t *sid_state)
++{
++    if (psid == NULL || psid->sid == NULL || sid_state == NULL) {
++        return;
++    }
++    resid_state_read(psid, sid_state);
++}
++
+ } // extern "C"

@@ -99,6 +99,40 @@ public static class ViceNativeBridge
     }
 
     /// <summary>
+    /// PLAN-VICEPARITY-001 Phase 0 (P0-1) / TR-SID-ORACLE-001. Single-cycle reSID
+    /// oracle surface: opens the shim's private reSID engine, then drives
+    /// reSID::SID::clock() one cycle at a time so parity tests can assert
+    /// bit-exact equality (the batched vice_sid_clock path drops the
+    /// envelope/waveform single-cycle pipelines). After open, drive register
+    /// writes ONLY through SidExactWrite; re-syncing from machine memory would
+    /// clobber pipeline state.
+    /// </summary>
+    public static bool SidExactOpen(IntPtr machine) => ViceNative.SidExactOpen(machine) != 0;
+
+    /// <summary>Reset the exact-oracle reSID engine (reSID::SID::reset()).</summary>
+    public static void SidExactReset(IntPtr machine) => ViceNative.SidExactReset(machine);
+
+    /// <summary>Advance the exact-oracle reSID engine by exactly <paramref name="cycles"/> single cycles.</summary>
+    public static int SidExactClock(IntPtr machine, int cycles) => ViceNative.SidExactClock(machine, cycles);
+
+    /// <summary>Write a SID register directly on the exact-oracle engine (reSID::SID::write()).</summary>
+    public static void SidExactWrite(IntPtr machine, ushort addr, byte value) => ViceNative.SidExactWrite(machine, addr, value);
+
+    /// <summary>Read a SID register from the exact-oracle engine (reSID::SID::read(); OSC3=$1B, ENV3=$1C).</summary>
+    public static byte SidExactRead(IntPtr machine, ushort addr) => ViceNative.SidExactRead(machine, addr);
+
+    /// <summary>Current 16-bit audio output of the exact-oracle engine (reSID::SID::output()).</summary>
+    public static short SidExactOutput(IntPtr machine) => ViceNative.SidExactOutput(machine);
+
+    /// <summary>Full reSID internal state of the exact-oracle engine (accumulators, noise shift registers, envelope pipelines, bus value).</summary>
+    public static ViceNative.ViceSidExactState SidExactGetState(IntPtr machine)
+    {
+        var state = new ViceNative.ViceSidExactState();
+        ViceNative.SidExactGetState(machine, ref state);
+        return state;
+    }
+
+    /// <summary>
     /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 (display-mode native visible-frame extension; full buffer support) / 
     /// TR-VIC-EDGE-002 / TR-VIC-EDGE-006 (open-border + display-mode depth) / FR-VIC-002 / FR-VIC-003 / FR-VIC-005 / FR-VIC-008 / TEST-VIC-001.
     /// 

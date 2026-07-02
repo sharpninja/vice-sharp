@@ -128,6 +128,50 @@ VICE_SHIM_API uint8_t vice_sid_engine_read(void* machine, uint16_t addr);
 // SID lockstep against the managed Sid6581.
 VICE_SHIM_API void vice_sid_clock(void* machine, int cycles);
 
+// Single-cycle reSID oracle (PLAN-VICEPARITY-001 Phase 0 / TR-SID-ORACLE-001).
+// vice_sid_clock batches through reSID's clock(delta_t), which drops the
+// single-cycle envelope/waveform pipelines; the exact API drives
+// reSID::SID::clock() one cycle at a time so managed parity tests can assert
+// bit-exact equality. vice_sid_exact_open force-recreates the shim's private
+// engine (no batched history) and syncs the machine's SID register file once;
+// afterwards drive writes ONLY through vice_sid_exact_write (a re-sync would
+// clobber pipeline state).
+
+// Full reSID internal state export. Field order and packing (1-byte) mirror
+// ViceSharp.Core.ViceNative.ViceSidExactState byte for byte.
+#pragma pack(push, 1)
+struct vice_sid_exact_state {
+    uint8_t  registers[32];
+    uint32_t accumulator[3];
+    uint32_t shift_register[3];
+    uint32_t shift_register_reset[3];
+    uint32_t shift_pipeline[3];
+    uint32_t floating_output_ttl[3];
+    uint16_t pulse_output[3];
+    uint16_t rate_counter[3];
+    uint16_t rate_counter_period[3];
+    uint16_t exponential_counter[3];
+    uint16_t exponential_counter_period[3];
+    uint8_t  envelope_counter[3];
+    uint8_t  envelope_state[3];
+    uint8_t  hold_zero[3];
+    uint8_t  envelope_pipeline[3];
+    uint8_t  bus_value;
+    uint32_t bus_value_ttl;
+    uint8_t  write_pipeline;
+    uint8_t  write_address;
+    uint8_t  voice_mask;
+};
+#pragma pack(pop)
+
+VICE_SHIM_API int vice_sid_exact_open(void* machine);
+VICE_SHIM_API void vice_sid_exact_reset(void* machine);
+VICE_SHIM_API int vice_sid_exact_clock(void* machine, int cycles);
+VICE_SHIM_API void vice_sid_exact_write(void* machine, uint16_t addr, uint8_t value);
+VICE_SHIM_API uint8_t vice_sid_exact_read(void* machine, uint16_t addr);
+VICE_SHIM_API int16_t vice_sid_exact_output(void* machine);
+VICE_SHIM_API void vice_sid_exact_get_state(void* machine, struct vice_sid_exact_state* state);
+
 struct vice_interrupt_state {
     uint8_t irq_asserted;
     uint8_t nmi_asserted;

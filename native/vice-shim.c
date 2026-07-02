@@ -1801,3 +1801,163 @@ VICE_SHIM_API void vice_sid_clock(void *machine, int cycles)
     }
     LeaveCriticalSection(&g_state_lock);
 }
+
+/*
+ * Single-cycle reSID oracle (PLAN-VICEPARITY-001 Phase 0 / TR-SID-ORACLE-001).
+ *
+ * The batched paths above go through sid_sound_machine_calculate_samples ->
+ * reSID clock(delta_t), which drops the single-cycle envelope/waveform
+ * pipelines ("Any pipelined envelope counter decrement from single cycle
+ * clocking will be lost", resid/envelope.h). The exact API drives
+ * reSID::SID::clock() one cycle at a time via resid_shim_* entry points
+ * added to src/sid/resid.cc (shim-internal, not dllexported).
+ */
+extern int resid_shim_clock_exact(sound_t *psid, int cycles);
+extern uint8_t resid_shim_read(sound_t *psid, uint16_t addr);
+extern void resid_shim_write(sound_t *psid, uint16_t addr, uint8_t value);
+extern int resid_shim_output(sound_t *psid);
+extern void resid_shim_reset(sound_t *psid);
+extern void resid_shim_state_read(sound_t *psid, sid_snapshot_state_t *sid_state);
+
+VICE_SHIM_API int vice_sid_exact_open(void *machine)
+{
+    const int cycles_per_sec = 985248; /* C64 PAL */
+    int ok = 0;
+
+    if (machine == NULL) {
+        return 0;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        /* Force a fresh engine so no batched clocking history leaks into the
+         * exact oracle, then sync the machine's register file exactly once.
+         * All further writes must come through vice_sid_exact_write. */
+        vice_shim_reset_sid_renderer_locked();
+        if (vice_shim_ensure_sid_renderer_locked(cycles_per_sec, cycles_per_sec)) {
+            vice_shim_sync_sid_registers_locked();
+            ok = 1;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return ok;
+}
+
+VICE_SHIM_API void vice_sid_exact_reset(void *machine)
+{
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        resid_shim_reset(g_shim_sid_psid);
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API int vice_sid_exact_clock(void *machine, int cycles)
+{
+    int clocked = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        clocked = resid_shim_clock_exact(g_shim_sid_psid, cycles);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return clocked;
+}
+
+VICE_SHIM_API void vice_sid_exact_write(void *machine, uint16_t addr, uint8_t value)
+{
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        resid_shim_write(g_shim_sid_psid, addr, value);
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API uint8_t vice_sid_exact_read(void *machine, uint16_t addr)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        value = resid_shim_read(g_shim_sid_psid, addr);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API int16_t vice_sid_exact_output(void *machine)
+{
+    int sample = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        sample = resid_shim_output(g_shim_sid_psid);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    if (sample > 32767) {
+        sample = 32767;
+    } else if (sample < -32768) {
+        sample = -32768;
+    }
+    return (int16_t)sample;
+}
+
+VICE_SHIM_API void vice_sid_exact_get_state(void *machine, struct vice_sid_exact_state *state)
+{
+    sid_snapshot_state_t snapshot;
+    int i;
+
+    if (state == NULL) {
+        return;
+    }
+
+    memset(state, 0, sizeof(*state));
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        memset(&snapshot, 0, sizeof(snapshot));
+        resid_shim_state_read(g_shim_sid_psid, &snapshot);
+
+        memcpy(state->registers, snapshot.sid_register, sizeof(state->registers));
+        for (i = 0; i < 3; i++) {
+            state->accumulator[i] = snapshot.accumulator[i];
+            state->shift_register[i] = snapshot.shift_register[i];
+            state->shift_register_reset[i] = snapshot.shift_register_reset[i];
+            state->shift_pipeline[i] = snapshot.shift_pipeline[i];
+            state->floating_output_ttl[i] = snapshot.floating_output_ttl[i];
+            state->pulse_output[i] = snapshot.pulse_output[i];
+            state->rate_counter[i] = snapshot.rate_counter[i];
+            state->rate_counter_period[i] = snapshot.rate_counter_period[i];
+            state->exponential_counter[i] = snapshot.exponential_counter[i];
+            state->exponential_counter_period[i] = snapshot.exponential_counter_period[i];
+            state->envelope_counter[i] = snapshot.envelope_counter[i];
+            state->envelope_state[i] = snapshot.envelope_state[i];
+            state->hold_zero[i] = snapshot.hold_zero[i];
+            state->envelope_pipeline[i] = snapshot.envelope_pipeline[i];
+        }
+        state->bus_value = snapshot.bus_value;
+        state->bus_value_ttl = snapshot.bus_value_ttl;
+        state->write_pipeline = snapshot.write_pipeline;
+        state->write_address = snapshot.write_address;
+        state->voice_mask = snapshot.voice_mask;
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
