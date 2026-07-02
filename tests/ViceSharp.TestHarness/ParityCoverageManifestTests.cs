@@ -20,10 +20,17 @@ public sealed class ParityCoverageManifestTests
     /// authored [ParityAc] test. 167 = every FAITHFUL lock (168 minus
     /// TEST-SID-FILTER-6581-19, re-tagged DIVERGENT during authoring: the
     /// managed 0x70 mode mask is the same defect as FR-SID-MIXVOL AC-01).
+    /// +17 = slice V1 (PLAN-VICEPARITY-001): all DIVERGENT ACs of FR-VIC-CYCLE
+    /// (8), FR-VIC-FETCH (5) and FR-VIC-MATRIX-ADDR (4) authored in
+    /// VicCycleDivergentParityTests.
+    /// +9 = slice S1 (PLAN-VICEPARITY-001): the DIVERGENT FR-SID-ENV criteria
+    /// (AC-07/AC-08/AC-50) and the clock-dispatch DIVERGENT FR-SID-CLOCK
+    /// criteria (AC-01/AC-02/AC-03/AC-06/AC-07/AC-09) authored in
+    /// SidEnvDivergentParityTests.
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered.
     /// </summary>
-    private const int ExpectedMinCovered = 167;
+    private const int ExpectedMinCovered = 193;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

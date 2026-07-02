@@ -36,6 +36,9 @@ public partial class Mos6569 : IStatefulDevice
         RasterX = inLineCycle;
         // 9-bit raster compare = $D012 | ($D011 bit7 << 8).
         _rasterIrqLine = (ushort)(_registers[0x12] | ((_registers[0x11] & 0x80) << 1));
+        // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08: seed the delayed $D011 copy so
+        // the first post-injection g-access does not see a stale pre-injection mode.
+        _reg11Delay = _registers[0x11];
         // PLAN-VICRENDER-001: seed the border + background colour-change logs from the injected registers.
         _borderEntryColour = _registers[0x20];
         _borderChangeCount = 0;

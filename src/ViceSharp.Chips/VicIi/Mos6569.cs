@@ -61,6 +61,17 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private int _totalLines = PalTotalLines;
     private double _frameRate = 50.0;
     private bool _allowBadLines;
+    // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-16/AC-17: per-cycle bad-line latch.
+    // VICE stores vicii.bad_line, sets/clears it once per cycle in check_badline
+    // (viciisc/vicii-cycle.c:51-60, invoked from :529-531) and force-clears it at
+    // start-of-line (:240). All operative consumers (VC/RC updates, c-access
+    // gating, BA/stall windows) read this latch, never a live formula.
+    private bool _badLine;
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08 / FR-VIC-MATRIX-ADDR AC-08: one-cycle
+    // delayed copy of $D011 used by the g-access address generator. VICE latches
+    // reg11_delay = regs[0x11] at the end of every cycle
+    // (viciisc/vicii-cycle.c:607-608).
+    private byte _reg11Delay;
     private byte _refreshCounter;
     private readonly byte[] _videoBuffer = new byte[40];
     private readonly byte[] _colorBuffer = new byte[40];
@@ -168,10 +179,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public bool IsVBlank => CurrentRasterLine >= VisibleLines;
     
     /// <summary>
-    /// VICE-style: Check if current raster line is a badline.
-    /// Badlines occur on raster lines $30-$F7 when DEN is set and the raster low bits match YSCROLL.
+    /// VICE-style: the bad-line condition exactly as check_badline evaluates it:
+    /// allow_bad_lines AND (raster line low bits == YSCROLL). The raster window
+    /// $30-$F7 is enforced solely by the allow_bad_lines lifecycle (on at line $30
+    /// under DEN, off after line $F7), never by a range clamp here.
+    /// PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-16; VICE viciisc/vicii-cycle.c:51-60.
+    /// This is the instantaneous view; the operative per-cycle latch is _badLine.
     /// </summary>
-    public bool IsBadLine => _allowBadLines && IsBadLineRaster(CurrentRasterLine);
+    public bool IsBadLine => _allowBadLines && (CurrentRasterLine & 0x07) == YScroll;
     
     /// <summary>
     /// Check if display is enabled (DEN bit in register $11)
@@ -185,38 +200,43 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     
     /// <summary>
     /// VICE-style: DMA stealing state
-    /// On badlines, VIC-II steals 40-63 cycles during display window for character data fetch
+    /// On badlines, VIC-II steals 40-63 cycles during display window for character data fetch.
+    /// Driven by the per-cycle bad-line latch (PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-17;
+    /// VICE viciisc/vicii-cycle.c:573 reads vicii.bad_line, not a live formula).
     /// </summary>
-    public bool IsDmaStealing => IsBadLine && RasterX >= 14 && RasterX < 54;
+    public bool IsDmaStealing => _badLine && RasterX >= 14 && RasterX < 54;
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
     /// CPU cycle is stolen when either the bad-line c-access window is
     /// active (RasterX 12..54 on a bad line) or the active VIC-II model's
-    /// sprite BA/DMA mask requests the bus for an enabled sprite.
+    /// sprite BA/DMA mask requests the bus for an enabled sprite. The bad-line
+    /// term reads the per-cycle latch exactly like VICE's BA logic
+    /// (PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-17; viciisc/vicii-cycle.c:572-575).
     /// </summary>
     public bool IsCpuCycleStolen =>
-        (IsBadLine && RasterX >= 12 && RasterX < 55)
+        (_badLine && RasterX >= 12 && RasterX < 55)
         || _inSpriteDmaStallWindow0;
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
     /// Mandatory cycle steal mirrors IsCpuCycleStolen but lags by one
-    /// cycle, matching the existing bad-line semantics.
+    /// cycle, matching the existing bad-line semantics (latch-driven,
+    /// PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-17).
     /// </summary>
     public bool IsCpuCycleStealMandatory =>
-        (IsBadLine && RasterX >= 13 && RasterX < 56)
+        (_badLine && RasterX >= 13 && RasterX < 56)
         || _inSpriteDmaStallWindow1;
-    
+
     /// <summary>
-    /// Check if VIC-II is currently accessing video matrix (cycle 14-54 of badline)
+    /// Check if VIC-II is currently accessing video matrix (cycle 14-54 of badline; latch-driven)
     /// </summary>
-    public bool IsVideoMatrixAccess => IsBadLine && RasterX >= 14 && RasterX < 54;
-    
+    public bool IsVideoMatrixAccess => _badLine && RasterX >= 14 && RasterX < 54;
+
     /// <summary>
-    /// Check if VIC-II is currently accessing character generator (cycle 54-64 of badline)
+    /// Check if VIC-II is currently accessing character generator (cycle 54-64 of badline; latch-driven)
     /// </summary>
-    public bool IsCharacterAccess => IsBadLine && RasterX >= 54 && RasterX < CyclesPerLine;
+    public bool IsCharacterAccess => _badLine && RasterX >= 54 && RasterX < CyclesPerLine;
     
     /// <summary>
     /// VICE-style: Screen memory address from registers
@@ -502,6 +522,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         public bool IsExpandedY;
         public bool IsMulticolor;
         public bool IsPriority;
+        // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: per-cycle sprite fetch pipeline
+        // state, mirroring VICE vicii.sprite[i] (viciisc/viciitypes.h): the p-access
+        // pointer, the 6-bit data counter mc, its per-line base mcbase, the Y
+        // expansion flip-flop and the 24-bit s-access data latch.
+        public byte Pointer;
+        public byte Mc;
+        public byte McBase;
+        public bool ExpFlop;
+        public uint Data;
     }
     
     /// <summary>
@@ -932,43 +961,6 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             RefreshInterruptLine();
         }
 
-        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:
-        // VC update at VICE cycle 14 / managed RasterX 13 (VICII_PAL_CYCLE(14) = 13).
-        // Resets vc to vcbase and vmli to 0. On a bad line, also resets rc to 0 and
-        // clears idle_state. VICE viciisc/vicii-cycle.c:541-548.
-        if (RasterX == 13)
-        {
-            _videoCounter = _vcBase;
-            _videoMatrixLineIndex = 0;
-            if (IsBadLine)
-            {
-                _rowCounter = 0;
-                _idleState = false;
-                CaptureRenderMatrixRowForCurrentLine();
-            }
-        }
-
-        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:
-        // RC update at VICE cycle 58 / managed RasterX 57 (VICII_PAL_CYCLE(58) = 57).
-        // If rc == 7: enter idle state and capture vcbase = vc. Then if !idle_state
-        // or bad_line: increment rc, clear idle_state. The two branches use the
-        // updated idle_state from the first branch, so a bad line both sets idle (rc==7
-        // case) then immediately clears it (second branch bad_line=1).
-        // VICE viciisc/vicii-cycle.c:551-563.
-        if (RasterX == 57)
-        {
-            if (_rowCounter == 7)
-            {
-                _idleState = true;
-                _vcBase = _videoCounter;
-            }
-            if (!_idleState || IsBadLine)
-            {
-                _rowCounter = (byte)((_rowCounter + 1) & 0x7);
-                _idleState = false;
-            }
-        }
-
         if (RasterX >= CyclesPerLine)
         {
             int completedLine = CurrentRasterLine;
@@ -983,6 +975,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 CurrentRasterLine = 0;
                 _refreshCounter = 0xFF;
                 _allowBadLines = false;
+                // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-07/AC-08 (and
+                // FR-VIC-MATRIX-ADDR AC-09): the frame start resets the video
+                // counter pipeline: vcbase = 0, vc = 0. VICE
+                // viciisc/vicii-cycle.c:208-209 (vicii_cycle_start_of_frame).
+                // Applied at the managed frame-start point (line wrap); the exact
+                // raster_cycle-1 placement is tracked by DIVERGENT AC-12.
+                _vcBase = 0;
+                _videoCounter = 0;
                 // BACKFILL-VIDEO-001: per-frame bad-line counter resets at the
                 // frame boundary (raster wrap back to line 0).
                 _badLineCountThisFrame = 0;
@@ -1004,16 +1004,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             bool leftBorderOpen = !_mainBorderActive;
             UpdateVerticalBorderForLineStart();
             CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);
-            UpdateBadLineLatchForStartOfLine();
-
-            // BACKFILL-VIDEO-001 / FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001:
-            // count this scanline as a bad line
-            // if it qualifies, exactly once per line.
-            if (IsBadLine && _lastBadLineCounted != CurrentRasterLine)
-            {
-                _badLineCountThisFrame++;
-                _lastBadLineCounted = CurrentRasterLine;
-            }
+            HandleStartOfLine(completedLine);
 
             // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
             // TEST-VIC-001: account sprite DMA cycle theft
@@ -1053,11 +1044,92 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             UpdateBorderFlipFlopsForCurrentCycle();
         }
 
+        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-15: per-cycle DEN re-check on the
+        // first DMA line. VICE viciisc/vicii-cycle.c:523-526: on every cycle of
+        // line $30 while bad lines are not yet allowed, allow_bad_lines takes the
+        // current DEN bit, so a mid-line DEN write arms the latch immediately.
+        if (CurrentRasterLine == FirstDmaLine && !_allowBadLines)
+        {
+            _allowBadLines = IsDisplayEnabled;
+        }
+
+        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-04/AC-16: per-cycle badline latch.
+        // VICE viciisc/vicii-cycle.c:528-531 runs check_badline every cycle while
+        // allowed; check_badline (:51-60) latches bad_line from the raw ysmooth
+        // match (no raster-range clamp) and forces idle_state = 0 on every
+        // matching cycle, not just at the VC update.
+        if (_allowBadLines)
+        {
+            if ((CurrentRasterLine & 0x07) == YScroll)
+            {
+                _badLine = true;
+                _idleState = false;
+
+                // BACKFILL-VIDEO-001 / FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001:
+                // count this scanline as a bad line exactly once, on the first
+                // cycle at which the latch fires for the line.
+                if (_lastBadLineCounted != CurrentRasterLine)
+                {
+                    _badLineCountThisFrame++;
+                    _lastBadLineCounted = CurrentRasterLine;
+                }
+            }
+            else
+            {
+                _badLine = false;
+            }
+        }
+
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:
+        // VC update at VICE cycle 14 / managed RasterX 13 (VICII_PAL_CYCLE(14) = 13).
+        // Resets vc to vcbase and vmli to 0. On a bad line (per-cycle latch), also
+        // resets rc to 0. VICE viciisc/vicii-cycle.c:541-549; the idle exit is
+        // handled per cycle by check_badline above (PLAN-VICEPARITY-001
+        // FR-VIC-CYCLE AC-04), exactly as in VICE.
+        if (RasterX == 13)
+        {
+            _videoCounter = _vcBase;
+            _videoMatrixLineIndex = 0;
+            if (_badLine)
+            {
+                _rowCounter = 0;
+                CaptureRenderMatrixRowForCurrentLine();
+            }
+        }
+
+        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-003 / FR-VIC-001 / TEST-VIC-001:
+        // RC update at VICE cycle 58 / managed RasterX 57 (VICII_PAL_CYCLE(58) = 57).
+        // If rc == 7: enter idle state and capture vcbase = vc. Then if !idle_state
+        // or bad_line: increment rc, clear idle_state. The two branches use the
+        // updated idle_state from the first branch, so a bad line both sets idle (rc==7
+        // case) then immediately clears it (second branch bad_line=1).
+        // VICE viciisc/vicii-cycle.c:551-563 (bad_line is the per-cycle latch).
+        if (RasterX == 57)
+        {
+            if (_rowCounter == 7)
+            {
+                _idleState = true;
+                _vcBase = _videoCounter;
+            }
+            if (!_idleState || _badLine)
+            {
+                _rowCounter = (byte)((_rowCounter + 1) & 0x7);
+                _idleState = false;
+            }
+        }
+
         UpdateSpriteDmaLatchForCurrentCycle();
+        UpdateSpriteSequencerForCurrentCycle();
 
         // PERF-VIC-003: Phi1MemoryReader initialized to non-null default in constructor;
         // direct invoke eliminates null check per cycle.
         LastReadPhi1 = Phi1MemoryReader(CurrentCycle);
+
+        // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08 / FR-VIC-MATRIX-ADDR AC-08:
+        // latch the delayed video-mode copy at the end of the cycle so the next
+        // cycle's g-access sees the previous $D011. VICE
+        // viciisc/vicii-cycle.c:607-608 (reg11_delay = regs[0x11]).
+        _reg11Delay = _registers[0x11];
 
         _registers[0x12] = (byte)CurrentRasterLine;
     }
@@ -1111,6 +1183,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _rowCounter = 0;
         _videoMatrixLineIndex = 0;
         _idleState = false;
+        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-17 / FR-VIC-FETCH AC-08: clear the
+        // per-cycle bad-line latch and the delayed $D011 copy on reset.
+        _badLine = false;
+        _reg11Delay = 0;
         LastReadPhi1 = 0;
         // BACKFILL-VIDEO-001: clear collision accumulators on reset.
         _spriteSpriteCollisionLatch = 0;
@@ -1221,6 +1297,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             _verticalBorderNextActive = true;
     }
 
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-MATRIX-ADDR AC-02/AC-03: snapshots the bad-line
+    /// row for the whole-line renderer using the video counter, exactly as the
+    /// hardware c-accesses address the matrix: cell = v_fetch_addr(vc + col)
+    /// (VICE viciisc/vicii-fetch.c:158-161,198). The raster line only selects the
+    /// render row slot; the CONTENT always comes from VC, and all 40 columns are
+    /// fetched regardless of CSEL because VC advances 40 per row
+    /// (viciisc/vicii-fetch.c:267-270 with the fixed 40-slot FetchC/FetchG table).
+    /// </summary>
     private void CaptureRenderMatrixRowForCurrentLine()
     {
         if (!TryMapRasterLineToDisplayCell(CurrentRasterLine, out var row, out var charRow) ||
@@ -1230,13 +1315,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return;
         }
 
-        int columns = Columns == ColumnMode.Wide40 ? 40 : 38;
+        // At this point (VC-update cycle of a bad line) vc has just been reloaded
+        // from vcbase, so it is the base cell index of the row about to display.
+        int baseVc = _videoCounter & 0x03FF;
         int rowOffset = row * 40;
-        for (var col = 0; col < columns; col++)
+        for (var col = 0; col < 40; col++)
         {
-            int screenIndex = (row * columns) + col;
-            _renderMatrixBuffer[rowOffset + col] = ReadVideoMemory((ushort)(ScreenMemoryBase + screenIndex));
-            _renderColorBuffer[rowOffset + col] = (byte)(ReadVideoMemory((ushort)(0xD800 + screenIndex)) & 0x0F);
+            int cell = (baseVc + col) & 0x03FF;
+            _renderMatrixBuffer[rowOffset + col] = ReadVideoMemory((ushort)(ScreenMemoryBase + cell));
+            _renderColorBuffer[rowOffset + col] = (byte)(ReadVideoMemory((ushort)(0xD800 + cell)) & 0x0F);
         }
 
         _renderMatrixRowValid[row] = true;
@@ -1457,7 +1544,99 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             _spriteDmaActiveMask |= bit;
             _spriteDmaStartLines[spriteNumber] = CurrentRasterLine;
             _spriteDmaHeights[spriteNumber] = (byte)(sprite.IsExpandedY ? 42 : 21);
+            // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: DMA turn-on seeds the fetch
+            // sequencer, mirroring VICE turn_sprite_dma_on
+            // (viciisc/vicii-cycle.c:108-113): mcbase = 0, exp_flop = 1.
+            sprite.McBase = 0;
+            sprite.ExpFlop = true;
         }
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: per-cycle sprite fetch sequencer
+    /// hooks, mirroring the VICE Phi2 sprite logic (viciisc/vicii-cycle.c:490-513
+    /// with the PAL cycle table): mcbase update at cycle 16 (RasterX 15,
+    /// sprite_mcbase_update :81-93), expansion flip-flop toggle at cycle 56
+    /// (RasterX 55, check_exp :95-105), and mc reload from mcbase at cycle 58
+    /// (RasterX 57, check_sprite_display :62-79).
+    /// </summary>
+    private void UpdateSpriteSequencerForCurrentCycle()
+    {
+        if (RasterX == 15)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                ref SpriteState sprite = ref _sprites[i];
+                if (sprite.ExpFlop)
+                {
+                    sprite.McBase = sprite.Mc;
+                }
+            }
+        }
+        else if (RasterX == 55)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                ref SpriteState sprite = ref _sprites[i];
+                if ((_spriteDmaActiveMask & (1 << i)) != 0 && sprite.IsExpandedY)
+                {
+                    sprite.ExpFlop = !sprite.ExpFlop;
+                }
+            }
+        }
+        else if (RasterX == 57)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                _sprites[i].Mc = _sprites[i].McBase;
+            }
+        }
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: latches the sprite pointer fetched
+    /// by the p-access, mirroring VICE vicii_fetch_sprite_pointer
+    /// (viciisc/vicii-fetch.c:275-280).
+    /// </summary>
+    public void LatchSpritePointer(int spriteNumber, byte pointer)
+    {
+        _sprites[spriteNumber].Pointer = pointer;
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: true while sprite DMA is latched
+    /// for the sprite, gating the s-accesses exactly like VICE check_sprite_dma
+    /// (viciisc/vicii-fetch.c:105-108 reading vicii.sprite_dma).
+    /// </summary>
+    public bool IsSpriteDmaActive(int spriteNumber) =>
+        (_spriteDmaActiveMask & (1 << spriteNumber)) != 0;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: the s-access bus address
+    /// (pointer &lt;&lt; 6) + mc, mirroring VICE viciisc/vicii-fetch.c:116,139,287.
+    /// </summary>
+    public ushort GetSpriteDataFetchAddress(int spriteNumber)
+    {
+        ref SpriteState sprite = ref _sprites[spriteNumber];
+        return (ushort)((sprite.Pointer << 6) + sprite.Mc);
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: merges one s-access byte into the
+    /// 24-bit sprite data latch and advances mc = (mc + 1) &amp; $3F, mirroring the
+    /// three VICE s-access lanes (viciisc/vicii-fetch.c:110-131 dma0 high byte,
+    /// :282-299 dma1 middle byte, :133-154 dma2 low byte).
+    /// </summary>
+    public void LatchSpriteData(int spriteNumber, int sAccessIndex, byte value)
+    {
+        ref SpriteState sprite = ref _sprites[spriteNumber];
+        sprite.Data = sAccessIndex switch
+        {
+            0 => (sprite.Data & 0x00FFFF) | ((uint)value << 16),
+            1 => (sprite.Data & 0xFF00FF) | ((uint)value << 8),
+            _ => (sprite.Data & 0xFFFF00) | value,
+        };
+        sprite.Mc = (byte)((sprite.Mc + 1) & 0x3F);
     }
 
     private void ClearExpiredSpriteDmaLatches()
@@ -1658,11 +1837,61 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         return value;
     }
 
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-09: machine-supplied predicate telling
+    /// whether a VIC Phi1 address resolves to character ROM in the active VIC bank
+    /// (VICE is_char_rom, viciisc/vicii-fetch.c:184-188). Null (bare chip) means
+    /// no address ever resolves to character ROM, so the 6569 RAM-to-char-ROM
+    /// fetch latch never engages.
+    /// </summary>
+    public Func<ushort, bool>? CharRomAddressProbe { get; set; }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08/AC-09 and FR-VIC-MATRIX-ADDR AC-08:
+    /// the g-access address generator ported from VICE vicii_fetch_graphics for
+    /// the 6569 color-latency path (viciisc/vicii-fetch.c:234-273): the mode is
+    /// the live $D011 with the BMM bit OR-ed in from the one-cycle-delayed copy
+    /// (:240), and on a BMM transition whose addresses move from RAM into char
+    /// ROM the fetch address is composed as (addr_from &amp; $FF) |
+    /// (addr_to &amp; $3F00) (:242-259). Each call performs one g-access:
+    /// vmli++ and vc = (vc + 1) &amp; $3FF (:267-270).
+    /// </summary>
     public ushort ConsumeGraphicsFetchAddress()
+    {
+        ushort address = ComputeGraphicsFetchAddress((byte)(_registers[0x11] | (_reg11Delay & 0x20)));
+
+        if (((_registers[0x11] ^ _reg11Delay) & 0x20) != 0)
+        {
+            // 6569 fetch magic (VICE viciisc/vicii-fetch.c:242-259): when the
+            // mode change switches the fetch from RAM to (char) ROM, the LSB is
+            // latched using the previous cycle's mode and the upper bits come
+            // from the current mode.
+            var addressFrom = ComputeGraphicsFetchAddress(_reg11Delay);
+            var addressTo = ComputeGraphicsFetchAddress(_registers[0x11]);
+            var probe = CharRomAddressProbe;
+            if (probe is not null && !probe(addressFrom) && probe(addressTo))
+            {
+                address = (ushort)((addressFrom & 0x00FF) | (addressTo & 0x3F00));
+            }
+        }
+
+        _videoMatrixLineIndex = (_videoMatrixLineIndex + 1) % _videoBuffer.Length;
+        _videoCounter = (ushort)((_videoCounter + 1) & 0x03FF);
+        return address;
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08: g_fetch_addr(mode) exactly as VICE
+    /// computes it (viciisc/vicii-fetch.c:163-182): BMM (mode bit 5) selects
+    /// (vc &lt;&lt; 3) | rc with the $D018 bitmap bank bit, text selects
+    /// (vbuf[vmli] &lt;&lt; 3) | rc with the $D018 character base, and ECM
+    /// (mode bit 6) masks the result with $39FF.
+    /// </summary>
+    private ushort ComputeGraphicsFetchAddress(byte mode)
     {
         ushort address;
 
-        if ((_registers[0x11] & 0x20) != 0)
+        if ((mode & 0x20) != 0)
         {
             address = (ushort)((_videoCounter << 3) | _rowCounter);
             address |= (ushort)((_registers[0x18] & 0x08) << 10);
@@ -1674,11 +1903,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             address |= (ushort)((_registers[0x18] & 0x0E) << 10);
         }
 
-        if ((_registers[0x11] & 0x40) != 0)
+        if ((mode & 0x40) != 0)
             address &= 0x39FF;
 
-        _videoMatrixLineIndex = (_videoMatrixLineIndex + 1) % _videoBuffer.Length;
-        _videoCounter = (ushort)((_videoCounter + 1) & 0x03FF);
         return address;
     }
 
@@ -2082,20 +2309,24 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         return slot;
     }
 
-    private bool IsBadLineRaster(ushort rasterLine)
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-13/AC-14/AC-17: start-of-line handling,
+    /// mirroring VICE vicii_cycle_start_of_line (viciisc/vicii-cycle.c:228-241).
+    /// VICE runs these checks at raster cycle 1 BEFORE raster_line increments, so
+    /// they key on the just-completed line: allow_bad_lines turns on when the
+    /// completed line is the first DMA line ($30) under DEN, turns off only when
+    /// the completed line equals the last DMA line ($F7, an equality check, never
+    /// a range clamp), and the bad-line latch is force-cleared.
+    /// </summary>
+    private void HandleStartOfLine(int completedLine)
     {
-        return rasterLine >= FirstDmaLine
-            && rasterLine <= LastDmaLine
-            && (rasterLine & 0x07) == YScroll;
-    }
-
-    private void UpdateBadLineLatchForStartOfLine()
-    {
-        if (CurrentRasterLine == FirstDmaLine && !_allowBadLines && IsDisplayEnabled)
+        if (completedLine == FirstDmaLine && !_allowBadLines && IsDisplayEnabled)
             _allowBadLines = true;
 
-        if (CurrentRasterLine > LastDmaLine)
+        if (completedLine == LastDmaLine)
             _allowBadLines = false;
+
+        _badLine = false;
     }
 
     private void RefreshInterruptLine()

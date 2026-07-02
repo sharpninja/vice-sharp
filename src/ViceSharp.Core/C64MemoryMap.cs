@@ -167,6 +167,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
 
         _vic.VideoMemoryReader = ReadVideoMemory;
         _vic.Phi1MemoryReader = ReadVicPhi1OpenBus;
+        // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-09: char-ROM address predicate for
+        // the 6569 RAM-to-char-ROM g-fetch latch (VICE is_char_rom,
+        // viciisc/vicii-fetch.c:184-188): the $1000-$1FFF window resolves to
+        // character ROM in VIC banks 0 and 2.
+        _vic.CharRomAddressProbe = IsVicPhi1CharRomAddress;
 
         Reset();
         // Note: RebuildReadPageTable() is called inside Reset(). The board
@@ -697,69 +702,72 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private byte ReadVicPhi1Pal(byte cycle) => cycle switch
     {
         0 => ReadVicSpritePointer(3),
-        1 => ReadVicIdleGap(),
+        1 => ReadVicSpriteData1(3),
         2 => ReadVicSpritePointer(4),
-        3 => ReadVicIdleGap(),
+        3 => ReadVicSpriteData1(4),
         4 => ReadVicSpritePointer(5),
-        5 => ReadVicIdleGap(),
+        5 => ReadVicSpriteData1(5),
         6 => ReadVicSpritePointer(6),
-        7 => ReadVicIdleGap(),
+        7 => ReadVicSpriteData1(6),
         8 => ReadVicSpritePointer(7),
-        9 => ReadVicIdleGap(),
-        >= 10 and <= 14 => ReadVicRefreshCounter(),
+        9 => ReadVicSpriteData1(7),
+        >= 10 and <= 13 => ReadVicRefreshCounter(),
+        14 => ReadVicRefreshAndFirstMatrix(),
         55 or 56 => ReadVicIdleGap(),
         57 => ReadVicSpritePointer(0),
-        58 => ReadVicIdleGap(),
+        58 => ReadVicSpriteData1(0),
         59 => ReadVicSpritePointer(1),
-        60 => ReadVicIdleGap(),
+        60 => ReadVicSpriteData1(1),
         61 => ReadVicSpritePointer(2),
-        62 => ReadVicIdleGap(),
+        62 => ReadVicSpriteData1(2),
         _ => ReadVicGfxDataOrIdle((byte)(cycle - 15))
     };
 
     private byte ReadVicPhi1NtscOld(byte cycle) => cycle switch
     {
         0 => ReadVicSpritePointer(3),
-        1 => ReadVicIdleGap(),
+        1 => ReadVicSpriteData1(3),
         2 => ReadVicSpritePointer(4),
-        3 => ReadVicIdleGap(),
+        3 => ReadVicSpriteData1(4),
         4 => ReadVicSpritePointer(5),
-        5 => ReadVicIdleGap(),
+        5 => ReadVicSpriteData1(5),
         6 => ReadVicSpritePointer(6),
-        7 => ReadVicIdleGap(),
+        7 => ReadVicSpriteData1(6),
         8 => ReadVicSpritePointer(7),
-        9 => ReadVicIdleGap(),
-        >= 10 and <= 14 => ReadVicRefreshCounter(),
+        9 => ReadVicSpriteData1(7),
+        >= 10 and <= 13 => ReadVicRefreshCounter(),
+        14 => ReadVicRefreshAndFirstMatrix(),
         55 or 56 or 57 => ReadVicIdleGap(),
         58 => ReadVicSpritePointer(0),
-        59 => ReadVicIdleGap(),
+        59 => ReadVicSpriteData1(0),
         60 => ReadVicSpritePointer(1),
-        61 => ReadVicIdleGap(),
+        61 => ReadVicSpriteData1(1),
         62 => ReadVicSpritePointer(2),
-        63 => ReadVicIdleGap(),
+        63 => ReadVicSpriteData1(2),
         _ => ReadVicGfxDataOrIdle((byte)(cycle - 15))
     };
 
     private byte ReadVicPhi1Ntsc(byte cycle) => cycle switch
     {
-        0 => ReadVicIdleGap(),
+        0 => ReadVicSpriteData1(3),
         1 => ReadVicSpritePointer(4),
-        2 => ReadVicIdleGap(),
+        2 => ReadVicSpriteData1(4),
         3 => ReadVicSpritePointer(5),
-        4 => ReadVicIdleGap(),
+        4 => ReadVicSpriteData1(5),
         5 => ReadVicSpritePointer(6),
-        6 => ReadVicIdleGap(),
+        6 => ReadVicSpriteData1(6),
         7 => ReadVicSpritePointer(7),
-        8 => ReadVicIdleGap(),
+        8 => ReadVicSpriteData1(7),
         9 => ReadVicIdleGap(),
-        >= 10 and <= 14 => ReadVicRefreshCounter(),
+        >= 10 and <= 13 => ReadVicRefreshCounter(),
+        14 => ReadVicRefreshAndFirstMatrix(),
         55 or 56 or 57 => ReadVicIdleGap(),
         58 => ReadVicSpritePointer(0),
-        59 => ReadVicIdleGap(),
+        59 => ReadVicSpriteData1(0),
         60 => ReadVicSpritePointer(1),
-        61 => ReadVicIdleGap(),
+        61 => ReadVicSpriteData1(1),
         62 => ReadVicSpritePointer(2),
-        63 => ReadVicIdleGap(),
+        63 => ReadVicSpriteData1(2),
         64 => ReadVicSpritePointer(3),
         _ => ReadVicGfxDataOrIdle((byte)(cycle - 15))
     };
@@ -767,7 +775,50 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     private byte ReadVicSpritePointer(byte sprite)
     {
         var pointerBase = (ushort)((_vic.Peek(0xD018) & 0xF0) << 6);
-        return ReadVicPhi1Ram((ushort)(pointerBase + 0x03F8 + sprite));
+        var pointer = ReadVicPhi1Ram((ushort)(pointerBase + 0x03F8 + sprite));
+        // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: the p-access stores the pointer
+        // (VICE vicii_fetch_sprite_pointer, viciisc/vicii-fetch.c:275-280) and the
+        // Phi2 of the same cycle performs the first s-access (SprDma0,
+        // vicii-chip-model.c cycle table; vicii-fetch.c:110-131).
+        _vic.LatchSpritePointer(sprite, pointer);
+        FetchSpriteDataPhi2(sprite, sAccessIndex: 0);
+        return pointer;
+    }
+
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: second sprite s-access (SprDma1) on
+    // the Phi1 following the pointer fetch: (pointer << 6) + mc with mc++, or the
+    // $3FFF idle fetch when the sprite has no DMA (VICE vicii_fetch_sprite_dma_1,
+    // viciisc/vicii-fetch.c:282-299). The Phi2 of the same cycle performs the
+    // third s-access (SprDma2, viciisc/vicii-fetch.c:133-154).
+    private byte ReadVicSpriteData1(byte sprite)
+    {
+        byte data;
+        if (_vic.IsSpriteDmaActive(sprite))
+        {
+            data = ReadVicPhi1Ram(_vic.GetSpriteDataFetchAddress(sprite));
+            _vic.LatchSpriteData(sprite, sAccessIndex: 1, data);
+        }
+        else
+        {
+            data = ReadVicIdleGap();
+        }
+
+        FetchSpriteDataPhi2(sprite, sAccessIndex: 2);
+        return data;
+    }
+
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: Phi2 sprite s-access (SprDma0 on the
+    // pointer cycle, SprDma2 on the dma1 cycle), gated on the sprite DMA latch
+    // (VICE sprite_dma_cycle_0/_2, viciisc/vicii-fetch.c:110-154). The CPU is
+    // halted by the sprite BA window during these cycles, so performing the fetch
+    // within the same dispatch preserves bus ordering.
+    private void FetchSpriteDataPhi2(byte sprite, int sAccessIndex)
+    {
+        if (!_vic.IsSpriteDmaActive(sprite))
+            return;
+
+        var value = ReadVicPhi1Ram(_vic.GetSpriteDataFetchAddress(sprite));
+        _vic.LatchSpriteData(sprite, sAccessIndex, value);
     }
 
     private byte ReadVicRefreshCounter()
@@ -776,27 +827,64 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         return ReadVicPhi1Ram((ushort)(0x3F00 + offset));
     }
 
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-03: VICE cycle 15 (managed RasterX 14)
+    // performs the last refresh fetch on Phi1 and the FIRST c-access on Phi2
+    // (vicii-chip-model.c:139-141: Phi1(15) Refresh, Phi2(15) FetchC), one slot
+    // ahead of the first g-access at cycle 16.
+    private byte ReadVicRefreshAndFirstMatrix()
+    {
+        var data = ReadVicRefreshCounter();
+        FetchVideoMatrixPhi2(cAccessOrdinal: 0);
+        return data;
+    }
+
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-03: Phi1 g-access for the slot, then the
+    // Phi2 c-access of the SAME cycle, which fills the vbuf/cbuf slot consumed by
+    // the NEXT cycle's g-access (VICE cycle_phi1_fetch + vicii_fetch_matrix;
+    // vicii-cycle.c:130-142,594-602). fetchSlot is the g ordinal (cycle - 15); the
+    // trailing c ordinal is fetchSlot + 1 and the last c-access runs at ordinal 39
+    // (VICE Phi2(54)), so the final g cycle (ordinal 39) has no trailing c-access.
     private byte ReadVicGfxDataOrIdle(byte fetchSlot)
     {
-        if (_vic.IsGraphicsIdle)
-            return ReadVicPhi1Ram(_vic.IdleGraphicsFetchAddress);
+        byte data = _vic.IsGraphicsIdle
+            ? ReadVicPhi1Ram(_vic.IdleGraphicsFetchAddress)
+            : ReadVicPhi1Ram(_vic.ConsumeGraphicsFetchAddress());
 
-        if (_vic.IsMatrixFetchSlot(fetchSlot))
+        if (fetchSlot < 39)
+            FetchVideoMatrixPhi2((byte)(fetchSlot + 1));
+
+        return data;
+    }
+
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-03: the Phi2 matrix fetch, gated on the
+    // per-cycle bad-line latch exactly like VICE (vicii-cycle.c:594-602
+    // "if (vicii.bad_line && cycle_may_fetch_c(...)) vicii_fetch_matrix()").
+    private void FetchVideoMatrixPhi2(byte cAccessOrdinal)
+    {
+        if (!_vic.IsMatrixFetchSlot(cAccessOrdinal))
+            return;
+
+        var slot = _vic.CurrentVideoMatrixSlot;
+        if (_vic.IsMatrixPrefetchSlot(cAccessOrdinal))
         {
-            var slot = _vic.CurrentVideoMatrixSlot;
-            if (_vic.IsMatrixPrefetchSlot(fetchSlot))
-            {
-                _vic.LatchVideoMatrixPrefetch(slot, ReadCpuProgramRamByte());
-            }
-            else
-            {
-                var vc = _vic.CurrentVideoMatrixCounter;
-                var matrixByte = ReadVicPhi1Ram(_vic.CurrentVideoMatrixFetchAddress);
-                _vic.LatchVideoMatrixFetch(slot, matrixByte, _colorRam[vc]);
-            }
+            _vic.LatchVideoMatrixPrefetch(slot, ReadCpuProgramRamByte());
         }
+        else
+        {
+            var vc = _vic.CurrentVideoMatrixCounter;
+            var matrixByte = ReadVicPhi1Ram(_vic.CurrentVideoMatrixFetchAddress);
+            _vic.LatchVideoMatrixFetch(slot, matrixByte, _colorRam[vc]);
+        }
+    }
 
-        return ReadVicPhi1Ram(_vic.ConsumeGraphicsFetchAddress());
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-09: VICE is_char_rom equivalent
+    // (viciisc/vicii-fetch.c:184-188) against the VIC Phi1 banking: the
+    // $1000-$1FFF window resolves to character ROM in banks 0 and 2 (mirrors
+    // ReadVicPhi1Ram's char-ROM dispatch).
+    private bool IsVicPhi1CharRomAddress(ushort vicAddress)
+    {
+        var normalizedAddress = (ushort)(vicAddress & 0x3FFF);
+        return normalizedAddress is >= 0x1000 and < 0x2000 && (_vicPhi1Bank is 0 or 2);
     }
 
     private byte ReadVicIdleGap() => ReadVicPhi1Ram(0x3FFF);
