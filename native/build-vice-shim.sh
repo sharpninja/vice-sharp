@@ -118,7 +118,7 @@ EOF
 
 make -C "$vice_src" -s -f Makefile -f "$tmp_makefile" "$shim_dll"
 
-for dep in libiconv-2.dll zlib1.dll; do
+for dep in libiconv-2.dll zlib1.dll libstdc++-6.dll libwinpthread-1.dll libgcc_s_seh-1.dll; do
   if [[ -f "$mingw_bin/$dep" ]]; then
     cp -f "$mingw_bin/$dep" "$script_dir/$dep"
   fi
