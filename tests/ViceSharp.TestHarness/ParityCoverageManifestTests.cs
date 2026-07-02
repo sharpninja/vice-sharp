@@ -58,6 +58,9 @@ public sealed class ParityCoverageManifestTests
 
         [YamlMember(Alias = "state")]
         public string State { get; set; } = string.Empty;
+
+        [YamlMember(Alias = "finding")]
+        public string Finding { get; set; } = string.Empty;
     }
 
     private static string ResolveRequirementsPath()
@@ -118,6 +121,16 @@ public sealed class ParityCoverageManifestTests
         Assert.All(acs, ac => Assert.True(
             (ac.Tag == "FAITHFUL" && ac.State == "green-now") || (ac.Tag == "DIVERGENT" && ac.State == "red-now"),
             $"AC {ac.Test} tag '{ac.Tag}' inconsistent with state '{ac.State}'"));
+
+        // P0-6 crosswalk: the finding id links each AC to the
+        // PLAN-VICEPARITY-001 audit (artifacts/vice-parity-requirements/
+        // crosswalk.md). Valid: a 2-3 digit audit finding number, or the
+        // literal "new" for the authoring-time discoveries enumerated in the
+        // artifact's newFindings header. Traceability must not decay.
+        Assert.All(acs, ac => Assert.True(
+            ac.Finding == "new"
+            || (ac.Finding.Length is 2 or 3 && ac.Finding.All(char.IsAsciiDigit)),
+            $"AC {ac.Test} finding id '{ac.Finding}' is not a PLAN-VICEPARITY-001 finding or 'new'"));
     }
 
     /// <summary>
