@@ -65,9 +65,13 @@ sealed partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetNoRestore(true)
                 .SetNoBuild(true)
-                // Exclude Determinism (its own target) and the slow, host-bound,
-                // non-deterministic aiUnit AI reviews (run on demand via AiReview target).
-                .SetFilter("Category!=Determinism&Category!=AiReview"));
+                // Exclude Determinism (its own target), the slow, host-bound,
+                // non-deterministic aiUnit AI reviews (AiReview target), the
+                // quarantined not-yet-remediated parity ACs (ParityPending,
+                // admitted per slice as they flip green: PLAN-VICEPARITY-001),
+                // and the legacy renderer tests awaiting per-cycle replacement
+                // (ParityLegacy, deleted as V-slices land).
+                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"));
         });
 
     Target DeterminismTest => _ => _
@@ -80,6 +84,21 @@ sealed partial class Build : NukeBuild
                 .SetNoRestore(true)
                 .SetNoBuild(true)
                 .SetFilter("Category=Determinism"));
+        });
+
+    // Whole VICE-parity suite including quarantined (ParityPending) red tests:
+    // the remediation burn-down. Non-blocking in CI; blocking locally at each
+    // slice exit (PLAN-VICEPARITY-001).
+    Target ParityTest => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(s => s
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetNoRestore(true)
+                .SetNoBuild(true)
+                .SetFilter("Category=Parity"));
         });
 
     Target RomFetch => _ => _

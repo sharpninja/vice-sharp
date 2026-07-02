@@ -23,6 +23,7 @@ using Xunit;
 /// would manifest as divergent sample hashes between two otherwise-
 /// identical runs.
 /// </summary>
+[Trait("Category", "Determinism")]
 public sealed class SidDeterminismTests
 {
     private static Sid6581 BuildSid()
