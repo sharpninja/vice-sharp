@@ -239,6 +239,37 @@ sealed partial class Build : NukeBuild
                 PackagesOutputDirectory);
         });
 
+    [Parameter("NuGet feed for PublishNuget. Default nuget.org v3.")]
+    readonly string NugetSource = "https://api.nuget.org/v3/index.json";
+
+    /// <summary>
+    /// Publish every package produced by PackNuget to the NuGet feed.
+    /// The API key comes from the NUGET_API_KEY environment variable and is
+    /// never logged (Nuke redacts the ApiKey setting). Duplicate versions are
+    /// skipped so re-runs are safe.
+    /// </summary>
+    Target PublishNuget => _ => _
+        .DependsOn(PackNuget)
+        .Executes(() =>
+        {
+            var apiKey = Environment.GetEnvironmentVariable("NUGET_API_KEY");
+            Assert.True(!string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
+
+            var packages = PackagesOutputDirectory.GlobFiles("*.nupkg");
+            Assert.True(packages.Count > 0, $"no packages found in {PackagesOutputDirectory}");
+
+            foreach (var package in packages.OrderBy(p => p.Name))
+            {
+                DotNetNuGetPush(s => s
+                    .SetTargetPath(package)
+                    .SetSource(NugetSource)
+                    .SetApiKey(apiKey)
+                    .EnableSkipDuplicate());
+            }
+
+            Serilog.Log.Information("Published {Count} packages to {Source}", packages.Count, NugetSource);
+        });
+
     /// <summary>
     /// The four sub-assembly ids that only exist inside the ViceSharp.Core
     /// bundle; a nuspec must never depend on them. (A dependency on
