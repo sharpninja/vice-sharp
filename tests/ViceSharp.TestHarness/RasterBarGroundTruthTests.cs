@@ -43,6 +43,18 @@ public sealed class RasterBarGroundTruthTests
 
     public RasterBarGroundTruthTests(ITestOutputHelper output) => _output = output;
 
+    /// <summary>
+    /// FR: FR-VICII-RASTER-001, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RASTERBAR-GT-001.
+    /// Use case: capture the authoritative raster-bar schedule - resume the user-staged
+    /// Pieces-of-Light .vsf in the embedded VICE shim and record, for every STA $D020 /
+    /// STA $D021 the CPU reaches (rising-edge opcode detection at the PC, so writes from
+    /// EVERY IRQ source are caught), the raster line and in-line cycle where it lands,
+    /// over ~4 PAL frames.
+    /// Acceptance: the .vsf resumes with rc 0, and the captured colour-write schedule is
+    /// non-empty (an empty schedule means the live demo state did not resume, not a
+    /// passing no-op); the schedule is written to artifacts/rastercmp/groundtruth-bars.txt.
+    /// Skips when the shim or the staged .vsf is absent.
+    /// </summary>
     [Fact]
     public void GroundTruth_RasterBarSchedule_FromUserSnapshot()
     {
@@ -137,12 +149,15 @@ public sealed class RasterBarGroundTruthTests
     }
 
     /// <summary>
-    /// FR/TR/TEST: FR-VICII-RASTER-001 / TR-LOCKSTEP-VSF-001 / TEST-RASTERBAR-GT-002.
-    ///
-    /// Decodes the IRQ topology directly from the staged .vsf chip modules (VIC-II,
-    /// CIA1, CIA2) - no shim required - to settle whether the demo segment is driven
-    /// by one raster IRQ or by raster + CIA-timer IRQ ("two different IRQ sources").
-    /// This scopes exactly which chip state the managed lockstep must inject.
+    /// FR: FR-VICII-RASTER-001, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RASTERBAR-GT-002.
+    /// Use case: settle whether the demo segment is driven by one raster IRQ or by
+    /// raster + CIA-timer IRQ ("two different IRQ sources") by decoding the IRQ topology
+    /// directly from the staged .vsf chip modules (VIC-II, CIA1, CIA2) - no shim
+    /// required - scoping exactly which chip state the managed lockstep must inject.
+    /// Acceptance: the CIA1 module is present and decodable from the snapshot (its
+    /// timer/ICR/CRA/CRB fields plus armed-IRQ flags are reported and written to
+    /// artifacts/rastercmp/irq-topology.txt); the large version-specific VIC-II blob is
+    /// reported as shim-read only, not hand-parsed. Skips when the staged .vsf is absent.
     /// </summary>
     [Fact]
     public void IrqTopology_FromUserSnapshot_ReportsArmedSources()

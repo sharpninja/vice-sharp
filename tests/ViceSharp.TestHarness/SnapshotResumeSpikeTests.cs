@@ -32,6 +32,17 @@ public sealed class SnapshotResumeSpikeTests
 
     public SnapshotResumeSpikeTests(ITestOutputHelper output) => _output = output;
 
+    /// <summary>
+    /// FR: FR-SNP-001, TR: TR-LOCKSTEP-VSF-001 (PLAN-VSFLOCKSTEP-001 Slice 0 spike).
+    /// Use case: Phase A diagnostic - determine whether an externally-staged x64sc GUI
+    /// .vsf (the supplied lockstep baseline, ready-c64sc-truedrive.vsf) gets past the
+    /// embedded shim's machine-identity gate, logging the snapshot's machine name and
+    /// the shim's ReadSnapshot rc / snapshot_last_error.
+    /// Acceptance: snapshot_last_error is not 21 (SNAPSHOT_MACHINE_MISMATCH_ERROR) -
+    /// the shim now identifies as C64SC - regardless of whether every optional module
+    /// (true-drive DRIVE8-11 etc.) loads fully. Skips when the native shim or the .vsf
+    /// fixture is absent.
+    /// </summary>
     [Fact]
     public void Spike_ExternalX64ScVsf_LoadDiagnostic()
     {
@@ -61,12 +72,16 @@ public sealed class SnapshotResumeSpikeTests
     }
 
     /// <summary>
-    /// PLAN-VSFLOCKSTEP-001 acceptance: an externally-staged x64sc GUI .vsf
-    /// (the supplied lockstep baseline, with the true-drive DRIVE8-11 set) must
-    /// resume fully into the shim - rc 0, snapshot_last_error 0 - and the resumed
-    /// MAINCPU registers must match those encoded in the snapshot's MAINCPU module.
-    /// This is the "stage in real VICE, snapshot, resume in vice#" contract that
+    /// FR: FR-SNP-001, TR: TR-LOCKSTEP-VSF-001 (PLAN-VSFLOCKSTEP-001 acceptance).
+    /// Use case: the "stage in real VICE, snapshot, resume in vice#" contract - an
+    /// externally-staged x64sc GUI .vsf (the supplied lockstep baseline, with the
+    /// true-drive DRIVE8-11 module set) must resume fully into the embedded shim, which
     /// the round-trip spike only approximated with a shim-written snapshot.
+    /// Acceptance: machine_read_snapshot returns rc 0 (every C64 module MAINCPU..USERPORT
+    /// consumed; the non-fatal snapshot_last_error residue from probing optional modules
+    /// is logged, not asserted), and the resumed MAINCPU A/X/Y/SP/PC each equal the
+    /// values parsed from the snapshot's MAINCPU module. Skips when the native shim or
+    /// the .vsf fixture is absent.
     /// </summary>
     [Fact]
     public void ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot()
@@ -104,6 +119,19 @@ public sealed class SnapshotResumeSpikeTests
         Assert.Equal(parsed.PC, st.PC);
     }
 
+    /// <summary>
+    /// FR: FR-SNP-001, TR: TR-LOCKSTEP-VSF-001 (PLAN-VSFLOCKSTEP-001 Slice 0 spike).
+    /// Use case: Phase B - measure how cycle-deep a managed vice# machine stays in CPU
+    /// lockstep with native VICE when both resume from the same shim-generated .vsf,
+    /// injecting only the state available today (CPU registers + 64K RAM + processor
+    /// port; no VIC/CIA/SID chip state). The measured depth decides whether the
+    /// production slices need full chip-state injection.
+    /// Acceptance: the shim stages ~100k cycles and writes a .vsf (rc 0), resumes it
+    /// (rc 0), and the in-test MAINCPU/C64MEM parser matches the shim's authoritative
+    /// resumed A/X/Y/SP/PC exactly; the first managed-vs-native CPU divergence within a
+    /// 50k-cycle window is measured and logged (diagnostic, not gated). Skips when the
+    /// native shim is unavailable.
+    /// </summary>
     [Fact]
     public void Spike_ShimRoundTripResume_MeasuresLockstepDepth()
     {

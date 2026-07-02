@@ -42,6 +42,14 @@ public sealed class Mos6502DisassemblerTests
         /* F0 */ 2,2,1,2, 2,2,2,2, 1,3,1,3, 3,3,3,3,
     };
 
+    /// <summary>
+    /// FR: FR-MONITOR-DISASM-001, TR: TR-MONITOR-DISASM-001, TEST: TEST-MONITOR-DISASM-001.
+    /// Use case: a disassembly walk advances the PC by the decoded instruction length,
+    /// so a single wrong length desyncs every following line of a monitor trace.
+    /// Acceptance: <see cref="Mos6502Disassembler.OpcodeLength(byte)"/> equals the
+    /// canonical NMOS 6502 length table (documented and undocumented opcodes alike)
+    /// for all 256 opcodes; any mismatch fails with the offending opcodes listed.
+    /// </summary>
     [Fact]
     public void OpcodeLength_MatchesCanonical6502Table_ForAll256Opcodes()
     {
@@ -90,6 +98,14 @@ public sealed class Mos6502DisassemblerTests
         Assert.Equal(expected, text);
     }
 
+    /// <summary>
+    /// FR: FR-MONITOR-DISASM-001, TR: TR-MONITOR-DISASM-001, TEST: TEST-MONITOR-DISASM-001.
+    /// Use case: branch instructions carry a signed relative offset; the monitor must
+    /// display the resolved absolute target address, not the raw operand byte.
+    /// Acceptance: decoding BNE with offset +$05 at $1000 yields exactly "BNE $1007"
+    /// and BPL with offset -$05 yields exactly "BPL $0FFD" (forward and backward
+    /// targets computed from the end of the 2-byte instruction).
+    /// </summary>
     [Fact]
     public void Decode_RelativeBranch_ResolvesTargetAddress()
     {
@@ -102,6 +118,15 @@ public sealed class Mos6502DisassemblerTests
         Assert.Equal("BPL $0FFD", Mos6502Disassembler.Decode(at, a => mem[a]));
     }
 
+    /// <summary>
+    /// FR: FR-MONITOR-DISASM-001, TR: TR-MONITOR-DISASM-001, TEST: TEST-MONITOR-DISASM-001.
+    /// Use case: the Pieces-of-Light loader stub at $0B72 (SEI, LDA/STA $0314 and $0315,
+    /// LDX, STX $D01A) is the real code stream whose absolute-mode stores desynced the
+    /// previous partial disassembler stub.
+    /// Acceptance: walking the 16-byte stub with OpcodeLength/Decode yields exactly the
+    /// seven expected instruction texts in order, proving the stream never desyncs on
+    /// absolute-mode stores.
+    /// </summary>
     [Fact]
     public void WalkStream_LoaderStub_DoesNotDesyncOnAbsoluteStores()
     {
@@ -126,6 +151,14 @@ public sealed class Mos6502DisassemblerTests
             decoded);
     }
 
+    /// <summary>
+    /// FR: FR-MONITOR-DISASM-001, TR: TR-MONITOR-DISASM-001, TEST: TEST-MONITOR-DISASM-001.
+    /// Use case: real demo code contains undocumented opcodes (JAM, SLO, NOP variants,
+    /// SHY, the $EB SBC duplicate); the disassembler must still advance by the correct
+    /// instruction width so the stream stays aligned.
+    /// Acceptance: <see cref="Mos6502Disassembler.OpcodeLength(byte)"/> returns the
+    /// canonical 1/2/3-byte length for each sampled undocumented opcode (exact equality).
+    /// </summary>
     [Theory]
     [InlineData(0x02, 1)]  // JAM
     [InlineData(0x03, 2)]  // SLO ($nn,X)

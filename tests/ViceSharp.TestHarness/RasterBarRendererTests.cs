@@ -28,6 +28,16 @@ public sealed class RasterBarRendererTests
         return 0xFF000000u | (uint)c.B | ((uint)c.G << 8) | ((uint)c.R << 16);
     }
 
+    /// <summary>
+    /// FR: FR-VIC-004, TR: TR-VIC-EDGE-003, TEST: TEST-VICRENDER-001 (PLAN-VICRENDER-001).
+    /// Use case: the demo rewrites $D020 mid-scanline so a single border line shows two
+    /// colours; the old renderer sampled $D020 once per line at line-wrap and filled the
+    /// whole scanline with the last colour, collapsing the bars.
+    /// Acceptance: driving the VIC to upper-border line 30 and writing red (colour 2) at
+    /// in-line cycle 5 then blue (colour 6) at cycle 40, the rendered scanline shows the
+    /// exact red BGRA at frame pixel 20 and the exact blue BGRA at pixel 360, and the two
+    /// pixels differ - two colour bands on ONE scanline.
+    /// </summary>
     [Fact]
     public void MidLineBorderColorChange_RendersTwoColourBandsOnOneScanline()
     {
@@ -74,6 +84,15 @@ public sealed class RasterBarRendererTests
         Assert.NotEqual(PixelAt(20), PixelAt(360));
     }
 
+    /// <summary>
+    /// FR: FR-VIC-004, TR: TR-VIC-EDGE-003, TEST: TEST-VICRENDER-001 (PLAN-VICRENDER-001).
+    /// Use case: regression guard for the common case - a border line with no mid-line
+    /// $D020 change must still render as one solid colour after the per-cycle border
+    /// colour fix (the fast path must be unaffected).
+    /// Acceptance: writing green (colour 5) once near the start of border line 28 and
+    /// finishing the line renders the same exact green BGRA at frame pixels 10, 200,
+    /// and 370 of that scanline.
+    /// </summary>
     [Fact]
     public void NoMidLineChange_RendersSolidBorder_FastPathUnaffected()
     {
@@ -108,13 +127,16 @@ public sealed class RasterBarRendererTests
     }
 
     /// <summary>
-    /// The actual bug: a $D020 write near the END of a scanline (the cycle-stable raster
-    /// handler writes ahead of the beam) must colour the NEXT scanline, not the current one.
-    /// The old renderer sampled $D020 once at line-wrap and painted the whole current line the
-    /// final colour, so every bar appeared ~1 raster line too high. This drives the VIC across
-    /// several consecutive border lines, writes a distinct colour near the end of each, and
-    /// asserts each colour lands on the following line - the vertical placement that was wrong.
-    /// Pure unit test: no emulation/injection, so it isolates the renderer.
+    /// FR: FR-VIC-004, TR: TR-VIC-EDGE-003, TEST: TEST-VICRENDER-001 (PLAN-VICRENDER-001).
+    /// Use case: the actual bug - a $D020 write near the END of a scanline (the
+    /// cycle-stable raster handler writes ahead of the beam) must colour the NEXT
+    /// scanline, not the current one. The old renderer sampled $D020 once at line-wrap
+    /// and painted the whole current line the final colour, so every bar appeared ~1
+    /// raster line too high. Pure renderer unit test: no emulation or injection.
+    /// Acceptance: writing a distinct colour at in-line cycle 60 of each consecutive
+    /// upper-border line 24-28, the left-border pixel of line L+1 equals the exact BGRA
+    /// of the colour written on line L for every consecutive pair - the vertical
+    /// placement that was wrong.
     /// </summary>
     [Fact]
     public void EndOfLineBorderWrites_ColourTheNextScanline_NotTheCurrentOne()
@@ -165,12 +187,18 @@ public sealed class RasterBarRendererTests
     ];
 
     /// <summary>
-    /// Demo-level verification (snapshot-gated): resume the staged Pieces-of-Light .vsf,
-    /// capture VICE's per-line border colour across the bar region, then inject the same t0
-    /// into the managed core, run the same span, and read the managed RENDERED frame's border
-    /// colour per line. With PLAN-VICRENDER-001 the managed bars land on the same raster lines
-    /// as VICE (the vertical alignment that was the bug) - so the two per-line colour sequences
-    /// must agree on a strong majority of bar lines.
+    /// FR: FR-VIC-004, TR: TR-VIC-EDGE-003, TEST: TEST-VICRENDER-001 (PLAN-VICRENDER-001).
+    /// Use case: demo-level diagnostic (snapshot-gated) - resume the staged
+    /// Pieces-of-Light .vsf, capture VICE's per-line border colour across the bar region
+    /// (lines 212-246), inject the same t0 into the managed core, run the same span, and
+    /// read the managed RENDERED frame's left-border colour per line for comparison.
+    /// Acceptance: diagnostic under LOSSY injection (InjectSnapshotState seeds VIC
+    /// registers + raster phase only), so residual per-line mismatch is an
+    /// emulation-fidelity limit of injection, not a renderer defect: the match ratio is
+    /// logged and the test gates only on having sampled at least 20 bar-region lines;
+    /// the renderer fix itself is gated by
+    /// MidLineBorderColorChange_RendersTwoColourBandsOnOneScanline. Skips when the shim
+    /// or the staged .vsf is absent.
     /// </summary>
     [Fact]
     public void DemoBars_ManagedRenderedFrame_AlignsWithViceBorderColoursPerLine()
@@ -252,13 +280,18 @@ public sealed class RasterBarRendererTests
     }
 
     /// <summary>
-    /// EMPIRICAL, non-lossy end-to-end proof (snapshot-gated). Captures VICE's REAL per-cycle
-    /// $D020 timeline for one frame of the live Pieces-of-Light bar segment (from the resumed
-    /// .vsf), then replays that exact timeline into a fresh managed VIC - bypassing the managed
-    /// emulation entirely, so injection lossiness cannot contaminate the result - and asserts the
-    /// managed RENDERED frame's border colour per line matches VICE's actual per-line border
-    /// across the whole bar region. This tests the real demo's writes AND the RasterX->pixel
-    /// phase; a vertical mis-placement or phase error would show as per-line mismatches.
+    /// FR: FR-VIC-004, TR: TR-VIC-EDGE-003, TEST: TEST-VICRENDER-001 (PLAN-VICRENDER-001).
+    /// Use case: EMPIRICAL, non-lossy end-to-end proof (snapshot-gated) - capture VICE's
+    /// real per-cycle $D020 timeline for one frame of the live Pieces-of-Light bar
+    /// segment from the resumed .vsf, then replay that exact timeline into a fresh
+    /// managed VIC, bypassing managed emulation entirely so injection lossiness cannot
+    /// contaminate the result. This exercises the real demo's writes AND the
+    /// RasterX-to-pixel phase; a vertical misplacement or phase error shows up as
+    /// per-line mismatches (both sides sampled at the same physical point: VICE cycle 13
+    /// == frame pixel 8).
+    /// Acceptance: at least 20 bar-region lines (212-246) are sampled and the managed
+    /// RENDERED frame's per-line border colour matches VICE's on at least 95% of them;
+    /// mismatched lines are logged. Skips when the shim or the staged .vsf is absent.
     /// </summary>
     [Fact]
     public void DemoBars_ReplayedViceTimeline_ManagedRendererMatchesVicePerLineBorder()

@@ -20,6 +20,18 @@ public sealed class LiveHandlerTraceTests
     private readonly ITestOutputHelper _out;
     public LiveHandlerTraceTests(ITestOutputHelper output) => _out = output;
 
+    /// <summary>
+    /// FR: FR-MONITOR-DISASM-001, TR: TR-MONITOR-DISASM-001, TEST: TEST-MONITOR-DISASM-002.
+    /// Use case: exploratory trace - locate the C64MEM RAM image inside the user-staged
+    /// Pieces-of-Light .vsf, follow the $0314/$0315 CINV vector, and disassemble the live
+    /// (decrunched) IRQ handler with <c>Mos6502Disassembler</c>, proving the in-house
+    /// disassembler handles real demo code that the earlier partial stub could not.
+    /// Acceptance: the C64MEM module is found in the snapshot (module walk throws
+    /// otherwise) and the straight-line walk of up to 64 instructions from the vector
+    /// decodes via OpcodeLength/Decode without desync or exception, stopping at RTI or
+    /// JMP; the listing and VIC registers are written to test output. Skips when the
+    /// staged snapshot is absent.
+    /// </summary>
     [Fact]
     public void Trace_LiveIrqHandler_FromUserSnapshot()
     {

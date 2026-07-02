@@ -37,6 +37,18 @@ public sealed class RasterBarLockstepTests
 
     public RasterBarLockstepTests(ITestOutputHelper output) => _output = output;
 
+    /// <summary>
+    /// FR: FR-VICII-RASTER-001, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RASTERBAR-LOCKSTEP-001.
+    /// Use case: resume the staged demo .vsf in the VICE shim, inject the same t0 into a
+    /// managed C64 (64K RAM, CPU registers, VIC register file + raster phase), capture
+    /// each side's STA $D020 raster-bar schedule independently, align both on a settled
+    /// frame, and diff the 31-bar staircase to localize managed VIC/CPU timing drift.
+    /// Acceptance: diagnostic under lossy injection (InjectSnapshotState seeds registers +
+    /// raster phase only; see PLAN-VICRENDER-001): the managed core must produce a
+    /// non-empty bar schedule from the injected snapshot and both sides must align a full
+    /// frame to compare; per-bar divergences are logged to artifacts, not gated. Skips
+    /// when the shim or the staged .vsf is absent.
+    /// </summary>
     [Fact]
     public void RasterBarSchedule_Managed_MatchesVice_FromSnapshot()
     {
@@ -137,10 +149,17 @@ public sealed class RasterBarLockstepTests
     }
 
     /// <summary>
-    /// Per-instruction cycle bisect: walks native + managed in instruction lockstep from
-    /// the injected t0 and reports the first PC where the managed instruction consumed a
-    /// different number of cycles than VICE. Localizes the per-iteration 1-cycle drift in
-    /// the $1229 raster loop to a single instruction / CPU-VIC interaction.
+    /// FR: FR-VICII-RASTER-001, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RASTERBAR-LOCKSTEP-001.
+    /// Use case: per-instruction cycle bisect - walk native and managed in instruction
+    /// lockstep from the injected t0 and report the first PC where the managed instruction
+    /// consumed a different number of cycles than VICE, localizing the per-iteration
+    /// 1-cycle drift in the $1229 raster loop to a single instruction / CPU-VIC
+    /// interaction.
+    /// Acceptance: diagnostic, not gating (the step-until-PC-moves native cycle counter
+    /// and the lossy injection make per-instruction deltas unreliable as a hard gate):
+    /// mismatches and any path divergence are written to
+    /// artifacts/rastercmp/perinstr-cycles.txt; the test requires only that the walk
+    /// executed at least one instruction. Skips when the shim or the staged .vsf is absent.
     /// </summary>
     [Fact]
     public void RasterLoop_PerInstructionCycles_MatchVice_FromSnapshot()
@@ -233,10 +252,16 @@ public sealed class RasterBarLockstepTests
     }
 
     /// <summary>
-    /// Cycle-level probe: steps native + managed one master cycle at a time from the
-    /// injected t0 (CPU at $1249 STA $D020) and logs each side's badline + raster-cycle +
-    /// PC state, exposing the exact cycle where managed halts the CPU (or advances raster)
-    /// differently than VICE. Diagnostic only.
+    /// FR: FR-VICII-RASTER-001, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RASTERBAR-LOCKSTEP-001.
+    /// Use case: cycle-level probe - step native and managed one master cycle at a time
+    /// from the injected t0 (CPU at the $1249 STA $D020 of the stable-raster loop) and
+    /// record the first divergence in CPU PC and in raster line, exposing the exact cycle
+    /// where managed halts the CPU (badline steal) or advances the raster differently
+    /// than VICE.
+    /// Acceptance: diagnostic only - the snapshot must resume (rc 0); the first PC and
+    /// raster-line divergences (or full 20000-cycle lockstep) are logged and written to
+    /// artifacts/rastercmp/stad020-cyclelevel.txt. Skips when the shim or the staged
+    /// .vsf is absent.
     /// </summary>
     [Fact]
     public void StaD020_CycleLevel_StealState_VsVice_FromSnapshot()

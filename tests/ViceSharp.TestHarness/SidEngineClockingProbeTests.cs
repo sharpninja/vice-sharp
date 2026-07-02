@@ -22,6 +22,18 @@ public sealed class SidEngineClockingProbeTests
 
     public SidEngineClockingProbeTests(ITestOutputHelper output) => _output = output;
 
+    /// <summary>
+    /// FR: FR-SID-ENV, TR: TR-SID-ORACLE-001 (PLAN-VSFLOCKSTEP-001 SID-checkpoint probe).
+    /// Use case: engine-sensitive SID checkpoints only mean something if the embedded
+    /// reSID actually advances its internal state; VICE clocks reSID from the
+    /// sound-rendering path, not per CPU cycle, so this probe answers "is reSID clocked
+    /// in the headless shim?" before any parity work relies on it.
+    /// Acceptance: after gating voice 3 (sawtooth, attack=4) and rendering ~88k cycles'
+    /// worth of samples (16 x 256 samples at 22 cycles/sample) through the shim's render
+    /// path, the engine-computed ENV3 ($1C) read via the SID-engine accessor is strictly
+    /// greater than its pre-render value. It does not assert engine parity. Skips when
+    /// the native shim is unavailable.
+    /// </summary>
     [Fact]
     public void Probe_NativeReSidInternalStateAdvancesOnStep()
     {
