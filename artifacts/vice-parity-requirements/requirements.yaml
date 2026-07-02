@@ -1505,13 +1505,13 @@ requirements:
     test: TEST-SID-FILTER-6581-18
     state: green-now
   - id: AC-19
-    tag: FAITHFUL
-    statement: writeMODE_VOL mode=v&0xf0, vol=v&0xf
+    tag: DIVERGENT
+    statement: writeMODE_VOL mode=v&0xf0, vol=v&0xf (managed masks 0x70, dropping bit 7 / 3OFF; same defect as FR-SID-MIXVOL AC-01, remediated together in S8)
     viceCite: filter8580new.cc:742-748
     managedCite: Sid6581.cs:931-933
-    finding: 
+    finding: "19"
     test: TEST-SID-FILTER-6581-19
-    state: green-now
+    state: red-now
   - id: AC-20
     tag: DIVERGENT
     statement: 'set_w0 6581: Vw=Vw_bias+f0_dac[fc]; Vddt_Vw_2'
@@ -4284,7 +4284,7 @@ summary:
   frCount: 38
   acCount: 466
   testCount: 466
-  faithfulAcs: 168
-  divergentAcs: 298
+  faithfulAcs: 167
+  divergentAcs: 299
   sidFrCount: 23
   vicFrCount: 15

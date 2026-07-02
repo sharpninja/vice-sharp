@@ -17,12 +17,13 @@ public sealed class ParityCoverageManifestTests
 {
     /// <summary>
     /// Coverage ratchet: the minimum number of distinct ACs that must carry an
-    /// authored [ParityAc] test. Starts at 0 (gate infra lands before the test
-    /// suites), rises to 168 when the FAITHFUL locks land, then by each
-    /// slice's DIVERGENT count. The final slice pins covered == 466.
-    /// MUST never be lowered.
+    /// authored [ParityAc] test. 167 = every FAITHFUL lock (168 minus
+    /// TEST-SID-FILTER-6581-19, re-tagged DIVERGENT during authoring: the
+    /// managed 0x70 mode mask is the same defect as FR-SID-MIXVOL AC-01).
+    /// Rises by each slice's DIVERGENT count; the final slice pins
+    /// covered == 466. MUST never be lowered.
     /// </summary>
-    private const int ExpectedMinCovered = 0;
+    private const int ExpectedMinCovered = 167;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

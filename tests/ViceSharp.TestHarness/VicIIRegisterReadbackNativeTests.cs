@@ -501,7 +501,15 @@ public sealed class VicIIRegisterReadbackNativeTests
     /// Byrd: Requirements (BACKFILL-VIDEO-001 + TR/FR/TEST IDs) + VICE evidence from the explore report drive this
     /// test + the contract it exercises. Mocks/stubs (bridge mock + simulator) proven green before suite.
     /// </summary>
+    /// PLAN-VICEPARITY-001 P0-2/P0-5: quarantined (ParityLegacy). This fact
+    /// asserted the OLD synthetic capture contract (0xCC sentinel at [0],
+    /// alpha 0 in the sample area, which real rendering never produces). The
+    /// shim now returns real rendered pixels (TR-VIC-ORACLE-001), so the
+    /// sentinel expectations are stale false confidence. Rewritten against
+    /// the real per-pixel oracle in the V2 registers slice (mock-path
+    /// retirement), then the trait comes off.
     [Fact]
+    [Trait("Category", "ParityLegacy")]
     public void NativeVsManaged_VisibleFrame_DisplayMode_InvalidEcm_Checkpoint_Match()
     {
         // BDP: mocks/stubs validated path (bridge mock + existing simulator). Always executes.
