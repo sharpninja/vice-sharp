@@ -20,6 +20,11 @@ namespace ViceSharp.TestHarness;
 /// border colours at two in-line cycles of the same scanline, and asserts the rendered
 /// line shows BOTH colours at the expected horizontal spans.
 /// </summary>
+// PLAN-VICEPARITY-001 P0-5: these facts assert the register write-time
+// change-log rendering hack that the per-cycle border/background units
+// (V4/V7) replace. Quarantined from the blocking gate; deleted as the
+// replacing V-slices land. Run ad hoc via --filter Category=ParityLegacy.
+[Trait("Category", "ParityLegacy")]
 public sealed class RasterBarRendererTests
 {
     private static uint ExpectedBgra(byte colorIndex)

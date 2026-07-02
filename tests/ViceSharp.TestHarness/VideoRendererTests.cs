@@ -5,6 +5,11 @@ using ViceSharp.Chips.VicIi;
 using ViceSharp.Abstractions;
 using ViceSharp.Core;
 
+// PLAN-VICEPARITY-001 P0-5: these facts bake in the per-line geometric
+// reconstruction that the per-cycle PixelSequencer (V3-V7) replaces.
+// Quarantined from the blocking gate; each fact is deleted as its replacing
+// V-slice lands. Run ad hoc via --filter Category=ParityLegacy.
+[Trait("Category", "ParityLegacy")]
 public sealed class VideoRendererTests
 {
     private static (BasicBus bus, RamDevice ram, InterruptLine irq) CreateTestMachine()
