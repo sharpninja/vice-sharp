@@ -255,6 +255,11 @@ sealed partial class Build : NukeBuild
                 .SetProject(AvaloniaProject)
                 .SetConfiguration(Configuration)
                 .SetRuntime(MsiRuntimeIdentifier)
+                // Stamp the GitVersion semver into the published assembly (AssemblyVersion,
+                // FileVersion, InformationalVersion) so the running app can show it in the
+                // window title. Without this the exe stays at the default 1.0.0 and every
+                // deployed build looks identical. Matches the MSI ProductVersion below.
+                .SetVersion(MsiVersion)
                 .SetSelfContained(true)
                 .SetProperty("PublishAot", "false")
                 .SetProperty("PublishTrimmed", "true")

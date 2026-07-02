@@ -1,3 +1,4 @@
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
@@ -34,6 +35,10 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        // Show the running build's semantic version in the title bar so a screen capture
+        // always identifies which deployed build produced it (removes "did it deploy?" doubt).
+        Title = $"ViceSharp {AppSemVer}";
 
         var hostConnection = CreateHostClient();
         _hostClient = hostConnection.Client;
@@ -114,6 +119,35 @@ public partial class MainWindow : Window
             DispatcherPriority.Background,
             async (_, _) => await UpdateStatusAsync().ConfigureAwait(true));
         statusTimer.Start();
+    }
+
+    /// <summary>
+    /// The running build's semantic version for the window title. Reads the assembly
+    /// informational version (GitVersion-stamped) and strips any build metadata suffix.
+    /// </summary>
+    private static string AppSemVer
+    {
+        get
+        {
+            var assembly = typeof(MainWindow).Assembly;
+            var raw = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                ?? assembly.GetName().Version?.ToString()
+                ?? "0.0.0";
+            return FormatSemVer(raw);
+        }
+    }
+
+    /// <summary>
+    /// Reduce a raw informational version to its semantic-version core: drop GitVersion's
+    /// "+Branch.Sha..." build metadata (keeping any "-prerelease" tag). Testable in isolation.
+    /// </summary>
+    public static string FormatSemVer(string rawVersion)
+    {
+        if (string.IsNullOrWhiteSpace(rawVersion))
+            return "0.0.0";
+
+        var plus = rawVersion.IndexOf('+');
+        return plus >= 0 ? rawVersion[..plus] : rawVersion;
     }
 
     // Lay out the content panel: the emulator display is docked to an edge and aspect-sized
