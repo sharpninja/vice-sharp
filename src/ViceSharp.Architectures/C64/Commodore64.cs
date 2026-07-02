@@ -45,7 +45,9 @@ public sealed class Commodore64 : IMachine
         _vic = new Mos6569(bus, irqLine);
         _cia1 = CreateC64Cia(bus, irqLine, 0xDC00);
         _cia2 = CreateC64Cia(bus, nmiLine, 0xDD00);
-        _sid = new Sid6581(bus) { BaseAddress = 0xD400 };
+        // PLAN-VICEPARITY-001 P0-7: canonical construction path (no backend:
+        // this legacy benchmark machine is headless; emission stays inert).
+        _sid = SidFactory.Create(bus, profile: null, audioBackend: null, masterClockHz: 985248.0);
 
         // Register devices on bus
         _bus.RegisterDevice(_cpu);

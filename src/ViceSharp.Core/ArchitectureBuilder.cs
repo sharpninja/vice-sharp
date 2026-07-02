@@ -406,19 +406,9 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
     }
 
     private static Sid6581 CreateSid(IBus bus, IMachineProfile? profile, IAudioBackend? audioBackend, double masterClockHz)
-    {
-        var sid = profile is not null &&
-                  profile.SidModel.Contains("8580", StringComparison.OrdinalIgnoreCase)
-            ? new Sid8580(bus, audioBackend) { BaseAddress = 0xD400 }
-            : new Sid6581(bus, audioBackend) { BaseAddress = 0xD400 };
-
-        // Drive live-audio emission at 44.1 kHz only when a backend is present;
-        // otherwise the SID never touches the audio path (parity-preserving).
-        if (audioBackend is not null)
-            sid.ConfigureAudioClock(masterClockHz);
-
-        return sid;
-    }
+        // PLAN-VICEPARITY-001 P0-7: single canonical construction path shared
+        // with every other machine (see SidFactory).
+        => SidFactory.Create(bus, profile, audioBackend, masterClockHz);
 }
 
 /// <summary>
