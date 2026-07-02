@@ -93,6 +93,10 @@ public sealed class VideoRenderer
             return;
         }
 
+        // PLAN-VICRENDER-001: precompute the per-pixel background colour for this line so mid-line
+        // $D021 changes (the demo's background bars) render in the display area, not one colour/line.
+        PopulateBackgroundLine();
+
         int leftBorderPixel = _vic.LeftBorderPixel;
         int rightBorderPixel = _vic.RightBorderEndPixel;
         bool leftBorderOpen = _vic.IsRasterLineLeftBorderOpen(lineNumber);
@@ -172,7 +176,7 @@ public sealed class VideoRenderer
 
         if (leftBorderOpen)
         {
-            FillPixels(pixels, 0, leftBorderPixel, bgPixel);
+            FillBackground(pixels, 0, leftBorderPixel);
         }
 
         var displayStart = leftBorderPixel;
@@ -181,7 +185,7 @@ public sealed class VideoRenderer
         {
             // Lower fine-scroll overflow has no matrix row to render; the
             // display window shows background instead of wrapping row 0.
-            FillPixels(pixels, displayStart, displayEnd - displayStart, bgPixel);
+            FillBackground(pixels, displayStart, displayEnd - displayStart);
         }
         else if (displayEnd > displayStart)
         {
@@ -203,14 +207,14 @@ public sealed class VideoRenderer
                 {
                     pixels[x + charX] = ((charData >> (7 - charX)) & 0x01) != 0
                         ? fgPixel
-                        : bgPixel;
+                        : _backgroundLine[x + charX];
                 }
             }
         }
 
         if (rightBorderOpen)
         {
-            FillPixels(pixels, rightBorderPixel, ScreenWidth - rightBorderPixel, bgPixel);
+            FillBackground(pixels, rightBorderPixel, ScreenWidth - rightBorderPixel);
         }
     }
 
@@ -233,6 +237,9 @@ public sealed class VideoRenderer
         bool inLeftBorder = x < leftBorderPixel;
         bool inRightBorder = x >= rightBorderPixel;
 
+        // PLAN-VICRENDER-001: per-pixel background colour (mid-line $D021 bars) instead of one/line.
+        uint bgPixelAtX = _backgroundLine[x];
+
         if ((inLeftBorder && !leftBorderOpen) || (inRightBorder && !rightBorderOpen))
         {
             return new PixelSample(borderPixel, false);
@@ -240,7 +247,7 @@ public sealed class VideoRenderer
 
         if (inLeftBorder || inRightBorder)
         {
-            return new PixelSample(bgPixel, false);
+            return new PixelSample(bgPixelAtX, false);
         }
 
         int screenX = x - leftBorderPixel;
@@ -251,7 +258,7 @@ public sealed class VideoRenderer
 
         if (!hasDisplayCell)
         {
-            return new PixelSample(bgPixel, false);
+            return new PixelSample(bgPixelAtX, false);
         }
 
         int col = screenX / 8;
@@ -265,11 +272,11 @@ public sealed class VideoRenderer
         // PERF-RENDER-002: displayMode cached once per line by RenderRasterLine.
         return displayMode switch
         {
-            Mos6569.VicIIDisplayMode.StandardText => RenderStandardTextPixel(charCode, colorCode, charRow, charX, bgPixel),
-            Mos6569.VicIIDisplayMode.MulticolorText => RenderMulticolorTextPixel(charCode, colorCode, charRow, charX, bgPixel),
+            Mos6569.VicIIDisplayMode.StandardText => RenderStandardTextPixel(charCode, colorCode, charRow, charX, bgPixelAtX),
+            Mos6569.VicIIDisplayMode.MulticolorText => RenderMulticolorTextPixel(charCode, colorCode, charRow, charX, bgPixelAtX),
             Mos6569.VicIIDisplayMode.ExtendedColor => RenderExtendedColorPixel(charCode, colorCode, charRow, charX),
             Mos6569.VicIIDisplayMode.StandardBitmap => RenderStandardBitmapPixel(screenIndex, colorCode: charCode, charRow, charX),
-            Mos6569.VicIIDisplayMode.MulticolorBitmap => RenderMulticolorBitmapPixel(screenIndex, screenCode: charCode, colorCode, charRow, charX, bgPixel),
+            Mos6569.VicIIDisplayMode.MulticolorBitmap => RenderMulticolorBitmapPixel(screenIndex, screenCode: charCode, colorCode, charRow, charX, bgPixelAtX),
             _ => new PixelSample(Palette[0], _vic.IsGraphicsPixelForegroundForSpritePriority(x, rasterLine)),
         };
     }
@@ -558,6 +565,55 @@ public sealed class VideoRenderer
         {
             FillPixels(pixels, x, pixels.Length - x, colour);
         }
+    }
+
+    // PLAN-VICRENDER-001: per-pixel background colour for the current scanline, honouring mid-line
+    // $D021 changes (the demo writes $D020 AND $D021 per bar, so the display-area background bands
+    // too). Precomputed once per line into _backgroundLine; the display render reads
+    // _backgroundLine[x] instead of a single colour. Fast path (uniform fill) when unchanged.
+    private readonly uint[] _backgroundLine = new uint[ScreenWidth];
+
+    private void PopulateBackgroundLine()
+    {
+        var span = _backgroundLine.AsSpan();
+        int count = _vic.BackgroundChangeCount;
+        if (count == 0)
+        {
+            span.Fill(Palette[_vic.BackgroundColor & 0x0F]);
+            return;
+        }
+
+        uint colour = Palette[_vic.BackgroundEntryColour & 0x0F];
+        int x = 0;
+        for (int i = 0; i < count; i++)
+        {
+            _vic.GetBackgroundChange(i, out int rasterX, out byte c);
+            int px = RasterXToFramePixel(rasterX);
+            if (px > x)
+            {
+                span.Slice(x, px - x).Fill(colour);
+                x = px;
+            }
+
+            colour = Palette[c & 0x0F];
+        }
+
+        if (x < span.Length)
+        {
+            span.Slice(x, span.Length - x).Fill(colour);
+        }
+    }
+
+    // PLAN-VICRENDER-001: copy the precomputed per-pixel background into a pixel range (replaces
+    // FillPixels(..., bgPixel) so background bars are honoured).
+    private void FillBackground(Span<uint> pixels, int start, int length)
+    {
+        if (length <= 0)
+        {
+            return;
+        }
+
+        _backgroundLine.AsSpan(start, length).CopyTo(pixels.Slice(start, length));
     }
 
     /// <summary>

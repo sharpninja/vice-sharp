@@ -317,6 +317,27 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         colour = _borderChangeColour[index];
     }
 
+    // PLAN-VICRENDER-001: per-line background ($D021) colour-change log. The Pieces-of-Light
+    // bar handler writes $D020 AND $D021 to the same colour per bar (STA $D020 / STA $D021), so
+    // the display-area background bands mid-line just like the border. Same mechanism as $D020.
+    private readonly short[] _bgChangeX = new short[MaxLineColourChanges];
+    private readonly byte[] _bgChangeColour = new byte[MaxLineColourChanges];
+    private int _bgChangeCount;
+    private byte _bgEntryColour;
+
+    /// <summary>PLAN-VICRENDER-001: count of mid-line $D021 changes on the line being rendered.</summary>
+    internal int BackgroundChangeCount => _bgChangeCount;
+
+    /// <summary>PLAN-VICRENDER-001: background colour ($D021 low nibble) active at the start of the line being rendered.</summary>
+    internal byte BackgroundEntryColour => _bgEntryColour;
+
+    /// <summary>PLAN-VICRENDER-001: the i-th mid-line $D021 change - its in-line cycle (RasterX) and new low-nibble colour.</summary>
+    internal void GetBackgroundChange(int index, out int rasterX, out byte colour)
+    {
+        rasterX = _bgChangeX[index];
+        colour = _bgChangeColour[index];
+    }
+
     /// <summary>
     /// Get border color from register $20
     /// </summary>
@@ -1019,11 +1040,13 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             else
                 _renderer.NotifyFrameCompleted();
 
-            // PLAN-VICRENDER-001: the log held the completed line's mid-line $D020 changes and
-            // has now been consumed by the render. The final colour becomes the next line's
-            // entry colour; reset the change log for the line just started.
+            // PLAN-VICRENDER-001: the logs held the completed line's mid-line $D020/$D021 changes
+            // and have now been consumed by the render. The final colours become the next line's
+            // entry colours; reset the change logs for the line just started.
             _borderEntryColour = _registers[0x20];
             _borderChangeCount = 0;
+            _bgEntryColour = _registers[0x21];
+            _bgChangeCount = 0;
         }
         else
         {
@@ -1052,9 +1075,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         CurrentRasterLine = 0;
         RasterX = ResetRasterCycle;
         CycleCounter = 0;
-        // PLAN-VICRENDER-001: reset the per-line border colour-change log.
+        // PLAN-VICRENDER-001: reset the per-line border + background colour-change logs.
         _borderEntryColour = 0;
         _borderChangeCount = 0;
+        _bgEntryColour = 0;
+        _bgChangeCount = 0;
         _rasterIrqLine = 0;
         // Armed on reset: hardware fires the raster IRQ unconditionally when raster_line
         // matches raster_irq_line. Starting disarmed caused managed to skip the first
@@ -1947,6 +1972,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _borderChangeX[_borderChangeCount] = (short)RasterX;
                 _borderChangeColour[_borderChangeCount] = masked;
                 _borderChangeCount++;
+            }
+            else if (register == 0x21 && masked != _registers[0x21] && _bgChangeCount < MaxLineColourChanges)
+            {
+                _bgChangeX[_bgChangeCount] = (short)RasterX;
+                _bgChangeColour[_bgChangeCount] = masked;
+                _bgChangeCount++;
             }
             _registers[register] = masked;
             UpdateSpriteRegisters((ushort)register, masked);
