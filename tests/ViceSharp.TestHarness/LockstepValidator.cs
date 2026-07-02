@@ -7,6 +7,7 @@ using ViceSharp.Core.Input;
 using ViceSharp.Chips.IEC;
 using ViceSharp.Chips.VicIi;
 using ViceSharp.Core;
+using ViceSharp.Core.Media;
 using ViceSharp.Core.Wiring;
 
 namespace ViceSharp.TestHarness;
@@ -188,6 +189,303 @@ public sealed class LockstepValidator : IDisposable
         }
 
         return ValidationReport.Pass(maxCycles);
+    }
+
+    /// <summary>
+    /// Snapshot-staged lockstep run (TR-LOCKSTEP-VSF-001): resumes <paramref name="snapshotPath"/>
+    /// in the NATIVE machine (throws with the shim's rc/snapshot_last_error when it cannot
+    /// resume), stages the MANAGED machine from the resumed native state via
+    /// <see cref="StageManagedFromNative"/> (CPU registers, 64K RAM, CPU port $00/$01, VIC
+    /// register file + convention-corrected raster phase), then reuses the same per-cycle
+    /// compare loop as <see cref="Run"/>. Without capture the run returns at the FIRST
+    /// divergence, exactly like <see cref="Run"/>. When <paramref name="videoOutPath"/> is
+    /// set, the managed side's video (VIC full-frame BGRA at each PAL frame boundary) and
+    /// audio (SID samples at 44.1 kHz mono) are muxed through the external-ffmpeg Media
+    /// recorder into that file; the run then executes the full cycle budget even past the
+    /// first divergence so the capture covers the whole run, while the report still carries
+    /// the FIRST divergence. Throws with a clear message when ffmpeg is unavailable.
+    /// </summary>
+    public ValidationReport RunFromSnapshot(string snapshotPath, long maxCycles, string? videoOutPath = null)
+    {
+        _native.Reset();
+        var rc = _native.ReadSnapshot(snapshotPath);
+        if (rc != 0)
+        {
+            throw new InvalidOperationException(
+                $"Native VICE could not resume snapshot '{snapshotPath}': rc={rc}, " +
+                $"snapshot_last_error={ViceNative.SnapshotLastError()}.");
+        }
+
+        ResetManaged();
+        StageManagedFromNative(_machine, _native);
+        _recentTrace.Clear();
+        _hasPendingKernalCloseCall = false;
+        _cycleCount = 0;
+        if (_recordRecentTrace)
+            RecordTrace(0);
+
+        using var capture = videoOutPath is null ? null : ManagedAvCapture.Start(_machine, videoOutPath);
+
+        ValidationReport? firstMismatch = null;
+        if (!ValidateState())
+        {
+            firstMismatch = ValidationReport.Fail(0, 0, GetStateDiff());
+            if (capture is null)
+                return firstMismatch;
+        }
+
+        long prevNativeCycle = 0;
+        for (_cycleCount = 0; _cycleCount < maxCycles; _cycleCount++)
+        {
+            _native.Step();
+            long nativeCycle = _native.GetState().Cycle;
+            long nativeDelta = nativeCycle - prevNativeCycle;
+            prevNativeCycle = nativeCycle;
+            _lastNativeDelta = nativeDelta;
+
+            for (long j = 0; j < nativeDelta; j++)
+            {
+                StepManaged();
+                capture?.OnManagedCycle();
+            }
+
+            if (_recordRecentTrace)
+                RecordTrace(_cycleCount + 1);
+
+            if (firstMismatch is null && !ValidateState())
+            {
+                var mismatchCycle = _cycleCount + 1;
+                firstMismatch = ValidationReport.Fail(mismatchCycle, mismatchCycle, GetStateDiff());
+                if (capture is null)
+                    return firstMismatch;
+            }
+        }
+
+        return firstMismatch ?? ValidationReport.Pass(maxCycles);
+    }
+
+    /// <summary>
+    /// Stages a managed machine from a native instance that has already resumed a .vsf,
+    /// using exactly the staging RasterBarLockstepTests proves works (TR-LOCKSTEP-VSF-001):
+    /// reset, copy the full 64K RAM from the native side, drive the CPU port $00/$01
+    /// through the bus, inject the CPU register file, and seed the VIC register file +
+    /// raster phase via <see cref="Mos6569.InjectSnapshotState"/>. The in-line cycle is
+    /// seeded convention-corrected ((raster_cycle + 1) mod 63) because the managed Tick()
+    /// increments RasterX before its IRQ/line-wrap checks, so managed RasterX reads
+    /// native raster_cycle + 1 at the same physical point.
+    /// </summary>
+    internal static void StageManagedFromNative(IMachine machine, IViceNative native)
+    {
+        machine.Reset();
+
+        if (machine.Devices.GetByRole(DeviceRole.SystemRam) is not IMemory ram)
+            throw new InvalidOperationException("Managed machine does not expose system RAM as IMemory.");
+        var span = ram.Span;
+        for (var address = 0; address < 0x10000; address++)
+            span[address] = native.PeekRam((ushort)address);
+
+        machine.Bus.Write(0x0000, span[0x0000]);
+        machine.Bus.Write(0x0001, span[0x0001]);
+
+        if (machine.Devices.GetByRole(DeviceRole.Cpu) is not Mos6502 cpu)
+            throw new InvalidOperationException("Managed machine does not expose an Mos6502 CPU.");
+        var cpu0 = native.GetState();
+        cpu.A = cpu0.A;
+        cpu.X = cpu0.X;
+        cpu.Y = cpu0.Y;
+        cpu.S = cpu0.S;
+        cpu.PC = cpu0.PC;
+        cpu.P = cpu0.P;
+
+        if (machine.Devices.GetByRole(DeviceRole.VideoChip) is not Mos6569 vic)
+            throw new InvalidOperationException("Managed machine does not expose Mos6569.");
+        var vic0 = native.GetVicState();
+        var registers = vic0.Registers
+            ?? throw new InvalidOperationException("Native VIC registers are unavailable for snapshot staging.");
+        vic.InjectSnapshotState(registers, vic0.RasterLine, (byte)((vic0.RasterCycle + 1) % 63));
+    }
+
+    /// <summary>
+    /// Captures a per-cycle CPU run log (cycle, PC, A, X, Y, S, P) from NATIVE VICE
+    /// resumed from <paramref name="snapshotPath"/> (TR-LOCKSTEP-VSF-001): one
+    /// <see cref="CpuRunLogEntry"/> is recorded BEFORE each of the
+    /// <paramref name="cycles"/> native master-cycle steps, then saved via
+    /// <see cref="CpuRunLog.Save"/> so the run can be replayed offline against the
+    /// managed core. Throws with the shim's rc/snapshot_last_error when the snapshot
+    /// cannot resume.
+    /// </summary>
+    public static void SaveNativeRunLog(string snapshotPath, int cycles, string outPath)
+    {
+        using var native = ViceNative.CreateInstance("c64");
+        native.Reset();
+        var rc = native.ReadSnapshot(snapshotPath);
+        if (rc != 0)
+        {
+            throw new InvalidOperationException(
+                $"Native VICE could not resume snapshot '{snapshotPath}': rc={rc}, " +
+                $"snapshot_last_error={ViceNative.SnapshotLastError()}.");
+        }
+
+        var entries = new List<CpuRunLogEntry>(cycles);
+        for (var i = 0; i < cycles; i++)
+        {
+            var state = native.GetState();
+            entries.Add(new CpuRunLogEntry(state.Cycle, state.PC, state.A, state.X, state.Y, state.S, state.P));
+            native.Step();
+        }
+
+        CpuRunLog.Save(
+            outPath,
+            entries,
+            $"native x64sc shim; snapshot={Path.GetFileName(snapshotPath)}; cycles={cycles}");
+    }
+
+    /// <summary>
+    /// Captures a per-cycle CPU run log from the MANAGED machine resumed from
+    /// <paramref name="snapshotPath"/> (TR-LOCKSTEP-VSF-001), using the same staging
+    /// as the parity theory (<see cref="StageManagedFromNative"/>; a short-lived
+    /// native instance decodes the .vsf because the VIC-II module is a
+    /// version-specific blob only the shim can parse). One entry is recorded BEFORE
+    /// each of the <paramref name="cycles"/> managed clock steps so both sides can be
+    /// captured for offline diffing.
+    /// </summary>
+    public static void SaveManagedRunLog(string snapshotPath, int cycles, string outPath)
+    {
+        using var native = ViceNative.CreateInstance("c64");
+        native.Reset();
+        var rc = native.ReadSnapshot(snapshotPath);
+        if (rc != 0)
+        {
+            throw new InvalidOperationException(
+                $"Native VICE could not resume snapshot '{snapshotPath}': rc={rc}, " +
+                $"snapshot_last_error={ViceNative.SnapshotLastError()}.");
+        }
+
+        var machine = MachineTestFactory.CreateC64Machine("c64");
+        StageManagedFromNative(machine, native);
+
+        var entries = new List<CpuRunLogEntry>(cycles);
+        for (var i = 0; i < cycles; i++)
+        {
+            var state = machine.GetState();
+            entries.Add(new CpuRunLogEntry(state.Cycle, state.PC, state.A, state.X, state.Y, state.S, state.P));
+            machine.Clock.Step();
+        }
+
+        CpuRunLog.Save(
+            outPath,
+            entries,
+            $"vice-sharp managed C64; snapshot={Path.GetFileName(snapshotPath)}; cycles={cycles}");
+    }
+
+    /// <summary>
+    /// Managed-side audio/video capture for <see cref="RunFromSnapshot"/> (FR-MED-004
+    /// reuse): frames come from the managed VIC's committed full-frame BGRA buffer at
+    /// each <see cref="IVideoChip.FrameCompleted"/> boundary, audio comes from the
+    /// managed SID via <see cref="IAudioChip.GenerateSample"/> (a pure read of the
+    /// committed chain state, so sampling never perturbs determinism) at a fractional
+    /// 44.1 kHz cadence (PAL 985248 Hz / 44100 ~= one sample per 22.34 cycles), and
+    /// both feeds mux through the existing external-ffmpeg Media recorder.
+    /// </summary>
+    private sealed class ManagedAvCapture : IDisposable
+    {
+        private const int SampleRate = 44100;
+        private const double PalClockHz = 985248.0;
+        private const double PalFrameRate = PalClockHz / (63.0 * 312.0);
+
+        private readonly FfmpegVideoRecorder _recorder;
+        private readonly IVideoChip _vic;
+        private readonly IAudioChip _sid;
+        private readonly EventHandler _frameHandler;
+        private readonly short[] _audioBatch = new short[256];
+        private readonly double _cyclesPerSample = PalClockHz / SampleRate;
+        private double _sampleAccumulator;
+        private int _audioBatchLength;
+        private bool _stopped;
+
+        private ManagedAvCapture(FfmpegVideoRecorder recorder, IVideoChip vic, IAudioChip sid)
+        {
+            _recorder = recorder;
+            _vic = vic;
+            _sid = sid;
+            _frameHandler = (_, _) => _recorder.CaptureFrame(_vic.FrameBuffer, _vic.FrameWidth, _vic.FrameHeight);
+        }
+
+        public static ManagedAvCapture Start(IMachine machine, string videoOutPath)
+        {
+            var ffmpegPath = FfmpegLocator.Locate()
+                ?? throw new InvalidOperationException(
+                    "Lockstep video capture requires ffmpeg, which was not found. " +
+                    "Install ffmpeg on PATH or point VICESHARP_FFMPEG at the binary.");
+
+            if (machine.Devices.GetByRole(DeviceRole.VideoChip) is not IVideoChip vic)
+                throw new InvalidOperationException("Managed machine does not expose a video chip; cannot capture video.");
+            if (machine.Devices.GetByRole(DeviceRole.AudioChip) is not IAudioChip sid)
+                throw new InvalidOperationException("Managed machine does not expose an audio chip; cannot capture audio.");
+
+            var extension = Path.GetExtension(videoOutPath).TrimStart('.');
+            if (!FfmpegVideoFormats.TryGet(extension, out var format))
+            {
+                throw new InvalidOperationException(
+                    $"Unsupported capture container '.{extension}'. " +
+                    $"Supported: {string.Join(", ", FfmpegVideoFormats.All.Select(f => f.Id))}.");
+            }
+
+            var recorder = new FfmpegVideoRecorder(
+                ffmpegPath,
+                format,
+                vic.FrameWidth,
+                vic.FrameHeight,
+                PalFrameRate,
+                videoOutPath,
+                includeAudio: true,
+                SampleRate,
+                channels: 1);
+            recorder.Start();
+
+            var capture = new ManagedAvCapture(recorder, vic, sid);
+            vic.FrameCompleted += capture._frameHandler;
+            return capture;
+        }
+
+        /// <summary>Called once per managed master cycle; emits one 44.1 kHz sample per accumulator crossing.</summary>
+        public void OnManagedCycle()
+        {
+            _sampleAccumulator += 1.0;
+            if (_sampleAccumulator < _cyclesPerSample)
+                return;
+
+            _sampleAccumulator -= _cyclesPerSample;
+            var sample = _sid.GenerateSample();
+            if (sample > 1f)
+                sample = 1f;
+            else if (sample < -1f)
+                sample = -1f;
+            _audioBatch[_audioBatchLength++] = (short)(sample * 32767f);
+            if (_audioBatchLength == _audioBatch.Length)
+                FlushAudio();
+        }
+
+        private void FlushAudio()
+        {
+            if (_audioBatchLength == 0)
+                return;
+
+            _recorder.WriteSamples(_audioBatch.AsSpan(0, _audioBatchLength));
+            _audioBatchLength = 0;
+        }
+
+        public void Dispose()
+        {
+            if (_stopped)
+                return;
+
+            _stopped = true;
+            _vic.FrameCompleted -= _frameHandler;
+            FlushAudio();
+            _recorder.Stop();
+            _recorder.Dispose();
+        }
     }
 
     /// <summary>
