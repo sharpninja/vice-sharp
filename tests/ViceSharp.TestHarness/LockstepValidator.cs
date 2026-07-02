@@ -326,17 +326,23 @@ public sealed class LockstepValidator : IDisposable
                 $"snapshot_last_error={ViceNative.SnapshotLastError()}.");
         }
 
-        var entries = new List<CpuRunLogEntry>(cycles);
-        for (var i = 0; i < cycles; i++)
+        // Streamed: baseline captures reach tens of millions of cycles
+        // (30 s PAL is ~29.5M entries, ~900 MB of log); buffering the whole
+        // run in a list would cost ~half a GB for nothing. Save enumerates
+        // lazily while the native instance stays alive in this scope.
+        IEnumerable<CpuRunLogEntry> Enumerate()
         {
-            var state = native.GetState();
-            entries.Add(new CpuRunLogEntry(state.Cycle, state.PC, state.A, state.X, state.Y, state.S, state.P));
-            native.Step();
+            for (var i = 0; i < cycles; i++)
+            {
+                var state = native.GetState();
+                yield return new CpuRunLogEntry(state.Cycle, state.PC, state.A, state.X, state.Y, state.S, state.P);
+                native.Step();
+            }
         }
 
         CpuRunLog.Save(
             outPath,
-            entries,
+            Enumerate(),
             $"native x64sc shim; snapshot={Path.GetFileName(snapshotPath)}; cycles={cycles}");
     }
 
