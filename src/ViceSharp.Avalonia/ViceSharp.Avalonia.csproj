@@ -25,6 +25,12 @@
       to compile.
     -->
     <ShouldBeValidatedAsExecutableReference>false</ShouldBeValidatedAsExecutableReference>
+    <!-- Packaged as a dotnet global tool (dotnet tool install ViceSharp.Avalonia;
+         command: vicesharp). Tool packages embed every copy-local dependency
+         under tools/, so no ViceSharp package dependencies are involved. -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>vicesharp</ToolCommandName>
+    <Description>ViceSharp desktop UI (Avalonia) as a dotnet tool. Installs the vicesharp command.</Description>
   </PropertyGroup>
 
   <ItemGroup>

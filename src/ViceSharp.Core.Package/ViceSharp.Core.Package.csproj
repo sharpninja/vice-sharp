@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Packaging shell for the ViceSharp.Core NuGet: one package carrying the
+       five emulation-core assemblies (Abstractions, Chips, RomFetch, Core,
+       Architectures). A dedicated pack project is required because the
+       package is named after ViceSharp.Core but must also carry
+       ViceSharp.Architectures, which sits ABOVE Core in the dependency
+       graph (Core referencing Architectures would be a cycle).
+       This project compiles an empty placeholder assembly that is excluded
+       from the package (IncludeBuildOutput=false); the referenced assemblies
+       are injected into lib/ via PackViceSharpCoreAssemblies below. -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <!-- PackageId=ViceSharp.Core is applied by the Nuke PackNuget target at
+         pack time (-p:PackageId). Setting it here would make NuGet restore
+         treat this project's identity as "ViceSharp.Core" and collide with
+         the real ViceSharp.Core project (NU: ambiguous project name). -->
+    <Description>ViceSharp emulation core - C# port of VICE (Versatile Commodore Emulator). Contains ViceSharp.Abstractions, ViceSharp.Chips, ViceSharp.RomFetch, ViceSharp.Core and ViceSharp.Architectures.</Description>
+    <PackageLicenseExpression>GPL-2.0-or-later</PackageLicenseExpression>
+    <PackageTags>commodore;c64;emulator;vice;6502;sid;vic-ii</PackageTags>
+    <!-- The placeholder assembly must not ship; the five real assemblies are
+         added by the pack target. -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackViceSharpCoreAssemblies</TargetsForTfmSpecificContentInPackage>
+    <!-- NU5128: the dependency group TFM is satisfied by the lib files this
+         pack target injects; NuGet's static check cannot see them. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- PrivateAssets=all: project references must not surface as package
+         dependencies (their assemblies ship inside this package). -->
+    <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- External RUNTIME dependencies of the bundled assemblies, re-declared
+         here so they appear as real package dependencies (PrivateAssets=all
+         on the project references above suppresses their transitive flow).
+         Versions come from Directory.Packages.props.
+         - Microsoft.Extensions.Configuration(.Abstractions): ViceSharp.Core
+           settings provider (SETTINGS-INI-001).
+         - YamlDotNet: ViceSharp.Architectures machine definitions.
+         The Vecc.YamlDotNet.Analyzers.StaticGenerator is analyzer-only
+         (PrivateAssets=all in Architectures) and intentionally absent. -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="YamlDotNet" />
+  </ItemGroup>
+
+  <!-- DependsOnTargets=ResolveReferences: pack runs with NoBuild, so the
+       reference walk must be triggered explicitly or ReferenceCopyLocalPaths
+       is empty and the package ships without the assemblies. -->
+  <Target Name="PackViceSharpCoreAssemblies" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <!-- Only the five ViceSharp assemblies (plus their pdbs/xml docs when
+           present); external dependency assemblies stay OUT of lib/ because
+           they are declared as package dependencies above. -->
+      <_ViceSharpPackFiles Include="@(ReferenceCopyLocalPaths)"
+                           Condition="'%(ReferenceCopyLocalPaths.Filename)' == 'ViceSharp.Abstractions'
+                                   Or '%(ReferenceCopyLocalPaths.Filename)' == 'ViceSharp.Chips'
+                                   Or '%(ReferenceCopyLocalPaths.Filename)' == 'ViceSharp.RomFetch'
+                                   Or '%(ReferenceCopyLocalPaths.Filename)' == 'ViceSharp.Core'
+                                   Or '%(ReferenceCopyLocalPaths.Filename)' == 'ViceSharp.Architectures'" />
+      <TfmSpecificPackageFile Include="@(_ViceSharpPackFiles)"
+                              PackagePath="lib/$(TargetFramework)/%(Filename)%(Extension)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

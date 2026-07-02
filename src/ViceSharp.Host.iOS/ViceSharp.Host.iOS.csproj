@@ -43,9 +43,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- PrivateAssets=all + ViceSharpEmbedPack.targets: the package embeds
+         all ViceSharp assemblies (ViceSharp.Avalonia ships as a dotnet tool
+         and cannot be a package dependency). -->
     <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj"
-                      GlobalPropertiesToRemove="RuntimeIdentifier;SelfContained" />
+                      GlobalPropertiesToRemove="RuntimeIdentifier;SelfContained"
+                      PrivateAssets="all" />
   </ItemGroup>
+
+  <Import Project="..\ViceSharpEmbedPack.targets" />
 
   <!--
     BRANDING-ICON-001: the iOS app-icon asset catalog. Under the

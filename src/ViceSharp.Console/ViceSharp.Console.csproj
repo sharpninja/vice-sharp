@@ -17,6 +17,13 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- Packaged as a dotnet global tool (dotnet tool install ViceSharp.Console;
+         command: vicesharp-console). Tool packages embed every copy-local
+         dependency under tools/, so no ViceSharp package dependencies are
+         involved. -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>vicesharp-console</ToolCommandName>
+    <Description>ViceSharp console shell as a dotnet tool. Installs the vicesharp-console command.</Description>
   </PropertyGroup>
 
 </Project>

@@ -8,7 +8,21 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
     <IsAotCompatible>false</IsAotCompatible>
+    <!-- Roslyn source generators ship as analyzers, not lib assemblies:
+         the generator dll goes to analyzers/dotnet/cs and the package marks
+         itself a development dependency (no runtime payload). -->
+    <Description>ViceSharp Roslyn source generator for device-registration boilerplate (analyzer package).</Description>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">

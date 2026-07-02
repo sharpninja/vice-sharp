@@ -5,7 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ViceSharp.Launcher</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
+    <Description>ViceSharp launcher argument parsing and machine bootstrap (VICE-compatible command line).</Description>
   </PropertyGroup>
 
   <ItemGroup>

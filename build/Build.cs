@@ -101,6 +101,251 @@ sealed partial class Build : NukeBuild
                 .SetFilter("Category=Parity"));
         });
 
+    [Parameter("Override the ViceSharp.Core NuGet package version. Default: GitVersion {Major}.{Minor}.{CommitsSinceVersionSource} (same scheme as the MSI).")]
+    readonly string PackageVersionOverride = null!;
+
+    AbsolutePath PackageProject => RootDirectory / "src" / "ViceSharp.Core.Package" / "ViceSharp.Core.Package.csproj";
+
+    AbsolutePath PackagesOutputDirectory => ArtifactsDirectory / "packages";
+
+    /// <summary>
+    /// Pack the five emulation-core assemblies (Abstractions, Chips, RomFetch,
+    /// Core, Architectures) into the single ViceSharp.Core NuGet and verify
+    /// the package contents before declaring success.
+    /// </summary>
+    Target PackNuget => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            var version = string.IsNullOrWhiteSpace(PackageVersionOverride) ? MsiVersion : PackageVersionOverride;
+            PackagesOutputDirectory.CreateOrCleanDirectory();
+
+            DotNetPack(s => s
+                .SetProject(PackageProject)
+                .SetConfiguration(Configuration)
+                // PackageId lives here, not in the csproj: setting it in the
+                // project (or letting pack's implicit restore see it as a
+                // global property) collides with the real ViceSharp.Core
+                // project at restore time (ambiguous project name). Compile
+                // already restored, so pack skips restore; the (incremental)
+                // build must run because the assembly-collection target
+                // depends on ResolveReferences (NoBuild would trip NETSDK1085
+                // on the referenced projects).
+                .EnableNoRestore()
+                .SetProperty("PackageId", "ViceSharp.Core")
+                .SetProperty("PackageVersion", version)
+                .SetOutputDirectory(PackagesOutputDirectory));
+
+            // Gate: exactly the five core assemblies in lib/net10.0, no
+            // placeholder assembly, no bundled external dependency DLLs, and
+            // the three external runtime dependencies present in the nuspec.
+            var nupkg = PackagesOutputDirectory / $"ViceSharp.Core.{version}.nupkg";
+            Assert.FileExists(nupkg);
+
+            using var zip = System.IO.Compression.ZipFile.OpenRead(nupkg);
+            var libFiles = zip.Entries
+                .Where(e => e.FullName.StartsWith("lib/", StringComparison.OrdinalIgnoreCase))
+                .Select(e => e.FullName.Replace('\\', '/'))
+                .OrderBy(n => n)
+                .ToList();
+
+            foreach (var name in new[]
+                     {
+                         "ViceSharp.Abstractions",
+                         "ViceSharp.Architectures",
+                         "ViceSharp.Chips",
+                         "ViceSharp.Core",
+                         "ViceSharp.RomFetch",
+                     })
+            {
+                Assert.True(
+                    libFiles.Contains($"lib/net10.0/{name}.dll"),
+                    $"{name}.dll missing from the package lib folder");
+            }
+
+            Assert.True(
+                !libFiles.Any(f => f.Contains("ViceSharp.Core.Package")),
+                "the packaging placeholder assembly leaked into the package");
+            Assert.True(
+                !libFiles.Any(f => f.Contains("YamlDotNet") || f.Contains("Microsoft.Extensions")),
+                "external dependency assemblies must be nuspec dependencies, not bundled in lib/");
+
+            var nuspecEntry = zip.Entries.Single(e => e.FullName.EndsWith(".nuspec", StringComparison.OrdinalIgnoreCase));
+            using var nuspecReader = new System.IO.StreamReader(nuspecEntry.Open());
+            var nuspec = nuspecReader.ReadToEnd();
+            foreach (var dependencyId in new[]
+                     {
+                         "Microsoft.Extensions.Configuration.Abstractions",
+                         "Microsoft.Extensions.Configuration",
+                         "YamlDotNet",
+                     })
+            {
+                Assert.True(
+                    nuspec.Contains($"id=\"{dependencyId}\"", StringComparison.Ordinal),
+                    $"nuspec is missing the {dependencyId} dependency");
+            }
+
+            Serilog.Log.Information(
+                "ViceSharp.Core {Version}: five core assemblies verified, dependencies present -> {Path}",
+                version,
+                nupkg);
+
+            // ----- Individual packages -------------------------------------
+            // Tool: dotnet tool package (embeds everything under tools/).
+            // RewriteDeps: project refs to the bundled assemblies must become
+            //   the single ViceSharp.Core dependency (NuGet has no dep-id
+            //   override for project references).
+            // Embeds: platform host shells embed all ViceSharp assemblies via
+            //   ViceSharpEmbedPack.targets (ViceSharp.Avalonia is a tool and
+            //   cannot be a package dependency).
+            var individual = new (string Name, bool Tool, bool RewriteDeps, bool Embeds)[]
+            {
+                ("ViceSharp.Protocol", false, false, false),
+                ("ViceSharp.Monitor", false, true, false),
+                ("ViceSharp.Launcher", false, true, false),
+                ("ViceSharp.AdhocHelper", false, true, false),
+                ("ViceSharp.Host", false, true, false),
+                ("ViceSharp.SourceGen", false, false, false),
+                ("ViceSharp.Avalonia", true, false, false),
+                ("ViceSharp.Console", true, false, false),
+                ("ViceSharp.Host.MacOS", false, false, true),
+                ("ViceSharp.Host.Android", false, false, true),
+                ("ViceSharp.Host.iOS", false, false, true),
+                ("ViceSharp.Host.Xbox", false, false, true),
+            };
+
+            foreach (var spec in individual)
+            {
+                DotNetPack(s => s
+                    .SetProject(RootDirectory / "src" / spec.Name / $"{spec.Name}.csproj")
+                    .SetConfiguration(Configuration)
+                    .EnableNoRestore()
+                    .SetProperty("PackageVersion", version)
+                    .SetOutputDirectory(PackagesOutputDirectory));
+
+                var packagePath = PackagesOutputDirectory / $"{spec.Name}.{version}.nupkg";
+                Assert.FileExists(packagePath);
+
+                if (spec.RewriteDeps)
+                    RewriteBundledDependenciesToViceSharpCore(packagePath, version);
+
+                VerifyPackage(packagePath, spec.Name, spec.Tool, spec.RewriteDeps, spec.Embeds);
+            }
+
+            Serilog.Log.Information(
+                "Packed {Count} individual packages + ViceSharp.Core bundle {Version} -> {Dir}",
+                individual.Length,
+                version,
+                PackagesOutputDirectory);
+        });
+
+    /// <summary>
+    /// The four sub-assembly ids that only exist inside the ViceSharp.Core
+    /// bundle; a nuspec must never depend on them. (A dependency on
+    /// ViceSharp.Core itself is correct: that IS the bundle.)
+    /// </summary>
+    static readonly string[] BundledOnlyIds =
+    {
+        "ViceSharp.Abstractions",
+        "ViceSharp.Chips",
+        "ViceSharp.RomFetch",
+        "ViceSharp.Architectures",
+    };
+
+    static void RewriteBundledDependenciesToViceSharpCore(AbsolutePath nupkgPath, string version)
+    {
+        using var archive = System.IO.Compression.ZipFile.Open(nupkgPath, System.IO.Compression.ZipArchiveMode.Update);
+        var nuspecEntry = archive.Entries.Single(e => e.FullName.EndsWith(".nuspec", StringComparison.OrdinalIgnoreCase));
+
+        System.Xml.Linq.XDocument doc;
+        using (var read = nuspecEntry.Open())
+        {
+            doc = System.Xml.Linq.XDocument.Load(read);
+        }
+
+        var rewritten = false;
+        foreach (var group in doc.Descendants().Where(e => e.Name.LocalName == "group" || e.Name.LocalName == "dependencies").ToList())
+        {
+            var bundled = group.Elements()
+                .Where(e => e.Name.LocalName == "dependency"
+                            && BundledOnlyIds.Contains((string?)e.Attribute("id") ?? string.Empty, StringComparer.OrdinalIgnoreCase))
+                .ToList();
+            if (bundled.Count == 0)
+                continue;
+
+            var ns = bundled[0].Name.Namespace;
+            bundled.ForEach(e => e.Remove());
+            rewritten = true;
+
+            var hasCore = group.Elements()
+                .Any(e => e.Name.LocalName == "dependency"
+                          && string.Equals((string?)e.Attribute("id"), "ViceSharp.Core", StringComparison.OrdinalIgnoreCase));
+            if (!hasCore)
+            {
+                group.Add(new System.Xml.Linq.XElement(
+                    ns + "dependency",
+                    new System.Xml.Linq.XAttribute("id", "ViceSharp.Core"),
+                    new System.Xml.Linq.XAttribute("version", version),
+                    new System.Xml.Linq.XAttribute("exclude", "Build,Analyzers")));
+            }
+        }
+
+        Assert.True(rewritten, $"{nupkgPath}: expected bundled-assembly dependencies to rewrite, found none");
+
+        nuspecEntry.Delete();
+        var replacement = archive.CreateEntry(nuspecEntry.FullName);
+        using var write = replacement.Open();
+        doc.Save(write);
+    }
+
+    static void VerifyPackage(AbsolutePath nupkgPath, string packageId, bool tool, bool rewritten, bool embeds)
+    {
+        using var zip = System.IO.Compression.ZipFile.OpenRead(nupkgPath);
+        var entries = zip.Entries.Select(e => e.FullName.Replace('\\', '/')).ToList();
+
+        var nuspecName = entries.Single(e => e.EndsWith(".nuspec", StringComparison.OrdinalIgnoreCase));
+        using var reader = new System.IO.StreamReader(zip.Entries.Single(e => e.FullName == nuspecName).Open());
+        var nuspec = reader.ReadToEnd();
+
+        if (tool)
+        {
+            Assert.True(nuspec.Contains("DotnetTool", StringComparison.OrdinalIgnoreCase), $"{packageId}: missing DotnetTool package type");
+            Assert.True(entries.Any(e => e.StartsWith("tools/", StringComparison.OrdinalIgnoreCase) && e.EndsWith($"{packageId}.dll", StringComparison.OrdinalIgnoreCase)),
+                $"{packageId}: tool payload missing");
+        }
+        else if (packageId == "ViceSharp.SourceGen")
+        {
+            Assert.True(entries.Contains("analyzers/dotnet/cs/ViceSharp.SourceGen.dll"), $"{packageId}: analyzer payload missing");
+            Assert.True(!entries.Any(e => e.StartsWith("lib/", StringComparison.OrdinalIgnoreCase)), $"{packageId}: analyzer package must not carry lib/");
+        }
+        else
+        {
+            Assert.True(entries.Any(e => e.StartsWith("lib/", StringComparison.OrdinalIgnoreCase) && e.EndsWith($"{packageId}.dll", StringComparison.OrdinalIgnoreCase)),
+                $"{packageId}: lib payload missing");
+        }
+
+        if (embeds)
+        {
+            Assert.True(entries.Any(e => e.StartsWith("lib/", StringComparison.OrdinalIgnoreCase) && e.EndsWith("ViceSharp.Avalonia.dll", StringComparison.OrdinalIgnoreCase)),
+                $"{packageId}: embedded ViceSharp assemblies missing");
+        }
+
+        if (rewritten || embeds || tool)
+        {
+            foreach (var id in BundledOnlyIds)
+            {
+                Assert.True(!nuspec.Contains($"id=\"{id}\"", StringComparison.OrdinalIgnoreCase),
+                    $"{packageId}: nuspec still depends on bundled assembly {id}");
+            }
+        }
+
+        if (rewritten)
+        {
+            Assert.True(nuspec.Contains("id=\"ViceSharp.Core\"", StringComparison.OrdinalIgnoreCase),
+                $"{packageId}: rewritten nuspec must depend on ViceSharp.Core");
+        }
+    }
+
     Target RomFetch => _ => _
         .Executes(() =>
         {
