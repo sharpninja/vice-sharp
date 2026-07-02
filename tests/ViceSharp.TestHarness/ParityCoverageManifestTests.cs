@@ -124,13 +124,20 @@ public sealed class ParityCoverageManifestTests
 
         // P0-6 crosswalk: the finding id links each AC to the
         // PLAN-VICEPARITY-001 audit (artifacts/vice-parity-requirements/
-        // crosswalk.md). Valid: a 2-3 digit audit finding number, or the
-        // literal "new" for the authoring-time discoveries enumerated in the
-        // artifact's newFindings header. Traceability must not decay.
-        Assert.All(acs, ac => Assert.True(
-            ac.Finding == "new"
-            || (ac.Finding.Length is 2 or 3 && ac.Finding.All(char.IsAsciiDigit)),
-            $"AC {ac.Test} finding id '{ac.Finding}' is not a PLAN-VICEPARITY-001 finding or 'new'"));
+        // crosswalk.md). Every DIVERGENT AC exists because something was
+        // found, so it must cite a 2-3 digit audit finding number or the
+        // literal "new" (authoring-time discoveries in the artifact's
+        // newFindings header). FAITHFUL ACs may cite one or be blank
+        // (regression locks with no divergence finding).
+        Assert.All(acs, ac =>
+        {
+            var finding = ac.Finding ?? string.Empty;
+            bool cited = finding == "new"
+                || (finding.Length is 2 or 3 && finding.All(char.IsAsciiDigit));
+            Assert.True(
+                cited || (ac.Tag == "FAITHFUL" && finding.Length == 0),
+                $"AC {ac.Test} ({ac.Tag}) finding id '{finding}' is not a PLAN-VICEPARITY-001 finding, 'new', or a blank FAITHFUL lock");
+        });
     }
 
     /// <summary>
