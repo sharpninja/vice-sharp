@@ -354,6 +354,34 @@ sealed partial class Build : NukeBuild
                     pending.Count,
                     string.Join(", ", pending.OrderBy(i => i)));
             }
+
+            // Registry listing: after the validated push, enumerate every
+            // ViceSharp package nuget.org reports (search API), so the run
+            // log records the full published surface. Non-fatal on search
+            // hiccups.
+            try
+            {
+                var searchJson = http
+                    .GetStringAsync("https://azuresearch-usnc.nuget.org/query?q=ViceSharp&prerelease=true&take=100")
+                    .GetAwaiter().GetResult();
+                using var searchDoc = JsonDocument.Parse(searchJson);
+                var listed = searchDoc.RootElement.GetProperty("data").EnumerateArray()
+                    .Select(e => (
+                        Id: e.GetProperty("id").GetString() ?? string.Empty,
+                        Version: e.GetProperty("version").GetString() ?? string.Empty,
+                        Downloads: e.TryGetProperty("totalDownloads", out var d) ? d.GetInt64() : 0))
+                    .Where(e => e.Id.StartsWith("ViceSharp", StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(e => e.Id, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                Serilog.Log.Information("nuget.org lists {Count} ViceSharp package(s):", listed.Count);
+                foreach (var entry in listed)
+                    Serilog.Log.Information("  {Id} {Version} (downloads: {Downloads})", entry.Id, entry.Version, entry.Downloads);
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Warning("Package listing after publish failed (non-fatal): {Message}", ex.Message);
+            }
         });
 
     /// <summary>
