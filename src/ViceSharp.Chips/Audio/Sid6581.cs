@@ -102,128 +102,19 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             (((lfsr >> 2) & 0x01) << 1) |
             ((lfsr >> 0) & 0x01));
 
+    /// <summary>
+    /// Reads the current audio sample from the per-cycle-evolved chain state.
+    /// PLAN-VICEPARITY-001 S1 (FR-SID-CLOCK AC-02/AC-06): the voice waveform
+    /// outputs, the filter stage and the external-filter stage are computed
+    /// once per phi2 cycle inside Tick() in reSID SID::clock() order
+    /// (sid.h:200-244, sid.cc:822-831), so sampling is a pure read of the
+    /// committed external-filter output with the 4-bit master volume applied.
+    /// Register writes between cycles no longer retroactively change the
+    /// current sample; they take effect when the next cycle's chain runs,
+    /// exactly like hardware.
+    /// </summary>
     public float GenerateSample()
     {
-        // Generate raw voice outputs with sync/ring modulation
-        int voiceOutputs0 = 0, voiceOutputs1 = 0, voiceOutputs2 = 0;
-        int prevOutput = 0;
-
-        for (int i = 0; i < 3; i++)
-        {
-            ref Voice voice = ref _voices[i];
-            // Waveform-select bits live in CTRL bits 4-7 (Triangle, Sawtooth,
-            // Pulse, Noise). Mask with 0xF0 to isolate them from sync/ring/
-            // test/gate bits.
-            byte waveformBits = (byte)(voice.Control & 0xF0);
-            bool sync = (voice.Control & 0x02) != 0;
-            bool ringMod = (voice.Control & 0x04) != 0;
-
-            int sample = 0;
-            // The phase accumulator is 24-bit (sync uses bit 23, noise bit 19),
-            // so the 8-bit waveform index is bits 16-23. Reading bits 24-31
-            // (>> 24) capped the oscillator at ~15 Hz - every note was sub-audible
-            // DC, which is why no sound was produced. (OSC3 readback at Read()
-            // keeps its existing extraction; it is parity-gated separately.)
-            uint phase = (voice.WaveformAccumulator >> 16) & 0xFF;
-            // Hard sync is handled cycle-accurately in Tick() via MSB-edge
-            // detection; GenerateSample only reads the post-sync state.
-            _ = sync;
-
-            bool hasTriangle = (waveformBits & 0x10) != 0;
-            bool hasSawtooth = (waveformBits & 0x20) != 0;
-            bool hasPulse = (waveformBits & 0x40) != 0;
-            bool hasNoise = (waveformBits & 0x80) != 0;
-
-            // FR-SID-003 (combined waveforms): the SID's hardware ANDs the
-            // outputs of every selected waveform together. With a single
-            // waveform selected this collapses to that waveform's value;
-            // with two or more selected the result is the bitwise AND of
-            // their 8-bit outputs (the distorted/attenuated combined-waveform
-            // sound associated with SID silicon). With zero waveform bits selected
-            // the voice is silent.
-            int triValue = 0, sawValue = 0, pulValue = 0, noiseValue = 0;
-
-            if (hasTriangle)
-            {
-                uint tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
-                if (ringMod)
-                {
-                    // Ring modulation: triangle output's "shape" is inverted
-                    // when the sync-source voice's MSB is high. The sync
-                    // source is voice ((i + 2) % 3) (cyclic backward).
-                    var modulatorMsb = (_voices[(i + 2) % 3].WaveformAccumulator & 0x800000u) != 0;
-                    if (modulatorMsb)
-                        tri ^= 0xFF;
-                }
-                triValue = (int)(tri & 0xFF);
-            }
-            if (hasSawtooth)
-            {
-                sawValue = (int)(phase & 0xFF);
-            }
-            if (hasPulse)
-            {
-                // 12-bit pulse width compared at the 8-bit phase resolution
-                // (top 8 bits of PW), so a 50% duty register (~$800) gives a
-                // 50% duty wave.
-                pulValue = phase < (uint)(voice.PulseWidth >> 4) ? 0xFF : 0x00;
-            }
-            if (hasNoise)
-            {
-                // FR-SID-009 ac.3: noise output is derived from specific
-                // taps of the 23-bit LFSR (bits 0, 2, 5, 9, 11, 14, 18, 20),
-                // packed into an 8-bit value. Matches the hardware tap map
-                // documented in resid/sid8580.c.
-                noiseValue = NoiseOutput(_noiseLfsr);
-            }
-
-            int selectedCount = (hasTriangle ? 1 : 0) + (hasSawtooth ? 1 : 0)
-                               + (hasPulse ? 1 : 0) + (hasNoise ? 1 : 0);
-
-            if (selectedCount == 0)
-            {
-                // No waveform selected: silence (hardware floats to 0).
-                sample = 0;
-            }
-            else if (selectedCount == 1)
-            {
-                // Single waveform - preserve the existing per-waveform value
-                // verbatim so single-waveform behaviour is unchanged.
-                sample = hasTriangle ? triValue
-                       : hasSawtooth ? sawValue
-                       : hasPulse    ? pulValue
-                       :               noiseValue;
-            }
-            else
-            {
-                // Two or more waveforms selected: AND the 8-bit outputs of
-                // every selected waveform. Unselected waveforms contribute
-                // 0xFF (the AND identity) so they do not affect the result.
-                int combined = 0xFF;
-                if (hasTriangle) combined &= triValue;
-                if (hasSawtooth) combined &= sawValue;
-                if (hasPulse)    combined &= pulValue;
-                if (hasNoise)    combined &= noiseValue;
-                // FR-SID-003 acceptance criterion 2: the 8580 die has
-                // different combined-waveform analog bleed than the 6581.
-                // ApplyCombinedBleed is a no-op on 6581 and applies a
-                // ~0.75 attenuation scalar on the 8580 variant.
-                sample = ApplyCombinedBleed((byte)combined);
-            }
-
-            prevOutput = sample;
-            int envelopeAdjusted = selectedCount == 0
-                ? 0
-                : ((sample - WaveZeroLevel) * voice.Envelope) >> 8;
-
-            if (i == 0) voiceOutputs0 = envelopeAdjusted;
-            else if (i == 1) voiceOutputs1 = envelopeAdjusted;
-            else voiceOutputs2 = envelopeAdjusted;
-        }
-
-        // Apply filter - classic VICE-style multi-mode filter
-        int filteredOutput = ApplyFilter(voiceOutputs0, voiceOutputs1, voiceOutputs2);
-
         // FR-SID-010 digi playback: the 4-bit master-volume DAC ($D418 bits 0-3)
         // contributes a small DC offset proportional to volume even when no
         // voices are gated. This is the rail that makes the famous Galway/
@@ -233,9 +124,249 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // normal voice output dominant while still letting per-write volume
         // changes register as audible amplitude.
         float volumeFraction = _volume / 15.0f;
-        float voiceMix = filteredOutput * volumeFraction / VoiceOutputScale;
+        float voiceMix = _cycleExtFilterOutput * volumeFraction / VoiceOutputScale;
         float digiDcOffset = volumeFraction * DigiDcOffset;
         return Math.Clamp(voiceMix + digiDcOffset, -1.0f, 1.0f);
+    }
+
+    /// <summary>
+    /// Per-cycle waveform-output pass (reSID sid.h:220-223, sid.cc:822-825):
+    /// computes each voice's selected 8-bit waveform sample from the
+    /// post-synchronize oscillator state, applies the envelope DAC, and
+    /// commits the three voice outputs that feed the filter stage this cycle.
+    /// </summary>
+    private void ComputeWaveformOutputs()
+    {
+        _cycleVoiceOutput0 = ComputeVoiceOutput(0);
+        _cycleVoiceOutput1 = ComputeVoiceOutput(1);
+        _cycleVoiceOutput2 = ComputeVoiceOutput(2);
+    }
+
+    /// <summary>
+    /// Selected waveform sample of voice <paramref name="i"/> multiplied by
+    /// the envelope DAC output. FR-SID-ENV AC-50: reSID's envelope output is
+    /// model_dac[sid_model][envelope_counter] (envelope.h:377-383), never the
+    /// raw counter, so the multiplicand goes through <see cref="EnvelopeDacTable"/>.
+    /// </summary>
+    private int ComputeVoiceOutput(int i)
+    {
+        ref Voice voice = ref _voices[i];
+        // Waveform-select bits live in CTRL bits 4-7 (Triangle, Sawtooth,
+        // Pulse, Noise). Mask with 0xF0 to isolate them from sync/ring/
+        // test/gate bits.
+        byte waveformBits = (byte)(voice.Control & 0xF0);
+        bool ringMod = (voice.Control & 0x04) != 0;
+
+        int sample;
+        // The phase accumulator is 24-bit (sync uses bit 23, noise bit 19),
+        // so the 8-bit waveform index is bits 16-23. Reading bits 24-31
+        // (>> 24) capped the oscillator at ~15 Hz - every note was sub-audible
+        // DC, which is why no sound was produced. (OSC3 readback at Read()
+        // keeps its existing extraction; it is parity-gated separately.)
+        // Hard sync ran earlier in this cycle's chain, so this is the
+        // post-sync phase.
+        uint phase = (voice.WaveformAccumulator >> 16) & 0xFF;
+
+        bool hasTriangle = (waveformBits & 0x10) != 0;
+        bool hasSawtooth = (waveformBits & 0x20) != 0;
+        bool hasPulse = (waveformBits & 0x40) != 0;
+        bool hasNoise = (waveformBits & 0x80) != 0;
+
+        // FR-SID-003 (combined waveforms): the SID's hardware ANDs the
+        // outputs of every selected waveform together. With a single
+        // waveform selected this collapses to that waveform's value;
+        // with two or more selected the result is the bitwise AND of
+        // their 8-bit outputs (the distorted/attenuated combined-waveform
+        // sound associated with SID silicon). With zero waveform bits selected
+        // the voice is silent.
+        int triValue = 0, sawValue = 0, pulValue = 0, noiseValue = 0;
+
+        if (hasTriangle)
+        {
+            uint tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
+            if (ringMod)
+            {
+                // Ring modulation: triangle output's "shape" is inverted
+                // when the sync-source voice's MSB is high. The sync
+                // source is voice ((i + 2) % 3) (cyclic backward).
+                var modulatorMsb = (_voices[(i + 2) % 3].WaveformAccumulator & 0x800000u) != 0;
+                if (modulatorMsb)
+                    tri ^= 0xFF;
+            }
+            triValue = (int)(tri & 0xFF);
+        }
+        if (hasSawtooth)
+        {
+            sawValue = (int)(phase & 0xFF);
+        }
+        if (hasPulse)
+        {
+            // 12-bit pulse width compared at the 8-bit phase resolution
+            // (top 8 bits of PW), so a 50% duty register (~$800) gives a
+            // 50% duty wave.
+            pulValue = phase < (uint)(voice.PulseWidth >> 4) ? 0xFF : 0x00;
+        }
+        if (hasNoise)
+        {
+            // FR-SID-009 ac.3: noise output is derived from specific
+            // taps of the 23-bit LFSR (bits 0, 2, 5, 9, 11, 14, 18, 20),
+            // packed into an 8-bit value. Matches the hardware tap map
+            // documented in resid/sid8580.c.
+            noiseValue = NoiseOutput(_noiseLfsr);
+        }
+
+        int selectedCount = (hasTriangle ? 1 : 0) + (hasSawtooth ? 1 : 0)
+                           + (hasPulse ? 1 : 0) + (hasNoise ? 1 : 0);
+
+        if (selectedCount == 0)
+        {
+            // No waveform selected: silence (hardware floats to 0).
+            return 0;
+        }
+
+        if (selectedCount == 1)
+        {
+            // Single waveform - preserve the existing per-waveform value
+            // verbatim so single-waveform behaviour is unchanged.
+            sample = hasTriangle ? triValue
+                   : hasSawtooth ? sawValue
+                   : hasPulse    ? pulValue
+                   :               noiseValue;
+        }
+        else
+        {
+            // Two or more waveforms selected: AND the 8-bit outputs of
+            // every selected waveform. Unselected waveforms contribute
+            // 0xFF (the AND identity) so they do not affect the result.
+            int combined = 0xFF;
+            if (hasTriangle) combined &= triValue;
+            if (hasSawtooth) combined &= sawValue;
+            if (hasPulse)    combined &= pulValue;
+            if (hasNoise)    combined &= noiseValue;
+            // FR-SID-003 acceptance criterion 2: the 8580 die has
+            // different combined-waveform analog bleed than the 6581.
+            // ApplyCombinedBleed is a no-op on 6581 and applies a
+            // ~0.75 attenuation scalar on the 8580 variant.
+            sample = ApplyCombinedBleed((byte)combined);
+        }
+
+        // FR-SID-ENV AC-50: envelope applied through the nonlinear model_dac
+        // row, not linearly through the raw counter.
+        return ((sample - WaveZeroLevel) * EnvelopeDacTable[voice.Env.EnvelopeCounter]) >> 8;
+    }
+
+    /// <summary>
+    /// Per-cycle filter chain (reSID SID::clock(), sid.h:225-229 and
+    /// sid.cc:827-831): the filter stage consumes this cycle's three voice
+    /// outputs, then the external-filter stage consumes the filter output.
+    /// The filter transfer function is still the managed SVF (its reSID
+    /// replacement is the FR-SID-FILTER-6581 / FR-SID-FILTER-CLOCK
+    /// remediation) and the external-filter stage is a unity placeholder
+    /// until FR-SID-EXTFILT lands; FR-SID-CLOCK AC-07 pins the dispatch,
+    /// not the analog models.
+    /// </summary>
+    private void ClockFilterChain()
+    {
+        _cycleFilterOutput = ApplyFilter(_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
+        _cycleExtFilterOutput = ClockExternalFilter(_cycleFilterOutput);
+    }
+
+    /// <summary>
+    /// External-filter stage of the per-cycle chain. Unity gain placeholder:
+    /// the reSID 16kHz low-pass / 16Hz high-pass pair is the FR-SID-EXTFILT
+    /// remediation; the chain position (fed filter.output() every cycle,
+    /// sid.cc:831) is what FR-SID-CLOCK requires here.
+    /// </summary>
+    private static int ClockExternalFilter(int filterOutput) => filterOutput;
+
+    // FR-SID-ENV AC-50 [PLAN-VICEPARITY-001 S1]: reSID envelope DAC tables,
+    // built once exactly like the EnvelopeGenerator constructor
+    // (envelope.cc:163-171): MOS 6581 with 2R/R = 2.20 and the missing
+    // termination resistor, MOS 8580 with 2R/R = 2.00 and correct
+    // termination.
+    private static readonly ushort[] EnvelopeDac6581 = BuildEnvelopeDacTable(8, 2.20, term: false);
+    private protected static readonly ushort[] EnvelopeDac8580 = BuildEnvelopeDacTable(8, 2.00, term: true);
+
+    /// <summary>
+    /// The die-specific envelope DAC row (reSID model_dac[sid_model],
+    /// envelope.h:377-383). The 6581 base implementation returns the
+    /// 2R/R = 2.20 no-termination table; Sid8580 overrides.
+    /// </summary>
+    protected virtual ReadOnlySpan<ushort> EnvelopeDacTable => EnvelopeDac6581;
+
+    /// <summary>
+    /// Verbatim port of reSID build_dac_table (dac.cc:76-137): computes the
+    /// output table of an R-2R ladder DAC with the given 2R/R ratio, an
+    /// optional termination resistor (missing on all MOS 6581 DACs), and
+    /// die-specific MOSFET leakage through zero bits (6581 0.0075, 8580
+    /// 0.0035, dac.cc:46-47). Per-bit voltages come from repeated parallel
+    /// substitution plus a source transformation, output voltages
+    /// superposition per set bit, and each entry scales to 2^bits - 1 with
+    /// + 0.5 truncation rounding. Same double arithmetic as the C++
+    /// original, so every entry is bit-exact.
+    /// </summary>
+    internal static ushort[] BuildEnvelopeDacTable(int bits, double twoRDivR, bool term)
+    {
+        const double MosfetLeakage6581 = 0.0075;
+        const double MosfetLeakage8580 = 0.0035;
+        double leakage = term ? MosfetLeakage8580 : MosfetLeakage6581;
+
+        Span<double> vbit = stackalloc double[12];
+        for (int setBit = 0; setBit < bits; setBit++)
+        {
+            int bit;
+            double vn = 1.0;          // Normalized bit voltage.
+            const double R = 1.0;     // Normalized R.
+            double twoR = twoRDivR * R;
+            double rn = term ? twoR : double.PositiveInfinity;
+
+            // DAC "tail" resistance by repeated parallel substitution.
+            for (bit = 0; bit < setBit; bit++)
+            {
+                rn = double.IsPositiveInfinity(rn)
+                    ? R + twoR
+                    : R + twoR * rn / (twoR + rn); // R + 2R || Rn
+            }
+
+            // Source transformation for the bit voltage.
+            if (double.IsPositiveInfinity(rn))
+            {
+                rn = twoR;
+            }
+            else
+            {
+                rn = twoR * rn / (twoR + rn); // 2R || Rn
+                vn = vn * rn / twoR;
+            }
+
+            // Output voltage by repeated source transformation from the tail.
+            for (++bit; bit < bits; bit++)
+            {
+                rn += R;
+                double current = vn / rn;
+                rn = twoR * rn / (twoR + rn); // 2R || Rn
+                vn = rn * current;
+            }
+
+            vbit[setBit] = vn;
+        }
+
+        var dac = new ushort[1 << bits];
+        for (int i = 0; i < (1 << bits); i++)
+        {
+            int x = i;
+            double vo = 0.0;
+            for (int j = 0; j < bits; j++)
+            {
+                vo += ((x & 0x1) != 0 ? 1.0 : leakage) * vbit[j];
+                x >>= 1;
+            }
+
+            // Scale maximum output to 2^bits - 1.
+            dac[i] = (ushort)(((1 << bits) - 1) * vo + 0.5);
+        }
+
+        return dac;
     }
 
     /// <summary>
@@ -376,6 +507,42 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     private readonly IBus _bus;
 
+    // PLAN-VICEPARITY-001 S1 (FR-SID-CLOCK): per-cycle clock-chain state.
+    // reSID SID::clock() (sid.h:200-244) runs envelopes, oscillators,
+    // synchronize, waveform outputs, filter, external filter, the pipelined
+    // write slot and bus aging every phi2 cycle; these fields hold the
+    // committed chain outputs plus the bus/pipeline tail state. reSID SID
+    // constructor seeds bus_value = 0, bus_value_ttl = 0, write_pipeline = 0
+    // (sid.cc:80-82); the 6581 write-to-bus TTL is 0x1d00 (sid.cc:119).
+    private const int DataBusTtl6581 = 0x1D00;
+    private byte _busValue;
+    private int _busValueTtl;
+    private byte _writePipeline;
+    private int _cycleVoiceOutput0;
+    private int _cycleVoiceOutput1;
+    private int _cycleVoiceOutput2;
+    private int _cycleFilterOutput;
+    private int _cycleExtFilterOutput;
+
+    /// <summary>Shared data-bus value (reSID SID::bus_value). Parity-test seam.</summary>
+    internal byte DataBusValue => _busValue;
+
+    /// <summary>Data-bus fade TTL in cycles (reSID SID::bus_value_ttl). Parity-test seam.</summary>
+    internal int DataBusValueTtl => _busValueTtl;
+
+    /// <summary>Pipelined-write slot (reSID SID::write_pipeline; always 0 on the 6581). Parity-test seam.</summary>
+    internal byte PipelinedWriteSlot => _writePipeline;
+
+    /// <summary>The three per-cycle voice outputs fed to the filter stage this cycle. Parity-test seam.</summary>
+    internal (int Voice0, int Voice1, int Voice2) CycleVoiceOutputs =>
+        (_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
+
+    /// <summary>The filter stage output committed by the current cycle's chain run. Parity-test seam.</summary>
+    internal int CycleFilterOutput => _cycleFilterOutput;
+
+    /// <summary>The external-filter stage output committed this cycle (fed from the filter output). Parity-test seam.</summary>
+    internal int CycleExternalFilterOutput => _cycleExtFilterOutput;
+
     // SID Registers
     private byte[] _registers = new byte[0x20];
 
@@ -443,8 +610,25 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public int EnvelopePipeline;
         public int ExponentialPipeline;
 
+        /// <summary>
+        /// reSID EnvelopeGenerator constructor state (envelope.cc:159-182):
+        /// the counter's odd bits are high on power-up (envelope_counter =
+        /// 0xaa, envelope.cc:176), next_state parks at RELEASE
+        /// (envelope.cc:179), then reset() runs and deliberately preserves
+        /// the counter. FR-SID-ENV AC-08 [PLAN-VICEPARITY-001 S1].
+        /// </summary>
+        public void PowerUp()
+        {
+            EnvelopeCounter = 0xaa;
+            NextState = EnvStateE.Release;
+            Reset();
+        }
+
         public void Reset()
         {
+            // envelope_counter (and the env3 latch) are deliberately NOT
+            // touched: "counter is not changed on reset" (envelope.cc:189).
+            // FR-SID-ENV AC-07 [PLAN-VICEPARITY-001 S1].
             EnvelopePipeline = 0;
             ExponentialPipeline = 0;
             StatePipeline = 0;
@@ -458,7 +642,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             NextState = EnvStateE.Release;
             RatePeriod = RatePeriods[Release];
             HoldZero = false;
-            EnvelopeCounter = 0;
         }
 
         public void WriteControl(byte control)
@@ -652,8 +835,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         _bus = bus;
         _audioBackend = audioBackend;
+        // FR-SID-ENV AC-08 [PLAN-VICEPARITY-001 S1]: power-up seeds each
+        // envelope counter to 0xaa (envelope.cc:176) via the reSID
+        // constructor sequence; the display mirrors reflect the seed so the
+        // capture surface is correct before the first Tick.
         for (var v = 0; v < _voices.Length; v++)
-            _voices[v].Env.Reset();
+        {
+            _voices[v].Env.PowerUp();
+            _voices[v].Envelope = _voices[v].Env.EnvelopeCounter;
+            _voices[v].State = EnvelopeState.Release;
+        }
     }
 
     /// <summary>
@@ -717,11 +908,68 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     public void Tick()
     {
+        // PLAN-VICEPARITY-001 S1 (FR-SID-CLOCK AC-01/AC-09): reSID's
+        // single-cycle SID::clock() chain (sid.h:200-244), in exact stage
+        // order: 1. amplitude modulators, 2. oscillators, 3. synchronize,
+        // 4. waveform outputs, 5. filter, 6. external filter, 7. pipelined
+        // write slot, 8. bus aging.
+        ClockEnvelopes();
+        ClockOscillators();
+        SynchronizeOscillators();
+        ComputeWaveformOutputs();
+        ClockFilterChain();
+        ConsumePipelinedWrite();
+        AgeBusValue();
+
+        // Live-audio emission: once a backend is attached and the audio clock is
+        // configured, sample the committed chain output at 44.1 kHz via a
+        // fractional tick:sample accumulator. Inert (no allocation, no call)
+        // when audio is not configured, so parity rigs are unaffected.
+        if (_audioBackend is not null && _audioTicksPerSample > 0.0)
+        {
+            _audioSampleAccumulator += 1.0;
+            if (_audioSampleAccumulator >= _audioTicksPerSample)
+            {
+                _audioSampleAccumulator -= _audioTicksPerSample;
+                GenerateSampleAndOutput();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Grouped envelope pass (reSID sid.h:205-208): clock all three
+    /// amplitude modulators before any oscillator advances. The passes are
+    /// order-independent within a cycle (FR-SID-CLOCK AC-11), so this
+    /// mirrors the reSID dispatch structure exactly.
+    /// </summary>
+    private void ClockEnvelopes()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            ProcessEnvelope(ref _voices[i]);
+        }
+    }
+
+    // Previous-cycle accumulator MSBs latched by the oscillator pass for the
+    // synchronize pass (parallel semantics: all oscillators clock, then all
+    // synchronize against the pre-reset MSB edges).
+    private bool _prevMsb0;
+    private bool _prevMsb1;
+    private bool _prevMsb2;
+
+    /// <summary>
+    /// Grouped oscillator pass (reSID sid.h:210-213): latch the
+    /// previous-cycle MSBs for the synchronize pass, advance every phase
+    /// accumulator, and clock the noise LFSR on accumulator bit-19 rising
+    /// edges.
+    /// </summary>
+    private void ClockOscillators()
+    {
         // Capture previous-cycle MSBs to detect 1->0 transitions for hard sync.
         // Each voice's sync source is voice ((i + 2) % 3) (cyclic backward).
-        var prevMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
-        var prevMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
-        var prevMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
+        _prevMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
+        _prevMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
+        _prevMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
 
         // FR-SID-009 ac.2: the noise LFSR clocks on bit-19 low->high
         // transitions of the phase accumulator. Capture each voice's
@@ -745,13 +993,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             {
                 _noiseLfsr = NoiseLfsrInitial;
                 voice.WaveformAccumulator = 0;
-                ProcessEnvelope(ref voice);
                 continue;
             }
 
             voice.WaveformAccumulator += voice.Frequency;
-
-            ProcessEnvelope(ref voice);
         }
 
         // FR-SID-009 ac.2: clock the LFSR once for each noise-selected
@@ -767,7 +1012,18 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         if (hasNoise0 && !prevBit19_0 && newBit19_0) ClockNoiseLfsr();
         if (hasNoise1 && !prevBit19_1 && newBit19_1) ClockNoiseLfsr();
         if (hasNoise2 && !prevBit19_2 && newBit19_2) ClockNoiseLfsr();
+    }
 
+    /// <summary>
+    /// Grouped synchronize pass (reSID sid.h:215-218): all oscillators have
+    /// clocked, so every sync decision sees this cycle's parallel state.
+    /// The managed trigger is the source MSB 1->0 edge; reSID fires on the
+    /// rising edge with a same-cycle sync-source special case, which is the
+    /// DIVERGENT FR-SID-WAVE-SYNC AC-01/AC-04 remediation owned by that
+    /// slice, not changed here.
+    /// </summary>
+    private void SynchronizeOscillators()
+    {
         // Detect MSB 1->0 transitions on each voice and apply hard sync to
         // the dependent voice when its SYNC control bit is set.
         var newMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
@@ -775,29 +1031,45 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         var newMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
 
         // Voice 0 syncs from voice 2 (downward edge of voice 2 MSB resets voice 0).
-        if ((_voices[0].Control & 0x02) != 0 && prevMsb2 && !newMsb2)
+        if ((_voices[0].Control & 0x02) != 0 && _prevMsb2 && !newMsb2)
             _voices[0].WaveformAccumulator = 0;
 
         // Voice 1 syncs from voice 0.
-        if ((_voices[1].Control & 0x02) != 0 && prevMsb0 && !newMsb0)
+        if ((_voices[1].Control & 0x02) != 0 && _prevMsb0 && !newMsb0)
             _voices[1].WaveformAccumulator = 0;
 
         // Voice 2 syncs from voice 1.
-        if ((_voices[2].Control & 0x02) != 0 && prevMsb1 && !newMsb1)
+        if ((_voices[2].Control & 0x02) != 0 && _prevMsb1 && !newMsb1)
             _voices[2].WaveformAccumulator = 0;
+    }
 
-        // Live-audio emission: once a backend is attached and the audio clock is
-        // configured, sample the (now-advanced) synthesis state at 44.1 kHz via
-        // a fractional tick:sample accumulator. Inert (no allocation, no call)
-        // when audio is not configured, so parity rigs are unaffected.
-        if (_audioBackend is not null && _audioTicksPerSample > 0.0)
+    /// <summary>
+    /// Pipelined-write slot of the per-cycle chain (reSID sid.h:231-234).
+    /// The 6581 commits every write immediately in Write(), so the slot is
+    /// always empty here; the MOS 8580 SAMPLE_FAST one-cycle write delay
+    /// that arms it (sid.cc:205-220, FR-SID-CLOCK AC-08) belongs to the
+    /// 8580/sampling slice. The chain still checks the slot every cycle,
+    /// exactly as reSID does.
+    /// </summary>
+    private void ConsumePipelinedWrite()
+    {
+        if (_writePipeline != 0)
         {
-            _audioSampleAccumulator += 1.0;
-            if (_audioSampleAccumulator >= _audioTicksPerSample)
-            {
-                _audioSampleAccumulator -= _audioTicksPerSample;
-                GenerateSampleAndOutput();
-            }
+            _writePipeline = 0;
+        }
+    }
+
+    /// <summary>
+    /// Bus aging, the final chain stage (reSID sid.h:236-239):
+    /// if (!--bus_value_ttl) bus_value = 0. The decrement deliberately
+    /// continues past zero exactly like reSID's cycle_count arithmetic; any
+    /// write reloads the ttl (sid.cc:207-209).
+    /// </summary>
+    private void AgeBusValue()
+    {
+        if (--_busValueTtl == 0)
+        {
+            _busValue = 0;
         }
     }
 
@@ -822,17 +1094,49 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     public void Reset()
     {
         Array.Clear(_registers);
-        Array.Clear(_voices);
-        // Array.Clear zeroes each Env to an invalid state (State=Attack,
-        // RatePeriod=0); restore the reSID power-on envelope state.
+        // reSID SID::reset() fans out to voice.reset() = wave.reset() +
+        // envelope.reset() (voice.cc:121-125). envelope.reset() preserves
+        // the envelope counter and the env3 latch (envelope.cc:189;
+        // FR-SID-ENV AC-07), so the voices are reset field-by-field instead
+        // of being zeroed wholesale.
         for (var v = 0; v < _voices.Length; v++)
-            _voices[v].Env.Reset();
+        {
+            ref var voice = ref _voices[v];
+            voice.Frequency = 0;
+            voice.PulseWidth = 0;
+            voice.Control = 0;
+            voice.AttackDecay = 0;
+            voice.SustainRelease = 0;
+            // Accumulator zeroing predates this slice: reSID wave.reset()
+            // preserves the accumulator ("accumulator is not changed on
+            // reset"); FR-SID-WAVE-ACC owns that remediation.
+            voice.WaveformAccumulator = 0;
+            voice.PulseAccumulator = 0;
+            voice.Gate = false;
+            voice.Reset = false;
+            voice.Env.Reset();
+            voice.Envelope = voice.Env.EnvelopeCounter;
+            voice.State = EnvelopeState.Release;
+        }
         _filterCutoff = 0;
         _filterResonance = 0;
         _filterControl = 0;
         _volume = 0;
         _svfLowPass = 0.0;
         _svfBandPass = 0.0;
+        // reSID SID::reset() clears the data bus (sid.cc:142-143); the
+        // per-cycle chain outputs restart from silence.
+        _busValue = 0;
+        _busValueTtl = 0;
+        _writePipeline = 0;
+        _cycleVoiceOutput0 = 0;
+        _cycleVoiceOutput1 = 0;
+        _cycleVoiceOutput2 = 0;
+        _cycleFilterOutput = 0;
+        _cycleExtFilterOutput = 0;
+        _prevMsb0 = false;
+        _prevMsb1 = false;
+        _prevMsb2 = false;
     }
 
     public byte Read(ushort address)
@@ -859,6 +1163,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         int register = address & 0x1F;
         _registers[register] = value;
+
+        // reSID SID::write (sid.cc:205-220): every write drives the shared
+        // data bus; the value fades to zero databus_ttl cycles later (0x1d00
+        // on the 6581, sid.cc:119; the 8580 value and the read-side bus
+        // semantics are FR-SID-DATABUS remediations).
+        _busValue = value;
+        _busValueTtl = DataBusTtl6581;
 
         int voiceIndex = register / 7;
 

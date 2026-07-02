@@ -1262,14 +1262,19 @@ public sealed class SidEnvFaithfulParityTests
     /// Acceptance: across a 200-cycle gated attack, every Sid6581.Read($D41C)
     /// equals the Env3 of a lockstep reference ReSidEnvelope driven by the same
     /// writes and clocks, and the final value is non-zero
-    /// (resid/envelope.cc:273-276).
+    /// (resid/envelope.cc:273-276). The reference is power-up-seeded
+    /// (PowerUp: counter 0xaa, envelope.cc:176) because the chip's voices
+    /// power up that way since FR-SID-ENV AC-08 was remediated; the AND of
+    /// DAC-independence is untouched (Read returns the raw latch while the
+    /// voice output path is DAC-mapped per AC-50).
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-ENV-49", ParityTag.Faithful)]
     public void Env_ReadEnv3_ReturnsRawEnvelopeCounterSample()
     {
         var sid = new Sid6581(new BasicBus()) { BaseAddress = 0xD400 };
-        var reference = NewEnv();
+        var reference = default(ReSidEnv);
+        reference.PowerUp();
 
         sid.Write(0xD413, 0x00); // attack 0 (period 8), decay 0
         reference.WriteAttackDecay(0x00);

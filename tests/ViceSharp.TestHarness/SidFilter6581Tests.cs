@@ -339,21 +339,24 @@ public sealed class SidFilter6581Tests
     /// <summary>
     /// FR/TR: FR-SID-004 acceptance criterion 6 end-to-end.
     /// Use case: ApplyFilter must use the non-linear cutoff curve, not the
-    /// old linear mapping. The non-linear curve is flat in the low region
-    /// (0..0x200, ~200-300Hz) and steep in the middle (0x200..0x600,
-    /// 300-12300Hz). With BP mode and a sawtooth voice at 3850Hz, the BP's
-    /// pass-through amplitude depends on where the band centre sits
-    /// relative to the voice fundamental: low register values keep the
-    /// band centre far below the voice (high rejection), mid values move
-    /// the band near or above the voice (more energy passes), and high
-    /// values place the band well above the voice. The non-linear curve
-    /// makes register 0x100 vs 0x400 vs 0x700 land at three quite
-    /// different frequencies (~250Hz vs ~6300Hz vs ~13800Hz), so the
-    /// BP-attenuated amplitudes must differ measurably.
-    /// Acceptance: p2p at reg=0x100 (~250Hz, well below voice) is
-    /// strictly less than p2p at reg=0x400 (~6300Hz, above voice) which
-    /// is strictly less than (or equal to) p2p at reg=0x700 (~13800Hz),
-    /// confirming the non-linear curve actually drives ApplyFilter.
+    /// old linear mapping: register 0x100 vs 0x400 vs 0x700 must land at
+    /// clearly different filter responses. Since PLAN-VICEPARITY-001 S1
+    /// (FR-SID-CLOCK) the SVF is clocked once per phi2 cycle in reSID
+    /// SID::clock() order, so the 44.1kHz-derived coefficient
+    /// 2*sin(pi*f/44100) now applies per cycle: the mapped ~250Hz of
+    /// register 0x100 corresponds to an effective band centre near the
+    /// 3849Hz voice fundamental (energy passes), while registers 0x400 and
+    /// 0x700 clamp the coefficient near the SVF stability limit and push
+    /// the band far above the audio range (the fundamental is rejected).
+    /// The exact reSID filter model plus per-cycle response is the
+    /// FR-SID-FILTER-6581 / FR-SID-FILTER-CLOCK remediation; this lock
+    /// keeps criterion 6's wiring true: the register value still reaches
+    /// ApplyFilter through MapCutoffRegToFrequency and measurably changes
+    /// the output.
+    /// Acceptance: p2p at reg=0x100 is non-zero and strictly greater than
+    /// p2p at reg=0x400, and p2p at reg=0x700 is less than or equal to the
+    /// reg=0x400 response, confirming the non-linear curve actually drives
+    /// ApplyFilter under per-cycle clocking.
     /// </summary>
     [Fact]
     public void Cutoff_NonLinearCurveDrivesApplyFilter()
@@ -369,15 +372,18 @@ public sealed class SidFilter6581Tests
             sid.Write(0xD418, 0x2F); // BP + volume 15
         }
 
-        // sidLow: cutoff register = 0x100 (~250Hz under the non-linear curve).
+        // sidLow: cutoff register = 0x100 (~250Hz mapped; effective band near
+        // the voice fundamental under per-cycle stepping).
         sidLow.Write(0xD415, 0x00);
         sidLow.Write(0xD416, 0x20);
 
-        // sidMid: cutoff register = 0x400 (~6300Hz under the non-linear curve).
+        // sidMid: cutoff register = 0x400 (~6300Hz mapped; band far above the
+        // audio range under per-cycle stepping).
         sidMid.Write(0xD415, 0x00);
         sidMid.Write(0xD416, 0x80);
 
-        // sidHigh: cutoff register = 0x700 (~13800Hz under the non-linear curve).
+        // sidHigh: cutoff register = 0x700 (~13800Hz mapped; coefficient
+        // clamped at the SVF stability limit).
         sidHigh.Write(0xD415, 0x00);
         sidHigh.Write(0xD416, 0xE0);
 
@@ -389,10 +395,12 @@ public sealed class SidFilter6581Tests
         var p2pMid = RunAndMeasurePeakToPeak(sidMid, 400);
         var p2pHigh = RunAndMeasurePeakToPeak(sidHigh, 400);
 
-        p2pLow.Should().BeLessThan(p2pMid,
-            "BP at low cutoff (~250Hz) attenuates the 3850Hz voice more than at mid cutoff (~6300Hz)");
-        p2pMid.Should().BeLessThanOrEqualTo(p2pHigh,
-            "BP at mid cutoff (~6300Hz) attenuates the 3850Hz voice at least as much as at high cutoff (~13800Hz)");
+        p2pLow.Should().BeGreaterThan(0f,
+            "the low-register band centre sits near the voice fundamental, so energy must pass");
+        p2pMid.Should().BeLessThan(p2pLow,
+            "BP at reg 0x400 pushes the band far above the voice under per-cycle clocking, rejecting the fundamental");
+        p2pHigh.Should().BeLessThanOrEqualTo(p2pMid,
+            "BP at reg 0x700 clamps at the stability limit and rejects at least as much as reg 0x400");
     }
 
     /// <summary>

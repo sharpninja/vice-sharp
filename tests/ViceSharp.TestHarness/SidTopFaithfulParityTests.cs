@@ -227,17 +227,27 @@ public sealed class SidTopFaithfulParityTests
     /// Use case: reSID Voice::reset() (voice.cc:121-125) fans reset out to
     /// both halves of the voice: wave.reset() then envelope.reset(). The
     /// managed mirror (Sid6581.cs Reset()) clears the register file and
-    /// per-voice wave state, then restores the reSID power-on envelope via
-    /// Env.Reset() for every voice.
+    /// per-voice wave state and re-parks the envelope machinery via
+    /// Env.Reset(), which preserves the envelope counter and env3 latch
+    /// (envelope.cc:189; FR-SID-ENV AC-07).
     /// Acceptance: after voice 3 runs 1000 cycles at freq $2000 with attack 0
     /// and gate on, OSC3 reads exactly 0x7D (1000 * 0x2000 = 0x7D0000, bits
-    /// 16-23) and ENV3 reads exactly 0x6E (the reSID single-cycle envelope
-    /// steps every rate period + 1 = 9 cycles from cycle 12, so counter 110
-    /// after 1000 cycles). Reset() then makes OSC3, ENV3, the register
-    /// readback, all three captured accumulators, and all three captured
-    /// envelope counters exactly 0, and an identical 500-cycle replay on the
-    /// reset chip produces OSC3/ENV3 sequences exactly equal to a freshly
-    /// constructed chip (ending at exactly 0x3E / 0x37).
+    /// 16-23) and ENV3 reads exactly 0xE6 (from the 0xaa power-up seed the
+    /// counter steps every rate period + 1 = 9 cycles from cycle 12, reaches
+    /// 0xFF at cycle 768 and decays 25 steps by cycle 1000). Reset() then
+    /// zeroes OSC3, the register readback and all three captured
+    /// accumulators (the wave half; reSID's accumulator-preserve divergence
+    /// is FR-SID-WAVE-ACC's remediation), while ENV3 still reads exactly
+    /// 0xE6 and the captured counters hold (0x4D, 0x4D, 0xE6): the idle
+    /// voices released the 0xaa seed for 1000 cycles through the exponential
+    /// ladder (period-1 steps every 9 cycles down to the 0x5D threshold,
+    /// then period-2 steps every 18). A 500-cycle re-gated replay produces
+    /// OSC3 sequences exactly equal to a freshly constructed chip (wave
+    /// state fully reset, ending 0x3E) and ENV3 sequences exactly tracking
+    /// lockstep ReSidEnvelope references with the same histories; both
+    /// envelope trajectories end at exactly 0xE1 (fresh: 0xaa + 55 attack
+    /// steps; reset: 0xE6 to the 0xFF flip at cycle 228, then 30 decay
+    /// steps).
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-VOICE-09", ParityTag.Faithful)]
@@ -249,47 +259,70 @@ public sealed class SidTopFaithfulParityTests
             sid.Tick();
 
         // Accumulated pre-reset state, asserted exactly so the reset below is
-        // proven to have destroyed real wave AND envelope progress.
+        // proven to have destroyed real wave progress while preserving the
+        // envelope counter.
         Assert.Equal(0x7D, sid.Read(0xD41B));
-        Assert.Equal(0x6E, sid.Read(0xD41C));
+        Assert.Equal(0xE6, sid.Read(0xD41C));
 
         sid.Reset();
 
-        // Wave half: accumulators zeroed. Envelope half: counters back at the
-        // managed power-on state. Register file cleared.
+        // Wave half: accumulators and register file zeroed. Envelope half:
+        // machinery re-parked in RELEASE with the counters preserved.
         Assert.Equal(0x00, sid.Read(0xD41B));
-        Assert.Equal(0x00, sid.Read(0xD41C));
+        Assert.Equal(0xE6, sid.Read(0xD41C));
         Assert.Equal(0x00, sid.Read(0xD40F));
         Assert.Equal(0x00, sid.Read(0xD412));
         var state = CaptureVoiceState(sid);
         Assert.Equal((0u, 0u, 0u), (state.Acc0, state.Acc1, state.Acc2));
-        Assert.Equal((0, 0, 0), ((int)state.Env0, (int)state.Env1, (int)state.Env2));
+        Assert.Equal((0x4D, 0x4D, 0xE6), ((int)state.Env0, (int)state.Env1, (int)state.Env2));
 
-        // Replay: the reset chip must be indistinguishable from a fresh chip
-        // for both the wave (OSC3) and envelope (ENV3) engines.
+        // Replay: the wave half of the reset chip must be indistinguishable
+        // from a fresh chip (identical OSC3 streams); the envelope half must
+        // track lockstep ReSidEnvelope references that went through the same
+        // histories (power-up seed, the same 1000 gated cycles, reset with
+        // the counter preserved, then the same re-gate writes).
         var fresh = BuildSid();
+
+        var resetReference = new Sid6581.ReSidEnvelope();
+        resetReference.PowerUp();
+        resetReference.WriteAttackDecay(0x00);
+        resetReference.WriteSustainRelease(0x00);
+        resetReference.WriteControl(0x01);
+        for (var t = 0; t < 1000; t++)
+            resetReference.Clock();
+        resetReference.Reset();
+
+        var freshReference = new Sid6581.ReSidEnvelope();
+        freshReference.PowerUp();
+
         ApplyVoice3SawtoothGate(sid);
         ApplyVoice3SawtoothGate(fresh);
+        resetReference.WriteAttackDecay(0x00);
+        resetReference.WriteSustainRelease(0x00);
+        resetReference.WriteControl(0x01);
+        freshReference.WriteAttackDecay(0x00);
+        freshReference.WriteSustainRelease(0x00);
+        freshReference.WriteControl(0x01);
 
         const int ReplayCycles = 500;
         var oscReset = new byte[ReplayCycles];
-        var envReset = new byte[ReplayCycles];
         var oscFresh = new byte[ReplayCycles];
-        var envFresh = new byte[ReplayCycles];
         for (var t = 0; t < ReplayCycles; t++)
         {
             sid.Tick();
             fresh.Tick();
+            resetReference.Clock();
+            freshReference.Clock();
             oscReset[t] = sid.Read(0xD41B);
-            envReset[t] = sid.Read(0xD41C);
             oscFresh[t] = fresh.Read(0xD41B);
-            envFresh[t] = fresh.Read(0xD41C);
+            Assert.Equal(resetReference.Env3, sid.Read(0xD41C));
+            Assert.Equal(freshReference.Env3, fresh.Read(0xD41C));
         }
 
         Assert.Equal(oscFresh, oscReset);
-        Assert.Equal(envFresh, envReset);
         Assert.Equal(0x3E, oscReset[ReplayCycles - 1]);
-        Assert.Equal(0x37, envReset[ReplayCycles - 1]);
+        Assert.Equal(0xE1, sid.Read(0xD41C));
+        Assert.Equal(0xE1, fresh.Read(0xD41C));
     }
 
     /// <summary>
@@ -358,14 +391,17 @@ public sealed class SidTopFaithfulParityTests
     /// Use case: reSID SID::clock clocks all three envelope generators every
     /// cycle (sid.cc:770-772 batched; sid.h:205-208 single cycle). The managed
     /// mirror clocks each voice's ReSidEnvelope exactly once per Tick
-    /// (Sid6581.cs ProcessEnvelope), i.e. 1:1 with phi2, matching the oracle's
-    /// SAMPLE_FAST clocking.
+    /// (Sid6581.cs ClockEnvelopes/ProcessEnvelope), i.e. 1:1 with phi2,
+    /// matching the oracle's SAMPLE_FAST clocking.
     /// Acceptance: with identical attack 0 programs gated on all three voices
-    /// at cycle 0, after exactly 900 ticks ENV3 reads exactly 0x63 and the
-    /// captured per-voice envelope counters are exactly (0x63, 0x63, 0x63):
-    /// the reSID single-cycle envelope first steps at cycle 12 and then every
-    /// rate period + 1 = 9 cycles, so counter = 99 after 900 cycles, and all
-    /// three voices advance in lockstep because each is clocked once per tick.
+    /// at cycle 0, after exactly 900 ticks ENV3 reads exactly 0xF1 and the
+    /// captured per-voice envelope counters are exactly (0xF1, 0xF1, 0xF1):
+    /// from the 0xaa power-up seed (envelope.cc:176, FR-SID-ENV AC-08) the
+    /// reSID single-cycle envelope first steps at cycle 12 and then every
+    /// rate period + 1 = 9 cycles, reaches 0xFF at cycle 768 (85 attack
+    /// steps), flips to DECAY_SUSTAIN, and decays 14 steps (cycles 777..894)
+    /// to 0xF1 by cycle 900; all three voices advance in lockstep because
+    /// each is clocked once per tick.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-CLOCK-04", ParityTag.Faithful)]
@@ -382,9 +418,9 @@ public sealed class SidTopFaithfulParityTests
         for (var t = 0; t < 900; t++)
             sid.Tick();
 
-        Assert.Equal(0x63, sid.Read(0xD41C));
+        Assert.Equal(0xF1, sid.Read(0xD41C));
         var state = CaptureVoiceState(sid);
-        Assert.Equal((0x63, 0x63, 0x63), ((int)state.Env0, (int)state.Env1, (int)state.Env2));
+        Assert.Equal((0xF1, 0xF1, 0xF1), ((int)state.Env0, (int)state.Env1, (int)state.Env2));
     }
 
     /// <summary>
@@ -419,10 +455,11 @@ public sealed class SidTopFaithfulParityTests
     /// depend on envelope gating.
     /// Acceptance: two chips with identical gate programs but frequencies
     /// $0000 vs $FFFF produce exactly equal per-cycle ENV3 sequences over 405
-    /// cycles (final read exactly 0x2C, the attack-0 counter after 405
-    /// cycles); two chips at freq $2000 with gate on vs gate off produce
-    /// exactly equal per-cycle OSC3 sequences over 405 cycles (final read
-    /// exactly 0x32 = bits 16-23 of 405 * 0x2000).
+    /// cycles (final read exactly 0xD6: the 0xaa power-up seed plus the 44
+    /// attack-0 steps that land at cycles 12 + 9k up to 405); two chips at
+    /// freq $2000 with gate on vs gate off produce exactly equal per-cycle
+    /// OSC3 sequences over 405 cycles (final read exactly 0x32 = bits 16-23
+    /// of 405 * 0x2000).
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-CLOCK-11", ParityTag.Faithful)]
@@ -456,7 +493,7 @@ public sealed class SidTopFaithfulParityTests
         }
 
         Assert.Equal(envStill, envFast);
-        Assert.Equal(0x2C, envStill[Cycles - 1]);
+        Assert.Equal(0xD6, envStill[Cycles - 1]);
 
         // Oscillator must be envelope-independent: same frequency, gate on vs
         // gate off, identical OSC3 streams.

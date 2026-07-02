@@ -22,6 +22,29 @@ public partial class Sid8580 : Sid6581
     /// <inheritdoc />
     protected override int WaveZeroLevel => 0x9E;
 
+    // PLAN-VICEPARITY-001 S1 (FR-SID-ENV AC-50) routed the 6581 envelope
+    // output through reSID's model_dac row 0. The 8580's own row
+    // (Sid6581.EnvelopeDac8580: 2R/R = 2.00, terminated, envelope.cc:167-168)
+    // plus the rest of the die differences are FR-SID-8580 /
+    // FR-SID-WAVE-DACRES remediations; until that slice lands, the identity
+    // table preserves this variant's existing linear envelope application
+    // bit for bit.
+    private static readonly ushort[] LinearEnvelopeTable = BuildLinearEnvelopeTable();
+
+    private static ushort[] BuildLinearEnvelopeTable()
+    {
+        var table = new ushort[256];
+        for (var i = 0; i < table.Length; i++)
+        {
+            table[i] = (ushort)i;
+        }
+
+        return table;
+    }
+
+    /// <inheritdoc />
+    protected override ReadOnlySpan<ushort> EnvelopeDacTable => LinearEnvelopeTable;
+
     /// <summary>
     /// FR-SID-003 / FR-SID-004 (BACKFILL-SID-001 8580 filter deepening).
     /// 8580 filter uses the same Chamberlin SVF topology as the 6581 in

@@ -128,7 +128,11 @@ public sealed class SidWaveformFaithfulParityTests
     /// full envelope (0xFF), master volume 15, filter mode bits clear:
     /// envelopeAdjusted = ((sample - 0x38) * 0xFF) arithmetic-shifted right 8,
     /// then envelopeAdjusted * 1.0f / 2048.0f + 0.05f, clamped to [-1, 1].
-    /// Same operation sequence as Sid6581.GenerateSample, so float equality is exact.
+    /// Same operation sequence as the per-cycle chain feeding
+    /// Sid6581.GenerateSample, so float equality is exact. The FR-SID-ENV
+    /// AC-50 envelope DAC is identity at the 0xFF plateau (the 6581
+    /// model_dac[0xFF] is exactly 255), so the mirrored multiplicand is
+    /// unchanged by that remediation.
     /// </summary>
     private static float ExpectedSampleAtFullEnvelope(int waveformSample)
     {
@@ -857,8 +861,11 @@ public sealed class SidWaveformFaithfulParityTests
     /// Sid6581.cs:850-852.
     /// Acceptance: a standalone <see cref="Sid6581.ReSidEnvelope"/> reference
     /// driven with the identical AD/SR/gate writes and one Clock per Tick
-    /// predicts $1C exactly on every one of 2,600 cycles (full attack ramp
-    /// plus sustain entry at attack 0 / sustain 15).
+    /// predicts $1C exactly on every one of 2,600 cycles (attack ramp from
+    /// the 0xaa power-up seed plus sustain entry at attack 0 / sustain 15).
+    /// The reference is power-up-seeded (PowerUp: counter 0xaa,
+    /// envelope.cc:176) to match the chip's reSID power-up state
+    /// (FR-SID-ENV AC-08).
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-OSC3ENV3-09", ParityTag.Faithful)]
@@ -870,7 +877,7 @@ public sealed class SidWaveformFaithfulParityTests
         sid.Write(0xD412, 0x01); // voice 3 gate on
 
         var reference = new Sid6581.ReSidEnvelope();
-        reference.Reset();
+        reference.PowerUp();
         reference.WriteAttackDecay(0x00);
         reference.WriteSustainRelease(0xF0);
         reference.WriteControl(0x01);
@@ -924,7 +931,9 @@ public sealed class SidWaveformFaithfulParityTests
     /// attack 2 (slow), $1C tracks the voice-3 reference exactly on every one
     /// of 400 cycles, the voice-1 envelope mirror tracks the voice-1 reference
     /// exactly, and the two references disagree at the end of the window (so
-    /// the readback demonstrably selected voice 3).
+    /// the readback demonstrably selected voice 3). Both references are
+    /// power-up-seeded (PowerUp: counter 0xaa, envelope.cc:176) to match the
+    /// chip's reSID power-up state (FR-SID-ENV AC-08).
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-OSC3ENV3-11", ParityTag.Faithful)]
@@ -939,13 +948,13 @@ public sealed class SidWaveformFaithfulParityTests
         sid.Write(0xD412, 0x01); // voice 3 gate on
 
         var referenceVoice0 = new Sid6581.ReSidEnvelope();
-        referenceVoice0.Reset();
+        referenceVoice0.PowerUp();
         referenceVoice0.WriteAttackDecay(0x00);
         referenceVoice0.WriteSustainRelease(0xF0);
         referenceVoice0.WriteControl(0x01);
 
         var referenceVoice2 = new Sid6581.ReSidEnvelope();
-        referenceVoice2.Reset();
+        referenceVoice2.PowerUp();
         referenceVoice2.WriteAttackDecay(0x20);
         referenceVoice2.WriteSustainRelease(0xF0);
         referenceVoice2.WriteControl(0x01);
