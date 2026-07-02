@@ -257,9 +257,11 @@ sealed partial class Build : NukeBuild
             Assert.True(!string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
 
             // PUBLISH-GATE: packages ship only from a tagged release commit
-            // carrying a FRESH minor version (vX.Y.0, first tag of that
-            // major.minor line). Guarantees published packages are exactly
-            // reproducible from a tag and each publish opens a new minor.
+            // whose version is NEW: either a fresh minor (vX.Y.0, first tag
+            // of its major.minor line) or a build-level increment within the
+            // line (vX.Y.Z strictly above every existing vX.Y.* tag).
+            // Guarantees published packages are exactly reproducible from a
+            // tag and versions only move forward.
             var headTags = ProcessTasks.StartProcess("git", "tag --points-at HEAD", RootDirectory, logOutput: false)
                 .AssertZeroExitCode()
                 .Output.Select(o => o.Text.Trim())
@@ -270,16 +272,17 @@ sealed partial class Build : NukeBuild
 
             var releaseTag = headTags[0];
             var parts = releaseTag.TrimStart('v').Split('.');
-            Assert.True(parts[2] == "0",
-                $"PublishNuget requires a fresh minor (vX.Y.0); tag {releaseTag} has a non-zero patch");
+            var releaseBuild = int.Parse(parts[2]);
 
-            var sameMinorTags = ProcessTasks.StartProcess("git", $"tag --list v{parts[0]}.{parts[1]}.*", RootDirectory, logOutput: false)
+            var otherSameMinorBuilds = ProcessTasks.StartProcess("git", $"tag --list v{parts[0]}.{parts[1]}.*", RootDirectory, logOutput: false)
                 .AssertZeroExitCode()
                 .Output.Select(o => o.Text.Trim())
-                .Where(t => t.Length > 0)
+                .Where(t => t.Length > 0 && t != releaseTag)
+                .Select(t => int.Parse(t.Split('.')[2]))
                 .ToList();
-            Assert.True(sameMinorTags.Count == 1 && sameMinorTags[0] == releaseTag,
-                $"PublishNuget requires the minor to be fresh; existing v{parts[0]}.{parts[1]}.* tags: [{string.Join(", ", sameMinorTags)}]");
+            Assert.True(otherSameMinorBuilds.All(b => b < releaseBuild),
+                $"PublishNuget requires {releaseTag} to be the highest build of the v{parts[0]}.{parts[1]}.* line; " +
+                $"existing builds: [{string.Join(", ", otherSameMinorBuilds.OrderBy(b => b))}]");
 
             var expectedVersion = releaseTag.TrimStart('v');
             var packages = PackagesOutputDirectory.GlobFiles("*.nupkg");
