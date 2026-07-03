@@ -21,7 +21,36 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private readonly byte[] _registers = new byte[64];
     private const byte InterruptSourceMask = 0x0F;
     private ushort _rasterIrqLine;
-    private bool _rasterIrqCompareArmed;
+    // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02/AC-03/AC-09/AC-11: VICE's
+    // raster_irq_triggered edge guard (viciisc/vicii-cycle.c:466-474). Set when
+    // the per-cycle comparison fires on line entry, held for the whole matching
+    // line, and reset ONLY by the per-cycle comparison when the line stops
+    // matching. Register stores never touch it (vicii-mem.c:145-169,
+    // finding 45). Construction-only quirk: starts true (the boot line-0 latch
+    // is treated as already consumed) so an un-Reset chip keeps the legacy
+    // disarmed first frame; Reset() clears it to the VICE power-on state
+    // (vicii.c:295) and every VICE-reachable path is then bit-exact.
+    private bool _rasterIrqTriggered = true;
+    // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-12: VICE start_of_frame latch. Armed
+    // at the line-end cycle of the last raster line (vicii_cycle_end_of_line,
+    // viciisc/vicii-cycle.c:220-226) and applied one cycle later at raster
+    // cycle 1 (vicii_cycle_start_of_frame, :453-456), so the raster line reads
+    // screen_height-1 through cycle 0 and 0 from cycle 1.
+    private bool _startOfFrame;
+    // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02: one-cycle recognition
+    // pipeline for the raster-latch IRQ line rise. VICE sets irq_status bit 7
+    // and calls maincpu_set_irq_clk in the same cycle as the latch
+    // (vicii-irq.c:47-62), but the maincpu recognises a rising IRQ line with
+    // one cycle of latency (interrupt.c). The managed CPU samples the
+    // IInterruptLine directly, so the VIC presents the rise one tick after
+    // the cycle-0 latch; register state ($D019 bits 0 and 7) is cycle-0 exact.
+    // System-level equivalence is proven by the READY snapshot lockstep gates.
+    private bool _rasterIrqAssertPending;
+    // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-12/AC-13/AC-14: VICE
+    // clear_collisions. A $D01E/$D01F read copies the accumulator and schedules
+    // the clear; the accumulator is zeroed in the NEXT cycle
+    // (viciisc/vicii-mem.c:530,547 with vicii-cycle.c:413-425, finding 46).
+    private byte _pendingCollisionClear;
 
     public ushort CurrentRasterLine { get; private set; }
     
@@ -140,6 +169,35 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private byte _lightPenLatchedX;
     private byte _lightPenLatchedY;
     private bool _lightPenTriggeredThisFrame;
+    // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-06/AC-07/AC-08/AC-14: VICE
+    // light_pen state (viciisc/vicii-lightpen.c:38-47 vicii_set_light_pen with
+    // viciitypes light_pen fields). _lightPenState remembers the LINE level so
+    // a still-low line retriggers at the frame start
+    // (vicii-cycle.c:210-217); _lightPenXExtraBits is the chip-model x offset
+    // (color latency ? 2 : 1) consumed by the latch and reset to 0 afterwards
+    // (vicii-lightpen.c:42,78,103); _lightPenTriggerPending is the one-clock
+    // trigger delay (trigger_cycle = mclk + 1 at :44, fired at the end of the
+    // matching cycle, vicii-cycle.c:610-613).
+    private bool _lightPenState;
+    private byte _lightPenXExtraBits;
+    private bool _lightPenTriggerPending;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-07: chip-model colour latency
+    /// (VICE viciisc/vicii-chip-model.c color_latency: 6569R1/R3, 6567 and
+    /// 6572 carry 1; 8565/8562 carry 0). Selects the light-pen x offset
+    /// (2 vs 1) loaded on a pen edge (vicii-lightpen.c:42).
+    /// </summary>
+    protected virtual bool ColorLatency => true;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-10: old light-pen IRQ mode
+    /// (VICE viciisc/vicii-chip-model.c lightpen_old_irq_mode: 6569R1 and
+    /// 6567R56A carry 1). In old mode the LP IRQ fires only on the
+    /// frame-start retrigger, never on a normal trigger
+    /// (vicii-lightpen.c:93-98,105-107).
+    /// </summary>
+    protected virtual bool LightPenOldIrqMode => false;
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001:
@@ -615,12 +673,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public ushort RasterIrqLine => _rasterIrqLine;
     
     /// <summary>
-    /// Set raster IRQ line
+    /// Set raster IRQ line. Like the $D011/$D012 stores it never touches the
+    /// raster_irq_triggered edge guard; only the per-cycle comparison arms and
+    /// disarms it (PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-11; VICE
+    /// viciisc/vicii-cycle.c:466-474).
     /// </summary>
     public void SetRasterIrqLine(ushort line)
     {
         _rasterIrqLine = (ushort)(line & 0x01FF);
-        _rasterIrqCompareArmed = true;
     }
     
     /// <summary>
@@ -944,21 +1004,30 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         CycleCounter++;
         RasterX++;
 
-        // VICE-style raster interrupt: fires at the FIRST cycle of the matching
-        // raster line (equivalent to vicii.raster_irq_triggered logic in VICE).
-        // VICE checks raster_line == raster_irq_line on every vicii_cycle() call
-        // and fires once per line entry (guarded by raster_irq_triggered).
-        // After reset, raster_cycle = 6 and raster_line = 0 = raster_irq_line,
-        // so VICE fires the latch on the very first vicii_cycle() call.
-        // Firing here (before the line-wrap check) matches that: if CurrentRasterLine
-        // already equals _rasterIrqLine when Tick() is entered, the latch fires
-        // immediately rather than waiting for RasterX to reach a specific value.
-        // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: latch is independent of enable.
-        if (_rasterIrqCompareArmed && CurrentRasterLine == _rasterIrqLine)
+        // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02: a raster latch from the
+        // previous cycle presents its IRQ-line rise now (the maincpu
+        // recognition point; VICE interrupt.c applies one cycle of latency to
+        // a rise that vicii-irq.c asserted with the latch).
+        if (_rasterIrqAssertPending)
         {
-            _rasterIrqCompareArmed = false; // once per line entry (matches raster_irq_triggered)
-            _registers[0x19] |= 0x01;
+            _rasterIrqAssertPending = false;
             RefreshInterruptLine();
+        }
+
+        // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-14: a collision clear
+        // scheduled by a $D01E/$D01F read zeroes the accumulator in the NEXT
+        // cycle, never in the read itself. VICE viciisc/vicii-cycle.c:413-425;
+        // applied at the top of the cycle so the managed per-line collision
+        // raster (which lands a whole line at the wrap tick, an acknowledged
+        // approximation of VICE's per-cycle draws) wipes at most the already
+        // accumulated state, mirroring the single-cycle wipe.
+        if (_pendingCollisionClear != 0)
+        {
+            if (_pendingCollisionClear == 0x1E)
+                _spriteSpriteCollisionLatch = 0;
+            else
+                _spriteBackgroundCollisionLatch = 0;
+            _pendingCollisionClear = 0;
         }
 
         if (RasterX >= CyclesPerLine)
@@ -966,70 +1035,48 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             int completedLine = CurrentRasterLine;
             CaptureHorizontalBorderForCompletedLine(CurrentRasterLine);
             RasterX = 0;
-            CurrentRasterLine++;
-            _rasterIrqCompareArmed = true;
 
-            bool frameWrapped = CurrentRasterLine >= TotalLines;
-            if (frameWrapped)
+            if (completedLine == TotalLines - 1)
             {
-                CurrentRasterLine = 0;
-                _refreshCounter = 0xFF;
-                _allowBadLines = false;
-                // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-07/AC-08 (and
-                // FR-VIC-MATRIX-ADDR AC-09): the frame start resets the video
-                // counter pipeline: vcbase = 0, vc = 0. VICE
-                // viciisc/vicii-cycle.c:208-209 (vicii_cycle_start_of_frame).
-                // Applied at the managed frame-start point (line wrap); the exact
-                // raster_cycle-1 placement is tracked by DIVERGENT AC-12.
-                _vcBase = 0;
-                _videoCounter = 0;
-                // BACKFILL-VIDEO-001: per-frame bad-line counter resets at the
-                // frame boundary (raster wrap back to line 0).
-                _badLineCountThisFrame = 0;
-                _lastBadLineCounted = -1;
-                // BACKFILL-VIDEO-001: per-frame sprite DMA counter also
-                // resets on the frame wrap so each frame is independent.
-                _spriteDmaCyclesThisFrame = 0;
-                _lastSpriteDmaLineCounted = -1;
-                _spriteDmaActiveMask = 0;
-                Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
-                Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
-                // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: clear the LP "already latched
-                // this frame" flag so the next LP trigger can re-arm. The
-                // last latched X/Y values are kept (consistent with reading
-                // $D013/$D014 between frames).
-                _lightPenTriggeredThisFrame = false;
+                // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-12: completing the last
+                // line arms start_of_frame; the raster line itself stays at
+                // screen_height-1 through this cycle 0 and the frame reset is
+                // applied one cycle later (VICE vicii_cycle_end_of_line,
+                // viciisc/vicii-cycle.c:220-226, with :453-456). Start-of-line
+                // processing still runs at cycle 0 (:447-451), and the frame
+                // completion event fires here exactly as before.
+                _startOfFrame = true;
+                HandleStartOfLine(completedLine);
+                _renderer.NotifyFrameCompleted();
             }
-
-            bool leftBorderOpen = !_mainBorderActive;
-            UpdateVerticalBorderForLineStart();
-            CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);
-            HandleStartOfLine(completedLine);
-
-            // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
-            // TEST-VIC-001: account sprite DMA cycle theft
-            // for this scanline, exactly once per line.
-            AccountSpriteDmaForRasterLine(CurrentRasterLine);
-
-            // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
-            ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
-
-            // PERF-RENDER-001: trigger render exactly once per completed line instead of
-            // calling _renderer.Tick() every cycle (19,656x/frame) and checking
-            // RasterX==0 inside the renderer. Matches original timing: line N is rendered
-            // when line N+1 begins (CurrentRasterLine>0 guard from original Tick()).
-            // Frame-wrap (line TotalLines-1) fires FrameCompleted instead (no render,
-            // matching original _currentFrame>0 guard on line 0 detection).
-            if (!frameWrapped)
+            else
             {
+                CurrentRasterLine++;
+
+                bool leftBorderOpen = !_mainBorderActive;
+                UpdateVerticalBorderForLineStart();
+                CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);
+                HandleStartOfLine(completedLine);
+
+                // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
+                // TEST-VIC-001: account sprite DMA cycle theft
+                // for this scanline, exactly once per line.
+                AccountSpriteDmaForRasterLine(CurrentRasterLine);
+
+                // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
+                ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
+
+                // PERF-RENDER-001: trigger render exactly once per completed line instead of
+                // calling _renderer.Tick() every cycle (19,656x/frame) and checking
+                // RasterX==0 inside the renderer. Matches original timing: line N is rendered
+                // when line N+1 begins (CurrentRasterLine>0 guard from original Tick()).
+                // The frame boundary fires FrameCompleted instead (no render, see above).
                 // Notify host subscribers of the line about to be rendered so they can reprogram
                 // VIC mode registers (raster split). The render call below samples those registers,
                 // so a synchronous handler that writes $D011/$D016/$D018 affects this exact line.
                 _pubSub?.Publish(RasterLineEvent.Topic, new RasterLineEvent(completedLine, CurrentRasterLine));
                 _renderer.NotifyLineCompleted(completedLine);
             }
-            else
-                _renderer.NotifyFrameCompleted();
 
             // PLAN-VICRENDER-001: the logs held the completed line's mid-line $D020/$D021 changes
             // and have now been consumed by the render. The final colours become the next line's
@@ -1041,7 +1088,48 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         }
         else
         {
+            // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-12: apply the armed frame
+            // reset at raster cycle 1 (VICE vicii_cycle_start_of_frame,
+            // viciisc/vicii-cycle.c:202-218 via :453-456).
+            if (_startOfFrame && RasterX == 1)
+            {
+                ApplyFrameStart();
+            }
+
             UpdateBorderFlipFlopsForCurrentCycle();
+        }
+
+        // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02/AC-03/AC-04/AC-11: the
+        // per-cycle raster comparison runs AFTER the line update in the same
+        // cycle, so the latch appears at raster cycle 0 of a matching line
+        // (cycle 1 for line 0, which only exists from the frame reset on).
+        // raster_irq_triggered fires once per non-match-to-match edge and is
+        // reset only here, never by a register store.
+        // VICE viciisc/vicii-cycle.c:463-474 with vicii_irq_raster_trigger
+        // (vicii-irq.c:116-121, idempotent irq_status bit 0 set).
+        if (CurrentRasterLine == _rasterIrqLine)
+        {
+            if (!_rasterIrqTriggered)
+            {
+                _rasterIrqTriggered = true;
+                if ((_registers[0x19] & 0x01) == 0)
+                {
+                    _registers[0x19] |= 0x01;
+                    // vicii_irq_set_line (vicii-irq.c:36-45): bit 7 mirrors the
+                    // IRQ output in the same cycle as the latch; the managed
+                    // IInterruptLine rise itself is presented next tick (the
+                    // maincpu recognition point, see _rasterIrqAssertPending).
+                    if ((_registers[0x19] & _registers[0x1A] & InterruptSourceMask) != 0)
+                    {
+                        _registers[0x19] |= 0x80;
+                        _rasterIrqAssertPending = true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            _rasterIrqTriggered = false;
         }
 
         // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-15: per-cycle DEN re-check on the
@@ -1132,6 +1220,69 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _reg11Delay = _registers[0x11];
 
         _registers[0x12] = (byte)CurrentRasterLine;
+
+        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-06: a pen edge schedules its
+        // trigger for the FOLLOWING cycle (trigger_cycle = mclk + 1,
+        // vicii-lightpen.c:44) and the trigger fires at the very end of that
+        // cycle, after every other per-cycle effect. VICE
+        // viciisc/vicii-cycle.c:610-613.
+        if (_lightPenTriggerPending)
+        {
+            TriggerLightPenInternal(retrigger: false);
+        }
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-07/AC-08/AC-10/AC-12 (and
+    /// FR-VIC-MATRIX-ADDR AC-09): the frame reset applied at raster cycle 1,
+    /// mirroring VICE vicii_cycle_start_of_frame
+    /// (viciisc/vicii-cycle.c:202-218): raster_line = 0, refresh counter $FF,
+    /// bad lines disallowed, vc/vcbase = 0, and the light-pen frame handling:
+    /// the once-per-frame flag clears and a line still held low reloads
+    /// x_extra_bits and retriggers immediately (FR-VIC-LIGHTPEN AC-08/AC-09,
+    /// vicii-cycle.c:210-217). The managed per-line startup calls for line 0
+    /// (border captures, sprite DMA accounting, collision raster) run here
+    /// because line 0 begins at this cycle.
+    /// </summary>
+    private void ApplyFrameStart()
+    {
+        _startOfFrame = false;
+        CurrentRasterLine = 0;
+        _refreshCounter = 0xFF;
+        _allowBadLines = false;
+        _vcBase = 0;
+        _videoCounter = 0;
+        // BACKFILL-VIDEO-001: per-frame bad-line counter resets at the
+        // frame boundary.
+        _badLineCountThisFrame = 0;
+        _lastBadLineCounted = -1;
+        // BACKFILL-VIDEO-001: per-frame sprite DMA counter also
+        // resets at the frame start so each frame is independent.
+        _spriteDmaCyclesThisFrame = 0;
+        _lastSpriteDmaLineCounted = -1;
+        _spriteDmaActiveMask = 0;
+        Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
+        Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
+
+        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-08/AC-09: clear the LP
+        // "already latched this frame" flag; if the pen line is still held
+        // low, reload the chip-model x offset and retrigger with the forced
+        // model x value (VICE viciisc/vicii-cycle.c:210-217 with
+        // vicii-lightpen.c:81-92). The last latched X/Y values are kept when
+        // no retrigger fires (consistent with reading $D013/$D014 between
+        // frames).
+        _lightPenTriggeredThisFrame = false;
+        if (_lightPenState)
+        {
+            _lightPenXExtraBits = ColorLatency ? (byte)2 : (byte)1;
+            TriggerLightPenInternal(retrigger: true);
+        }
+
+        bool leftBorderOpen = !_mainBorderActive;
+        UpdateVerticalBorderForLineStart();
+        CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);
+        AccountSpriteDmaForRasterLine(CurrentRasterLine);
+        ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
     }
 
     /// <inheritdoc />
@@ -1153,11 +1304,17 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _bgEntryColour = 0;
         _bgChangeCount = 0;
         _rasterIrqLine = 0;
-        // Armed on reset: hardware fires the raster IRQ unconditionally when raster_line
-        // matches raster_irq_line. Starting disarmed caused managed to skip the first
-        // match at line 0 (before any line wrap), diverging from VICE which fires at
-        // cycle 1 of line 0. Arm here so the first pass through line 0 fires the latch.
-        _rasterIrqCompareArmed = true;
+        // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02/AC-11: VICE reset clears
+        // raster_irq_triggered (vicii.c:295) with raster_irq_line = 0, so the
+        // first per-cycle comparison on line 0 fires the boot latch exactly
+        // like the hardware.
+        _rasterIrqTriggered = false;
+        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-12 / FR-VIC-REGISTERS AC-14 /
+        // FR-VIC-RASTER-IRQ AC-02: no armed frame reset, pending collision
+        // clear or pending IRQ-line rise after reset.
+        _startOfFrame = false;
+        _pendingCollisionClear = 0;
+        _rasterIrqAssertPending = false;
         _verticalBorderActive = true;
         _verticalBorderNextActive = true;
         _mainBorderActive = true;
@@ -1209,6 +1366,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _lightPenLatchedX = 0;
         _lightPenLatchedY = 0;
         _lightPenTriggeredThisFrame = false;
+        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-06/AC-07/AC-08: clear the pen
+        // line level, the chip-model x offset and any scheduled trigger.
+        _lightPenState = false;
+        _lightPenXExtraBits = 0;
+        _lightPenTriggerPending = false;
     }
 
     // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
@@ -2067,22 +2229,27 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return _lightPenLatchedY;
         }
 
-        // BACKFILL-VIDEO-001: $D01E sprite-sprite collision register.
-        // Read-and-clear semantics: return the accumulated mask, then clear.
+        // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-12: a $D01E read copies the
+        // sprite-sprite collision accumulator into regs[$1E], schedules the
+        // deferred clear, and returns the copy; the accumulator itself is NOT
+        // cleared inside the read (VICE viciisc/vicii-mem.c:520-535 d01e_read;
+        // the clear lands in the next cycle, vicii-cycle.c:413-425,
+        // finding 46).
         if (register == 0x1E)
         {
-            byte value = _spriteSpriteCollisionLatch;
-            _spriteSpriteCollisionLatch = 0;
-            return value;
+            _registers[0x1E] = _spriteSpriteCollisionLatch;
+            _pendingCollisionClear = 0x1E;
+            return _registers[0x1E];
         }
 
-        // BACKFILL-VIDEO-001: $D01F sprite-background collision register.
-        // Read-and-clear semantics: return the accumulated mask, then clear.
+        // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-13: $D01F has the same
+        // deferred-clear contract for the sprite-background accumulator (VICE
+        // viciisc/vicii-mem.c:537-559 d01f_read, finding 46).
         if (register == 0x1F)
         {
-            byte value = _spriteBackgroundCollisionLatch;
-            _spriteBackgroundCollisionLatch = 0;
-            return value;
+            _registers[0x1F] = _spriteBackgroundCollisionLatch;
+            _pendingCollisionClear = 0x1F;
+            return _registers[0x1F];
         }
 
         // BACKFILL-VIDEO-001 / FR-VIC-004 / FR-VIC-007 / TEST-VIC-001:
@@ -2149,15 +2316,29 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         if (register == 0x12)
         {
+            // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-09: an unchanged-value
+            // $D012 store returns early with no compare-line update (VICE
+            // viciisc/vicii-mem.c:158-169 d012_store; the stored compare low
+            // byte lives in _rasterIrqLine because _registers[0x12] mirrors
+            // the live raster). AC-11: the store never touches
+            // raster_irq_triggered, so it can never re-fire the matching line
+            // (finding 45).
+            if (value == (byte)(_rasterIrqLine & 0xFF))
+            {
+                return;
+            }
+
             _rasterIrqLine = (ushort)((_rasterIrqLine & 0x100) | value);
-            _rasterIrqCompareArmed = true;
             return;
         }
 
         if (register == 0x11)
         {
+            // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-10: a $D011 store always
+            // recomputes the 9-bit compare (no unchanged-value early exit,
+            // VICE viciisc/vicii-mem.c:145-156 d011_store). AC-11: it never
+            // touches raster_irq_triggered (finding 45).
             _rasterIrqLine = (ushort)((_rasterIrqLine & 0x0FF) | ((value & 0x80) << 1));
-            _rasterIrqCompareArmed = true;
             _registers[register] = value;
             return;
         }
@@ -2345,27 +2526,105 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     }
 
     /// <summary>
-    /// BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: Simulate a high-to-low transition on the
-    /// VIC-II LP (light pen) pin. On the first trigger of the current frame
-    /// the chip latches the current RasterX shifted right by one into $D013
-    /// and the low 8 bits of the current raster line into $D014, sets the
-    /// LP IRQ latch ($D019 bit 3), and asserts the IRQ output if the LP
-    /// enable bit in $D01A is set. Second and later triggers within the
-    /// same frame are ignored. The latch re-arms when the raster wraps
-    /// back to line 0 (frame boundary).
+    /// BACKFILL-VIDEO-001 / FR-VIC-001 / PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN /
+    /// TEST-VIC-001: immediate internal light-pen trigger (the
+    /// vicii_trigger_light_pen_internal(0) surface, VICE
+    /// viciisc/vicii-lightpen.c:50-108). On the first trigger of the current
+    /// frame the chip latches the pen X into $D013 (currently RasterX &gt;&gt; 1
+    /// plus the pending x offset; the xpos translation divergence is owned by
+    /// TEST-VIC-LIGHTPEN-01) and the raster line low byte into $D014, sets the
+    /// LP IRQ latch ($D019 bit 3, suppressed for normal triggers on
+    /// old-IRQ-mode models per FR-VIC-LIGHTPEN AC-10), and asserts the IRQ
+    /// output if $D01A bit 3 is enabled. Triggers on the last raster line are
+    /// swallowed after its first cycle (FR-VIC-LIGHTPEN AC-05,
+    /// vicii-lightpen.c:71-73). Second and later triggers within the same
+    /// frame are ignored; the frame start re-arms the latch
+    /// (viciisc/vicii-cycle.c:210).
     /// </summary>
-    public void TriggerLightPen()
+    public void TriggerLightPen() => TriggerLightPenInternal(retrigger: false);
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-06/AC-07/AC-08/AC-14: light-pen
+    /// LINE level input (the vicii_set_light_pen surface, VICE
+    /// viciisc/vicii-lightpen.c:38-47). A low edge loads the chip-model x
+    /// offset (x_extra_bits = color latency ? 2 : 1, :42) and schedules the
+    /// trigger one clock later (trigger_cycle = mclk + 1, :44, fired at the
+    /// end of the next cycle per vicii-cycle.c:610-613). The level is
+    /// remembered so a line still held low at the start of a frame retriggers
+    /// (vicii-cycle.c:210-217). Releasing the line does not cancel an already
+    /// scheduled trigger (:40-46 only assign state).
+    /// </summary>
+    /// <param name="state">True when the LP line is pulled low (pen pressed).</param>
+    public void SetLightPen(bool state)
     {
+        if (state)
+        {
+            _lightPenXExtraBits = ColorLatency ? (byte)2 : (byte)1;
+            _lightPenTriggerPending = true;
+        }
+
+        _lightPenState = state;
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-05/AC-09/AC-10/AC-14: the
+    /// internal light-pen trigger, a bit-exact port of
+    /// vicii_trigger_light_pen_internal (VICE viciisc/vicii-lightpen.c:50-108):
+    /// unset any scheduled trigger (:60), honour the once-per-frame guard
+    /// (:62-66), swallow last-line triggers after cycle 0 (:71-73), compute the
+    /// pen X plus x_extra_bits (:75-78; the xpos base translation divergence is
+    /// owned by TEST-VIC-LIGHTPEN-01), force the model X on a frame-start
+    /// retrigger with the old-mode IRQ (:81-98), latch x/y, reset x_extra_bits
+    /// (:100-103), and fire the normal-mode IRQ (:105-107).
+    /// </summary>
+    private void TriggerLightPenInternal(bool retrigger)
+    {
+        _lightPenTriggerPending = false;
+
         if (_lightPenTriggeredThisFrame)
         {
             return;
         }
 
         _lightPenTriggeredThisFrame = true;
-        _lightPenLatchedX = (byte)(RasterX >> 1);
-        _lightPenLatchedY = (byte)(CurrentRasterLine & 0xFF);
-        _registers[0x19] |= 0x08;
-        RefreshInterruptLine();
+
+        int y = CurrentRasterLine;
+
+        // Don't trigger on the last line, except on the first cycle.
+        if (y == TotalLines - 1 && RasterX > 0)
+        {
+            return;
+        }
+
+        int x = (RasterX >> 1) + _lightPenXExtraBits;
+
+        if (retrigger)
+        {
+            // Forced model X: $D1 for 63-cycle lines (PAL and the 64-cycle
+            // old NTSC default case), $D5 for 65-cycle lines
+            // (vicii-lightpen.c:81-92).
+            x = _cyclesPerLine == 65 ? 0xD5 : 0xD1;
+
+            // On old-IRQ-mode models (6569R1/6567R56A) the interrupt fires
+            // only here, when the line is low on the first cycle of the frame
+            // (vicii-lightpen.c:93-98).
+            if (LightPenOldIrqMode)
+            {
+                _registers[0x19] |= 0x08;
+                RefreshInterruptLine();
+            }
+        }
+
+        _lightPenLatchedX = (byte)x;
+        _lightPenLatchedY = (byte)y;
+
+        _lightPenXExtraBits = 0;
+
+        if (!LightPenOldIrqMode)
+        {
+            _registers[0x19] |= 0x08;
+            RefreshInterruptLine();
+        }
     }
 
     // BACKFILL-VIDEO-001: minimal sprite collision raster.

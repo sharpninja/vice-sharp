@@ -222,7 +222,10 @@ public sealed class VicCycleFaithfulParityTests
         var before = ReadInternals(vic);
         Assert.Equal(0xFD, before.Refresh);
 
-        AdvanceTo(vic, 0x00, 0); // Through the full frame and the wrap to line 0.
+        // Through the full frame to the frame start (applied at raster cycle 1
+        // per VICE viciisc/vicii-cycle.c:453-456; line 0 cycle 0 does not
+        // exist, PLAN-VICEPARITY-001 slice V2 / TEST-VIC-CYCLE-12).
+        AdvanceTo(vic, 0x00, 1);
         var after = ReadInternals(vic);
         Assert.Equal(0xFF, after.Refresh);
     }
@@ -232,8 +235,8 @@ public sealed class VicCycleFaithfulParityTests
     /// Use case: at frame start bad lines are disallowed: allow_bad_lines = 0
     /// (VICE viciisc/vicii-cycle.c:207, managed Mos6569.cs:985).
     /// Acceptance: with DEN set, allow_bad_lines is true inside the display window
-    /// (line $31) and is false again when the raster has wrapped to line 0 cycle 0
-    /// of the next frame.
+    /// (line $31) and is false again at the next frame start (line 0 cycle 1,
+    /// where vicii_cycle_start_of_frame applies per vicii-cycle.c:453-456).
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-CYCLE-10", ParityTag.Faithful)]
@@ -246,7 +249,10 @@ public sealed class VicCycleFaithfulParityTests
         var during = ReadInternals(vic);
         Assert.True(during.AllowBadLines);
 
-        AdvanceTo(vic, 0x00, 0); // Frame wrap back to line 0.
+        // Frame start (applied at raster cycle 1 per VICE
+        // viciisc/vicii-cycle.c:453-456; line 0 cycle 0 does not exist,
+        // PLAN-VICEPARITY-001 slice V2 / TEST-VIC-CYCLE-12).
+        AdvanceTo(vic, 0x00, 1);
         var atFrameStart = ReadInternals(vic);
         Assert.False(atFrameStart.AllowBadLines);
     }
@@ -254,9 +260,18 @@ public sealed class VicCycleFaithfulParityTests
     /// <summary>
     /// FR-VIC-CYCLE AC-11.
     /// Use case: at frame start the raster line is reset: raster_line = 0
-    /// (VICE viciisc/vicii-cycle.c:205, managed Mos6569.cs:983).
-    /// Acceptance: from the last PAL line (311, TotalLines - 1) cycle 62, one tick
-    /// wraps the raster to exactly line 0, cycle 0.
+    /// (VICE viciisc/vicii-cycle.c:205 in vicii_cycle_start_of_frame, applied
+    /// at raster cycle 1 via :453-456 after vicii_cycle_end_of_line armed
+    /// start_of_frame at cycle 0 of the wrap, :220-226).
+    /// Acceptance: from the last PAL line (311, TotalLines - 1) cycle 62, one
+    /// tick reaches cycle 0 with the raster line still reading 311 (VICE
+    /// line-wrap visibility), and the next tick applies the reset: line 0 at
+    /// cycle 1.
+    /// REBASED (PLAN-VICEPARITY-001 slice V2): the previous expectation
+    /// ((311,62) -> (0,0) in one tick) encoded the managed wrap timing that
+    /// DIVERGENT TEST-VIC-CYCLE-12 owned; with the frame reset now applied at
+    /// raster cycle 1 per VICE viciisc/vicii-cycle.c:202-218,453-456, the lock
+    /// pins the VICE-exact wrap visibility instead.
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-CYCLE-11", ParityTag.Faithful)]
@@ -268,9 +283,13 @@ public sealed class VicCycleFaithfulParityTests
         AdvanceTo(vic, (ushort)(vic.TotalLines - 1), 62);
         Assert.Equal(311, vic.CurrentRasterLine);
 
-        vic.Tick();
-        Assert.Equal(0, vic.CurrentRasterLine);
+        vic.Tick(); // VICE raster cycle 1: start_of_frame armed, line NOT yet reset.
+        Assert.Equal(311, vic.CurrentRasterLine);
         Assert.Equal(0, vic.RasterX);
+
+        vic.Tick(); // VICE raster cycle 2: vicii_cycle_start_of_frame applies.
+        Assert.Equal(0, vic.CurrentRasterLine);
+        Assert.Equal(1, vic.RasterX);
     }
 
     /// <summary>

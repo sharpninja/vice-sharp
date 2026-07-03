@@ -116,7 +116,7 @@ public sealed class VicIIRegisterReadbackNativeTests
             byte afterClearSS = ViceNativeBridge.ReadMemory(native, SpriteSpriteCollision);
             Assert.Equal(0x00, afterClearSS);
             // (Real generated collisions would exercise d01e_read/d01f_read clear_collisions at :522-559;
-            // that requires machine stepping + sprite positioning — out of this minimal slice.)
+            // that requires machine stepping + sprite positioning - out of this minimal slice.)
         }
         finally
         {
@@ -468,134 +468,121 @@ public sealed class VicIIRegisterReadbackNativeTests
     }
 
     /// <summary>
-    /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 (native visible-frame/checkpoint validation for display-mode effects) /
-    /// FR-VIC-002 / FR-VIC-003 / FR-VIC-005 / TEST-VIC-001.
-    /// 
-    /// Gated test exercising the new ViceNativeBridge.TryCaptureVicVisibleFrame contract surface (mock path in this slice)
-    /// for native visible frame checkpoints under display-mode effects (invalid ECM producing COL_NONE black visible
-    /// pixels while preserving the hidden priority bit from gbuf data).
-    /// 
-    /// VICE sources (detailed gaps from explore subagent report ID 019e6acc-29b8-77f1-a9cc-56499af366f9 + prior TR):
-    /// native/vice/vice/src/viciisc/vicii-draw-cycle.c:41 (COL_NONE token), :133-141 (colors[] table routes all three
-    /// invalid ECM combos (ECM+BMM/MCM combos) to COL_NONE rows forcing visible black), :196 (pixel_pri = (px &amp; 0x2)
-    /// derived unconditionally from gbuf), :197-203 (cc = colors[vmode|px]; COL_NONE overrides cc=0 but pri_buffer written
-    /// regardless), :224 (pri_buffer[i] = pixel_pri for every pixel), :401-428 (draw_sprites consumes pri_buffer for
-    /// priority decision + sprite_background_collisions latch when pixel_pri).
-    /// Raster integration: vicii-cycle.c (vicii_raster_draw_handler at per-cycle points + line rendering into internal
-    /// buffers that the future native capture will expose).
-    /// 
-    /// Use case: After setting invalid ECM mode + minimal raster advance via stepping (managed + native), capture the
-    /// visible frame via the new bridge surface and validate key display-mode semantics (e.g. gfx area black per
-    /// simulator, border handling, sentinel from mock). This is the direct next native depth increment after the
-    /// register/ECM pixel side-effect checkpoints (TR-VIC-EDGE-006 + TR-VIC-EDGE-001 ECM).
-    /// 
-    /// Acceptance: (BDP + VICE)
-    /// - New bridge method is callable; mock path succeeds and returns standard 320x200 BGRA dimensions.
-    /// - Managed + native (stepped) paths under invalid ECM produce equivalent display-mode effects (black visible
-    ///   where COL_NONE selected per VICE table).
-    /// - Simulator (InvalidEcmNativeSimulator) cross-checks expectations derived from the exact cited VICE lines.
-    /// - Contract surface + test validated with mocks/stubs first (per todo gate); no prod changes, lockstep untouched.
-    /// - Documents the exact follow-on: real native FB export in shim + P/Invoke + bridge delegation, then re-run
-    ///   this fact with authentic pixels vs simulator expectations.
-    /// 
-    /// Byrd: Requirements (BACKFILL-VIDEO-001 + TR/FR/TEST IDs) + VICE evidence from the explore report drive this
-    /// test + the contract it exercises. Mocks/stubs (bridge mock + simulator) proven green before suite.
+    /// PLAN-VICEPARITY-001 slice V2 (mock retirement, deferred from P0-2) /
+    /// TR-VIC-ORACLE-001 / TR-VIC-EDGE-001 / FR-VIC-002 / FR-VIC-003 /
+    /// TEST-VIC-001.
+    /// Use case: the invalid ECM display modes (ECM=1 with BMM and/or MCM)
+    /// render the whole display window black in REAL VICE output: the
+    /// colors[] table routes every invalid vmode row to COL_NONE and the draw
+    /// cycle forces cc = 0 (black) for COL_NONE pixels (VICE
+    /// native/vice/vice/src/viciisc/vicii-draw-cycle.c:133-141 with
+    /// :197-203). This fact retires the former 0xCC-sentinel mock capture
+    /// contract: it drives a REAL machine (READY .vsf resume, invalid-ECM
+    /// registers, two full PAL frames) and asserts the per-pixel index oracle
+    /// and the BGRA visible-frame oracle
+    /// (ViceNativeBridge.TryCaptureVicFrameIndices /
+    /// TryCaptureVicVisibleFrame, real rendered pixels per TR-VIC-ORACLE-001).
+    /// Acceptance: the managed chip classifies $D011=$58/$D016=$18 as
+    /// VicIIDisplayMode.Invalid; with the border forced to $0E (the fixture
+    /// boots with a black border), the native index capture reports 384x272
+    /// with the border pixel equal to the live $D020 low nibble ($0E) and the
+    /// display-window interior all index 0 (COL_NONE black); the BGRA capture
+    /// carries no sentinel fill, is fully opaque at the sampled pixels, and
+    /// maps the black interior to a colour distinct from the border.
     /// </summary>
-    /// PLAN-VICEPARITY-001 P0-2/P0-5: quarantined (ParityLegacy). This fact
-    /// asserted the OLD synthetic capture contract (0xCC sentinel at [0],
-    /// alpha 0 in the sample area, which real rendering never produces). The
-    /// shim now returns real rendered pixels (TR-VIC-ORACLE-001), so the
-    /// sentinel expectations are stale false confidence. Rewritten against
-    /// the real per-pixel oracle in the V2 registers slice (mock-path
-    /// retirement), then the trait comes off.
-    [Fact]
-    [Trait("Category", "ParityLegacy")]
+    [ViceFact]
     public void NativeVsManaged_VisibleFrame_DisplayMode_InvalidEcm_Checkpoint_Match()
     {
-        // BDP: mocks/stubs validated path (bridge mock + existing simulator). Always executes.
-        var irq = new InterruptLine(InterruptType.Irq);
-        var bus = new BasicBus();
-        var vic = new Mos6569(bus, irq);
-        vic.Write(0xD011, 0x58); // ECM=1
-        vic.Write(0xD016, 0x18); // MCM=1 => ECM+MCM invalid
+        // Managed contract: the same register pair selects the Invalid mode.
+        var vic = new Mos6569(new BasicBus(), new InterruptLine(InterruptType.Irq));
+        vic.Write(0xD011, 0x58); // ECM=1 + DEN + RSEL.
+        vic.Write(0xD016, 0x18); // MCM=1 + CSEL: ECM+MCM = invalid.
         Assert.Equal(Mos6569.VicIIDisplayMode.Invalid, vic.DisplayModeSelection);
 
-        // Exercise the new contract surface (mock path for this slice).
-        var frame = new byte[320 * 200 * 4];
-        bool captured = ViceNativeBridge.TryCaptureVicVisibleFrame(IntPtr.Zero, frame, out int w, out int h);
-        Assert.True(captured, "Mock path for new visible-frame contract must succeed (BDP gate).");
-        Assert.Equal(320, w);
-        Assert.Equal(200, h);
-        // Sentinel from mock impl proves the buffer was touched by the contract.
-        Assert.Equal(0xCC, frame[0]);
-        Assert.Equal(0xFF, frame[3]);
+        var vsfPath = Path.Combine(AppContext.BaseDirectory, "Fixtures", "Vsf", "ready-c64sc-truedrive.vsf");
+        if (!File.Exists(vsfPath))
+            Assert.Skip("External x64sc .vsf fixture not present.");
 
-        // Strengthened checkpoint: use simulator generator (new mocks surface) for expected invalid ECM frame pattern
-        // (gfx black per COL_NONE). This advances native visible depth validation for display-mode effects.
-        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 / FR-VIC-002/003/005 / TEST-VIC-001 + explore 019e6acc-29b8-77f1-a9cc-56499af366f9.
-        InvalidEcmNativeSimulator.GenerateExpectedInvalidEcmFrame(frame, out int gw, out int gh); // re-generate for assert parity (mock fill now cross-tied)
-        Assert.Equal(320, gw);
-        Assert.Equal(200, gh);
-        // Sample gfx position must be black (COL_NONE) per VICE invalid table + simulator.
-        int sample = (100 * 320 + 160) * 4;
-        Assert.Equal((byte)0, frame[sample + 0]); // B
-        Assert.Equal((byte)0, frame[sample + 1]); // G
-        Assert.Equal((byte)0, frame[sample + 2]); // R
-        Assert.Equal((byte)0xFF, frame[sample + 3]); // A
+        const int PalCyclesPerFrame = 63 * 312;
+        const int Width = 384;
+        const int Height = 272;
 
-        // Cross-check with simulator for the invalid mode semantics (COL_NONE visible black independent of px data).
-        // (Real native capture in follow-on will be asserted against these same expectations.)
-        var (vis, pri) = InvalidEcmNativeSimulator.ComputeForInvalid(0x05 /*ECM+MCM*/, 0x03 /*px*/);
-        Assert.Equal((byte)0, vis); // COL_NONE per viciisc/vicii-draw-cycle.c:133-141 + 197-203
-        Assert.True(pri);           // (px & 0x2) preserved per :196,224
-
-        if (!ViceNativeBridge.IsAvailable)
-        {
-            // Mock/stub success gate (identical to prior native checkpoint tests): green on contract alone.
-            // Real native FB + stepping comparison is the explicit next gated increment.
-            return;
-        }
-
-        // (Native leg when available: identical setup + step + capture on real machine; assert pixels match
-        // simulator expectations derived from the VICE draw-cycle lines above. Kept narrow for this slice.)
-        var native = ViceNativeBridge.CreateMachine("c64");
+        var machine = ViceNativeBridge.CreateMachine("c64");
         try
         {
-            ViceNativeBridge.ResetMachine(native);
-            ViceNativeBridge.WriteMemory(native, 0xD011, 0x58);
-            ViceNativeBridge.WriteMemory(native, 0xD016, 0x18);
-            for (int c = 0; c < 100; c++) ViceNativeBridge.StepCycle(native); // advance to visible raster area
+            var rc = ViceNative.ReadSnapshotNative(machine, vsfPath);
+            if (rc != 0)
+                Assert.Skip($"READY snapshot failed to resume (rc={rc}); the oracle needs a booted machine.");
 
-            var nativeFrame = new byte[320 * 200 * 4];
-            bool nativeCaptured = ViceNativeBridge.TryCaptureVicVisibleFrame(native, nativeFrame, out int nw, out int nh);
-            Assert.True(nativeCaptured);
-            Assert.Equal(320, nw);
-            Assert.Equal(200, nh);
-            // BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 (native visible-frame/checkpoint) / TEST-VIC-001 + explore 019e6acc-29b8-77f1-a9cc-56499af366f9.
-            // Sentinel proves the capture path (bridge -> [real P/Invoke after wiring] -> shim export) touched the buffer.
-            // This assert added in BDP "tests first" phase (before wiring the native interop surface in ViceNative + shim).
-            // Validates the contract extension for real native visible frame checkpoints under display-mode effects.
-            Assert.Equal((byte)0xCC, nativeFrame[0]);
-            Assert.Equal((byte)0xFF, nativeFrame[3]);
-            // Parity on dimensions + contract; pixel value assertions now use authentic native data from shim (real FB wiring complete in this slice).
+            // Invalid ECM on the live machine; the READY idle loop never
+            // rewrites $D011/$D016/$D020, so the mode holds while the raster
+            // pipeline redraws every visible line. The fixture's border is
+            // black, so force a non-black border ($0E) to make the
+            // border-vs-COL_NONE distinction observable.
+            ViceNativeBridge.WriteMemory(machine, 0xD011, 0x58);
+            ViceNativeBridge.WriteMemory(machine, 0xD016, 0x18);
+            ViceNativeBridge.WriteMemory(machine, 0xD020, 0x0E);
+            for (int i = 0; i < 2 * PalCyclesPerFrame; i++)
+                ViceNativeBridge.StepCycle(machine);
 
-            // === Visible raster/pixel checkpoint parity advance (TR-VIC-EDGE-001, builds on prior pri-bit success) ===
-            // Use simulator GenerateExpected + black sample (COL_NONE per VICE table) on the *native* captured frame.
-            // This completes the full visible raster/pixel parity for display-mode (invalid ECM) using existing bridge + simulator.
-            // VICE: vicii-draw-cycle.c:133-141/195-197/201-203/224/401-428 + explore 019e6acc-29b8-77f1-a9cc-56499af366f9.
-            // (Shim now supplies authentic black for invalid ECM per emulation state + cited draw logic.)
-            var checkFrame = new byte[320 * 200 * 4];
-            InvalidEcmNativeSimulator.GenerateExpectedInvalidEcmFrame(checkFrame, out int _, out int _);
-            int pxSample = (100 * 320 + 160) * 4;
-            Assert.Equal((byte)0, nativeFrame[pxSample + 0]); // B black per COL_NONE (authentic native from shim, matches simulator)
-            Assert.Equal((byte)0, nativeFrame[pxSample + 1]); // G
-            Assert.Equal((byte)0, nativeFrame[pxSample + 2]); // R
-            Assert.Equal((byte)0, nativeFrame[pxSample + 3]); // A
-            // (Native frame cross-checked against simulator expectations derived from the cited VICE draw-cycle lines. Real FB surface active.)
+            var indices = new byte[Width * Height];
+            Assert.True(
+                ViceNativeBridge.TryCaptureVicFrameIndices(machine, indices, out var iw, out var ih),
+                "index capture failed");
+            Assert.Equal(Width, iw);
+            Assert.Equal(Height, ih);
+
+            var vicState = new ViceNativeBridge.ViceVicState();
+            ViceNativeBridge.GetVicState(machine, ref vicState);
+            byte borderIndex = (byte)(vicState.Registers[0x20] & 0x0F);
+            Assert.Equal(0x0E, borderIndex); // The forced border colour held.
+            Assert.True(
+                borderIndex == indices[0],
+                $"border pixel {indices[0]:X2} != live $D020 nibble {borderIndex:X2}");
+
+            // Display-window interior: every pixel is COL_NONE black under
+            // invalid ECM (vicii-draw-cycle.c:133-141,197-203). The sampled
+            // rectangle sits safely inside the 320x200 window of the 384x272
+            // visible canvas.
+            for (int y = 120; y < 152; y++)
+            {
+                for (int x = 160; x < 224; x++)
+                {
+                    byte index = indices[(y * Width) + x];
+                    Assert.True(
+                        index == 0x00,
+                        $"invalid-ECM gfx pixel ({x},{y}) has index {index:X2}, expected COL_NONE black 00");
+                }
+            }
+
+            var bgra = new byte[Width * Height * 4];
+            Assert.True(
+                ViceNativeBridge.TryCaptureVicVisibleFrame(machine, bgra, out var bw, out var bh),
+                "BGRA capture failed");
+            Assert.Equal(Width, bw);
+            Assert.Equal(Height, bh);
+
+            // The retired mock filled a 0xCC sentinel; a real capture never does.
+            Assert.False(
+                bgra[0] == 0xCC && bgra[1] == 0xCC && bgra[2] == 0xCC,
+                "BGRA capture still returns the retired sentinel fill");
+
+            int interior = ((136 * Width) + 192) * 4;
+            Assert.Equal(0xFF, bgra[interior + 3]); // Opaque interior pixel.
+            Assert.Equal(0xFF, bgra[3]);            // Opaque border pixel.
+            bool sameAsBorder =
+                bgra[interior] == bgra[0] &&
+                bgra[interior + 1] == bgra[1] &&
+                bgra[interior + 2] == bgra[2];
+            Assert.False(
+                sameAsBorder,
+                $"COL_NONE black interior must differ from the ($0E) border colour; " +
+                $"border BGR=({bgra[0]:X2},{bgra[1]:X2},{bgra[2]:X2}), " +
+                $"interior BGR=({bgra[interior]:X2},{bgra[interior + 1]:X2},{bgra[interior + 2]:X2})");
         }
         finally
         {
-            ViceNativeBridge.DestroyMachine(native);
+            ViceNativeBridge.DestroyMachine(machine);
         }
     }
 

@@ -46,6 +46,21 @@ public partial class Mos6569 : IStatefulDevice
         RasterX = inLineCycle;
         // 9-bit raster compare = $D012 | ($D011 bit7 << 8).
         _rasterIrqLine = (ushort)(_registers[0x12] | ((_registers[0x11] & 0x80) << 1));
+        // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02/AC-11: seed the
+        // raster_irq_triggered edge guard. Resuming mid-line ON the compare
+        // line means VICE fired its once-per-line latch at that line's entry
+        // already, so treat it as consumed; off the line the per-cycle
+        // comparison holds it clear anyway (viciisc/vicii-cycle.c:466-474).
+        _rasterIrqTriggered = CurrentRasterLine == _rasterIrqLine;
+        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-12 / FR-VIC-REGISTERS AC-14 /
+        // FR-VIC-LIGHTPEN AC-06 / FR-VIC-RASTER-IRQ AC-02: injection
+        // re-derives frame phase from the raster position; no armed frame
+        // reset, pending collision clear, scheduled pen trigger or pending
+        // IRQ-line rise survives from before the injection.
+        _startOfFrame = false;
+        _pendingCollisionClear = 0;
+        _lightPenTriggerPending = false;
+        _rasterIrqAssertPending = false;
         // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08: seed the delayed $D011 copy so
         // the first post-injection g-access does not see a stale pre-injection mode.
         _reg11Delay = _registers[0x11];

@@ -56,7 +56,11 @@ public sealed class VicIISpriteDmaTests
     /// </summary>
     private static void AdvanceOneFullFrame(Mos6569 vic)
     {
-        AdvanceTo(vic, 0, 0);
+        // Align to the frame start (line 0 cycle 1: VICE applies
+        // vicii_cycle_start_of_frame at raster cycle 1 per
+        // viciisc/vicii-cycle.c:453-456, so line 0 cycle 0 does not exist;
+        // PLAN-VICEPARITY-001 slice V2 / TEST-VIC-CYCLE-12).
+        AdvanceTo(vic, 0, 1);
         AdvanceTo(vic, (ushort)(vic.TotalLines - 1), (byte)(vic.CyclesPerLine - 1));
     }
 

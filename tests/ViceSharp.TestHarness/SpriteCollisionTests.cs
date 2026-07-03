@@ -114,9 +114,17 @@ public sealed class SpriteCollisionTests
 
     /// <summary>
     /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
-    /// Use case: $D01E read-clear semantics: after reading the latch, a
-    /// subsequent read must return 0 until new collisions accumulate.
-    /// Acceptance: First read returns 0x03; immediate second read returns 0x00.
+    /// Use case: $D01E read-clear semantics: reading the latch schedules the
+    /// clear for the NEXT cycle (VICE d01e_read sets clear_collisions,
+    /// viciisc/vicii-mem.c:520-535; the following vicii_cycle zeroes the
+    /// accumulator, vicii-cycle.c:413-425), so one cycle later a read
+    /// returns 0 until new collisions accumulate.
+    /// Acceptance: First read returns 0x03; after one Tick (the deferred
+    /// clear) the next read returns 0x00.
+    /// REBASED (PLAN-VICEPARITY-001 slice V2 / TEST-VIC-REGISTERS-12/14): the
+    /// previous immediate back-to-back-read expectation encoded the divergent
+    /// in-read clear (finding 46); on hardware consecutive reads are always
+    /// separated by at least one cycle.
     /// </summary>
     [Fact]
     public void SpriteSprite_LatchClearsOnRead()
@@ -132,6 +140,7 @@ public sealed class SpriteCollisionTests
         AdvanceTo(vic, line: 130, extra: 0);
 
         Assert.Equal(0x03, vic.Read(SpriteSpriteCollision));
+        vic.Tick(); // Deferred clear lands on the next cycle (vicii-cycle.c:413-425).
         Assert.Equal(0x00, vic.Read(SpriteSpriteCollision));
     }
 
@@ -220,9 +229,17 @@ public sealed class SpriteCollisionTests
 
     /// <summary>
     /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
-    /// Use case: $D01F read-clear semantics: after reading the latch, a
-    /// subsequent read must return 0 until new collisions accumulate.
-    /// Acceptance: First read returns 0x01; immediate second read returns 0x00.
+    /// Use case: $D01F read-clear semantics: reading the latch schedules the
+    /// clear for the NEXT cycle (VICE d01f_read sets clear_collisions,
+    /// viciisc/vicii-mem.c:537-559; the following vicii_cycle zeroes the
+    /// accumulator, vicii-cycle.c:413-425), so one cycle later a read
+    /// returns 0 until new collisions accumulate.
+    /// Acceptance: First read returns 0x01; after one Tick (the deferred
+    /// clear) the next read returns 0x00.
+    /// REBASED (PLAN-VICEPARITY-001 slice V2 / TEST-VIC-REGISTERS-13/14): the
+    /// previous immediate back-to-back-read expectation encoded the divergent
+    /// in-read clear (finding 46); on hardware consecutive reads are always
+    /// separated by at least one cycle.
     /// </summary>
     [Fact]
     public void SpriteBackground_LatchClearsOnRead()
@@ -236,6 +253,7 @@ public sealed class SpriteCollisionTests
         AdvanceTo(vic, line: 130, extra: 0);
 
         Assert.Equal(0x01, vic.Read(SpriteBackgroundCollision));
+        vic.Tick(); // Deferred clear lands on the next cycle (vicii-cycle.c:413-425).
         Assert.Equal(0x00, vic.Read(SpriteBackgroundCollision));
     }
 

@@ -19,4 +19,11 @@ public sealed class Mos8565 : Mos6569
 
     public override string Name => "MOS 8565 VIC-II (new PAL)";
     public override DeviceId Id => new DeviceId(0x0009);
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-07: the HMOS 8565 has no colour
+    /// latency (VICE viciisc/vicii-chip-model.c:260-268, color_latency = 0),
+    /// so the light-pen x offset is 1 instead of 2 (vicii-lightpen.c:42).
+    /// </summary>
+    protected override bool ColorLatency => false;
 }

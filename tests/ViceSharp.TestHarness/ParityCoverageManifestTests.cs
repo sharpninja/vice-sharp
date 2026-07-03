@@ -34,10 +34,18 @@ public sealed class ParityCoverageManifestTests
     /// in S2: their VICE-exact fixes conflict with the FAITHFUL locks
     /// TEST-SID-CLOCK-11, TEST-SID-VOICE-07 and TEST-SID-VOICE-09 (see the
     /// S2 slice report).
+    /// +15 = slice V2 (PLAN-VICEPARITY-001): all DIVERGENT ACs of
+    /// FR-VIC-RASTER-IRQ (AC-02/AC-09/AC-11), FR-VIC-REGISTERS
+    /// (AC-12/AC-13/AC-14/AC-15) and FR-VIC-LIGHTPEN
+    /// (AC-01/AC-05..AC-10/AC-14) authored in
+    /// VicIrqRegsLightpenDivergentParityTests. FR-VIC-LIGHTPEN AC-01 and
+    /// FR-VIC-REGISTERS AC-15 were stopped in V2: their VICE-exact fixes
+    /// conflict with the FAITHFUL locks TEST-VIC-LIGHTPEN-03/04 and
+    /// TEST-VIC-REGISTERS-10/11 (see the V2 slice report).
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered.
     /// </summary>
-    private const int ExpectedMinCovered = 199;
+    private const int ExpectedMinCovered = 214;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

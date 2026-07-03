@@ -74,7 +74,10 @@ public sealed class VicCycleDivergentParityTests
         vic.Write(ScreenControl1, 0x10); // DEN=1: full 25-row display frame.
 
         AdvanceTo(vic, (ushort)(vic.TotalLines - 1), 0);
-        AdvanceTo(vic, 0x00, 0); // Frame wrap into frame 2.
+        // Frame start of frame 2 (applied at raster cycle 1 per VICE
+        // viciisc/vicii-cycle.c:453-456; line 0 cycle 0 does not exist,
+        // PLAN-VICEPARITY-001 slice V2 / TEST-VIC-CYCLE-12).
+        AdvanceTo(vic, 0x00, 1);
 
         var atFrameStart = ReadInternals(vic);
         Assert.Equal(0, atFrameStart.Vc);
@@ -97,7 +100,10 @@ public sealed class VicCycleDivergentParityTests
         vic.Write(ScreenControl1, 0x10); // DEN=1: full 25-row display frame.
 
         AdvanceTo(vic, (ushort)(vic.TotalLines - 1), 0);
-        AdvanceTo(vic, 0x00, 0); // Frame wrap into frame 2.
+        // Frame start of frame 2 (applied at raster cycle 1 per VICE
+        // viciisc/vicii-cycle.c:453-456; line 0 cycle 0 does not exist,
+        // PLAN-VICEPARITY-001 slice V2 / TEST-VIC-CYCLE-12).
+        AdvanceTo(vic, 0x00, 1);
 
         var atFrameStart = ReadInternals(vic);
         Assert.Equal(0, atFrameStart.VcBase);
@@ -115,13 +121,14 @@ public sealed class VicCycleDivergentParityTests
     /// Acceptance: from line 311 cycle 62, the first tick leaves the raster line at
     /// 311 with RasterX 0; the second tick (RasterX 1) performs the frame reset:
     /// raster line 0, refresh counter $FF, allow_bad_lines false.
-    /// SLICE V1 STOP: remediation conflicts with the FAITHFUL lock
-    /// TEST-VIC-CYCLE-11 (one tick from (311,62) must yield (0,0)), which encodes
-    /// the managed wrap timing. Kept pending until the lock conflict is resolved
-    /// by the parity plan owner.
+    /// RESOLVED (PLAN-VICEPARITY-001 slice V2): the V1 stop over the
+    /// TEST-VIC-CYCLE-11 lock is lifted; the raster-IRQ cycle-0 remediation
+    /// (TEST-VIC-RASTER-IRQ-02) required the VICE start_of_frame mechanism, so
+    /// CYCLE-11 was re-based to the VICE-exact wrap visibility and this AC is
+    /// implemented (vicii-cycle.c:202-218,453-456).
     /// </summary>
     [Fact]
-    [ParityAc("TEST-VIC-CYCLE-12", ParityTag.Divergent, pending: true)]
+    [ParityAc("TEST-VIC-CYCLE-12", ParityTag.Divergent, pending: false)]
     public void FrameResetAppliesAtRasterCycle1OfLastLine()
     {
         var vic = BuildVic();
