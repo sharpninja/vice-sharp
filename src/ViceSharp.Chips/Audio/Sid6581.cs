@@ -71,6 +71,18 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3].
     /// </summary>
     private const int FloatingOutputTtlBit6581 = 1500;
+    /// <summary>
+    /// reSID 6581 shift-register full-reset countdown (wave.cc:35):
+    /// cycles from test-rising to the first shiftreg_bitfade call.
+    /// FR-SID-WAVE-TESTBIT AC-04 [PLAN-VICEPARITY-001 S4/S5].
+    /// </summary>
+    private const uint ShiftRegisterResetStart6581 = 35000;
+    /// <summary>
+    /// reSID 6581 per-bit-fade countdown (wave.cc:36): cycles between
+    /// successive OR-fill steps while the shift register is not all-ones.
+    /// FR-SID-WAVE-TESTBIT AC-04 [PLAN-VICEPARITY-001 S4/S5].
+    /// </summary>
+    private const uint ShiftRegisterResetBit6581 = 1000;
     private uint _noiseLfsr = NoiseLfsrInitial;
 
     /// <summary>
@@ -650,6 +662,26 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// <summary>The external-filter stage output committed this cycle (fed from the filter output). Parity-test seam.</summary>
     internal int CycleExternalFilterOutput => _cycleExtFilterOutput;
 
+    /// <summary>
+    /// Per-voice 23-bit noise shift register (reSID wave.h shift_register).
+    /// FR-SID-WAVE-TESTBIT AC-08 [PLAN-VICEPARITY-001 S4/S5]. Parity-test seam.
+    /// </summary>
+    internal uint VoiceShiftRegister(int i) => _voices[i].ShiftRegister;
+
+    /// <summary>
+    /// Per-voice shift-register-reset countdown (reSID wave.h shift_register_reset):
+    /// cycles remaining to the next shiftreg_bitfade call while test is held.
+    /// FR-SID-WAVE-TESTBIT AC-04 [PLAN-VICEPARITY-001 S4/S5]. Parity-test seam.
+    /// </summary>
+    internal uint VoiceShiftRegisterReset(int i) => _voices[i].ShiftRegisterReset;
+
+    /// <summary>
+    /// Per-voice noise-clock pipeline (reSID wave.h shift_pipeline): armed to 2
+    /// on bit-19 rise, decremented each cycle, shift register clocks at 0.
+    /// FR-SID-WAVE-TESTBIT AC-05 [PLAN-VICEPARITY-001 S4/S5]. Parity-test seam.
+    /// </summary>
+    internal uint VoiceShiftPipeline(int i) => _voices[i].ShiftPipeline;
+
     // SID Registers
     private byte[] _registers = new byte[0x20];
 
@@ -690,6 +722,26 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         /// AC-07 [PLAN-VICEPARITY-001 S3].
         /// </summary>
         public int FloatingOutputTtl;
+        /// <summary>
+        /// Per-voice 23-bit noise LFSR (reSID shift_register, wave.h).
+        /// Initialized to 0x7FFFFE by reset() (wave.cc:307). Maintained in
+        /// parallel with the shared _noiseLfsr for oracle state matching.
+        /// FR-SID-WAVE-TESTBIT AC-08 [PLAN-VICEPARITY-001 S4/S5].
+        /// </summary>
+        public uint ShiftRegister;
+        /// <summary>
+        /// Countdown cycles to the next shiftreg_bitfade call while test is held.
+        /// Armed to ShiftRegisterResetStart6581 (35000) on test-rising
+        /// (writeCONTROL_REG wave.cc:234). FR-SID-WAVE-TESTBIT AC-04.
+        /// </summary>
+        public uint ShiftRegisterReset;
+        /// <summary>
+        /// Noise-clock pipeline: set to 2 on bit-19 rising edge, decremented
+        /// each cycle, shift register clocks when it hits 0 (reSID shift_pipeline,
+        /// wave.h:164-170). Flushed to 0 on test-rising (wave.cc:233).
+        /// FR-SID-WAVE-TESTBIT AC-05 [PLAN-VICEPARITY-001 S4/S5].
+        /// </summary>
+        public uint ShiftPipeline;
         public byte Envelope;          // display/readback mirror of Env.EnvelopeCounter
         public EnvelopeState State;     // display mirror of Env.State
         public bool Gate;
@@ -981,6 +1033,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // up the accumulator with even bits high (accumulator = 0x555555,
             // wave.cc:117). Shared by both 6581 and 8580.
             _voices[v].WaveformAccumulator = 0x555555;
+            // FR-SID-WAVE-TESTBIT AC-08 [PLAN-VICEPARITY-001 S4/S5]: per-voice
+            // shift register initialized by the constructor's implicit reset():
+            // shift_register = 0x7ffffe (wave.cc:307), shift_register_reset = 0,
+            // shift_pipeline not explicitly set by constructor (starts at 0).
+            _voices[v].ShiftRegister = 0x7FFFFEu;
+            _voices[v].ShiftRegisterReset = 0;
+            _voices[v].ShiftPipeline = 0;
         }
     }
 
@@ -1087,34 +1146,32 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         }
     }
 
-    // Previous-cycle accumulator MSBs latched by the oscillator pass for the
-    // synchronize pass (parallel semantics: all oscillators clock, then all
-    // synchronize against the pre-reset MSB edges).
-    private bool _prevMsb0;
-    private bool _prevMsb1;
-    private bool _prevMsb2;
+    // Per-voice msb_rising flags (reSID wave.h:160): true when bit 23 transitions
+    // 0->1 this cycle. Set by ClockOscillators, consumed by SynchronizeOscillators.
+    // FR-SID-WAVE-SYNC AC-01 [PLAN-VICEPARITY-001 S4/S5].
+    private bool _msbRising0;
+    private bool _msbRising1;
+    private bool _msbRising2;
 
     /// <summary>
-    /// Grouped oscillator pass (reSID sid.h:210-213): latch the
-    /// previous-cycle MSBs for the synchronize pass, advance every phase
-    /// accumulator, and clock the noise LFSR on accumulator bit-19 rising
-    /// edges.
+    /// Grouped oscillator pass (reSID sid.h:210-213 + wave.h:142-172): capture
+    /// the pre-advance MSBs for msb_rising detection, advance every phase
+    /// accumulator, manage the per-voice noise-clock pipeline, handle the
+    /// test-bit-held path (accumulator held 0, slow shift-register-reset counter,
+    /// pulse forced high), and clock the shared noise LFSR on bit-19 rising edges.
+    /// FR-SID-WAVE-SYNC AC-01 [PLAN-VICEPARITY-001 S4/S5]: msb_rising replaces
+    /// the old falling-edge _prevMsb fields.
+    /// FR-SID-WAVE-TESTBIT AC-04/AC-05 [PLAN-VICEPARITY-001 S4/S5]: per-voice
+    /// shift_register_reset countdown and shift_pipeline management.
     /// </summary>
     private void ClockOscillators()
     {
-        // Capture previous-cycle MSBs to detect 1->0 transitions for hard sync.
-        // Each voice's sync source is voice ((i + 2) % 3) (cyclic backward).
-        _prevMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
-        _prevMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
-        _prevMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
+        // Capture pre-advance MSBs for the rising-edge (msb_rising) computation.
+        bool prevMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
+        bool prevMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
+        bool prevMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
 
-        // FR-SID-009 ac.2: the noise LFSR clocks on bit-19 low->high
-        // transitions of the phase accumulator. Capture each voice's
-        // bit-19 state before the accumulator advances so we can detect
-        // the edge precisely. Real hardware has a per-voice LFSR; this
-        // implementation shares one LFSR across voices (good enough for
-        // mono SFX), and clocks once per edge observed on any noise-
-        // selected voice this cycle.
+        // FR-SID-009 ac.2: capture bit-19 before advance for shared LFSR edge detection.
         var prevBit19_0 = (_voices[0].WaveformAccumulator & NoiseClockBit) != 0;
         var prevBit19_1 = (_voices[1].WaveformAccumulator & NoiseClockBit) != 0;
         var prevBit19_2 = (_voices[2].WaveformAccumulator & NoiseClockBit) != 0;
@@ -1123,31 +1180,39 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         {
             ref Voice voice = ref _voices[i];
 
-            // FR-SID-009 ac.4: the CTRL test bit (bit 3) forces the LFSR
-            // back to the all-ones seed and pins the phase accumulator
-            // at zero (matches the SidOscillator and resid behaviour).
-            // FR-SID-OSC3ENV3 AC-03 [PLAN-VICEPARITY-001 S2]: while test is
-            // held, each cycle also forces the pulse level high before the
-            // waveform-output pass consumes it ("The test bit sets pulse
-            // high", reSID wave.h:150-151).
             if ((voice.Control & 0x08) != 0)
             {
-                _noiseLfsr = NoiseLfsrInitial;
+                // Test bit held (wave.h:144-152, FR-SID-WAVE-TESTBIT AC-04/AC-05):
+                // accumulator stays 0, shift_register_reset counts down, pulse forced high.
                 voice.WaveformAccumulator = 0;
+                if (voice.ShiftRegisterReset != 0 && --voice.ShiftRegisterReset == 0)
+                {
+                    ShiftRegBitFade(ref voice);
+                }
                 voice.PulseLevel = 0xFFF;
                 continue;
             }
 
-            // FR-SID-WAVE-ACC AC-02 [PLAN-VICEPARITY-001 S3]: reSID masks the
-            // accumulator to 24 bits every cycle (wave.h:155:
-            // accumulator_next = (accumulator + freq) & 0xffffff).
-            voice.WaveformAccumulator = (voice.WaveformAccumulator + voice.Frequency) & 0xFFFFFF;
+            // Normal accumulator advance (wave.h:155-157).
+            // FR-SID-WAVE-ACC AC-02 [PLAN-VICEPARITY-001 S3]: mask to 24 bits each cycle.
+            uint prevAcc = voice.WaveformAccumulator;
+            voice.WaveformAccumulator = (prevAcc + voice.Frequency) & 0xFFFFFF;
+            uint bitsSet = ~prevAcc & voice.WaveformAccumulator;
+
+            // Per-voice noise-clock pipeline (wave.h:164-170, FR-SID-WAVE-TESTBIT AC-05):
+            // arm to 2 on bit-19 rising edge, decrement each cycle, clock LFSR at 0.
+            if ((bitsSet & 0x080000) != 0)
+            {
+                voice.ShiftPipeline = 2;
+            }
+            else if (voice.ShiftPipeline != 0 && --voice.ShiftPipeline == 0)
+            {
+                ClockVoiceShiftRegister(ref voice);
+            }
         }
 
-        // FR-SID-009 ac.2: clock the LFSR once for each noise-selected
-        // voice that just transitioned bit 19 low->high. Most noise
-        // patches use a single voice so this is typically a single clock
-        // per cycle.
+        // FR-SID-009 ac.2: shared noise LFSR (backward-compat audio path).
+        // Clock once per noise-selected voice with bit-19 rising edge.
         bool hasNoise0 = (_voices[0].Control & 0x80) != 0;
         bool hasNoise1 = (_voices[1].Control & 0x80) != 0;
         bool hasNoise2 = (_voices[2].Control & 0x80) != 0;
@@ -1157,35 +1222,68 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         if (hasNoise0 && !prevBit19_0 && newBit19_0) ClockNoiseLfsr();
         if (hasNoise1 && !prevBit19_1 && newBit19_1) ClockNoiseLfsr();
         if (hasNoise2 && !prevBit19_2 && newBit19_2) ClockNoiseLfsr();
+
+        // Compute msb_rising for each voice (wave.h:159-160): 0->1 transition of bit 23.
+        // FR-SID-WAVE-SYNC AC-01 [PLAN-VICEPARITY-001 S4/S5].
+        _msbRising0 = !prevMsb0 && (_voices[0].WaveformAccumulator & 0x800000u) != 0;
+        _msbRising1 = !prevMsb1 && (_voices[1].WaveformAccumulator & 0x800000u) != 0;
+        _msbRising2 = !prevMsb2 && (_voices[2].WaveformAccumulator & 0x800000u) != 0;
     }
 
     /// <summary>
-    /// Grouped synchronize pass (reSID sid.h:215-218): all oscillators have
-    /// clocked, so every sync decision sees this cycle's parallel state.
-    /// The managed trigger is the source MSB 1->0 edge; reSID fires on the
-    /// rising edge with a same-cycle sync-source special case, which is the
-    /// DIVERGENT FR-SID-WAVE-SYNC AC-01/AC-04 remediation owned by that
-    /// slice, not changed here.
+    /// reSID clock_shift_register: advance the per-voice 23-bit noise LFSR one
+    /// step with feedback from bits 22 and 17 (XOR). Used for the oracle-matching
+    /// per-voice shift register state; audio output still runs through _noiseLfsr.
+    /// </summary>
+    private static void ClockVoiceShiftRegister(ref Voice voice)
+    {
+        uint bit0 = ((voice.ShiftRegister >> 22) ^ (voice.ShiftRegister >> 17)) & 1u;
+        voice.ShiftRegister = ((voice.ShiftRegister << 1) | bit0) & 0x7FFFFFu;
+    }
+
+    /// <summary>
+    /// reSID shiftreg_bitfade (wave.cc:282-291): OR-fill upward by one step
+    /// (each 0-bit OR'd with the bit above it), then re-arm the per-bit TTL
+    /// to ShiftRegisterResetBit6581 if the register is not yet all-ones.
+    /// FR-SID-WAVE-TESTBIT AC-04 [PLAN-VICEPARITY-001 S4/S5].
+    /// </summary>
+    private static void ShiftRegBitFade(ref Voice voice)
+    {
+        voice.ShiftRegister |= 1u;
+        voice.ShiftRegister = (voice.ShiftRegister | (voice.ShiftRegister << 1)) & 0x7FFFFFu;
+        if (voice.ShiftRegister != 0x7FFFFFu)
+        {
+            voice.ShiftRegisterReset = ShiftRegisterResetBit6581;
+        }
+    }
+
+    /// <summary>
+    /// Grouped synchronize pass (reSID sid.h:215-218 + wave.h:255-264): all
+    /// oscillators have clocked so every sync decision sees this cycle's parallel
+    /// post-advance state. Fires on the RISING MSB edge (msb_rising set by
+    /// ClockOscillators) with the same-cycle sync-source special case:
+    /// voice[i] does NOT reset voice[(i+1)%3] if voice[i] itself has SYNC set
+    /// AND its own source voice[(i+2)%3] also has its MSB rising this cycle
+    /// (reSID wave.h:255-264: "!(sync and sync_source->msb_rising)").
+    /// FR-SID-WAVE-SYNC AC-01/AC-04 [PLAN-VICEPARITY-001 S4/S5].
     /// </summary>
     private void SynchronizeOscillators()
     {
-        // Detect MSB 1->0 transitions on each voice and apply hard sync to
-        // the dependent voice when its SYNC control bit is set.
-        var newMsb0 = (_voices[0].WaveformAccumulator & 0x800000u) != 0;
-        var newMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
-        var newMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
+        bool sync0 = (_voices[0].Control & 0x02) != 0;
+        bool sync1 = (_voices[1].Control & 0x02) != 0;
+        bool sync2 = (_voices[2].Control & 0x02) != 0;
 
-        // Voice 0 syncs from voice 2 (downward edge of voice 2 MSB resets voice 0).
-        if ((_voices[0].Control & 0x02) != 0 && _prevMsb2 && !newMsb2)
-            _voices[0].WaveformAccumulator = 0;
-
-        // Voice 1 syncs from voice 0.
-        if ((_voices[1].Control & 0x02) != 0 && _prevMsb0 && !newMsb0)
+        // voice[0] fires on voice[1]: suppress if voice[0].sync AND voice[2].msb_rising.
+        if (_msbRising0 && sync1 && !(sync0 && _msbRising2))
             _voices[1].WaveformAccumulator = 0;
 
-        // Voice 2 syncs from voice 1.
-        if ((_voices[2].Control & 0x02) != 0 && _prevMsb1 && !newMsb1)
+        // voice[1] fires on voice[2]: suppress if voice[1].sync AND voice[0].msb_rising.
+        if (_msbRising1 && sync2 && !(sync1 && _msbRising0))
             _voices[2].WaveformAccumulator = 0;
+
+        // voice[2] fires on voice[0]: suppress if voice[2].sync AND voice[1].msb_rising.
+        if (_msbRising2 && sync0 && !(sync2 && _msbRising1))
+            _voices[0].WaveformAccumulator = 0;
     }
 
     /// <summary>
@@ -1267,6 +1365,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // clears the floating-DAC TTL (floating_output_ttl = 0,
             // wave.cc:331).
             voice.FloatingOutputTtl = 0;
+            // FR-SID-WAVE-TESTBIT AC-08 [PLAN-VICEPARITY-001 S4/S5]: reset()
+            // sets shift_register = 0x7ffffe (wave.cc:307) and clears the
+            // reset counter and pipeline.
+            voice.ShiftRegister = 0x7FFFFEu;
+            voice.ShiftRegisterReset = 0;
+            voice.ShiftPipeline = 0;
             voice.Gate = false;
             voice.Reset = false;
             voice.Env.Reset();
@@ -1289,9 +1393,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         _cycleVoiceOutput2 = 0;
         _cycleFilterOutput = 0;
         _cycleExtFilterOutput = 0;
-        _prevMsb0 = false;
-        _prevMsb1 = false;
-        _prevMsb2 = false;
+        _msbRising0 = false;
+        _msbRising1 = false;
+        _msbRising2 = false;
     }
 
     public byte Read(ushort address)
@@ -1354,32 +1458,54 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                     PushPulseLevel(voiceIndex);
                     break;
                 case 4:
-                    var prevWaveformBits = _voices[voiceIndex].Control & 0xF0;
-                    _voices[voiceIndex].Control = value;
-                    _voices[voiceIndex].Gate = (value & 0x01) != 0;
-                    // reSID gate/state transition (attack on gate-on, release on gate-off).
-                    _voices[voiceIndex].Env.WriteControl(value);
-                    // FR-SID-OSC3ENV3 AC-01/AC-06 [PLAN-VICEPARITY-001 S2]:
-                    // a control write with a waveform selected refreshes the
-                    // waveform output and the osc3 latch immediately (reSID
-                    // writeCONTROL_REG, wave.cc:261-264), which is also what
-                    // serves the 8580 tri_saw_pipeline power-up seed on the
-                    // first selection.
-                    if ((value & 0xF0) != 0)
                     {
-                        SetWaveformOutput(voiceIndex);
-                    }
-                    else if (prevWaveformBits != 0)
-                    {
-                        // FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3]:
-                        // deselecting all waveforms while a waveform was
-                        // previously selected arms the floating-DAC fade TTL
-                        // (reSID writeCONTROL_REG, wave.cc:265-268). The 6581
-                        // TTL start value (182000) is die-specific; 8580 TTL
-                        // is a separate slice remediation.
-                        _voices[voiceIndex].FloatingOutputTtl = FloatingOutputTtlStart6581;
-                    }
+                        byte prevCtrl = _voices[voiceIndex].Control;
+                        var prevWaveformBits = prevCtrl & 0xF0;
+                        bool prevTest = (prevCtrl & 0x08) != 0;
+                        bool newTest = (value & 0x08) != 0;
 
+                        _voices[voiceIndex].Control = value;
+                        _voices[voiceIndex].Gate = (value & 0x01) != 0;
+                        // reSID gate/state transition (attack on gate-on, release on gate-off).
+                        _voices[voiceIndex].Env.WriteControl(value);
+
+                        if (!prevTest && newTest)
+                        {
+                            // Test bit rising (wave.cc:229-241, FR-SID-WAVE-TESTBIT AC-04/AC-05):
+                            // accumulator = 0, shift_pipeline = 0,
+                            // shift_register_reset = SHIFT_REGISTER_RESET_START_6581, pulse_output = 0xfff.
+                            _voices[voiceIndex].WaveformAccumulator = 0;
+                            _voices[voiceIndex].ShiftPipeline = 0;
+                            _voices[voiceIndex].ShiftRegisterReset = ShiftRegisterResetStart6581;
+                            _voices[voiceIndex].PulseLevel = 0xFFF;
+                        }
+                        else if (prevTest && !newTest)
+                        {
+                            // Test bit falling (wave.cc:242-259, FR-SID-WAVE-TESTBIT AC-06):
+                            // single clock of the shift register with bit0 = NOT(bit17).
+                            // Comment in wave.cc: "bit0 = (bit22 | test) ^ bit17 = 1 ^ bit17 = ~bit17"
+                            ref Voice vt = ref _voices[voiceIndex];
+                            uint bit0 = (~vt.ShiftRegister >> 17) & 1u;
+                            vt.ShiftRegister = ((vt.ShiftRegister << 1) | bit0) & 0x7FFFFFu;
+                        }
+
+                        // FR-SID-OSC3ENV3 AC-01/AC-06 [PLAN-VICEPARITY-001 S2]:
+                        // a control write with a waveform selected refreshes the
+                        // waveform output and the osc3 latch immediately (reSID
+                        // writeCONTROL_REG, wave.cc:261-264).
+                        if ((value & 0xF0) != 0)
+                        {
+                            SetWaveformOutput(voiceIndex);
+                        }
+                        else if (prevWaveformBits != 0)
+                        {
+                            // FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3]:
+                            // deselecting all waveforms while a waveform was
+                            // previously selected arms the floating-DAC fade TTL
+                            // (reSID writeCONTROL_REG, wave.cc:265-268).
+                            _voices[voiceIndex].FloatingOutputTtl = FloatingOutputTtlStart6581;
+                        }
+                    }
                     break;
                 case 5:
                     _voices[voiceIndex].AttackDecay = value;

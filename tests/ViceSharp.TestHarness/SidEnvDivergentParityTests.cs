@@ -467,12 +467,19 @@ public sealed class SidEnvDivergentParityTests
     /// were ever fed to a filter stage.
     /// Acceptance: voice 0 (sawtooth, SYNC, gate, envelope parked at 0xFF)
     /// runs at freq $0100 against sync source voice 2 at freq $8000 from
-    /// zeroed accumulators. At cycle 511 the per-cycle voice outputs fed to
-    /// the filter stage are exactly (-862, 0, 0): sawtooth ix = acc>>12 =
-    /// 511*0x100>>12 = 0x1FF00>>12 = 0x1F = 31, so ((31 - 0x380) * 255)>>8.
-    /// At cycle 512 the source MSB edge resets the destination accumulator and
-    /// the fed value is exactly (-893, 0, 0): post-sync ix=0x000 gives
-    /// ((0x000 - 0x380) * 255) >> 8 = -893, not the stale pre-sync -861.
+    /// zeroed accumulators. reSID hard sync fires on the RISING MSB edge of
+    /// the source (msb_rising, wave.h:160), which happens at cycle 256
+    /// (256*0x8000 = 0x800000). At cycle 255, one cycle before the sync, the
+    /// per-cycle voice outputs fed to the filter stage are exactly
+    /// (-878, 0, 0): sawtooth ix = acc>>12 = 255*0x100>>12 = 0xFF00>>12 =
+    /// 0x0F = 15, so ((15 - 0x380) * 255)>>8. At cycle 256 the source MSB
+    /// rises, the synchronize step resets the destination accumulator, and the
+    /// fed value is exactly (-893, 0, 0): post-sync ix=0x000 gives
+    /// ((0x000 - 0x380) * 255) >> 8 = -893. Witnessing the drop to the
+    /// post-sync value at the sync cycle proves the filter is fed the voice
+    /// outputs computed AFTER synchronize, which is the point of this AC.
+    /// [S4/S5 rebase: source MSB rises at cycle 256 under the corrected
+    /// rising-edge hard sync, not falls at cycle 512 under the old model.]
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-CLOCK-02", ParityTag.Divergent, pending: false)]
@@ -503,12 +510,12 @@ public sealed class SidEnvDivergentParityTests
         Assert.Equal(0u, RawAccumulator(sid, 0) & 0xFFFFFFu);
 
         WriteVoice(sid, 0, 1, 0x01);    // destination freq $0100
-        WriteVoice(sid, 2, 1, 0x80);    // sync source freq $8000: MSB falls at cycle 512
+        WriteVoice(sid, 2, 1, 0x80);    // sync source freq $8000: MSB rises at cycle 256 (256*$8000=0x800000)
 
-        TickN(sid, 511);
-        Assert.Equal((-862, 0, 0), sid.CycleVoiceOutputs); // ix=31=(511*$100)>>12: ((31 - 0x380) * 255) >> 8
+        TickN(sid, 255);
+        Assert.Equal((-878, 0, 0), sid.CycleVoiceOutputs); // ix=15=(255*$100)>>12: ((15 - 0x380) * 255) >> 8
 
-        sid.Tick();                     // source MSB edge: destination resynced to phase 0
+        sid.Tick();                     // cycle 256: source MSB rises -> destination resynced to phase 0
         Assert.Equal((-893, 0, 0), sid.CycleVoiceOutputs); // post-sync ix=0: ((0 - 0x380) * 255) >> 8
     }
 

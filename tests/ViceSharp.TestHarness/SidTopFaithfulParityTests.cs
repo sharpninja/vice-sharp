@@ -181,30 +181,30 @@ public sealed class SidTopFaithfulParityTests
     /// and the captured accumulators are compared at the architectural 24-bit
     /// width (FR-SID-WAVE-ACC AC-02), so the leg is independent of the stored
     /// width. For each wiring leg the source voice runs freq $FFFF so its
-    /// accumulator bit 23 falls exactly once in 300 cycles (rises at cycle
-    /// 129; 256 * 0xFFFF = 0xFFFF00 still has bit 23 set, 257 * 0xFFFF =
-    /// 0x010100FF is 0x0100FF modulo 2^24, so the 1-to-0 edge lands on cycle
-    /// 257 whether or not the store is masked). The dependent voice (freq
-    /// $0100, SYNC bit set) is reset on that edge and re-accumulates for the
-    /// remaining 43 cycles: exactly 43 * 0x100 = 0x2B00. The source ends at
-    /// exactly (300 * 0xFFFF) mod 2^24 = 0x2BFED4 and the uninvolved third
-    /// voice (freq $0010, no edge in 300 cycles) ends at exactly 300 * 0x10 =
-    /// 0x12C0, proving the dependent was reset by its designated source and
-    /// nothing else.
+    /// accumulator bit 23 RISES exactly once in 300 cycles (128 * 0xFFFF =
+    /// 0x7FFF80 bit23=0, 129 * 0xFFFF = 0x80FF7F bit23=1, so the 0-to-1
+    /// rising edge lands on cycle 129). The dependent voice (freq $0100,
+    /// SYNC bit set) is reset on that RISING edge and re-accumulates for the
+    /// remaining 171 cycles: exactly 171 * 0x100 = 0xAB00. The source ends
+    /// at exactly (300 * 0xFFFF) mod 2^24 = 0x2BFED4 and the uninvolved
+    /// third voice (freq $0010, no edge in 300 cycles) ends at exactly
+    /// 300 * 0x10 = 0x12C0, proving the dependent was reset by its designated
+    /// source and nothing else.
     /// S3 relock: previously asserted the raw 32-bit from-zero captures
     /// (source 0x012BFED4, i.e. the unmasked store from a zero power-on
-    /// seed); the same wiring subject is now pinned via test-bit zeroing and
-    /// 24-bit captures (source 0x2BFED4 = 0x012BFED4 &amp; 0xFFFFFF; the
-    /// dependent/third values 0x2B00/0x12C0 are unchanged), which stays
-    /// bit-exact across the FR-SID-WAVE-ACC AC-02/AC-05 remediation.
+    /// seed); the same wiring subject was pinned via test-bit zeroing and
+    /// 24-bit captures (source 0x2BFED4 = 0x012BFED4 &amp; 0xFFFFFF).
+    /// S4 relock: previously asserted dependent 0x2B00 (old falling-edge at
+    /// cycle 257, 43 remaining cycles); rebased to rising-edge at cycle 129
+    /// (171 remaining cycles, 0xAB00) per reSID wave.h:160 msb_rising.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-VOICE-07", ParityTag.Faithful)]
     public void HardSyncSourceTopology_MatchesReSidVoiceWiring()
     {
-        Assert.Equal((0x2B00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 0, source: 2, third: 1));
-        Assert.Equal((0x2B00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 1, source: 0, third: 2));
-        Assert.Equal((0x2B00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 2, source: 1, third: 0));
+        Assert.Equal((0xAB00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 0, source: 2, third: 1));
+        Assert.Equal((0xAB00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 1, source: 0, third: 2));
+        Assert.Equal((0xAB00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 2, source: 1, third: 0));
     }
 
     private static (uint DependentAcc, uint SourceAcc, uint ThirdAcc) RunHardSyncLeg(int dependent, int source, int third)

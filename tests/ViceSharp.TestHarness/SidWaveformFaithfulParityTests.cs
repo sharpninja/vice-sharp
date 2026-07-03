@@ -423,9 +423,13 @@ public sealed class SidWaveformFaithfulParityTests
     /// CTRL SYNC bit 0x02 is set (reSID wave.h:261 gates on sync_dest sync);
     /// managed cite Sid6581.cs:778,782,786.
     /// Acceptance: identical rigs (source voice 2 FREQ 0x8000, destination
-    /// voice 0 FREQ 0x0100, 600 cycles spanning the source MSB edge at cycle
-    /// 512) end at exactly 88 * 0x100 with the bit set and exactly 600 * 0x100
-    /// (an unbroken ramp) with the bit clear.
+    /// voice 0 FREQ 0x0100, 600 cycles spanning the source MSB RISING edge at
+    /// cycle 256 per reSID wave.h:160) end at exactly 344 * 0x100 with the bit
+    /// set (reset at 256, 344 remaining cycles) and exactly 600 * 0x100 (an
+    /// unbroken ramp) with the bit clear.
+    /// S4 relock: previously asserted 88 * 0x100 (reset at old falling edge,
+    /// cycle 512, 88 remaining cycles); rebased to rising-edge (cycle 256,
+    /// 344 remaining cycles) per reSID wave.h:160, msb_rising = bit 23 0-to-1.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-WAVE-SYNC-02", ParityTag.Faithful)]
@@ -437,9 +441,8 @@ public sealed class SidWaveformFaithfulParityTests
         TickN(synced, 600);
         TickN(unsynced, 600);
 
-        // Current managed edge (source MSB 1 to 0) lands at cycle 512; the
-        // rising-vs-falling polarity itself is DIVERGENT TEST-SID-WAVE-SYNC-01.
-        Assert.Equal(88u * 0x100u, Accumulator24(synced, 0));
+        // Source MSB RISES at cycle 256 (reSID wave.h:160 msb_rising = 0-to-1 transition).
+        Assert.Equal(344u * 0x100u, Accumulator24(synced, 0));
         Assert.Equal(600u * 0x100u, Accumulator24(unsynced, 0));
     }
 
@@ -448,10 +451,13 @@ public sealed class SidWaveformFaithfulParityTests
     /// Use case: on a sync event the destination accumulator is set to exactly
     /// zero (reSID wave.h:262 sync_dest accumulator = 0); managed cite
     /// Sid6581.cs:779,783,787.
-    /// Acceptance: the destination ramps untouched through cycle 511
-    /// (511 * 0x100), reads exactly 0 after the sync cycle 512 (the reset wins
+    /// Acceptance: the destination ramps untouched through cycle 255
+    /// (255 * 0x100), reads exactly 0 after the sync cycle 256 (the reset wins
     /// over that cycle's FREQ add), and resumes from zero with exactly 0x100
-    /// on cycle 513.
+    /// on cycle 257.
+    /// S4 relock: previously checked cycles 511/512/513 (old falling edge at
+    /// 512); rebased to cycles 255/256/257 per reSID wave.h:160 rising edge
+    /// (source FREQ 0x8000: 256 * 0x8000 = 0x800000, bit 23 transitions 0-to-1).
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-WAVE-SYNC-03", ParityTag.Faithful)]
@@ -459,10 +465,10 @@ public sealed class SidWaveformFaithfulParityTests
     {
         var sid = BuildHardSyncRig(0x02);
 
-        TickN(sid, 511);
-        Assert.Equal(511u * 0x100u, Accumulator24(sid, 0));
+        TickN(sid, 255);
+        Assert.Equal(255u * 0x100u, Accumulator24(sid, 0));
 
-        sid.Tick(); // source MSB edge cycle
+        sid.Tick(); // cycle 256: source FREQ 0x8000 MSB RISES (0x800000), resets destination
         Assert.Equal(0u, Accumulator24(sid, 0));
 
         sid.Tick();
@@ -475,10 +481,13 @@ public sealed class SidWaveformFaithfulParityTests
     /// voice 1 from voice 0, voice 2 from voice 1 (reSID sid.cc:74-76
     /// set_sync_source wiring); managed cite Sid6581.cs:721,777-787.
     /// Acceptance: for each source voice s, after 600 cycles the chained
-    /// destination (s+1 mod 3) is reset at the source edge (exactly
-    /// 88 * 0x100) while the remaining voice - whose own source produced no
-    /// MSB edge - ramps to exactly 600 * 0x100 even though its SYNC bit is
-    /// also set.
+    /// destination (s+1 mod 3) is reset at the source RISING edge (exactly
+    /// 344 * 0x100: reset at cycle 256, 344 remaining) while the remaining
+    /// voice - whose own source produced no MSB rising edge - ramps to exactly
+    /// 600 * 0x100 even though its SYNC bit is also set.
+    /// S4 relock: previously asserted 88 * 0x100 (old falling edge cycle 512,
+    /// 88 remaining); rebased to rising edge cycle 256 (344 remaining) per
+    /// reSID wave.h:160 msb_rising = bit 23 0-to-1.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-WAVE-SYNC-05", ParityTag.Faithful)]
@@ -491,7 +500,7 @@ public sealed class SidWaveformFaithfulParityTests
 
             var sid = BuildSid();
             ZeroAllAccumulatorsViaTestBit(sid);
-            WriteVoice(sid, source, 1, 0x80);              // source FREQ 0x8000: MSB falls at cycle 512
+            WriteVoice(sid, source, 1, 0x80);              // source FREQ 0x8000: MSB RISES at cycle 256
             WriteVoice(sid, chainedDestination, 1, 0x01);  // FREQ 0x0100
             WriteVoice(sid, chainedDestination, 4, 0x02);
             WriteVoice(sid, unrelated, 1, 0x01);           // FREQ 0x0100
@@ -499,7 +508,7 @@ public sealed class SidWaveformFaithfulParityTests
 
             TickN(sid, 600);
 
-            Assert.Equal(88u * 0x100u, Accumulator24(sid, chainedDestination));
+            Assert.Equal(344u * 0x100u, Accumulator24(sid, chainedDestination));
             Assert.Equal(600u * 0x100u, Accumulator24(sid, unrelated));
         }
     }
@@ -507,15 +516,20 @@ public sealed class SidWaveformFaithfulParityTests
     /// <summary>
     /// FR-SID-WAVE-SYNC AC-06 (FAITHFUL, TEST-SID-WAVE-SYNC-06).
     /// Use case: all oscillators are clocked first and only then synchronized,
-    /// because they operate in parallel (reSID sid.h:200-223); managed
-    /// latches every post-clock MSB before applying any sync reset
-    /// (Sid6581.cs:722-724,737-755,771-787).
-    /// Acceptance: with voice 0 (FREQ 0x7000) producing its MSB edge at cycle
-    /// 586 while voice 1 (FREQ 0x4000, SYNC set) holds its MSB high across
-    /// that cycle, voice 1 is reset to exactly 0 at cycle 586 but voice 2
-    /// (FREQ 0x0010, SYNC set) keeps its unbroken ramp (586 * 0x10 then
-    /// 700 * 0x10): a serial implementation reading voice 1 post-reset would
-    /// have synced voice 2.
+    /// because they operate in parallel (reSID sid.h:200-223); managed latches
+    /// each voice's post-clock msb_rising flag before applying any sync reset
+    /// (Sid6581.cs ClockOscillators sets _msbRising0/1/2 before
+    /// SynchronizeOscillators reads them).
+    /// Acceptance: with voice 0 (FREQ 0x7000) producing its MSB RISING edge at
+    /// cycle 293 (292 * 0x7000 = 0x7FC000 bit23=0, 293 * 0x7000 = 0x803000
+    /// bit23=1) while voice 1 (FREQ 0x4000, SYNC set) has its MSB NOT rising
+    /// at cycle 293 (acc 0x494000, bit23 stays 0), voice 1 is reset to exactly
+    /// 0 at cycle 293 and voice 2 (FREQ 0x0010, SYNC set) keeps its unbroken
+    /// ramp: _msbRising1 was false (natural clock, not the post-reset 0 state),
+    /// so SynchronizeOscillators correctly does not cascade to voice 2.
+    /// S4 relock: previously pinned old falling-edge at cycle 586 (voice 1 MSB
+    /// high, not rising); rebased to rising-edge at cycle 293 per reSID
+    /// wave.h:160 msb_rising = bit 23 0-to-1.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-WAVE-SYNC-06", ParityTag.Faithful)]
@@ -523,21 +537,21 @@ public sealed class SidWaveformFaithfulParityTests
     {
         var sid = BuildSid();
         ZeroAllAccumulatorsViaTestBit(sid);
-        WriteVoice(sid, 0, 1, 0x70); // FREQ 0x7000: MSB set cycles 293..585, falls at 586
-        WriteVoice(sid, 1, 1, 0x40); // FREQ 0x4000: MSB set from cycle 512 (still high at 586)
+        WriteVoice(sid, 0, 1, 0x70); // FREQ 0x7000: MSB RISES at cycle 293
+        WriteVoice(sid, 1, 1, 0x40); // FREQ 0x4000: MSB not rising at cycle 293 (rises at 512)
         WriteVoice(sid, 1, 4, 0x02); // voice 1 syncs from voice 0
         WriteVoice(sid, 2, 0, 0x10); // FREQ 0x0010
         WriteVoice(sid, 2, 4, 0x02); // voice 2 syncs from voice 1
 
-        TickN(sid, 585);
-        Assert.Equal((585u * 0x4000u) & Acc24Mask, Accumulator24(sid, 1)); // 0x924000: not yet reset
+        TickN(sid, 292);
+        Assert.Equal((292u * 0x4000u) & Acc24Mask, Accumulator24(sid, 1)); // 0x490000: not yet reset
 
-        sid.Tick(); // cycle 586: voice 0 edge resets voice 1; voice 1's latched MSB stayed high
+        sid.Tick(); // cycle 293: voice 0 MSB rises, resets voice 1; _msbRising1 false, voice 2 untouched
         Assert.Equal(0u, Accumulator24(sid, 1));
-        Assert.Equal(586u * 0x10u, Accumulator24(sid, 2)); // parallel semantics: voice 2 untouched
+        Assert.Equal(293u * 0x10u, Accumulator24(sid, 2)); // parallel: voice 1 not rising, voice 2 not synced
 
-        TickN(sid, 114); // to cycle 700
-        Assert.Equal(114u * 0x4000u, Accumulator24(sid, 1));
+        TickN(sid, 407); // to cycle 700
+        Assert.Equal(407u * 0x4000u, Accumulator24(sid, 1));
         Assert.Equal(700u * 0x10u, Accumulator24(sid, 2));
     }
 

@@ -413,6 +413,22 @@ public static unsafe partial class ViceNative
             }
         }
 
+        public readonly uint[] GetShiftRegisterResets()
+        {
+            fixed (uint* srr = ShiftRegisterReset)
+            {
+                return new ReadOnlySpan<uint>(srr, 3).ToArray();
+            }
+        }
+
+        public readonly uint[] GetShiftPipelines()
+        {
+            fixed (uint* sp = ShiftPipeline)
+            {
+                return new ReadOnlySpan<uint>(sp, 3).ToArray();
+            }
+        }
+
         public readonly byte[] GetEnvelopeCounters()
         {
             fixed (byte* envelopeCounter = EnvelopeCounter)
