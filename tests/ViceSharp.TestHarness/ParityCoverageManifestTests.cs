@@ -42,10 +42,23 @@ public sealed class ParityCoverageManifestTests
     /// FR-VIC-REGISTERS AC-15 were stopped in V2: their VICE-exact fixes
     /// conflict with the FAITHFUL locks TEST-VIC-LIGHTPEN-03/04 and
     /// TEST-VIC-REGISTERS-10/11 (see the V2 slice report).
+    /// +14 = slice V5 (PLAN-VICEPARITY-001): all DIVERGENT ACs of
+    /// FR-VIC-SPRITE-DMA (AC-01..AC-14) authored in
+    /// VicSpriteDmaDivergentParityTests. PART 1 V5 also flipped
+    /// TEST-VIC-LIGHTPEN-01 and TEST-VIC-REGISTERS-15 from pending to
+    /// active (2 additional covered, already counted from V2 authoring).
+    /// +13 = slice S3 (PLAN-VICEPARITY-001): the S2-stopped FR-SID-WAVE-ACC
+    /// (AC-02/AC-05/AC-06) and FR-SID-OSC3ENV3 AC-07 (unblocked by the S3
+    /// relock of TEST-SID-VOICE-07/09 and TEST-SID-CLOCK-11), plus every
+    /// DIVERGENT criterion of FR-SID-WAVE-SAWTRI (AC-01..AC-04) and
+    /// FR-SID-WAVE-PULSE (AC-01/AC-02/AC-03/AC-04/AC-06), authored in
+    /// SidWaveCoreDivergentParityTests.
     /// Rises by each slice's DIVERGENT count; the final slice pins
-    /// covered == 466. MUST never be lowered.
+    /// covered == 466. MUST never be lowered. Current authored distinct
+    /// [ParityAc] ids = 241 (240 admitted green + 1 pending: TEST-VIC-FETCH-06,
+    /// the V1 leftover paired with the TEST-VIC-FETCH-07 lock).
     /// </summary>
-    private const int ExpectedMinCovered = 214;
+    private const int ExpectedMinCovered = 241;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

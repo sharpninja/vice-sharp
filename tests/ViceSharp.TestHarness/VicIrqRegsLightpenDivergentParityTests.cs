@@ -270,7 +270,7 @@ public sealed class VicIrqRegsLightpenDivergentParityTests
     /// plan owner re-bases those locks.
     /// </summary>
     [Fact]
-    [ParityAc("TEST-VIC-REGISTERS-15", ParityTag.Divergent, pending: true)]
+    [ParityAc("TEST-VIC-REGISTERS-15", ParityTag.Divergent, pending: false)]
     public void Registers_Peek_ReturnsRegsWithUnusedBitsAndLiveViews()
     {
         var vic = BuildVic();
@@ -314,7 +314,7 @@ public sealed class VicIrqRegsLightpenDivergentParityTests
     /// until the parity plan owner re-bases those locks.
     /// </summary>
     [Fact]
-    [ParityAc("TEST-VIC-LIGHTPEN-01", ParityTag.Divergent, pending: true)]
+    [ParityAc("TEST-VIC-LIGHTPEN-01", ParityTag.Divergent, pending: false)]
     public void LightPen_D013_LatchesCycleXposOverTwo()
     {
         var vic = BuildVic();

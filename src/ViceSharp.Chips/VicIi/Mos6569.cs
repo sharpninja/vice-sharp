@@ -151,6 +151,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private byte _spriteDmaActiveMask;
     private readonly ushort[] _spriteDmaStartLines = new ushort[8];
     private readonly byte[] _spriteDmaHeights = new byte[8];
+    // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-14/AC-04: VICE sprite_display_bits,
+    // latched at cycle 58 (RasterX 57) by check_sprite_display in vicii-cycle.c:62-79.
+    // Separate from sprite_dma (the fetch mask): a sprite fetches data for 21 lines
+    // but only DISPLAYS on lines where enable AND Y==raster_line at cycle 58.
+    private byte _spriteDisplayBits;
 
     // Cached results of the expensive model-aware sprite DMA stall window checks.
     // These are recomputed in UpdateSpriteDmaLatchForCurrentCycle (after RasterX advances).
@@ -159,11 +164,29 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private bool _inSpriteDmaStallWindow0;
     private bool _inSpriteDmaStallWindow1;
 
+    // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-15 / FR-VIC-REGISTERS AC-15:
+    // unused bits per VICE viciisc/vicii-mem.c:48-67 unused_bits_in_registers.
+    // Used by Peek (vicii_peek semantics) to OR the floating-high bits into
+    // the backing store value. $D016: bits 7-6 (0xC0); $D018: bit 0 (0x01);
+    // $D019: bits 6-4 (0x70); $D01A: bits 7-4 (0xF0); $D020-$D02E: bits 7-4
+    // (0xF0); $D02F-$D03F: all bits (0xFF). All others: 0x00.
+    private static ReadOnlySpan<byte> UnusedBitsInRegisters =>
+    [
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // $D000-$D007
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // $D008-$D00F
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00,  // $D010-$D017 ($D016 bits 7-6)
+        0x01, 0x70, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00,  // $D018-$D01F
+        0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0,  // $D020-$D027
+        0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xFF,  // $D028-$D02F
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,  // $D030-$D037
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,  // $D038-$D03F
+    ];
+
     // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: Light pen latch state.
-    // On a high-to-low transition of the LP pin the VIC-II latches
-    // RasterX >> 1 into $D013 and the low 8 bits of the current raster
-    // line into $D014, sets $D019 bit 3 (LP IRQ latch), and asserts the
-    // IRQ output if $D01A bit 3 is enabled. The latch fires at most once
+    // On a high-to-low transition of the LP pin the VIC-II latches the
+    // VICE xpos formula result into $D013 and the low 8 bits of the current
+    // raster line into $D014, sets $D019 bit 3 (LP IRQ latch), and asserts
+    // the IRQ output if $D01A bit 3 is enabled. The latch fires at most once
     // per frame; the "already triggered this frame" flag clears at the
     // frame boundary (raster wrap to line 0).
     private byte _lightPenLatchedX;
@@ -1263,6 +1286,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _spriteDmaActiveMask = 0;
         Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
         Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
+        _spriteDisplayBits = 0;
 
         // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-08/AC-09: clear the LP
         // "already latched this frame" flag; if the pen line is still held
@@ -1359,9 +1383,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
         _inSpriteDmaStallWindow0 = false;
         _inSpriteDmaStallWindow1 = false;
-        _inSpriteDmaStallWindow0 = false;
-        _inSpriteDmaStallWindow1 = false;
         Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
+        _spriteDisplayBits = 0;
         // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: clear light-pen latch state on reset.
         _lightPenLatchedX = 0;
         _lightPenLatchedY = 0;
@@ -1655,15 +1678,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // VICE sources: vicii-chip-model.c:272-403/437-566 (cycle_tab_* check points), vicii-cycle.c:118/499/502/503.
     private void UpdateSpriteDmaLatchForCurrentCycle()
     {
-        if (RasterX == 0)
-        {
-            ClearExpiredSpriteDmaLatches();
-            return;
-        }
-
-        // Model-specific check points from VICE (PAL 54/55; NTSC/old derived from table start + ChkSprDma flags).
-        // For NTSC 65cpl the equivalent late-line checks are around 56/57 (adjusted from cycle_tab_ntsc layout).
-        // Old NTSC 64cpl similar.
+        // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-01/AC-07: DMA turn-on uses the
+        // VICE check_sprite_dma cycles (PAL cycles 55/56 = RasterX 54/55). DMA
+        // turn-off is now handled by sprite_mcbase_update at RasterX 15 (mcbase==63),
+        // mirroring vicii-cycle.c:81-93. The coarse height-window expiry
+        // (ClearExpiredSpriteDmaLatches at RasterX 0) is no longer needed because
+        // mc advances via LatchSpriteData s-accesses in C64MemoryMap.
         int check1 = (CyclesPerLine == PalCyclesPerLine) ? 54 : (CyclesPerLine == NtscCyclesPerLine ? 56 : 55);
         int check2 = check1 + 1;
         if (RasterX == check1 || RasterX == check2)
@@ -1726,17 +1746,30 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     {
         if (RasterX == 15)
         {
+            // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-06/AC-07: sprite_mcbase_update
+            // (vicii-cycle.c:81-93). Advance mcbase = mc when exp_flop is set; if
+            // mcbase reaches 63 turn DMA off (sprite_dma &= ~bit). This replaces the
+            // coarse height-window expiry (ClearExpiredSpriteDmaLatches) with the
+            // VICE-exact mc/mcbase model.
             for (int i = 0; i < 8; i++)
             {
+                byte bit = (byte)(1 << i);
                 ref SpriteState sprite = ref _sprites[i];
                 if (sprite.ExpFlop)
                 {
                     sprite.McBase = sprite.Mc;
+                    if (sprite.McBase == 63 && (_spriteDmaActiveMask & bit) != 0)
+                    {
+                        _spriteDmaActiveMask = (byte)(_spriteDmaActiveMask & ~bit);
+                    }
                 }
             }
         }
         else if (RasterX == 55)
         {
+            // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-03: check_exp
+            // (vicii-cycle.c:95-105). Toggle exp_flop for each DMA-active Y-expanded
+            // sprite.
             for (int i = 0; i < 8; i++)
             {
                 ref SpriteState sprite = ref _sprites[i];
@@ -1748,9 +1781,31 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         }
         else if (RasterX == 57)
         {
+            // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-04/AC-05/AC-14:
+            // check_sprite_display (vicii-cycle.c:62-79). Reload mc = mcbase for
+            // every sprite, then set sprite_display_bits for each sprite that has
+            // DMA active and (enable && Y == raster_line). If DMA is not active,
+            // clear the display bit. Note: the bit is NOT cleared when DMA is active
+            // but Y does not match (it stays set once latched until DMA ends).
+            byte enabled = _registers[0x15];
+            int rasterLow = CurrentRasterLine & 0xFF;
             for (int i = 0; i < 8; i++)
             {
-                _sprites[i].Mc = _sprites[i].McBase;
+                byte bit = (byte)(1 << i);
+                ref SpriteState sprite = ref _sprites[i];
+                sprite.Mc = sprite.McBase;
+                if ((_spriteDmaActiveMask & bit) != 0)
+                {
+                    if ((enabled & bit) != 0 && sprite.Y == rasterLow)
+                    {
+                        _spriteDisplayBits |= bit;
+                    }
+                    // else: display bit stays as-is (not cleared while DMA active)
+                }
+                else
+                {
+                    _spriteDisplayBits = (byte)(_spriteDisplayBits & ~bit);
+                }
             }
         }
     }
@@ -1772,6 +1827,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public bool IsSpriteDmaActive(int spriteNumber) =>
         (_spriteDmaActiveMask & (1 << spriteNumber)) != 0;
+
+    // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-04/AC-05/AC-06/AC-07/AC-08/AC-14:
+    // test-only accessors for sprite mc/mcbase/exp_flop/display state, mirroring
+    // the VICE vicii.sprite[i] and vicii.sprite_display_bits fields exposed for
+    // unit testing without a full C64MemoryMap.
+    /// <summary>Test-only: data counter mc for sprite N (vicii.sprite[N].mc).</summary>
+    public byte GetSpriteMc(int n) => _sprites[n].Mc;
+    /// <summary>Test-only: line-base counter mcbase for sprite N (vicii.sprite[N].mcbase).</summary>
+    public byte GetSpriteMcBase(int n) => _sprites[n].McBase;
+    /// <summary>Test-only: Y-expansion flip-flop for sprite N (vicii.sprite[N].exp_flop).</summary>
+    public bool GetSpriteExpFlop(int n) => _sprites[n].ExpFlop;
+    /// <summary>Test-only: sprite_display_bits bit N (vicii.sprite_display_bits).</summary>
+    public bool GetSpriteDisplayBit(int n) => (_spriteDisplayBits & (1 << n)) != 0;
+    /// <summary>Test-only: 24-bit sprite data latch for sprite N (vicii.sprite[N].data).</summary>
+    public uint GetSpriteData(int n) => _sprites[n].Data;
 
     /// <summary>
     /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: the s-access bus address
@@ -1918,15 +1988,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
     private bool IsSpriteDmaActiveForAccessLine(int spriteNumber, int accessLine)
     {
-        byte bit = (byte)(1 << spriteNumber);
-        if ((_spriteDmaActiveMask & bit) == 0)
-        {
-            return false;
-        }
-
-        int height = _spriteDmaHeights[spriteNumber] == 0 ? 21 : _spriteDmaHeights[spriteNumber];
-        int elapsedLines = NormalizeRasterLine(accessLine - _spriteDmaStartLines[spriteNumber]);
-        return elapsedLines >= 0 && elapsedLines < height;
+        // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-07/AC-13: with the mc/mcbase
+        // model, sprite_dma is the live mask updated at cycle 55/56 (turn on) and
+        // cycle 16/RasterX 15 (turn off). The height-window check
+        // (elapsedLines < height) is removed; the mask itself is authoritative.
+        // accessLine is unused; the mask reflects whether DMA is currently active
+        // for any raster line in the stall-window neighbourhood.
+        _ = accessLine;
+        return (_spriteDmaActiveMask & (1 << spriteNumber)) != 0;
     }
 
     private void MapCurrentCycleToRasterX(int cycle, out int rasterLineOffset, out int rasterX)
@@ -2167,34 +2236,55 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     }
 
     /// <inheritdoc />
+    /// <summary>
+    /// PLAN-VICEPARITY-001: raw VIC register state matching VICE's
+    /// <c>vicii.regs</c> backing store (the array the snapshot module saves and
+    /// the shim's <c>vice_vic_get_state</c> returns): live raster / light-pen /
+    /// collision composition, but WITHOUT the unused-bit masking. This is
+    /// distinct from <see cref="Peek"/>, which is <c>vicii_peek</c> and OR-s in
+    /// the floating-high unused bits (FR-VIC-REGISTERS AC-15). Cycle-exact
+    /// state lockstep against native VICE compares this, not Peek: comparing
+    /// the masked Peek against raw <c>vicii.regs</c> diverges on every register
+    /// with unused bits ($D016 |0xC0, $D018 |0x01, $D019 |0x70, $D01A |0xF0,
+    /// the colour registers |0xF0).
+    /// </summary>
+    internal byte PeekStateRegister(int register) => (register & 0x3F) switch
+    {
+        0x11 => (byte)((_registers[0x11] & 0x7F) | ((CurrentRasterLine & 0x100) >> 1)),
+        0x12 => (byte)(CurrentRasterLine & 0xFF),
+        0x13 => _lightPenLatchedX,
+        0x14 => _lightPenLatchedY,
+        0x1E => _spriteSpriteCollisionLatch,
+        0x1F => _spriteBackgroundCollisionLatch,
+        _ => _registers[register & 0x3F],
+    };
+
     public byte Peek(ushort offset)
     {
         int register = (offset - BaseAddress) & 0x3F;
 
-        // BACKFILL-VIDEO-001: Peek is debug-only; never disturb collision latches.
-        if (register == 0x1E)
+        // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-15: vicii_peek semantics
+        // (VICE viciisc/vicii-mem.c:747-770). Each special case mirrors the
+        // corresponding vicii_peek case; the default OR-in unused_bits
+        // (UnusedBitsInRegisters table, vicii-mem.c:48-67). Peek is debug-only
+        // and must never schedule side-effects (no deferred collision clear).
+        return register switch
         {
-            return _spriteSpriteCollisionLatch;
-        }
-
-        if (register == 0x1F)
-        {
-            return _spriteBackgroundCollisionLatch;
-        }
-
-        // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: Peek $D013 / $D014 returns the LP
-        // latched values rather than the raw _registers backing store.
-        if (register == 0x13)
-        {
-            return _lightPenLatchedX;
-        }
-
-        if (register == 0x14)
-        {
-            return _lightPenLatchedY;
-        }
-
-        return _registers[register];
+            // $D011: live raster bit 8 merged with stored bits 6-0 (vicii-mem.c:753-754).
+            0x11 => (byte)((_registers[0x11] & 0x7F) | ((CurrentRasterLine & 0x100) >> 1)),
+            // $D012: live raster line low byte (vicii-mem.c:755-756).
+            0x12 => (byte)(CurrentRasterLine & 0xFF),
+            // $D013/$D014: latched light-pen coordinates (vicii-mem.c:757-760).
+            0x13 => _lightPenLatchedX,
+            0x14 => _lightPenLatchedY,
+            // $D01E/$D01F: raw collision accumulators, no side-effect (vicii-mem.c:763-766).
+            0x1E => _spriteSpriteCollisionLatch,
+            0x1F => _spriteBackgroundCollisionLatch,
+            // Default: regs[addr] OR unused_bits_in_registers[addr] (vicii-mem.c:767-768).
+            // Handles $D019 (|0x70), $D01A (|0xF0), $D016 (|0xC0), $D018 (|0x01),
+            // $D020-$D02E (|0xF0), $D02F-$D03F (|0xFF), all others (|0x00).
+            _ => (byte)(_registers[register] | UnusedBitsInRegisters[register]),
+        };
     }
 
     /// <inheritdoc />
@@ -2596,7 +2686,16 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return;
         }
 
-        int x = (RasterX >> 1) + _lightPenXExtraBits;
+        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-01: VICE xpos formula from
+        // vicii-lightpen.c:75 + vicii-chip-model.h:164-167.
+        // cycle_get_xpos(cycle_table[raster_cycle]) / 2  where
+        // raster_cycle = RasterX + 1 (0-based managed index to 1-based VICE).
+        // PAL Phi1 xpos for cycle n = (0x194 + 8*(n-1)) wrapping at 0x1F8;
+        // equivalently: phi1_xpos = (0x194 + 8*RasterX) % 0x1F8.
+        // cycle_get_xpos clears the low 3 bits (XPOS_M/XPOS_B shift, then <<3):
+        // x_base = (phi1_xpos & ~7) / 2.
+        int phi1Xpos = (0x194 + 8 * RasterX) % 0x1F8;
+        int x = (phi1Xpos & ~7) / 2 + _lightPenXExtraBits;
 
         if (retrigger)
         {

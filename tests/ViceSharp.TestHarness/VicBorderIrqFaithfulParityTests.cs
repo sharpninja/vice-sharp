@@ -805,8 +805,11 @@ public sealed class VicBorderIrqFaithfulParityTests
     /// Use case: the four upper bits of a color write are physically
     /// unconnected and never reach the register backing store.
     /// Acceptance: for every register $D020-$D02E, writing a value with a
-    /// dirty high nibble leaves exactly the low nibble in the backing store
-    /// (observed through the non-masking debug Peek).
+    /// dirty high nibble leaves the low nibble in the backing store, and
+    /// Peek returns regs|unused_bits = nibble|$F0 (vicii_peek semantics per
+    /// vicii-mem.c:767-768, unused_bits_in_registers[0x20..0x2E]=0xF0).
+    /// Rebased from V2 (old lock asserted Peek returns raw nibble via
+    /// "non-masking debug Peek"); superseded by FR-VIC-REGISTERS AC-15 fix.
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-REGISTERS-10", ParityTag.Faithful)]
@@ -818,7 +821,8 @@ public sealed class VicBorderIrqFaithfulParityTests
             var address = (ushort)(0xD000 + reg);
             byte nibble = (byte)((reg - 0x20 + 5) & 0x0F);
             vic.Write(address, (byte)(0xB0 | nibble));
-            Assert.Equal(nibble, vic.Peek(address));
+            // vicii_peek returns regs[addr] | unused_bits[addr] = nibble | 0xF0.
+            Assert.Equal((byte)(0xF0 | nibble), vic.Peek(address));
         }
     }
 
@@ -830,9 +834,13 @@ public sealed class VicBorderIrqFaithfulParityTests
     /// no-op); managed Mos6569.Write early returns (Mos6569.cs:1948-1958).
     /// Use case: collision registers are read-only latches and the unused
     /// range has no backing hardware; stores must not disturb any state.
-    /// Acceptance: after writing $FF to $D01E/$D01F both latches still peek
-    /// and read as $00; after writing to $D02F/$D03F the backing store peeks
-    /// $00 and reads stay $FF.
+    /// Acceptance: after writing $FF to $D01E/$D01F both collision accumulators
+    /// still peek and read as $00 (vicii_peek returns raw accumulator per
+    /// vicii-mem.c:763-766); after writing to $D02F/$D03F Peek returns $FF
+    /// (regs[0]=0x00 | unused_bits=0xFF per vicii-mem.c:767-768) and Read
+    /// also returns $FF. Rebased from V2 (old lock asserted Peek($D02F/$D03F)
+    /// returns $00 via "non-masking debug Peek"); superseded by
+    /// FR-VIC-REGISTERS AC-15 fix.
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-REGISTERS-11", ParityTag.Faithful)]
@@ -842,6 +850,7 @@ public sealed class VicBorderIrqFaithfulParityTests
 
         vic.Write(SpriteSpriteCollision, 0xFF);
         vic.Write(SpriteBackgroundCollision, 0xFF);
+        // vicii_peek($D01E/$D01F): raw collision accumulators (0x00 - no collision accumulated).
         Assert.Equal(0x00, vic.Peek(SpriteSpriteCollision));
         Assert.Equal(0x00, vic.Peek(SpriteBackgroundCollision));
         Assert.Equal(0x00, vic.Read(SpriteSpriteCollision));
@@ -849,8 +858,9 @@ public sealed class VicBorderIrqFaithfulParityTests
 
         vic.Write(UnusedD02F, 0xAA);
         vic.Write(UnusedD03F, 0x55);
-        Assert.Equal(0x00, vic.Peek(UnusedD02F));
-        Assert.Equal(0x00, vic.Peek(UnusedD03F));
+        // vicii_peek($D02F/$D03F): regs[addr]=0x00 | unused_bits=0xFF = 0xFF.
+        Assert.Equal(0xFF, vic.Peek(UnusedD02F));
+        Assert.Equal(0xFF, vic.Peek(UnusedD03F));
         Assert.Equal(0xFF, vic.Read(UnusedD02F));
         Assert.Equal(0xFF, vic.Read(UnusedD03F));
     }
@@ -892,8 +902,12 @@ public sealed class VicBorderIrqFaithfulParityTests
     /// Mos6569.TriggerLightPen guard (Mos6569.cs:2128-2131).
     /// Use case: only the first light-pen pulse of a frame is captured; later
     /// pulses in the same frame must not disturb the latched coordinates.
-    /// Acceptance: after a trigger at line 10 cycle 5 latches X=$02/Y=$0A, a
-    /// second trigger at line 20 cycle 8 leaves both reads unchanged.
+    /// Acceptance: after a trigger at line 10 cycle 5 latches
+    /// X=$DC (VICE xpos: Phi1(6) 0x1bc, cycle_get_xpos=0x1b8=440, /2=220=$DC)
+    /// and Y=$0A, a second trigger at line 20 cycle 8 leaves both reads
+    /// unchanged. Old managed value was $02 (RasterX>>1=5>>1=2; superseded by
+    /// FR-VIC-LIGHTPEN AC-01 fix; cites vicii-chip-model.h:164-167 +
+    /// vicii-lightpen.c:75).
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-LIGHTPEN-03", ParityTag.Faithful)]
@@ -903,12 +917,12 @@ public sealed class VicBorderIrqFaithfulParityTests
 
         AdvanceTo(vic, 10, 5);
         vic.TriggerLightPen();
-        Assert.Equal(0x02, vic.Read(LightPenX));
+        Assert.Equal(0xDC, vic.Read(LightPenX)); // VICE-exact: Phi1(6) xpos 0x1bc -> 0x1b8/2 = 0xDC.
         Assert.Equal(0x0A, vic.Read(LightPenY));
 
         AdvanceTo(vic, 20, 8);
         vic.TriggerLightPen();
-        Assert.Equal(0x02, vic.Read(LightPenX));
+        Assert.Equal(0xDC, vic.Read(LightPenX)); // Second trigger ignored; latch unchanged.
         Assert.Equal(0x0A, vic.Read(LightPenY));
     }
 
@@ -922,7 +936,11 @@ public sealed class VicBorderIrqFaithfulParityTests
     /// Use case: the light pen latches exactly once per frame and re-arms
     /// automatically when the raster wraps to line 0.
     /// Acceptance: a trigger at line 5 latches Y=$05; after the frame wrap a
-    /// trigger at line 2 is accepted and overwrites the latch with Y=$02.
+    /// trigger at line 2 cycle 4 is accepted and overwrites the latch with
+    /// Y=$02 and X=$D8 (VICE-exact: Phi1(5) xpos 0x1b4, cycle_get_xpos=0x1b0=432,
+    /// /2=216=$D8). Old managed X was $02 (RasterX>>1=4>>1=2; superseded by
+    /// FR-VIC-LIGHTPEN AC-01 fix; cites vicii-chip-model.h:164-167 +
+    /// vicii-lightpen.c:75).
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-LIGHTPEN-04", ParityTag.Faithful)]
@@ -937,7 +955,7 @@ public sealed class VicBorderIrqFaithfulParityTests
         AdvanceTo(vic, 2, 4);
         vic.TriggerLightPen();
         Assert.Equal(0x02, vic.Read(LightPenY));
-        Assert.Equal(0x02, vic.Read(LightPenX));
+        Assert.Equal(0xD8, vic.Read(LightPenX)); // VICE-exact: Phi1(5) xpos 0x1b4 -> 0x1b0/2 = 0xD8.
     }
 
     /// <summary>
@@ -995,16 +1013,17 @@ public sealed class VicBorderIrqFaithfulParityTests
 
     /// <summary>
     /// FR-VIC-LIGHTPEN AC-13 (TEST-VIC-LIGHTPEN-13, FAITHFUL): $D013/$D014
-    /// reads return the latched X/Y values non-destructively (plumbing; the
-    /// X-value xpos translation itself diverges and is owned by
-    /// TEST-VIC-LIGHTPEN-01).
+    /// reads return the latched X/Y values non-destructively.
     /// VICE native/vice/vice/src/viciisc/vicii-mem.c:611-619; managed
-    /// Mos6569.Read $D013/$D014 (Mos6569.cs:1831-1841).
+    /// Mos6569.Read $D013/$D014.
     /// Use case: light-pen coordinates read back from the latch registers, not
     /// from live raster state, and repeated reads are stable.
     /// Acceptance: both registers read $00 before any trigger; after a trigger
-    /// at line 100 cycle 40 they read X=$14 (current managed RasterX >> 1)
-    /// and Y=$64, stable across a second read.
+    /// at line 100 cycle 40 they read X=$6C (VICE-exact: Phi1(41) xpos 0x0dc,
+    /// cycle_get_xpos=0x0d8=216, /2=108=$6C per vicii-chip-model.h:164-167 +
+    /// vicii-lightpen.c:75) and Y=$64, stable across a second read. Rebased
+    /// from V2 (old acceptance pinned X=$14 = managed RasterX>>1; superseded
+    /// by FR-VIC-LIGHTPEN AC-01 fix, owned by TEST-VIC-LIGHTPEN-01).
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-LIGHTPEN-13", ParityTag.Faithful)]
@@ -1016,9 +1035,10 @@ public sealed class VicBorderIrqFaithfulParityTests
 
         AdvanceTo(vic, 100, 40);
         vic.TriggerLightPen();
-        Assert.Equal(0x14, vic.Read(LightPenX));
+        // VICE-exact: Phi1(41) xpos 0x0dc, cycle_get_xpos=0x0d8, /2=0x6C.
+        Assert.Equal(0x6C, vic.Read(LightPenX));
         Assert.Equal(0x64, vic.Read(LightPenY));
-        Assert.Equal(0x14, vic.Read(LightPenX));
+        Assert.Equal(0x6C, vic.Read(LightPenX));
         Assert.Equal(0x64, vic.Read(LightPenY));
     }
 }
