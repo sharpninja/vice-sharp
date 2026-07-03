@@ -22,6 +22,15 @@ public partial class Sid8580 : Sid6581
     /// <inheritdoc />
     protected override int WaveZeroLevel => 0x9E;
 
+    /// <summary>
+    /// FR-SID-OSC3ENV3 AC-05 [PLAN-VICEPARITY-001 S2]: the 8580 die serves
+    /// the tri/saw component of OSC3 one cycle late through
+    /// tri_saw_pipeline (reSID wave.h:475-482, the sid_model == MOS8580
+    /// branch of set_waveform_output) and uses the 8580 noise+pulse
+    /// combination transform (wave.h:453-456).
+    /// </summary>
+    protected override bool IsMos8580Wave => true;
+
     // PLAN-VICEPARITY-001 S1 (FR-SID-ENV AC-50) routed the 6581 envelope
     // output through reSID's model_dac row 0. The 8580's own row
     // (Sid6581.EnvelopeDac8580: 2R/R = 2.00, terminated, envelope.cc:167-168)

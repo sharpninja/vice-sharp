@@ -131,16 +131,170 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     /// <summary>
     /// Per-cycle waveform-output pass (reSID sid.h:220-223, sid.cc:822-825):
-    /// computes each voice's selected 8-bit waveform sample from the
-    /// post-synchronize oscillator state, applies the envelope DAC, and
-    /// commits the three voice outputs that feed the filter stage this cycle.
+    /// first runs each voice's reSID set_waveform_output equivalent (the
+    /// 12-bit selected-waveform pass that latches the osc3 readback state
+    /// and pushes the pulse level pipeline, FR-SID-OSC3ENV3
+    /// [PLAN-VICEPARITY-001 S2]), then computes each voice's selected 8-bit
+    /// waveform sample from the post-synchronize oscillator state, applies
+    /// the envelope DAC, and commits the three voice outputs that feed the
+    /// filter stage this cycle. (Routing the audio path through the same
+    /// 12-bit output is the FR-SID-WAVE-SAWTRI / FR-SID-WAVE-DACRES
+    /// remediation, not this slice.)
     /// </summary>
     private void ComputeWaveformOutputs()
     {
+        SetWaveformOutput(0);
+        SetWaveformOutput(1);
+        SetWaveformOutput(2);
         _cycleVoiceOutput0 = ComputeVoiceOutput(0);
         _cycleVoiceOutput1 = ComputeVoiceOutput(1);
         _cycleVoiceOutput2 = ComputeVoiceOutput(2);
     }
+
+    /// <summary>
+    /// True on the MOS 8580 die variants. Selects the 8580 branches of the
+    /// waveform-output pass: the tri/saw OSC3 pipeline delay (reSID
+    /// wave.h:475-482) and the 8580 noise+pulse combination transform
+    /// (wave.h:453-456,469-473). The 6581 base returns false.
+    /// </summary>
+    protected virtual bool IsMos8580Wave => false;
+
+    /// <summary>
+    /// Per-voice mirror of reSID WaveformGenerator::set_waveform_output()
+    /// (wave.h:458-519) for the OSC3 readback path, FR-SID-OSC3ENV3
+    /// AC-01..AC-06 [PLAN-VICEPARITY-001 S2]. With a waveform selected it
+    /// computes the 12-bit selected output wave[ix] &amp; (no_pulse |
+    /// pulse_output) &amp; no_noise_or_noise_output (wave.h:462-467), applies
+    /// the die-specific noise+pulse transform (wave.h:469-473), and latches
+    /// osc3: directly on the 6581 (wave.h:485), through the one-cycle
+    /// tri_saw_pipeline on the 8580 (wave.h:475-482). The waveform-0
+    /// floating-DAC fade (wave.h:499-504) is FR-SID-OSC3ENV3 AC-07, stopped
+    /// this slice (TEST-SID-CLOCK-11 locks the legacy phase readback), so
+    /// waveform 0 leaves the latch untouched. The tail always pushes the
+    /// next pulse level into the pipeline (one-cycle compare delay,
+    /// wave.h:506-518). The 6581 combined-saw accumulator writeback and the
+    /// combined-waveform shift-register writeback (wave.h:488-497) belong to
+    /// FR-SID-WAVE-COMBINED / FR-SID-WAVE-NOISE and are intentionally
+    /// absent. Called once per voice per cycle from the chain and at
+    /// control-write time (wave.cc:261-264). Allocation-free.
+    /// </summary>
+    private void SetWaveformOutput(int i)
+    {
+        ref Voice voice = ref _voices[i];
+        int waveform = (voice.Control >> 4) & 0x0F;
+        // Bits 24-31 of the stored accumulator are masked off defensively:
+        // reSID keeps the register 24-bit (wave.h:155); the managed stored
+        // width is FR-SID-WAVE-ACC AC-02 (stopped this slice).
+        uint accumulator = voice.WaveformAccumulator & 0x00FFFFFFu;
+
+        if (waveform != 0)
+        {
+            // wave.h:465 with wave.cc:214: the ring-mod MSB substitution mask
+            // is armed only when ring mod is on and sawtooth is off.
+            uint syncSourceAccumulator = _voices[(i + 2) % 3].WaveformAccumulator & 0x00FFFFFFu;
+            uint ringMsbMask = (voice.Control & 0x24) == 0x04 ? 0x00800000u : 0u;
+            int ix = (int)((accumulator ^ (~syncSourceAccumulator & ringMsbMask)) >> 12);
+
+            int wave12 = WaveTable12(waveform, ix);
+            int noPulse = (waveform & 0x4) != 0 ? 0x000 : 0xFFF;                       // wave.cc:221
+            int noNoiseOrNoiseOutput = (waveform & 0x8) != 0                            // wave.cc:219-220
+                ? NoiseOutput12(_noiseLfsr)
+                : 0xFFF;
+
+            int waveformOutput = wave12 & (noPulse | voice.PulseLevel) & noNoiseOrNoiseOutput;
+
+            if ((waveform & 0xC) == 0xC)
+            {
+                waveformOutput = IsMos8580Wave
+                    ? NoisePulse8580(waveformOutput)
+                    : NoisePulse6581(waveformOutput);
+            }
+
+            if ((waveform & 0x3) != 0 && IsMos8580Wave)
+            {
+                // wave.h:475-482: 8580 tri/saw output is delayed half a cycle,
+                // appearing as a one-cycle OSC3 delay through the pipeline.
+                voice.Osc3 = (ushort)(voice.TriSawPipeline & (noPulse | voice.PulseLevel) & noNoiseOrNoiseOutput);
+                voice.TriSawPipeline = (ushort)wave12;
+            }
+            else
+            {
+                voice.Osc3 = (ushort)waveformOutput;                                    // wave.h:485
+            }
+        }
+
+        // wave.h:506-518: the pulse compare result is delayed one cycle; push
+        // the next level from this cycle's post-clock 24-bit phase.
+        voice.PulseLevel = (accumulator >> 12) >= voice.PulseWidth ? (ushort)0xFFF : (ushort)0x000;
+    }
+
+    /// <summary>
+    /// The reSID waveform table row for the OSC3 path, selected by
+    /// waveform &amp; 0x7 (wave.cc:211). Rows 0 and 4 are the all-ones
+    /// noise/pulse mask rows, row 1 the branch-free triangle (upper 11 bits
+    /// MSB-folded and left-shifted, bit 0 grounded) and row 2 the sawtooth
+    /// identity, exactly as built by the reSID class initialiser
+    /// (wave.cc:87-101). The combined rows 3/5/6/7 are sampled-die tables in
+    /// reSID (wave6581__ST.h and friends); until FR-SID-WAVE-SAWTRI AC-04
+    /// ports them, this returns the analytic AND combination the managed
+    /// audio path already models.
+    /// </summary>
+    private static int WaveTable12(int waveform, int ix)
+    {
+        int tri = (((ix & 0x800) != 0 ? ~ix : ix) & 0x7FF) << 1;   // wave.cc:96
+        int saw = ix & 0xFFF;                                      // wave.cc:97
+        return (waveform & 0x7) switch
+        {
+            0 => 0xFFF,        // wave.cc:95 (noise-only selections mask through)
+            1 => tri,
+            2 => saw,
+            3 => tri & saw,    // interim analytic; sampled __ST row is FR-SID-WAVE-SAWTRI AC-04
+            4 => 0xFFF,        // wave.cc:98 (pulse rail comes from the pulse level mask)
+            5 => tri,          // interim analytic; sampled P_T row
+            6 => saw,          // interim analytic; sampled PS_ row
+            _ => tri & saw,    // interim analytic; sampled PST row
+        };
+    }
+
+    /// <summary>
+    /// reSID 12-bit noise output packing (set_noise_output, wave.h:354-367):
+    /// shift-register bits 20, 18, 14, 11, 9, 5, 2, 0 drive waveform bits 11
+    /// down to 4; the low 4 waveform bits are grounded. FR-SID-OSC3ENV3
+    /// AC-04: OSC3 with noise selected reads exactly this value shifted
+    /// right 4.
+    /// </summary>
+    private static int NoiseOutput12(uint lfsr) =>
+        (int)(((lfsr & 0x100000) >> 9) |
+              ((lfsr & 0x040000) >> 8) |
+              ((lfsr & 0x004000) >> 5) |
+              ((lfsr & 0x000800) >> 3) |
+              ((lfsr & 0x000200) >> 2) |
+              ((lfsr & 0x000020) << 1) |
+              ((lfsr & 0x000004) << 3) |
+              ((lfsr & 0x000001) << 4));
+
+    /// <summary>
+    /// Immediate pulse-level push performed by the PW register writes (reSID
+    /// writePW_LO / writePW_HI, wave.cc:158-170): the new 12-bit compare
+    /// result enters the pulse level pipeline without waiting for the next
+    /// cycle's waveform-output pass. FR-SID-OSC3ENV3 AC-03
+    /// [PLAN-VICEPARITY-001 S2].
+    /// </summary>
+    private void PushPulseLevel(int i)
+    {
+        ref Voice voice = ref _voices[i];
+        voice.PulseLevel = ((voice.WaveformAccumulator & 0x00FFFFFFu) >> 12) >= voice.PulseWidth
+            ? (ushort)0xFFF
+            : (ushort)0x000;
+    }
+
+    /// <summary>MOS 6581 noise+pulse combination transform (reSID wave.h:448-451).</summary>
+    private static int NoisePulse6581(int noise) =>
+        noise < 0xF00 ? 0x000 : noise & (noise << 1) & (noise << 2);
+
+    /// <summary>MOS 8580 noise+pulse combination transform (reSID wave.h:453-456).</summary>
+    private static int NoisePulse8580(int noise) =>
+        noise < 0xFC0 ? noise & (noise << 1) : 0xFC0;
 
     /// <summary>
     /// Selected waveform sample of voice <paramref name="i"/> multiplied by
@@ -564,6 +718,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public byte SustainRelease;
         public uint WaveformAccumulator;
         public uint PulseAccumulator;
+        // FR-SID-OSC3ENV3 [PLAN-VICEPARITY-001 S2]: reSID WaveformGenerator
+        // readback state. Osc3 is the 12-bit osc3 latch (wave.h:104) written
+        // by the per-cycle SetWaveformOutput pass and by control writes;
+        // PulseLevel is the one-cycle-delayed 12-bit pulse level pipeline
+        // (wave.h:97,516-518), 0x000 or 0xFFF; TriSawPipeline is the 8580
+        // tri/saw OSC3 pipeline (wave.h:102-103), power-up seeded 0x555
+        // (wave.cc:119) and deliberately untouched by reset (wave.cc:301-332).
+        public ushort Osc3;
+        public ushort PulseLevel;
+        public ushort TriSawPipeline;
         public byte Envelope;          // display/readback mirror of Env.EnvelopeCounter
         public EnvelopeState State;     // display mirror of Env.State
         public bool Gate;
@@ -844,6 +1008,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             _voices[v].Env.PowerUp();
             _voices[v].Envelope = _voices[v].Env.EnvelopeCounter;
             _voices[v].State = EnvelopeState.Release;
+            // FR-SID-OSC3ENV3 AC-06 [PLAN-VICEPARITY-001 S2]: the 8580
+            // tri/saw OSC3 pipeline powers up with the even bits high
+            // (tri_saw_pipeline = 0x555, wave.cc:119; seeded on every die,
+            // consumed only by the 8580 OSC3 path). The pulse level pipeline
+            // powers up high via the constructor's reset() (wave.cc:319).
+            _voices[v].TriSawPipeline = 0x555;
+            _voices[v].PulseLevel = 0xFFF;
         }
     }
 
@@ -989,10 +1160,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // FR-SID-009 ac.4: the CTRL test bit (bit 3) forces the LFSR
             // back to the all-ones seed and pins the phase accumulator
             // at zero (matches the SidOscillator and resid behaviour).
+            // FR-SID-OSC3ENV3 AC-03 [PLAN-VICEPARITY-001 S2]: while test is
+            // held, each cycle also forces the pulse level high before the
+            // waveform-output pass consumes it ("The test bit sets pulse
+            // high", reSID wave.h:150-151).
             if ((voice.Control & 0x08) != 0)
             {
                 _noiseLfsr = NoiseLfsrInitial;
                 voice.WaveformAccumulator = 0;
+                voice.PulseLevel = 0xFFF;
                 continue;
             }
 
@@ -1112,6 +1288,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // reset"); FR-SID-WAVE-ACC owns that remediation.
             voice.WaveformAccumulator = 0;
             voice.PulseAccumulator = 0;
+            // FR-SID-OSC3ENV3 [PLAN-VICEPARITY-001 S2]: reSID wave.reset()
+            // clears the osc3 latch (osc3 = 0, wave.cc:330) and parks the
+            // pulse level high (pulse_output = 0xfff, wave.cc:319), while
+            // tri_saw_pipeline is deliberately NOT touched by reset
+            // (wave.cc:301-332 never assigns it), so it is preserved here.
+            voice.Osc3 = 0;
+            voice.PulseLevel = 0xFFF;
             voice.Gate = false;
             voice.Reset = false;
             voice.Env.Reset();
@@ -1146,11 +1329,19 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // VICE-style: Read back current values (not just registers)
         switch (register)
         {
-            case 0x1B: // OSC3: upper 8 bits of the 24-bit voice-3 oscillator.
-                // Bits 16-23 - the same slice waveform generation uses. (Reading
-                // bits 24-31 via >> 24 was the OSC3-readback twin of the BUG-SIDAUDIO
-                // accumulator bug, and made OSC3 read ~1/64 of the true value.)
-                return (byte)((_voices[2].WaveformAccumulator >> 16) & 0xFF);
+            case 0x1B: // OSC3: voice-3 selected-waveform readback.
+                // FR-SID-OSC3ENV3 AC-01/AC-02 [PLAN-VICEPARITY-001 S2]: reSID
+                // readOSC() returns the osc3 latch's top 8 bits (osc3 >> 4,
+                // wave.cc:293-296), i.e. the SELECTED waveform output set by
+                // the per-cycle set_waveform_output pass (wave.h:485), never
+                // the raw accumulator phase. With no waveform selected the
+                // legacy phase readback (bits 16-23) is preserved: the
+                // floating-DAC fade of the latch is FR-SID-OSC3ENV3 AC-07,
+                // stopped this slice because the FAITHFUL TEST-SID-CLOCK-11
+                // lock pins the phase ramp for waveform 0.
+                return (_voices[2].Control & 0xF0) != 0
+                    ? (byte)(_voices[2].Osc3 >> 4)
+                    : (byte)((_voices[2].WaveformAccumulator >> 16) & 0xFF);
             case 0x1C: // ENV3: voice 3 envelope readback (reSID env3 = counter
                        // sampled at the first phase of the cycle).
                 return _voices[2].Env.Env3;
@@ -1185,15 +1376,33 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                     break;
                 case 2:
                     _voices[voiceIndex].PulseWidth = (ushort)((_voices[voiceIndex].PulseWidth & 0xFF00) | value);
+                    // FR-SID-OSC3ENV3 AC-03 [PLAN-VICEPARITY-001 S2]: a pulse
+                    // width write pushes the next pulse level immediately
+                    // (reSID writePW_LO, wave.cc:158-163).
+                    PushPulseLevel(voiceIndex);
                     break;
                 case 3:
                     _voices[voiceIndex].PulseWidth = (ushort)((_voices[voiceIndex].PulseWidth & 0x00FF) | ((value & 0x0F) << 8));
+                    // reSID writePW_HI pushes the next pulse level immediately
+                    // (wave.cc:165-170).
+                    PushPulseLevel(voiceIndex);
                     break;
                 case 4:
                     _voices[voiceIndex].Control = value;
                     _voices[voiceIndex].Gate = (value & 0x01) != 0;
                     // reSID gate/state transition (attack on gate-on, release on gate-off).
                     _voices[voiceIndex].Env.WriteControl(value);
+                    // FR-SID-OSC3ENV3 AC-01/AC-06 [PLAN-VICEPARITY-001 S2]:
+                    // a control write with a waveform selected refreshes the
+                    // waveform output and the osc3 latch immediately (reSID
+                    // writeCONTROL_REG, wave.cc:261-264), which is also what
+                    // serves the 8580 tri_saw_pipeline power-up seed on the
+                    // first selection.
+                    if ((value & 0xF0) != 0)
+                    {
+                        SetWaveformOutput(voiceIndex);
+                    }
+
                     break;
                 case 5:
                     _voices[voiceIndex].AttackDecay = value;

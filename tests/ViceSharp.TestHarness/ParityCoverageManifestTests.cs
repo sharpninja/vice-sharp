@@ -27,10 +27,17 @@ public sealed class ParityCoverageManifestTests
     /// (AC-07/AC-08/AC-50) and the clock-dispatch DIVERGENT FR-SID-CLOCK
     /// criteria (AC-01/AC-02/AC-03/AC-06/AC-07/AC-09) authored in
     /// SidEnvDivergentParityTests.
+    /// +6 = slice S2 (PLAN-VICEPARITY-001): the OSC3-side DIVERGENT
+    /// FR-SID-OSC3ENV3 criteria (AC-01..AC-06) authored in
+    /// SidWaveOsc3DivergentParityTests. FR-SID-OSC3ENV3 AC-07 and the
+    /// DIVERGENT FR-SID-WAVE-ACC criteria (AC-02/AC-05/AC-06) were stopped
+    /// in S2: their VICE-exact fixes conflict with the FAITHFUL locks
+    /// TEST-SID-CLOCK-11, TEST-SID-VOICE-07 and TEST-SID-VOICE-09 (see the
+    /// S2 slice report).
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered.
     /// </summary>
-    private const int ExpectedMinCovered = 193;
+    private const int ExpectedMinCovered = 199;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;
