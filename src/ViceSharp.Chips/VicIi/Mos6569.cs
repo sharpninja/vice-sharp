@@ -210,8 +210,18 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// (VICE viciisc/vicii-chip-model.c color_latency: 6569R1/R3, 6567 and
     /// 6572 carry 1; 8565/8562 carry 0). Selects the light-pen x offset
     /// (2 vs 1) loaded on a pen edge (vicii-lightpen.c:42).
+    /// PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX: also consumed by PixelSequencer
+    /// for the between-pixel-3-and-4 vmode11_pipe rising/falling edge logic.
     /// </summary>
     protected virtual bool ColorLatency => true;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 V3: internal bridge exposing <see cref="ColorLatency"/>
+    /// to <see cref="PixelSequencer"/> (which is in the same assembly but not
+    /// a derived class). The protected virtual is preserved so chip-model subclasses
+    /// (e.g. Mos8565 with color_latency=0) can override without widening the API.
+    /// </summary>
+    internal bool ColorLatencyEnabled => ColorLatency;
 
     /// <summary>
     /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-10: old light-pen IRQ mode
@@ -981,6 +991,19 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // host connects one; the publish on the line boundary is a no-op when unset.
     private IPubSub? _pubSub;
 
+    // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL: per-cycle pixel sequencer.
+    // Ports draw_graphics8 from native/vice/vice/src/viciisc/vicii-draw-cycle.c lines 227-295.
+    // Wired into Tick() immediately after LastReadPhi1 is set; exposes LineIndices[504] for
+    // VideoRenderer to read the display-window palette indices in place of the geometric path.
+    private readonly PixelSequencer _pixelSequencer;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX: per-cycle pixel sequencer.
+    /// VideoRenderer reads display-window palette indices from
+    /// <see cref="PixelSequencer.LineIndices"/> instead of the geometric char path.
+    /// </summary>
+    internal PixelSequencer PixelSequencer => _pixelSequencer;
+
     public IReadOnlyList<IInterruptLine> ConnectedLines => new[] { _irqLine };
 
     public Mos6569(IBus bus, IInterruptLine irqLine)
@@ -992,6 +1015,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         VideoMemoryReader = addr => _bus.Read(addr);
         // PERF-VIC-003: default returns open-bus 0; machine maps may override for phi1 banking.
         Phi1MemoryReader = _ => (byte)0;
+        // PLAN-VICEPARITY-001 V3: construct after arrays are initialized (field initializers run first).
+        _pixelSequencer = new PixelSequencer(_registers, _videoBuffer, _colorBuffer, this);
     }
 
     /// <summary>
@@ -1108,6 +1133,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             _borderChangeCount = 0;
             _bgEntryColour = _registers[0x21];
             _bgChangeCount = 0;
+
+            // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX: clear the pixel sequencer's line buffers
+            // and reset dmli for the new line. Called after NotifyLineCompleted / NotifyFrameCompleted
+            // has consumed LineIndices for the completed line.
+            _pixelSequencer.BeginLine();
         }
         else
         {
@@ -1235,6 +1265,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // PERF-VIC-003: Phi1MemoryReader initialized to non-null default in constructor;
         // direct invoke eliminates null check per cycle.
         LastReadPhi1 = Phi1MemoryReader(CurrentCycle);
+
+        // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL: per-cycle pixel sequencer.
+        // vis_en = cycle is inside the 40-column display window (RasterX 14-53) AND
+        // vertical border is closed. Matches VICE vicii-draw-cycle.c vis_en check.
+        {
+            bool psVisEn = RasterX >= 14 && RasterX < 54 && !_verticalBorderActive;
+            _pixelSequencer.DrawGraphics8(RasterX, psVisEn, _verticalBorderActive, _idleState, LastReadPhi1);
+        }
 
         // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08 / FR-VIC-MATRIX-ADDR AC-08:
         // latch the delayed video-mode copy at the end of the cycle so the next
@@ -1394,6 +1432,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _lightPenState = false;
         _lightPenXExtraBits = 0;
         _lightPenTriggerPending = false;
+        // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX: reset the pixel sequencer.
+        _pixelSequencer.Reset();
     }
 
     // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /

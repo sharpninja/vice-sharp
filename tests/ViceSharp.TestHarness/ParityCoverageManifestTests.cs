@@ -53,12 +53,24 @@ public sealed class ParityCoverageManifestTests
     /// DIVERGENT criterion of FR-SID-WAVE-SAWTRI (AC-01..AC-04) and
     /// FR-SID-WAVE-PULSE (AC-01/AC-02/AC-03/AC-04/AC-06), authored in
     /// SidWaveCoreDivergentParityTests.
+    /// +10 = slice S4/S5 combined (PLAN-VICEPARITY-001): every DIVERGENT AC of
+    /// FR-SID-WAVE-SYNC (AC-01/AC-04), FR-SID-WAVE-RING (AC-01/AC-02/AC-03)
+    /// and FR-SID-WAVE-TESTBIT (AC-03/AC-04/AC-05/AC-06/AC-08) authored in
+    /// SidSyncRingTestbitDivergentParityTests. RING and TESTBIT-03 were already
+    /// correct in S3; SYNC and TESTBIT-04/05/06/08 remediated in this slice.
+    /// +11 = slice V3 (PLAN-VICEPARITY-001): all DIVERGENT ACs of
+    /// FR-VIC-DRAW-GFX (AC-01/02/03/04/06/14/15) and FR-VIC-XSCROLL
+    /// (AC-01/02/03/04) authored in VicGraphicsPipelineDivergentParityTests.
+    /// These prove the new per-cycle PixelSequencer (VicIi/PixelSequencer.cs,
+    /// a port of draw_graphics/draw_graphics8 from viciisc/vicii-draw-cycle.c)
+    /// reproduces the gbuf shift register, xscroll_pipe latch, gbuf_mc_flop
+    /// pair-holding and pipe0-&gt;pipe1 double-buffering that the retired
+    /// geometric renderer could not. All 11 admitted green.
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered. Current authored distinct
-    /// [ParityAc] ids = 241 (240 admitted green + 1 pending: TEST-VIC-FETCH-06,
-    /// the V1 leftover paired with the TEST-VIC-FETCH-07 lock).
+    /// [ParityAc] ids = 262 (all 262 admitted green).
     /// </summary>
-    private const int ExpectedMinCovered = 241;
+    private const int ExpectedMinCovered = 262;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

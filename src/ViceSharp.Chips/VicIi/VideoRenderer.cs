@@ -35,6 +35,12 @@ public sealed class VideoRenderer
     // Format: 0xAABBGGRR (Alpha, Blue, Green, Red)
     private static readonly uint[] Palette = new uint[16];
 
+    // PLAN-VICEPARITY-001 V3: true only during NotifyLineCompleted (clock-driven live
+    // rendering). False during RenderFullFrame (synthetic path). Controls whether
+    // RenderStandardTextLineNoSprites and RenderBackgroundPixel read from
+    // PixelSequencer.LineIndices (cycle-accurate) or the geometric fallback path.
+    private bool _isLiveRender;
+
     static VideoRenderer()
     {
         // Initialize palette from VicPalette to BGRA format
@@ -63,7 +69,9 @@ public sealed class VideoRenderer
     // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008 / TEST-VIC-001.
     internal void NotifyLineCompleted(int completedLine)
     {
+        _isLiveRender = true;
         RenderRasterLine(completedLine);
+        _isLiveRender = false;
     }
 
     // PERF-RENDER-001: called once per frame at frame-wrap from Mos6569.Tick().
@@ -181,10 +189,24 @@ public sealed class VideoRenderer
 
         var displayStart = leftBorderPixel;
         var displayEnd = Math.Min(rightBorderPixel, leftBorderPixel + screenWidth);
-        if (displayEnd > displayStart && !hasDisplayCell)
+        if (displayEnd > displayStart && _isLiveRender)
         {
-            // Lower fine-scroll overflow has no matrix row to render; the
-            // display window shows background instead of wrapping row 0.
+            // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL: live clock-driven
+            // rendering uses PixelSequencer.LineIndices (ports draw_graphics8 from
+            // vicii-draw-cycle.c). Correct xscroll_pipe 2-cycle pipeline delay: col0 at
+            // frame pixel 32 (xscroll=0). Synthetic path (RenderFullFrame) falls through
+            // to the geometric branches below which read VIC state on-demand.
+            var lineIndices = _vic.PixelSequencer.LineIndices;
+            int bufOffset = FirstVisibleRasterX * 8; // = 96
+            for (int x = displayStart; x < displayEnd; x++)
+            {
+                int idx = x + bufOffset;
+                pixels[x] = Palette[lineIndices[idx]];
+            }
+        }
+        else if (displayEnd > displayStart && !hasDisplayCell)
+        {
+            // Lower fine-scroll overflow has no matrix row to render; display window shows background.
             FillBackground(pixels, displayStart, displayEnd - displayStart);
         }
         else if (displayEnd > displayStart)
@@ -193,16 +215,12 @@ public sealed class VideoRenderer
             {
                 var x = displayStart + col * 8;
                 if (x >= displayEnd)
-                {
                     break;
-                }
-
                 var screenIndex = screenRow * columns + col;
                 ReadMatrixCell(screenRow, col, screenIndex, out var charCode, out var colorCode);
                 byte charData = ReadCharacterRow(charCode, charRow);
                 uint fgPixel = Palette[colorCode & 0x0F];
                 var pixelsInCell = Math.Min(8, displayEnd - x);
-
                 for (var charX = 0; charX < pixelsInCell; charX++)
                 {
                     pixels[x + charX] = ((charData >> (7 - charX)) & 0x01) != 0
@@ -254,6 +272,18 @@ public sealed class VideoRenderer
         if (screenX >= screenWidth)
         {
             return new PixelSample(borderPixel, false);
+        }
+
+        // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL: during live clock-driven
+        // rendering (NotifyLineCompleted) use PixelSequencer.LineIndices for cycle-accurate
+        // color and priority. During synthetic renders (RenderFullFrame), fall through to the
+        // geometric path so RenderFullFrame-based tests continue to read VIC state on-demand.
+        if (_isLiveRender)
+        {
+            int idx = x + FirstVisibleRasterX * 8;
+            byte paletteIndex = _vic.PixelSequencer.LineIndices[idx];
+            bool isForeground  = _vic.PixelSequencer.LinePriority[idx] != 0;
+            return new PixelSample(Palette[paletteIndex], isForeground);
         }
 
         if (!hasDisplayCell)
