@@ -17,11 +17,17 @@ public sealed class SidClockRateTests
     /// Use case: When the SID is driven by the SystemClock, stepping N master cycles must
     ///   advance a voice's phase by N x Frequency (the accumulator increments every phi2
     ///   cycle), so the output frequency is Frequency x phi2 / 2^24 - the correct pitch.
-    /// Acceptance: With voice-3 frequency 0x0100, after stepping the SystemClock 8192
-    ///   master cycles, OSC3 ($D41B = the high byte of the 24-bit oscillator, bits 16-23)
+    /// Acceptance: With voice-3 frequency 0x0100 and sawtooth selected, after stepping
+    ///   the SystemClock 8192 master cycles, OSC3 ($D41B = the top 8 bits of the selected
+    ///   waveform output; for sawtooth that is accumulator bits 16-23, reSID wave.cc:97)
     ///   reads 0x20 (= ((8192 x 0x0100) >> 16) &amp; 0xff). The 16x-slow bug ticks only 512
-    ///   times and reads 0x02. (OSC3 = bits 16-23, verified cycle-exact against reSID in
+    ///   times and reads 0x02. (Verified cycle-exact against reSID in
     ///   SidEngineParityTests; the old >> 24 readback over-read by one byte.)
+    /// PLAN-VICEPARITY-001 S3 relock: the probe previously read OSC3 with no waveform
+    ///   selected, pinning the legacy waveform-0 phase readback (remediated by
+    ///   FR-SID-OSC3ENV3 AC-07) and the legacy zero power-on accumulator (remediated by
+    ///   FR-SID-WAVE-ACC AC-05). The identical 0x20 literal is now pinned via the
+    ///   test-bit-zeroed accumulator and a selected sawtooth.
     /// </summary>
     [Fact]
     public void SidPhase_AdvancesAtPhi2Rate_WhenClockedBySystemClock()
@@ -30,6 +36,12 @@ public sealed class SidClockRateTests
         var sid = new Sid6581(bus) { BaseAddress = 0xD400 };
         var clock = new SystemClock(985_248);
         clock.Register(sid);
+
+        // Pin the voice-3 accumulator to zero via the CTRL test bit so the
+        // closed form is independent of the power-on accumulator seed.
+        sid.Write(0xD412, 0x08);
+        clock.Step(1);
+        sid.Write(0xD412, 0x20); // sawtooth, test released
 
         // Voice 3 frequency = 0x0100 (FRELO=0x00 @ $D40E, FREHI=0x01 @ $D40F).
         // 0x0100 x 8192 = 0x200000 does not wrap the 24-bit accumulator, so the

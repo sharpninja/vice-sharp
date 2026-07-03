@@ -53,13 +53,21 @@ public sealed class SidDualSidTests
     /// FR: FR-SID-012 (BACKFILL-SID-001 dual-SID, ac.2).
     /// Use case: A demo programs voice 3 on the primary SID at <c>$D400</c>
     /// for the lead voice and leaves the secondary SID at <c>$D420</c>
-    /// idle. After clocking both chips, the OSC3 latch (high byte of
-    /// voice-3 phase) must advance only on the primary; the secondary
-    /// must remain pinned at zero because nothing was ever programmed
-    /// into its frequency registers.
+    /// idle. After clocking both chips, the OSC3 readback must advance only
+    /// on the primary; the secondary must keep reading zero because no
+    /// waveform was ever selected on it (its floating waveform-0 output
+    /// latch has never latched anything, reSID wave.cc:329-331).
     /// Acceptance: Each Sid6581 instance ticks its own voice state in
     /// isolation; activity on one chip's voice does not propagate any
     /// observable state into another chip's register/voice surface.
+    /// PLAN-VICEPARITY-001 S3 relock: the primary probe previously read
+    /// OSC3 with no waveform selected, pinning the legacy waveform-0 phase
+    /// readback (remediated by FR-SID-OSC3ENV3 AC-07) and the legacy zero
+    /// power-on accumulator (remediated by FR-SID-WAVE-ACC AC-05). The
+    /// primary now pins the identical $02 advance through a test-bit-zeroed
+    /// accumulator and a selected sawtooth; the untouched secondary reads
+    /// exactly 0 on both the legacy path (zero-seed phase) and the reSID
+    /// path (never-latched floating waveform-0 output).
     /// </summary>
     [Fact]
     public void TwoSids_TickIndependently_NoCrossTalk()
@@ -68,13 +76,21 @@ public sealed class SidDualSidTests
         var primary = new Sid6581(bus) { BaseAddress = 0xD400 };
         var secondary = new Sid6581(bus) { BaseAddress = 0xD420 };
 
+        // Pin the primary's voice-3 accumulator to zero via the CTRL test
+        // bit (seed-robust rig), then select sawtooth so OSC3 reads the
+        // selected waveform output (= accumulator bits 16-23 for sawtooth).
+        // The secondary is deliberately left untouched.
+        primary.Write(0xD412, 0x08);
+        primary.Tick();
+        secondary.Tick();
+        primary.Write(0xD412, 0x20);   // sawtooth, test released
+
         // Drive primary voice 3 so OSC3 readback advances. Voice 3 lives at
         // $D40E (FREQ LO), $D40F (FREQ HI) on the primary's window; the
         // secondary's same registers live at $D42E / $D42F. We only write the
-        // primary. OSC3 latches the high byte (bits 16-23) of voice 3's 24-bit
-        // phase accumulator. Use freq $0100 so 512 ticks gives accumulator
-        // $020000 - a clear non-zero high byte ($02) that does NOT wrap the
-        // 24-bit accumulator (freq $8000 would wrap to exactly $1000000, i.e.
+        // primary. Use freq $0100 so 512 ticks gives accumulator $020000 - a
+        // clear non-zero high byte ($02) that does NOT wrap the 24-bit
+        // accumulator (freq $8000 would wrap to exactly $1000000, i.e.
         // 24-bit zero, making OSC3 read 0 and hiding the advance).
         primary.Write(0xD40E, 0x00);   // V3 FREQ LO
         primary.Write(0xD40F, 0x01);   // V3 FREQ HI = $0100
@@ -85,14 +101,14 @@ public sealed class SidDualSidTests
             secondary.Tick();
         }
 
-        // OSC3 ($D41B for primary, $D43B for secondary) reads back the high byte
-        // (bits 16-23) of voice 3's 24-bit phase accumulator. Primary
-        // accumulator = $0100 * 512 = $020000, high byte = $02. Secondary
-        // accumulator should still be 0 - it never had a frequency written.
+        // OSC3 ($D41B for primary, $D43B for secondary) reads the selected
+        // waveform output's top byte. Primary sawtooth accumulator =
+        // $0100 * 512 = $020000, so OSC3 = $02. The secondary never had a
+        // waveform selected, so it must read 0.
         var primaryOsc3 = primary.Read(0xD41B);
         var secondaryOsc3 = secondary.Read(0xD43B);
 
-        primaryOsc3.Should().NotBe(0,
+        primaryOsc3.Should().Be(0x02,
             "primary voice 3 advanced its phase under its own frequency");
         secondaryOsc3.Should().Be(0,
             "writes to the primary at $D40F must not bleed into the secondary at $D42F");

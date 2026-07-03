@@ -170,34 +170,55 @@ public sealed class SidTopFaithfulParityTests
 
     /// <summary>
     /// FR: FR-SID-VOICE AC-07 (TEST-SID-VOICE-07), FAITHFUL lock,
-    /// PLAN-VICEPARITY-001 P0-8.
+    /// PLAN-VICEPARITY-001 P0-8, re-rigged in slice S3.
     /// Use case: hard-sync wiring must match reSID SID::SID() (sid.cc:74-76):
     /// voice 0 syncs from voice 2, voice 1 from voice 0, voice 2 from voice 1.
-    /// Managed mirror: Sid6581.cs Tick() MSB-edge sync (and the ring-mod
+    /// Managed mirror: Sid6581.cs SynchronizeOscillators (and the ring-mod
     /// modulator pick (i + 2) % 3).
-    /// Acceptance: for each wiring leg, the source voice runs freq $FFFF so
-    /// its accumulator bit 23 falls exactly once in 300 cycles (rises at cycle
-    /// 129; 256 * 0xFFFF = 0x00FFFF00 still has bit 23 set, 257 * 0xFFFF =
-    /// 0x010100FF clears it, so the 1-to-0 edge lands on cycle 257). The
-    /// dependent voice (freq $0100, SYNC bit set) is reset on that edge and
-    /// re-accumulates for the remaining 43 cycles: exactly 43 * 0x100 =
-    /// 0x2B00. The source ends at exactly 300 * 0xFFFF = 0x012BFED4 and the
-    /// uninvolved third voice (freq $0010, no edge in 300 cycles) ends at
-    /// exactly 300 * 0x10 = 0x12C0, proving the dependent was reset by its
-    /// designated source and nothing else.
+    /// Acceptance: each leg first pins all three accumulators to zero through
+    /// the CTRL test bit (FAITHFUL TEST-SID-WAVE-TESTBIT-01), so the leg is
+    /// independent of the power-on accumulator seed (FR-SID-WAVE-ACC AC-05),
+    /// and the captured accumulators are compared at the architectural 24-bit
+    /// width (FR-SID-WAVE-ACC AC-02), so the leg is independent of the stored
+    /// width. For each wiring leg the source voice runs freq $FFFF so its
+    /// accumulator bit 23 falls exactly once in 300 cycles (rises at cycle
+    /// 129; 256 * 0xFFFF = 0xFFFF00 still has bit 23 set, 257 * 0xFFFF =
+    /// 0x010100FF is 0x0100FF modulo 2^24, so the 1-to-0 edge lands on cycle
+    /// 257 whether or not the store is masked). The dependent voice (freq
+    /// $0100, SYNC bit set) is reset on that edge and re-accumulates for the
+    /// remaining 43 cycles: exactly 43 * 0x100 = 0x2B00. The source ends at
+    /// exactly (300 * 0xFFFF) mod 2^24 = 0x2BFED4 and the uninvolved third
+    /// voice (freq $0010, no edge in 300 cycles) ends at exactly 300 * 0x10 =
+    /// 0x12C0, proving the dependent was reset by its designated source and
+    /// nothing else.
+    /// S3 relock: previously asserted the raw 32-bit from-zero captures
+    /// (source 0x012BFED4, i.e. the unmasked store from a zero power-on
+    /// seed); the same wiring subject is now pinned via test-bit zeroing and
+    /// 24-bit captures (source 0x2BFED4 = 0x012BFED4 &amp; 0xFFFFFF; the
+    /// dependent/third values 0x2B00/0x12C0 are unchanged), which stays
+    /// bit-exact across the FR-SID-WAVE-ACC AC-02/AC-05 remediation.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-VOICE-07", ParityTag.Faithful)]
     public void HardSyncSourceTopology_MatchesReSidVoiceWiring()
     {
-        Assert.Equal((0x2B00u, 0x012BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 0, source: 2, third: 1));
-        Assert.Equal((0x2B00u, 0x012BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 1, source: 0, third: 2));
-        Assert.Equal((0x2B00u, 0x012BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 2, source: 1, third: 0));
+        Assert.Equal((0x2B00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 0, source: 2, third: 1));
+        Assert.Equal((0x2B00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 1, source: 0, third: 2));
+        Assert.Equal((0x2B00u, 0x2BFED4u, 0x12C0u), RunHardSyncLeg(dependent: 2, source: 1, third: 0));
     }
 
     private static (uint DependentAcc, uint SourceAcc, uint ThirdAcc) RunHardSyncLeg(int dependent, int source, int third)
     {
         var sid = BuildSid();
+
+        // Pin all three accumulators to zero through the CTRL test bit
+        // (FAITHFUL mechanism, TEST-SID-WAVE-TESTBIT-01) so the leg does not
+        // depend on the power-on accumulator seed.
+        for (var v = 0; v < 3; v++)
+            sid.Write(VoiceReg(v, 4), 0x08);
+        sid.Tick();
+        for (var v = 0; v < 3; v++)
+            sid.Write(VoiceReg(v, 4), 0x00);
 
         // Source sweeps fast enough that its accumulator MSB falls exactly
         // once within the 300-cycle window (cycle 257, see the test doc).
@@ -216,84 +237,129 @@ public sealed class SidTopFaithfulParityTests
         for (var t = 0; t < 300; t++)
             sid.Tick();
 
+        // Compare at the architectural 24-bit accumulator width (reSID
+        // wave.h:155); the stored-width divergence is FR-SID-WAVE-ACC AC-02.
         var state = CaptureVoiceState(sid);
-        var accumulators = new[] { state.Acc0, state.Acc1, state.Acc2 };
+        var accumulators = new[] { state.Acc0 & 0xFFFFFFu, state.Acc1 & 0xFFFFFFu, state.Acc2 & 0xFFFFFFu };
         return (accumulators[dependent], accumulators[source], accumulators[third]);
     }
 
     /// <summary>
     /// FR: FR-SID-VOICE AC-09 (TEST-SID-VOICE-09), FAITHFUL lock,
-    /// PLAN-VICEPARITY-001 P0-8.
+    /// PLAN-VICEPARITY-001 P0-8, re-rigged in slice S3.
     /// Use case: reSID Voice::reset() (voice.cc:121-125) fans reset out to
     /// both halves of the voice: wave.reset() then envelope.reset(). The
-    /// managed mirror (Sid6581.cs Reset()) clears the register file and
-    /// per-voice wave state and re-parks the envelope machinery via
-    /// Env.Reset(), which preserves the envelope counter and env3 latch
-    /// (envelope.cc:189; FR-SID-ENV AC-07).
-    /// Acceptance: after voice 3 runs 1000 cycles at freq $2000 with attack 0
-    /// and gate on, OSC3 reads exactly 0x7D (1000 * 0x2000 = 0x7D0000, bits
-    /// 16-23) and ENV3 reads exactly 0xE6 (from the 0xaa power-up seed the
-    /// counter steps every rate period + 1 = 9 cycles from cycle 12, reaches
-    /// 0xFF at cycle 768 and decays 25 steps by cycle 1000). Reset() then
-    /// zeroes OSC3, the register readback and all three captured
-    /// accumulators (the wave half; reSID's accumulator-preserve divergence
-    /// is FR-SID-WAVE-ACC's remediation), while ENV3 still reads exactly
-    /// 0xE6 and the captured counters hold (0x4D, 0x4D, 0xE6): the idle
-    /// voices released the 0xaa seed for 1000 cycles through the exponential
-    /// ladder (period-1 steps every 9 cycles down to the 0x5D threshold,
-    /// then period-2 steps every 18). A 500-cycle re-gated replay produces
-    /// OSC3 sequences exactly equal to a freshly constructed chip (wave
-    /// state fully reset, ending 0x3E) and ENV3 sequences exactly tracking
-    /// lockstep ReSidEnvelope references with the same histories; both
-    /// envelope trajectories end at exactly 0xE1 (fresh: 0xaa + 55 attack
-    /// steps; reset: 0xE6 to the 0xFF flip at cycle 228, then 30 decay
-    /// steps).
+    /// managed mirror (Sid6581.cs Reset()) re-parks the register file and
+    /// per-voice wave state per reSID wave.cc:301-332 and the envelope
+    /// machinery via Env.Reset(), which preserves the envelope counter and
+    /// env3 latch (envelope.cc:189; FR-SID-ENV AC-07).
+    /// Acceptance: all three accumulators are first pinned to zero through
+    /// the CTRL test bit (FAITHFUL TEST-SID-WAVE-TESTBIT-01, one tick), so
+    /// the rig does not depend on the power-on seed (FR-SID-WAVE-ACC AC-05).
+    /// After voice 3 then runs 1000 cycles at freq $2000 with attack 0 and
+    /// gate on, OSC3 reads exactly 0x7D (1000 * 0x2000 = 0x7D0000; sawtooth
+    /// output bits 16-23) and ENV3 exactly tracks a lockstep ReSidEnvelope
+    /// reference with the identical history (one idle pre-clock, then the
+    /// gated ramp: exactly 0xE6). The wave state is then parked at the
+    /// reset-invariant point (test bit held for one tick pins every
+    /// accumulator at zero, so reSID's accumulator-preserving reset,
+    /// wave.cc:301-303 / FR-SID-WAVE-ACC AC-06, and the legacy zeroing reset
+    /// coincide) and Reset() is called. OSC3 then reads exactly 0x00 (reset
+    /// clears the osc3 latch, wave.cc:330), the register readback is zeroed,
+    /// the captured 24-bit accumulators are exactly (0, 0, 0), ENV3 still
+    /// reads its reference-preserved value exactly, and the captured
+    /// counters equal the reference counters exactly (idle voices released
+    /// the 0xaa power-up seed through the exponential ladder for the same
+    /// 1002 clocks). A 500-cycle re-gated replay produces OSC3 sequences
+    /// exactly equal to a freshly constructed chip whose accumulators were
+    /// pinned the same way (wave state fully reset, ending 0x3E) and ENV3
+    /// sequences exactly tracking the lockstep references; both trajectories
+    /// end at exactly the reference values.
+    /// S3 relock: previously the rig started from the legacy zero power-on
+    /// accumulators, asserted the raw captures (0, 0, 0) right after a
+    /// mid-run Reset() (pinning the legacy accumulator zeroing that
+    /// FR-SID-WAVE-ACC AC-06 remediates), and pinned ENV3 literals for the
+    /// unprefixed history (0xE6/0x4D). The same reset-fans-to-both-halves
+    /// subject is now pinned with the accumulators parked at zero before
+    /// Reset(), which stays bit-exact whether reset preserves or clears the
+    /// accumulator, and the envelope literals are derived from the lockstep
+    /// ReSidEnvelope references driven through the re-rigged history.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-VOICE-09", ParityTag.Faithful)]
     public void Reset_RestoresWaveAndEnvelopePowerOnStatePerVoice()
     {
         var sid = BuildSid();
+
+        // Reference envelope for voice 3, driven through the exact same
+        // write/clock history as the chip (the derivation vehicle for every
+        // envelope literal in this lock).
+        var resetReference = new Sid6581.ReSidEnvelope();
+        resetReference.PowerUp();
+
+        // Pin all three accumulators to zero via the test bit (seed-robust
+        // rig; the CTRL writes carry gate 0, so no envelope transition).
+        for (var v = 0; v < 3; v++)
+            sid.Write(VoiceReg(v, 4), 0x08);
+        sid.Tick();
+        resetReference.Clock();
+        for (var v = 0; v < 3; v++)
+            sid.Write(VoiceReg(v, 4), 0x00);
+
         ApplyVoice3SawtoothGate(sid);
+        resetReference.WriteAttackDecay(0x00);
+        resetReference.WriteSustainRelease(0x00);
+        resetReference.WriteControl(0x01);
         for (var t = 0; t < 1000; t++)
+        {
             sid.Tick();
+            resetReference.Clock();
+        }
 
         // Accumulated pre-reset state, asserted exactly so the reset below is
         // proven to have destroyed real wave progress while preserving the
         // envelope counter.
         Assert.Equal(0x7D, sid.Read(0xD41B));
+        Assert.Equal(resetReference.Env3, sid.Read(0xD41C));
         Assert.Equal(0xE6, sid.Read(0xD41C));
 
-        sid.Reset();
+        // Park the wave state at the reset-invariant point: one held test
+        // cycle pins every accumulator at zero, so a reSID
+        // accumulator-preserving reset and the legacy zeroing reset produce
+        // the identical post-reset accumulators. Voice 3's gate drops with
+        // the same write (mirrored into the reference).
+        for (var v = 0; v < 3; v++)
+            sid.Write(VoiceReg(v, 4), 0x08);
+        resetReference.WriteControl(0x08);
+        sid.Tick();
+        resetReference.Clock();
 
-        // Wave half: accumulators and register file zeroed. Envelope half:
-        // machinery re-parked in RELEASE with the counters preserved.
+        sid.Reset();
+        resetReference.Reset();
+
+        // Wave half: osc3 latch, register file and (parked-at-zero)
+        // accumulators all read zero. Envelope half: machinery re-parked in
+        // RELEASE with the counters preserved (envelope.cc:189).
         Assert.Equal(0x00, sid.Read(0xD41B));
+        Assert.Equal(resetReference.Env3, sid.Read(0xD41C));
         Assert.Equal(0xE6, sid.Read(0xD41C));
         Assert.Equal(0x00, sid.Read(0xD40F));
         Assert.Equal(0x00, sid.Read(0xD412));
         var state = CaptureVoiceState(sid);
-        Assert.Equal((0u, 0u, 0u), (state.Acc0, state.Acc1, state.Acc2));
-        Assert.Equal((0x4D, 0x4D, 0xE6), ((int)state.Env0, (int)state.Env1, (int)state.Env2));
+        Assert.Equal((0u, 0u, 0u), (state.Acc0 & 0xFFFFFFu, state.Acc1 & 0xFFFFFFu, state.Acc2 & 0xFFFFFFu));
+        Assert.Equal(resetReference.EnvelopeCounter, state.Env2);
+        Assert.Equal((0x4D, 0x4D, 0xE5), ((int)state.Env0, (int)state.Env1, (int)state.Env2));
 
         // Replay: the wave half of the reset chip must be indistinguishable
-        // from a fresh chip (identical OSC3 streams); the envelope half must
-        // track lockstep ReSidEnvelope references that went through the same
-        // histories (power-up seed, the same 1000 gated cycles, reset with
-        // the counter preserved, then the same re-gate writes).
+        // from a fresh chip whose accumulators were pinned the same way
+        // (identical OSC3 streams); the envelope half must track lockstep
+        // ReSidEnvelope references that went through the same histories.
         var fresh = BuildSid();
-
-        var resetReference = new Sid6581.ReSidEnvelope();
-        resetReference.PowerUp();
-        resetReference.WriteAttackDecay(0x00);
-        resetReference.WriteSustainRelease(0x00);
-        resetReference.WriteControl(0x01);
-        for (var t = 0; t < 1000; t++)
-            resetReference.Clock();
-        resetReference.Reset();
-
         var freshReference = new Sid6581.ReSidEnvelope();
         freshReference.PowerUp();
+        fresh.Write(0xD412, 0x08);
+        fresh.Tick();
+        freshReference.Clock();
 
         ApplyVoice3SawtoothGate(sid);
         ApplyVoice3SawtoothGate(fresh);
@@ -320,9 +386,11 @@ public sealed class SidTopFaithfulParityTests
         }
 
         Assert.Equal(oscFresh, oscReset);
-        Assert.Equal(0x3E, oscReset[ReplayCycles - 1]);
-        Assert.Equal(0xE1, sid.Read(0xD41C));
-        Assert.Equal(0xE1, fresh.Read(0xD41C));
+        Assert.Equal(0x3E, oscReset[ReplayCycles - 1]); // 500 * 0x2000 = 0x3E8000, sawtooth bits 16-23
+        Assert.Equal(resetReference.Env3, sid.Read(0xD41C));
+        Assert.Equal(freshReference.Env3, fresh.Read(0xD41C));
+        Assert.Equal(0xE2, sid.Read(0xD41C));   // reset leg: 0xE6 to the 0xFF flip, then decay
+        Assert.Equal(0xE1, fresh.Read(0xD41C)); // fresh leg: 0xaa seed plus 55 attack steps
     }
 
     /// <summary>
@@ -445,7 +513,7 @@ public sealed class SidTopFaithfulParityTests
 
     /// <summary>
     /// FR: FR-SID-CLOCK AC-11 (TEST-SID-CLOCK-11), FAITHFUL lock,
-    /// PLAN-VICEPARITY-001 P0-8.
+    /// PLAN-VICEPARITY-001 P0-8, re-rigged in slice S3.
     /// Use case: reSID clocks envelopes before oscillators within a cycle
     /// (sid.h:205-212), the managed Tick advances the accumulator before the
     /// envelope per voice; the orders are equivalent because neither engine
@@ -457,9 +525,20 @@ public sealed class SidTopFaithfulParityTests
     /// $0000 vs $FFFF produce exactly equal per-cycle ENV3 sequences over 405
     /// cycles (final read exactly 0xD6: the 0xaa power-up seed plus the 44
     /// attack-0 steps that land at cycles 12 + 9k up to 405); two chips at
-    /// freq $2000 with gate on vs gate off produce exactly equal per-cycle
-    /// OSC3 sequences over 405 cycles (final read exactly 0x32 = bits 16-23
-    /// of 405 * 0x2000).
+    /// freq $2000 with sawtooth selected and gate on vs gate off (CTRL $21
+    /// vs $20), accumulators pinned to zero via the test bit first, produce
+    /// exactly equal per-cycle OSC3 sequences over 405 cycles (final read
+    /// exactly 0x32: sawtooth output = accumulator bits 16-23, with
+    /// 405 * 0x2000 = 0x32A000).
+    /// S3 relock: the oscillator half previously probed OSC3 with NO
+    /// waveform selected (CTRL $01 vs $00), pinning the legacy waveform-0
+    /// phase readback that FR-SID-OSC3ENV3 AC-07 remediates (waveform 0
+    /// reads the fading floating-DAC latch, wave.h:499-504), and started
+    /// from the legacy zero power-on accumulator that FR-SID-WAVE-ACC AC-05
+    /// remediates. The same envelope-independence subject is now pinned
+    /// through the sawtooth-selected readback (osc3 = accumulator top bits,
+    /// wave.cc:97), which produces the identical 0x32 literal on both the
+    /// legacy and the reSID readback paths.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-CLOCK-11", ParityTag.Faithful)]
@@ -495,19 +574,24 @@ public sealed class SidTopFaithfulParityTests
         Assert.Equal(envStill, envFast);
         Assert.Equal(0xD6, envStill[Cycles - 1]);
 
-        // Oscillator must be envelope-independent: same frequency, gate on vs
-        // gate off, identical OSC3 streams.
+        // Oscillator must be envelope-independent: same frequency and
+        // sawtooth selection, gate on vs gate off, identical OSC3 streams.
+        // The voice-3 accumulator is pinned to zero via the test bit first
+        // (FAITHFUL TEST-SID-WAVE-TESTBIT-01) so the closed form does not
+        // depend on the power-on seed.
         var gated = BuildSid();
         var silent = BuildSid();
         foreach (var sid in new[] { gated, silent })
         {
+            sid.Write(0xD412, 0x08); // test bit: pin the accumulator to zero
+            sid.Tick();
             sid.Write(0xD40E, 0x00); // freq lo
             sid.Write(0xD40F, 0x20); // freq hi ($2000)
             sid.Write(0xD413, 0x00);
             sid.Write(0xD414, 0x00);
         }
-        gated.Write(0xD412, 0x01);
-        silent.Write(0xD412, 0x00);
+        gated.Write(0xD412, 0x21);  // sawtooth + gate
+        silent.Write(0xD412, 0x20); // sawtooth, no gate
 
         var oscGated = new byte[Cycles];
         var oscSilent = new byte[Cycles];

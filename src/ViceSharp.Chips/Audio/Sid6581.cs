@@ -59,6 +59,18 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // Bit 19 of the 24-bit accumulator (the implementation stores the
     // 24-bit value in a uint; the upper byte is the phase output).
     private const uint NoiseClockBit = 1u << 19;
+    /// <summary>
+    /// reSID 6581 floating-DAC fade-start TTL: cycles from waveform
+    /// deselect to the first bit-fade (wave.cc:43).
+    /// FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3].
+    /// </summary>
+    private const int FloatingOutputTtlStart6581 = 182000;
+    /// <summary>
+    /// reSID 6581 per-bit-fade TTL: cycles between successive bit-fades
+    /// while the latch is nonzero (wave.cc:44).
+    /// FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3].
+    /// </summary>
+    private const int FloatingOutputTtlBit6581 = 1500;
     private uint _noiseLfsr = NoiseLfsrInitial;
 
     /// <summary>
@@ -222,10 +234,39 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 voice.Osc3 = (ushort)waveformOutput;                                    // wave.h:485
             }
         }
+        else
+        {
+            // FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3]: with waveform 0
+            // selected, set_waveform_output ages the floating-DAC TTL each
+            // cycle and calls wave_bitfade() when it expires (wave.h:499-503).
+            // The Osc3 latch retains the last selected output and decays
+            // bit-by-bit to zero; a zero latch never re-arms (wave.cc:278-279).
+            if (voice.FloatingOutputTtl != 0 && --voice.FloatingOutputTtl == 0)
+            {
+                WaveBitFade(ref voice);
+            }
+        }
 
         // wave.h:506-518: the pulse compare result is delayed one cycle; push
         // the next level from this cycle's post-clock 24-bit phase.
         voice.PulseLevel = (accumulator >> 12) >= voice.PulseWidth ? (ushort)0xFFF : (ushort)0x000;
+    }
+
+    /// <summary>
+    /// reSID wave_bitfade() (wave.cc:274-280): right-fold the Osc3 latch
+    /// one bit and re-arm the per-bit TTL if the result is nonzero.
+    /// Called by the waveform-0 path in <see cref="SetWaveformOutput"/>
+    /// when the floating-DAC TTL expires.
+    /// FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3].
+    /// </summary>
+    private static void WaveBitFade(ref Voice voice)
+    {
+        int output = voice.Osc3 & (voice.Osc3 >> 1);
+        voice.Osc3 = (ushort)output;
+        if (output != 0)
+        {
+            voice.FloatingOutputTtl = FloatingOutputTtlBit6581;
+        }
     }
 
     /// <summary>
@@ -298,115 +339,27 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     /// <summary>
     /// Selected waveform sample of voice <paramref name="i"/> multiplied by
-    /// the envelope DAC output. FR-SID-ENV AC-50: reSID's envelope output is
-    /// model_dac[sid_model][envelope_counter] (envelope.h:377-383), never the
-    /// raw counter, so the multiplicand goes through <see cref="EnvelopeDacTable"/>.
+    /// the envelope DAC output, routed through the 12-bit
+    /// <see cref="Voice.Osc3"/> latch set by <see cref="SetWaveformOutput"/>
+    /// each cycle. FR-SID-WAVE-SAWTRI / FR-SID-WAVE-PULSE / FR-SID-WAVE-DACRES
+    /// AC-01 [PLAN-VICEPARITY-001 S3]: reSID routes audio through the 12-bit
+    /// waveform_output latch (wave.h:104,485); with no waveform selected the
+    /// voice is silent (the waveform-0 floating-DAC audio bias is FR-SID-VOICE
+    /// AC-04, a later slice). FR-SID-ENV AC-50: the envelope is applied through
+    /// the nonlinear model_dac row (envelope.h:377-383).
     /// </summary>
     private int ComputeVoiceOutput(int i)
     {
         ref Voice voice = ref _voices[i];
-        // Waveform-select bits live in CTRL bits 4-7 (Triangle, Sawtooth,
-        // Pulse, Noise). Mask with 0xF0 to isolate them from sync/ring/
-        // test/gate bits.
-        byte waveformBits = (byte)(voice.Control & 0xF0);
-        bool ringMod = (voice.Control & 0x04) != 0;
-
-        int sample;
-        // The phase accumulator is 24-bit (sync uses bit 23, noise bit 19),
-        // so the 8-bit waveform index is bits 16-23. Reading bits 24-31
-        // (>> 24) capped the oscillator at ~15 Hz - every note was sub-audible
-        // DC, which is why no sound was produced. (OSC3 readback at Read()
-        // keeps its existing extraction; it is parity-gated separately.)
-        // Hard sync ran earlier in this cycle's chain, so this is the
-        // post-sync phase.
-        uint phase = (voice.WaveformAccumulator >> 16) & 0xFF;
-
-        bool hasTriangle = (waveformBits & 0x10) != 0;
-        bool hasSawtooth = (waveformBits & 0x20) != 0;
-        bool hasPulse = (waveformBits & 0x40) != 0;
-        bool hasNoise = (waveformBits & 0x80) != 0;
-
-        // FR-SID-003 (combined waveforms): the SID's hardware ANDs the
-        // outputs of every selected waveform together. With a single
-        // waveform selected this collapses to that waveform's value;
-        // with two or more selected the result is the bitwise AND of
-        // their 8-bit outputs (the distorted/attenuated combined-waveform
-        // sound associated with SID silicon). With zero waveform bits selected
-        // the voice is silent.
-        int triValue = 0, sawValue = 0, pulValue = 0, noiseValue = 0;
-
-        if (hasTriangle)
-        {
-            uint tri = phase < 128 ? (phase << 1) : ((255 - phase) << 1);
-            if (ringMod)
-            {
-                // Ring modulation: triangle output's "shape" is inverted
-                // when the sync-source voice's MSB is high. The sync
-                // source is voice ((i + 2) % 3) (cyclic backward).
-                var modulatorMsb = (_voices[(i + 2) % 3].WaveformAccumulator & 0x800000u) != 0;
-                if (modulatorMsb)
-                    tri ^= 0xFF;
-            }
-            triValue = (int)(tri & 0xFF);
-        }
-        if (hasSawtooth)
-        {
-            sawValue = (int)(phase & 0xFF);
-        }
-        if (hasPulse)
-        {
-            // 12-bit pulse width compared at the 8-bit phase resolution
-            // (top 8 bits of PW), so a 50% duty register (~$800) gives a
-            // 50% duty wave.
-            pulValue = phase < (uint)(voice.PulseWidth >> 4) ? 0xFF : 0x00;
-        }
-        if (hasNoise)
-        {
-            // FR-SID-009 ac.3: noise output is derived from specific
-            // taps of the 23-bit LFSR (bits 0, 2, 5, 9, 11, 14, 18, 20),
-            // packed into an 8-bit value. Matches the hardware tap map
-            // documented in resid/sid8580.c.
-            noiseValue = NoiseOutput(_noiseLfsr);
-        }
-
-        int selectedCount = (hasTriangle ? 1 : 0) + (hasSawtooth ? 1 : 0)
-                           + (hasPulse ? 1 : 0) + (hasNoise ? 1 : 0);
-
-        if (selectedCount == 0)
-        {
-            // No waveform selected: silence (hardware floats to 0).
+        // No waveform selected: voice output is silence. The Osc3 latch
+        // keeps fading (FR-SID-OSC3ENV3 AC-07) but its audio contribution
+        // (floating-DAC bias) is FR-SID-VOICE AC-04, a later slice.
+        if ((voice.Control & 0xF0) == 0)
             return 0;
-        }
-
-        if (selectedCount == 1)
-        {
-            // Single waveform - preserve the existing per-waveform value
-            // verbatim so single-waveform behaviour is unchanged.
-            sample = hasTriangle ? triValue
-                   : hasSawtooth ? sawValue
-                   : hasPulse    ? pulValue
-                   :               noiseValue;
-        }
-        else
-        {
-            // Two or more waveforms selected: AND the 8-bit outputs of
-            // every selected waveform. Unselected waveforms contribute
-            // 0xFF (the AND identity) so they do not affect the result.
-            int combined = 0xFF;
-            if (hasTriangle) combined &= triValue;
-            if (hasSawtooth) combined &= sawValue;
-            if (hasPulse)    combined &= pulValue;
-            if (hasNoise)    combined &= noiseValue;
-            // FR-SID-003 acceptance criterion 2: the 8580 die has
-            // different combined-waveform analog bleed than the 6581.
-            // ApplyCombinedBleed is a no-op on 6581 and applies a
-            // ~0.75 attenuation scalar on the 8580 variant.
-            sample = ApplyCombinedBleed((byte)combined);
-        }
-
-        // FR-SID-ENV AC-50: envelope applied through the nonlinear model_dac
-        // row, not linearly through the raw counter.
-        return ((sample - WaveZeroLevel) * EnvelopeDacTable[voice.Env.EnvelopeCounter]) >> 8;
+        // Wave zero (voice.cc:93): 0x380 for 6581, 0x9E0 for 8580.
+        // WaveZeroLevel is the 8-bit representation (0x38 / 0x9E) so
+        // multiply by 0x10 to reach the 12-bit domain.
+        return ((voice.Osc3 - WaveZeroLevel * 0x10) * EnvelopeDacTable[voice.Env.EnvelopeCounter]) >> 8;
     }
 
     /// <summary>
@@ -728,6 +681,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public ushort Osc3;
         public ushort PulseLevel;
         public ushort TriSawPipeline;
+        /// <summary>
+        /// reSID floating_output_ttl: countdown (cycles remaining) until the
+        /// next bit-fade; zero means the fade is not armed. Armed to
+        /// FloatingOutputTtlStart6581 when a non-zero waveform is deselected
+        /// (wave.cc:265-268); re-armed to FloatingOutputTtlBit6581 after each
+        /// fade while the latch is nonzero (wave.cc:278-279). FR-SID-OSC3ENV3
+        /// AC-07 [PLAN-VICEPARITY-001 S3].
+        /// </summary>
+        public int FloatingOutputTtl;
         public byte Envelope;          // display/readback mirror of Env.EnvelopeCounter
         public EnvelopeState State;     // display mirror of Env.State
         public bool Gate;
@@ -1015,6 +977,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // powers up high via the constructor's reset() (wave.cc:319).
             _voices[v].TriSawPipeline = 0x555;
             _voices[v].PulseLevel = 0xFFF;
+            // FR-SID-WAVE-ACC AC-05 [PLAN-VICEPARITY-001 S3]: reSID powers
+            // up the accumulator with even bits high (accumulator = 0x555555,
+            // wave.cc:117). Shared by both 6581 and 8580.
+            _voices[v].WaveformAccumulator = 0x555555;
         }
     }
 
@@ -1172,7 +1138,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 continue;
             }
 
-            voice.WaveformAccumulator += voice.Frequency;
+            // FR-SID-WAVE-ACC AC-02 [PLAN-VICEPARITY-001 S3]: reSID masks the
+            // accumulator to 24 bits every cycle (wave.h:155:
+            // accumulator_next = (accumulator + freq) & 0xffffff).
+            voice.WaveformAccumulator = (voice.WaveformAccumulator + voice.Frequency) & 0xFFFFFF;
         }
 
         // FR-SID-009 ac.2: clock the LFSR once for each noise-selected
@@ -1283,10 +1252,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             voice.Control = 0;
             voice.AttackDecay = 0;
             voice.SustainRelease = 0;
-            // Accumulator zeroing predates this slice: reSID wave.reset()
-            // preserves the accumulator ("accumulator is not changed on
-            // reset"); FR-SID-WAVE-ACC owns that remediation.
-            voice.WaveformAccumulator = 0;
+            // FR-SID-WAVE-ACC AC-06 [PLAN-VICEPARITY-001 S3]: reSID
+            // wave.reset() deliberately leaves the accumulator alone
+            // ("accumulator is not changed on reset", wave.cc:301-303).
             voice.PulseAccumulator = 0;
             // FR-SID-OSC3ENV3 [PLAN-VICEPARITY-001 S2]: reSID wave.reset()
             // clears the osc3 latch (osc3 = 0, wave.cc:330) and parks the
@@ -1295,6 +1263,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // (wave.cc:301-332 never assigns it), so it is preserved here.
             voice.Osc3 = 0;
             voice.PulseLevel = 0xFFF;
+            // FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3]: reset also
+            // clears the floating-DAC TTL (floating_output_ttl = 0,
+            // wave.cc:331).
+            voice.FloatingOutputTtl = 0;
             voice.Gate = false;
             voice.Reset = false;
             voice.Env.Reset();
@@ -1330,18 +1302,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         switch (register)
         {
             case 0x1B: // OSC3: voice-3 selected-waveform readback.
-                // FR-SID-OSC3ENV3 AC-01/AC-02 [PLAN-VICEPARITY-001 S2]: reSID
-                // readOSC() returns the osc3 latch's top 8 bits (osc3 >> 4,
-                // wave.cc:293-296), i.e. the SELECTED waveform output set by
-                // the per-cycle set_waveform_output pass (wave.h:485), never
-                // the raw accumulator phase. With no waveform selected the
-                // legacy phase readback (bits 16-23) is preserved: the
-                // floating-DAC fade of the latch is FR-SID-OSC3ENV3 AC-07,
-                // stopped this slice because the FAITHFUL TEST-SID-CLOCK-11
-                // lock pins the phase ramp for waveform 0.
-                return (_voices[2].Control & 0xF0) != 0
-                    ? (byte)(_voices[2].Osc3 >> 4)
-                    : (byte)((_voices[2].WaveformAccumulator >> 16) & 0xFF);
+                // FR-SID-OSC3ENV3 AC-01/AC-02 [PLAN-VICEPARITY-001 S3]:
+                // reSID readOSC() always returns the osc3 latch's top 8 bits
+                // (osc3 >> 4, wave.cc:293-296), regardless of waveform-select
+                // state. With waveform 0 the Osc3 latch decays via floating-DAC
+                // fade (wave.h:499-503) starting from the last active output.
+                return (byte)(_voices[2].Osc3 >> 4);
             case 0x1C: // ENV3: voice 3 envelope readback (reSID env3 = counter
                        // sampled at the first phase of the cycle).
                 return _voices[2].Env.Env3;
@@ -1388,6 +1354,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                     PushPulseLevel(voiceIndex);
                     break;
                 case 4:
+                    var prevWaveformBits = _voices[voiceIndex].Control & 0xF0;
                     _voices[voiceIndex].Control = value;
                     _voices[voiceIndex].Gate = (value & 0x01) != 0;
                     // reSID gate/state transition (attack on gate-on, release on gate-off).
@@ -1401,6 +1368,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                     if ((value & 0xF0) != 0)
                     {
                         SetWaveformOutput(voiceIndex);
+                    }
+                    else if (prevWaveformBits != 0)
+                    {
+                        // FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3]:
+                        // deselecting all waveforms while a waveform was
+                        // previously selected arms the floating-DAC fade TTL
+                        // (reSID writeCONTROL_REG, wave.cc:265-268). The 6581
+                        // TTL start value (182000) is die-specific; 8580 TTL
+                        // is a separate slice remediation.
+                        _voices[voiceIndex].FloatingOutputTtl = FloatingOutputTtlStart6581;
                     }
 
                     break;
