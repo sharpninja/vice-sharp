@@ -76,6 +76,11 @@ public partial class Mos6569 : IStatefulDevice
             _allowBadLines = allow;
         if (idleState is { } idle)
             _idleState = idle;
+        // V4 FR-VIC-DRAW-COLOR: seed Cregs from injected registers so the first
+        // rendered post-injection frame uses correct colour values without a CPU
+        // write replay. Equivalent to vicii_draw_cycle_init seeding the identity
+        // table plus a snapshot-restore step for 0x20-0x2E.
+        _pixelSequencer.SeedCregsFromRegisters();
     }
 
     public void CaptureState(Span<byte> destination)

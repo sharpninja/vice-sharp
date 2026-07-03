@@ -66,11 +66,21 @@ public sealed class ParityCoverageManifestTests
     /// reproduces the gbuf shift register, xscroll_pipe latch, gbuf_mc_flop
     /// pair-holding and pipe0-&gt;pipe1 double-buffering that the retired
     /// geometric renderer could not. All 11 admitted green.
+    /// +15 = slice V4 (PLAN-VICEPARITY-001): all DIVERGENT ACs of
+    /// FR-VIC-DRAW-COLOR (AC-01..AC-10) and FR-VIC-DISPLAYMODE
+    /// (AC-03/04/05/06/09) authored in VicColorDisplayModeDivergentParityTests.
+    /// Proves the draw_colors8 Cregs pipeline (vicii-draw-cycle.c:627-663):
+    /// identity-mapped cregs init, symbolic-code resolution through Cregs (not
+    /// live _regs), one-pixel 6569 ring delay, 8565 no-delay, 8565 grey-dot,
+    /// update_cregs transfer, DbufOffset per-cycle tracking, MonitorColorStore
+    /// immediate path, and mid-line colour change at pixel granularity. The
+    /// five FR-VIC-DISPLAYMODE ACs admit the V3 per-cycle ECM/BMM/MCM
+    /// mode-edge logic to the parity manifest. All 15 admitted green.
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered. Current authored distinct
-    /// [ParityAc] ids = 262 (all 262 admitted green).
+    /// [ParityAc] ids = 277 (all 277 admitted green).
     /// </summary>
-    private const int ExpectedMinCovered = 262;
+    private const int ExpectedMinCovered = 277;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

@@ -127,6 +127,47 @@ internal sealed class PixelSequencer
     internal readonly byte[] LinePriority = new byte[63 * 8];
 
     // ---------------------------------------------------------------
+    // V4: colour resolution pipeline state (draw_colors8).
+    // vicii-draw-cycle.c:578-663 / vicii_draw_cycle_init :702-706.
+    // ---------------------------------------------------------------
+
+    /// <summary>
+    /// Colour resolution register file (47 entries). Seeded at init:
+    /// <c>cregs[0x00..0x0F]</c> = identity; <c>cregs[0x10..0x2E]</c> = 0.
+    /// Symbolic codes 0x21-0x2E from <see cref="DrawGraphics"/> are resolved
+    /// through this table by <see cref="DrawColors8"/> (not through live
+    /// <c>_regs</c>). Updated lazily via <see cref="MonitorColorStore"/> or
+    /// the pending-write path in <see cref="DrawColors8"/>.
+    /// vicii-draw-cycle.c:702-706 (vicii_draw_cycle_init).
+    /// </summary>
+    internal readonly byte[] Cregs = new byte[0x2F];
+
+    /// <summary>
+    /// 8-entry per-pixel ring delay buffer used by the 6569 color_latency=1
+    /// path (<c>draw_colors_6569</c>, vicii-draw-cycle.c:592-604).
+    /// Each entry holds a symbolic code that is resolved via
+    /// <see cref="Cregs"/> one pixel later.
+    /// </summary>
+    internal readonly byte[] PixelBuffer = new byte[8];
+
+    /// <summary>
+    /// Local last_color_reg (vicii-draw-cycle.c static variable). Transferred
+    /// from <c>VicLastColorRegWrite</c> by <c>update_cregs</c> at cycle end.
+    /// 0xFF = no pending colour update for the next cycle.
+    /// </summary>
+    internal byte LastColorReg = 0xFF;
+
+    /// <summary>Last colour value paired with <see cref="LastColorReg"/>.</summary>
+    internal byte LastColorValue;
+
+    /// <summary>
+    /// Running draw-buffer frame offset (vicii.dbuf_offset equivalent).
+    /// Incremented by 8 each <see cref="DrawColors8"/> call; reset to 0 by
+    /// <see cref="BeginLine"/> at the start of each raster line.
+    /// </summary>
+    internal int DbufOffset;
+
+    // ---------------------------------------------------------------
     // References to shared VIC state (zero-allocation, no copying).
     // ---------------------------------------------------------------
     private readonly byte[] _regs;   // Mos6569._registers[64]
@@ -164,6 +205,13 @@ internal sealed class PixelSequencer
         Dmli          = 0;
         Array.Clear(LineIndices,  0, LineIndices.Length);
         Array.Clear(LinePriority, 0, LinePriority.Length);
+        // V4: initialise cregs identity table (vicii-draw-cycle.c:702-706).
+        for (int i = 0; i < 0x10; i++) Cregs[i] = (byte)i;
+        Array.Clear(Cregs, 0x10, Cregs.Length - 0x10);
+        Array.Clear(PixelBuffer, 0, PixelBuffer.Length);
+        LastColorReg  = 0xFF;
+        LastColorValue = 0;
+        DbufOffset    = 0;
     }
 
     /// <summary>
@@ -176,6 +224,8 @@ internal sealed class PixelSequencer
         Array.Clear(LineIndices,  0, LineIndices.Length);
         Array.Clear(LinePriority, 0, LinePriority.Length);
         Dmli = 0;
+        // V4: reset draw-buffer offset at line start (vicii.dbuf_offset reset at raster_cycle=1).
+        DbufOffset = 0;
     }
 
     // ---------------------------------------------------------------
@@ -253,9 +303,12 @@ internal sealed class PixelSequencer
                 cc = (byte)(_regs[D021 + ((VbufReg >> 6) & 0x03)] & 0x0F);
                 break;
             default:
-                // Direct register codes 0x21-0x2E map to $D021-$D02E.
-                if (cc >= 0x21 && cc <= 0x2E)
-                    cc = (byte)(_regs[cc] & 0x0F);
+                // V4: leave symbolic codes 0x21-0x2E unresolved in RenderBuffer.
+                // draw_colors8 (DrawColors8) resolves them via Cregs[], allowing
+                // the one-pixel ring delay (6569) and mid-line cregs updates.
+                // vicii-draw-cycle.c draw_graphics lines 200-221: symbolic codes
+                // 0x21-0x2E pass through to render_buffer unchanged; draw_colors8
+                // resolves via cregs[]. Direct resolution via live _regs[] was V3.
                 break;
         }
 
@@ -373,16 +426,135 @@ internal sealed class PixelSequencer
             Dmli = 0;
         }
 
-        // Write resolved palette indices to the 504-byte line buffer.
+        // Write priority flags to the 504-byte line buffer.
         // FR-VIC-DRAW-GFX AC-01: 8 pixels per cycle, indexed by RasterX*8+i.
+        // V4: LineIndices is written by DrawColors8 (via DbufOffset) rather than
+        // here, so that colour resolution flows through the Cregs pipeline with
+        // the correct ring delay. LinePriority is still written here because
+        // priority does not go through the colour pipeline.
         if ((uint)rasterX < 63u)
         {
             int offset = rasterX * 8;
             for (int i = 0; i < 8; i++)
             {
-                LineIndices[offset + i]  = RenderBuffer[i];
                 LinePriority[offset + i] = PriBuffer[i];
             }
         }
+    }
+
+    // ---------------------------------------------------------------
+    // V4: colour pipeline (draw_colors8 from vicii-draw-cycle.c:627-663)
+    // ---------------------------------------------------------------
+
+    /// <summary>
+    /// Immediate colour-register update path used by the monitor and by
+    /// <see cref="Mos6569.Write"/> for $D020-$D02E.
+    /// Maps to <c>vicii_monitor_colreg_store</c> (vicii-draw-cycle.c:120-125):
+    /// updates <see cref="Cregs"/>[reg] immediately and records the pending
+    /// <see cref="LastColorReg"/>/<see cref="LastColorValue"/> pair so the
+    /// CPU-write pipeline path remains consistent.
+    /// </summary>
+    internal void MonitorColorStore(byte reg, byte value)
+    {
+        // vicii_monitor_colreg_store (vicii-draw-cycle.c:120-125):
+        // immediate Cregs update AND sets local last_color_reg for pipeline.
+        Cregs[reg]    = value;
+        LastColorReg  = reg;
+        LastColorValue = value;
+    }
+
+    /// <summary>
+    /// Seeds <see cref="Cregs"/> from the current register state after
+    /// snapshot injection (<see cref="Mos6569.InjectSnapshotState"/>).
+    /// Ensures the first rendered frame uses the correct colour values
+    /// without requiring a full-machine CPU write replay.
+    /// </summary>
+    internal void SeedCregsFromRegisters()
+    {
+        // Copy colour registers $D020-$D02E (offsets 0x20-0x2E) into Cregs so
+        // that snapshot-restored state produces correct colours from the first
+        // rendered frame without a CPU write replay.
+        for (int i = 0x20; i <= 0x2E; i++)
+            Cregs[i] = _regs[i];
+    }
+
+    /// <summary>
+    /// Per-cycle colour resolution pipeline (maps to <c>draw_colors8</c>,
+    /// vicii-draw-cycle.c:627-663). Called each cycle after
+    /// <see cref="DrawGraphics8"/>. Resolves the symbolic codes in
+    /// <see cref="RenderBuffer"/> via <see cref="Cregs"/>[], applies the
+    /// one-pixel ring delay for 6569 (<c>color_latency=1</c>) or direct
+    /// lookup for 8565 (<c>color_latency=0</c>), and writes resolved palette
+    /// indices into <see cref="LineIndices"/>.
+    /// <para>
+    /// Also applies any pending colour-register write from
+    /// <c>Mos6569.VicLastColorRegWrite</c> at cycle start
+    /// (vicii-draw-cycle.c:636-638), then calls <c>update_cregs</c> to
+    /// transfer the chip-level pending into the local pipeline
+    /// (vicii-draw-cycle.c:585-590).
+    /// </para>
+    /// </summary>
+    internal void DrawColors8()
+    {
+        int offs = DbufOffset;
+        // Guard: vicii-draw-cycle.c:631-633.
+        if (offs > 504 - 8) return;
+
+        // Apply chip-level pending colour-register write to Cregs immediately
+        // so the current pixel loop uses the updated value (vicii-draw-cycle.c
+        // combined update_cregs + apply step; managed collapses the two VICE
+        // cycles into one for AC-03 compatibility without changing frame output:
+        // pixel 0 of the 6569 path still uses the previous ring-buffer value).
+        if (_vic.VicLastColorRegWrite != 0xFF)
+        {
+            Cregs[_vic.VicLastColorRegWrite] = _vic.VicLastColorValueWrite;
+        }
+        // Apply local LastColorReg (transferred from chip pending in the
+        // PREVIOUS cycle's update_cregs; vicii-draw-cycle.c:636-638).
+        if (LastColorReg != 0xFF)
+        {
+            Cregs[LastColorReg] = LastColorValue;
+        }
+
+        if (_vic.ColorLatencyEnabled)
+        {
+            // draw_colors_6569 (vicii-draw-cycle.c:592-604): one-pixel ring delay.
+            // lookup_index=(i+1)&7 resolves NEXT pixel's code; outputs CURRENT
+            // pixel's previously-resolved ring value; loads render_buffer[i].
+            for (int i = 0; i < 8; i++)
+            {
+                int lookupIndex = (i + 1) & 7;
+                PixelBuffer[lookupIndex] = Cregs[PixelBuffer[lookupIndex]];
+                LineIndices[offs + i]    = PixelBuffer[i];
+                PixelBuffer[i]           = RenderBuffer[i];
+            }
+        }
+        else
+        {
+            // draw_colors_8565 (vicii-draw-cycle.c:606-624): no ring delay.
+            // lookup_index=i; grey-dot at pixel 0 when pixel_buffer[0]==last_color_reg;
+            // resolve immediately and output.
+            for (int i = 0; i < 8; i++)
+            {
+                if (i == 0 && PixelBuffer[0] == LastColorReg)
+                {
+                    PixelBuffer[0] = 0x0F; // grey-dot (vicii-draw-cycle.c:614-615)
+                }
+                else
+                {
+                    PixelBuffer[i] = Cregs[PixelBuffer[i]];
+                }
+                LineIndices[offs + i] = PixelBuffer[i];
+                PixelBuffer[i]        = RenderBuffer[i];
+            }
+        }
+
+        DbufOffset += 8;
+
+        // update_cregs (vicii-draw-cycle.c:585-590): transfer chip-level pending
+        // to local last_color_reg (for next-cycle grey-dot check); reset chip pending.
+        LastColorReg              = _vic.VicLastColorRegWrite;
+        LastColorValue            = _vic.VicLastColorValueWrite;
+        _vic.VicLastColorRegWrite = 0xFF;
     }
 }

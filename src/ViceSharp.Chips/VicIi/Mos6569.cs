@@ -223,6 +223,25 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     internal bool ColorLatencyEnabled => ColorLatency;
 
+    // V4: FR-VIC-DRAW-COLOR AC-03/AC-07: chip-level pending colour-register
+    // write (vicii.last_color_reg / vicii.last_color_value in VICE's
+    // vicii-draw-cycle.c). Set by Write() for $D020-$D02E; consumed and reset
+    // by PixelSequencer.DrawColors8() via update_cregs() at each cycle end.
+    // 0xFF = no pending write. Internal so tests can inject a write without
+    // triggering the immediate MonitorColorStore path.
+
+    /// <summary>
+    /// Pending colour-register index (maps to vicii.last_color_reg,
+    /// vicii-draw-cycle.c:580). 0xFF = no pending write.
+    /// </summary>
+    internal byte VicLastColorRegWrite = 0xFF;
+
+    /// <summary>
+    /// Pending colour-register value (maps to vicii.last_color_value,
+    /// vicii-draw-cycle.c:581).
+    /// </summary>
+    internal byte VicLastColorValueWrite;
+
     /// <summary>
     /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-10: old light-pen IRQ mode
     /// (VICE viciisc/vicii-chip-model.c lightpen_old_irq_mode: 6569R1 and
@@ -1273,6 +1292,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             bool psVisEn = RasterX >= 14 && RasterX < 54 && !_verticalBorderActive;
             _pixelSequencer.DrawGraphics8(RasterX, psVisEn, _verticalBorderActive, _idleState, LastReadPhi1);
         }
+        // V4 FR-VIC-DRAW-COLOR: per-cycle colour resolution pipeline
+        // (vicii_draw_cycle -> draw_colors8, vicii-draw-cycle.c:627-663).
+        _pixelSequencer.DrawColors8();
 
         // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08 / FR-VIC-MATRIX-ADDR AC-08:
         // latch the delayed video-mode copy at the end of the cycle so the next
@@ -1434,6 +1456,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _lightPenTriggerPending = false;
         // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX: reset the pixel sequencer.
         _pixelSequencer.Reset();
+        // V4 FR-VIC-DRAW-COLOR: clear chip-level colour-register pending
+        // (vicii.last_color_reg = 0xFF at reset, vicii-draw-cycle.c:707).
+        VicLastColorRegWrite   = 0xFF;
+        VicLastColorValueWrite = 0;
     }
 
     // BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001 /
@@ -2518,6 +2544,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 _bgChangeCount++;
             }
             _registers[register] = masked;
+            // V4 FR-VIC-DRAW-COLOR: update the Cregs pipeline for colour registers
+            // $D020-$D02E. MonitorColorStore (vicii_monitor_colreg_store,
+            // vicii-draw-cycle.c:120-125) applies immediately to Cregs; the
+            // VicLastColorRegWrite pending is consumed by DrawColors8 at the next
+            // cycle end (update_cregs, vicii-draw-cycle.c:585-590).
+            _pixelSequencer.MonitorColorStore((byte)register, masked);
+            VicLastColorRegWrite   = (byte)register;
+            VicLastColorValueWrite = masked;
             UpdateSpriteRegisters((ushort)register, masked);
             return;
         }
