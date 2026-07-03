@@ -19,14 +19,24 @@ public partial class Mos6569 : IStatefulDevice
     public int StateSize => VicRegisterBytes + VicInternalBytes;
 
     /// <summary>
-    /// Snapshot-resume injection for cross-emulator lockstep diagnostics (PLAN-VSFLOCKSTEP):
-    /// seeds the 64-byte register file and the raster phase (line + in-line cycle) from an
-    /// external VICE snapshot so the managed VIC starts at the same point. The bad-line
-    /// allowance, video counters, and pipeline re-derive within a frame from the register
-    /// state and raster position, so this is sufficient to drive a self-correcting raster
-    /// engine. Not used on the per-cycle emulation hot path.
+    /// Snapshot-resume injection for cross-emulator lockstep diagnostics (PLAN-VSFLOCKSTEP /
+    /// TR-LOCKSTEP-VSF-001): seeds the 64-byte register file and the raster phase (line +
+    /// in-line cycle) from an external VICE snapshot so the managed VIC starts at the same
+    /// point. The video counters and pipeline re-derive within a frame from the register
+    /// state and raster position. The bad-line allowance does NOT re-derive mid-frame (it
+    /// only arms on line $30 with DEN set; VICE viciisc/vicii-cycle.c:523-526) and the .vsf
+    /// VIC-II module carries it explicitly (viciisc/vicii-snapshot.c allow_bad_lines), so
+    /// resuming mid-frame must seed it or every remaining badline BA stall is lost;
+    /// <paramref name="allowBadLines"/>/<paramref name="idleState"/> seed those latches
+    /// (null leaves the reset-state values untouched for legacy register-only staging).
+    /// Not used on the per-cycle emulation hot path.
     /// </summary>
-    public void InjectSnapshotState(ReadOnlySpan<byte> registers, ushort rasterLine, byte inLineCycle)
+    public void InjectSnapshotState(
+        ReadOnlySpan<byte> registers,
+        ushort rasterLine,
+        byte inLineCycle,
+        bool? allowBadLines = null,
+        bool? idleState = null)
     {
         if (registers.Length < VicRegisterBytes)
             throw new ArgumentException($"Expected at least {VicRegisterBytes} register bytes.", nameof(registers));
@@ -44,6 +54,13 @@ public partial class Mos6569 : IStatefulDevice
         _borderChangeCount = 0;
         _bgEntryColour = _registers[0x21];
         _bgChangeCount = 0;
+        // TR-LOCKSTEP-VSF-001: seed the .vsf badline/display latches so mid-frame
+        // resume reproduces the remaining badline BA stalls (the per-cycle
+        // check_badline latch gates on _allowBadLines exactly like VICE).
+        if (allowBadLines is { } allow)
+            _allowBadLines = allow;
+        if (idleState is { } idle)
+            _idleState = idle;
     }
 
     public void CaptureState(Span<byte> destination)

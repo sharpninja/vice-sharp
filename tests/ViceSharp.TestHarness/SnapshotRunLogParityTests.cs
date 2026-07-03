@@ -186,19 +186,20 @@ public sealed class SnapshotRunLogParityTests
 
     /// <summary>
     /// FR: FR-VIC-CYCLE, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RUNLOG-PARITY-001.
-    /// Use case: end-to-end infra proof of the capture half - save a 2000-cycle
+    /// Use case: end-to-end proof of the capture half - save a 2000-cycle
     /// per-cycle CPU run log from native VICE resumed from the READY fixture .vsf,
     /// then run the SAME comparison routine the theory uses against a managed
     /// machine resumed from that snapshot.
-    /// Acceptance: infra proof, honest about BUG-LOCKSTEP-001 - either the managed
-    /// machine matches all 2000 entries (zero divergence), or the comparison
-    /// produces a well-formed analysis containing "DIVERGES HERE", the divergence
-    /// cycle number, and at least 5 disassembly lines; the actual divergence
-    /// content is logged via ITestOutputHelper as real signal, never masked.
-    /// Skips when the shim or the READY fixture is absent.
+    /// Acceptance: the managed machine matches ALL 2000 native run-log entries
+    /// (zero divergence). The .vsf MAINCPU/C64MEM resume state (register file,
+    /// CPU port pport data/dir, VIC raster phase) staged into the managed C64
+    /// must reproduce VICE's per-cycle exported CPU state exactly from cycle 0;
+    /// any divergence fails with the full analysis (cycle, field diff,
+    /// disassembly with DIVERGES-HERE marker). Skips when the shim or the READY
+    /// fixture is absent.
     /// </summary>
     [ViceFact]
-    public void SaveNativeRunLog_ReadyFixture_TheoryComparisonIsWellFormed()
+    public void SaveNativeRunLog_ReadyFixture_ManagedMatchesAllEntries()
     {
         var vsf = LocateFixturePath("Vsf", ReadyFixtureName);
         if (vsf is null)
@@ -224,22 +225,15 @@ public sealed class SnapshotRunLogParityTests
             LockstepValidator.StageManagedFromNative(machine, native);
 
             var comparison = CompareManagedAgainstLog(machine, expected);
-            if (comparison.DivergenceIndex < 0)
+            if (comparison.DivergenceIndex >= 0)
             {
-                _output.WriteLine($"managed stayed in lockstep with the native run log for all {expected.Count} entries.");
-                return;
+                _output.WriteLine($"REAL DIVERGENCE at log index {comparison.DivergenceIndex}:");
+                _output.WriteLine(comparison.Analysis!);
+                Assert.Fail(comparison.Analysis!);
             }
 
-            _output.WriteLine($"REAL DIVERGENCE (BUG-LOCKSTEP-001 signal) at log index {comparison.DivergenceIndex}:");
-            _output.WriteLine(comparison.Analysis!);
-
-            Assert.Contains("DIVERGES HERE", comparison.Analysis!, StringComparison.Ordinal);
-            Assert.Contains($"cycle {expected[comparison.DivergenceIndex].Cycle}", comparison.Analysis!, StringComparison.Ordinal);
-            var disassemblyLines = comparison.Analysis!
-                .Split(Environment.NewLine)
-                .Count(line => line.TrimStart().StartsWith('$'));
-            Assert.True(disassemblyLines >= 5,
-                $"analysis must contain at least 5 disassembly lines; found {disassemblyLines}.");
+            Assert.Equal(expected.Count, comparison.ManagedLog.Count);
+            _output.WriteLine($"managed stayed in lockstep with the native run log for all {expected.Count} entries.");
         }
         finally
         {
@@ -306,20 +300,19 @@ public sealed class SnapshotRunLogParityTests
 
     /// <summary>
     /// FR: FR-VIC-CYCLE, TR: TR-LOCKSTEP-VSF-001, TEST: TEST-RUNLOG-PARITY-001.
-    /// Use case: the lockstep analyzer itself must support starting from a VICE
-    /// snapshot, not only from reset - resume the READY fixture .vsf on BOTH sides
-    /// (native via ReadSnapshot, managed via the proven .vsf staging) and run the
-    /// existing per-cycle compare loop for 5000 cycles.
-    /// Acceptance: infra proof, honest about BUG-LOCKSTEP-001 - either
-    /// <see cref="LockstepValidator.RunFromSnapshot"/> reports Success with exactly
-    /// 5000 cycles executed, or the divergence report is well-formed (a non-negative
-    /// mismatch cycle plus a register/cycle field difference between expected and
-    /// actual states); the actual divergence content and recent trace are logged via
-    /// ITestOutputHelper as real signal, never masked. Skips when the shim or the
-    /// READY fixture is absent.
+    /// Use case: the lockstep analyzer must resume from a VICE snapshot, not only
+    /// from reset - resume the READY fixture .vsf on BOTH sides (native via
+    /// ReadSnapshot, managed via the .vsf staging incl. the MAINCPU register file
+    /// and the C64MEM CPU-port pport state) and run the existing per-cycle compare
+    /// loop for 5000 cycles.
+    /// Acceptance: <see cref="LockstepValidator.RunFromSnapshot"/> reports ZERO
+    /// divergence (Success with exactly 5000 cycles executed) - snapshot-staged
+    /// lockstep aligns from cycle 0. On failure the divergence content and recent
+    /// trace are logged via ITestOutputHelper before the assert. Skips when the
+    /// shim or the READY fixture is absent.
     /// </summary>
     [ViceFact]
-    public void RunFromSnapshot_ReadyFixture_PassesOrReportsWellFormedDivergence()
+    public void RunFromSnapshot_ReadyFixture_HoldsLockstepZeroDivergence()
     {
         var vsf = LocateFixturePath("Vsf", ReadyFixtureName);
         if (vsf is null)
@@ -332,35 +325,23 @@ public sealed class SnapshotRunLogParityTests
         using var validator = new LockstepValidator(ModelSelector);
         var report = validator.RunFromSnapshot(vsf, Cycles);
 
-        if (report.Success)
+        if (!report.Success && report.Mismatch is { } mismatch)
         {
-            Assert.Equal(Cycles, report.TotalCyclesExecuted);
-            _output.WriteLine($"RunFromSnapshot held lockstep for all {Cycles} cycles from {Path.GetFileName(vsf)}.");
-            return;
+            _output.WriteLine($"REAL DIVERGENCE at cycle {report.FirstMismatchCycle}:");
+            _output.WriteLine(
+                $"expected (VICE)   PC=${mismatch.Expected.PC:X4} A=${mismatch.Expected.A:X2} X=${mismatch.Expected.X:X2} " +
+                $"Y=${mismatch.Expected.Y:X2} S=${mismatch.Expected.S:X2} P=${mismatch.Expected.P:X2} cyc={mismatch.Expected.Cycle}");
+            _output.WriteLine(
+                $"actual (managed)  PC=${mismatch.Actual.PC:X4} A=${mismatch.Actual.A:X2} X=${mismatch.Actual.X:X2} " +
+                $"Y=${mismatch.Actual.Y:X2} S=${mismatch.Actual.S:X2} P=${mismatch.Actual.P:X2} cyc={mismatch.Actual.Cycle}");
+            _output.WriteLine("recent trace:");
+            _output.WriteLine(validator.FormatRecentTrace());
         }
 
-        Assert.NotNull(report.Mismatch);
-        var mismatch = report.Mismatch!.Value;
-        _output.WriteLine($"REAL DIVERGENCE (BUG-LOCKSTEP-001 signal) at cycle {report.FirstMismatchCycle}:");
-        _output.WriteLine(
-            $"expected (VICE)   PC=${mismatch.Expected.PC:X4} A=${mismatch.Expected.A:X2} X=${mismatch.Expected.X:X2} " +
-            $"Y=${mismatch.Expected.Y:X2} S=${mismatch.Expected.S:X2} P=${mismatch.Expected.P:X2} cyc={mismatch.Expected.Cycle}");
-        _output.WriteLine(
-            $"actual (managed)  PC=${mismatch.Actual.PC:X4} A=${mismatch.Actual.A:X2} X=${mismatch.Actual.X:X2} " +
-            $"Y=${mismatch.Actual.Y:X2} S=${mismatch.Actual.S:X2} P=${mismatch.Actual.P:X2} cyc={mismatch.Actual.Cycle}");
-        _output.WriteLine("recent trace:");
-        _output.WriteLine(validator.FormatRecentTrace());
-
-        Assert.True(report.FirstMismatchCycle >= 0, "divergence report must carry the mismatch cycle number.");
-        var hasFieldDifference =
-            mismatch.Expected.A != mismatch.Actual.A ||
-            mismatch.Expected.X != mismatch.Actual.X ||
-            mismatch.Expected.Y != mismatch.Actual.Y ||
-            mismatch.Expected.S != mismatch.Actual.S ||
-            mismatch.Expected.P != mismatch.Actual.P ||
-            mismatch.Expected.PC != mismatch.Actual.PC ||
-            mismatch.Expected.Cycle != mismatch.Actual.Cycle;
-        Assert.True(hasFieldDifference, "divergence report must show a register or cycle field difference.");
+        Assert.True(report.Success,
+            $"snapshot-staged lockstep must hold with zero divergence; first mismatch at cycle {report.FirstMismatchCycle}.");
+        Assert.Equal(Cycles, report.TotalCyclesExecuted);
+        _output.WriteLine($"RunFromSnapshot held lockstep for all {Cycles} cycles from {Path.GetFileName(vsf)}.");
     }
 
     // ------------------------------------------------------------------

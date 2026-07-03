@@ -241,15 +241,19 @@ public sealed class VicIiCoreTimingTests
     }
 
     /// <summary>
-    /// FR: FR-CPU-003, FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// FR: FR-CPU-003, FR: FR-VIC-006, TR: TR-CYCLE-001 / TR-LOCKSTEP-VSF-001.
     /// Use case: A conditional steal request that ultimately does NOT
     /// skip the CPU must still allow the CPU to honour an IRQ pulse
     /// from a separate device on the same cycle.
     /// Acceptance: With a scripted stealer that asks but does not
-    /// preempt, plus an IRQ pulse asserting on tick 2, two clock steps
-    /// drive the CPU into its IRQ vector at $4000 with the correct
-    /// stack state and X register unchanged from the in-flight
-    /// instruction's already-executed effect.
+    /// preempt, plus an IRQ pulse asserting on tick 2, the second clock
+    /// step arms the CPU's staged IRQ dispatch (VICE's 7-cycle x64sc
+    /// sequence, 6510dtvcore.c DO_INTERRUPT + DO_IRQBRK, with the first
+    /// dummy cycle absorbed by the arming boundary tick); seven further
+    /// steps consume the sequence plus the handler's delayed-fetch cycle,
+    /// leaving PC at the $4000 vector with the pushed return state on the
+    /// stack (S=$FC) and X unchanged from the in-flight DEX's
+    /// already-executed effect.
     /// </summary>
     [Fact]
     public void SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu()
@@ -275,7 +279,14 @@ public sealed class VicIiCoreTimingTests
         clock.Register(irqPulse);
 
         clock.Step();
-        clock.Step();
+        clock.Step(); // boundary after DEX: the asserted line arms the staged sequence
+
+        Assert.Equal(0x00, cpu.X); // DEX completed before the dispatch
+
+        // Staged dispatch: dummy fetch, PCH/PCL/P pushes, vector lo (I set),
+        // vector hi, then the handler's delayed-fetch cycle makes the JUMP visible.
+        for (var i = 0; i < 7; i++)
+            clock.Step();
 
         Assert.Equal(0x4000, cpu.PC);
         Assert.Equal(0xFC, cpu.S);

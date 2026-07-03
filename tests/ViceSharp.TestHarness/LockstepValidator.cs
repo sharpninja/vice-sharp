@@ -265,14 +265,21 @@ public sealed class LockstepValidator : IDisposable
     }
 
     /// <summary>
-    /// Stages a managed machine from a native instance that has already resumed a .vsf,
-    /// using exactly the staging RasterBarLockstepTests proves works (TR-LOCKSTEP-VSF-001):
-    /// reset, copy the full 64K RAM from the native side, drive the CPU port $00/$01
-    /// through the bus, inject the CPU register file, and seed the VIC register file +
-    /// raster phase via <see cref="Mos6569.InjectSnapshotState"/>. The in-line cycle is
-    /// seeded convention-corrected ((raster_cycle + 1) mod 63) because the managed Tick()
-    /// increments RasterX before its IRQ/line-wrap checks, so managed RasterX reads
-    /// native raster_cycle + 1 at the same physical point.
+    /// Stages a managed machine from a native instance that has already resumed a .vsf
+    /// (TR-LOCKSTEP-VSF-001): reset, copy the full 64K RAM from the native side, stage
+    /// the 6510 processor port from the .vsf C64MEM pport state (the shim's CPU
+    /// pipeline-state export; RAM under $00/$01 is NOT the port - VICE resolves
+    /// $00/$01 through pport.dir/pport.data, c64mem.c zero_read, and the port
+    /// selects ROM/IO banking), inject the CPU register file with VICE x64sc resume
+    /// semantics via <see cref="Mos6502.InjectSnapshotResumeState"/> (register import +
+    /// in-flight restart, mirroring the hosted bootstrap in mainc64cpu.c), and seed the
+    /// VIC register file + raster phase + .vsf badline/display latches via
+    /// <see cref="Mos6569.InjectSnapshotState"/>. The in-line cycle is seeded EXACTLY
+    /// at the native raster_cycle: boot-lockstep measurement shows managed RasterX ==
+    /// native raster_cycle at every post-cycle compare point (offset 0, stable across
+    /// badlines), and the managed badline BA window (RasterX 12..54, mirroring
+    /// viciisc/vicii-cycle.c BA logic) only reproduces VICE's stall cycles under that
+    /// phase; the former (+1) seed made the staged VIC steal one cycle early.
     /// </summary>
     internal static void StageManagedFromNative(IMachine machine, IViceNative native)
     {
@@ -284,25 +291,54 @@ public sealed class LockstepValidator : IDisposable
         for (var address = 0; address < 0x10000; address++)
             span[address] = native.PeekRam((ushort)address);
 
-        machine.Bus.Write(0x0000, span[0x0000]);
-        machine.Bus.Write(0x0001, span[0x0001]);
+        var pipeline = native.GetCpuPipelineState();
+        machine.Bus.Write(0x0000, pipeline.PportDir);
+        machine.Bus.Write(0x0001, pipeline.PportData);
 
         if (machine.Devices.GetByRole(DeviceRole.Cpu) is not Mos6502 cpu)
             throw new InvalidOperationException("Managed machine does not expose an Mos6502 CPU.");
         var cpu0 = native.GetState();
-        cpu.A = cpu0.A;
-        cpu.X = cpu0.X;
-        cpu.Y = cpu0.Y;
-        cpu.S = cpu0.S;
-        cpu.PC = cpu0.PC;
-        cpu.P = cpu0.P;
+        cpu.InjectSnapshotResumeState(cpu0.A, cpu0.X, cpu0.Y, cpu0.S, cpu0.P, cpu0.PC);
 
         if (machine.Devices.GetByRole(DeviceRole.VideoChip) is not Mos6569 vic)
             throw new InvalidOperationException("Managed machine does not expose Mos6569.");
         var vic0 = native.GetVicState();
         var registers = vic0.Registers
             ?? throw new InvalidOperationException("Native VIC registers are unavailable for snapshot staging.");
-        vic.InjectSnapshotState(registers, vic0.RasterLine, (byte)((vic0.RasterCycle + 1) % 63));
+        vic.InjectSnapshotState(
+            registers,
+            vic0.RasterLine,
+            vic0.RasterCycle,
+            allowBadLines: vic0.AllowBadLines != 0,
+            idleState: vic0.IdleState != 0);
+
+        // TR-LOCKSTEP-VSF-001: the .vsf CIA modules carry live timers (counters +
+        // reload latches), control registers and the ICR enable mask; without
+        // them the managed CIAs sit in reset state and every $DC04/$DD04-style
+        // timer read (and timer IRQ) diverges from the resumed native machine.
+        StageCia(machine, native, DeviceRole.Cia1, 0);
+        StageCia(machine, native, DeviceRole.Cia2, 1);
+    }
+
+    private static void StageCia(IMachine machine, IViceNative native, DeviceRole role, int nativeIndex)
+    {
+        if (machine.Devices.GetByRole(role) is not Mos6526 cia)
+            return;
+
+        var state = native.GetCiaState(nativeIndex);
+        cia.InjectSnapshotState(
+            state.PortA,
+            state.PortB,
+            state.DdrA,
+            state.DdrB,
+            state.TimerA,
+            state.TimerALatch,
+            state.TimerB,
+            state.TimerBLatch,
+            state.Cra,
+            state.Crb,
+            state.InterruptFlags,
+            state.IrqMask);
     }
 
     /// <summary>

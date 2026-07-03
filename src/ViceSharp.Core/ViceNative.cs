@@ -194,6 +194,9 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_interrupt_get_state")]
     public static partial void GetInterruptState(IntPtr instance, ref ViceInterruptState state);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pipeline_state")]
+    public static partial void GetCpuPipelineState(IntPtr instance, ref ViceCpuPipelineState state);
+
     public static IViceNative CreateInstance(string? modelSelector = null)
     {
         if (!IsAvailable)
@@ -275,6 +278,16 @@ public static unsafe partial class ViceNative
         public byte SpriteDma;
         public fixed byte Registers[64];
 
+        /// <summary>
+        /// TR-LOCKSTEP-VSF-001: .vsf VIC-II module resume context beyond the
+        /// register file (viciisc/vicii-snapshot.c). AllowBadLines is the DEN
+        /// seen-at-line-$30 latch gating every badline (and BA-low CPU stall)
+        /// for the rest of the frame; IdleState is the display/idle g-access
+        /// state. Mirrors struct vice_vic_state in native/vice-shim.h.
+        /// </summary>
+        public byte AllowBadLines;
+        public byte IdleState;
+
         public readonly byte[] GetRegisters()
         {
             fixed (byte* registers = Registers)
@@ -291,12 +304,26 @@ public static unsafe partial class ViceNative
         public byte PortB;
         public byte DdrA;
         public byte DdrB;
+        // Field order mirrors struct vice_cia_state in native/vice-shim.h; the
+        // trailing TR-LOCKSTEP-VSF-001 latch/mask fields are appended below.
         public ushort TimerA;
         public ushort TimerB;
         public byte Icr;
         public byte Cra;
         public byte Crb;
         public byte InterruptFlag;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer A reload latch (ciat_read_latch).</summary>
+        public ushort TimerALatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer B reload latch (ciat_read_latch).</summary>
+        public ushort TimerBLatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: ICR interrupt-enable mask (ciacore irq_enabled).</summary>
+        public byte IrqMask;
+
+        /// <summary>Padding; keeps the native struct mirror byte-exact.</summary>
+        public byte Reserved;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -411,6 +438,33 @@ public static unsafe partial class ViceNative
         public byte GlobalPending;
         public byte IrqSourceCount;
         public byte NmiSourceCount;
+    }
+
+    /// <summary>
+    /// TR-LOCKSTEP-VSF-001: x64sc main-CPU resume/pipeline state, mirroring
+    /// <c>struct vice_cpu_pipeline_state</c> in native/vice-shim.h byte for byte
+    /// (1-byte packing). Carries the .vsf-restored in-flight context beyond the
+    /// plain register file: the MAINCPU module's last_opcode_info and BA-low
+    /// stall flags (mainc64cpu.c maincpu_snapshot_read_module), the C64MEM
+    /// module's 6510 processor port (c64memsnapshot.c; dir/data written values
+    /// plus the effective read values that select ROM/IO banking), and the
+    /// interrupt-status clocks (interrupt.c snapshot sub-modules).
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ViceCpuPipelineState
+    {
+        public ulong Clk;
+        public uint LastOpcodeInfo;
+        public uint BaLowFlags;
+        public byte PportData;
+        public byte PportDir;
+        public byte PportDataRead;
+        public byte PportDirRead;
+        public uint GlobalPendingInt;
+        public ulong IrqClk;
+        public ulong NmiClk;
+        public ulong IrqDelayCycles;
+        public ulong NmiDelayCycles;
     }
 
     private static IntPtr ResolveLibrary(string libraryName, Assembly _, DllImportSearchPath? __)
@@ -630,7 +684,53 @@ public static unsafe partial class ViceNative
                 BadLine = state.BadLine,
                 DisplayState = state.DisplayState,
                 SpriteDma = state.SpriteDma,
-                Registers = state.GetRegisters()
+                Registers = state.GetRegisters(),
+                AllowBadLines = state.AllowBadLines,
+                IdleState = state.IdleState
+            };
+        }
+
+        public NativeCiaState GetCiaState(int ciaIndex)
+        {
+            var state = new ViceCiaState();
+            global::ViceSharp.Core.ViceNative.GetCiaState(_instance, ciaIndex, ref state);
+
+            return new NativeCiaState
+            {
+                PortA = state.PortA,
+                PortB = state.PortB,
+                DdrA = state.DdrA,
+                DdrB = state.DdrB,
+                TimerA = state.TimerA,
+                TimerB = state.TimerB,
+                TimerALatch = state.TimerALatch,
+                TimerBLatch = state.TimerBLatch,
+                Cra = state.Cra,
+                Crb = state.Crb,
+                InterruptFlags = state.InterruptFlag,
+                IrqMask = state.IrqMask
+            };
+        }
+
+        public NativeCpuPipelineState GetCpuPipelineState()
+        {
+            var state = new ViceCpuPipelineState();
+            global::ViceSharp.Core.ViceNative.GetCpuPipelineState(_instance, ref state);
+
+            return new NativeCpuPipelineState
+            {
+                Clk = state.Clk,
+                LastOpcodeInfo = state.LastOpcodeInfo,
+                BaLowFlags = state.BaLowFlags,
+                PportData = state.PportData,
+                PportDir = state.PportDir,
+                PportDataRead = state.PportDataRead,
+                PportDirRead = state.PportDirRead,
+                GlobalPendingInt = state.GlobalPendingInt,
+                IrqClk = state.IrqClk,
+                NmiClk = state.NmiClk,
+                IrqDelayCycles = state.IrqDelayCycles,
+                NmiDelayCycles = state.NmiDelayCycles
             };
         }
 

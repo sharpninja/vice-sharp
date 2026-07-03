@@ -62,39 +62,63 @@ public sealed class CpuInterruptTests
     }
 
     /// <summary>
-    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
-    /// Use case: With the I flag clear, asserting an IRQ must push the
-    /// return PC onto the stack and jump through the $FFFE/$FFFF vector,
-    /// then mask further IRQs by setting I.
-    /// Acceptance: After <c>Irq()</c>, PC equals the vector target ($0800),
-    /// I is set, and the stack contains PCL/PCH at $01FE/$01FF.
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001 / TR-LOCKSTEP-VSF-001.
+    /// Use case: With the I flag clear, asserting an IRQ must dispatch through
+    /// VICE's 7-cycle x64sc sequence (6510dtvcore.c DO_INTERRUPT + DO_IRQBRK:
+    /// two dummy fetches, PCH/PCL/P pushes with B clear, I set with the $FFFE
+    /// read, $FFFF read). <c>Irq()</c> arms the sequence at the boundary tick
+    /// (which under the core's one-cycle-lag convention coincides with the
+    /// native sequence's first dummy cycle) and each Tick() consumes one of
+    /// the remaining 6 cycles, so BA steals can interleave exactly as on the
+    /// single-cycle core.
+    /// Acceptance: after <c>Irq()</c> plus 6 ticks, PC equals the vector
+    /// target ($0800) on the following fetch tick, I is set, the stack holds
+    /// PCH/PCL at $01FF/$01FE and the pushed status at $01FD with B (bit 4)
+    /// clear; the stack pushes land on sequence ticks 2-4 (S still $FF after
+    /// the dummy tick, $FC after the 4th tick) and I becomes visible with the
+    /// $FFFE read on tick 5, matching the measured native per-cycle export.
     /// </summary>
     [Fact]
-    public void Irq_WhenInterruptEnabled_PushesStateAndJumps()
+    public void Irq_WhenInterruptEnabled_RunsStagedSequenceAndJumps()
     {
         // Arrange
         var bus = new MockBus();
         var cpu = new Mos6502(bus);
-        cpu.P = 0x00; // I flag clear = interrupts enabled
+        cpu.P = 0x20; // I flag clear = interrupts enabled
         cpu.S = 0xFF;
         cpu.PC = 0x0400;
-        
+
         // Setup IRQ vector
         bus.SetMemory(0xFFFE, 0x00);
         bus.SetMemory(0xFFFF, 0x08);
 
-        // Act
+        // Act: arm at the boundary, then consume the staged dispatch sequence.
         cpu.Irq();
+
+        cpu.Tick(); // dummy fetch (native C2)
+        Assert.Equal(0xFF, cpu.S); // no push yet
+
+        cpu.Tick(); // push PCH (native C3)
+        cpu.Tick(); // push PCL (native C4)
+        cpu.Tick(); // push P with B clear (native C5)
+        Assert.Equal(0xFC, cpu.S);
+        Assert.Equal(0x00, cpu.P & 0x04); // I not yet visible before the vector read
+
+        cpu.Tick(); // set I + read $FFFE (native C6)
+        Assert.Equal(0x04, cpu.P & 0x04);
+        Assert.Equal(0x0400, cpu.PC); // interrupted PC stays visible
+
+        cpu.Tick(); // read $FFFF, latch new PC (native C7)
+        Assert.Equal(0x0400, cpu.PC); // JUMP not exported until the fetch cycle
+
+        cpu.Tick(); // handler C1: JUMP visible (delayed-fetch tick restores the lag)
 
         // Assert
         Assert.Equal(0x0800, cpu.PC);
         Assert.Equal(0x04, cpu.P & 0x04); // I flag should be set
-        
-        // Stack after PushWord(0x0400):
-        // S = 0xFF initially, Push(PCH=0x04) writes to 0x01FF, S becomes 0xFE
-        // Push(PCL=0x00) writes to 0x01FE, S becomes 0xFD
-        Assert.Equal(0x00, bus.Read(0x01FE)); // PCL = 0x00
         Assert.Equal(0x04, bus.Read(0x01FF)); // PCH = 0x04
+        Assert.Equal(0x00, bus.Read(0x01FE)); // PCL = 0x00
+        Assert.Equal(0x20, bus.Read(0x01FD)); // pushed P with B (0x10) clear
     }
 
     /// <summary>

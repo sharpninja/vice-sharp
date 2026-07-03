@@ -42,6 +42,7 @@
 #include "c64/c64.h"
 #include "c64/c64cia.h"
 #include "c64/c64model.h"
+#include "c64/c64pla.h"
 #include "cartridge.h"
 #include "keyboard.h"
 #include "vicii.h"
@@ -1258,6 +1259,51 @@ VICE_SHIM_API uint16_t vice_cpu_get_pc(void *machine)
     return value;
 }
 
+/* CPU resume/pipeline state (TR-LOCKSTEP-VSF-001). Exposes the x64sc main-CPU
+   in-flight context the .vsf carries beyond the plain register file, valid
+   right after vice_machine_read_snapshot (and at any paused cycle boundary):
+   - last_opcode_info / maincpu_ba_low_flags from the MAINCPU module
+     (mainc64cpu.c maincpu_snapshot_read_module); the hosted bootstrap clears
+     last_opcode_info on resume (mainc64cpu.c VICE_SHIM_HOSTED block), so the
+     value seen here is the restart context, matching what the resumed native
+     core actually runs with.
+   - the 6510 processor port from the C64MEM module (c64memsnapshot.c writes
+     pport.data/dir/data_out/data_read/dir_read); mem_read(0)/mem_read(1)
+     resolve through pport.dir_read/pport.data_read (c64mem.c zero_read), so
+     these are the values a managed C64 must stage into $00/$01 to reproduce
+     the snapshot's ROM/IO banking.
+   - the interrupt-status clocks from the MAINCPU interrupt sub-modules
+     (interrupt.c interrupt_read_snapshot / interrupt_read_new_snapshot). */
+VICE_SHIM_API void vice_cpu_get_pipeline_state(void *machine, struct vice_cpu_pipeline_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    memset(state, 0, sizeof(*state));
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        state->clk = (uint64_t)maincpu_clk;
+        state->last_opcode_info = (uint32_t)last_opcode_info;
+        state->ba_low_flags = (uint32_t)maincpu_ba_low_flags;
+        state->pport_data = pport.data;
+        state->pport_dir = pport.dir;
+        state->pport_data_read = pport.data_read;
+        state->pport_dir_read = pport.dir_read;
+        if (maincpu_int_status != NULL) {
+            state->global_pending_int = (uint32_t)maincpu_int_status->global_pending_int;
+            state->irq_clk = (uint64_t)maincpu_int_status->irq_clk;
+            state->nmi_clk = (uint64_t)maincpu_int_status->nmi_clk;
+            state->irq_delay_cycles = (uint64_t)maincpu_int_status->irq_delay_cycles;
+            state->nmi_delay_cycles = (uint64_t)maincpu_int_status->nmi_delay_cycles;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
 /*
  * Drive-CPU state accessors. Each takes a device number (8..11) and
  * returns the corresponding 1541/1571 drive-CPU register from the
@@ -1422,6 +1468,11 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
         state->bad_line = (uint8_t)(vicii.bad_line != 0);
         state->display_state = 0;
         state->sprite_dma = vicii.sprite_dma;
+        /* TR-LOCKSTEP-VSF-001: .vsf-restored badline/display context
+           (viciisc/vicii-snapshot.c). allow_bad_lines gates check_badline and
+           therefore the badline BA stall for the remainder of the frame. */
+        state->allow_bad_lines = (uint8_t)(vicii.allow_bad_lines != 0);
+        state->idle_state = (uint8_t)(vicii.idle_state != 0);
         memcpy(state->registers, vicii.regs, sizeof(state->registers));
         /* $D019: vicii.irq_status holds the live IRQ latch (bits 0-3 = source flags).
            vicii.regs[0x19] only reflects the last CPU write; vicii_irq_raster_set()
@@ -1674,6 +1725,8 @@ VICE_SHIM_API void vice_cia_get_state(void *machine, int cia_index, struct vice_
     if (vice_shim_is_active_machine(machine)) {
         cia = cia_index == 0 ? machine_context.cia1 : machine_context.cia2;
         if (cia != NULL) {
+            CLOCK cclk = cia->clk_ptr != NULL ? *(cia->clk_ptr) : maincpu_clk;
+
             state->port_a = cia->c_cia[CIA_PRA];
             state->port_b = cia->c_cia[CIA_PRB];
             state->ddr_a = cia->c_cia[CIA_DDRA];
@@ -1684,6 +1737,11 @@ VICE_SHIM_API void vice_cia_get_state(void *machine, int cia_index, struct vice_
             state->cra = cia->c_cia[CIA_CRA];
             state->crb = cia->c_cia[CIA_CRB];
             state->interrupt_flag = (uint8_t)(cia->irqflags & 0xff);
+            /* TR-LOCKSTEP-VSF-001: latches + ICR enable mask for snapshot
+               staging (ciatimer.h ciat_read_latch; ciacore irq_enabled). */
+            state->timer_a_latch = ciat_read_latch(cia->ta, cclk);
+            state->timer_b_latch = ciat_read_latch(cia->tb, cclk);
+            state->irq_mask = (uint8_t)(cia->irq_enabled & 0xff);
         }
     }
     LeaveCriticalSection(&g_state_lock);

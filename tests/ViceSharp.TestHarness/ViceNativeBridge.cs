@@ -55,6 +55,8 @@ public static class ViceNativeBridge
         state.DisplayState = nativeState.DisplayState;
         state.SpriteDma = nativeState.SpriteDma;
         state.Registers = nativeState.GetRegisters();
+        state.AllowBadLines = nativeState.AllowBadLines;
+        state.IdleState = nativeState.IdleState;
     }
 
     public static void GetCiaState(IntPtr machine, int ciaIndex, ref ViceCiaState state)
@@ -72,6 +74,9 @@ public static class ViceNativeBridge
         state.Cra = nativeState.Cra;
         state.Crb = nativeState.Crb;
         state.InterruptFlag = nativeState.InterruptFlag;
+        state.TimerALatch = nativeState.TimerALatch;
+        state.TimerBLatch = nativeState.TimerBLatch;
+        state.IrqMask = nativeState.IrqMask;
     }
 
     public static void GetSidState(IntPtr machine, ref ViceSidState state)
@@ -311,6 +316,22 @@ public static class ViceNativeBridge
         return true;
     }
 
+    /// <summary>
+    /// TR-LOCKSTEP-VSF-001: main-CPU resume/pipeline state from the shim
+    /// (vice_cpu_get_pipeline_state): the .vsf-restored x64sc in-flight context
+    /// beyond the register file - MAINCPU last_opcode_info + BA-low stall flags
+    /// (mainc64cpu.c snapshot module), the C64MEM 6510 processor port
+    /// (c64memsnapshot.c pport block; selects ROM/IO banking), and the
+    /// interrupt-status clocks. Used to stage the managed C64 so snapshot-resumed
+    /// lockstep aligns from cycle 0.
+    /// </summary>
+    public static ViceNative.ViceCpuPipelineState GetCpuPipelineState(IntPtr machine)
+    {
+        var state = new ViceNative.ViceCpuPipelineState();
+        ViceNative.GetCpuPipelineState(machine, ref state);
+        return state;
+    }
+
     public static void GetInterruptState(IntPtr machine, ref ViceInterruptState state)
     {
         var nativeState = new ViceNative.ViceInterruptState();
@@ -332,6 +353,12 @@ public static class ViceNativeBridge
         public byte DisplayState;
         public byte SpriteDma;
         public byte[] Registers;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: .vsf allow_bad_lines latch (gates badline BA stalls this frame).</summary>
+        public byte AllowBadLines;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: .vsf display/idle g-access state.</summary>
+        public byte IdleState;
     }
 
     public struct ViceCiaState
@@ -346,6 +373,15 @@ public static class ViceNativeBridge
         public byte Cra;
         public byte Crb;
         public byte InterruptFlag;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer A reload latch.</summary>
+        public ushort TimerALatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer B reload latch.</summary>
+        public ushort TimerBLatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: ICR interrupt-enable mask.</summary>
+        public byte IrqMask;
     }
 
     public struct ViceSidState

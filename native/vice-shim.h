@@ -46,6 +46,34 @@ VICE_SHIM_API uint8_t vice_cpu_get_p(void* machine);
 VICE_SHIM_API uint8_t vice_cpu_get_sp(void* machine);
 VICE_SHIM_API uint16_t vice_cpu_get_pc(void* machine);
 
+// CPU resume/pipeline state (TR-LOCKSTEP-VSF-001): the .vsf-restored in-flight
+// context of the x64sc main CPU right after vice_machine_read_snapshot, i.e.
+// everything the MAINCPU module (mainc64cpu.c maincpu_snapshot_read_module)
+// and the C64MEM module (c64memsnapshot.c pport block) carry beyond the plain
+// register file: the last-opcode interrupt context, the pending BA-low stall
+// flags, the 6510 processor port (written data/dir plus the effective read
+// values that select ROM/IO banking), and the interrupt-status clocks. Field
+// order and 1-byte packing mirror ViceSharp.Core.ViceNative.ViceCpuPipelineState
+// byte for byte.
+#pragma pack(push, 1)
+struct vice_cpu_pipeline_state {
+    uint64_t clk;                /* maincpu_clk at export */
+    uint32_t last_opcode_info;   /* vsf MAINCPU: last opcode + IRQ delay/enable flags */
+    uint32_t ba_low_flags;       /* vsf MAINCPU: maincpu_ba_low_flags (pending BA stall) */
+    uint8_t  pport_data;         /* vsf C64MEM: pport.data ($01 written value) */
+    uint8_t  pport_dir;          /* vsf C64MEM: pport.dir ($00 written value) */
+    uint8_t  pport_data_read;    /* effective $01 read value (pull-ups applied) */
+    uint8_t  pport_dir_read;     /* effective $00 read value */
+    uint32_t global_pending_int; /* vsf MAINCPU interrupt module: pending IK_* mask */
+    uint64_t irq_clk;            /* interrupt-status clocks (CLOCK) */
+    uint64_t nmi_clk;
+    uint64_t irq_delay_cycles;
+    uint64_t nmi_delay_cycles;
+};
+#pragma pack(pop)
+
+VICE_SHIM_API void vice_cpu_get_pipeline_state(void* machine, struct vice_cpu_pipeline_state* state);
+
 // Drive CPU State (1541-family, unit = 8..11 device number)
 VICE_SHIM_API uint8_t vice_drivecpu_get_a(void* machine, unsigned int unit);
 VICE_SHIM_API uint8_t vice_drivecpu_get_x(void* machine, unsigned int unit);
@@ -67,6 +95,14 @@ struct vice_vic_state {
     uint8_t display_state;
     uint8_t sprite_dma;
     uint8_t registers[64];
+    /* TR-LOCKSTEP-VSF-001: .vsf VIC-II module resume context beyond the register
+       file (viciisc/vicii-snapshot.c saves both). allow_bad_lines is the DEN
+       seen-at-line-$30 latch that gates every badline (and therefore every
+       BA-low CPU stall) for the rest of the frame; idle_state is the
+       display/idle g-access state. Both are required to stage a managed VIC
+       from a mid-frame snapshot. */
+    uint8_t allow_bad_lines;
+    uint8_t idle_state;
 };
 
 VICE_SHIM_API void vice_vic_get_state(void* machine, struct vice_vic_state* state);
@@ -100,6 +136,14 @@ struct vice_cia_state {
     uint8_t cra;
     uint8_t crb;
     uint8_t interrupt_flag;
+    /* TR-LOCKSTEP-VSF-001: .vsf CIA resume context beyond the live counters -
+       the timer latches (ciat_read_latch; reload values on underflow) and the
+       ICR interrupt-enable mask (cia_context->irq_enabled, saved by the CIA
+       snapshot module). Required to stage a managed CIA from a snapshot. */
+    uint16_t timer_a_latch;
+    uint16_t timer_b_latch;
+    uint8_t irq_mask;
+    uint8_t reserved;
 };
 
 VICE_SHIM_API void vice_cia_get_state(void* machine, int cia_index, struct vice_cia_state* state);

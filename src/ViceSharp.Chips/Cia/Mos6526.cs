@@ -216,6 +216,55 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         _irqLine.Release(this);
     }
 
+    /// <summary>
+    /// Snapshot-resume state injection (TR-LOCKSTEP-VSF-001): adopts the .vsf
+    /// CIA module state a resumed machine needs - port output latches and data
+    /// directions, the LIVE timer counters with their reload latches, the
+    /// control registers (bit 0 = running, force-load bit 4 masked off exactly
+    /// like the CRA/CRB write path), the latched interrupt flags, and the ICR
+    /// interrupt-enable mask (ciacore irq_enabled). Timers resume mid-count
+    /// with no start-pipeline delay, matching VICE's restored ciat state.
+    /// </summary>
+    internal void InjectSnapshotState(
+        byte portA,
+        byte portB,
+        byte ddrA,
+        byte ddrB,
+        ushort timerACounter,
+        ushort timerALatch,
+        ushort timerBCounter,
+        ushort timerBLatch,
+        byte cra,
+        byte crb,
+        byte interruptFlags,
+        byte irqMask)
+    {
+        _portA = portA;
+        _portB = portB;
+        _portADir = ddrA;
+        _portBDir = ddrB;
+
+        _timerA.Counter = timerACounter;
+        _timerA.Latch = timerALatch;
+        _timerA.Control = (byte)(cra & 0xEF);
+        _timerA.Running = (cra & 0x01) != 0;
+        _timerA.LoadDelay = 0;
+        _timerA.CountDelay = 0;
+        _registers[0x0E] = _timerA.Control;
+
+        _timerB.Counter = timerBCounter;
+        _timerB.Latch = timerBLatch;
+        _timerB.Control = (byte)(crb & 0xEF);
+        _timerB.Running = (crb & 0x01) != 0;
+        _timerB.LoadDelay = 0;
+        _timerB.CountDelay = 0;
+        _registers[0x0F] = _timerB.Control;
+
+        _interruptFlags = (byte)(interruptFlags & 0x7F);
+        _interruptMask = (byte)(irqMask & 0x7F);
+        RefreshIrqLine();
+    }
+
     public byte Peek(ushort address) => Read(address);
 
     public byte Read(ushort address)
