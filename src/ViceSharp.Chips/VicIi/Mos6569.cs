@@ -641,6 +641,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         public byte McBase;
         public bool ExpFlop;
         public uint Data;
+        // True when LatchSpriteData has fully loaded all 3 bytes (sAccessIndex==2)
+        // for the current DMA cycle. Cleared at RasterX 57 (check_sprite_display)
+        // so each new DMA line starts with DataValid=false until the bus fills it.
+        // GetSpriteDataForRender uses this to distinguish real-DMA data (return
+        // sprite.Data as-is) from the VideoMemoryReader fallback (advance mc by 3).
+        public bool DataValid;
     }
     
     /// <summary>
@@ -1130,8 +1136,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 // for this scanline, exactly once per line.
                 AccountSpriteDmaForRasterLine(CurrentRasterLine);
 
-                // BACKFILL-VIDEO-001: compute sprite collisions once per scanline.
-                ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
+                // PLAN-VICEPARITY-001 V6: per-pixel sprite collision now handled by
+                // DrawSprites8 in the per-cycle tick path (below). The geometric
+                // ProcessSpriteCollisionsForRasterLine call is removed.
 
                 // PERF-RENDER-001: trigger render exactly once per completed line instead of
                 // calling _renderer.Tick() every cycle (19,656x/frame) and checking
@@ -1292,6 +1299,26 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             bool psVisEn = RasterX >= 14 && RasterX < 54 && !_verticalBorderActive;
             _pixelSequencer.DrawGraphics8(RasterX, psVisEn, _verticalBorderActive, _idleState, LastReadPhi1);
         }
+        // PLAN-VICEPARITY-001 V6 FR-VIC-SPRITE-RENDER / FR-VIC-SPRITE-COLLISION:
+        // per-cycle sprite pipeline. Runs AFTER DrawGraphics8 (PriBuffer ready) and
+        // BEFORE DrawColors8 (sprite symbolic codes resolve via Cregs like background).
+        // First-appearance IRQ: fire SS (bit 2) and SB (bit 1) only on the transition
+        // from zero to non-zero latch (VICE vicii-cycle.c:427-433).
+        {
+            bool canSs = (_spriteSpriteCollisionLatch == 0);
+            bool canSb = (_spriteBackgroundCollisionLatch == 0);
+            _pixelSequencer.DrawSprites8(RasterX, _spriteDisplayBits);
+            _spriteSpriteCollisionLatch       |= _pixelSequencer.SpriteSsCollisionThisCycle;
+            _spriteBackgroundCollisionLatch   |= _pixelSequencer.SpriteSbCollisionThisCycle;
+            byte irqBits = 0;
+            if (canSs && _spriteSpriteCollisionLatch     != 0) irqBits |= 0x04;
+            if (canSb && _spriteBackgroundCollisionLatch != 0) irqBits |= 0x02;
+            if (irqBits != 0)
+            {
+                _registers[0x19] |= irqBits;
+                RefreshInterruptLine();
+            }
+        }
         // V4 FR-VIC-DRAW-COLOR: per-cycle colour resolution pipeline
         // (vicii_draw_cycle -> draw_colors8, vicii-draw-cycle.c:627-663).
         _pixelSequencer.DrawColors8();
@@ -1366,7 +1393,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         UpdateVerticalBorderForLineStart();
         CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);
         AccountSpriteDmaForRasterLine(CurrentRasterLine);
-        ProcessSpriteCollisionsForRasterLine(CurrentRasterLine);
+        // PLAN-VICEPARITY-001 V6: geometric ProcessSpriteCollisionsForRasterLine removed;
+        // per-pixel collision is handled by DrawSprites8 in the per-cycle tick path.
     }
 
     /// <inheritdoc />
@@ -1860,6 +1888,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 byte bit = (byte)(1 << i);
                 ref SpriteState sprite = ref _sprites[i];
                 sprite.Mc = sprite.McBase;
+                // DataValid is NOT cleared here. It persists until GetSpriteDataForRender
+                // consumes it (cleared on first read so each DMA2 cycle uses the data
+                // exactly once). Clearing here would destroy data latched via LatchSpriteData
+                // before cycle 57 (e.g. test stubs that call LatchSpriteData at cycle 54).
                 if ((_spriteDmaActiveMask & bit) != 0)
                 {
                     if ((enabled & bit) != 0 && sprite.Y == rasterLow)
@@ -1910,6 +1942,83 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public uint GetSpriteData(int n) => _sprites[n].Data;
 
     /// <summary>
+    /// PLAN-VICEPARITY-001 V6: sprite data for the render pipeline (vicii.sprite[s].data
+    /// as loaded by update_sprite_data in draw_sprites8). Returns sprite[n].Data when
+    /// C64MemoryMap DMA has populated it (non-zero). Falls back to a 3-byte read from
+    /// VideoMemoryReader at pointer-base + sprite.Mc when Data is zero (test harnesses
+    /// without C64MemoryMap: BuildVicWithSprites sets VideoMemoryReader but does not
+    /// call LatchSpriteData, so Data stays 0 until this fallback supplies the pattern).
+    /// </summary>
+    internal uint GetSpriteDataForRender(int n)
+    {
+        ref SpriteState sprite = ref _sprites[n];
+        // Real-DMA path: LatchSpriteData set DataValid after loading all 3 bytes.
+        // Return the latched data without modifying mc (LatchSpriteData already
+        // advanced it 3 times, once per s-access byte).
+        if (sprite.DataValid)
+        {
+            // Consume the flag so a subsequent DMA2 cycle on the next line falls
+            // through to the fallback path (keeping Mc advancing correctly).
+            sprite.DataValid = false;
+            return sprite.Data;
+        }
+        // Fallback: read pointer from the screen pointer table (ScreenMemoryBase + $3F8 + n),
+        // then read 3 bytes from the sprite data block at pointer * 64 + mc.
+        // This mirrors VICE's p-access + s-access sequence without requiring C64MemoryMap:
+        // test harnesses that supply VideoMemoryReader (e.g. BuildVicWithSprites,
+        // SpriteCollisionTests.BuildVic) get correct data via this path; harnesses that
+        // leave VideoMemoryReader as the default bus.Read (returning 0) get transparent data.
+        // Advance mc by 3 here to mirror the 3 real s-accesses, so McBase eventually
+        // reaches 63 and DMA deactivates (stops sprites after 21 lines as VICE does).
+        byte pointer = VideoMemoryReader((ushort)(ScreenMemoryBase + 0x3F8 + n));
+        int baseAddr = pointer << 6;
+        byte hi  = VideoMemoryReader((ushort)(baseAddr + sprite.Mc));
+        byte mid = VideoMemoryReader((ushort)(baseAddr + sprite.Mc + 1));
+        byte lo  = VideoMemoryReader((ushort)(baseAddr + sprite.Mc + 2));
+        sprite.Mc = (byte)((sprite.Mc + 3) & 0x3F);
+        return ((uint)hi << 16) | ((uint)mid << 8) | lo;
+    }
+
+    // PLAN-VICEPARITY-001 FR-VIC-SPRITE-RENDER / FR-VIC-SPRITE-COLLISION V6:
+    // test-only accessors for PixelSequencer sprite-render pipeline state (sbuf
+    // shift register, x_pipe, mc_flops, expx_flops, active/pending/halt/pri bits).
+    // These mirror VICE vicii.sbuf_reg, vicii.sbuf_pixel_reg, vicii.sprite_x_pipe,
+    // vicii.sbuf_mc_flops, vicii.sbuf_expx_flops, vicii.sprite_active_bits,
+    // vicii.sprite_pending_bits, vicii.sprite_halt_bits, vicii.sprite_pri_bits,
+    // vicii.sprite_expx_bits from vicii-draw-cycle.c.
+    // Stub implementations return 0 (red) until DrawSprites8 is implemented.
+
+    /// <summary>Test-only: one-cycle-lagged sprite X position (vicii.sprite_x_pipe[n]).</summary>
+    public int GetSpriteXPipe(int n) => _pixelSequencer.GetSpriteXPipe(n);
+
+    /// <summary>Test-only: 24-bit sbuf shift register for sprite N (vicii.sbuf_reg[n]).</summary>
+    public uint GetSbufReg(int n) => _pixelSequencer.GetSbufReg(n);
+
+    /// <summary>Test-only: current pixel value from sbuf for sprite N (vicii.sbuf_pixel_reg[n]).</summary>
+    public int GetSbufPixelReg(int n) => _pixelSequencer.GetSbufPixelReg(n);
+
+    /// <summary>Test-only: per-sprite sbuf multicolor flops byte (vicii.sbuf_mc_flops).</summary>
+    public byte GetSbufMcFlops() => _pixelSequencer.GetSbufMcFlops();
+
+    /// <summary>Test-only: per-sprite sbuf X-expansion flops byte (vicii.sbuf_expx_flops).</summary>
+    public byte GetSbufExpxFlops() => _pixelSequencer.GetSbufExpxFlops();
+
+    /// <summary>Test-only: sprite_active_bits bitmask (vicii.sprite_active_bits).</summary>
+    public byte GetSpriteActiveBits() => _pixelSequencer.GetSpriteActiveBits();
+
+    /// <summary>Test-only: sprite_pending_bits bitmask (vicii.sprite_pending_bits).</summary>
+    public byte GetSpritePendingBits() => _pixelSequencer.GetSpritePendingBits();
+
+    /// <summary>Test-only: sprite_halt_bits bitmask (vicii.sprite_halt_bits).</summary>
+    public byte GetSpriteHaltBits() => _pixelSequencer.GetSpriteHaltBits();
+
+    /// <summary>Test-only: latched sprite_pri_bits (vicii.sprite_pri_bits, sampled at pixel 6).</summary>
+    public byte GetSpritePriBits() => _pixelSequencer.GetSpritePriBits();
+
+    /// <summary>Test-only: latched sprite_expx_bits (vicii.sprite_expx_bits, sampled at pixel 6).</summary>
+    public byte GetSpriteExpxBits() => _pixelSequencer.GetSpriteExpxBits();
+
+    /// <summary>
     /// PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: the s-access bus address
     /// (pointer &lt;&lt; 6) + mc, mirroring VICE viciisc/vicii-fetch.c:116,139,287.
     /// </summary>
@@ -1935,6 +2044,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             _ => (sprite.Data & 0xFFFF00) | value,
         };
         sprite.Mc = (byte)((sprite.Mc + 1) & 0x3F);
+        if (sAccessIndex == 2)
+            sprite.DataValid = true;
     }
 
     private void ClearExpiredSpriteDmaLatches()

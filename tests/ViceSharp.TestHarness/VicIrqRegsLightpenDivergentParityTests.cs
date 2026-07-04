@@ -620,6 +620,13 @@ public sealed class VicIrqRegsLightpenDivergentParityTests
 
             return bgPattern;
         };
+        // VICE draw_sprites (viciisc/vicii-draw-cycle.c) derives the
+        // sprite-background collision foreground bit from the g-access byte, not
+        // the video-II p/c-access. VideoMemoryReader covers the p/c-accesses;
+        // Phi1MemoryReader supplies the g-access character/bitmap row data the
+        // V6 per-pixel PriBuffer path reads. Mirror the wiring already used by
+        // SpriteCollisionTests / VicIISpriteCollisionIrqTests so $D01F latches.
+        vic.Phi1MemoryReader = _ => bgPattern;
         vic.Write(ScreenControl1, 0x1B); // DEN=1, RSEL=1, YSCROLL=3.
         vic.Write(0xD016, 0x08);         // CSEL=1.
         return vic;

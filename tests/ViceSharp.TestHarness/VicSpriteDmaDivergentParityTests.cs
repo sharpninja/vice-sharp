@@ -185,11 +185,14 @@ public sealed class VicSpriteDmaDivergentParityTests
         vic.Write(SpriteEnable, 0x01);
 
         // DMA activates at RasterX 54 of line 100. mc=0, mcbase=0.
-        AdvanceTo(vic, 100, 58);
-        // Simulate 3 s-accesses after check_sprite_display at RasterX 57.
+        // Advance to RasterX 57 (mc=mcbase reload fires), then simulate the 3
+        // s-accesses that would occur at cycles 57-58 on the real bus, then
+        // advance to RasterX 58 so update_sprite_data uses DataValid=true (real path).
+        AdvanceTo(vic, 100, 57);
         vic.LatchSpriteData(0, 0, 0xAA); // mc: 0->1
         vic.LatchSpriteData(0, 1, 0xBB); // mc: 1->2
-        vic.LatchSpriteData(0, 2, 0xCC); // mc: 2->3
+        vic.LatchSpriteData(0, 2, 0xCC); // mc: 2->3, DataValid=true
+        AdvanceTo(vic, 100, 58);         // real path: sbuf loaded, DataValid consumed, mc=3
 
         // Advance past RasterX 15 of line 101: mcbase = mc = 3.
         // Advance past RasterX 57 of line 101: mc = mcbase = 3 (reload).
@@ -219,10 +222,13 @@ public sealed class VicSpriteDmaDivergentParityTests
         vic.Write(SpriteY0, 100);
         vic.Write(SpriteEnable, 0x01);
 
-        AdvanceTo(vic, 100, 58);
+        // Advance to RasterX 57 (mc=mcbase reload fires), simulate s-accesses,
+        // then advance to RasterX 58 so update_sprite_data uses the real data path.
+        AdvanceTo(vic, 100, 57);
         vic.LatchSpriteData(0, 0, 0); // mc: 0->1
         vic.LatchSpriteData(0, 1, 0); // mc: 1->2
-        vic.LatchSpriteData(0, 2, 0); // mc: 2->3
+        vic.LatchSpriteData(0, 2, 0); // mc: 2->3, DataValid=true
+        AdvanceTo(vic, 100, 58);      // real path: DataValid consumed, mc stays 3
 
         // RasterX 15 of line 101: mcbase = mc = 3 (exp_flop=true).
         AdvanceTo(vic, 101, 15);
@@ -267,14 +273,17 @@ public sealed class VicSpriteDmaDivergentParityTests
         AdvanceTo(vic, 100, 54);
         Assert.True(vic.IsSpriteDmaActive(0), "Precondition: DMA active.");
 
-        // Simulate 21 DMA lines: 3 s-accesses per line (called after RasterX 57
-        // so the mc=mcbase reload has fired, then mc advances 0->3->6->...->63).
+        // Simulate 21 DMA lines: advance to RasterX 57 (mc=mcbase reload fires),
+        // simulate 3 s-accesses (mc advances), then advance to RasterX 58 so
+        // update_sprite_data uses DataValid=true (real path, no spurious Mc bump).
+        // mc sequence: 0->3->6->...->63 over lines 100-120.
         for (int line = 100; line <= 120; line++)
         {
-            AdvanceTo(vic, (ushort)line, 58);
+            AdvanceTo(vic, (ushort)line, 57);
             vic.LatchSpriteData(0, 0, 0); // mc += 1
             vic.LatchSpriteData(0, 1, 0); // mc += 1
-            vic.LatchSpriteData(0, 2, 0); // mc += 1 => 3*(line-99)
+            vic.LatchSpriteData(0, 2, 0); // mc += 1, DataValid=true
+            AdvanceTo(vic, (ushort)line, 58); // real path: sbuf loaded, DataValid consumed
         }
         // After line 120 s-accesses: mc = 63, mcbase = 60 (updated at RasterX 15 of line 120
         // from mc=57, before the line 120 s-accesses ran).
@@ -497,12 +506,15 @@ public sealed class VicSpriteDmaDivergentParityTests
             "Display bit must be set at RasterX 57 when DMA active and Y matches.");
 
         // Simulate 21 DMA lines (mc reaches 63, DMA turns off at RasterX 15 of line 121).
+        // Each iteration: advance to RasterX 57 (mc=mcbase reload), simulate s-accesses,
+        // then advance to RasterX 58 (real data path, DataValid consumed, mc preserved).
         for (int line = 100; line <= 120; line++)
         {
-            AdvanceTo(vic, (ushort)line, 58);
+            AdvanceTo(vic, (ushort)line, 57);
             vic.LatchSpriteData(0, 0, 0);
             vic.LatchSpriteData(0, 1, 0);
-            vic.LatchSpriteData(0, 2, 0);
+            vic.LatchSpriteData(0, 2, 0); // DataValid=true
+            AdvanceTo(vic, (ushort)line, 58);
         }
         AdvanceTo(vic, 121, 15); // DMA off (mcbase=63).
         Assert.False(vic.IsSpriteDmaActive(0), "DMA must be off at RasterX 15 of line 121.");

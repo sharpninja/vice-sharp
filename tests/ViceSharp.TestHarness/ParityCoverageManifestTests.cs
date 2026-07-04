@@ -76,14 +76,18 @@ public sealed class ParityCoverageManifestTests
     /// immediate path, and mid-line colour change at pixel granularity. The
     /// five FR-VIC-DISPLAYMODE ACs admit the V3 per-cycle ECM/BMM/MCM
     /// mode-edge logic to the parity manifest. All 15 admitted green.
+    /// +15 = slice V6 (PLAN-VICEPARITY-001): DIVERGENT ACs of
+    /// FR-VIC-SPRITE-RENDER / FR-VIC-SPRITE-PRIORITY / FR-VIC-SPRITE-COLLISION
+    /// authored in VicSpriteRenderDivergentParityTests, proving the per-pixel
+    /// sprite draw (sbuf shift + xpos trigger + expansion/mc flops), the
+    /// winner-first behind-priority test over the graphics pri_buffer, and
+    /// per-pixel collision latching, all consuming V3's PixelSequencer and
+    /// V5's mc/mcbase/exp_flop DMA. All 15 admitted green.
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered. Current authored distinct
-    /// [ParityAc] ids = 320 (292 S6 baseline + 28 S7 SID combined-waveform
-    /// ROM table + model_dac wave DAC ACs from
-    /// SidCombinedDacresDivergentParityTests: 17 COMBINED + 3 DACRES ids,
-    /// 8 pre-existing pending:false + 20 newly-unflipped = 28 new total).
+    /// [ParityAc] ids = 335 (320 prior + 15 V6).
     /// </summary>
-    private const int ExpectedMinCovered = 320;
+    private const int ExpectedMinCovered = 335;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

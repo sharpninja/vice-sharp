@@ -60,6 +60,11 @@ public sealed class SpriteCollisionTests
             // Return a configurable foreground bitmap pattern for background pixels.
             return bgPattern;
         };
+        // Connect Phi1MemoryReader so DrawGraphics8 sees the same bgPattern
+        // when computing PriBuffer for sprite-background collision detection.
+        // (VideoMemoryReader covers video-II p/c-accesses; Phi1MemoryReader
+        // covers g-access character row data.)
+        vic.Phi1MemoryReader = _ => bgPattern;
         // Set DEN (display enable) for badline behaviour and standard text mode.
         vic.Write(ScreenControl1, 0x1B); // DEN=1, RSEL=1, YSCROLL=3
         vic.Write(ScreenControl2, 0x08); // CSEL=1 (40 cols)
@@ -283,7 +288,33 @@ public sealed class SpriteCollisionTests
         vic.Write(ScreenControl1, d011);
         vic.Write(ScreenControl2, d016);
         vic.Write(MemoryPointers, sourceKind <= 1 ? (byte)0x15 : (byte)0x18);
-        ConfigureInvalidEcmForegroundSource(ram, vic, x: 96, rasterLine: 100, sourceKind);
+
+        // Connect Phi1MemoryReader to bus so DrawGraphics8 gets the correct
+        // g-access character or bitmap row data for PriBuffer construction.
+        // Visible cycles 14-53 map to display columns 0-39; the address is
+        // CharacterBase + screenCode*8 + rowCounter (char mode) or
+        // BitmapPointerBase + screenIndex*8 + rowCounter (bitmap mode).
+        bool bitmapMode = (d011 & 0x20) != 0;
+        int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        vic.Phi1MemoryReader = cycle =>
+        {
+            if (cycle < 14 || cycle >= 14 + columns) return 0;
+            int col = cycle - 14;
+            int fbl = vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 7) + 8) & 7);
+            int screenRow = (vic.CurrentRasterLine - fbl) / 8;
+            if (screenRow < 0 || screenRow >= 25) return 0;
+            int rowCounter = vic.CurrentRasterLine & 7;
+            int screenIndex = screenRow * columns + col;
+            if (bitmapMode)
+                return bus.Read((ushort)(vic.BitmapPointerBase + screenIndex * 8 + rowCounter));
+            byte screenCode = bus.Read((ushort)(vic.ScreenMemoryBase + screenIndex));
+            return bus.Read((ushort)(vic.CharacterBase + screenCode * 8 + rowCounter));
+        };
+
+        // rasterLine: 101 because DrawSprites8 detects collision on the first
+        // rendering line (sprite.Y+1), so the foreground source must be at
+        // the char row for line 101, not line 100.
+        ConfigureInvalidEcmForegroundSource(ram, vic, x: 96, rasterLine: 101, sourceKind);
         ConfigureSprite(ram, vic, sprite: 0, x: spriteX, y: 100, pointer: 0x20);
         vic.Write(SpriteEnable, 0x01);
         return vic;

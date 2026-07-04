@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace ViceSharp.Chips.VicIi;
@@ -187,6 +188,82 @@ internal sealed class PixelSequencer
     // Lifecycle
     // ---------------------------------------------------------------
 
+    // PLAN-VICEPARITY-001 FR-VIC-SPRITE-RENDER / FR-VIC-SPRITE-COLLISION V6:
+    // Sprite-render pipeline state (sbuf shift register, x_pipe, mc_flops, etc.)
+    // from VICE vicii-draw-cycle.c lines 65-116.
+    // All fields match VICE static locals in vicii-draw-cycle.c.
+
+    private readonly int[]  _spriteXPipe      = new int[8];
+    private readonly uint[] _sbufReg          = new uint[8];
+    private readonly int[]  _sbufPixelReg     = new int[8];
+    private byte             _sbufMcFlops;
+    private byte             _sbufExpxFlops;
+    private byte             _spriteActiveBits;
+    private byte             _spritePendingBits;
+    private byte             _spriteHaltBits;
+    private byte             _spritePriBits;
+    private byte             _spriteExpxBits;
+
+    // sprite_mc_bits: last-committed $D01C value for toggled-bits calculation
+    // (vicii.sprite_mc_bits, VICE vicii-draw-cycle.c). Separate from sbuf_mc_flops.
+    private byte _spriteMcBits;
+
+    // Per-cycle sprite collision output written by DrawSprites8, consumed by
+    // Mos6569 for first-appearance IRQ gate (vicii-cycle.c:427-433).
+    internal byte SpriteSsCollisionThisCycle;
+    internal byte SpriteSbCollisionThisCycle;
+
+    // PAL cycle DMA tables: index = managed RasterX (0-62).
+    // _s_palDmaCycle0[rx] = sprite bitmask for Phi1(SprPtr) cycles (VICE dma_cycle_0).
+    // _s_palDmaCycle2[rx] = sprite bitmask for Phi1(SprDma1) cycles (VICE dma_cycle_2,
+    //   fires update_sprite_data and also halt-release at pixel 7).
+    // Phi1(N) -> managed RasterX = N-1 (VICE uses 1-based cycles).
+    private static readonly byte[] s_palDmaCycle0 = new byte[63];
+    private static readonly byte[] s_palDmaCycle2 = new byte[63];
+
+    static PixelSequencer()
+    {
+        // SprPtr (Phi1 type) -> dma_cycle_0. vicii-chip-model.c PAL table lines 112-238.
+        s_palDmaCycle0[57] = 0x01; // Phi1(58) SprPtr(0)
+        s_palDmaCycle0[59] = 0x02; // Phi1(60) SprPtr(1)
+        s_palDmaCycle0[61] = 0x04; // Phi1(62) SprPtr(2)
+        s_palDmaCycle0[ 0] = 0x08; // Phi1(1)  SprPtr(3)
+        s_palDmaCycle0[ 2] = 0x10; // Phi1(3)  SprPtr(4)
+        s_palDmaCycle0[ 4] = 0x20; // Phi1(5)  SprPtr(5)
+        s_palDmaCycle0[ 6] = 0x40; // Phi1(7)  SprPtr(6)
+        s_palDmaCycle0[ 8] = 0x80; // Phi1(9)  SprPtr(7)
+        // SprDma1 (Phi1 type) -> dma_cycle_2. vicii-chip-model.c PAL table lines 112-238.
+        s_palDmaCycle2[58] = 0x01; // Phi1(59) SprDma1(0)
+        s_palDmaCycle2[60] = 0x02; // Phi1(61) SprDma1(1)
+        s_palDmaCycle2[62] = 0x04; // Phi1(63) SprDma1(2)
+        s_palDmaCycle2[ 1] = 0x08; // Phi1(2)  SprDma1(3)
+        s_palDmaCycle2[ 3] = 0x10; // Phi1(4)  SprDma1(4)
+        s_palDmaCycle2[ 5] = 0x20; // Phi1(6)  SprDma1(5)
+        s_palDmaCycle2[ 7] = 0x40; // Phi1(8)  SprDma1(6)
+        s_palDmaCycle2[ 9] = 0x80; // Phi1(10) SprDma1(7)
+    }
+
+    /// <summary>Test-only: sprite_x_pipe[n] (one-cycle-lagged X, VICE vicii.sprite_x_pipe).</summary>
+    internal int  GetSpriteXPipe(int n)    => _spriteXPipe[n];
+    /// <summary>Test-only: sbuf_reg[n] (24-bit shift register, VICE vicii.sbuf_reg).</summary>
+    internal uint GetSbufReg(int n)        => _sbufReg[n];
+    /// <summary>Test-only: sbuf_pixel_reg[n] (current pixel value, VICE vicii.sbuf_pixel_reg).</summary>
+    internal int  GetSbufPixelReg(int n)   => _sbufPixelReg[n];
+    /// <summary>Test-only: sbuf_mc_flops byte (VICE vicii.sbuf_mc_flops).</summary>
+    internal byte GetSbufMcFlops()         => _sbufMcFlops;
+    /// <summary>Test-only: sbuf_expx_flops byte (VICE vicii.sbuf_expx_flops).</summary>
+    internal byte GetSbufExpxFlops()       => _sbufExpxFlops;
+    /// <summary>Test-only: sprite_active_bits (VICE vicii.sprite_active_bits).</summary>
+    internal byte GetSpriteActiveBits()    => _spriteActiveBits;
+    /// <summary>Test-only: sprite_pending_bits (VICE vicii.sprite_pending_bits).</summary>
+    internal byte GetSpritePendingBits()   => _spritePendingBits;
+    /// <summary>Test-only: sprite_halt_bits (VICE vicii.sprite_halt_bits).</summary>
+    internal byte GetSpriteHaltBits()      => _spriteHaltBits;
+    /// <summary>Test-only: sprite_pri_bits latched at pixel 6 (VICE vicii.sprite_pri_bits).</summary>
+    internal byte GetSpritePriBits()       => _spritePriBits;
+    /// <summary>Test-only: sprite_expx_bits latched at pixel 6 (VICE vicii.sprite_expx_bits).</summary>
+    internal byte GetSpriteExpxBits()      => _spriteExpxBits;
+
     /// <summary>Reset all pipeline state to power-on values.</summary>
     internal void Reset()
     {
@@ -212,6 +289,20 @@ internal sealed class PixelSequencer
         LastColorReg  = 0xFF;
         LastColorValue = 0;
         DbufOffset    = 0;
+        // V6: sprite-render pipeline state.
+        Array.Clear(_spriteXPipe,   0, _spriteXPipe.Length);
+        Array.Clear(_sbufReg,       0, _sbufReg.Length);
+        Array.Clear(_sbufPixelReg,  0, _sbufPixelReg.Length);
+        _sbufMcFlops               = 0;
+        _sbufExpxFlops             = 0;
+        _spriteActiveBits          = 0;
+        _spritePendingBits         = 0;
+        _spriteHaltBits            = 0;
+        _spritePriBits             = 0;
+        _spriteExpxBits            = 0;
+        _spriteMcBits              = 0;
+        SpriteSsCollisionThisCycle = 0;
+        SpriteSbCollisionThisCycle = 0;
     }
 
     /// <summary>
@@ -556,5 +647,259 @@ internal sealed class PixelSequencer
         LastColorReg              = _vic.VicLastColorRegWrite;
         LastColorValue            = _vic.VicLastColorValueWrite;
         _vic.VicLastColorRegWrite = 0xFF;
+    }
+
+    // ---------------------------------------------------------------
+    // V6: sprite render pipeline (draw_sprites8 vicii-draw-cycle.c:469-532)
+    // ---------------------------------------------------------------
+
+    /// <summary>
+    /// Per-pixel sprite trigger: activates sprites whose x_pipe position matches
+    /// xpos exactly. Corresponds to VICE trigger_sprites (vicii-draw-cycle.c:318-340).
+    /// Sets sbuf_expx_flops, sbuf_mc_flops, sprite_active_bits unconditionally on match.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void TriggerSprites(int xpos, byte candidateBits)
+    {
+        if (candidateBits == 0 || _spritePendingBits == 0) return;
+        for (int s = 0; s < 8; s++)
+        {
+            byte m = (byte)(1 << s);
+            if ((candidateBits & m) != 0
+                && (_spritePendingBits & m) != 0
+                && (_spriteActiveBits & m) == 0
+                && (_spriteHaltBits   & m) == 0)
+            {
+                if (xpos == _spriteXPipe[s])
+                {
+                    _sbufExpxFlops    |= m;
+                    _sbufMcFlops      |= m;
+                    _spriteActiveBits |= m;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Per-pixel sprite draw: advances sbuf shift registers, computes pixel values,
+    /// writes sprite color symbolic codes to RenderBuffer, and accumulates collision
+    /// masks. Corresponds to VICE draw_sprites (vicii-draw-cycle.c:342-430).
+    ///
+    /// Symbolic codes written to RenderBuffer:
+    ///   0x25 = COL_D025 (sprite MC1, $D025)
+    ///   0x26 = COL_D026 (sprite MC2, $D026)
+    ///   0x27..0x2E = COL_D027 + sprite_num (sprite individual color)
+    /// DrawColors8 resolves these via Cregs[] exactly as for background colors.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void DrawSpritePixel(int i)
+    {
+        if (_spriteActiveBits == 0) return;
+
+        int  activeSpriteNum = -1;
+        byte collisionMask   = 0;
+
+        for (int s = 7; s >= 0; s--)
+        {
+            byte m = (byte)(1 << s);
+            if ((_spriteActiveBits & m) == 0) continue;
+
+            if (_sbufReg[s] != 0 || _sbufPixelReg[s] != 0)
+            {
+                if ((_spriteHaltBits & m) == 0)
+                {
+                    if ((_sbufExpxFlops & m) != 0)
+                    {
+                        if ((_spriteMcBits & m) != 0)
+                        {
+                            // MC sprite: fetch 2-bit pair when mc_flop is set.
+                            if ((_sbufMcFlops & m) != 0)
+                                _sbufPixelReg[s] = (int)((_sbufReg[s] >> 22) & 0x03);
+                            _sbufMcFlops ^= m;  // toggle MC clock every expx pixel
+                        }
+                        else
+                        {
+                            // Hires sprite: fetch 1 bit, shift to 0 or 2.
+                            _sbufPixelReg[s] = (int)(((_sbufReg[s] >> 23) & 0x01) << 1);
+                        }
+                    }
+
+                    // Shift sbuf only when expx_flop is set (VICE vicii-draw-cycle.c:377-379).
+                    if ((_sbufExpxFlops & m) != 0)
+                        _sbufReg[s] <<= 1;
+
+                    // Update expx_flop: toggle for expanded, set for non-expanded.
+                    if ((_spriteExpxBits & m) != 0)
+                        _sbufExpxFlops ^= m;
+                    else
+                        _sbufExpxFlops |= m;
+                }
+
+                // Accumulate collision if this sprite has a non-transparent pixel.
+                if (_sbufPixelReg[s] != 0)
+                {
+                    activeSpriteNum = s;
+                    collisionMask  |= m;
+                }
+            }
+            else
+            {
+                // sbuf drained: deactivate sprite (VICE vicii-draw-cycle.c:395-397).
+                _spriteActiveBits &= (byte)~m;
+            }
+        }
+
+        if (collisionMask != 0)
+        {
+            // Determine if graphics pixel at this position is foreground (pri_buffer[i]).
+            byte pixelPri = PriBuffer[i];
+            int  as_      = activeSpriteNum;  // winner = lowest-numbered opaque sprite
+            bool spri     = (_spritePriBits & (1 << as_)) != 0;
+
+            // Write sprite color to render_buffer unless winner is behind + foreground
+            // graphics pixel (VICE vicii-draw-cycle.c:401-419).
+            if (!(pixelPri != 0 && spri))
+            {
+                RenderBuffer[i] = _sbufPixelReg[as_] switch
+                {
+                    1 => 0x25,               // COL_D025: sprite MC1 color
+                    2 => (byte)(0x27 + as_), // COL_D027+n: sprite individual color
+                    3 => 0x26,               // COL_D026: sprite MC2 color
+                    _ => RenderBuffer[i],    // transparent: leave background
+                };
+            }
+
+            // Sprite-background collision: any foreground graphics pixel under any
+            // opaque sprite pixel (vicii-draw-cycle.c:420-424).
+            if (pixelPri != 0)
+                SpriteSbCollisionThisCycle |= collisionMask;
+        }
+
+        // Sprite-sprite collision: two or more sprites opaque at this pixel
+        // (vicii-draw-cycle.c:426-429).
+        if ((collisionMask & (collisionMask - 1)) != 0)
+            SpriteSsCollisionThisCycle |= collisionMask;
+    }
+
+    /// <summary>
+    /// 6569 (color_latency=1) MC-bits update at pixel 7.
+    /// Clears sbuf_mc_flops for bits that TOGGLED in $D01C since last update
+    /// (VICE update_sprite_mc_bits_6569, vicii-draw-cycle.c:433-439).
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void UpdateSpriteMcBits6569()
+    {
+        byte nextMcBits = _regs[0x1C];
+        byte toggled    = (byte)(nextMcBits ^ _spriteMcBits);
+        _sbufMcFlops   &= (byte)~toggled;
+        _spriteMcBits   = nextMcBits;
+    }
+
+    /// <summary>
+    /// 8565 (color_latency=0) MC-bits update at pixel 6.
+    /// XORs sbuf_mc_flops with (toggled AND NOT expx_flops)
+    /// (VICE update_sprite_mc_bits_8565, vicii-draw-cycle.c:442-448).
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void UpdateSpriteMcBits8565()
+    {
+        byte nextMcBits = _regs[0x1C];
+        byte toggled    = (byte)(nextMcBits ^ _spriteMcBits);
+        _sbufMcFlops   ^= (byte)(toggled & ~_sbufExpxFlops);
+        _spriteMcBits   = nextMcBits;
+    }
+
+    /// <summary>
+    /// Per-cycle sprite render pipeline (VICE draw_sprites8, vicii-draw-cycle.c:469-532).
+    /// Called each cycle from Mos6569.Tick AFTER DrawGraphics8 (which fills PriBuffer)
+    /// and BEFORE DrawColors8 (which resolves symbolic color codes from RenderBuffer).
+    ///
+    /// Pixel sequence mirrors VICE exactly: trigger+draw per pixel, with DMA halt/reload
+    /// at pixels 2-4, MC-bits update at pixel 6 (8565) or 7 (6569), and xpos pipe
+    /// latch (update_sprite_xpos) at the end of pixel 7.
+    ///
+    /// Writes SpriteSsCollisionThisCycle and SpriteSbCollisionThisCycle for Mos6569
+    /// first-appearance IRQ gate (vicii-cycle.c:427-433).
+    /// </summary>
+    internal void DrawSprites8(int rasterX, byte spriteDisplayBits)
+    {
+        // xpos: 8-aligned PAL phi1 x coordinate for this cycle.
+        // Matches cycle_get_xpos(cycle_flags) in VICE (vicii-chip-model.h:164-167).
+        int phi1Full = (0x194 + 8 * rasterX) % 0x1F8;
+        int xpos     = phi1Full & ~7;
+
+        // ChkSprDisp fires only at rasterX 57 (VICE Phi1(58), vicii-chip-model.c:226).
+        bool sprEn = (rasterX == 57);
+
+        // DMA tables: bitmask of sprite(s) whose DMA fires this cycle.
+        byte dmaCycle0 = (uint)rasterX < 63u ? s_palDmaCycle0[rasterX] : (byte)0;
+        byte dmaCycle2 = (uint)rasterX < 63u ? s_palDmaCycle2[rasterX] : (byte)0;
+
+        // get_trigger_candidates: coarse xpos window check (VICE vicii-draw-cycle.c:304-316).
+        byte candidateBits = 0;
+        for (int s = 0; s < 8; s++)
+        {
+            if ((xpos & 0x1F8) == (_spriteXPipe[s] & 0x1F8))
+                candidateBits |= (byte)(1 << s);
+        }
+
+        SpriteSsCollisionThisCycle = 0;
+        SpriteSbCollisionThisCycle = 0;
+
+        // pixel 0
+        TriggerSprites(xpos + 0, candidateBits);
+        DrawSpritePixel(0);
+
+        // pixel 1
+        TriggerSprites(xpos + 1, candidateBits);
+        DrawSpritePixel(1);
+
+        // pixel 2: deactivate sprite under SprDma1 reload
+        _spriteActiveBits &= (byte)~dmaCycle2;
+        TriggerSprites(xpos + 2, candidateBits);
+        DrawSpritePixel(2);
+
+        // pixel 3: halt sprite under SprPtr
+        _spriteHaltBits |= dmaCycle0;
+        TriggerSprites(xpos + 3, candidateBits);
+        DrawSpritePixel(3);
+
+        // pixel 4: copy pending display bits when ChkSprDisp; reload sbuf from sprite data
+        if (sprEn)
+            _spritePendingBits = spriteDisplayBits;
+        if (dmaCycle2 != 0)
+        {
+            int sn = BitOperations.TrailingZeroCount((uint)dmaCycle2);
+            // VICE update_sprite_data (vicii-draw-cycle.c:451-457) gates on sprite_dma.
+            // Without the guard, the DMA2 table fires for sprite N at every cycle 58
+            // (even on lines where DMA is inactive), causing spurious fallback Mc increments.
+            if (_vic.IsSpriteDmaActive(sn))
+                _sbufReg[sn] = _vic.GetSpriteDataForRender(sn);
+        }
+        TriggerSprites(xpos + 4, candidateBits);
+        DrawSpritePixel(4);
+
+        // pixel 5
+        TriggerSprites(xpos + 5, candidateBits);
+        DrawSpritePixel(5);
+
+        // pixel 6: update MC bits (8565 path); latch pri_bits and expx_bits
+        if (!_vic.ColorLatencyEnabled)
+            UpdateSpriteMcBits8565();
+        _spritePriBits  = _regs[0x1B];
+        _spriteExpxBits = _regs[0x1D];
+        TriggerSprites(xpos + 6, candidateBits);
+        DrawSpritePixel(6);
+
+        // pixel 7: update MC bits (6569 path); release halt after SprDma1
+        if (_vic.ColorLatencyEnabled)
+            UpdateSpriteMcBits6569();
+        _spriteHaltBits &= (byte)~dmaCycle2;
+        TriggerSprites(xpos + 7, candidateBits);
+        DrawSpritePixel(7);
+
+        // update_sprite_xpos: latch x_pipe from live sprite X registers (vicii-draw-cycle.c:459-465).
+        for (int s = 0; s < 8; s++)
+            _spriteXPipe[s] = _vic.GetSpriteX(s);
     }
 }

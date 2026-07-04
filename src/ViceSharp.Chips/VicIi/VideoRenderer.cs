@@ -446,7 +446,12 @@ public sealed class VideoRenderer
 
             if (_vic.GetSpritePriority(sprite) == Mos6569.SpritePriority.Behind && backgroundIsForeground)
             {
-                continue;
+                // PLAN-VICEPARITY-001 FR-VIC-SPRITE-PRIORITY AC-05: winner is behind
+                // AND graphics pixel is foreground -> output background (return false),
+                // not fall through to a lower-priority in-front sprite. VICE
+                // vicii-draw-cycle.c:401-419 applies the priority gate to the winner
+                // only and does not write render_buffer[i] on this path.
+                return false;
             }
 
             pixel = Palette[paletteIndex & 0x0F];

@@ -181,6 +181,7 @@ public sealed class VicDrawSpriteFaithfulParityTests
 
             return bgPattern;
         };
+        vic.Phi1MemoryReader = _ => bgPattern;
         vic.Write(0xD011, 0x1B);
         vic.Write(0xD016, 0x08);
         return vic;
@@ -1005,9 +1006,26 @@ public sealed class VicDrawSpriteFaithfulParityTests
             vic.Write(0xD011, 0x1B);
             vic.Write(0xD016, d016);
             vic.Write(0xD018, 0x15);
+            // Supply character data so DrawGraphics8 fills PriBuffer for the
+            // SB-collision gate check (phi1 cycle -> GbufPipe0 -> PriBuffer).
+            int fbl = vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 7) + 8) & 7);
+            vic.Phi1MemoryReader = cycle =>
+            {
+                if (cycle < 14 || cycle >= 54) return 0;
+                int col = cycle - 14;
+                int screenRow = (vic.CurrentRasterLine - fbl) / 8;
+                if (screenRow < 0 || screenRow >= 25) return 0;
+                int rowCounter = (vic.CurrentRasterLine - fbl) & 7;
+                int screenIndex = screenRow * 40 + col;
+                byte screenCode = bus.Read((ushort)(vic.ScreenMemoryBase + screenIndex));
+                return bus.Read((ushort)(vic.CharacterBase + screenCode * 8 + rowCounter));
+            };
 
             int line = FirstVisibleBadLine(vic);
-            ConfigureCharacterCell(ram, vic, x: 96, rasterLine: line, charCode: 0x01, color: colorRam, charByte: glyphByte);
+            // rasterLine: line+1 because DrawSprites8 detects collision on the first
+            // rendering line (sprite.Y+1), so the foreground source must be at
+            // the char row for line+1.
+            ConfigureCharacterCell(ram, vic, x: 96, rasterLine: line + 1, charCode: 0x01, color: colorRam, charByte: glyphByte);
             ConfigureSprite(ram, vic, sprite: 0, x: 96, y: (byte)line, pointer: 0x20, color: 0x02, row0: 0x80);
             vic.Write(0xD015, 0x01);
 
@@ -1046,9 +1064,28 @@ public sealed class VicDrawSpriteFaithfulParityTests
         vic.Write(0xD011, 0x1B);
         vic.Write(0xD016, 0x08);
         vic.Write(0xD018, 0x15);
+        // Supply character data so DrawGraphics8 fills PriBuffer for the
+        // SB-collision gate check (phi1 cycle -> GbufPipe0 -> PriBuffer).
+        {
+            int fbl = vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 7) + 8) & 7);
+            vic.Phi1MemoryReader = cycle =>
+            {
+                if (cycle < 14 || cycle >= 54) return 0;
+                int col = cycle - 14;
+                int screenRow = (vic.CurrentRasterLine - fbl) / 8;
+                if (screenRow < 0 || screenRow >= 25) return 0;
+                int rowCounter = (vic.CurrentRasterLine - fbl) & 7;
+                int screenIndex = screenRow * 40 + col;
+                byte screenCode = bus.Read((ushort)(vic.ScreenMemoryBase + screenIndex));
+                return bus.Read((ushort)(vic.CharacterBase + screenCode * 8 + rowCounter));
+            };
+        }
 
         int line = FirstVisibleBadLine(vic);
-        ConfigureCharacterCell(ram, vic, x: 96, rasterLine: line, charCode: 0x01, color: 0x0E, charByte: 0x80);
+        // rasterLine: line+1 because DrawSprites8 detects collision on the first
+        // rendering line (sprite.Y+1), so the foreground source must be at
+        // the char row for line+1.
+        ConfigureCharacterCell(ram, vic, x: 96, rasterLine: line + 1, charCode: 0x01, color: 0x0E, charByte: 0x80);
         ConfigureSprite(ram, vic, sprite: 0, x: 96, y: (byte)line, pointer: 0x20, color: 0x02, row0: 0x80);
         ConfigureSprite(ram, vic, sprite: 1, x: 96, y: (byte)line, pointer: 0x21, color: 0x03, row0: 0x80);
         vic.Write(0xD01B, 0x03);
@@ -1153,13 +1190,13 @@ public sealed class VicDrawSpriteFaithfulParityTests
     [ParityAc("TEST-VIC-SPRITE-COLLISION-11", ParityTag.Faithful)]
     public void SpriteBackgroundCollisionIsSuppressedInTheVerticalBorder()
     {
-        // Sprite entirely inside the vertical border (rows 30..50 < 51).
+        // Sprite entirely inside the vertical border (rows 21..41 < 51).
         var borderVic = BuildStubVic(bgPattern: 0xFF);
         borderVic.Write(0xD000, 100);
-        borderVic.Write(0xD001, 30);
+        borderVic.Write(0xD001, 20);
         borderVic.Write(0xD015, 0x01);
         AdvanceToLineStart(borderVic, 55);
-        Assert.True(borderVic.IsRasterLineVerticalBorderActive(30));
+        Assert.True(borderVic.IsRasterLineVerticalBorderActive(20));
         Assert.Equal(0x00, borderVic.Read(0xD01F));
 
         // Control: identical sprite inside the display window latches.
