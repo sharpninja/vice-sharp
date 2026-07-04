@@ -78,10 +78,12 @@ public sealed class ParityCoverageManifestTests
     /// mode-edge logic to the parity manifest. All 15 admitted green.
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered. Current authored distinct
-    /// [ParityAc] ids = 292 (277 admitted green + 15 S6 NOISE ACs admitted
-    /// after PLAN-VICEPARITY-001 S6 noise reconciliation).
+    /// [ParityAc] ids = 320 (292 S6 baseline + 28 S7 SID combined-waveform
+    /// ROM table + model_dac wave DAC ACs from
+    /// SidCombinedDacresDivergentParityTests: 17 COMBINED + 3 DACRES ids,
+    /// 8 pre-existing pending:false + 20 newly-unflipped = 28 new total).
     /// </summary>
-    private const int ExpectedMinCovered = 292;
+    private const int ExpectedMinCovered = 320;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

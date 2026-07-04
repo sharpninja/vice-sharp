@@ -39,6 +39,24 @@ public sealed class SidEnvDivergentParityTests
     /// <summary>MOS 6581 write-to-bus TTL (reSID sid.cc:119, model 6581 branch).</summary>
     private const int DataBusTtl6581 = 0x1D00;
 
+    /// <summary>
+    /// 12-bit waveform DAC table for the 6581 (reSID dac.cc, 2R/R = 2.20,
+    /// no termination, MOSFET leakage 0.0075). Used to mirror
+    /// <c>ComputeVoiceOutput</c> after PLAN-VICEPARITY-001 S7 replaces the
+    /// raw waveform index with <c>WaveDacTable[Osc3]</c>.
+    /// </summary>
+    private static readonly ushort[] _waveDac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
+
+    /// <summary>
+    /// Mirror of <c>ComputeVoiceOutput</c> for a single 6581 voice: maps
+    /// <paramref name="wave12"/> through the 12-bit wave DAC and applies
+    /// <paramref name="envDacLevel"/> (the envelope DAC output, not the raw
+    /// envelope counter). Default env=255 corresponds to counter 0xFF
+    /// (dac[0xFF]=255) on the 6581 plateau.
+    /// </summary>
+    private static int VoiceOut(int wave12, int envDacLevel = 255)
+        => ((_waveDac6581[wave12] - 0x380) * envDacLevel) >> 8;
+
     private static Sid6581 BuildSid()
     {
         var bus = new BasicBus();
@@ -100,20 +118,23 @@ public sealed class SidEnvDivergentParityTests
 
     /// <summary>
     /// Mirror of the exact GenerateSample arithmetic for a single active voice
-    /// whose 8-bit waveform sample is <paramref name="waveformSample"/> and
+    /// whose 12-bit waveform index is <paramref name="waveformSample"/> and
     /// whose envelope DAC level is <paramref name="envelopeDacLevel"/>, at
     /// master volume 15 with filter mode bits clear:
-    /// envelopeAdjusted = ((sample - 0x380) * dacLevel) arithmetic-shifted
-    /// right 8, then envelopeAdjusted / 2048f + 0.05f, clamped to [-1, 1].
+    /// envelopeAdjusted = ((WaveDac[waveformSample] - 0x380) * dacLevel)
+    /// arithmetic-shifted right 8, then envelopeAdjusted / 2048f + 0.05f,
+    /// clamped to [-1, 1].
     /// wave_zero is 0x380 for the 6581 die (voice.cc:93); the 8-bit form
     /// WaveZeroLevel=0x38 is multiplied by 0x10 in ComputeVoiceOutput to reach
-    /// the 12-bit domain [PLAN-VICEPARITY-001 S3].
+    /// the 12-bit domain [PLAN-VICEPARITY-001 S3]. After S7, WaveDac maps the
+    /// 12-bit waveform index through the nonlinear R-2R ladder before the
+    /// wave_zero subtraction (dac.cc build_dac_table, bits=12, 2R/R=2.20).
     /// Same operation sequence as Sid6581.GenerateSample, so float equality
     /// is exact.
     /// </summary>
     private static float ExpectedSample(int waveformSample, int envelopeDacLevel)
     {
-        var envelopeAdjusted = ((waveformSample - 0x380) * envelopeDacLevel) >> 8;
+        var envelopeAdjusted = ((_waveDac6581[waveformSample] - 0x380) * envelopeDacLevel) >> 8;
         const float VolumeFraction = 15 / 15.0f;
         var voiceMix = envelopeAdjusted * VolumeFraction / 2048.0f;
         const float DigiDcOffset = VolumeFraction * 0.05f;
@@ -339,12 +360,13 @@ public sealed class SidEnvDivergentParityTests
     /// and then walked down through release 0; at counter levels 0xFF, 0xAA,
     /// 0x5D, 0x40 and 0x1A the sample equals exactly the value computed from
     /// the dac.cc-derived 6581 table (255, 168, 97, 65, 30): envelopeAdjusted
-    /// (0x000 - 0x380) * dac[level] arithmetic-shifted right 8 gives -893,
-    /// -588, -340, -228, -105 [PLAN-VICEPARITY-001 S3 rebase: 12-bit Osc3 path;
-    /// the old 8-bit values were -56, -37, -22, -15, -7], while the linear
-    /// counter gives divergent values at the non-plateau levels, so every
-    /// non-plateau level is a strict divergence witness. Exact float equality
-    /// via the mirrored GenerateSample arithmetic.
+    /// (WaveDac[0x000] - 0x380) * dac[level] right-shifted 8 gives -862,
+    /// -568, -328, -220, -102 [PLAN-VICEPARITY-001 S7: WaveDac[0]=31 replaces
+    /// raw 0 due to MOSFET leakage; S3 rebase gave -893, -588, -340, -228,
+    /// -105 with the old raw formula], while the linear counter gives divergent
+    /// values at the non-plateau levels, so every non-plateau level is a strict
+    /// divergence witness. Exact float equality via the mirrored GenerateSample
+    /// arithmetic.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-ENV-50", ParityTag.Divergent, pending: false)]
@@ -471,11 +493,12 @@ public sealed class SidEnvDivergentParityTests
     /// the source (msb_rising, wave.h:160), which happens at cycle 256
     /// (256*0x8000 = 0x800000). At cycle 255, one cycle before the sync, the
     /// per-cycle voice outputs fed to the filter stage are exactly
-    /// (-878, 0, 0): sawtooth ix = acc>>12 = 255*0x100>>12 = 0xFF00>>12 =
-    /// 0x0F = 15, so ((15 - 0x380) * 255)>>8. At cycle 256 the source MSB
-    /// rises, the synchronize step resets the destination accumulator, and the
-    /// fed value is exactly (-893, 0, 0): post-sync ix=0x000 gives
-    /// ((0x000 - 0x380) * 255) >> 8 = -893. Witnessing the drop to the
+    /// (-842, 0, 0): sawtooth ix = acc>>12 = 255*0x100>>12 = 0xFF00>>12 =
+    /// 0x0F = 15, so ((WaveDac[15]-0x380)*255)>>8 = (51-896)*255>>8 = -842.
+    /// At cycle 256 the source MSB rises, the synchronize step resets the
+    /// destination accumulator, and the fed value is exactly (-862, 0, 0):
+    /// post-sync ix=0x000 gives ((WaveDac[0]-0x380)*255)>>8 = (31-896)*255>>8
+    /// = -862. Witnessing the drop to the
     /// post-sync value at the sync cycle proves the filter is fed the voice
     /// outputs computed AFTER synchronize, which is the point of this AC.
     /// [S4/S5 rebase: source MSB rises at cycle 256 under the corrected
@@ -513,10 +536,10 @@ public sealed class SidEnvDivergentParityTests
         WriteVoice(sid, 2, 1, 0x80);    // sync source freq $8000: MSB rises at cycle 256 (256*$8000=0x800000)
 
         TickN(sid, 255);
-        Assert.Equal((-878, 0, 0), sid.CycleVoiceOutputs); // ix=15=(255*$100)>>12: ((15 - 0x380) * 255) >> 8
+        Assert.Equal((VoiceOut(15), 0, 0), sid.CycleVoiceOutputs); // ix=15=(255*$100)>>12: WaveDac[15]=51
 
         sid.Tick();                     // cycle 256: source MSB rises -> destination resynced to phase 0
-        Assert.Equal((-893, 0, 0), sid.CycleVoiceOutputs); // post-sync ix=0: ((0 - 0x380) * 255) >> 8
+        Assert.Equal((VoiceOut(0), 0, 0), sid.CycleVoiceOutputs); // post-sync ix=0: WaveDac[0]=31
     }
 
     /// <summary>
@@ -647,10 +670,12 @@ public sealed class SidEnvDivergentParityTests
     /// (12-bit OSC3 = 0x000 via set_waveform_output); with filter mode bits
     /// clear the filter stage is the exact unity sum of the per-cycle voice
     /// outputs. At the 0xFF envelope plateau the committed filter output and
-    /// the external-filter output both read exactly -893 (((0x000 - 0x380) *
-    /// 255) >> 8); after gate-off walks the envelope to 0xAA they both read
-    /// exactly -588 ((0x000 - 0x380) * dac[0xAA]=168 >> 8), proving both
-    /// stages re-clock from fresh voice outputs every cycle.
+    /// the external-filter output both read exactly -862 (((WaveDac[0x000]
+    /// - 0x380) * 255) >> 8 = (31-896)*255>>8); after gate-off walks the
+    /// envelope to 0xAA they both read exactly -568 ((WaveDac[0x000] - 0x380)
+    /// * dac[0xAA]=168 >> 8 = (31-896)*168>>8), proving both stages re-clock
+    /// from fresh voice outputs every cycle [S7: WaveDac[0]=31 shifts values
+    /// from -893/-588 under the old raw-index formula].
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-CLOCK-07", ParityTag.Divergent, pending: false)]
@@ -662,13 +687,13 @@ public sealed class SidEnvDivergentParityTests
         sid.Write(0xD412, 0x29);        // TEST | sawtooth | gate: waveform sample pinned to 0
 
         TickUntilEnvelope(sid, voice: 2, target: 0xFF, maxCycles: 6000);
-        Assert.Equal(-893, sid.CycleFilterOutput);           // (0x000 - 0x380) * 255 >> 8
-        Assert.Equal(-893, sid.CycleExternalFilterOutput);   // extfilt consumes this cycle's filter output
+        Assert.Equal(VoiceOut(0), sid.CycleFilterOutput);           // (WaveDac[0]-0x380)*255>>8 = -862
+        Assert.Equal(VoiceOut(0), sid.CycleExternalFilterOutput);   // extfilt consumes this cycle's filter output
 
         sid.Write(0xD412, 0x28);        // gate off: release 0 walks the counter down
         TickUntilEnvelope(sid, voice: 2, target: 0xAA, maxCycles: 6000);
-        Assert.Equal(-588, sid.CycleFilterOutput);           // (0x000 - 0x380) * dac[0xAA]=168 >> 8
-        Assert.Equal(-588, sid.CycleExternalFilterOutput);
+        Assert.Equal(VoiceOut(0, 168), sid.CycleFilterOutput);           // (WaveDac[0]-0x380)*168>>8 = -568
+        Assert.Equal(VoiceOut(0, 168), sid.CycleExternalFilterOutput);
     }
 
     /// <summary>

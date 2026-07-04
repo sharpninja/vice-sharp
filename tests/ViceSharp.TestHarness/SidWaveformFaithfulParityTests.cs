@@ -33,6 +33,15 @@ public sealed class SidWaveformFaithfulParityTests
     private const uint Acc24Mask = 0x00FF_FFFF;
     private const uint NoiseLfsrMask = 0x007F_FFFF;
 
+    /// <summary>
+    /// 12-bit waveform DAC table for the 6581 (reSID dac.cc build_dac_table,
+    /// 2R/R = 2.20, no termination, MOSFET leakage 0.0075). After
+    /// PLAN-VICEPARITY-001 S7, ComputeVoiceOutput maps the 12-bit waveform
+    /// index through this nonlinear R-2R ladder before the wave_zero
+    /// subtraction, so the FAITHFUL mirrors must do the same.
+    /// </summary>
+    private static readonly ushort[] _waveDac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
+
     /// <summary>Cycles that park an attack-0 / sustain-15 envelope at 0xFF (full ramp needs ~2,300).</summary>
     private const int EnvelopeWarmupCycles = 5000;
 
@@ -122,11 +131,14 @@ public sealed class SidWaveformFaithfulParityTests
     /// <summary>
     /// Mirror of the exact GenerateSample arithmetic for a single voice at
     /// full envelope (0xFF), master volume 15, filter mode bits clear:
-    /// envelopeAdjusted = ((sample - 0x380) * 0xFF) arithmetic-shifted right 8,
-    /// then envelopeAdjusted * 1.0f / 2048.0f + 0.05f, clamped to [-1, 1].
+    /// envelopeAdjusted = ((WaveDac[sample] - 0x380) * 0xFF) arithmetic-shifted
+    /// right 8, then envelopeAdjusted * 1.0f / 2048.0f + 0.05f, clamped to
+    /// [-1, 1].
     /// wave_zero is 0x380 for the 6581 die (voice.cc:93); the 8-bit form
     /// WaveZeroLevel=0x38 is multiplied by 0x10 in ComputeVoiceOutput to reach
-    /// the 12-bit domain [PLAN-VICEPARITY-001 S3].
+    /// the 12-bit domain [PLAN-VICEPARITY-001 S3]. After S7, WaveDac maps the
+    /// 12-bit waveform index through the nonlinear R-2R ladder before the
+    /// wave_zero subtraction (dac.cc build_dac_table, bits=12, 2R/R=2.20).
     /// Same operation sequence as the per-cycle chain feeding
     /// Sid6581.GenerateSample, so float equality is exact. The FR-SID-ENV
     /// AC-50 envelope DAC is identity at the 0xFF plateau (the 6581
@@ -135,7 +147,7 @@ public sealed class SidWaveformFaithfulParityTests
     /// </summary>
     private static float ExpectedSampleAtFullEnvelope(int waveformSample)
     {
-        var envelopeAdjusted = ((waveformSample - 0x380) * 0xFF) >> 8;
+        var envelopeAdjusted = ((_waveDac6581[waveformSample] - 0x380) * 0xFF) >> 8;
         const float volumeFraction = 15 / 15.0f;
         var voiceMix = envelopeAdjusted * volumeFraction / 2048.0f;
         const float digiDcOffset = volumeFraction * 0.05f;

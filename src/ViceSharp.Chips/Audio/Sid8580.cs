@@ -55,6 +55,35 @@ public partial class Sid8580 : Sid6581
     protected override ReadOnlySpan<ushort> EnvelopeDacTable => LinearEnvelopeTable;
 
     /// <summary>
+    /// 8580 waveform DAC: 2R/R = 2.00, terminated (dac.cc:167-168).
+    /// Overrides the 6581 table (2R/R = 2.20, no termination).
+    /// FR-SID-WAVE-DACRES / PLAN-VICEPARITY-001 S7.
+    /// </summary>
+    protected override ReadOnlySpan<ushort> WaveDacTable => WaveDac8580Static;
+
+    /// <summary>
+    /// 8580 combined waveform ROM tables from wave8580_*.h (reSID).
+    /// Overrides the 6581 ROM tables in <see cref="WaveTable12"/>.
+    /// FR-SID-WAVE-COMBINED / PLAN-VICEPARITY-001 S7.
+    /// </summary>
+    protected override int WaveTable12(int waveform, int ix)
+    {
+        int tri = (((ix & 0x800) != 0 ? ~ix : ix) & 0x7FF) << 1;   // wave.cc:96
+        int saw = ix & 0xFFF;                                      // wave.cc:97
+        return (waveform & 0x7) switch
+        {
+            0 => 0xFFF,
+            1 => tri,
+            2 => saw,
+            3 => SidWaveTables.Wave8580_ST[ix],
+            4 => 0xFFF,
+            5 => SidWaveTables.Wave8580_PT[ix],
+            6 => SidWaveTables.Wave8580_PS[ix],
+            _ => SidWaveTables.Wave8580_PST[ix],
+        };
+    }
+
+    /// <summary>
     /// FR-SID-003 / FR-SID-004 (BACKFILL-SID-001 8580 filter deepening).
     /// 8580 filter uses the same Chamberlin SVF topology as the 6581 in
     /// this implementation, but with the 8580 linear cutoff curve

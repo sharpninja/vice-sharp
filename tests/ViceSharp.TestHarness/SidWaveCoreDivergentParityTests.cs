@@ -173,10 +173,13 @@ public sealed class SidWaveCoreDivergentParityTests
     /// the parked 0xFF envelope plateau: (wave12 - wave_zero 0x380) *
     /// envelope DAC 255, arithmetic-shifted right 8. The 12-bit wave_zero is
     /// the reSID 6581 voice DC level (voice.cc:93; the no-shift 20-bit
-    /// multiply itself is FR-SID-VOICE AC-01, another slice). Exact integer
-    /// mirror of Sid6581.ComputeVoiceOutput, so equality is exact.
+    /// multiply itself is FR-SID-VOICE AC-01, another slice). After
+    /// PLAN-VICEPARITY-001 S7 the voice output routes through the 12-bit
+    /// waveform DAC (model_dac, wave.h:587-593), so this helper uses the
+    /// same BuildEnvelopeDacTable call to stay bit-exact.
     /// </summary>
-    private static int VoiceOut(int wave12) => ((wave12 - 0x380) * 255) >> 8;
+    private static readonly ushort[] _waveDac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
+    private static int VoiceOut(int wave12) => ((_waveDac6581[wave12] - 0x380) * 255) >> 8;
 
     /// <summary>reSID triangle table row at accumulator <paramref name="acc24"/>: ((acc ^ -!!msb) &gt;&gt; 11) &amp; 0xffe (wave.cc:96).</summary>
     private static int Tri12(uint acc24)
@@ -458,7 +461,6 @@ public sealed class SidWaveCoreDivergentParityTests
         }
 
         Assert.Equal(VoiceOut(8), sid.CycleVoiceOutputs.Voice0); // saw12(0x8500) = 8
-        Assert.Equal(-885, sid.CycleVoiceOutputs.Voice0);
     }
 
     /// <summary>
@@ -493,15 +495,12 @@ public sealed class SidWaveCoreDivergentParityTests
             {
                 case 511:
                     Assert.Equal(VoiceOut(0xFF8), sid.CycleVoiceOutputs.Voice0);
-                    Assert.Equal(3179, sid.CycleVoiceOutputs.Voice0);
                     break;
                 case 512:
                     Assert.Equal(VoiceOut(0xFFE), sid.CycleVoiceOutputs.Voice0);
-                    Assert.Equal(3185, sid.CycleVoiceOutputs.Voice0);
                     break;
                 case 513:
                     Assert.Equal(VoiceOut(0xFF6), sid.CycleVoiceOutputs.Voice0);
-                    Assert.Equal(3177, sid.CycleVoiceOutputs.Voice0);
                     break;
             }
         }
@@ -544,7 +543,6 @@ public sealed class SidWaveCoreDivergentParityTests
             {
                 case 1:
                     Assert.Equal(VoiceOut(2), sid.CycleVoiceOutputs.Voice0);
-                    Assert.Equal(-891, sid.CycleVoiceOutputs.Voice0);
                     break;
                 case 1365:
                     Assert.Equal(VoiceOut(0xFFE), sid.CycleVoiceOutputs.Voice0);
@@ -582,17 +580,21 @@ public sealed class SidWaveCoreDivergentParityTests
         var sid = BuildGatedVoice0Rig(control: 0x31, pulseWidth: 0x000);
         WriteVoice(sid, 0, 1, 0x40); // FREQ $4000
 
+        // After PLAN-VICEPARITY-001 S7: combined waveforms use the measured ROM table
+        // (SidWaveTables.Wave6581_ST) and the 6581 saw accumulator writeback modifies
+        // the accumulator when waveform_output bit 11 = 0 (wave.h:488-492).
+        // Track the simulated accumulator to compute the expected output per cycle.
+        uint simAcc = 0;
         for (var cycle = 1; cycle <= 1024; cycle++)
         {
+            simAcc = (simAcc + 0x4000u) & 0x00FFFFFFu;
+            int ix = (int)(simAcc >> 12);
+            int wave12 = SidWaveTables.Wave6581_ST[ix];
+            // Saw accumulator writeback (6581, saw bit set): clear bit 23 when bit 11 = 0.
+            simAcc &= (uint)(wave12 << 12) | 0x7FFFFFu;
+            var expected = VoiceOut(wave12);
             sid.Tick();
-            var acc = (uint)(cycle * 0x4000) & 0xFFFFFF;
-            var expected = VoiceOut(Tri12(acc) & Saw12(acc));
             Assert.Equal(expected, sid.CycleVoiceOutputs.Voice0);
-            if (cycle == 600)
-            {
-                Assert.Equal(VoiceOut(0x920), sid.CycleVoiceOutputs.Voice0);
-                Assert.Equal(1434, sid.CycleVoiceOutputs.Voice0);
-            }
         }
     }
 

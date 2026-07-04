@@ -147,9 +147,14 @@ public sealed class SidFilter6581Tests
     /// $D415 (low 3 bits) and $D416 (high 8 bits). At minimum cutoff
     /// the LP filter should heavily attenuate a routed voice; at
     /// maximum cutoff it should pass the voice with much less loss.
-    /// Acceptance: peak amplitude with cutoff = 0 is strictly less
-    /// than peak amplitude with cutoff = 0x7FF, given LP mode and
-    /// the voice routed through the filter.
+    /// Acceptance: the LP AC swing (peak-to-peak) with cutoff = 0 is
+    /// strictly less than the swing with cutoff = 0x7FF, given LP mode
+    /// and the voice routed through the filter. Peak-to-peak isolates
+    /// the AC content the LP is attenuating: since PLAN-VICEPARITY-001
+    /// S7 gives the sawtooth a physically-correct DC bias through the
+    /// waveform model_dac (wave.output = model_dac[waveform_output],
+    /// voice.cc/wave.h), the peak-absolute measure saturates at both
+    /// cutoffs, whereas the AC swing still cleanly separates them.
     /// </summary>
     [Fact]
     public void Cutoff_Is11BitFromD415AndD416()
@@ -178,11 +183,11 @@ public sealed class SidFilter6581Tests
         WarmUpEnvelope(sidLow);
         WarmUpEnvelope(sidHigh);
 
-        var peakLow = RunAndMeasurePeak(sidLow, 400);
-        var peakHigh = RunAndMeasurePeak(sidHigh, 400);
+        var peakLow = RunAndMeasurePeakToPeak(sidLow, 400);
+        var peakHigh = RunAndMeasurePeakToPeak(sidHigh, 400);
 
         peakLow.Should().BeLessThan(peakHigh,
-            "min cutoff must attenuate the routed voice more than max cutoff");
+            "min cutoff must attenuate the routed voice's AC swing more than max cutoff");
     }
 
     /// <summary>
@@ -354,9 +359,14 @@ public sealed class SidFilter6581Tests
     /// ApplyFilter through MapCutoffRegToFrequency and measurably changes
     /// the output.
     /// Acceptance: p2p at reg=0x100 is non-zero and strictly greater than
-    /// p2p at reg=0x400, and p2p at reg=0x700 is less than or equal to the
-    /// reg=0x400 response, confirming the non-linear curve actually drives
-    /// ApplyFilter under per-cycle clocking.
+    /// p2p at reg=0x400, and p2p at reg=0x700 sits at essentially the same
+    /// clamped residual as reg=0x400 (both push the band far above audio and
+    /// clamp the coefficient at the SVF stability limit), confirming the
+    /// non-linear curve actually drives ApplyFilter under per-cycle clocking.
+    /// The reg 0x400 vs 0x700 residuals coincide to within a few thousandths
+    /// (the exact residual now carries the physically-correct waveform
+    /// model_dac harmonics from PLAN-VICEPARITY-001 S7), so the far-above-band
+    /// pair is asserted approximately equal rather than strictly ordered.
     /// </summary>
     [Fact]
     public void Cutoff_NonLinearCurveDrivesApplyFilter()
@@ -399,8 +409,8 @@ public sealed class SidFilter6581Tests
             "the low-register band centre sits near the voice fundamental, so energy must pass");
         p2pMid.Should().BeLessThan(p2pLow,
             "BP at reg 0x400 pushes the band far above the voice under per-cycle clocking, rejecting the fundamental");
-        p2pHigh.Should().BeLessThanOrEqualTo(p2pMid,
-            "BP at reg 0x700 clamps at the stability limit and rejects at least as much as reg 0x400");
+        p2pHigh.Should().BeApproximately(p2pMid, 0.02f,
+            "BP at reg 0x700 clamps at the stability limit and rejects the fundamental to the same residual as reg 0x400");
     }
 
     /// <summary>

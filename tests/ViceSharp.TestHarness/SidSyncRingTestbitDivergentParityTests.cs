@@ -118,7 +118,8 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// Voice output for 12-bit waveform at the 0xFF envelope plateau (exactly
     /// as SidWaveCoreDivergentParityTests.VoiceOut).
     /// </summary>
-    private static int VoiceOut(int wave12) => ((wave12 - 0x380) * 255) >> 8;
+    private static readonly ushort[] _waveDac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
+    private static int VoiceOut(int wave12) => ((_waveDac6581[wave12] - 0x380) * 255) >> 8;
 
     /// <summary>reSID triangle table row at acc24 (wave.cc:96).</summary>
     private static int Tri12(uint acc24)

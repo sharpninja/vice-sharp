@@ -209,6 +209,19 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 WriteShiftRegister(ref voice, waveformOutput);
             }
 
+            // wave.h:488-492 (6581 only): when the sawtooth is combined with
+            // another waveform the accumulator MSB (bit 23) may be driven low
+            // when waveform_output bit 11 is 0. The (waveform & 0xd) guard
+            // restricts this to sawtooth-in-combination (triangle/pulse/noise
+            // also selected); for pure sawtooth reSID skips it because it is a
+            // mathematical identity. For combined waveforms with a ROM output
+            // below 0x800 it resets bit 23 (FR-SID-WAVE-COMBINED AC-15 /
+            // PLAN-VICEPARITY-001 S7).
+            if (!IsMos8580Wave && (waveform & 0x2) != 0 && (waveform & 0xd) != 0)
+            {
+                voice.WaveformAccumulator &= (uint)(waveformOutput << 12) | 0x7FFFFFu;
+            }
+
             if ((waveform & 0x3) != 0 && IsMos8580Wave)
             {
                 // wave.h:475-482: 8580 tri/saw output is delayed half a cycle,
@@ -262,25 +275,26 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// noise/pulse mask rows, row 1 the branch-free triangle (upper 11 bits
     /// MSB-folded and left-shifted, bit 0 grounded) and row 2 the sawtooth
     /// identity, exactly as built by the reSID class initialiser
-    /// (wave.cc:87-101). The combined rows 3/5/6/7 are sampled-die tables in
-    /// reSID (wave6581__ST.h and friends); until FR-SID-WAVE-SAWTRI AC-04
-    /// ports them, this returns the analytic AND combination the managed
-    /// audio path already models.
+    /// (wave.cc:87-101). The combined rows 3/5/6/7 are measured die ROM tables
+    /// (wave6581__ST.h / wave6581_P_T.h / wave6581_PS_.h / wave6581_PST.h)
+    /// ported verbatim in <see cref="SidWaveTables"/> (FR-SID-WAVE-COMBINED,
+    /// PLAN-VICEPARITY-001 S7). Overridden in <see cref="Sid8580"/> to use
+    /// the 8580 ROM tables.
     /// </summary>
-    private static int WaveTable12(int waveform, int ix)
+    protected virtual int WaveTable12(int waveform, int ix)
     {
         int tri = (((ix & 0x800) != 0 ? ~ix : ix) & 0x7FF) << 1;   // wave.cc:96
         int saw = ix & 0xFFF;                                      // wave.cc:97
         return (waveform & 0x7) switch
         {
-            0 => 0xFFF,        // wave.cc:95 (noise-only selections mask through)
+            0 => 0xFFF,                             // wave.cc:95 (noise-only selections mask through)
             1 => tri,
             2 => saw,
-            3 => tri & saw,    // interim analytic; sampled __ST row is FR-SID-WAVE-SAWTRI AC-04
-            4 => 0xFFF,        // wave.cc:98 (pulse rail comes from the pulse level mask)
-            5 => tri,          // interim analytic; sampled P_T row
-            6 => saw,          // interim analytic; sampled PS_ row
-            _ => tri & saw,    // interim analytic; sampled PST row
+            3 => SidWaveTables.Wave6581_ST[ix],     // wave6581__ST.h (PLAN-VICEPARITY-001 S7)
+            4 => 0xFFF,                             // wave.cc:98 (pulse rail comes from the pulse level mask)
+            5 => SidWaveTables.Wave6581_PT[ix],     // wave6581_P_T.h
+            6 => SidWaveTables.Wave6581_PS[ix],     // wave6581_PS_.h
+            _ => SidWaveTables.Wave6581_PST[ix],    // wave6581_PST.h
         };
     }
 
@@ -346,7 +360,11 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // Wave zero (voice.cc:93): 0x380 for 6581, 0x9E0 for 8580.
         // WaveZeroLevel is the 8-bit representation (0x38 / 0x9E) so
         // multiply by 0x10 to reach the 12-bit domain.
-        return ((voice.Osc3 - WaveZeroLevel * 0x10) * EnvelopeDacTable[voice.Env.EnvelopeCounter]) >> 8;
+        // FR-SID-WAVE-DACRES AC-01 (PLAN-VICEPARITY-001 S7): voice output uses
+        // model_dac[waveform_output] (wave.h:587-593), not raw waveform_output.
+        // voice.Osc3 is the 12-bit waveform_output (0x000-0xFFF); WaveDacTable
+        // maps it through the R-2R DAC nonlinearity.
+        return ((WaveDacTable[voice.Osc3] - WaveZeroLevel * 0x10) * EnvelopeDacTable[voice.Env.EnvelopeCounter]) >> 8;
     }
 
     /// <summary>
@@ -387,6 +405,17 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// 2R/R = 2.20 no-termination table; Sid8580 overrides.
     /// </summary>
     protected virtual ReadOnlySpan<ushort> EnvelopeDacTable => EnvelopeDac6581;
+
+    /// <summary>
+    /// The 12-bit waveform DAC table (reSID model_dac[sid_model][waveform_output],
+    /// wave.h:587-593). 4096 entries; built with the same R-2R algorithm as the
+    /// envelope DAC but over 12 bits. For MOS 6581: 2R/R = 2.20, no termination.
+    /// Overridden in <see cref="Sid8580"/> for 2R/R = 2.00 with termination.
+    /// FR-SID-WAVE-DACRES AC-01 / PLAN-VICEPARITY-001 S7.
+    /// </summary>
+    private static readonly ushort[] WaveDac6581 = BuildEnvelopeDacTable(12, 2.20, term: false);
+    private protected static readonly ushort[] WaveDac8580Static = BuildEnvelopeDacTable(12, 2.00, term: true);
+    protected virtual ReadOnlySpan<ushort> WaveDacTable => WaveDac6581;
 
     /// <summary>
     /// Verbatim port of reSID build_dac_table (dac.cc:76-137): computes the
