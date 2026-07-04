@@ -53,7 +53,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // with a 2-cycle pipeline delay (wave.h:164-170). The reset seed is
     // 0x7ffffe (wave.cc:323). Output is 12 bits packed from SR bits
     // 20,18,14,11,9,5,2,0 into waveform bits 11-4 (wave.h:354-367).
-    private const float VoiceOutputScale = 2048.0f;
+    // PLAN-VICEPARITY-001 S8 (FR-SID-VOICE): 20-bit voice output range is
+    // (wave12dac - wave_zero) * envelope_dac, no >>8 shift (voice.h:99-103).
+    // The product spans [-2048*255, 2047*255] = ~[-521984, 521985].
+    // GenerateSample divides by this scale to normalize to [-1,1] float.
+    // 524288 = 2048 * 256 (was 2048 when >>8 was applied; removing >>8 adds factor 256).
+    private const float VoiceOutputScale = 524288.0f;
     // Bit 19 of the 24-bit accumulator (the implementation stores the
     // 24-bit value in a uint; the upper byte is the phase output).
     private const uint NoiseClockBit = 1u << 19;
@@ -83,13 +88,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private const uint ShiftRegisterResetBit6581 = 1000;
 
     /// <summary>
-    /// The die-specific waveform DAC zero point, scaled from reSID's 12-bit
-    /// voice model down to this implementation's 8-bit waveform samples.
-    /// Selected waveform output is centered around this point before the
-    /// envelope is applied; a digital waveform value of zero is therefore the
-    /// negative rail, not silence.
+    /// The waveform DAC zero point in the 12-bit domain (voice.cc:93-97).
+    /// reSID subtracts wave_zero from the 12-bit R-2R waveform DAC output
+    /// before multiplying by the envelope DAC, producing a signed 20-bit
+    /// voice output centered around zero. MOS 6581: 0x380; MOS 8580: 0x9e0.
+    /// FR-SID-VOICE AC-02, AC-03 [PLAN-VICEPARITY-001 S8].
     /// </summary>
-    protected virtual int WaveZeroLevel => 0x38;
+    protected virtual int WaveZeroLevel => 0x380;
 
 
     /// <summary>
@@ -357,14 +362,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // (floating-DAC bias) is FR-SID-VOICE AC-04, a later slice.
         if ((voice.Control & 0xF0) == 0)
             return 0;
-        // Wave zero (voice.cc:93): 0x380 for 6581, 0x9E0 for 8580.
-        // WaveZeroLevel is the 8-bit representation (0x38 / 0x9E) so
-        // multiply by 0x10 to reach the 12-bit domain.
-        // FR-SID-WAVE-DACRES AC-01 (PLAN-VICEPARITY-001 S7): voice output uses
-        // model_dac[waveform_output] (wave.h:587-593), not raw waveform_output.
-        // voice.Osc3 is the 12-bit waveform_output (0x000-0xFFF); WaveDacTable
-        // maps it through the R-2R DAC nonlinearity.
-        return ((WaveDacTable[voice.Osc3] - WaveZeroLevel * 0x10) * EnvelopeDacTable[voice.Env.EnvelopeCounter]) >> 8;
+        // PLAN-VICEPARITY-001 S8 (FR-SID-VOICE AC-01, AC-02): reSID voice
+        // output = (wave.output() - wave_zero) * envelope.output() with NO >>8
+        // (voice.h:99-103, voice.cc:105-113). WaveZeroLevel is the 12-bit
+        // constant (0x380 for 6581, 0x9e0 for 8580). WaveDacTable maps the
+        // 12-bit oscillator output through the R-2R nonlinearity (S7).
+        return (WaveDacTable[voice.Osc3] - WaveZeroLevel) * EnvelopeDacTable[voice.Env.EnvelopeCounter];
     }
 
     /// <summary>
@@ -535,43 +538,55 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// </summary>
     protected virtual int ApplyFilter(int voice0, int voice1, int voice2)
     {
-        // FR-SID-004 ac.4: per-voice routing. $D417 bits 0-2 gate which
-        // voice mixes into the filter input; the remaining voices bypass.
-        bool voice0Filtered = (_filterControl & 0x01) != 0;
-        bool voice1Filtered = (_filterControl & 0x02) != 0;
-        bool voice2Filtered = (_filterControl & 0x04) != 0;
-        // FR-SID-004 ac.5: external audio input via $D417 bit 3. The chip
-        // has no IAudioBackend-style input surface yet, so the routing bit
-        // is parsed but the external sample is 0 (silent). A follow-up
-        // slice will wire a real external-input mixer.
-        bool extInRouted = (_filterControl & 0x08) != 0;
-        _ = extInRouted;
+        // PLAN-VICEPARITY-001 S8 (FR-SID-MIXVOL AC-03..08, AC-11):
+        // reSID Filter::set_sum_mix() (filter8580new.cc:768-776) computes:
+        //   filt  = _filterControl & 0x0F  (per-voice routing from $D417)
+        //   mode  = _filterControl & 0xF0  (mode bits from $D418, inc. bit7=3OFF)
+        //   sum   = (enabled ? filt : 0x00) & voice_mask
+        //   mix   = (enabled ? (mode & 0x70) | (~(filt | (mode&0x80)>>5) & 0x0F) : 0x0F) & voice_mask
+        // sum   = filter input voices; mix lower nibble = direct-to-mixer voices.
+        // enabled = always true in this managed implementation (no power-down).
+        byte filt = (byte)(_filterControl & 0x0F);
+        byte mode = (byte)(_filterControl & 0xF0);
+        byte vm = _voiceMask;  // default 0x07 (filter8580new.cc:633)
 
+        // sum: voices routed to filter input (filter8580new.cc:772).
+        // FR-SID-MIXVOL AC-03: only voice_mask-enabled voices can enter filter.
+        byte sum = (byte)(filt & vm);
+
+        // mix lower nibble: direct-to-mixer voices (filter8580new.cc:773-775).
+        // 3OFF: (mode & 0x80) >> 5 = 0x04 when bit7 set -> removes voice3 bit.
+        // FR-SID-MIXVOL AC-04, AC-05: 3OFF removes voice3 from direct path.
+        byte v3offBit = (byte)((mode & 0x80) >> 5);          // 0x04 if 3OFF, 0x00 otherwise
+        byte directMask = (byte)((~(filt | v3offBit)) & 0x0F & vm);
+
+        // Build filter input sum from sum-masked voices.
         int filterInput = 0;
-        if (voice0Filtered) filterInput += voice0;
-        if (voice1Filtered) filterInput += voice1;
-        if (voice2Filtered) filterInput += voice2;
+        if ((sum & 0x01) != 0) filterInput += voice0;
+        if ((sum & 0x02) != 0) filterInput += voice1;
+        if ((sum & 0x04) != 0) filterInput += voice2;
 
+        // Build direct-to-mixer (bypass) sum from directMask voices.
         int bypassMix = 0;
-        if (!voice0Filtered) bypassMix += voice0;
-        if (!voice1Filtered) bypassMix += voice1;
-        if (!voice2Filtered) bypassMix += voice2;
+        if ((directMask & 0x01) != 0) bypassMix += voice0;
+        if ((directMask & 0x02) != 0) bypassMix += voice1;
+        if ((directMask & 0x04) != 0) bypassMix += voice2;
 
-        // FR-SID-004 ac.3: LP/BP/HP mode select via $D418 bits 4-6. The
-        // taps are additive: if all three are set, the output sums all
-        // three filter responses. If none are set, the filter is bypassed
-        // and the input passes through unchanged (the standard "filter off"
-        // configuration).
-        bool lp = (_filterControl & 0x10) != 0;
-        bool bp = (_filterControl & 0x20) != 0;
-        bool hp = (_filterControl & 0x40) != 0;
+        // FR-SID-004 ac.3 / FR-SID-MIXVOL AC-06: LP/BP/HP tap select from
+        // mode bits 4-6 ($D418 upper nibble bits 4-6). mix upper nibble =
+        // (mode & 0x70) in reSID. When no taps are set, filter is inactive
+        // (filter input voices do NOT reach the output; they go into the SVF
+        // but with no active tap there is no output path for them).
+        // FR-SID-MIXVOL AC-07: no-taps means filtered voices are NOT in output.
+        bool lp = (mode & 0x10) != 0;
+        bool bp = (mode & 0x20) != 0;
+        bool hp = (mode & 0x40) != 0;
 
         if (!(lp || bp || hp))
         {
-            // No mode bits selected: filter is effectively bypassed and
-            // routed voices still reach the mix (matches real hardware
-            // where the filter just becomes a unity-gain wire).
-            return filterInput + bypassMix;
+            // No mode taps: filter input voices are swallowed (no tap output).
+            // Only bypass (direct) voices reach the mixer.
+            return bypassMix;
         }
 
         // FR-SID-004 ac.1 + ac.6: 11-bit cutoff register mapped to Hz
@@ -626,7 +641,11 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// signal headroom (8-bit voice * envelope ~ 255 max) while
     /// preventing runaway feedback.
     /// </summary>
-    private const double FilterSaturation = 2048.0;
+    // PLAN-VICEPARITY-001 S8 (FR-SID-VOICE): voice outputs are now 20-bit
+    // (no >>8), scaling by 256x. FilterSaturation scales proportionally:
+    // 2048 (old 12-bit range) * 256 = 524288. Prevents SVF runaway at high
+    // resonance while allowing the full 20-bit signal range to pass.
+    private const double FilterSaturation = 524288.0;
 
     private readonly IBus _bus;
 
@@ -697,6 +716,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     protected byte _filterResonance;
     protected byte _filterControl;
     protected byte _volume;
+    /// <summary>
+    /// Voice routing mask (reSID Filter::voice_mask, filter8580new.cc:692-696).
+    /// Lower nibble enables which of the four possible filter inputs (voices 0-2
+    /// + EXT-IN) participate in the summer and direct-to-mixer paths. Default
+    /// 0x07 enables all three internal voices. The upper nibble is always 0xF0
+    /// so mode bits always pass through set_sum_mix regardless of voice_mask.
+    /// Set once at construction; not reset on chip reset.
+    /// FR-SID-MIXVOL AC-08 [PLAN-VICEPARITY-001 S8].
+    /// </summary>
+    protected byte _voiceMask = 0x07;
 
     private struct Voice
     {
@@ -1571,7 +1600,11 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 break;
             case 0x18:
                 _volume = (byte)(value & 0x0F);
-                _filterControl = (byte)((_filterControl & 0x0F) | (value & 0x70));
+                // PLAN-VICEPARITY-001 S8 (FR-SID-MIXVOL AC-01): preserve bit7
+                // (3OFF / V3OFF) in mode store. reSID writeMODE_VOL stores
+                // mode = v & 0xf0, vol = v & 0xf (filter8580new.cc:742-748).
+                // Previously masked 0x70 (dropped bit7). Must mask 0xF0.
+                _filterControl = (byte)((_filterControl & 0x0F) | (value & 0xF0));
                 break;
         }
     }

@@ -119,7 +119,9 @@ public sealed class SidSyncRingTestbitDivergentParityTests
     /// as SidWaveCoreDivergentParityTests.VoiceOut).
     /// </summary>
     private static readonly ushort[] _waveDac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
-    private static int VoiceOut(int wave12) => ((_waveDac6581[wave12] - 0x380) * 255) >> 8;
+    // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8.
+    // 20-bit formula: (waveDac[wave12] - wave_zero) * envDac (voice.h:99-103).
+    private static int VoiceOut(int wave12) => (_waveDac6581[wave12] - 0x380) * 255;
 
     /// <summary>reSID triangle table row at acc24 (wave.cc:96).</summary>
     private static int Tri12(uint acc24)

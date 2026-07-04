@@ -179,7 +179,11 @@ public sealed class SidWaveCoreDivergentParityTests
     /// same BuildEnvelopeDacTable call to stay bit-exact.
     /// </summary>
     private static readonly ushort[] _waveDac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
-    private static int VoiceOut(int wave12) => ((_waveDac6581[wave12] - 0x380) * 255) >> 8;
+    // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8 to match the
+    // 20-bit reSID formula (voice.h:99-103). Doc-comment specific values
+    // (e.g. VoiceOut(0x000)=-893, VoiceOut(0xFFF)=3186) were the S7 formula;
+    // new values are 256x larger (e.g. VoiceOut(0x000)=-220575).
+    private static int VoiceOut(int wave12) => (_waveDac6581[wave12] - 0x380) * 255;
 
     /// <summary>reSID triangle table row at accumulator <paramref name="acc24"/>: ((acc ^ -!!msb) &gt;&gt; 11) &amp; 0xffe (wave.cc:96).</summary>
     private static int Tri12(uint acc24)

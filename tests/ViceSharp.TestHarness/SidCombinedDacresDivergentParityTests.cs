@@ -864,10 +864,10 @@ public sealed class SidCombinedDacresDivergentParityTests
             // Oracle envelope counter (managed envelope should match after S1 parity).
             byte envCounter = ViceNativeBridge.SidExactGetState(native).GetEnvelopeCounters()[2];
 
-            // Expected: DAC-processed formula.
-            int expectedDac = (waveDac[0x400] - 0x380) * envDac[envCounter] >> 8;
-            // Current managed formula: (0x400 - 0x380) * envDac[envCounter] >> 8.
-            // After S7: managed formula should equal expectedDac.
+            // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8.
+            // Expected: DAC-processed formula, 20-bit (voice.h:99-103).
+            int expectedDac = (waveDac[0x400] - 0x380) * envDac[envCounter];
+            // After S7+S8: managed formula should equal expectedDac (no >>8).
             Assert.Equal(expectedDac, sid.CycleVoiceOutputs.Voice2);
         }
         finally { ViceNativeBridge.DestroyMachine(native); }
@@ -913,7 +913,8 @@ public sealed class SidCombinedDacresDivergentParityTests
             Assert.Equal(4096, waveDac.Length);
 
             byte envCounter = ViceNativeBridge.SidExactGetState(native).GetEnvelopeCounters()[2];
-            int expected = (waveDac[0xA00] - 0x380) * envDac[envCounter] >> 8;
+            // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8.
+            int expected = (waveDac[0xA00] - 0x380) * envDac[envCounter];
             Assert.Equal(expected, sid.CycleVoiceOutputs.Voice2);
         }
         finally { ViceNativeBridge.DestroyMachine(native); }
@@ -1176,8 +1177,9 @@ public sealed class SidCombinedDacresDivergentParityTests
             ushort[] envDac  = Sid6581.BuildEnvelopeDacTable(8,  2.20, term: false);
             byte envCounter  = ViceNativeBridge.SidExactGetState(native).GetEnvelopeCounters()[2];
 
-            int rawVoiceOutput = (0x400 - 0x380) * envDac[envCounter] >> 8;
-            int dacVoiceOutput = (waveDac[0x400] - 0x380) * envDac[envCounter] >> 8;
+            // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8.
+            int rawVoiceOutput = (0x400 - 0x380) * envDac[envCounter];
+            int dacVoiceOutput = (waveDac[0x400] - 0x380) * envDac[envCounter];
 
             // Nonlinear DAC must produce a different voice output than linear raw.
             Assert.NotEqual(rawVoiceOutput, dacVoiceOutput);
@@ -1215,15 +1217,14 @@ public sealed class SidCombinedDacresDivergentParityTests
         // The constants are 0x380 for 6581 and 0x9E0 for 8580 (voice.cc).
         // Access through VoiceWaveZeroLevel12 test seam once available; for now
         // verify the formula used in ComputeVoiceOutput against expected constants.
-        // WaveZeroLevel = 0x38 (6581), 0x9E (8580) from the chip base property.
-
-        // 6581: WaveZeroLevel = 0x38 -> 12-bit: 0x38 * 0x10 = 0x380.
-        // 8580: WaveZeroLevel = 0x9E -> 12-bit: 0x9E * 0x10 = 0x9E0.
+        // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): WaveZeroLevel is now
+        // the 12-bit constant directly: 0x380 (6581), 0x9E0 (8580).
+        // Old code had 0x38/0x9E (8-bit) with * 0x10 in ComputeVoiceOutput.
 
         // Verify via formula-level round-trip: set up a sawtooth at wave_zero ix and
-        // confirm voice output = 0 (DC centered). At osc3 = WaveZeroLevel * 16:
-        // (model_dac[WaveZeroLevel * 16] - WaveZeroLevel * 16) * env >> 8.
-        // After S7 this may not be exactly 0 because model_dac is nonlinear, but
+        // confirm voice output = 0 (DC centered). At osc3 = WaveZeroLevel (now 12-bit):
+        // (model_dac[WaveZeroLevel] - WaveZeroLevel) * env (no >>8, S8).
+        // May not be exactly 0 because model_dac is nonlinear, but
         // the wave_zero CONSTANTS must be 0x380 and 0x9E0 respectively.
 
         // Formula: assert correct bit-pattern of WaveZeroLevel constants.

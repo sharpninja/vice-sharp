@@ -131,25 +131,24 @@ public sealed class SidWaveformFaithfulParityTests
     /// <summary>
     /// Mirror of the exact GenerateSample arithmetic for a single voice at
     /// full envelope (0xFF), master volume 15, filter mode bits clear:
-    /// envelopeAdjusted = ((WaveDac[sample] - 0x380) * 0xFF) arithmetic-shifted
-    /// right 8, then envelopeAdjusted * 1.0f / 2048.0f + 0.05f, clamped to
-    /// [-1, 1].
-    /// wave_zero is 0x380 for the 6581 die (voice.cc:93); the 8-bit form
-    /// WaveZeroLevel=0x38 is multiplied by 0x10 in ComputeVoiceOutput to reach
-    /// the 12-bit domain [PLAN-VICEPARITY-001 S3]. After S7, WaveDac maps the
-    /// 12-bit waveform index through the nonlinear R-2R ladder before the
+    /// envelopeAdjusted = (WaveDac[sample] - 0x380) * 0xFF (no >>8 shift;
+    /// SANCTIONED REBASE S8: PLAN-VICEPARITY-001 S8 removed the >>8 from
+    /// ComputeVoiceOutput to match reSID voice.h:99-103).
+    /// voiceMix = envelopeAdjusted / 524288.0f + 0.05f, clamped to [-1, 1].
+    /// wave_zero is 0x380 for the 6581 die (voice.cc:93, now stored as
+    /// WaveZeroLevel=0x380 directly in 12-bit form). After S7, WaveDac maps
+    /// the 12-bit waveform index through the nonlinear R-2R ladder before the
     /// wave_zero subtraction (dac.cc build_dac_table, bits=12, 2R/R=2.20).
     /// Same operation sequence as the per-cycle chain feeding
-    /// Sid6581.GenerateSample, so float equality is exact. The FR-SID-ENV
-    /// AC-50 envelope DAC is identity at the 0xFF plateau (the 6581
-    /// model_dac[0xFF] is exactly 255), so the mirrored multiplicand is
-    /// unchanged by that remediation.
+    /// Sid6581.GenerateSample, so float equality is exact.
     /// </summary>
     private static float ExpectedSampleAtFullEnvelope(int waveformSample)
     {
-        var envelopeAdjusted = ((_waveDac6581[waveformSample] - 0x380) * 0xFF) >> 8;
+        // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8,
+        // changed scale from 2048.0f to 524288.0f (= 2048 * 256).
+        var envelopeAdjusted = (_waveDac6581[waveformSample] - 0x380) * 0xFF;
         const float volumeFraction = 15 / 15.0f;
-        var voiceMix = envelopeAdjusted * volumeFraction / 2048.0f;
+        var voiceMix = envelopeAdjusted * volumeFraction / 524288.0f;
         const float digiDcOffset = volumeFraction * 0.05f;
         return Math.Clamp(voiceMix + digiDcOffset, -1.0f, 1.0f);
     }

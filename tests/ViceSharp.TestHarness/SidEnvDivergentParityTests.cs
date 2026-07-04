@@ -44,6 +44,7 @@ public sealed class SidEnvDivergentParityTests
     /// no termination, MOSFET leakage 0.0075). Used to mirror
     /// <c>ComputeVoiceOutput</c> after PLAN-VICEPARITY-001 S7 replaces the
     /// raw waveform index with <c>WaveDacTable[Osc3]</c>.
+    /// SANCTIONED REBASE (S8): VoiceOut formula updated to 20-bit no-shift.
     /// </summary>
     private static readonly ushort[] _waveDac6581 = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
 
@@ -54,8 +55,11 @@ public sealed class SidEnvDivergentParityTests
     /// envelope counter). Default env=255 corresponds to counter 0xFF
     /// (dac[0xFF]=255) on the 6581 plateau.
     /// </summary>
+    // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8 to match the
+    // 20-bit reSID formula (wave.output() - wave_zero) * envelope.output()
+    // with no right-shift (voice.h:99-103, voice.cc:105-113).
     private static int VoiceOut(int wave12, int envDacLevel = 255)
-        => ((_waveDac6581[wave12] - 0x380) * envDacLevel) >> 8;
+        => (_waveDac6581[wave12] - 0x380) * envDacLevel;
 
     private static Sid6581 BuildSid()
     {
@@ -121,22 +125,23 @@ public sealed class SidEnvDivergentParityTests
     /// whose 12-bit waveform index is <paramref name="waveformSample"/> and
     /// whose envelope DAC level is <paramref name="envelopeDacLevel"/>, at
     /// master volume 15 with filter mode bits clear:
-    /// envelopeAdjusted = ((WaveDac[waveformSample] - 0x380) * dacLevel)
-    /// arithmetic-shifted right 8, then envelopeAdjusted / 2048f + 0.05f,
-    /// clamped to [-1, 1].
-    /// wave_zero is 0x380 for the 6581 die (voice.cc:93); the 8-bit form
-    /// WaveZeroLevel=0x38 is multiplied by 0x10 in ComputeVoiceOutput to reach
-    /// the 12-bit domain [PLAN-VICEPARITY-001 S3]. After S7, WaveDac maps the
-    /// 12-bit waveform index through the nonlinear R-2R ladder before the
-    /// wave_zero subtraction (dac.cc build_dac_table, bits=12, 2R/R=2.20).
+    /// envelopeAdjusted = (WaveDac[waveformSample] - 0x380) * dacLevel
+    /// (no >>8 shift; SANCTIONED REBASE S8), then envelopeAdjusted / 524288f
+    /// + 0.05f, clamped to [-1, 1].
+    /// wave_zero is 0x380 for the 6581 die (voice.cc:93).
+    /// After S7, WaveDac maps the 12-bit waveform index through the nonlinear
+    /// R-2R ladder before the wave_zero subtraction (dac.cc build_dac_table,
+    /// bits=12, 2R/R=2.20). After S8, no >>8 shift (voice.h:99-103).
     /// Same operation sequence as Sid6581.GenerateSample, so float equality
     /// is exact.
     /// </summary>
     private static float ExpectedSample(int waveformSample, int envelopeDacLevel)
     {
-        var envelopeAdjusted = ((_waveDac6581[waveformSample] - 0x380) * envelopeDacLevel) >> 8;
+        // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8 and
+        // changed scale from 2048.0f to 524288.0f (= 2048 * 256).
+        var envelopeAdjusted = (_waveDac6581[waveformSample] - 0x380) * envelopeDacLevel;
         const float VolumeFraction = 15 / 15.0f;
-        var voiceMix = envelopeAdjusted * VolumeFraction / 2048.0f;
+        var voiceMix = envelopeAdjusted * VolumeFraction / 524288.0f;
         const float DigiDcOffset = VolumeFraction * 0.05f;
         return Math.Clamp(voiceMix + DigiDcOffset, -1.0f, 1.0f);
     }
@@ -668,14 +673,14 @@ public sealed class SidEnvDivergentParityTests
     /// exactly this cycle's filter output.
     /// Acceptance: voice 3 (TEST | sawtooth | gate) holds waveform sample 0
     /// (12-bit OSC3 = 0x000 via set_waveform_output); with filter mode bits
-    /// clear the filter stage is the exact unity sum of the per-cycle voice
-    /// outputs. At the 0xFF envelope plateau the committed filter output and
-    /// the external-filter output both read exactly -862 (((WaveDac[0x000]
-    /// - 0x380) * 255) >> 8 = (31-896)*255>>8); after gate-off walks the
-    /// envelope to 0xAA they both read exactly -568 ((WaveDac[0x000] - 0x380)
-    /// * dac[0xAA]=168 >> 8 = (31-896)*168>>8), proving both stages re-clock
-    /// from fresh voice outputs every cycle [S7: WaveDac[0]=31 shifts values
-    /// from -893/-588 under the old raw-index formula].
+    /// clear the filter stage is the exact bypass sum of the per-cycle voice
+    /// outputs (S8: no-taps bypasses only direct voices, not filtered voices).
+    /// At the 0xFF envelope plateau the committed filter output and the
+    /// external-filter output both read exactly -220575 (SANCTIONED REBASE S8:
+    /// (WaveDac[0x000] - 0x380) * 255 = (31-896)*255, no >>8); after gate-off
+    /// walks the envelope to 0xAA they both read exactly -145320
+    /// ((WaveDac[0x000] - 0x380) * dac[0xAA]=168 = (31-896)*168),
+    /// proving both stages re-clock every cycle [S7: WaveDac[0]=31; S8: no >>8].
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-CLOCK-07", ParityTag.Divergent, pending: false)]
@@ -687,12 +692,12 @@ public sealed class SidEnvDivergentParityTests
         sid.Write(0xD412, 0x29);        // TEST | sawtooth | gate: waveform sample pinned to 0
 
         TickUntilEnvelope(sid, voice: 2, target: 0xFF, maxCycles: 6000);
-        Assert.Equal(VoiceOut(0), sid.CycleFilterOutput);           // (WaveDac[0]-0x380)*255>>8 = -862
+        Assert.Equal(VoiceOut(0), sid.CycleFilterOutput);           // S8: (WaveDac[0]-0x380)*255 = -220575
         Assert.Equal(VoiceOut(0), sid.CycleExternalFilterOutput);   // extfilt consumes this cycle's filter output
 
         sid.Write(0xD412, 0x28);        // gate off: release 0 walks the counter down
         TickUntilEnvelope(sid, voice: 2, target: 0xAA, maxCycles: 6000);
-        Assert.Equal(VoiceOut(0, 168), sid.CycleFilterOutput);           // (WaveDac[0]-0x380)*168>>8 = -568
+        Assert.Equal(VoiceOut(0, 168), sid.CycleFilterOutput);           // S8: (WaveDac[0]-0x380)*168 = -145320
         Assert.Equal(VoiceOut(0, 168), sid.CycleExternalFilterOutput);
     }
 

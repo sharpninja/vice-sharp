@@ -20,7 +20,9 @@ public partial class Sid8580 : Sid6581
     private const int DcOffset8580 = 0;
 
     /// <inheritdoc />
-    protected override int WaveZeroLevel => 0x9E;
+    /// PLAN-VICEPARITY-001 S8 (FR-SID-VOICE AC-03): MOS 8580 wave_zero in
+    /// 12-bit domain = 0x9e0 (voice.cc:97). Was 0x9E (8-bit).
+    protected override int WaveZeroLevel => 0x9E0;
 
     /// <summary>
     /// FR-SID-OSC3ENV3 AC-05 [PLAN-VICEPARITY-001 S2]: the 8580 die serves
