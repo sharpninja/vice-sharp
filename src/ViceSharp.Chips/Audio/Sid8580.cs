@@ -19,6 +19,12 @@ public partial class Sid8580 : Sid6581
     // cleaner output stage the offset is small but observable.
     private const int DcOffset8580 = 0;
 
+    /// <summary>
+    /// Keep Chamberlin SVF path for 8580 until S10 lands the 8580 reSID filter.
+    /// PLAN-VICEPARITY-001 S9.
+    /// </summary>
+    protected override bool UsesReSidFilter => false;
+
     /// <inheritdoc />
     /// PLAN-VICEPARITY-001 S8 (FR-SID-VOICE AC-03): MOS 8580 wave_zero in
     /// 12-bit domain = 0x9e0 (voice.cc:97). Was 0x9E (8-bit).

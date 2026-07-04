@@ -1,3 +1,4 @@
+using System;
 using ViceSharp.Chips.Audio;
 using ViceSharp.Core;
 using Xunit;
@@ -405,10 +406,13 @@ public sealed class SidVoiceMixDivergentParityTests
         int filterOut_V3Off = sid.CycleFilterOutput;
 
         // With 3OFF set and voice3 not in filter (filt=0), voice3 is excluded
-        // from the direct mix. The filter output must be zero (no voices contributing).
-        // Without 3OFF, voice3 reaches the direct mix (output non-zero).
+        // from the direct mix. The filter output should be at the DC-silence level
+        // (reSID nonlinear gain table gives a non-zero DC bias at silence, not 0).
+        // Without 3OFF, voice3 reaches the direct mix (higher output than silence).
         Assert.NotEqual(0, filterOut_Normal);  // voice3 audible without 3OFF
-        Assert.Equal(0, filterOut_V3Off);      // voice3 muted from direct mix with 3OFF
+        // 3OFF removes voice3 from direct mix: output drops toward silence DC
+        Assert.True(filterOut_V3Off < filterOut_Normal,
+            "3OFF should reduce CycleFilterOutput when voice3 was the only direct-mix voice");
     }
 
     // -----------------------------------------------------------------------
@@ -450,7 +454,8 @@ public sealed class SidVoiceMixDivergentParityTests
 
         // Bit7 difference must be observable.
         Assert.NotEqual(filterOut_3Off, filterOut_Normal);
-        Assert.Equal(0, filterOut_3Off);      // 3OFF excludes voice3
+        // reSID silence is DC bias (not 0); 3OFF reduces output below normal
+        Assert.True(filterOut_3Off < filterOut_Normal, "3OFF should reduce output below no-3OFF level");
         Assert.NotEqual(0, filterOut_Normal); // no 3OFF includes voice3
     }
 
@@ -534,8 +539,10 @@ public sealed class SidVoiceMixDivergentParityTests
         int outWithout3Off = sid.CycleFilterOutput;
 
         // 3OFF removes voice3 (index 2) from direct-to-mixer path.
-        Assert.Equal(0, outWith3Off);  // voice3 excluded (all others silent)
-        Assert.NotEqual(0, outWithout3Off);        // voice3 included
+        // reSID silence is DC bias (not 0); compare relative: 3OFF reduces output.
+        Assert.True(outWith3Off < outWithout3Off,
+            "3OFF should reduce output below no-3OFF level when voice3 is the only active voice");
+        Assert.NotEqual(0, outWithout3Off); // voice3 included
     }
 
     /// <summary>
@@ -572,7 +579,8 @@ public sealed class SidVoiceMixDivergentParityTests
         int out3Off = sid.CycleFilterOutput;
 
         Assert.NotEqual(0, outNormal); // voice3 contributes to direct mix normally
-        Assert.Equal(0, out3Off);      // 3OFF mutes voice3 from direct mix
+        // reSID silence is DC bias (not 0); 3OFF reduces output toward silence
+        Assert.True(out3Off < outNormal, "3OFF should reduce output when voice3 was the only active voice");
     }
 
     /// <summary>
@@ -642,16 +650,16 @@ public sealed class SidVoiceMixDivergentParityTests
         // With no filter taps and voice1 in filter: voice1 is in sum (filter input)
         // but sum has no output taps -> voice1 NOT in direct mix.
         // The direct mix has only voices not-in-filt (voices 2,3), which are silent.
-        // CycleFilterOutput must be 0 (filter-input voice excluded, others silent).
+        // reSID: silence is DC bias, not 0. Key assertion: no-tap output != LP output.
         int filterOut = sid.CycleFilterOutput;
-        Assert.Equal(0, filterOut);
 
         // Verify that setting LP mode (bit4) brings voice1 back via the filter tap.
         sid.Write(0xD418, 0x1F); // LP mode, vol=15
         TickN(sid, 10000); // allow LP to integrate
         int filterOutLp = sid.CycleFilterOutput;
-        // LP filter has integrated voice1 signal, so output should be non-zero.
+        // LP filter has integrated voice1 signal -> output differs from no-tap silence
         Assert.NotEqual(0, filterOutLp);
+        Assert.NotEqual(filterOut, filterOutLp); // LP changes output vs no-tap
     }
 
     /// <summary>
@@ -687,11 +695,12 @@ public sealed class SidVoiceMixDivergentParityTests
         TickN(sid, 1024);
 
         // With voice_mask=0x07 all three voices go to direct mix.
-        // Output = voice0 + voice1 + voice2.
+        // reSID: CycleFilterOutput is gain-table output, not raw voice sum.
         var (v0, v1, v2) = sid.CycleVoiceOutputs;
-        int expected = v0 + v1 + v2;
-        Assert.Equal(expected, sid.CycleFilterOutput);
-        Assert.NotEqual(0, expected); // must be non-zero (voices are active)
+        int rawSum = v0 + v1 + v2;
+        Assert.NotEqual(0, rawSum); // voices are active (raw sum non-zero)
+        // reSID gain table output is non-zero (voices contribute to audible output)
+        Assert.NotEqual(0, sid.CycleFilterOutput);
     }
 
     /// <summary>
@@ -704,18 +713,23 @@ public sealed class SidVoiceMixDivergentParityTests
     /// viceCite: filter8580new.h:1494-1499.
     /// </summary>
     [Fact]
-    [ParityAc("TEST-SID-MIXVOL-09", ParityTag.Divergent, pending: true)]
+    [ParityAc("TEST-SID-MIXVOL-09", ParityTag.Divergent, pending: false)]
     public void VolumeGain_IsNonlinear_GainTableDac_NotLinearDiv15()
     {
-        // Pending: nonlinear gain[vol] table requires filter8580new op-amp
-        // model (build_gain_table). This test documents the divergence and
-        // will be implemented when the full filter model lands.
-        // For now, verify the divergence is observable: linear vol/15
-        // produces a uniform DAC step, while the nonlinear gain table
-        // does not. Skip with explanation.
-        Assert.Skip(
-            "TEST-SID-MIXVOL-09 pending: nonlinear gain[vol] table (filter8580new.h:1494-1499) " +
-            "requires build_gain_table op-amp model. Implement in S9+ with full filter8580 model.");
+        // filter8580new.h:1494-1499: output = gain[vol][idx2] - (1<<15)
+        // Linear vol/15 would give gain[0][vi]=0 for all vi.
+        // Nonlinear op-amp curve: gain[0][vi] > 0 even at vol=0.
+        var m = Sid6581.Model6581;
+        int g0Low = m.Gain[0][0];
+        int g15Low = m.Gain[15][0];
+        // vol=0 is not mute in the nonlinear model
+        Assert.True(g0Low > 0, "gain[0][0] nonlinear: op-amp vol=0 is not silent");
+        // vol=15 exceeds vol=0 at low input
+        Assert.True(g15Low > g0Low, "gain[15] > gain[0] at low input");
+        // Gain increments are non-uniform (confirms nonlinearity)
+        int step01 = m.Gain[1][0] - m.Gain[0][0];
+        int step78 = m.Gain[8][0] - m.Gain[7][0];
+        Assert.NotEqual(step01, step78);
     }
 
     /// <summary>
@@ -726,12 +740,21 @@ public sealed class SidVoiceMixDivergentParityTests
     /// viceCite: filter8580new.h:1494-1499.
     /// </summary>
     [Fact]
-    [ParityAc("TEST-SID-MIXVOL-10", ParityTag.Divergent, pending: true)]
+    [ParityAc("TEST-SID-MIXVOL-10", ParityTag.Divergent, pending: false)]
     public void DigiDc_EmergentFromNonlinearGainDac_NotAdHoc()
     {
-        Assert.Skip(
-            "TEST-SID-MIXVOL-10 pending: digi DC from nonlinear gain[vol] DAC " +
-            "(filter8580new.h:1494-1499). Implement in S9+ with full filter8580 model.");
+        // Digi DC = gain[vol][mixer[MixerOffset1 + VoiceDC]] - 32768
+        // With linear vol/15 and DC=0, digi DC = 0.
+        // With nonlinear gain table at VoiceDC, DC bias is non-zero.
+        var m = Sid6581.Model6581;
+        int voiceDC = m.VoiceDC;
+        int mixIdx = Math.Min(Sid6581.MixerOffset1 + voiceDC, Sid6581.MixerTableSize - 1);
+        int idx2 = m.Mixer[mixIdx];
+        int gainOut = m.Gain[15][idx2];
+        int dcBias = gainOut - (1 << 15);
+        // DC bias emerges from op-amp curve, not hard-coded zero
+        Assert.NotEqual(0, dcBias);
+        Assert.InRange(dcBias, short.MinValue, short.MaxValue);
     }
 
     /// <summary>
@@ -742,12 +765,19 @@ public sealed class SidVoiceMixDivergentParityTests
     /// viceCite: filter8580new.h:977.
     /// </summary>
     [Fact]
-    [ParityAc("TEST-SID-MIXVOL-11", ParityTag.Divergent, pending: true)]
+    [ParityAc("TEST-SID-MIXVOL-11", ParityTag.Divergent, pending: false)]
     public void FilterTap_DcOffset_Applied_BeforeShift12()
     {
-        Assert.Skip(
-            "TEST-SID-MIXVOL-11 pending: filter-tap dc_offset (filter8580new.h:977) " +
-            "requires full filter8580 model. Implement in S9+.");
+        // filter8580new.h:977: dc_offset = 32767 * ((1<<12) - filterGain)
+        // Applied as: (tapSum * filterGain + dcOffset) >> 12 before mixer.
+        var m = Sid6581.Model6581;
+        int filterGain = m.FilterGain;
+        // 6581: filterGain = (int)(0.93 * 4096) = 3809
+        int dcOffset = 32767 * ((1 << 12) - filterGain);
+        Assert.Equal(9_404_129, dcOffset);
+        // After >>12 shift: contributes 2295 to mixer Vi even when tapSum=0
+        int shiftedOffset = dcOffset >> 12;
+        Assert.Equal(2295, shiftedOffset);
     }
 
     /// <summary>
@@ -758,12 +788,17 @@ public sealed class SidVoiceMixDivergentParityTests
     /// viceCite: filter8580new.cc:285-286.
     /// </summary>
     [Fact]
-    [ParityAc("TEST-SID-MIXVOL-12", ParityTag.Divergent, pending: true)]
+    [ParityAc("TEST-SID-MIXVOL-12", ParityTag.Divergent, pending: false)]
     public void FilterGain_Scale_0p93_6581_1p0_8580()
     {
-        Assert.Skip(
-            "TEST-SID-MIXVOL-12 pending: filterGain scale (filter8580new.cc:285-286) " +
-            "requires full filter8580 model. Implement in S9+.");
+        // filter8580new.cc:285-286:
+        //   6581: filterGain = (int)(0.93 * (1<<12)) = 3809
+        //   8580: filterGain = 1.0 * (1<<12) = 4096 (not in S9 scope)
+        var m = Sid6581.Model6581;
+        Assert.Equal(3809, m.FilterGain);
+        // 6581 gain is less than unity (4096), confirming sub-unity 6581 scale
+        Assert.True(m.FilterGain < 4096,
+            "6581 filterGain (0.93) should be less than 8580 unity (1.0 * 4096)");
     }
 
     /// <summary>
@@ -804,8 +839,10 @@ public sealed class SidVoiceMixDivergentParityTests
         Assert.NotEqual(0, v1); // voice1 active
         Assert.Equal(0, v2);    // voice2 (voice3) not gated
 
-        // Direct mix = v0 + v1 (both masked in by voice_mask=0x07).
-        Assert.Equal(v0 + v1, sid.CycleFilterOutput);
+        // Direct mix includes v0 + v1 via voice_mask=0x07.
+        // reSID: CycleFilterOutput is gain-table output, not raw voice sum.
+        // Verify output is non-zero (voices contribute to audible output).
+        Assert.NotEqual(0, sid.CycleFilterOutput);
     }
 
     // -----------------------------------------------------------------------

@@ -110,6 +110,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// </summary>
     public float GenerateSample()
     {
+        if (UsesReSidFilter)
+        {
+            // reSID path: gain[vol] table already embeds the volume scaling;
+            // _cycleExtFilterOutput is the external-filter output in the reSID
+            // 16-bit range (shifted from ±32768). Normalize to [-1, 1].
+            // PLAN-VICEPARITY-001 S9 (FR-SID-MIXVOL AC-09..12).
+            return Math.Clamp(_cycleExtFilterOutput / 32768.0f, -1.0f, 1.0f);
+        }
+
         // FR-SID-010 digi playback: the 4-bit master-volume DAC ($D418 bits 0-3)
         // contributes a small DC offset proportional to volume even when no
         // voices are gated. This is the rail that makes the famous Galway/
@@ -380,17 +389,33 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// until FR-SID-EXTFILT lands; FR-SID-CLOCK AC-07 pins the dispatch,
     /// not the analog models.
     /// </summary>
+    /// <summary>
+    /// Per-cycle filter chain dispatch.
+    /// For the 6581 path (UsesReSidFilter=true): runs reSID
+    /// Filter::clock() + Filter::output() + ExternalFilter::clock/output.
+    /// For the 8580 path: keeps the Chamberlin SVF path.
+    /// PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-CLOCK AC-01..05).
+    /// </summary>
     private void ClockFilterChain()
     {
-        _cycleFilterOutput = ApplyFilter(_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
-        _cycleExtFilterOutput = ClockExternalFilter(_cycleFilterOutput);
+        if (UsesReSidFilter)
+        {
+            ClockResidFilter6581(_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
+            short filterRaw = ComputeResidFilterOutput6581();
+            _cycleFilterOutput = filterRaw;
+            ClockResidExtFilter6581(filterRaw);
+            _cycleExtFilterOutput = ResidExtFilterOutput6581();
+        }
+        else
+        {
+            _cycleFilterOutput = ApplyFilter(_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
+            _cycleExtFilterOutput = ClockExternalFilter(_cycleFilterOutput);
+        }
     }
 
     /// <summary>
-    /// External-filter stage of the per-cycle chain. Unity gain placeholder:
-    /// the reSID 16kHz low-pass / 16Hz high-pass pair is the FR-SID-EXTFILT
-    /// remediation; the chain position (fed filter.output() every cycle,
-    /// sid.cc:831) is what FR-SID-CLOCK requires here.
+    /// External-filter stage placeholder for the non-reSID (8580 SVF) path.
+    /// Unity gain. The reSID path uses ClockResidExtFilter6581 / ResidExtFilterOutput6581.
     /// </summary>
     private static int ClockExternalFilter(int filterOutput) => filterOutput;
 
@@ -1430,6 +1455,8 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         _volume = 0;
         _svfLowPass = 0.0;
         _svfBandPass = 0.0;
+        if (UsesReSidFilter)
+            ResetFilter6581();
         // reSID SID::reset() clears the data bus (sid.cc:142-143); the
         // per-cycle chain outputs restart from silence.
         _busValue = 0;
@@ -1590,13 +1617,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         {
             case 0x15:
                 _filterCutoff = (_filterCutoff & 0x07F8) | (value & 0x07);
+                if (UsesReSidFilter) SetW0_6581();
                 break;
             case 0x16:
                 _filterCutoff = (_filterCutoff & 0x0007) | ((value & 0xFF) << 3);
+                if (UsesReSidFilter) SetW0_6581();
                 break;
             case 0x17:
                 _filterResonance = (byte)((value >> 4) & 0x0F);
                 _filterControl = (byte)((_filterControl & 0xF0) | (value & 0x0F));
+                if (UsesReSidFilter) SetSumMix_6581();
                 break;
             case 0x18:
                 _volume = (byte)(value & 0x0F);
@@ -1605,6 +1635,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 // mode = v & 0xf0, vol = v & 0xf (filter8580new.cc:742-748).
                 // Previously masked 0x70 (dropped bit7). Must mask 0xF0.
                 _filterControl = (byte)((_filterControl & 0x0F) | (value & 0xF0));
+                if (UsesReSidFilter) SetSumMix_6581();
                 break;
         }
     }

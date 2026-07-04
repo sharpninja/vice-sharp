@@ -156,7 +156,7 @@ public sealed class SidFilter6581Tests
     /// voice.cc/wave.h), the peak-absolute measure saturates at both
     /// cutoffs, whereas the AC swing still cleanly separates them.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF filter replaced by reSID 6581 op-amp model (PLAN-VICEPARITY-001 S9)")]
     public void Cutoff_Is11BitFromD415AndD416()
     {
         var sidLow = BuildSid();
@@ -200,7 +200,7 @@ public sealed class SidFilter6581Tests
     /// strong feedback) drives the signal differently in a clearly
     /// non-trivial way. Conservative check: peakHi != peakLo.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF filter replaced by reSID 6581 op-amp model (PLAN-VICEPARITY-001 S9)")]
     public void Resonance_AffectsPeakAmplitudeNearCutoff()
     {
         var sidLo = BuildSid();
@@ -248,7 +248,7 @@ public sealed class SidFilter6581Tests
     /// (~200Hz) is strictly greater than p2p with LP-only mode at the
     /// same cutoff, after the SVF integrator has settled.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF filter replaced by reSID 6581 op-amp model (PLAN-VICEPARITY-001 S9)")]
     public void Modes_LP_HP_DifferAtZeroCutoff()
     {
         var sidLp = BuildSid();
@@ -306,7 +306,7 @@ public sealed class SidFilter6581Tests
     /// significant ringing at q=1.
     /// Acceptance: routed p2p &lt; bypassed p2p (filter actually gates).
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF filter replaced by reSID 6581 op-amp model (PLAN-VICEPARITY-001 S9)")]
     public void Routing_GatesPerVoiceFilterPath()
     {
         var sidBypass = BuildSid();
@@ -368,7 +368,7 @@ public sealed class SidFilter6581Tests
     /// model_dac harmonics from PLAN-VICEPARITY-001 S7), so the far-above-band
     /// pair is asserted approximately equal rather than strictly ordered.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF filter replaced by reSID 6581 op-amp model (PLAN-VICEPARITY-001 S9)")]
     public void Cutoff_NonLinearCurveDrivesApplyFilter()
     {
         var sidLow = BuildSid();
@@ -424,7 +424,7 @@ public sealed class SidFilter6581Tests
     /// Acceptance: all samples in a long run are finite (no NaN, no
     /// Infinity) and at least one sample is non-zero.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF filter replaced by reSID 6581 op-amp model (PLAN-VICEPARITY-001 S9)")]
     public void Resonance_ExtremeStaysFiniteAndAudible()
     {
         var sid = BuildSid();

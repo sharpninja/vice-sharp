@@ -1984,6 +1984,7 @@ extern void resid_shim_write(sound_t *psid, uint16_t addr, uint8_t value);
 extern int resid_shim_output(sound_t *psid);
 extern void resid_shim_reset(sound_t *psid);
 extern void resid_shim_state_read(sound_t *psid, sid_snapshot_state_t *sid_state);
+extern void resid_shim_filter_probe(sound_t *psid, int *out);
 
 VICE_SHIM_API int vice_sid_exact_open(void *machine)
 {
@@ -2124,6 +2125,7 @@ VICE_SHIM_API void vice_sid_exact_get_state(void *machine, struct vice_sid_exact
         state->write_pipeline = snapshot.write_pipeline;
         state->write_address = snapshot.write_address;
         state->voice_mask = snapshot.voice_mask;
+        resid_shim_filter_probe(g_shim_sid_psid, state->filter_probe);
     }
     LeaveCriticalSection(&g_state_lock);
 }
