@@ -339,30 +339,37 @@ public sealed class VicColorDisplayModeDivergentParityTests
         // Cregs[0x21]=3; pixel_buffer seeded with 3 after vis_en cycles.
         vic.Write(BackgroundColor, 0x03);
 
-        // Advance to display cycle 14 (first vis_en cycle of this line).
-        // draw_colors8 for cycle 14 has run; pixel_buffer[0] was resolved to
-        // Cregs[0x21]=3 (at cycle 13's i=7 step).
-        AdvanceTo(vic, DisplayLine, 14);
+        // Advance to display cycle 17 (first pure display cycle on a CSEL=1 line
+        // with VICE-correct border timing from PLAN-VICEPARITY-001 V7). With
+        // left border opening at managed RasterX 16 (VICE PAL Phi2(17)), cycles
+        // 14-16 are still border/border-transition cycles where DrawBorder8
+        // overlays ColD020 on top of the graphics pixels. Cycle 17 is the first
+        // cycle where DrawBorder8 early-exits (border_state=0, main_border=false)
+        // and the graphics + colour pipeline runs unobstructed.
+        // After cycle 17, pixel_buffer[0] = Cregs[0x21] = 3 (resolved at i=7),
+        // pixel_buffer[1..7] = 0x21 (loaded from RenderBuffer, not yet resolved).
+        AdvanceTo(vic, DisplayLine, 17);
 
-        // Mid-line write between cycles 14 and 15.
+        // Mid-line write between cycles 17 and 18.
         // V4: MonitorColorStore -> Cregs[0x21]=7 immediately; VicLastColorReg=0x21.
         // V3: _regs[0x21]=7 immediately; DrawGraphics resolves it next cycle.
         vic.Write(BackgroundColor, 0x07);
 
-        // Tick into cycle 15. draw_colors8 for cycle 15:
-        // V4: apply pending (already applied by MonitorColorStore, Cregs[0x21]=7);
+        // Tick into cycle 18. draw_colors8 for cycle 18:
+        // V4: apply pending (VicLastColorRegWrite=0x21 -> Cregs[0x21]=7);
         //     ring delay: pixel_buffer[0] was resolved to OLD Cregs[0x21]=3 in
-        //     cycle 14's i=7 step -> LineIndices[15*8+0] = 3 (old colour).
-        //     pixel_buffer[1] resolved with NEW Cregs[0x21]=7 -> [15*8+1] = 7.
+        //     cycle 17's i=7 step -> LineIndices[18*8+0] = 3 (old colour).
+        //     pixel_buffer[1] = Cregs[0x21]=7 (resolved at cycle 18's i=0 step)
+        //     -> LineIndices[18*8+1] = 7 (new colour).
         // V3: DrawGraphics resolves 0x21 -> _regs[0x21]=7 for ALL pixels
-        //     -> LineIndices[15*8+0] = 7 (fails assertion below).
+        //     -> LineIndices[18*8+0] = 7 (fails assertion below).
         vic.Tick();
 
-        int offset15 = 15 * 8;
+        int offset18 = 18 * 8;
         // 6569 ring delay: pixel 0 still shows old colour 3 (diverges from V3).
-        Assert.Equal(3, vic.PixelSequencer.LineIndices[offset15 + 0]);
+        Assert.Equal(3, vic.PixelSequencer.LineIndices[offset18 + 0]);
         // Pixel 1 already shows new colour 7.
-        Assert.Equal(7, vic.PixelSequencer.LineIndices[offset15 + 1]);
+        Assert.Equal(7, vic.PixelSequencer.LineIndices[offset18 + 1]);
     }
 
     // ----------------------------------------------------------------

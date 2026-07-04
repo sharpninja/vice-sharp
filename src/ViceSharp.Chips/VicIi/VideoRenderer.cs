@@ -179,7 +179,25 @@ public sealed class VideoRenderer
         uint borderPixel)
     {
         var pixels = MemoryMarshal.Cast<byte, uint>(line);
-        // PLAN-VICRENDER-001: segmented border fill (mid-line $D020 changes) instead of one colour.
+
+        // PLAN-VICEPARITY-001 V7 FR-VIC-BORDER: live render reads ALL visible
+        // pixels (border AND display area) from PixelSequencer.LineIndices.
+        // DrawBorder8 fills RenderBuffer with COL_D020 for border cycles;
+        // DrawColors8 resolves COL_D020 through Cregs to the live $D020 index
+        // and writes to LineIndices. Border pixels therefore include per-cycle
+        // CSEL edge transitions and mid-line $D020 colour changes automatically,
+        // eliminating the FillBorderSegmented change-log hack (finding 42).
+        if (_isLiveRender)
+        {
+            var lineIndices = _vic.PixelSequencer.LineIndices;
+            int bufOffset = FirstVisibleRasterX * 8; // = 96
+            for (int x = 0; x < ScreenWidth; x++)
+                pixels[x] = Palette[lineIndices[x + bufOffset]];
+            return;
+        }
+
+        // Synthetic path (RenderFullFrame): geometric border + display fill.
+        // PLAN-VICRENDER-001: segmented border fill (mid-line $D020 changes).
         FillBorderSegmented(pixels);
 
         if (leftBorderOpen)
@@ -189,22 +207,7 @@ public sealed class VideoRenderer
 
         var displayStart = leftBorderPixel;
         var displayEnd = Math.Min(rightBorderPixel, leftBorderPixel + screenWidth);
-        if (displayEnd > displayStart && _isLiveRender)
-        {
-            // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL: live clock-driven
-            // rendering uses PixelSequencer.LineIndices (ports draw_graphics8 from
-            // vicii-draw-cycle.c). Correct xscroll_pipe 2-cycle pipeline delay: col0 at
-            // frame pixel 32 (xscroll=0). Synthetic path (RenderFullFrame) falls through
-            // to the geometric branches below which read VIC state on-demand.
-            var lineIndices = _vic.PixelSequencer.LineIndices;
-            int bufOffset = FirstVisibleRasterX * 8; // = 96
-            for (int x = displayStart; x < displayEnd; x++)
-            {
-                int idx = x + bufOffset;
-                pixels[x] = Palette[lineIndices[idx]];
-            }
-        }
-        else if (displayEnd > displayStart && !hasDisplayCell)
+        if (displayEnd > displayStart && !hasDisplayCell)
         {
             // Lower fine-scroll overflow has no matrix row to render; display window shows background.
             FillBackground(pixels, displayStart, displayEnd - displayStart);

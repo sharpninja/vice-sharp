@@ -1319,6 +1319,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 RefreshInterruptLine();
             }
         }
+        // PLAN-VICEPARITY-001 V7 FR-VIC-BORDER AC-01..07: per-cycle border pipeline.
+        // draw_border8 (vicii-draw-cycle.c:541-575) runs AFTER draw_sprites8 and BEFORE
+        // draw_colors8 so border pixels overlay graphics+sprite output and are resolved
+        // through the same cregs pipeline. border_state is the one-cycle-lagged main_border.
+        _pixelSequencer.DrawBorder8(_mainBorderActive);
+
         // V4 FR-VIC-DRAW-COLOR: per-cycle colour resolution pipeline
         // (vicii_draw_cycle -> draw_colors8, vicii-draw-cycle.c:627-663).
         _pixelSequencer.DrawColors8();
@@ -1608,9 +1614,16 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         _renderMatrixRowValid[row] = true;
     }
 
-    private int LeftBorderCheckCycle => Csel ? 17 : 18;
+    // PLAN-VICEPARITY-001 V7 FR-VIC-BORDER AC-11/AC-12.
+    // VICE PAL table: ChkBrdL1 at Phi2(17) = managed RasterX 16 (CSEL=1);
+    //                 ChkBrdL0 at Phi2(18) = managed RasterX 17 (CSEL=0);
+    //                 ChkBrdR0 at Phi2(56) = managed RasterX 55 (CSEL=0);
+    //                 ChkBrdR1 at Phi2(57) = managed RasterX 56 (CSEL=1).
+    // vicii-chip-model.c PAL table lines 145,147,223,225.
+    // Managed RasterX = VICE 1-based cycle - 1.
+    private int LeftBorderCheckCycle  => Csel ? 16 : 17;
 
-    private int RightBorderCheckCycle => Csel ? 57 : 56;
+    private int RightBorderCheckCycle => Csel ? 56 : 55;
 
     private void CaptureVerticalBorderForCurrentLine()
     {

@@ -30,6 +30,10 @@ internal sealed class PixelSequencer
     private const byte ColCbuf    = 0x13;
     private const byte ColCbufMc  = 0x14;
     private const byte ColD02xExt = 0x15;
+    // Symbolic code for $D020 (border colour). draw_border8 fills RenderBuffer
+    // with this code; draw_colors8 resolves it to the live $D020 palette index
+    // via Cregs[0x20]. vicii-draw-cycle.c line 47.
+    private const byte ColD020 = 0x20;
 
     // VIC register byte offsets within the 64-byte _registers array.
     private const int D011 = 0x11;
@@ -213,6 +217,11 @@ internal sealed class PixelSequencer
     internal byte SpriteSsCollisionThisCycle;
     internal byte SpriteSbCollisionThisCycle;
 
+    // V7: border_state (vicii-draw-cycle.c:105, static int border_state=0).
+    // One-cycle-lagged copy of main_border; updated by DrawBorder8 each cycle.
+    // Must be reset to 0 at line/frame start (vicii_draw_cycle_init).
+    internal int BorderState;
+
     // PAL cycle DMA tables: index = managed RasterX (0-62).
     // _s_palDmaCycle0[rx] = sprite bitmask for Phi1(SprPtr) cycles (VICE dma_cycle_0).
     // _s_palDmaCycle2[rx] = sprite bitmask for Phi1(SprDma1) cycles (VICE dma_cycle_2,
@@ -303,6 +312,7 @@ internal sealed class PixelSequencer
         _spriteMcBits              = 0;
         SpriteSsCollisionThisCycle = 0;
         SpriteSbCollisionThisCycle = 0;
+        BorderState                = 0;
     }
 
     /// <summary>
@@ -901,5 +911,62 @@ internal sealed class PixelSequencer
         // update_sprite_xpos: latch x_pipe from live sprite X registers (vicii-draw-cycle.c:459-465).
         for (int s = 0; s < 8; s++)
             _spriteXPipe[s] = _vic.GetSpriteX(s);
+    }
+
+    // ---------------------------------------------------------------
+    // V7: border render pipeline (draw_border8 vicii-draw-cycle.c:541-575)
+    // ---------------------------------------------------------------
+
+    /// <summary>
+    /// Per-cycle border pixel sequencer. Exact port of <c>draw_border8</c> from
+    /// <c>native/vice/vice/src/viciisc/vicii-draw-cycle.c</c> lines 541-575.
+    ///
+    /// <para>Called after <see cref="DrawSprites8"/> and before
+    /// <see cref="DrawColors8"/> in the per-cycle pipeline so that border pixels
+    /// overlay the graphics + sprite output before colour resolution runs.</para>
+    ///
+    /// <para>When active, fills <see cref="RenderBuffer"/> entries with
+    /// <c>ColD020</c> (0x20) - the symbolic border-colour code that
+    /// <see cref="DrawColors8"/> resolves via <c>Cregs[0x20]</c> to the live
+    /// <c>$D020</c> palette index. This mirrors VICE's <c>COL_D020</c> sentinel +
+    /// <c>cregs[]</c> resolution pipeline (vicii-draw-cycle.c:47, 592-604).</para>
+    ///
+    /// <para>FR-VIC-BORDER AC-01..07: draw_border8 semantics per vicii-draw-cycle.c.</para>
+    /// </summary>
+    /// <param name="mainBorder">Current value of <c>vicii.main_border</c>
+    /// (combined horizontal + vertical flip-flop result for this cycle).</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal void DrawBorder8(bool mainBorder)
+    {
+        // draw_border8 line 544: uint8_t csel = vicii.regs[0x16] & 0x8
+        int csel = _regs[D016] & 0x8;
+        // draw_border8 line 547: if (!border_state && !main_border) return (early exit)
+        int mainInt = mainBorder ? 1 : 0;
+        if ((BorderState | mainInt) == 0) return;
+        // draw_border8 line 551: if (border_state && main_border) continuous border
+        if ((BorderState & mainInt) != 0)
+        {
+            // memset(render_buffer, COL_D020, 8)
+            for (int i = 0; i < 8; i++) RenderBuffer[i] = ColD020;
+            return; // border_state NOT updated; already latched from prev cycle
+        }
+        // draw_border8 lines 556-574: csel-dependent transition logic
+        if (csel != 0)
+        {
+            // CSEL=1: if border_state, memset 8; border_state = main_border
+            if (BorderState != 0)
+                for (int i = 0; i < 8; i++) RenderBuffer[i] = ColD020;
+            BorderState = mainInt;
+        }
+        else
+        {
+            // CSEL=0: if border_state, memset 7; border_state = main_border;
+            // if new border_state, set pixel 7
+            if (BorderState != 0)
+                for (int i = 0; i < 7; i++) RenderBuffer[i] = ColD020;
+            BorderState = mainInt;
+            if (BorderState != 0)
+                RenderBuffer[7] = ColD020;
+        }
     }
 }

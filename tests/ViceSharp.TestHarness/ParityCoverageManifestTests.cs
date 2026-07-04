@@ -85,9 +85,10 @@ public sealed class ParityCoverageManifestTests
     /// V5's mc/mcbase/exp_flop DMA. All 15 admitted green.
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered. Current authored distinct
-    /// [ParityAc] ids = 335 (320 prior + 15 V6).
+    /// [ParityAc] ids = 364 (335 prior + 9 V7 FR-VIC-BORDER AC-01..07/11/12
+    /// + 20 S8 FR-SID-VOICE/MIXVOL AC).
     /// </summary>
-    private const int ExpectedMinCovered = 335;
+    private const int ExpectedMinCovered = 364;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;

@@ -178,15 +178,16 @@ public sealed class VicBorderIrqFaithfulParityTests
     /// <summary>
     /// FR-VIC-BORDER AC-13 (TEST-VIC-BORDER-13, FAITHFUL): CSEL selects which
     /// left/right border check cycle pair is armed (L1/R1 for CSEL=1, L0/R0 for
-    /// CSEL=0); the selection structure is faithful while the managed absolute
-    /// base sits one cycle after VICE (finding 43, TEST-VIC-BORDER-11/12).
-    /// VICE native/vice/vice/src/viciisc/vicii-chip-model.h:204-218; managed
-    /// Mos6569.LeftBorderCheckCycle / RightBorderCheckCycle (Mos6569.cs:1245,1247).
+    /// CSEL=0). VICE PAL table: L1 at Phi2(17) = managed RasterX 16 (CSEL=1),
+    /// L0 at Phi2(18) = managed RasterX 17 (CSEL=0), R0 at Phi2(56) = managed
+    /// RasterX 55 (CSEL=0), R1 at Phi2(57) = managed RasterX 56 (CSEL=1).
+    /// vicii-chip-model.c PAL table lines 145,147,223,225; managed
+    /// Mos6569.LeftBorderCheckCycle / RightBorderCheckCycle (Mos6569.cs).
     /// Use case: CSEL=1 (40 columns) opens the main border one cycle earlier
     /// and closes it one cycle later than CSEL=0 (38 columns).
-    /// Acceptance: with CSEL=1 the main border flip-flop clears at RasterX 17
-    /// and sets at 57; with CSEL=0 it clears at 18 and sets at 56 (current
-    /// managed base cycles, locked exactly).
+    /// Acceptance: with CSEL=1 the main border flip-flop clears at RasterX 16
+    /// and sets at 56; with CSEL=0 it clears at 17 and sets at 55 (VICE-correct
+    /// cycles aligned to TEST-VIC-BORDER-11/12 in V7 of PLAN-VICEPARITY-001).
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-BORDER-13", ParityTag.Faithful)]
@@ -196,25 +197,29 @@ public sealed class VicBorderIrqFaithfulParityTests
         vic.Write(ScreenControl1, 0x18); // DEN + RSEL
         vic.Write(ScreenControl2, 0x08); // CSEL=1
 
+        // CSEL=1: left check fires at managed RasterX 16 (VICE PAL Phi2(17)).
+        AdvanceTo(vic, 100, 15);
+        Assert.True(vic.IsMainBorderActive);   // still in border before check
         AdvanceTo(vic, 100, 16);
-        Assert.True(vic.IsMainBorderActive);
-        AdvanceTo(vic, 100, 17);
-        Assert.False(vic.IsMainBorderActive);
+        Assert.False(vic.IsMainBorderActive);  // border opens at 16
+        // CSEL=1: right check fires at managed RasterX 56 (VICE PAL Phi2(57)).
+        AdvanceTo(vic, 100, 55);
+        Assert.False(vic.IsMainBorderActive);  // still in display before check
         AdvanceTo(vic, 100, 56);
-        Assert.False(vic.IsMainBorderActive);
-        AdvanceTo(vic, 100, 57);
-        Assert.True(vic.IsMainBorderActive);
+        Assert.True(vic.IsMainBorderActive);   // border closes at 56
 
         AdvanceTo(vic, 101, 0);
         vic.Write(ScreenControl2, 0x00); // CSEL=0
+        // CSEL=0: left check fires at managed RasterX 17 (VICE PAL Phi2(18)).
+        AdvanceTo(vic, 101, 16);
+        Assert.True(vic.IsMainBorderActive);   // still in border before check
         AdvanceTo(vic, 101, 17);
-        Assert.True(vic.IsMainBorderActive);
-        AdvanceTo(vic, 101, 18);
-        Assert.False(vic.IsMainBorderActive);
+        Assert.False(vic.IsMainBorderActive);  // border opens at 17
+        // CSEL=0: right check fires at managed RasterX 55 (VICE PAL Phi2(56)).
+        AdvanceTo(vic, 101, 54);
+        Assert.False(vic.IsMainBorderActive);  // still in display before check
         AdvanceTo(vic, 101, 55);
-        Assert.False(vic.IsMainBorderActive);
-        AdvanceTo(vic, 101, 56);
-        Assert.True(vic.IsMainBorderActive);
+        Assert.True(vic.IsMainBorderActive);   // border closes at 55
     }
 
     /// <summary>
