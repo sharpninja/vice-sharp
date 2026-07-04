@@ -49,12 +49,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     // FR-SID-009 noise LFSR. The hardware LFSR is 23 bits wide (mask
     // 0x7FFFFF) with feedback taps at bits 17 and 22 (XOR), clocked when
-    // bit 19 of each voice's 24-bit phase accumulator transitions low->high.
-    // Output is derived from bits 0, 2, 5, 9, 11, 14, 18, 20 (one tap per
-    // 8-bit output bit). The reset state is all-ones (0x7FFFFF) and the
-    // test bit in CTRL (bit 3) reseeds the LFSR to that state.
-    private const uint NoiseLfsrMask = 0x007F_FFFF;
-    private const uint NoiseLfsrInitial = NoiseLfsrMask;
+    // bit 19 of each voice's 24-bit phase accumulator transitions low->high
+    // with a 2-cycle pipeline delay (wave.h:164-170). The reset seed is
+    // 0x7ffffe (wave.cc:323). Output is 12 bits packed from SR bits
+    // 20,18,14,11,9,5,2,0 into waveform bits 11-4 (wave.h:354-367).
     private const float VoiceOutputScale = 2048.0f;
     // Bit 19 of the 24-bit accumulator (the implementation stores the
     // 24-bit value in a uint; the upper byte is the phase output).
@@ -83,7 +81,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// FR-SID-WAVE-TESTBIT AC-04 [PLAN-VICEPARITY-001 S4/S5].
     /// </summary>
     private const uint ShiftRegisterResetBit6581 = 1000;
-    private uint _noiseLfsr = NoiseLfsrInitial;
 
     /// <summary>
     /// The die-specific waveform DAC zero point, scaled from reSID's 12-bit
@@ -94,37 +91,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// </summary>
     protected virtual int WaveZeroLevel => 0x38;
 
-    /// <summary>
-    /// FR-SID-009 ac.1: advance the 23-bit noise LFSR one step. The
-    /// feedback polynomial taps bits 22 and 17 (XOR), the result is
-    /// shifted into bit 0, and the LFSR is masked to 23 bits. If the
-    /// LFSR ever lands on zero it is reseeded to the all-ones state
-    /// (the LFSR cannot escape zero with the standard polynomial).
-    /// </summary>
-    private void ClockNoiseLfsr()
-    {
-        var feedback = ((_noiseLfsr >> 22) ^ (_noiseLfsr >> 17)) & 0x01;
-        _noiseLfsr = ((_noiseLfsr << 1) | feedback) & NoiseLfsrMask;
-        if (_noiseLfsr == 0)
-            _noiseLfsr = NoiseLfsrInitial;
-    }
-
-    /// <summary>
-    /// FR-SID-009 ac.3: pack the 8-bit noise output from the 23-bit LFSR
-    /// using the canonical hardware tap map (bits 0, 2, 5, 9, 11, 14, 18,
-    /// 20 contribute one bit each to the 8-bit output). Matches the
-    /// SidOscillator and resid noise output exactly.
-    /// </summary>
-    private static byte NoiseOutput(uint lfsr) =>
-        (byte)(
-            (((lfsr >> 20) & 0x01) << 7) |
-            (((lfsr >> 18) & 0x01) << 6) |
-            (((lfsr >> 14) & 0x01) << 5) |
-            (((lfsr >> 11) & 0x01) << 4) |
-            (((lfsr >> 9) & 0x01) << 3) |
-            (((lfsr >> 5) & 0x01) << 2) |
-            (((lfsr >> 2) & 0x01) << 1) |
-            ((lfsr >> 0) & 0x01));
 
     /// <summary>
     /// Reads the current audio sample from the per-cycle-evolved chain state.
@@ -222,7 +188,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             int wave12 = WaveTable12(waveform, ix);
             int noPulse = (waveform & 0x4) != 0 ? 0x000 : 0xFFF;                       // wave.cc:221
             int noNoiseOrNoiseOutput = (waveform & 0x8) != 0                            // wave.cc:219-220
-                ? NoiseOutput12(_noiseLfsr)
+                ? NoiseOutput12(voice.ShiftRegister)                                    // AC-08 [PLAN-VICEPARITY-001 S6]
                 : 0xFFF;
 
             int waveformOutput = wave12 & (noPulse | voice.PulseLevel) & noNoiseOrNoiseOutput;
@@ -232,6 +198,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 waveformOutput = IsMos8580Wave
                     ? NoisePulse8580(waveformOutput)
                     : NoisePulse6581(waveformOutput);
+            }
+
+            // wave.h:494-497: combined waveforms write back into shift register.
+            // Condition: noise is combined with another waveform (waveform > 0x8),
+            // test bit is not held, and shift_pipeline is not in step 1.
+            // AC-11/AC-16/AC-17/AC-18 [PLAN-VICEPARITY-001 S6].
+            if (waveform > 0x8 && (voice.Control & 0x08) == 0 && voice.ShiftPipeline != 1)
+            {
+                WriteShiftRegister(ref voice, waveformOutput);
             }
 
             if ((waveform & 0x3) != 0 && IsMos8580Wave)
@@ -724,8 +699,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         public int FloatingOutputTtl;
         /// <summary>
         /// Per-voice 23-bit noise LFSR (reSID shift_register, wave.h).
-        /// Initialized to 0x7FFFFE by reset() (wave.cc:307). Maintained in
-        /// parallel with the shared _noiseLfsr for oracle state matching.
+        /// Initialized to 0x7FFFFE by reset() (wave.cc:307).
         /// FR-SID-WAVE-TESTBIT AC-08 [PLAN-VICEPARITY-001 S4/S5].
         /// </summary>
         public uint ShiftRegister;
@@ -1171,11 +1145,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         bool prevMsb1 = (_voices[1].WaveformAccumulator & 0x800000u) != 0;
         bool prevMsb2 = (_voices[2].WaveformAccumulator & 0x800000u) != 0;
 
-        // FR-SID-009 ac.2: capture bit-19 before advance for shared LFSR edge detection.
-        var prevBit19_0 = (_voices[0].WaveformAccumulator & NoiseClockBit) != 0;
-        var prevBit19_1 = (_voices[1].WaveformAccumulator & NoiseClockBit) != 0;
-        var prevBit19_2 = (_voices[2].WaveformAccumulator & NoiseClockBit) != 0;
-
         for (int i = 0; i < 3; i++)
         {
             ref Voice voice = ref _voices[i];
@@ -1211,18 +1180,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             }
         }
 
-        // FR-SID-009 ac.2: shared noise LFSR (backward-compat audio path).
-        // Clock once per noise-selected voice with bit-19 rising edge.
-        bool hasNoise0 = (_voices[0].Control & 0x80) != 0;
-        bool hasNoise1 = (_voices[1].Control & 0x80) != 0;
-        bool hasNoise2 = (_voices[2].Control & 0x80) != 0;
-        var newBit19_0 = (_voices[0].WaveformAccumulator & NoiseClockBit) != 0;
-        var newBit19_1 = (_voices[1].WaveformAccumulator & NoiseClockBit) != 0;
-        var newBit19_2 = (_voices[2].WaveformAccumulator & NoiseClockBit) != 0;
-        if (hasNoise0 && !prevBit19_0 && newBit19_0) ClockNoiseLfsr();
-        if (hasNoise1 && !prevBit19_1 && newBit19_1) ClockNoiseLfsr();
-        if (hasNoise2 && !prevBit19_2 && newBit19_2) ClockNoiseLfsr();
-
         // Compute msb_rising for each voice (wave.h:159-160): 0->1 transition of bit 23.
         // FR-SID-WAVE-SYNC AC-01 [PLAN-VICEPARITY-001 S4/S5].
         _msbRising0 = !prevMsb0 && (_voices[0].WaveformAccumulator & 0x800000u) != 0;
@@ -1231,9 +1188,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     }
 
     /// <summary>
-    /// reSID clock_shift_register: advance the per-voice 23-bit noise LFSR one
-    /// step with feedback from bits 22 and 17 (XOR). Used for the oracle-matching
-    /// per-voice shift register state; audio output still runs through _noiseLfsr.
+    /// reSID clock_shift_register (wave.h:321-329): advance the per-voice 23-bit
+    /// noise LFSR one step with feedback from bits 22 and 17 (XOR), masked to
+    /// 23 bits. Clocked by the bit-19 rising edge (2-cycle pipeline via
+    /// ShiftPipeline). The audio noise output is derived from this register via
+    /// NoiseOutput12 in SetWaveformOutput. FR-SID-WAVE-NOISE AC-05/AC-06/AC-07
+    /// [PLAN-VICEPARITY-001 S6].
     /// </summary>
     private static void ClockVoiceShiftRegister(ref Voice voice)
     {
@@ -1242,19 +1202,48 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     }
 
     /// <summary>
-    /// reSID shiftreg_bitfade (wave.cc:282-291): OR-fill upward by one step
-    /// (each 0-bit OR'd with the bit above it), then re-arm the per-bit TTL
-    /// to ShiftRegisterResetBit6581 if the register is not yet all-ones.
+    /// reSID shiftreg_bitfade (wave.cc:282-291): OR-fill the SR upward by one
+    /// step (`SR |= 1; SR |= SR &lt;&lt; 1`), with NO 23-bit masking (wave.cc:284-285
+    /// uses raw `unsigned int` arithmetic). Starting from 0x7ffffe the result is
+    /// 0xffffff (24-bit all-ones, NOT 0x7fffff). Since 0xffffff != 0x7fffff the
+    /// re-arm condition fires again (wave.cc:289-290), keeping SRR alive.
     /// FR-SID-WAVE-TESTBIT AC-04 [PLAN-VICEPARITY-001 S4/S5].
+    /// FR-SID-WAVE-NOISE AC-14 [PLAN-VICEPARITY-001 S6]: removed incorrect mask.
     /// </summary>
     private static void ShiftRegBitFade(ref Voice voice)
     {
         voice.ShiftRegister |= 1u;
-        voice.ShiftRegister = (voice.ShiftRegister | (voice.ShiftRegister << 1)) & 0x7FFFFFu;
+        voice.ShiftRegister |= voice.ShiftRegister << 1;   // no 23-bit mask (wave.cc:285)
         if (voice.ShiftRegister != 0x7FFFFFu)
         {
             voice.ShiftRegisterReset = ShiftRegisterResetBit6581;
         }
+    }
+
+    /// <summary>
+    /// reSID write_shift_register (wave.h:331-351): when a combined waveform
+    /// (noise + any other) is selected, the current waveform output is AND'd
+    /// back into the shift register tap positions. A bit once zeroed in the
+    /// output stays zero in the SR forever, gradually corrupting (decaying to 0)
+    /// the register. Also updates the 12-bit noise_output mask in reSID; in
+    /// managed code the noise output is re-derived from SR each cycle so no
+    /// separate mask field is needed.
+    /// FR-SID-WAVE-NOISE AC-11/AC-16/AC-17/AC-18 [PLAN-VICEPARITY-001 S6].
+    /// </summary>
+    private static void WriteShiftRegister(ref Voice voice, int waveformOutput)
+    {
+        // wave.h:339-348: AND the waveform output bits back into SR tap positions.
+        // Tap-clear mask: ~(bit20|bit18|bit14|bit11|bit9|bit5|bit2|bit0) = 0xFFEBB5DAu
+        voice.ShiftRegister &=
+            0xFFEBB5DAu                                                                   // clear all 8 tap positions
+            | ((uint)(waveformOutput & 0x800) << 9)   // waveform bit 11 -> SR bit 20
+            | ((uint)(waveformOutput & 0x400) << 8)   // waveform bit 10 -> SR bit 18
+            | ((uint)(waveformOutput & 0x200) << 5)   // waveform bit  9 -> SR bit 14
+            | ((uint)(waveformOutput & 0x100) << 3)   // waveform bit  8 -> SR bit 11
+            | ((uint)(waveformOutput & 0x080) << 2)   // waveform bit  7 -> SR bit  9
+            | ((uint)(waveformOutput & 0x040) >> 1)   // waveform bit  6 -> SR bit  5
+            | ((uint)(waveformOutput & 0x020) >> 3)   // waveform bit  5 -> SR bit  2
+            | ((uint)(waveformOutput & 0x010) >> 4);  // waveform bit  4 -> SR bit  0
     }
 
     /// <summary>

@@ -77,15 +77,11 @@ public sealed class SidWaveformFaithfulParityTests
     }
 
     /// <summary>
-    /// The 23-bit noise shift register. It is a private field with no public
-    /// or internal read surface, so the lock reads it via reflection
-    /// (test-only; the emulation hot path is untouched).
+    /// The 23-bit noise shift register of voice 0. S6 (PLAN-VICEPARITY-001)
+    /// replaced the shared _noiseLfsr with per-voice ShiftRegister; this
+    /// helper now reads the public VoiceShiftRegister seam (sanctioned rebase).
     /// </summary>
-    private static uint NoiseLfsr(Sid6581 sid)
-    {
-        var field = typeof(Sid6581).GetField("_noiseLfsr", BindingFlags.NonPublic | BindingFlags.Instance)!;
-        return (uint)field.GetValue(sid)!;
-    }
+    private static uint NoiseLfsr(Sid6581 sid) => sid.VoiceShiftRegister(0);
 
     /// <summary>
     /// The composed 12-bit pulse-width latch of a voice. Voice state is a
@@ -155,10 +151,11 @@ public sealed class SidWaveformFaithfulParityTests
 
     /// <summary>
     /// Drive a noise-selected voice at FREQ 0xFFFF for <paramref name="cycles"/>
-    /// cycles and collect every (before, after) noise-register transition that
-    /// occurs on an accumulator bit-19 rising edge; asserts the register is
-    /// untouched on every other cycle. The accumulator is modelled from its
-    /// observed initial value with the same raw uint arithmetic the chip uses.
+    /// cycles and collect every (before, after) noise-register transition.
+    /// S6 (PLAN-VICEPARITY-001): the shift now fires 2 cycles after the bit-19
+    /// rising edge (2-cycle shift_pipeline); the old bit-19-rising-is-shift
+    /// invariant was removed as a sanctioned rebase. Transitions are detected
+    /// by SR != previous, giving the same 44 shifts in 700 cycles.
     /// </summary>
     private static List<(uint Before, uint After)> CollectNoiseShifts(int cycles)
     {
@@ -167,22 +164,15 @@ public sealed class SidWaveformFaithfulParityTests
         WriteVoice(sid, 0, 1, 0xFF); // FREQ 0xFFFF
         WriteVoice(sid, 0, 4, 0x80); // noise selected
 
-        var accumulator = RawAccumulator(sid, 0);
         var last = NoiseLfsr(sid);
         var shifts = new List<(uint Before, uint After)>();
         for (var cycle = 1; cycle <= cycles; cycle++)
         {
-            var accumulatorPrevious = accumulator;
-            accumulator += 0xFFFFu;
             sid.Tick();
             var current = NoiseLfsr(sid);
-            if (((~accumulatorPrevious & accumulator) & 0x0008_0000u) != 0)
+            if (current != last)
             {
                 shifts.Add((last, current));
-            }
-            else
-            {
-                Assert.Equal(last, current);
             }
 
             last = current;
@@ -322,6 +312,11 @@ public sealed class SidWaveformFaithfulParityTests
 
         var accumulator = RawAccumulator(sid, 0);
         var expectedLfsr = NoiseLfsr(sid);
+        // S6 sanctioned rebase: reSID arms shift_pipeline=2 on bit-19 rise
+        // (wave.h:164-170); the shift fires 2 cycles later. The co-model
+        // mirrors that 2-cycle delay so the lock tracks the correct reSID
+        // behaviour rather than the old immediate-shift approximation.
+        var modelPipeline = 0;
         for (var cycle = 1; cycle <= 700; cycle++)
         {
             var accumulatorPrevious = accumulator;
@@ -329,9 +324,13 @@ public sealed class SidWaveformFaithfulParityTests
             sid.Tick();
 
             // wave.h:156: accumulator_bits_set = ~accumulator & accumulator_next;
-            // wave.h:164: bit 19 in the set clocks the shift register.
+            // wave.h:164: bit 19 in the set arms pipeline=2; fires 2 cycles later.
             var bitsSet = ~accumulatorPrevious & accumulator;
             if ((bitsSet & 0x0008_0000u) != 0)
+            {
+                modelPipeline = 2;
+            }
+            else if (modelPipeline > 0 && --modelPipeline == 0)
             {
                 expectedLfsr = NextLfsr(expectedLfsr);
             }
@@ -824,7 +823,12 @@ public sealed class SidWaveformFaithfulParityTests
         for (var cycle = 1; cycle <= 200; cycle++)
         {
             sid.Tick();
-            if (cycle % 32 == 16)
+            // S6 sanctioned rebase: bit-19 rises at cycle 16 (freq 0x8000
+            // accumulates 0x8000 per cycle; bit 19 = 0x080000 first set at
+            // cycle 16 = 0x080000). reSID arms pipeline=2 on that edge and
+            // fires the shift 2 cycles later at cycle 18. Co-model updated
+            // to match the correct reSID 2-cycle delay (wave.h:164-170).
+            if (cycle % 32 == 18)
             {
                 expected = NextLfsr(expected);
                 shiftCycles.Add(cycle);
@@ -833,7 +837,7 @@ public sealed class SidWaveformFaithfulParityTests
             Assert.Equal(expected, NoiseLfsr(sid));
         }
 
-        Assert.Equal(new[] { 16, 48, 80, 112, 144, 176 }, shiftCycles);
+        Assert.Equal(new[] { 18, 50, 82, 114, 146, 178 }, shiftCycles);
     }
 
     // ------------------------------------------------------------------

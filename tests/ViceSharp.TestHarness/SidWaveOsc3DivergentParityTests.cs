@@ -1,4 +1,3 @@
-using System.Reflection;
 using ViceSharp.Chips.Audio;
 using ViceSharp.Core;
 using Xunit;
@@ -73,15 +72,12 @@ public sealed class SidWaveOsc3DivergentParityTests
     }
 
     /// <summary>
-    /// The 23-bit noise shift register of the managed chip (private field,
-    /// no readback surface; test-only reflection, same seam the FAITHFUL
-    /// noise locks use).
+    /// The 23-bit noise shift register of voice 3 (index 2) via the public
+    /// VoiceShiftRegister seam. S6 (PLAN-VICEPARITY-001) replaced the shared
+    /// _noiseLfsr with per-voice ShiftRegister; this helper reads voice 3
+    /// (index 2), which is the voice under test in Osc3_NoiseReadsNoiseOutputTopBits.
     /// </summary>
-    private static uint NoiseLfsr(Sid6581 sid)
-    {
-        var field = typeof(Sid6581).GetField("_noiseLfsr", BindingFlags.NonPublic | BindingFlags.Instance)!;
-        return (uint)field.GetValue(sid)!;
-    }
+    private static uint NoiseLfsr(Sid6581 sid) => sid.VoiceShiftRegister(2);
 
     /// <summary>
     /// Independent reference of reSID's 12-bit noise output packing

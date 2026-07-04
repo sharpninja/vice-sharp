@@ -78,9 +78,10 @@ public sealed class ParityCoverageManifestTests
     /// mode-edge logic to the parity manifest. All 15 admitted green.
     /// Rises by each slice's DIVERGENT count; the final slice pins
     /// covered == 466. MUST never be lowered. Current authored distinct
-    /// [ParityAc] ids = 277 (all 277 admitted green).
+    /// [ParityAc] ids = 292 (277 admitted green + 15 S6 NOISE ACs admitted
+    /// after PLAN-VICEPARITY-001 S6 noise reconciliation).
     /// </summary>
-    private const int ExpectedMinCovered = 277;
+    private const int ExpectedMinCovered = 292;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;
