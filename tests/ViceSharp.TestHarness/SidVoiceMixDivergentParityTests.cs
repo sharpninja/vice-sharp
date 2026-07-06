@@ -831,13 +831,19 @@ public sealed class SidVoiceMixDivergentParityTests
         sid.Write(0xD417, 0x00); // No filter routing
         sid.Write(0xD418, 0x0F); // No taps, vol=15
 
-        TickN(sid, 1024);
+        // Voices 0/1 (attack 0, sustain 15) reach and hold the 0xFF plateau; voice2
+        // is ungated. Its no-waveform output carries only the residual floating-DAC
+        // bias (FR-SID-VOICE AC-04) rid on a decaying power-up envelope - never
+        // exactly 0 (the 6581 envelope DAC maps 0 to 2), but far below the gated
+        // voices' full-envelope waveform output.
+        TickN(sid, 6000);
 
         // Both voice0 and voice1 should contribute via voice_mask=0x07.
         var (v0, v1, v2) = sid.CycleVoiceOutputs;
         Assert.NotEqual(0, v0); // voice0 active
         Assert.NotEqual(0, v1); // voice1 active
-        Assert.Equal(0, v2);    // voice2 (voice3) not gated
+        Assert.True(System.Math.Abs(v2) < System.Math.Abs(v0) / 4, // voice2 not gated-active
+            $"ungated voice2 output {v2} should be far below gated voice0 {v0}");
 
         // Direct mix includes v0 + v1 via voice_mask=0x07.
         // reSID: CycleFilterOutput is gain-table output, not raw voice sum.

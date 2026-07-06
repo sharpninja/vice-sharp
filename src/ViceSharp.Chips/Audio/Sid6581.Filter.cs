@@ -74,6 +74,7 @@ public partial class Sid6581
     private int _extFiltVlp;
     private int _extFiltVhp;
 
+
     // ----------------------------------------------------------------
     // reSID dispatch flag
     // ----------------------------------------------------------------
@@ -101,9 +102,16 @@ public partial class Sid6581
     {
         var m = Model6581;
 
-        // Voice pre-scaling: v = ((raw * voice_scale_s14) >> 18) + voice_DC
-        // noise = 0 (no synchronized Randomnoise buffer, max deviation 1)
-        // filter8580new.h:688-690
+        // Voice pre-scaling: v = ((raw * voice_scale_s14 + rnd.getNoise()) >> 18)
+        // + voice_DC (filter8580new.h:701-703). reSID adds a per-draw dither from
+        // its Randomnoise buffer, filled at construction with rand() % (1<<19).
+        // That dither is NON-DETERMINISTIC (it varies per SID instance and run,
+        // since VICE never seeds rand()), so it cannot be bit-reproduced and it
+        // violates the ViceSharp determinism invariant. ViceSharp therefore omits
+        // it (deterministic filter), and the parity oracle zeroes reSID's dither
+        // buffer to match (native filter8580new.h Randomnoise ctor). The
+        // deterministic filter model below is bit-exact against that oracle.
+        // PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-6581).
         _rv1 = ((rawVoice0 * m.VoiceScaleS14) >> 18) + m.VoiceDC;
         _rv2 = ((rawVoice1 * m.VoiceScaleS14) >> 18) + m.VoiceDC;
         _rv3 = ((rawVoice2 * m.VoiceScaleS14) >> 18) + m.VoiceDC;
@@ -139,14 +147,15 @@ public partial class Sid6581
         _vlp = SolveIntegrate6581(1, _vbp, ref _vlpX, ref _vlpVc, m);
         _vbp = SolveIntegrate6581(1, _vhp, ref _vbpX, ref _vbpVc, m);
 
-        // Clamp Vbp and Vlp for table lookups
+        // reSID summer index: offset + resonance[res][Vbp] + Vlp + Vi, using RAW
+        // Vbp/Vlp (filter8580new.h:776). Vbp is asserted in [0, 1<<16) so the
+        // resonance array index is clamped only for memory safety; Vlp is added
+        // raw (clamping it here diverges from reSID on the double-integrated tap).
         int vbpC = _vbp;
         if (vbpC < 0) vbpC = 0; else if (vbpC > 65535) vbpC = 65535;
-        int vlpC = _vlp;
-        if (vlpC < 0) vlpC = 0; else if (vlpC > 65535) vlpC = 65535;
 
         int resonanceOut = m.Resonance[_filterResonance][vbpC];
-        int sumIdx = offset + resonanceOut + vlpC + Vi;
+        int sumIdx = offset + resonanceOut + _vlp + Vi;
         if (sumIdx < 0) sumIdx = 0;
         else if (sumIdx >= SummerTableSize) sumIdx = SummerTableSize - 1;
         _vhp = m.Summer[sumIdx];
@@ -263,11 +272,21 @@ public partial class Sid6581
     /// Called on $D415/$D416 writes when UsesReSidFilter is true.
     /// PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-6581 AC-20).
     /// </summary>
+    // VICE default 6581 filter bias: RESID_6581_FILTER_BIAS_DEFAULT = 500 (mV)
+    // (native src/sid/sid.h). VICE resid.cc always applies it via
+    // SID::adjust_filter_bias(bias_mV/1000), which sets
+    // Vw_bias = int((bias_mV/1000) * model_filter[0].vo_N16)
+    // (filter8580new.cc:654-657). The managed chip must apply the same bias or
+    // every cutoff (and thus the whole VCR integrator rate) diverges from the
+    // oracle. PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-6581 AC-20 / FR-SID-CUTOFFDAC).
+    private const double FilterBiasVolts6581 = 500.0 / 1000.0;
+
     internal void SetW0_6581()
     {
         var m = Model6581;
+        int vwBias = (int)(FilterBiasVolts6581 * m.VoN16);
         int fc = _filterCutoff & 0x7FF; // 11-bit cutoff register value
-        int Vw = m.F0Dac[fc];           // Vw_bias = 0
+        int Vw = vwBias + m.F0Dac[fc];  // reSID: Vw = Vw_bias + f0_dac[fc]
         uint diff = (uint)(m.KVddt - Vw);
         _vddt_Vw_2 = (int)((diff * diff) >> 1);
     }

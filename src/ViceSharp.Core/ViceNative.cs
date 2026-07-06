@@ -390,14 +390,14 @@ public static unsafe partial class ViceNative
         public byte VoiceMask;
         // VICE-Sharp S9 parity probe: reSID internal filter state.
         // [0]=Vlp [1]=Vbp [2]=Vhp [3]=v1 [4]=v2 [5]=v3 [6]=sum [7]=mix
-        // [8]=filter.output() [9]=Vlp_x [10]=Vlp_vc [11]=Vbp_x [12]=Vbp_vc
-        public fixed int FilterProbe[13];
+        // [8]=filter.output() [9]=Vlp_x [10]=Vlp_vc [11]=Vbp_x [12]=Vbp_vc [13]=Vddt_Vw_2
+        public fixed int FilterProbe[9];
 
         public readonly int[] GetFilterProbe()
         {
             fixed (int* fp = FilterProbe)
             {
-                return new ReadOnlySpan<int>(fp, 13).ToArray();
+                return new ReadOnlySpan<int>(fp, 9).ToArray();
             }
         }
 

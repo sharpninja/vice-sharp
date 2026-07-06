@@ -402,26 +402,41 @@ public sealed class SidWaveformFaithfulParityTests
     [ParityAc("TEST-SID-WAVE-PULSE-07", ParityTag.Faithful)]
     public void PulseWidthAffectsOutputOnlyWhenPulseWaveformSelected()
     {
+        // Observe voice 0's output (this AC is about the pulse comparator's effect
+        // on the waveform, not the master sample; GenerateSample now runs the reSID
+        // op-amp filter over all voices). VoiceOut = (WaveDac[wave]-wave_zero)*255 at
+        // the full-envelope plateau the rig parks voice 0 at.
         // Triangle | gate: pulse width must be inert.
         var triangleWide = BuildGatedVoice0SampleRig(0x11, 0x08);   // pw 0x800
         var triangleNarrow = BuildGatedVoice0SampleRig(0x11, 0x04); // pw 0x400
         TickN(triangleWide, 100);
         TickN(triangleNarrow, 100); // 12-bit phase 0x320 (800): tri12 = 0x640
-        Assert.Equal(ExpectedSampleAtFullEnvelope(0x640), triangleWide.GenerateSample());
-        Assert.Equal(ExpectedSampleAtFullEnvelope(0x640), triangleNarrow.GenerateSample());
+        Assert.Equal(VoiceOutFull(0x640), triangleWide.CycleVoiceOutputs.Voice0);
+        Assert.Equal(VoiceOutFull(0x640), triangleNarrow.CycleVoiceOutputs.Voice0);
         TickN(triangleWide, 200);
         TickN(triangleNarrow, 200); // 12-bit phase 0x960 (2400): tri12 = 0xD3E
-        Assert.Equal(ExpectedSampleAtFullEnvelope(0xD3E), triangleWide.GenerateSample());
-        Assert.Equal(ExpectedSampleAtFullEnvelope(0xD3E), triangleNarrow.GenerateSample());
+        Assert.Equal(VoiceOutFull(0xD3E), triangleWide.CycleVoiceOutputs.Voice0);
+        Assert.Equal(VoiceOutFull(0xD3E), triangleNarrow.CycleVoiceOutputs.Voice0);
 
         // Pulse | gate: the identical pulse-width pair now swings the output.
         var pulseWide = BuildGatedVoice0SampleRig(0x41, 0x08);   // PW 0x800; 12-bit phase 0x640 < 0x800: LOW
         var pulseNarrow = BuildGatedVoice0SampleRig(0x41, 0x04); // PW 0x400; 12-bit phase 0x640 >= 0x400: HIGH
         TickN(pulseWide, 200);
         TickN(pulseNarrow, 200); // 12-bit phase 0x640 (200 cycles at FREQ $8000)
-        Assert.Equal(ExpectedSampleAtFullEnvelope(0x000), pulseWide.GenerateSample());   // 0x640 < PW 0x800: LOW
-        Assert.Equal(ExpectedSampleAtFullEnvelope(0xFFF), pulseNarrow.GenerateSample()); // 0x640 >= PW 0x400: HIGH
+        Assert.Equal(VoiceOutFull(0x000), pulseWide.CycleVoiceOutputs.Voice0);   // 0x640 < PW 0x800: LOW
+        Assert.Equal(VoiceOutFull(0xFFF), pulseNarrow.CycleVoiceOutputs.Voice0); // 0x640 >= PW 0x400: HIGH
     }
+
+    private static readonly ushort[] WaveDac6581Full = Sid6581.BuildEnvelopeDacTable(12, 2.20, term: false);
+
+    /// <summary>
+    /// Voice output at the full-envelope (0xFF) plateau: (WaveDac[wave12] -
+    /// wave_zero) * dac[0xFF], where the 6581 envelope DAC maps 0xFF to 255. This
+    /// matches reSID Voice::output() = (wave.output() - wave_zero) *
+    /// envelope.output() (voice.h:99-103), replacing the pre-S9
+    /// ExpectedSampleAtFullEnvelope master-sample mirror for per-voice assertions.
+    /// </summary>
+    private static int VoiceOutFull(int wave12) => (WaveDac6581Full[wave12] - 0x380) * 255;
 
     // ------------------------------------------------------------------
     // FR-SID-WAVE-SYNC: hard sync
@@ -586,13 +601,22 @@ public sealed class SidWaveformFaithfulParityTests
     [ParityAc("TEST-SID-WAVE-RING-04", ParityTag.Faithful)]
     public void RingModulationSourceIsVoicePlusTwoModThree()
     {
-        var lowSample = ExpectedSampleAtFullEnvelope(0x000);  // normal triangle at 12-bit phase 0: tri12=0x000
-        var highSample = ExpectedSampleAtFullEnvelope(0xFFE); // ring-inverted: source MSB=0 -> ix=0x800 -> tri12=0xFFE
+        // Observe the destination voice's own output (this AC is about the ring
+        // source selection; GenerateSample now runs the reSID op-amp filter and the
+        // other, ungated voices add their floating-DAC bias to the mix).
+        var lowSample = VoiceOutFull(0x000);  // normal triangle at 12-bit phase 0: tri12=0x000
+        var highSample = VoiceOutFull(0xFFE); // ring-inverted: source MSB=0 -> ix=0x800 -> tri12=0xFFE
 
         for (var destination = 0; destination < 3; destination++)
         {
             var source = (destination + 2) % 3;
             var nonSource = (destination + 1) % 3;
+            int DestOut(Sid6581 s) => destination switch
+            {
+                0 => s.CycleVoiceOutputs.Voice0,
+                1 => s.CycleVoiceOutputs.Voice1,
+                _ => s.CycleVoiceOutputs.Voice2,
+            };
 
             var sid = BuildSid();
             ZeroAllAccumulatorsViaTestBit(sid);
@@ -603,15 +627,15 @@ public sealed class SidWaveformFaithfulParityTests
             TickN(sid, EnvelopeWarmupCycles);        // all FREQ 0: phases frozen while envelope parks
             Assert.Equal((byte)0xFF, EnvelopeLevel(sid, destination));
 
-            Assert.Equal(highSample, sid.GenerateSample()); // source acc=0 MSB=LOW: ring inverts -> 0xFFE
+            Assert.Equal(highSample, DestOut(sid)); // source acc=0 MSB=LOW: ring inverts -> 0xFFE
 
             ParkVoiceMsbHigh(sid, nonSource);
             Assert.Equal(0x800000u, RawAccumulator(sid, nonSource));
-            Assert.Equal(highSample, sid.GenerateSample()); // non-source MSB ignored; ring source unchanged
+            Assert.Equal(highSample, DestOut(sid)); // non-source MSB ignored; ring source unchanged
 
             ParkVoiceMsbHigh(sid, source);
             Assert.Equal(0x800000u, RawAccumulator(sid, source));
-            Assert.Equal(lowSample, sid.GenerateSample()); // source MSB=HIGH: no ring inversion -> 0x000
+            Assert.Equal(lowSample, DestOut(sid)); // source MSB=HIGH: no ring inversion -> 0x000
         }
     }
 

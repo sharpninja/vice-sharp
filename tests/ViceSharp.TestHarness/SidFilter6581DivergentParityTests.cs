@@ -457,8 +457,12 @@ public sealed class SidFilter6581DivergentParityTests
     /// <summary>
     /// FR: FR-SID-FILTER-6581 AC-23 (DIVERGENT, finding 12).
     /// Use case: per-cycle voice pre-scale v=((voice*voice_scale_s14)>>18)+voice_DC.
-    /// Acceptance: for rawVoice=0, prescaled = voice_DC (~27788); each voice's
-    ///   prescaled value is (0*voiceScaleS14>>18)+voiceDC = voiceDC.
+    /// Acceptance: each voice's prescaled value equals
+    ///   ((voiceOutput*voiceScaleS14)>>18)+voiceDC applied to that cycle's actual
+    ///   voice output (filter8580new.h:688-690). NB the reSID envelope DAC maps 0
+    ///   to 2 (leakage) and no-waveform voices carry a floating-DAC bias
+    ///   (FR-SID-VOICE AC-04), so a genuinely zero voice output is not reachable by
+    ///   idling; the formula is verified against the live per-cycle voice outputs.
     /// viceCite: filter8580new.h:688-690.
     /// </summary>
     [Fact]
@@ -467,13 +471,20 @@ public sealed class SidFilter6581DivergentParityTests
     {
         var sid = MakeSid6581();
         sid.Reset();
-        // Do not enable any voice (all raw outputs = 0 since no gate or waveform)
-        // Tick once to run ClockResidFilter6581
-        Tick1(sid);
-        // ResidPrescaledV1 = (0 * voiceScaleS14) >> 18 + voiceDC = voiceDC
-        Assert.Equal(M.VoiceDC, sid.ResidPrescaledV1);
-        Assert.Equal(M.VoiceDC, sid.ResidPrescaledV2);
-        Assert.Equal(M.VoiceDC, sid.ResidPrescaledV3);
+        // Gate voice 0 to a sawtooth plateau (a known nonzero output); voices 1/2
+        // idle (floating-DAC bias). Then verify the prescale formula against each
+        // voice's actual per-cycle output. For a genuinely zero input the formula
+        // gives voiceDC, which this exercises as the general affine relation.
+        sid.Write(0xD405, 0x00);   // attack 0 / decay 0
+        sid.Write(0xD406, 0xF0);   // sustain 15 / release 0
+        sid.Write(0xD401, 0x20);   // freq $2000
+        sid.Write(0xD404, 0x21);   // sawtooth | gate
+        for (int i = 0; i < 6000; i++) Tick1(sid);
+
+        var (v0, v1, v2) = sid.CycleVoiceOutputs;
+        Assert.Equal(((v0 * M.VoiceScaleS14) >> 18) + M.VoiceDC, sid.ResidPrescaledV1);
+        Assert.Equal(((v1 * M.VoiceScaleS14) >> 18) + M.VoiceDC, sid.ResidPrescaledV2);
+        Assert.Equal(((v2 * M.VoiceScaleS14) >> 18) + M.VoiceDC, sid.ResidPrescaledV3);
     }
 
     /// <summary>
@@ -800,31 +811,26 @@ public sealed class SidFilter6581DivergentParityTests
 
     /// <summary>
     /// FR: FR-SID-FILTER-CLOCK AC-01 (DIVERGENT, finding 16).
-    /// Use case: reSID SID::clock() runs filter once per phi2 cycle;
+    /// Use case: reSID SID::clock() runs the filter once per phi2 cycle;
     ///   managed now runs ClockResidFilter6581 from ClockFilterChain once per phi2.
-    /// Acceptance: CycleFilterOutput changes between consecutive ticks
-    ///   (filter state evolves each tick, not just each output sample).
+    /// Acceptance: the committed per-cycle filter output (Filter::output(), before
+    ///   the external filter) is bit-exact against the reSID oracle every phi2 cycle
+    ///   for a running, LP-routed voice - locking both the per-cycle dispatch and
+    ///   the numeric op-amp model. Compared vs the oracle filter-state probe [8].
     /// viceCite: sid.cc:745-828.
     /// </summary>
-    [Fact]
+    [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-01", ParityTag.Divergent, pending: false)]
     public void FilterClockedPerPhi2_StateEvolvesEachTick()
     {
-        var sid = MakeSid6581();
-        sid.Reset();
-        sid.Write(0xD417, 0x07);
-        sid.Write(0xD418, 0x1F);
-        Tick1(sid);
-        int after1 = sid.CycleFilterOutput;
-        Tick1(sid);
-        int after2 = sid.CycleFilterOutput;
-        // After the second tick, the filter state should have changed
-        // (two consecutive ticks should not give identical outputs if
-        // the filter is processing non-zero input)
-        // Note: they may coincidentally be equal at some states; we use
-        // the VoiceDC input which ensures the filter is always clocked
-        Assert.InRange(after1, short.MinValue, short.MaxValue);
-        Assert.InRange(after2, short.MinValue, short.MaxValue);
+        AssertFilterLockstepVsOracle(
+            new (ushort, byte)[]
+            {
+                (0x15, 0x00), (0x16, 0x80), (0x17, 0x01), (0x18, 0x1F), // fc, filt v1, LP+vol15
+                (0x01, 0x40), (0x05, 0x00), (0x06, 0xF0), (0x04, 0x21), // freq, AD, SR, saw|gate
+            },
+            cycles: 4000,
+            compareFilterOutput: true);
     }
 
     /// <summary>
@@ -835,20 +841,63 @@ public sealed class SidFilter6581DivergentParityTests
     ///   CycleExternalFilterOutput = (ExtFiltVlp - ExtFiltVhp) >> 11.
     /// viceCite: sid.cc:831.
     /// </summary>
-    [Fact]
+    [ViceFact]
     [ParityAc("TEST-SID-FILTER-CLOCK-02", ParityTag.Divergent, pending: false)]
     public void ExtFiltClockedPerPhi2_VlpEvolves()
     {
+        // The final chip output (external filter consuming this cycle's filter
+        // output) is bit-exact against the reSID oracle SID::output() every phi2
+        // cycle for a running, LP-routed voice.
+        AssertFilterLockstepVsOracle(
+            new (ushort, byte)[]
+            {
+                (0x15, 0x00), (0x16, 0x80), (0x17, 0x01), (0x18, 0x1F),
+                (0x01, 0x40), (0x05, 0x00), (0x06, 0xF0), (0x04, 0x21),
+            },
+            cycles: 4000,
+            compareFilterOutput: false);
+    }
+
+    /// <summary>
+    /// Drives the managed Sid6581 and the reSID single-cycle oracle in lockstep
+    /// from reset through the same register program and asserts the per-cycle
+    /// filter output matches every phi2 cycle. compareFilterOutput selects the
+    /// pre-external-filter Filter::output() (oracle probe[8]) vs the final chip
+    /// output SID::output() (oracle SidExactOutput). The oracle's non-deterministic
+    /// filter dither is zeroed in the shim so the deterministic model is comparable.
+    /// </summary>
+    private static void AssertFilterLockstepVsOracle(
+        (ushort reg, byte val)[] program, int cycles, bool compareFilterOutput)
+    {
         var sid = MakeSid6581();
-        sid.Reset();
-        sid.Write(0xD418, 0x1F); // LP+vol=15
-        for (int i = 0; i < 100; i++) Tick1(sid);
-        // External filter Vlp should have evolved from 0
-        bool extFiltEvolved = sid.ExtFiltVlpState != 0 || sid.ExtFiltVhpState != 0;
-        Assert.True(extFiltEvolved, "External filter state should evolve over 100 ticks");
-        // Verify CycleExternalFilterOutput is consistent with extfilt state
-        int expected = (sid.ExtFiltVlpState - sid.ExtFiltVhpState) >> 11;
-        Assert.Equal(expected, sid.CycleExternalFilterOutput);
+        foreach (var (reg, val) in program) sid.Write((ushort)(0xD400 + reg), val);
+
+        var native = ViceNativeBridge.CreateMachine("c64");
+        try
+        {
+            Assert.True(ViceNativeBridge.SidExactOpen(native), "exact oracle failed to open");
+            ViceNativeBridge.SidExactReset(native);
+            foreach (var (reg, val) in program) ViceNativeBridge.SidExactWrite(native, reg, val);
+
+            for (int c = 0; c < cycles; c++)
+            {
+                sid.Tick();
+                ViceNativeBridge.SidExactClock(native, 1);
+                if (compareFilterOutput)
+                {
+                    int oracleFilter = ViceNativeBridge.SidExactGetState(native).GetFilterProbe()[8];
+                    Assert.Equal(oracleFilter, sid.CycleFilterOutput);
+                }
+                else
+                {
+                    Assert.Equal(ViceNativeBridge.SidExactOutput(native), sid.CycleExternalFilterOutput);
+                }
+            }
+        }
+        finally
+        {
+            ViceNativeBridge.DestroyMachine(native);
+        }
     }
 
     /// <summary>

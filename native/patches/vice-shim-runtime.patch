@@ -136,11 +136,63 @@ index 357b27452b..b94ee8587d 100644
          goto fail;
      }
  
+diff --git a/vice/src/resid/filter8580new.h b/vice/src/resid/filter8580new.h
+index 9cde045a4e..3aa4536601 100644
+--- a/vice/src/resid/filter8580new.h
++++ b/vice/src/resid/filter8580new.h
+@@ -551,6 +551,16 @@ public:
+   // SID audio output (16 bits).
+   short output();
+ 
++  // VICE-Sharp S9 parity probe: export internal filter state for managed
++  // lockstep against the reSID oracle. Test-only accessor.
++  //   [0]=Vlp [1]=Vbp [2]=Vhp [3]=v1 [4]=v2 [5]=v3 [6]=sum [7]=mix [8]=output()
++  void vsharp_probe(int* out) {
++    out[0] = Vlp; out[1] = Vbp; out[2] = Vhp;
++    out[3] = v1;  out[4] = v2;  out[5] = v3;
++    out[6] = (int)sum; out[7] = (int)mix;
++    out[8] = (int)output();
++  }
++
+ protected:
+   void set_sum_mix();
+   void set_w0();
+@@ -659,8 +669,14 @@ private:
+     public:
+         Randomnoise()
+         {
++            // VICE-Sharp parity oracle: the stock reSID dither is
++            // buffer[i] = rand() % (1<<19), which is NON-DETERMINISTIC (varies per
++            // SID instance and run, since VICE never seeds rand()). It cannot be
++            // bit-reproduced and violates the determinism the parity oracle
++            // requires, so the dither is zeroed here. The managed Sid6581 likewise
++            // omits it; the deterministic filter model is compared bit-exactly.
+             for (int i=0; i<1024; i++)
+-                buffer[i] = rand() % (1<<19);
++                buffer[i] = 0;
+         }
+         int getNoise() const { index = (index + 1) & 0x3ff; return buffer[index]; }
+     };
+diff --git a/vice/src/resid/sid.h b/vice/src/resid/sid.h
+index 5d2c7309b1..1e9d2f2451 100644
+--- a/vice/src/resid/sid.h
++++ b/vice/src/resid/sid.h
+@@ -61,6 +61,10 @@ public:
+   reg8 read(reg8 offset);
+   void write(reg8 offset, reg8 value);
+ 
++  // VICE-Sharp S9 parity probe: passthrough to Filter::vsharp_probe (filter is
++  // a protected member; SID exposes it for managed lockstep). Diagnostic only.
++  void vsharp_filter_probe(int* out) { filter.vsharp_probe(out); }
++
+   // Read/write state.
+   class State
+   {
 diff --git a/vice/src/sid/resid.cc b/vice/src/sid/resid.cc
-index b68421226c..59115874f4 100644
+index b68421226c..1727a8b53d 100644
 --- a/vice/src/sid/resid.cc
 +++ b/vice/src/sid/resid.cc
-@@ -449,4 +449,67 @@ sid_engine_t resid_hooks =
+@@ -449,4 +449,78 @@ sid_engine_t resid_hooks =
      resid_state_write
  };
  
@@ -205,6 +257,17 @@ index b68421226c..59115874f4 100644
 +        return;
 +    }
 +    resid_state_read(psid, sid_state);
++}
++
++/* VICE-Sharp S9 parity probe: export reSID internal filter state
++ * (Vlp/Vbp/Vhp, prescaled v1/v2/v3, sum/mix, filter.output(), integrator
++ * x/vc) for managed lockstep. out must have room for 13 ints. */
++void resid_shim_filter_probe(sound_t *psid, int *out)
++{
++    if (psid == NULL || psid->sid == NULL || out == NULL) {
++        return;
++    }
++    psid->sid->vsharp_filter_probe(out);
 +}
 +
  } // extern "C"

@@ -366,11 +366,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private int ComputeVoiceOutput(int i)
     {
         ref Voice voice = ref _voices[i];
-        // No waveform selected: voice output is silence. The Osc3 latch
-        // keeps fading (FR-SID-OSC3ENV3 AC-07) but its audio contribution
-        // (floating-DAC bias) is FR-SID-VOICE AC-04, a later slice.
-        if ((voice.Control & 0xF0) == 0)
-            return 0;
+        // reSID never special-cases "no waveform"; Voice::output() is always
+        // (model_dac[waveform_output] - wave_zero) * envelope.output()
+        // (voice.h:99-103). With no waveform selected, waveform_output is the
+        // floating-DAC latch (voice.Osc3) that fades to 0 via floating_output_ttl
+        // (wave.h:501,546-551), so the voice still contributes a decaying DC bias
+        // to the mix. PLAN-VICEPARITY-001 S9 (FR-SID-VOICE AC-04): route the
+        // floating latch through the shared formula below rather than forcing 0.
         // PLAN-VICEPARITY-001 S8 (FR-SID-VOICE AC-01, AC-02): reSID voice
         // output = (wave.output() - wave_zero) * envelope.output() with NO >>8
         // (voice.h:99-103, voice.cc:105-113). WaveZeroLevel is the 12-bit

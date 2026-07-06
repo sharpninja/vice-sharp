@@ -1,3 +1,119 @@
+# S9 reSID 6581 filter - bit-exact remediation
+
+## RESULT: BIT-EXACT (Δ0) achieved 2026-07-06
+
+Managed 6581 filter output == reSID oracle SidExactOutput, **max Δ0, 20000/20000
+exact** across direct / LP / BP / HP / notch / resonance / all-taps / 1-voice /
+3-voice scenarios. Four fixes, in order of impact:
+1. Vw_bias = 500 mV (the primary bug; VCR integrator rate).
+2. FR-SID-VOICE AC-04 floating-DAC audio bias (ComputeVoiceOutput no longer
+   short-circuits no-waveform to 0).
+3. Raw Vlp in the summer index (reSID uses raw, not clamped).
+4. Dither zeroed in both managed and oracle (non-deterministic, determinism-breaking).
+
+### TEST REBASELINE (DONE 2026-07-06)
+8 tests rebaselined off stale bypass formulas + 2 weak structural tests upgraded to
+oracle locks:
+- ENV-50, CLOCK-06, PULSE-07, RING-04, CLOCK-02(FilterStage): assert the per-VOICE
+  output (CycleVoiceOutputs, unaffected by the filter) via VoiceOut/VoiceOutFull
+  instead of the filtered GenerateSample.
+- CLOCK-07: verify the DISPATCH (running oscillator -> filter+extfilt outputs take
+  multiple distinct values) not the stale bypass value; needed $D418 vol=15 or the
+  gain table flattens output.
+- FILTER-6581-23 (VoicePreScale): assert the affine prescale formula against the live
+  voice output (a genuinely zero input is unreachable: env DAC maps 0->2, AC-04
+  floating bias), not a zero-input assumption.
+- MIXVOL-13 (VoiceMask): ungated voice can't be exactly 0 (env DAC 0->2 + floating
+  bias); assert |v2| << |v0| instead.
+- FR-SID-FILTER-CLOCK-01/-02: converted from weak InRange to [ViceFact] ORACLE LOCKS
+  (managed CycleFilterOutput == oracle filter.output probe[8]; CycleExternalFilterOutput
+  == SidExactOutput, 4000 cycles each). These are the permanent output locks the
+  worker never wrote.
+Gates: 87/87 SID parity (S9 files) + 167/167 broad SID/manifest/xmldocs/determinism,
+distinct=ratchet=405. Native probe trimmed to filter_probe[9].
+
+### REMAINING to finish/commit S9 (filter is DONE + bit-exact)
+Native probe trimmed to filter_probe[9] = [0]Vlp [1]Vbp [2]Vhp [3]v1 [4]v2 [5]v3
+[6]sum [7]mix [8]filter.output() (uncommitted). 8 tests fail on stale hand-mirrored
+BYPASS formulas and must be rebaselined to the real reSID op-amp filter output
+(managed is bit-exact vs oracle, so assert against SidExactOutput or the corrected
+reSID value):
+- SidWaveformFaithfulParity: RingModulationSourceIsVoicePlusTwoModThree,
+  PulseWidthAffectsOutputOnlyWhenPulseWaveformSelected (ExpectedSampleAtFullEnvelope
+  mirror is the old bypass; GenerateSample now = reSID op-amp filter).
+- SidEnvDivergentParity: EnvelopeOutput_MapsThroughMos6581ModelDacTable,
+  WaveformOutput_IsCommittedOncePerCycleNotLazilyAtSampleTime,
+  FilterAndExternalFilterStages_ClockEveryCycleFromChainOutputs,
+  FilterStage_IsFedVoiceOutputsComputedAfterSynchronize (VoiceOut/ExpectedSample
+  mirrors are old bypass).
+- SidFilter6581DivergentParity: VoicePreScale_ZeroInput_GivesVoiceDC (AC-04:
+  no-waveform no longer 0, so zero *raw* input still gives voiceDC but the test
+  likely drives a no-waveform voice -> re-check), SidVoiceMixDivergentParity:
+  VoiceMask_And_ExtIn_RoutedVia_SummerAndMixer.
+Then: add [ViceFact] oracle filter-output locks (managed CycleExternalFilterOutput ==
+SidExactOutput across tap modes - the permanent lock the worker never wrote), green
+all gates, ratchet check, commit S9 + shim probe. Filter source changes to commit:
+Sid6581.Filter.cs (Vw_bias, raw Vlp, dither removed), Sid6581.cs (AC-04
+ComputeVoiceOutput), native (Randomnoise zeroed, vsharp_probe, shim export).
+
+### CRITICAL BUILD LESSON (cost hours)
+The reSID ENGINE (SID/Filter/wave/envelope/Randomnoise ctors + filter math) lives in
+`native/vice/vice/src/resid/libresid.a`, NOT in `src/sid/` (which is only the VICE
+`resid.cc` wrapper). Editing `src/resid/*.h/.cc` requires:
+```
+rm -f resid/*.o resid/libresid.a && make -C resid libresid.a   # <-- REQUIRED
+rm -f sid/*.o  sid/libsid.a      && make -C sid  libsid.a
+bash .build-nopatch.sh
+```
+The dither-zeroing looked ineffective for a long time because only `sid/` was rebuilt;
+the `Randomnoise` ctor is instantiated inside the SID ctor in `libresid.a`. Inline
+probe accessors (filter8580new.h) DID work because they compile into `resid.o`, which
+masked the stale engine. ALWAYS rebuild `libresid.a` after any `src/resid/` edit.
+
+## UPDATE 2026-07-04 (post-reboot): root causes found + fixed
+
+Oracle-probe-driven diagnosis (native filter-state export added to
+vice_sid_exact_get_state: Vlp/Vbp/Vhp, prescaled v1/v2/v3, Vddt_Vw_2, kVddt,
+f0_dac[fc], table samples). Settled max/mean |managed CycleExternalFilterOutput -
+SidExactOutput| across saw/lp/bp/notch/hp scenarios:
+
+1. **PRIMARY BUG - missing filter bias (FIXED).** managed Vddt_Vw_2 diverged
+   (267,174,728 vs oracle 197,189,940) though kVddt (65535) and f0_dac[fc] (42419)
+   matched. Back-solve: oracle Vw = Vw_bias + f0_dac[fc] with **Vw_bias = 3257**,
+   not 0. VICE resid.cc:199 always calls adjust_filter_bias(SidResidFilterBias/1000)
+   and RESID_6581_FILTER_BIAS_DEFAULT = 500 (sid.h) -> Vw_bias = int(0.5*vo_N16) =
+   3257. Managed SetW0_6581 hardcoded 0. Fix: Sid6581.Filter.cs applies
+   FilterBiasVolts6581 = 500/1000 * VoN16. Result: LP tap mean **Δ1031 -> Δ2**.
+2. **Non-deterministic dither (NEUTRALIZED).** reSID Filter::Randomnoise fills a
+   1024-entry buffer at construction with rand() % (1<<19); VICE never srand()s, so
+   the buffer differs per SID instance and per run (verified: 3 machines, 3 buffers).
+   It cannot be bit-reproduced and violates determinism, so it is zeroed in BOTH the
+   managed chip (prescale drops +getNoise) and the parity oracle (native
+   filter8580new.h Randomnoise ctor sets buffer[i]=0).
+3. **FR-SID-VOICE AC-04 floating-DAC audio bias (IMPLEMENTED).** ComputeVoiceOutput
+   short-circuited no-waveform voices to `return 0`; reSID always computes
+   (model_dac[waveform_output] - wave_zero) * env using the fading floating latch
+   (voice.Osc3). Removed the special-case -> uses the shared formula. Result: mean
+   **Δ2 -> Δ0.6**.
+4. Summer index uses RAW Vlp (matching reSID) instead of clamped (marginal).
+
+Table builds are BIT-EXACT (opamp_rev/gain/mixer/summer/resonance/vcr all d=0 vs
+oracle). Current residual: direct/BP paths max 1 (mean 0.11); LP/notch taps max 5-8
+(mean 0.6, ~50% exact). Root cause of the REMAINING residual: the floating-DAC FADE
+(FR-SID-OSC3ENV3 AC-07) is not perfectly bit-exact, so silent/no-waveform voices'
+floating output differs by +/-1 occasionally; the LP/notch double-integrator
+amplifies it. This is a waveform-generator detail (S1/S2 fade), separate from the
+now-correct filter math.
+
+REMAINING to finish S9: (a) get the floating-DAC fade bit-exact (or scope decision),
+(b) rebaseline the 5 broken tests (PULSE-07, RING-04, ENV-50, CLOCK-06, CLOCK-07) to
+oracle values, (c) add [ViceFact] oracle filter-output tests as permanent locks,
+(d) trim the native filter_probe to the useful state export, (e) green all gates,
+commit S9 + shim probe. Native probe (uncommitted) currently exports 25 ints incl.
+throwaway table samples - trim before commit.
+
+---
+
 # S9 reSID 6581 filter - bit-exact remediation (CHECKPOINT, pre-reboot)
 
 Branch: `feat/vsf-lockstep-resid-rebaseline`. Date: 2026-07-04.

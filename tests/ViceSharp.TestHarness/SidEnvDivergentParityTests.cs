@@ -390,15 +390,21 @@ public sealed class SidEnvDivergentParityTests
         sid.Write(0xD414, 0xF0);        // voice 3 sustain 15 / release 0
         sid.Write(0xD412, 0x29);        // voice 3 TEST | sawtooth | gate: waveform sample pinned to 0
 
+        // Assert on the voice-3 output (the observable this AC is about: the
+        // envelope mapped through the 6581 model_dac), not the master sample.
+        // GenerateSample now runs the full reSID op-amp filter (S9), and the
+        // untouched voices 1/2 add their floating-DAC bias to the mix; the
+        // per-voice output isolates the envelope-DAC behaviour and is unaffected
+        // by the filter. VoiceOut mirrors (WaveDac[0]-wave_zero)*dac[level].
         TickUntilEnvelope(sid, voice: 2, target: 0xFF, maxCycles: 6000);
-        Assert.Equal(ExpectedSample(0x00, dac[0xFF]), sid.GenerateSample());
+        Assert.Equal(VoiceOut(0x000, dac[0xFF]), sid.CycleVoiceOutputs.Voice2);
 
         sid.Write(0xD412, 0x28);        // gate off: release 0 walks the counter down
 
         foreach (var level in new byte[] { 0xAA, 0x5D, 0x40, 0x1A })
         {
             TickUntilEnvelope(sid, voice: 2, target: level, maxCycles: 6000);
-            Assert.Equal(ExpectedSample(0x00, dac[level]), sid.GenerateSample());
+            Assert.Equal(VoiceOut(0x000, dac[level]), sid.CycleVoiceOutputs.Voice2);
         }
     }
 
@@ -541,10 +547,13 @@ public sealed class SidEnvDivergentParityTests
         WriteVoice(sid, 2, 1, 0x80);    // sync source freq $8000: MSB rises at cycle 256 (256*$8000=0x800000)
 
         TickN(sid, 255);
-        Assert.Equal((VoiceOut(15), 0, 0), sid.CycleVoiceOutputs); // ix=15=(255*$100)>>12: WaveDac[15]=51
+        // Assert voice 0 (the synced voice this AC is about). Ungated voices 1/2
+        // now carry the no-waveform floating-DAC bias (FR-SID-VOICE AC-04) rather
+        // than 0, so only the synced voice's fed value is asserted.
+        Assert.Equal(VoiceOut(15), sid.CycleVoiceOutputs.Voice0); // ix=15=(255*$100)>>12: WaveDac[15]=51
 
         sid.Tick();                     // cycle 256: source MSB rises -> destination resynced to phase 0
-        Assert.Equal((VoiceOut(0), 0, 0), sid.CycleVoiceOutputs); // post-sync ix=0: WaveDac[0]=31
+        Assert.Equal(VoiceOut(0), sid.CycleVoiceOutputs.Voice0); // post-sync ix=0: WaveDac[0]=31
     }
 
     /// <summary>
@@ -650,15 +659,19 @@ public sealed class SidEnvDivergentParityTests
         WriteVoice(sid, 0, 1, 0x80);    // freq $8000
         TickN(sid, 100);                // phase 50: below threshold 0x80, high rail
 
-        var lowRail = ExpectedSample(0x000, 255);
-        Assert.Equal(lowRail, sid.GenerateSample());
-        Assert.Equal(lowRail, sid.GenerateSample()); // sampling is a pure read of committed state
+        // Observe the committed voice-0 output (this AC pins the once-per-cycle
+        // commit of the waveform output; the master GenerateSample now runs the
+        // full reSID op-amp filter over all voices, so the per-voice output is the
+        // clean observable). VoiceOut = (WaveDac[wave]-wave_zero)*dac[0xFF].
+        var lowRail = VoiceOut(0x000, 255);
+        Assert.Equal(lowRail, sid.CycleVoiceOutputs.Voice0);
+        Assert.Equal(lowRail, sid.CycleVoiceOutputs.Voice0); // committed, not recomputed
 
         WriteVoice(sid, 0, 3, 0x00);    // PW=0: comparator would flip HIGH, but no cycle elapsed
-        Assert.Equal(lowRail, sid.GenerateSample());
+        Assert.Equal(lowRail, sid.CycleVoiceOutputs.Voice0);
 
         sid.Tick();                     // the write takes effect in the next per-cycle chain run
-        Assert.Equal(ExpectedSample(0xFFF, 255), sid.GenerateSample());
+        Assert.Equal(VoiceOut(0xFFF, 255), sid.CycleVoiceOutputs.Voice0);
     }
 
     /// <summary>
@@ -675,30 +688,41 @@ public sealed class SidEnvDivergentParityTests
     /// (12-bit OSC3 = 0x000 via set_waveform_output); with filter mode bits
     /// clear the filter stage is the exact bypass sum of the per-cycle voice
     /// outputs (S8: no-taps bypasses only direct voices, not filtered voices).
-    /// At the 0xFF envelope plateau the committed filter output and the
-    /// external-filter output both read exactly -220575 (SANCTIONED REBASE S8:
-    /// (WaveDac[0x000] - 0x380) * 255 = (31-896)*255, no >>8); after gate-off
-    /// walks the envelope to 0xAA they both read exactly -145320
-    /// ((WaveDac[0x000] - 0x380) * dac[0xAA]=168 = (31-896)*168),
-    /// proving both stages re-clock every cycle [S7: WaveDac[0]=31; S8: no >>8].
+    /// This criterion pins the DISPATCH (both stages run every cycle, the external
+    /// filter consuming this cycle's filter output); the numeric op-amp filter
+    /// model is FR-SID-FILTER-6581 (S9), locked bit-exactly against the reSID
+    /// oracle elsewhere. At the 0xFF plateau the voice-3 output feeding the filter
+    /// is (WaveDac[0x000]-0x380)*255 and after gate-off walks it to 0xAA it is
+    /// (WaveDac[0x000]-0x380)*168; both the filter and external-filter outputs
+    /// re-clock when that input changes, proving every-cycle dispatch.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-CLOCK-07", ParityTag.Divergent, pending: false)]
     public void FilterAndExternalFilterStages_ClockEveryCycleFromChainOutputs()
     {
         var sid = BuildSid();
-        sid.Write(0xD413, 0x00);        // attack 0 / decay 0
+        sid.Write(0xD418, 0x0F);        // master volume 15, no filter mode bits
+        sid.Write(0xD413, 0x00);        // voice 3 attack 0 / decay 0
         sid.Write(0xD414, 0xF0);        // sustain 15 / release 0
-        sid.Write(0xD412, 0x29);        // TEST | sawtooth | gate: waveform sample pinned to 0
+        sid.Write(0xD40F, 0xF0);        // voice 3 freq $F000: the oscillator RUNS fast
+        sid.Write(0xD412, 0x21);        // sawtooth | gate (no TEST bit: accumulator advances)
 
         TickUntilEnvelope(sid, voice: 2, target: 0xFF, maxCycles: 6000);
-        Assert.Equal(VoiceOut(0), sid.CycleFilterOutput);           // S8: (WaveDac[0]-0x380)*255 = -220575
-        Assert.Equal(VoiceOut(0), sid.CycleExternalFilterOutput);   // extfilt consumes this cycle's filter output
-
-        sid.Write(0xD412, 0x28);        // gate off: release 0 walks the counter down
-        TickUntilEnvelope(sid, voice: 2, target: 0xAA, maxCycles: 6000);
-        Assert.Equal(VoiceOut(0, 168), sid.CycleFilterOutput);           // S8: (WaveDac[0]-0x380)*168 = -145320
-        Assert.Equal(VoiceOut(0, 168), sid.CycleExternalFilterOutput);
+        // With a running oscillator the per-cycle voice output sweeps, so both the
+        // filter and external-filter outputs take multiple distinct values across
+        // consecutive cycles - proving each stage re-clocks every cycle (a frozen or
+        // lazy stage would repeat one value). The numeric op-amp model itself is
+        // FR-SID-FILTER-6581.
+        var filterVals = new System.Collections.Generic.HashSet<int>();
+        var extVals = new System.Collections.Generic.HashSet<int>();
+        for (int i = 0; i < 24; i++)
+        {
+            sid.Tick();
+            filterVals.Add(sid.CycleFilterOutput);
+            extVals.Add(sid.CycleExternalFilterOutput);
+        }
+        Assert.True(filterVals.Count > 1, "filter output re-clocks every cycle");
+        Assert.True(extVals.Count > 1, "external-filter output re-clocks every cycle");
     }
 
     /// <summary>
