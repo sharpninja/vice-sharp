@@ -36,7 +36,13 @@ public partial class Mos6569 : IStatefulDevice
         ushort rasterLine,
         byte inLineCycle,
         bool? allowBadLines = null,
-        bool? idleState = null)
+        bool? idleState = null,
+        ushort? videoCounter = null,
+        ushort? videoCounterBase = null,
+        byte? rowCounter = null,
+        byte? videoMatrixLineIndex = null,
+        byte? refreshCounter = null,
+        byte? spriteDmaActiveMask = null)
     {
         if (registers.Length < VicRegisterBytes)
             throw new ArgumentException($"Expected at least {VicRegisterBytes} register bytes.", nameof(registers));
@@ -81,6 +87,23 @@ public partial class Mos6569 : IStatefulDevice
             _allowBadLines = allow;
         if (idleState is { } idle)
             _idleState = idle;
+        // audit L10: restore the video counters and sprite DMA state exactly
+        // like VICE's snapshot module (vicii-snapshot.c:105-108,131,223-227,
+        // 250,270): vc/vcbase/rc/vmli/refresh_counter/sprite_dma load from
+        // the snapshot; they only re-derive at frame top, so a mid-frame
+        // resume without them diverges for the rest of the frame.
+        if (videoCounter is { } vc)
+            _videoCounter = (ushort)(vc & 0x03FF);
+        if (videoCounterBase is { } vcBase)
+            _vcBase = (ushort)(vcBase & 0x03FF);
+        if (rowCounter is { } rc)
+            _rowCounter = (byte)(rc & 0x07);
+        if (videoMatrixLineIndex is { } vmli)
+            _videoMatrixLineIndex = vmli % _videoBuffer.Length;
+        if (refreshCounter is { } refresh)
+            _refreshCounter = refresh;
+        if (spriteDmaActiveMask is { } spriteDma)
+            _spriteDmaActiveMask = spriteDma;
         // V4 FR-VIC-DRAW-COLOR: seed Cregs from injected registers so the first
         // rendered post-injection frame uses correct colour values without a CPU
         // write replay. Equivalent to vicii_draw_cycle_init seeding the identity
