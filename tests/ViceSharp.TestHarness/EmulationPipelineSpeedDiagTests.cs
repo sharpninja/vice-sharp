@@ -20,7 +20,7 @@ public sealed class EmulationPipelineSpeedDiagTests
     /// FR: FR-C64-Boot, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-02.
     /// Use case: the app pipeline at 100 percent limiter must sustain close
     /// to real time on a machine whose bare core runs several times real
-    /// time. Acceptance (diagnostic): the achieved rate over 4 seconds is at
+    /// time. Acceptance: (diagnostic) the achieved rate over 4 seconds is at
     /// least 90 percent of the PAL master clock; the failure message reports
     /// the measured percentage for diagnosis.
     /// </summary>
@@ -43,7 +43,7 @@ public sealed class EmulationPipelineSpeedDiagTests
     /// <summary>
     /// FR: FR-C64-Boot, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-03.
     /// Use case: warp (limiter off) must exceed real time on this hardware
-    /// (bare core ~497 percent). Acceptance (diagnostic): at least 150
+    /// (bare core ~497 percent). Acceptance: (diagnostic) at least 150
     /// percent of the PAL master clock over 4 seconds.
     /// </summary>
     [Fact]
@@ -67,7 +67,7 @@ public sealed class EmulationPipelineSpeedDiagTests
     /// FR: FR-C64-Boot, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-04.
     /// Use case: the True Drive session (a second full machine stepped with
     /// the C64) must also sustain real time at 100 percent limiter.
-    /// Acceptance (diagnostic): at least 90 percent of the PAL master clock.
+    /// Acceptance: (diagnostic) at least 90 percent of the PAL master clock.
     /// </summary>
     [Fact]
     public void AppPipeline_TrueDrive_Limited_Sustains_RealTime()

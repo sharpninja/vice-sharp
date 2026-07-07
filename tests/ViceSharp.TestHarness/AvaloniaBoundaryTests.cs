@@ -38,11 +38,14 @@ public sealed class AvaloniaBoundaryTests
     /// Use case: Even if the project references are clean, Avalonia
     /// source code must not contain string references to runtime
     /// namespace names or runtime-internal types - a textual usage
-    /// would imply reflection-based coupling.
+    /// would imply reflection-based coupling. ViceSharp.Abstractions is
+    /// deliberately NOT forbidden: it is the emulator contract and
+    /// TR-MVVM-001 prescribes that ViewModels reference exactly that
+    /// assembly (e.g. WarpModeEvent, ILocalVideoFrameSource).
     /// Acceptance: Concatenated Avalonia source contains none of
-    /// "ViceSharp.Abstractions", "ViceSharp.Architectures",
-    /// "ViceSharp.Core", "ViceSharp.Chips", "ViceSharp.RomFetch",
-    /// "IMachine", "IVideoChip", or "ArchitectureBuilder".
+    /// "ViceSharp.Architectures", "ViceSharp.Core", "ViceSharp.Chips",
+    /// "ViceSharp.RomFetch", "IMachine", "IVideoChip", or
+    /// "ArchitectureBuilder".
     /// </summary>
     [Fact]
     public void AvaloniaSources_DoNotReferenceRuntimeInternals()
@@ -56,7 +59,6 @@ public sealed class AvaloniaBoundaryTests
 
         foreach (var forbidden in new[]
         {
-            "ViceSharp.Abstractions",
             "ViceSharp.Architectures",
             "ViceSharp.Core",
             "ViceSharp.Chips",

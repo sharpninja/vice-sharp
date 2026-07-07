@@ -18,7 +18,7 @@ public sealed class LiveDeployedAppSettingsBisectTests
     /// <summary>
     /// FR: FR-C64-Boot, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-08.
     /// Use case: identify the app-side pacing brake by live A/B of settings.
-    /// Acceptance (diagnostic): always reports the per-phase clock percents in
+    /// Acceptance: (diagnostic) always reports the per-phase clock percents in
     /// the failure message; the assert requires the baseline to reach 90.
     /// </summary>
     [Fact]

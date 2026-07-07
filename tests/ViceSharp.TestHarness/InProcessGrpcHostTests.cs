@@ -278,17 +278,29 @@ public sealed class InProcessGrpcHostTests
     /// <summary>
     /// FR-HOST-DIAG-001 / TR-HOST-DIAG-004 / TEST-HOST-DIAG-001.
     /// Use case: production/default local hosts should not expose reflection
-    /// unless explicitly requested.
+    /// unless explicitly requested. The test isolates itself from ambient
+    /// VICESHARP_GRPC_REFLECTION (a debug-MSI install exports it machine-wide
+    /// and processes started before the uninstall inherit the stale value), so
+    /// "default" genuinely means no switch set.
     /// Acceptance: ReflectionEnabled is false when no reflection switch is set.
     /// </summary>
     [Fact]
     public async Task Reflection_IsDisabledByDefault()
     {
-        await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
-        var property = typeof(InProcessGrpcHost).GetProperty("ReflectionEnabled");
-        Assert.NotNull(property);
+        var ambient = Environment.GetEnvironmentVariable("VICESHARP_GRPC_REFLECTION");
+        Environment.SetEnvironmentVariable("VICESHARP_GRPC_REFLECTION", null);
+        try
+        {
+            await using var host = await InProcessGrpcHost.StartAsync(TestContext.Current.CancellationToken);
+            var property = typeof(InProcessGrpcHost).GetProperty("ReflectionEnabled");
+            Assert.NotNull(property);
 
-        Assert.False((bool)Assert.IsType<bool>(property.GetValue(host)));
+            Assert.False((bool)Assert.IsType<bool>(property.GetValue(host)));
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("VICESHARP_GRPC_REFLECTION", ambient);
+        }
     }
 
     /// <summary>

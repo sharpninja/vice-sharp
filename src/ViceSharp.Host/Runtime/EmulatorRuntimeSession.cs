@@ -639,9 +639,12 @@ public sealed class EmulatorRuntimeSession
         return true;
     }
 
-    // Headline speed is emulated machine time. At real PAL speed this should read ~100%
-    // while the VIC-II may still steal 6510 cycles; CPU duty belongs in PerCpuRates.
-    private long MachineCycle => Machine.GetState().Cycle;
+    // Headline speed is the PRIMARY CPU's own executed-cycle rate
+    // (FR-CPUTICK-001 AC2): on a multi-CPU rig the system/bus clock also
+    // advances peripheral cycles and would conflate the reading. Machines
+    // without a PrimaryCpu fall back to the system clock (same value on a
+    // single-CPU C64, where the 6510 executes every master cycle).
+    private long MachineCycle => Machine.PrimaryCpu?.ExecutedCycles ?? Machine.GetState().Cycle;
 
     public void ResetPerformanceCounters() => ResetPerformanceCounters(DateTimeOffset.UtcNow);
 

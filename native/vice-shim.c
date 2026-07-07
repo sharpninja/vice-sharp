@@ -46,6 +46,7 @@
 #include "cartridge.h"
 #include "keyboard.h"
 #include "vicii.h"
+#include "viciisc/vicii-mem.h"
 #include "vice-shim-runtime.h"
 #include "viciisc/viciitypes.h"
 #include "palette.h"
@@ -1473,12 +1474,23 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
            therefore the badline BA stall for the remainder of the frame. */
         state->allow_bad_lines = (uint8_t)(vicii.allow_bad_lines != 0);
         state->idle_state = (uint8_t)(vicii.idle_state != 0);
-        memcpy(state->registers, vicii.regs, sizeof(state->registers));
+        /* Export vicii_peek() semantics (vicii-mem.c:747-770), not raw
+           vicii.regs: managed Mos6569.Peek mirrors vicii_peek exactly
+           (FR-VIC-REGISTERS AC-15), including the unused-bit OR table
+           ($D016|=$C0, $D019|=$70, $D01A|=$F0, colors|=$F0) and the live
+           raster in $D011/$D012. Raw regs made every register-checkpoint
+           comparison diverge by the unused bits (e.g. $D016 managed=$C5
+           vs native=$05). vicii_peek is side-effect-free by contract. */
+        {
+            unsigned int reg;
+            for (reg = 0; reg < sizeof(state->registers); reg++) {
+                state->registers[reg] = vicii_peek((uint16_t)(0xd000 + reg));
+            }
+        }
         /* $D019: vicii.irq_status holds the live IRQ latch (bits 0-3 = source flags).
-           vicii.regs[0x19] only reflects the last CPU write; vicii_irq_raster_set()
-           updates irq_status, NOT regs[0x19]. Override so the snapshot matches what
-           managed Peek(0xD019) returns (managed stores latch in _registers[0x19]). */
-        state->registers[0x19] = (uint8_t)(vicii.irq_status & 0x0F);
+           vicii_peek(0xd019) returns irq_status with bit 7 (any-enabled-source)
+           and the |0x70 unused bits; managed Peek(0xD019) stores the latch in
+           _registers[0x19] and ORs the same table, so peek matches peek. */
     }
     LeaveCriticalSection(&g_state_lock);
 }

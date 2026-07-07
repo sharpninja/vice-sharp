@@ -115,9 +115,10 @@ public sealed class WarpAudioDiscardTests
     /// Use case: with live audio ON and the limiter inside the live-audio
     /// band, sound back-pressure must pace to the REQUESTED rate, not wall
     /// clock: the SID emits samples at speed_percent-scaled cadence (VICE
-    /// sound.c:1067) and the fixed-rate device drains them. Acceptance
-    /// (diagnostic): a 150 percent limiter measures 135-170 percent and a
-    /// 50 percent limiter measures 40-60 percent over 4 seconds each.
+    /// sound.c:1067) and the fixed-rate device drains them.
+    /// Acceptance: (diagnostic) a 150 percent limiter measures 135-170
+    /// percent and a 50 percent limiter measures 40-60 percent over 4
+    /// seconds each.
     /// </summary>
     [Fact]
     public async Task AppPipeline_LiveAudio_Paces_To_Limiter_Rate()
@@ -176,7 +177,7 @@ public sealed class WarpAudioDiscardTests
     /// Use case: with live audio suspended above 200 percent, the pacing
     /// gate must fall through to the vsync regulator and actually reach the
     /// requested fast-forward rate instead of being held near 100 percent by
-    /// the sound path. Acceptance (diagnostic): a 251 percent limiter with
+    /// the sound path. Acceptance: (diagnostic) a 251 percent limiter with
     /// VICESHARP_AUDIO=1 sustains at least 200 percent of the PAL master
     /// clock over 4 seconds.
     /// </summary>
@@ -248,7 +249,7 @@ public sealed class WarpAudioDiscardTests
     /// Use case: the user symptom - warp with live audio was capped near 100
     /// percent because the SID's fragment writes blocked on the full WinMM
     /// ring. With warp discarding live audio (VICE sound.c:1573) the app
-    /// pipeline must actually sprint. Acceptance (diagnostic): warp with
+    /// pipeline must actually sprint. Acceptance: (diagnostic) warp with
     /// VICESHARP_AUDIO=1 reaches at least 150 percent of the PAL master
     /// clock over 4 seconds; the failure message reports the measured rate.
     /// </summary>

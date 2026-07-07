@@ -22,7 +22,7 @@ public sealed class LiveDeployedAppSpeedProbeTests
     /// <summary>
     /// FR: FR-C64-Boot, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-07.
     /// Use case: the deployed app must sustain real time while running the
-    /// demo the user reported at about 50 percent. Acceptance (diagnostic):
+    /// demo the user reported at about 50 percent. Acceptance: (diagnostic)
     /// the app's own effective clock percent averages at least 90 over the
     /// sampled window; the failure message reports the measured percentages
     /// at READY and during the demo.
