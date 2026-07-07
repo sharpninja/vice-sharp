@@ -845,12 +845,15 @@ internal sealed class PixelSequencer
     internal void DrawSprites8(int flagsRasterX, byte spriteDisplayBits)
     {
         // xpos: cycle_get_xpos(cycle_flags) (vicii-chip-model.h:164-167)
-        // returns the piped cycle's merged 8-aligned xpos, which is the Phi2
-        // xpos of that cycle: Phi2(1)=0x198 at rc0, +8 per cycle, wrapping at
-        // 0x1F8 (vicii-chip-model.c PAL table :112-238). A negative
-        // flagsRasterX models VICE's zero flags word before the first draw
-        // (xpos 0).
-        int xpos = flagsRasterX >= 0 ? (0x198 + 8 * flagsRasterX) % 0x1F8 : 0;
+        // returns the piped cycle's merged xpos, which the table build stores
+        // as the PHI1 xpos floored to 8 (vicii-chip-model.c:767,
+        // entry |= (xpos_phi[0] >> 3) << XPOS_B). PAL: Phi1(1)=0x194 at rc0,
+        // +8 per full cycle, wrapping at 0x1F8 (PAL table :112-238), then &~7.
+        // Beam anchor: sprite X=24 (the CSEL=1 display edge) triggers during
+        // the cycle-17 draw, the same cycle that renders the first display
+        // pixels. A negative flagsRasterX models VICE's zero flags word
+        // before the first draw (xpos 0).
+        int xpos = flagsRasterX >= 0 ? ((0x194 + (8 * flagsRasterX)) % 0x1F8) & ~7 : 0;
 
         // ChkSprDisp is carried by the rc57 flags (VICE Phi1(58) row,
         // vicii-chip-model.c:226) and consumed one cycle later via the pipe.

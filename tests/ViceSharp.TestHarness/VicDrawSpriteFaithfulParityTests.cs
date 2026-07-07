@@ -1011,8 +1011,10 @@ public sealed class VicDrawSpriteFaithfulParityTests
             int fbl = vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 7) + 8) & 7);
             vic.Phi1MemoryReader = cycle =>
             {
-                if (cycle < 14 || cycle >= 54) return 0;
-                int col = cycle - 14;
+                // Real g-accesses: cycles 15-54 serve display columns 0-39
+                // (VICE FetchG, PAL table Phi1(16)..Phi1(55); audit H1 pipe).
+                if (cycle < 15 || cycle >= 55) return 0;
+                int col = cycle - 15;
                 int screenRow = (vic.CurrentRasterLine - fbl) / 8;
                 if (screenRow < 0 || screenRow >= 25) return 0;
                 int rowCounter = (vic.CurrentRasterLine - fbl) & 7;
@@ -1070,8 +1072,10 @@ public sealed class VicDrawSpriteFaithfulParityTests
             int fbl = vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 7) + 8) & 7);
             vic.Phi1MemoryReader = cycle =>
             {
-                if (cycle < 14 || cycle >= 54) return 0;
-                int col = cycle - 14;
+                // Real g-accesses: cycles 15-54 serve display columns 0-39
+                // (VICE FetchG, PAL table Phi1(16)..Phi1(55); audit H1 pipe).
+                if (cycle < 15 || cycle >= 55) return 0;
+                int col = cycle - 15;
                 int screenRow = (vic.CurrentRasterLine - fbl) / 8;
                 if (screenRow < 0 || screenRow >= 25) return 0;
                 int rowCounter = (vic.CurrentRasterLine - fbl) & 7;

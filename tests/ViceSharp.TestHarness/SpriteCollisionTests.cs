@@ -291,15 +291,17 @@ public sealed class SpriteCollisionTests
 
         // Connect Phi1MemoryReader to bus so DrawGraphics8 gets the correct
         // g-access character or bitmap row data for PriBuffer construction.
-        // Visible cycles 14-53 map to display columns 0-39; the address is
+        // The real g-accesses run at cycles 15-54 for display columns 0-39
+        // (VICE FetchG, vicii-chip-model.c PAL table Phi1(16)..Phi1(55), with
+        // the one-cycle-delayed visibility gate of audit H1); the address is
         // CharacterBase + screenCode*8 + rowCounter (char mode) or
         // BitmapPointerBase + screenIndex*8 + rowCounter (bitmap mode).
         bool bitmapMode = (d011 & 0x20) != 0;
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         vic.Phi1MemoryReader = cycle =>
         {
-            if (cycle < 14 || cycle >= 14 + columns) return 0;
-            int col = cycle - 14;
+            if (cycle < 15 || cycle >= 15 + columns) return 0;
+            int col = cycle - 15;
             int fbl = vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 7) + 8) & 7);
             int screenRow = (vic.CurrentRasterLine - fbl) / 8;
             if (screenRow < 0 || screenRow >= 25) return 0;

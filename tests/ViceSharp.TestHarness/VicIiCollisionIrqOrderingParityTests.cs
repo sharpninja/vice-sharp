@@ -28,12 +28,13 @@ public sealed class VicIiCollisionIrqOrderingParityTests
     private const ushort SpriteSSColl = 0xD01E;
 
     // Same trigger geometry as VicSpriteRenderDivergentParityTests: sprites at
-    // X=20 trigger at RasterX 15 (flags xpos 16..23 covers 20 at pixel 4) on
-    // the first render line after DMA start at Y=100.
+    // X=20 trigger during the RasterX 16 draw (the piped rc15 flags carry the
+    // floored Phi1 xpos 16, vicii-chip-model.c:767; pixels 16..23 cover 20 at
+    // pixel 4) on the first render line after DMA start at Y=100.
     private const byte   SpriteTestX  = 20;
     private const byte   SpriteTestY  = 100;
     private const ushort TriggerLine  = 101;
-    private const byte   TriggerCycle = 15;
+    private const byte   TriggerCycle = 16;
 
     private static Mos6569 BuildVicWithSprites(out IInterruptLine irq)
     {

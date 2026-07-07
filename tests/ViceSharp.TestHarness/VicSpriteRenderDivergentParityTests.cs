@@ -49,14 +49,17 @@ public sealed class VicSpriteRenderDivergentParityTests
     private const ushort SpriteSBColl = 0xD01F;
     private const ushort InterruptReg = 0xD019;
 
-    // Sprite at X=20: phi1_xpos = (0x194 + 8*15) % 0x1F8 = 0x14 = 20 -> triggers at RasterX 15.
+    // Sprite at X=20: the draw at RasterX 16 consumes the piped rc15 flags,
+    // whose merged xpos is the floored Phi1 value ((0x194 + 8*15) % 0x1F8)
+    // & ~7 = 16 (vicii-chip-model.c:767 with cycle_get_xpos), so pixels
+    // 16..23 cover X=20 at pixel 4.
     private const byte SpriteTestX = 20;
     // Y=100 starts DMA on line 100; sprite renders on lines 100..120.
     private const byte SpriteTestY = 100;
-    // Line we advance TO for render-path tests (line 101 passes through trigger RasterX 15).
+    // Line we advance TO for render-path tests (line 101 passes through trigger RasterX 16).
     private const ushort TriggerLine = 101;
-    // RasterX where phi1_xpos == SpriteTestX == 20.
-    private const byte TriggerCycle = 15;
+    // RasterX of the draw whose piped xpos window covers SpriteTestX == 20.
+    private const byte TriggerCycle = 16;
 
     // ----------------------------------------------------------------
     // FR-VIC-SPRITE-RENDER: per-pixel sbuf shift-register render path
@@ -600,12 +603,13 @@ public sealed class VicSpriteRenderDivergentParityTests
         AdvanceTo(vic, 101, 0);
 
         // Frame pixel for raster line 100 (VICE window starts at raster line
-        // 16, VICII_PAL_NORMAL_FIRST_DISPLAYED_LINE, vicii-timing.h:68). The
-        // frame x coordinate equals the sprite/beam x coordinate: frame x 0 is
-        // dbuf[104] = beam xpos 0 (vicii-draw.c:71 DBUF_OFFSET with the PAL
-        // 0x20 left border width).
+        // 16, VICII_PAL_NORMAL_FIRST_DISPLAYED_LINE, vicii-timing.h:68).
+        // Frame x = beam x + 8: frame x 0 is dbuf[104] (vicii-draw.c:71
+        // DBUF_OFFSET with the PAL 0x20 left border width), and the draw of
+        // cycle k covers beam (floored Phi1 xpos of cycle k-1) while landing
+        // at dbuf[8(k-1)], so a sprite at X=50 renders at frame x 58.
         int frameY = 100 - VideoRenderer.PalFirstVisibleRasterLine;
-        int offset = ((frameY * VideoRenderer.ScreenWidth) + 50) * 4;
+        int offset = ((frameY * VideoRenderer.ScreenWidth) + 58) * 4;
         uint pixel = System.BitConverter.ToUInt32(vic.FrameBuffer, offset);
 
         // Background color register $D021 defaults to 0 (black) -> BGRA 0xFF000000.
