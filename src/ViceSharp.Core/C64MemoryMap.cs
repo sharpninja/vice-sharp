@@ -113,6 +113,18 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     // $DE0F Ethernet register window is stubbed.
     private int _rrNetCartridgeBank;
     private bool _rrNetHidden;
+    // PLAN-VICEPARITY-001 audit M6 RESOLUTION: audit claimed VICE boots both
+    // banks at base 0 (vicii.c:354-355), but the lockstep oracle REFUTES
+    // changing this seed: with _vicBank = 0 the CPU stream diverges from
+    // native x64sc within 200 cycles (LockstepValidationTests), because bank 0
+    // enables the managed char-ROM window at VIC $1000-$1FFF while VICE's
+    // pre-CIA2 init leaves chargen matching unconfigured and fetches raw RAM.
+    // The 3/0 seed is observationally equivalent to native at boot (the C64
+    // RAM init pattern repeats every $4000, so base $C000 and base $0000
+    // fetch identical bytes) and the KERNAL programs the real bank via $DD00
+    // (both fields then track it symmetrically, :163-164) before the display
+    // is enabled. Verified by First10000/100000CyclesMatch plus the bit-exact
+    // boot-frame oracle test.
     private int _vicBank = 3;
     private int _vicPhi1Bank;
     private byte _lastCpuBusValue = 0xFF;
@@ -207,6 +219,8 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         _joystickPort2.Reset();
         _pla.WriteDataDirection(0x2F);
         _pla.WriteDataPort(0x37);
+        // audit M6 RESOLUTION: keep the 3/0 boot seed; see the field comment.
+        // Changing it to 0/0 breaks CPU lockstep vs native x64sc.
         _vicBank = 3;
         _vicPhi1Bank = 0;
         if (_attachedCartridgeMappingMode == CartridgeMappingMode.GameSystem)
@@ -865,7 +879,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             return;
 
         var slot = _vic.CurrentVideoMatrixSlot;
-        if (_vic.IsMatrixPrefetchSlot(cAccessOrdinal))
+        if (_vic.IsMatrixPrefetchActive)
         {
             _vic.LatchVideoMatrixPrefetch(slot, ReadCpuProgramRamByte());
         }

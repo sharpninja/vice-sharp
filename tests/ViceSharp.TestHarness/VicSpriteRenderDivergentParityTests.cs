@@ -265,9 +265,11 @@ public sealed class VicSpriteRenderDivergentParityTests
         vic.LatchSpriteData(0, 1, 0xB2);
         vic.LatchSpriteData(0, 2, 0xC3); // sprite.Data = 0xA1B2C3
 
-        // Advance to RasterX 58 (VICE cycle 59: Phi1=SprDma1(0), Phi2=SprDma2(0)).
-        // update_sprite_data fires here: sbuf_reg[0] = sprite[0].data = 0xA1B2C3.
-        AdvanceTo(vic, SpriteTestY, 58);
+        // The SprDma1(0) flags ride RasterX 58 (VICE Phi1(59)), but draw_sprites8
+        // consumes them one cycle later via cycle_flags_pipe
+        // (vicii-draw-cycle.c:679-687, audit H1), so update_sprite_data copies
+        // sprite[0].data into sbuf_reg during the RasterX 59 draw.
+        AdvanceTo(vic, SpriteTestY, 59);
         Assert.Equal(0xA1B2C3u, vic.GetSbufReg(0));
     }
 
@@ -467,12 +469,14 @@ public sealed class VicSpriteRenderDivergentParityTests
         vic.Write(SpriteY0, SpriteTestY);
         vic.Write(SpriteEnable, 0x01);
 
-        // Advance to TriggerCycle+1: the gbuf pipeline has a 2-cycle delay, so
-        // the foreground pixels from Phi1=0xFF (first visible cycle=14) first
-        // appear in PriBuffer at cycle 16 (TriggerCycle+1). The sprite triggered
-        // at pixel 4 of TriggerCycle=15 and is still active at cycle 16, so
-        // SB collision fires at pixel 0 of cycle 16 (still mid-line).
-        AdvanceTo(vic, TriggerLine, (byte)(TriggerCycle + 1));
+        // Advance to TriggerCycle+2: the pipe0 load is gated by the PREVIOUS
+        // cycle's VISIBLE flag (audit H1, cycle_flags_pipe,
+        // vicii-draw-cycle.c:679/:687), so the first g-access (cycle 15) loads
+        // at end of cycle 15 and its foreground pixels first appear in
+        // PriBuffer at cycle 17 (TriggerCycle+2). The sprite triggered at
+        // pixel 4 of TriggerCycle=15 and is 24px wide, so it is still active
+        // at cycle 17 and the SB collision fires there (still mid-line).
+        AdvanceTo(vic, TriggerLine, (byte)(TriggerCycle + 2));
 
         byte latch = vic.SpriteBackgroundCollision;
         Assert.NotEqual(0, latch); // per-pixel SB collision must have fired
@@ -543,12 +547,13 @@ public sealed class VicSpriteRenderDivergentParityTests
 
         AdvanceTo(vic, SpriteTestY, 57);
 
-        // Advance to TriggerCycle+1: the gbuf pipeline has a 2-cycle delay (VICE
-        // draw_graphics8 gbuf_pipe1_reg = old gbuf_pipe0_reg), so the first
-        // foreground PriBuffer pixels from Phi1=0xFF appear at cycle 16.
-        // Sprite triggered at pixel 4 of cycle 15; SB IRQ fires at pixel 0 of
-        // cycle 16 (still mid-line, before end-of-line wrap).
-        AdvanceTo(vic, TriggerLine, (byte)(TriggerCycle + 1));
+        // Advance to TriggerCycle+2: the pipe0 load is gated by the PREVIOUS
+        // cycle's VISIBLE flag (audit H1, cycle_flags_pipe,
+        // vicii-draw-cycle.c:679/:687), so the first g-access (cycle 15) loads
+        // at end of cycle 15 and its foreground PriBuffer pixels appear at
+        // cycle 17. Sprite triggered at pixel 4 of cycle 15 and is 24px wide,
+        // so the SB IRQ fires at cycle 17 (still mid-line, before wrap).
+        AdvanceTo(vic, TriggerLine, (byte)(TriggerCycle + 2));
 
         // VICE first-appearance: $D019 bit 1 set at the FIRST bg collision pixel.
         Assert.NotEqual(0, vic.Read(InterruptReg) & 0x02);
@@ -594,9 +599,13 @@ public sealed class VicSpriteRenderDivergentParityTests
         // At that point FrameBuffer has line 100 rendered with PixelSequencer foreground data.
         AdvanceTo(vic, 101, 0);
 
-        // Frame pixel for raster line 100: frameY = 100 - PalFirstVisibleRasterLine(15) = 85.
-        const int FrameY = 85;
-        int offset = (FrameY * VideoRenderer.ScreenWidth + 50) * 4;
+        // Frame pixel for raster line 100 (VICE window starts at raster line
+        // 16, VICII_PAL_NORMAL_FIRST_DISPLAYED_LINE, vicii-timing.h:68). The
+        // frame x coordinate equals the sprite/beam x coordinate: frame x 0 is
+        // dbuf[104] = beam xpos 0 (vicii-draw.c:71 DBUF_OFFSET with the PAL
+        // 0x20 left border width).
+        int frameY = 100 - VideoRenderer.PalFirstVisibleRasterLine;
+        int offset = ((frameY * VideoRenderer.ScreenWidth) + 50) * 4;
         uint pixel = System.BitConverter.ToUInt32(vic.FrameBuffer, offset);
 
         // Background color register $D021 defaults to 0 (black) -> BGRA 0xFF000000.

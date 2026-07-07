@@ -141,6 +141,47 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     private bool _mainBorderActive = true;
     private bool _mainBorderOpenedThisLine;
 
+    // PLAN-VICEPARITY-001 audit H1: managed equivalent of VICE's
+    // cycle_flags_pipe (vicii-draw-cycle.c:679-687). Holds the PREVIOUS
+    // cycle's RasterX; DrawGraphics8's pipe0-load visibility gate and every
+    // cycle-derived input of DrawSprites8 (xpos, ChkSprDisp, SprPtr/SprDma1
+    // pixel events) consume this one-cycle-delayed value while gbuf, vborder,
+    // idle_state and the registers are read live, exactly as vicii_draw_cycle
+    // passes cycle_flags_pipe to draw_graphics8/draw_sprites8 and latches
+    // cycle_flags_pipe = vicii.cycle_flags only afterwards. -1 mirrors the
+    // zero-initialised flags word before the first cycle (no visibility, no
+    // sprite events).
+    private int _rasterXPipe = -1;
+
+    // PLAN-VICEPARITY-001 audit H3: VICE vicii.prefetch_cycles
+    // (viciisc/vicii-cycle.c:580-591). While BA is high the counter re-arms at
+    // 3+1; each BA-low cycle decrements it BEFORE the Phi2 fetches, so a
+    // standard bad line (BA falls at cycle 12, first c-access at cycle 15)
+    // reaches 0 exactly at the first c-access and fetches real matrix data.
+    // Only a bad line raised mid-line (or a fetch overlapping a fresh sprite
+    // BA) still sees garbage c-accesses (vicii-fetch.c:192-201).
+    private int _prefetchCycles;
+
+    // PLAN-VICEPARITY-001 audit H3: per-cycle sprite BA masks from the PAL
+    // cycle table (viciisc/vicii-chip-model.c:112-238, BaSpr entries; consumed
+    // by vicii_check_sprite_ba, vicii-fetch.c:301-307). Index = RasterX.
+    // NTSC tables differ at the line-end cycles and are refined in the audit
+    // Phase 5 slice (M11); until then 64/65-cycle models fall back to 0 for
+    // the cycles beyond this table.
+    private static readonly byte[] PalSpriteBaMasks =
+    [
+        0x18, 0x38, 0x30, 0x70, 0x60, 0xE0, 0xC0, 0xC0, // rc0-7:  BaSpr(3,4)..BaSpr(6,7)
+        0x80, 0x80, 0x00,                               // rc8-10: BaSpr(7), BaSpr(7), none
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc11-18 (BaFetch window)
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc19-26
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc27-34
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc35-42
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc43-50
+        0x00, 0x00, 0x00,                               // rc51-53
+        0x01, 0x01, 0x03, 0x03, 0x07,                   // rc54-58: BaSpr(0)..BaSpr(0,1,2)
+        0x06, 0x0E, 0x0C, 0x1C,                         // rc59-62: BaSpr(1,2)..BaSpr(2,3,4)
+    ];
+
     // BACKFILL-VIDEO-001: Sprite DMA cycle stealing accounting.
     // Each enabled sprite that intersects the current raster line steals
     // two CPU cycles for s-data fetches. _spriteDmaCyclesThisFrame
@@ -1288,15 +1329,56 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         UpdateSpriteDmaLatchForCurrentCycle();
         UpdateSpriteSequencerForCurrentCycle();
 
+        // PLAN-VICEPARITY-001 audit H3: BA/prefetch countdown, VICE
+        // viciisc/vicii-cycle.c:572-591. BA is low on bad-line fetch cycles
+        // (BaFetch, chip-model rc11-53) and on sprite BA cycles for sprites
+        // with DMA latched (vicii_check_sprite_ba, vicii-fetch.c:301-307).
+        // While BA is high the counter re-arms at 3+1; each BA-low cycle
+        // decrements it BEFORE this cycle's fetches so the first c-access of a
+        // standard bad line (cycle 15, BA low since 12) reads real data.
+        {
+            bool baLow = _badLine && RasterX >= 11 && RasterX < 54;
+            if (!baLow && (uint)RasterX < (uint)PalSpriteBaMasks.Length)
+            {
+                baLow = (_spriteDmaActiveMask & PalSpriteBaMasks[RasterX]) != 0;
+            }
+
+            if (baLow)
+            {
+                if (_prefetchCycles != 0)
+                    _prefetchCycles--;
+            }
+            else
+            {
+                _prefetchCycles = 3 + 1;
+            }
+        }
+
         // PERF-VIC-003: Phi1MemoryReader initialized to non-null default in constructor;
         // direct invoke eliminates null check per cycle.
         LastReadPhi1 = Phi1MemoryReader(CurrentCycle);
 
-        // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL: per-cycle pixel sequencer.
-        // vis_en = cycle is inside the 40-column display window (RasterX 14-53) AND
-        // vertical border is closed. Matches VICE vicii-draw-cycle.c vis_en check.
+        // PLAN-VICEPARITY-001 audit H2: reset the draw-buffer offset at raster
+        // cycle 1, exactly where VICE does it (vicii_draw_cycle,
+        // vicii-draw-cycle.c:674-677). Combined with the colour ring delay this
+        // places cycle k's pixels at LineIndices[8*(k-1)], identical to VICE's
+        // dbuf indexing (dbuf[8k] = render_buffer of cycle k).
+        if (RasterX == 1)
         {
-            bool psVisEn = RasterX >= 14 && RasterX < 54 && !_verticalBorderActive;
+            _pixelSequencer.DbufOffset = 0;
+        }
+
+        // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL + audit H1:
+        // per-cycle pixel sequencer. vis_en comes from the PREVIOUS cycle's
+        // flags via the cycle_flags_pipe equivalent (_rasterXPipe): VICE's
+        // VISIBLE_M covers the FetchC cycles rc14-53, so the delayed gate
+        // fires on rc15-54 and pairs the g-access fetched THIS cycle with the
+        // matching vbuf/cbuf cell (vicii-draw-cycle.c:679 draw_graphics8
+        // consuming cycle_flags_pipe, load block :275-294). vborder and
+        // idle_state stay live, exactly as VICE reads vicii.vborder and
+        // vicii.idle_state inside the load block.
+        {
+            bool psVisEn = _rasterXPipe >= 14 && _rasterXPipe < 54 && !_verticalBorderActive;
             _pixelSequencer.DrawGraphics8(RasterX, psVisEn, _verticalBorderActive, _idleState, LastReadPhi1);
         }
         // PLAN-VICEPARITY-001 V6 FR-VIC-SPRITE-RENDER / FR-VIC-SPRITE-COLLISION:
@@ -1307,7 +1389,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         {
             bool canSs = (_spriteSpriteCollisionLatch == 0);
             bool canSb = (_spriteBackgroundCollisionLatch == 0);
-            _pixelSequencer.DrawSprites8(RasterX, _spriteDisplayBits);
+            // audit H1: draw_sprites8 receives the piped flags too
+            // (vicii-draw-cycle.c:681), so xpos, ChkSprDisp and the
+            // SprPtr/SprDma1 pixel events all key off the previous cycle.
+            _pixelSequencer.DrawSprites8(_rasterXPipe, _spriteDisplayBits);
             _spriteSpriteCollisionLatch       |= _pixelSequencer.SpriteSsCollisionThisCycle;
             _spriteBackgroundCollisionLatch   |= _pixelSequencer.SpriteSbCollisionThisCycle;
             byte irqBits = 0;
@@ -1328,6 +1413,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // V4 FR-VIC-DRAW-COLOR: per-cycle colour resolution pipeline
         // (vicii_draw_cycle -> draw_colors8, vicii-draw-cycle.c:627-663).
         _pixelSequencer.DrawColors8();
+
+        // PLAN-VICEPARITY-001 audit H1: latch the flags pipe AFTER all four
+        // draw stages, mirroring "cycle_flags_pipe = vicii.cycle_flags" at the
+        // end of vicii_draw_cycle (vicii-draw-cycle.c:687).
+        _rasterXPipe = RasterX;
 
         // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08 / FR-VIC-MATRIX-ADDR AC-08:
         // latch the delayed video-mode copy at the end of the cycle so the next
@@ -1447,6 +1537,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen: false);
         _allowBadLines = false;
         _refreshCounter = 0;
+        // audit H1/H3: no draw flags piped yet (VICE's cycle_flags_pipe starts
+        // as the zero flags word) and the BA prefetch counter starts at 0; the
+        // first non-BA cycle re-arms it at 3+1 (vicii-cycle.c:587-591).
+        _rasterXPipe = -1;
+        _prefetchCycles = 0;
         Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
         Array.Clear(_colorBuffer, 0, _colorBuffer.Length);
         Array.Clear(_videoBufferDisplayValid, 0, _videoBufferDisplayValid.Length);
@@ -1551,6 +1646,25 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
     private void UpdateBorderFlipFlopsForCurrentCycle()
     {
+        // PLAN-VICEPARITY-001 audit M5: VICE evaluates the vertical border
+        // comparisons EVERY cycle in Phi2 (viciisc/vicii-cycle.c:477-479), so a
+        // mid-line DEN write on the top-border line or a mid-line RSEL change
+        // takes effect at the writing cycle, not at the next line start. This
+        // runs before the draw of the current cycle, which is the same
+        // sequence point as VICE's previous-cycle Phi2.
+        CheckVerticalBorderTopForCurrentLine();
+        CheckVerticalBorderBottomForCurrentLine();
+
+        // audit M5: the vborder flip-flop copies set_vborder at raster cycle 1
+        // (vicii-cycle.c:480-482, Phi2 of raster_cycle 0 = before the cycle-1
+        // draw), closing the border at the line start of the RSEL stop line
+        // instead of waiting for the left-border check.
+        if (RasterX == 1)
+        {
+            _verticalBorderActive = _verticalBorderNextActive;
+            CaptureVerticalBorderForCurrentLine();
+        }
+
         if (RasterX == LeftBorderCheckCycle)
         {
             CheckVerticalBorderBottomForCurrentLine();
@@ -2369,7 +2483,16 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
     public bool IsMatrixFetchSlot(byte graphicsFetchSlot) => IsBadLine && graphicsFetchSlot < _videoBuffer.Length;
 
-    public bool IsMatrixPrefetchSlot(byte graphicsFetchSlot) => graphicsFetchSlot < 3;
+    /// <summary>
+    /// PLAN-VICEPARITY-001 audit H3: true while VICE's prefetch counter is
+    /// non-zero, i.e. BA has been low for fewer than 3 cycles before this
+    /// fetch (vicii-cycle.c:580-591). A c-access in this state reads garbage
+    /// (vbuf 0xFF + CPU-bus colour nibble, vicii-fetch.c:192-201). On a
+    /// standard bad line the counter reaches 0 exactly at the first c-access,
+    /// so no slot is corrupted; the previous fixed slot&lt;3 heuristic wrongly
+    /// corrupted the first three columns of every bad line.
+    /// </summary>
+    public bool IsMatrixPrefetchActive => _prefetchCycles != 0;
 
     public void LatchVideoMatrixFetch(int slot, byte matrixByte, byte colorNibble)
     {

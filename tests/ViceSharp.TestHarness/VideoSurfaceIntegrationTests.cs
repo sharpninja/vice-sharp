@@ -467,13 +467,14 @@ public sealed class VideoSurfaceIntegrationTests
 
     /// <summary>
     /// FR: FR-VIC-001, FR: FR-VIC-007, TR: TR-CYCLE-001.
-    /// Use case: VideoRenderer must crop the PAL raster (312 lines)
-    /// down to the visible 272-line frame so the 200-line text area
-    /// is vertically centred.
-    /// Acceptance: With DEN and 25-row mode enabled, upper text area
-    /// maps to frame Y 36, lower text area maps to frame Y 236, and
-    /// the bottom margin (ScreenHeight - lower) equals the top margin
-    /// (both 36) - i.e. perfectly centred.
+    /// Use case: VideoRenderer must crop the PAL raster (312 lines) down to
+    /// the visible 272-line frame using VICE's real window: the first
+    /// displayed line is raster 16 (VICII_PAL_NORMAL_FIRST_DISPLAYED_LINE,
+    /// vicii-timing.h:68), verified bit-exact against the x64sc frame oracle.
+    /// Acceptance: With DEN and 25-row mode enabled, the upper text area
+    /// (raster $33) maps to frame Y 35 and the lower border start (raster
+    /// $FB) to frame Y 235, giving VICE's real margins: 35 above, 37 below
+    /// (the hardware window is not perfectly centred).
     /// </summary>
     [Fact]
     public void VideoFrame_CropsPalRasterToCenterTextAreaVertically()
@@ -486,9 +487,9 @@ public sealed class VideoSurfaceIntegrationTests
         var upperTextArea = VideoRenderer.RasterLineToFrameY(vic.UpperBorderStart);
         var lowerTextArea = VideoRenderer.RasterLineToFrameY(vic.LowerBorderStart);
 
-        Assert.Equal(36, upperTextArea);
-        Assert.Equal(236, lowerTextArea);
-        Assert.Equal(36, VideoRenderer.ScreenHeight - lowerTextArea);
+        Assert.Equal(35, upperTextArea);
+        Assert.Equal(235, lowerTextArea);
+        Assert.Equal(37, VideoRenderer.ScreenHeight - lowerTextArea);
     }
 
     private static void WriteFrameToPng(byte[] frameBuffer, int width, int height, string outputPath)

@@ -95,7 +95,11 @@ public sealed class VicColorDisplayModeDivergentParityTests
         // Set Cregs[0x21] = 3 independently - the pipeline must use this, not the live register.
         vic.PixelSequencer.Cregs[0x21] = 3;
 
-        AdvanceTo(vic, DisplayLine, DisplayCycle);
+        // audit H2: LineIndices now uses VICE's dbuf indexing (dbuf_offset reset
+        // at raster cycle 1, vicii-draw-cycle.c:674-677): cycle k's ring-delayed
+        // pixels are flushed during cycle k+1 into LineIndices[8k], so advance
+        // one cycle past DisplayCycle before reading its pixels.
+        AdvanceTo(vic, DisplayLine, (byte)(DisplayCycle + 1));
 
         int offset = DisplayCycle * 8;
         // draw_colors8 must resolve symbolic code 0x21 via Cregs[0x21]=3, not _regs[0x21]=0.
@@ -146,15 +150,19 @@ public sealed class VicColorDisplayModeDivergentParityTests
         vic.Write(ScreenControl1, DenStandardText);
         vic.Write(ScreenControl2, 0x08);
 
-        // Advance to DisplayCycle-1 to seed pixel_buffer. After this cycle,
+        // Advance to DisplayCycle to seed pixel_buffer. After this cycle,
         // pixel_buffer[0] holds the resolved value of Cregs[0x21]=0 (initial).
-        AdvanceTo(vic, DisplayLine, (byte)(DisplayCycle - 1));
+        // audit H2: cycle k's pixels are flushed during cycle k+1 into
+        // LineIndices[8k] (dbuf_offset reset at raster cycle 1,
+        // vicii-draw-cycle.c:674-677), so the batch under test is DisplayCycle's
+        // render, flushed during DisplayCycle+1.
+        AdvanceTo(vic, DisplayLine, DisplayCycle);
 
-        // Inject pending write between cycles (simulates CPU write during cycle DisplayCycle-1).
+        // Inject pending write between cycles (simulates CPU write during cycle DisplayCycle).
         vic.VicLastColorRegWrite   = 0x21;
         vic.VicLastColorValueWrite = 5; // new bg = 5; old Cregs[0x21] = 0
 
-        // Tick into DisplayCycle. draw_colors8 applies pending at start (Cregs[0x21]=5)
+        // Tick into DisplayCycle+1. draw_colors8 applies pending at start (Cregs[0x21]=5)
         // but pixel_buffer[0] was already resolved to old Cregs[0x21]=0 in previous cycle.
         vic.Tick();
 
@@ -183,12 +191,14 @@ public sealed class VicColorDisplayModeDivergentParityTests
         vic.Write(ScreenControl1, DenStandardText);
         vic.Write(ScreenControl2, 0x08);
 
-        AdvanceTo(vic, DisplayLine, (byte)(DisplayCycle - 1));
+        // audit H2: DisplayCycle's pixels are flushed during DisplayCycle+1
+        // into LineIndices[DisplayCycle*8] (VICE dbuf indexing).
+        AdvanceTo(vic, DisplayLine, DisplayCycle);
 
         vic.VicLastColorRegWrite   = 0x21;
         vic.VicLastColorValueWrite = 5; // new bg = 5
 
-        vic.Tick(); // DisplayCycle
+        vic.Tick(); // DisplayCycle+1 flushes DisplayCycle's batch
 
         int offset = DisplayCycle * 8;
         // 8565: NO ring delay; pixel 0 uses new Cregs[0x21]=5.
@@ -217,20 +227,23 @@ public sealed class VicColorDisplayModeDivergentParityTests
         vic.Write(ScreenControl1, DenStandardText);
         vic.Write(ScreenControl2, 0x08);
 
-        // Advance to DisplayCycle-2 so there is a vis_en cycle between setup and target.
-        AdvanceTo(vic, DisplayLine, (byte)(DisplayCycle - 2));
+        // Advance to DisplayCycle-1 so there is a vis_en cycle between setup and
+        // target (audit H2: cycle k's batch is flushed during cycle k+1 into
+        // LineIndices[8k], so the asserted batch is DisplayCycle's render,
+        // flushed and grey-dot-checked during DisplayCycle+1).
+        AdvanceTo(vic, DisplayLine, (byte)(DisplayCycle - 1));
 
-        // Inject pending write for cycle DisplayCycle-1: this gets consumed by
-        // update_cregs at the end of DisplayCycle-1, making LastColorReg=0x21
-        // for DisplayCycle's draw_colors8 check.
+        // Inject pending write for cycle DisplayCycle: this gets consumed by
+        // update_cregs at the end of DisplayCycle, making LastColorReg=0x21
+        // for DisplayCycle+1's draw_colors8 check.
         vic.VicLastColorRegWrite   = 0x21;
         vic.VicLastColorValueWrite = 3;
 
-        // Tick to DisplayCycle-1: update_cregs at end transfers VicLastColorRegWrite
+        // Tick to DisplayCycle: update_cregs at end transfers VicLastColorRegWrite
         // to LastColorReg=0x21; pixel_buffer[0] gets render_buffer[0]=0x21.
         vic.Tick();
 
-        // Tick to DisplayCycle: grey-dot condition pixel_buffer[0]==last_color_reg
+        // Tick to DisplayCycle+1: grey-dot condition pixel_buffer[0]==last_color_reg
         // (both 0x21) fires; pixel 0 forced to 0x0F.
         vic.Tick();
 
@@ -283,15 +296,17 @@ public sealed class VicColorDisplayModeDivergentParityTests
         vic.Write(ScreenControl2, 0x08);
 
         AdvanceTo(vic, DisplayLine, DisplayCycle);
-        // BeginLine() resets DbufOffset at cycle 0 of the line. Cycles 0..DisplayCycle
-        // each ran DrawColors8 (DbufOffset += 8 at end of each call).
-        // After cycle RasterX=N: DbufOffset = (N+1)*8.
-        Assert.Equal((DisplayCycle + 1) * 8, vic.PixelSequencer.DbufOffset);
+        // audit H2: DbufOffset resets at raster cycle 1 exactly like VICE
+        // (vicii_draw_cycle, vicii-draw-cycle.c:674-677), executed by
+        // Mos6569.Tick before the draws. Cycles 1..DisplayCycle each ran
+        // DrawColors8 (+8), so after cycle RasterX=N: DbufOffset = N*8.
+        Assert.Equal(DisplayCycle * 8, vic.PixelSequencer.DbufOffset);
 
-        // Advance to cycle 1 of the next line (BeginLine resets DbufOffset to 0,
-        // then cycles 0 and 1 each increment: DbufOffset = 2*8 = 16).
+        // Advance to cycle 1 of the next line: the reset fires at cycle 1
+        // (not at the line wrap), then cycle 1's DrawColors8 increments once:
+        // DbufOffset = 8.
         AdvanceTo(vic, (ushort)(DisplayLine + 1), 1);
-        Assert.Equal(2 * 8, vic.PixelSequencer.DbufOffset);
+        Assert.Equal(8, vic.PixelSequencer.DbufOffset);
     }
 
     /// <summary>
@@ -339,27 +354,26 @@ public sealed class VicColorDisplayModeDivergentParityTests
         // Cregs[0x21]=3; pixel_buffer seeded with 3 after vis_en cycles.
         vic.Write(BackgroundColor, 0x03);
 
-        // Advance to display cycle 17 (first pure display cycle on a CSEL=1 line
-        // with VICE-correct border timing from PLAN-VICEPARITY-001 V7). With
-        // left border opening at managed RasterX 16 (VICE PAL Phi2(17)), cycles
-        // 14-16 are still border/border-transition cycles where DrawBorder8
-        // overlays ColD020 on top of the graphics pixels. Cycle 17 is the first
-        // cycle where DrawBorder8 early-exits (border_state=0, main_border=false)
-        // and the graphics + colour pipeline runs unobstructed.
-        // After cycle 17, pixel_buffer[0] = Cregs[0x21] = 3 (resolved at i=7),
+        // Advance to display cycle 18. Display rendering starts at cycle 17
+        // (audit H1: the pipe0 load is gated by the PREVIOUS cycle's VISIBLE
+        // flag, so the first g-access of cycle 15 renders at cycle 17;
+        // DrawBorder8 also early-exits from cycle 17). Cycle 18 is therefore a
+        // pure display cycle whose batch (audit H2) is flushed during cycle 19
+        // into LineIndices[18*8], matching VICE dbuf[8k] = render(k).
+        // After cycle 18, pixel_buffer[0] = Cregs[0x21] = 3 (resolved at i=7),
         // pixel_buffer[1..7] = 0x21 (loaded from RenderBuffer, not yet resolved).
-        AdvanceTo(vic, DisplayLine, 17);
+        AdvanceTo(vic, DisplayLine, 18);
 
-        // Mid-line write between cycles 17 and 18.
+        // Mid-line write between cycles 18 and 19.
         // V4: MonitorColorStore -> Cregs[0x21]=7 immediately; VicLastColorReg=0x21.
         // V3: _regs[0x21]=7 immediately; DrawGraphics resolves it next cycle.
         vic.Write(BackgroundColor, 0x07);
 
-        // Tick into cycle 18. draw_colors8 for cycle 18:
+        // Tick into cycle 19, which flushes cycle 18's batch:
         // V4: apply pending (VicLastColorRegWrite=0x21 -> Cregs[0x21]=7);
         //     ring delay: pixel_buffer[0] was resolved to OLD Cregs[0x21]=3 in
-        //     cycle 17's i=7 step -> LineIndices[18*8+0] = 3 (old colour).
-        //     pixel_buffer[1] = Cregs[0x21]=7 (resolved at cycle 18's i=0 step)
+        //     cycle 18's i=7 step -> LineIndices[18*8+0] = 3 (old colour).
+        //     pixel_buffer[1] = Cregs[0x21]=7 (resolved at cycle 19's i=0 step)
         //     -> LineIndices[18*8+1] = 7 (new colour).
         // V3: DrawGraphics resolves 0x21 -> _regs[0x21]=7 for ALL pixels
         //     -> LineIndices[18*8+0] = 7 (fails assertion below).

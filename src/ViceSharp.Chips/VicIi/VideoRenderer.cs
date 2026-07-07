@@ -13,7 +13,10 @@ public sealed class VideoRenderer
     public const int PalCyclesPerLine = 63;
     public const int PalTotalLines = 312;
     public const int PalVisibleLines = 272;
-    public const int PalFirstVisibleRasterLine = 15;
+    // VICE PAL normal-border geometry: the visible window starts at raster
+    // line 16 (VICII_PAL_NORMAL_FIRST_DISPLAYED_LINE = 0x10, vicii-timing.h:68,
+    // applied via vicii-timing.c:131 and consumed by the frame oracle).
+    public const int PalFirstVisibleRasterLine = 16;
     
     /// <summary>
     /// Pixel aspect ratios by video standard (from VICE)
@@ -552,12 +555,17 @@ public sealed class VideoRenderer
         pixels.Slice(start, length).Fill(pixel);
     }
 
-    // PLAN-VICRENDER-001: frame pixel 0 corresponds to ~RasterX 12 (the display window starts at
-    // frame pixel 24 = LeftBorderPixel, which is the first g-access at ~RasterX 15; 8 pixels per
-    // cycle). A $D020 write at in-line cycle C therefore takes effect from this frame pixel; a
-    // late-in-line write (RasterX ~60) maps past the right edge and so carries into the next line,
-    // which is exactly what places the raster bar on the correct scanline.
-    private const int FirstVisibleRasterX = 12;
+    // PLAN-VICEPARITY-001 audit (boot-frame oracle): frame pixel 0 is VICE
+    // dbuf[104] = raster cycle 13. VICE copies the visible canvas line from
+    // vicii.dbuf[DBUF_OFFSET], DBUF_OFFSET = 17*8 - screen_leftborderwidth
+    // (vicii-draw.c:71,91) with the PAL normal border width 0x20
+    // (vicii-timing.h:31): 136 - 32 = 104 = 8 * 13. The 32px left border is
+    // dbuf[104..135] (cycles 13-16) and the display window starts at frame
+    // pixel 32 = dbuf[136] (first gfx render cycle 17). A $D020 write at
+    // in-line cycle C takes effect from this frame pixel; a late-in-line
+    // write maps past the right edge and carries into the next line, which
+    // places raster bars on the correct scanline.
+    private const int FirstVisibleRasterX = 13;
 
     private static int RasterXToFramePixel(int rasterX)
     {

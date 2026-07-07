@@ -168,7 +168,9 @@ internal sealed class PixelSequencer
     /// <summary>
     /// Running draw-buffer frame offset (vicii.dbuf_offset equivalent).
     /// Incremented by 8 each <see cref="DrawColors8"/> call; reset to 0 by
-    /// <see cref="BeginLine"/> at the start of each raster line.
+    /// <c>Mos6569.Tick</c> at raster cycle 1, exactly like VICE
+    /// (vicii-draw-cycle.c:674-677), so cycle k's ring-delayed pixels land at
+    /// <see cref="LineIndices"/>[8*(k-1)] = VICE dbuf[8*(k-1)].
     /// </summary>
     internal int DbufOffset;
 
@@ -325,8 +327,11 @@ internal sealed class PixelSequencer
         Array.Clear(LineIndices,  0, LineIndices.Length);
         Array.Clear(LinePriority, 0, LinePriority.Length);
         Dmli = 0;
-        // V4: reset draw-buffer offset at line start (vicii.dbuf_offset reset at raster_cycle=1).
-        DbufOffset = 0;
+        // PLAN-VICEPARITY-001 audit H2: DbufOffset is deliberately NOT reset
+        // here. VICE resets vicii.dbuf_offset at raster_cycle == 1 inside
+        // vicii_draw_cycle (vicii-draw-cycle.c:674-677), one cycle after the
+        // line wrap; Mos6569.Tick performs that reset. Resetting at the wrap
+        // shifted every resolved colour 8px right of VICE's dbuf placement.
     }
 
     // ---------------------------------------------------------------
@@ -824,6 +829,12 @@ internal sealed class PixelSequencer
     /// Called each cycle from Mos6569.Tick AFTER DrawGraphics8 (which fills PriBuffer)
     /// and BEFORE DrawColors8 (which resolves symbolic color codes from RenderBuffer).
     ///
+    /// PLAN-VICEPARITY-001 audit H1: VICE calls draw_sprites8(cycle_flags_pipe)
+    /// (vicii-draw-cycle.c:681), so <paramref name="flagsRasterX"/> is the
+    /// PREVIOUS cycle's RasterX (Mos6569's cycle_flags_pipe equivalent). All
+    /// cycle-derived inputs - xpos, ChkSprDisp, the SprPtr/SprDma1 pixel
+    /// events - key off that piped cycle; register and sprite state stay live.
+    ///
     /// Pixel sequence mirrors VICE exactly: trigger+draw per pixel, with DMA halt/reload
     /// at pixels 2-4, MC-bits update at pixel 6 (8565) or 7 (6569), and xpos pipe
     /// latch (update_sprite_xpos) at the end of pixel 7.
@@ -831,19 +842,24 @@ internal sealed class PixelSequencer
     /// Writes SpriteSsCollisionThisCycle and SpriteSbCollisionThisCycle for Mos6569
     /// first-appearance IRQ gate (vicii-cycle.c:427-433).
     /// </summary>
-    internal void DrawSprites8(int rasterX, byte spriteDisplayBits)
+    internal void DrawSprites8(int flagsRasterX, byte spriteDisplayBits)
     {
-        // xpos: 8-aligned PAL phi1 x coordinate for this cycle.
-        // Matches cycle_get_xpos(cycle_flags) in VICE (vicii-chip-model.h:164-167).
-        int phi1Full = (0x194 + 8 * rasterX) % 0x1F8;
-        int xpos     = phi1Full & ~7;
+        // xpos: cycle_get_xpos(cycle_flags) (vicii-chip-model.h:164-167)
+        // returns the piped cycle's merged 8-aligned xpos, which is the Phi2
+        // xpos of that cycle: Phi2(1)=0x198 at rc0, +8 per cycle, wrapping at
+        // 0x1F8 (vicii-chip-model.c PAL table :112-238). A negative
+        // flagsRasterX models VICE's zero flags word before the first draw
+        // (xpos 0).
+        int xpos = flagsRasterX >= 0 ? (0x198 + 8 * flagsRasterX) % 0x1F8 : 0;
 
-        // ChkSprDisp fires only at rasterX 57 (VICE Phi1(58), vicii-chip-model.c:226).
-        bool sprEn = (rasterX == 57);
+        // ChkSprDisp is carried by the rc57 flags (VICE Phi1(58) row,
+        // vicii-chip-model.c:226) and consumed one cycle later via the pipe.
+        bool sprEn = (flagsRasterX == 57);
 
-        // DMA tables: bitmask of sprite(s) whose DMA fires this cycle.
-        byte dmaCycle0 = (uint)rasterX < 63u ? s_palDmaCycle0[rasterX] : (byte)0;
-        byte dmaCycle2 = (uint)rasterX < 63u ? s_palDmaCycle2[rasterX] : (byte)0;
+        // DMA tables: bitmask of sprite(s) whose SprPtr/SprDma1 flags ride the
+        // piped cycle (vicii-draw-cycle.c:481-486 reading the passed flags).
+        byte dmaCycle0 = (uint)flagsRasterX < 63u ? s_palDmaCycle0[flagsRasterX] : (byte)0;
+        byte dmaCycle2 = (uint)flagsRasterX < 63u ? s_palDmaCycle2[flagsRasterX] : (byte)0;
 
         // get_trigger_candidates: coarse xpos window check (VICE vicii-draw-cycle.c:304-316).
         byte candidateBits = 0;

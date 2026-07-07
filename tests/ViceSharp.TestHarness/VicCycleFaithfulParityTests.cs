@@ -522,31 +522,64 @@ public sealed class VicCycleFaithfulParityTests
 
     /// <summary>
     /// FR-VIC-FETCH AC-07.
-    /// Use case: bad-line prefetch slots seed vbuf with $FF and cbuf with the low
-    /// nibble of the CPU program RAM byte (VICE viciisc/vicii-fetch.c:195-196,
-    /// managed C64MemoryMap.cs:789 via Mos6569.LatchVideoMatrixPrefetch).
-    /// Acceptance: with RAM at the CPU PC seeded to $AB, the first three matrix
-    /// slots of bad line $30 latch matrix byte exactly $FF and colour nibble
-    /// exactly $0B.
+    /// Use case: c-access garbage is gated by VICE's prefetch counter, not by
+    /// the slot number (audit H3). BA falls on bad-line fetch cycles (BaFetch,
+    /// rc11-53) and prefetch_cycles counts down from 3+1 BEFORE each cycle's
+    /// fetches (vicii-cycle.c:580-591), so on a STANDARD bad line (BA low from
+    /// cycle 12, first c-access at cycle 15) the counter reaches 0 exactly at
+    /// the first c-access and ALL slots latch real matrix data. Only a bad
+    /// line raised mid-line still sees vbuf $FF and cbuf from the CPU program
+    /// RAM byte for its first three c-accesses (vicii-fetch.c:192-201).
+    /// Acceptance: on the standard bad line $30 the first three matrix slots
+    /// hold the seeded screen bytes (no $FF corruption); after a mid-line
+    /// YSCROLL write on line $31 raises the bad line late, exactly three
+    /// matrix slots hold $FF.
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-FETCH-07", ParityTag.Faithful)]
     public void PrefetchLatchesVbufFfAndCbufFromCpuProgramRam()
     {
         var (machine, vic, memory) = CreatePalC64Machine();
-        var cpu = (ICpu)machine.Devices.GetByRole(DeviceRole.Cpu)!;
+        _ = machine;
         vic.Write(ScreenControl1, 0x10);
         vic.Write(MemoryPointers, 0x14);
-        memory.Span[cpu.PC] = 0xAB; // Raw RAM under the KERNAL reset vector target.
 
-        AdvanceTo(vic, 0x30, 17); // Prefetch slots 0..2 latched at cycles 15..17.
+        // Standard bad line $30: BA falls at cycle 12 (BaFetch from rc11),
+        // the prefetch counter re-armed at 3+1 decrements on rc11..14 and
+        // reaches 0 exactly at the first c-access (cycle 15), so slots 0..2
+        // latch REAL screen data. Seed the actual row cells at the VC-update
+        // cycle (vc is the row base; frame 1 boots with a non-zero vcbase).
+        AdvanceTo(vic, 0x30, 13);
         Assert.True(vic.IsBadLine);
-        Assert.Equal(0xFF, vic.PeekVideoMatrixLatch(0));
-        Assert.Equal(0xFF, vic.PeekVideoMatrixLatch(1));
-        Assert.Equal(0xFF, vic.PeekVideoMatrixLatch(2));
-        Assert.Equal(0x0B, vic.PeekColorMatrixLatch(0));
-        Assert.Equal(0x0B, vic.PeekColorMatrixLatch(1));
-        Assert.Equal(0x0B, vic.PeekColorMatrixLatch(2));
+        int rowBase = vic.CurrentVideoMatrixCounter;
+        memory.Span[0x0400 + rowBase + 0] = 0x21;
+        memory.Span[0x0400 + rowBase + 1] = 0x22;
+        memory.Span[0x0400 + rowBase + 2] = 0x23;
+        AdvanceTo(vic, 0x30, 54);
+        Assert.Equal(0x21, vic.PeekVideoMatrixLatch(0));
+        Assert.Equal(0x22, vic.PeekVideoMatrixLatch(1));
+        Assert.Equal(0x23, vic.PeekVideoMatrixLatch(2));
+
+        // Mid-line bad line: on line $31 (yscroll 0 mismatch) raise the bad
+        // line at cycle 19 by writing YSCROLL=1. BA falls at cycle 20 with the
+        // prefetch counter re-armed at 3+1, so the c-accesses of cycles 20-22
+        // (matrix slots 6-8, vmli having advanced with the row's g-accesses)
+        // latch vbuf $FF garbage and cycle 23 onward latches real data again
+        // (vicii-cycle.c:580-591, vicii-fetch.c:192-201). Seed the whole row
+        // to a non-$FF value so garbage is unambiguous.
+        AdvanceTo(vic, 0x31, 13);
+        rowBase = vic.CurrentVideoMatrixCounter;
+        for (var k = 0; k < 40; k++)
+            memory.Span[0x0400 + rowBase + k] = 0x33;
+        AdvanceTo(vic, 0x31, 19);
+        vic.Write(ScreenControl1, 0x11); // DEN + YSCROLL=1 -> bad line from cycle 20.
+        AdvanceTo(vic, 0x31, 54);
+
+        Assert.Equal(0xFF, vic.PeekVideoMatrixLatch(6));
+        Assert.Equal(0xFF, vic.PeekVideoMatrixLatch(7));
+        Assert.Equal(0xFF, vic.PeekVideoMatrixLatch(8));
+        for (var slot = 9; slot < 40; slot++)
+            Assert.Equal(0x33, vic.PeekVideoMatrixLatch(slot));
     }
 
     /// <summary>

@@ -44,6 +44,11 @@ public partial class Mos6569 : IStatefulDevice
         registers[..VicRegisterBytes].CopyTo(_registers);
         CurrentRasterLine = (ushort)(rasterLine & 0x01FF);
         RasterX = inLineCycle;
+        // audit H1: seed the cycle_flags_pipe equivalent with the previous
+        // cycle so the first post-injection draw consumes the correct piped
+        // flags (vicii-draw-cycle.c:687). audit L10 (Phase 6) will carry the
+        // real piped value through the snapshot format.
+        _rasterXPipe = inLineCycle > 0 ? inLineCycle - 1 : CyclesPerLine - 1;
         // 9-bit raster compare = $D012 | ($D011 bit7 << 8).
         _rasterIrqLine = (ushort)(_registers[0x12] | ((_registers[0x11] & 0x80) << 1));
         // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02/AC-11: seed the
