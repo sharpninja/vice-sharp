@@ -255,13 +255,52 @@ public sealed class AttachPanelViewModel : ObservableObject
     public double LimiterRatePercent
     {
         get => _limiterRatePercent;
-        set => SetSettingsProperty(ref _limiterRatePercent, Math.Clamp(value, LimiterMinimumPercent, LimiterMaximumPercent));
+        set
+        {
+            if (SetSettingsProperty(ref _limiterRatePercent, Math.Clamp(value, LimiterMinimumPercent, LimiterMaximumPercent)))
+                OnPropertyChanged(nameof(SpeedCycleLabel));
+        }
     }
 
     public bool LimiterEnabled
     {
         get => _limiterEnabled;
-        set => SetSettingsProperty(ref _limiterEnabled, value);
+        set
+        {
+            if (SetSettingsProperty(ref _limiterEnabled, value))
+                OnPropertyChanged(nameof(SpeedCycleLabel));
+        }
+    }
+
+    /// <summary>
+    /// Label of the Limiter speed button - always the speed a click will
+    /// APPLY: "200%" only while the limiter is enabled at exactly 100
+    /// percent, otherwise "100%" (warp, fast-forward, or any other rate).
+    /// Dragging the slider past 200 therefore reads "100%", matching the
+    /// host-side rule that suspends live SID output above 200 percent.
+    /// </summary>
+    public string SpeedCycleLabel =>
+        LimiterEnabled && LimiterRatePercent == 100 ? "200%" : "100%";
+
+    /// <summary>
+    /// Apply the speed the button shows: "100%" leaves warp, sets the
+    /// limiter to 100 (which re-enables live sound host-side); "200%" moves
+    /// to 200 leaving the SID enabled (200 is the live-audio boundary).
+    /// Applies live through the host protocol like the Alt+W warp toggle.
+    /// </summary>
+    public async Task CycleSpeedAsync(CancellationToken cancellationToken = default)
+    {
+        if (SpeedCycleLabel == "100%")
+        {
+            IsWarpMode = false;
+            LimiterRatePercent = 100;
+        }
+        else
+        {
+            LimiterRatePercent = 200;
+        }
+
+        await ApplySettingsAsync(restartRequired: false, cancellationToken).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -835,7 +874,8 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
-        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp checkbox in sync
+        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp toggle in sync
+        OnPropertyChanged(nameof(SpeedCycleLabel));
         OnPropertyChanged(nameof(SelectedMachineProfile));
         OnPropertyChanged(nameof(SelectedRenderer));
         OnPropertyChanged(nameof(SelectedDisplayScale));
@@ -858,6 +898,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
         OnPropertyChanged(nameof(IsWarpMode));
+        OnPropertyChanged(nameof(SpeedCycleLabel));
     }
 
     private UpdateSettingsRequest CreateUpdateSettingsRequest(bool restartSession)
@@ -1145,7 +1186,8 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
-        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp checkbox in sync
+        OnPropertyChanged(nameof(IsWarpMode)); // derived from LimiterEnabled; keep the Warp toggle in sync
+        OnPropertyChanged(nameof(SpeedCycleLabel));
         OnPropertyChanged(nameof(SelectedMachineProfile));
         OnPropertyChanged(nameof(SelectedRenderer));
         OnPropertyChanged(nameof(SelectedDisplayScale));

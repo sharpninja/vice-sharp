@@ -123,8 +123,10 @@ public sealed class EmulatorRuntimeSession
         set
         {
             _audioCaptureTap = value;
-            // A freshly attached tap is unpaused; only warp needs enforcing here.
-            if (!_limiterEnabled)
+            // A freshly attached tap is unpaused; only suspension (warp or
+            // fast-forward past the live-audio ceiling) needs enforcing here.
+            _liveAudioOutputSuspendedApplied = IsLiveAudioOutputSuspended;
+            if (_liveAudioOutputSuspendedApplied)
                 value?.Pause();
         }
     }
@@ -151,11 +153,34 @@ public sealed class EmulatorRuntimeSession
 
     public SortedSet<ushort> Breakpoints { get; } = new();
 
-    public double LimiterRatePercent { get; set; } = 100;
+    /// <summary>
+    /// Fast-forward rates above this keep live audio suspended: a 44100 Hz
+    /// device cannot be fed at more than double speed without resampling, so
+    /// past 200 percent the vsync regulator paces the requested rate while
+    /// the live leaf discards (TR-AUDIO-WARP-001).
+    /// </summary>
+    public const double LiveAudioMaxRatePercent = 200;
+
+    /// <summary>
+    /// Limiter target as a percentage of real time. Setting it applies the
+    /// live audio policy: above <see cref="LiveAudioMaxRatePercent"/> the
+    /// live output leaf is paused (fast-forward), at or below it resumes.
+    /// </summary>
+    public double LimiterRatePercent
+    {
+        get => _limiterRatePercent;
+        set
+        {
+            _limiterRatePercent = value;
+            ApplyLiveAudioPolicy();
+        }
+    }
+
+    private double _limiterRatePercent = 100;
 
     /// <summary>
     /// True while the pace limiter is on; false is warp. Toggling applies the
-    /// warp audio policy (TR-AUDIO-WARP-001): warp pauses the live audio leaf
+    /// live audio policy (TR-AUDIO-WARP-001): warp pauses the live audio leaf
     /// so SID fragments are discarded without blocking, mirroring VICE's
     /// sound_flush (sound.c:1528-1531 discards pending samples;
     /// sound.c:1573 gates the blocking device write on !warp_mode_enabled)
@@ -169,7 +194,7 @@ public sealed class EmulatorRuntimeSession
         set
         {
             _limiterEnabled = value;
-            ApplyWarpAudioPolicy();
+            ApplyLiveAudioPolicy();
         }
     }
 
@@ -177,19 +202,36 @@ public sealed class EmulatorRuntimeSession
 
     public bool IsWarpMode => !LimiterEnabled;
 
-    // Pause the live output leaf in warp (drop fragments non-blocking), resume
-    // it when the limiter returns. The tap sits above the leaf, so recorders
-    // attached for sound capture keep receiving samples either way - exactly
-    // VICE's warp behavior with an active recording device (sound.c:1528).
-    private void ApplyWarpAudioPolicy()
+    /// <summary>
+    /// True while live audio output is suspended - in warp, or fast-forward
+    /// past <see cref="LiveAudioMaxRatePercent"/>. The pacing gates use this
+    /// to skip the sound regulator (which relies on device back-pressure) and
+    /// pace by vsync instead, so fast-forward actually reaches its target.
+    /// </summary>
+    public bool IsLiveAudioOutputSuspended => !_limiterEnabled || _limiterRatePercent > LiveAudioMaxRatePercent;
+
+    // Pause the live output leaf while suspended (drop fragments non-blocking),
+    // resume it otherwise - on state TRANSITIONS only, so repeated setter
+    // writes and the two-step SetLimiter assignment do not churn the device.
+    // The tap sits above the leaf, so recorders attached for sound capture
+    // keep receiving samples either way - exactly VICE's warp behavior with
+    // an active recording device (sound.c:1528).
+    private bool _liveAudioOutputSuspendedApplied;
+
+    private void ApplyLiveAudioPolicy()
     {
+        var suspended = IsLiveAudioOutputSuspended;
+        if (suspended == _liveAudioOutputSuspendedApplied)
+            return;
+
+        _liveAudioOutputSuspendedApplied = suspended;
         if (_audioCaptureTap is not { } tap)
             return;
 
-        if (_limiterEnabled)
-            tap.Resume();
-        else
+        if (suspended)
             tap.Pause();
+        else
+            tap.Resume();
     }
 
     /// <summary>

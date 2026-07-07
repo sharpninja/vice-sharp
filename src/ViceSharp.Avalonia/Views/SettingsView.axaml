@@ -45,9 +45,18 @@
                            Text="{Binding LimiterRatePercent, StringFormat='Target {0:0}%'}" />
                 <Slider Minimum="1" Maximum="1000" TickFrequency="10" IsSnapToTickEnabled="True"
                         Value="{Binding LimiterRatePercent, Mode=TwoWay}" />
-                <CheckBox Content="Warp Mode (Alt+W)" IsChecked="{Binding IsWarpMode, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <ToggleButton Content="Warp (Alt+W)"
+                                  AutomationProperties.AutomationId="Limiter.WarpToggle"
+                                  IsChecked="{Binding IsWarpMode, Mode=TwoWay}"
+                                  Click="OnWarpToggled" />
+                    <Button Content="{Binding SpeedCycleLabel}"
+                            AutomationProperties.AutomationId="Limiter.SpeedCycle"
+                            MinWidth="64"
+                            Click="OnCycleSpeed" />
+                </StackPanel>
                 <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="OrangeRed" TextWrapping="Wrap"
-                           Text="Warp = uncapped speed (same as VICE -warp). Use with dotTrace for profiling." />
+                           Text="Warp = uncapped speed (same as VICE -warp). The speed button jumps between 100% (sound on) and 200%; past 200% live sound is suspended while the emulator paces to the slider target." />
                 <TextBlock FontSize="13" FontWeight="SemiBold" Text="Pacing strategy" />
                 <ComboBox Classes="row" ItemsSource="{Binding PacingStrategies}"
                           SelectedItem="{Binding SelectedPacingStrategy, Mode=TwoWay}" />

@@ -77,6 +77,92 @@ public sealed class WarpAudioDiscardTests
     }
 
     /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-AUDIO-WARP-001, TEST: TEST-AUDIO-WARP-03.
+    /// Use case: fast-forward past 200 percent needs the live audio leaf
+    /// suspended too - the SID cannot feed a 44100 Hz device at more than
+    /// double speed without resampling, so above 200 percent the limiter
+    /// pauses live output (discard, non-blocking) and the vsync regulator
+    /// paces to the requested rate; at or below 200 percent live audio
+    /// stays on. Warp behavior is unchanged.
+    /// Acceptance: rate 251 pauses the leaf; returning to 100 resumes it;
+    /// the 200 boundary itself never pauses.
+    /// </summary>
+    [Fact]
+    public void FastForward_Past200_Suspends_Live_Audio_And_200_Does_Not()
+    {
+        var session = CreateMinimalSession();
+        var backend = new FakeBackend();
+        session.AudioCaptureTap = new CaptureAudioTap(backend);
+
+        session.SetLimiter(200, enabled: true);
+        Assert.Equal(0, backend.PauseCount);
+
+        session.SetLimiter(251, enabled: true);
+        Assert.Equal(1, backend.PauseCount);
+
+        session.SetLimiter(100, enabled: true);
+        Assert.Equal(1, backend.ResumeCount);
+
+        session.LimiterRatePercent = 300;
+        Assert.Equal(2, backend.PauseCount);
+
+        session.LimiterRatePercent = 150;
+        Assert.Equal(2, backend.ResumeCount);
+    }
+
+    /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-AUDIO-WARP-001, TEST: TEST-AUDIO-PACE-10.
+    /// Use case: with live audio suspended above 200 percent, the pacing
+    /// gate must fall through to the vsync regulator and actually reach the
+    /// requested fast-forward rate instead of being held near 100 percent by
+    /// the sound path. Acceptance (diagnostic): a 251 percent limiter with
+    /// VICESHARP_AUDIO=1 sustains at least 200 percent of the PAL master
+    /// clock over 4 seconds.
+    /// </summary>
+    [Fact]
+    public async Task AppPipeline_FastForward251_WithLiveAudio_Reaches_Target()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        Environment.SetEnvironmentVariable("VICESHARP_AUDIO", "1");
+        try
+        {
+            var registry = new EmulatorRuntimeRegistry();
+            var factory = new DefaultEmulatorRuntimeFactory();
+            var session = factory.Create(new CreateEmulatorSessionRequest("c64", "", false));
+            registry.Add(session);
+            using var pump = new EmulationPumpService(registry);
+
+            session.SetLimiter(251, enabled: true);
+
+            await pump.StartAsync(ct);
+            session.RunState = EmulatorRunState.Running;
+            await Task.Delay(1000, ct);
+
+            long startCycles;
+            lock (session.SyncRoot)
+                startCycles = session.Machine.Clock.TotalCycles;
+
+            var sw = Stopwatch.StartNew();
+            await Task.Delay(4000, ct);
+            sw.Stop();
+
+            long endCycles;
+            lock (session.SyncRoot)
+                endCycles = session.Machine.Clock.TotalCycles;
+
+            session.RunState = EmulatorRunState.Paused;
+            await pump.StopAsync(ct);
+
+            var pct = (endCycles - startCycles) / sw.Elapsed.TotalSeconds / 985_248.0 * 100.0;
+            Assert.True(pct >= 200.0, $"DIAG fast-forward 251% pace = {pct:F1}% of real time");
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("VICESHARP_AUDIO", null);
+        }
+    }
+
+    /// <summary>
     /// FR: FR-Audio-SID, TR: TR-AUDIO-WARP-001, TEST: TEST-AUDIO-WARP-02.
     /// Use case: the restart path assigns AudioCaptureTap after LimiterEnabled
     /// (object-initializer order), so a session already in warp must pause a
