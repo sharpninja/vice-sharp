@@ -968,11 +968,15 @@ public sealed class VicBorderIrqFaithfulParityTests
     /// (non-6569R1) accepted trigger fires the light-pen IRQ
     /// (vicii_irq_lightpen_set).
     /// VICE native/vice/vice/src/viciisc/vicii-lightpen.c:105-107 with
-    /// vicii-irq.c:94-98; managed Mos6569.TriggerLightPen (Mos6569.cs:2136-2137).
-    /// Use case: with $D01A bit 3 enabled, the light-pen latch immediately
-    /// asserts the CPU IRQ line.
+    /// vicii-irq.c:94-98; managed Mos6569.TriggerLightPen.
+    /// Use case: with $D01A bit 3 enabled, the light-pen latch sets $D019
+    /// bits 3 and 7 in the trigger cycle; the CPU-visible IRQ line rises one
+    /// cycle later, the same maincpu recognition latency (interrupt.c) the
+    /// raster path models (audit M12: all VIC sources share the deferred
+    /// rise).
     /// Acceptance: with enable $08, a trigger reads $D019 = $F8 (LP latch +
-    /// bit 7) and the IRQ line is asserted.
+    /// bit 7) with the line still released, and the line asserts after the
+    /// next cycle.
     /// </summary>
     [Fact]
     [ParityAc("TEST-VIC-LIGHTPEN-11", ParityTag.Faithful)]
@@ -985,6 +989,9 @@ public sealed class VicBorderIrqFaithfulParityTests
         vic.TriggerLightPen();
 
         Assert.Equal(0xF8, vic.Read(InterruptLatch));
+        Assert.False(irq.IsAsserted);
+
+        vic.Tick();
         Assert.True(irq.IsAsserted);
     }
 

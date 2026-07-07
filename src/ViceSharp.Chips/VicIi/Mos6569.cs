@@ -43,9 +43,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // (vicii-irq.c:47-62), but the maincpu recognises a rising IRQ line with
     // one cycle of latency (interrupt.c). The managed CPU samples the
     // IInterruptLine directly, so the VIC presents the rise one tick after
-    // the cycle-0 latch; register state ($D019 bits 0 and 7) is cycle-0 exact.
-    // System-level equivalence is proven by the READY snapshot lockstep gates.
-    private bool _rasterIrqAssertPending;
+    // the latch; register state ($D019 source bits and bit 7) is latch-cycle
+    // exact. audit M12: shared by ALL VIC IRQ sources (raster, sprite
+    // collisions, light pen) via ScheduleInterruptRise, matching VICE's
+    // single vicii_irq_set_line path. System-level equivalence is proven by
+    // the READY snapshot lockstep gates.
+    private bool _irqAssertPending;
     // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-12/AC-13/AC-14: VICE
     // clear_collisions. A $D01E/$D01F read copies the accumulator and schedules
     // the clear; the accumulator is zeroed in the NEXT cycle
@@ -1118,31 +1121,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         CycleCounter++;
         RasterX++;
 
-        // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02: a raster latch from the
-        // previous cycle presents its IRQ-line rise now (the maincpu
-        // recognition point; VICE interrupt.c applies one cycle of latency to
-        // a rise that vicii-irq.c asserted with the latch).
-        if (_rasterIrqAssertPending)
+        // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02 + audit M12: an IRQ
+        // latch from the previous cycle presents its line rise now (the
+        // maincpu recognition point; VICE interrupt.c applies one cycle of
+        // latency to a rise that vicii-irq.c asserted with the latch). All
+        // VIC sources share this path: raster, sprite collisions, light pen.
+        if (_irqAssertPending)
         {
-            _rasterIrqAssertPending = false;
+            _irqAssertPending = false;
             RefreshInterruptLine();
         }
 
-        // PLAN-VICEPARITY-001 FR-VIC-REGISTERS AC-14: a collision clear
-        // scheduled by a $D01E/$D01F read zeroes the accumulator in the NEXT
-        // cycle, never in the read itself. VICE viciisc/vicii-cycle.c:413-425;
-        // applied at the top of the cycle so the managed per-line collision
-        // raster (which lands a whole line at the wrap tick, an acknowledged
-        // approximation of VICE's per-cycle draws) wipes at most the already
-        // accumulated state, mirroring the single-cycle wipe.
-        if (_pendingCollisionClear != 0)
-        {
-            if (_pendingCollisionClear == 0x1E)
-                _spriteSpriteCollisionLatch = 0;
-            else
-                _spriteBackgroundCollisionLatch = 0;
-            _pendingCollisionClear = 0;
-        }
+        // audit M10: the deferred $D01E/$D01F collision clear no longer runs
+        // here; VICE applies it AFTER the cycle's draw has accumulated
+        // collisions (vicii-cycle.c:411-425), so it lives in the sprite draw
+        // block below.
 
         if (RasterX >= CyclesPerLine)
         {
@@ -1238,12 +1231,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                     // vicii_irq_set_line (vicii-irq.c:36-45): bit 7 mirrors the
                     // IRQ output in the same cycle as the latch; the managed
                     // IInterruptLine rise itself is presented next tick (the
-                    // maincpu recognition point, see _rasterIrqAssertPending).
-                    if ((_registers[0x19] & _registers[0x1A] & InterruptSourceMask) != 0)
-                    {
-                        _registers[0x19] |= 0x80;
-                        _rasterIrqAssertPending = true;
-                    }
+                    // maincpu recognition point, see _irqAssertPending).
+                    ScheduleInterruptRise();
                 }
             }
         }
@@ -1395,13 +1384,29 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             _pixelSequencer.DrawSprites8(_rasterXPipe, _spriteDisplayBits);
             _spriteSpriteCollisionLatch       |= _pixelSequencer.SpriteSsCollisionThisCycle;
             _spriteBackgroundCollisionLatch   |= _pixelSequencer.SpriteSbCollisionThisCycle;
+
+            // audit M10: apply the deferred $D01E/$D01F clear AFTER the draw
+            // accumulated this cycle's collisions and BEFORE the IRQ check
+            // (VICE vicii-cycle.c:413-425 between :411 and :427). A collision
+            // landing in the clear cycle is wiped and never raises an IRQ.
+            if (_pendingCollisionClear != 0)
+            {
+                if (_pendingCollisionClear == 0x1E)
+                    _spriteSpriteCollisionLatch = 0;
+                else
+                    _spriteBackgroundCollisionLatch = 0;
+                _pendingCollisionClear = 0;
+            }
+
             byte irqBits = 0;
             if (canSs && _spriteSpriteCollisionLatch     != 0) irqBits |= 0x04;
             if (canSb && _spriteBackgroundCollisionLatch != 0) irqBits |= 0x02;
             if (irqBits != 0)
             {
+                // audit M12: same deferred line rise as the raster path
+                // (vicii_irq_sscoll/sbcoll_set -> vicii_irq_set_line).
                 _registers[0x19] |= irqBits;
-                RefreshInterruptLine();
+                ScheduleInterruptRise();
             }
         }
         // PLAN-VICEPARITY-001 V7 FR-VIC-BORDER AC-01..07: per-cycle border pipeline.
@@ -1522,7 +1527,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // clear or pending IRQ-line rise after reset.
         _startOfFrame = false;
         _pendingCollisionClear = 0;
-        _rasterIrqAssertPending = false;
+        _irqAssertPending = false;
         _verticalBorderActive = true;
         _verticalBorderNextActive = true;
         _mainBorderActive = true;
@@ -2937,6 +2942,23 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     }
 
     /// <summary>
+    /// PLAN-VICEPARITY-001 audit M12: schedules the IRQ-line rise for a
+    /// source latch set in the current cycle. The $D019 IRQ mirror (bit 7)
+    /// becomes visible in the same cycle as the latch, but the line itself
+    /// is presented at the next cycle's start - the maincpu recognition
+    /// latency that VICE's interrupt.c applies to every vicii_irq_set_line
+    /// rise (raster, sprite collisions, light pen alike).
+    /// </summary>
+    private void ScheduleInterruptRise()
+    {
+        if ((_registers[0x19] & _registers[0x1A] & InterruptSourceMask) != 0)
+        {
+            _registers[0x19] |= 0x80;
+            _irqAssertPending = true;
+        }
+    }
+
+    /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-001 / PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN /
     /// TEST-VIC-001: immediate internal light-pen trigger (the
     /// vicii_trigger_light_pen_internal(0) surface, VICE
@@ -3030,8 +3052,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             // (vicii-lightpen.c:93-98).
             if (LightPenOldIrqMode)
             {
+                // audit M12: pen IRQ uses the same deferred line rise as the
+                // raster path (vicii_irq_lightpen_set -> vicii_irq_set_line).
                 _registers[0x19] |= 0x08;
-                RefreshInterruptLine();
+                ScheduleInterruptRise();
             }
         }
 
@@ -3042,8 +3066,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         if (!LightPenOldIrqMode)
         {
+            // audit M12: pen IRQ uses the same deferred line rise as the
+            // raster path (vicii_irq_lightpen_set -> vicii_irq_set_line).
             _registers[0x19] |= 0x08;
-            RefreshInterruptLine();
+            ScheduleInterruptRise();
         }
     }
 
