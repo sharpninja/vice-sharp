@@ -1008,6 +1008,18 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         if (address < 0xDD00)
         {
             _cia1.Write(address, value);
+            // PLAN-VICEPARITY-001 audit L5: the VIC light-pen input follows
+            // CIA1 port B bit 4 (c64cia1.c cia1_internal_lightpen_check,
+            // called from the PA and PB store paths :163/:176): after any
+            // port or DDR store, the merged port-B line level (output
+            // register, direction and the keyboard/joystick pulls, which the
+            // CIA port read already combines) drives vicii_set_light_pen;
+            // a low PB4 asserts the pen.
+            if ((address & 0x0F) <= 0x03)
+            {
+                _vic.SetLightPen((_cia1.Peek(0xDC01) & 0x10) == 0);
+            }
+
             return;
         }
 

@@ -70,7 +70,7 @@ public partial class Mos6569 : IStatefulDevice
         // IRQ-line rise survives from before the injection.
         _startOfFrame = false;
         _pendingCollisionClear = 0;
-        _lightPenTriggerPending = false;
+        _lightPenTriggerCountdown = 0;
         _irqAssertPending = false;
         // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08: seed the delayed $D011 copy so
         // the first post-injection g-access does not see a stale pre-injection mode.

@@ -289,12 +289,14 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // a still-low line retriggers at the frame start
     // (vicii-cycle.c:210-217); _lightPenXExtraBits is the chip-model x offset
     // (color latency ? 2 : 1) consumed by the latch and reset to 0 afterwards
-    // (vicii-lightpen.c:42,78,103); _lightPenTriggerPending is the one-clock
-    // trigger delay (trigger_cycle = mclk + 1 at :44, fired at the end of the
-    // matching cycle, vicii-cycle.c:610-613).
+    // (vicii-lightpen.c:42,78,103); _lightPenTriggerCountdown is the pending
+    // trigger delay in cycles (trigger_cycle = mclk + delta; the LINE path
+    // uses delta 1, :44, and the pointing-device timing path uses
+    // x/8 + y*cycles_per_line, :123; fired at the end of the matching cycle,
+    // vicii-cycle.c:610-613). 0 = no trigger scheduled.
     private bool _lightPenState;
     private byte _lightPenXExtraBits;
-    private bool _lightPenTriggerPending;
+    private int _lightPenTriggerCountdown;
 
     /// <summary>
     /// PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-07: chip-model colour latency
@@ -1487,12 +1489,13 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         _registers[0x12] = (byte)CurrentRasterLine;
 
-        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-06: a pen edge schedules its
-        // trigger for the FOLLOWING cycle (trigger_cycle = mclk + 1,
-        // vicii-lightpen.c:44) and the trigger fires at the very end of that
-        // cycle, after every other per-cycle effect. VICE
-        // viciisc/vicii-cycle.c:610-613.
-        if (_lightPenTriggerPending)
+        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-06 + audit L4: a scheduled
+        // pen trigger fires at the very end of its matching cycle, after
+        // every other per-cycle effect (trigger_cycle comparison, VICE
+        // viciisc/vicii-cycle.c:610-613). The LINE path schedules mclk+1
+        // (vicii-lightpen.c:44); the pointing-device timing path schedules
+        // the beam-position delay (:123).
+        if (_lightPenTriggerCountdown > 0 && --_lightPenTriggerCountdown == 0)
         {
             TriggerLightPenInternal(retrigger: false);
         }
@@ -1645,7 +1648,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // line level, the chip-model x offset and any scheduled trigger.
         _lightPenState = false;
         _lightPenXExtraBits = 0;
-        _lightPenTriggerPending = false;
+        _lightPenTriggerCountdown = 0;
         // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX: reset the pixel sequencer.
         _pixelSequencer.Reset();
         // V4 FR-VIC-DRAW-COLOR: clear chip-level colour-register pending
@@ -3171,10 +3174,36 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (state)
         {
             _lightPenXExtraBits = ColorLatency ? (byte)2 : (byte)1;
-            _lightPenTriggerPending = true;
+            _lightPenTriggerCountdown = 1;
         }
 
         _lightPenState = state;
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 audit L4: the pointing-device light-pen timing, a
+    /// port of <c>vicii_lightpen_timing</c> (VICE
+    /// viciisc/vicii-lightpen.c:111-130). The visible-window pen position
+    /// translates to beam coordinates via the normal border geometry
+    /// (screen_leftborderwidth = 0x20 on every normal-border model,
+    /// vicii-timing.h:31/:38/:45/:52; first displayed line 0x10 PAL/PAL-N,
+    /// 0x1c NTSC, :68/:95/:102/:109). An x below 104 is off screen and
+    /// schedules nothing (pulse_time 0); otherwise the sub-CLK precision
+    /// bits latch from the pixel position ((x &gt;&gt; 1) &amp; 3) and the
+    /// trigger fires after x/8 + y*cycles_per_line cycles.
+    /// </summary>
+    public void SetLightPenTiming(int x, int y)
+    {
+        x += 0x80 - 0x20;
+        y += IsNtscVideo ? 0x1C : 0x10;
+
+        if (x < 104)
+        {
+            return;
+        }
+
+        _lightPenXExtraBits = (byte)((x >> 1) & 0x3);
+        _lightPenTriggerCountdown = (x / 8) + (y * CyclesPerLine);
     }
 
     /// <summary>
@@ -3190,7 +3219,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     private void TriggerLightPenInternal(bool retrigger)
     {
-        _lightPenTriggerPending = false;
+        _lightPenTriggerCountdown = 0;
 
         if (_lightPenTriggeredThisFrame)
         {
