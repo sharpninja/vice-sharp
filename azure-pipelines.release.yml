@@ -5,7 +5,7 @@
 #
 #     - To turn off auto-generation set:
 #
-#         [AzurePipelines (AutoGenerate = false)]
+#         [DefaultPoolAzurePipelines (AutoGenerate = false)]
 #
 #     - To trigger manual generation invoke:
 #
@@ -20,11 +20,9 @@ trigger:
       - v*
 
 stages:
-  - stage: windows_latest
-    displayName: 'windows-latest'
+  - stage: default_pool
+    displayName: 'Default agent pool'
     dependsOn: [  ]
-    pool:
-      vmImage: 'windows-latest'
     jobs:
       - job: PublishNuget
         displayName: 'PublishNuget'
@@ -34,5 +32,3 @@ stages:
             displayName: 'Run: PublishNuget'
             inputs:
               script: './build.cmd PublishNuget --skip'
-            env:
-              NUGET_API_KEY: $(NUGET_API_KEY)

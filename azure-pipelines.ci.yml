@@ -5,7 +5,7 @@
 #
 #     - To turn off auto-generation set:
 #
-#         [AzurePipelines (AutoGenerate = false)]
+#         [DefaultPoolAzurePipelines (AutoGenerate = false)]
 #
 #     - To trigger manual generation invoke:
 #
@@ -18,19 +18,19 @@ trigger:
   branches:
     include:
       - master
+      - main
       - feat/*
 
 pr:
   branches:
     include:
       - master
+      - main
 
 stages:
-  - stage: windows_latest
-    displayName: 'windows-latest'
+  - stage: default_pool
+    displayName: 'Default agent pool'
     dependsOn: [  ]
-    pool:
-      vmImage: 'windows-latest'
     jobs:
       - job: Restore
         displayName: 'Restore'

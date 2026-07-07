@@ -12,24 +12,25 @@ using Nuke.Common.Tools.Git;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 
-// Nuke-generated Azure DevOps pipelines (regenerated on every local build run):
-// - azure-pipelines.ci.yml: Test on branch pushes (native-oracle tests auto-skip
-//   off-box via [ViceFact]; Determinism/AiReview categories excluded by Test).
+// Nuke-generated Azure DevOps pipelines (regenerated on every local build run),
+// both dispatching to the self-hosted "Default" agent pool via
+// DefaultPoolAzurePipelinesAttribute (the runners carry the native toolchain
+// and the NUGET_API_KEY environment - no pipeline secret, no vmImage):
+// - azure-pipelines.ci.yml: Test on branch pushes.
 // - azure-pipelines.release.yml: PublishNuget on v* tags only - the tag-gated
-//   reproducible NuGet release path (needs the NUGET_API_KEY secret on the
-//   pipeline; PublishNuget's own gate re-verifies tag/version/pack integrity).
-[AzurePipelines(
+//   reproducible NuGet release path (single self-sufficient job; PublishNuget's
+//   own gate re-verifies tag/version/pack integrity).
+[DefaultPoolAzurePipelines(
     "ci",
     AzurePipelinesImage.WindowsLatest,
     InvokedTargets = new[] { nameof(Test) },
-    TriggerBranchesInclude = new[] { "master", "feat/*" },
-    PullRequestsBranchesInclude = new[] { "master" },
+    TriggerBranchesInclude = new[] { "master", "main", "feat/*" },
+    PullRequestsBranchesInclude = new[] { "master", "main" },
     CacheKeyFiles = new string[0])]
-[AzurePipelines(
+[DefaultPoolAzurePipelines(
     "release",
     AzurePipelinesImage.WindowsLatest,
     InvokedTargets = new[] { nameof(PublishNuget) },
-    ImportSecrets = new[] { "NUGET_API_KEY" },
     TriggerTagsInclude = new[] { "v*" },
     TriggerBranchesInclude = new string[0],
     CacheKeyFiles = new string[0])]
