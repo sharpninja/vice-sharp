@@ -23,6 +23,8 @@ stages:
   - stage: default_pool
     displayName: 'Default agent pool'
     dependsOn: [  ]
+    pool:
+      name: 'Default'
     jobs:
       - job: PublishNuget
         displayName: 'PublishNuget'
