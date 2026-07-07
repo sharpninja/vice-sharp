@@ -113,9 +113,23 @@ public sealed class EmulatorRuntimeSession
     /// machine-build time, or null when the session has no live audio path
     /// (headless / test rigs built without the platform backend). Sound capture
     /// (FR-MED-003) attaches a WAV recorder to this tap; video capture does not
-    /// use it.
+    /// use it. Assigning the tap applies the current warp audio policy so a
+    /// session already in warp pauses its live output immediately
+    /// (TR-AUDIO-WARP-001).
     /// </summary>
-    public CaptureAudioTap? AudioCaptureTap { get; set; }
+    public CaptureAudioTap? AudioCaptureTap
+    {
+        get => _audioCaptureTap;
+        set
+        {
+            _audioCaptureTap = value;
+            // A freshly attached tap is unpaused; only warp needs enforcing here.
+            if (!_limiterEnabled)
+                value?.Pause();
+        }
+    }
+
+    private CaptureAudioTap? _audioCaptureTap;
 
     /// <summary>True while a numbered-BMP video capture is in progress.</summary>
     public bool IsVideoCaptureActive
@@ -139,9 +153,44 @@ public sealed class EmulatorRuntimeSession
 
     public double LimiterRatePercent { get; set; } = 100;
 
-    public bool LimiterEnabled { get; set; } = true;
+    /// <summary>
+    /// True while the pace limiter is on; false is warp. Toggling applies the
+    /// warp audio policy (TR-AUDIO-WARP-001): warp pauses the live audio leaf
+    /// so SID fragments are discarded without blocking, mirroring VICE's
+    /// sound_flush (sound.c:1528-1531 discards pending samples;
+    /// sound.c:1573 gates the blocking device write on !warp_mode_enabled)
+    /// while an attached recorder keeps receiving samples through the tap.
+    /// SID sample calculation itself continues, matching VICE's
+    /// SoundEmulateOnWarp default of 1 (sound.c:733).
+    /// </summary>
+    public bool LimiterEnabled
+    {
+        get => _limiterEnabled;
+        set
+        {
+            _limiterEnabled = value;
+            ApplyWarpAudioPolicy();
+        }
+    }
+
+    private bool _limiterEnabled = true;
 
     public bool IsWarpMode => !LimiterEnabled;
+
+    // Pause the live output leaf in warp (drop fragments non-blocking), resume
+    // it when the limiter returns. The tap sits above the leaf, so recorders
+    // attached for sound capture keep receiving samples either way - exactly
+    // VICE's warp behavior with an active recording device (sound.c:1528).
+    private void ApplyWarpAudioPolicy()
+    {
+        if (_audioCaptureTap is not { } tap)
+            return;
+
+        if (_limiterEnabled)
+            tap.Resume();
+        else
+            tap.Pause();
+    }
 
     /// <summary>
     /// Selected emulation pacing strategy id ("semaphore" | "vice"), surfaced in the
