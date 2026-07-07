@@ -603,8 +603,8 @@ sealed partial class Build : NukeBuild
     [Parameter("Runtime identifier for the desktop publish that feeds PublishMsi. Default win-x64.")]
     readonly string MsiRuntimeIdentifier = "win-x64";
 
-    [Parameter("Disable AOT-style MSI publish outputs. Values: auto, true, false. Default auto (true for Debug, false otherwise).")]
-    readonly string MsiAotDisabled = "auto";
+    [Parameter("Publish the MSI payload with native AOT instead of the standard ReadyToRun+single-file+trimmed JIT publish. Values: auto, true, false. Default auto (false).")]
+    readonly string MsiAotEnabled = "auto";
 
     [Parameter("Allow packaging a Debug-configuration MSI (unoptimized emulator; ~10x slower). Values: auto, true, false. Default auto (false).")]
     readonly string MsiAllowDebug = "auto";
@@ -650,7 +650,7 @@ sealed partial class Build : NukeBuild
                 throw new InvalidOperationException(
                     "PublishMsi with Configuration=Debug produces an unoptimized emulator. " +
                     "Pass --configuration Release (recommended) or --msi-allow-debug true to package a Debug build deliberately.");
-            var aotDisabled = ResolveAutoBoolean(MsiAotDisabled, isDebugMsi, nameof(MsiAotDisabled));
+            var aotEnabled = ResolveAutoBoolean(MsiAotEnabled, false, nameof(MsiAotEnabled));
             var enableDebugGrpc = ResolveAutoBoolean(MsiEnableDebugGrpc, isDebugMsi, nameof(MsiEnableDebugGrpc));
             if (enableDebugGrpc)
             {
@@ -662,40 +662,48 @@ sealed partial class Build : NukeBuild
                     throw new InvalidOperationException("MsiRemoteControlPort must be in the range 1..65535.");
             }
 
-            // Step 1: self-contained JIT publish of ViceSharp.Avalonia.
-            // Native AOT stays disabled so the debug gRPC surfaces and debugger
-            // attach path remain usable, but the MSI payload is trimmed and
-            // single-file so installed startup does not crawl through hundreds of
-            // separate framework/package assemblies.
+            // Step 1: self-contained publish of ViceSharp.Avalonia. The standard
+            // MSI payload is ALWAYS ReadyToRun + single-file + trimmed JIT (fast
+            // startup, one exe, no unoptimized-deploy surprises); --msi-aot-enabled
+            // true switches to a native AOT publish instead (AOT is inherently a
+            // fully-trimmed single native exe, and PublishReadyToRun/
+            // PublishSingleFile do not apply to it).
             Serilog.Log.Information(
-                "Publishing ViceSharp.Avalonia ({Configuration}, self-contained trimmed single-file JIT, ReadyToRun={ReadyToRun}, DebugGrpc={DebugGrpc}, {Rid}) -> {Out}",
+                "Publishing ViceSharp.Avalonia ({Configuration}, self-contained {Mode}, DebugGrpc={DebugGrpc}, {Rid}) -> {Out}",
                 Configuration,
-                !aotDisabled,
+                aotEnabled ? "native AOT" : "ReadyToRun+single-file+trimmed JIT",
                 enableDebugGrpc,
                 MsiRuntimeIdentifier,
                 AvaloniaPublishDir);
-            DotNetPublish(s => s
-                .SetProject(AvaloniaProject)
-                .SetConfiguration(Configuration)
-                .SetRuntime(MsiRuntimeIdentifier)
-                // Stamp the GitVersion semver into the published assembly (AssemblyVersion,
-                // FileVersion, InformationalVersion) so the running app can show it in the
-                // window title. Without this the exe stays at the default 1.0.0 and every
-                // deployed build looks identical. Matches the MSI ProductVersion below.
-                .SetVersion(MsiVersion)
-                .SetSelfContained(true)
-                .SetProperty("PublishAot", "false")
-                .SetProperty("PublishTrimmed", "true")
-                .SetProperty("TrimMode", "partial")
-                .SetProperty("ILLinkTreatWarningsAsErrors", "false")
-                .SetProperty("PublishReadyToRun", aotDisabled ? "false" : "true")
-                .SetProperty("PublishSingleFile", "true")
-                .SetProperty("IncludeNativeLibrariesForSelfExtract", "true")
-                .SetProperty("DebugType", isDebugMsi ? "portable" : "none")
-                .SetProperty("DebugSymbols", isDebugMsi ? "true" : "false")
-                .SetProperty("DocumentationFile", string.Empty)
-                .SetProperty("GenerateDocumentationFile", "false")
-                .SetProperty("CopyDocumentationFilesFromPackages", "false"));
+            DotNetPublish(s =>
+            {
+                s = s
+                    .SetProject(AvaloniaProject)
+                    .SetConfiguration(Configuration)
+                    .SetRuntime(MsiRuntimeIdentifier)
+                    // Stamp the GitVersion semver into the published assembly (AssemblyVersion,
+                    // FileVersion, InformationalVersion) so the running app can show it in the
+                    // window title. Without this the exe stays at the default 1.0.0 and every
+                    // deployed build looks identical. Matches the MSI ProductVersion below.
+                    .SetVersion(MsiVersion)
+                    .SetSelfContained(true)
+                    .SetProperty("ILLinkTreatWarningsAsErrors", "false")
+                    .SetProperty("DebugType", isDebugMsi ? "portable" : "none")
+                    .SetProperty("DebugSymbols", isDebugMsi ? "true" : "false")
+                    .SetProperty("DocumentationFile", string.Empty)
+                    .SetProperty("GenerateDocumentationFile", "false")
+                    .SetProperty("CopyDocumentationFilesFromPackages", "false");
+
+                return aotEnabled
+                    ? s.SetProperty("PublishAot", "true")
+                    : s
+                        .SetProperty("PublishAot", "false")
+                        .SetProperty("PublishTrimmed", "true")
+                        .SetProperty("TrimMode", "partial")
+                        .SetProperty("PublishReadyToRun", "true")
+                        .SetProperty("PublishSingleFile", "true")
+                        .SetProperty("IncludeNativeLibrariesForSelfExtract", "true");
+            });
 
             var exePath = AvaloniaPublishDir / "ViceSharp.Avalonia.exe";
             if (!exePath.FileExists())
