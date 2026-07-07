@@ -19,6 +19,14 @@ sealed class DefaultPoolAzurePipelinesAttribute : AzurePipelinesAttribute
     {
     }
 
+    /// <summary>
+    /// The Default-pool agents are Linux; Nuke's default resolves to
+    /// build.cmd (a Windows batch file here, not the polyglot), which bash
+    /// cannot execute. Point the generated steps at build.sh instead
+    /// (executable bit set in the git index).
+    /// </summary>
+    protected override string BuildCmdPath => "build.sh";
+
     protected override AzurePipelinesStage GetStage(
         AzurePipelinesImage image,
         IReadOnlyCollection<ExecutableTarget> relevantTargets)

@@ -31,4 +31,4 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: PublishNuget'
             inputs:
-              script: './build.cmd PublishNuget --skip'
+              script: './build.sh PublishNuget --skip'

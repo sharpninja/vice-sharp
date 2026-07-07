@@ -246,10 +246,12 @@ sealed partial class Build : NukeBuild
 
             foreach (var spec in individual)
             {
+                // No NoRestore: each pack restores+builds its own project graph,
+                // keeping the single-job CI release agent-agnostic (nothing here
+                // depends on a prior whole-solution build).
                 DotNetPack(s => s
                     .SetProject(RootDirectory / "src" / spec.Name / $"{spec.Name}.csproj")
                     .SetConfiguration(Configuration)
-                    .EnableNoRestore()
                     .SetProperty("PackageVersion", version)
                     .SetOutputDirectory(PackagesOutputDirectory));
 
@@ -288,11 +290,15 @@ sealed partial class Build : NukeBuild
             var apiKey = Environment.GetEnvironmentVariable("NUGET_API_KEY");
             Assert.True(!string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
 
-            // Build + pack in-job (reproducible from the tagged checkout; the
-            // bundle pack requires a prior restore+build because its PackageId
-            // is injected pack-time and cannot survive an implicit restore).
+            // Build + pack in-job (reproducible from the tagged checkout). Only
+            // the bundle's package project graph needs a prior restore+build
+            // (its PackageId is injected pack-time and cannot survive an
+            // implicit restore); the individual packs restore+build their own
+            // graphs. Deliberately NOT the whole solution: the release agent
+            // is a lean Linux runner and must not drag in the native-oracle
+            // test harness build.
             DotNetBuild(s => s
-                .SetProjectFile(Solution)
+                .SetProjectFile(PackageProject)
                 .SetConfiguration(Configuration));
             PackAllNugetPackages();
 
