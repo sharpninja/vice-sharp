@@ -26,4 +26,9 @@ public sealed class Mos8565 : Mos6569
     /// so the light-pen x offset is 1 instead of 2 (vicii-lightpen.c:42).
     /// </summary>
     protected override bool ColorLatency => false;
+
+    /// <summary>
+    /// audit M15/L7: 8565 uses the 8565r2 palette (vicii-color.c:641-643).
+    /// </summary>
+    public override VicPalette.Group PaletteGroup => VicPalette.Group.Mos8565R2;
 }

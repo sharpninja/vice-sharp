@@ -422,7 +422,11 @@ public sealed class VideoSurfaceIntegrationTests
 
                 for (var charColumn = 0; charColumn < 8; charColumn++)
                 {
-                    var x = vic.LeftBorderPixel + (column * 8) + charColumn;
+                    // Display column 0 sits at frame x 32: frame x = beam x + 8
+                    // (VICE DBUF_OFFSET = 17*8 - 0x20 = dbuf[104] at frame x 0,
+                    // vicii-draw.c:71 with vicii-timing.h:31; the CSEL=1 beam
+                    // edge is LeftBorderPixel = 24).
+                    var x = vic.LeftBorderPixel + 8 + (column * 8) + charColumn;
                     var bit = (glyph >> (7 - charColumn)) & 0x01;
                     var expected = bit == 0 ? background : foreground;
                     var actual = ReadPixel(videoChip.FrameBuffer, x, y);

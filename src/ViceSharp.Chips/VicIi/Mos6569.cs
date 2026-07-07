@@ -2595,6 +2595,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public bool IsPrefetchActive => _prefetchCycles != 0;
 
     /// <summary>
+    /// PLAN-VICEPARITY-001 audit M15/L7: the VICE TOBIAS_COLORS palette group
+    /// for this chip (vicii_color_update_palette, vicii-color.c:630-648).
+    /// The 9-luma "old" PAL 6569 default; model subclasses override.
+    /// </summary>
+    public virtual VicPalette.Group PaletteGroup => VicPalette.Group.Mos6569R5;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 audit M15/L7: true when the chip's video standard
+    /// converts colors through the NTSC YIQ (Sony) matrix instead of the PAL
+    /// BT.601 path (video-color.c:249-278, selected by the canvas crt_type).
+    /// PAL and PAL-N use the PAL path; the 6567/6567R56A/8562 override.
+    /// </summary>
+    public virtual bool IsNtscVideo => false;
+
+    /// <summary>
     /// PLAN-VICEPARITY-001 audit M11/L3: the merged cycle-table xpos VICE
     /// stores for a raster cycle: the PHI1 xpos floored to 8
     /// (vicii-chip-model.c:767, read back by cycle_get_xpos,

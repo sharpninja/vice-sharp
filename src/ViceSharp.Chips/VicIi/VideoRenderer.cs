@@ -34,9 +34,11 @@ public sealed class VideoRenderer
 
     private readonly Mos6569 _vic;
 
-    // VIC-II palette in BGRA format - built from VicPalette colors
-    // Format: 0xAABBGGRR (Alpha, Blue, Green, Red)
-    private static readonly uint[] Palette = new uint[16];
+    // VIC-II palette in BGRA format, per chip model (audit L7: VICE installs
+    // a different generated palette per model, vicii-color.c:630-648).
+    // FrameBuffer stores pixels as BGRA bytes: [0]=B, [1]=G, [2]=R, [3]=A,
+    // so each uint packs B at bits 0-7, G at 8-15, R at 16-23, A at 24-31.
+    private readonly uint[] Palette = new uint[16];
 
     // PLAN-VICEPARITY-001 V3: true only during NotifyLineCompleted (clock-driven live
     // rendering). False during RenderFullFrame (synthetic path). Controls whether
@@ -44,22 +46,16 @@ public sealed class VideoRenderer
     // PixelSequencer.LineIndices (cycle-accurate) or the geometric fallback path.
     private bool _isLiveRender;
 
-    static VideoRenderer()
-    {
-        // Initialize palette from VicPalette to BGRA format
-        // FrameBuffer stores pixels as BGRA: [offset 0=B, offset 1=G, offset 2=R, offset 3=A]
-        // BitConverter.ToUInt32 reads bytes as: [0]=bits0-7, [1]=bits8-15, [2]=bits16-23, [3]=bits24-31
-        // So we need: B at bits0-7, G at bits8-15, R at bits16-23, A at bits24-31
-        for (int i = 0; i < 16; i++)
-        {
-            var c = VicPalette.Colors[i];
-            Palette[i] = 0xFF000000u | ((uint)c.B) | ((uint)c.G << 8) | ((uint)c.R << 16);
-        }
-    }
-
     public VideoRenderer(Mos6569 vic)
     {
         _vic = vic;
+
+        var colors = VicPalette.ForGroup(vic.PaletteGroup, vic.IsNtscVideo);
+        for (int i = 0; i < 16; i++)
+        {
+            var c = colors[i];
+            Palette[i] = 0xFF000000u | c.B | ((uint)c.G << 8) | ((uint)c.R << 16);
+        }
     }
 
     public VideoRenderer(Mos6569 vic, IBus _)

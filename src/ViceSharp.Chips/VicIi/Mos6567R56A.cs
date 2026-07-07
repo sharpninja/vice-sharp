@@ -28,4 +28,13 @@ public sealed class Mos6567R56A : Mos6569
     /// (vicii-lightpen.c:93-98,105-107).
     /// </summary>
     protected override bool LightPenOldIrqMode => true;
+
+    /// <summary>
+    /// audit M15/L7: 6567R56A uses the 5-luma 6569r1 palette
+    /// (vicii-color.c:632-634) through the NTSC YIQ conversion.
+    /// </summary>
+    public override VicPalette.Group PaletteGroup => VicPalette.Group.Mos6569R1;
+
+    /// <inheritdoc />
+    public override bool IsNtscVideo => true;
 }
