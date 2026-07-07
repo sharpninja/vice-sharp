@@ -41,7 +41,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Restore'
             inputs:
-              script: './build.sh Restore --skip'
+              script: './build.cmd Restore --skip'
       - job: Compile
         displayName: 'Compile'
         dependsOn: [ Restore ]
@@ -49,7 +49,7 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Compile'
             inputs:
-              script: './build.sh Compile --skip'
+              script: './build.cmd Compile --skip'
       - job: Test
         displayName: 'Test'
         dependsOn: [ Compile ]
@@ -57,4 +57,4 @@ stages:
           - task: CmdLine@2
             displayName: 'Run: Test'
             inputs:
-              script: './build.sh Test --skip'
+              script: './build.cmd Test --skip'
