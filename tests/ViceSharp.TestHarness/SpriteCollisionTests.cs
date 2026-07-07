@@ -307,10 +307,13 @@ public sealed class SpriteCollisionTests
             if (screenRow < 0 || screenRow >= 25) return 0;
             int rowCounter = vic.CurrentRasterLine & 7;
             int screenIndex = screenRow * columns + col;
+            // audit L6: mirror the real g-access ECM address mask
+            // (g_fetch_addr, vicii-fetch.c:176-179).
+            int gMask = (d011 & 0x40) != 0 ? 0x39FF : 0x3FFF;
             if (bitmapMode)
-                return bus.Read((ushort)(vic.BitmapPointerBase + screenIndex * 8 + rowCounter));
+                return bus.Read((ushort)((vic.BitmapPointerBase + (screenIndex * 8) + rowCounter) & gMask));
             byte screenCode = bus.Read((ushort)(vic.ScreenMemoryBase + screenIndex));
-            return bus.Read((ushort)(vic.CharacterBase + screenCode * 8 + rowCounter));
+            return bus.Read((ushort)((vic.CharacterBase + (screenCode * 8) + rowCounter) & gMask));
         };
 
         // rasterLine: 101 because DrawSprites8 detects collision on the first
@@ -333,10 +336,10 @@ public sealed class SpriteCollisionTests
                 ConfigureCharacterByte(ram, vic, x, rasterLine, color: 0x0B, charByte: 0x90);
                 break;
             case 2:
-                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x80);
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x80, applyEcmMask: true);
                 break;
             case 3:
-                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x90);
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x90, applyEcmMask: true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(sourceKind));
@@ -359,7 +362,7 @@ public sealed class SpriteCollisionTests
         ram.Write((ushort)(vic.CharacterBase + charCode * 8 + charRow), charByte);
     }
 
-    private static void ConfigureBitmapByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte bitmapByte)
+    private static void ConfigureBitmapByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte bitmapByte, bool applyEcmMask = false)
     {
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = x - vic.LeftBorderPixel;
@@ -369,7 +372,14 @@ public sealed class SpriteCollisionTests
         int charRow = screenLine & 7;
         int screenIndex = screenRow * columns + col;
 
-        ram.Write((ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow), bitmapByte);
+        // audit L6: with ECM set the chip fetches through the $39FF g-address
+        // mask (g_fetch_addr, vicii-fetch.c:176-179), so ECM scenarios must
+        // seed the MASKED address.
+        int address = vic.BitmapPointerBase + (screenIndex * 8) + charRow;
+        if (applyEcmMask)
+            address &= 0x39FF;
+
+        ram.Write((ushort)address, bitmapByte);
     }
 
     // =====================================================================
@@ -437,6 +447,10 @@ public sealed class SpriteCollisionTests
         int charRow = screenLine & 7;
         int screenIndex = screenRow * columns + col;
 
+        // audit L6: with ECM set the g-fetch goes through the $39FF address
+        // mask (g_fetch_addr, vicii-fetch.c:176-179); serve the data at the
+        // address the chip actually fetches.
+        int ecmMask = (d011 & 0x40) != 0 ? 0x39FF : 0x3FFF;
         vic.VideoMemoryReader = addr =>
         {
             ushort masked = (ushort)(addr & 0x3FFF);
@@ -445,13 +459,13 @@ public sealed class SpriteCollisionTests
                 // Character screen + color + glyph data (for BMM=0 cases)
                 if (masked == (ushort)(vic.ScreenMemoryBase + screenIndex)) return 0x01; // charCode
                 if (masked == (ushort)(0xD800 + screenIndex)) return (byte)(sourceKind == 0 ? 0x07 : 0x0B);
-                ushort glyphAddr = (ushort)(vic.CharacterBase + 0x01 * 8 + charRow);
+                ushort glyphAddr = (ushort)((vic.CharacterBase + (0x01 * 8) + charRow) & ecmMask);
                 if (masked == glyphAddr) return dataByte;
             }
             else
             {
                 // Bitmap data (for BMM=1 cases)
-                ushort bmpAddr = (ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow);
+                ushort bmpAddr = (ushort)((vic.BitmapPointerBase + (screenIndex * 8) + charRow) & ecmMask);
                 if (masked == bmpAddr) return dataByte;
                 // Also satisfy screen read in IsGraphics path
                 if (masked == (ushort)(vic.ScreenMemoryBase + screenIndex)) return 0x00;

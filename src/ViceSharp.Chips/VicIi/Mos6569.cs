@@ -3457,7 +3457,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         if (bmm)
         {
             // ECM + BMM cases (invalid regardless of MCM): bitmap data supplies the bits.
-            byte bmp = ReadVideoMemory((ushort)(BitmapPointerBase + screenIndex * 8 + charRow));
+            // audit L6: ECM masks the g-address with $39FF (g_fetch_addr,
+            // vicii-fetch.c:176-179), clearing address bits 9/10. This helper
+            // is only reached with ECM set, so the mask always applies here.
+            byte bmp = ReadVideoMemory((ushort)((BitmapPointerBase + (screenIndex * 8) + charRow) & 0x39FF));
             int bit = 7 - charX;
             bool high = ((bmp >> bit) & 0x01) != 0; // corresponds to px bit 1 in VICE gbuf for these modes
             // For MC bitmap under invalid, the pair high bit is what matters for px&2.
@@ -3469,8 +3472,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return (byte)(high ? 0x02 : 0x00);
         }
 
-        // ECM + !BMM + MCM (the remaining invalid): MC text path.
-        byte ch = ReadVideoMemory((ushort)(CharacterBase + screenCode * 8 + charRow));
+        // ECM + !BMM + MCM (the remaining invalid): MC text path. audit L6:
+        // the same ECM $39FF g-address mask applies (vicii-fetch.c:176-179).
+        byte ch = ReadVideoMemory((ushort)((CharacterBase + (screenCode * 8) + charRow) & 0x39FF));
         if ((colorCode & 0x08) == 0)
         {
             int bit = 7 - charX;
