@@ -15,6 +15,13 @@
       <_Parameter1>TestHarnessSourceDirectory</_Parameter1>
       <_Parameter2>$(MSBuildThisFileDirectory)</_Parameter2>
     </AssemblyAttribute>
+    <!-- PLAN-VICEPARITY-001 P0-8: the parity coverage manifest loads the
+         requirements artifact at test time (same idiom as
+         TestHarnessSourceDirectory). -->
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>ParityRequirementsPath</_Parameter1>
+      <_Parameter2>$(MSBuildThisFileDirectory)..\..\artifacts\vice-parity-requirements\requirements.yaml</_Parameter2>
+    </AssemblyAttribute>
   </ItemGroup>
 
   <ItemGroup>
@@ -41,10 +48,12 @@
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="Avalonia.Headless.XUnit" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Fixtures\D64\*.d64" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Fixtures\Vsf\*.vsf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <Target Name="BuildViceNative"

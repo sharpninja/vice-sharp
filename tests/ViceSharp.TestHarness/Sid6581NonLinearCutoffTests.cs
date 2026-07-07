@@ -26,7 +26,7 @@ public sealed class Sid6581NonLinearCutoffTests
     /// Acceptance: Cutoff frequency between reg=0x00 and reg=0x100 differs by less
     /// than 10% of the full audible range, proving the curve barely moves there.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF cutoff curve replaced by reSID 6581 f0_dac (PLAN-VICEPARITY-001 S9)")]
     public void CutoffCurve_LowRegion_IsFlat()
     {
         float fAt0x00 = Sid6581.MapCutoffRegToFrequency(0x00);
@@ -47,7 +47,7 @@ public sealed class Sid6581NonLinearCutoffTests
     /// Acceptance: Cutoff difference between reg=0x200 and reg=0x600 exceeds 50%
     /// of the full audible range, proving the steep rise in this region.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF cutoff curve replaced by reSID 6581 f0_dac (PLAN-VICEPARITY-001 S9)")]
     public void CutoffCurve_MiddleRegion_IsSteep()
     {
         float fAt0x200 = Sid6581.MapCutoffRegToFrequency(0x200);
@@ -67,7 +67,7 @@ public sealed class Sid6581NonLinearCutoffTests
     /// Acceptance: Slope (Hz per register step) in the high region is less than
     /// the slope in the middle region, proving the curve flattens at the top.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF cutoff curve replaced by reSID 6581 f0_dac (PLAN-VICEPARITY-001 S9)")]
     public void CutoffCurve_HighRegion_IsFlatterThanMiddle()
     {
         float fAt0x200 = Sid6581.MapCutoffRegToFrequency(0x200);
@@ -90,7 +90,7 @@ public sealed class Sid6581NonLinearCutoffTests
     /// Acceptance: Cutoff frequency is non-decreasing for every register step
     /// from 0x000 through 0x7FF.
     /// </summary>
-    [Fact]
+    [Fact(Skip = "Retired in S9: SVF cutoff curve replaced by reSID 6581 f0_dac (PLAN-VICEPARITY-001 S9)")]
     public void CutoffCurve_IsMonotonicNonDecreasing()
     {
         float prev = Sid6581.MapCutoffRegToFrequency(0);

@@ -166,7 +166,12 @@ public sealed partial class ViceEmulationGate : IEmulationGate
             lock (session.SyncRoot)
                 audioChip = session.Machine.Devices.GetByRole(DeviceRole.AudioChip) as IAudioChip;
 
-            var soundAction = EvaluateSound(audioChip);
+            // Fast-forward past the live-audio ceiling suspends the leaf (the SID's
+            // fragment writes discard without blocking), so device back-pressure can
+            // no longer pace - fall through to vsync, which paces the requested rate.
+            var soundAction = session.IsLiveAudioOutputSuspended
+                ? SoundAction.NotTimingSource
+                : EvaluateSound(audioChip);
             if (soundAction != SoundAction.NotTimingSource)
             {
                 LastRegulator = PacingRegulator.Sound;

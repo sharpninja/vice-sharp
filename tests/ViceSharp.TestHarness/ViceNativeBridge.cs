@@ -55,6 +55,8 @@ public static class ViceNativeBridge
         state.DisplayState = nativeState.DisplayState;
         state.SpriteDma = nativeState.SpriteDma;
         state.Registers = nativeState.GetRegisters();
+        state.AllowBadLines = nativeState.AllowBadLines;
+        state.IdleState = nativeState.IdleState;
     }
 
     public static void GetCiaState(IntPtr machine, int ciaIndex, ref ViceCiaState state)
@@ -72,6 +74,9 @@ public static class ViceNativeBridge
         state.Cra = nativeState.Cra;
         state.Crb = nativeState.Crb;
         state.InterruptFlag = nativeState.InterruptFlag;
+        state.TimerALatch = nativeState.TimerALatch;
+        state.TimerBLatch = nativeState.TimerBLatch;
+        state.IrqMask = nativeState.IrqMask;
     }
 
     public static void GetSidState(IntPtr machine, ref ViceSidState state)
@@ -96,6 +101,57 @@ public static class ViceNativeBridge
     {
         var written = ViceNative.RenderSidSamples(machine, buffer, (nuint)buffer.Length, deltaTCycles);
         return (int)written;
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 Phase 0 (P0-1) / TR-SID-ORACLE-001. Single-cycle reSID
+    /// oracle surface: opens the shim's private reSID engine, then drives
+    /// reSID::SID::clock() one cycle at a time so parity tests can assert
+    /// bit-exact equality (the batched vice_sid_clock path drops the
+    /// envelope/waveform single-cycle pipelines). After open, drive register
+    /// writes ONLY through SidExactWrite; re-syncing from machine memory would
+    /// clobber pipeline state.
+    /// </summary>
+    public static bool SidExactOpen(IntPtr machine) => ViceNative.SidExactOpen(machine) != 0;
+
+    /// <summary>Reset the exact-oracle reSID engine (reSID::SID::reset()).</summary>
+    public static void SidExactReset(IntPtr machine) => ViceNative.SidExactReset(machine);
+
+    /// <summary>Advance the exact-oracle reSID engine by exactly <paramref name="cycles"/> single cycles.</summary>
+    public static int SidExactClock(IntPtr machine, int cycles) => ViceNative.SidExactClock(machine, cycles);
+
+    /// <summary>Write a SID register directly on the exact-oracle engine (reSID::SID::write()).</summary>
+    public static void SidExactWrite(IntPtr machine, ushort addr, byte value) => ViceNative.SidExactWrite(machine, addr, value);
+
+    /// <summary>Read a SID register from the exact-oracle engine (reSID::SID::read(); OSC3=$1B, ENV3=$1C).</summary>
+    public static byte SidExactRead(IntPtr machine, ushort addr) => ViceNative.SidExactRead(machine, addr);
+
+    /// <summary>Current 16-bit audio output of the exact-oracle engine (reSID::SID::output()).</summary>
+    public static short SidExactOutput(IntPtr machine) => ViceNative.SidExactOutput(machine);
+
+    /// <summary>Full reSID internal state of the exact-oracle engine (accumulators, noise shift registers, envelope pipelines, bus value).</summary>
+    public static ViceNative.ViceSidExactState SidExactGetState(IntPtr machine)
+    {
+        var state = new ViceNative.ViceSidExactState();
+        ViceNative.SidExactGetState(machine, ref state);
+        return state;
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 Phase 0 (P0-2) / TR-VIC-ORACLE-001. Per-pixel VIC
+    /// oracle: copies the visible frame from VICE's viciisc raster draw buffer
+    /// as raw palette indices (one byte per pixel, 0x00-0x0F). Index-exact
+    /// comparison is palette-independent; VIC parity ACs assert colour identity
+    /// against this buffer rather than an RGB conversion.
+    /// </summary>
+    /// <param name="machine">Native VICE machine handle.</param>
+    /// <param name="indexBuffer">Destination; must hold at least visible width * height bytes (384 * 272 PAL).</param>
+    /// <param name="width">Visible width reported by the native geometry.</param>
+    /// <param name="height">Visible height reported by the native geometry.</param>
+    /// <returns>True when the native raster draw buffer was copied.</returns>
+    public static bool TryCaptureVicFrameIndices(IntPtr machine, byte[] indexBuffer, out int width, out int height)
+    {
+        return ViceNative.CaptureVicFrameIndices(machine, indexBuffer, indexBuffer.Length, out width, out height) != 0;
     }
 
     /// <summary>
@@ -260,6 +316,22 @@ public static class ViceNativeBridge
         return true;
     }
 
+    /// <summary>
+    /// TR-LOCKSTEP-VSF-001: main-CPU resume/pipeline state from the shim
+    /// (vice_cpu_get_pipeline_state): the .vsf-restored x64sc in-flight context
+    /// beyond the register file - MAINCPU last_opcode_info + BA-low stall flags
+    /// (mainc64cpu.c snapshot module), the C64MEM 6510 processor port
+    /// (c64memsnapshot.c pport block; selects ROM/IO banking), and the
+    /// interrupt-status clocks. Used to stage the managed C64 so snapshot-resumed
+    /// lockstep aligns from cycle 0.
+    /// </summary>
+    public static ViceNative.ViceCpuPipelineState GetCpuPipelineState(IntPtr machine)
+    {
+        var state = new ViceNative.ViceCpuPipelineState();
+        ViceNative.GetCpuPipelineState(machine, ref state);
+        return state;
+    }
+
     public static void GetInterruptState(IntPtr machine, ref ViceInterruptState state)
     {
         var nativeState = new ViceNative.ViceInterruptState();
@@ -281,6 +353,12 @@ public static class ViceNativeBridge
         public byte DisplayState;
         public byte SpriteDma;
         public byte[] Registers;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: .vsf allow_bad_lines latch (gates badline BA stalls this frame).</summary>
+        public byte AllowBadLines;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: .vsf display/idle g-access state.</summary>
+        public byte IdleState;
     }
 
     public struct ViceCiaState
@@ -295,6 +373,15 @@ public static class ViceNativeBridge
         public byte Cra;
         public byte Crb;
         public byte InterruptFlag;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer A reload latch.</summary>
+        public ushort TimerALatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer B reload latch.</summary>
+        public ushort TimerBLatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: ICR interrupt-enable mask.</summary>
+        public byte IrqMask;
     }
 
     public struct ViceSidState

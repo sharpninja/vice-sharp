@@ -17,6 +17,11 @@
 *.ps1     text eol=crlf
 *.sh      text eol=lf
 
+# Patch files carry unified-diff context lines where a blank line is encoded as
+# a single space; that is valid content, not a whitespace error. Skip the
+# whitespace check so `git diff --check` does not flag generated .patch files.
+*.patch   text eol=lf -whitespace
+
 # Binary files - never modify
 *.png     binary
 *.jpg     binary

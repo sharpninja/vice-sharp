@@ -32,4 +32,12 @@ public partial class SettingsView : UserControl
 
     private void OnApplyRestart(object? sender, RoutedEventArgs e)
         => _ = ViewModel?.ApplySettingsAsync(restartRequired: true);
+
+    // Warp is a live control like Alt+W: the ToggleButton two-way binding has
+    // already flipped IsWarpMode when Click fires; push it to the host now.
+    private void OnWarpToggled(object? sender, RoutedEventArgs e)
+        => _ = ViewModel?.ApplySettingsAsync(restartRequired: false);
+
+    private void OnCycleSpeed(object? sender, RoutedEventArgs e)
+        => _ = ViewModel?.CycleSpeedAsync();
 }

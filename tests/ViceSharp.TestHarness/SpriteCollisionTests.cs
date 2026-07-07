@@ -60,6 +60,11 @@ public sealed class SpriteCollisionTests
             // Return a configurable foreground bitmap pattern for background pixels.
             return bgPattern;
         };
+        // Connect Phi1MemoryReader so DrawGraphics8 sees the same bgPattern
+        // when computing PriBuffer for sprite-background collision detection.
+        // (VideoMemoryReader covers video-II p/c-accesses; Phi1MemoryReader
+        // covers g-access character row data.)
+        vic.Phi1MemoryReader = _ => bgPattern;
         // Set DEN (display enable) for badline behaviour and standard text mode.
         vic.Write(ScreenControl1, 0x1B); // DEN=1, RSEL=1, YSCROLL=3
         vic.Write(ScreenControl2, 0x08); // CSEL=1 (40 cols)
@@ -114,9 +119,17 @@ public sealed class SpriteCollisionTests
 
     /// <summary>
     /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
-    /// Use case: $D01E read-clear semantics: after reading the latch, a
-    /// subsequent read must return 0 until new collisions accumulate.
-    /// Acceptance: First read returns 0x03; immediate second read returns 0x00.
+    /// Use case: $D01E read-clear semantics: reading the latch schedules the
+    /// clear for the NEXT cycle (VICE d01e_read sets clear_collisions,
+    /// viciisc/vicii-mem.c:520-535; the following vicii_cycle zeroes the
+    /// accumulator, vicii-cycle.c:413-425), so one cycle later a read
+    /// returns 0 until new collisions accumulate.
+    /// Acceptance: First read returns 0x03; after one Tick (the deferred
+    /// clear) the next read returns 0x00.
+    /// REBASED (PLAN-VICEPARITY-001 slice V2 / TEST-VIC-REGISTERS-12/14): the
+    /// previous immediate back-to-back-read expectation encoded the divergent
+    /// in-read clear (finding 46); on hardware consecutive reads are always
+    /// separated by at least one cycle.
     /// </summary>
     [Fact]
     public void SpriteSprite_LatchClearsOnRead()
@@ -132,6 +145,7 @@ public sealed class SpriteCollisionTests
         AdvanceTo(vic, line: 130, extra: 0);
 
         Assert.Equal(0x03, vic.Read(SpriteSpriteCollision));
+        vic.Tick(); // Deferred clear lands on the next cycle (vicii-cycle.c:413-425).
         Assert.Equal(0x00, vic.Read(SpriteSpriteCollision));
     }
 
@@ -220,9 +234,17 @@ public sealed class SpriteCollisionTests
 
     /// <summary>
     /// FR/TR: FR-VIC-005 / TEST-VIC-001 (BACKFILL-VIDEO-001 sprite collision).
-    /// Use case: $D01F read-clear semantics: after reading the latch, a
-    /// subsequent read must return 0 until new collisions accumulate.
-    /// Acceptance: First read returns 0x01; immediate second read returns 0x00.
+    /// Use case: $D01F read-clear semantics: reading the latch schedules the
+    /// clear for the NEXT cycle (VICE d01f_read sets clear_collisions,
+    /// viciisc/vicii-mem.c:537-559; the following vicii_cycle zeroes the
+    /// accumulator, vicii-cycle.c:413-425), so one cycle later a read
+    /// returns 0 until new collisions accumulate.
+    /// Acceptance: First read returns 0x01; after one Tick (the deferred
+    /// clear) the next read returns 0x00.
+    /// REBASED (PLAN-VICEPARITY-001 slice V2 / TEST-VIC-REGISTERS-13/14): the
+    /// previous immediate back-to-back-read expectation encoded the divergent
+    /// in-read clear (finding 46); on hardware consecutive reads are always
+    /// separated by at least one cycle.
     /// </summary>
     [Fact]
     public void SpriteBackground_LatchClearsOnRead()
@@ -236,6 +258,7 @@ public sealed class SpriteCollisionTests
         AdvanceTo(vic, line: 130, extra: 0);
 
         Assert.Equal(0x01, vic.Read(SpriteBackgroundCollision));
+        vic.Tick(); // Deferred clear lands on the next cycle (vicii-cycle.c:413-425).
         Assert.Equal(0x00, vic.Read(SpriteBackgroundCollision));
     }
 
@@ -265,7 +288,38 @@ public sealed class SpriteCollisionTests
         vic.Write(ScreenControl1, d011);
         vic.Write(ScreenControl2, d016);
         vic.Write(MemoryPointers, sourceKind <= 1 ? (byte)0x15 : (byte)0x18);
-        ConfigureInvalidEcmForegroundSource(ram, vic, x: 96, rasterLine: 100, sourceKind);
+
+        // Connect Phi1MemoryReader to bus so DrawGraphics8 gets the correct
+        // g-access character or bitmap row data for PriBuffer construction.
+        // The real g-accesses run at cycles 15-54 for display columns 0-39
+        // (VICE FetchG, vicii-chip-model.c PAL table Phi1(16)..Phi1(55), with
+        // the one-cycle-delayed visibility gate of audit H1); the address is
+        // CharacterBase + screenCode*8 + rowCounter (char mode) or
+        // BitmapPointerBase + screenIndex*8 + rowCounter (bitmap mode).
+        bool bitmapMode = (d011 & 0x20) != 0;
+        int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
+        vic.Phi1MemoryReader = cycle =>
+        {
+            if (cycle < 15 || cycle >= 15 + columns) return 0;
+            int col = cycle - 15;
+            int fbl = vic.UpperBorderStart + ((vic.YScroll - (vic.UpperBorderStart & 7) + 8) & 7);
+            int screenRow = (vic.CurrentRasterLine - fbl) / 8;
+            if (screenRow < 0 || screenRow >= 25) return 0;
+            int rowCounter = vic.CurrentRasterLine & 7;
+            int screenIndex = screenRow * columns + col;
+            // audit L6: mirror the real g-access ECM address mask
+            // (g_fetch_addr, vicii-fetch.c:176-179).
+            int gMask = (d011 & 0x40) != 0 ? 0x39FF : 0x3FFF;
+            if (bitmapMode)
+                return bus.Read((ushort)((vic.BitmapPointerBase + (screenIndex * 8) + rowCounter) & gMask));
+            byte screenCode = bus.Read((ushort)(vic.ScreenMemoryBase + screenIndex));
+            return bus.Read((ushort)((vic.CharacterBase + (screenCode * 8) + rowCounter) & gMask));
+        };
+
+        // rasterLine: 101 because DrawSprites8 detects collision on the first
+        // rendering line (sprite.Y+1), so the foreground source must be at
+        // the char row for line 101, not line 100.
+        ConfigureInvalidEcmForegroundSource(ram, vic, x: 96, rasterLine: 101, sourceKind);
         ConfigureSprite(ram, vic, sprite: 0, x: spriteX, y: 100, pointer: 0x20);
         vic.Write(SpriteEnable, 0x01);
         return vic;
@@ -282,10 +336,10 @@ public sealed class SpriteCollisionTests
                 ConfigureCharacterByte(ram, vic, x, rasterLine, color: 0x0B, charByte: 0x90);
                 break;
             case 2:
-                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x80);
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x80, applyEcmMask: true);
                 break;
             case 3:
-                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x90);
+                ConfigureBitmapByte(ram, vic, x, rasterLine, bitmapByte: 0x90, applyEcmMask: true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(sourceKind));
@@ -308,7 +362,7 @@ public sealed class SpriteCollisionTests
         ram.Write((ushort)(vic.CharacterBase + charCode * 8 + charRow), charByte);
     }
 
-    private static void ConfigureBitmapByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte bitmapByte)
+    private static void ConfigureBitmapByte(RamDevice ram, Mos6569 vic, int x, int rasterLine, byte bitmapByte, bool applyEcmMask = false)
     {
         int columns = vic.Columns == Mos6569.ColumnMode.Wide40 ? 40 : 38;
         int screenX = x - vic.LeftBorderPixel;
@@ -318,7 +372,14 @@ public sealed class SpriteCollisionTests
         int charRow = screenLine & 7;
         int screenIndex = screenRow * columns + col;
 
-        ram.Write((ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow), bitmapByte);
+        // audit L6: with ECM set the chip fetches through the $39FF g-address
+        // mask (g_fetch_addr, vicii-fetch.c:176-179), so ECM scenarios must
+        // seed the MASKED address.
+        int address = vic.BitmapPointerBase + (screenIndex * 8) + charRow;
+        if (applyEcmMask)
+            address &= 0x39FF;
+
+        ram.Write((ushort)address, bitmapByte);
     }
 
     // =====================================================================
@@ -386,6 +447,10 @@ public sealed class SpriteCollisionTests
         int charRow = screenLine & 7;
         int screenIndex = screenRow * columns + col;
 
+        // audit L6: with ECM set the g-fetch goes through the $39FF address
+        // mask (g_fetch_addr, vicii-fetch.c:176-179); serve the data at the
+        // address the chip actually fetches.
+        int ecmMask = (d011 & 0x40) != 0 ? 0x39FF : 0x3FFF;
         vic.VideoMemoryReader = addr =>
         {
             ushort masked = (ushort)(addr & 0x3FFF);
@@ -394,13 +459,13 @@ public sealed class SpriteCollisionTests
                 // Character screen + color + glyph data (for BMM=0 cases)
                 if (masked == (ushort)(vic.ScreenMemoryBase + screenIndex)) return 0x01; // charCode
                 if (masked == (ushort)(0xD800 + screenIndex)) return (byte)(sourceKind == 0 ? 0x07 : 0x0B);
-                ushort glyphAddr = (ushort)(vic.CharacterBase + 0x01 * 8 + charRow);
+                ushort glyphAddr = (ushort)((vic.CharacterBase + (0x01 * 8) + charRow) & ecmMask);
                 if (masked == glyphAddr) return dataByte;
             }
             else
             {
                 // Bitmap data (for BMM=1 cases)
-                ushort bmpAddr = (ushort)(vic.BitmapPointerBase + screenIndex * 8 + charRow);
+                ushort bmpAddr = (ushort)((vic.BitmapPointerBase + (screenIndex * 8) + charRow) & ecmMask);
                 if (masked == bmpAddr) return dataByte;
                 // Also satisfy screen read in IsGraphics path
                 if (masked == (ushort)(vic.ScreenMemoryBase + screenIndex)) return 0x00;

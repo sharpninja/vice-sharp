@@ -1,0 +1,28 @@
+<Project>
+  <!-- Shared packaging for the platform host shells (PLAN packaging task,
+       2026-07-02): a host shell package must be self-carrying because the
+       ViceSharp UI/host assemblies it builds on are not all published as
+       standalone packages (ViceSharp.Avalonia ships as a dotnet tool, which
+       cannot be a package dependency). The importing project marks its
+       ViceSharp ProjectReferences PrivateAssets="all" and this target embeds
+       every copy-local ViceSharp.* assembly into lib/. External package
+       references (Avalonia.*, etc.) still flow as normal dependencies. -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);EmbedViceSharpAssembliesInPackage</TargetsForTfmSpecificContentInPackage>
+    <!-- NU5128: the dependency-group TFM is satisfied by the embedded lib
+         files, which NuGet's static check cannot see. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <!-- DependsOnTargets=ResolveReferences: pack may run without a fresh build
+       in the same invocation; without the reference walk
+       ReferenceCopyLocalPaths is empty and the package ships hollow. -->
+  <Target Name="EmbedViceSharpAssembliesInPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <_ViceSharpEmbedFiles Include="@(ReferenceCopyLocalPaths)"
+                            Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.Filename)').StartsWith('ViceSharp.'))" />
+      <TfmSpecificPackageFile Include="@(_ViceSharpEmbedFiles)"
+                              PackagePath="lib/$(TargetFramework)/%(Filename)%(Extension)" />
+    </ItemGroup>
+  </Target>
+</Project>

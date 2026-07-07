@@ -18,6 +18,99 @@ public partial class Mos6569 : IStatefulDevice
 
     public int StateSize => VicRegisterBytes + VicInternalBytes;
 
+    /// <summary>
+    /// Snapshot-resume injection for cross-emulator lockstep diagnostics (PLAN-VSFLOCKSTEP /
+    /// TR-LOCKSTEP-VSF-001): seeds the 64-byte register file and the raster phase (line +
+    /// in-line cycle) from an external VICE snapshot so the managed VIC starts at the same
+    /// point. The video counters and pipeline re-derive within a frame from the register
+    /// state and raster position. The bad-line allowance does NOT re-derive mid-frame (it
+    /// only arms on line $30 with DEN set; VICE viciisc/vicii-cycle.c:523-526) and the .vsf
+    /// VIC-II module carries it explicitly (viciisc/vicii-snapshot.c allow_bad_lines), so
+    /// resuming mid-frame must seed it or every remaining badline BA stall is lost;
+    /// <paramref name="allowBadLines"/>/<paramref name="idleState"/> seed those latches
+    /// (null leaves the reset-state values untouched for legacy register-only staging).
+    /// Not used on the per-cycle emulation hot path.
+    /// </summary>
+    public void InjectSnapshotState(
+        ReadOnlySpan<byte> registers,
+        ushort rasterLine,
+        byte inLineCycle,
+        bool? allowBadLines = null,
+        bool? idleState = null,
+        ushort? videoCounter = null,
+        ushort? videoCounterBase = null,
+        byte? rowCounter = null,
+        byte? videoMatrixLineIndex = null,
+        byte? refreshCounter = null,
+        byte? spriteDmaActiveMask = null)
+    {
+        if (registers.Length < VicRegisterBytes)
+            throw new ArgumentException($"Expected at least {VicRegisterBytes} register bytes.", nameof(registers));
+
+        registers[..VicRegisterBytes].CopyTo(_registers);
+        CurrentRasterLine = (ushort)(rasterLine & 0x01FF);
+        RasterX = inLineCycle;
+        // audit H1: seed the cycle_flags_pipe equivalent with the previous
+        // cycle so the first post-injection draw consumes the correct piped
+        // flags (vicii-draw-cycle.c:687). audit L10 (Phase 6) will carry the
+        // real piped value through the snapshot format.
+        _rasterXPipe = inLineCycle > 0 ? inLineCycle - 1 : CyclesPerLine - 1;
+        // 9-bit raster compare = $D012 | ($D011 bit7 << 8).
+        _rasterIrqLine = (ushort)(_registers[0x12] | ((_registers[0x11] & 0x80) << 1));
+        // PLAN-VICEPARITY-001 FR-VIC-RASTER-IRQ AC-02/AC-11: seed the
+        // raster_irq_triggered edge guard. Resuming mid-line ON the compare
+        // line means VICE fired its once-per-line latch at that line's entry
+        // already, so treat it as consumed; off the line the per-cycle
+        // comparison holds it clear anyway (viciisc/vicii-cycle.c:466-474).
+        _rasterIrqTriggered = CurrentRasterLine == _rasterIrqLine;
+        // PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-12 / FR-VIC-REGISTERS AC-14 /
+        // FR-VIC-LIGHTPEN AC-06 / FR-VIC-RASTER-IRQ AC-02: injection
+        // re-derives frame phase from the raster position; no armed frame
+        // reset, pending collision clear, scheduled pen trigger or pending
+        // IRQ-line rise survives from before the injection.
+        _startOfFrame = false;
+        _pendingCollisionClear = 0;
+        _lightPenTriggerCountdown = 0;
+        _irqAssertPending = false;
+        // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08: seed the delayed $D011 copy so
+        // the first post-injection g-access does not see a stale pre-injection mode.
+        _reg11Delay = _registers[0x11];
+        // PLAN-VICRENDER-001: seed the border + background colour-change logs from the injected registers.
+        _borderEntryColour = _registers[0x20];
+        _borderChangeCount = 0;
+        _bgEntryColour = _registers[0x21];
+        _bgChangeCount = 0;
+        // TR-LOCKSTEP-VSF-001: seed the .vsf badline/display latches so mid-frame
+        // resume reproduces the remaining badline BA stalls (the per-cycle
+        // check_badline latch gates on _allowBadLines exactly like VICE).
+        if (allowBadLines is { } allow)
+            _allowBadLines = allow;
+        if (idleState is { } idle)
+            _idleState = idle;
+        // audit L10: restore the video counters and sprite DMA state exactly
+        // like VICE's snapshot module (vicii-snapshot.c:105-108,131,223-227,
+        // 250,270): vc/vcbase/rc/vmli/refresh_counter/sprite_dma load from
+        // the snapshot; they only re-derive at frame top, so a mid-frame
+        // resume without them diverges for the rest of the frame.
+        if (videoCounter is { } vc)
+            _videoCounter = (ushort)(vc & 0x03FF);
+        if (videoCounterBase is { } vcBase)
+            _vcBase = (ushort)(vcBase & 0x03FF);
+        if (rowCounter is { } rc)
+            _rowCounter = (byte)(rc & 0x07);
+        if (videoMatrixLineIndex is { } vmli)
+            _videoMatrixLineIndex = vmli % _videoBuffer.Length;
+        if (refreshCounter is { } refresh)
+            _refreshCounter = refresh;
+        if (spriteDmaActiveMask is { } spriteDma)
+            _spriteDmaActiveMask = spriteDma;
+        // V4 FR-VIC-DRAW-COLOR: seed Cregs from injected registers so the first
+        // rendered post-injection frame uses correct colour values without a CPU
+        // write replay. Equivalent to vicii_draw_cycle_init seeding the identity
+        // table plus a snapshot-restore step for 0x20-0x2E.
+        _pixelSequencer.SeedCregsFromRegisters();
+    }
+
     public void CaptureState(Span<byte> destination)
     {
         _registers.AsSpan(0, VicRegisterBytes).CopyTo(destination);

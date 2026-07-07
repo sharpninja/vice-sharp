@@ -156,18 +156,21 @@ public sealed class AppIconTests
     }
 
     [Fact]
-    public void Build_PublishMsi_UsesConfigurationAndCanDisableAot()
+    public void Build_PublishMsi_AlwaysR2RSingleFileTrimmed_WithOptInAot()
     {
         var build = File.ReadAllText(PathUnder("build", "Build.cs"));
         build.Should().Contain(".SetConfiguration(Configuration)", "PublishMsi must honor the requested Debug/Release configuration");
-        build.Should().Contain("MsiAotDisabled", "the MSI target must expose an explicit AOT disable switch");
-        build.Should().Contain(".SetProperty(\"PublishAot\", \"false\")", "native AOT must stay disabled for MSI publishing");
-        build.Should().Contain(".SetProperty(\"PublishTrimmed\", \"true\")", "MSI publishing must trim the installed payload for startup");
+        build.Should().Contain("MsiAotEnabled", "the MSI target must expose an explicit opt-in native AOT switch");
+        build.Should().Contain("ResolveAutoBoolean(MsiAotEnabled, false", "native AOT must default OFF");
+        build.Should().Contain(".SetProperty(\"PublishAot\", \"true\")", "the AOT switch must actually publish native AOT when enabled");
+        build.Should().Contain(".SetProperty(\"PublishAot\", \"false\")", "the default JIT publish must pin native AOT off explicitly");
+        build.Should().Contain(".SetProperty(\"PublishTrimmed\", \"true\")", "the default MSI publish must ALWAYS trim the installed payload");
         build.Should().Contain(".SetProperty(\"TrimMode\", \"partial\")", "MSI trimming must use the safer partial trim mode for Avalonia/gRPC");
         build.Should().Contain(".SetProperty(\"ILLinkTreatWarningsAsErrors\", \"false\")", "trim warnings should stay visible without blocking diagnostic MSI publishing");
-        build.Should().Contain(".SetProperty(\"PublishSingleFile\", \"true\")", "MSI publishing must bundle managed payload into a single-file app for startup");
+        build.Should().Contain(".SetProperty(\"PublishSingleFile\", \"true\")", "the default MSI publish must ALWAYS bundle a single-file app");
         build.Should().Contain(".SetProperty(\"IncludeNativeLibrariesForSelfExtract\", \"true\")", "single-file MSI publishing must include native dependencies");
-        build.Should().Contain(".SetProperty(\"PublishReadyToRun\", aotDisabled ? \"false\" : \"true\")", "Debug diagnostic MSI builds must be able to disable ReadyToRun");
+        build.Should().Contain(".SetProperty(\"PublishReadyToRun\", \"true\")", "the default MSI publish must ALWAYS be ReadyToRun (a Debug-JIT deploy measured ~50% emulator speed)");
+        build.Should().Contain("MsiAllowDebug", "packaging a Debug MSI must require an explicit opt-in");
         build.Should().Contain(".SetProperty(\"DebugSymbols\", isDebugMsi ? \"true\" : \"false\")", "Debug MSI builds must preserve debugger symbols");
         build.Should().Contain("MsiEnableDebugGrpc", "the MSI target must expose the debug gRPC surface switch");
     }

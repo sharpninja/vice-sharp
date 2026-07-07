@@ -73,6 +73,7 @@ public sealed class SpriteYExpansionMulticolorTests
 
             return bgPattern;
         };
+        vic.Phi1MemoryReader = _ => bgPattern;
         // DEN=1, RSEL=1, YSCROLL=3 (standard test config).
         vic.Write(ScreenControl1, 0x1B);
         // CSEL=1 (40 cols)
@@ -123,6 +124,7 @@ public sealed class SpriteYExpansionMulticolorTests
 
             return bgPattern;
         };
+        vic.Phi1MemoryReader = _ => bgPattern;
         vic.Write(ScreenControl1, 0x1B);
         vic.Write(ScreenControl2, 0x08);
         return vic;

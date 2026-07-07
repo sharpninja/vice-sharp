@@ -37,6 +37,20 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
     private volatile string? _pendingStrategyId;
     private Thread? _workerThread;
     private volatile bool _running;
+    private long _appliedWorkerAffinityMask;
+
+    /// <summary>
+    /// The CPU affinity mask the worker thread pinned itself to from
+    /// VICESHARP_EMU_CPU (TR-HOST-AFFINITY-001), or null when unpinned.
+    /// </summary>
+    public ulong? AppliedWorkerAffinityMask
+    {
+        get
+        {
+            var mask = Interlocked.Read(ref _appliedWorkerAffinityMask);
+            return mask == 0 ? null : (ulong)mask;
+        }
+    }
 
     public EmulationPumpService(EmulatorRuntimeRegistry registry)
         : this(registry, SelectGate())
@@ -136,6 +150,12 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
 
     private void Loop()
     {
+        // Opt-in worker pinning (TR-HOST-AFFINITY-001): VICESHARP_EMU_CPU names the
+        // logical CPU this thread runs on, so a busy desktop cannot migrate the
+        // emulation loop between cores. Unset/invalid -> scheduler-managed as before.
+        var affinity = ThreadAffinity.TryPinCurrentThreadFromEnvironment("VICESHARP_EMU_CPU");
+        Interlocked.Exchange(ref _appliedWorkerAffinityMask, affinity is { } mask ? (long)mask : 0);
+
         while (_running)
         {
             // Live strategy switch: swap the gate on this worker thread (the only thread

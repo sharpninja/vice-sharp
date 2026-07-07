@@ -41,4 +41,18 @@ public interface IAudioChip : IClockedDevice
     /// source. Defaults to false (silent / parity mode).
     /// </summary>
     bool IsAudioTimingSource => false;
+
+    /// <summary>
+    /// Relative emulation speed for live audio, in percent (VICE
+    /// sound_set_relative_speed, sound.c:1799): the chip scales its
+    /// tick-to-sample cadence by speed/100 (clkstep, sound.c:1067) so the
+    /// fixed-rate device drains one emulated-second of audio in 100/speed
+    /// wall seconds - audio back-pressure then paces emulation to the
+    /// requested rate, pitch shifting with speed exactly like VICE
+    /// fast-forward. Non-positive values are ignored. Default: no-op for
+    /// chips without live audio.
+    /// </summary>
+    void SetRelativeSpeed(double speedPercent)
+    {
+    }
 }

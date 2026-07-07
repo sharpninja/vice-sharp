@@ -13,7 +13,10 @@ public sealed class VideoRenderer
     public const int PalCyclesPerLine = 63;
     public const int PalTotalLines = 312;
     public const int PalVisibleLines = 272;
-    public const int PalFirstVisibleRasterLine = 15;
+    // VICE PAL normal-border geometry: the visible window starts at raster
+    // line 16 (VICII_PAL_NORMAL_FIRST_DISPLAYED_LINE = 0x10, vicii-timing.h:68,
+    // applied via vicii-timing.c:131 and consumed by the frame oracle).
+    public const int PalFirstVisibleRasterLine = 16;
     
     /// <summary>
     /// Pixel aspect ratios by video standard (from VICE)
@@ -31,26 +34,28 @@ public sealed class VideoRenderer
 
     private readonly Mos6569 _vic;
 
-    // VIC-II palette in BGRA format - built from VicPalette colors
-    // Format: 0xAABBGGRR (Alpha, Blue, Green, Red)
-    private static readonly uint[] Palette = new uint[16];
+    // VIC-II palette in BGRA format, per chip model (audit L7: VICE installs
+    // a different generated palette per model, vicii-color.c:630-648).
+    // FrameBuffer stores pixels as BGRA bytes: [0]=B, [1]=G, [2]=R, [3]=A,
+    // so each uint packs B at bits 0-7, G at 8-15, R at 16-23, A at 24-31.
+    private readonly uint[] Palette = new uint[16];
 
-    static VideoRenderer()
-    {
-        // Initialize palette from VicPalette to BGRA format
-        // FrameBuffer stores pixels as BGRA: [offset 0=B, offset 1=G, offset 2=R, offset 3=A]
-        // BitConverter.ToUInt32 reads bytes as: [0]=bits0-7, [1]=bits8-15, [2]=bits16-23, [3]=bits24-31
-        // So we need: B at bits0-7, G at bits8-15, R at bits16-23, A at bits24-31
-        for (int i = 0; i < 16; i++)
-        {
-            var c = VicPalette.Colors[i];
-            Palette[i] = 0xFF000000u | ((uint)c.B) | ((uint)c.G << 8) | ((uint)c.R << 16);
-        }
-    }
+    // PLAN-VICEPARITY-001 V3: true only during NotifyLineCompleted (clock-driven live
+    // rendering). False during RenderFullFrame (synthetic path). Controls whether
+    // RenderStandardTextLineNoSprites and RenderBackgroundPixel read from
+    // PixelSequencer.LineIndices (cycle-accurate) or the geometric fallback path.
+    private bool _isLiveRender;
 
     public VideoRenderer(Mos6569 vic)
     {
         _vic = vic;
+
+        var colors = VicPalette.ForGroup(vic.PaletteGroup, vic.IsNtscVideo);
+        for (int i = 0; i < 16; i++)
+        {
+            var c = colors[i];
+            Palette[i] = 0xFF000000u | c.B | ((uint)c.G << 8) | ((uint)c.R << 16);
+        }
     }
 
     public VideoRenderer(Mos6569 vic, IBus _)
@@ -63,7 +68,9 @@ public sealed class VideoRenderer
     // BACKFILL-VIDEO-001 / FR-VIC-002 / FR-VIC-003 / FR-VIC-008 / TEST-VIC-001.
     internal void NotifyLineCompleted(int completedLine)
     {
+        _isLiveRender = true;
         RenderRasterLine(completedLine);
+        _isLiveRender = false;
     }
 
     // PERF-RENDER-001: called once per frame at frame-wrap from Mos6569.Tick().
@@ -92,6 +99,10 @@ public sealed class VideoRenderer
             DrawBorder(line, borderPixel);
             return;
         }
+
+        // PLAN-VICRENDER-001: precompute the per-pixel background colour for this line so mid-line
+        // $D021 changes (the demo's background bars) render in the display area, not one colour/line.
+        PopulateBackgroundLine();
 
         int leftBorderPixel = _vic.LeftBorderPixel;
         int rightBorderPixel = _vic.RightBorderEndPixel;
@@ -167,20 +178,38 @@ public sealed class VideoRenderer
         uint borderPixel)
     {
         var pixels = MemoryMarshal.Cast<byte, uint>(line);
-        pixels.Fill(borderPixel);
+
+        // PLAN-VICEPARITY-001 V7 FR-VIC-BORDER: live render reads ALL visible
+        // pixels (border AND display area) from PixelSequencer.LineIndices.
+        // DrawBorder8 fills RenderBuffer with COL_D020 for border cycles;
+        // DrawColors8 resolves COL_D020 through Cregs to the live $D020 index
+        // and writes to LineIndices. Border pixels therefore include per-cycle
+        // CSEL edge transitions and mid-line $D020 colour changes automatically,
+        // eliminating the FillBorderSegmented change-log hack (finding 42).
+        if (_isLiveRender)
+        {
+            var lineIndices = _vic.PixelSequencer.LineIndices;
+            int bufOffset = FirstVisibleRasterX * 8; // = 96
+            for (int x = 0; x < ScreenWidth; x++)
+                pixels[x] = Palette[lineIndices[x + bufOffset]];
+            return;
+        }
+
+        // Synthetic path (RenderFullFrame): geometric border + display fill.
+        // PLAN-VICRENDER-001: segmented border fill (mid-line $D020 changes).
+        FillBorderSegmented(pixels);
 
         if (leftBorderOpen)
         {
-            FillPixels(pixels, 0, leftBorderPixel, bgPixel);
+            FillBackground(pixels, 0, leftBorderPixel);
         }
 
         var displayStart = leftBorderPixel;
         var displayEnd = Math.Min(rightBorderPixel, leftBorderPixel + screenWidth);
         if (displayEnd > displayStart && !hasDisplayCell)
         {
-            // Lower fine-scroll overflow has no matrix row to render; the
-            // display window shows background instead of wrapping row 0.
-            FillPixels(pixels, displayStart, displayEnd - displayStart, bgPixel);
+            // Lower fine-scroll overflow has no matrix row to render; display window shows background.
+            FillBackground(pixels, displayStart, displayEnd - displayStart);
         }
         else if (displayEnd > displayStart)
         {
@@ -188,28 +217,24 @@ public sealed class VideoRenderer
             {
                 var x = displayStart + col * 8;
                 if (x >= displayEnd)
-                {
                     break;
-                }
-
                 var screenIndex = screenRow * columns + col;
                 ReadMatrixCell(screenRow, col, screenIndex, out var charCode, out var colorCode);
                 byte charData = ReadCharacterRow(charCode, charRow);
                 uint fgPixel = Palette[colorCode & 0x0F];
                 var pixelsInCell = Math.Min(8, displayEnd - x);
-
                 for (var charX = 0; charX < pixelsInCell; charX++)
                 {
                     pixels[x + charX] = ((charData >> (7 - charX)) & 0x01) != 0
                         ? fgPixel
-                        : bgPixel;
+                        : _backgroundLine[x + charX];
                 }
             }
         }
 
         if (rightBorderOpen)
         {
-            FillPixels(pixels, rightBorderPixel, ScreenWidth - rightBorderPixel, bgPixel);
+            FillBackground(pixels, rightBorderPixel, ScreenWidth - rightBorderPixel);
         }
     }
 
@@ -232,6 +257,9 @@ public sealed class VideoRenderer
         bool inLeftBorder = x < leftBorderPixel;
         bool inRightBorder = x >= rightBorderPixel;
 
+        // PLAN-VICRENDER-001: per-pixel background colour (mid-line $D021 bars) instead of one/line.
+        uint bgPixelAtX = _backgroundLine[x];
+
         if ((inLeftBorder && !leftBorderOpen) || (inRightBorder && !rightBorderOpen))
         {
             return new PixelSample(borderPixel, false);
@@ -239,7 +267,7 @@ public sealed class VideoRenderer
 
         if (inLeftBorder || inRightBorder)
         {
-            return new PixelSample(bgPixel, false);
+            return new PixelSample(bgPixelAtX, false);
         }
 
         int screenX = x - leftBorderPixel;
@@ -248,9 +276,21 @@ public sealed class VideoRenderer
             return new PixelSample(borderPixel, false);
         }
 
+        // PLAN-VICEPARITY-001 V3 FR-VIC-DRAW-GFX / FR-VIC-XSCROLL: during live clock-driven
+        // rendering (NotifyLineCompleted) use PixelSequencer.LineIndices for cycle-accurate
+        // color and priority. During synthetic renders (RenderFullFrame), fall through to the
+        // geometric path so RenderFullFrame-based tests continue to read VIC state on-demand.
+        if (_isLiveRender)
+        {
+            int idx = x + FirstVisibleRasterX * 8;
+            byte paletteIndex = _vic.PixelSequencer.LineIndices[idx];
+            bool isForeground  = _vic.PixelSequencer.LinePriority[idx] != 0;
+            return new PixelSample(Palette[paletteIndex], isForeground);
+        }
+
         if (!hasDisplayCell)
         {
-            return new PixelSample(bgPixel, false);
+            return new PixelSample(bgPixelAtX, false);
         }
 
         int col = screenX / 8;
@@ -264,11 +304,11 @@ public sealed class VideoRenderer
         // PERF-RENDER-002: displayMode cached once per line by RenderRasterLine.
         return displayMode switch
         {
-            Mos6569.VicIIDisplayMode.StandardText => RenderStandardTextPixel(charCode, colorCode, charRow, charX, bgPixel),
-            Mos6569.VicIIDisplayMode.MulticolorText => RenderMulticolorTextPixel(charCode, colorCode, charRow, charX, bgPixel),
+            Mos6569.VicIIDisplayMode.StandardText => RenderStandardTextPixel(charCode, colorCode, charRow, charX, bgPixelAtX),
+            Mos6569.VicIIDisplayMode.MulticolorText => RenderMulticolorTextPixel(charCode, colorCode, charRow, charX, bgPixelAtX),
             Mos6569.VicIIDisplayMode.ExtendedColor => RenderExtendedColorPixel(charCode, colorCode, charRow, charX),
             Mos6569.VicIIDisplayMode.StandardBitmap => RenderStandardBitmapPixel(screenIndex, colorCode: charCode, charRow, charX),
-            Mos6569.VicIIDisplayMode.MulticolorBitmap => RenderMulticolorBitmapPixel(screenIndex, screenCode: charCode, colorCode, charRow, charX, bgPixel),
+            Mos6569.VicIIDisplayMode.MulticolorBitmap => RenderMulticolorBitmapPixel(screenIndex, screenCode: charCode, colorCode, charRow, charX, bgPixelAtX),
             _ => new PixelSample(Palette[0], _vic.IsGraphicsPixelForegroundForSpritePriority(x, rasterLine)),
         };
     }
@@ -408,7 +448,12 @@ public sealed class VideoRenderer
 
             if (_vic.GetSpritePriority(sprite) == Mos6569.SpritePriority.Behind && backgroundIsForeground)
             {
-                continue;
+                // PLAN-VICEPARITY-001 FR-VIC-SPRITE-PRIORITY AC-05: winner is behind
+                // AND graphics pixel is foreground -> output background (return false),
+                // not fall through to a lower-priority in-front sprite. VICE
+                // vicii-draw-cycle.c:401-419 applies the priority gate to the winner
+                // only and does not write render_buffer[i] on this path.
+                return false;
             }
 
             pixel = Palette[paletteIndex & 0x0F];
@@ -492,7 +537,8 @@ public sealed class VideoRenderer
 
     private void DrawBorder(Span<byte> line, uint borderPixel)
     {
-        MemoryMarshal.Cast<byte, uint>(line).Fill(borderPixel);
+        // PLAN-VICRENDER-001: segmented border fill (mid-line $D020 changes) instead of one colour.
+        FillBorderSegmented(MemoryMarshal.Cast<byte, uint>(line));
     }
 
     private static void FillPixels(Span<uint> pixels, int start, int length, uint pixel)
@@ -503,6 +549,113 @@ public sealed class VideoRenderer
         }
 
         pixels.Slice(start, length).Fill(pixel);
+    }
+
+    // PLAN-VICEPARITY-001 audit (boot-frame oracle): frame pixel 0 is VICE
+    // dbuf[104] = raster cycle 13. VICE copies the visible canvas line from
+    // vicii.dbuf[DBUF_OFFSET], DBUF_OFFSET = 17*8 - screen_leftborderwidth
+    // (vicii-draw.c:71,91) with the PAL normal border width 0x20
+    // (vicii-timing.h:31): 136 - 32 = 104 = 8 * 13. The 32px left border is
+    // dbuf[104..135] (cycles 13-16) and the display window starts at frame
+    // pixel 32 = dbuf[136] (first gfx render cycle 17). A $D020 write at
+    // in-line cycle C takes effect from this frame pixel; a late-in-line
+    // write maps past the right edge and carries into the next line, which
+    // places raster bars on the correct scanline.
+    private const int FirstVisibleRasterX = 13;
+
+    private static int RasterXToFramePixel(int rasterX)
+    {
+        int px = (rasterX - FirstVisibleRasterX) * 8;
+        if (px < 0)
+        {
+            return 0;
+        }
+
+        return px > ScreenWidth ? ScreenWidth : px;
+    }
+
+    // PLAN-VICRENDER-001: fill the whole scanline with the border colour(s), honouring mid-line
+    // $D020 changes so cycle-stable raster bars render on the correct lines. Fast path (a single
+    // Fill) when the line had no mid-line change, which is the overwhelmingly common case.
+    private void FillBorderSegmented(Span<uint> pixels)
+    {
+        int count = _vic.BorderChangeCount;
+        if (count == 0)
+        {
+            // Fast path (no mid-line change): the whole line is the current border colour,
+            // identical to the pre-PLAN-VICRENDER-001 single-fill behaviour (zero change).
+            pixels.Fill(Palette[_vic.BorderColor & 0x0F]);
+            return;
+        }
+
+        uint colour = Palette[_vic.BorderEntryColour & 0x0F];
+        int x = 0;
+        for (int i = 0; i < count; i++)
+        {
+            _vic.GetBorderChange(i, out int rasterX, out byte c);
+            int px = RasterXToFramePixel(rasterX);
+            if (px > x)
+            {
+                FillPixels(pixels, x, px - x, colour);
+                x = px;
+            }
+
+            colour = Palette[c & 0x0F];
+        }
+
+        if (x < pixels.Length)
+        {
+            FillPixels(pixels, x, pixels.Length - x, colour);
+        }
+    }
+
+    // PLAN-VICRENDER-001: per-pixel background colour for the current scanline, honouring mid-line
+    // $D021 changes (the demo writes $D020 AND $D021 per bar, so the display-area background bands
+    // too). Precomputed once per line into _backgroundLine; the display render reads
+    // _backgroundLine[x] instead of a single colour. Fast path (uniform fill) when unchanged.
+    private readonly uint[] _backgroundLine = new uint[ScreenWidth];
+
+    private void PopulateBackgroundLine()
+    {
+        var span = _backgroundLine.AsSpan();
+        int count = _vic.BackgroundChangeCount;
+        if (count == 0)
+        {
+            span.Fill(Palette[_vic.BackgroundColor & 0x0F]);
+            return;
+        }
+
+        uint colour = Palette[_vic.BackgroundEntryColour & 0x0F];
+        int x = 0;
+        for (int i = 0; i < count; i++)
+        {
+            _vic.GetBackgroundChange(i, out int rasterX, out byte c);
+            int px = RasterXToFramePixel(rasterX);
+            if (px > x)
+            {
+                span.Slice(x, px - x).Fill(colour);
+                x = px;
+            }
+
+            colour = Palette[c & 0x0F];
+        }
+
+        if (x < span.Length)
+        {
+            span.Slice(x, span.Length - x).Fill(colour);
+        }
+    }
+
+    // PLAN-VICRENDER-001: copy the precomputed per-pixel background into a pixel range (replaces
+    // FillPixels(..., bgPixel) so background bars are honoured).
+    private void FillBackground(Span<uint> pixels, int start, int length)
+    {
+        if (length <= 0)
+        {
+            return;
+        }
+
+        _backgroundLine.AsSpan(start, length).CopyTo(pixels.Slice(start, length));
     }
 
     /// <summary>

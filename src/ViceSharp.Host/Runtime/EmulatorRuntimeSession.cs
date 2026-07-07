@@ -113,9 +113,25 @@ public sealed class EmulatorRuntimeSession
     /// machine-build time, or null when the session has no live audio path
     /// (headless / test rigs built without the platform backend). Sound capture
     /// (FR-MED-003) attaches a WAV recorder to this tap; video capture does not
-    /// use it.
+    /// use it. Assigning the tap applies the current warp audio policy so a
+    /// session already in warp pauses its live output immediately
+    /// (TR-AUDIO-WARP-001).
     /// </summary>
-    public CaptureAudioTap? AudioCaptureTap { get; set; }
+    public CaptureAudioTap? AudioCaptureTap
+    {
+        get => _audioCaptureTap;
+        set
+        {
+            _audioCaptureTap = value;
+            // A freshly attached tap is unpaused; only suspension (warp or
+            // fast-forward past the live-audio ceiling) needs enforcing here.
+            _liveAudioOutputSuspendedApplied = IsLiveAudioOutputSuspended;
+            if (_liveAudioOutputSuspendedApplied)
+                value?.Pause();
+        }
+    }
+
+    private CaptureAudioTap? _audioCaptureTap;
 
     /// <summary>True while a numbered-BMP video capture is in progress.</summary>
     public bool IsVideoCaptureActive
@@ -137,11 +153,102 @@ public sealed class EmulatorRuntimeSession
 
     public SortedSet<ushort> Breakpoints { get; } = new();
 
-    public double LimiterRatePercent { get; set; } = 100;
+    /// <summary>
+    /// Fast-forward rates above this keep live audio suspended: a 44100 Hz
+    /// device cannot be fed at more than double speed without resampling, so
+    /// past 200 percent the vsync regulator paces the requested rate while
+    /// the live leaf discards (TR-AUDIO-WARP-001).
+    /// </summary>
+    public const double LiveAudioMaxRatePercent = 200;
 
-    public bool LimiterEnabled { get; set; } = true;
+    /// <summary>
+    /// Limiter target as a percentage of real time. Setting it applies the
+    /// live audio policy: above <see cref="LiveAudioMaxRatePercent"/> the
+    /// live output leaf is paused (fast-forward), at or below it resumes.
+    /// </summary>
+    public double LimiterRatePercent
+    {
+        get => _limiterRatePercent;
+        set
+        {
+            _limiterRatePercent = value;
+            ApplyLiveAudioPolicy();
+            PushRelativeSpeedToAudioChip();
+        }
+    }
+
+    private double _limiterRatePercent = 100;
+
+    /// <summary>
+    /// True while the pace limiter is on; false is warp. Toggling applies the
+    /// live audio policy (TR-AUDIO-WARP-001): warp pauses the live audio leaf
+    /// so SID fragments are discarded without blocking, mirroring VICE's
+    /// sound_flush (sound.c:1528-1531 discards pending samples;
+    /// sound.c:1573 gates the blocking device write on !warp_mode_enabled)
+    /// while an attached recorder keeps receiving samples through the tap.
+    /// SID sample calculation itself continues, matching VICE's
+    /// SoundEmulateOnWarp default of 1 (sound.c:733).
+    /// </summary>
+    public bool LimiterEnabled
+    {
+        get => _limiterEnabled;
+        set
+        {
+            _limiterEnabled = value;
+            ApplyLiveAudioPolicy();
+            PushRelativeSpeedToAudioChip();
+        }
+    }
+
+    private bool _limiterEnabled = true;
+
+    // Keep the SID's live-audio cadence in step with the limiter (VICE
+    // sound_set_relative_speed tracks relative_speed from vsync.c,
+    // sound.c:913/:1799): with the limiter on, the fixed-rate device then
+    // paces emulation to the requested rate. Skipped in warp - output is
+    // suspended and vsync is bypassed anyway; re-enabling pushes the rate.
+    private void PushRelativeSpeedToAudioChip()
+    {
+        if (!_limiterEnabled)
+            return;
+
+        if (Machine.Devices.GetByRole(DeviceRole.AudioChip) is IAudioChip chip)
+            chip.SetRelativeSpeed(_limiterRatePercent);
+    }
 
     public bool IsWarpMode => !LimiterEnabled;
+
+    /// <summary>
+    /// True while live audio output is suspended - in warp, or fast-forward
+    /// past <see cref="LiveAudioMaxRatePercent"/>. The pacing gates use this
+    /// to skip the sound regulator (which relies on device back-pressure) and
+    /// pace by vsync instead, so fast-forward actually reaches its target.
+    /// </summary>
+    public bool IsLiveAudioOutputSuspended => !_limiterEnabled || _limiterRatePercent > LiveAudioMaxRatePercent;
+
+    // Pause the live output leaf while suspended (drop fragments non-blocking),
+    // resume it otherwise - on state TRANSITIONS only, so repeated setter
+    // writes and the two-step SetLimiter assignment do not churn the device.
+    // The tap sits above the leaf, so recorders attached for sound capture
+    // keep receiving samples either way - exactly VICE's warp behavior with
+    // an active recording device (sound.c:1528).
+    private bool _liveAudioOutputSuspendedApplied;
+
+    private void ApplyLiveAudioPolicy()
+    {
+        var suspended = IsLiveAudioOutputSuspended;
+        if (suspended == _liveAudioOutputSuspendedApplied)
+            return;
+
+        _liveAudioOutputSuspendedApplied = suspended;
+        if (_audioCaptureTap is not { } tap)
+            return;
+
+        if (suspended)
+            tap.Pause();
+        else
+            tap.Resume();
+    }
 
     /// <summary>
     /// Selected emulation pacing strategy id ("semaphore" | "vice"), surfaced in the

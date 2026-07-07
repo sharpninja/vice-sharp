@@ -57,6 +57,9 @@ public sealed class VicIISpriteCollisionIrqTests
 
             return bgPattern;
         };
+        // Connect Phi1MemoryReader so DrawGraphics8 PriBuffer uses the same
+        // pattern; required for sprite-background collision via the V6 path.
+        vic.Phi1MemoryReader = _ => bgPattern;
         // DEN=1, RSEL=1, YSCROLL=3 + CSEL=1 (40 cols): same as SpriteCollisionTests.
         vic.Write(ScreenControl1, 0x1B);
         vic.Write(ScreenControl2, 0x08);

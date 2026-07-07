@@ -133,9 +133,10 @@ public sealed class VicIIBorderFlipFlopTests
     /// FR: FR-VIC-007, TR: TR-VIC-EDGE-002, TR: TR-CYCLE-001,
     /// TEST: TEST-VIC-001, TODO: BACKFILL-VIDEO-001.
     /// Use case: VICE x64sc opens the right side border when software
-    /// switches CSEL from 40-column to 38-column mode at PAL cycle 56,
-    /// after the 38-column right-border set check and before the
-    /// 40-column right-border set check.
+    /// switches CSEL from 40-column to 38-column mode AFTER the 38-column
+    /// right-border check (managed RasterX 55) and BEFORE the 40-column
+    /// right-border check (managed RasterX 56). With VICE-correct timing
+    /// (PLAN-VICEPARITY-001 V7), the switch happens at RasterX 55.
     /// Acceptance: The line remains horizontally open past the normal
     /// right border, so sprite-visible pixels are not masked at x=340.
     /// </summary>
@@ -149,7 +150,10 @@ public sealed class VicIIBorderFlipFlopTests
         AdvanceTo(vic, 51, 18);
         Assert.False(vic.IsVerticalBorderActive);
 
-        AdvanceTo(vic, 100, 56);
+        // Tick for RasterX 55 ran with CSEL=1 (right check at 56, no fire).
+        // Switch CSEL=0 so right check moves to 55 but we are already past 55.
+        // At RasterX 56: CSEL=0, check at 55 != 56, no fire. Right border open!
+        AdvanceTo(vic, 100, 55);
         vic.Write(ScreenControl2, 0x00);
 
         AdvanceTo(vic, 101, 0);
@@ -178,7 +182,8 @@ public sealed class VicIIBorderFlipFlopTests
         AdvanceTo(vic, 51, 18);
         Assert.False(vic.IsVerticalBorderActive);
 
-        AdvanceTo(vic, 100, 56);
+        // Open right border: switch CSEL to 0 after 38-col check (55) but before 40-col check (56).
+        AdvanceTo(vic, 100, 55);
         vic.Write(ScreenControl2, 0x00);
 
         AdvanceTo(vic, 102, 0);
@@ -207,12 +212,15 @@ public sealed class VicIIBorderFlipFlopTests
         AdvanceTo(vic, 51, 18);
         Assert.False(vic.IsVerticalBorderActive);
 
-        AdvanceTo(vic, 100, 56);
+        // Line 100: open right border (switch CSEL after 38-col check at 55, before 40-col at 56).
+        AdvanceTo(vic, 100, 55);
         vic.Write(ScreenControl2, 0x00);
 
-        AdvanceTo(vic, 101, 55);
+        // Line 101: re-open right border with CSEL=0 active (38-col check would fire at 55).
+        // Switch CSEL=1 before check at 55, then switch CSEL=0 before 40-col check at 56.
+        AdvanceTo(vic, 101, 54);
         vic.Write(ScreenControl2, 0x08);
-        AdvanceTo(vic, 101, 56);
+        AdvanceTo(vic, 101, 55);
         vic.Write(ScreenControl2, 0x00);
 
         AdvanceTo(vic, 103, 0);
@@ -228,9 +236,10 @@ public sealed class VicIIBorderFlipFlopTests
     /// FR: FR-VIC-007, TR: TR-VIC-EDGE-002, TR: TR-CYCLE-001,
     /// TEST: TEST-VIC-001, TODO: BACKFILL-VIDEO-001.
     /// Use case: VICE x64sc blanks a line when CSEL changes from 38-column
-    /// to 40-column mode at PAL cycle 17: the 40-column left-border clear
-    /// check has already passed, and the 38-column check is skipped by the
-    /// new CSEL value.
+    /// to 40-column mode AFTER the 40-column left-border check (managed
+    /// RasterX 16) and BEFORE the 38-column check (managed RasterX 17).
+    /// With VICE-correct timing (PLAN-VICEPARITY-001 V7), the switch
+    /// happens at RasterX 16.
     /// Acceptance: The line never opens horizontal display, so sprite pixels
     /// remain masked even inside the normal graphics window.
     /// </summary>
@@ -244,7 +253,10 @@ public sealed class VicIIBorderFlipFlopTests
         AdvanceTo(vic, 51, 18);
         Assert.False(vic.IsVerticalBorderActive);
 
-        AdvanceTo(vic, 100, 17);
+        // Tick for RasterX 16 ran with CSEL=0 (left check at 17, no fire at 16).
+        // Switch CSEL=1 so left check moves to 16 but we are already past 16.
+        // At RasterX 17: CSEL=1, check at 16 != 17, no fire. Line stays blanked!
+        AdvanceTo(vic, 100, 16);
         vic.Write(ScreenControl2, 0x08);
 
         AdvanceTo(vic, 101, 0);
@@ -278,7 +290,8 @@ public sealed class VicIIBorderFlipFlopTests
         AdvanceTo(vic, 51, 18);
         Assert.False(vic.IsVerticalBorderActive);
 
-        AdvanceTo(vic, 100, 56);
+        // Open right border: switch CSEL to 0 after 38-col check (55) but before 40-col check (56).
+        AdvanceTo(vic, 100, 55);
         vic.Write(ScreenControl2, 0x00);
         AdvanceTo(vic, 102, 0);
 
@@ -312,7 +325,8 @@ public sealed class VicIIBorderFlipFlopTests
         AdvanceTo(vic, 51, 18);
         Assert.False(vic.IsVerticalBorderActive);
 
-        AdvanceTo(vic, 100, 17);
+        // Blank the line: switch CSEL to 1 after 40-col check (16) but before 38-col check (17).
+        AdvanceTo(vic, 100, 16);
         vic.Write(ScreenControl2, 0x08);
         AdvanceTo(vic, 101, 0);
 

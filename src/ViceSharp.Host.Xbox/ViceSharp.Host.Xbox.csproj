@@ -33,7 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj" />
-    <ProjectReference Include="..\ViceSharp.Host\ViceSharp.Host.csproj" />
+    <!-- PrivateAssets=all + ViceSharpEmbedPack.targets: the package embeds
+         all ViceSharp assemblies (ViceSharp.Avalonia ships as a dotnet tool
+         and cannot be a package dependency). -->
+    <ProjectReference Include="..\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\ViceSharp.Host\ViceSharp.Host.csproj" PrivateAssets="all" />
   </ItemGroup>
+
+  <Import Project="..\ViceSharpEmbedPack.targets" />
 </Project>

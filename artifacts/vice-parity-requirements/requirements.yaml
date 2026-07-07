@@ -1,0 +1,4290 @@
+schema: vice-parity-requirements/v1
+generatedUtc: 2026-07-01T22:31:29Z
+mandate: VICE is the specification. reSID (native/vice/vice/src/resid) is the SID spec; viciisc (native/vice/vice/src/viciisc) is the VIC-II spec. The managed C# must duplicate VICE exactly. Deterministic, so every AC is bit-exact equality, not tolerance. AC tag FAITHFUL = managed already matches (regression-lock, green now); DIVERGENT = managed differs (red now, remediation target).
+linkedTodos:
+- PLAN-VICEPARITY-001
+- PLAN-REQAUDIT-001
+prerequisites:
+- 'Phase0: add a single-cycle reSID clock() oracle entry point to native/vice-shim.c (current shim uses batched clock(delta_t) which drops pipelines).'
+- 'Phase0: add InternalsVisibleTo ViceSharp.TestHarness to ViceSharp.Chips so internal-state ACs can be asserted directly.'
+- 'Phase0: retire false-confidence tests (SidEngineParityTests sawtooth-only; SidCombinedWaveformTests asserts the AND).'
+- Supersede docs/requirements FR-SID-004/005; reconcile finding IDs vs PLAN-VICEPARITY-001.
+newFindings:
+- SID accumulator stored 32-bit, not masked to 24 bits.
+- 'Power-on seeds wrong: accumulator 0x555555, envelope 0xaa, noise LFSR 0x7ffffe.'
+- reset() should preserve envelope_counter and accumulator (managed zeroes them).
+- Noise LFSR shared across voices (should be per-voice); wrong zero-reseed; missing 2-cycle shift pipeline.
+- Combined-waveform shift-register corruption/lock-up not modeled.
+- Hard-sync same-cycle special case missing; ring gated on triangle-selected vs sawtooth-deselected.
+- 'Two disagreeing SID wiring paths: Commodore64.cs 6581-no-backend (inert) vs ArchitectureBuilder 8580-with-backend.'
+requirements:
+- id: FR-SID-ENV
+  chip: SID
+  title: ADSR envelope generator (single-cycle EnvelopeGenerator)
+  spec:
+  - envelope.h
+  - envelope.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "02"
+  - "03"
+  tr: Verbatim single-cycle port; fix AC-07 reset-preserve, AC-08 power-up 0xaa, AC-50 model_dac output.
+  acCount: 54
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: rate_counter_period[16] = {8,31,62,94,148,219,266,312,391,976,1953,3125,3906,11719,19531,31250}
+    viceCite: envelope.cc:72-89
+    managedCite: Sid6581.cs:424-425
+    finding: "02"
+    test: TEST-SID-ENV-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: sustain_level[16] = {0x00,0x11,...,0xff}
+    viceCite: envelope.cc:129-146
+    managedCite: Sid6581.cs:427-428
+    finding: "02"
+    test: TEST-SID-ENV-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: reset() sets envelope/exponential/state pipelines = 0
+    viceCite: envelope.cc:190-193
+    managedCite: Sid6581.cs:448-450
+    finding: "02"
+    test: TEST-SID-ENV-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: reset() attack=decay=sustain=release=0, gate=0
+    viceCite: envelope.cc:195-200
+    managedCite: Sid6581.cs:451-452
+    finding: "02"
+    test: TEST-SID-ENV-04
+    state: green-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: reset() rate_counter=0, exponential_counter=0, exp_period=1, reset_rate_counter=false
+    viceCite: envelope.cc:202-206
+    managedCite: Sid6581.cs:453-456
+    finding: "02"
+    test: TEST-SID-ENV-05
+    state: green-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: reset() state=RELEASE, rate_period=period[release]=8, hold_zero=false
+    viceCite: envelope.cc:208-210
+    managedCite: Sid6581.cs:457-460
+    finding: "02"
+    test: TEST-SID-ENV-06
+    state: green-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: reset() must NOT modify envelope_counter (managed forces 0)
+    viceCite: envelope.cc:189
+    managedCite: Sid6581.cs:461
+    finding: "03"
+    test: TEST-SID-ENV-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: power-up envelope_counter = 0xaa (managed = 0)
+    viceCite: envelope.cc:176
+    managedCite: Sid6581.cs:655-656
+    finding: "03"
+    test: TEST-SID-ENV-08
+    state: red-now
+  - id: AC-09
+    tag: FAITHFUL
+    statement: power-up next_state = RELEASE
+    viceCite: envelope.cc:179
+    managedCite: Sid6581.cs:458
+    finding: "02"
+    test: TEST-SID-ENV-09
+    state: green-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: writeCONTROL is a no-op when gate == gate_next
+    viceCite: envelope.cc:228,233
+    managedCite: Sid6581.cs:466-468
+    finding: "02"
+    test: TEST-SID-ENV-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: 'gate 0->1: next_state=ATTACK, state=DECAY_SUSTAIN, rate_period=period[decay], state_pipeline=2'
+    viceCite: envelope.cc:236-241
+    managedCite: Sid6581.cs:470-477
+    finding: "02"
+    test: TEST-SID-ENV-11
+    state: green-now
+  - id: AC-12
+    tag: FAITHFUL
+    statement: 'gate 0->1 with (reset_rate_counter||exp_pipeline==2): envelope_pipeline=(exp_period==1||exp_pipeline==2)?2:4'
+    viceCite: envelope.cc:242-244
+    managedCite: Sid6581.cs:478-479
+    finding: "02"
+    test: TEST-SID-ENV-12
+    state: green-now
+  - id: AC-13
+    tag: FAITHFUL
+    statement: 'gate 0->1 else, exp_pipeline==1: state_pipeline=3'
+    viceCite: envelope.cc:245
+    managedCite: Sid6581.cs:480-481
+    finding: "02"
+    test: TEST-SID-ENV-13
+    state: green-now
+  - id: AC-14
+    tag: FAITHFUL
+    statement: 'gate 1->0: next_state=RELEASE, state_pipeline=envelope_pipeline>0?3:2'
+    viceCite: envelope.cc:247
+    managedCite: Sid6581.cs:483-485
+    finding: "02"
+    test: TEST-SID-ENV-14
+    state: green-now
+  - id: AC-15
+    tag: FAITHFUL
+    statement: gate = gate_next after transition
+    viceCite: envelope.cc:248
+    managedCite: Sid6581.cs:487
+    finding: "02"
+    test: TEST-SID-ENV-15
+    state: green-now
+  - id: AC-16
+    tag: FAITHFUL
+    statement: 'writeATTACK_DECAY: attack=(v>>4)&0xf, decay=v&0xf'
+    viceCite: envelope.cc:254-255
+    managedCite: Sid6581.cs:492-493
+    finding: "02"
+    test: TEST-SID-ENV-16
+    state: green-now
+  - id: AC-17
+    tag: FAITHFUL
+    statement: 'if state==ATTACK: rate_period=period[attack]'
+    viceCite: envelope.cc:256-258
+    managedCite: Sid6581.cs:494-495
+    finding: "02"
+    test: TEST-SID-ENV-17
+    state: green-now
+  - id: AC-18
+    tag: FAITHFUL
+    statement: 'elif DECAY_SUSTAIN: rate_period=period[decay]; RELEASE/FREEZED unchanged'
+    viceCite: envelope.cc:259-261
+    managedCite: Sid6581.cs:496-497
+    finding: "02"
+    test: TEST-SID-ENV-18
+    state: green-now
+  - id: AC-19
+    tag: FAITHFUL
+    statement: 'writeSUSTAIN_RELEASE: sustain=(v>>4)&0xf, release=v&0xf'
+    viceCite: envelope.cc:266-267
+    managedCite: Sid6581.cs:502-503
+    finding: "02"
+    test: TEST-SID-ENV-19
+    state: green-now
+  - id: AC-20
+    tag: FAITHFUL
+    statement: 'if state==RELEASE: rate_period=period[release]'
+    viceCite: envelope.cc:268-270
+    managedCite: Sid6581.cs:504-505
+    finding: "02"
+    test: TEST-SID-ENV-20
+    state: green-now
+  - id: AC-21
+    tag: FAITHFUL
+    statement: 'clock entry: env3=envelope_counter (sampled first phase)'
+    viceCite: envelope.h:118
+    managedCite: Sid6581.cs:536
+    finding: "02"
+    test: TEST-SID-ENV-21
+    state: green-now
+  - id: AC-22
+    tag: FAITHFUL
+    statement: if state_pipeline!=0, state_change() runs first
+    viceCite: envelope.h:120-122
+    managedCite: Sid6581.cs:538-539
+    finding: "02"
+    test: TEST-SID-ENV-22
+    state: green-now
+  - id: AC-23
+    tag: FAITHFUL
+    statement: envelope_pipeline decremented each cycle, fires only at 0
+    viceCite: envelope.h:126
+    managedCite: Sid6581.cs:543
+    finding: "02"
+    test: TEST-SID-ENV-23
+    state: green-now
+  - id: AC-24
+    tag: FAITHFUL
+    statement: hold_zero skips the envelope step block
+    viceCite: envelope.h:127
+    managedCite: Sid6581.cs:545
+    finding: "02"
+    test: TEST-SID-ENV-24
+    state: green-now
+  - id: AC-25
+    tag: FAITHFUL
+    statement: 'ATTACK step: envelope_counter=(c+1)&0xff'
+    viceCite: envelope.h:128-129
+    managedCite: Sid6581.cs:547-549
+    finding: "02"
+    test: TEST-SID-ENV-25
+    state: green-now
+  - id: AC-26
+    tag: FAITHFUL
+    statement: 'ATTACK 0xff: state=DECAY_SUSTAIN, rate_period=period[decay]'
+    viceCite: envelope.h:130-133
+    managedCite: Sid6581.cs:550-554
+    finding: "02"
+    test: TEST-SID-ENV-26
+    state: green-now
+  - id: AC-27
+    tag: FAITHFUL
+    statement: 'DECAY_SUSTAIN/RELEASE step: (c-1)&0xff'
+    viceCite: envelope.h:135-137
+    managedCite: Sid6581.cs:556-559
+    finding: "02"
+    test: TEST-SID-ENV-27
+    state: green-now
+  - id: AC-28
+    tag: FAITHFUL
+    statement: set_exponential_counter() after each step
+    viceCite: envelope.h:139
+    managedCite: Sid6581.cs:560
+    finding: "02"
+    test: TEST-SID-ENV-28
+    state: green-now
+  - id: AC-29
+    tag: FAITHFUL
+    statement: exponential_pipeline decrements, on 0 sets exponential_counter=0
+    viceCite: envelope.h:143-144
+    managedCite: Sid6581.cs:564-566
+    finding: "02"
+    test: TEST-SID-ENV-29
+    state: green-now
+  - id: AC-30
+    tag: FAITHFUL
+    statement: on exp-fire requeue envelope_pipeline=1 iff (DECAY_SUSTAIN && c!=sustain_level)||RELEASE
+    viceCite: envelope.h:146-154
+    managedCite: Sid6581.cs:567-571
+    finding: "02"
+    test: TEST-SID-ENV-30
+    state: green-now
+  - id: AC-31
+    tag: FAITHFUL
+    statement: reset_rate_counter block is else-if of exp-fire; rate_counter=0, reset_rate_counter=false
+    viceCite: envelope.h:156-158
+    managedCite: Sid6581.cs:573-575
+    finding: "02"
+    test: TEST-SID-ENV-31
+    state: green-now
+  - id: AC-32
+    tag: FAITHFUL
+    statement: 'reset_rate_counter ATTACK: exponential_counter=0, envelope_pipeline=2'
+    viceCite: envelope.h:160-171
+    managedCite: Sid6581.cs:578-583
+    finding: "02"
+    test: TEST-SID-ENV-32
+    state: green-now
+  - id: AC-33
+    tag: FAITHFUL
+    statement: 'reset_rate_counter non-ATTACK: if !hold_zero && ++exp_counter==exp_period then exp_pipeline=(exp_period!=1)?2:1'
+    viceCite: envelope.h:172-176
+    managedCite: Sid6581.cs:585-588
+    finding: "02"
+    test: TEST-SID-ENV-33
+    state: green-now
+  - id: AC-34
+    tag: FAITHFUL
+    statement: 'rate_counter!=rate_period: pre-increment once'
+    viceCite: envelope.h:186-188
+    managedCite: Sid6581.cs:593-595
+    finding: "02"
+    test: TEST-SID-ENV-34
+    state: green-now
+  - id: AC-35
+    tag: FAITHFUL
+    statement: 'ADSR delay bug: on 0x8000 increment again, mask &0x7fff'
+    viceCite: envelope.h:187-189
+    managedCite: Sid6581.cs:596-597
+    finding: "02"
+    test: TEST-SID-ENV-35
+    state: green-now
+  - id: AC-36
+    tag: FAITHFUL
+    statement: 'rate_counter==rate_period: no increment, reset_rate_counter=true'
+    viceCite: envelope.h:191-192
+    managedCite: Sid6581.cs:599-601
+    finding: "02"
+    test: TEST-SID-ENV-36
+    state: green-now
+  - id: AC-37
+    tag: FAITHFUL
+    statement: 'set_exp: 0xff -> period=1'
+    viceCite: envelope.h:390-391
+    managedCite: Sid6581.cs:512
+    finding: "02"
+    test: TEST-SID-ENV-37
+    state: green-now
+  - id: AC-38
+    tag: FAITHFUL
+    statement: 'set_exp: 0x5d -> period=2'
+    viceCite: envelope.h:392-393
+    managedCite: Sid6581.cs:513
+    finding: "02"
+    test: TEST-SID-ENV-38
+    state: green-now
+  - id: AC-39
+    tag: FAITHFUL
+    statement: 'set_exp: 0x36 -> period=4'
+    viceCite: envelope.h:394-395
+    managedCite: Sid6581.cs:514
+    finding: "02"
+    test: TEST-SID-ENV-39
+    state: green-now
+  - id: AC-40
+    tag: FAITHFUL
+    statement: 'set_exp: 0x1a -> period=8'
+    viceCite: envelope.h:396-397
+    managedCite: Sid6581.cs:515
+    finding: "02"
+    test: TEST-SID-ENV-40
+    state: green-now
+  - id: AC-41
+    tag: FAITHFUL
+    statement: 'set_exp: 0x0e -> period=16'
+    viceCite: envelope.h:398-399
+    managedCite: Sid6581.cs:516
+    finding: "02"
+    test: TEST-SID-ENV-41
+    state: green-now
+  - id: AC-42
+    tag: FAITHFUL
+    statement: 'set_exp: 0x06 -> period=30'
+    viceCite: envelope.h:400-401
+    managedCite: Sid6581.cs:517
+    finding: "02"
+    test: TEST-SID-ENV-42
+    state: green-now
+  - id: AC-43
+    tag: FAITHFUL
+    statement: 'set_exp: 0x00 -> period=1 and hold_zero=true'
+    viceCite: envelope.h:402-417
+    managedCite: Sid6581.cs:518-522
+    finding: "02"
+    test: TEST-SID-ENV-43
+    state: green-now
+  - id: AC-44
+    tag: FAITHFUL
+    statement: non-threshold counter leaves exp_period unchanged (no default)
+    viceCite: envelope.h:388-418
+    managedCite: Sid6581.cs:510-523
+    finding: "02"
+    test: TEST-SID-ENV-44
+    state: green-now
+  - id: AC-45
+    tag: FAITHFUL
+    statement: state_change decrements state_pipeline first
+    viceCite: envelope.h:348
+    managedCite: Sid6581.cs:607
+    finding: "02"
+    test: TEST-SID-ENV-45
+    state: green-now
+  - id: AC-46
+    tag: FAITHFUL
+    statement: 'next_state==ATTACK fires at sp==0: state=ATTACK, rate_period=period[attack], hold_zero=false'
+    viceCite: envelope.h:351-357
+    managedCite: Sid6581.cs:610-617
+    finding: "02"
+    test: TEST-SID-ENV-46
+    state: green-now
+  - id: AC-47
+    tag: FAITHFUL
+    statement: 'next_state==RELEASE fires (ATTACK&&sp==0)||(DECAY_SUSTAIN&&sp==1): state=RELEASE, rate_period=period[release]'
+    viceCite: envelope.h:361-367
+    managedCite: Sid6581.cs:620-627
+    finding: "02"
+    test: TEST-SID-ENV-47
+    state: green-now
+  - id: AC-48
+    tag: FAITHFUL
+    statement: next_state DECAY_SUSTAIN and FREEZED are no-ops in state_change
+    viceCite: envelope.h:359-360,368-370
+    managedCite: Sid6581.cs:618-619,628-630
+    finding: "02"
+    test: TEST-SID-ENV-48
+    state: green-now
+  - id: AC-49
+    tag: FAITHFUL
+    statement: readENV() returns env3 (raw counter, DAC-independent)
+    viceCite: envelope.cc:273-276
+    managedCite: Sid6581.cs:850-852
+    finding: "02"
+    test: TEST-SID-ENV-49
+    state: green-now
+  - id: AC-50
+    tag: DIVERGENT
+    statement: output()=model_dac[model][envelope_counter] nonlinear DAC; managed applies envelope linearly
+    viceCite: envelope.h:377-383
+    managedCite: Sid6581.cs:215-217
+    finding: "03"
+    test: TEST-SID-ENV-50
+    state: red-now
+  - id: AC-51
+    tag: FAITHFUL
+    statement: ADSR delay bug end-to-end
+    viceCite: envelope.h:179-190
+    managedCite: Sid6581.cs:593-598
+    finding: "02"
+    test: TEST-SID-ENV-51
+    state: green-now
+  - id: AC-52
+    tag: FAITHFUL
+    statement: 'freeze-at-zero bug: 0xff->0x00 via RELEASE-then-ATTACK freezes at 0'
+    viceCite: envelope.h:164-168,408-417
+    managedCite: Sid6581.cs:578-583,518-522
+    finding: "02"
+    test: TEST-SID-ENV-52
+    state: green-now
+  - id: AC-53
+    tag: FAITHFUL
+    statement: 'release-continue bug: 0x00->0xff via ATTACK-then-RELEASE counts down'
+    viceCite: envelope.h:146-154,135-137
+    managedCite: Sid6581.cs:556-559,567-571
+    finding: "02"
+    test: TEST-SID-ENV-53
+    state: green-now
+  - id: AC-54
+    tag: FAITHFUL
+    statement: single-cycle clock() timing (not batched)
+    viceCite: envelope.h:114-193
+    managedCite: Sid6581.cs:718-755
+    finding: "02"
+    test: TEST-SID-ENV-54
+    state: green-now
+- id: FR-SID-WAVE-ACC
+  chip: SID
+  title: 24-bit phase accumulator
+  spec:
+  - wave.h
+  - wave.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings: []
+  tr: Mask stored accumulator to 24 bits; seed 0x555555; reset() preserves accumulator.
+  acCount: 6
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: 'non-test cycle: accumulator bits 0-23 = (accumulator+freq)&0xffffff'
+    viceCite: wave.h:155,157
+    managedCite: Sid6581.cs:752
+    finding: 
+    test: TEST-SID-WAVE-ACC-01
+    state: green-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: stored accumulator must be masked to 24 bits (managed stores unmasked 32-bit)
+    viceCite: wave.h:155
+    managedCite: Sid6581.cs:752,398
+    finding: new
+    test: TEST-SID-WAVE-ACC-02
+    state: red-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: FREQ is a 16-bit addend applied every cycle
+    viceCite: wave.cc:148-156
+    managedCite: Sid6581.cs:870-873,752
+    finding: 
+    test: TEST-SID-WAVE-ACC-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: bit-transition set ~acc & acc_next drives sync/noise (managed pre/post capture)
+    viceCite: wave.h:156,160,164
+    managedCite: Sid6581.cs:722-724,733-735,764-769
+    finding: 
+    test: TEST-SID-WAVE-ACC-04
+    state: green-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: power-on accumulator = 0x555555 (managed 0)
+    viceCite: wave.cc:117
+    managedCite: Sid6581.cs:398
+    finding: new
+    test: TEST-SID-WAVE-ACC-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: reset() must NOT change accumulator (managed clears it)
+    viceCite: wave.cc:301-303
+    managedCite: Sid6581.cs:825
+    finding: new
+    test: TEST-SID-WAVE-ACC-06
+    state: red-now
+- id: FR-SID-WAVE-SAWTRI
+  chip: SID
+  title: Sawtooth and triangle (12-bit, table-indexed)
+  spec:
+  - wave.h
+  - wave.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "11"
+  tr: Rework to reSID 12-bit table-indexed model.
+  acCount: 4
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: sawtooth = accumulator>>12 (upper 12 bits); managed uses upper 8
+    viceCite: wave.cc:97
+    managedCite: Sid6581.cs:162,127
+    finding: "11"
+    test: TEST-SID-WAVE-SAWTRI-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: triangle fold direction on accumulator bit 23; managed folds 8-bit not 11
+    viceCite: wave.cc:96
+    managedCite: Sid6581.cs:148
+    finding: "11"
+    test: TEST-SID-WAVE-SAWTRI-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: triangle output 12-bit, bit0 grounded (&0xffe), MSB discarded
+    viceCite: wave.cc:96
+    managedCite: Sid6581.cs:148,158
+    finding: "11"
+    test: TEST-SID-WAVE-SAWTRI-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: selected output via table lookup wave[ix], ix=(acc^ring)>>12; managed AND-combines
+    viceCite: wave.h:462-467
+    managedCite: Sid6581.cs:197-212
+    finding: "04"
+    test: TEST-SID-WAVE-SAWTRI-04
+    state: red-now
+- id: FR-SID-WAVE-PULSE
+  chip: SID
+  title: Pulse comparator
+  spec:
+  - wave.h
+  - wave.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "05"
+  tr: De-invert to (acc>>12)>=pw at 12-bit; force 0xfff under test bit.
+  acCount: 7
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: pulse HIGH (0xfff) iff (accumulator>>12) >= pw; managed inverts (phase<pw)
+    viceCite: wave.h:243,518
+    managedCite: Sid6581.cs:169
+    finding: "05"
+    test: TEST-SID-WAVE-PULSE-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: 12-bit compare; managed compares 8-bit
+    viceCite: wave.h:243
+    managedCite: Sid6581.cs:169,127
+    finding: "05"
+    test: TEST-SID-WAVE-PULSE-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: pw==0 gives constant HIGH; managed gives constant LOW
+    viceCite: wave.h:243
+    managedCite: Sid6581.cs:169
+    finding: "05"
+    test: TEST-SID-WAVE-PULSE-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: test bit forces pulse_output=0xfff; managed does not
+    viceCite: wave.h:151,194
+    managedCite: Sid6581.cs:169
+    finding: "09"
+    test: TEST-SID-WAVE-PULSE-04
+    state: red-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: pw 12-bit = PW_LO | ((PW_HI&0x0f)<<8)
+    viceCite: wave.cc:160,167
+    managedCite: Sid6581.cs:876,879
+    finding: 
+    test: TEST-SID-WAVE-PULSE-05
+    state: green-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: pulse compare result delayed one cycle; managed same-cycle
+    viceCite: wave.h:516-518
+    managedCite: Sid6581.cs:164-170
+    finding: new
+    test: TEST-SID-WAVE-PULSE-06
+    state: red-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: pulse contributes only when the pulse waveform is selected
+    viceCite: wave.cc:221
+    managedCite: Sid6581.cs:164-170,205
+    finding: 
+    test: TEST-SID-WAVE-PULSE-07
+    state: green-now
+- id: FR-SID-WAVE-SYNC
+  chip: SID
+  title: Hard sync
+  spec:
+  - wave.h
+  - wave.cc
+  - sid.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "07"
+  tr: Sync on rising MSB edge; add same-cycle special case.
+  acCount: 6
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: sync fires on the source rising MSB edge (msb_rising); managed fires on falling edge
+    viceCite: wave.h:160,261
+    managedCite: Sid6581.cs:778,782,786
+    finding: "07"
+    test: TEST-SID-WAVE-SYNC-01
+    state: red-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: gated on destination SYNC control bit 0x02
+    viceCite: wave.h:261
+    managedCite: Sid6581.cs:778,782,786
+    finding: 
+    test: TEST-SID-WAVE-SYNC-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: on sync event destination accumulator set to 0
+    viceCite: wave.h:262
+    managedCite: Sid6581.cs:779,783,787
+    finding: 
+    test: TEST-SID-WAVE-SYNC-03
+    state: green-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: same-cycle sync-source special case suppresses dest sync; managed absent
+    viceCite: wave.h:257-261
+    managedCite: Sid6581.cs:771-787
+    finding: new
+    test: TEST-SID-WAVE-SYNC-04
+    state: red-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: inter-voice chain 0<-2, 1<-0, 2<-1
+    viceCite: sid.cc:74-76
+    managedCite: Sid6581.cs:721,777-787
+    finding: 
+    test: TEST-SID-WAVE-SYNC-05
+    state: green-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: clock-all then synchronize-all (parallel)
+    viceCite: sid.h:200-223
+    managedCite: Sid6581.cs:722-724,737-755,771-787
+    finding: 
+    test: TEST-SID-WAVE-SYNC-06
+    state: green-now
+- id: FR-SID-WAVE-RING
+  chip: SID
+  title: Ring modulation
+  spec:
+  - wave.h
+  - wave.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "06"
+  tr: Substitute fold MSB via index XOR; gate on sawtooth-deselected.
+  acCount: 4
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: ring substitutes only the fold MSB (index bit 23); managed XORs whole 8-bit triangle
+    viceCite: wave.h:465
+    managedCite: Sid6581.cs:151-156
+    finding: "06"
+    test: TEST-SID-WAVE-RING-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: trigger polarity = NOT(sync-source MSB); managed flips on modulator MSB high
+    viceCite: wave.h:465
+    managedCite: Sid6581.cs:154-156
+    finding: "06"
+    test: TEST-SID-WAVE-RING-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: ring active iff ring_mod set AND sawtooth deselected; managed gates on triangle-selected
+    viceCite: wave.cc:214
+    managedCite: Sid6581.cs:146-157
+    finding: new
+    test: TEST-SID-WAVE-RING-03
+    state: red-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: ring source = voice (i+2)%3
+    viceCite: wave.h:465
+    managedCite: Sid6581.cs:154
+    finding: 
+    test: TEST-SID-WAVE-RING-04
+    state: green-now
+- id: FR-SID-WAVE-TESTBIT
+  chip: SID
+  title: Test bit
+  spec:
+  - wave.h
+  - wave.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "09"
+  tr: 'Port test-bit state machine: slow reset, pulse-high, test-falling single clock, per-voice register.'
+  acCount: 8
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: while test set, accumulator = 0
+    viceCite: wave.cc:231
+    managedCite: Sid6581.cs:747
+    finding: 
+    test: TEST-SID-WAVE-TESTBIT-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: while test set, accumulator not advanced by FREQ
+    viceCite: wave.h:144-152
+    managedCite: Sid6581.cs:744-750
+    finding: 
+    test: TEST-SID-WAVE-TESTBIT-02
+    state: green-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: test forces pulse_output=0xfff; managed does not
+    viceCite: wave.h:151,194
+    managedCite: Sid6581.cs:744-750
+    finding: "09"
+    test: TEST-SID-WAVE-TESTBIT-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: test-rising arms slow shift_register_reset=35000 (6581); managed instant reseed to all-ones
+    viceCite: wave.cc:229-241
+    managedCite: Sid6581.cs:746
+    finding: "09"
+    test: TEST-SID-WAVE-TESTBIT-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: test-rising flushes shift_pipeline=0; managed models no shift pipeline
+    viceCite: wave.cc:234
+    managedCite: Sid6581.cs:733-735,764-769
+    finding: "09"
+    test: TEST-SID-WAVE-TESTBIT-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: 'test-falling: single clock bit0=~bit17 + conditional pre-writeback; managed absent'
+    viceCite: wave.cc:242-259
+    managedCite: Sid6581.cs
+    finding: "09"
+    test: TEST-SID-WAVE-TESTBIT-06
+    state: red-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: test bit is CTRL bit 3 (mask 0x08)
+    viceCite: wave.cc:206
+    managedCite: Sid6581.cs:744
+    finding: 
+    test: TEST-SID-WAVE-TESTBIT-07
+    state: green-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: reset register is per-voice; managed reseeds one shared LFSR
+    viceCite: wave.h:84
+    managedCite: Sid6581.cs:62,746
+    finding: "08"
+    test: TEST-SID-WAVE-TESTBIT-08
+    state: red-now
+- id: FR-SID-WAVE-NOISE
+  chip: SID
+  title: 23-bit noise LFSR
+  spec:
+  - wave.h
+  - wave.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "08"
+  tr: Per-voice register, 2-cycle shift pipeline, free-run, slow test reset, combined-waveform corruption/lock-up, 12-bit output; remove zero-reseed; seed 0x7ffffe.
+  acCount: 19
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: register 23-bit, masked &0x7fffff after each shift
+    viceCite: wave.h:325
+    managedCite: Sid6581.cs:56,83
+    finding: 
+    test: TEST-SID-WAVE-NOISE-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: feedback bit0 = ((sr>>22)^(sr>>17))&1
+    viceCite: wave.h:323-324
+    managedCite: Sid6581.cs:82
+    finding: 
+    test: TEST-SID-WAVE-NOISE-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: shift sr=((sr<<1)|bit0)&0x7fffff
+    viceCite: wave.h:325
+    managedCite: Sid6581.cs:83
+    finding: 
+    test: TEST-SID-WAVE-NOISE-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: clocked on accumulator bit-19 0->1 transition
+    viceCite: wave.h:156,164
+    managedCite: Sid6581.cs:61,733-735,764-766
+    finding: 
+    test: TEST-SID-WAVE-NOISE-04
+    state: green-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: shift delayed exactly 2 cycles (shift_pipeline=2); managed shifts immediately
+    viceCite: wave.h:164-170
+    managedCite: Sid6581.cs:767-769
+    finding: "08"
+    test: TEST-SID-WAVE-NOISE-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: register free-runs regardless of waveform selection; managed shifts only when noise selected
+    viceCite: wave.h:142-172
+    managedCite: Sid6581.cs:761-769
+    finding: "08"
+    test: TEST-SID-WAVE-NOISE-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: each voice owns its shift register; managed shares one _noiseLfsr
+    viceCite: wave.h:84
+    managedCite: Sid6581.cs:62,767-769
+    finding: "08"
+    test: TEST-SID-WAVE-NOISE-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: noise_output 12-bit taps {20->11,18->10,14->9,11->8,9->7,5->6,2->5,0->4}; managed 8-bit
+    viceCite: wave.h:356-364
+    managedCite: Sid6581.cs:94-103
+    finding: "11"
+    test: TEST-SID-WAVE-NOISE-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: 'no_noise_or_noise_output: unselected noise contributes 0xfff; managed absent'
+    viceCite: wave.h:366
+    managedCite: Sid6581.cs:177,206
+    finding: "08"
+    test: TEST-SID-WAVE-NOISE-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: power-on seed 0x7ffffe; managed 0x7fffff and reset does not re-seed
+    viceCite: wave.cc:323-327
+    managedCite: Sid6581.cs:57,822-836
+    finding: new
+    test: TEST-SID-WAVE-NOISE-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: a zeroed register stays locked (reSID never forces it non-zero); managed reseeds if 0
+    viceCite: wave.h:321-329
+    managedCite: Sid6581.cs:84-85
+    finding: new
+    test: TEST-SID-WAVE-NOISE-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: 'test-rising: acc=0, shift_pipeline=0, shift_register_reset=START, pulse=0xfff, register NOT reset; managed forces all-ones each cycle'
+    viceCite: wave.cc:229-241
+    managedCite: Sid6581.cs:744-749
+    finding: "09"
+    test: TEST-SID-WAVE-NOISE-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: 'test-falling: pre-writeback + single clock bit0=(~sr>>17)&1; managed absent'
+    viceCite: wave.cc:242-259
+    managedCite: Sid6581.cs
+    finding: "09"
+    test: TEST-SID-WAVE-NOISE-13
+    state: red-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: while test held register fades toward 0x7fffff via shiftreg_bitfade; managed absent
+    viceCite: wave.cc:282-291
+    managedCite: Sid6581.cs
+    finding: "09"
+    test: TEST-SID-WAVE-NOISE-14
+    state: red-now
+  - id: AC-15
+    tag: DIVERGENT
+    statement: reset-fade constants 6581 35000/1000, 8580 2519864/315000; managed absent
+    viceCite: wave.cc:30-33
+    managedCite: Sid6581.cs
+    finding: new
+    test: TEST-SID-WAVE-NOISE-15
+    state: red-now
+  - id: AC-16
+    tag: DIVERGENT
+    statement: combined (waveform>0x8) writes waveform_output back into register {11->20,...}; managed never writes back
+    viceCite: wave.h:494-497,339-348
+    managedCite: Sid6581.cs:197-212
+    finding: "08"
+    test: TEST-SID-WAVE-NOISE-16
+    state: red-now
+  - id: AC-17
+    tag: DIVERGENT
+    statement: on corruption noise_output &= waveform_output; managed only ANDs into the mix
+    viceCite: wave.h:350-351
+    managedCite: Sid6581.cs:206
+    finding: "08"
+    test: TEST-SID-WAVE-NOISE-17
+    state: red-now
+  - id: AC-18
+    tag: DIVERGENT
+    statement: noise+X combinations decay output to zero (lock-up); managed keeps sounding
+    viceCite: wave.h:443-446,350
+    managedCite: Sid6581.cs
+    finding: "08"
+    test: TEST-SID-WAVE-NOISE-18
+    state: red-now
+  - id: AC-19
+    tag: DIVERGENT
+    statement: batched clock(delta_t) shift walk; managed single-cycle subset only
+    viceCite: wave.h:211-239
+    managedCite: Sid6581.cs:752,767-769
+    finding: new
+    test: TEST-SID-WAVE-NOISE-19
+    state: red-now
+- id: FR-SID-WAVE-COMBINED
+  chip: SID
+  title: Combined waveforms via measured ROM tables
+  spec:
+  - wave.h
+  - wave.cc
+  - wave6581_*.h
+  - wave8580_*.h
+  managed:
+  - Sid6581.cs
+  - Sid8580.cs
+  mappedFindings:
+  - "04"
+  tr: Embed wave6581_*/wave8580_* ROM tables; 12-bit table lookup with pulse/noise gating; noise_pulse shapers; 6581 saw feedback.
+  acCount: 17
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: table selector waveform&0x7; wave=model_wave[model][waveform&0x7]; managed computes independently
+    viceCite: wave.cc:141,211
+    managedCite: Sid6581.cs:132-178
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: 'sub-table map: 1 tri,2 saw,3 __ST,4 pulse,5 P_T,6 PS_,7 PST'
+    viceCite: wave.cc:49-70
+    managedCite: Sid6581.cs
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: triangle table ((acc^-!!msb)>>11)&0xffe; managed 8-bit
+    viceCite: wave.cc:96
+    managedCite: Sid6581.cs:148
+    finding: "11"
+    test: TEST-SID-WAVE-COMBINED-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: sawtooth table acc>>12; managed 8-bit
+    viceCite: wave.cc:97
+    managedCite: Sid6581.cs:161
+    finding: "11"
+    test: TEST-SID-WAVE-COMBINED-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: multi-waveform via measured ROM sample, NOT bitwise AND
+    viceCite: wave.h:369-388
+    managedCite: Sid6581.cs:197-212
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: distinct 6581/8580 ROM tables; managed 8580 = AND*3/4
+    viceCite: wave.cc:49-70
+    managedCite: Sid8580.cs:104-105
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: waveform_output = wave[ix] & (no_pulse|pulse_output) & no_noise_or_noise_output
+    viceCite: wave.h:465-467
+    managedCite: Sid6581.cs:200-206
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: 'no_pulse gating: pulse-selected whole sample gated by pulse_output'
+    viceCite: wave.cc:221
+    managedCite: Sid6581.cs:169,205
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: no_noise gating via no_noise_or_noise_output
+    viceCite: wave.cc:219-220
+    managedCite: Sid6581.cs:206
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: ring index MSB substitution ix=(acc^(~src&ring_mask))>>12; managed triangle-only
+    viceCite: wave.h:465
+    managedCite: Sid6581.cs:149-157
+    finding: "06"
+    test: TEST-SID-WAVE-COMBINED-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: ring_msb_mask=((~ctrl>>5)&(ctrl>>2)&1)<<23
+    viceCite: wave.cc:214
+    managedCite: Sid6581.cs:119,149
+    finding: "06"
+    test: TEST-SID-WAVE-COMBINED-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: noise+pulse ((waveform&0xc)==0xc) routes through noise_pulse shaper
+    viceCite: wave.h:469-473
+    managedCite: Sid6581.cs:205-206
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: noise_pulse6581(n)=(n<0xf00)?0:n&(n<<1)&(n<<2)
+    viceCite: wave.h:448-451
+    managedCite: Sid6581.cs
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-13
+    state: red-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: noise_pulse8580(n)=(n<0xfc0)?n&(n<<1):0xfc0
+    viceCite: wave.h:453-456
+    managedCite: Sid6581.cs
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-14
+    state: red-now
+  - id: AC-15
+    tag: DIVERGENT
+    statement: 6581 sawtooth-in-combination drives accumulator top bit low (acc&=(wf<<12)|0x7fffff)
+    viceCite: wave.h:488-492
+    managedCite: Sid6581.cs
+    finding: new
+    test: TEST-SID-WAVE-COMBINED-15
+    state: red-now
+  - id: AC-16
+    tag: DIVERGENT
+    statement: combined (waveform>0x8) writes back to shift register
+    viceCite: wave.h:494-497
+    managedCite: Sid6581.cs
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-16
+    state: red-now
+  - id: AC-17
+    tag: DIVERGENT
+    statement: ROM tables are 4096-entry 12-bit measured OSC3 samples; managed ships none
+    viceCite: wave6581_*.h
+    managedCite: Sid6581.cs
+    finding: "04"
+    test: TEST-SID-WAVE-COMBINED-17
+    state: red-now
+- id: FR-SID-OSC3ENV3
+  chip: SID
+  title: OSC3/ENV3 readback
+  spec:
+  - wave.h
+  - wave.cc
+  - envelope.cc
+  - sid.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "10"
+  tr: OSC3 returns selected waveform_output>>4 incl 8580 pipeline + floating fade; ENV3 already faithful.
+  acCount: 11
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: readOSC returns osc3>>4 (selected waveform); managed returns raw accumulator bits
+    viceCite: wave.cc:293-296
+    managedCite: Sid6581.cs:845-849
+    finding: "10"
+    test: TEST-SID-OSC3ENV3-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: osc3 = waveform_output (waveform-dependent), not phase
+    viceCite: wave.h:485
+    managedCite: Sid6581.cs:849
+    finding: "10"
+    test: TEST-SID-OSC3ENV3-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: pulse-only OSC3 reads 0x00/0xff, not a ramp
+    viceCite: wave.h:485,467
+    managedCite: Sid6581.cs:849
+    finding: "10"
+    test: TEST-SID-OSC3ENV3-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: noise OSC3 reads noise_output>>4
+    viceCite: wave.h:485
+    managedCite: Sid6581.cs:849
+    finding: "10"
+    test: TEST-SID-OSC3ENV3-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: 8580 tri/saw OSC3 delayed one cycle (tri_saw_pipeline)
+    viceCite: wave.h:478-482
+    managedCite: Sid6581.cs:849
+    finding: "10"
+    test: TEST-SID-OSC3ENV3-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: tri_saw_pipeline initial 0x555
+    viceCite: wave.cc:119
+    managedCite: Sid6581.cs
+    finding: new
+    test: TEST-SID-OSC3ENV3-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: waveform==0 OSC3 reads floating-DAC fade to 0; managed reads phase
+    viceCite: wave.h:501-503
+    managedCite: Sid6581.cs:849
+    finding: "10"
+    test: TEST-SID-OSC3ENV3-07
+    state: red-now
+  - id: AC-08
+    tag: FAITHFUL
+    statement: OSC3 reads voice 3 (index 2)
+    viceCite: sid.cc
+    managedCite: Sid6581.cs:849
+    finding: 
+    test: TEST-SID-OSC3ENV3-08
+    state: green-now
+  - id: AC-09
+    tag: FAITHFUL
+    statement: ENV3 returns readENV()=env3
+    viceCite: envelope.cc:273-275
+    managedCite: Sid6581.cs:850-852
+    finding: 
+    test: TEST-SID-OSC3ENV3-09
+    state: green-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: env3 latched at first phase of clock
+    viceCite: envelope.cc:118
+    managedCite: Sid6581.cs:536
+    finding: 
+    test: TEST-SID-OSC3ENV3-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: ENV3 reads voice 3 (index 2)
+    viceCite: sid.cc
+    managedCite: Sid6581.cs:852
+    finding: 
+    test: TEST-SID-OSC3ENV3-11
+    state: green-now
+- id: FR-SID-WAVE-DACRES
+  chip: SID
+  title: 12-bit waveform + model_dac R-2R DAC
+  spec:
+  - wave.h
+  - dac.cc
+  managed:
+  - Sid6581.cs
+  - Sid8580.cs
+  mappedFindings:
+  - "11"
+  tr: Port build_dac_table + model_dac[2][256]; widen waveform path to 12-bit; route output through DAC.
+  acCount: 11
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: output=model_dac[model][waveform_output] 12-bit index; managed 8-bit, no table
+    viceCite: wave.h:587-593
+    managedCite: Sid6581.cs:211-217
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: waveform path is 12-bit (0x000..0xfff); managed 8-bit
+    viceCite: wave.h:113,467
+    managedCite: Sid6581.cs:200-211
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: model_dac built 6581 (12,2.20,false) / 8580 (12,2.00,true)
+    viceCite: wave.cc:105-107
+    managedCite: Sid6581.cs
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: MOSFET leakage 6581 0.0075 / 8580 0.0035
+    viceCite: dac.cc:46-47
+    managedCite: Sid6581.cs
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: per-bit voltage vbit via repeated parallel substitution + source transform
+    viceCite: dac.cc:85-123
+    managedCite: Sid6581.cs
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: Vo superposition; dac[i]=((1<<bits)-1)*Vo+0.5
+    viceCite: dac.cc:126-136
+    managedCite: Sid6581.cs
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: 6581 missing termination -> low-bit nonlinearity (bit0 output == bit1)
+    viceCite: dac.cc:90-92
+    managedCite: Sid6581.cs:71
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: 8580 correct termination -> monotonic DAC
+    viceCite: dac.cc:90-92
+    managedCite: Sid8580.cs:23
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: round-half-up (+0.5) before unsigned-short cast
+    viceCite: dac.cc:135
+    managedCite: Sid6581.cs
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: output() uses DAC table, readOSC() uses raw waveform_output
+    viceCite: wave.h:590-592
+    managedCite: Sid6581.cs:211-217,849
+    finding: "10"
+    test: TEST-SID-WAVE-DACRES-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: WaveZeroLevel (0x38/0x9E) is a crude single-point stand-in for the DAC zero
+    viceCite: wave.h
+    managedCite: Sid6581.cs:71,Sid8580.cs:23
+    finding: "11"
+    test: TEST-SID-WAVE-DACRES-11
+    state: red-now
+- id: FR-SID-FILTER-6581
+  chip: SID
+  title: 6581 filter (reSID two-integrator EKV/VCR/opamp model)
+  spec:
+  - filter8580new.cc
+  - filter8580new.h
+  - spline.h
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "12"
+  - "13"
+  - "14"
+  tr: Field-for-field port of reSID filter8580new 6581 path; replace the Chamberlin SVF.
+  acCount: 30
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: opamp_voltage_6581 34-point transfer curve
+    viceCite: filter8580new.cc:40-76
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: model_filter_init[0] scalars (voice_voltage_range 1.5, voice_DC 5.075, C 470e-12, Vdd 12.18, Vth 1.31, ...)
+    viceCite: filter8580new.cc:179-202
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: normalization constants vmin, kVddt, vmax, denorm, norm, N16, N30, N31, vo_N16
+    viceCite: filter8580new.cc:269-280
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: filterGain(6581) = (int)(0.93*(1<<12))
+    viceCite: filter8580new.cc:285-286
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: voice_scale_s14 = (int)(N14*1.5); voice_DC = (int)(N16*(5.075-vmin))
+    viceCite: filter8580new.cc:291-293
+    managedCite: Sid6581.cs
+    finding: "12"
+    test: TEST-SID-FILTER-6581-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: kVddt = (int)(N16*(k*(Vdd-Vth)-vmin)+0.5)
+    viceCite: filter8580new.cc:297
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: op-amp reverse-transfer spline build into voltages[65536]
+    viceCite: filter8580new.cc:310-369
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: opamp_rev[65536] = opamp[i].vx
+    viceCite: filter8580new.cc:436-438
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: summer[] table (5 configs) via solve_gain_d
+    viceCite: filter8580new.cc:382-392
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: mixer[] table (8 configs) n_idiv=(idiv<<3)/6
+    viceCite: filter8580new.cc:400-418
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: gain[16][65536] n=n8/12.0; managed linear volume
+    viceCite: filter8580new.cc:425-432
+    managedCite: Sid6581.cs:235-236
+    finding: "12"
+    test: TEST-SID-FILTER-6581-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: resonance[16][65536] n=(~n8&0xf)/8.0; managed q=1/(1+res/4)
+    viceCite: filter8580new.cc:462-468
+    managedCite: Sid6581.cs:338
+    finding: "14"
+    test: TEST-SID-FILTER-6581-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: n_snake = (int)(WL_snake*tmp_n_param[0]+0.5)
+    viceCite: filter8580new.cc:299,474
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-13
+    state: red-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: vcr_kVg[65536] VCR gate voltage table
+    viceCite: filter8580new.cc:487-499
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-FILTER-6581-14
+    state: red-now
+  - id: AC-15
+    tag: DIVERGENT
+    statement: vcr_n_Ids_term[65536] EKV subthreshold table
+    viceCite: filter8580new.cc:509-523
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-15
+    state: red-now
+  - id: AC-16
+    tag: DIVERGENT
+    statement: solve_gain_d Newton-Raphson root solver with Dekker fallback
+    viceCite: filter8580new.h:1632-1704
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-16
+    state: red-now
+  - id: AC-17
+    tag: FAITHFUL
+    statement: writeFC_LO/HI compose 11-bit fc = (fc&0x7f8)|(lo&7); ((hi<<3)&0x7f8)|(fc&7)
+    viceCite: filter8580new.cc:722-732
+    managedCite: Sid6581.cs:921-926
+    finding: 
+    test: TEST-SID-FILTER-6581-17
+    state: green-now
+  - id: AC-18
+    tag: FAITHFUL
+    statement: writeRES_FILT res=(v>>4)&0xf, filt=v&0xf (decode only; downstream divergent)
+    viceCite: filter8580new.cc:734-740
+    managedCite: Sid6581.cs:927-930
+    finding: 
+    test: TEST-SID-FILTER-6581-18
+    state: green-now
+  - id: AC-19
+    tag: DIVERGENT
+    statement: writeMODE_VOL mode=v&0xf0, vol=v&0xf (managed masks 0x70, dropping bit 7 / 3OFF; same defect as FR-SID-MIXVOL AC-01, remediated together in S8)
+    viceCite: filter8580new.cc:742-748
+    managedCite: Sid6581.cs:931-933
+    finding: "19"
+    test: TEST-SID-FILTER-6581-19
+    state: red-now
+  - id: AC-20
+    tag: DIVERGENT
+    statement: 'set_w0 6581: Vw=Vw_bias+f0_dac[fc]; Vddt_Vw_2'
+    viceCite: filter8580new.cc:751-758
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-FILTER-6581-20
+    state: red-now
+  - id: AC-21
+    tag: DIVERGENT
+    statement: set_sum_mix sum/mix masks incl voice_mask + V3OFF-in-mixer
+    viceCite: filter8580new.cc:768-776
+    managedCite: Sid6581.cs:286-321
+    finding: "12"
+    test: TEST-SID-FILTER-6581-21
+    state: red-now
+  - id: AC-22
+    tag: DIVERGENT
+    statement: set_voice_mask + reset() zeroes Vhp/Vbp/Vlp state
+    viceCite: filter8580new.cc:692-716
+    managedCite: Sid6581.cs:822-836
+    finding: "12"
+    test: TEST-SID-FILTER-6581-22
+    state: red-now
+  - id: AC-23
+    tag: DIVERGENT
+    statement: per-cycle voice pre-scale v=((voice*voice_scale_s14+rnd.getNoise())>>18)+voice_DC
+    viceCite: filter8580new.h:688-690
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-23
+    state: red-now
+  - id: AC-24
+    tag: DIVERGENT
+    statement: summer input routing 16-case switch with summer_offset
+    viceCite: filter8580new.h:696-761
+    managedCite: Sid6581.cs:296-299
+    finding: "12"
+    test: TEST-SID-FILTER-6581-24
+    state: red-now
+  - id: AC-25
+    tag: DIVERGENT
+    statement: 6581 per-cycle order Vlp=solve_int(Vbp); Vbp=solve_int(Vhp); Vhp=summer[...]; managed SVF
+    viceCite: filter8580new.h:764-778
+    managedCite: Sid6581.cs:343-345
+    finding: "12"
+    test: TEST-SID-FILTER-6581-25
+    state: red-now
+  - id: AC-26
+    tag: DIVERGENT
+    statement: solve_integrate_6581 (snake current + VCR EKV + capacitor charge + opamp_rev)
+    viceCite: filter8580new.h:1827-1875
+    managedCite: none
+    finding: "12"
+    test: TEST-SID-FILTER-6581-26
+    state: red-now
+  - id: AC-27
+    tag: DIVERGENT
+    statement: clock(delta_t) sub-steps at delta_t_flt=3
+    viceCite: filter8580new.h:872-892
+    managedCite: none
+    finding: "16"
+    test: TEST-SID-FILTER-6581-27
+    state: red-now
+  - id: AC-28
+    tag: DIVERGENT
+    statement: output() mixer switch (128 cases) with dc_offset
+    viceCite: filter8580new.h:977-1492
+    managedCite: Sid6581.cs:357-364
+    finding: "12"
+    test: TEST-SID-FILTER-6581-28
+    state: red-now
+  - id: AC-29
+    tag: DIVERGENT
+    statement: output() final gain = gain[vol][mixer[offset+Vi]]-(1<<15); managed linear
+    viceCite: filter8580new.h:1494-1499
+    managedCite: Sid6581.cs:235-238
+    finding: "12"
+    test: TEST-SID-FILTER-6581-29
+    state: red-now
+  - id: AC-30
+    tag: DIVERGENT
+    statement: input() EXT-IN ve=(sample*voice_scale_s14*3>>14)+mixer[0]; managed forces 0
+    viceCite: filter8580new.h:918-932
+    managedCite: Sid6581.cs:293-294
+    finding: "12"
+    test: TEST-SID-FILTER-6581-30
+    state: red-now
+- id: FR-SID-FILTER-8580
+  chip: SID
+  title: 8580 filter (solve_integrate_8580, resGain, DAC gate voltage)
+  spec:
+  - filter8580new.cc
+  - filter8580new.h
+  managed:
+  - Sid8580.cs
+  - Sid8580D.cs
+  mappedFindings:
+  - "17"
+  tr: Port the reSID 8580 branch; collapse Sid8580D onto the 8580 model.
+  acCount: 14
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: opamp_voltage_8580 22-point curve
+    viceCite: filter8580new.cc:80-104
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: model_filter_init[1] scalars (range 0.24, DC 4.7975, C 22e-9, Vdd 9.09, dac_2R_div_R 2.00)
+    viceCite: filter8580new.cc:203-224
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: filterGain 1.0*(1<<12); mixer divider 5; gain divider 16
+    viceCite: filter8580new.cc:285-286,400,425
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: resGain[16] parallel-resistor ratios; managed q=1/(1+res*0.875/4)
+    viceCite: filter8580new.cc:135-153
+    managedCite: Sid8580.cs:69
+    finding: "17"
+    test: TEST-SID-FILTER-8580-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: resonance[16][65536] (8580) via solve_gain_d(resGain[n8])
+    viceCite: filter8580new.cc:592-597
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: shared opamp_rev/summer/mixer/gain built for m==1 with 8580 params
+    viceCite: filter8580new.cc:382-438
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: n_param = (int)(tmp_n_param[1]*32+0.5)
+    viceCite: filter8580new.cc:600
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: nVgt = (int)(N16*(Vgt-vmin)+0.5), Vgt=Vref*1.6-Vth
+    viceCite: filter8580new.cc:602-603
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: 8580 f0_dac from dacWL=806 (parallel W/L)
+    viceCite: filter8580new.cc:605-620
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: 'set_w0 8580: n_dac=(n_param*f0_dac[fc])>>11; managed 2*sin(pi*f/Fs)'
+    viceCite: filter8580new.cc:760-764
+    managedCite: Sid8580.cs:60-64
+    finding: "17"
+    test: TEST-SID-FILTER-8580-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: solve_integrate_8580 (nVgt, n_dac, triode/saturation branch)
+    viceCite: filter8580new.h:1896-1921
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: 8580 per-cycle order uses solve_integrate_8580; managed same SVF biased q
+    viceCite: filter8580new.h:769-778
+    managedCite: Sid8580.cs:72-74
+    finding: "17"
+    test: TEST-SID-FILTER-8580-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: adjust_filter_bias recomputes nVgt
+    viceCite: filter8580new.cc:654-669
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-FILTER-8580-13
+    state: red-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: no separate 8580D filter in reSID; Sid8580D must reduce to the 8580 model
+    viceCite: none
+    managedCite: Sid8580D.cs:19-60
+    finding: "17"
+    test: TEST-SID-FILTER-8580-14
+    state: red-now
+- id: FR-SID-EXTFILT
+  chip: SID
+  title: External output filter (16kHz LP + 16Hz HP)
+  spec:
+  - extfilt.cc
+  - extfilt.h
+  - sid.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "15"
+  tr: Port ExternalFilter; clock per phi2 after the filter; output=(Vlp-Vhp)>>11.
+  acCount: 7
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: coefficients w0lp_1_s7 and w0hp_1_s17
+    viceCite: extfilt.cc:41-42
+    managedCite: none
+    finding: "15"
+    test: TEST-SID-EXTFILT-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: reset() sets Vlp=0, Vhp=0
+    viceCite: extfilt.cc:58-63
+    managedCite: none
+    finding: "15"
+    test: TEST-SID-EXTFILT-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: 'clock(1): dVlp=w0lp_1_s7*((Vi<<11)-Vlp)>>7; dVhp=w0hp_1_s17*(Vlp-Vhp)>>17'
+    viceCite: extfilt.h:96-116
+    managedCite: none
+    finding: "15"
+    test: TEST-SID-EXTFILT-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: clock(delta_t) delta_t_flt=8
+    viceCite: extfilt.h:121-153
+    managedCite: none
+    finding: "15"
+    test: TEST-SID-EXTFILT-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: 'disabled: Vlp=Vi<<11, Vhp=0'
+    viceCite: extfilt.h:100-105
+    managedCite: none
+    finding: "15"
+    test: TEST-SID-EXTFILT-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: output() = (Vlp-Vhp)>>11; managed returns filter mix directly
+    viceCite: extfilt.h:159-163
+    managedCite: Sid6581.cs:238
+    finding: "15"
+    test: TEST-SID-EXTFILT-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: 'wiring: extfilt.clock(delta_t, filter.output()) every cycle; sample = extfilt.output()'
+    viceCite: sid.cc:828-831
+    managedCite: Sid6581.cs:224-238
+    finding: "15"
+    test: TEST-SID-EXTFILT-07
+    state: red-now
+- id: FR-SID-CUTOFFDAC
+  chip: SID
+  title: Cutoff DAC (build_dac_table R-2R + f0_dac)
+  spec:
+  - dac.cc
+  - dac.h
+  - filter8580new.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "13"
+  tr: Port build_dac_table + per-model f0_dac; remove MapCutoffRegToFrequency from the audio path.
+  acCount: 8
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: leakage constants 6581 0.0075 / 8580 0.0035
+    viceCite: dac.cc:46-47,82
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-CUTOFFDAC-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: tail resistance recurrence Rn=R+2R||Rn
+    viceCite: dac.cc:85-102
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-CUTOFFDAC-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: source transform for bit voltage
+    viceCite: dac.cc:104-120
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-CUTOFFDAC-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: superposition Vo and dac[i]=((1<<bits)-1)*Vo+0.5
+    viceCite: dac.cc:125-136
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-CUTOFFDAC-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: 6581 missing-termination branch (term=false, 2R/R=2.20)
+    viceCite: dac.cc:91-97
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-CUTOFFDAC-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: 8580 terminated branch + parallel-W/L f0_dac (dacWL=806)
+    viceCite: filter8580new.cc:605-620
+    managedCite: none
+    finding: "17"
+    test: TEST-SID-CUTOFFDAC-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: 6581 f0_dac post-scale (dac_zero 6.65, dac_scale 2.63, bits 11)
+    viceCite: filter8580new.cc:477-480
+    managedCite: none
+    finding: "13"
+    test: TEST-SID-CUTOFFDAC-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: bits=11, table size 2048, indexed by fc; managed piecewise-linear Hz curve
+    viceCite: filter8580new.cc:258,371
+    managedCite: Sid6581.cs:974-990
+    finding: "13"
+    test: TEST-SID-CUTOFFDAC-08
+    state: red-now
+- id: FR-SID-FILTER-CLOCK
+  chip: SID
+  title: Filter clocked per phi2 (not per output sample)
+  spec:
+  - sid.cc
+  - filter8580new.h
+  - extfilt.h
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "16"
+  tr: Drive filter+extfilt from the per-cycle tick; decimate to 44.1kHz for emission.
+  acCount: 5
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: SID::clock(delta_t) advances filter by elapsed phi2 cycles; managed runs filter per output sample
+    viceCite: sid.cc:745-828
+    managedCite: Sid6581.cs:225,718-802
+    finding: "16"
+    test: TEST-SID-FILTER-CLOCK-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: extfilt.clock(delta_t, filter.output()) every cycle
+    viceCite: sid.cc:831
+    managedCite: none
+    finding: "16"
+    test: TEST-SID-FILTER-CLOCK-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: filter sub-stepping delta_t_flt=3
+    viceCite: filter8580new.h:872-892
+    managedCite: none
+    finding: "16"
+    test: TEST-SID-FILTER-CLOCK-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: external filter sub-stepping delta_t_flt=8
+    viceCite: extfilt.h:134-152
+    managedCite: none
+    finding: "16"
+    test: TEST-SID-FILTER-CLOCK-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: output decimated from the per-cycle extfilt stream; managed advances state once per emitted sample
+    viceCite: sid.cc:745-832
+    managedCite: Sid6581.cs:225,793-801
+    finding: "16"
+    test: TEST-SID-FILTER-CLOCK-05
+    state: red-now
+- id: FR-SID-VOICE
+  chip: SID
+  title: Voice multiplying DAC (wave-wave_zero)*envelope
+  spec:
+  - voice.cc
+  - voice.h
+  managed:
+  - Sid6581.cs
+  - Sid8580.cs
+  mappedFindings:
+  - "18"
+  tr: 12-bit (wave12-wave_zero12)*env8, no >>8; runtime chip model; fan control byte to wave+envelope.
+  acCount: 11
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: output=(wave.output()-wave_zero)*envelope.output() (20-bit); managed 8-bit *env >>8
+    viceCite: voice.h:99-103
+    managedCite: Sid6581.cs:215-217
+    finding: "18"
+    test: TEST-SID-VOICE-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: 6581 wave_zero=0x380; managed WaveZeroLevel=0x38 (8-bit domain)
+    viceCite: voice.cc:93
+    managedCite: Sid6581.cs:71
+    finding: "18"
+    test: TEST-SID-VOICE-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: 8580 wave_zero=0x9e0; managed 0x9E
+    viceCite: voice.cc:97
+    managedCite: Sid8580.cs:23
+    finding: "18"
+    test: TEST-SID-VOICE-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: DC bias subtracted before envelope multiply, signed (may be negative)
+    viceCite: voice.h:50,102
+    managedCite: Sid6581.cs:217
+    finding: "18"
+    test: TEST-SID-VOICE-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: output range 20-bit [-2048*255, 2047*255]
+    viceCite: voice.h:42-43
+    managedCite: Sid6581.cs
+    finding: "18"
+    test: TEST-SID-VOICE-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: set_chip_model propagates to wave+envelope then selects wave_zero; managed fixed by subclass
+    viceCite: voice.cc:38-99
+    managedCite: Sid6581.cs
+    finding: "18"
+    test: TEST-SID-VOICE-06
+    state: red-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: sync-source topology 0<-2, 1<-0, 2<-1
+    viceCite: sid.cc:74-76
+    managedCite: Sid6581.cs:154
+    finding: 
+    test: TEST-SID-VOICE-07
+    state: green-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: writeCONTROL_REG fans same byte to wave+envelope; managed handles wave bits out-of-band
+    viceCite: voice.cc:112-116
+    managedCite: Sid6581.cs:882-885
+    finding: "18"
+    test: TEST-SID-VOICE-08
+    state: red-now
+  - id: AC-09
+    tag: FAITHFUL
+    statement: reset() calls wave.reset then envelope.reset
+    viceCite: voice.cc:121-125
+    managedCite: Sid6581.cs:822-836
+    finding: 
+    test: TEST-SID-VOICE-09
+    state: green-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: default model MOS6581 (wave_zero 0x380)
+    viceCite: voice.cc:30-33
+    managedCite: Commodore64.cs:48
+    finding: 
+    test: TEST-SID-VOICE-10
+    state: green-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: voice muting is via filter voice_mask, not output(); managed has no mask
+    viceCite: voice.h:99-103
+    managedCite: Sid6581.cs
+    finding: "18"
+    test: TEST-SID-VOICE-11
+    state: red-now
+- id: FR-SID-MIXVOL
+  chip: SID
+  title: Mixer, 3OFF, nonlinear volume DAC, digi
+  spec:
+  - sid.cc
+  - filter8580new.cc
+  - filter8580new.h
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "18"
+  - "19"
+  tr: Store full $D418; port set_sum_mix incl 3OFF; nonlinear gain[vol] DAC; voice_mask.
+  acCount: 13
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: writeMODE_VOL mode=v&0xf0, vol=v&0xf; managed drops bit7 (masks 0x70)
+    viceCite: filter8580new.cc:742-748
+    managedCite: Sid6581.cs:931-934
+    finding: "19"
+    test: TEST-SID-MIXVOL-01
+    state: red-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: writeRES_FILT res=(v>>4)&0xf, filt=v&0xf
+    viceCite: filter8580new.cc:734-740
+    managedCite: Sid6581.cs:927-930
+    finding: 
+    test: TEST-SID-MIXVOL-02
+    state: green-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: sum=(enabled?filt:0)&voice_mask; managed no mask
+    viceCite: filter8580new.cc:772
+    managedCite: Sid6581.cs:286-299
+    finding: "19"
+    test: TEST-SID-MIXVOL-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: direct-to-mixer voices (~(filt|(mode&0x80)>>5))&0xf; managed ignores (mode&0x80)>>5
+    viceCite: filter8580new.cc:773-775
+    managedCite: Sid6581.cs:301-304
+    finding: "19"
+    test: TEST-SID-MIXVOL-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: '3OFF: mode bit7 removes voice3 from mixer iff not in filt; managed no-op (bit7 dropped)'
+    viceCite: filter8580new.cc:770-775
+    managedCite: Sid6581.cs:931-934
+    finding: "19"
+    test: TEST-SID-MIXVOL-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: mix|=mode&0x70 filter-tap select (LP/BP/HP)
+    viceCite: filter8580new.cc:773-774
+    managedCite: Sid6581.cs:311-360
+    finding: "19"
+    test: TEST-SID-MIXVOL-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: 'filter disabled: sum=0, mix=0xf&voice_mask'
+    viceCite: filter8580new.cc:772-775
+    managedCite: Sid6581.cs:315-321
+    finding: "19"
+    test: TEST-SID-MIXVOL-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: set_voice_mask=0xf0|(mask&0xf); managed absent
+    viceCite: filter8580new.cc:692-696
+    managedCite: Sid6581.cs
+    finding: "19"
+    test: TEST-SID-MIXVOL-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: volume via nonlinear gain[vol] DAC minus (1<<15); managed linear vol/15
+    viceCite: filter8580new.h:1494-1499
+    managedCite: Sid6581.cs:235-236
+    finding: "18"
+    test: TEST-SID-MIXVOL-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: digi emerges from nonlinear DAC + dc_offset; managed ad-hoc DC 0.05*vol
+    viceCite: filter8580new.h:1494-1499
+    managedCite: Sid6581.cs:237-238,248
+    finding: "18"
+    test: TEST-SID-MIXVOL-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: filter-tap dc_offset=32767*((1<<12)-filterGain) before >>12
+    viceCite: filter8580new.h:977
+    managedCite: Sid6581.cs
+    finding: "18"
+    test: TEST-SID-MIXVOL-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: filterGain scale 0.93 (6581) / 1.0 (8580)
+    viceCite: filter8580new.cc:285-286
+    managedCite: Sid6581.cs
+    finding: "18"
+    test: TEST-SID-MIXVOL-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: voice muting + EXT-IN disconnect via voice_mask in summer+mixer
+    viceCite: filter8580new.cc:576-578
+    managedCite: Sid6581.cs
+    finding: "19"
+    test: TEST-SID-MIXVOL-13
+    state: red-now
+- id: FR-SID-OUTPUT
+  chip: SID
+  title: 'Output: external filter, amplify/scaleFactor, resample'
+  spec:
+  - sid.cc
+  - sid.h
+  - extfilt.h
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "20"
+  - "23"
+  tr: Route through ExternalFilter; amplify(scaleFactor)+integer clip; reproduce fixed-point resample (fast/interpolate/resample).
+  acCount: 13
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: SID::output()=extfilt.output(); managed returns normalized float
+    viceCite: sid.h:190-194
+    managedCite: Sid6581.cs:105-239
+    finding: "20"
+    test: TEST-SID-OUTPUT-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: ExternalFilter::output()=(Vlp-Vhp)>>11
+    viceCite: extfilt.h:159-163
+    managedCite: none
+    finding: "20"
+    test: TEST-SID-OUTPUT-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: ext-filter disabled Vlp=Vi<<11, Vhp=0
+    viceCite: extfilt.h:97-105
+    managedCite: none
+    finding: "20"
+    test: TEST-SID-OUTPUT-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: ext-filter 1-cycle enabled step recurrences
+    viceCite: extfilt.h:112-115
+    managedCite: none
+    finding: "20"
+    test: TEST-SID-OUTPUT-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: amplify(input,scaleFactor)=clip((scaleFactor*input)/2)
+    viceCite: sid.cc:54-57
+    managedCite: Sid6581.cs:236
+    finding: "23"
+    test: TEST-SID-OUTPUT-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: clip saturates integer [-32768,32767]; managed float Clamp(-1,1)
+    viceCite: sid.cc:42-52
+    managedCite: Sid6581.cs:238
+    finding: "20"
+    test: TEST-SID-OUTPUT-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: scaleFactor default 3 (6581)
+    viceCite: sid.cc:86,121
+    managedCite: none
+    finding: "23"
+    test: TEST-SID-OUTPUT-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: SAMPLE_FAST fixed-point next-sample selection; managed double accumulator
+    viceCite: sid.cc:868-892
+    managedCite: Sid6581.cs:672-676,793-801
+    finding: "20"
+    test: TEST-SID-OUTPUT-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: SAMPLE_INTERPOLATE linear; managed absent
+    viceCite: sid.cc:904-938
+    managedCite: none
+    finding: "20"
+    test: TEST-SID-OUTPUT-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: SAMPLE_RESAMPLE Kaiser-windowed-sinc FIR; managed absent
+    viceCite: sid.cc:977-1038
+    managedCite: none
+    finding: "20"
+    test: TEST-SID-OUTPUT-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: cycles_per_sample=round(clock/sample*(1<<16)); managed double ratio
+    viceCite: sid.cc:619-620
+    managedCite: Sid6581.cs:673-674
+    finding: "20"
+    test: TEST-SID-OUTPUT-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: resample constants FIR_N=125, FIR_RES=285, FIR_SHIFT=15, RINGSIZE=16384, FIXP_SHIFT=16
+    viceCite: sid.h:144-155
+    managedCite: none
+    finding: "20"
+    test: TEST-SID-OUTPUT-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: FIR table sinc*Kaiser window, rounded to short (only legit float stage)
+    viceCite: sid.cc:646-717
+    managedCite: none
+    finding: "20"
+    test: TEST-SID-OUTPUT-13
+    state: red-now
+- id: FR-SID-CLOCK
+  chip: SID
+  title: Per-phi2 clock chain
+  spec:
+  - sid.cc
+  - sid.h
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "13"
+  tr: Run env/osc/sync/setwf/filter/extfilt/pipeline/bus per cycle; sampled output derives from per-cycle-evolved state.
+  acCount: 11
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: 1-cycle clock() order env x3, osc x3, sync x3, set_waveform, filter, extfilt, pipeline, bus; managed omits filter/extfilt/bus per cycle
+    viceCite: sid.h:200-244
+    managedCite: Sid6581.cs:718-802
+    finding: "13"
+    test: TEST-SID-CLOCK-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: filter fed each voice output() computed after set_waveform_output; managed computes in GenerateSample
+    viceCite: sid.h:220-226
+    managedCite: Sid6581.cs:127-217
+    finding: "13"
+    test: TEST-SID-CLOCK-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: clock(delta_t) ages bus first (bus_value_ttl-=delta_t)
+    viceCite: sid.cc:762-767
+    managedCite: Sid6581.cs
+    finding: "21"
+    test: TEST-SID-CLOCK-03
+    state: red-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: clock all three envelopes with batched delta_t; managed 1:1 per tick matches oracle SAMPLE_FAST
+    viceCite: sid.cc:770-772
+    managedCite: Sid6581.cs:811
+    finding: 
+    test: TEST-SID-CLOCK-04
+    state: green-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: clock(delta_t) osc sub-steps to nearest MSB toggle; managed 1-cycle only
+    viceCite: sid.cc:776-820
+    managedCite: Sid6581.cs:722-787
+    finding: "13"
+    test: TEST-SID-CLOCK-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: set_waveform_output invoked once after osc loop; managed lazy in GenerateSample
+    viceCite: sid.cc:822-825
+    managedCite: Sid6581.cs
+    finding: "13"
+    test: TEST-SID-CLOCK-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: filter.clock(delta_t) then extfilt.clock(delta_t, filter.output()); managed absent
+    viceCite: sid.cc:827-831
+    managedCite: Sid6581.cs
+    finding: "13"
+    test: TEST-SID-CLOCK-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: write-pipeline prologue if write_pipeline && delta_t>0; managed absent
+    viceCite: sid.cc:749-756
+    managedCite: Sid6581.cs
+    finding: "23"
+    test: TEST-SID-CLOCK-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: 'grouped passes: all env, then all osc, then all sync; managed interleaves'
+    viceCite: sid.h:205-218
+    managedCite: Sid6581.cs:737-787
+    finding: "13"
+    test: TEST-SID-CLOCK-09
+    state: red-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: SID clocked at phi2, divisor 1
+    viceCite: sid.h
+    managedCite: Sid6581.cs:14-15
+    finding: 
+    test: TEST-SID-CLOCK-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: envelope-before-oscillator order-independent within a cycle
+    viceCite: sid.h:205-212
+    managedCite: Sid6581.cs
+    finding: 
+    test: TEST-SID-CLOCK-11
+    state: green-now
+- id: FR-SID-DATABUS
+  chip: SID
+  title: Data bus value + TTL fade + write-only readback
+  spec:
+  - sid.cc
+  - sid.h
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "21"
+  tr: Model bus_value + bus_value_ttl; set on writes and $19-$1c reads; decay per cycle; return bus_value for other reads; ttl 0x1d00/0xa2000.
+  acCount: 10
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: any write sets bus_value=value, bus_value_ttl=databus_ttl; managed stores per-register only
+    viceCite: sid.cc:207-209
+    managedCite: Sid6581.cs:860-861
+    finding: "21"
+    test: TEST-SID-DATABUS-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: read of $19/$1a/$1b/$1c sets bus and returns bus_value
+    viceCite: sid.cc:178-197
+    managedCite: Sid6581.cs:845-852
+    finding: "21"
+    test: TEST-SID-DATABUS-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: other reads return shared bus_value (last write to any reg); managed returns per-register
+    viceCite: sid.cc:196
+    managedCite: Sid6581.cs:854
+    finding: "21"
+    test: TEST-SID-DATABUS-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: '1-cycle bus aging: if(!--bus_value_ttl) bus_value=0'
+    viceCite: sid.h:236-239
+    managedCite: Sid6581.cs
+    finding: "21"
+    test: TEST-SID-DATABUS-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: batched bus aging bus_value_ttl-=delta_t
+    viceCite: sid.cc:762-767
+    managedCite: Sid6581.cs
+    finding: "21"
+    test: TEST-SID-DATABUS-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: 6581 databus_ttl=0x1d00
+    viceCite: sid.cc:119
+    managedCite: Sid6581.cs
+    finding: "21"
+    test: TEST-SID-DATABUS-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: 8580 databus_ttl=0xa2000
+    viceCite: sid.cc:119
+    managedCite: Sid6581.cs
+    finding: "21"
+    test: TEST-SID-DATABUS-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: reset() clears bus_value=0, bus_value_ttl=0
+    viceCite: sid.cc:142-143
+    managedCite: Sid6581.cs:822-836
+    finding: "21"
+    test: TEST-SID-DATABUS-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: OSC3 read latches the bus (in addition to value)
+    viceCite: sid.cc:187-189
+    managedCite: Sid6581.cs:849
+    finding: "21"
+    test: TEST-SID-DATABUS-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: ENV3 read latches the bus
+    viceCite: sid.cc:191-193
+    managedCite: Sid6581.cs:852
+    finding: "21"
+    test: TEST-SID-DATABUS-10
+    state: red-now
+- id: FR-SID-POT
+  chip: SID
+  title: Paddle A/D readback
+  spec:
+  - pot.cc
+  - sid.cc
+  managed:
+  - Sid6581.cs
+  mappedFindings:
+  - "22"
+  tr: Return 0xff for $D419/$D41A and latch the bus.
+  acCount: 4
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: readPOT() returns 0xff (paddle not modeled in reSID)
+    viceCite: pot.cc:25-29
+    managedCite: Sid6581.cs
+    finding: "22"
+    test: TEST-SID-POT-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: $D419 returns potx 0xff + bus latch; managed returns _registers[0x19] (0)
+    viceCite: sid.cc:179-182
+    managedCite: Sid6581.cs:842-855
+    finding: "22"
+    test: TEST-SID-POT-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: $D41A returns poty 0xff + bus latch; managed returns 0
+    viceCite: sid.cc:183-186
+    managedCite: Sid6581.cs
+    finding: "22"
+    test: TEST-SID-POT-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: exact-equality target is constant 0xff regardless of paddle (timing in CIA/host)
+    viceCite: pot.cc:27
+    managedCite: Sid6581.cs
+    finding: "22"
+    test: TEST-SID-POT-04
+    state: red-now
+- id: FR-SID-8580
+  chip: SID
+  title: 8580 variant differences
+  spec:
+  - sid.cc
+  - voice.cc
+  - filter8580new.cc
+  managed:
+  - Sid8580.cs
+  - Sid8580D.cs
+  mappedFindings:
+  - "23"
+  tr: databus_ttl 0xa2000, scaleFactor 5, wave_zero 0x9e0, 1-cycle write pipeline, filterGain 1.0, model 1; unify/remove Sid8580D.
+  acCount: 11
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: 8580 databus_ttl=0xa2000
+    viceCite: sid.cc:119
+    managedCite: Sid8580.cs
+    finding: "23"
+    test: TEST-SID-8580-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: 8580 scaleFactor=5
+    viceCite: sid.cc:121
+    managedCite: Sid8580.cs
+    finding: "23"
+    test: TEST-SID-8580-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: 8580 wave_zero=0x9e0; managed 0x9E
+    viceCite: voice.cc:97
+    managedCite: Sid8580.cs:23
+    finding: "23"
+    test: TEST-SID-8580-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: SAMPLE_FAST+8580 write sets write_pipeline=1 (1-cycle delay); managed immediate
+    viceCite: sid.cc:211-216
+    managedCite: Sid8580.cs
+    finding: "23"
+    test: TEST-SID-8580-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: clock(delta_t) flushes pipeline
+    viceCite: sid.cc:749-756
+    managedCite: Sid8580.cs
+    finding: "23"
+    test: TEST-SID-8580-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: 1-cycle clock() flushes pipeline
+    viceCite: sid.h:231-234
+    managedCite: Sid8580.cs
+    finding: "23"
+    test: TEST-SID-8580-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: 8580 mixer filterGain uses scaleFactor 1.0
+    viceCite: filter8580new.cc:285-286
+    managedCite: Sid8580.cs
+    finding: "23"
+    test: TEST-SID-8580-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: sid_model 1 selects model_filter[1] + solve_integrate_8580; managed SVF
+    viceCite: sid.cc:105-128
+    managedCite: Sid8580.cs:33-89
+    finding: "23"
+    test: TEST-SID-8580-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: write_state HACK forces SAMPLE_RESAMPLE for immediate register apply
+    viceCite: sid.cc:424-433
+    managedCite: Sid8580.cs
+    finding: "23"
+    test: TEST-SID-8580-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: 8580 combined waveform via wave8580_* tables; managed AND*3/4
+    viceCite: wave8580_*.h
+    managedCite: Sid8580.cs:104-105
+    finding: "23"
+    test: TEST-SID-8580-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: Sid8580D is a fabricated filter with no reSID counterpart
+    viceCite: none
+    managedCite: Sid8580D.cs:19-60
+    finding: "23"
+    test: TEST-SID-8580-11
+    state: red-now
+- id: FR-VIC-CYCLE
+  chip: VIC-II
+  title: Per-cycle state engine (VC/RC/VMLI/idle/badline)
+  spec:
+  - vicii-cycle.c
+  - vicii-chip-model.c
+  managed:
+  - Mos6569.cs
+  mappedFindings:
+  - "33"
+  - "34"
+  - "35"
+  tr: Add frame-start VC/VCBASE reset; disable allow_bad_lines at ==0xF7; per-cycle DEN re-check on line 0x30.
+  acCount: 19
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: at cycle 14 (RasterX 13) vc=vcbase
+    viceCite: vicii-cycle.c:543-544
+    managedCite: Mos6569.cs:939-941
+    finding: 
+    test: TEST-VIC-CYCLE-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: at cycle 14 vmli=0
+    viceCite: vicii-cycle.c:545
+    managedCite: Mos6569.cs:942
+    finding: 
+    test: TEST-VIC-CYCLE-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: at cycle 14 on bad line rc=0
+    viceCite: vicii-cycle.c:546-548
+    managedCite: Mos6569.cs:943-944
+    finding: 
+    test: TEST-VIC-CYCLE-03
+    state: green-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: idle_state forced 0 per-cycle on bad line; managed clears once at cycle 13
+    viceCite: vicii-cycle.c:56
+    managedCite: Mos6569.cs:945
+    finding: new
+    test: TEST-VIC-CYCLE-04
+    state: red-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: 'at cycle 58 rc==7: idle_state=1, vcbase=vc'
+    viceCite: vicii-cycle.c:556-559
+    managedCite: Mos6569.cs:960-964
+    finding: 
+    test: TEST-VIC-CYCLE-05
+    state: green-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: at cycle 58 rc increment sequential on updated idle
+    viceCite: vicii-cycle.c:560-563
+    managedCite: Mos6569.cs:965-969
+    finding: 
+    test: TEST-VIC-CYCLE-06
+    state: green-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: frame start vc=0; managed never resets (only Reset())
+    viceCite: vicii-cycle.c:209
+    managedCite: Mos6569.cs:980-1002
+    finding: "33"
+    test: TEST-VIC-CYCLE-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: frame start vcbase=0; managed never resets
+    viceCite: vicii-cycle.c:208
+    managedCite: Mos6569.cs:980-1002
+    finding: "33"
+    test: TEST-VIC-CYCLE-08
+    state: red-now
+  - id: AC-09
+    tag: FAITHFUL
+    statement: frame start refresh_counter=0xff
+    viceCite: vicii-cycle.c:206
+    managedCite: Mos6569.cs:984
+    finding: 
+    test: TEST-VIC-CYCLE-09
+    state: green-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: frame start allow_bad_lines=0
+    viceCite: vicii-cycle.c:207
+    managedCite: Mos6569.cs:985
+    finding: 
+    test: TEST-VIC-CYCLE-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: frame start raster_line=0
+    viceCite: vicii-cycle.c:205
+    managedCite: Mos6569.cs:983
+    finding: 
+    test: TEST-VIC-CYCLE-11
+    state: green-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: frame reset applied at raster_cycle 1 of last line; managed applies at line-wrap
+    viceCite: vicii-cycle.c:222-226
+    managedCite: Mos6569.cs:972-1002
+    finding: new
+    test: TEST-VIC-CYCLE-12
+    state: red-now
+  - id: AC-13
+    tag: FAITHFUL
+    statement: allow_bad_lines on at line 0x30 under DEN
+    viceCite: vicii-cycle.c:231-233
+    managedCite: Mos6569.cs:2094-2095
+    finding: 
+    test: TEST-VIC-CYCLE-13
+    state: green-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: allow_bad_lines off at line 0xF7; managed disables only at >0xF8
+    viceCite: vicii-cycle.c:236-238
+    managedCite: Mos6569.cs:2097-2098
+    finding: "34"
+    test: TEST-VIC-CYCLE-14
+    state: red-now
+  - id: AC-15
+    tag: DIVERGENT
+    statement: per-cycle DEN re-check on line 0x30; managed samples once at start-of-line
+    viceCite: vicii-cycle.c:524-526
+    managedCite: Mos6569.cs
+    finding: "35"
+    test: TEST-VIC-CYCLE-15
+    state: red-now
+  - id: AC-16
+    tag: DIVERGENT
+    statement: per-cycle bad_line latch (derived vs latched; managed adds <=0xF7 clamp)
+    viceCite: vicii-cycle.c:54,529-531
+    managedCite: Mos6569.cs:174,2085-2090
+    finding: new
+    test: TEST-VIC-CYCLE-16
+    state: red-now
+  - id: AC-17
+    tag: DIVERGENT
+    statement: bad_line cleared at start-of-line; managed has no stored bad_line
+    viceCite: vicii-cycle.c:240
+    managedCite: Mos6569.cs
+    finding: new
+    test: TEST-VIC-CYCLE-17
+    state: red-now
+  - id: AC-18
+    tag: FAITHFUL
+    statement: raster_cycle wraps 0..cycles_per_line-1
+    viceCite: vicii-cycle.c:244-253
+    managedCite: Mos6569.cs:972-977
+    finding: 
+    test: TEST-VIC-CYCLE-18
+    state: green-now
+  - id: AC-19
+    tag: FAITHFUL
+    statement: raster_line increment (net numbering equivalent)
+    viceCite: vicii-cycle.c:458-461
+    managedCite: Mos6569.cs:977
+    finding: 
+    test: TEST-VIC-CYCLE-19
+    state: green-now
+- id: FR-VIC-FETCH
+  chip: VIC-II
+  title: Phi1/Phi2 fetch schedule
+  spec:
+  - vicii-fetch.c
+  - vicii-cycle.c
+  - vicii-chip-model.c
+  managed:
+  - Mos6569.cs
+  - C64MemoryMap.cs
+  mappedFindings:
+  - "36"
+  - "37"
+  tr: reg11_delay latch + 6569 char-ROM latch; prefetch_cycles counter; split c-access (cycle 14) from g-access (cycle 15).
+  acCount: 15
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: refresh at raster_cycle 10-14
+    viceCite: vicii-chip-model.c:132-140
+    managedCite: C64MemoryMap.cs:709
+    finding: 
+    test: TEST-VIC-FETCH-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: refresh reads 0x3f00+refresh_counter-- (post-decrement)
+    viceCite: vicii-fetch.c:203-206
+    managedCite: C64MemoryMap.cs:773-777
+    finding: 
+    test: TEST-VIC-FETCH-02
+    state: green-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: c-access at cycle 14 leads g-access by one slot; managed fuses c+g at cycle 15
+    viceCite: vicii-chip-model.c:139-141
+    managedCite: C64MemoryMap.cs:717,784-799
+    finding: "36"
+    test: TEST-VIC-FETCH-03
+    state: red-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: c-access matrix address = v_fetch_addr(vc) (phase differs)
+    viceCite: vicii-fetch.c:198
+    managedCite: C64MemoryMap.cs:793-795
+    finding: 
+    test: TEST-VIC-FETCH-04
+    state: green-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: c-access color data low nibble
+    viceCite: vicii-fetch.c:199
+    managedCite: C64MemoryMap.cs:795
+    finding: 
+    test: TEST-VIC-FETCH-05
+    state: green-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: prefetch garbage gated by prefetch_cycles (0 by cycle 14); managed hardcodes slot<3
+    viceCite: vicii-fetch.c:194-196
+    managedCite: Mos6569.cs:1724
+    finding: "36"
+    test: TEST-VIC-FETCH-06
+    state: red-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: prefetch data cbuf=PC&0xf, vbuf=0xff (data source only)
+    viceCite: vicii-fetch.c:195-196
+    managedCite: C64MemoryMap.cs:789
+    finding: 
+    test: TEST-VIC-FETCH-07
+    state: green-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: g-access address uses reg11_delay (previous $D011); managed uses current
+    viceCite: vicii-fetch.c:261
+    managedCite: Mos6569.cs:1665,1677
+    finding: "37"
+    test: TEST-VIC-FETCH-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: 6569 RAM->char-ROM address latch (addr_from&0xff)|(addr_to&0x3f00); managed absent
+    viceCite: vicii-fetch.c:239-259
+    managedCite: Mos6569.cs
+    finding: "37"
+    test: TEST-VIC-FETCH-09
+    state: red-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: idle g fetch $39ff (ECM) / $3fff (address; reg11 source divergent)
+    viceCite: vicii-fetch.c:213-232
+    managedCite: Mos6569.cs:1700-1702
+    finding: 
+    test: TEST-VIC-FETCH-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: idle non-gfx / gap fetch $3fff
+    viceCite: vicii-fetch.c:208-211
+    managedCite: C64MemoryMap.cs:802
+    finding: 
+    test: TEST-VIC-FETCH-11
+    state: green-now
+  - id: AC-12
+    tag: FAITHFUL
+    statement: sprite p-access address v_fetch_addr(0x3f8+i)
+    viceCite: vicii-fetch.c:275-280
+    managedCite: C64MemoryMap.cs:767-771
+    finding: 
+    test: TEST-VIC-FETCH-12
+    state: green-now
+  - id: AC-13
+    tag: FAITHFUL
+    statement: sprite p-access PAL schedule slots
+    viceCite: vicii-chip-model.c:112-236
+    managedCite: C64MemoryMap.cs:697-718
+    finding: 
+    test: TEST-VIC-FETCH-13
+    state: green-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: sprite s-access per-cycle (pointer<<6)+mc with mc++; managed reads at render time
+    viceCite: vicii-fetch.c:110-154
+    managedCite: Mos6569.cs:2196-2201
+    finding: new
+    test: TEST-VIC-FETCH-14
+    state: red-now
+  - id: AC-15
+    tag: FAITHFUL
+    statement: Phi1 char-ROM banking [0x1000,0x2000) in banks 0/2
+    viceCite: vicii-fetch.c:50-74
+    managedCite: C64MemoryMap.cs:818-830
+    finding: 
+    test: TEST-VIC-FETCH-15
+    state: green-now
+- id: FR-VIC-MATRIX-ADDR
+  chip: VIC-II
+  title: Matrix/graphics addressing from VC
+  spec:
+  - vicii-fetch.c
+  managed:
+  - Mos6569.cs
+  - C64MemoryMap.cs
+  mappedFindings:
+  - "31"
+  - "32"
+  - "33"
+  - "37"
+  tr: Renderer must address via VC not geometry; 40/row stride regardless of CSEL; g-fetch mode from reg11_delay.
+  acCount: 10
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: hot-path matrix address = v_fetch_addr(vc)
+    viceCite: vicii-fetch.c:158-161,198
+    managedCite: Mos6569.cs:1714,1720
+    finding: 
+    test: TEST-VIC-MATRIX-ADDR-01
+    state: green-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: renderer computes matrix cell geometrically (row from raster), not from VC
+    viceCite: vicii-fetch.c:158-161
+    managedCite: Mos6569.cs:829-849,1224-1243
+    finding: "31"
+    test: TEST-VIC-MATRIX-ADDR-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: VC advances 40/row regardless of CSEL; managed render stride is Csel?40:38
+    viceCite: vicii-fetch.c:267-270
+    managedCite: Mos6569.cs:1233,1237
+    finding: "32"
+    test: TEST-VIC-MATRIX-ADDR-03
+    state: red-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: g-access vmli++, vc=(vc+1)&0x3ff
+    viceCite: vicii-fetch.c:267-270
+    managedCite: Mos6569.cs:1680-1681
+    finding: 
+    test: TEST-VIC-MATRIX-ADDR-04
+    state: green-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: g_fetch_addr BMM (vc<<3)|rc | (D018&8)<<10
+    viceCite: vicii-fetch.c:168-170
+    managedCite: Mos6569.cs:1665-1668
+    finding: 
+    test: TEST-VIC-MATRIX-ADDR-05
+    state: green-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: g_fetch_addr text (vbuf[vmli]<<3)|rc | (D018&0xe)<<10
+    viceCite: vicii-fetch.c:171-174
+    managedCite: Mos6569.cs:1670-1674
+    finding: 
+    test: TEST-VIC-MATRIX-ADDR-06
+    state: green-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: g_fetch_addr ECM mask &=0x39ff
+    viceCite: vicii-fetch.c:177-179
+    managedCite: Mos6569.cs:1677-1678
+    finding: 
+    test: TEST-VIC-MATRIX-ADDR-07
+    state: green-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: g_fetch_addr mode from reg11_delay; managed uses current $D011
+    viceCite: vicii-fetch.c:240,261
+    managedCite: Mos6569.cs:1665,1677
+    finding: "37"
+    test: TEST-VIC-MATRIX-ADDR-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: VC not frame-reset makes the hot-path address drift after frame 1 (masked by renderer geometry)
+    viceCite: vicii-cycle.c:208-209
+    managedCite: Mos6569.cs:1720
+    finding: "33"
+    test: TEST-VIC-MATRIX-ADDR-09
+    state: red-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: color-RAM index = vc (hot path)
+    viceCite: vicii-fetch.c:199
+    managedCite: C64MemoryMap.cs:793-795
+    finding: 
+    test: TEST-VIC-MATRIX-ADDR-10
+    state: green-now
+- id: FR-VIC-DRAW-GFX
+  chip: VIC-II
+  title: Per-cycle graphics pixel generation (draw_graphics8)
+  spec:
+  - vicii-draw-cycle.c
+  managed:
+  - VideoRenderer.cs
+  - Mos6569.cs
+  mappedFindings:
+  - "27"
+  - "29"
+  - "30"
+  tr: Per-cycle 8px shift-register draw with gbuf/vbuf/cbuf pipes and mc_flop; preserve the colors[] table and invalid->black+priority as regression locks.
+  acCount: 15
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: 8 render_buffer/pri_buffer pixels emitted per cycle; managed renders whole line at line-wrap
+    viceCite: vicii-draw-cycle.c:227-262
+    managedCite: VideoRenderer.cs:75-157
+    finding: "27"
+    test: TEST-VIC-DRAW-GFX-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: at i==xscroll_pipe latch vbuf/cbuf/gbuf, gbuf_mc_flop=1; managed fixed screenX
+    viceCite: vicii-draw-cycle.c:151-158
+    managedCite: VideoRenderer.cs:253,264-265
+    finding: "29"
+    test: TEST-VIC-DRAW-GFX-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: gbuf shift register MSB-first, gbuf_reg<<=1; managed reads bit directly
+    viceCite: vicii-draw-cycle.c:172,182,191
+    managedCite: VideoRenderer.cs:299
+    finding: "27"
+    test: TEST-VIC-DRAW-GFX-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: mc pixel = gbuf_reg>>6 held across pair via gbuf_mc_flop; managed pairs from charX
+    viceCite: vicii-draw-cycle.c:166-169
+    managedCite: VideoRenderer.cs:381-385
+    finding: "27"
+    test: TEST-VIC-DRAW-GFX-04
+    state: red-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: mc-vs-hires colour selection (result faithful; per-pixel flop timing divergent)
+    viceCite: vicii-draw-cycle.c:164-173
+    managedCite: VideoRenderer.cs:308-323
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-05
+    state: green-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: $D023 MCM-transition kludge px=2; managed samples mode once/line
+    viceCite: vicii-draw-cycle.c:180-183
+    managedCite: VideoRenderer.cs:110
+    finding: "30"
+    test: TEST-VIC-DRAW-GFX-06
+    state: red-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: 'standard text: bg=$D021, fg=CBUF'
+    viceCite: vicii-draw-cycle.c:134
+    managedCite: VideoRenderer.cs:296-303
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-07
+    state: green-now
+  - id: AC-08
+    tag: FAITHFUL
+    statement: 'mc text: pairs $D021/$D022/$D023/CBUF_MC'
+    viceCite: vicii-draw-cycle.c:135
+    managedCite: VideoRenderer.cs:305-324
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-08
+    state: green-now
+  - id: AC-09
+    tag: FAITHFUL
+    statement: 'standard bitmap: fg=vbuf>>4, bg=vbuf&0x0f'
+    viceCite: vicii-draw-cycle.c:136
+    managedCite: VideoRenderer.cs:346-354
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-09
+    state: green-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: 'mc bitmap: pairs $D021/vbuf>>4/vbuf&0x0f/cbuf'
+    viceCite: vicii-draw-cycle.c:137
+    managedCite: VideoRenderer.cs:356-367
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: 'extended colour: bg by screen-code bits 6-7, char masked 0x3f'
+    viceCite: vicii-draw-cycle.c:138
+    managedCite: VideoRenderer.cs:326-344
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-11
+    state: green-now
+  - id: AC-12
+    tag: FAITHFUL
+    statement: invalid modes -> black (cc=0) with pri_buffer=px&0x2 preserved
+    viceCite: vicii-draw-cycle.c:139-141
+    managedCite: VideoRenderer.cs:280,Mos6569.cs:2314-2322
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-12
+    state: green-now
+  - id: AC-13
+    tag: FAITHFUL
+    statement: colour code = colors[(vmode11|vmode16)|px] (steady-state decode)
+    viceCite: vicii-draw-cycle.c:195-197
+    managedCite: Mos6569.cs:387-401
+    finding: "26"
+    test: TEST-VIC-DRAW-GFX-13
+    state: green-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: vbuf/cbuf/gbuf pipe0->pipe1 double-buffering; managed reads matrix per pixel
+    viceCite: vicii-draw-cycle.c:269-294
+    managedCite: VideoRenderer.cs:284-294
+    finding: "27"
+    test: TEST-VIC-DRAW-GFX-14
+    state: red-now
+  - id: AC-15
+    tag: DIVERGENT
+    statement: gbuf forced 0 outside visible; vbuf/cbuf 0 in idle; managed uses background path
+    viceCite: vicii-draw-cycle.c:275-294
+    managedCite: VideoRenderer.cs:106,259-262
+    finding: "27"
+    test: TEST-VIC-DRAW-GFX-15
+    state: red-now
+- id: FR-VIC-DRAW-COLOR
+  chip: VIC-II
+  title: Colour resolution pipeline (draw_colors8)
+  spec:
+  - vicii-draw-cycle.c
+  managed:
+  - VideoRenderer.cs
+  - Mos6569.cs
+  mappedFindings:
+  - "28"
+  tr: cregs[] snapshot, 8-entry pixel_buffer ring, color_latency 6569/8565, grey-dot, pixel-granular $D020-$D02E writes.
+  acCount: 10
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: cregs[0x00..0x0f] seeded 1:1, rest 0; managed has no cregs array
+    viceCite: vicii-draw-cycle.c:702-706
+    managedCite: VideoRenderer.cs
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: code 0x20-0x2e resolves to cregs[code]; managed reads live once/line for $D022-$D02E
+    viceCite: vicii-draw-cycle.c:592-623
+    managedCite: VideoRenderer.cs:538-605
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: pending colour write applied cregs[last_color_reg]=value at cycle start
+    viceCite: vicii-draw-cycle.c:636-638
+    managedCite: Mos6569.cs:1982
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: 6569 color_latency=1 one-pixel pixel_buffer ring delay
+    viceCite: vicii-draw-cycle.c:592-604
+    managedCite: VideoRenderer.cs:131-156
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: 8565 color_latency=0 lookup_index=i (no extra delay)
+    viceCite: vicii-draw-cycle.c:606-624
+    managedCite: VideoRenderer.cs
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: '8565 grey-dot: pixel 0 == 0x0f when pixel_buffer[0]==last_color_reg'
+    viceCite: vicii-draw-cycle.c:613-618
+    managedCite: VideoRenderer.cs
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: update_cregs shift last_color_reg/value at cycle end
+    viceCite: vicii-draw-cycle.c:585-590
+    managedCite: VideoRenderer.cs
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: dbuf_offset +=8/cycle, reset at cycle 1, guard; managed line-relative
+    viceCite: vicii-draw-cycle.c:626-633
+    managedCite: VideoRenderer.cs:80,131
+    finding: "27"
+    test: TEST-VIC-DRAW-COLOR-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: monitor colour store updates cregs+last_color_*; managed no cregs mirror
+    viceCite: vicii-draw-cycle.c:120-125
+    managedCite: Mos6569.cs:1964-1984
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: full-line dbuf stream equals oracle incl mid-line $D020-$D02E writes
+    viceCite: vicii-draw-cycle.c:626-663
+    managedCite: VideoRenderer.cs:75-157
+    finding: "28"
+    test: TEST-VIC-DRAW-COLOR-10
+    state: red-now
+- id: FR-VIC-XSCROLL
+  chip: VIC-II
+  title: $D016 fine horizontal scroll pipe
+  spec:
+  - vicii-draw-cycle.c
+  managed:
+  - VideoRenderer.cs
+  - Mos6569.cs
+  mappedFindings:
+  - "29"
+  tr: xscroll_pipe sampled at end-of-cycle, consumed as the draw_graphics latch offset, one-cycle delay, correct CSEL clipping.
+  acCount: 4
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: xscroll_pipe = regs[$16]&0x07 sampled in display; managed XScroll defined but unused
+    viceCite: vicii-draw-cycle.c:276-280
+    managedCite: Mos6569.cs:858
+    finding: "29"
+    test: TEST-VIC-XSCROLL-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: cell visible from i==xscroll_pipe (shift display right by xscroll px); managed fixed LeftBorderPixel
+    viceCite: vicii-draw-cycle.c:151-158
+    managedCite: VideoRenderer.cs:253,264-265
+    finding: "29"
+    test: TEST-VIC-XSCROLL-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: $D016 bits 0-2 write takes effect one cycle later (pipe)
+    viceCite: vicii-draw-cycle.c:276-280
+    managedCite: VideoRenderer.cs
+    finding: "29"
+    test: TEST-VIC-XSCROLL-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: xscroll x CSEL border clipping of fractional cell
+    viceCite: vicii-draw-cycle.c:151-158
+    managedCite: Mos6569.cs:649,654
+    finding: "29"
+    test: TEST-VIC-XSCROLL-04
+    state: red-now
+- id: FR-VIC-DISPLAYMODE
+  chip: VIC-II
+  title: ECM/BMM/MCM selection and mid-line change
+  spec:
+  - vicii-draw-cycle.c
+  managed:
+  - VideoRenderer.cs
+  - Mos6569.cs
+  mappedFindings:
+  - "30"
+  tr: vmode11/vmode16 pipes updated at color_latency-correct pixels (4/6 for 6569); preserve steady-state decode + colors[] table.
+  acCount: 9
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: vmode11_pipe = (regs[$11]&0x60)>>2 (decode value; timing divergent)
+    viceCite: vicii-draw-cycle.c:246
+    managedCite: Mos6569.cs:391-392
+    finding: "26"
+    test: TEST-VIC-DISPLAYMODE-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: vmode16_pipe = (regs[$16]&0x10)>>2 (decode value; timing divergent)
+    viceCite: vicii-draw-cycle.c:243
+    managedCite: Mos6569.cs:393
+    finding: "26"
+    test: TEST-VIC-DISPLAYMODE-02
+    state: green-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: 6569 rising-edge mode change OR-in at pixel 4; managed samples once/line
+    viceCite: vicii-draw-cycle.c:244-247
+    managedCite: VideoRenderer.cs:110
+    finding: "30"
+    test: TEST-VIC-DISPLAYMODE-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: 6569 falling-edge mode change AND-in at pixel 6
+    viceCite: vicii-draw-cycle.c:252-255
+    managedCite: VideoRenderer.cs
+    finding: "30"
+    test: TEST-VIC-DISPLAYMODE-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: 8565 whole-cell mode update after pixel 7
+    viceCite: vicii-draw-cycle.c:264-266
+    managedCite: VideoRenderer.cs
+    finding: "30"
+    test: TEST-VIC-DISPLAYMODE-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: MCM two-stage pipe vmode16_pipe2 + gbuf_mc_flop=0 on rising edge
+    viceCite: vicii-draw-cycle.c:243,258-261
+    managedCite: VideoRenderer.cs
+    finding: "30"
+    test: TEST-VIC-DISPLAYMODE-06
+    state: red-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: steady-state 5-mode + ECM&(BMM||MCM)->Invalid decode
+    viceCite: vicii-draw-cycle.c:133-142
+    managedCite: Mos6569.cs:394-399
+    finding: "26"
+    test: TEST-VIC-DISPLAYMODE-07
+    state: green-now
+  - id: AC-08
+    tag: FAITHFUL
+    statement: colors[] 32-entry table contents
+    viceCite: vicii-draw-cycle.c:133-142
+    managedCite: VideoRenderer.cs:273-281
+    finding: "26"
+    test: TEST-VIC-DISPLAYMODE-08
+    state: green-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: mid-line mode change is per-cell (pixel 4/6); managed applies final value whole-line
+    viceCite: vicii-draw-cycle.c:243-266
+    managedCite: VideoRenderer.cs:110
+    finding: "30"
+    test: TEST-VIC-DISPLAYMODE-09
+    state: red-now
+- id: FR-VIC-SPRITE-RENDER
+  chip: VIC-II
+  title: Per-pixel sprite render from sbuf shift registers
+  spec:
+  - vicii-draw-cycle.c
+  managed:
+  - VideoRenderer.cs
+  - Mos6569.cs
+  mappedFindings:
+  - "38"
+  tr: Model 8 sbuf shift regs, xpos trigger, expansion/mc flops, register pipe delays; keep MC/colour/expansion rules as regression locks.
+  acCount: 13
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: get_trigger_candidates coarse (xpos&0x1f8)==(x&0x1f8); managed has no candidate stage
+    viceCite: vicii-draw-cycle.c:304-316
+    managedCite: VideoRenderer.cs:441-444
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: exact-X activation on xpos==sprite_x with pending/active/halt gating; managed bounding-box
+    viceCite: vicii-draw-cycle.c:318-340
+    managedCite: VideoRenderer.cs:441-444
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: render while sbuf non-empty, 24-bit drain (48 X-expanded); managed fixed width
+    viceCite: vicii-draw-cycle.c:356-399
+    managedCite: VideoRenderer.cs:438,443
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: hires pixel px=((sbuf>>23)&1)<<1 MSB-first; managed opacity test
+    viceCite: vicii-draw-cycle.c:371-372
+    managedCite: VideoRenderer.cs:482-493
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-04
+    state: red-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: MC pixel px=(sbuf>>22)&3 held 2 pixels via sbuf_mc_flops (pairing rule)
+    viceCite: vicii-draw-cycle.c:363-369
+    managedCite: VideoRenderer.cs:456-467
+    finding: "26"
+    test: TEST-VIC-SPRITE-RENDER-05
+    state: green-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: MC pair -> 1:$D025, 2:$D027+n, 3:$D026, 0 transparent
+    viceCite: vicii-draw-cycle.c:406-418
+    managedCite: VideoRenderer.cs:467-479
+    finding: "26"
+    test: TEST-VIC-SPRITE-RENDER-06
+    state: green-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: hires opaque pixel -> $D027+n
+    viceCite: vicii-draw-cycle.c:411
+    managedCite: VideoRenderer.cs:495
+    finding: "26"
+    test: TEST-VIC-SPRITE-RENDER-07
+    state: green-now
+  - id: AC-08
+    tag: FAITHFUL
+    statement: X-expansion doubling (result)
+    viceCite: vicii-draw-cycle.c:377-384
+    managedCite: VideoRenderer.cs:448
+    finding: "26"
+    test: TEST-VIC-SPRITE-RENDER-08
+    state: green-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: sprite_x_pipe latched end-of-cycle (one-cycle X delay); managed reads live X
+    viceCite: vicii-draw-cycle.c:459-465
+    managedCite: VideoRenderer.cs:433,Mos6569.cs:510
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: sbuf reloaded from sprite.data at DMA cycle; managed reads video RAM per pixel
+    viceCite: vicii-draw-cycle.c:451-457
+    managedCite: VideoRenderer.cs:450-454
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: 6569 $D01C change clears sbuf_mc_flops for toggled bits at pixel 7; managed reads live
+    viceCite: vicii-draw-cycle.c:433-440
+    managedCite: Mos6569.cs:2040-2046
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: 8565 $D01C toggled MC bits XOR into sbuf_mc_flops masked by ~expx at pixel 6
+    viceCite: vicii-draw-cycle.c:442-449
+    managedCite: Mos6569.cs
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: sprite_pri_bits/sprite_expx_bits latched at pixel 6 (one-cycle delay); managed reads live
+    viceCite: vicii-draw-cycle.c:518-519
+    managedCite: Mos6569.cs:2036,2052
+    finding: "38"
+    test: TEST-VIC-SPRITE-RENDER-13
+    state: red-now
+- id: FR-VIC-SPRITE-DMA
+  chip: VIC-II
+  title: Sprite DMA state machine (mc/mcbase/exp_flop)
+  spec:
+  - vicii-cycle.c
+  - vicii-fetch.c
+  managed:
+  - Mos6569.cs
+  - VideoRenderer.cs
+  mappedFindings:
+  - "39"
+  tr: Model mc/mcbase/exp_flop, sprite_dma vs sprite_display_bits, p/s-access sequence at cycles 55/56/58/16.
+  acCount: 14
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: DMA turn-on at cycle 55/56 when enable && Y==raster&0xff && !dma; managed cycle-agnostic
+    viceCite: vicii-cycle.c:115-128
+    managedCite: Mos6569.cs:1434-1461
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: 'turn_sprite_dma_on: sprite_dma|=b, mcbase=0, exp_flop=1; managed no mcbase/exp_flop'
+    viceCite: vicii-cycle.c:108-113
+    managedCite: Mos6569.cs:1457-1459
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: exp_flop toggle at cycle 56 for Y-expanded dma sprites; managed sourceY=row/2
+    viceCite: vicii-cycle.c:95-105
+    managedCite: Mos6569.cs:2193
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: display-bit latch at cycle 58; managed gates on geometry/border only
+    viceCite: vicii-cycle.c:62-79
+    managedCite: VideoRenderer.cs:441-444
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: mc=mcbase reload at cycle 58; managed recomputes sourceY per line
+    viceCite: vicii-cycle.c:69
+    managedCite: Mos6569.cs:2186,2193
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: mcbase=mc at cycle 16 gated by exp_flop; managed none
+    viceCite: vicii-cycle.c:81-93
+    managedCite: Mos6569.cs
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: DMA off when mcbase==63 at cycle 16; managed off after 21/42-line count
+    viceCite: vicii-cycle.c:88-90
+    managedCite: Mos6569.cs:1463-1483
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: mc=(mc+1)&0x3f per s-access (advances 3/line); managed derives from line count
+    viceCite: vicii-fetch.c:119-120
+    managedCite: VideoRenderer.cs:451-454
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: p-access pointer fetch (address matches; no phi1-latched pointer)
+    viceCite: vicii-fetch.c:275-280
+    managedCite: VideoRenderer.cs:450
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: s-access DMA1 mid byte assembled into data
+    viceCite: vicii-fetch.c:282-299
+    managedCite: VideoRenderer.cs:453
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-10
+    state: red-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: s-access DMA0 high byte gated by check_sprite_dma
+    viceCite: vicii-fetch.c:110-131
+    managedCite: VideoRenderer.cs:452
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: s-access DMA2 low byte
+    viceCite: vicii-fetch.c:133-154
+    managedCite: VideoRenderer.cs:454
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: BA-low from sprite_dma at model sprite BA cycles; managed flat 2/line charge
+    viceCite: vicii-fetch.c:301-307
+    managedCite: Mos6569.cs:1147-1182
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-13
+    state: red-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: sprite_dma (fetch) distinct from sprite_display_bits (render); managed single mask
+    viceCite: vicii-cycle.c:62-79
+    managedCite: Mos6569.cs:1457
+    finding: "39"
+    test: TEST-VIC-SPRITE-DMA-14
+    state: red-now
+- id: FR-VIC-SPRITE-COLLISION
+  chip: VIC-II
+  title: Per-pixel sprite-sprite and sprite-bg collisions
+  spec:
+  - vicii-draw-cycle.c
+  - vicii-cycle.c
+  managed:
+  - Mos6569.cs
+  mappedFindings:
+  - "40"
+  tr: Per-pixel collision membership; $D01E/$D01F deferred clear; $D019 bit1/2 first-appearance latch; keep priority-independent rules.
+  acCount: 11
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: collision_mask |= (1<<s) for each opaque sprite pixel; managed once-per-line geometric
+    viceCite: vicii-draw-cycle.c:391-394
+    managedCite: Mos6569.cs:2242-2253
+    finding: "40"
+    test: TEST-VIC-SPRITE-COLLISION-01
+    state: red-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: 'sprite-sprite: (mask&(mask-1)) sets sprite_sprite_collisions (rule; per-line timing divergent)'
+    viceCite: vicii-draw-cycle.c:427-429
+    managedCite: Mos6569.cs:2276-2280
+    finding: "40"
+    test: TEST-VIC-SPRITE-COLLISION-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: 'sprite-background: gated on foreground pixel_pri (rule; per-line timing divergent)'
+    viceCite: vicii-draw-cycle.c:401-424
+    managedCite: Mos6569.cs:2281-2286
+    finding: "40"
+    test: TEST-VIC-SPRITE-COLLISION-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: collisions recorded independent of $D01B priority
+    viceCite: vicii-draw-cycle.c:391-429
+    managedCite: Mos6569.cs:2168-2290
+    finding: 
+    test: TEST-VIC-SPRITE-COLLISION-04
+    state: green-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: transparent pixels (MC 00, hires 0) never collide
+    viceCite: vicii-draw-cycle.c:391
+    managedCite: Mos6569.cs:2235,2239
+    finding: 
+    test: TEST-VIC-SPRITE-COLLISION-05
+    state: green-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: $D01E read returns mask, clear DEFERRED to next cycle; managed clears in-read
+    viceCite: vicii-cycle.c:414-418
+    managedCite: Mos6569.cs:1845-1850
+    finding: "46"
+    test: TEST-VIC-SPRITE-COLLISION-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: $D01F read deferred clear; managed clears in-read
+    viceCite: vicii-cycle.c:419-423
+    managedCite: Mos6569.cs:1854-1858
+    finding: "46"
+    test: TEST-VIC-SPRITE-COLLISION-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: sprite-sprite IRQ ($D019 bit2) latches on first-appearance edge; managed per-line
+    viceCite: vicii-cycle.c:407,428-430
+    managedCite: Mos6569.cs:2303-2311
+    finding: "40"
+    test: TEST-VIC-SPRITE-COLLISION-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: sprite-bg IRQ ($D019 bit1) first-appearance; managed per-line
+    viceCite: vicii-cycle.c:408,431-433
+    managedCite: Mos6569.cs:2299-2311
+    finding: "40"
+    test: TEST-VIC-SPRITE-COLLISION-09
+    state: red-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: sprite-sprite collisions recorded even under the border
+    viceCite: vicii-draw-cycle.c:679-683
+    managedCite: Mos6569.cs:2269-2280
+    finding: 
+    test: TEST-VIC-SPRITE-COLLISION-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: sprite-bg collision suppressed where graphics foreground bit is 0 (vertical border)
+    viceCite: vicii-draw-cycle.c:275-280
+    managedCite: Mos6569.cs:731-734,2283
+    finding: 
+    test: TEST-VIC-SPRITE-COLLISION-11
+    state: green-now
+- id: FR-VIC-SPRITE-PRIORITY
+  chip: VIC-II
+  title: Sprite priority (winner-first behind test)
+  spec:
+  - vicii-draw-cycle.c
+  managed:
+  - VideoRenderer.cs
+  - Mos6569.cs
+  mappedFindings:
+  - "41"
+  tr: Select lowest-numbered opaque sprite as winner; apply behind-vs-foreground test to that winner only (no fall-through).
+  acCount: 6
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: winner = lowest-numbered opaque sprite (for all-in-front case)
+    viceCite: vicii-draw-cycle.c:356,391-393
+    managedCite: VideoRenderer.cs:405-424
+    finding: 
+    test: TEST-VIC-SPRITE-PRIORITY-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: behind test applied only to the winner
+    viceCite: vicii-draw-cycle.c:401-419
+    managedCite: VideoRenderer.cs:417-423
+    finding: 
+    test: TEST-VIC-SPRITE-PRIORITY-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: in-front winner draws over foreground background pixel
+    viceCite: vicii-draw-cycle.c:405
+    managedCite: VideoRenderer.cs:417
+    finding: 
+    test: TEST-VIC-SPRITE-PRIORITY-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: behind winner over non-foreground background, hidden by foreground
+    viceCite: vicii-draw-cycle.c:405
+    managedCite: VideoRenderer.cs:417-420
+    finding: 
+    test: TEST-VIC-SPRITE-PRIORITY-04
+    state: green-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: behind winner + foreground bg shows BACKGROUND (no substitute); managed continues to next sprite
+    viceCite: vicii-draw-cycle.c:401-419
+    managedCite: VideoRenderer.cs:417-420
+    finding: "41"
+    test: TEST-VIC-SPRITE-PRIORITY-05
+    state: red-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: pixel_pri from graphics px&0x02 (all modes incl invalid-ECM)
+    viceCite: vicii-draw-cycle.c:196,224,402
+    managedCite: Mos6569.cs:760-806
+    finding: 
+    test: TEST-VIC-SPRITE-PRIORITY-06
+    state: green-now
+- id: FR-VIC-BORDER
+  chip: VIC-II
+  title: Border flip-flops and per-cycle draw_border8
+  spec:
+  - vicii-draw-cycle.c
+  - vicii-cycle.c
+  - vicii-chip-model.c
+  managed:
+  - Mos6569.cs
+  - VideoRenderer.cs
+  mappedFindings:
+  - "42"
+  - "43"
+  tr: Per-cycle draw_border8 with lagged border_state and CSEL pixel-7 edge; correct border-FF check cycles to 16/17/55/56.
+  acCount: 14
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: draw_border8 reads csel=regs[$16]&0x8 each cycle; managed has no per-cycle consumer
+    viceCite: vicii-draw-cycle.c:543
+    managedCite: Mos6569.cs:634
+    finding: "42"
+    test: TEST-VIC-BORDER-01
+    state: red-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: no-border early exit leaves render_buffer untouched; managed whole-line
+    viceCite: vicii-draw-cycle.c:547
+    managedCite: VideoRenderer.cs
+    finding: "42"
+    test: TEST-VIC-BORDER-02
+    state: red-now
+  - id: AC-03
+    tag: DIVERGENT
+    statement: 'continuous border: memset(render_buffer,COL_D020,8); managed FillBorderSegmented per line'
+    viceCite: vicii-draw-cycle.c:551-554
+    managedCite: VideoRenderer.cs:538
+    finding: "42"
+    test: TEST-VIC-BORDER-03
+    state: red-now
+  - id: AC-04
+    tag: DIVERGENT
+    statement: 'CSEL=1 transition: memset 8, border_state=main_border'
+    viceCite: vicii-draw-cycle.c:561-565
+    managedCite: VideoRenderer.cs
+    finding: "42"
+    test: TEST-VIC-BORDER-04
+    state: red-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: 'CSEL=0 transition: memset 7 then render_buffer[7]=COL_D020 if border_state (38-col edge)'
+    viceCite: vicii-draw-cycle.c:566-574
+    managedCite: VideoRenderer.cs
+    finding: "42"
+    test: TEST-VIC-BORDER-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: border_state is a one-cycle-lagged copy of main_border; managed keeps no lagged FF
+    viceCite: vicii-draw-cycle.c:105,565,570
+    managedCite: VideoRenderer.cs
+    finding: "43"
+    test: TEST-VIC-BORDER-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: COL_D020 resolves through cregs to live $D020; managed consumes whole-line
+    viceCite: vicii-draw-cycle.c:47,592-663
+    managedCite: Mos6569.cs:344
+    finding: "42"
+    test: TEST-VIC-BORDER-07
+    state: red-now
+  - id: AC-08
+    tag: FAITHFUL
+    statement: check_vborder_top at line 51/55 with DEN clears vborder/set_vborder
+    viceCite: vicii-cycle.c:165-173
+    managedCite: Mos6569.cs:1209-1216
+    finding: 
+    test: TEST-VIC-BORDER-08
+    state: green-now
+  - id: AC-09
+    tag: FAITHFUL
+    statement: check_vborder_bottom at line 251/247 sets set_vborder=1
+    viceCite: vicii-cycle.c:175-182
+    managedCite: Mos6569.cs:1218-1222
+    finding: 
+    test: TEST-VIC-BORDER-09
+    state: green-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: 'left check: bottom compare, vborder=set_vborder, main_border=0 if vborder==0'
+    viceCite: vicii-cycle.c:189-195
+    managedCite: Mos6569.cs:1193-1203
+    finding: 
+    test: TEST-VIC-BORDER-10
+    state: green-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: left check cycle 16 (CSEL=1)/17 (CSEL=0); managed 17/18 (+1)
+    viceCite: vicii-chip-model.c:145,147
+    managedCite: Mos6569.cs:1193,1245
+    finding: "43"
+    test: TEST-VIC-BORDER-11
+    state: red-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: right check cycle 55 (CSEL=0)/56 (CSEL=1); managed 57/56 (+1)
+    viceCite: vicii-chip-model.c:223,225
+    managedCite: Mos6569.cs:1205-1206,1247
+    finding: "43"
+    test: TEST-VIC-BORDER-12
+    state: red-now
+  - id: AC-13
+    tag: FAITHFUL
+    statement: CSEL selection rule for L1/R1 vs L0/R0 (structure; +1 cycle base per 43)
+    viceCite: vicii-chip-model.h:204-218
+    managedCite: Mos6569.cs:1245,1247
+    finding: 
+    test: TEST-VIC-BORDER-13
+    state: green-now
+  - id: AC-14
+    tag: FAITHFUL
+    statement: vborder=set_vborder at raster_cycle 0 (start-of-line)
+    viceCite: vicii-cycle.c:480-482
+    managedCite: Mos6569.cs:1005,1184-1189
+    finding: 
+    test: TEST-VIC-BORDER-14
+    state: green-now
+- id: FR-VIC-RASTER-IRQ
+  chip: VIC-II
+  title: Raster-compare interrupt
+  spec:
+  - vicii-cycle.c
+  - vicii-mem.c
+  - vicii-irq.c
+  managed:
+  - Mos6569.cs
+  mappedFindings:
+  - "44"
+  - "45"
+  tr: Fire at raster_cycle 0 after raster_line++; gate re-fire on raster_irq_triggered edge (never re-armed by a write); add $D012 unchanged-value guard.
+  acCount: 13
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: raster_irq_line = $D012 | ($D011.7<<8) (9-bit)
+    viceCite: vicii-mem.c:132-143
+    managedCite: Mos6569.cs:1925,1932
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-01
+    state: green-now
+  - id: AC-02
+    tag: DIVERGENT
+    statement: IRQ latches at raster_cycle 0 after raster_line++; managed fires one cycle late (RasterX 1)
+    viceCite: vicii-cycle.c:466-474
+    managedCite: Mos6569.cs:928-933
+    finding: "44"
+    test: TEST-VIC-RASTER-IRQ-02
+    state: red-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: raster_irq_triggered holds the whole line, reset only when line != irq_line
+    viceCite: vicii-cycle.c:467-474
+    managedCite: Mos6569.cs:930,978
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: idempotent set of irq_status bit0
+    viceCite: vicii-irq.c:116-121
+    managedCite: Mos6569.cs:931
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-04
+    state: green-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: raster latch sets irq_status |= 0x1
+    viceCite: vicii-irq.c:58-62
+    managedCite: Mos6569.cs:931
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-05
+    state: green-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: '$D019 write-1-clear: irq_status &= ~((v&0xf)|0x80) then recompute'
+    viceCite: vicii-mem.c:227-233
+    managedCite: Mos6569.cs:1916-1921
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-06
+    state: green-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: $D01A = value&0xf then recompute IRQ line
+    viceCite: vicii-mem.c:235-242
+    managedCite: Mos6569.cs:1938-1943
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-07
+    state: green-now
+  - id: AC-08
+    tag: FAITHFUL
+    statement: 'IRQ output: (irq_status & $D01A) nonzero sets bit7 and asserts'
+    viceCite: vicii-irq.c:36-45
+    managedCite: Mos6569.cs:2101-2114
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-08
+    state: green-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: $D012 unchanged-value write returns early (no update); managed always updates+re-arms
+    viceCite: vicii-mem.c:158-169
+    managedCite: Mos6569.cs:1923-1928
+    finding: "45"
+    test: TEST-VIC-RASTER-IRQ-09
+    state: red-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: $D011 store always recomputes compare line
+    viceCite: vicii-mem.c:145-156
+    managedCite: Mos6569.cs:1930-1936
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-10
+    state: green-now
+  - id: AC-11
+    tag: DIVERGENT
+    statement: a $D011/$D012 write must NOT re-arm on the matching line; managed re-arms and can double-fire
+    viceCite: vicii-cycle.c:472-473
+    managedCite: Mos6569.cs:1926,1933,594
+    finding: "45"
+    test: TEST-VIC-RASTER-IRQ-11
+    state: red-now
+  - id: AC-12
+    tag: FAITHFUL
+    statement: $D019 read-back = irq_status | 0x70
+    viceCite: vicii-mem.c:515-518
+    managedCite: Mos6569.cs:1819-1822
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-12
+    state: green-now
+  - id: AC-13
+    tag: FAITHFUL
+    statement: $D01A read-back = regs | 0xf0
+    viceCite: vicii-mem.c:650-653
+    managedCite: Mos6569.cs:1895-1898
+    finding: 
+    test: TEST-VIC-RASTER-IRQ-13
+    state: green-now
+- id: FR-VIC-REGISTERS
+  chip: VIC-II
+  title: Register read/write masks and collision read
+  spec:
+  - vicii-mem.c
+  - vicii-cycle.c
+  managed:
+  - Mos6569.cs
+  mappedFindings:
+  - "46"
+  tr: Preserve read masks + live $D011/$D012; change $D01E/$D01F to deferred (next-cycle) clear; align vicii_peek.
+  acCount: 15
+  acceptanceCriteria:
+  - id: AC-01
+    tag: FAITHFUL
+    statement: $D016 read = regs | 0xc0
+    viceCite: vicii-mem.c:627-631
+    managedCite: Mos6569.cs:1877-1880
+    finding: 
+    test: TEST-VIC-REGISTERS-01
+    state: green-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: $D018 read = regs | 0x01
+    viceCite: vicii-mem.c:639-643
+    managedCite: Mos6569.cs:1887-1890
+    finding: 
+    test: TEST-VIC-REGISTERS-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: $D019 read = irq_status | 0x70
+    viceCite: vicii-mem.c:515-518
+    managedCite: Mos6569.cs:1819-1822
+    finding: 
+    test: TEST-VIC-REGISTERS-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: $D01A read = regs | 0xf0
+    viceCite: vicii-mem.c:650-653
+    managedCite: Mos6569.cs:1895-1898
+    finding: 
+    test: TEST-VIC-REGISTERS-04
+    state: green-now
+  - id: AC-05
+    tag: FAITHFUL
+    statement: $D020-$D02E read = regs | 0xf0
+    viceCite: vicii-mem.c:681-714
+    managedCite: Mos6569.cs:1867-1870
+    finding: 
+    test: TEST-VIC-REGISTERS-05
+    state: green-now
+  - id: AC-06
+    tag: FAITHFUL
+    statement: $D02F-$D03F read = 0xff
+    viceCite: vicii-mem.c:716-735
+    managedCite: Mos6569.cs:1903-1906
+    finding: 
+    test: TEST-VIC-REGISTERS-06
+    state: green-now
+  - id: AC-07
+    tag: FAITHFUL
+    statement: $D011 read = (regs&0x7f)|((raster_y&0x100)>>1)
+    viceCite: vicii-mem.c:501-512
+    managedCite: Mos6569.cs:1824-1827
+    finding: 
+    test: TEST-VIC-REGISTERS-07
+    state: green-now
+  - id: AC-08
+    tag: FAITHFUL
+    statement: $D012 read = live raster_y&0xff
+    viceCite: vicii-mem.c:501-512
+    managedCite: Mos6569.cs:1062,1908
+    finding: 
+    test: TEST-VIC-REGISTERS-08
+    state: green-now
+  - id: AC-09
+    tag: FAITHFUL
+    statement: raw-register reads (sprite X/Y, $D010/$D015/$D017/$D01B-$D01D) return regs unmasked
+    viceCite: vicii-mem.c:573-671
+    managedCite: Mos6569.cs:1908
+    finding: 
+    test: TEST-VIC-REGISTERS-09
+    state: green-now
+  - id: AC-10
+    tag: FAITHFUL
+    statement: color-register write stores value & 0x0f
+    viceCite: vicii-mem.c:277-331
+    managedCite: Mos6569.cs:1964-1985
+    finding: 
+    test: TEST-VIC-REGISTERS-10
+    state: green-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: $D01E/$D01F writes ignored; $D02F-$D03F writes ignored
+    viceCite: vicii-mem.c:265-268
+    managedCite: Mos6569.cs:1948-1958
+    finding: 
+    test: TEST-VIC-REGISTERS-11
+    state: green-now
+  - id: AC-12
+    tag: DIVERGENT
+    statement: $D01E read copies mask, sets clear_collisions, does NOT clear in read; managed clears immediately
+    viceCite: vicii-mem.c:520-535
+    managedCite: Mos6569.cs:1845-1850
+    finding: "46"
+    test: TEST-VIC-REGISTERS-12
+    state: red-now
+  - id: AC-13
+    tag: DIVERGENT
+    statement: $D01F read deferred clear
+    viceCite: vicii-mem.c:537-559
+    managedCite: Mos6569.cs:1852-1859
+    finding: "46"
+    test: TEST-VIC-REGISTERS-13
+    state: red-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: clear_collisions zeroes the register on the NEXT vicii_cycle; managed no deferral
+    viceCite: vicii-cycle.c:413-425
+    managedCite: Mos6569.cs
+    finding: "46"
+    test: TEST-VIC-REGISTERS-14
+    state: red-now
+  - id: AC-15
+    tag: DIVERGENT
+    statement: vicii_peek default = regs|unused_bits + live $D011/$D012/$D019|0x70; managed returns raw
+    viceCite: vicii-mem.c:742-770
+    managedCite: Mos6569.cs:1808
+    finding: "46"
+    test: TEST-VIC-REGISTERS-15
+    state: red-now
+- id: FR-VIC-LIGHTPEN
+  chip: VIC-II
+  title: Light pen $D013/$D014
+  spec:
+  - vicii-lightpen.c
+  - vicii-cycle.c
+  - vicii-mem.c
+  - vicii-irq.c
+  managed:
+  - Mos6569.cs
+  - Mos6569R1.cs
+  mappedFindings:
+  - "47"
+  tr: Replace RasterX>>1 with cycle_get_xpos/2 + x_extra_bits; add last-line guard, 1-clock delay, frame-start retrigger, 6569R1 old-IRQ mode.
+  acCount: 14
+  acceptanceCriteria:
+  - id: AC-01
+    tag: DIVERGENT
+    statement: $D013 = cycle_get_xpos(cycle_table[raster_cycle])/2 + x_extra_bits; managed RasterX>>1, no extra bits
+    viceCite: vicii-lightpen.c:75,78,100
+    managedCite: Mos6569.cs:2134
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-01
+    state: red-now
+  - id: AC-02
+    tag: FAITHFUL
+    statement: $D014 = raster_line (low byte)
+    viceCite: vicii-lightpen.c:68,101
+    managedCite: Mos6569.cs:2135
+    finding: 
+    test: TEST-VIC-LIGHTPEN-02
+    state: green-now
+  - id: AC-03
+    tag: FAITHFUL
+    statement: once-per-frame guard (if triggered return)
+    viceCite: vicii-lightpen.c:62-64
+    managedCite: Mos6569.cs:2128-2131
+    finding: 
+    test: TEST-VIC-LIGHTPEN-03
+    state: green-now
+  - id: AC-04
+    tag: FAITHFUL
+    statement: triggered set on accepted trigger
+    viceCite: vicii-lightpen.c:66
+    managedCite: Mos6569.cs:2133
+    finding: 
+    test: TEST-VIC-LIGHTPEN-04
+    state: green-now
+  - id: AC-05
+    tag: DIVERGENT
+    statement: 'last-line guard: y==screen_height-1 && raster_cycle>0 returns without latch; managed absent'
+    viceCite: vicii-lightpen.c:71-73
+    managedCite: Mos6569.cs
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-05
+    state: red-now
+  - id: AC-06
+    tag: DIVERGENT
+    statement: one-clock trigger delay (trigger_cycle=mclk+1); managed latches immediately
+    viceCite: vicii-lightpen.c:38-47
+    managedCite: Mos6569.cs:2126-2138
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-06
+    state: red-now
+  - id: AC-07
+    tag: DIVERGENT
+    statement: x_extra_bits = color_latency?2:1 added into $D013; managed absent
+    viceCite: vicii-lightpen.c:42,103
+    managedCite: Mos6569.cs
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-07
+    state: red-now
+  - id: AC-08
+    tag: DIVERGENT
+    statement: frame-start retrigger when LP still low; managed only clears triggered at wrap
+    viceCite: vicii-cycle.c:202-218
+    managedCite: Mos6569.cs:1001
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-08
+    state: red-now
+  - id: AC-09
+    tag: DIVERGENT
+    statement: retrigger forced x=0xd1 (63 cpl)/0xd5 (65 cpl); managed no retrigger
+    viceCite: vicii-lightpen.c:81-92
+    managedCite: Mos6569.cs
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-09
+    state: red-now
+  - id: AC-10
+    tag: DIVERGENT
+    statement: '6569R1 old-IRQ mode: LP IRQ only on frame-start retrigger; managed R1 fires on normal trigger'
+    viceCite: vicii-lightpen.c:93-98
+    managedCite: Mos6569R1.cs
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-10
+    state: red-now
+  - id: AC-11
+    tag: FAITHFUL
+    statement: normal-mode IRQ fire (vicii_irq_lightpen_set)
+    viceCite: vicii-lightpen.c:105-107
+    managedCite: Mos6569.cs:2136-2137
+    finding: 
+    test: TEST-VIC-LIGHTPEN-11
+    state: green-now
+  - id: AC-12
+    tag: FAITHFUL
+    statement: LP latch $D019 bit3 + $D01A bit3 enable gating
+    viceCite: vicii-irq.c:94-98
+    managedCite: Mos6569.cs:2136-2137
+    finding: 
+    test: TEST-VIC-LIGHTPEN-12
+    state: green-now
+  - id: AC-13
+    tag: FAITHFUL
+    statement: $D013/$D014 read return latched x/y (plumbing; X value diverges per AC-01)
+    viceCite: vicii-mem.c:611-619
+    managedCite: Mos6569.cs:1831-1841
+    finding: 
+    test: TEST-VIC-LIGHTPEN-13
+    state: green-now
+  - id: AC-14
+    tag: DIVERGENT
+    statement: x_extra_bits reset to 0 after each latch; managed has no such state
+    viceCite: vicii-lightpen.c:103
+    managedCite: Mos6569.cs
+    finding: "47"
+    test: TEST-VIC-LIGHTPEN-14
+    state: red-now
+summary:
+  frCount: 38
+  acCount: 466
+  testCount: 466
+  faithfulAcs: 167
+  divergentAcs: 299
+  sidFrCount: 23
+  vicFrCount: 15

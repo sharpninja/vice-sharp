@@ -51,6 +51,15 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_step_cycle")]
     public static partial void StepNative(IntPtr instance);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_read_snapshot", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial int ReadSnapshotNative(IntPtr instance, string path);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_write_snapshot", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial int WriteSnapshotNative(IntPtr instance, string path);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_snapshot_last_error")]
+    public static partial int SnapshotLastError();
+
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_cartridge")]
     private static partial int AttachCartridgeNative(IntPtr instance, byte* image, int length, int mappingMode);
 
@@ -129,6 +138,14 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_capture_visible_frame")]
     public static partial int CaptureVisibleFrame(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
 
+    // Per-pixel VIC oracle (PLAN-VICEPARITY-001 Phase 0 / TR-VIC-ORACLE-001): the
+    // visible frame as raw VICE palette indices (one byte per pixel, 0x00-0x0F),
+    // copied from the viciisc raster draw buffer that vicii-draw-cycle.c fills
+    // 8 pixels per cycle. Index-exact comparison is palette-independent, so
+    // parity ACs compare colour identity rather than RGB conversion.
+    [LibraryImport(LibraryName, EntryPoint = "vice_vic_capture_frame_indices")]
+    public static partial int CaptureVicFrameIndices(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_graphics_priority_at_raster")]
     public static partial int GetGraphicsPriorityAtRaster(IntPtr instance, ushort rasterLine, [Out] byte[] buffer, int length);
 
@@ -141,8 +158,44 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_sid_render_samples")]
     public static partial nuint RenderSidSamples(IntPtr instance, [Out] short[] buffer, nuint n, int deltaTCycles);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_engine_read")]
+    public static partial byte ReadSidEngine(IntPtr instance, ushort addr);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_clock")]
+    public static partial void ClockSid(IntPtr instance, int cycles);
+
+    // Single-cycle reSID oracle (PLAN-VICEPARITY-001 Phase 0). Unlike vice_sid_clock,
+    // which batches through clock(delta_t) and drops the envelope/waveform single-cycle
+    // pipelines, the exact API drives reSID::SID::clock() one cycle at a time so managed
+    // parity tests can assert bit-exact equality. Open syncs registers once; afterwards
+    // drive writes through SidExactWrite only (a re-sync would clobber pipeline state).
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_open")]
+    public static partial int SidExactOpen(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_reset")]
+    public static partial void SidExactReset(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_clock")]
+    public static partial int SidExactClock(IntPtr instance, int cycles);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_write")]
+    public static partial void SidExactWrite(IntPtr instance, ushort addr, byte value);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_read")]
+    public static partial byte SidExactRead(IntPtr instance, ushort addr);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_output")]
+    public static partial short SidExactOutput(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_get_state")]
+    public static partial void SidExactGetState(IntPtr instance, ref ViceSidExactState state);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_interrupt_get_state")]
     public static partial void GetInterruptState(IntPtr instance, ref ViceInterruptState state);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pipeline_state")]
+    public static partial void GetCpuPipelineState(IntPtr instance, ref ViceCpuPipelineState state);
 
     public static IViceNative CreateInstance(string? modelSelector = null)
     {
@@ -225,6 +278,16 @@ public static unsafe partial class ViceNative
         public byte SpriteDma;
         public fixed byte Registers[64];
 
+        /// <summary>
+        /// TR-LOCKSTEP-VSF-001: .vsf VIC-II module resume context beyond the
+        /// register file (viciisc/vicii-snapshot.c). AllowBadLines is the DEN
+        /// seen-at-line-$30 latch gating every badline (and BA-low CPU stall)
+        /// for the rest of the frame; IdleState is the display/idle g-access
+        /// state. Mirrors struct vice_vic_state in native/vice-shim.h.
+        /// </summary>
+        public byte AllowBadLines;
+        public byte IdleState;
+
         public readonly byte[] GetRegisters()
         {
             fixed (byte* registers = Registers)
@@ -241,12 +304,26 @@ public static unsafe partial class ViceNative
         public byte PortB;
         public byte DdrA;
         public byte DdrB;
+        // Field order mirrors struct vice_cia_state in native/vice-shim.h; the
+        // trailing TR-LOCKSTEP-VSF-001 latch/mask fields are appended below.
         public ushort TimerA;
         public ushort TimerB;
         public byte Icr;
         public byte Cra;
         public byte Crb;
         public byte InterruptFlag;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer A reload latch (ciat_read_latch).</summary>
+        public ushort TimerALatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: Timer B reload latch (ciat_read_latch).</summary>
+        public ushort TimerBLatch;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: ICR interrupt-enable mask (ciacore irq_enabled).</summary>
+        public byte IrqMask;
+
+        /// <summary>Padding; keeps the native struct mirror byte-exact.</summary>
+        public byte Reserved;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -283,6 +360,104 @@ public static unsafe partial class ViceNative
         }
     }
 
+    /// <summary>
+    /// Full reSID internal state exported by the single-cycle oracle
+    /// (vice_sid_exact_get_state). Field order and packing mirror
+    /// struct vice_sid_exact_state in vice-shim.h byte for byte.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ViceSidExactState
+    {
+        public fixed byte Registers[32];
+        public fixed uint Accumulator[3];
+        public fixed uint ShiftRegister[3];
+        public fixed uint ShiftRegisterReset[3];
+        public fixed uint ShiftPipeline[3];
+        public fixed uint FloatingOutputTtl[3];
+        public fixed ushort PulseOutput[3];
+        public fixed ushort RateCounter[3];
+        public fixed ushort RateCounterPeriod[3];
+        public fixed ushort ExponentialCounter[3];
+        public fixed ushort ExponentialCounterPeriod[3];
+        public fixed byte EnvelopeCounter[3];
+        public fixed byte EnvelopeState[3];
+        public fixed byte HoldZero[3];
+        public fixed byte EnvelopePipeline[3];
+        public byte BusValue;
+        public uint BusValueTtl;
+        public byte WritePipeline;
+        public byte WriteAddress;
+        public byte VoiceMask;
+        // VICE-Sharp S9 parity probe: reSID internal filter state.
+        // [0]=Vlp [1]=Vbp [2]=Vhp [3]=v1 [4]=v2 [5]=v3 [6]=sum [7]=mix
+        // [8]=filter.output() [9]=Vlp_x [10]=Vlp_vc [11]=Vbp_x [12]=Vbp_vc [13]=Vddt_Vw_2
+        public fixed int FilterProbe[9];
+
+        public readonly int[] GetFilterProbe()
+        {
+            fixed (int* fp = FilterProbe)
+            {
+                return new ReadOnlySpan<int>(fp, 9).ToArray();
+            }
+        }
+
+        public readonly byte[] GetRegisters()
+        {
+            fixed (byte* registers = Registers)
+            {
+                return new ReadOnlySpan<byte>(registers, 32).ToArray();
+            }
+        }
+
+        public readonly uint[] GetAccumulators()
+        {
+            fixed (uint* accumulator = Accumulator)
+            {
+                return new ReadOnlySpan<uint>(accumulator, 3).ToArray();
+            }
+        }
+
+        public readonly uint[] GetShiftRegisters()
+        {
+            fixed (uint* shiftRegister = ShiftRegister)
+            {
+                return new ReadOnlySpan<uint>(shiftRegister, 3).ToArray();
+            }
+        }
+
+        public readonly uint[] GetShiftRegisterResets()
+        {
+            fixed (uint* srr = ShiftRegisterReset)
+            {
+                return new ReadOnlySpan<uint>(srr, 3).ToArray();
+            }
+        }
+
+        public readonly uint[] GetShiftPipelines()
+        {
+            fixed (uint* sp = ShiftPipeline)
+            {
+                return new ReadOnlySpan<uint>(sp, 3).ToArray();
+            }
+        }
+
+        public readonly byte[] GetEnvelopeCounters()
+        {
+            fixed (byte* envelopeCounter = EnvelopeCounter)
+            {
+                return new ReadOnlySpan<byte>(envelopeCounter, 3).ToArray();
+            }
+        }
+
+        public readonly ushort[] GetRateCounters()
+        {
+            fixed (ushort* rateCounter = RateCounter)
+            {
+                return new ReadOnlySpan<ushort>(rateCounter, 3).ToArray();
+            }
+        }
+    }
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ViceInterruptState
     {
@@ -291,6 +466,33 @@ public static unsafe partial class ViceNative
         public byte GlobalPending;
         public byte IrqSourceCount;
         public byte NmiSourceCount;
+    }
+
+    /// <summary>
+    /// TR-LOCKSTEP-VSF-001: x64sc main-CPU resume/pipeline state, mirroring
+    /// <c>struct vice_cpu_pipeline_state</c> in native/vice-shim.h byte for byte
+    /// (1-byte packing). Carries the .vsf-restored in-flight context beyond the
+    /// plain register file: the MAINCPU module's last_opcode_info and BA-low
+    /// stall flags (mainc64cpu.c maincpu_snapshot_read_module), the C64MEM
+    /// module's 6510 processor port (c64memsnapshot.c; dir/data written values
+    /// plus the effective read values that select ROM/IO banking), and the
+    /// interrupt-status clocks (interrupt.c snapshot sub-modules).
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ViceCpuPipelineState
+    {
+        public ulong Clk;
+        public uint LastOpcodeInfo;
+        public uint BaLowFlags;
+        public byte PportData;
+        public byte PportDir;
+        public byte PportDataRead;
+        public byte PportDirRead;
+        public uint GlobalPendingInt;
+        public ulong IrqClk;
+        public ulong NmiClk;
+        public ulong IrqDelayCycles;
+        public ulong NmiDelayCycles;
     }
 
     private static IntPtr ResolveLibrary(string libraryName, Assembly _, DllImportSearchPath? __)
@@ -450,6 +652,17 @@ public static unsafe partial class ViceNative
 
         public void Step() => StepNative(_instance);
 
+        public int ReadSnapshot(string path)
+        {
+            var result = ReadSnapshotNative(_instance, path);
+            // Re-baseline so GetState().Cycle counts forward from the loaded
+            // state, mirroring Reset().
+            _cycleBaseline = ReadNativeCycle();
+            return result;
+        }
+
+        public int WriteSnapshot(string path) => WriteSnapshotNative(_instance, path);
+
         public void AttachCartridge(ReadOnlyMemory<byte> image, CartridgeMappingMode mappingMode)
         {
             ViceNative.AttachCartridge(_instance, image, mappingMode);
@@ -498,7 +711,54 @@ public static unsafe partial class ViceNative
                 RasterCycle = state.RasterCycle,
                 BadLine = state.BadLine,
                 DisplayState = state.DisplayState,
-                SpriteDma = state.SpriteDma
+                SpriteDma = state.SpriteDma,
+                Registers = state.GetRegisters(),
+                AllowBadLines = state.AllowBadLines,
+                IdleState = state.IdleState
+            };
+        }
+
+        public NativeCiaState GetCiaState(int ciaIndex)
+        {
+            var state = new ViceCiaState();
+            global::ViceSharp.Core.ViceNative.GetCiaState(_instance, ciaIndex, ref state);
+
+            return new NativeCiaState
+            {
+                PortA = state.PortA,
+                PortB = state.PortB,
+                DdrA = state.DdrA,
+                DdrB = state.DdrB,
+                TimerA = state.TimerA,
+                TimerB = state.TimerB,
+                TimerALatch = state.TimerALatch,
+                TimerBLatch = state.TimerBLatch,
+                Cra = state.Cra,
+                Crb = state.Crb,
+                InterruptFlags = state.InterruptFlag,
+                IrqMask = state.IrqMask
+            };
+        }
+
+        public NativeCpuPipelineState GetCpuPipelineState()
+        {
+            var state = new ViceCpuPipelineState();
+            global::ViceSharp.Core.ViceNative.GetCpuPipelineState(_instance, ref state);
+
+            return new NativeCpuPipelineState
+            {
+                Clk = state.Clk,
+                LastOpcodeInfo = state.LastOpcodeInfo,
+                BaLowFlags = state.BaLowFlags,
+                PportData = state.PportData,
+                PportDir = state.PportDir,
+                PportDataRead = state.PportDataRead,
+                PportDirRead = state.PportDirRead,
+                GlobalPendingInt = state.GlobalPendingInt,
+                IrqClk = state.IrqClk,
+                NmiClk = state.NmiClk,
+                IrqDelayCycles = state.IrqDelayCycles,
+                NmiDelayCycles = state.NmiDelayCycles
             };
         }
 

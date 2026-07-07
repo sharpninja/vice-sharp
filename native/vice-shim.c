@@ -34,6 +34,7 @@
 #include "resources.h"
 #include "screenshot.h"
 #include "sid.h"
+#include "snapshot.h"
 #include "sid/sid-snapshot.h"
 #include "sysfile.h"
 #include "uiapi.h"
@@ -41,11 +42,14 @@
 #include "c64/c64.h"
 #include "c64/c64cia.h"
 #include "c64/c64model.h"
+#include "c64/c64pla.h"
 #include "cartridge.h"
 #include "keyboard.h"
 #include "vicii.h"
 #include "vice-shim-runtime.h"
 #include "viciisc/viciitypes.h"
+#include "palette.h"
+#include "videoarch.h" /* headless video_canvas_s for the frame oracle */
 
 int archdep_init(int *argc, char **argv);
 
@@ -227,6 +231,13 @@ static int vice_shim_initialize_runtime_locked(void)
         return 0;
     }
 
+    /* This shim is an x64sc (cycle-exact) build: VIC-II uses viciisc/vicii-cycle.c
+       and the SC memory model. machine_class is a compile-time global that the link
+       resolved to plain VICE_MACHINE_C64; force it to C64SC so machine_get_name()
+       reports "C64SC" and snapshots are read/written with the x64sc machine identity
+       (matching real x64sc .vsf files). */
+    machine_class = VICE_MACHINE_C64SC;
+
     tick_init();
     maincpu_early_init();
     machine_setup_context();
@@ -234,6 +245,11 @@ static int vice_shim_initialize_runtime_locked(void)
     machine_early_init();
     sysfile_init(machine_name);
 
+    /* reSID is the canonical SID engine. The build defines HAVE_RESID and leaves
+       HAVE_FASTSID undefined, so resources_set_defaults() selects reSID (the only
+       compiled engine) via SID_ENGINE_DEFAULT -> SID_ENGINE_RESID. Do NOT set the
+       SidEngine resource explicitly: switching the engine a second time before
+       init_main wires up sound/SID fails. fastsid is excluded at the build level. */
     if (init_resources() < 0
         || init_cmdline_options() < 0
         || gfxoutput_early_init((int)help_requested) < 0
@@ -542,6 +558,8 @@ VICE_SHIM_API void vice_machine_destroy(void *machine)
     free(instance);
 }
 
+static void vice_shim_reset_sid_renderer_locked(void);
+
 VICE_SHIM_API void vice_machine_reset(void *machine)
 {
     if (g_debug_reset_calls < 8) {
@@ -602,7 +620,124 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
        managed Reset() which clears _registers[0x19] unconditionally. */
     vicii.irq_status = 0;
     vice_shim_reset_cpu_state_locked();
+    /* g_shim_sid_psid (the SID clock/render instance) is a global that outlives
+       individual machine instances; reset it so vice_sid_clock starts each
+       machine from a fresh reSID. Otherwise envelope/accumulator state leaks
+       across tests/sessions and makes SID lockstep order-dependent. */
+    vice_shim_reset_sid_renderer_locked();
     LeaveCriticalSection(&g_state_lock);
+}
+
+/* Peek the VIC-II model byte (first byte of the "VIC-II" module data) from a
+   snapshot without disturbing machine state. vicii_snapshot_read_module rejects
+   a snapshot whose model differs from the configured VICIIModel
+   (SNAPSHOT_VICII_MODEL_MISMATCH). An externally-staged x64sc .vsf may use a
+   different VIC-II revision than the shim's default (e.g. 8565 vs the C64_PAL
+   default 6569 - both PAL); aligning VICIIModel to the snapshot lets it resume
+   without forcing a full c64model change (which would also alter the SID type).
+   Returns the model byte, or -1 if it cannot be read. */
+static int vice_shim_peek_snapshot_vicii_model(const char *path)
+{
+    uint8_t snap_major, snap_minor, mod_major, mod_minor, model;
+    snapshot_t *s;
+    snapshot_module_t *m;
+
+    s = snapshot_open(path, &snap_major, &snap_minor, machine_get_name());
+    if (s == NULL) {
+        return -1;
+    }
+    m = snapshot_module_open(s, "VIC-II", &mod_major, &mod_minor);
+    if (m == NULL) {
+        snapshot_close(s);
+        return -1;
+    }
+    if (snapshot_module_read_byte(m, &model) < 0) {
+        snapshot_module_close(m);
+        snapshot_close(s);
+        return -1;
+    }
+    snapshot_module_close(m);
+    snapshot_close(s);
+    return (int)model;
+}
+
+VICE_SHIM_API int vice_machine_read_snapshot(void *machine, const char *path)
+{
+    if (path == NULL) {
+        return -1;
+    }
+
+    vice_shim_stop_worker(machine);
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    vice_machine_t *instance = (vice_machine_t *)machine;
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    /* Select the model so banked ROM/PLA config matches the snapshot's machine,
+       then let VICE restore CPU/mem/VIC/CIA/SID state directly from the .vsf
+       into maincpu_regs and the chip globals. Do NOT power up: that would wipe
+       the loaded state.
+
+       Set bootstrap_pending = 1 (NOT 0). When the worker re-enters
+       maincpu_mainloop on the next step, vice_shim_take_bootstrap_maincpu()
+       must return 1 so it IMPORT_REGISTERS() the snapshot-restored maincpu_regs
+       into the hosted CPU and clears only the micro-op state. Returning 0 makes
+       the mainloop fall back to machine_trigger_reset(), which zeroes the
+       architectural registers - i.e. it would discard the resumed state. */
+    c64model_set(instance->c64_model);
+    {
+        /* Align VICIIModel to the snapshot so vicii_snapshot_read_module does
+           not reject an externally-staged .vsf with a different VIC-II
+           revision. Both 6569 and 8565 are PAL, so this preserves timing. */
+        int snap_vicii_model = vice_shim_peek_snapshot_vicii_model(path);
+        if (snap_vicii_model >= 0) {
+            resources_set_int("VICIIModel", snap_vicii_model);
+        }
+    }
+    int result = machine_read_snapshot(path, 0);
+    if (result == 0) {
+        /* A successful machine_read_snapshot still probes optional modules that
+           are absent from a plain state snapshot, leaving a non-fatal
+           SNAPSHOT_MODULE_* residue in the global error. Normalise it so a
+           successful resume reports SNAPSHOT_NO_ERROR. */
+        snapshot_set_error(SNAPSHOT_NO_ERROR);
+    }
+    g_bootstrap_pending = 1;
+
+    LeaveCriticalSection(&g_state_lock);
+    return result;
+}
+
+VICE_SHIM_API int vice_machine_write_snapshot(void *machine, const char *path)
+{
+    if (path == NULL) {
+        return -1;
+    }
+
+    vice_shim_stop_worker(machine);
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    /* save_roms=0, save_disks=0, event_mode=0: a plain machine state snapshot,
+       matching what x64sc writes from Snapshot > Save with default options. */
+    int result = machine_write_snapshot(path, 0, 0, 0);
+
+    LeaveCriticalSection(&g_state_lock);
+    return result;
+}
+
+VICE_SHIM_API int vice_snapshot_last_error(void)
+{
+    return snapshot_get_error();
 }
 
 VICE_SHIM_API int vice_machine_attach_cartridge(void *machine, const uint8_t *image, int length, int mapping_mode)
@@ -1124,6 +1259,51 @@ VICE_SHIM_API uint16_t vice_cpu_get_pc(void *machine)
     return value;
 }
 
+/* CPU resume/pipeline state (TR-LOCKSTEP-VSF-001). Exposes the x64sc main-CPU
+   in-flight context the .vsf carries beyond the plain register file, valid
+   right after vice_machine_read_snapshot (and at any paused cycle boundary):
+   - last_opcode_info / maincpu_ba_low_flags from the MAINCPU module
+     (mainc64cpu.c maincpu_snapshot_read_module); the hosted bootstrap clears
+     last_opcode_info on resume (mainc64cpu.c VICE_SHIM_HOSTED block), so the
+     value seen here is the restart context, matching what the resumed native
+     core actually runs with.
+   - the 6510 processor port from the C64MEM module (c64memsnapshot.c writes
+     pport.data/dir/data_out/data_read/dir_read); mem_read(0)/mem_read(1)
+     resolve through pport.dir_read/pport.data_read (c64mem.c zero_read), so
+     these are the values a managed C64 must stage into $00/$01 to reproduce
+     the snapshot's ROM/IO banking.
+   - the interrupt-status clocks from the MAINCPU interrupt sub-modules
+     (interrupt.c interrupt_read_snapshot / interrupt_read_new_snapshot). */
+VICE_SHIM_API void vice_cpu_get_pipeline_state(void *machine, struct vice_cpu_pipeline_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    memset(state, 0, sizeof(*state));
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        state->clk = (uint64_t)maincpu_clk;
+        state->last_opcode_info = (uint32_t)last_opcode_info;
+        state->ba_low_flags = (uint32_t)maincpu_ba_low_flags;
+        state->pport_data = pport.data;
+        state->pport_dir = pport.dir;
+        state->pport_data_read = pport.data_read;
+        state->pport_dir_read = pport.dir_read;
+        if (maincpu_int_status != NULL) {
+            state->global_pending_int = (uint32_t)maincpu_int_status->global_pending_int;
+            state->irq_clk = (uint64_t)maincpu_int_status->irq_clk;
+            state->nmi_clk = (uint64_t)maincpu_int_status->nmi_clk;
+            state->irq_delay_cycles = (uint64_t)maincpu_int_status->irq_delay_cycles;
+            state->nmi_delay_cycles = (uint64_t)maincpu_int_status->nmi_delay_cycles;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
 /*
  * Drive-CPU state accessors. Each takes a device number (8..11) and
  * returns the corresponding 1541/1571 drive-CPU register from the
@@ -1288,6 +1468,11 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
         state->bad_line = (uint8_t)(vicii.bad_line != 0);
         state->display_state = 0;
         state->sprite_dma = vicii.sprite_dma;
+        /* TR-LOCKSTEP-VSF-001: .vsf-restored badline/display context
+           (viciisc/vicii-snapshot.c). allow_bad_lines gates check_badline and
+           therefore the badline BA stall for the remainder of the frame. */
+        state->allow_bad_lines = (uint8_t)(vicii.allow_bad_lines != 0);
+        state->idle_state = (uint8_t)(vicii.idle_state != 0);
         memcpy(state->registers, vicii.regs, sizeof(state->registers));
         /* $D019: vicii.irq_status holds the live IRQ latch (bits 0-3 = source flags).
            vicii.regs[0x19] only reflects the last CPU write; vicii_irq_raster_set()
@@ -1298,16 +1483,95 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
     LeaveCriticalSection(&g_state_lock);
 }
 
-// Full visible frame buffer copy for BACKFILL-VIDEO-001 / TR-VIC-EDGE-001 (full buffer beyond 320x200 checkpoint) + TR-VIC-EDGE-002/006 (open-border/display depth).
-// Leverages existing vice-shim surface + vicii raster/line buffers (vicii_t raster + draw_buffer_ptr per viciitypes.h + vicii-cycle.c raster_draw_handler).
-// Supports 320x200 checkpoint (compat) or 384x272 full (VideoRenderer.ScreenWidth/Height + raster geometry) when caller buffer sized accordingly.
-// For invalid ECM: COL_NONE black gfx (vicii-draw-cycle.c:133-141/197-203) with pri preserved ( :196/224/401-428).
-// Authentic buffer copy path from vicii state for real native vs simulator expectations.
+/*
+ * Per-pixel VIC oracle (PLAN-VICEPARITY-001 Phase 0 / TR-VIC-ORACLE-001).
+ *
+ * vicii-draw-cycle.c draws 8 palette-indexed pixels per cycle into vicii.dbuf;
+ * vicii_raster_draw_handler flushes each completed line through
+ * raster_line_emulate -> draw_dummy into the canvas draw buffer at
+ * draw_buffer + line * frame_buffer_width + extra_offscreen_border_left
+ * (raster_draw_buffer_ptr_update, raster.c). The visible window is
+ * screen_leftborderwidth + VICII_SCREEN_XPIX + screen_rightborderwidth
+ * pixels wide and spans first_displayed_line..last_displayed_line.
+ *
+ * Resolves the visible window into *out_base (top-left pixel), *out_stride
+ * (frame buffer row width) and *out_w/*out_h. Caller must hold g_state_lock.
+ * Returns 0 when the draw buffer is not realized (headless canvas missing)
+ * or when the NTSC lower-border wrap layout is active (unsupported here).
+ */
+static int vice_shim_vic_visible_window_locked(const uint8_t **out_base, int *out_stride, int *out_w, int *out_h)
+{
+    unsigned int fbw;
+    unsigned int first_line;
+    unsigned int last_line;
+
+    if (vicii.raster.canvas == NULL
+        || vicii.raster.canvas->draw_buffer == NULL
+        || vicii.raster.canvas->draw_buffer->draw_buffer == NULL
+        || vicii.raster.geometry == NULL) {
+        return 0;
+    }
+
+    first_line = (unsigned int)vicii.first_displayed_line;
+    last_line = (unsigned int)vicii.last_displayed_line;
+    if (last_line >= vicii.raster.geometry->screen_size.height || last_line < first_line) {
+        /* NTSC lower-border wrap layout; not needed by the PAL oracle. */
+        return 0;
+    }
+
+    fbw = vicii.raster.geometry->screen_size.width
+          + vicii.raster.geometry->extra_offscreen_border_left
+          + vicii.raster.geometry->extra_offscreen_border_right;
+
+    *out_base = vicii.raster.canvas->draw_buffer->draw_buffer
+                + first_line * fbw
+                + vicii.raster.geometry->extra_offscreen_border_left;
+    *out_stride = (int)fbw;
+    *out_w = vicii.screen_leftborderwidth + VICII_SCREEN_XPIX + vicii.screen_rightborderwidth;
+    *out_h = (int)(last_line - first_line + 1);
+    return 1;
+}
+
+VICE_SHIM_API int vice_vic_capture_frame_indices(void *machine, uint8_t *buffer, int length, int *width, int *height)
+{
+    const uint8_t *base = NULL;
+    int stride = 0;
+    int w = 0;
+    int h = 0;
+    int row;
+    int ok = 0;
+
+    if (width) *width = 0;
+    if (height) *height = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)
+        && vice_shim_vic_visible_window_locked(&base, &stride, &w, &h)) {
+        if (width) *width = w;
+        if (height) *height = h;
+        if (buffer != NULL && length >= w * h) {
+            for (row = 0; row < h; row++) {
+                memcpy(buffer + (size_t)row * w, base + (size_t)row * stride, (size_t)w);
+            }
+            ok = 1;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return ok;
+}
+
+// Full visible frame as BGRA (presentation-level capture). The real path maps
+// the raster draw buffer's palette indices through the canvas palette; the
+// index endpoint above is the parity oracle. 320x200 selects the graphics
+// window (gfx_position), 384x272 the full visible canvas including borders.
 VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buffer, int length, int* width, int* height)
 {
     const int CheckpointW = 320;
     const int CheckpointH = 200;
-    const int FullW = 384; // matches VideoRenderer + raster full visible canvas (borders/open-border per TR-VIC-EDGE-002/006)
+    const int FullW = 384; // matches VideoRenderer + raster full visible canvas
     const int FullH = 272;
 
     int fullRequired = FullW * FullH * 4;
@@ -1316,11 +1580,13 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buf
     int w = CheckpointW;
     int h = CheckpointH;
     int required = checkpointRequired;
+    int full = 0;
     if (length >= fullRequired)
     {
         w = FullW;
         h = FullH;
         required = fullRequired;
+        full = 1;
     }
     else if (length < checkpointRequired)
     {
@@ -1343,28 +1609,53 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buf
         return 1;
     }
 
-    // Authentic from native VICE state (vicii.regs + raster/line buffers for full copy)
-    uint8_t d011 = vicii.regs[0x11];
-    uint8_t d016 = vicii.regs[0x16];
-    bool ecm = (d011 & 0x40) != 0;
-    bool bmm = (d011 & 0x20) != 0;
-    bool mcm = (d016 & 0x10) != 0;
-    bool is_invalid = ecm && (bmm || mcm);
+    {
+        const uint8_t *base = NULL;
+        int stride = 0;
+        int visW = 0;
+        int visH = 0;
+        const palette_t *pal = vicii.raster.canvas != NULL ? vicii.raster.canvas->palette : NULL;
 
-    if (is_invalid)
-    {
-        // Full buffer copy: COL_NONE black gfx per vicii-draw-cycle.c:133-141,197-203 (three invalid combos).
-        // pri preserved :196/224/401-428 even on black. Uses vicii raster (line buffers) for the canvas region (full 384x272 or checkpoint).
-        // BACKFILL-VIDEO-001 / TR-VIC-EDGE-001/002/006 / FR-VIC-002/003/005/008 / TEST-VIC-001 + explore 019e6acc-29b8-77f1-a9cc-56499af366f9.
-        // (Implemented full vicii.raster.canvas copy follow-on from prior checkpoint surface comment.)
-        memset(buffer, 0, required);
-        for (int i = 3; i < required; i += 4) buffer[i] = 0xFF; // opaque
-        // (Minimal authentic copy leveraging vicii state/raster; full draw_buffer_ptr memcpy would be in follow-on if raster populated at capture point.)
-    }
-    else
-    {
-        memset(buffer, 0, required);
-        buffer[0] = 0xCC; buffer[1] = 0xCC; buffer[2] = 0xCC; buffer[3] = 0xFF;
+        if (!vice_shim_vic_visible_window_locked(&base, &stride, &visW, &visH)
+            || pal == NULL || pal->entries == NULL) {
+            LeaveCriticalSection(&g_state_lock);
+            return 0;
+        }
+
+        if (!full) {
+            /* Graphics window: gfx_position is in screen coordinates; the
+             * visible window starts at first_displayed_line and x 0 of the
+             * visible canvas maps to screen x extra-left already removed, so
+             * offset by the left border width and the gfx start line. */
+            int gfxTop = (int)vicii.raster.geometry->gfx_position.y - vicii.first_displayed_line;
+            if (gfxTop < 0 || gfxTop + CheckpointH > visH
+                || vicii.screen_leftborderwidth + CheckpointW > visW) {
+                LeaveCriticalSection(&g_state_lock);
+                return 0;
+            }
+            base += (size_t)gfxTop * stride + vicii.screen_leftborderwidth;
+            visW = CheckpointW;
+            visH = CheckpointH;
+        }
+        else if (visW != FullW || visH != FullH) {
+            LeaveCriticalSection(&g_state_lock);
+            return 0;
+        }
+
+        for (int row = 0; row < h; row++) {
+            const uint8_t *src = base + (size_t)row * stride;
+            uint8_t *dst = buffer + (size_t)row * w * 4;
+            for (int x = 0; x < w; x++) {
+                unsigned int idx = src[x];
+                if (idx >= pal->num_entries) {
+                    idx = 0;
+                }
+                dst[(x * 4) + 0] = pal->entries[idx].blue;
+                dst[(x * 4) + 1] = pal->entries[idx].green;
+                dst[(x * 4) + 2] = pal->entries[idx].red;
+                dst[(x * 4) + 3] = 0xFF;
+            }
+        }
     }
     LeaveCriticalSection(&g_state_lock);
     return 1;
@@ -1434,6 +1725,8 @@ VICE_SHIM_API void vice_cia_get_state(void *machine, int cia_index, struct vice_
     if (vice_shim_is_active_machine(machine)) {
         cia = cia_index == 0 ? machine_context.cia1 : machine_context.cia2;
         if (cia != NULL) {
+            CLOCK cclk = cia->clk_ptr != NULL ? *(cia->clk_ptr) : maincpu_clk;
+
             state->port_a = cia->c_cia[CIA_PRA];
             state->port_b = cia->c_cia[CIA_PRB];
             state->ddr_a = cia->c_cia[CIA_DDRA];
@@ -1444,6 +1737,11 @@ VICE_SHIM_API void vice_cia_get_state(void *machine, int cia_index, struct vice_
             state->cra = cia->c_cia[CIA_CRA];
             state->crb = cia->c_cia[CIA_CRB];
             state->interrupt_flag = (uint8_t)(cia->irqflags & 0xff);
+            /* TR-LOCKSTEP-VSF-001: latches + ICR enable mask for snapshot
+               staging (ciatimer.h ciat_read_latch; ciacore irq_enabled). */
+            state->timer_a_latch = ciat_read_latch(cia->ta, cclk);
+            state->timer_b_latch = ciat_read_latch(cia->tb, cclk);
+            state->irq_mask = (uint8_t)(cia->irq_enabled & 0xff);
         }
     }
     LeaveCriticalSection(&g_state_lock);
@@ -1510,10 +1808,11 @@ VICE_SHIM_API void vice_interrupt_get_state(void *machine, struct vice_interrupt
  * we resync that register state into our private sound_t before each render
  * so register writes performed through vice_machine_write still take effect.
  *
- * Engine selection follows the configured SidEngine resource. In the build
- * used by the shim (--without-resid --with-fastsid) the engine is FastSID.
- * The cycle_based flag therefore is false, so we drive the renderer with a
- * fixed delta_t per sample request.
+ * Engine selection follows the configured SidEngine resource. The shim build
+ * defines HAVE_RESID and leaves HAVE_FASTSID undefined, so the engine is reSID.
+ * We drive the renderer one sample at a time with a fixed delta_t per request,
+ * which also clocks reSID's internal state (accumulator, ADSR envelope) so it
+ * can be read back via vice_sid_engine_read.
  */
 static sound_t *g_shim_sid_psid = NULL;
 static int g_shim_sid_speed = 0;
@@ -1544,6 +1843,16 @@ static int vice_shim_ensure_sid_renderer_locked(int sample_rate_hz, int cycles_p
     g_shim_sid_speed = sample_rate_hz;
     g_shim_sid_cycles_per_sec = cycles_per_sec;
     return 1;
+}
+
+static void vice_shim_reset_sid_renderer_locked(void)
+{
+    if (g_shim_sid_psid != NULL) {
+        sid_sound_machine_close(g_shim_sid_psid);
+        g_shim_sid_psid = NULL;
+    }
+    g_shim_sid_speed = 0;
+    g_shim_sid_cycles_per_sec = 0;
 }
 
 static void vice_shim_sync_sid_registers_locked(void)
@@ -1602,4 +1911,221 @@ VICE_SHIM_API size_t vice_sid_render_samples(void *machine, int16_t *buffer, siz
     LeaveCriticalSection(&g_state_lock);
 
     return rendered;
+}
+
+VICE_SHIM_API uint8_t vice_sid_engine_read(void *machine, uint16_t addr)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        value = sid_sound_machine_read(g_shim_sid_psid, (uint16_t)(addr & 0x1f));
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API void vice_sid_clock(void *machine, int cycles)
+{
+    const int cycles_per_sec = 985248; /* C64 PAL */
+
+    if (machine == NULL || cycles <= 0) {
+        return;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        /* sample_rate == cpu clock => exactly 1 cycle consumed per rendered
+           sample, so reSID advances `cycles` cycles cycle-exactly (verified via
+           OSC3 = freq*N). NB: FAST and RESAMPLE sampling give the same envelope
+           timing here, so the sampling method is not the source of the ~156
+           cyc/step attack vs the reSID source's ~148-149. */
+        if (vice_shim_ensure_sid_renderer_locked(cycles_per_sec, cycles_per_sec)) {
+            int16_t scratch[256];
+            int remaining = cycles;
+
+            vice_shim_sync_sid_registers_locked();
+
+            while (remaining > 0) {
+                int n = remaining > 256 ? 256 : remaining;
+                CLOCK delta = (CLOCK)n;
+                sound_t *engines[1];
+                int got;
+                engines[0] = g_shim_sid_psid;
+                got = sid_sound_machine_calculate_samples(engines, scratch, n, 1, 1, &delta);
+                if (got <= 0) {
+                    break;
+                }
+                remaining -= got;
+            }
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+/*
+ * Single-cycle reSID oracle (PLAN-VICEPARITY-001 Phase 0 / TR-SID-ORACLE-001).
+ *
+ * The batched paths above go through sid_sound_machine_calculate_samples ->
+ * reSID clock(delta_t), which drops the single-cycle envelope/waveform
+ * pipelines ("Any pipelined envelope counter decrement from single cycle
+ * clocking will be lost", resid/envelope.h). The exact API drives
+ * reSID::SID::clock() one cycle at a time via resid_shim_* entry points
+ * added to src/sid/resid.cc (shim-internal, not dllexported).
+ */
+extern int resid_shim_clock_exact(sound_t *psid, int cycles);
+extern uint8_t resid_shim_read(sound_t *psid, uint16_t addr);
+extern void resid_shim_write(sound_t *psid, uint16_t addr, uint8_t value);
+extern int resid_shim_output(sound_t *psid);
+extern void resid_shim_reset(sound_t *psid);
+extern void resid_shim_state_read(sound_t *psid, sid_snapshot_state_t *sid_state);
+extern void resid_shim_filter_probe(sound_t *psid, int *out);
+
+VICE_SHIM_API int vice_sid_exact_open(void *machine)
+{
+    const int cycles_per_sec = 985248; /* C64 PAL */
+    int ok = 0;
+
+    if (machine == NULL) {
+        return 0;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        /* Force a fresh engine so no batched clocking history leaks into the
+         * exact oracle, then sync the machine's register file exactly once.
+         * All further writes must come through vice_sid_exact_write. */
+        vice_shim_reset_sid_renderer_locked();
+        if (vice_shim_ensure_sid_renderer_locked(cycles_per_sec, cycles_per_sec)) {
+            vice_shim_sync_sid_registers_locked();
+            ok = 1;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return ok;
+}
+
+VICE_SHIM_API void vice_sid_exact_reset(void *machine)
+{
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        resid_shim_reset(g_shim_sid_psid);
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API int vice_sid_exact_clock(void *machine, int cycles)
+{
+    int clocked = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        clocked = resid_shim_clock_exact(g_shim_sid_psid, cycles);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return clocked;
+}
+
+VICE_SHIM_API void vice_sid_exact_write(void *machine, uint16_t addr, uint8_t value)
+{
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        resid_shim_write(g_shim_sid_psid, addr, value);
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API uint8_t vice_sid_exact_read(void *machine, uint16_t addr)
+{
+    uint8_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        value = resid_shim_read(g_shim_sid_psid, addr);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+VICE_SHIM_API int16_t vice_sid_exact_output(void *machine)
+{
+    int sample = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        sample = resid_shim_output(g_shim_sid_psid);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    if (sample > 32767) {
+        sample = 32767;
+    } else if (sample < -32768) {
+        sample = -32768;
+    }
+    return (int16_t)sample;
+}
+
+VICE_SHIM_API void vice_sid_exact_get_state(void *machine, struct vice_sid_exact_state *state)
+{
+    sid_snapshot_state_t snapshot;
+    int i;
+
+    if (state == NULL) {
+        return;
+    }
+
+    memset(state, 0, sizeof(*state));
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        memset(&snapshot, 0, sizeof(snapshot));
+        resid_shim_state_read(g_shim_sid_psid, &snapshot);
+
+        memcpy(state->registers, snapshot.sid_register, sizeof(state->registers));
+        for (i = 0; i < 3; i++) {
+            state->accumulator[i] = snapshot.accumulator[i];
+            state->shift_register[i] = snapshot.shift_register[i];
+            state->shift_register_reset[i] = snapshot.shift_register_reset[i];
+            state->shift_pipeline[i] = snapshot.shift_pipeline[i];
+            state->floating_output_ttl[i] = snapshot.floating_output_ttl[i];
+            state->pulse_output[i] = snapshot.pulse_output[i];
+            state->rate_counter[i] = snapshot.rate_counter[i];
+            state->rate_counter_period[i] = snapshot.rate_counter_period[i];
+            state->exponential_counter[i] = snapshot.exponential_counter[i];
+            state->exponential_counter_period[i] = snapshot.exponential_counter_period[i];
+            state->envelope_counter[i] = snapshot.envelope_counter[i];
+            state->envelope_state[i] = snapshot.envelope_state[i];
+            state->hold_zero[i] = snapshot.hold_zero[i];
+            state->envelope_pipeline[i] = snapshot.envelope_pipeline[i];
+        }
+        state->bus_value = snapshot.bus_value;
+        state->bus_value_ttl = snapshot.bus_value_ttl;
+        state->write_pipeline = snapshot.write_pipeline;
+        state->write_address = snapshot.write_address;
+        state->voice_mask = snapshot.voice_mask;
+        resid_shim_filter_probe(g_shim_sid_psid, state->filter_probe);
+    }
+    LeaveCriticalSection(&g_state_lock);
 }

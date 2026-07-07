@@ -177,8 +177,13 @@ public sealed class ChipGlueBoundaryTests
         AssertSourceContains(
             "CreateC64Cia",
             "src", "ViceSharp.Core", "ArchitectureBuilder.cs");
+        // PLAN-VICEPARITY-001 P0-7: SID construction moved to the canonical
+        // SidFactory (same assembly); the builder delegates to it.
         AssertSourceContains(
-            "new Sid6581(bus, audioBackend) { BaseAddress = 0xD400 }",
+            "new Sid6581(bus, audioBackend) { BaseAddress = C64BaseAddress }",
+            "src", "ViceSharp.Core", "SidFactory.cs");
+        AssertSourceContains(
+            "SidFactory.Create(bus, profile, audioBackend, masterClockHz)",
             "src", "ViceSharp.Core", "ArchitectureBuilder.cs");
         AssertSourceContains(
             "_pla.WriteDataDirection(0x2F)",

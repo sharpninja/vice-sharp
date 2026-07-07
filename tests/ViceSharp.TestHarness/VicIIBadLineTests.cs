@@ -163,8 +163,11 @@ public sealed class VicIIBadLineTests
 
         Assert.Equal(25, vic.BadLineCountThisFrame);
 
-        // Cross the frame boundary and verify the counter resets at line 0.
-        AdvanceTo(vic, 0, 0);
+        // Cross the frame boundary and verify the counter resets at the frame
+        // start (line 0 cycle 1, where VICE applies vicii_cycle_start_of_frame
+        // per viciisc/vicii-cycle.c:453-456; line 0 cycle 0 does not exist,
+        // PLAN-VICEPARITY-001 slice V2 / TEST-VIC-CYCLE-12).
+        AdvanceTo(vic, 0, 1);
         Assert.Equal(0, vic.BadLineCountThisFrame);
     }
 

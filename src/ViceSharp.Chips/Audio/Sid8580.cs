@@ -19,8 +19,77 @@ public partial class Sid8580 : Sid6581
     // cleaner output stage the offset is small but observable.
     private const int DcOffset8580 = 0;
 
+    /// <summary>
+    /// Keep Chamberlin SVF path for 8580 until S10 lands the 8580 reSID filter.
+    /// PLAN-VICEPARITY-001 S9.
+    /// </summary>
+    protected override bool UsesReSidFilter => false;
+
     /// <inheritdoc />
-    protected override int WaveZeroLevel => 0x9E;
+    /// PLAN-VICEPARITY-001 S8 (FR-SID-VOICE AC-03): MOS 8580 wave_zero in
+    /// 12-bit domain = 0x9e0 (voice.cc:97). Was 0x9E (8-bit).
+    protected override int WaveZeroLevel => 0x9E0;
+
+    /// <summary>
+    /// FR-SID-OSC3ENV3 AC-05 [PLAN-VICEPARITY-001 S2]: the 8580 die serves
+    /// the tri/saw component of OSC3 one cycle late through
+    /// tri_saw_pipeline (reSID wave.h:475-482, the sid_model == MOS8580
+    /// branch of set_waveform_output) and uses the 8580 noise+pulse
+    /// combination transform (wave.h:453-456).
+    /// </summary>
+    protected override bool IsMos8580Wave => true;
+
+    // PLAN-VICEPARITY-001 S1 (FR-SID-ENV AC-50) routed the 6581 envelope
+    // output through reSID's model_dac row 0. The 8580's own row
+    // (Sid6581.EnvelopeDac8580: 2R/R = 2.00, terminated, envelope.cc:167-168)
+    // plus the rest of the die differences are FR-SID-8580 /
+    // FR-SID-WAVE-DACRES remediations; until that slice lands, the identity
+    // table preserves this variant's existing linear envelope application
+    // bit for bit.
+    private static readonly ushort[] LinearEnvelopeTable = BuildLinearEnvelopeTable();
+
+    private static ushort[] BuildLinearEnvelopeTable()
+    {
+        var table = new ushort[256];
+        for (var i = 0; i < table.Length; i++)
+        {
+            table[i] = (ushort)i;
+        }
+
+        return table;
+    }
+
+    /// <inheritdoc />
+    protected override ReadOnlySpan<ushort> EnvelopeDacTable => LinearEnvelopeTable;
+
+    /// <summary>
+    /// 8580 waveform DAC: 2R/R = 2.00, terminated (dac.cc:167-168).
+    /// Overrides the 6581 table (2R/R = 2.20, no termination).
+    /// FR-SID-WAVE-DACRES / PLAN-VICEPARITY-001 S7.
+    /// </summary>
+    protected override ReadOnlySpan<ushort> WaveDacTable => WaveDac8580Static;
+
+    /// <summary>
+    /// 8580 combined waveform ROM tables from wave8580_*.h (reSID).
+    /// Overrides the 6581 ROM tables in <see cref="WaveTable12"/>.
+    /// FR-SID-WAVE-COMBINED / PLAN-VICEPARITY-001 S7.
+    /// </summary>
+    protected override int WaveTable12(int waveform, int ix)
+    {
+        int tri = (((ix & 0x800) != 0 ? ~ix : ix) & 0x7FF) << 1;   // wave.cc:96
+        int saw = ix & 0xFFF;                                      // wave.cc:97
+        return (waveform & 0x7) switch
+        {
+            0 => 0xFFF,
+            1 => tri,
+            2 => saw,
+            3 => SidWaveTables.Wave8580_ST[ix],
+            4 => 0xFFF,
+            5 => SidWaveTables.Wave8580_PT[ix],
+            6 => SidWaveTables.Wave8580_PS[ix],
+            _ => SidWaveTables.Wave8580_PST[ix],
+        };
+    }
 
     /// <summary>
     /// FR-SID-003 / FR-SID-004 (BACKFILL-SID-001 8580 filter deepening).

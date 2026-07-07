@@ -23,5 +23,6 @@
     <Description>ViceSharp - C# port of VICE (Versatile Commodore Emulator)</Description>
     <RepositoryUrl>https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>GPL-2.0-or-later</PackageLicenseExpression>
   </PropertyGroup>
 </Project>

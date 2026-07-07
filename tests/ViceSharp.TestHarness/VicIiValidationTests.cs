@@ -120,10 +120,15 @@ public sealed class VicIiValidationTests : LockstepTestRunner<Mos6569>, IAsyncLi
 
     private byte[] ReadManagedRegisters()
     {
+        // PLAN-VICEPARITY-001: compare the RAW register state (VICE vicii.regs,
+        // which the shim's GetVicState returns), not the unused-bit-masked
+        // vicii_peek. Chip.Peek now OR-s in the floating-high unused bits
+        // (FR-VIC-REGISTERS AC-15), so it no longer mirrors vicii.regs; the
+        // raw state accessor does.
         var registers = new byte[0x40];
         for (var i = 0; i < registers.Length; i++)
         {
-            registers[i] = Chip.Peek((ushort)(Chip.BaseAddress + i));
+            registers[i] = Chip.PeekStateRegister(i);
         }
 
         return registers;

@@ -23,6 +23,7 @@ using Xunit;
 /// would manifest as divergent sample hashes between two otherwise-
 /// identical runs.
 /// </summary>
+[Trait("Category", "Determinism")]
 public sealed class SidDeterminismTests
 {
     private static Sid6581 BuildSid()
@@ -105,35 +106,45 @@ public sealed class SidDeterminismTests
     }
 
     /// <summary>
-    /// FR/TR: TR-DET-001 (audio sample determinism).
-    /// Use case: A single SID instance, after <see cref="Sid6581.Reset"/>,
-    /// must produce the same sample stream as a freshly constructed SID
-    /// given the same stimulus. This catches Reset-doesn't-fully-reset
-    /// bugs (lingering filter state, accumulator residue, envelope
-    /// counters, etc.) that would otherwise allow run N+1 to diverge from
-    /// run N even when both are "supposed to start clean".
-    /// Acceptance: Hash(samples-after-Reset) == Hash(samples-fresh).
+    /// FR/TR: TR-DET-001 (audio sample determinism) + FR-SID-ENV AC-07.
+    /// Use case: A SID that has run, been Reset(), and re-stimulated must be
+    /// deterministic: any other instance with the byte-identical history
+    /// produces the byte-identical post-reset stream. This catches
+    /// Reset-related non-determinism (lingering RNG, wall-clock or
+    /// identity-dependent state) without asserting reset-equals-fresh,
+    /// which reSID explicitly rejects: EnvelopeGenerator::reset() preserves
+    /// the envelope counter ("counter is not changed on reset",
+    /// resid/envelope.cc:189), so a reset chip legitimately differs from a
+    /// freshly powered one (power-up counter 0xaa, envelope.cc:176) until
+    /// their envelope trajectories reconverge.
+    /// Acceptance: Hash(post-reset samples, instance A) == Hash(post-reset
+    /// samples, instance B) for two instances with identical run/reset/run
+    /// histories; and the pre-reset first-run streams also match pairwise
+    /// (sanity that the shared history really was identical).
     /// </summary>
     [Fact]
     public void ResetClearsAllState_SecondRunMatchesFresh()
     {
-        var sid = BuildSid();
-        var fresh = BuildSid();
+        var sidA = BuildSid();
+        var sidB = BuildSid();
 
         const int Total = 8_000;
         const int Every = 22;
 
-        // First run on `sid` - we discard these samples; the goal is to
-        // accumulate state that Reset() must clear.
-        _ = RunStimulus(sid, BasicSawtoothStimulus, Total, Every);
+        // Identical first runs accumulate state that Reset() must re-park
+        // deterministically (envelope counters are preserved by design).
+        var firstRunA = RunStimulus(sidA, BasicSawtoothStimulus, Total, Every);
+        var firstRunB = RunStimulus(sidB, BasicSawtoothStimulus, Total, Every);
+        firstRunA.Should().Equal(firstRunB, "identical histories must produce identical first runs");
 
-        sid.Reset();
-        var samplesAfterReset = RunStimulus(sid, BasicSawtoothStimulus, Total, Every);
-        var samplesFresh = RunStimulus(fresh, BasicSawtoothStimulus, Total, Every);
+        sidA.Reset();
+        sidB.Reset();
+        var afterResetA = RunStimulus(sidA, BasicSawtoothStimulus, Total, Every);
+        var afterResetB = RunStimulus(sidB, BasicSawtoothStimulus, Total, Every);
 
-        samplesAfterReset.Should().Equal(samplesFresh,
-            "Reset() must restore the SID to a state byte-equivalent to a fresh instance");
-        HashSamples(samplesAfterReset).Should().Equal(HashSamples(samplesFresh));
+        afterResetA.Should().Equal(afterResetB,
+            "Reset() must leave the SID in a deterministic state: equal histories, equal post-reset streams");
+        HashSamples(afterResetA).Should().Equal(HashSamples(afterResetB));
     }
 
     /// <summary>

@@ -61,34 +61,46 @@ public sealed class VicIiCoreTimingTests
     /// Use case: The VIC-II raster IRQ must assert on the configured
     /// compare line and remain latched in $D019 bit 0 until the
     /// CPU writes a 1 to that bit to clear it.
-    /// Acceptance: Writing $D012=$00 arms the comparator for line 0;
-    /// the VIC starts on line 0 so the first Tick fires the latch
-    /// immediately (VICE-compatible: raster IRQ asserts at the first
-    /// cycle of the matching raster line, not at a fixed cycle offset).
+    /// Acceptance: After reset the comparator holds line 0; the VIC starts
+    /// on line 0 so the first Tick fires the latch immediately
+    /// (VICE-compatible: raster IRQ asserts at the first cycle of the
+    /// matching raster line, not at a fixed cycle offset).
     /// $D019 reads $F1 (raster flag + IR master + fixed high bits 6-4);
     /// writing $01 to $D019 deasserts IRQ and clears the flag.
+    /// REBASED (PLAN-VICEPARITY-001 slice V2 / TEST-VIC-RASTER-IRQ-11): the
+    /// scenario previously relied on the divergent write-arming of the
+    /// comparator ($D012 store re-armed the latch); VICE stores never arm
+    /// (vicii-mem.c:158-169) and the boot fire comes from the reset state
+    /// (vicii.c:295,334-335 with the per-cycle compare,
+    /// vicii-cycle.c:466-474), so the chip is now Reset() into that
+    /// VICE-reachable state.
     /// </summary>
     [Fact]
     public void RasterIrq_AssertsAtCompareCycleAndClearsByWriteOneToD019()
     {
         var irq = new InterruptLine(InterruptType.Irq);
         var vic = new Mos6569(new BasicBus(), irq);
+        vic.Reset(); // VICE power-on: raster_irq_line 0, raster_irq_triggered 0.
 
-        vic.Write(0xD012, 0x00);
         vic.Write(0xD01A, 0x01);
 
-        // Before any tick: comparator just armed, no tick yet — latch still clear.
+        // Before any tick: reset state, no tick yet, latch still clear.
         Assert.False(irq.IsAsserted);
         Assert.Equal(0x70, vic.Read(0xD019));
 
-        // VICE-compatible: fires at the first cycle of the matching line.
-        // VIC is on line 0 and _rasterIrqLine=0 with compare armed,
-        // so the first Tick asserts the latch without delay.
+        // VICE-compatible: the latch fires at the first cycle of the matching
+        // line. VIC is on line 0 with raster_irq_line 0, so the first Tick
+        // latches bit 0 and (mask enabled) raises bit 7 in the same cycle
+        // (vicii-irq.c:36-62).
         vic.Tick();
+        Assert.Equal(0xF1, vic.Read(0xD019));
+        Assert.Equal(0xF1, vic.Read(0xD019));
 
+        // The IRQ line rise is presented one cycle later (the maincpu
+        // recognition point; VICE interrupt.c applies one cycle of latency to
+        // the rise, PLAN-VICEPARITY-001 slice V2 / TEST-VIC-RASTER-IRQ-02).
+        vic.Tick();
         Assert.True(irq.IsAsserted);
-        Assert.Equal(0xF1, vic.Read(0xD019));
-        Assert.Equal(0xF1, vic.Read(0xD019));
 
         vic.Write(0xD019, 0x01);
 
@@ -241,15 +253,19 @@ public sealed class VicIiCoreTimingTests
     }
 
     /// <summary>
-    /// FR: FR-CPU-003, FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// FR: FR-CPU-003, FR: FR-VIC-006, TR: TR-CYCLE-001 / TR-LOCKSTEP-VSF-001.
     /// Use case: A conditional steal request that ultimately does NOT
     /// skip the CPU must still allow the CPU to honour an IRQ pulse
     /// from a separate device on the same cycle.
     /// Acceptance: With a scripted stealer that asks but does not
-    /// preempt, plus an IRQ pulse asserting on tick 2, two clock steps
-    /// drive the CPU into its IRQ vector at $4000 with the correct
-    /// stack state and X register unchanged from the in-flight
-    /// instruction's already-executed effect.
+    /// preempt, plus an IRQ pulse asserting on tick 2, the second clock
+    /// step arms the CPU's staged IRQ dispatch (VICE's 7-cycle x64sc
+    /// sequence, 6510dtvcore.c DO_INTERRUPT + DO_IRQBRK, with the first
+    /// dummy cycle absorbed by the arming boundary tick); seven further
+    /// steps consume the sequence plus the handler's delayed-fetch cycle,
+    /// leaving PC at the $4000 vector with the pushed return state on the
+    /// stack (S=$FC) and X unchanged from the in-flight DEX's
+    /// already-executed effect.
     /// </summary>
     [Fact]
     public void SystemClock_DeliversIrqWhenConditionalStealRequestDoesNotSkipCpu()
@@ -275,7 +291,14 @@ public sealed class VicIiCoreTimingTests
         clock.Register(irqPulse);
 
         clock.Step();
-        clock.Step();
+        clock.Step(); // boundary after DEX: the asserted line arms the staged sequence
+
+        Assert.Equal(0x00, cpu.X); // DEX completed before the dispatch
+
+        // Staged dispatch: dummy fetch, PCH/PCL/P pushes, vector lo (I set),
+        // vector hi, then the handler's delayed-fetch cycle makes the JUMP visible.
+        for (var i = 0; i < 7; i++)
+            clock.Step();
 
         Assert.Equal(0x4000, cpu.PC);
         Assert.Equal(0xFC, cpu.S);

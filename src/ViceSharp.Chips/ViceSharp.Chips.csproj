@@ -4,6 +4,13 @@
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- PLAN-VICEPARITY-001 P0-3: parity ACs assert chip-internal state
+         (per-voice noise shift registers, envelope pipelines, VIC fetch
+         counters) directly instead of only through register readback. -->
+    <InternalsVisibleTo Include="ViceSharp.TestHarness" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

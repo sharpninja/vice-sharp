@@ -289,11 +289,20 @@ public sealed class SidPcmEquivalencyTests : IAsyncLifetime
             // written registers. The shim renderer resyncs the SID register
             // state into its private engine each call, so mid-stream digi
             // writes propagate.
+            // reSID is cycle-based and needs ~22.34 cycles per 44100 Hz sample,
+            // so a single 22-cycle call can yield 0 until the fractional sample
+            // accumulator catches up (fastsid, the previous oracle, produced one
+            // per call unconditionally). Render extra cycles until a sample is
+            // produced rather than failing.
             int got = ViceNativeBridge.RenderSidSamples(native, _singleNativeBuf, DeltaTCycles);
+            for (int guard = 0; got <= 0 && guard < 16; guard++)
+            {
+                got = ViceNativeBridge.RenderSidSamples(native, _singleNativeBuf, DeltaTCycles);
+            }
             if (got <= 0)
             {
                 throw new InvalidOperationException(
-                    $"vice_sid_render_samples returned {got} at sample {i}; expected 1 per call");
+                    $"vice_sid_render_samples returned {got} at sample {i} after retries; expected 1 per call");
             }
             nativeBuffer[i] = _singleNativeBuf[0];
         }
