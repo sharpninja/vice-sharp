@@ -122,9 +122,11 @@ public class RomProvider : IRomProvider
 
     private static readonly Dictionary<string, RomEntry> RomDatabase = new()
     {
-        ["basic"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/basic.901226-01.bin", Convert.FromHexString("89878CEA0A268734696DE11C4BAE593EAAA506465D2029D619C0E0CBCCDFA62D")),
-        ["kernal"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/kernal.901227-03.bin", Convert.FromHexString("83C60D47047D7BEAB8E5B7BF6F67F80DAA088B7A6A27DE0D7E016F6484042721")),
-        ["characters"] = new RomEntry("https://vice-emu.sourceforge.io/roms/C64/characters.901225-01.bin", Convert.FromHexString("FD0D53B8480E86163AC98998976C72CC58D5DD8EB824ED7B829774E74213B420")),
+        // VICE's GitHub mirror (svn-mirror) hosts the canonical ROM dumps; the sourceforge /roms/ paths
+        // now 404. Same bytes, so the SHA256 checks are unchanged (verified against the mirror).
+        ["basic"] = new RomEntry("https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/C64/basic-901226-01.bin", Convert.FromHexString("89878CEA0A268734696DE11C4BAE593EAAA506465D2029D619C0E0CBCCDFA62D")),
+        ["kernal"] = new RomEntry("https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/C64/kernal-901227-03.bin", Convert.FromHexString("83C60D47047D7BEAB8E5B7BF6F67F80DAA088B7A6A27DE0D7E016F6484042721")),
+        ["characters"] = new RomEntry("https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/C64/chargen-901225-01.bin", Convert.FromHexString("FD0D53B8480E86163AC98998976C72CC58D5DD8EB824ED7B829774E74213B420")),
     };
 
     private sealed record RomEntry(string Url, byte[] Sha256);

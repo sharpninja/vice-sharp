@@ -101,3 +101,4 @@ tools/aiunit-grok-claude-shim/publish/
 
 # MCP plugin transient cache (session state, current-turn, locks, failsafe). Never commit.
 /cache/
+cache/
