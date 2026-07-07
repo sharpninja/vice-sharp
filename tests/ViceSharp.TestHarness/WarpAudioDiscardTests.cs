@@ -111,6 +111,67 @@ public sealed class WarpAudioDiscardTests
     }
 
     /// <summary>
+    /// FR: FR-Audio-SID, TR: TR-AUDIO-SPEED-001, TEST: TEST-AUDIO-PACE-11.
+    /// Use case: with live audio ON and the limiter inside the live-audio
+    /// band, sound back-pressure must pace to the REQUESTED rate, not wall
+    /// clock: the SID emits samples at speed_percent-scaled cadence (VICE
+    /// sound.c:1067) and the fixed-rate device drains them. Acceptance
+    /// (diagnostic): a 150 percent limiter measures 135-170 percent and a
+    /// 50 percent limiter measures 40-60 percent over 4 seconds each.
+    /// </summary>
+    [Fact]
+    public async Task AppPipeline_LiveAudio_Paces_To_Limiter_Rate()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        Environment.SetEnvironmentVariable("VICESHARP_AUDIO", "1");
+        try
+        {
+            var registry = new EmulatorRuntimeRegistry();
+            var factory = new DefaultEmulatorRuntimeFactory();
+            var session = factory.Create(new CreateEmulatorSessionRequest("c64", "", false));
+            registry.Add(session);
+            using var pump = new EmulationPumpService(registry);
+
+            await pump.StartAsync(ct);
+            session.RunState = EmulatorRunState.Running;
+
+            session.SetLimiter(150, enabled: true);
+            await Task.Delay(1000, ct);
+            var fast = await MeasurePaceAsync(session, 4000, ct);
+            Assert.True(fast is >= 135.0 and <= 170.0, $"DIAG 150% limiter with audio = {fast:F1}%");
+
+            session.SetLimiter(50, enabled: true);
+            await Task.Delay(1000, ct);
+            var slow = await MeasurePaceAsync(session, 4000, ct);
+            Assert.True(slow is >= 40.0 and <= 60.0, $"DIAG 50% limiter with audio = {slow:F1}%");
+
+            session.RunState = EmulatorRunState.Paused;
+            await pump.StopAsync(ct);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("VICESHARP_AUDIO", null);
+        }
+    }
+
+    private static async Task<double> MeasurePaceAsync(EmulatorRuntimeSession session, int measureMs, CancellationToken ct)
+    {
+        long startCycles;
+        lock (session.SyncRoot)
+            startCycles = session.Machine.Clock.TotalCycles;
+
+        var sw = Stopwatch.StartNew();
+        await Task.Delay(measureMs, ct);
+        sw.Stop();
+
+        long endCycles;
+        lock (session.SyncRoot)
+            endCycles = session.Machine.Clock.TotalCycles;
+
+        return (endCycles - startCycles) / sw.Elapsed.TotalSeconds / 985_248.0 * 100.0;
+    }
+
+    /// <summary>
     /// FR: FR-Audio-SID, TR: TR-AUDIO-WARP-001, TEST: TEST-AUDIO-PACE-10.
     /// Use case: with live audio suspended above 200 percent, the pacing
     /// gate must fall through to the vsync regulator and actually reach the

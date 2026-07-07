@@ -1065,6 +1065,8 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // touches the audio path (preserving native cycle parity).
     private double _audioTicksPerSample;
     private double _audioSampleAccumulator;
+    private double _audioMasterClockHz;
+    private double _audioRelativeSpeedPercent = 100.0;
 
     public Sid6581(IBus bus) : this(bus, audioBackend: null) { }
 
@@ -1112,13 +1114,42 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         if (masterClockHz <= 0.0)
         {
+            _audioMasterClockHz = 0.0;
             _audioTicksPerSample = 0.0;
             return;
         }
 
-        var sidTickHz = masterClockHz / ClockDivisor;
-        _audioTicksPerSample = sidTickHz / SamplingRate;
+        _audioMasterClockHz = masterClockHz;
+        RecomputeAudioCadence();
         _audioSampleAccumulator = 0.0;
+    }
+
+    /// <summary>
+    /// Set the relative emulation speed for live audio (percent), mirroring
+    /// VICE sound_set_relative_speed (sound.c:1799-1817): the sample step
+    /// scales to clkstep = speed/100 * cycles_per_sec / sample_rate
+    /// (sound.c:1067), so the fixed-rate device drains one emulated second
+    /// of audio in 100/speed wall seconds and back-pressure paces emulation
+    /// to the requested rate (pitch shifts with speed, like VICE
+    /// fast-forward). Non-positive values are ignored; values above 200 are
+    /// clamped (past double speed the host suspends live output instead,
+    /// TR-AUDIO-WARP-001). Synthesis state is untouched - only the emission
+    /// cadence changes - so parity and determinism are unaffected.
+    /// </summary>
+    public void SetRelativeSpeed(double speedPercent)
+    {
+        if (speedPercent <= 0.0)
+            return;
+
+        _audioRelativeSpeedPercent = Math.Min(speedPercent, 200.0);
+        if (_audioMasterClockHz > 0.0)
+            RecomputeAudioCadence();
+    }
+
+    private void RecomputeAudioCadence()
+    {
+        var sidTickHz = _audioMasterClockHz / ClockDivisor;
+        _audioTicksPerSample = _audioRelativeSpeedPercent / 100.0 * sidTickHz / SamplingRate;
     }
 
     /// <summary>

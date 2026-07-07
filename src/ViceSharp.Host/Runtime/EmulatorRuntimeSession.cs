@@ -173,6 +173,7 @@ public sealed class EmulatorRuntimeSession
         {
             _limiterRatePercent = value;
             ApplyLiveAudioPolicy();
+            PushRelativeSpeedToAudioChip();
         }
     }
 
@@ -195,10 +196,25 @@ public sealed class EmulatorRuntimeSession
         {
             _limiterEnabled = value;
             ApplyLiveAudioPolicy();
+            PushRelativeSpeedToAudioChip();
         }
     }
 
     private bool _limiterEnabled = true;
+
+    // Keep the SID's live-audio cadence in step with the limiter (VICE
+    // sound_set_relative_speed tracks relative_speed from vsync.c,
+    // sound.c:913/:1799): with the limiter on, the fixed-rate device then
+    // paces emulation to the requested rate. Skipped in warp - output is
+    // suspended and vsync is bypassed anyway; re-enabling pushes the rate.
+    private void PushRelativeSpeedToAudioChip()
+    {
+        if (!_limiterEnabled)
+            return;
+
+        if (Machine.Devices.GetByRole(DeviceRole.AudioChip) is IAudioChip chip)
+            chip.SetRelativeSpeed(_limiterRatePercent);
+    }
 
     public bool IsWarpMode => !LimiterEnabled;
 

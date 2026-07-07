@@ -126,25 +126,31 @@
                                 <TextBlock Classes="val" Text="{Binding Run}" />
                             </StackPanel>
                         </Border>
-                        <Border Grid.Row="0" Grid.Column="2" Classes="statusCell">
+                        <!-- Cell MinWidths cover the widest value each column can show
+                             (monospace val font) so live updates never resize the grid:
+                             col0 CLOCK "9.853 MHz (1000%)", col1 CYCLE long-session
+                             counter, col2 LIMITER "1000%", col3 FPS "9999.9" / IEC
+                             "Active". An Auto grid column takes the max of its cells,
+                             so one MinWidth per column pins both rows. -->
+                        <Border Grid.Row="0" Grid.Column="2" Classes="statusCell" MinWidth="84">
                             <StackPanel>
                                 <TextBlock Classes="lbl" Text="LIMITER" />
                                 <TextBlock Classes="val" Text="{Binding Limiter}" />
                             </StackPanel>
                         </Border>
-                        <Border Grid.Row="0" Grid.Column="3" Classes="statusCell">
+                        <Border Grid.Row="0" Grid.Column="3" Classes="statusCell" MinWidth="84">
                             <StackPanel>
                                 <TextBlock Classes="lbl" Text="FPS" />
                                 <TextBlock Classes="val" Text="{Binding Fps}" />
                             </StackPanel>
                         </Border>
-                        <Border Grid.Row="1" Grid.Column="0" Classes="statusCell">
+                        <Border Grid.Row="1" Grid.Column="0" Classes="statusCell" MinWidth="148">
                             <StackPanel>
                                 <TextBlock Classes="lbl" Text="CLOCK" />
                                 <TextBlock Classes="val" Text="{Binding Clock}" />
                             </StackPanel>
                         </Border>
-                        <Border Grid.Row="1" Grid.Column="1" Classes="statusCell">
+                        <Border Grid.Row="1" Grid.Column="1" Classes="statusCell" MinWidth="112">
                             <StackPanel>
                                 <TextBlock Classes="lbl" Text="CYCLE" />
                                 <TextBlock Classes="val" Text="{Binding Cycle}" />
@@ -156,7 +162,7 @@
                                 <TextBlock Classes="val" Text="{Binding Pc}" />
                             </StackPanel>
                         </Border>
-                        <Border Grid.Row="1" Grid.Column="3" Classes="statusCell">
+                        <Border Grid.Row="1" Grid.Column="3" Classes="statusCell" MinWidth="84">
                             <StackPanel>
                                 <TextBlock Classes="lbl" Text="IEC" />
                                 <TextBlock Classes="val" Text="{Binding Iec}" />
