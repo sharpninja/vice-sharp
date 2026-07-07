@@ -800,10 +800,14 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
     }
 
     // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: second sprite s-access (SprDma1) on
-    // the Phi1 following the pointer fetch: (pointer << 6) + mc with mc++, or the
-    // $3FFF idle fetch when the sprite has no DMA (VICE vicii_fetch_sprite_dma_1,
-    // viciisc/vicii-fetch.c:282-299). The Phi2 of the same cycle performs the
-    // third s-access (SprDma2, viciisc/vicii-fetch.c:133-154).
+    // the Phi1 following the pointer fetch: (pointer << 6) + mc with mc++ when DMA
+    // is active, or the $3FFF idle fetch without an mc advance when it is not
+    // (VICE vicii_fetch_sprite_dma_1, viciisc/vicii-fetch.c:282-299). audit M7:
+    // the fetched byte merges into the middle data lane UNCONDITIONALLY
+    // (:295-296). This Phi1 access is NOT gated by the BA prefetch window
+    // (audit M9: vicii_fetch_sprite_dma_1 fetches regardless of
+    // prefetch_cycles). The Phi2 of the same cycle performs the third s-access
+    // (SprDma2, viciisc/vicii-fetch.c:133-154).
     private byte ReadVicSpriteData1(byte sprite)
     {
         byte data;
@@ -815,24 +819,36 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         else
         {
             data = ReadVicIdleGap();
+            _vic.MergeSpriteData(sprite, sAccessIndex: 1, data);
         }
 
         FetchSpriteDataPhi2(sprite, sAccessIndex: 2);
         return data;
     }
 
-    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14: Phi2 sprite s-access (SprDma0 on the
-    // pointer cycle, SprDma2 on the dma1 cycle), gated on the sprite DMA latch
-    // (VICE sprite_dma_cycle_0/_2, viciisc/vicii-fetch.c:110-154). The CPU is
-    // halted by the sprite BA window during these cycles, so performing the fetch
-    // within the same dispatch preserves bus ordering.
+    // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-14 + audit M7/M9/L2: Phi2 sprite
+    // s-access (SprDma0 on the pointer cycle, SprDma2 on the dma1 cycle),
+    // mirroring VICE sprite_dma_cycle_0/_2 (viciisc/vicii-fetch.c:110-154).
+    // The byte defaults to the Phi2 bus latch (last_bus_phi2, :112/:135); with
+    // DMA active the real fetch replaces it only when the BA prefetch counter
+    // has settled (!prefetch_cycles, :115/:138) while mc always advances; the
+    // merge into the 24-bit data latch happens UNCONDITIONALLY (:129-130,
+    // :152-153). The CPU is halted by the sprite BA window during real
+    // fetches, so performing them within the same dispatch preserves bus
+    // ordering.
     private void FetchSpriteDataPhi2(byte sprite, int sAccessIndex)
     {
-        if (!_vic.IsSpriteDmaActive(sprite))
-            return;
-
-        var value = ReadVicPhi1Ram(_vic.GetSpriteDataFetchAddress(sprite));
-        _vic.LatchSpriteData(sprite, sAccessIndex, value);
+        byte value = _vic.LastBusPhi2;
+        if (_vic.IsSpriteDmaActive(sprite))
+        {
+            if (!_vic.IsPrefetchActive)
+                value = ReadVicPhi1Ram(_vic.GetSpriteDataFetchAddress(sprite));
+            _vic.LatchSpriteData(sprite, sAccessIndex, value);
+        }
+        else
+        {
+            _vic.MergeSpriteData(sprite, sAccessIndex, value);
+        }
     }
 
     private byte ReadVicRefreshCounter()
@@ -879,7 +895,7 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             return;
 
         var slot = _vic.CurrentVideoMatrixSlot;
-        if (_vic.IsMatrixPrefetchActive)
+        if (_vic.IsPrefetchActive)
         {
             _vic.LatchVideoMatrixPrefetch(slot, ReadCpuProgramRamByte());
         }

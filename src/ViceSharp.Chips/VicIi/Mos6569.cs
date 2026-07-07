@@ -55,6 +55,21 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // (viciisc/vicii-mem.c:530,547 with vicii-cycle.c:413-425, finding 46).
     private byte _pendingCollisionClear;
 
+    // PLAN-VICEPARITY-001 audit L2: VICE vicii.last_bus_phi2. Every CPU
+    // register read latches the returned byte and every store latches the
+    // written byte (vicii-mem.c:738/:338); the value resets to $FF once per
+    // cycle at the end of the Phi2 section (vicii-cycle.c:604-605). Idle
+    // sprite s-accesses on the Phi2 lanes consume it (vicii-fetch.c:112,135).
+    private byte _lastBusPhi2 = 0xFF;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 audit L2: the current Phi2 bus latch
+    /// (vicii.last_bus_phi2). Consumed by the C64 memory map's sprite Phi2
+    /// s-access lanes when sprite DMA is inactive or the BA prefetch window
+    /// has not settled (vicii-fetch.c:110-154).
+    /// </summary>
+    public byte LastBusPhi2 => _lastBusPhi2;
+
     public ushort CurrentRasterLine { get; private set; }
     
     private readonly VideoRenderer _renderer;
@@ -1424,6 +1439,11 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // end of vicii_draw_cycle (vicii-draw-cycle.c:687).
         _rasterXPipe = RasterX;
 
+        // audit L2: the Phi2 bus latch resets to $FF once per cycle (VICE
+        // viciisc/vicii-cycle.c:604-605); a CPU register access between ticks
+        // is therefore visible exactly to the following cycle's sprite lanes.
+        _lastBusPhi2 = 0xFF;
+
         // PLAN-VICEPARITY-001 FR-VIC-FETCH AC-08 / FR-VIC-MATRIX-ADDR AC-08:
         // latch the delayed video-mode copy at the end of the cycle so the next
         // cycle's g-access sees the previous $D011. VICE
@@ -1467,14 +1487,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // frame boundary.
         _badLineCountThisFrame = 0;
         _lastBadLineCounted = -1;
-        // BACKFILL-VIDEO-001: per-frame sprite DMA counter also
-        // resets at the frame start so each frame is independent.
+        // BACKFILL-VIDEO-001: per-frame sprite DMA cycle-theft DIAGNOSTIC
+        // counters reset at the frame start so each frame is independent.
         _spriteDmaCyclesThisFrame = 0;
         _lastSpriteDmaLineCounted = -1;
-        _spriteDmaActiveMask = 0;
-        Array.Clear(_spriteDmaStartLines, 0, _spriteDmaStartLines.Length);
-        Array.Clear(_spriteDmaHeights, 0, _spriteDmaHeights.Length);
-        _spriteDisplayBits = 0;
+        // audit M8: sprite DMA/display STATE is deliberately NOT reset here.
+        // VICE vicii_cycle_start_of_frame (vicii-cycle.c:202-218) never
+        // touches sprite_dma, sprite_display_bits or mc/mcbase/exp_flop; a
+        // DMA window straddling the raster wrap keeps fetching until
+        // sprite_mcbase_update turns it off at mcbase==63 (vicii-cycle.c:81-93).
 
         // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-08/AC-09: clear the LP
         // "already latched this frame" flag; if the pen line is still held
@@ -1547,6 +1568,8 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // first non-BA cycle re-arms it at 3+1 (vicii-cycle.c:587-591).
         _rasterXPipe = -1;
         _prefetchCycles = 0;
+        // audit L2: idle Phi2 bus (vicii-cycle.c:604-605).
+        _lastBusPhi2 = 0xFF;
         Array.Clear(_videoBuffer, 0, _videoBuffer.Length);
         Array.Clear(_colorBuffer, 0, _colorBuffer.Length);
         Array.Clear(_videoBufferDisplayValid, 0, _videoBufferDisplayValid.Length);
@@ -2168,6 +2191,22 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public void LatchSpriteData(int spriteNumber, int sAccessIndex, byte value)
     {
+        MergeSpriteData(spriteNumber, sAccessIndex, value);
+        ref SpriteState sprite = ref _sprites[spriteNumber];
+        sprite.Mc = (byte)((sprite.Mc + 1) & 0x3F);
+        if (sAccessIndex == 2)
+            sprite.DataValid = true;
+    }
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 audit M7: merges one s-access byte into the 24-bit
+    /// sprite data latch WITHOUT advancing mc. VICE performs this merge
+    /// unconditionally on every s-access lane, DMA active or not
+    /// (viciisc/vicii-fetch.c:129-130 dma0, :295-296 dma1, :152-153 dma2);
+    /// only the memory fetch and the mc advance are gated on the DMA latch.
+    /// </summary>
+    public void MergeSpriteData(int spriteNumber, int sAccessIndex, byte value)
+    {
         ref SpriteState sprite = ref _sprites[spriteNumber];
         sprite.Data = sAccessIndex switch
         {
@@ -2175,9 +2214,6 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             1 => (sprite.Data & 0xFF00FF) | ((uint)value << 8),
             _ => (sprite.Data & 0xFFFF00) | value,
         };
-        sprite.Mc = (byte)((sprite.Mc + 1) & 0x3F);
-        if (sAccessIndex == 2)
-            sprite.DataValid = true;
     }
 
     private void ClearExpiredSpriteDmaLatches()
@@ -2489,15 +2525,17 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public bool IsMatrixFetchSlot(byte graphicsFetchSlot) => IsBadLine && graphicsFetchSlot < _videoBuffer.Length;
 
     /// <summary>
-    /// PLAN-VICEPARITY-001 audit H3: true while VICE's prefetch counter is
+    /// PLAN-VICEPARITY-001 audit H3/M9: true while VICE's prefetch counter is
     /// non-zero, i.e. BA has been low for fewer than 3 cycles before this
     /// fetch (vicii-cycle.c:580-591). A c-access in this state reads garbage
-    /// (vbuf 0xFF + CPU-bus colour nibble, vicii-fetch.c:192-201). On a
-    /// standard bad line the counter reaches 0 exactly at the first c-access,
-    /// so no slot is corrupted; the previous fixed slot&lt;3 heuristic wrongly
-    /// corrupted the first three columns of every bad line.
+    /// (vbuf 0xFF + CPU-bus colour nibble, vicii-fetch.c:192-201) and a Phi2
+    /// sprite s-access keeps the Phi2 bus byte instead of fetching RAM
+    /// (vicii-fetch.c:115/:138). On a standard bad line the counter reaches 0
+    /// exactly at the first c-access, so no slot is corrupted; the previous
+    /// fixed slot&lt;3 heuristic wrongly corrupted the first three columns of
+    /// every bad line.
     /// </summary>
-    public bool IsMatrixPrefetchActive => _prefetchCycles != 0;
+    public bool IsPrefetchActive => _prefetchCycles != 0;
 
     public void LatchVideoMatrixFetch(int slot, byte matrixByte, byte colorNibble)
     {
@@ -2608,6 +2646,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// <inheritdoc />
     public byte Read(ushort offset)
     {
+        var value = ReadRegister(offset);
+        // audit L2: every CPU read latches the transferred byte onto the Phi2
+        // bus (VICE vicii-mem.c:738), including the $FF of unused registers.
+        _lastBusPhi2 = value;
+        return value;
+    }
+
+    private byte ReadRegister(ushort offset)
+    {
         int register = (offset - BaseAddress) & 0x3F;
 
         // BACKFILL-VIDEO-001 / TR-VIC-EDGE-006 / FR-VIC-001 /
@@ -2714,6 +2761,43 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     public void Write(ushort offset, byte value)
     {
         int register = (offset - BaseAddress) & 0x3F;
+
+        // audit L2: every CPU store latches the written byte onto the Phi2
+        // bus (VICE vicii-mem.c:338), before any register dispatch.
+        _lastBusPhi2 = value;
+
+        // audit M13: d017_store (VICE vicii-mem.c:183-214). An unchanged
+        // value early-outs; for each sprite whose Y-expand bit clears while
+        // exp_flop is low, the sprite crunch rewrites mc when the store lands
+        // on the ChkSprCrunch cycle (hw Phi2(15) flags = managed RasterX 14,
+        // vicii-chip-model.c:141), and exp_flop is set unconditionally. The
+        // register is stored last.
+        if (register == 0x17)
+        {
+            if (value == _registers[0x17])
+                return;
+
+            for (int i = 0; i < 8; i++)
+            {
+                ref SpriteState sprite = ref _sprites[i];
+                if ((value & (1 << i)) == 0 && !sprite.ExpFlop)
+                {
+                    if (RasterX == 14)
+                    {
+                        // 0x2a = 0b101010, 0x15 = 0b010101 (vicii-mem.c:198-205).
+                        sprite.Mc = (byte)((0x2A & (sprite.McBase & sprite.Mc))
+                                         | (0x15 & (sprite.McBase | sprite.Mc)));
+                    }
+
+                    sprite.ExpFlop = true;
+                }
+
+                sprite.IsExpandedY = (value & (1 << i)) != 0;
+            }
+
+            _registers[0x17] = value;
+            return;
+        }
 
         if (register == 0x19)
         {
@@ -2842,14 +2926,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                     _sprites[i].X &= 0xFF;
             }
         }
-        // $D017 Sprite Y Expansion: bit n = sprite n is Y-expanded.
-        else if (offset == 0x17)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                _sprites[i].IsExpandedY = (value & (1 << i)) != 0;
-            }
-        }
+        // $D017 Sprite Y Expansion is handled directly in Write (audit M13:
+        // the d017_store crunch/exp_flop side effects need the pre-store
+        // register value and the current cycle).
         // $D01B Sprite-data priority (bit n = sprite n behind background data).
         else if (offset == 0x1B)
         {
