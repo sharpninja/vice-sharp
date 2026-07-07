@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Nuke.Common;
+using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
@@ -11,6 +12,27 @@ using Nuke.Common.Tools.Git;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 
+// Nuke-generated Azure DevOps pipelines (regenerated on every local build run):
+// - azure-pipelines.ci.yml: Test on branch pushes (native-oracle tests auto-skip
+//   off-box via [ViceFact]; Determinism/AiReview categories excluded by Test).
+// - azure-pipelines.release.yml: PublishNuget on v* tags only - the tag-gated
+//   reproducible NuGet release path (needs the NUGET_API_KEY secret on the
+//   pipeline; PublishNuget's own gate re-verifies tag/version/pack integrity).
+[AzurePipelines(
+    "ci",
+    AzurePipelinesImage.WindowsLatest,
+    InvokedTargets = new[] { nameof(Test) },
+    TriggerBranchesInclude = new[] { "master", "feat/*" },
+    PullRequestsBranchesInclude = new[] { "master" },
+    CacheKeyFiles = new string[0])]
+[AzurePipelines(
+    "release",
+    AzurePipelinesImage.WindowsLatest,
+    InvokedTargets = new[] { nameof(PublishNuget) },
+    ImportSecrets = new[] { "NUGET_API_KEY" },
+    TriggerTagsInclude = new[] { "v*" },
+    TriggerBranchesInclude = new string[0],
+    CacheKeyFiles = new string[0])]
 sealed partial class Build : NukeBuild
 {
     public static int Main() => Execute<Build>(x => x.Compile);
@@ -116,8 +138,14 @@ sealed partial class Build : NukeBuild
     /// </summary>
     Target PackNuget => _ => _
         .DependsOn(Compile)
-        .Executes(() =>
-        {
+        .Executes(PackAllNugetPackages);
+
+    // Shared by PackNuget (local flow, after Compile) and PublishNuget (the
+    // Nuke-generated single-job release pipeline, which restores/builds and
+    // packs on one agent because the Azure generator never downloads
+    // artifacts between jobs - its download side is unimplemented upstream).
+    void PackAllNugetPackages()
+    {
             var version = string.IsNullOrWhiteSpace(PackageVersionOverride) ? MsiVersion : PackageVersionOverride;
             PackagesOutputDirectory.CreateOrCleanDirectory();
 
@@ -238,23 +266,34 @@ sealed partial class Build : NukeBuild
                 individual.Length,
                 version,
                 PackagesOutputDirectory);
-        });
+    }
 
     [Parameter("NuGet feed for PublishNuget. Default nuget.org v3.")]
     readonly string NugetSource = "https://api.nuget.org/v3/index.json";
 
     /// <summary>
-    /// Publish every package produced by PackNuget to the NuGet feed.
-    /// The API key comes from the NUGET_API_KEY environment variable and is
-    /// never logged (Nuke redacts the ApiKey setting). Duplicate versions are
-    /// skipped so re-runs are safe.
+    /// Publish the v-tagged release packages to the NuGet feed. Deliberately
+    /// dependency-free so the Nuke-generated Azure release pipeline is a
+    /// single self-sufficient job (the generator gives every target its own
+    /// job on a fresh agent and never downloads artifacts between jobs):
+    /// restores/builds the solution and packs fresh from the tagged checkout,
+    /// then pushes. The API key comes from the NUGET_API_KEY environment
+    /// variable and is never logged (Nuke redacts the ApiKey setting).
+    /// Duplicate versions are skipped so re-runs are safe.
     /// </summary>
     Target PublishNuget => _ => _
-        .DependsOn(PackNuget)
         .Executes(() =>
         {
             var apiKey = Environment.GetEnvironmentVariable("NUGET_API_KEY");
             Assert.True(!string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
+
+            // Build + pack in-job (reproducible from the tagged checkout; the
+            // bundle pack requires a prior restore+build because its PackageId
+            // is injected pack-time and cannot survive an implicit restore).
+            DotNetBuild(s => s
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration));
+            PackAllNugetPackages();
 
             // PUBLISH-GATE: packages ship only from a tagged release commit
             // whose version is NEW: either a fresh minor (vX.Y.0, first tag
