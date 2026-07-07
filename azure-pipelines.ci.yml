@@ -34,27 +34,11 @@ stages:
     pool:
       name: 'Default'
     jobs:
-      - job: Restore
-        displayName: 'Restore'
+      - job: CiTest
+        displayName: 'CiTest'
         dependsOn: [  ]
         steps:
           - task: CmdLine@2
-            displayName: 'Run: Restore'
+            displayName: 'Run: CiTest'
             inputs:
-              script: './build.cmd Restore --skip'
-      - job: Compile
-        displayName: 'Compile'
-        dependsOn: [ Restore ]
-        steps:
-          - task: CmdLine@2
-            displayName: 'Run: Compile'
-            inputs:
-              script: './build.cmd Compile --skip'
-      - job: Test
-        displayName: 'Test'
-        dependsOn: [ Compile ]
-        steps:
-          - task: CmdLine@2
-            displayName: 'Run: Test'
-            inputs:
-              script: './build.cmd Test --skip'
+              script: './build.cmd CiTest --skip'

@@ -4,4 +4,5 @@
 :; exit $?
 
 @ECHO OFF
-powershell -NoLogo -NoProfile -ExecutionPolicy ByPass -Command "& '%~dp0build.ps1' %*"
+powershell -NoLogo -NoProfile -ExecutionPolicy ByPass -Command "& '%~dp0build.ps1' %*; exit $LASTEXITCODE"
+exit /b %ERRORLEVEL%

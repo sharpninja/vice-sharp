@@ -23,7 +23,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [DefaultPoolAzurePipelines(
     "ci",
     AzurePipelinesImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(Test) },
+    InvokedTargets = new[] { nameof(CiTest) },
     TriggerBranchesInclude = new[] { "master", "main", "feat/*" },
     PullRequestsBranchesInclude = new[] { "master", "main" },
     CacheKeyFiles = new string[0])]
@@ -95,6 +95,22 @@ sealed partial class Build : NukeBuild
                 // admitted per slice as they flip green: PLAN-VICEPARITY-001),
                 // and the legacy renderer tests awaiting per-cycle replacement
                 // (ParityLegacy, deleted as V-slices land).
+                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"));
+        });
+
+    /// <summary>
+    /// CI variant of <see cref="Test"/>: dependency-free and self-sufficient
+    /// (restores and builds in-job) because the Nuke Azure generator gives
+    /// every target its own job on a fresh agent and never moves artifacts
+    /// between jobs - run 1029's Test job proved --skip + --no-build on a
+    /// clean workspace finds no test assemblies. Local flows keep using Test.
+    /// </summary>
+    Target CiTest => _ => _
+        .Executes(() =>
+        {
+            DotNetTest(s => s
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
                 .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"));
         });
 
