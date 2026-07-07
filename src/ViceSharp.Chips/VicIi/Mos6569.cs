@@ -180,12 +180,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     // BA) still sees garbage c-accesses (vicii-fetch.c:192-201).
     private int _prefetchCycles;
 
-    // PLAN-VICEPARITY-001 audit H3: per-cycle sprite BA masks from the PAL
-    // cycle table (viciisc/vicii-chip-model.c:112-238, BaSpr entries; consumed
-    // by vicii_check_sprite_ba, vicii-fetch.c:301-307). Index = RasterX.
-    // NTSC tables differ at the line-end cycles and are refined in the audit
-    // Phase 5 slice (M11); until then 64/65-cycle models fall back to 0 for
-    // the cycles beyond this table.
+    // PLAN-VICEPARITY-001 audit H3/M11: per-cycle sprite BA masks from the
+    // per-model cycle tables (viciisc/vicii-chip-model.c, BaSpr entries;
+    // consumed by vicii_check_sprite_ba, vicii-fetch.c:301-307). Index =
+    // RasterX; selection follows CyclesPerLine like VICE's cycle_tab choice.
     private static readonly byte[] PalSpriteBaMasks =
     [
         0x18, 0x38, 0x30, 0x70, 0x60, 0xE0, 0xC0, 0xC0, // rc0-7:  BaSpr(3,4)..BaSpr(6,7)
@@ -198,6 +196,40 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         0x00, 0x00, 0x00,                               // rc51-53
         0x01, 0x01, 0x03, 0x03, 0x07,                   // rc54-58: BaSpr(0)..BaSpr(0,1,2)
         0x06, 0x0E, 0x0C, 0x1C,                         // rc59-62: BaSpr(1,2)..BaSpr(2,3,4)
+    ];
+
+    // NTSC-65 (cycle_tab_ntsc, vicii-chip-model.c:272-403): sprite 3's s-pair
+    // wraps the line (SprDma1(3) at rc0, SprPtr(3) at rc64), BA windows shift
+    // accordingly; rc54 carries no sprite BA.
+    private static readonly byte[] NtscSpriteBaMasks =
+    [
+        0x38, 0x30, 0x70, 0x60, 0xE0, 0xC0, 0xC0, 0x80, // rc0-7
+        0x80, 0x00, 0x00,                               // rc8-10
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc11-18 (BaFetch window)
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc19-26
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc27-34
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc35-42
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc43-50
+        0x00, 0x00, 0x00, 0x00,                         // rc51-54
+        0x01, 0x01, 0x03, 0x03, 0x07,                   // rc55-59
+        0x06, 0x0E, 0x0C, 0x1C, 0x18,                   // rc60-64
+    ];
+
+    // Old NTSC (cycle_tab_ntsc_old, vicii-chip-model.c:437-566): PAL-style
+    // sprite pairs shifted one cycle later at the line end; rc54 has no
+    // sprite BA.
+    private static readonly byte[] NtscOldSpriteBaMasks =
+    [
+        0x18, 0x38, 0x30, 0x70, 0x60, 0xE0, 0xC0, 0xC0, // rc0-7
+        0x80, 0x80, 0x00,                               // rc8-10
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc11-18 (BaFetch window)
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc19-26
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc27-34
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc35-42
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // rc43-50
+        0x00, 0x00, 0x00, 0x00,                         // rc51-54
+        0x01, 0x01, 0x03, 0x03, 0x07,                   // rc55-59
+        0x06, 0x0E, 0x0C, 0x1C,                         // rc60-63
     ];
 
     // BACKFILL-VIDEO-001: Sprite DMA cycle stealing accounting.
@@ -1342,9 +1374,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // standard bad line (cycle 15, BA low since 12) reads real data.
         {
             bool baLow = _badLine && RasterX >= 11 && RasterX < 54;
-            if (!baLow && (uint)RasterX < (uint)PalSpriteBaMasks.Length)
+            byte[] spriteBaMasks = CyclesPerLine == NtscCyclesPerLine
+                ? NtscSpriteBaMasks
+                : CyclesPerLine == NtscOldCyclesPerLine ? NtscOldSpriteBaMasks : PalSpriteBaMasks;
+            if (!baLow && (uint)RasterX < (uint)spriteBaMasks.Length)
             {
-                baLow = (_spriteDmaActiveMask & PalSpriteBaMasks[RasterX]) != 0;
+                baLow = (_spriteDmaActiveMask & spriteBaMasks[RasterX]) != 0;
             }
 
             if (baLow)
@@ -1933,7 +1968,10 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         // mirroring vicii-cycle.c:81-93. The coarse height-window expiry
         // (ClearExpiredSpriteDmaLatches at RasterX 0) is no longer needed because
         // mc advances via LatchSpriteData s-accesses in C64MemoryMap.
-        int check1 = (CyclesPerLine == PalCyclesPerLine) ? 54 : (CyclesPerLine == NtscCyclesPerLine ? 56 : 55);
+        // audit M3: ChkSprDma rides raster cycles 54/55 on PAL (Phi1(55)/(56),
+        // vicii-chip-model.c:220/:222) and 55/56 on BOTH NTSC variants
+        // (cycle_tab_ntsc :383/:385, cycle_tab_ntsc_old :548/:550).
+        int check1 = (CyclesPerLine == PalCyclesPerLine) ? 54 : 55;
         int check2 = check1 + 1;
         if (RasterX == check1 || RasterX == check2)
         {
@@ -2028,7 +2066,7 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
                 }
             }
         }
-        else if (RasterX == 57)
+        else if (RasterX == (CyclesPerLine == NtscCyclesPerLine ? 58 : 57))
         {
             // PLAN-VICEPARITY-001 FR-VIC-SPRITE-DMA AC-04/AC-05/AC-14:
             // check_sprite_display (vicii-cycle.c:62-79). Reload mc = mcbase for
@@ -2036,6 +2074,9 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             // DMA active and (enable && Y == raster_line). If DMA is not active,
             // clear the display bit. Note: the bit is NOT cleared when DMA is active
             // but Y does not match (it stays set once latched until DMA ends).
+            // audit M4: ChkSprDisp rides cycle 57 on PAL and old NTSC
+            // (Phi1(58), vicii-chip-model.c:226/:552) but cycle 58 on NTSC-65
+            // (Phi1(59), :389), matching the shifted sprite-0 p-access.
             byte enabled = _registers[0x15];
             int rasterLow = CurrentRasterLine & 0xFF;
             for (int i = 0; i < 8; i++)
@@ -2434,21 +2475,34 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// </summary>
     public ushort ConsumeGraphicsFetchAddress()
     {
-        ushort address = ComputeGraphicsFetchAddress((byte)(_registers[0x11] | (_reg11Delay & 0x20)));
+        ushort address;
 
-        if (((_registers[0x11] ^ _reg11Delay) & 0x20) != 0)
+        // audit M14: vicii_fetch_graphics branches on color_latency
+        // (vicii-fetch.c:239-262): the 6569 family composes the mode from the
+        // live $D011 with the delayed BMM bit and runs the RAM-to-charROM
+        // latch magic; the 8565/8562 use the delayed copy alone, no magic.
+        if (ColorLatencyEnabled)
         {
-            // 6569 fetch magic (VICE viciisc/vicii-fetch.c:242-259): when the
-            // mode change switches the fetch from RAM to (char) ROM, the LSB is
-            // latched using the previous cycle's mode and the upper bits come
-            // from the current mode.
-            var addressFrom = ComputeGraphicsFetchAddress(_reg11Delay);
-            var addressTo = ComputeGraphicsFetchAddress(_registers[0x11]);
-            var probe = CharRomAddressProbe;
-            if (probe is not null && !probe(addressFrom) && probe(addressTo))
+            address = ComputeGraphicsFetchAddress((byte)(_registers[0x11] | (_reg11Delay & 0x20)));
+
+            if (((_registers[0x11] ^ _reg11Delay) & 0x20) != 0)
             {
-                address = (ushort)((addressFrom & 0x00FF) | (addressTo & 0x3F00));
+                // 6569 fetch magic (VICE viciisc/vicii-fetch.c:242-259): when the
+                // mode change switches the fetch from RAM to (char) ROM, the LSB is
+                // latched using the previous cycle's mode and the upper bits come
+                // from the current mode.
+                var addressFrom = ComputeGraphicsFetchAddress(_reg11Delay);
+                var addressTo = ComputeGraphicsFetchAddress(_registers[0x11]);
+                var probe = CharRomAddressProbe;
+                if (probe is not null && !probe(addressFrom) && probe(addressTo))
+                {
+                    address = (ushort)((addressFrom & 0x00FF) | (addressTo & 0x3F00));
+                }
             }
+        }
+        else
+        {
+            address = ComputeGraphicsFetchAddress(_reg11Delay);
         }
 
         _videoMatrixLineIndex = (_videoMatrixLineIndex + 1) % _videoBuffer.Length;
@@ -2497,12 +2551,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001:
-    /// VICE viciisc/vicii-fetch.c:vici_fetch_idle_gfx reads $39ff in ECM
-    /// and $3fff otherwise.
+    /// VICE viciisc/vicii-fetch.c:vicii_fetch_idle_gfx reads $39ff in ECM
+    /// and $3fff otherwise. audit M14: the $D011 source follows
+    /// color_latency (vicii-fetch.c:218-222): live regs on the 6569 family,
+    /// the one-cycle-delayed copy on the 8565/8562.
     /// </summary>
-    public ushort IdleGraphicsFetchAddress => (_registers[0x11] & 0x40) != 0
-        ? (ushort)0x39FF
-        : (ushort)0x3FFF;
+    public ushort IdleGraphicsFetchAddress =>
+        ((ColorLatencyEnabled ? _registers[0x11] : _reg11Delay) & 0x40) != 0
+            ? (ushort)0x39FF
+            : (ushort)0x3FFF;
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / TR-VIC-EDGE-005 / FR-VIC-001 / TEST-VIC-001:
@@ -2536,6 +2593,33 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
     /// every bad line.
     /// </summary>
     public bool IsPrefetchActive => _prefetchCycles != 0;
+
+    /// <summary>
+    /// PLAN-VICEPARITY-001 audit M11/L3: the merged cycle-table xpos VICE
+    /// stores for a raster cycle: the PHI1 xpos floored to 8
+    /// (vicii-chip-model.c:767, read back by cycle_get_xpos,
+    /// vicii-chip-model.h:164-167). PAL starts at 0x194 wrapping at 0x1F8
+    /// (:112-238); both NTSC tables start at 0x19c wrapping at 0x200
+    /// (:273/:438), and NTSC-65 holds 0x184 for one extra cycle at raster
+    /// cycle 62 (the Phi1(62)/Phi1(63) stall, :395-397). Consumed by the
+    /// sprite draw (through the flags pipe) and the light-pen X latch (from
+    /// the current cycle).
+    /// </summary>
+    internal int FlooredPhi1Xpos(int rasterCycle)
+    {
+        if (CyclesPerLine == NtscCyclesPerLine)
+        {
+            int rc = rasterCycle >= 62 ? rasterCycle - 1 : rasterCycle;
+            return ((0x19C + (8 * rc)) % 0x200) & ~7;
+        }
+
+        if (CyclesPerLine == NtscOldCyclesPerLine)
+        {
+            return ((0x19C + (8 * rasterCycle)) % 0x200) & ~7;
+        }
+
+        return ((0x194 + (8 * rasterCycle)) % 0x1F8) & ~7;
+    }
 
     public void LatchVideoMatrixFetch(int slot, byte matrixByte, byte colorNibble)
     {
@@ -3108,16 +3192,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
             return;
         }
 
-        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-01: VICE xpos formula from
-        // vicii-lightpen.c:75 + vicii-chip-model.h:164-167.
-        // cycle_get_xpos(cycle_table[raster_cycle]) / 2  where
-        // raster_cycle = RasterX + 1 (0-based managed index to 1-based VICE).
-        // PAL Phi1 xpos for cycle n = (0x194 + 8*(n-1)) wrapping at 0x1F8;
-        // equivalently: phi1_xpos = (0x194 + 8*RasterX) % 0x1F8.
-        // cycle_get_xpos clears the low 3 bits (XPOS_M/XPOS_B shift, then <<3):
-        // x_base = (phi1_xpos & ~7) / 2.
-        int phi1Xpos = (0x194 + 8 * RasterX) % 0x1F8;
-        int x = (phi1Xpos & ~7) / 2 + _lightPenXExtraBits;
+        // PLAN-VICEPARITY-001 FR-VIC-LIGHTPEN AC-01 + audit L3: VICE xpos is
+        // cycle_get_xpos(cycle_table[raster_cycle]) / 2 (vicii-lightpen.c:75)
+        // from the ACTIVE model's cycle table via the shared floored-Phi1
+        // helper (vicii-chip-model.c:767 with the per-model bases/wraps and
+        // the NTSC-65 stall).
+        int x = (FlooredPhi1Xpos(RasterX) / 2) + _lightPenXExtraBits;
 
         if (retrigger)
         {

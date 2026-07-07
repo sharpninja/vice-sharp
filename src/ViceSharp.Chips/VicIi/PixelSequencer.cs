@@ -118,18 +118,20 @@ internal sealed class PixelSequencer
     // ---------------------------------------------------------------
 
     /// <summary>
-    /// 504-byte palette-index line buffer.
-    /// Index = RasterX * 8 + pixel_i (0..7).
-    /// VideoRenderer reads frame pixel X as
-    /// <c>LineIndices[X + FirstVisibleRasterX * 8]</c>.
+    /// 520-byte palette-index line buffer (audit L1: VICE
+    /// VICII_DRAW_BUFFER_SIZE = 65*8, viciitypes.h:60, sized for the 65-cycle
+    /// NTSC line). Index = VICE dbuf indexing: cycle k's ring-delayed pixels
+    /// land at 8*(k-1) after the raster-cycle-1 offset reset. VideoRenderer
+    /// reads frame pixel X as <c>LineIndices[X + FirstVisibleRasterX * 8]</c>.
     /// </summary>
-    internal readonly byte[] LineIndices = new byte[63 * 8];
+    internal readonly byte[] LineIndices = new byte[65 * 8];
 
     /// <summary>
-    /// 504-byte priority-flag line buffer; same indexing as <see cref="LineIndices"/>.
-    /// 0 = background pixel, 2 = foreground pixel (sprite priority gate).
+    /// 520-byte priority-flag line buffer; same sizing rationale as
+    /// <see cref="LineIndices"/> (audit L1). 0 = background pixel,
+    /// 2 = foreground pixel (sprite priority gate).
     /// </summary>
-    internal readonly byte[] LinePriority = new byte[63 * 8];
+    internal readonly byte[] LinePriority = new byte[65 * 8];
 
     // ---------------------------------------------------------------
     // V4: colour resolution pipeline state (draw_colors8).
@@ -232,6 +234,15 @@ internal sealed class PixelSequencer
     private static readonly byte[] s_palDmaCycle0 = new byte[63];
     private static readonly byte[] s_palDmaCycle2 = new byte[63];
 
+    // audit M11: NTSC-65 tables (cycle_tab_ntsc, vicii-chip-model.c:272-403).
+    // Sprite 3's pair wraps the line: SprDma1(3) at rc0, SprPtr(3) at rc64.
+    private static readonly byte[] s_ntscDmaCycle0 = new byte[65];
+    private static readonly byte[] s_ntscDmaCycle2 = new byte[65];
+
+    // audit M11: old-NTSC tables (cycle_tab_ntsc_old, vicii-chip-model.c:437-566).
+    private static readonly byte[] s_ntscOldDmaCycle0 = new byte[64];
+    private static readonly byte[] s_ntscOldDmaCycle2 = new byte[64];
+
     static PixelSequencer()
     {
         // SprPtr (Phi1 type) -> dma_cycle_0. vicii-chip-model.c PAL table lines 112-238.
@@ -252,6 +263,42 @@ internal sealed class PixelSequencer
         s_palDmaCycle2[ 5] = 0x20; // Phi1(6)  SprDma1(5)
         s_palDmaCycle2[ 7] = 0x40; // Phi1(8)  SprDma1(6)
         s_palDmaCycle2[ 9] = 0x80; // Phi1(10) SprDma1(7)
+
+        // NTSC-65 (vicii-chip-model.c:272-403).
+        s_ntscDmaCycle0[ 1] = 0x10; // Phi1(2)  SprPtr(4)
+        s_ntscDmaCycle0[ 3] = 0x20; // Phi1(4)  SprPtr(5)
+        s_ntscDmaCycle0[ 5] = 0x40; // Phi1(6)  SprPtr(6)
+        s_ntscDmaCycle0[ 7] = 0x80; // Phi1(8)  SprPtr(7)
+        s_ntscDmaCycle0[58] = 0x01; // Phi1(59) SprPtr(0)
+        s_ntscDmaCycle0[60] = 0x02; // Phi1(61) SprPtr(1)
+        s_ntscDmaCycle0[62] = 0x04; // Phi1(63) SprPtr(2)
+        s_ntscDmaCycle0[64] = 0x08; // Phi1(65) SprPtr(3)
+        s_ntscDmaCycle2[ 0] = 0x08; // Phi1(1)  SprDma1(3)
+        s_ntscDmaCycle2[ 2] = 0x10; // Phi1(3)  SprDma1(4)
+        s_ntscDmaCycle2[ 4] = 0x20; // Phi1(5)  SprDma1(5)
+        s_ntscDmaCycle2[ 6] = 0x40; // Phi1(7)  SprDma1(6)
+        s_ntscDmaCycle2[ 8] = 0x80; // Phi1(9)  SprDma1(7)
+        s_ntscDmaCycle2[59] = 0x01; // Phi1(60) SprDma1(0)
+        s_ntscDmaCycle2[61] = 0x02; // Phi1(62) SprDma1(1)
+        s_ntscDmaCycle2[63] = 0x04; // Phi1(64) SprDma1(2)
+
+        // Old NTSC (vicii-chip-model.c:437-566).
+        s_ntscOldDmaCycle0[ 0] = 0x08; // Phi1(1)  SprPtr(3)
+        s_ntscOldDmaCycle0[ 2] = 0x10; // Phi1(3)  SprPtr(4)
+        s_ntscOldDmaCycle0[ 4] = 0x20; // Phi1(5)  SprPtr(5)
+        s_ntscOldDmaCycle0[ 6] = 0x40; // Phi1(7)  SprPtr(6)
+        s_ntscOldDmaCycle0[ 8] = 0x80; // Phi1(9)  SprPtr(7)
+        s_ntscOldDmaCycle0[58] = 0x01; // Phi1(59) SprPtr(0)
+        s_ntscOldDmaCycle0[60] = 0x02; // Phi1(61) SprPtr(1)
+        s_ntscOldDmaCycle0[62] = 0x04; // Phi1(63) SprPtr(2)
+        s_ntscOldDmaCycle2[ 1] = 0x08; // Phi1(2)  SprDma1(3)
+        s_ntscOldDmaCycle2[ 3] = 0x10; // Phi1(4)  SprDma1(4)
+        s_ntscOldDmaCycle2[ 5] = 0x20; // Phi1(6)  SprDma1(5)
+        s_ntscOldDmaCycle2[ 7] = 0x40; // Phi1(8)  SprDma1(6)
+        s_ntscOldDmaCycle2[ 9] = 0x80; // Phi1(10) SprDma1(7)
+        s_ntscOldDmaCycle2[59] = 0x01; // Phi1(60) SprDma1(0)
+        s_ntscOldDmaCycle2[61] = 0x02; // Phi1(62) SprDma1(1)
+        s_ntscOldDmaCycle2[63] = 0x04; // Phi1(64) SprDma1(2)
     }
 
     /// <summary>Test-only: sprite_x_pipe[n] (one-cycle-lagged X, VICE vicii.sprite_x_pipe).</summary>
@@ -532,13 +579,13 @@ internal sealed class PixelSequencer
             Dmli = 0;
         }
 
-        // Write priority flags to the 504-byte line buffer.
+        // Write priority flags to the line buffer (520 bytes, audit L1).
         // FR-VIC-DRAW-GFX AC-01: 8 pixels per cycle, indexed by RasterX*8+i.
         // V4: LineIndices is written by DrawColors8 (via DbufOffset) rather than
         // here, so that colour resolution flows through the Cregs pipeline with
         // the correct ring delay. LinePriority is still written here because
         // priority does not go through the colour pipeline.
-        if ((uint)rasterX < 63u)
+        if ((uint)rasterX < 65u)
         {
             int offset = rasterX * 8;
             for (int i = 0; i < 8; i++)
@@ -603,8 +650,9 @@ internal sealed class PixelSequencer
     internal void DrawColors8()
     {
         int offs = DbufOffset;
-        // Guard: vicii-draw-cycle.c:631-633.
-        if (offs > 504 - 8) return;
+        // Guard: vicii-draw-cycle.c:631-633 with VICII_DRAW_BUFFER_SIZE = 520
+        // (audit L1: the 65-cycle NTSC line writes offsets up to 504..511).
+        if (offs > 520 - 8) return;
 
         // Apply chip-level pending colour-register write to Cregs immediately
         // so the current pixel loop uses the updated value (vicii-draw-cycle.c
@@ -847,22 +895,33 @@ internal sealed class PixelSequencer
         // xpos: cycle_get_xpos(cycle_flags) (vicii-chip-model.h:164-167)
         // returns the piped cycle's merged xpos, which the table build stores
         // as the PHI1 xpos floored to 8 (vicii-chip-model.c:767,
-        // entry |= (xpos_phi[0] >> 3) << XPOS_B). PAL: Phi1(1)=0x194 at rc0,
-        // +8 per full cycle, wrapping at 0x1F8 (PAL table :112-238), then &~7.
-        // Beam anchor: sprite X=24 (the CSEL=1 display edge) triggers during
-        // the cycle-17 draw, the same cycle that renders the first display
-        // pixels. A negative flagsRasterX models VICE's zero flags word
+        // entry |= (xpos_phi[0] >> 3) << XPOS_B). audit M11: base/wrap follow
+        // the model's cycle_tab: PAL Phi1(1)=0x194 wrapping at 0x1F8
+        // (:112-238); both NTSC tables start at 0x19c wrapping at 0x200
+        // (:273/:438), and NTSC-65 holds 0x184 for one extra cycle at rc62
+        // (the Phi1(62)/Phi1(63) stall, :395-397). Beam anchor: sprite X=24
+        // (the CSEL=1 display edge) triggers during the cycle-17 draw on
+        // every model. A negative flagsRasterX models VICE's zero flags word
         // before the first draw (xpos 0).
-        int xpos = flagsRasterX >= 0 ? ((0x194 + (8 * flagsRasterX)) % 0x1F8) & ~7 : 0;
+        int cyclesPerLine = _vic.CyclesPerLine;
+        int xpos = flagsRasterX >= 0 ? _vic.FlooredPhi1Xpos(flagsRasterX) : 0;
 
-        // ChkSprDisp is carried by the rc57 flags (VICE Phi1(58) row,
-        // vicii-chip-model.c:226) and consumed one cycle later via the pipe.
-        bool sprEn = (flagsRasterX == 57);
+        // ChkSprDisp rides the rc57 flags on PAL and old NTSC (Phi1(58),
+        // vicii-chip-model.c:226/:552) and rc58 on NTSC-65 (Phi1(59), :389;
+        // audit M4), consumed one cycle later via the pipe.
+        bool sprEn = flagsRasterX == (cyclesPerLine == Mos6569.NtscCyclesPerLine ? 58 : 57);
 
         // DMA tables: bitmask of sprite(s) whose SprPtr/SprDma1 flags ride the
-        // piped cycle (vicii-draw-cycle.c:481-486 reading the passed flags).
-        byte dmaCycle0 = (uint)flagsRasterX < 63u ? s_palDmaCycle0[flagsRasterX] : (byte)0;
-        byte dmaCycle2 = (uint)flagsRasterX < 63u ? s_palDmaCycle2[flagsRasterX] : (byte)0;
+        // piped cycle (vicii-draw-cycle.c:481-486 reading the passed flags);
+        // audit M11: per-model tables matching the cycle_tab layouts.
+        byte[] dma0Table = cyclesPerLine == Mos6569.NtscCyclesPerLine
+            ? s_ntscDmaCycle0
+            : cyclesPerLine == Mos6569.NtscOldCyclesPerLine ? s_ntscOldDmaCycle0 : s_palDmaCycle0;
+        byte[] dma2Table = cyclesPerLine == Mos6569.NtscCyclesPerLine
+            ? s_ntscDmaCycle2
+            : cyclesPerLine == Mos6569.NtscOldCyclesPerLine ? s_ntscOldDmaCycle2 : s_palDmaCycle2;
+        byte dmaCycle0 = (uint)flagsRasterX < (uint)dma0Table.Length ? dma0Table[flagsRasterX] : (byte)0;
+        byte dmaCycle2 = (uint)flagsRasterX < (uint)dma2Table.Length ? dma2Table[flagsRasterX] : (byte)0;
 
         // get_trigger_candidates: coarse xpos window check (VICE vicii-draw-cycle.c:304-316).
         byte candidateBits = 0;
