@@ -1,7 +1,10 @@
 namespace ViceSharp.TestHarness;
 
+using NSubstitute;
+using ViceSharp.Abstractions;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.ViewModels;
+using ViceSharp.Protocol;
 using Xunit;
 
 /// <summary>
@@ -97,5 +100,42 @@ public sealed class SpeedCycleButtonTests
         Assert.True(vm.LimiterEnabled);
         Assert.Equal(200, vm.LimiterRatePercent);
         Assert.Equal("100%", vm.SpeedCycleLabel);
+    }
+
+    /// <summary>
+    /// FR: FR-Host-UI-Boundary, TR: TR-AUDIO-SPEED-001, TEST: TEST-UI-SPEEDCYCLE-04.
+    /// Use case: dragging the Limiter slider must apply the target speed LIVE
+    /// (debounced through the rate-only limiter RPC), so the user actually
+    /// reaches 50 percent (or any band value) without hunting for the Apply
+    /// button - matching the live Warp and speed buttons. Rapid successive
+    /// changes coalesce into one trailing call with the final value, and
+    /// host-echoed refreshes (ApplyWarpMode) never re-trigger it.
+    /// Acceptance: after a burst of slider values ending at 50, exactly one
+    /// SetLimiterRateAsync(50) lands within the debounce window; an
+    /// ApplyWarpMode echo triggers none.
+    /// </summary>
+    [Fact]
+    public async Task Slider_Changes_Apply_Live_Debounced()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        host.SessionId.Returns(string.Empty);
+        host.SetLimiterRateAsync(Arg.Any<double>(), Arg.Any<CancellationToken>())
+            .Returns(new EmulatorCommandResponse(RpcStatus.Ok(), null));
+
+        var vm = new AttachPanelViewModel(host);
+
+        vm.LimiterRatePercent = 80;
+        vm.LimiterRatePercent = 60;
+        vm.LimiterRatePercent = 50;
+
+        await Task.Delay(900, TestContext.Current.CancellationToken);
+
+        await host.Received(1).SetLimiterRateAsync(50, Arg.Any<CancellationToken>());
+        host.ClearReceivedCalls();
+
+        vm.ApplyWarpMode(new WarpModeEvent(false, true, 120, 0));
+        await Task.Delay(900, TestContext.Current.CancellationToken);
+
+        await host.DidNotReceive().SetLimiterRateAsync(Arg.Any<double>(), Arg.Any<CancellationToken>());
     }
 }

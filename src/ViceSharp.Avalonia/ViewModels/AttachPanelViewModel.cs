@@ -258,7 +258,50 @@ public sealed class AttachPanelViewModel : ObservableObject
         set
         {
             if (SetSettingsProperty(ref _limiterRatePercent, Math.Clamp(value, LimiterMinimumPercent, LimiterMaximumPercent)))
+            {
                 OnPropertyChanged(nameof(SpeedCycleLabel));
+                ScheduleLiveLimiterApply();
+            }
+        }
+    }
+
+    private CancellationTokenSource? _liveLimiterApplyCts;
+
+    // The Limiter slider applies LIVE (TR-AUDIO-SPEED-001): a debounced
+    // trailing call through the rate-only limiter RPC, so dragging to 50%
+    // actually reaches 50% without the Apply button - same live semantics as
+    // the Warp and speed buttons. Host echoes come back through
+    // ApplyWarpMode/ApplySettingsFromHost, which write the field directly
+    // (never this setter), so echoes cannot re-trigger the apply.
+    private void ScheduleLiveLimiterApply()
+    {
+        _liveLimiterApplyCts?.Cancel();
+        var cts = new CancellationTokenSource();
+        _liveLimiterApplyCts = cts;
+        _ = ApplyLimiterLiveAsync(cts.Token);
+    }
+
+    private async Task ApplyLimiterLiveAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Task.Delay(300, cancellationToken).ConfigureAwait(true);
+            var applied = LimiterRatePercent;
+            var response = await _hostClient.SetLimiterRateAsync(applied, cancellationToken).ConfigureAwait(true);
+            if (!response.Status.IsSuccess)
+            {
+                StatusText = response.Status.Message;
+                return;
+            }
+
+            // The limiter portion is now applied; refresh the applied snapshot so a
+            // slider-only change does not linger as a pending settings delta.
+            _appliedSettings = _appliedSettings with { LimiterRatePercent = applied, LimiterEnabled = true };
+            HasPendingSettingsChanges = !CaptureSettings().Equals(_appliedSettings);
+        }
+        catch (OperationCanceledException)
+        {
+            // Superseded by a newer slider value.
         }
     }
 
