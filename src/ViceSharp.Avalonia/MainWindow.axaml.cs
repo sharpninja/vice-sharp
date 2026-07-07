@@ -36,6 +36,11 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        // Opt-in UI-thread pinning (TR-HOST-AFFINITY-001): VICESHARP_UI_CPU names the
+        // logical CPU the Avalonia UI thread runs on, complementing VICESHARP_EMU_CPU
+        // for the emulation worker. Unset/invalid -> scheduler-managed as before.
+        ViceSharp.Host.Services.ThreadAffinity.TryPinCurrentThreadFromEnvironment("VICESHARP_UI_CPU");
+
         // Show the running build's semantic version in the title bar so a screen capture
         // always identifies which deployed build produced it (removes "did it deploy?" doubt).
         Title = $"ViceSharp {AppSemVer}";

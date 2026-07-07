@@ -77,7 +77,9 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             new GrpcContracts.SessionRequest { SessionId = sessionId },
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        return new GetEmulatorStatusResponse(MapStatus(response.Status), MapStatusDto(response.EmulatorStatus));
+        var status = MapStatus(response.Status);
+        HealLostSession(status);
+        return new GetEmulatorStatusResponse(status, MapStatusDto(response.EmulatorStatus));
     }
 
     public async ValueTask<EmulatorCommandResponse> StartAsync(CancellationToken cancellationToken = default)
@@ -624,7 +626,31 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
     {
         await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
         var response = await command(_hostClient).ConfigureAwait(false);
-        return MapCommand(response);
+        var mapped = MapCommand(response);
+        HealLostSession(mapped.Status);
+        return mapped;
+    }
+
+    /// <summary>
+    /// TR-HOST-SESSIONHEAL-001: true when a host response means the client's
+    /// CURRENT session no longer exists on the host (externally shut down or
+    /// the host recreated its registry) - a NotFound status naming this
+    /// client's session id. Pure classification, unit-tested directly.
+    /// </summary>
+    public static bool IndicatesLostSession(RpcStatus? status, string sessionId)
+    {
+        return status is { Code: RpcStatusCode.NotFound }
+            && !string.IsNullOrWhiteSpace(sessionId)
+            && status.Message.Contains($"Emulator session '{sessionId}'", StringComparison.Ordinal);
+    }
+
+    // Drop the cached session id when the host says it is gone, so the next
+    // command's EnsureSessionAsync creates a fresh session instead of every
+    // later call (and the status bar) wedging on the dead id forever.
+    private void HealLostSession(RpcStatus status)
+    {
+        if (IndicatesLostSession(status, _sessionId))
+            SetSessionId(string.Empty);
     }
 
     private static GrpcContracts.MediaSlot MapSlot(MediaSlot slot) => slot switch

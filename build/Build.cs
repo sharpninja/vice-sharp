@@ -606,6 +606,9 @@ sealed partial class Build : NukeBuild
     [Parameter("Disable AOT-style MSI publish outputs. Values: auto, true, false. Default auto (true for Debug, false otherwise).")]
     readonly string MsiAotDisabled = "auto";
 
+    [Parameter("Allow packaging a Debug-configuration MSI (unoptimized emulator; ~10x slower). Values: auto, true, false. Default auto (false).")]
+    readonly string MsiAllowDebug = "auto";
+
     [Parameter("Enable both debug gRPC surfaces in the installed MSI environment. Values: auto, true, false. Default auto (true for Debug, false otherwise).")]
     readonly string MsiEnableDebugGrpc = "auto";
 
@@ -639,6 +642,14 @@ sealed partial class Build : NukeBuild
         .Executes(() =>
         {
             var isDebugMsi = string.Equals(Configuration, "Debug", StringComparison.OrdinalIgnoreCase);
+            // A Debug MSI runs the per-cycle emulator on unoptimized JIT code (~10x slower;
+            // a deployed Debug build measured ~50% of real time on a machine whose Release
+            // build sustains ~500%). Local builds default Configuration to Debug, so require
+            // an explicit opt-in before packaging one.
+            if (isDebugMsi && !ResolveAutoBoolean(MsiAllowDebug, false, nameof(MsiAllowDebug)))
+                throw new InvalidOperationException(
+                    "PublishMsi with Configuration=Debug produces an unoptimized emulator. " +
+                    "Pass --configuration Release (recommended) or --msi-allow-debug true to package a Debug build deliberately.");
             var aotDisabled = ResolveAutoBoolean(MsiAotDisabled, isDebugMsi, nameof(MsiAotDisabled));
             var enableDebugGrpc = ResolveAutoBoolean(MsiEnableDebugGrpc, isDebugMsi, nameof(MsiEnableDebugGrpc));
             if (enableDebugGrpc)
