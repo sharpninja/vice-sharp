@@ -12,14 +12,12 @@
     operator contract "do not fail the test, write the output to a log".
 
     Kept as a SEPARATE project from ViceSharp.TestHarness because the slow,
-    host-bound AI review calls must not gate the focused unit suite. aiUnit 2.0.0
-    targets xUnit v3 (same major as the harness), so the prior v2/v3 incompatibility
-    no longer applies; the split is now purely about keeping the AI gate out of the
-    fast unit run.
+    host-bound AI review calls must not gate the focused unit suite; the split is
+    purely about keeping the AI gate out of the fast unit run.
 
-    Opts out of central package management because it pins a locally vendored aiUnit
-    2.0.0 (restored from nuget-local) plus its own xUnit v3 runner versions, and relaxes
-    warnings-as-errors so the aiUnit stack restores cleanly here.
+    Under central package management like every other project: aiUnit 2.1.3 and
+    the xUnit v3 stack restore from nuget.org (the vendored nuget-local feed is
+    retired; TR-DEPS-202607-001).
   -->
   <PropertyGroup>
     <!-- xUnit v3 test projects run as executables. -->
@@ -28,8 +26,6 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <!-- Do not let the focused unit gate accidentally pick these slow AI tests up. -->
     <IsPublishable>false</IsPublishable>
     <!-- Auto-apply the long session timeout so a headless Grok review is not killed
@@ -38,11 +34,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="SharpNinja.aiUnit" Version="2.1.3" />
-    <PackageReference Include="xunit.v3" Version="2.0.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="SharpNinja.aiUnit" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
   <ItemGroup>
