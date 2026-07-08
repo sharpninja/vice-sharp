@@ -41,7 +41,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// the shim P/Invoke layer is correctly built + bound.
     /// Acceptance: GetDrivePC(native, 8) returns 0 on a fresh machine.
     /// </summary>
-    [Fact]
+    [ViceFact]
     public void GetDrivePc_IsCallable_WithoutCrashing()
     {
         // Singleton native VICE state may persist across tests; we only
@@ -56,7 +56,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// unit number is out of range (below 8 or above 11).
     /// Acceptance: GetDrive* with unit 7, 12, or 255 all return zero.
     /// </summary>
-    [Theory]
+    [ViceTheory]
     [InlineData(7u)]
     [InlineData(12u)]
     [InlineData(255u)]
@@ -78,7 +78,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// is "non-crashing".
     /// Acceptance: GetDriveA / GetDrivePC for units 8..11 do not throw.
     /// </summary>
-    [Theory]
+    [ViceTheory]
     [InlineData(8u)]
     [InlineData(9u)]
     [InlineData(10u)]
@@ -103,7 +103,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// GetDriveTrueEmulation reads back 1, and after 50k steps drive PC
     /// is greater than 0.
     /// </summary>
-    [Fact]
+    [ViceFact]
     public void TrueDriveEmulation_EnabledOnUnit8_DriveCpuAdvances()
     {
         var native = _fixture!.NativeMachine;
@@ -124,7 +124,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// Use case: TDE toggles cleanly off + on for the same unit.
     /// Acceptance: Set 1 -> get returns 1; set 0 -> get returns 0.
     /// </summary>
-    [Fact]
+    [ViceFact]
     public void TrueDriveEmulation_RoundTrips_Per_Unit()
     {
         var native = _fixture!.NativeMachine;
@@ -140,7 +140,7 @@ public sealed class LockstepDriveValidationTests : IAsyncLifetime
     /// Use case: Out-of-range unit numbers are rejected by the set/get.
     /// Acceptance: Set on unit 12 returns non-zero; Get on unit 7 returns 0.
     /// </summary>
-    [Fact]
+    [ViceFact]
     public void TrueDriveEmulation_RejectsOutOfRangeUnits()
     {
         var native = _fixture!.NativeMachine;

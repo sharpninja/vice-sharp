@@ -64,7 +64,7 @@ public sealed class CpuValidationTests : LockstepTestRunner<Mos6502>, IAsyncLife
     /// when any cycle differs the test throws a combined trace including the
     /// pre-step, post-step and divergence summary for each failing cycle.
     /// </summary>
-    [Fact]
+    [ViceFact]
     public void BootstrapTrace_First12Cycles()
     {
         _fixture.ResetBoth();
