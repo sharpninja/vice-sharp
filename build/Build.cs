@@ -108,15 +108,90 @@ sealed partial class Build : NukeBuild
     /// SnapshotResume partition is fixed at the mechanism (PLAN-NATIVERESIDUE-001:
     /// TrueEmulation resource re-baseline + vicii.rc/idle_state clears at
     /// machine create in vice-shim.c; TEST-NATIVE-RESIDUE-01/02 guard it).
+    /// ROM self-sufficiency: agents have no VICE data root and the repo ships
+    /// no ROMs, so runs 1040-1064 failed 342 managed tests with
+    /// DirectoryNotFoundException from MachineTestFactory.CreateC64RomProvider.
+    /// EnsureCiRomRoot downloads the required dumps (hash-pinned) from the
+    /// VICE-Team svn-mirror into artifacts and points VICESHARP_ROM_PATH at
+    /// them for the test process only; when the machine already provides a
+    /// root (env var or the untracked vendored data tree) it does nothing.
     /// </summary>
     Target CiTest => _ => _
         .Executes(() =>
         {
+            var romRoot = EnsureCiRomRoot();
             DotNetTest(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"));
+                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy")
+                .When(_ => romRoot is not null, x => x
+                    .SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
         });
+
+    /// <summary>
+    /// Returns a VICE data root for CI test runs, or null when the machine
+    /// already provides one (VICESHARP_ROM_PATH / VICE_DATA_PATH env, or the
+    /// untracked vendored tree at native/vice/vice/data that developer
+    /// machines carry). Downloads are pinned to SHA256 values verified
+    /// 2026-07-08 against both the local authoritative tree and the mirror.
+    /// </summary>
+    static string? EnsureCiRomRoot()
+    {
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VICESHARP_ROM_PATH")) ||
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("VICE_DATA_PATH")))
+        {
+            return null;
+        }
+
+        var vendored = RootDirectory / "native" / "vice" / "vice" / "data";
+        if (File.Exists(vendored / "C64" / "kernal-901227-03.bin"))
+        {
+            return null;
+        }
+
+        var romRoot = RootDirectory / "artifacts" / "vice-data";
+        var roms = new (string RelativePath, string Sha256)[]
+        {
+            ("C64/basic-901226-01.bin", "89878CEA0A268734696DE11C4BAE593EAAA506465D2029D619C0E0CBCCDFA62D"),
+            ("C64/kernal-901227-03.bin", "83C60D47047D7BEAB8E5B7BF6F67F80DAA088B7A6A27DE0D7E016F6484042721"),
+            ("C64/chargen-901225-01.bin", "FD0D53B8480E86163AC98998976C72CC58D5DD8EB824ED7B829774E74213B420"),
+            ("DRIVES/dos1541-325302-01+901229-05.bin", "D1D45AFB46FD4E2B48D93CA367B889D75654A3B7ACF73044E51F6D880C09369E"),
+            ("DRIVES/dos1541ii-251968-03.bin", "326C289C38753323D7E8167897447CF61EF35189D82EB8D75210ECE949ADDA7C"),
+        };
+
+        using var http = new System.Net.Http.HttpClient();
+        http.DefaultRequestHeaders.UserAgent.ParseAdd("ViceSharp-Build/1.0");
+        foreach (var (relativePath, sha256) in roms)
+        {
+            var target = romRoot / relativePath;
+            if (File.Exists(target) && HashMatches(target, sha256))
+            {
+                continue;
+            }
+
+            var url = $"https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/{relativePath}";
+            var data = http.GetByteArrayAsync(url).GetAwaiter().GetResult();
+            var actual = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(data));
+            if (!string.Equals(actual, sha256, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    $"ROM hash mismatch for {relativePath}: expected {sha256}, got {actual}. Refusing to stage an unverified dump.");
+            }
+
+            target.Parent.CreateDirectory();
+            File.WriteAllBytes(target, data);
+            Serilog.Log.Information("CiTest ROM bootstrap: staged {Rom} ({Bytes} bytes, sha256 verified)", relativePath, data.Length);
+        }
+
+        return romRoot;
+    }
+
+    static bool HashMatches(AbsolutePath path, string expectedSha256)
+    {
+        using var stream = File.OpenRead(path);
+        var actual = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(stream));
+        return string.Equals(actual, expectedSha256, StringComparison.OrdinalIgnoreCase);
+    }
 
     Target DeterminismTest => _ => _
         .DependsOn(Compile)
