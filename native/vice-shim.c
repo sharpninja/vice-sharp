@@ -405,6 +405,27 @@ VICE_SHIM_API void *vice_machine_create_model(const char *model_selector)
     c64model_set(model);
     vice_shim_detach_cartridge_locked();
     file_system_detach_disk_all();
+    /* NOTE: deliberately no Drive{8..11}TrueEmulation re-baseline here. x64sc
+       DEFAULTS TDE on, and the managed C64 rig models the matching drive
+       presence - forcing TDE=0 at create made machine #2+ boot WITHOUT the
+       serial drive holding DATA, flipping the kernal's $DD00 read from $47 to
+       $C7 around cycle 197 and failing CPU lockstep for every later test.
+       Tests that need a specific TDE state set it explicitly through
+       vice_drive_set_true_emulation. */
+
+    /* Machine-boundary residue clear (TEST-NATIVE-RESIDUE-01): a .vsf resume
+       leaves the VIC row counter mid-frame, and NOTHING in viciisc ever
+       re-zeroes vicii.rc (vicii.c powerup/reset skip it; only the monitor
+       prints it). With rc stuck at 7, the first end-of-line display check
+       (vicii-cycle.c:556) flips idle_state=1 within ~60 cycles of the NEXT
+       machine's boot, diverging CPU lockstep around cycle 167 for every
+       machine created after a snapshot test (the A=$47-vs-$C7 in-suite
+       cascade). Cleared at CREATE - a fresh machine boots with rc=0 like the
+       managed core - and deliberately NOT in vice_machine_reset: VICE's own
+       reset preserves rc, and within-test resets must keep that semantics
+       (ResetAfterActivity parity). */
+    vicii.rc = 0;
+    vicii.idle_state = 0;
 
     machine = (vice_machine_t *)calloc(1, sizeof(*machine));
     if (machine == NULL) {
@@ -1474,23 +1495,23 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
            therefore the badline BA stall for the remainder of the frame. */
         state->allow_bad_lines = (uint8_t)(vicii.allow_bad_lines != 0);
         state->idle_state = (uint8_t)(vicii.idle_state != 0);
-        /* Export vicii_peek() semantics (vicii-mem.c:747-770), not raw
-           vicii.regs: managed Mos6569.Peek mirrors vicii_peek exactly
-           (FR-VIC-REGISTERS AC-15), including the unused-bit OR table
-           ($D016|=$C0, $D019|=$70, $D01A|=$F0, colors|=$F0) and the live
-           raster in $D011/$D012. Raw regs made every register-checkpoint
-           comparison diverge by the unused bits (e.g. $D016 managed=$C5
-           vs native=$05). vicii_peek is side-effect-free by contract. */
+        /* Two register views (vice-shim.h): `registers` = RAW vicii.regs for
+           raw-vs-raw snapshot/reset parity, `registers_peek` = vicii_peek()
+           (vicii-mem.c:747-770) for checkpoint comparisons against managed
+           Mos6569.Peek, which mirrors vicii_peek exactly (FR-VIC-REGISTERS
+           AC-15: unused-bit OR table, live raster in $D011/$D012,
+           irq_status|0x70 in $D019). vicii_peek is side-effect-free. */
+        memcpy(state->registers, vicii.regs, sizeof(state->registers));
+        /* $D019 raw view: vicii.irq_status holds the live IRQ latch; regs[0x19]
+           only reflects the last CPU write. Managed stores the latch in its
+           register file, so the raw view exports the latch too. */
+        state->registers[0x19] = (uint8_t)(vicii.irq_status & 0x0F);
         {
             unsigned int reg;
-            for (reg = 0; reg < sizeof(state->registers); reg++) {
-                state->registers[reg] = vicii_peek((uint16_t)(0xd000 + reg));
+            for (reg = 0; reg < sizeof(state->registers_peek); reg++) {
+                state->registers_peek[reg] = vicii_peek((uint16_t)(0xd000 + reg));
             }
         }
-        /* $D019: vicii.irq_status holds the live IRQ latch (bits 0-3 = source flags).
-           vicii_peek(0xd019) returns irq_status with bit 7 (any-enabled-source)
-           and the |0x70 unused bits; managed Peek(0xD019) stores the latch in
-           _registers[0x19] and ORs the same table, so peek matches peek. */
     }
     LeaveCriticalSection(&g_state_lock);
 }

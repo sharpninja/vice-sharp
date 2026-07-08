@@ -288,9 +288,26 @@ public static unsafe partial class ViceNative
         public byte AllowBadLines;
         public byte IdleState;
 
+        /// <summary>
+        /// Register file through native vicii_peek (vicii-mem.c:747-770): the
+        /// CPU-visible debug view (unused-bit OR table, live raster in
+        /// $D011/$D012, irq_status in $D019). <see cref="Registers"/> stays
+        /// the RAW vicii.regs store. Mirrors struct vice_vic_state in
+        /// native/vice-shim.h (field appended so prior offsets are unchanged).
+        /// </summary>
+        public fixed byte RegistersPeek[64];
+
         public readonly byte[] GetRegisters()
         {
             fixed (byte* registers = Registers)
+            {
+                return new ReadOnlySpan<byte>(registers, 64).ToArray();
+            }
+        }
+
+        public readonly byte[] GetRegistersPeek()
+        {
+            fixed (byte* registers = RegistersPeek)
             {
                 return new ReadOnlySpan<byte>(registers, 64).ToArray();
             }

@@ -22,7 +22,9 @@ public static class ViceNativeBridge
 
         return machine;
     }
+
     public static void DestroyMachine(IntPtr machine) => ViceNative.Destroy(machine);
+
     public static void ResetMachine(IntPtr machine) => ViceNative.ResetNative(machine);
     public static void StepCycle(IntPtr machine) => ViceNative.StepNative(machine);
     public static int GetModel(IntPtr machine) => ViceNative.GetModel(machine);
@@ -55,6 +57,7 @@ public static class ViceNativeBridge
         state.DisplayState = nativeState.DisplayState;
         state.SpriteDma = nativeState.SpriteDma;
         state.Registers = nativeState.GetRegisters();
+        state.RegistersPeek = nativeState.GetRegistersPeek();
         state.AllowBadLines = nativeState.AllowBadLines;
         state.IdleState = nativeState.IdleState;
     }
@@ -353,6 +356,14 @@ public static class ViceNativeBridge
         public byte DisplayState;
         public byte SpriteDma;
         public byte[] Registers;
+
+        /// <summary>
+        /// Register file through native vicii_peek (vicii-mem.c:747-770); the
+        /// CPU-visible debug view used by register-checkpoint comparisons
+        /// against managed <c>Mos6569.Peek</c>. <see cref="Registers"/> stays
+        /// the RAW vicii.regs store for raw-vs-raw parity tests.
+        /// </summary>
+        public byte[] RegistersPeek;
 
         /// <summary>TR-LOCKSTEP-VSF-001: .vsf allow_bad_lines latch (gates badline BA stalls this frame).</summary>
         public byte AllowBadLines;

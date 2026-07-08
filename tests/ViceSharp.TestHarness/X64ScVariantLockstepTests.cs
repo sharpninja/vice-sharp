@@ -1736,7 +1736,10 @@ public sealed class X64ScVariantLockstepTests
         foreach (var register in ViciiRegisterCheckpointOffsets)
         {
             var actual = vic.Peek((ushort)(0xD000 + register));
-            var expected = nativeState.Registers[register];
+            // Peek-vs-peek: managed Mos6569.Peek mirrors vicii_peek exactly
+            // (FR-VIC-REGISTERS AC-15), so compare against the shim's
+            // vicii_peek view, not the raw vicii.regs store.
+            var expected = nativeState.RegistersPeek[register];
 
             if (actual != expected)
                 mismatches.Add($"${0xD000 + register:X4}: managed=${actual:X2}, native=${expected:X2}");

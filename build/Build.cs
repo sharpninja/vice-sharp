@@ -104,14 +104,30 @@ sealed partial class Build : NukeBuild
     /// every target its own job on a fresh agent and never moves artifacts
     /// between jobs - run 1029's Test job proved --skip + --no-build on a
     /// clean workspace finds no test assemblies. Local flows keep using Test.
+    ///
+    /// Runs in TWO processes: tests that resume a native .vsf leave residue
+    /// inside the single global VICE instance that no reset fully clears
+    /// (TEST-NATIVE-RESIDUE-01 caught vicii.rc/idle_state; deeper fields
+    /// remain - tracked in PLAN-NATIVERESIDUE-001), so the SnapshotResume
+    /// category gets its own test process. Every class is green in isolation;
+    /// the partition makes that isolation deterministic.
     /// </summary>
     Target CiTest => _ => _
         .Executes(() =>
         {
+            const string BaseExclusions = "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy";
+
             DotNetTest(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"));
+                .SetFilter(BaseExclusions + "&Category!=SnapshotResume"));
+
+            DotNetTest(s => s
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .SetNoRestore(true)
+                .SetNoBuild(true)
+                .SetFilter("Category=SnapshotResume&" + BaseExclusions));
         });
 
     Target DeterminismTest => _ => _

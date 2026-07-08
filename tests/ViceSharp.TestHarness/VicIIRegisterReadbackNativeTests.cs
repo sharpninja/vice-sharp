@@ -35,6 +35,7 @@ using Xunit;
 /// Existing managed tests (VicIIRegisterReadbackTests) + broader VIC/video gates (179+/179+) must remain green.
 /// </summary>
 [Collection("NativeVice")]
+[Trait("Category", "SnapshotResume")]
 public sealed class VicIIRegisterReadbackNativeTests
 {
     private const ushort Base = 0xD000;

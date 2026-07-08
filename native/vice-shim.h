@@ -103,6 +103,13 @@ struct vice_vic_state {
        from a mid-frame snapshot. */
     uint8_t allow_bad_lines;
     uint8_t idle_state;
+    /* Register file through vicii_peek() (vicii-mem.c:747-770): the CPU-visible
+       debug view (unused-bit OR table, live raster in $D011/$D012, irq_status
+       in $D019). `registers` above stays the RAW vicii.regs store - snapshot
+       and reset-state parity tests compare raw-vs-raw, while the register
+       CHECKPOINT tests compare managed Peek against this peek view. Appended
+       so existing field offsets are unchanged. */
+    uint8_t registers_peek[64];
 };
 
 VICE_SHIM_API void vice_vic_get_state(void* machine, struct vice_vic_state* state);

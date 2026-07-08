@@ -64,7 +64,9 @@ public sealed class EmulatorRuntimeSession
         Machine = machine;
         IecBusActivity = iecBusActivity;
         _lastPerformanceSampleTime = DateTimeOffset.UtcNow;
-        _lastPerformanceSampleCycle = machine.PrimaryCpu?.ExecutedCycles ?? machine.GetState().Cycle;
+        // Anchor on the same source MachineCycle reads (machine time), so the
+        // first performance sample after construction measures a clean delta.
+        _lastPerformanceSampleCycle = machine.GetState().Cycle;
         _lastPerCpuExecuted = SnapshotCpuExecuted();
     }
 
@@ -639,12 +641,11 @@ public sealed class EmulatorRuntimeSession
         return true;
     }
 
-    // Headline speed is the PRIMARY CPU's own executed-cycle rate
-    // (FR-CPUTICK-001 AC2): on a multi-CPU rig the system/bus clock also
-    // advances peripheral cycles and would conflate the reading. Machines
-    // without a PrimaryCpu fall back to the system clock (same value on a
-    // single-CPU C64, where the 6510 executes every master cycle).
-    private long MachineCycle => Machine.PrimaryCpu?.ExecutedCycles ?? Machine.GetState().Cycle;
+    // Headline speed is emulated MACHINE time (FR-CPUTICK-001: the store's
+    // AC2 defines the PER-CPU percent, which lives in PerCpuRates and may
+    // legitimately dip to 95-100 on the BA-stalled primary; the headline
+    // stays the machine clock so a perfectly paced session reads 100%).
+    private long MachineCycle => Machine.GetState().Cycle;
 
     public void ResetPerformanceCounters() => ResetPerformanceCounters(DateTimeOffset.UtcNow);
 
