@@ -25,7 +25,6 @@ namespace ViceSharp.TestHarness;
 // (V4/V7) replace. Quarantined from the blocking gate; deleted as the
 // replacing V-slices land. Run ad hoc via --filter Category=ParityLegacy.
 [Trait("Category", "ParityLegacy")]
-[Trait("Category", "SnapshotResume")]
 public sealed class RasterBarRendererTests
 {
     private static uint ExpectedBgra(byte colorIndex)

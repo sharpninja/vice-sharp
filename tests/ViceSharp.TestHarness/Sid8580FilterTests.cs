@@ -130,7 +130,12 @@ public sealed class Sid8580FilterTests
         var trace6581 = Run(sid6581);
         var trace8580 = Run(sid8580);
 
-        trace6581.Should().NotBeEquivalentTo(trace8580,
+        // O(n) ordered compare. FluentAssertions NotBeEquivalentTo runs an
+        // unordered equivalency graph over the buffers (O(n^2) scopes plus
+        // per-pair failure context); under full-suite single-process heap
+        // pressure that allocation spiral produced an OutOfMemoryException.
+        Assert.False(
+            trace6581.AsSpan().SequenceEqual(trace8580),
             "Sid8580.ApplyFilter must produce a different sample sequence than Sid6581.ApplyFilter at the same register state");
     }
 }

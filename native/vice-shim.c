@@ -405,13 +405,30 @@ VICE_SHIM_API void *vice_machine_create_model(const char *model_selector)
     c64model_set(model);
     vice_shim_detach_cartridge_locked();
     file_system_detach_disk_all();
-    /* NOTE: deliberately no Drive{8..11}TrueEmulation re-baseline here. x64sc
-       DEFAULTS TDE on, and the managed C64 rig models the matching drive
-       presence - forcing TDE=0 at create made machine #2+ boot WITHOUT the
-       serial drive holding DATA, flipping the kernal's $DD00 read from $47 to
-       $C7 around cycle 197 and failing CPU lockstep for every later test.
-       Tests that need a specific TDE state set it explicitly through
-       vice_drive_set_true_emulation. */
+    /* Re-baseline Drive{8..11}TrueEmulation to the VICE DEFAULT (1,
+       drive-resources.c:401) at every machine boundary. A .vsf whose DRIVE8
+       module carries has_tde=0 makes drive_snapshot_read_module call
+       resources_set_int("Drive8TrueEmulation", 0) (drive-snapshot.c:334-363),
+       silently disabling the true drive for the REST OF THE PROCESS: with no
+       drive holding serial DATA, the kernal's $DD00 read flips $47 -> $C7
+       (iecbus.c conf0 path via c64cia2.c read_ciapa) and every later
+       kernal-boot lockstep test diverges (TEST-NATIVE-RESIDUE-02 fingerprint;
+       the X64Sc ResetAfterActivity in-suite cascade). The re-baseline MUST go
+       through resources_set_int so set_drive_true_emulation recomputes the
+       iecbus function-local statics + $DD00 callback pointers
+       (iecbus.c:512-548, calculate_callback_index) and the serial trap
+       gating (serial-trap.c serial_truedrive) - poking unit->enable directly
+       would leave the conf0 callbacks installed. Forcing 0 here (tried
+       earlier) is the same bug from the other side: 1 IS the default.
+       Tests that need TDE off set it via vice_drive_set_true_emulation. */
+    {
+        unsigned int unit;
+        char resource_name[32];
+        for (unit = 8; unit <= 11; unit++) {
+            snprintf(resource_name, sizeof(resource_name), "Drive%uTrueEmulation", unit);
+            resources_set_int(resource_name, 1);
+        }
+    }
 
     /* Machine-boundary residue clear (TEST-NATIVE-RESIDUE-01): a .vsf resume
        leaves the VIC row counter mid-frame, and NOTHING in viciisc ever

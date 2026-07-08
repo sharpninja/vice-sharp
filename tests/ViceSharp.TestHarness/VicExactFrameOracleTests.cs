@@ -14,7 +14,6 @@ using Xunit;
 /// the previous sentinel/synthetic capture path.
 /// </summary>
 [Collection("NativeVice")]
-[Trait("Category", "SnapshotResume")]
 public sealed class VicExactFrameOracleTests
 {
     private const int PalCyclesPerLine = 63;

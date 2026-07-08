@@ -23,7 +23,6 @@ namespace ViceSharp.TestHarness;
 ///
 /// Snapshot-gated. Expected RED until the timing defect is fixed.
 /// </summary>
-[Trait("Category", "SnapshotResume")]
 public sealed class RasterBarLockstepTests
 {
     private const string ModelSelector = "c64";

@@ -29,7 +29,6 @@ namespace ViceSharp.TestHarness;
 /// (snapshot, run log) pairs and gates them exactly.
 /// </summary>
 [Collection("NativeVice")]
-[Trait("Category", "SnapshotResume")]
 public sealed class SnapshotRunLogParityTests
 {
     private const string ModelSelector = "c64";

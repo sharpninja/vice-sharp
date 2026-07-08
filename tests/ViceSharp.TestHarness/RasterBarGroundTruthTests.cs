@@ -26,7 +26,6 @@ namespace ViceSharp.TestHarness;
 /// Snapshot-gated: skips cleanly when the shim or the staged .vsf is absent, so it
 /// never runs in CI without the fixture present.
 /// </summary>
-[Trait("Category", "SnapshotResume")]
 public sealed class RasterBarGroundTruthTests
 {
     private const string ModelSelector = "c64";
