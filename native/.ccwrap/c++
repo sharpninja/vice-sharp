@@ -1,0 +1,3 @@
+#!/bin/sh
+export TMPDIR="C:/Users/kingd/AppData/Local/Temp" TMP="C:/Users/kingd/AppData/Local/Temp" TEMP="C:/Users/kingd/AppData/Local/Temp"
+exec /c/msys64/mingw64/bin/c++ "$@"
