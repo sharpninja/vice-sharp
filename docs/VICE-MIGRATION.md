@@ -6,9 +6,9 @@ A side-by-side reference for users who already drive classic VICE (`x64sc`, `c15
 
 | Classic VICE | ViceSharp launcher | Status |
 |--------------|--------------------|--------|
-| `x64` | `x64.exe` | Supported. Maps to the cycle-exact C64 host (ViceSharp does not maintain a separate "fast" variant). |
-| `x64sc` | `x64sc.exe` | Supported. Identical topology to `x64` in ViceSharp; both go through the same cycle-exact path. |
-| `c1541` | `c1541.exe` | Supported as a standalone 1541 disk-tool topology (single drive, optional D64 mount). |
+| `x64` | `x64` (binary-name dispatch) | Supported via the launcher library; maps to the cycle-exact C64 host (ViceSharp does not maintain a separate "fast" variant). No `x64.exe` ships yet. |
+| `x64sc` | `x64sc` (console shell) | Supported via the console shell: `ViceSharp.Console` parses its arguments as binary name `x64sc`. Identical topology to `x64`; both go through the same cycle-exact path. No `x64sc.exe` ships yet. |
+| `c1541` | `c1541` (binary-name dispatch) | Supported as a standalone 1541 disk-tool topology (single drive, optional D64 mount) in the launcher library. No `c1541.exe` ships yet. |
 | `x128` | `x128.exe` | Not yet. Throws `NotSupportedException`. C128 is iteration 3. |
 | `xvic` | `xvic.exe` | Not yet. VIC-20 is iteration 2. |
 | `xpet` | `xpet.exe` | Not yet. PET is iteration 4. |
@@ -18,7 +18,7 @@ A side-by-side reference for users who already drive classic VICE (`x64sc`, `c15
 | `petcat` | `petcat.exe` | Not yet. BASIC tokeniser is post-MVP. |
 | `cartconv` | `cartconv.exe` | Not yet. Cart converter is post-MVP. |
 
-Binary-name dispatch is implemented in [ViceTopologyBuilder.cs](../src/ViceSharp.Launcher/ViceTopologyBuilder.cs); unsupported binaries deliberately throw with a message listing the supported set so you find out fast rather than silently doing the wrong thing.
+`ViceSharp.Launcher` is a class library: no VICE-named executables are built today. Binary-name dispatch is implemented in [ViceTopologyBuilder.cs](../src/ViceSharp.Launcher/ViceTopologyBuilder.cs) and consumed by `ViceSharp.Console` (which hardcodes the binary name `x64sc`); unsupported binary names deliberately throw with a message listing the supported set so you find out fast rather than silently doing the wrong thing. Until named binaries ship, invoke the flags below through `dotnet run --project src/ViceSharp.Console --`.
 
 ## 2. Flag mapping
 
@@ -35,6 +35,10 @@ The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/Vice
 | `-truedrive` | `-truedrive` | Disable true-drive emulation. |
 | `-config <path>` (closest analogue) | `--machine-yaml <path>` / `-m <path>` | Explicit machine topology YAML. ViceSharp uses YAML topologies instead of a flat `vicerc`. |
 | (n/a in classic) | `--cycles <N>` | Host-cycle budget. Classic VICE runs until you quit; ViceSharp's console host needs a budget for deterministic batch runs. |
+| `-autostart <path>` | `-autostart <path>` | Autostart a PRG. Parsed and consumed by the console entry point (FR-CFG-005 AC8). |
+| `x64sc ... testcase.prg` (positional) | `program.prg` (positional) | Any bare `*.prg` argument is treated as an autostart PRG, matching the classic testbench invocation style. |
+| `-debugcart` | `-debugcart` / `+debugcart` | Debug cartridge ($D7FF exit signaling for regression harnesses, per VICE `debugcart.c`). `-debugcart` enables, `+debugcart` disables; consumed by the console entry point. |
+| `-limitcycles <N>` | `--limitcycles <N>` / `-limitcycles <N>` | Bounded execution cycle limit (testbench); overrides the run's cycle budget in the console entry point. |
 | `-verbose` / `-v` | `-v` / `--verbose` | Same intent. |
 | `-help` / `-?` | `--help` / `-h` / `-?` | Same intent. |
 
@@ -43,7 +47,7 @@ The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/Vice
 | Classic VICE flag | ViceSharp behaviour |
 |-------------------|---------------------|
 | `-cart <path>` | Standard raw/CRT images load, normalise to 8K / 16K ROML+ROMH banks, and drive the C64 memory map through `GAME` / `EXROM`. Broader mapper families and cart-converter workflows are post-MVP. |
-| `-autostart <path>` (classic) | No direct equivalent. Use `-8 <disk.d64>` + a BASIC `LOAD"*",8,1: RUN` from the running console, or build a topology where the drive image is mounted at boot. |
+| `-autostart <path>` | PRG autostart is parsed and dispatched by the console entry point; disk-image autostart (`LOAD"*",8,1: RUN` injection from a D64) is not wired, so for disks use `-8 <disk.d64>` plus a topology where the drive image is mounted at boot. |
 
 ### Not yet (collected as unknown)
 
@@ -51,12 +55,11 @@ Each of these is currently in the launcher's `Unknown` bucket; the run still pro
 
 | Classic VICE flag | Status |
 |-------------------|--------|
-| `-warp` | Not yet. The console host always runs at full speed within its `--cycles` budget; a warp toggle is meaningful only for an interactive UI host. |
-| `-sound` / `-soundoutput` | Not yet. SID audio backend wiring exists (`Sid6581(IBus, IAudioBackend?)`) but no default backend is connected. |
+| `-warp` | Launcher flag not yet wired. The capability exists: the Avalonia desktop UI has a Warp toggle (Alt+W), a speed-cycle button, and a live limiter slider; warp runs uncapped and discards live sound, same semantics as VICE `-warp`. |
+| `-sound` / `-soundoutput` | Launcher flag not yet wired. A default WinMM audio backend is connected on Windows desktop (the Avalonia app enables it at startup; `VICESHARP_AUDIO=0` disables it); library consumers pass an `IAudioBackend` to `Sid6581(IBus, IAudioBackend?)`. |
 | `-fullscreen` | Not yet. The Avalonia/host-control core exists, but the launcher path does not start an always-on display shell. |
-| `-model <name>` (`c64c`, `c64pal`, etc.) | Not yet. ViceSharp currently builds a single C64 model; PAL / NTSC variants are deferred. |
-| `-ntsc` / `-pal` | Not yet. See `-model`. |
-| `-autostart <path>` | Not yet. |
+| `-model <name>` (`c64c`, `c64pal`, etc.) | Launcher flag not yet wired. The model profiles exist: `C64MachineProfiles` defines C64, C64C, SX-64, C64GS, and Japanese boards in PAL and NTSC variants, exercised by the 322-case `X64ScVariantLockstepTests` gate. Only the flag wiring is missing. |
+| `-ntsc` / `-pal` | Launcher flag not yet wired. NTSC and PAL profiles exist; see `-model`. |
 | `-tape <path>` | Not yet via the launcher. TAP support exists at the device layer, but launcher attach plus spin-up/record timing remain under `RUNTIME-TAPE-002`. |
 | `-monitor` (built-in machine-language monitor) | Not yet via the launcher. The gRPC monitor/control surface is built under `BACKFILL-HOSTUI-001`; wiring this flag belongs with `CLI-LAUNCHER-001`. |
 | `-keymap`, `-joydev`, `-userportdevice`, `-cartrev`, etc. | Not yet. |
@@ -72,7 +75,7 @@ Classic VICE puts everything in one command line (or one `vicerc`). ViceSharp pr
 The canonical sample is [docs/samples/c64-plus-1541.multisystem.yaml](samples/c64-plus-1541.multisystem.yaml); see [USER-GUIDE.md section 5](USER-GUIDE.md#5-machine-yaml-topologies) for the schema.
 
 Recommendation:
-- VICE muscle memory: use `x64sc.exe -8 disk.d64 +truedrive` for the common cases.
+- VICE muscle memory: the `x64sc -8 disk.d64 +truedrive` form is what the launcher library parses and dispatches; until named binaries ship, drive topologies go through `--machine-yaml` on the console shell.
 - Multi-drive / multi-machine: write a YAML and pass `--machine-yaml`.
 
 ### No always-on UI / GUI host
@@ -108,7 +111,7 @@ Classic VICE faithfully reproduces several Commodore-era hardware bugs that real
 | VIC-II sprite-DMA timing | Bounded. Sprite fetch is wired and side-border visibility is managed, but non-PAL per-model fetch tables and native multiplexing checkpoints remain. |
 | SID ADSR bug | Reproduced in the focused Phase 1 SID suite; further analog deepening is post-MVP. |
 | SID combined waveforms | Reproduced for the Phase 1 SID suite; further analog deepening is post-MVP. |
-| 1541 GCR bit-stream timing | Not yet. Sector-stream fast path is the default; cycle-accurate GCR is future work. |
+| 1541 GCR bit-stream timing | Byte-level GCR playback implemented under true drive: `GcrCodec` plus `C1541DriveMechanismDevice` raise byte-ready through VIA2 at per-speed-zone intervals (32/30/28/26 cycles). The sector-stream fast path remains the default fidelity; sub-byte bit-cell effects (weak bits, killer tracks) are not modeled. |
 
 If a specific demo / game depends on a deferred bug, file a regression with the SID dump or D64; that helps prioritise the relevant slice.
 

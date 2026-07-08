@@ -146,6 +146,11 @@ Scope: layer-1+
 **BMP-sequence sink with all/unique dedup, off-worker writes** — FrameSequenceCapture writes numbered 24-bit BMPs via a background queue; unique mode skips byte-identical consecutive frames.
 Scope: layer-1+
 
+## TR-MVVM-001
+
+**TR-MVVM-001** — Placeholder requirement backfilled for TODO link TR-MVVM-001.
+Scope: layer-1+
+
 ## TR-PACESEL-STRAT-001
 
 **Live-switchable pacing strategy plumbing** — EmulationGateStrategies provides canonical ids + gate factory. EmulationPumpService.SetStrategy swaps the gate on the worker thread (no restart). LimiterSettingsDto.PacingStrategy flows through proto/gRPC, SettingsServiceHost applies it live to the pump and round-trips it, and the UI exposes a dropdown.

@@ -1,10 +1,10 @@
 # ViceSharp Cross-Platform Wireframes
 
-Tracking TODO: `PLATFORM-CROSS-001` (Phase 1 - wireframes only; host code deferred to follow-up TODOs).
+Tracking TODO: `PLATFORM-CROSS-001`. The host project scaffolds have since landed in the solution (`src/ViceSharp.Host.Xbox`, `src/ViceSharp.Host.Android`, `src/ViceSharp.Host.iOS`, `src/ViceSharp.Host.MacOS`); these wireframes remain the UX contract those hosts implement.
 
-This directory captures the host UI surface ViceSharp must present on every supported platform. It is the design reference for the deferred work items:
+This directory captures the host UI surface ViceSharp must present on every supported platform. It is the design reference for the platform hosts:
 
-- UWP Xbox One / Xbox Series host
+- Xbox One / Xbox Series host (Avalonia shell today; UWP is a documented future switch)
 - Avalonia 12 mobile host (Android + iOS)
 - MacOS support for the existing Avalonia desktop host
 
@@ -24,7 +24,7 @@ The current Avalonia 12 desktop UI is the canonical reference: any feature visib
 
 Every host must surface these screens, even if they are folded into a single pane or hidden behind a menu:
 
-1. **Machine view** - the emulated video output (`VideoSurface`, 384x272 PAL @ 4:3) plus a status bar (Power, Run, Limiter, FPS, Clock, Cycle, PC).
+1. **Machine view** - the emulated video output (`VideoSurface`, 384x272 PAL @ 4:3) plus a status bar (Power, Run, Limiter, FPS, Clock, Cycle, PC, IEC).
 2. **Attach / media picker** - select disk (D64/D71/D81/G64), tape (TAP/T64), cartridge (CRT/raw 8K/16K), snapshot (VSF) for each slot (Drive 8/9/10/11, Datasette, Cartridge).
 3. **Monitor** - command-line debugger over the host's gRPC `IHostProtocolClient`; supports registers, memory window, disassembly trace, step/run/breakpoints.
 4. **Settings** - clock limiter ratio, video filter, audio output, keyboard map (`.vkm`), controller layout, ROM paths.
@@ -77,14 +77,16 @@ The host abstraction (`IHostProtocolClient.SetKeyStateAsync`) accepts a logical 
 The Avalonia desktop status bar is the canonical text layout; every host reproduces the same fields (truncated as space allows):
 
 ```
-Power Off | Run Stopped | Limiter 100% | FPS 50.0 | Clock 0.985 MHz (100%) | Cycle 0 | PC 0000
+Power Off | Run Stopped | Limiter 100% | FPS 50.0 | Clock 0.985 MHz (100%) | Cycle 0 | PC 0000 | IEC Idle
 ```
+
+On multi-CPU topologies (a true-drive rig or the C128's two CPUs) the line appends per-CPU effective clock rates, e.g. `| CPUs C64 100%, 1541 100%`.
 
 ## Out of Scope (Phase 1)
 
-- Host project scaffolding (UWP `.csproj`, Avalonia Mobile `.csproj`, MacOS bundling).
+- Host project scaffolding (UWP `.csproj`, Avalonia Mobile `.csproj`, MacOS bundling). (Since landed: the four host scaffolds now exist under `src/`.)
 - Concrete XAML / AXAML / SwiftUI markup.
 - ViewModel implementations.
 - Asset production (icons, splash screens, app-store metadata).
 
-All of the above land in the Phase 2 platform-specific TODOs.
+The remaining items land in the platform-specific TODOs.

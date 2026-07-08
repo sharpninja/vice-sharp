@@ -130,7 +130,7 @@ The 6581 SID filter is a state-variable filter with low-pass, band-pass, and hig
 ### Traceability
 
 - **Interfaces:** `IAudioChip`, `IFilter`
-- **Test Suite:** `Filter6581Tests`, `FilterCutoffCurveTests`, `FilterResonanceTests`, `FilterRoutingTests`
+- **Test Suite:** `SidFilter6581Tests`, `Sid6581NonLinearCutoffTests`, `SidFilter6581DivergentParityTests`, `Sid8580FilterTests`
 
 ---
 
@@ -431,5 +431,5 @@ SID voice output shall be centered and scaled like VICE/reSID so live host audio
 ### Traceability
 
 - **Interfaces:** `IAudioChip`, `IAudioBackend`
-- **Test Suite:** `SidCombinedWaveformTests`, `SidPcmEquivalencyTests`
+- **Test Suite:** `SidPcmEquivalencyTests`, `SidDeterminismTests`
 - **Validation Evidence:** `validation-output/runtime/sid-goal-20260626-2351/vicesharp-pieces-release-space-final.mp4`

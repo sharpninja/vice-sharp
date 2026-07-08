@@ -6,12 +6,14 @@
 |----------------|--------------------------------------------|
 | Project        | ViceSharp                                  |
 | Version        | 0.1.0-draft                                |
-| Last Updated   | 2026-05-13                                 |
+| Last Updated   | 2026-07-08                                 |
 | Status         | Draft                                      |
 
 ## Purpose
 
 This document indexes ViceSharp Technical Requirements (TRs). TRs define architecture constraints and non-functional qualities derived from Vice-Sharp architecture, not from classic VICE implementation choices.
+
+> **Index scope note (2026-07-08):** The tables below are a hand-maintained snapshot frozen at the 2026-05-13 requirement set. TRs added after 2026-05 (for example TR-SID-ORACLE-001, TR-LOCKSTEP-VSF-001, TR-AUDIO-WARP-001, TR-CYCLE-PACE-001, TR-PARITY-GATE-001, and the TR-VIC-*/TR-TICKHIST-*/TR-MEM-PAGE-* families cited by tests) are managed in the MCP requirements store; the generated wiki export (`PublishWiki` target) is the authoritative, complete TR index. Do not hand-extend the tables below; register new TRs through the MCP requirements store.
 
 ## TR Document Index
 
@@ -39,14 +41,14 @@ This document indexes ViceSharp Technical Requirements (TRs). TRs define archite
 | TR ID | Title | Quality Attribute |
 |-------|-------|-------------------|
 | TR-ALLOC-001 | Zero Managed Allocations Per Emulation Cycle on Hot Path | Performance / GC |
-| TR-BUILD-001 | Nuke Build System with Dual CI/CD Pipelines | CI/CD / Build |
+| TR-BUILD-001 | Nuke Build System with Azure DevOps CI and Release Pipelines | CI/CD / Build |
 | TR-CYCLE-001 | Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior | Accuracy / Fidelity |
 | TR-DET-001 | Bit-Exact Reproducibility Given Same Initial State and Inputs | Correctness / Replay |
 | TR-GRPC-BOUNDARY-001 | Versioned gRPC Boundary Between Emulator Host and UI Clients | Architecture / Boundary |
 | TR-HOST-STATUS-001 | Measured Emulator Runtime Telemetry | Runtime Telemetry |
 | TR-INPUT-VKM-001 | VICE VKM Parser and Selected Map Resolver | Input Translation |
 | TR-LIB-001 | Emulator Core as a Reusable Library with UI Shells as Thin Consumers | Architecture / Reuse |
-| TR-MEDIA-001 | FFmpeg Integration via P/Invoke with Multiple Format Support | Integration / Media |
+| TR-MEDIA-001 | External FFmpeg Process Integration with Multiple Format Support | Integration / Media |
 | TR-MVVM-001 | Strict MVVM Separation -- ViewModels Reference Abstractions Only, Views Contain Zero Logic | Architecture / UI |
 | TR-PLAT-001 | Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64 | Portability |
 | TR-PUBSUB-001 | <50ns Publish, <100ns Deliver, 0 Allocations Per Frame | Performance / Messaging |

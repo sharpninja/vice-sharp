@@ -1,7 +1,7 @@
 # Sample multi-system topology: a C64 host + a peer "machine" attached over
-# an IEC-style bus. The peer is a minimal CPU+RAM stub - it stands in for a
-# 1541 drive (or any future peripheral) until the true-drive 1541 builder
-# lands in Phase B (ARCH-TRUEDRIVE-1541-001).
+# an IEC-style bus. The peer is a minimal CPU+RAM stub; this sample exists to
+# demonstrate yamlInline peer machines. For the real true-drive topology
+# (kind: C1541, fidelity: TrueDevice), see c64-plus-1541.multisystem.yaml.
 #
 # Loaded by ViceSharp.Architectures.Multisystem.MultiSystemYamlLoader.
 schemaVersion: 1

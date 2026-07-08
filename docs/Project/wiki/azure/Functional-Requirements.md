@@ -117,6 +117,11 @@ Scope: layer-1+
 Export emulator video and audio into a single muxed container (mp4/mkv/avi) by streaming raw BGRA + s16le PCM to an external ffmpeg process over loopback TCP, mirroring VICE ffmpegexedrv.
 Scope: layer-1+
 
+## FR-NATIVERESIDUE-001 Order-independent native oracle across .vsf resumes
+
+Every native (x64sc shim) machine created in a test process must present identical boot and post-activity-reset state regardless of whether a .vsf snapshot was resumed earlier in the same process. Snapshot side effects on process-wide VICE resources (e.g. DriveNTrueEmulation from a has_tde=0 DRIVE8 module) must be re-baselined to VICE defaults at machine create so lockstep suites are order-independent and can run in one process.
+Scope: layer-1+
+
 ## FR-PACESEL-001 Selectable emulation pacing strategy
 
 The pacing strategy (Semaphore vs VICE) is selectable in settings, applied live by swapping the gate on the worker thread, and persisted.

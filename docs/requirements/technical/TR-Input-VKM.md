@@ -46,7 +46,7 @@ ViceSharp machine keyboard input shall resolve normalized host key events throug
 
 - `docs/Architecture.md`: host/UI boundary, input boundary, and library-first assembly rules.
 - `src/ViceSharp.Abstractions`: keyboard map and machine keyboard abstractions.
-- `src/ViceSharp.Chips/Input`: C64 VKM parser and keyboard matrix implementation.
+- `src/ViceSharp.Core/Input`: C64 VKM parser and keyboard matrix implementation (moved from ViceSharp.Chips during ARCH-CHIPGLUE-001).
 - `src/ViceSharp.Host`: host input service.
 
 ### Related FRs

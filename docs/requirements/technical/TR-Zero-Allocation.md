@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Performance / GC Pressure      |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-07-08                     |
 
 ---
 
@@ -39,15 +39,14 @@ A single C64 frame at PAL timing requires approximately 19,656 CPU cycles (312 l
 
 1. A benchmark running 10 million emulation cycles reports zero `GC.GetAllocatedBytesForCurrentThread()` delta on the hot-path thread.
 2. `dotnet-counters` monitoring during a 60-second emulation session shows zero Gen0 collections attributable to the emulation thread.
-3. The `[NoAlloc]` custom attribute (checked by a Roslyn analyzer) is applied to all hot-path methods, and the analyzer reports zero violations.
+3. The `RunFramePerfProbe` benchmark (`tests/ViceSharp.Benchmarks/RunFramePerfProbe.cs`) asserts a zero `GC.GetAllocatedBytesForCurrentThread()` delta over the measured `RunFrame` window; the assertion is smoke-tested by `BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations` (TEST-PERF-RUNFRAME-001).
 4. The PayloadArena reset occurs exactly once per frame and completes in under 100ns.
 5. All event/message payloads in the pub/sub system are value types (per TR-PUBSUB-001).
 6. No `new` keyword appears in hot-path code paths except for stack-allocated `Span<T>` or `stackalloc`.
 
 ### Verification Method
 
-- Allocation-tracking benchmark in the performance test suite.
-- Roslyn analyzer that flags heap allocations in methods annotated with `[NoAlloc]`.
+- Allocation-tracking benchmark in the performance test suite (`RunFramePerfProbe` allocation assert, smoke-tested in `BenchmarksSmokeTests`).
 - `dotnet-trace` GC event analysis during integration test runs.
 - Code review checklist item for all hot-path PRs.
 

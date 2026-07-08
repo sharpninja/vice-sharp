@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Architecture / Process Boundary |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-05-13                     |
+| Last Updated   | 2026-07-08                     |
 
 ---
 
@@ -34,7 +34,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 
 ### Technical Specification
 
-1. **Ownership Boundary:** `ViceSharp.Hosting` owns emulator session composition, local render-source composition, and references concrete core assemblies. UI control assemblies reference host client abstractions and generated contracts only.
+1. **Ownership Boundary:** `ViceSharp.Host` owns emulator session composition, local render-source composition, and references concrete core assemblies. UI control assemblies reference host client abstractions and generated contracts only.
 2. **Contract Source of Truth:** `.proto` files define the wire contract for control, remote output, input, media, state, diagnostics, and event services.
 3. **Versioning:** Contract packages include a semantic version and support additive evolution. Breaking changes require a new package or service version.
 4. **Command Shape:** Mutating commands are unary request/response calls with session id, command id, sequence, correlation id, and structured result.

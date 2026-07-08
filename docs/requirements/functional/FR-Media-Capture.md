@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Subsystem      | Media Capture                  |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-05-13 |
+| Last Updated   | 2026-07-08 |
 
 ---
 
@@ -40,7 +40,7 @@ The emulator shall capture the current video frame as a still image in PNG or BM
 
 - **Interfaces:** `IMediaCapture`
 - **Boundary:** FR-HOST-005 exposes screenshot commands and artifact metadata through the host service.
-- **Test Suite:** `ScreenshotCaptureTests`, `PngFormatTests`, `PaletteTests`
+- **Test Suite:** `RuntimeCaptureTests`, `MediaServiceHostTests`, `FrameSequenceCaptureTests`
 
 ---
 
@@ -53,7 +53,7 @@ The emulator shall capture the current video frame as a still image in PNG or BM
 
 ### Description
 
-The emulator shall record video output to MP4 (H.264) format using FFmpeg libraries via P/Invoke. Recording captures consecutive frames at the native frame rate (PAL: 50fps, NTSC: approximately 59.94fps) and encodes them in real-time or offline.
+The emulator shall record video output to MP4 (H.264) format by streaming raw frames to an external `ffmpeg` process (mirroring VICE's `ffmpegexedrv`; discovery via `PATH` or `VICESHARP_FFMPEG`, no libav P/Invoke bindings). Recording captures consecutive frames at the native frame rate (PAL: 50fps, NTSC: approximately 59.94fps) and encodes them in real-time.
 
 ### Acceptance Criteria
 
@@ -72,7 +72,7 @@ The emulator shall record video output to MP4 (H.264) format using FFmpeg librar
 ### Traceability
 
 - **Interfaces:** `IMediaCapture`, `IVideoEncoder`
-- **Test Suite:** `VideoRecordingTests`, `H264EncoderTests`, `FrameRateAccuracyTests`
+- **Test Suite:** `MediaServiceHostTests`, `CaptureServiceHostTests`, `RuntimeCaptureTests`
 
 ---
 
@@ -104,7 +104,7 @@ The emulator shall record audio output to WAV (uncompressed PCM) or FLAC (lossle
 ### Traceability
 
 - **Interfaces:** `IMediaCapture`, `IAudioEncoder`
-- **Test Suite:** `AudioRecordingTests`, `WavFormatTests`, `FlacFormatTests`, `StereoRecordingTests`
+- **Test Suite:** `WavAudioRecorderTests`, `MediaServiceHostTests`, `CaptureServiceHostTests`
 
 ---
 
@@ -136,7 +136,7 @@ The emulator shall support recording audio and video simultaneously with correct
 ### Traceability
 
 - **Interfaces:** `IMediaCapture`, `IMuxer`
-- **Test Suite:** `AvSyncTests`, `MuxerTests`, `LongRecordingSyncTests`
+- **Test Suite:** `MediaServiceHostTests`, `CaptureServiceHostTests`, `RuntimeCaptureTests`
 
 ---
 
@@ -158,7 +158,7 @@ The media capture system shall support multiple output formats with configurable
 3. Image formats: PNG (lossless), BMP (uncompressed), JPEG (lossy).
 4. Each format exposes its available quality/compression parameters.
 5. Format availability is reported by `IMediaCapture.GetSupportedFormats()`.
-6. Unavailable formats (e.g., if FFmpeg libraries are not present) are gracefully reported as unsupported without crashing.
+6. Unavailable formats (e.g., if the external `ffmpeg` executable is not present) are gracefully reported as unsupported without crashing.
 7. The default format for each capture type is configurable via `IMediaCapture.SetDefaultFormat()`.
 
 ### Source References
@@ -168,4 +168,4 @@ The media capture system shall support multiple output formats with configurable
 ### Traceability
 
 - **Interfaces:** `IMediaCapture`
-- **Test Suite:** `FormatSelectionTests`, `FormatAvailabilityTests`, `GracefulDegradationTests`
+- **Test Suite:** `CaptureServiceHostTests`, `MediaServiceHostTests`

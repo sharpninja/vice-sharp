@@ -1,4 +1,4 @@
-# Iteration 0 — Foundations
+# Iteration 0: Foundations
 
 ## Objective
 
@@ -8,19 +8,19 @@ Create the runnable scaffolding for ViceSharp: solution structure, 33+ public in
 
 ### Phase A: Documentation and Knowledge
 
-1. **Repository Infrastructure** — .NET 10 solution, Nuke build system, central package management, AoT/trim analyzers
-2. **MCP Server Setup** — workspace registration, TODO tracking, session logging
-3. **In-Repo Documentation** — architecture docs, public API reference, ROL (122+ entries), iteration specs
-4. **FR/TR Requirements** — functional and technical requirements with traceability
-5. **GraphRAG Ingestion** — VICE manual, hardware datasheets, file format specs into knowledge base
+1. **Repository Infrastructure**: .NET 10 solution, Nuke build system, central package management, AoT/trim analyzers
+2. **MCP Server Setup**: workspace registration, TODO tracking, session logging
+3. **In-Repo Documentation**: architecture docs, public API reference, ROL (122+ entries), iteration specs
+4. **FR/TR Requirements**: functional and technical requirements with traceability
+5. **GraphRAG Ingestion**: VICE manual, hardware datasheets, file format specs into knowledge base
 
 ### Phase B: Code Implementation (TDD)
 
 Each phase follows the Byrd Development Process:
-1. RED — Write failing tests defining the contracts
-2. Mermaid diagrams — Update canonical class diagrams
-3. GREEN — Implement until tests pass
-4. Update TODOs — Mark tasks complete
+1. RED: Write failing tests defining the contracts
+2. Mermaid diagrams: Update canonical class diagrams
+3. GREEN: Implement until tests pass
+4. Update TODOs: Mark tasks complete
 
 #### Batch 5-6: Abstractions
 - 33+ interfaces in `ViceSharp.Abstractions`
@@ -49,7 +49,7 @@ Each phase follows the Byrd Development Process:
 - Architecture validation (detect missing/conflicting devices)
 
 #### Batch 13: Chips and Peripherals (stubs)
-- CPU, VIC-II, SID, CIA, VIA, PLA — stub implementations
+- CPU, VIC-II, SID, CIA, VIA, PLA: stub implementations
 - Each implements the correct interface, returns default values
 - Validates the full device pipeline without actual emulation
 
@@ -69,7 +69,7 @@ Each phase follows the Byrd Development Process:
 ## Acceptance Criteria
 
 - [ ] `dotnet build ViceSharp.slnx` succeeds with zero warnings
-- [ ] `dotnet test ViceSharp.slnx` — all tests pass
+- [ ] `dotnet test ViceSharp.slnx`: all tests pass
 - [ ] Console app publishes and runs using the supported managed packaging path (starts, prints version, exits)
 - [ ] Avalonia app launches showing an empty display surface
 - [ ] Determinism test: two independent empty-machine snapshots are byte-identical

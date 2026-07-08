@@ -145,6 +145,17 @@ ffprobe-verified video+audio streams; Start failure cleanup; BackgroundByteWrite
 
 
 
+## TEST-NATIVERESIDUE
+
+### TEST-NATIVERESIDUE-001
+
+NativeResidueDiagTests: probe 01 diffs a fresh machine's 200-cycle boot state before/after a demo .vsf resume on a scratch machine; probe 02 replicates the post-activity-reset divergence (boot + full PAL frame + reset + per-cycle walk 140-260 sampling DD00/DD01, CIA1+CIA2, VIC beam, CPU). Guards the PLAN-NATIVERESIDUE-001 mechanism fix: vice_machine_create_model re-baselines Drive{8..11}TrueEmulation to the VICE default 1 via resources_set_int so a has_tde=0 DRIVE8 snapshot module cannot disable True Drive Emulation process-wide.
+
+**Acceptance Criteria:**
+- [x] Fresh-machine boot state is bit-identical before and after a .vsf snapshot resume in the same process. (evidence: TEST-NATIVE-RESIDUE-01 green post-fix; poison combo 36 passed / 0 failed / 1 skipped in one process.)
+- [x] Post-activity-reset per-cycle trace (DD00/CIA/VIC/CPU, cycles 140-260) is bit-identical before and after a .vsf resume. (evidence: TEST-NATIVE-RESIDUE-02 green post-fix; full suite one process 0 failed / 2594 passed.)
+
+
 ## TEST-PACESEL
 
 ### TEST-PACESEL-001

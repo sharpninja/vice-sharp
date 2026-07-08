@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Portability                    |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-07-08                     |
 
 ---
 
@@ -36,8 +36,8 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
    - `IAudioOutput`: Platform-specific audio output (WASAPI on Windows, PulseAudio/ALSA on Linux, CoreAudio on macOS).
    - `IVideoOutput`: Platform-specific window/surface management.
    - `IInputSource`: Platform-specific input device enumeration and event handling.
-4. **Native Library Loading:**
-   - FFmpeg shared libraries are loaded via `NativeLibrary.TryLoad()` with platform-specific paths.
+4. **Native Dependency Discovery:**
+   - The external `ffmpeg` executable is discovered per-platform via `PATH` or `VICESHARP_FFMPEG` (no native library loading; see TR-MEDIA-001).
    - SIMD capability detection uses `System.Runtime.Intrinsics` which is platform-aware.
 5. **File System:**
    - All file paths use `Path.Combine()` and forward slashes internally.
@@ -48,7 +48,7 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 ### Acceptance Criteria
 
 1. The emulation core library (`ViceSharp.Core`) compiles and runs on all 6 target RIDs without conditional compilation (`#if`).
-2. The CI/CD pipeline builds and tests on Windows x64, Ubuntu x64, and macOS ARM64.
+2. The CI pipeline (Azure DevOps `VICE-Sharp-CI` on the self-hosted `Default` pool, Windows) builds and tests every push; a multi-OS CI matrix (Ubuntu x64, macOS ARM64) is future work.
 3. Release publish succeeds on all supported target RIDs.
 4. Audio output plays correctly on all three OS platforms (verified by manual testing and automated A/V sync tests).
 5. Input devices (keyboard, gamepad) are recognized on all platforms.
@@ -57,7 +57,7 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 
 ### Verification Method
 
-- Multi-platform CI matrix (GitHub Actions for Windows/Linux/macOS).
+- Azure DevOps pipelines (`VICE-Sharp-CI` / `VICE-Sharp-Release`) on the self-hosted `Default` pool (Windows). No GitHub Actions workflows exist; a multi-platform CI matrix remains future work.
 - Cross-platform integration tests running a subset of the Lorenz test suite.
 - Release publish smoke test on each target RID.
 
@@ -65,7 +65,7 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 
 - TR-SIMD-001 (SIMD support differs between x64 SSE/AVX and ARM64 NEON)
 - TR-LIB-001 (Core library is platform-agnostic)
-- TR-MEDIA-001 (FFmpeg native libraries are platform-specific)
+- TR-MEDIA-001 (external ffmpeg executable discovery is per-platform)
 
 ### Design Decisions
 

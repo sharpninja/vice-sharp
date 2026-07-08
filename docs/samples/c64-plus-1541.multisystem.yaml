@@ -2,7 +2,7 @@
 # 1541 attached over a cycle-exact IEC InterSystemBus. Load this through the
 # console host:
 #
-#     vsharp --machine-yaml docs/samples/c64-plus-1541.multisystem.yaml --cycles 1000000
+#     dotnet run --project src/ViceSharp.Console -- --machine-yaml docs/samples/c64-plus-1541.multisystem.yaml --cycles 1000000
 #
 # The MultiSystemYamlLoader dispatches each kind: field to its real architecture
 # descriptor; MultiSystemBlueprint.BuildCoordinatorAuto wires the C64 CIA2 and

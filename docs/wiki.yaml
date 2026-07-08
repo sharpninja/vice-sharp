@@ -1,0 +1,234 @@
+schema: mcp-wiki-export/v1
+home:
+  document: home
+documents:
+- id: home
+  title: Home
+  source: generated:home
+  target: Home.md
+  platforms:
+  - github
+  - azure
+- id: functional
+  title: Functional Requirements
+  source: generated:functional
+  target: Functional-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: technical
+  title: Technical Requirements
+  source: generated:technical
+  target: Technical-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: testing
+  title: Testing Requirements
+  source: generated:testing
+  target: Testing-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: mapping
+  title: TR per FR Mapping
+  source: generated:mapping
+  target: TR-per-FR-Mapping.md
+  platforms:
+  - github
+  - azure
+- id: matrix
+  title: Requirements Matrix
+  source: generated:matrix
+  target: Requirements-Matrix.md
+  platforms:
+  - github
+  - azure
+- id: project-overview
+  title: Project Overview
+  source: README.md
+  target: Project-Overview.md
+  platforms:
+  - github
+  - azure
+- id: user-guide
+  title: User Guide
+  source: docs/USER-GUIDE.md
+  target: User-Guide.md
+  platforms:
+  - github
+  - azure
+- id: vice-migration
+  title: Migrating from Classic VICE
+  source: docs/VICE-MIGRATION.md
+  target: VICE-Migration.md
+  platforms:
+  - github
+  - azure
+- id: rom-setup
+  title: ROM Setup and Legal Sources
+  source: docs/ROMs.md
+  target: ROM-Setup.md
+  platforms:
+  - github
+  - azure
+- id: architecture
+  title: Architecture
+  source: docs/Architecture.md
+  target: Architecture.md
+  platforms:
+  - github
+  - azure
+- id: public-api
+  title: Public API Reference
+  source: docs/Public-API.md
+  target: Public-API.md
+  platforms:
+  - github
+  - azure
+- id: pubsub
+  title: Pub-Sub and Mutation Queue
+  source: docs/PubSub.md
+  target: PubSub.md
+  platforms:
+  - github
+  - azure
+- id: decoupling
+  title: Video and Audio Decoupling
+  source: docs/Decoupling.md
+  target: Video-Audio-Decoupling.md
+  platforms:
+  - github
+  - azure
+- id: state-window
+  title: State Window (Design Proposal)
+  source: docs/StateWindow.md
+  target: State-Window.md
+  platforms:
+  - github
+  - azure
+- id: iteration-roadmap
+  title: Iteration Roadmap
+  source: docs/Iteration-Roadmap.md
+  target: Iteration-Roadmap.md
+  platforms:
+  - github
+  - azure
+- id: ai-review
+  title: AI Code and Project Review (aiUnit)
+  source: docs/AI-Review.md
+  target: AI-Review.md
+  platforms:
+  - github
+  - azure
+- id: registry-of-lore
+  title: Registry of Lore
+  source: docs/ROL.md
+  target: Registry-of-Lore.md
+  platforms:
+  - github
+  - azure
+- id: fr-overview
+  title: Functional Requirements Overview
+  source: docs/requirements/functional/FR-Overview.md
+  target: Functional-Requirements-Overview.md
+  platforms:
+  - github
+  - azure
+- id: tr-overview
+  title: Technical Requirements Overview
+  source: docs/requirements/technical/TR-Overview.md
+  target: Technical-Requirements-Overview.md
+  platforms:
+  - github
+  - azure
+- id: test-requirements
+  title: Test Requirements
+  source: docs/requirements/test/TEST-Requirements.md
+  target: Test-Requirements.md
+  platforms:
+  - github
+  - azure
+- id: x64sc-model-matrix
+  title: x64sc Model Matrix
+  source: docs/requirements/backfill/X64SC-Model-Matrix.md
+  target: X64sc-Model-Matrix.md
+  platforms:
+  - github
+  - azure
+- id: x64sc-requirement-coverage
+  title: x64sc Requirement Coverage
+  source: docs/requirements/backfill/X64SC-Requirement-Coverage.md
+  target: X64sc-Requirement-Coverage.md
+  platforms:
+  - github
+  - azure
+- id: vice-edge-case-backfill
+  title: Classic VICE Edge-Case TR Backfill
+  source: docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md
+  target: Classic-VICE-Edge-Case-TR-Backfill.md
+  platforms:
+  - github
+  - azure
+- id: vice-source-manifest
+  title: VICE Source Manifest
+  source: docs/requirements/sources/VICE-Source-Manifest.md
+  target: VICE-Source-Manifest.md
+  platforms:
+  - github
+  - azure
+- id: machine-architecture-schema
+  title: Ad-Hoc Machine Architecture YAML Schema (v1)
+  source: docs/schemas/machine-architecture.schema.md
+  target: Machine-Architecture-Schema.md
+  platforms:
+  - github
+  - azure
+- id: cross-platform-wireframes
+  title: Cross-Platform UI Wireframes
+  source: docs/wireframes/README.md
+  target: Cross-Platform-Wireframes.md
+  platforms:
+  - github
+  - azure
+- id: desktop-windows-ui
+  title: Desktop UI Reference (Windows, Avalonia)
+  source: docs/wireframes/desktop-windows.md
+  target: Desktop-Windows-UI.md
+  platforms:
+  - github
+  - azure
+navigation:
+- document: home
+  children:
+  - document: functional
+  - document: technical
+  - document: testing
+  - document: mapping
+  - document: matrix
+- document: project-overview
+  children:
+  - document: user-guide
+  - document: vice-migration
+  - document: rom-setup
+- document: architecture
+  children:
+  - document: public-api
+  - document: pubsub
+  - document: decoupling
+  - document: state-window
+  - document: iteration-roadmap
+  - document: ai-review
+  - document: registry-of-lore
+- document: fr-overview
+  children:
+  - document: tr-overview
+  - document: test-requirements
+  - document: x64sc-model-matrix
+  - document: x64sc-requirement-coverage
+  - document: vice-edge-case-backfill
+  - document: vice-source-manifest
+- document: machine-architecture-schema
+  children:
+  - document: cross-platform-wireframes
+  - document: desktop-windows-ui

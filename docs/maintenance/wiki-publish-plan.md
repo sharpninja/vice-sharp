@@ -1,5 +1,14 @@
 # Wiki Publish Plan (2026-05-16)
 
+> **SUPERSEDED.** The manual scratch-clone publish procedure below was replaced
+> by the implemented automation: `tools/Publish-Wiki.ps1` plus the Nuke
+> `PublishWiki` target (`build/Build.cs`). The script regenerates the MCP wiki
+> export and pushes both wiki targets, skipping a target when its PAT env var
+> is absent. The known-gaps items are closed: the three TR markdown files exist
+> under `docs/requirements/technical/`, and the manifests are regenerated on
+> each publish. The gates G1-G6 below remain the publishing rules the script
+> honors; the rest of this document is retained as historical planning record.
+
 Owner: REPO-MAINT-001 phase 1.
 
 This plan documents the pipeline that will publish the ViceSharp requirements wiki to its public target. The plan is documentation-only; no actual wiki push is performed in this slice.

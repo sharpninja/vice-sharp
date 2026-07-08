@@ -1,4 +1,21 @@
-# 2026-06-25/26 VICE pacing, true-drive load, and renderer handoff
+# 2026-07-08 Current state: v1.0.2 released
+
+**Tag:** `v1.0.2` (released 2026-07-08)
+**Default branch:** `master` (work happens on `main`)
+**Status:** Released; suite green.
+
+## Release
+
+- v1.0.2 tagged and released 2026-07-08 with 13 NuGet packages verified on nuget.org: the ViceSharp.Core bundle, SourceGen, Protocol, Monitor, Launcher, AdhocHelper, Host, Avalonia, Console, and Host.MacOS/Android/iOS/Xbox. Console and Avalonia ship as dotnet tools.
+- PLAN-NATIVERESIDUE-001 closed: TrueDrive re-baseline now happens at machine create, and the SnapshotResume partition was removed.
+- Test baseline at v1.0.2: Failed 0 / Passed 2594 / Skipped 21 / Total 2615, single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`.
+- CI green on Azure DevOps pipelines VICE-Sharp-CI + VICE-Sharp-Release (self-hosted Default pool); CiTest stages hash-pinned ROMs via `EnsureCiRomRoot`.
+
+Everything below this line is archived history retained for reference.
+
+---
+
+# ARCHIVED: 2026-06-25/26 VICE pacing, true-drive load, and renderer handoff
 
 **Branch:** `codex/iec-timetravel-debugger`
 **Base before wrap-up:** `dbca07d5818a3e9133798dbb6dea70b0a6e84f5d`
@@ -66,7 +83,7 @@ as the incomplete test in the blame sequence artifacts. A future full-suite run 
 
 ---
 
-# ViceSharp - Phase 1 Closeout Handoff
+# ARCHIVED: ViceSharp - Phase 1 Closeout Handoff
 
 **Date:** 2026-05-31 (marathon pull-in complete)
 **HEAD:** `32880a4`

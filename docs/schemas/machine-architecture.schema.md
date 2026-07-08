@@ -6,7 +6,7 @@ Describes a complete ViceSharp emulated machine as a single YAML (or JSON) docum
 
 - machine identity (name, video standard)
 - master clock
-- 64KB memory map (RAM, ROM, mirrors)
+- 64KB memory map (RAM, ROM; mirrors are expressed by overlapping regions, where later entries shadow earlier ones)
 - chip catalogue (CPU + peripheral chips, base addresses, interrupt wiring)
 - optional reset port settings
 
@@ -33,7 +33,7 @@ machine:
 memory:
   regions:
     - id: ram-main
-      kind: Ram             # Ram | Rom | Mirror
+      kind: Ram             # Ram | Rom
       start: 0x0000
       end:   0xFFFF
       size:  0x10000        # optional; if present must equal (end-start+1)
@@ -75,7 +75,7 @@ interruptLines:
 | name            | string    | yes      | Human readable machine name                            |
 | videoStandard   | enum      | yes      | `Pal` or `Ntsc`                                        |
 | masterClockHz   | long      | yes      | Master clock in Hz                                     |
-| resetVector     | uint16    | no       | Power-on reset vector. Default `0xFFFC`               |
+| resetVector     | uint16    | no       | Power-on reset vector. Default `0xFFFC`. Accepted for forward compatibility but not yet consumed: the loader binds the value and the builder discards it |
 
 ### memory.regions[]
 
@@ -119,10 +119,10 @@ The resolver tries each candidate in order and uses the first that exists and va
 
 Required `baseAddress` per type:
 
-- `Mos6526` — required
-- `Mos6569` — required
-- `Sid6581` — must NOT be specified (SID hard-codes its window at 0xD400-0xD7FF in this iteration)
-- `Mos6502` — must NOT be specified (CPU is not address-mapped as a peripheral)
+- `Mos6526` - required
+- `Mos6569` - required
+- `Sid6581` - must NOT be specified (SID hard-codes its window at 0xD400-0xD7FF in this iteration)
+- `Mos6502` - must NOT be specified (CPU is not address-mapped as a peripheral)
 
 ### interruptLines[]
 
@@ -146,7 +146,7 @@ Board / bus configuration for a specific variant. Mirrors `C64SystemCoreDefiniti
 | cia2Connected         | bool   | no       | Second CIA present (false on Ultimax)                                                  |
 | cartridgeBootExpected | bool   | no       | Machine boots from cartridge (Ultimax / C64GS)                                         |
 
-Per-variant machine definitions live under `docs/samples/machines/<id>.machine.yaml` (one per C64 variant), generated from `C64MachineProfiles` by `tools/generate-c64-machines.py`. The `id`, `systemCore`, chip `model`/raster, and `rom` fields are forward-compatible: the current loader tolerates them (unknown keys are ignored) until the builder consumes them.
+Per-variant machine definitions live under `docs/samples/machines/<id>.machine.yaml` (one per C64 variant), generated from `C64MachineProfiles` by `C64MachineDefinitionWriter` (`src/ViceSharp.Architectures/C64/C64MachineDefinitionWriter.cs`) via `ViceSharp.Console --export-machines docs/samples/machines`. The `id`, `systemCore`, chip `model`/raster, and `rom` fields are forward-compatible: the current loader tolerates them (unknown keys are ignored) until the builder consumes them.
 
 ## Validation Rules
 

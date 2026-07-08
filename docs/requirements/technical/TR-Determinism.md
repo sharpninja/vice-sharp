@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Correctness / Reproducibility  |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-07-08                     |
 
 ---
 
@@ -41,13 +41,13 @@ Determinism is a foundational requirement for: (1) snapshot-based replay (FR-SNP
 3. The same test produces identical hashes for Debug and Release builds.
 4. Video frame checksums (CRC32 of raw pixel data) match for every frame between two runs of the same replay.
 5. Audio sample checksums match for every audio buffer between two runs of the same replay.
-6. The `[Deterministic]` custom attribute is applied to all emulation-core methods, and a Roslyn analyzer verifies no non-deterministic operations are used.
+6. Determinism is verified mechanically by the `Category=Determinism` bit-exact replay suites (run by the Nuke `DeterminismTest` target, e.g. `SidDeterminismTests`) plus the cycle-exact lockstep comparison gates against VICE `x64sc` and VSF baselines (Nuke `ParityTest` target).
 
 ### Verification Method
 
-- Cross-platform determinism test in CI (Windows, Linux, macOS runners).
-- Replay regression test suite that compares frame/audio checksums against golden reference files.
-- Static analysis (Roslyn analyzer) for floating-point usage and non-deterministic patterns in annotated code.
+- `Category=Determinism` replay suites executed by the Nuke `DeterminismTest` target (bit-exact replay checks).
+- Lockstep comparison gates against VICE `x64sc` and `.vsf` snapshot baselines (Nuke `ParityTest` target).
+- Replay regression tests that compare frame/audio checksums against golden reference files.
 
 ### Related FRs
 

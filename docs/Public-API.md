@@ -1,6 +1,8 @@
 # ViceSharp Public API Reference
 
-This document describes the 33+ public interfaces defined in `ViceSharp.Abstractions`. The interfaces are explicit and trim-aware: no reflection on the hot path, no base classes, and all members are explicitly defined for source-generator discovery. Current application packaging is self-contained managed code with ReadyToRun, not native ahead-of-time publishing.
+This document describes the public interfaces defined in `ViceSharp.Abstractions` (50 interface files as of v1.0.2). The interfaces are explicit and trim-aware: no reflection on the hot path, no base classes, and all members are explicitly defined for source-generator discovery. Current application packaging is self-contained managed code with ReadyToRun, not native ahead-of-time publishing.
+
+This reference covers the foundational contracts. Chip-level and machine-level contracts (`ICpu`, `IVideoChip`, `IAudioChip`, `ICiaChip`, `IMemory`, the input/storage port interfaces, `IStatefulDevice`, `ISystemCoordinator`, `IInterSystemBus`, the lockstep oracle `IViceNative`, and others) are documented by their XML doc comments in `src/ViceSharp.Abstractions`.
 
 ---
 
@@ -12,14 +14,9 @@ These interfaces define the fundamental emulation primitives: bus access, clock-
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Provides a flat address space with read/write access, representing the system data bus. All memory-mapped I/O, RAM, and ROM access flows through this interface.
+Provides a flat address space with read/write access, representing the system data bus. All memory-mapped I/O, RAM, and ROM access flows through this interface. Address decoding is delegated to the registered `IAddressSpace` devices.
 
 ```csharp
-/// <summary>
-/// Represents the system data bus providing unified address-space access.
-/// All memory reads and writes are dispatched through the bus to the
-/// appropriate IAddressSpace handler based on the current banking configuration.
-/// </summary>
 public interface IBus
 {
     /// <summary>Reads a byte from the specified 16-bit address.</summary>
@@ -28,20 +25,14 @@ public interface IBus
     /// <summary>Writes a byte to the specified 16-bit address.</summary>
     void Write(ushort address, byte value);
 
-    /// <summary>Reads a contiguous block of memory into the target span.</summary>
-    void ReadBlock(ushort startAddress, Span<byte> target);
+    /// <summary>Reads a byte without side effects (monitor/debugger inspection).</summary>
+    byte Peek(ushort address);
 
-    /// <summary>Writes a contiguous block of memory from the source span.</summary>
-    void WriteBlock(ushort startAddress, ReadOnlySpan<byte> source);
+    /// <summary>Registers an address space handler on the bus.</summary>
+    void RegisterDevice(IAddressSpace device);
 
-    /// <summary>Registers an address space handler for a given address range.</summary>
-    void MapAddressSpace(IAddressSpace space, ushort start, ushort end);
-
-    /// <summary>Removes an address space mapping, reverting to the underlying default.</summary>
-    void UnmapAddressSpace(ushort start, ushort end);
-
-    /// <summary>Gets the current banking configuration identifier.</summary>
-    int BankConfiguration { get; }
+    /// <summary>Removes an address space handler from the bus.</summary>
+    void UnregisterDevice(IAddressSpace device);
 }
 ```
 
@@ -52,18 +43,13 @@ public interface IBus
 Represents any device that receives ticks from the system clock. The clock subsystem calls `Tick()` at the device's configured rate, which may differ from the master clock frequency via a divisor.
 
 ```csharp
-/// <summary>
-/// A device driven by the system clock. Receives periodic tick calls
-/// at a rate determined by the master clock frequency and the device's
-/// clock divisor.
-/// </summary>
 public interface IClockedDevice : IDevice
 {
     /// <summary>Advances the device by one clock cycle.</summary>
     void Tick();
 
     /// <summary>Clock divisor relative to master clock. 1 = same as master.</summary>
-    int ClockDivisor { get; }
+    uint ClockDivisor { get; }
 
     /// <summary>The clock phase this device operates on (phi1 or phi2).</summary>
     ClockPhase Phase { get; }
@@ -77,11 +63,6 @@ public interface IClockedDevice : IDevice
 Models a physical interrupt line (IRQ or NMI). Multiple sources can assert the same line; the line remains active as long as any source holds it asserted (active-low, open-drain behavior matching real hardware).
 
 ```csharp
-/// <summary>
-/// Represents a physical interrupt line (IRQ or NMI) with open-drain
-/// semantics. The line is active-low: it is asserted when any source
-/// pulls it low, and deasserted only when all sources release.
-/// </summary>
 public interface IInterruptLine
 {
     /// <summary>Assert (pull low) the interrupt line from the given source.</summary>
@@ -105,11 +86,7 @@ public interface IInterruptLine
 Implemented by any device capable of raising interrupts. Provides identification for the source so the interrupt line can track which sources are currently asserting.
 
 ```csharp
-/// <summary>
-/// Identifies a device that can raise interrupts. Used by IInterruptLine
-/// to track assertion state per source.
-/// </summary>
-public interface IInterruptSource
+public interface IInterruptSource : IDevice
 {
     /// <summary>Unique identifier for this interrupt source.</summary>
     DeviceId SourceId { get; }
@@ -123,30 +100,22 @@ public interface IInterruptSource
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Implemented by devices that occupy a region of the address bus. The bus routes reads and writes to the correct `IAddressSpace` implementor based on the current memory map and banking state.
+Implemented by devices that occupy a region of the address bus. The bus routes reads and writes to the correct `IAddressSpace` implementor; each implementor answers `HandlesAddress` for the current banking configuration.
 
 ```csharp
-/// <summary>
-/// A device that maps onto a contiguous region of the system address bus.
-/// The bus routes memory operations to the appropriate IAddressSpace
-/// based on the architecture's banking configuration.
-/// </summary>
-public interface IAddressSpace
+public interface IAddressSpace : IDevice
 {
-    /// <summary>Reads a byte at the given offset within this address space.</summary>
-    byte Read(ushort offset);
+    /// <summary>Reads a byte at the given system address.</summary>
+    byte Read(ushort address);
 
-    /// <summary>Writes a byte at the given offset within this address space.</summary>
-    void Write(ushort offset, byte value);
+    /// <summary>Writes a byte at the given system address.</summary>
+    void Write(ushort address, byte value);
 
-    /// <summary>Base address of this space in the system memory map.</summary>
-    ushort BaseAddress { get; }
+    /// <summary>Reads a byte without side effects (monitor/debugger inspection).</summary>
+    byte Peek(ushort address);
 
-    /// <summary>Size of this address space in bytes.</summary>
-    ushort Size { get; }
-
-    /// <summary>True if this space is read-only (e.g., ROM).</summary>
-    bool IsReadOnly { get; }
+    /// <summary>True if this space currently decodes the given address.</summary>
+    bool HandlesAddress(ushort address);
 }
 ```
 
@@ -157,11 +126,6 @@ public interface IAddressSpace
 The master system clock. Drives all cycle-accurate timing. Manages registration of clocked devices and distributes ticks according to each device's divisor and phase configuration.
 
 ```csharp
-/// <summary>
-/// Master system clock that drives cycle-accurate emulation.
-/// Distributes ticks to all registered IClockedDevice instances
-/// respecting divisors and clock phases.
-/// </summary>
 public interface IClock
 {
     /// <summary>Advances the clock by one master cycle, ticking all due devices.</summary>
@@ -181,6 +145,9 @@ public interface IClock
 
     /// <summary>Unregisters a device from clock tick distribution.</summary>
     void Unregister(IClockedDevice device);
+
+    /// <summary>Resets the cycle counter.</summary>
+    void Reset();
 }
 ```
 
@@ -194,14 +161,9 @@ These interfaces define the machine abstraction: how devices are organized into 
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Top-level container for a running emulator instance. Holds the machine, manages lifecycle (start, stop, reset), and provides access to system-wide services.
+Top-level container for a running emulator instance. Holds the machine and manages lifecycle (start, stop, reset).
 
 ```csharp
-/// <summary>
-/// Top-level container for a running emulator instance. Manages machine
-/// lifecycle and provides access to system-wide services like ROM loading,
-/// media capture, and the monitor/debugger.
-/// </summary>
 public interface ISystem
 {
     /// <summary>The currently loaded machine.</summary>
@@ -218,12 +180,6 @@ public interface ISystem
 
     /// <summary>True if the emulation loop is currently running.</summary>
     bool IsRunning { get; }
-
-    /// <summary>Access to the system's ROM provider.</summary>
-    IRomProvider RomProvider { get; }
-
-    /// <summary>Access to the monitor/debugger.</summary>
-    IMonitor Monitor { get; }
 }
 ```
 
@@ -231,14 +187,9 @@ public interface ISystem
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Represents a specific hardware configuration (e.g., C64 PAL, VIC-20 NTSC). Assembled from an `IArchitectureDescriptor` by the `IArchitectureBuilder`. Owns the bus, clock, and device registry.
+Represents a specific hardware configuration (e.g., C64 PAL). Assembled from an `IArchitectureDescriptor` by the `IArchitectureBuilder`. Owns the bus, clock, and device registry, and exposes optional pub/sub and CPU accessors with default implementations.
 
 ```csharp
-/// <summary>
-/// A fully-assembled emulated machine. Created by IArchitectureBuilder
-/// from an IArchitectureDescriptor. Owns the bus, clock, and all
-/// registered devices.
-/// </summary>
 public interface IMachine
 {
     /// <summary>The system bus for this machine.</summary>
@@ -258,6 +209,21 @@ public interface IMachine
 
     /// <summary>Executes a single CPU instruction (variable cycle count).</summary>
     void StepInstruction();
+
+    /// <summary>Captures the machine state for lockstep comparison.</summary>
+    MachineState GetState();
+
+    /// <summary>Resets the machine.</summary>
+    void Reset();
+
+    /// <summary>The machine's pub/sub hub, or null when not wired.</summary>
+    IPubSub? PubSub => null;
+
+    /// <summary>The primary (host system) CPU, or null when not exposed.</summary>
+    ICpu? PrimaryCpu => null;
+
+    /// <summary>Per-CPU cycle counts for the status surface (host CPU plus attached drive CPUs).</summary>
+    IReadOnlyList<CpuInfo> CpuInfos { get; }
 }
 ```
 
@@ -265,13 +231,9 @@ public interface IMachine
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Base interface for all emulated hardware components. Every chip, memory bank, and peripheral implements `IDevice`. Provides identification and lifecycle management.
+Base interface for all emulated hardware components. Every chip, memory bank, and peripheral implements `IDevice`.
 
 ```csharp
-/// <summary>
-/// Base interface for all emulated hardware components. Provides
-/// identification, initialization, and reset capabilities.
-/// </summary>
 public interface IDevice
 {
     /// <summary>Unique identifier for this device instance.</summary>
@@ -279,9 +241,6 @@ public interface IDevice
 
     /// <summary>Human-readable device name (e.g., "MOS 6510 CPU").</summary>
     string Name { get; }
-
-    /// <summary>Initializes the device to its power-on state.</summary>
-    void Initialize();
 
     /// <summary>Resets the device (equivalent to hardware reset line).</summary>
     void Reset();
@@ -292,26 +251,19 @@ public interface IDevice
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Represents an external peripheral device such as a disk drive, datasette, or cartridge. Peripherals can be connected and disconnected at runtime and interact with the machine through defined ports.
+Represents an external peripheral device such as a disk drive, datasette, or cartridge. Peripherals can be connected and disconnected at runtime.
 
 ```csharp
-/// <summary>
-/// An external peripheral that can be attached/detached at runtime.
-/// Examples: 1541 disk drive, datasette, cartridges, REU.
-/// </summary>
 public interface IPeripheral : IDevice
 {
     /// <summary>Connects the peripheral to the machine.</summary>
-    void Attach(IMachine machine);
+    void Attach();
 
     /// <summary>Disconnects the peripheral from the machine.</summary>
     void Detach();
 
     /// <summary>True if the peripheral is currently attached.</summary>
     bool IsAttached { get; }
-
-    /// <summary>The type of port this peripheral connects to.</summary>
-    PeripheralPort Port { get; }
 }
 ```
 
@@ -322,10 +274,6 @@ public interface IPeripheral : IDevice
 Registry of all devices within a machine. Populated by the architecture builder during machine construction. Supports lookup by ID, type, and role.
 
 ```csharp
-/// <summary>
-/// Registry of all devices in a machine. Supports lookup by DeviceId,
-/// interface type, or device role. Populated during machine construction.
-/// </summary>
 public interface IDeviceRegistry
 {
     /// <summary>Returns the device with the given ID, or null if not found.</summary>
@@ -351,55 +299,17 @@ public interface IDeviceRegistry
 
 These interfaces define how machines are described, constructed, and validated.
 
-### `IArchitecture`
-
-**Assembly:** `ViceSharp.Abstractions`
-
-Represents a fully-wired machine architecture at runtime. Provides access to the memory map, interrupt routing, and clock configuration as assembled from a descriptor.
-
-```csharp
-/// <summary>
-/// A fully-wired runtime architecture. Provides the assembled memory map,
-/// interrupt routing tables, and clock configuration.
-/// </summary>
-public interface IArchitecture
-{
-    /// <summary>The descriptor this architecture was built from.</summary>
-    IArchitectureDescriptor Descriptor { get; }
-
-    /// <summary>The memory map with all address space assignments.</summary>
-    IReadOnlyList<AddressMapping> MemoryMap { get; }
-
-    /// <summary>All interrupt line connections.</summary>
-    IReadOnlyList<InterruptRoute> InterruptRoutes { get; }
-
-    /// <summary>Clock configuration including divisors and phases.</summary>
-    ClockConfiguration ClockConfig { get; }
-}
-```
-
 ### `IArchitectureDescriptor`
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Declarative description of a machine architecture. Lists the devices, memory map, clock speeds, and interrupt wiring needed to construct a running machine. Descriptors are immutable data.
+Declarative description of a machine architecture. Lists the devices, master clock, video standard, and ROM set needed to construct a running machine. Descriptors are immutable data.
 
 ```csharp
-/// <summary>
-/// Immutable declarative description of a machine architecture.
-/// Lists devices, memory map, clock configuration, and interrupt wiring.
-/// Used by IArchitectureBuilder to construct a running IMachine.
-/// </summary>
 public interface IArchitectureDescriptor
 {
     /// <summary>Machine name (e.g., "Commodore 64 PAL").</summary>
     string MachineName { get; }
-
-    /// <summary>Devices required by this architecture.</summary>
-    IReadOnlyList<DeviceDescriptor> Devices { get; }
-
-    /// <summary>Address space mappings.</summary>
-    IReadOnlyList<AddressMapEntry> AddressMap { get; }
 
     /// <summary>Master clock frequency in Hz.</summary>
     long MasterClockHz { get; }
@@ -407,8 +317,11 @@ public interface IArchitectureDescriptor
     /// <summary>Video standard (PAL or NTSC).</summary>
     VideoStandard VideoStandard { get; }
 
-    /// <summary>Required ROM set for this architecture.</summary>
-    IRomSet RequiredRoms { get; }
+    /// <summary>Devices required by this architecture.</summary>
+    IReadOnlyList<DeviceDescriptor> Devices { get; }
+
+    /// <summary>Required ROM set for this architecture, or null when none.</summary>
+    IRomSet? RequiredRoms { get; }
 }
 ```
 
@@ -419,21 +332,10 @@ public interface IArchitectureDescriptor
 Constructs a running `IMachine` from an `IArchitectureDescriptor`. Performs the assembly sequence: select the profile's system core, instantiate chips, map address spaces, connect interrupts, configure clocks, and validate. The builder is the glue between system-core policy and concrete chip instances.
 
 ```csharp
-/// <summary>
-/// Constructs a running IMachine from an IArchitectureDescriptor.
-/// Selects the system core, instantiates chips, wires address spaces, connects interrupts,
-/// configures clocks, and runs validation.
-/// </summary>
 public interface IArchitectureBuilder
 {
     /// <summary>Builds a machine from the given architecture descriptor.</summary>
     IMachine Build(IArchitectureDescriptor descriptor);
-
-    /// <summary>Builds a machine with custom service overrides.</summary>
-    IMachine Build(IArchitectureDescriptor descriptor, Action<IServiceOverrides> configure);
-
-    /// <summary>Validates a descriptor without constructing a machine.</summary>
-    ValidationResult Validate(IArchitectureDescriptor descriptor);
 }
 ```
 
@@ -441,24 +343,13 @@ public interface IArchitectureBuilder
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Validates an architecture descriptor for correctness before construction. Catches configuration errors such as overlapping address ranges, missing required devices, and invalid clock divisors.
+Validates an architecture descriptor for correctness before construction. Catches configuration errors such as overlapping address ranges and missing required devices.
 
 ```csharp
-/// <summary>
-/// Validates an IArchitectureDescriptor for correctness. Catches errors
-/// like overlapping address ranges, missing required devices, invalid
-/// clock divisors, and disconnected interrupt sources.
-/// </summary>
 public interface IArchitectureValidator
 {
     /// <summary>Runs all validation rules against the descriptor.</summary>
-    ValidationResult Validate(IArchitectureDescriptor descriptor);
-
-    /// <summary>Checks for overlapping address space mappings.</summary>
-    ValidationResult ValidateAddressMap(IReadOnlyList<AddressMapEntry> map);
-
-    /// <summary>Checks that all required device roles are present.</summary>
-    ValidationResult ValidateDeviceRoles(IReadOnlyList<DeviceDescriptor> devices);
+    bool Validate(IArchitectureDescriptor descriptor);
 }
 ```
 
@@ -472,29 +363,16 @@ These interfaces define external services consumed by the emulation engine.
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Loads and caches ROM images from the filesystem or other sources. Validates ROM integrity via checksums before use.
+Loads ROM images for a given architecture. The concrete loader (`ViceSharp.RomFetch`) validates ROM integrity against pinned MD5/SHA1 descriptor hashes before returning data.
 
 ```csharp
-/// <summary>
-/// Loads and caches ROM images. Validates integrity via CRC32/SHA256
-/// checksums before returning ROM data.
-/// </summary>
 public interface IRomProvider
 {
-    /// <summary>Loads a ROM by name for the specified architecture.</summary>
+    /// <summary>Loads a ROM file for the specified architecture.</summary>
     ReadOnlyMemory<byte> LoadRom(string romName, string architecture);
 
-    /// <summary>Checks whether a ROM is available and valid.</summary>
+    /// <summary>Checks if a ROM is available.</summary>
     bool IsAvailable(string romName, string architecture);
-
-    /// <summary>Returns all available ROMs for the given architecture.</summary>
-    IReadOnlyList<RomInfo> GetAvailableRoms(string architecture);
-
-    /// <summary>Validates a ROM's checksum against known-good values.</summary>
-    RomValidationResult Validate(string romName, string architecture);
-
-    /// <summary>Base search path for ROM files.</summary>
-    string RomBasePath { get; }
 }
 ```
 
@@ -505,17 +383,10 @@ public interface IRomProvider
 Describes the complete set of ROMs required by a specific architecture (e.g., KERNAL, BASIC, CHARGEN for C64).
 
 ```csharp
-/// <summary>
-/// Describes the complete set of ROMs required by a specific architecture.
-/// Each entry specifies the ROM name, expected size, and known-good checksums.
-/// </summary>
 public interface IRomSet
 {
     /// <summary>Architecture this ROM set belongs to (e.g., "c64").</summary>
     string Architecture { get; }
-
-    /// <summary>Individual ROM file requirements.</summary>
-    IReadOnlyList<RomRequirement> Requirements { get; }
 
     /// <summary>Checks if all required ROMs are present and valid.</summary>
     bool IsComplete(IRomProvider provider);
@@ -526,29 +397,22 @@ public interface IRomSet
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Platform-specific audio output. Receives sample data from the emulation engine and delivers it to the host audio system. Manages buffering, sample rate conversion, and latency.
+Platform-specific audio output. Receives PCM samples from the emulation engine and delivers them to the host audio system. Backends are constructed pre-configured (e.g., the desktop `WinMmAudioBackend` via `AudioBackendFactory` in `ViceSharp.Host`); there is no separate initialize step.
 
 ```csharp
-/// <summary>
-/// Platform-specific audio output backend. Receives PCM samples from the
-/// emulation engine's ring buffer and delivers them to the host audio system.
-/// </summary>
 public interface IAudioBackend
 {
-    /// <summary>Initializes the audio backend with the given parameters.</summary>
-    void Initialize(AudioParameters parameters);
-
     /// <summary>Submits a buffer of PCM samples for playback.</summary>
     void SubmitSamples(ReadOnlySpan<float> samples);
 
     /// <summary>Number of samples currently queued for playback.</summary>
     int QueuedSampleCount { get; }
 
-    /// <summary>Target latency in milliseconds.</summary>
-    int TargetLatencyMs { get; set; }
-
-    /// <summary>Actual measured latency in milliseconds.</summary>
-    int ActualLatencyMs { get; }
+    /// <summary>
+    /// Number of additional samples the playback device can accept without blocking.
+    /// Backends that do not expose finite device space report a large value.
+    /// </summary>
+    int AvailableSampleCount => int.MaxValue;
 
     /// <summary>Pauses audio playback without discarding buffered data.</summary>
     void Pause();
@@ -565,24 +429,13 @@ public interface IAudioBackend
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Receives completed video frames from the emulation engine. The video chip writes into a back buffer; when a frame is complete, it is swapped to the front buffer and delivered to the sink.
+Receives completed video frames from the emulation engine. The video chip writes into a back buffer; when a frame is complete, it is swapped to the front buffer and delivered to the sink as raw pixel data.
 
 ```csharp
-/// <summary>
-/// Receives completed video frames from the emulation engine.
-/// Frames are delivered as raw pixel data in a platform-neutral format.
-/// The sink owns presentation timing (vsync, frame skip).
-/// </summary>
 public interface IFrameSink
 {
     /// <summary>Called when a complete frame is ready for display.</summary>
-    void PresentFrame(ReadOnlySpan<byte> pixelData, FrameMetadata metadata);
-
-    /// <summary>Current display resolution (may change on mode switch).</summary>
-    Resolution DisplayResolution { get; }
-
-    /// <summary>Preferred pixel format for frame data.</summary>
-    PixelFormat PreferredFormat { get; }
+    void PresentFrame(ReadOnlySpan<byte> pixelData);
 
     /// <summary>True if the sink is ready to accept a new frame.</summary>
     bool IsReady { get; }
@@ -596,55 +449,16 @@ public interface IFrameSink
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Abstracts host input devices (keyboard, gamepad, mouse) into emulated input events. Polls or receives events from the host and translates them to Commodore-compatible input.
+Abstracts a host input device. Host shells poll the source each frame; concrete keyboard/joystick translation flows through `IMachineKeyboardInput`, `IMachineJoystickInput`, `IKeyboardMatrix`, and `IKeyboardInputMap`.
 
 ```csharp
-/// <summary>
-/// Abstracts host input devices into emulated input events.
-/// Translates keyboard, gamepad, and mouse input from the host platform
-/// into Commodore-compatible input events.
-/// </summary>
 public interface IInputSource
 {
     /// <summary>Polls for new input events since the last call.</summary>
     void Poll();
 
-    /// <summary>Returns all pending input events.</summary>
-    IReadOnlyList<IInputEvent> GetPendingEvents();
-
-    /// <summary>The type of input device this source represents.</summary>
-    InputDeviceType DeviceType { get; }
-
     /// <summary>True if this input source is currently connected/active.</summary>
     bool IsConnected { get; }
-}
-```
-
-### `IInputEvent`
-
-**Assembly:** `ViceSharp.Abstractions`
-
-A single input event produced by an `IInputSource`. Carries the event type, key/button code, and timestamp for accurate input timing.
-
-```csharp
-/// <summary>
-/// A single input event carrying type, code, and timestamp.
-/// Used for keyboard presses, joystick directions, mouse movements,
-/// and other host input translated to emulated device signals.
-/// </summary>
-public interface IInputEvent
-{
-    /// <summary>Type of input event (key down, key up, axis, button).</summary>
-    InputEventType EventType { get; }
-
-    /// <summary>Key or button code.</summary>
-    int Code { get; }
-
-    /// <summary>Analog value for axis events, 0/1 for digital.</summary>
-    float Value { get; }
-
-    /// <summary>Timestamp in master clock cycles when this event was received.</summary>
-    long Timestamp { get; }
 }
 ```
 
@@ -742,116 +556,26 @@ ListCapturesAsync(SessionRequest) -> CaptureSessionDto[]
 
 ## Monitor Interfaces
 
-These interfaces define the debugger/monitor subsystem for interactive debugging and inspection.
-
 ### `IMonitor`
 
 **Assembly:** `ViceSharp.Abstractions`
 
-The monitor/debugger engine. Provides breakpoints, memory inspection, disassembly, register access, and single-step execution.
+The monitor/debugger contract. Provides command execution, register access, and side-effect-free disassembly. The full monitor engine (command parsing, breakpoints, tick history) lives in `ViceSharp.Monitor` and `ViceSharp.Host`, exposed remotely through the gRPC `MonitorService`.
 
 ```csharp
-/// <summary>
-/// Debugger/monitor engine providing breakpoints, disassembly,
-/// memory inspection, register manipulation, and execution control.
-/// </summary>
 public interface IMonitor
 {
     /// <summary>Executes a monitor command and returns the result.</summary>
-    MonitorResult Execute(IMonitorCommand command);
-
-    /// <summary>Sets a breakpoint at the specified address.</summary>
-    BreakpointHandle SetBreakpoint(ushort address, BreakpointType type);
-
-    /// <summary>Removes a previously set breakpoint.</summary>
-    void RemoveBreakpoint(BreakpointHandle handle);
-
-    /// <summary>Disassembles instructions starting at the given address.</summary>
-    IReadOnlyList<DisassemblyLine> Disassemble(ushort address, int count);
+    string ExecuteCommand(string command);
 
     /// <summary>Gets the current CPU register state.</summary>
     RegisterSnapshot GetRegisters();
 
+    /// <summary>Disassembles instructions without mutating machine state.</summary>
+    IReadOnlyList<DisassemblyEntry> Disassemble(ushort address, int count);
+
     /// <summary>True if execution is currently paused at a breakpoint.</summary>
     bool IsPaused { get; }
-
-    /// <summary>Event stream for monitor events (breakpoint hit, step complete).</summary>
-    IMonitorEventStream Events { get; }
-}
-```
-
-### `IMonitorCommand`
-
-**Assembly:** `ViceSharp.Abstractions`
-
-Represents a parsed monitor command ready for execution. Commands are parsed from text input by a command parser and executed by the `IMonitor`.
-
-```csharp
-/// <summary>
-/// A parsed monitor command ready for execution by IMonitor.
-/// Carries the command verb, target, and any arguments.
-/// </summary>
-public interface IMonitorCommand
-{
-    /// <summary>Command verb (e.g., "break", "disassemble", "mem").</summary>
-    string Verb { get; }
-
-    /// <summary>Command arguments as parsed tokens.</summary>
-    IReadOnlyList<string> Arguments { get; }
-
-    /// <summary>Raw text representation of the command.</summary>
-    string RawText { get; }
-}
-```
-
-### `IMonitorTransport`
-
-**Assembly:** `ViceSharp.Abstractions`
-
-Transport layer for monitor I/O. Supports multiple frontends: interactive console, TCP socket (for remote debugging), and programmatic in-process access.
-
-```csharp
-/// <summary>
-/// Transport layer for monitor I/O. Supports console, TCP socket,
-/// and in-process programmatic access.
-/// </summary>
-public interface IMonitorTransport
-{
-    /// <summary>Reads the next command from the transport.</summary>
-    Task<IMonitorCommand> ReadCommandAsync(CancellationToken ct);
-
-    /// <summary>Writes a response back through the transport.</summary>
-    Task WriteResponseAsync(MonitorResult result, CancellationToken ct);
-
-    /// <summary>True if the transport connection is active.</summary>
-    bool IsConnected { get; }
-
-    /// <summary>Transport type identifier (console, tcp, in-process).</summary>
-    string TransportType { get; }
-}
-```
-
-### `IMonitorEventStream`
-
-**Assembly:** `ViceSharp.Abstractions`
-
-Async event stream for monitor notifications. Consumers subscribe to events such as breakpoint hits, single-step completions, and register changes.
-
-```csharp
-/// <summary>
-/// Async event stream for monitor notifications including breakpoint hits,
-/// step completions, and state changes.
-/// </summary>
-public interface IMonitorEventStream
-{
-    /// <summary>Subscribes to all monitor events.</summary>
-    IDisposable Subscribe(Action<MonitorEvent> handler);
-
-    /// <summary>Asynchronously yields monitor events as they occur.</summary>
-    IAsyncEnumerable<MonitorEvent> ReadAllAsync(CancellationToken ct);
-
-    /// <summary>Total events emitted since the stream was created.</summary>
-    long EventCount { get; }
 }
 ```
 
@@ -865,32 +589,22 @@ These interfaces manage emulation state: snapshots, mutation tracking, and inter
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Captures the complete machine state as a flat byte array. Snapshots are serializable, comparable (byte-exact for determinism testing), and diffable for incremental saves.
+Captures the complete machine state in a serializable form. Snapshots are byte-comparable for determinism testing.
 
 ```csharp
-/// <summary>
-/// Complete machine state captured as a flat byte array.
-/// Serializable, byte-comparable, and diffable for incremental saves.
-/// </summary>
 public interface ISnapshot
 {
-    /// <summary>The raw state data.</summary>
-    ReadOnlyMemory<byte> Data { get; }
+    /// <summary>Cycle number when this snapshot was taken.</summary>
+    ulong Cycle { get; }
 
-    /// <summary>Architecture identifier this snapshot was taken from.</summary>
-    string Architecture { get; }
+    /// <summary>Serialize snapshot to a byte span.</summary>
+    void Serialize(Span<byte> destination);
 
-    /// <summary>Master clock cycle at the time of capture.</summary>
-    long CycleStamp { get; }
+    /// <summary>Deserialize snapshot from a byte span.</summary>
+    void Deserialize(ReadOnlySpan<byte> source);
 
-    /// <summary>Frame number at the time of capture.</summary>
-    long FrameNumber { get; }
-
-    /// <summary>Computes a byte-level diff against another snapshot.</summary>
-    SnapshotDiff DiffAgainst(ISnapshot other);
-
-    /// <summary>Size of the snapshot data in bytes.</summary>
-    int SizeBytes { get; }
+    /// <summary>Get required buffer size for serialization.</summary>
+    int GetSerializedSize();
 }
 ```
 
@@ -898,13 +612,9 @@ public interface ISnapshot
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Manages snapshot persistence: saving to disk, loading, and maintaining a history window of recent snapshots in memory.
+Captures and restores machine state. Persistence to disk and any history retention are host concerns layered above this contract (see `SnapshotService` in the gRPC surface).
 
 ```csharp
-/// <summary>
-/// Manages snapshot persistence and the in-memory history window.
-/// Supports save/load to disk and ring-buffer retention of recent snapshots.
-/// </summary>
 public interface ISnapshotStore
 {
     /// <summary>Captures a snapshot of the current machine state.</summary>
@@ -912,18 +622,6 @@ public interface ISnapshotStore
 
     /// <summary>Restores machine state from a snapshot.</summary>
     void Restore(IMachine machine, ISnapshot snapshot);
-
-    /// <summary>Saves a snapshot to the specified file path.</summary>
-    Task SaveAsync(ISnapshot snapshot, string filePath);
-
-    /// <summary>Loads a snapshot from the specified file path.</summary>
-    Task<ISnapshot> LoadAsync(string filePath);
-
-    /// <summary>Recent snapshots held in the history window.</summary>
-    IReadOnlyList<ISnapshot> History { get; }
-
-    /// <summary>Current StateWindow configuration.</summary>
-    StateWindowConfig WindowConfig { get; set; }
 }
 ```
 
@@ -934,63 +632,33 @@ public interface ISnapshotStore
 Records all state changes as small mutation structs. Double-buffered: the emulation thread writes to the active buffer while consumers read the committed buffer.
 
 ```csharp
-/// <summary>
-/// Records all state changes as mutation structs. Double-buffered so
-/// the emulation thread writes to the active buffer while consumers
-/// (UI, debugger, recorder) read the committed buffer.
-/// </summary>
 public interface IMutationQueue
 {
-    /// <summary>Enqueues a mutation (called from the emulation thread).</summary>
-    void Enqueue(IMutation mutation);
+    /// <summary>Record a state mutation.</summary>
+    void Enqueue(DeviceId source, ushort address, byte oldValue, byte newValue, ulong cycle);
 
-    /// <summary>Swaps active and committed buffers at frame boundary.</summary>
+    /// <summary>Commit current buffer and swap to next buffer.</summary>
     void Commit();
 
-    /// <summary>Returns all mutations in the committed buffer.</summary>
-    ReadOnlySpan<IMutation> GetCommitted();
-
-    /// <summary>Number of mutations in the active (uncommitted) buffer.</summary>
-    int PendingCount { get; }
-
-    /// <summary>Number of mutations in the committed buffer.</summary>
-    int CommittedCount { get; }
-
-    /// <summary>Clears the committed buffer after consumers have processed it.</summary>
-    void AcknowledgeCommitted();
+    /// <summary>Reset the queue to empty state.</summary>
+    void Clear();
 }
 ```
 
-### `IMutation`
+### `MutationEntry`
 
 **Assembly:** `ViceSharp.Abstractions`
 
-A single state change record. Captures the source device, target location, old and new values, and the cycle timestamp for replay and auditing.
+A single state change record. Captures the source device, target address, old and new values, and the cycle timestamp for replay and auditing.
 
 ```csharp
-/// <summary>
-/// A single state change record for auditing, undo, and replay.
-/// Captures source, target, old/new values, and cycle timestamp.
-/// </summary>
-public interface IMutation
+public readonly struct MutationEntry
 {
-    /// <summary>Device that caused this mutation.</summary>
-    DeviceId Source { get; }
-
-    /// <summary>Target address or field identifier.</summary>
-    ushort TargetAddress { get; }
-
-    /// <summary>Value before the mutation.</summary>
-    byte OldValue { get; }
-
-    /// <summary>Value after the mutation.</summary>
-    byte NewValue { get; }
-
-    /// <summary>Master clock cycle when this mutation occurred.</summary>
-    long CycleStamp { get; }
-
-    /// <summary>Category of mutation (memory write, register change, I/O).</summary>
-    MutationType Type { get; }
+    public DeviceId Source { get; }
+    public ushort Address { get; }
+    public byte OldValue { get; }
+    public byte NewValue { get; }
+    public ulong Cycle { get; }
 }
 ```
 
@@ -998,28 +666,24 @@ public interface IMutation
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Lock-free topic-based publish/subscribe for inter-device communication. Designed for zero-allocation hot-path operation using pre-allocated message pools and arena-scoped payloads.
+Lock-free topic-based publish/subscribe for inter-device communication. Designed for zero-allocation hot-path operation. Alongside the generic typed surface shown below, `IPubSub` offers packed-payload overloads (`Publish(Topic, MessageKind, PubSubPayload)`, `Subscribe(Topic, Action<PubSubMessage>)`) and raw-span compatibility overloads keyed by `TopicId`.
 
 ```csharp
-/// <summary>
-/// Lock-free topic-based publish/subscribe for inter-device communication.
-/// Zero-allocation on the hot path using IMessagePool and PayloadArena.
-/// </summary>
 public interface IPubSub
 {
-    /// <summary>Publishes a message to the given topic.</summary>
+    /// <summary>Publishes an unmanaged payload to all subscribers of the given topic.</summary>
     void Publish<T>(Topic topic, T payload) where T : unmanaged;
 
-    /// <summary>Subscribes a handler to the given topic.</summary>
+    /// <summary>Subscribes a strongly typed handler to the given topic.</summary>
     SubscriptionHandle Subscribe<T>(Topic topic, Action<T> handler) where T : unmanaged;
 
-    /// <summary>Removes a subscription.</summary>
+    /// <summary>Removes a subscription by its opaque handle.</summary>
     void Unsubscribe(SubscriptionHandle handle);
 
-    /// <summary>Delivers all pending messages to their subscribers.</summary>
+    /// <summary>Delivers pending messages. Synchronous implementations may complete this as a no-op.</summary>
     void Flush();
 
-    /// <summary>Resets the message pool and payload arena (call at frame boundary).</summary>
+    /// <summary>Resets frame-scoped message state.</summary>
     void FrameReset();
 
     /// <summary>Number of active subscriptions.</summary>
@@ -1031,13 +695,9 @@ public interface IPubSub
 
 **Assembly:** `ViceSharp.Abstractions`
 
-Pre-allocates a fixed number of message slots to avoid per-message heap allocation. Slots are rented for the duration of a message's lifetime and returned automatically when the reference count drops to zero or at frame reset.
+Pre-allocates a fixed number of message slots to avoid per-message heap allocation. Slots are rented for the duration of a message's lifetime and returned via reference counting or frame reset.
 
 ```csharp
-/// <summary>
-/// Pre-allocated pool of message slots for zero-allocation pub/sub.
-/// Slots are rented and returned via reference counting or frame reset.
-/// </summary>
 public interface IMessagePool
 {
     /// <summary>Rents a message slot from the pool.</summary>
@@ -1046,13 +706,13 @@ public interface IMessagePool
     /// <summary>Returns a message slot to the pool.</summary>
     void Return(MessageHandle handle);
 
-    /// <summary>Total capacity of the pool.</summary>
+    /// <summary>Total number of slots in the pool.</summary>
     int Capacity { get; }
 
-    /// <summary>Number of slots currently in use.</summary>
+    /// <summary>Number of slots currently rented.</summary>
     int ActiveCount { get; }
 
-    /// <summary>Resets the pool, returning all slots (called at frame boundary).</summary>
+    /// <summary>Returns all slots to the pool.</summary>
     void Reset();
 }
 ```
@@ -1061,48 +721,40 @@ public interface IMessagePool
 
 ## Value Types
 
-The following value types are used throughout the interface surface. All are structs or records for stack allocation.
+The following value types are defined in `ViceSharp.Abstractions`. All are structs or records for stack allocation (except the `ValidationReport` and `BusSnapshot` diagnostic classes).
 
-| Type | Assembly | Description |
-|------|----------|-------------|
-| `DeviceId` | `ViceSharp.Abstractions` | 32-bit unique device identifier |
-| `Address` | `ViceSharp.Abstractions` | 16-bit address with bank qualifier |
-| `ClockCycle` | `ViceSharp.Abstractions` | 64-bit master cycle counter |
-| `MessageHandle` | `ViceSharp.Abstractions` | Reference-counted handle into `IMessagePool` |
-| `Topic` | `ViceSharp.Abstractions` | Pub/sub topic identifier (interned string key) |
-| `SubscriptionHandle` | `ViceSharp.Abstractions` | Opaque handle for unsubscribing from a topic |
-| `BreakpointHandle` | `ViceSharp.Abstractions` | Opaque handle for removing a breakpoint |
-| `FrameMetadata` | `ViceSharp.Abstractions` | Frame number, cycle stamp, and timing info |
-| `Resolution` | `ViceSharp.Abstractions` | Width/height pair for display resolution |
-| `AudioParameters` | `ViceSharp.Abstractions` | Sample rate, channels, buffer size |
-| `StateWindowConfig` | `ViceSharp.Abstractions` | Snapshot interval, history depth, memory budget |
-| `SnapshotDiff` | `ViceSharp.Abstractions` | Delta between two snapshots |
-| `ValidationResult` | `ViceSharp.Abstractions` | Success/failure with diagnostic messages |
-| `RegisterSnapshot` | `ViceSharp.Abstractions` | CPU register state at a point in time |
-| `DisassemblyLine` | `ViceSharp.Abstractions` | Single disassembled instruction |
-| `RomInfo` | `ViceSharp.Abstractions` | ROM metadata (name, size, checksum) |
-| `RomRequirement` | `ViceSharp.Abstractions` | Expected ROM with known-good checksums |
-| `RomValidationResult` | `ViceSharp.Abstractions` | ROM integrity check result |
-| `AddressMapping` | `ViceSharp.Abstractions` | Runtime address-to-device mapping |
-| `AddressMapEntry` | `ViceSharp.Abstractions` | Descriptor-level address range entry |
-| `InterruptRoute` | `ViceSharp.Abstractions` | Source-to-line interrupt connection |
-| `ClockConfiguration` | `ViceSharp.Abstractions` | Assembled clock tree with divisors |
-| `DeviceDescriptor` | `ViceSharp.Abstractions` | Device type and role within an architecture |
+| Type | Defined in | Description |
+|------|------------|-------------|
+| `DeviceId` | `IDevice.cs` | Strongly typed device identifier wrapping a `uint` |
+| `Topic` | `IPubSub.cs` | Pub/sub topic: FNV-1a `uint` key plus optional interned name |
+| `TopicId` | `IPubSub.cs` | Compatibility numeric topic identifier (implicit conversions to/from `Topic`) |
+| `SubscriptionHandle` | `IPubSub.cs` | Opaque unsubscribe handle (slot index, generation, topic) |
+| `MessageHandle` | `IPubSub.cs` | Reference-counted handle into `IMessagePool` (owner, slot, generation, topic, kind, payload length, sequence) |
+| `PubSubPayload` | `IPubSub.cs` | Fixed 64-byte inline payload union |
+| `PubSubMessage` | `IPubSub.cs` | Discriminated message: topic, `MessageKind`, packed payload |
+| `MutationEntry` | `IMutationQueue.cs` | Single state-change record (source, address, old/new value, cycle) |
+| `RegisterSnapshot` | `IMonitor.cs` | CPU register state (A, X, Y, S, P, PC) |
+| `DisassemblyEntry` | `IMonitor.cs` | Single disassembled instruction (address, bytes, text, length, next address) |
+| `DeviceDescriptor` | `IArchitectureDescriptor.cs` | Device name, id, role, base address, and size within an architecture |
+| `CpuInfo` / `CpuRateReading` | `IMachine.cs` | Per-CPU cycle counts and effective-rate readings for the status surface |
+| `ChipStateField` | `IStatefulDevice.cs` | One named field of a chip's staged state |
+| `StateDiff` | `StateDiff.cs` | Managed-vs-native state comparison result (cycle, expected/actual `MachineState`) |
+| `ValidationReport` | `ValidationReport.cs` | Architecture validation results (class) |
+| `MachineState`, `NativeCpuPipelineState`, `NativeVicState`, `NativeCiaState` | `IViceNative.cs` | Lockstep oracle state structs shared with the native VICE shim |
+| `MemoryWriteEvent`, `RasterLineEvent`, `WarpModeEvent`, `CpuInstructionCompletedEvent`, `CpuControlTransferEvent` | event records | Pub/sub event payloads |
+| `BusSnapshot`, `BusLineSnapshot`, `BusEdgeEventArgs` | `IInterSystemBus.cs` | Inter-system bus diagnostics |
 
 ---
 
 ## Enumerations
 
-| Enum | Assembly | Values |
-|------|----------|--------|
-| `ClockPhase` | `ViceSharp.Abstractions` | `Phi1`, `Phi2` |
-| `InterruptType` | `ViceSharp.Abstractions` | `IRQ`, `NMI`, `Reset` |
-| `PeripheralPort` | `ViceSharp.Abstractions` | `CartridgePort`, `UserPort`, `SerialBus`, `CassettePort`, `JoystickPort1`, `JoystickPort2` |
-| `DeviceRole` | `ViceSharp.Abstractions` | `CPU`, `VideoChip`, `AudioChip`, `Timer`, `Memory`, `PLA`, `IOController` |
-| `VideoStandard` | `ViceSharp.Abstractions` | `PAL`, `NTSC` |
-| `PixelFormat` | `ViceSharp.Abstractions` | `RGBA8888`, `BGRA8888`, `RGB565` |
-| `InputDeviceType` | `ViceSharp.Abstractions` | `Keyboard`, `Joystick`, `Mouse`, `Lightpen`, `Paddle` |
-| `InputEventType` | `ViceSharp.Abstractions` | `KeyDown`, `KeyUp`, `ButtonDown`, `ButtonUp`, `AxisMoved`, `MouseMoved` |
-| `BreakpointType` | `ViceSharp.Abstractions` | `Execution`, `Read`, `Write`, `ReadWrite` |
-| `MutationType` | `ViceSharp.Abstractions` | `MemoryWrite`, `RegisterChange`, `IOWrite`, `InterruptChange`, `BankSwitch` |
-| `ImageFormat` | `ViceSharp.Abstractions` | `PNG`, `BMP` |
+| Enum | Defined in | Values |
+|------|------------|--------|
+| `ClockPhase` | `IClock.cs` | `Phi1`, `Phi2` |
+| `InterruptType` | `IInterruptLine.cs` | `Irq`, `Nmi`, `Reset` |
+| `DeviceRole` | `IDeviceRegistry.cs` | `SystemCore`, `Cpu`, `VideoChip`, `AudioChip`, `Cia1`, `Cia2`, `Pla`, `SystemRam`, `KernalRom`, `BasicRom`, `ChargenRom`, `CartridgePort`, `DriveCpu`, `DriveVia`, `DriveRam`, `DriveRom`, `DriveDisk` |
+| `VideoStandard` | `IArchitectureDescriptor.cs` | `Pal`, `Ntsc` |
+| `MessageKind` | `IPubSub.cs` | `Unknown`, `Raw`, `Typed`, `Irq`, `Nmi`, `BusAvailable`, `AddressEnableControl`, `Dma`, `Clock`, `State` |
+| `CpuFlags` | `ICpu.cs` | `Carry`, `Zero`, `InterruptDisable`, `Decimal`, `Break`, `Unused`, `Overflow`, `Negative` (flags) |
+| `Fidelity` | `Fidelity.cs` | `Buffered` (lightweight in-host emulation), `TrueDevice` (full standalone-machine emulation) |
+| `CartridgeMappingMode` | `ICartridgePort.cs` | `Auto`, `Standard8K`, `Standard16K`, `Ultimax`, `GameSystem`, `MagicDesk`, `Ocean`, `FinalCartridgeIII`, `ActionReplay`, `EasyFlash`, `SuperSnapshotV5`, `RRNet` |

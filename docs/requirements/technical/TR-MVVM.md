@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Architecture / UI Separation   |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-05-13                     |
+| Last Updated   | 2026-07-08                     |
 
 ---
 
@@ -28,7 +28,7 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
 ### Technical Specification
 
 1. **ViewModel Layer:**
-   - ViewModels are in a separate assembly (e.g., `ViceSharp.ViewModels`) that references only `ViceSharp.Abstractions` and standard .NET libraries.
+   - ViewModels live in the `ViewModels` folder of the `ViceSharp.Avalonia` assembly (`src/ViceSharp.Avalonia/ViewModels`); they use only `ViceSharp.Abstractions` types, host client facades, and standard .NET libraries, never runtime internals.
    - ViewModels expose observable properties (implementing `INotifyPropertyChanged`) and commands (implementing `ICommand` or equivalent).
    - ViewModels receive emulator services via constructor injection of abstraction interfaces.
    - ViewModels do not reference any UI framework types (`Avalonia.Controls`, `Microsoft.Maui.Controls`, etc.).
@@ -42,12 +42,12 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
    - The "Model" is the `ViceSharp.Core` emulation engine, accessed exclusively through `ViceSharp.Abstractions` interfaces.
    - ViewModels never instantiate core types directly; they receive them from the DI container.
 
-4. **Dependency Rules (strict, enforced by architecture test):**
+4. **Dependency Rules (strict, enforced by source-level boundary tests):**
    - `ViceSharp.Abstractions` -> (no dependencies)
    - `ViceSharp.Core` -> `ViceSharp.Abstractions`
-   - `ViceSharp.ViewModels` -> `ViceSharp.Abstractions`
-   - `ViceSharp.UI.Avalonia` (View) -> `ViceSharp.ViewModels`, `ViceSharp.Abstractions`, Avalonia
-   - `ViceSharp.UI.Avalonia` does NOT reference `ViceSharp.Core` (only the host/composition root does)
+   - `ViceSharp.Avalonia` -> `ViceSharp.Protocol`, `ViceSharp.Host` (composition), `ViceSharp.Abstractions`, Avalonia
+   - `ViceSharp.Avalonia` does NOT reference `ViceSharp.Core`, `ViceSharp.Chips`, `ViceSharp.Architectures`, or `ViceSharp.RomFetch` (only the host/composition root touches concrete runtime projects)
+   - Enforcement is by `AvaloniaBoundaryTests` (TR-MVVM-001 citations): project-reference checks on the `.csproj` plus forbidden-identifier scans over all Avalonia source, rather than a separate-assembly compile check.
 
 5. **Remote Host Client:**
    - ViewModels consume abstraction-level host client facades for TR-GRPC-BOUNDARY-001 scenarios.
@@ -57,18 +57,18 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
 
 ### Acceptance Criteria
 
-1. `ViceSharp.ViewModels` compiles with zero references to any UI framework (verified by dependency analysis).
-2. `ViceSharp.ViewModels` compiles with zero references to `ViceSharp.Core` (only `ViceSharp.Abstractions`).
+1. The `ViceSharp.Avalonia` project references `ViceSharp.Protocol` and `ViceSharp.Host` but no runtime projects (Core, Chips, Architectures, RomFetch), verified by `AvaloniaBoundaryTests.AvaloniaProject_ReferencesProtocolAndHostCompositionButNotRuntimeProjects`.
+2. Avalonia source (including all ViewModels) contains no references to runtime internals (`ViceSharp.Core`, `ViceSharp.Chips`, `ViceSharp.Architectures`, `ViceSharp.RomFetch`, `IMachine`, `IVideoChip`, `ArchitectureBuilder`), verified by `AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals`.
 3. All ViewModel public properties and commands are exercised by unit tests that do not require a UI framework.
 4. View code-behind files contain fewer than 20 lines of code each (excluding auto-generated code).
-5. An architecture test (using a tool like NetArchTest or ArchUnitNET) enforces the dependency rules and fails the build on violations.
-6. Swapping the UI framework (e.g., replacing Avalonia views with MAUI views) requires changes only in the View assembly.
+5. Source-level boundary tests (`AvaloniaBoundaryTests`) enforce the dependency rules and fail the test gate on violations.
+6. Swapping the UI framework (e.g., replacing Avalonia views with MAUI views) requires changes only in the View layer.
 7. A remote host UI can be tested with mocked host client facades and without starting `ViceSharp.Core`.
 8. The local Avalonia render surface can be tested as a host/composition concern without adding core, chip, or architecture references to ViewModels.
 
 ### Verification Method
 
-- Architecture test in the CI pipeline that validates assembly dependency rules.
+- `AvaloniaBoundaryTests` in the test suite validates project references and forbidden source identifiers.
 - Line-count check on View code-behind files.
 - ViewModel unit test coverage report (target: >90% of ViewModel methods covered).
 - Dependency analysis output in the build log.
@@ -81,7 +81,7 @@ Strict MVVM enables: (1) unit testing of all UI logic without instantiating UI c
 
 ### Design Decisions
 
-- The composition root (application entry point) is the only place where `ViceSharp.Core` and `ViceSharp.ViewModels` meet; it registers concrete implementations against abstraction interfaces in the DI container.
-- ReactiveUI or CommunityToolkit.Mvvm is used for `INotifyPropertyChanged` and `ICommand` infrastructure.
+- The host/composition root (`ViceSharp.Host`) is the only place where concrete core types and the ViewModel-facing abstractions meet; the Avalonia shell consumes the host surface, not core assemblies.
+- A lightweight in-repo `ObservableObject` base (`src/ViceSharp.Avalonia/ViewModels/ObservableObject.cs`) provides the `INotifyPropertyChanged` infrastructure; no external MVVM framework dependency.
 - The ViewModel for the main emulator display exposes display state and commands through abstractions only. The in-process Avalonia render surface may bind directly to a local frame source, but that binding is owned by the host/composition layer rather than the ViewModel.
 - gRPC generated clients are adapted behind ViewModel-facing interfaces so transport code does not leak into ViewModels.

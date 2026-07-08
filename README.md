@@ -2,7 +2,7 @@
 
 A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10.
 
-> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, and the current validation baseline is `2092 passed / 5 skipped / 0 failed` in `ViceSharp.TestHarness`. See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
+> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, and the validation baseline at the v1.0.2 release is `2594 passed / 21 skipped / 0 failed` (2615 total) in `ViceSharp.TestHarness`. See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
 
 ## Quick Start
 
@@ -22,7 +22,24 @@ dotnet run --project src/ViceSharp.Console -- `
     --cycles 1000000
 ```
 
-Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64sc`, and `c1541` binaries that accept the usual `-8`, `-9`, `-cart`, `+truedrive` / `-truedrive` flags. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) for the full install and first-run walkthrough, and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) for a side-by-side flag mapping.
+Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compatible argument parsing and binary-name topology dispatch (`x64`, `x64sc`, `c1541`), consumed by `ViceSharp.Console`, which accepts the usual `-8`, `-9`, `-cart`, `+truedrive` / `-truedrive` flags. Standalone VICE-named binaries are not yet shipped. See [docs/USER-GUIDE.md](docs/USER-GUIDE.md) for the full install and first-run walkthrough, and [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) for a side-by-side flag mapping.
+
+## Install
+
+The current release is **v1.0.2** (released 2026-07-08): 13 NuGet packages on [nuget.org](https://www.nuget.org/packages?q=ViceSharp) plus an MSI / winget desktop package.
+
+```pwsh
+# Desktop UI as a dotnet global tool (command: vicesharp)
+dotnet tool install --global ViceSharp.Avalonia
+
+# Console reference shell as a dotnet global tool (command: vicesharp-console)
+dotnet tool install --global ViceSharp.Console
+
+# Embed the emulation core (Abstractions + Chips + RomFetch + Core + Architectures) in your own app
+dotnet add package ViceSharp.Core
+```
+
+Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launcher`, `ViceSharp.AdhocHelper`, `ViceSharp.Host`, `ViceSharp.SourceGen`, and the `ViceSharp.Host.MacOS` / `Android` / `iOS` / `Xbox` shells) are published alongside the bundle. The Windows desktop app is also packaged as a self-contained MSI (Nuke `PublishMsi`) with winget metadata (`PublishWinget`, package id `sharpninja.ViceSharp`).
 
 ## User documentation
 
@@ -33,9 +50,9 @@ Coming from classic VICE? The `ViceSharp.Launcher` project provides `x64`, `x64s
 
 ## Status
 
-✅ **Iteration 0 (Foundations)** — Complete. All core primitives implemented, lock-free and zero allocation.
-✅ **Iteration 1 (C64 Bringup)** — **Complete (Phase 1 closed 2026-05-31; diagnostics/attach surface updated 2026-06-25)**:
-  - Full `ViceSharp.TestHarness` suite green: 2092 passed / 5 skipped / 0 failed (skips are opt-in clock-throughput benchmarks)
+✅ **Iteration 0 (Foundations)**: Complete. All core primitives implemented, lock-free and zero allocation.
+✅ **Iteration 1 (C64 Bringup)**: **Complete (Phase 1 closed 2026-05-31; diagnostics/attach surface updated 2026-06-25)**:
+  - `ViceSharp.TestHarness` gate green at v1.0.2: 2594 passed / 21 skipped / 0 failed (2615 total, single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`)
   - x64sc lockstep and D64 attach paths are covered across deterministic no-cartridge variants
   - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
   - Snapshot/capture/input/testbench/launcher surfaces are in place, including gRPC capture and diagnostics services
@@ -53,11 +70,11 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-05-31` at HEAD `32880a4` (Phase 1 marathon close - all six original deferral items pulled back into scope and shipped; see `docs/handoff.md`). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. 8580 SID: real Chamberlin SVF on linear cutoff curve. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-07-08` at HEAD `534cded` (v1.0.2 tagged and released; VIC-II per-cycle parity remediation and reSID re-baseline in progress; see `docs/handoff.md`). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. 8580 SID: real Chamberlin SVF on linear cutoff curve. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
 
-**Legend** — State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
+**Legend**: State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
-### Iteration 0 — Foundations
+### Iteration 0: Foundations
 
 | Feature | State | % | Source |
 |---------|:----:|:----:|--------|
@@ -66,7 +83,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Documentation set (Architecture, Public API, Roadmap) | ✅ | 100% | iteration0 batch 3 |
 | GraphRAG ingest | ✅ | 100% | iteration0 batch 4 |
 
-### Iteration 1 — C64 Bringup
+### Iteration 1: C64 Bringup
 
 | Feature | State | % | Source |
 |---------|:----:|:----:|--------|
@@ -92,7 +109,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | x64sc variant lockstep gate (10-frame depth across no-cart variants, 322 lockstep tests green) | ✅ | 100% | `BACKFILL-LOCKSTEP-001` Phase 1 close (slice 7) |
 | Upstream VICE testbench integration (debugcart + limitcycles + PRG autostart + help text + ROM-less smoke) | ✅ | 100% | `ARCH-TESTBENCH-001` + `CLI-LAUNCHER-001` Phase 1 close (slice 6) |
 
-### Iterations 2-5 — Other Machines
+### Iterations 2-5: Other Machines
 
 | Machine | Target Iteration | State | % |
 |---------|:----------------:|:----:|:----:|
@@ -113,7 +130,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | ✅ | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
 
-Dashboard is regenerated as subagent slices land. Source-of-truth IDs: see `http://PAYTON-LEGION2:7147/mcpserver/todo?done=false` for live MCP TODO state. Latest validation on 2026-05-21: focused VIC-II matrix/idle plus adjacent timing `18/18`, broader VIC/video `179/179`, and requirement traceability passed with `163` canonical IDs, `82` referenced canonical IDs, `81` unreferenced canonical IDs, and `53` noncanonical source/test references. Full-solution `dotnet test .\ViceSharp.slnx --no-build --nologo` timed out after five minutes during the prior full-suite attempt and was stopped cleanly, so the current green gate remains focused rather than solution-wide. MCP TODO/session writes are paused for this slice because a subagent reported MCP health nonce failure; local fallback docs record the state.
+Dashboard is regenerated as subagent slices land. Latest validation gate at v1.0.2 (2026-07-08): `2594 passed / 21 skipped / 0 failed` (2615 total), single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`.
 
 ## Supported Machines (planned)
 
@@ -149,7 +166,7 @@ build.cmd Compile     # Windows
 | `Clean` | Remove bin/obj/artifacts |
 | `Restore` | Restore NuGet packages |
 | `Compile` | Build with TreatWarningsAsErrors |
-| `Test` | Run unit tests (excludes determinism and the on-demand aiUnit AI reviews) |
+| `Test` | Run unit tests with filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy` (excludes determinism, the on-demand aiUnit AI reviews, and the quarantined parity categories) |
 | `DeterminismTest` | Run determinism verification tests |
 | `RunConsole` | Run the console reference shell |
 | `RunAvalonia` | Run the Avalonia desktop UI |
@@ -157,27 +174,34 @@ build.cmd Compile     # Windows
 | `PublishMsi` | Publish the self-contained desktop app and package `artifacts/installer/ViceSharp.msi` |
 | `InstallMsi` | Install the locally built MSI |
 | `PublishWinget` | Generate winget package metadata for the MSI |
-| `CiAzure` | Full Azure DevOps CI pipeline |
-| `CiGitHub` | Full GitHub Actions CI pipeline |
+| `CiTest` | CI variant of `Test`: restores and builds in-job, stages hash-pinned ROMs via `EnsureCiRomRoot` when the agent has no VICE data root (used by the `VICE-Sharp-CI` Azure DevOps pipeline) |
+| `ParityTest` | Run the whole VICE-parity suite (`Category=Parity`), including quarantined `ParityPending` tests (remediation burn-down) |
+| `PackNuget` | Pack the `ViceSharp.Core` bundle and the individual NuGet packages into `artifacts/packages`, verifying package contents |
+| `PublishNuget` | Tag-gated release publish: pack from the tagged checkout and push to nuget.org (used by the `VICE-Sharp-Release` Azure DevOps pipeline; requires `NUGET_API_KEY`) |
 
 ## Architecture
 
 ViceSharp is designed as a **library-first emulator**:
 
-- **ViceSharp.Abstractions** — 33+ public interfaces defining the emulator contract
-- **ViceSharp.Core** — bus, clock, devices, mutation queue, pub/sub
-- **ViceSharp.Chips** — CPU (6502/6510/8502), VIC-II, SID, CIA, VIA, PLA
-- **ViceSharp.Architectures** — machine definitions (C64, VIC-20, C128, PET, Plus/4)
-- **ViceSharp.SourceGen** — Roslyn source generator for device registration boilerplate
-- **ViceSharp.Console** — command-line reference shell
-- **ViceSharp.Avalonia** — Avalonia 12.x desktop UI
+- **ViceSharp.Abstractions** - 33+ public interfaces defining the emulator contract
+- **ViceSharp.Core** - bus, clock, devices, mutation queue, pub/sub
+- **ViceSharp.Chips** - CPU (6502/6510/8502), VIC-II, SID, CIA, VIA, PLA
+- **ViceSharp.Architectures** - machine definitions: C64 and the C1541 true drive today, plus ad-hoc and multisystem topologies (VIC-20, C128, PET, Plus/4 planned for iterations 2-5)
+- **ViceSharp.SourceGen** - Roslyn source generator for device registration boilerplate
+- **ViceSharp.Host** - composition boundary: emulator sessions, media, snapshots, diagnostics, and the gRPC host surface
+- **ViceSharp.Protocol** - gRPC/protobuf contracts and generated client/server types
+- **ViceSharp.Monitor** - machine-language monitor/debugger surface
+- **ViceSharp.Launcher** - VICE-compatible argument parsing and binary-name topology dispatch (library, consumed by the Console shell)
+- **ViceSharp.RomFetch** - ROM descriptors, load-time validation, and pinned download helpers
+- **ViceSharp.Console** - command-line reference shell
+- **ViceSharp.Avalonia** - Avalonia 12.x desktop UI
 
 Key design principles:
-- **Zero allocation hot path** — per-cycle emulation allocates nothing
-- **POCO model** — all state is plain C# structs/records, no base classes
-- **Mutation queue** — all state changes flow through an auditable queue
-- **Deterministic** — bit-exact replay given identical inputs
-- **Reflection-light hot path** — no runtime reflection in per-cycle emulation
+- **Zero allocation hot path** - per-cycle emulation allocates nothing
+- **POCO model** - all state is plain C# structs/records, no base classes
+- **Mutation queue** - all state changes flow through an auditable queue
+- **Deterministic** - bit-exact replay given identical inputs
+- **Reflection-light hot path** - no runtime reflection in per-cycle emulation
 
 See [docs/Architecture.md](docs/Architecture.md) for the full design.
 

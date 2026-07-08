@@ -4,7 +4,7 @@ A knowledge base of technical facts about Commodore hardware, VICE emulation beh
 
 ---
 
-## CPU — MOS 6502/6510/8502
+## CPU: MOS 6502/6510/8502
 
 ### ROL-001: 6510 I/O Port at $0000/$0001
 **Category:** CPU
@@ -40,7 +40,7 @@ The NMOS 6502/6510 does not set the N, V, and Z flags correctly after BCD arithm
 **Category:** CPU / Timing
 **Source:** VIC-II article by Christian Bauer
 
-The VIC-II pulls the RDY line low to halt the CPU during DMA cycles (sprite fetch, refresh, badlines). The CPU finishes the current read cycle, then stalls. Write cycles cannot be stalled — the CPU completes them before honoring RDY.
+The VIC-II pulls the RDY line low to halt the CPU during DMA cycles (sprite fetch, refresh, badlines). The CPU finishes the current read cycle, then stalls. Write cycles cannot be stalled: the CPU completes them before honoring RDY.
 
 ### ROL-007: Cycle-Exact Behavior of RMW Instructions
 **Category:** CPU / Timing
@@ -68,7 +68,7 @@ IRQ is level-triggered and sampled on the penultimate cycle of each instruction.
 
 ---
 
-## Video — VIC-II (6567/6569)
+## Video: VIC-II (6567/6569)
 
 ### ROL-011: Badlines
 **Category:** Video / Timing
@@ -122,7 +122,7 @@ In multicolor mode, sprites use pixel pairs (2 bits) giving 3 colors plus transp
 **Category:** Video / Memory
 **Source:** C64 schematic
 
-Color RAM at $D800-$DBFF is only 4 bits wide (1 nibble per cell). The upper 4 bits read as undefined on real hardware. ViceSharp should model this — reading $D800 returns (color_nibble | random_upper_nibble).
+Color RAM at $D800-$DBFF is only 4 bits wide (1 nibble per cell). The upper 4 bits read as undefined on real hardware. ViceSharp should model this: reading $D800 returns (color_nibble | random_upper_nibble).
 
 ### ROL-020: PAL vs NTSC Timing
 **Category:** Video / Timing
@@ -164,7 +164,7 @@ $D012 (and bit 7 of $D011) set the raster compare value. When the current raster
 
 ---
 
-## Audio — SID (6581/8580)
+## Audio: SID (6581/8580)
 
 ### ROL-026: Combined Waveforms
 **Category:** Audio
@@ -172,7 +172,7 @@ $D012 (and bit 7 of $D011) set the raster compare value. When the current raster
 
 When multiple waveform bits are set simultaneously (e.g., triangle + sawtooth), the SID ANDs the waveform outputs. This produces characteristic sounds used in many C64 tunes. The exact combination output differs between 6581 and 8580.
 
-### ROL-027: Filter Distortion — 6581 vs 8580
+### ROL-027: Filter Distortion: 6581 vs 8580
 **Category:** Audio
 **Source:** resid-fp documentation
 
@@ -228,7 +228,7 @@ $D019/$D01A read the analog paddle (potentiometer) values. The SID charges a cap
 
 ---
 
-## I/O — CIA (6526)
+## I/O: CIA (6526)
 
 ### ROL-036: CIA Timer Cascading
 **Category:** I/O
@@ -274,7 +274,7 @@ CIA2 ($DD00-$DD0F) is connected to the NMI line. Timer underflows, TOD alarms, a
 
 ---
 
-## I/O — VIA (6522)
+## I/O: VIA (6522)
 
 ### ROL-043: VIA Timer Behavior Differences
 **Category:** I/O
@@ -348,7 +348,7 @@ RAM exists at all 65536 addresses. ROM and I/O are overlaid by the PLA. The CPU 
 
 ---
 
-## Storage — IEC Bus and Disk Drives
+## Storage: IEC Bus and Disk Drives
 
 ### ROL-054: IEC Serial Bus Protocol
 **Category:** Storage
@@ -356,7 +356,7 @@ RAM exists at all 65536 addresses. ROM and I/O are overlaid by the PLA. The CPU 
 
 The C64 communicates with drives via a 3-wire serial bus (CLK, DATA, ATN). The protocol is handshaked and slow (~300 bytes/sec). Fast loaders replace the ROM routines with custom bit-banging protocols achieving 2-10 KB/sec.
 
-### ROL-055: 1541 Drive — Separate Computer
+### ROL-055: 1541 Drive: Separate Computer
 **Category:** Storage / Architecture
 **Source:** 1541 service manual
 
@@ -374,7 +374,7 @@ The 1541 stores data using Group Code Recording (GCR), where 4 data bits are enc
 
 The 1541 disk has 4 speed zones: tracks 1-17 (21 sectors/track, zone 3), 18-24 (19 sectors, zone 2), 25-30 (18 sectors, zone 1), 31-35 (17 sectors, zone 0). Outer tracks spin faster relative to the head, allowing more sectors.
 
-### ROL-058: Copy Protection — Track Alignment
+### ROL-058: Copy Protection: Track Alignment
 **Category:** Storage / Quirk
 **Source:** C64 preservation community
 
@@ -394,7 +394,7 @@ The 1581 uses standard 3.5" DD disks with MFM encoding and has its own WD1770 fl
 
 ---
 
-## Storage — Datasette
+## Storage: Datasette
 
 ### ROL-061: TAP Format Timing
 **Category:** Storage / Format
@@ -406,7 +406,7 @@ The TAP file format stores pulse lengths as byte values. A value of N represents
 **Category:** Storage / Timing
 **Source:** C64 service manual
 
-The datasette motor is controlled via bit 5 of CIA1 port A ($DC00). The motor has mechanical inertia — it takes approximately 300ms to reach stable speed after being turned on. Turbo loaders must account for this startup delay.
+The datasette motor is controlled via bit 5 of CIA1 port A ($DC00). The motor has mechanical inertia: it takes approximately 300ms to reach stable speed after being turned on. Turbo loaders must account for this startup delay.
 
 ### ROL-063: Turbo Tape Loaders
 **Category:** Storage
@@ -492,7 +492,7 @@ The C128 operates in three modes: C128 mode (native, 2 MHz capable), C64 mode (f
 **Category:** Architecture
 **Source:** C128 PRG
 
-The C128's MOS 8563 VDC provides an 80-column text display on a separate RGBI monitor output. The VDC has its own 16KB (or 64KB) RAM not accessible by the CPU — all access is through register ports $D600/$D601.
+The C128's MOS 8563 VDC provides an 80-column text display on a separate RGBI monitor output. The VDC has its own 16KB (or 64KB) RAM not accessible by the CPU: all access is through register ports $D600/$D601.
 
 ### ROL-076: VIC-20 Memory Expansion
 **Category:** Architecture
@@ -820,4 +820,4 @@ The side borders can be opened by switching between 38-column and 40-column mode
 **Category:** Storage / Architecture
 **Source:** 1541 schematic
 
-1541 memory map: $0000-$07FF: 2KB RAM. $1800-$180F: VIA1 (IEC bus). $1C00-$1C0F: VIA2 (drive mechanism). $C000-$FFFF: 16KB ROM (DOS). Address decoding is partial — RAM mirrors exist at $0800-$0FFF.
+1541 memory map: $0000-$07FF: 2KB RAM. $1800-$180F: VIA1 (IEC bus). $1C00-$1C0F: VIA2 (drive mechanism). $C000-$FFFF: 16KB ROM (DOS). Address decoding is partial: RAM mirrors exist at $0800-$0FFF.

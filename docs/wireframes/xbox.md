@@ -1,15 +1,15 @@
-# Xbox - UWP (10-foot UI, gamepad-first)
+# Xbox (10-foot UI, gamepad-first; Avalonia shell, UWP future switch)
 
 Tracking: `PLATFORM-CROSS-001` Phase 1. Reference: [desktop-windows.md](desktop-windows.md).
 
-Xbox One and Xbox Series host the ViceSharp shell as a **UWP** app (Xbox doesn't yet support WinUI 3 or full .NET 10 desktop). The runtime constraint is therefore:
+Xbox One and Xbox Series host the ViceSharp shell via the scaffold at `src/ViceSharp.Host.Xbox`: an **Avalonia** WinExe on plain net10.0 (runs on Xbox developer mode via the standard .NET runtime + Avalonia.Desktop). The UWP target (`net10.0-windows10.0.19041.0`) is a documented future switch in the csproj, taken once the windows-app workload is available. The runtime constraints are:
 
-- UI framework: UWP XAML (10-foot styled, high-contrast safe).
-- Runtime: UWP CoreCLR managed runtime for Xbox deployment.
+- UI framework: Avalonia today (10-foot styled, high-contrast safe); UWP XAML as the future switch.
+- Runtime: standard .NET runtime today; UWP CoreCLR managed runtime once the UWP target is enabled.
 - Input: Gamepad-first; USB keyboard / mouse / chatpad supported; touch not applicable.
 - Memory budget: Game mode grants ~5 GB (Series X) / 1 GB (One S) - we ship as a "general purpose" app for now, capped at ~1 GB to keep certification cheap.
 
-The UWP project is **deferred** to a follow-up TODO; this document only describes the UX it must deliver.
+The scaffold exists; this document describes the UX it must deliver.
 
 ## Window Chrome
 

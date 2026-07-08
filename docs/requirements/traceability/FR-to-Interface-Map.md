@@ -6,11 +6,13 @@
 |-------|-------|
 | Project | ViceSharp |
 | Version | 0.1.0-draft |
-| Last Updated | 2026-05-13 |
+| Last Updated | 2026-07-08 |
 
 ## Purpose
 
 This map links Functional Requirements to the ViceSharp interfaces or host service surfaces expected to satisfy them.
+
+> **Stale-content banner (2026-07-08):** The interface names in this map are the original 2026-05-13 design vocabulary and predate the implementation. Many identifiers listed below (for example `ICia`, `IVia`, `IDiskDrive`, `ITapeUnit`, `ISnapshotManager`, `IMediaCapture`, `IVoice`, `IMuxer`, `HostControlService`, `UiHostClient`) do not exist in `src/`; the implemented surface uses names such as `ICiaChip`, `IFloppyDrive`, `ITapeDevice`, `ISnapshot`/`ISnapshotStore`, `IInterruptLine`/`IInterruptSource`, `IAudioChip`/`IAudioBackend`/`IAudioRecorder`, the `*ServiceHost` classes, and `EmulatorHostClient`. This document is retained as a planning-history snapshot only. The authoritative FR-to-implementation map is the generated TR-per-FR wiki export from the MCP requirements store (`PublishWiki` target); consult it instead of the tables below.
 
 ---
 

@@ -1092,7 +1092,7 @@ PackageVersion: {MsiVersion}
 PackageLocale: en-US
 Publisher: {publisher}
 PackageName: ViceSharp
-License: MIT
+License: GPL-2.0-or-later
 ShortDescription: VICE-compatible Commodore 64 emulator (Avalonia GUI).
 Description: |
   ViceSharp is a .NET 10 Commodore 64 emulator with VICE compatibility.

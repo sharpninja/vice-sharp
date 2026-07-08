@@ -1,5 +1,19 @@
 # VIC-II vs VICE (viciisc) Parity Audit: Final Report
 
+## Remediation status (updated 2026-07-08)
+
+The remediation phases for this audit have landed. Mapping of findings to commits:
+
+| Phase | Commit(s) | Findings addressed |
+|-------|-----------|--------------------|
+| Phase 1+2 (boot frame bit-exact vs x64sc; draw/fetch pipeline aligned to VICE) | `14cacab` | H1, H2, and the c-access prefetch drivers of the boot display-start garbage |
+| Phase 4 (sprites) | `e1dd81c` | Sprite frame-wrap DMA, Phi2 bus latch, gated s-accesses, $D017 crunch |
+| Phase 5 (NTSC/models) | `27239fa`, `1f09073` | NTSC model timing, per-model xpos/DMA tables, 8565 g-fetch, 520-byte dbuf; sprite beam position (H6) |
+| Phase 6 (low-severity sweep) | `6d17ef2`, `c640bc6`, `fd4d938`, `fd084cb` | L6 (ECM $39FF g-address mask), L10 (snapshot resume of vc/vcbase/rc/vmli/refresh/spriteDma), M15+L7+L8+L9 (per-model palettes via VICE color pipeline), L5+L4 (light-pen wiring and timing) |
+| Refuted | (no change) | M6 was refuted by the lockstep oracle; the existing 3/0 bank behavior is kept |
+
+The body below is the original audit, retained verbatim as the finding record.
+
 ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi2 fetch) audited cycle-by-cycle against `native/vice/vice/src/viciisc/`. Every divergence below was adversarially verified against native source lines.
 
 ---
@@ -100,7 +114,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### H3. c-access prefetch garbage hardcoded to first 3 slots instead of VICE `prefetch_cycles` BA counter (corrupts leftmost 3 columns of EVERY bad line)
-**Severity: HIGH (CONFIRMED)** — merges fetch-phi1 and matrix-addressing views of the same defect.
+**Severity: HIGH (CONFIRMED)** - merges fetch-phi1 and matrix-addressing views of the same defect.
 
 - **Managed:** `Mos6569.cs:2372` (`IsMatrixPrefetchSlot => cAccessOrdinal < 3`), `:2382` (`LatchVideoMatrixPrefetch`), consumed by `C64MemoryMap.cs:862-878` (`FetchVideoMatrixPhi2`, prefetch branch 868-871).
 - **VICE:** `vicii-fetch.c:192-201` (`vicii_fetch_matrix`); `vicii-cycle.c:580-602` (`prefetch_cycles` countdown).
@@ -113,7 +127,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M6. Reset VIC-bank state asymmetric (`_vicBank=3` / `_vicPhi1Bank=0`); VICE keeps Phi1==Phi2 and both 0
-**Severity: MEDIUM (CONFIRMED)** — merges the two per-path bank-reset findings.
+**Severity: MEDIUM (CONFIRMED)** - merges the two per-path bank-reset findings.
 
 - **Managed:** `C64MemoryMap.cs:210-211` (`Reset` sets `_vicBank=3`, `_vicPhi1Bank=0`), field init `:116`. `_vicBank` used by whole-line `ReadVideoMemory` (`:641/:644` via `TranslateVicAddress:929-931`); `_vicPhi1Bank` used by per-cycle `ReadVicPhi1Ram`.
 - **VICE:** `vicii.c:354-355` (`vbank_phi1=0`, `vbank_phi2=0`); `c64/c64memsc.c:962` (`vicii_set_vbank` sets both together via `vicii_set_vbanks(tmp,tmp)`).
@@ -139,7 +153,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M7. Sprite s-access with DMA inactive does not merge the open-bus value into `sprite.data`
-**Severity: MEDIUM (CONFIRMED)** — depends on L2 (`last_bus_phi2`).
+**Severity: MEDIUM (CONFIRMED)** - depends on L2 (`last_bus_phi2`).
 
 - **Managed:** `C64MemoryMap.cs:815-822` (`FetchSpriteDataPhi2` returns early when `!IsSpriteDmaActive`), `:793-808` (`ReadVicSpriteData1`).
 - **VICE:** `vicii-fetch.c:110-131` (`sprite_dma_cycle_0`), `:133-154` (`sprite_dma_cycle_2`), `:282-299` (`vicii_fetch_sprite_dma_1`).
@@ -152,7 +166,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M9. Sprite s-access always performs the RAM fetch, ignoring VICE's `prefetch_cycles` BA-settle gate
-**Severity: MEDIUM (CONFIRMED)** — merges sprites-dma "always fetch" and fetch-phi1 "prefetch gating missing on sprite s-accesses".
+**Severity: MEDIUM (CONFIRMED)** - merges sprites-dma "always fetch" and fetch-phi1 "prefetch gating missing on sprite s-accesses".
 
 - **Managed:** `C64MemoryMap.cs:793-808` (`ReadVicSpriteData1`), `:815-822` (`FetchSpriteDataPhi2`), with `Mos6569.cs:2050` (`LatchSpriteData`).
 - **VICE:** `vicii-fetch.c:114-120` (`sprite_dma_cycle_0`), `:137-143` (`sprite_dma_cycle_2`), `:282-299` (`vicii_fetch_sprite_dma_1`).
@@ -182,7 +196,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M3. NTSC (65-cycle) `check_sprite_dma` latch fires one cycle too late
-**Severity: MEDIUM (CONFIRMED)** — merges the cycle-state-machine, sprites-dma, and model-variants views (all the same `check1` bug).
+**Severity: MEDIUM (CONFIRMED)** - merges the cycle-state-machine, sprites-dma, and model-variants views (all the same `check1` bug).
 
 - **Managed:** `Mos6569.cs:1794` (`UpdateSpriteDmaLatchForCurrentCycle`, `check1` selection).
 - **VICE:** `vicii-chip-model.c:383,385` (`cycle_tab_ntsc` ChkSprDma at Phi1(56)/Phi1(57)), built at `:808` (stored at `cycle_table[cycle-1]`), consumed `vicii-cycle.c:499`.
@@ -195,7 +209,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M4. NTSC (65-cycle) `check_sprite_display` / mc-reload fires one cycle too early
-**Severity: MEDIUM (CONFIRMED)** — merges cycle-state-machine, sprites-dma, and model-variants views.
+**Severity: MEDIUM (CONFIRMED)** - merges cycle-state-machine, sprites-dma, and model-variants views.
 
 - **Managed:** `Mos6569.cs:1889` (`else if (RasterX == 57)`) and `PixelSequencer.cs:842` (`sprEn = rasterX == 57`).
 - **VICE:** `vicii-chip-model.c:389` (`cycle_tab_ntsc` ChkSprDisp at Phi1(59)) vs `:226` PAL Phi1(58) / `:552` old-NTSC Phi1(58); consumed `vicii-cycle.c:511`.
@@ -208,7 +222,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M11. `DrawSprites8` sprite pixel pipeline hardcoded to the PAL cycle model for all chips
-**Severity: MEDIUM (CONFIRMED)** — merges sprites-render-collision and model-variants views.
+**Severity: MEDIUM (CONFIRMED)** - merges sprites-render-collision and model-variants views.
 
 - **Managed:** `PixelSequencer.cs:838` (xpos), `:845-846` (`s_palDmaCycle0/2`), tables at `Mos6569`/`PixelSequencer.cs:230-252` (63-entry PAL).
 - **VICE:** `vicii-chip-model.c:273` (`cycle_tab_ntsc` Phi1(1) xpos 0x19c) vs `:112` (PAL 0x194); `:389` (NTSC SprPtr(0) Phi1(59)) vs `:226` (PAL Phi1(58)); consumed via `cycle_is_check_spr_disp` / `cycle_is_sprite_ptr_dma0` / `cycle_is_sprite_dma1_dma2`.
@@ -234,7 +248,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M5. Vertical border FF not evaluated every cycle; missing `vborder = set_vborder` copy at raster cycle 1 (mid-line DEN/RSEL writes ignored)
-**Severity: MEDIUM (CONFIRMED)** — merges border-flipflops findings #1 (cycle-0 copy) and #2 (per-cycle top/bottom checks) and the cycle-state-machine vborder finding into one discipline fix.
+**Severity: MEDIUM (CONFIRMED)** - merges border-flipflops findings #1 (cycle-0 copy) and #2 (per-cycle top/bottom checks) and the cycle-state-machine vborder finding into one discipline fix.
 
 - **Managed:** `Mos6569.cs:1545-1550` (`UpdateVerticalBorderForLineStart`), `:1552-1583` (`UpdateBorderFlipFlopsForCurrentCycle` / `CheckVerticalBorderTop/BottomForCurrentLine`).
 - **VICE:** `vicii-cycle.c:476-482` (`check_vborder_top`, `check_vborder_bottom` every cycle, then `vborder=set_vborder` at CYCLE(1)); comparison logic `:165-182`.
@@ -251,7 +265,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M10. Deferred collision-register clear applied BEFORE the per-cycle sprite draw (and the can_* IRQ gate captured after the clear) instead of after the draw
-**Severity: MEDIUM (CONFIRMED)** — merges the sprites-render-collision and raster-irq views of the identical ordering bug.
+**Severity: MEDIUM (CONFIRMED)** - merges the sprites-render-collision and raster-irq views of the identical ordering bug.
 
 - **Managed:** `Mos6569.cs:1097-1104` (pending clear at top of Tick), `:1308-1320` (can capture + `DrawSprites8` + IRQ).
 - **VICE:** `vicii-cycle.c:407-433`.
@@ -290,9 +304,9 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### L2. `vicii.last_bus_phi2` not modeled: register R/W never latches the bus, idle sprite fetches use the wrong value
-**Severity: LOW (CONFIRMED)** — prerequisite for M7 and M9.
+**Severity: LOW (CONFIRMED)** - prerequisite for M7 and M9.
 
-- **Managed:** `Mos6569.cs:2481` (Read), `:2586` (Write) — no `last_bus_phi2` field exists.
+- **Managed:** `Mos6569.cs:2481` (Read), `:2586` (Write) - no `last_bus_phi2` field exists.
 - **VICE:** `vicii-mem.c:338` (store) and `:738` (read) set `vicii.last_bus_phi2 = value`; `vicii-cycle.c:605` resets it to 0xff each cycle; `vicii-fetch.c:112,135` consume it.
 - **What VICE does:** Every `vicii_store` and `vicii_read` latch the transferred byte into `last_bus_phi2`; it resets to 0xff at end of cycle. During an idle-sprite s-access, `sprite_dma_cycle_0/2` read `sprdata = last_bus_phi2`, so an idle sprite data byte reflects any same-cycle CPU access to a VIC register (else 0xff).
 - **What managed does:** No `last_bus_phi2` state; Read/Write do not latch, no per-cycle reset. Idle sprite fetches never see a CPU-bus value.
@@ -307,7 +321,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### M15. Palette is an arbitrary hardcoded RGB table, not VICE's YUV-derived 8565r2 palette (default model)
-**Severity: MEDIUM (CONFIRMED)** — this is the umbrella color-fidelity divergence; L7/L8/L9 are facets of it.
+**Severity: MEDIUM (CONFIRMED)** - this is the umbrella color-fidelity divergence; L7/L8/L9 are facets of it.
 
 - **Managed:** `VicPalette.cs:14-32` (static `Colors[]`), consumed verbatim by `VideoRenderer.cs:52-53`.
 - **VICE:** `vicii-color.c:513-531` (`vicii_colors_8565r2`) + `:650` (`video_color_palette_internal`); default model `VICII_MODEL_8565` (`vicii-resources.c:202`), TOBIAS_COLORS build (`vicii-color.c:50`).
@@ -363,7 +377,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 ---
 
 #### L3. Light-pen X uses the hardcoded PAL xpos base (0x194) and PAL wrap for all models; NTSC X is wrong
-**Severity: LOW (CONFIRMED)** — merges lightpen and model-variants views.
+**Severity: LOW (CONFIRMED)** - merges lightpen and model-variants views.
 
 - **Managed:** `Mos6569.cs:2895-2896` (`TriggerLightPenInternal`).
 - **VICE:** `vicii-lightpen.c:75`; `vicii-chip-model.c:272-289` (`cycle_tab_ntsc`); `vicii-chip-model.h:164-167` (`cycle_get_xpos`).
@@ -378,7 +392,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 #### L5. CIA1 PB4 light-pen line is not wired to `SetLightPen`; nothing in the machine ever triggers the pen
 **Severity: LOW (CONFIRMED)**
 
-- **Managed:** `Mos6569.cs:2846` (`SetLightPen`) — no caller anywhere in src.
+- **Managed:** `Mos6569.cs:2846` (`SetLightPen`) - no caller anywhere in src.
 - **VICE:** `c64/c64cia1.c:153` (`vicii_set_light_pen(maincpu_clk, !(m & 0x10))`).
 - **What VICE does:** Drives the VIC-II light-pen input from CIA1 port B bit 4: whenever CIA1 PB state changes, calls `vicii_set_light_pen`; pulling PB4 low asserts the pen and schedules the trigger.
 - **What managed does:** No call to `SetLightPen`/`TriggerLightPen` outside the class; the CIA glue never invokes them. The latch can only be exercised by direct test calls.
@@ -391,7 +405,7 @@ ViceSharp managed VIC-II (`Mos6569` + `PixelSequencer` + `C64MemoryMap` Phi1/Phi
 #### L4. `vicii_lightpen_timing` (real light-pen pointing-device path) is entirely unported
 **Severity: LOW (CONFIRMED)**
 
-- **Managed:** `Mos6569.cs` — no equivalent; only `SetLightPen`/`TriggerLightPenInternal` exist.
+- **Managed:** `Mos6569.cs` - no equivalent; only `SetLightPen`/`TriggerLightPenInternal` exist.
 - **VICE:** `vicii-lightpen.c:110-130` (`vicii_lightpen_timing`).
 - **What VICE does:** For a real pen at (x,y): `x += 0x80 - screen_leftborderwidth; y += first_displayed_line;` if `x < 104` the pen is off-screen and `pulse_time=0` (no trigger); otherwise `pulse_time = maincpu_clk + (x/8) + (y*cycles_per_line)` and `light_pen.x_extra_bits = (x >> 1) & 0x3` (sub-CLK precision from the actual pixel position).
 - **What managed does:** No analogue. The only `x_extra_bits` source is the chip-model constant (`color_latency?2:1`); no pixel-derived value, no off-screen suppression, no coordinate-based pulse scheduling.

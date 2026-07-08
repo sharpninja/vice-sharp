@@ -1,6 +1,6 @@
 # Avalonia UI Redesign - Byrd Development Process v4 Plan
 
-Status: IN PROGRESS. Branch base: `069d28c` (codex/iec-timetravel-debugger).
+Status: COMPLETE (follow-ups tracked as PLAN-DRVTRUE-002). Branch base: `069d28c` (codex/iec-timetravel-debugger).
 
 ## Implementation status (2026-06-16, honest scope after adversarial review)
 
@@ -14,9 +14,11 @@ true-drive LOAD test, all green) and a 4-reviewer adversarial pass:
   VM `IsPaneOpen`/`ToggleSidebar`/`ToggleDockSide`/`PanePlacement` tested. Done
   (AXAML render itself only via the manual app-launch gate, not run here).
 - **S2 PeripheralCardView:** reusable AXAML card renders every slot via an
-  `ItemsControl`; rendered in-app inside the (still imperative) `AttachPanelView`
-  peripherals tab. The dedicated `SidebarView` extraction was NOT done, so the
-  ~860-line imperative `AttachPanelView` shell/keyboard/monitor/tab-strip remains.
+  `ItemsControl`; rendered in-app inside the `AttachPanelView` peripherals tab.
+  The imperative bulk has since been dismantled: `AttachPanelView` now lives at
+  `src/ViceSharp.Avalonia/Views/AttachPanelView.cs` and is under 300 lines. The
+  dedicated `SidebarView` extraction is still NOT done (only the placeholder
+  comment in `MainWindow.axaml.cs` marks it).
 - **S3 SettingsView:** reusable AXAML settings UserControl, bound, rendered in
   the settings tab; old imperative settings cluster deleted. Done.
 - **S4 True Drive + LED + runtime gating:** end-to-end for drive 8/9 (single
@@ -25,7 +27,10 @@ true-drive LOAD test, all green) and a 4-reviewer adversarial pass:
     session - `true_drive`/`true_drive_device` flow through the proto +
     `CreateEmulatorSessionRequest` + the gRPC adapter; `DefaultEmulatorRuntimeFactory.Create(request)`
     honors `request.TrueDrive` and builds `C64TrueDriveRigBuilder` (coordinator
-    C64 + emulated 1541), default-off so native parity is byte-identical;
+    C64 + emulated 1541). Update 2026-06-25/26: Drive 8 now defaults to the
+    VICE-faithful true-drive path (`AttachPanelViewModel` constructs the Drive8
+    slot with `trueDrive: true`); default-off survives only as the
+    persisted-restore override;
     `GrpcHostProtocolClient.SetTrueDriveAsync` recreates the session with the
     selection; `AttachPanelViewModel` observes the per-drive toggle and enforces
     single true-drive. Verified end-to-end through a live in-process gRPC host

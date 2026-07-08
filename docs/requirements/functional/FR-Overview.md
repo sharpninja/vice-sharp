@@ -6,12 +6,14 @@
 |----------------|--------------------------------------------|
 | Project        | ViceSharp                                  |
 | Version        | 0.1.0-draft                                |
-| Last Updated   | 2026-05-13                                 |
+| Last Updated   | 2026-07-08                                 |
 | Status         | Draft                                      |
 
 ## Purpose
 
 This document serves as the master index for all ViceSharp Functional Requirements (FRs). FRs define observable, testable emulator behavior. Classic VICE documentation is used as the source corpus for emulator-visible FR behavior; Vice-Sharp architecture documents constrain TRs and implementation boundaries.
+
+> **Index scope note (2026-07-08):** The tables below are a hand-maintained snapshot frozen at the 2026-05-13 requirement set. FRs added after 2026-05 (for example FR-TICKHIST-001, FR-IECMON-001, FR-DRVTRUE-001, FR-SNDREG-001, FR-PACESEL-001, FR-SIDAUDIO-001) are managed in the MCP requirements store; the generated wiki export (`PublishWiki` target) is the authoritative, complete FR index. Interface names in the traceability matrix reflect the original 2026-05 design vocabulary and may predate the implemented `ViceSharp.Abstractions` surface; consult the generated TR-per-FR wiki export for the authoritative mapping. Do not hand-extend the tables below; register new FRs through the MCP requirements store.
 
 ## FR Document Index
 

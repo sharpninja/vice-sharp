@@ -20,7 +20,8 @@ calls out of the focused unit suite.
 
 The project is in `ViceSharp.slnx` (so it builds and is discoverable) but is tagged
 `[Trait("Category", "AiReview")]` and **excluded from the default Nuke `Test`
-gate** (`Category!=Determinism&Category!=AiReview`). Run it on demand.
+gate** (`Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`).
+Run it on demand.
 
 ## What it reviews
 

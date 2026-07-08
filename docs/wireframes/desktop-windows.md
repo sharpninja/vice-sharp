@@ -52,6 +52,8 @@ This document captures the current Avalonia desktop UI as the reference for ever
 +------------------------------------------------------------------------------+
 ```
 
+The full status line continues `... | Cycle 0 | PC 0000 | IEC Idle`; on multi-CPU topologies (a true-drive rig or the C128's two CPUs) per-CPU effective clock rates are appended (`| CPUs ...`).
+
 ## Layout (collapsed sidebar)
 
 ```
@@ -133,7 +135,7 @@ Machine view (default)
 | Shift+F11 | Rewind 1 cycle |
 | Shift+F10 | Rewind 1 frame |
 | Ctrl+R | Warm reset |
-| Ctrl+Shift+R | Cold reset |
+| Ctrl+Shift+R | Cold reset (CONFLICT: Ctrl+Shift+R is now bound to the "MP4 + sound..." recording menu item in `MainWindow.axaml`; the cold-reset gesture needs reassignment) |
 | Ctrl+O | Open media (Drive 8 default) |
 | Ctrl+M | Pop out monitor |
 | Esc | Toggle sidebar |

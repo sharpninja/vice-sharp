@@ -19,12 +19,12 @@ Typical VICE data-root locations:
 
 ### 2. Cloanto C64 Forever
 
-[C64 Forever](https://www.oxyron.de/) by Cloanto provides legally licensed ROM images. The "Plus" and "Premium" editions include complete ROM sets for all Commodore machines.
+[C64 Forever](https://www.c64forever.com/) by Cloanto provides legally licensed ROM images. The "Plus" and "Premium" editions include complete ROM sets for all Commodore machines.
 
 ### 3. Open-Source Alternatives
 
-- **Open ROMs** — open-source KERNAL and BASIC replacements (limited compatibility)
-- **JiffyDOS** — aftermarket replacement KERNAL (requires purchase)
+- **Open ROMs** - open-source KERNAL and BASIC replacements (limited compatibility)
+- **JiffyDOS** - aftermarket replacement KERNAL (requires purchase)
 
 ### 4. Physical Extraction
 
@@ -67,44 +67,45 @@ $VICESHARP_ROM_PATH/
 
 ## ROM Validation
 
-ViceSharp validates ROM files at load time using SHA256 checksums for known-good images. Unknown checksums produce a warning but do not prevent loading (to support modified/patched ROMs).
+ViceSharp validates ROM files at load time using MD5 checksums for known-good images (`C64RomLoader.LoadRom` in [src/ViceSharp.RomFetch/C64RomLoader.cs](../src/ViceSharp.RomFetch/C64RomLoader.cs)). Validation is strict: if a file matches a known ROM name but its MD5 does not match the descriptor, the load fails (no warning, no fallback). ROM file names the loader does not recognize skip checksum validation entirely and load as-is (this is what supports modified/patched ROMs). Each descriptor also stores a SHA1 hash for reference, but only MD5 is checked at load time. SHA256 is used elsewhere: it pins RomFetch downloads (`RomProvider`) and the CI ROM staging in `build/Build.cs` (`EnsureCiRomRoot`).
 
 ### Known C64 ROM Checksums
 
-| File | Size | SHA256 (first 8 hex) | Description |
-|------|------|---------------------|-------------|
-| `kernal-901227-03.bin` | 8,192 | `83c60d47...` | Standard C64 KERNAL (901227-03) |
-| `basic-901226-01.bin` | 8,192 | `89878cea...` | BASIC V2 (901226-01) |
-| `chargen-901225-01.bin` | 4,096 | `fd0d53b8...` | Character ROM (901225-01) |
-| `dos1541-325302-01+901229-05.bin` | 16,384 | n/a | 1541 DOS (325302-01/901229-05) |
+Copied from the descriptors in `C64RomLoader.cs`:
+
+| File | Size | MD5 (validated at load) | Description |
+|------|------|-------------------------|-------------|
+| `kernal-901227-03.bin` | 8,192 | `39065497630802346bce17963f13c092` | Standard C64 KERNAL (901227-03) |
+| `kernal-901227-02.bin` | 8,192 | `7360b296d64e18b88f6cf52289fd99a1` | KERNAL rev 2 (901227-02) |
+| `kernal-901227-01.bin` | 8,192 | `1ae0ea224f2b291dafa2c20b990bb7d4` | KERNAL rev 1 (901227-01) |
+| `kernal-251104-04.bin` | 8,192 | `187b8c713b51931e070872bd390b472a` | SX-64 KERNAL (251104-04) |
+| `kernal-901246-01.bin` | 8,192 | `da92801e3a03b005b746a4dd0b639c7c` | PET64 KERNAL (901246-01) |
+| `kernal-906145-02.bin` | 8,192 | `479553fd53346ec84054f0b1c6237397` | Japanese C64 KERNAL (906145-02) |
+| `kernal-390852-01.bin` | 8,192 | `ddee89b0fed19572da5245ea68ff11b5` | C64GS KERNAL (390852-01) |
+| `basic-901226-01.bin` | 8,192 | `57af4ae21d4b705c2991d98ed5c1f7b8` | BASIC V2 (901226-01) |
+| `chargen-901225-01.bin` | 4,096 | `12a4202f5331d45af846af6c58fba946` | Character ROM (901225-01) |
+| `chargen-906143-02.bin` | 4,096 | `cf32a93c0a693ed359a4f483ef6db53d` | Japanese character ROM (906143-02) |
+| `dos1541-325302-01+901229-05.bin` | 16,384 | n/a (no descriptor; loads unvalidated) | 1541 DOS (325302-01/901229-05) |
 
 ## ViceSharp.RomFetch Tool
 
-The `ViceSharp.RomFetch` tool automates ROM acquisition from legal sources:
+`ViceSharp.RomFetch` is currently a class library, not a command-line tool: the project has no executable entry point, so there is no `dotnet run --project src/ViceSharp.RomFetch` invocation today (the Nuke `RomFetch` target logs "tool not yet implemented"). A standalone CLI remains planned work.
 
-```bash
-# Fetch ROMs from an existing VICE installation
-dotnet run --project src/ViceSharp.RomFetch -- --source vice --vice-path "C:\WinVICE"
+What the library provides today:
 
-# Fetch from a URL (user provides their own legal source)
-dotnet run --project src/ViceSharp.RomFetch -- --source url --url "https://example.com/roms.zip"
+- `C64RomLoader` - loads C64 ROM images into the bus with strict MD5 validation (see [ROM Validation](#rom-validation) above).
+- `RomProvider` - resolves ROM files from one or more base paths and can download known ROMs from a user-supplied URL database, verifying each download against a pinned SHA256 hash before writing it to disk.
+- `ViceDataPathResolver` - locates the VICE data root from `VICESHARP_ROM_PATH`, `VICE_DATA_PATH`, `VICE_HOME`, or (on Windows) `x64sc.exe` on `PATH`, and normalizes a `C64/` subdirectory to its parent root.
 
-# Validate existing ROM set
-dotnet run --project src/ViceSharp.RomFetch -- --validate --rom-path "$VICESHARP_ROM_PATH"
-```
-
-The tool:
-1. Locates or downloads ROM files
-2. Organizes them into the expected directory structure
-3. Validates checksums
-4. Reports any missing or corrupted files
+CI uses the same hash-pinning approach: the `CiTest` Nuke target stages the required ROM dumps via `EnsureCiRomRoot` in `build/Build.cs`, downloading them SHA256-pinned when they are not already present on the agent.
 
 ## Fallback Behavior
 
-When ROMs are missing:
+When ROMs are missing or invalid:
 - `VICESHARP_ROM_PATH` / `VICE_DATA_PATH` unset and no `x64sc.exe` found on `PATH` → error with setup instructions
 - ROM directory exists but files missing → error listing missing files
-- ROM loads but checksum unknown → warning (proceeds with caution)
+- Known ROM name but MD5 checksum mismatch → load fails
+- Unrecognized ROM file name → checksum validation skipped, loads as-is
 - ROM loads and checksum matches → normal operation
 
-ViceSharp will NOT attempt to download ROMs automatically without explicit user action via the RomFetch tool.
+ViceSharp will NOT attempt to download ROMs automatically without explicit user action via the RomFetch APIs.

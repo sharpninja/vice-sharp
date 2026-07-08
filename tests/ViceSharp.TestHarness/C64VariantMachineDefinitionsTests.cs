@@ -12,7 +12,8 @@ using Xunit;
 /// system-core config. These assert every generated definition is schema-valid
 /// (loads via AdhocMachineYamlLoader) and that the set is complete.
 ///
-/// Files are produced by tools/generate-c64-machines.py from C64MachineProfiles.
+/// Files are produced by C64MachineDefinitionWriter from C64MachineProfiles
+/// via ViceSharp.Console --export-machines docs/samples/machines.
 /// </summary>
 public sealed class C64VariantMachineDefinitionsTests
 {

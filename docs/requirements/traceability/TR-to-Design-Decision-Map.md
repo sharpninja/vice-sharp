@@ -136,11 +136,11 @@ This map links Technical Requirements to Vice-Sharp architecture decisions and s
 
 ---
 
-## TR-MEDIA-001: FFmpeg Integration via P/Invoke with Multiple Format Support
+## TR-MEDIA-001: External FFmpeg Process Integration with Multiple Format Support
 
 | Decision ID | Decision |
 |-------------|----------|
-| DD-MEDIA-001 | Capture/encoding stays behind explicit P/Invoke media abstractions. |
+| DD-MEDIA-001 | Muxed video capture shells out to an external `ffmpeg` process (mirroring VICE `ffmpegexedrv`); no libav P/Invoke bindings, graceful degradation when ffmpeg is absent. |
 
 **Architecture Sources**
 

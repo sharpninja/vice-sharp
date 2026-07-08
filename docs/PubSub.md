@@ -39,7 +39,7 @@ During frame → arena.Allocate(size) returns Span<byte>
 Frame end → arena.Reset() (all allocations invalidated)
 ```
 
-The arena is a single contiguous byte array (default: 64KB). Allocation is a single pointer increment — the fastest possible allocator.
+The arena is a single contiguous byte array (default: 64KB). Allocation is a single pointer increment: the fastest possible allocator.
 
 ### Constraints
 
@@ -55,12 +55,13 @@ A reference-counted handle into the message pool. Handles are value types (struc
 ### Reference Counting
 
 ```csharp
-public readonly struct MessageHandle : IDisposable
+public readonly struct MessageHandle : IEquatable<MessageHandle>, IDisposable
 {
-    // Pool slot index (immutable)
-    // Reference count (interlocked increment/decrement)
-    // Topic (interned string, set at publish time)
-    // PayloadOffset + PayloadLength (into arena)
+    // Owner (IMessagePool the slot belongs to)
+    // SlotIndex + Generation (stale handles from slot reuse are rejected)
+    // Topic (Topic struct, set at publish time)
+    // Kind (MessageKind payload discriminator) + PayloadLength
+    // Sequence (monotonic, assigned by the owning pool)
 }
 ```
 
@@ -68,20 +69,24 @@ When ref count reaches zero, the message slot is returned to the pool. Subscribe
 
 ### Zero-Copy Delivery
 
-Subscribers receive the same `MessageHandle` — no copying. The payload `Span<byte>` points directly into the arena. This makes delivery O(1) regardless of payload size.
+Subscribers receive the same `MessageHandle` with no copying. The payload `Span<byte>` points directly into the arena. This makes delivery O(1) regardless of payload size.
 
 ## IPubSub
 
 ### Topic-Based Routing
 
-Topics are interned strings for fast comparison:
-- `"irq"` — IRQ line asserted/deasserted
-- `"nmi"` — NMI line asserted/deasserted
-- `"ba"` — BA line (VIC-II signals bus available)
-- `"aec"` — AEC line (address enable control)
-- `"dma"` — DMA transfer initiated
-- `"clock"` — clock phase notification
-- `"state"` — state mutation notification
+A `Topic` is a readonly struct (`src/ViceSharp.Abstractions/IPubSub.cs`) keyed by a `uint` computed with a deterministic FNV-1a hash of the topic name. The optional `Name` is interned and kept for diagnostics (`ToString`), while hot-path equality compares the `uint` key. Topics can also be constructed directly from a precomputed numeric value, and a `TopicId` compatibility struct (numeric-only, with implicit conversions to/from `Topic`) serves the early raw-span API surface.
+
+Well-known topic names:
+- `"irq"`: IRQ line asserted/deasserted
+- `"nmi"`: NMI line asserted/deasserted
+- `"ba"`: BA line (VIC-II signals bus available)
+- `"aec"`: AEC line (address enable control)
+- `"dma"`: DMA transfer initiated
+- `"clock"`: clock phase notification
+- `"state"`: state mutation notification
+
+These map onto the `MessageKind` payload discriminator (`Irq`, `Nmi`, `BusAvailable`, `AddressEnableControl`, `Dma`, `Clock`, `State`).
 
 ### Subscription Management
 
@@ -95,21 +100,21 @@ Subscriptions are stored in a flat array per topic (cache-friendly iteration). A
 
 ### Delivery Order
 
-Within a single `Publish()` call, subscribers are notified in registration order. This is deterministic — same device init order produces same delivery order.
+Within a single `Publish()` call, subscribers are notified in registration order. This is deterministic: same device init order produces same delivery order.
 
 ## Performance Targets
 
-| Operation | Target | Measured |
-|-----------|--------|----------|
-| Pool.Rent() | <20ns | — |
-| Pool.Return() | <20ns | — |
-| Arena.Allocate() | <10ns | — |
-| IPubSub.Publish() | <50ns | — |
-| Per-subscriber delivery | <100ns | — |
-| Total per-frame overhead | <50us | — |
-| Allocations per frame | 0 | — |
+| Operation | Target |
+|-----------|--------|
+| Pool.Rent() | <20ns |
+| Pool.Return() | <20ns |
+| Arena.Allocate() | <10ns |
+| IPubSub.Publish() | <50ns |
+| Per-subscriber delivery | <100ns |
+| Total per-frame overhead | <50us |
+| Allocations per frame | 0 |
 
-Measured column populated during Iteration 1 benchmarking.
+Measured performance is tracked by the probes in `tests/ViceSharp.Benchmarks` (`PubSubBenchmarks`, `PubSubPerfProbe`) rather than pinned in this document.
 
 ## Integration with Mutation Queue
 

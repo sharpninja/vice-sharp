@@ -6,11 +6,13 @@
 |-------|-------|
 | Project | ViceSharp |
 | Version | 0.1.0-draft |
-| Last Updated | 2026-05-13 |
+| Last Updated | 2026-07-08 |
 
 ## Purpose
 
 This map groups Functional Requirements by planned implementation iteration.
+
+> **Planning-snapshot note (2026-07-08):** This document is the original 2026-05-13 planning snapshot and intentionally reflects the plan, not delivery status. Actual delivery ran ahead of it: Iteration 1 (C64) is complete, and many FRs listed under Iteration 2 and Iteration 3 below (for example FR-VIC-007/008/010, FR-DRV-001/004/005, FR-CRT-001, FR-MED-002/003/004, FR-TAP-001/002/003, FR-SID-003/007/008/010/012/013, FR-HOST-002, FR-CFG-001/005/006) are implemented today and cited by passing tests. Consult the MCP requirements store and its generated wiki export for current per-FR status; do not use this snapshot as a delivery tracker.
 
 ---
 

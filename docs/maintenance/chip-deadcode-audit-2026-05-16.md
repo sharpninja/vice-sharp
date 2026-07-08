@@ -1,5 +1,15 @@
 # Chip Dead-Code Audit (2026-05-16)
 
+> **EXECUTED (closure note, 2026-07-08).** The recommended deletions were fully
+> carried out: all DELETE candidates inventoried below (root
+> Cpu6510/Mos6510/Mos6526/Mos6581/VicII/CharacterRom/IecDrive, Interface/Cia6526)
+> plus `src/ViceSharp.Architectures/C64Machine.cs` are gone from the tree; only
+> `SidOscillator.cs` remains at the Chips root. The KEEP inventory paths are
+> also stale: IecBus/IecDrive/StandardCartridgeImage/C64HostKeyboardMapper glue
+> moved to `src/ViceSharp.Core` per ARCH-CHIPGLUE-001 (commit `4e0a277`), and
+> `Video/`, `Input/`, `Cartridges/`, `Interface/` no longer exist under
+> `ViceSharp.Chips`. Retained as historical record.
+
 Owner: REPO-MAINT-001 phase 1.
 
 This document inventories every public type declared under `src/ViceSharp.Chips/` and classifies each as **KEEP**, **DELETE**, or **INVESTIGATE**. Reference counts are *external* file counts: how many files outside the type's own declaring file mention the type by its short name (ripgrep `\bTypeName\b`, scope `src/` and `tests/`, excluding generated `obj/`).

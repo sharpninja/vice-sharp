@@ -1,5 +1,15 @@
 # StateWindow
 
+> **STATUS: UNIMPLEMENTED DESIGN PROPOSAL.** Nothing described below is shipped. No
+> `StateWindowConfig` type exists anywhere in `src/` or `tests/`, and `ISnapshotStore`
+> (`src/ViceSharp.Abstractions/ISnapshotStore.cs`) exposes only `Capture` and `Restore`.
+> The rewind surface that actually shipped is the tick-history write-delta capture:
+> `TickHistoryRecorder` (`src/ViceSharp.Host/Runtime/TickHistoryRecorder.cs`) keeps the
+> last 100 completed CPU instructions with per-instruction memory write-deltas and staged
+> chip state, exposed through the gRPC `MonitorService` (`GetTickHistory`,
+> `ReadMemoryAtTick`, `GetChipStateAtTick`) and the desktop History panel.
+> The remainder of this document is retained as the original design record.
+
 The StateWindow controls how much emulation history ViceSharp retains in memory. It governs the frequency of automatic snapshots, the depth of the snapshot ring buffer, and the total memory budget allocated to state retention.
 
 ## Configuration Surface

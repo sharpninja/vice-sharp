@@ -31,40 +31,32 @@ Buffer management rules:
 - If the emulation completes a frame before the sink has consumed the previous one, the new frame overwrites the front buffer (latest-wins policy). This prevents the emulation from stalling on slow display paths.
 - If the sink requests a frame before the emulation has produced one, it re-presents the current front buffer (frame repeat).
 
-### VSync Strategies
+### Presentation Timing
 
-ViceSharp supports multiple synchronization strategies, configured via the `IFrameSink`:
-
-| Strategy | Behavior | Use Case |
-|----------|----------|----------|
-| **VSync-locked** | Presents frames synchronized to the monitor's vertical refresh. Uses compositor hints where available. | Standard desktop use. Eliminates tearing but may introduce up to one frame of input latency. |
-| **Adaptive VSync** | VSync when the emulation keeps up; tears when it falls behind. | Reduces stutter during brief slowdowns compared to hard VSync. |
-| **Unlocked** | Presents frames as fast as the emulation produces them, ignoring monitor refresh. | Benchmarking, fast-forward mode. May cause visible tearing. |
-| **Frame pacing** | Inserts variable sleep between frames to match the emulated machine's native rate. | Authentic experience: C64 PAL runs at exactly 50.125 fps even on a 60 Hz display. |
+Presentation timing (vsync against the host display, compositor pacing) is owned by the host render surface, not by `IFrameSink` or the emulation loop. The desktop UI's in-process renderer reads the committed frame buffer on the UI's own render schedule; remote UIs consume the gRPC `VideoService` frame stream at whatever cadence they choose. Emulation-side pacing is a separate concern handled by the emulation gate (see Emulation Pacing below).
 
 ### Frame Skip
 
-When the emulation falls behind real-time (or during fast-forward), frames may be skipped to catch up:
+When the emulation falls behind real time (or during warp/fast-forward), display frames are effectively skipped without perturbing emulation:
 
-- **Automatic skip:** If the emulation is more than one frame behind, intermediate frames are computed (all cycle-accurate side effects occur) but not rendered to the `IFrameSink`. The video chip still executes all cycles, maintaining determinism, but the pixel output is discarded.
-- **Skip limit:** A configurable maximum skip count (default: 4) prevents the display from freezing entirely during sustained slowdowns.
-- **Skip reporting:** `FrameMetadata.WasSkipped` indicates whether a frame was skipped, allowing the UI to display a frame-skip indicator.
+- **Latest-wins overwrite:** every frame is fully computed (all cycle-accurate side effects occur, preserving determinism), but if a new frame completes before the previous one was consumed, the committed buffer is simply overwritten. Presentation never stalls emulation and emulation never stalls presentation.
+- **Skip visibility:** the sink's `FrameCount` counts presented frames, so hosts can derive an effective presentation rate and surface a speed/fps indicator (as the desktop status bar does).
 
 ## Audio Decoupling
 
 ### Ring Buffer
 
-Audio samples produced by the emulation engine (SID output for C64, VIC audio for VIC-20, TED audio for Plus/4) are written into a lock-free ring buffer. The `IAudioBackend` reads from this ring buffer on its own thread, typically driven by the host audio system's callback.
+Audio samples produced by the emulation engine (SID output for C64) are submitted to the `IAudioBackend`, which writes them into its device ring buffer. The host audio system drains that buffer on its own schedule.
 
 ```
-Emulation thread:    [ Write samples ] --> | Ring Buffer | --> [ Read samples ] Audio callback thread
+Emulation thread:    [ SubmitSamples ] --> | Device Ring | --> [ Playback ] Host audio device
                                            |  (N slots)  |
 ```
 
-Ring buffer parameters:
-- **Capacity:** Configurable, typically 4096-8192 samples. Larger buffers increase latency but tolerate more scheduling jitter.
-- **Write policy:** If the buffer is full (emulation running faster than real-time), excess samples are dropped from the oldest end. This prevents unbounded latency growth during fast-forward.
-- **Read policy:** If the buffer underruns (emulation running slower than real-time), the audio backend inserts silence or repeats the last sample block. Both approaches are audible but preferable to undefined behavior.
+Ring buffer parameters (desktop `WinMmAudioBackend`):
+- **Capacity:** 8 fragments of 256 samples (2048 samples, roughly 46 ms at 44100 Hz). Free space is calculated from `waveOutGetPosition` against the write cursor, matching VICE's WMM driver, so back-pressure reflects samples Windows has actually played.
+- **Write policy:** live audio waits for a free fragment instead of dropping PCM when the device queue is full; that blocking write is exactly the sound back-pressure the VICE pacing gate relies on. During warp or fast-forward the live output leaf is paused and fragments are discarded without blocking.
+- **Underrun:** if the emulation falls behind, the device plays through already-submitted data and the gap is audible; the pacing gate's fine advance granularity (roughly 2 ms slices) keeps submissions ahead of the roughly 5.8 ms fragment drain in normal operation.
 
 ### Sample Rate Conversion
 
@@ -75,82 +67,67 @@ The emulated machine's audio output rate is derived from its master clock and ma
 | C64 PAL | 985,248 / cycle divisor ~= variable | 48,000 Hz | Requires resampling |
 | C64 NTSC | 1,022,727 / cycle divisor ~= variable | 48,000 Hz | Requires resampling |
 
-The SID chip produces one sample per CPU cycle in the simplest model, but practical implementations downsample to a target rate. ViceSharp performs sample rate conversion using:
+The SID chip produces one sample per CPU cycle in the simplest model, but practical implementations downsample to a target rate. ViceSharp handles rate conversion in the SID output path:
 
-1. **Accumulate-and-average:** During each emulation step, SID output values are accumulated. At the output sample boundary, the accumulated values are averaged. This is a simple box filter suitable for the hot path.
-2. **Optional high-quality resampling:** When `AudioParameters.HighQualityResample` is true, a polyphase FIR filter is used. This produces higher-fidelity output at the cost of additional CPU. Applied as a post-processing step outside the cycle-accurate hot path.
+1. **Cycle-to-sample cadence:** the SID emits one output sample every `clock / sampleRate` cycles and submits them to the `IAudioBackend` in small fixed batches (256 samples).
+2. **Limiter-rate cadence tracking:** when the pace limiter is set away from 100%, the session pushes the requested rate into the audio chip (`IAudioChip.SetRelativeSpeed`), stretching or compressing the sample cadence so the fixed-rate audio device paces emulation at the requested speed. This mirrors VICE's `sound_set_relative_speed` (`sound.c`).
 
 ### Latency Management
 
 Audio latency is the delay between the emulation producing a sample and the user hearing it. Lower latency improves responsiveness (important for music programs) but requires tighter scheduling.
 
 Latency components:
-- **Ring buffer latency:** `BufferSizeSamples / SampleRate` seconds. A 2048-sample buffer at 48 kHz = ~42 ms.
-- **Audio backend latency:** The host audio API's own buffering. Typically 5-20 ms for modern APIs (WASAPI exclusive, PulseAudio low-latency, CoreAudio).
-- **Total latency:** Sum of ring buffer and backend latency.
+- **Device queue latency:** `QueuedSampleCount / SampleRate` seconds of already-submitted audio waiting to play.
+- **Audio backend latency:** The host audio API's own buffering (e.g., the WinMM buffer chain in the desktop `WinMmAudioBackend`).
+- **Total latency:** Sum of the two.
 
-`IAudioBackend.TargetLatencyMs` sets the desired total latency. The implementation adjusts the ring buffer size and requests an appropriate backend buffer size. `ActualLatencyMs` reports the measured end-to-end latency.
-
-Latency adaptation:
-- If `ActualLatencyMs` exceeds `TargetLatencyMs` by more than 50%, the ring buffer is drained faster (slight pitch increase, inaudible at small adjustments) to reduce the backlog.
-- If the ring buffer is consistently less than 25% full, the drain rate is slowed slightly to prevent underruns.
+There is no latency setpoint on the contract. Instead, the backend exposes its queue state (`QueuedSampleCount`, and `AvailableSampleCount` for how much more the device can accept without blocking), and latency is bounded structurally: the backend's fixed buffer chain caps how much audio can ever be queued, and the VICE pacing gate's sound back-pressure (below) stops the emulator from running ahead of the device, so the queue hovers near full without growing.
 
 ## IFrameSink Contract
 
-The `IFrameSink` interface is the boundary between the emulation engine and the display subsystem:
+The `IFrameSink` interface (`src/ViceSharp.Abstractions/IFrameSink.cs`) is the boundary between the emulation engine and the display subsystem. It has three members: `PresentFrame(ReadOnlySpan<byte> pixelData)`, `IsReady`, and `FrameCount`.
 
 1. **Thread safety:** `PresentFrame` is called from the emulation thread. The sink implementation must be safe for cross-thread access (typically by copying the pixel data into its own buffer or using an atomic swap).
 
-2. **Pixel format:** The emulation engine produces frames in the format specified by `PreferredFormat`. The sink declares its preference; the engine performs any necessary conversion before delivery. `RGBA8888` is the default.
+2. **Pixel format:** Frames are delivered as raw BGRA8888 bytes (`width * height * 4`). There is no per-sink format negotiation; the frame path, the capture recorders, and the gRPC `VideoService` all share this format.
 
-3. **Resolution:** `DisplayResolution` may change at runtime if the emulated machine switches video modes (e.g., VIC-II multicolor vs. hires, VDC 80-column mode). The sink must handle resolution changes gracefully.
+3. **Backpressure:** If `IsReady` returns false, the emulation engine skips delivery of the current frame (the frame is still computed for correctness). The sink signals readiness when it has consumed the previous frame.
 
-4. **Backpressure:** If `IsReady` returns false, the emulation engine skips delivery of the current frame (the frame is still computed for correctness). The sink signals readiness when it has consumed the previous frame.
-
-5. **Metadata:** `FrameMetadata` carries the frame number, cycle stamp, video standard, and whether the frame was skipped. The sink can use this for frame-pacing calculations and diagnostic display.
+4. **Diagnostics:** `FrameCount` reports total frames presented since the last reset, which hosts use for effective-rate display.
 
 ## IAudioBackend Contract
 
-The `IAudioBackend` interface is the boundary between the emulation engine and the audio subsystem:
+The `IAudioBackend` interface (`src/ViceSharp.Abstractions/IAudioBackend.cs`) is the boundary between the emulation engine and the audio subsystem. Its members are `SubmitSamples(ReadOnlySpan<float>)`, `QueuedSampleCount`, `AvailableSampleCount`, `Pause`, `Resume`, and `Stop`.
 
-1. **Thread model:** `SubmitSamples` is called from the emulation thread. The backend's playback callback runs on a separate audio thread. The ring buffer mediates between the two.
+1. **Thread model:** `SubmitSamples` is called from the emulation thread. The backend's playback runs on the host audio system's own thread; the backend's internal buffering mediates between the two.
 
-2. **Sample format:** Samples are 32-bit floating-point PCM, mono or stereo as specified by `AudioParameters.Channels`. For the SID (mono output), the backend may apply stereo expansion or panning as a post-processing effect.
+2. **Sample format:** Samples are 32-bit floating-point PCM. The SID produces a mono stream; the desktop `WinMmAudioBackend` converts it to clamped 16-bit mono PCM at 44100 Hz (`AudioSampleConverter`) and writes it into a looping WaveOut ring of 8 fragments of 256 samples.
 
-3. **Lifecycle:** `Initialize` must be called before any samples are submitted. `Pause`/`Resume` control playback without discarding buffered data (used when the emulator window loses focus). `Stop` discards all buffered data and releases audio resources.
+3. **Lifecycle:** Backends arrive pre-configured from their factory (`AudioBackendFactory`); there is no separate initialize step. `Pause`/`Resume` control playback without discarding buffered data (used for warp and fast-forward suspension). `Stop` discards all buffered samples and releases audio resources.
 
-4. **Queue monitoring:** `QueuedSampleCount` reports how many samples are buffered but not yet played. The emulation engine uses this to detect overrun (too many queued samples = emulation running too fast) and underrun (too few = emulation running too slow).
+4. **Queue monitoring and back-pressure:** `QueuedSampleCount` reports how many samples are buffered but not yet played; `AvailableSampleCount` reports how many more the device can accept without blocking (backends without finite device space report a large value). The VICE pacing gate uses the blocking fragment write as its sound back-pressure regulator.
 
-## Refresh Strategies
+## Emulation Pacing: Gate Strategies
 
-ViceSharp supports three high-level synchronization strategies that coordinate video and audio decoupling:
+Pacing the emulation worker to real time is a pluggable strategy, the `IEmulationGate` (`src/ViceSharp.Host/Services/IEmulationGate.cs`). The `EmulationPumpService` owns the worker thread and clean-instruction cycle advancement; the gate decides, per worker iteration, how many cycles each running session advances and how the worker blocks or sleeps. Gates must never busy-spin.
 
-### Sync to Audio
+Two strategies are selectable (`src/ViceSharp.Host/Services/EmulationGateStrategies.cs`, stored ids `"semaphore"` and `"vice"`); the user picks one via the limiter settings and can switch live. The default is **VICE**.
 
-The emulation loop paces itself to maintain a steady audio buffer fill level. The audio ring buffer drives timing:
+### VICE (default)
 
-- If the buffer is more than 75% full, the emulation pauses briefly.
-- If the buffer is less than 25% full, the emulation runs uncapped until the buffer recovers.
-- Video frames are delivered whenever available, with frame skip or repeat as needed.
+Faithful to VICE's Layer-3 outer throttle (`vsync.c` / `sound.c`). Two regulators, in precedence order:
 
-This strategy produces the smoothest audio at the potential cost of occasional video judder. Recommended for music playback and general use.
+1. **Sound-buffer back-pressure** (`sound.c` `sound_flush`): when the audio device is the timing source (the SID has a live backend and a configured audio clock), the emulator advances freely and the audio backend blocks only when a completed sound fragment is written to a full device queue. Produce sound first, then write a whole fragment when one fits, otherwise retry after a short sleep. When sound is the timing source, vsync is skipped for that session.
+2. **vsync** (`vsync.c` `set_timer_speed` / `vsync_do_vsync`): compute the emulated-cycles-per-second target (master clock x speed), convert the emulated-cycle delta since an anchor into how many host ticks should have passed, and sleep the remainder on an OS waitable timer. It targets a wall-clock time derived from cycle progress, not a fixed frame rate, and self-corrects: cycles a tick could not advance persist as a deficit and are caught up on following ticks.
 
-### Sync to Video
+### Semaphore (fallback)
 
-The emulation loop paces itself to the host display's refresh rate (via VSync):
+A high-resolution OS waitable timer fires at 500 Hz and releases a `SemaphoreSlim`; the worker blocks on it (yielding the CPU) and advances the real-time cycle deficit since its anchor each tick, so the emulated clock tracks real time regardless of timer jitter.
 
-- One frame of emulation is computed per display refresh.
-- Audio samples are produced at whatever rate results from the emulation, and the ring buffer absorbs rate differences.
-- Sample rate drift is corrected by micro-adjusting the playback rate (pitch stretching within inaudible limits).
+### Warp and the Pace Limiter
 
-This strategy produces the smoothest video at the potential cost of occasional audio artifacts. Recommended for games and visual demonstrations.
+Both gates honor each session's limiter/warp state (`EmulatorRuntimeSession`):
 
-### Free-Run
-
-The emulation loop runs as fast as possible with no synchronization:
-
-- Video frames are delivered at the emulation's natural rate. The sink discards any it cannot display.
-- Audio samples are produced at the emulation's natural rate. Overflow is dropped from the ring buffer.
-- Useful for fast-forward, benchmarking, and automated testing.
-
-The user selects the strategy via a system-level setting. The default is **Sync to Audio**.
+- **Limiter rate:** `LimiterRatePercent` (default 100) scales the pacing target; the UI exposes it as a live slider and a speed-cycle button, and `EmulatorHost.SetLimiterRate` sets it remotely. With the limiter on, the session also pushes the rate into the SID (`IAudioChip.SetRelativeSpeed`) so the fixed-rate audio device paces the requested speed, mirroring VICE's `sound_set_relative_speed`.
+- **Warp** (limiter off): highest precedence. The gate applies no pacing and runs large cycle bursts flat out. Live audio output is suspended so SID fragment writes are discarded without blocking, mirroring VICE's `sound_flush` warp behavior; SID sample calculation itself continues, and an attached sound recorder keeps receiving samples through the capture tap (TR-AUDIO-WARP-001).
+- **Fast-forward ceiling:** live audio is also suspended when the limiter rate exceeds 200% (`LiveAudioMaxRatePercent`): a fixed 44100 Hz device cannot be fed faster than double speed, so beyond it the vsync regulator paces the requested rate while the live audio leaf discards.

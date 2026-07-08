@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Architecture / Reuse           |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-05-13                     |
+| Last Updated   | 2026-07-08                     |
 
 ---
 
@@ -32,9 +32,9 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 3. **No UI Framework References:** The core library shall not reference `System.Windows`, `Avalonia`, `Microsoft.Maui`, `System.Drawing`, or any UI framework assembly.
 4. **No Threading Assumptions:** The core library does not create threads. The host application controls the emulation thread and timing.
 5. **Frame-Based API:**
-   - `IEmulator.RunFrame()` advances the emulation by one video frame and returns the frame data (video buffer, audio buffer, state events).
-   - `IEmulator.RunCycles(int count)` advances by a specific number of cycles (for debugging).
-   - `IEmulator.Step()` advances by one CPU instruction.
+   - `IMachine.RunFrame()` advances the emulation by one video frame (all cycles for one frame); frame and audio data flow through the host-provided sinks/buffers.
+   - `IMachine.StepInstruction()` advances by one CPU instruction (for debugging).
+   - `IMachine.GetState()` returns the full machine state snapshot; `IMachine.Reset()` restores the power-on state.
 6. **Output Buffers:**
    - Video: The core writes to a pre-allocated pixel buffer (`Span<byte>` or `Memory<byte>`) provided by the host.
    - Audio: The core writes to a pre-allocated sample buffer provided by the host.
@@ -43,7 +43,7 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
    - The host injects input events via `IKeyboardMatrix`, `IJoystickPort`, `IMousePort`.
    - Events are queued and consumed at the correct emulation time.
 8. **Host Boundary:**
-   - Out-of-process UI shells communicate with `ViceSharp.Hosting` through TR-GRPC-BOUNDARY-001.
+   - Out-of-process UI shells communicate with `ViceSharp.Host` through TR-GRPC-BOUNDARY-001.
    - The core remains embeddable and does not know whether its host is local, headless, or serving a UI client.
 
 ### Acceptance Criteria
@@ -51,7 +51,7 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 1. `ViceSharp.Core` compiles with zero references to any UI framework (verified by dependency analysis).
 2. `ViceSharp.Core` can be consumed from a headless console application that runs the emulation and writes frame checksums to stdout.
 3. `ViceSharp.Core` can be consumed from a unit test project that validates emulation behavior without any display or audio.
-4. The `IEmulator` API is sufficient to build a complete UI (demonstrated by at least one working UI shell).
+4. The `IMachine` API is sufficient to build a complete UI (demonstrated by at least one working UI shell).
 5. The core library NuGet package size is under 5MB (excluding ROMs and test data).
 6. The core library has zero transitive dependencies beyond the .NET BCL and `ViceSharp.Abstractions`.
 7. A gRPC-hosted UI scenario can run without adding UI or transport dependencies to `ViceSharp.Core`.
@@ -72,5 +72,5 @@ A library-first design enables: (1) multiple UI frontends (Avalonia, MAUI, Blazo
 
 - The core library does not implement a "run loop" -- the host application calls `RunFrame()` at the appropriate cadence (vsync, timer, or free-running).
 - The core library exposes synchronous APIs only; the host is responsible for threading and async patterns.
-- ROM images are not bundled with the library; the host provides ROM data via `IEmulator.LoadRom()`.
-- `ViceSharp.Hosting` may expose the core through gRPC, but that transport remains outside the core library.
+- ROM images are not bundled with the library; the host provides ROM data via `IRomProvider.LoadRom(romName, architecture)`, with `IRomSet` validating per-architecture completeness.
+- `ViceSharp.Host` may expose the core through gRPC, but that transport remains outside the core library.

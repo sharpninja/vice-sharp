@@ -185,6 +185,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-IECLOAD-001 | Tracked | Functional-Requirements.md |
 | FR-IECMON-001 | Tracked | Functional-Requirements.md |
 | FR-IECSPY-001 | Tracked | Functional-Requirements.md |
+| FR-NATIVERESIDUE-001 | Tracked | Functional-Requirements.md |
 | FR-PACESEL-001 | Tracked | Functional-Requirements.md |
 | FR-PERF-RUNFRAME-001 | Tracked | Functional-Requirements.md |
 | FR-PUBSUB-001 | Tracked | Functional-Requirements.md |
@@ -254,6 +255,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MED-002 | Tracked | Testing-Requirements.md |
 | TEST-MED-003 | Tracked | Testing-Requirements.md |
 | TEST-MED-004 | Tracked | Testing-Requirements.md |
+| TEST-NATIVERESIDUE-001 | Tracked | Testing-Requirements.md |
 | TEST-PACESEL-001 | Tracked | Testing-Requirements.md |
 | TEST-PERF-RUNFRAME-001 | Tracked | Testing-Requirements.md |
 | TEST-PUBSUB-001 | Tracked | Testing-Requirements.md |

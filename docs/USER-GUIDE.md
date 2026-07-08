@@ -22,11 +22,15 @@ The build is `TreatWarningsAsErrors`; a clean checkout on a supported SDK builds
 
 ### First-run verification
 
+Run the supported test gate (the same filter the Nuke `Test` target uses):
+
 ```pwsh
-dotnet test ViceSharp.slnx --nologo
+dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"
 ```
 
-Expect the entire suite to pass. A regression here means your local environment is off (typically a missing native VICE bundle or a wrong .NET SDK) rather than a real failure.
+`./build.ps1 Test` runs the same gate. At the v1.0.2 release the baseline is Failed 0 / Passed 2594 / Skipped 21 / Total 2615 (single process). A failure here means your local environment is off (typically a missing native VICE bundle or a wrong .NET SDK) rather than a real regression.
+
+Avoid an unfiltered `dotnet test ViceSharp.slnx`: it pulls in opt-in categories (determinism replays, AI reviews, quarantined parity suites), can exceed 5 minutes, and has hung historically.
 
 ## 2. Get ROMs
 
@@ -37,9 +41,9 @@ ViceSharp does not ship Commodore ROM images. Use the data root from an installe
    $env:VICESHARP_ROM_PATH = "C:\path\to\GTK3VICE-3.8-win64"
    ```
 2. Use the native VICE layout, for example `C64/basic-901226-01.bin`, `C64/kernal-901227-03.bin`, `C64/chargen-901225-01.bin`, and `DRIVES/dos1541-325302-01+901229-05.bin`. See [ROMs.md](ROMs.md#rom-directory-structure) for the full tree.
-3. Validate the layout with `dotnet run --project src/ViceSharp.RomFetch -- --validate --rom-path "$env:VICESHARP_ROM_PATH"`.
+3. The layout is checked at machine build time: known ROMs are validated by MD5 and a mismatch fails the load. See [ROMs.md](ROMs.md#rom-validation) for the known checksums.
 
-If you have classic VICE installed, the preferred value is the VICE data root that contains `C64/` and `DRIVES/`; pointing directly at `C64/` is normalized to the parent root. If not, `ViceSharp.RomFetch` can import from a VICE install or a user-supplied URL; see [ROMs.md](ROMs.md#vicesharprromfetch-tool) for the exact commands.
+If you have classic VICE installed, the preferred value is the VICE data root that contains `C64/` and `DRIVES/`; pointing directly at `C64/` is normalized to the parent root. If not, the `ViceSharp.RomFetch` library can resolve and download ROMs from a user-supplied source (a standalone CLI is planned but does not ship yet); see [ROMs.md](ROMs.md#vicesharpromfetch-tool) for what it provides today.
 
 ## 3. Run your first machine
 
@@ -68,15 +72,15 @@ You can also boot a default C64 host (no peripherals, no YAML) by omitting `--ma
 dotnet run --project src/ViceSharp.Console -- --roms $env:VICESHARP_ROM_PATH --cycles 100000
 ```
 
-## 4. CLI launcher (VICE-name binaries)
+## 4. CLI launcher (VICE-compatible flags)
 
-`ViceSharp.Launcher` ships VICE-named entry points so muscle memory carries over. Build it once and the relevant executables drop into `src/ViceSharp.Launcher/bin/<config>/net10.0/`:
+`ViceSharp.Launcher` is a class library, not a set of executables: it supplies VICE-compatible argument parsing ([ViceArgsParser.cs](../src/ViceSharp.Launcher/ViceArgsParser.cs)) and binary-name topology dispatch ([ViceTopologyBuilder.cs](../src/ViceSharp.Launcher/ViceTopologyBuilder.cs)). VICE-named binaries (`x64.exe`, `x64sc.exe`, `c1541.exe`) are not yet shipped. Today the consumer is `ViceSharp.Console`, which parses its arguments as binary name `x64sc`, so you invoke the launcher flags through the console shell:
 
 ```pwsh
-dotnet build src/ViceSharp.Launcher
+dotnet run --project src/ViceSharp.Console -- <flags>
 ```
 
-The launcher recognises this flag set (transcribed from [ViceArgsParser.cs](../src/ViceSharp.Launcher/ViceArgsParser.cs)):
+The parser recognises this flag set (transcribed from [ViceArgsParser.cs](../src/ViceSharp.Launcher/ViceArgsParser.cs)):
 
 | Flag | Meaning |
 |------|---------|
@@ -87,25 +91,31 @@ The launcher recognises this flag set (transcribed from [ViceArgsParser.cs](../s
 | `-truedrive` | Disable true-drive emulation. |
 | `--machine-yaml <path>` / `-m <path>` | Explicit machine topology YAML. Overrides the binary-name default. |
 | `--cycles <N>` | Host-cycle budget. |
+| `-debugcart` / `+debugcart` | Enable / disable the debug cartridge ($D7FF exit signaling for regression harnesses). Note the VICE polarity: `-debugcart` enables, `+debugcart` disables. |
+| `--limitcycles <N>` / `-limitcycles <N>` | Bounded execution cycle limit (testbench style); overrides the run's cycle budget. |
+| `-autostart <path>` | Autostart a PRG file. |
+| `program.prg` (positional) | Any bare `*.prg` argument is treated as an autostart PRG (classic VICE testbench style). |
 | `-v` / `--verbose` | Verbose output. |
 | `--help` / `-h` / `-?` | Show help. |
 
-The launcher selects a topology from the binary name (see [ViceTopologyBuilder.cs](../src/ViceSharp.Launcher/ViceTopologyBuilder.cs)):
+The console entry point currently consumes `--help`, `-debugcart` / `+debugcart`, `--limitcycles`, and `-autostart` / positional `.prg` from the parsed set (plus its own `--roms`, `--machine-yaml`, `--cycles`, and `--trace` flags from section 3). Disk, cartridge, and true-drive dispatch from parsed flags lives in the launcher library (`ViceTopologyBuilder`) and is not yet wired into the console entry point; use `--machine-yaml` for drive topologies today.
 
-| Binary | Topology |
-|--------|----------|
+`ViceTopologyBuilder` selects a topology from the binary name (library dispatch, ready for when named binaries ship):
+
+| Binary name | Topology |
+|-------------|----------|
 | `x64` | C64 host. Adds drives if `-8` / `-9` is given. |
 | `x64sc` | Same as `x64` (cycle-exact path is the only path in ViceSharp). |
 | `c1541` | Standalone 1541 (disk-only tool mode). |
 | `x128`, `xvic`, `xpet`, `xplus4`, `xcbm2`, `xcbm5x0`, `vsid`, `petcat`, `cartconv` | Reserved. Throws `NotSupportedException` for now. |
 
-Example: VICE-style "boot the C64 with a disk in drive 8 and true-drive emulation on":
+Example: VICE testbench style "run a PRG with the debug cartridge and a bounded cycle budget":
 
 ```pwsh
-.\src\ViceSharp.Launcher\bin\Debug\net10.0\x64sc.exe -8 .\disks\game.d64 +truedrive --cycles 5000000
+dotnet run --project src/ViceSharp.Console -- --roms $env:VICESHARP_ROM_PATH -debugcart -limitcycles 5000000 testcase.prg
 ```
 
-Unknown flags are not fatal: the launcher collects them in `ViceArgs.Unknown` and proceeds, matching classic VICE's lenient behaviour. See [VICE-MIGRATION.md](VICE-MIGRATION.md) for which classic flags are currently in this bucket.
+Unknown flags are not fatal: the parser collects them in `ViceArgs.Unknown` and proceeds, matching classic VICE's lenient behaviour. See [VICE-MIGRATION.md](VICE-MIGRATION.md) for which classic flags are currently in this bucket.
 
 ## 5. Machine YAML topologies
 
@@ -150,12 +160,12 @@ Add a second drive by uncommenting the `drive-9` block in the sample. Add a thir
 
 Two ways to attach a D64:
 
-- **CLI**: `x64sc.exe -8 path\to\disk.d64`. The launcher builds a transient YAML topology with the drive declared as a peripheral.
-- **YAML**: set `diskImagePath:` on the drive peripheral. See section 5 above.
+- **YAML**: set `diskImagePath:` on the drive peripheral. See section 5 above. This is the working path today.
+- **CLI (library dispatch, binaries pending)**: `x64sc -8 path\to\disk.d64` builds a transient YAML topology with the drive declared as a peripheral via `ViceTopologyBuilder`, but VICE-named binaries are not yet shipped and the console entry point does not consume `-8` yet (see section 4).
 
 D64 mounts go through `D64DiskImageDevice`. Sector reads are deterministic and exercised by the regression suite. Current limitations to be aware of:
 
-- Sector-stream fast path is the default. Cycle-accurate GCR bit-stream playback (relevant to copy-protected images and fastloader tricks) is deferred and tracked under future drive work.
+- Sector-stream fast path (`Buffered`) is the default when `fidelity:` is omitted. Under `fidelity: TrueDevice`, GCR track encoding and byte-level playback are implemented (`GcrCodec` plus `C1541DriveMechanismDevice`): the drive raises byte-ready through VIA2 at per-speed-zone intervals (32/30/28/26 cycles). Sub-byte bit-cell effects (weak bits, killer tracks used by some copy protections) are not modeled.
 - 1541 head step + motor control are wired (4-phase Gray accumulator on VIA2 PB0/PB1, motor on PB2); seek timing matches the substrate's quarter-track resolution.
 - D64 stream load, sector writes, and commit-to-stream are covered; launcher-level
   save-as workflows and non-D64 formats are still future work.
@@ -171,7 +181,7 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | 1541 drive (true-drive: 6502 + VIA1 + VIA2 + IEC) | Bounded | IEC, head step, motor, D64 sector reads/writes, and stream commit are wired; drive-CPU lockstep and full KERNAL load validation remain Phase 1 work. |
 | CIA1 / CIA2 timers, TOD, ports | Working | Full solution test passes. |
 | SID hard sync + ring modulation | Working | Voice i syncs from voice ((i+2) % 3); triangle XOR with sync-source MSB. |
-| SID audio backend wiring | Working (off by default) | `Sid6581(IBus, IAudioBackend?)`; pass an `IAudioBackend` to receive 256-sample batches. |
+| SID audio backend wiring | Working (default on desktop) | The Avalonia desktop app enables a WinMM audio backend by default on Windows (it sets `VICESHARP_AUDIO=1` at startup; set `VICESHARP_AUDIO=0` to force silence). Headless and test hosts stay silent. Library consumers pass an `IAudioBackend` to `Sid6581(IBus, IAudioBackend?)` to receive 256-sample batches. |
 | Standard 8K / 16K cartridge mapping (raw + CRT) | Working | Image normalises to ROML/ROMH and drives the live C64 memory map with GAME/EXROM behaviour; broader mapper families are post-MVP. |
 | Tape (TAP pulse reads) | Bounded | TAP pulse stream, CIA1 FLAG integration, builder wiring, rewind, and seek are present; spin-up/spin-down timing and record state remain Phase 1 work. |
 | Snapshot save/load | Bounded | 64K + public CPU state round-trips; full chip, timing, and resume state remain Phase 1 work. |
@@ -181,6 +191,15 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | Cartridge ports / user port as live CPU attachment | Substrate ready | `IInterSystemBus` supports `UserPort` and `CartPort` bus kinds; chip-level bindings are in for CIA2 / VIA1 / VIA2 / GAME / EXROM. Cartridge-as-running-CPU sample topology is future work. |
 | C128 / VIC-20 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException`. |
 | Host UI (Avalonia, monitor, gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Launcher-integrated always-on UI remains separate work. |
+
+### Warp, speed limiter, and speed controls
+
+The Avalonia desktop UI exposes VICE-style speed controls:
+
+- **Warp mode** runs the emulator uncapped, same semantics as VICE `-warp`; live sound is discarded while warp is on. Toggle it with **Alt+W**, the System menu's **Warp mode** item, or the Warp toggle in the Settings **Limiter** section.
+- **Limiter slider** (Settings > Limiter) sets a live target speed percentage; the emulator paces to the slider target. Past 200% live sound is suspended.
+- **Speed-cycle button** jumps between 100% (sound on) and 200%.
+- The **status bar** shows the current state as `Limiter 100%` (or the active percentage) and `WARP` while warp is on.
 
 ### Media capture and recording
 
@@ -219,19 +238,19 @@ grpcurl -plaintext -d "{}" $attach.endpoint vice_sharp.v1.DiagnosticsService/Get
 
 ## 9. Troubleshooting
 
-**`Failed to load multi-system YAML: ...`** — the loader is strict about schema. Re-check `kind:` (case-sensitive: `C64`, `C1541`), `busAttachments:` references resolve to a `buses:` entry, and `deviceNumber:` is 8..11.
+**`Failed to load multi-system YAML: ...`** - the loader is strict about schema. Re-check `kind:` (case-sensitive: `C64`, `C1541`), `busAttachments:` references resolve to a `buses:` entry, and `deviceNumber:` is 8..11.
 
-**Missing ROMs / `FileNotFoundException` on kernal/basic/chargen** — `VICESHARP_ROM_PATH` is unset or pointing at the wrong directory. Verify the layout in [ROMs.md](ROMs.md#rom-directory-structure).
+**Missing ROMs / `FileNotFoundException` on kernal/basic/chargen** - `VICESHARP_ROM_PATH` is unset or pointing at the wrong directory. Verify the layout in [ROMs.md](ROMs.md#rom-directory-structure).
 
-**Drive sits idle / `PC` never moves** — true-drive emulation may be off. In YAML, set `fidelity: TrueDevice`. From the launcher, pass `+truedrive`. The CPU on a buffered drive doesn't run by design.
+**Drive sits idle / `PC` never moves** - true-drive emulation may be off. In YAML, set `fidelity: TrueDevice` (the launcher library's `+truedrive` flag maps to the same setting). The CPU on a buffered drive doesn't run by design.
 
-**`Native VICE failed to create a machine`** — the native shim couldn't allocate a VICE instance. On Windows this is usually disk pressure (the shim writes scratch state) or a missing native bundle. Free space and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist, or rebuild the shim with `pwsh native/build-vice-shim.ps1` (needs MSYS2 + gcc). Maintainers can package a rebuilt bundle with `pwsh tools/Package-NativeViceBinary.ps1`.
+**`Native VICE failed to create a machine`** - the native shim couldn't allocate a VICE instance. On Windows this is usually disk pressure (the shim writes scratch state) or a missing native bundle. Free space and confirm `native/vice_x64.dll`, `native/libiconv-2.dll`, and `native/zlib1.dll` exist, or rebuild the shim with `pwsh native/build-vice-shim.ps1` (needs MSYS2 + gcc). Maintainers can package a rebuilt bundle with `pwsh tools/Package-NativeViceBinary.ps1`.
 
-**`SetDriveTrueEmulation` returns non-zero** — VICE rejected the resource set. The most common cause is an out-of-range unit number; valid units are 8..11.
+**`SetDriveTrueEmulation` returns non-zero** - VICE rejected the resource set. The most common cause is an out-of-range unit number; valid units are 8..11.
 
-**Wrong-sized D64 / load errors** — only the canonical 174,848-byte D64 layout (35 tracks, no error info block) is fully exercised. Larger images may load but sector mapping may be wrong; non-D64 disk formats (G64, D71, D81) are not yet supported.
+**Wrong-sized D64 / load errors** - only the canonical 174,848-byte D64 layout (35 tracks, no error info block) is fully exercised. Larger images may load but sector mapping may be wrong; non-D64 disk formats (G64, D71, D81) are not yet supported.
 
-**Em-dashes in commit messages or doc PRs** — repo policy is to use a colon, hyphen, semicolon, or parentheses instead. CI does not enforce this but reviews will flag it.
+**Em-dashes in commit messages or doc PRs** - repo policy is to use a colon, hyphen, semicolon, or parentheses instead. CI does not enforce this but reviews will flag it.
 
 ## Where to file regressions
 

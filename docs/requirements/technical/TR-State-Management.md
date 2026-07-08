@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Reliability / Consistency      |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-04-13                     |
+| Last Updated   | 2026-07-08                     |
 
 ---
 
@@ -16,6 +16,8 @@
 **Title:** Mutation Queue with ACID State Transactions and Configurable State Window
 **Priority:** P0 -- Critical
 **Category:** Reliability / Architecture
+
+> **Implementation-status note (2026-07-08):** The implemented mechanism is `IMutationQueue` (double-buffered: worker writes the active buffer, consumers read the committed buffer) plus `ISnapshot`/`ISnapshotStore` for durable state, with the tick-history capture (TR-TICKHIST-*, last-100-ticks write-delta recording) providing the rewind/debug window. No `IStateManager` or `TransactionGranularity` API exists; the delta/keyframe state-window ring buffer described below is an original design sketch that remains unimplemented.
 
 ### Description
 
@@ -47,7 +49,7 @@ ACID transactions ensure that a snapshot taken at any point captures a consisten
 4. **Transaction Boundary:**
    - For instruction-level accuracy: one transaction per instruction.
    - For cycle-level accuracy: one transaction per half-cycle (per TR-CYCLE-001).
-   - The granularity is configurable via `IStateManager.TransactionGranularity`.
+   - Granularity is fixed by the machine's tick loop; a configurable granularity API (the sketched `IStateManager.TransactionGranularity`) was never implemented.
 
 ### Acceptance Criteria
 

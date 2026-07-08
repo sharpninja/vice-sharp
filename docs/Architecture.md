@@ -2,53 +2,66 @@
 
 ## Design Philosophy
 
-ViceSharp is a **library-first** emulator: the emulation engine is a set of composable .NET libraries. UI shells (console, Avalonia, future MAUI/WebAssembly) are thin consumers.
+ViceSharp is a **library-first** emulator: the emulation engine is a set of composable .NET libraries. UI shells (console, Avalonia desktop, and the platform host shells) are thin consumers.
 
 ### Core Principles
 
-1. **POCO model** — All emulator state lives in plain C# structs and records. No base classes, no ORM, no serialization attributes on hot-path types.
-2. **Zero-allocation hot path** — The per-cycle emulation loop allocates zero managed objects. All transient data uses stack allocation, spans, or arena-pooled buffers.
-3. **Deterministic** — Given identical initial state and input sequence, execution is bit-exact reproducible. This enables snapshot comparison, replay, and regression testing.
-4. **Trim-aware managed runtime** — No reflection on the hot path. Source generators replace runtime discovery where useful. Supported desktop packaging is self-contained JIT + ReadyToRun rather than native ahead-of-time publishing.
-5. **MVVM** — ViewModels reference only `ViceSharp.Abstractions`. Views contain zero logic. The emulation engine has no UI dependencies.
-6. **Host/UI boundary** — UI control, media, session, input, snapshot, capture, and diagnostic operations communicate with `ViceSharp.Hosting` through versioned gRPC services or narrow gRPC-backed client abstractions. The host owns emulator sessions, devices, media, snapshots, diagnostics, and local render-source composition.
+1. **POCO model**: All emulator state lives in plain C# structs and records. No base classes, no ORM, no serialization attributes on hot-path types.
+2. **Zero-allocation hot path**: The per-cycle emulation loop allocates zero managed objects. All transient data uses stack allocation, spans, or arena-pooled buffers.
+3. **Deterministic**: Given identical initial state and input sequence, execution is bit-exact reproducible. This enables snapshot comparison, replay, and regression testing.
+4. **Trim-aware managed runtime**: No reflection on the hot path. Source generators replace runtime discovery where useful. Supported desktop packaging is self-contained JIT + ReadyToRun rather than native ahead-of-time publishing.
+5. **MVVM**: ViewModels reference only `ViceSharp.Abstractions`. Views contain zero logic. The emulation engine has no UI dependencies.
+6. **Host/UI boundary**: UI control, media, session, input, snapshot, capture, and diagnostic operations communicate with `ViceSharp.Host` through versioned gRPC services or narrow gRPC-backed client abstractions. The host owns emulator sessions, devices, media, snapshots, diagnostics, and local render-source composition.
 
 ## Assembly Structure
 
 ```
-ViceSharp.Abstractions     33+ interfaces, value types, attributes
+ViceSharp.Abstractions     50 interface files: interfaces, value types, attributes
     |
-    +-- ViceSharp.Core         Bus, clock, mutation queue, pub/sub, snapshots
+    +-- ViceSharp.Core         Bus, clock, mutation queue, pub/sub, snapshots, media recorders
     |       |
-    |       +-- ViceSharp.Chips          CPU, VIC-II, SID, CIA, VIA, PLA stubs
+    |       +-- ViceSharp.Chips          CPU, VIC-II, SID, CIA, VIA, PLA implementations
     |       |
-    |       +-- ViceSharp.Architectures  Machine definitions (C64, VIC-20, etc.)
+    |       +-- ViceSharp.Architectures  Machine definitions (C64, C1541 drive, ad-hoc/multisystem)
     |
     +-- ViceSharp.SourceGen    Roslyn source generator (device registration)
     |
     +-- ViceSharp.Monitor      Debugger/monitor engine
     |
-    +-- ViceSharp.Hosting      Generic host integration, service registration, gRPC host boundary
+    +-- ViceSharp.Host         Composition boundary: emulator sessions, service registration, gRPC host surface
+    |       |
+    |       +-- ViceSharp.Host.Android / .iOS / .MacOS / .Xbox   Platform host shells
     |
     +-- ViceSharp.Protocol     gRPC/protobuf contracts and generated client/server types
+    |
+    +-- ViceSharp.Launcher     VICE-style command-line parsing and machine topology building
     |
     +-- ViceSharp.Console      CLI/reference shell
     |
     +-- ViceSharp.Avalonia     Desktop UI (Avalonia 12.x)
     |
+    +-- ViceSharp.AdhocHelper  Ad-hoc machine configuration helper UI (Avalonia)
+    |
     +-- ViceSharp.RomFetch     ROM download/validation tool
+    |
+    +-- ViceSharp.Core.Package Packaging shell for the ViceSharp.Core NuGet bundle
+                               (Abstractions + Chips + RomFetch + Core + Architectures)
 ```
 
 ## Host/UI gRPC Boundary
 
-`ViceSharp.Hosting` is the composition boundary for UI-facing emulator sessions. It creates machines from architecture descriptors, owns media and state services, and exposes control, remote output, input, media, snapshot, capture, and diagnostic operations through TR-GRPC-BOUNDARY-001.
+`ViceSharp.Host` is the composition boundary for UI-facing emulator sessions. It creates machines from architecture descriptors, owns media and state services, and exposes control, remote output, input, media, snapshot, capture, and diagnostic operations through TR-GRPC-BOUNDARY-001.
 
-UI control clients consume the host contract:
-- Lifecycle commands use `HostControlService`.
-- Remote video/audio and host events stream through `HostOutputService`.
-- Keyboard and joystick events are normalized through `HostInputService`.
-- Disk, tape, and cartridge attach/eject operations use `HostMediaService`.
-- Snapshot, screenshot, and diagnostics commands use `HostStateService`.
+UI control clients consume the nine proto services defined in `src/ViceSharp.Protocol/Protos/emulator_host.proto`:
+- `EmulatorHost`: session lifecycle and execution control (create session, status, start/pause/resume, cold/warm reset, autostart, step/rewind by cycle or frame, limiter rate, shutdown).
+- `SettingsService`: settings profiles (list, get, update) and resource validation.
+- `MediaService`: disk/tape/cartridge attach, eject, listing, and media status streaming.
+- `VideoService`: video status, single-frame fetch, and frame streaming for remote UIs.
+- `InputService`: normalized keyboard/joystick state, input state queries, and keyboard-map selection.
+- `MonitorService`: debugger surface (monitor commands, registers, disassembly, breakpoints, memory read/write, tick-history and at-tick state queries).
+- `SnapshotService`: snapshot capture and restore.
+- `CaptureService`: screenshots, sound recording, and video recording (see Media Capture below).
+- `DiagnosticsService`: host info, session enumeration, and performance snapshots/streams.
 
 The in-process Avalonia renderer is a narrow host-owned exception for frame presentation: it may bind directly to a local emulator/frame source so local rendering does not have to route frame buffers through gRPC. That binding belongs in the host/composition or render-surface layer, not in ViewModels, and it does not allow UI code to mutate emulator devices.
 
@@ -60,10 +73,10 @@ Every hardware component is an `IDevice` with a unique `DeviceId`. Devices are r
 
 ```
 IDevice
-    IClockedDevice          — receives clock ticks
-    IAddressSpace           — maps address ranges on the bus
-    IInterruptSource        — can raise IRQ/NMI
-    IPeripheral             — external device (drive, datasette)
+    IClockedDevice          - receives clock ticks
+    IAddressSpace           - maps address ranges on the bus
+    IInterruptSource        - can raise IRQ/NMI
+    IPeripheral             - external device (drive, datasette)
 ```
 
 Devices are wired together by an `IArchitecture` which describes:
@@ -87,10 +100,10 @@ For the C64:
 All state changes flow through an `IMutationQueue`. Each mutation is a small struct describing: source device, target address/field, old value, new value, cycle timestamp.
 
 Benefits:
-- **Auditing** — full history of every state change
-- **Undo** — reverse mutations for debugging
-- **Determinism** — replay mutations to reproduce exact state
-- **Networking** — serialize mutation stream for netplay
+- **Auditing**: full history of every state change
+- **Undo**: reverse mutations for debugging
+- **Determinism**: replay mutations to reproduce exact state
+- **Networking**: serialize mutation stream for netplay
 
 The queue is double-buffered: the emulation thread writes to the active buffer while consumers (UI, debugger, recorder) read the committed buffer.
 
@@ -98,24 +111,20 @@ The queue is double-buffered: the emulation thread writes to the active buffer w
 
 High-frequency inter-device communication (interrupt signals, DMA requests, bus contention notifications) uses a lock-free pub/sub system.
 
-- `IMessagePool` — pre-allocates message slots to avoid allocation
-- `PayloadArena` — bump allocator for variable-size payloads within a frame
-- `MessageHandle` — reference-counted handle into the pool
-- `IPubSub` — topic-based publish/subscribe with zero-copy delivery
+- `IMessagePool`: pre-allocates message slots to avoid allocation
+- `PayloadArena`: bump allocator for variable-size payloads within a frame
+- `MessageHandle`: reference-counted handle into the pool
+- `IPubSub`: topic-based publish/subscribe with zero-copy delivery
 
 The pool and arena reset at frame boundaries, making per-frame allocation effectively free.
 
 ## State and Snapshots
 
 The `ISnapshot` interface captures the complete machine state as a flat byte array. Snapshots are:
-- **Serializable** — save/load to disk
-- **Comparable** — byte-exact comparison for determinism testing
-- **Diffable** — compute delta between two snapshots for incremental save
+- **Serializable**: save/load to disk
+- **Comparable**: byte-exact comparison for determinism testing
 
-The `StateWindow` concept allows configuring how much history is retained:
-- Snapshot interval (e.g., every N frames)
-- Maximum history depth
-- Memory budget
+The `StateWindow` concept (configurable snapshot interval, history depth, and memory budget) is an unimplemented design proposal; see `docs/StateWindow.md`. The shipped rewind surface is the tick-history write-delta capture (`TickHistoryRecorder` in `ViceSharp.Host`, exposed through `MonitorService`).
 
 ## Clock and Timing
 
