@@ -173,13 +173,31 @@ sealed partial class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(PackAllNugetPackages);
 
+    /// <summary>
+    /// The vX.Y.Z release tag on HEAD, or null. When present it wins the pack
+    /// version: PublishNuget's gate requires packed versions to equal the tag
+    /// (run 1054 failed exactly there - GitVersion's commit-height scheme
+    /// yields X.Y.&lt;height&gt;, not the tagged X.Y.Z).
+    /// </summary>
+    string? HeadReleaseTagVersion()
+    {
+        var tags = ProcessTasks.StartProcess("git", "tag --points-at HEAD", RootDirectory, logOutput: false)
+            .AssertZeroExitCode()
+            .Output.Select(o => o.Text.Trim())
+            .Where(t => System.Text.RegularExpressions.Regex.IsMatch(t, @"^v\d+\.\d+\.\d+$"))
+            .ToList();
+        return tags.Count == 1 ? tags[0].TrimStart('v') : null;
+    }
+
     // Shared by PackNuget (local flow, after Compile) and PublishNuget (the
     // Nuke-generated single-job release pipeline, which restores/builds and
     // packs on one agent because the Azure generator never downloads
     // artifacts between jobs - its download side is unimplemented upstream).
     void PackAllNugetPackages()
     {
-            var version = string.IsNullOrWhiteSpace(PackageVersionOverride) ? MsiVersion : PackageVersionOverride;
+            var version = string.IsNullOrWhiteSpace(PackageVersionOverride)
+                ? HeadReleaseTagVersion() ?? MsiVersion
+                : PackageVersionOverride;
             PackagesOutputDirectory.CreateOrCleanDirectory();
 
             DotNetPack(s => s
