@@ -5,7 +5,7 @@
 1. Read `AGENTS-README-FIRST.yaml` in the repo root before any other repo work. It contains the current MCP endpoint data, workspace marker, and rendered runtime instructions.
 2. For session bootstrap, session-log turn workflow, TODO operations, requirements operations, and helper command sequence, follow `AGENTS-README-FIRST.yaml`.
 3. Do not treat MCP session startup as a substitute for reading `AGENTS-README-FIRST.yaml`.
-4. Read `docs/handoff.md` when resuming interrupted ViceSharp work. There is no root `handoff.md`; the canonical handoff is under `docs/`.
+4. Read `HANDOFF.md` in the repo root when resuming interrupted ViceSharp work. It is the single canonical handoff (the former `docs/handoff.md` was retired 2026-07-09).
 
 On every subsequent user message:
 
@@ -19,7 +19,7 @@ On every subsequent user message:
 3. Use helper tools or plugins for session log, TODO, requirements, import/export, and traceability operations. Do not make raw REST calls, direct DB edits, or direct YAML state edits when a supported helper/tool exists.
 4. Persist session-log updates immediately after each meaningful change: turn creation, action append, decision, requirement, blocker, file/context update, validation result, commit, or push.
 5. Capture rich turn detail: interpretation, response, status, actions with type/status/filePath, contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and relevant processing dialog.
-6. Follow workspace conventions in this file, `README.md`, `docs/plan.md`, `docs/handoff.md`, and `.github/copilot-instructions.md`.
+6. Follow workspace conventions in this file, `README.md`, `docs/plan.md`, `HANDOFF.md`, and `.github/copilot-instructions.md`.
 7. In Codex Desktop, use PowerShell.Mcp for command execution. Open or reuse a PowerShell.Mcp console, then invoke git, dotnet, Nuke, Bash, Node, PowerShell, and file-system commands through `mcp__powershell.invoke_expression`.
 8. If Bash is required from PowerShell.Mcp, invoke explicit Git Bash at `C:\Program Files\Git\bin\bash.exe`; do not rely on bare `bash`.
 9. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
@@ -37,7 +37,7 @@ On every subsequent user message:
 - `tests/ViceSharp.Benchmarks/` - performance probes and benchmarks.
 - `tests/ViceSharp.AiReview.Tests/` - AI review harness tests.
 - `build/Build.cs` and `build.ps1` - Nuke build targets.
-- `docs/handoff.md` - canonical handoff and recent session continuity notes.
+- `HANDOFF.md` (repo root) - canonical handoff and recent session continuity notes.
 - `docs/plan.md` - historical/current plan context.
 - `docs/requirements/` - canonical FR/TR/TEST requirements, source manifests, and traceability artifacts.
 - `docs/Project/` - generated/exported project requirements and wiki mirrors.
