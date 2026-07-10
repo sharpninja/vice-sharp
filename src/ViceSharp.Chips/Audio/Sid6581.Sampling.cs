@@ -395,44 +395,65 @@ public partial class Sid6581
 
             _sampleOffset = nextSampleOffset & FixpMask;
 
-            int firOffset = _sampleOffset * _firRes >> FixpShift;
-            int firOffsetRmd = _sampleOffset * _firRes & FixpMask;
-            int firStart = firOffset * _firN;                       // base index into _fir
-            int sampleStart = _sampleIndex - _firN - 1 + RingSize;  // base index into _ring
-
-            // Convolution with filter impulse response.
-            int v1 = 0;
-            for (int j = 0; j < _firN; j++)
-            {
-                v1 += ring[sampleStart + j] * fir[firStart + j];
-            }
-
-            // Use next FIR table, wrap around to first FIR table using next sample.
-            if (++firOffset == _firRes)
-            {
-                firOffset = 0;
-                ++sampleStart;
-            }
-            firStart = firOffset * _firN;
-
-            // Convolution with filter impulse response.
-            int v2 = 0;
-            for (int k = 0; k < _firN; k++)
-            {
-                v2 += ring[sampleStart + k] * fir[firStart + k];
-            }
-
-            // Linear interpolation.
-            // fir_offset_rmd is equal for all samples, it can thus be factorized out:
-            // sum(v1 + rmd*(v2 - v1)) = sum(v1) + rmd*(sum(v2) - sum(v1))
-            int v = v1 + (int)((uint)firOffsetRmd * (uint)(v2 - v1) >> FixpShift);
-
-            v >>= FirShift;
-
-            buf[s] = AmplifyToPcm16(v);
+            buf[s] = AmplifyToPcm16(ConvolveResampleSample(_sampleOffset));
         }
 
         return s;
+    }
+
+    /// <summary>
+    /// reSID clock_resample dual-FIR convolution + linear interpolation
+    /// (sid.cc:1002-1032), for the ring state at the current _sampleIndex and the
+    /// given fractional sample_offset. Shared by the buffered (pull) resampler and
+    /// the live-audio (push) tail so both emit the identical short stream.
+    /// PLAN-VICEPARITY-001 (live-audio wiring slice).
+    /// </summary>
+    private int ConvolveResampleSample(int sampleOffset)
+    {
+        short[] ring = _ring!;
+        short[] fir = _fir!;
+
+        int firOffset = sampleOffset * _firRes >> FixpShift;
+        int firOffsetRmd = sampleOffset * _firRes & FixpMask;
+        int firStart = firOffset * _firN;                       // base index into _fir
+        int sampleStart = _sampleIndex - _firN - 1 + RingSize;  // base index into _ring
+
+        // Convolution with filter impulse response.
+        int v1 = 0;
+        for (int j = 0; j < _firN; j++)
+        {
+            v1 += ring[sampleStart + j] * fir[firStart + j];
+        }
+
+        // Use next FIR table, wrap around to first FIR table using next sample.
+        if (++firOffset == _firRes)
+        {
+            firOffset = 0;
+            ++sampleStart;
+        }
+        firStart = firOffset * _firN;
+
+        int v2 = 0;
+        for (int k = 0; k < _firN; k++)
+        {
+            v2 += ring[sampleStart + k] * fir[firStart + k];
+        }
+
+        // Linear interpolation. fir_offset_rmd is equal for all samples, so it can
+        // be factored out: sum(v1 + rmd*(v2 - v1)) = sum(v1) + rmd*(sum(v2)-sum(v1)).
+        int v = v1 + (int)((uint)firOffsetRmd * (uint)(v2 - v1) >> FixpShift);
+        return v >> FirShift;
+    }
+
+    /// <summary>
+    /// Push one cycle of chip output into the resampler ring. Shared by the
+    /// buffered resampler loop and the live-audio tail.
+    /// </summary>
+    private void PushResampleRingSample(short pcm)
+    {
+        _ring![_sampleIndex] = pcm;
+        _ring[_sampleIndex + RingSize] = pcm;
+        _sampleIndex = (_sampleIndex + 1) & RingMask;
     }
 }
 

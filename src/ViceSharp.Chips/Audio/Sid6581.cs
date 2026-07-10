@@ -33,7 +33,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// True once a backend is attached AND <see cref="ConfigureAudioClock"/> has run
     /// (so the SID is streaming samples and can be the emulation timing source).
     /// </summary>
-    public bool IsAudioTimingSource => _audioBackend is not null && _audioTicksPerSample > 0.0;
+    public bool IsAudioTimingSource => _audioBackend is not null && _liveAudioArmed;
 
     // Waveform types
     public enum Waveform { Triangle = 0x04, Sawtooth = 0x08, Pulse = 0x40, Noise = 0x80, None = 0x00 }
@@ -1041,18 +1041,18 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     private readonly float[] _sampleBuffer = new float[256];
     private int _sampleBufferLen;
 
-    // Audio sample-rate downconversion. The SID is clocked (Tick) at
-    // masterClockHz / ClockDivisor; output runs at SamplingRate (44.1 kHz).
-    // _audioTicksPerSample is how many Tick()s elapse per emitted sample
-    // (e.g. PAL: (985248/1)/44100 ~= 22.34). A fractional accumulator emits
-    // one sample whenever it crosses that threshold, sampling the evolving
-    // synthesis state. Zero (the default) disables emission entirely - so a
-    // SID built without an audio backend behaves exactly as before and never
-    // touches the audio path (preserving native cycle parity).
-    private double _audioTicksPerSample;
-    private double _audioSampleAccumulator;
-    private double _audioMasterClockHz;
-    private double _audioRelativeSpeedPercent = 100.0;
+    // Live-audio emission drives the reSID fixed-point resampler (SAMPLE_RESAMPLE,
+    // matching VICE x64sc) one cycle per Tick: the ring is pushed each cycle and a
+    // Kaiser-FIR sample is emitted at each fixed-point sample boundary. Armed only
+    // when an audio backend exists AND ConfigureAudioClock ran (a SID without a
+    // backend never touches the audio path, preserving cycle parity). The buffered
+    // ClockBuffered path and the live tail share the same engine (Sid6581.Sampling.cs)
+    // so they emit identical streams. PLAN-VICEPARITY-001 (live-audio wiring slice).
+    private bool _liveAudioArmed;
+    private int _liveSampleOffset;      // fixed-point 16.16 sample_offset (live)
+    private int _liveDeltaTRemaining;   // cycles left before the next convolution
+    private double _liveMasterClockHz;
+    private double _liveRelativeSpeedPercent = 100.0;
 
     public Sid6581(IBus bus) : this(bus, audioBackend: null) { }
 
@@ -1109,14 +1109,25 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         if (masterClockHz <= 0.0)
         {
-            _audioMasterClockHz = 0.0;
-            _audioTicksPerSample = 0.0;
+            _liveMasterClockHz = 0.0;
+            _liveAudioArmed = false;
             return;
         }
 
-        _audioMasterClockHz = masterClockHz;
-        RecomputeAudioCadence();
-        _audioSampleAccumulator = 0.0;
+        _liveMasterClockHz = masterClockHz;
+        // Configure the reSID resampler engine (SAMPLE_RESAMPLE, matching VICE
+        // x64sc's default) at the SID tick rate, then arm the per-Tick live tail.
+        // The live path always resamples (the SamplingMethod property is the
+        // parity/buffered surface); forcing Resample guarantees the ring/FIR are
+        // allocated for EmitLiveResampleTick.
+        SetSamplingParameters(masterClockHz / ClockDivisor, SidSamplingMethod.Resample, SamplingRate);
+        RecomputeLiveCadence();
+        _liveSampleOffset = 0;
+        _liveDeltaTRemaining = 0;
+        // Arm the per-Tick live tail only when a backend is present: a SID with no
+        // backend stays fully inert (no emission, no buffer flush) even after the
+        // audio clock is configured (TEST-SIDAUDIO-001 inert-without-backend).
+        _liveAudioArmed = _audioBackend is not null;
     }
 
     /// <summary>
@@ -1136,15 +1147,22 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         if (speedPercent <= 0.0)
             return;
 
-        _audioRelativeSpeedPercent = Math.Min(speedPercent, 200.0);
-        if (_audioMasterClockHz > 0.0)
-            RecomputeAudioCadence();
+        _liveRelativeSpeedPercent = Math.Min(speedPercent, 200.0);
+        if (_liveMasterClockHz > 0.0)
+            RecomputeLiveCadence();
     }
 
-    private void RecomputeAudioCadence()
+    // Warp: scale the resampler's 16.16 cycles-per-sample by the relative speed
+    // (VICE scales the delta budget, sound.c:1067). reSID has no speed knob, so a
+    // faster speed decimates more cycles per output sample = pitch shift, exactly
+    // like VICE fast-forward. Only the live decimation ratio changes; the FIR
+    // table and synthesis state are untouched, so parity/determinism are
+    // unaffected (the parity surface calls SetSamplingParameters directly).
+    private void RecomputeLiveCadence()
     {
-        var sidTickHz = _audioMasterClockHz / ClockDivisor;
-        _audioTicksPerSample = _audioRelativeSpeedPercent / 100.0 * sidTickHz / SamplingRate;
+        double sidTickHz = _liveMasterClockHz / ClockDivisor;
+        _cyclesPerSample =
+            (int)(_liveRelativeSpeedPercent / 100.0 * sidTickHz / SamplingRate * (1 << 16) + 0.5);
     }
 
     /// <summary>
@@ -1156,12 +1174,42 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     {
         var sample = GenerateSample();
         if (_audioBackend is null) return;
+        AppendSampleToBuffer(sample);
+    }
 
+    // Buffer a float sample and flush to the backend in 256-sample batches.
+    // Shared by GenerateSampleAndOutput and the live resampler tail.
+    private void AppendSampleToBuffer(float sample)
+    {
         _sampleBuffer[_sampleBufferLen++] = sample;
         if (_sampleBufferLen >= _sampleBuffer.Length)
         {
-            _audioBackend.SubmitSamples(_sampleBuffer.AsSpan(0, _sampleBufferLen));
+            _audioBackend!.SubmitSamples(_sampleBuffer.AsSpan(0, _sampleBufferLen));
             _sampleBufferLen = 0;
+        }
+    }
+
+    // Live-audio resampler tail: drives the reSID SAMPLE_RESAMPLE engine one cycle
+    // per Tick (a "push" decomposition of ClockResample's "pull" loop). Pushes this
+    // cycle's chip output into the ring, and at each fixed-point sample boundary
+    // convolves the Kaiser FIR and emits the amplified/clipped sample. Produces the
+    // identical short stream as ClockBuffered (asserted by the equivalence test).
+    // Zero allocation. PLAN-VICEPARITY-001 (live-audio wiring slice).
+    private void EmitLiveResampleTick()
+    {
+        // Begin a new output-sample window when the previous one completed.
+        if (_liveDeltaTRemaining == 0)
+        {
+            int next = _liveSampleOffset + _cyclesPerSample;
+            _liveDeltaTRemaining = next >> 16;
+            _liveSampleOffset = next & 0xFFFF;
+        }
+
+        PushResampleRingSample(ClipPcm16(_cycleExtFilterOutput));
+
+        if (--_liveDeltaTRemaining == 0)
+        {
+            AppendSampleToBuffer(AmplifyToPcm16(ConvolveResampleSample(_liveSampleOffset)) / 32768.0f);
         }
     }
 
@@ -1189,17 +1237,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         AgeBusValue();
 
         // Live-audio emission: once a backend is attached and the audio clock is
-        // configured, sample the committed chain output at 44.1 kHz via a
-        // fractional tick:sample accumulator. Inert (no allocation, no call)
-        // when audio is not configured, so parity rigs are unaffected.
-        if (_audioBackend is not null && _audioTicksPerSample > 0.0)
+        // configured, drive the reSID SAMPLE_RESAMPLE engine one cycle per Tick.
+        // Inert (no allocation, no call) when audio is not configured, so parity
+        // rigs are unaffected.
+        if (_liveAudioArmed)
         {
-            _audioSampleAccumulator += 1.0;
-            if (_audioSampleAccumulator >= _audioTicksPerSample)
-            {
-                _audioSampleAccumulator -= _audioTicksPerSample;
-                GenerateSampleAndOutput();
-            }
+            EmitLiveResampleTick();
         }
     }
 
