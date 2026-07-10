@@ -916,6 +916,98 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             }
         }
 
+        /// <summary>
+        /// reSID EnvelopeGenerator::clock(cycle_count delta_t) - batched
+        /// (envelope.h:200-304), used only by the SAMPLE_FAST batched clock.
+        /// It deliberately DROPS the envelope/exponential/rate-counter pipelines
+        /// (the single-cycle Clock models them), keeping only the state_pipeline
+        /// flush and the bulk rate_step arithmetic. new_exponential_counter_period
+        /// is dead in this build (only ever set to 0, envelope.cc:205), so the
+        /// set_exponential_counter path is the managed SetExponentialCounter.
+        /// PLAN-VICEPARITY-001 (batched clock slice).
+        /// </summary>
+        public void ClockBatched(int deltaT)
+        {
+            Env3 = EnvelopeCounter;
+
+            if (StatePipeline != 0)
+            {
+                if (NextState == EnvStateE.Attack)
+                {
+                    State = EnvStateE.Attack;
+                    HoldZero = false;
+                    RatePeriod = RatePeriods[Attack];
+                }
+                else if (NextState == EnvStateE.Release)
+                {
+                    State = EnvStateE.Release;
+                    RatePeriod = RatePeriods[Release];
+                }
+                else if (NextState == EnvStateE.Freezed)
+                {
+                    HoldZero = true;
+                }
+                StatePipeline = 0;
+            }
+
+            // ADSR delay bug: if the comparison value is below the current rate
+            // counter, the counter wraps at 0x8000 (envelope.h:227-231).
+            int rateStep = RatePeriod - RateCounter;
+            if (rateStep <= 0)
+                rateStep += 0x7fff;
+
+            while (deltaT != 0)
+            {
+                if (deltaT < rateStep)
+                {
+                    RateCounter += deltaT;
+                    if ((RateCounter & 0x8000) != 0)
+                        RateCounter = (RateCounter + 1) & 0x7fff;
+                    return;
+                }
+
+                RateCounter = 0;
+                deltaT -= rateStep;
+
+                // The first attack step also resets the exponential counter.
+                if (State == EnvStateE.Attack || ++ExponentialCounter == ExponentialCounterPeriod)
+                {
+                    ExponentialCounter = 0;
+
+                    if (HoldZero)
+                    {
+                        rateStep = RatePeriod;
+                        continue;
+                    }
+
+                    switch (State)
+                    {
+                        case EnvStateE.Attack:
+                            EnvelopeCounter = (byte)((EnvelopeCounter + 1) & 0xff);
+                            if (EnvelopeCounter == 0xff)
+                            {
+                                State = EnvStateE.DecaySustain;
+                                RatePeriod = RatePeriods[Decay];
+                            }
+                            break;
+                        case EnvStateE.DecaySustain:
+                            if (EnvelopeCounter != SustainLevels[Sustain])
+                                EnvelopeCounter--;
+                            break;
+                        case EnvStateE.Release:
+                            EnvelopeCounter = (byte)((EnvelopeCounter - 1) & 0xff);
+                            break;
+                        case EnvStateE.Freezed:
+                            break;
+                    }
+
+                    SetExponentialCounter();
+                }
+
+                rateStep = RatePeriod;
+            }
+        }
+
         private void StateChange()
         {
             StatePipeline--;

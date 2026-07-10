@@ -292,10 +292,11 @@ public partial class Sid6581
                 deltaTSample = deltaT;
             }
 
-            for (int i = deltaTSample; i > 0; i--)
-            {
-                Tick();
-            }
+            // reSID clock_fast advances via the batched SID::clock(delta_t)
+            // (sid.cc:880), not N single cycles: voice outputs held over the
+            // window, oscillators/filter/extfilt sub-stepped. This is the
+            // SAMPLE_FAST approximation and is bit-exact vs the buffered oracle.
+            ClockBatched(deltaTSample);
 
             if ((deltaT -= deltaTSample) == 0)
             {
