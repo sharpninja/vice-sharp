@@ -132,6 +132,12 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_drive_get_true_emulation")]
     public static partial int GetDriveTrueEmulation(IntPtr instance, uint unit);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_drive_get_clock_residue")]
+    public static partial int GetDriveClockResidue(IntPtr instance, uint unit, out ulong attachClk, out ulong detachClk, out ulong attachDetachClk);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_drivecpu_get_cycle_accum")]
+    public static partial ulong GetDriveCycleAccum(IntPtr instance, uint unit);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_state")]
     public static partial void GetVicState(IntPtr instance, ref ViceVicState state);
 

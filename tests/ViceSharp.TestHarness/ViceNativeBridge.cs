@@ -38,6 +38,16 @@ public static class ViceNativeBridge
         => ViceNative.AttachDisk(machine, unit, drive, path);
     public static void DetachDisk(IntPtr machine, uint unit, uint drive)
         => ViceNative.DetachDisk(machine, unit, drive);
+    // Drive residue observability (TEST-NATIVE-RESIDUE-03/04).
+    public static int GetDriveClockResidue(IntPtr machine, uint unit, out ulong attachClk, out ulong detachClk, out ulong attachDetachClk)
+        => ViceNative.GetDriveClockResidue(machine, unit, out attachClk, out detachClk, out attachDetachClk);
+    public static ulong GetDriveCycleAccum(IntPtr machine, uint unit)
+        => ViceNative.GetDriveCycleAccum(machine, unit);
+    public static int ReadSnapshot(IntPtr machine, string path) => ViceNative.ReadSnapshotNative(machine, path);
+    public static int WriteSnapshot(IntPtr machine, string path) => ViceNative.WriteSnapshotNative(machine, path);
+    public static int SetDriveTrueEmulation(IntPtr machine, uint unit, bool enabled)
+        => ViceNative.SetDriveTrueEmulation(machine, unit, enabled ? 1 : 0);
+    public static int GetDriveTrueEmulation(IntPtr machine, uint unit) => ViceNative.GetDriveTrueEmulation(machine, unit);
     public static void SetKeyboardMatrixKey(IntPtr machine, int row, int column, bool pressed)
         => ViceNative.SetKeyboardMatrixKey(machine, row, column, pressed);
     public static void StoreCia1Register(IntPtr machine, byte registerIndex, byte value)

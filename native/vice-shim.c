@@ -1451,6 +1451,78 @@ VICE_SHIM_API uint16_t vice_drivecpu_get_pc(void *machine, unsigned int unit)
 }
 
 /*
+ * Drive-clock residue observability (TEST-NATIVE-RESIDUE-03). Reads the three
+ * drive_t IEC-event timestamps attach_clk/detach_clk/attach_detach_clk
+ * (drive.h:288-295; CLOCK is uint64_t per types.h:61) for drives[0] of unit
+ * 8..11. A fresh drive boots with all three at 0 (drive_init, drive.c); a .vsf
+ * resume (drive_snapshot_read_module) or a disk attach/detach leaves them
+ * nonzero, and that residue shifts the next machine's IEC timeline. drives[0]
+ * only, mirroring the snapshot copy loop (drive-snapshot.c:543). Returns 0 on
+ * success (out-params written), -1 when the machine is inactive, the unit is
+ * out of range, or the drive slot is null (out-params zeroed).
+ */
+VICE_SHIM_API int vice_drive_get_clock_residue(void *machine, unsigned int unit,
+    uint64_t *attach_clk, uint64_t *detach_clk, uint64_t *attach_detach_clk)
+{
+    int result = -1;
+
+    if (attach_clk != NULL) {
+        *attach_clk = 0;
+    }
+    if (detach_clk != NULL) {
+        *detach_clk = 0;
+    }
+    if (attach_detach_clk != NULL) {
+        *attach_detach_clk = 0;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)
+        && unit >= DRIVE_UNIT_MIN && unit <= DRIVE_UNIT_MAX
+        && diskunit_context[unit - DRIVE_UNIT_MIN] != NULL
+        && diskunit_context[unit - DRIVE_UNIT_MIN]->drives[0] != NULL) {
+        drive_t *drive = diskunit_context[unit - DRIVE_UNIT_MIN]->drives[0];
+        if (attach_clk != NULL) {
+            *attach_clk = (uint64_t)drive->attach_clk;
+        }
+        if (detach_clk != NULL) {
+            *detach_clk = (uint64_t)drive->detach_clk;
+        }
+        if (attach_detach_clk != NULL) {
+            *attach_detach_clk = (uint64_t)drive->attach_detach_clk;
+        }
+        result = 0;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return result;
+}
+
+/*
+ * Drive-CPU fractional cycle accumulator observability
+ * (TEST-NATIVE-RESIDUE-04). Reads drivecpu_context_t.cycle_accum
+ * (drivetypes.h:85) for unit 8..11 - the 16.16 fixed-point remainder
+ * drivecpu_execute carries between calls (drivecpu.c:387-389). Returns 0 when
+ * the machine is inactive, the unit is out of range, or the drive CPU is null.
+ */
+VICE_SHIM_API uint64_t vice_drivecpu_get_cycle_accum(void *machine, unsigned int unit)
+{
+    uint64_t value = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        value = (uint64_t)diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cycle_accum;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+/*
  * Toggle VICE's per-unit true-drive emulation. unit is 8..11. When TDE is
  * enabled the drive's 6502 runs cycle-by-cycle; when disabled VICE uses
  * fast-loader traps. Returns 0 on success, non-zero on failure.
