@@ -30,12 +30,14 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [DefaultPoolAzurePipelines(
     "release",
     AzurePipelinesImage.WindowsLatest,
+    // PublishChocolatey exists and is manually invokable, but is intentionally
+    // NOT in the release pipeline yet (held per operator until the CHOCO_API_KEY
+    // agent env + community moderation flow are set up).
     InvokedTargets = new[]
     {
         nameof(PublishNuget),
         nameof(PublishGitHubRelease),
         nameof(PublishWinget),
-        nameof(PublishChocolatey),
         nameof(PublishScoop),
     },
     TriggerTagsInclude = new[] { "v*" },
