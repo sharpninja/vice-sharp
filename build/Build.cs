@@ -312,6 +312,15 @@ sealed partial class Build : NukeBuild
                 : PackageVersionOverride;
             PackagesOutputDirectory.CreateOrCleanDirectory();
 
+            // The bundle pack below runs with --no-restore, so the bundle's
+            // project graph must already be restored + built. Compile provides
+            // that in the local flow; targets that call PackAllNugetPackages
+            // directly (PublishGitHubRelease on a fresh agent with no obj/) do
+            // not, so build it here. Idempotent/incremental when already built.
+            DotNetBuild(s => s
+                .SetProjectFile(PackageProject)
+                .SetConfiguration(Configuration));
+
             DotNetPack(s => s
                 .SetProject(PackageProject)
                 .SetConfiguration(Configuration)
@@ -456,16 +465,10 @@ sealed partial class Build : NukeBuild
             var apiKey = Environment.GetEnvironmentVariable("NUGET_API_KEY");
             Assert.True(PublishDryRun || !string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
 
-            // Build + pack in-job (reproducible from the tagged checkout). Only
-            // the bundle's package project graph needs a prior restore+build
-            // (its PackageId is injected pack-time and cannot survive an
-            // implicit restore); the individual packs restore+build their own
-            // graphs. Deliberately NOT the whole solution: the release agent
-            // is a lean Linux runner and must not drag in the native-oracle
-            // test harness build.
-            DotNetBuild(s => s
-                .SetProjectFile(PackageProject)
-                .SetConfiguration(Configuration));
+            // Build + pack in-job (reproducible from the tagged checkout).
+            // PackAllNugetPackages restores+builds the bundle graph itself, so no
+            // separate build is needed here. Deliberately NOT the whole solution:
+            // the release agent must not drag in the native-oracle test harness.
             PackAllNugetPackages();
 
             if (PublishDryRun)
