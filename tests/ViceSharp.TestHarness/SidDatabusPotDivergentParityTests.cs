@@ -366,8 +366,10 @@ public sealed class SidDatabusPotDivergentParityTests
     /// <summary>
     /// FR: FR-SID-DATABUS AC-07 (DIVERGENT, finding 21), TR: TR-SID-ORACLE-001,
     /// TEST: TEST-SID-DATABUS-07.
-    /// The 8580 databus ttl (0xa2000) needs the per-model DataBusTtl override
-    /// that lands with the 8580 slice (S11); quarantined until then.
+    /// Use case: the 8580 databus ttl is 0xa2000 (sid.cc), which needs the
+    /// per-model DataBusTtl override that lands with the 8580 slice (S11).
+    /// Acceptance: quarantined (pending) until S11 adds the Sid8580 override;
+    /// then the managed 8580 ttl equals 0xA2000 in lockstep with the c64c oracle.
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-DATABUS-07", ParityTag.Divergent, pending: true)]
