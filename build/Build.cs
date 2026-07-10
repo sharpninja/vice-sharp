@@ -1312,7 +1312,9 @@ ManifestVersion: 1.6.0
         if (gh is null) return false;
         var (publisher, identifier) = SplitWingetPackageId(packageId);
         var path = $"manifests/{publisher.Substring(0, 1).ToLowerInvariant()}/{publisher}/{identifier}";
-        var exit = RunProcess(gh, $"api repos/microsoft/winget-pkgs/contents/{path} --silent", throwOnNonZero: false);
+        // A 404 here just means the package is not published yet (first-time),
+        // so keep gh's "Not Found" off the warning stream.
+        var exit = RunProcess(gh, $"api repos/microsoft/winget-pkgs/contents/{path} --silent", throwOnNonZero: false, logErrors: false);
         Serilog.Log.Information("winget-pkgs {Path} -> {Result}.", path, exit == 0 ? "exists (update)" : "not found (first-time)");
         return exit == 0;
     }
@@ -1339,7 +1341,10 @@ ManifestVersion: 1.6.0
         return null;
     }
 
-    static int RunProcess(string fileName, string args, bool throwOnNonZero)
+    // logErrors=false routes stderr to debug instead of warning - use it for
+    // probes where a non-zero exit is an expected answer (e.g. a 404 meaning
+    // "not found"), so the output does not read as a failure.
+    static int RunProcess(string fileName, string args, bool throwOnNonZero, bool logErrors = true)
     {
         var psi = new System.Diagnostics.ProcessStartInfo(fileName, args)
         {
@@ -1349,7 +1354,7 @@ ManifestVersion: 1.6.0
         };
         using var p = System.Diagnostics.Process.Start(psi)!;
         p.OutputDataReceived += (_, e) => { if (e.Data != null) Serilog.Log.Information(e.Data); };
-        p.ErrorDataReceived  += (_, e) => { if (e.Data != null) Serilog.Log.Warning(e.Data); };
+        p.ErrorDataReceived  += (_, e) => { if (e.Data != null) { if (logErrors) Serilog.Log.Warning(e.Data); else Serilog.Log.Debug(e.Data); } };
         p.BeginOutputReadLine();
         p.BeginErrorReadLine();
         p.WaitForExit();
