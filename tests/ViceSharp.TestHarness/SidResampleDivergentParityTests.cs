@@ -37,28 +37,39 @@ public sealed class SidResampleDivergentParityTests
         (0x07, 0x00), (0x08, 0x40), (0x0B, 0x41),
     };
 
+    // Hard-sync + ring-mod + LP-filter program: stresses the batched engine's
+    // trickiest paths at SAMPLE_FAST - the oscillator MSB-toggle sub-stepping
+    // (voice 0 is a sync source for voice 1), ring modulation, the filter dt=3
+    // sub-steps and the external filter dt=8 sub-steps.
+    private static readonly (ushort reg, byte val)[] SyncRingProgram =
+    {
+        (0x15, 0x00), (0x16, 0x40), (0x17, 0x11), (0x18, 0x1F), // LP, route voice 1
+        (0x00, 0x00), (0x01, 0x11), (0x05, 0x00), (0x06, 0xF0), (0x04, 0x21), // v1 saw+gate (sync src)
+        (0x07, 0x00), (0x08, 0x1F), (0x0C, 0x00), (0x0D, 0xF0), (0x0B, 0x13), // v2 tri+sync+gate
+        (0x0E, 0x00), (0x0F, 0x30), (0x13, 0x00), (0x14, 0xF0), (0x12, 0x15), // v3 tri+ringmod+gate
+    };
+
     /// <summary>
     /// FR: FR-SID-OUTPUT AC-08 (DIVERGENT, finding 20). TR-SID-RESAMPLE-001.
-    /// Use case: SAMPLE_FAST fixed-point next-sample selection (sid.cc:868-892)
-    ///   replaces the managed double accumulator: next_sample_offset =
-    ///   sample_offset + cycles_per_sample + half; delta_t_sample = it &gt;&gt; 16.
-    /// Acceptance: the managed ClockFast reproduces the fixed-point sample cadence
-    ///   bit-exact vs the buffered oracle: identical sample count AND identical
-    ///   unconsumed remainder every 4096-cycle chunk for &gt;= 30000 samples.
-    ///   NB the per-sample VALUES are NOT locked here: reSID clock_fast advances
-    ///   the chain via the batched SID::clock(delta_t) (sid.cc:745-832), which
-    ///   holds the voice outputs constant over the window and sub-steps the
-    ///   filter (dt=3) / external filter (dt=8), while the managed fast path
-    ///   clocks cycle-exact. That batched sub-stepping is the deferred
-    ///   TEST-SID-FILTER-CLOCK-03/04 (PLAN-VICEPARITY-001 out-of-scope). The
-    ///   high-fidelity value lockstep is sealed by OUTPUT-09 (interpolate) and
-    ///   OUTPUT-10 (resample), both cycle-exact in reSID.
-    /// viceCite: sid.cc:868-892.
+    /// Use case: SAMPLE_FAST advances the chain via the batched SID::clock(delta_t)
+    ///   (sid.cc:745-832): voice outputs held over the window, oscillators
+    ///   sub-stepped to sync-source MSB toggles (sid.cc:776-820), the filter
+    ///   sub-stepped at dt=3 (filter8580new.h:888-927) and the external filter at
+    ///   dt=8 (extfilt.h:121-153), plus the write-pipeline prologue and batched
+    ///   bus aging. Replaces the managed cycle-exact fast path.
+    /// Acceptance: the managed ClockFast short stream matches the buffered oracle
+    ///   at SAMPLE_FAST element-for-element for &gt;= 30000 samples on BOTH the 6581
+    ///   (c64) and the 8580 (c64c), driven by a hard-sync + ring-mod + LP-filter
+    ///   program that exercises every batched sub-step path.
+    /// viceCite: sid.cc:868-892, 745-832.
     /// </summary>
     [ViceFact]
     [ParityAc("TEST-SID-OUTPUT-08", ParityTag.Divergent, pending: false)]
-    public void SampleFast_FixedPointCadence_MatchesOracle()
-        => AssertFastCadenceMatchesOracle("c64", MakeSid6581, SawLpProgram, 30000);
+    public void SampleFast_BatchedClock_BufferedLockstep_BothModels()
+    {
+        AssertBufferedOutputLockstep("c64", MakeSid6581, SidSamplingMethod.Fast, SyncRingProgram, 30000);
+        AssertBufferedOutputLockstep("c64c", MakeSid8580, SidSamplingMethod.Fast, SyncRingProgram, 30000);
+    }
 
     /// <summary>
     /// FR: FR-SID-OUTPUT AC-09 (DIVERGENT, finding 20). TR-SID-RESAMPLE-001.
@@ -196,49 +207,6 @@ public sealed class SidResampleDivergentParityTests
             sum += u;
         } while (u >= i0e * sum);
         return sum;
-    }
-
-    // -----------------------------------------------------------------------
-    // SAMPLE_FAST cadence lockstep: the fixed-point next-sample selection
-    // (sample count + unconsumed remainder) is bit-exact vs the oracle even
-    // though the per-sample values diverge (batched vs cycle-exact clock).
-    // -----------------------------------------------------------------------
-    private static void AssertFastCadenceMatchesOracle(
-        string oracleMachine, Func<Sid6581> makeSid,
-        (ushort reg, byte val)[] program, int minSamples)
-    {
-        var sid = makeSid();
-        Assert.True(sid.SetSamplingParameters(ClockPal, SidSamplingMethod.Fast, SampleRate));
-        foreach (var (reg, val) in program) sid.Write((ushort)(0xD400 + reg), val);
-
-        var native = ViceNativeBridge.CreateMachine(oracleMachine);
-        try
-        {
-            Assert.True(ViceNativeBridge.SidExactOpen(native), "exact oracle failed to open");
-            ViceNativeBridge.SidExactReset(native);
-            Assert.True(ViceNativeBridge.SidExactSetSampling(native, (int)SidSamplingMethod.Fast, SampleRate));
-            foreach (var (reg, val) in program) ViceNativeBridge.SidExactWrite(native, reg, val);
-
-            var mbuf = new short[512];
-            var obuf = new short[512];
-            int produced = 0;
-            while (produced < minSamples)
-            {
-                int mc = 4096, oc = 4096;
-                int mGot = sid.ClockBuffered(ref mc, mbuf);
-                int oGot = ViceNativeBridge.SidExactClockBuffered(native, ref oc, obuf);
-                // The fixed-point cadence (count + remainder) is purely arithmetic
-                // (cycles_per_sample + half-cycle bias), independent of the audio
-                // values, so it is bit-exact vs the oracle every chunk.
-                Assert.Equal(oGot, mGot);
-                Assert.Equal(oc, mc);
-                produced += mGot;
-            }
-        }
-        finally
-        {
-            ViceNativeBridge.DestroyMachine(native);
-        }
     }
 
     // -----------------------------------------------------------------------

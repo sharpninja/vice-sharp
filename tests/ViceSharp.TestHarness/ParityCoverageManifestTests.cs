@@ -84,13 +84,13 @@ public sealed class ParityCoverageManifestTests
     /// per-pixel collision latching, all consuming V3's PixelSequencer and
     /// V5's mc/mcbase/exp_flop DMA. All 15 admitted green.
     /// Rises by each slice's DIVERGENT count; the final slice pins
-    /// covered == 466. MUST never be lowered. Current authored distinct
-    /// [ParityAc] ids = 457 (405 through S9 + 14 S10 FR-SID-POT AC-01..04 and
-    /// FR-SID-DATABUS AC-01..10 + 25 S11 FR-SID-FILTER-8580 AC-01..14 and
-    /// FR-SID-8580 AC-01..11 + 7 S12 FR-SID-OUTPUT AC-01..07 + 6 S13
-    /// FR-SID-OUTPUT AC-08..13).
+    /// covered == 466 (the AuthoredCoverage_MeetsRatchet completion pin). MUST
+    /// never be lowered. Current authored distinct [ParityAc] ids = 466: 457
+    /// (405 through S9 + 14 S10 + 25 S11 + 7 S12 + 6 S13) + 9 batched-clock slice
+    /// (FR-SID-EXTFILT AC-01..07 and FR-SID-CLOCK AC-05/AC-08). Every one of the
+    /// 466 acceptance criteria is now authored.
     /// </summary>
-    private const int ExpectedMinCovered = 457;
+    private const int ExpectedMinCovered = 466;
 
     private const int ExpectedFrCount = 38;
     private const int ExpectedAcCount = 466;
@@ -266,6 +266,11 @@ public sealed class ParityCoverageManifestTests
         Assert.True(
             covered >= ExpectedMinCovered,
             $"parity coverage regressed: {covered} authored ACs, ratchet requires >= {ExpectedMinCovered}");
+
+        // Project-completion pin: every one of the 466 acceptance criteria in
+        // the requirements artifact now carries an authored [ParityAc] test.
+        // PLAN-VICEPARITY-001 closure (batched clock slice).
+        Assert.Equal(ExpectedAcCount, covered);
     }
 
     /// <summary>

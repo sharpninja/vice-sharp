@@ -567,25 +567,24 @@ public sealed class SidFilter6581DivergentParityTests
     }
 
     /// <summary>
-    /// FR: FR-SID-FILTER-6581 AC-27 (DIVERGENT, finding 16).
-    /// Use case: Filter::clock(delta_t) runs internal sub-steps at delta_t_flt=3;
-    ///   per-cycle tick is dt=1 (no sub-stepping in S9 managed implementation).
-    /// Acceptance: pending - sub-stepping (delta_t_flt=3) not yet implemented.
-    ///   Current S9 managed code runs dt=1 (single step per phi2 cycle).
-    ///   This AC tracks the deviation; exact behavior is deferred to a future slice.
+    /// FR: FR-SID-FILTER-6581 AC-27 (DIVERGENT, finding 16). TR-SID-ORACLE-002.
+    /// Use case: reSID Filter::clock(delta_t) runs the two integrators in
+    ///   delta_t_flt=3 sub-steps over the SAMPLE_FAST window (filter8580new.h:
+    ///   888-908), with the voice input held constant; the batched clock engine
+    ///   now implements this (ClockResidFilterBatched).
+    /// Acceptance: the managed Sid6581 filter output matches the c64 oracle
+    ///   bit-exact at SAMPLE_FAST across a resonant LP program, which is only
+    ///   possible if the filter sub-steps at dt=3 exactly like reSID.
     /// viceCite: filter8580new.h:872-892.
     /// </summary>
-    [Fact]
-    [ParityAc("TEST-SID-FILTER-6581-27", ParityTag.Divergent, pending: true)]
-    public void FilterSubStepping_DeltaTFlt3_PendingImplementation()
-    {
-        // S9 uses dt=1 (no sub-stepping). This test documents the deviation.
-        // delta_t_flt=3 sub-stepping is deferred to a future slice.
-        Assert.Skip(
-            "TEST-SID-FILTER-6581-27 pending: Filter::clock(delta_t) sub-stepping " +
-            "(delta_t_flt=3, filter8580new.h:872-892) not yet implemented. " +
-            "Current S9 path uses dt=1.");
-    }
+    [ViceFact]
+    [ParityAc("TEST-SID-FILTER-6581-27", ParityTag.Divergent, pending: false)]
+    public void FilterSubStepping_DeltaTFlt3_BatchedLockstep()
+        => AssertFastBatchedLockstep(new (ushort, byte)[]
+        {
+            (0x15, 0x05), (0x16, 0x30), (0x17, 0xF1), (0x18, 0x1F),
+            (0x00, 0x00), (0x01, 0x40), (0x05, 0x00), (0x06, 0xF0), (0x04, 0x11),
+        }, 8000);
 
     /// <summary>
     /// FR: FR-SID-FILTER-6581 AC-28 (DIVERGENT, finding 12).
@@ -753,20 +752,33 @@ public sealed class SidFilter6581DivergentParityTests
     }
 
     /// <summary>
-    /// FR: FR-SID-CUTOFFDAC AC-06 (DIVERGENT, finding 17).
-    /// Use case: 8580 terminated branch + parallel-W/L f0_dac (dacWL=806)
-    ///   is a separate 8580-specific table build (filter8580new.cc:605-620).
-    ///   Currently pending until the 8580 filter model is ported in S10.
-    /// Acceptance: deferred - 8580 filter model build not in S9 scope.
+    /// FR: FR-SID-CUTOFFDAC AC-06 (DIVERGENT, finding 17). TR-SID-ORACLE-002.
+    /// Use case: the 8580 f0_dac is a separate parallel-W/L NMOS ladder with
+    ///   dacWL=806 (no N16/dac_zero/dac_scale normalization), built in the S11
+    ///   8580 filter model port (filter8580new.cc:605-620).
+    /// Acceptance: Model8580.F0Dac matches an independent in-test recomputation
+    ///   of the dacWL=806 ladder for all 2048 entries (f0_dac[0]=dacWL&gt;&gt;8=3).
     /// viceCite: filter8580new.cc:605-620.
     /// </summary>
     [Fact]
-    [ParityAc("TEST-SID-CUTOFFDAC-06", ParityTag.Divergent, pending: true)]
-    public void DacWL806_8580F0Dac_Deferred()
+    [ParityAc("TEST-SID-CUTOFFDAC-06", ParityTag.Divergent, pending: false)]
+    public void DacWL806_8580F0Dac_MatchesLadder()
     {
-        Assert.Skip(
-            "TEST-SID-CUTOFFDAC-06 pending: 8580 dacWL=806 parallel-W/L f0_dac " +
-            "(filter8580new.cc:605-620) is not in S9 scope. Deferred to S10.");
+        const uint dacWL = 806;
+        var f0dac = Sid6581.Model8580.Value.F0Dac;
+        Assert.Equal(1 << 11, f0dac.Length);
+        Assert.Equal((ushort)(dacWL >> 8), f0dac[0]);
+        for (int n = 1; n < (1 << 11); n++)
+        {
+            uint wl = 0;
+            for (int i = 0; i < 11; i++)
+            {
+                int bitmask = 1 << i;
+                if ((n & bitmask) != 0)
+                    wl += dacWL * (uint)(bitmask << 1);
+            }
+            Assert.Equal((ushort)(wl >> 8), f0dac[n]);
+        }
     }
 
     /// <summary>
@@ -905,36 +917,88 @@ public sealed class SidFilter6581DivergentParityTests
     }
 
     /// <summary>
-    /// FR: FR-SID-FILTER-CLOCK AC-03 (DIVERGENT, finding 16).
-    /// Use case: Filter::clock(delta_t) runs internal sub-steps at delta_t_flt=3
-    ///   (filter8580new.h:872-892). S9 managed does not implement sub-stepping.
-    /// Acceptance: pending - sub-stepping not in S9 scope.
-    /// viceCite: filter8580new.h:872-892.
+    /// Drives the managed Sid6581 and the c64 oracle at SAMPLE_FAST through the
+    /// batched clock engine (managed SetSamplingParameters + ClockBuffered vs the
+    /// oracle SidExactSetSampling(FAST) + SidExactClockBuffered), 4096-cycle
+    /// chunks, element-exact. Only bit-exact if the batched filter (dt=3) and
+    /// external filter (dt=8) sub-stepping reproduce reSID exactly.
     /// </summary>
-    [Fact]
-    [ParityAc("TEST-SID-FILTER-CLOCK-03", ParityTag.Divergent, pending: true)]
-    public void FilterSubStepping_DeltaTFlt3_NotYetImplemented()
+    private static void AssertFastBatchedLockstep((ushort reg, byte val)[] program, int minSamples)
     {
-        Assert.Skip(
-            "TEST-SID-FILTER-CLOCK-03 pending: Filter::clock(delta_t_flt=3) sub-stepping " +
-            "(filter8580new.h:872-892) deferred to a future slice. S9 uses dt=1.");
+        var sid = MakeSid6581();
+        Assert.True(sid.SetSamplingParameters(985248.0, SidSamplingMethod.Fast, 44100.0));
+        foreach (var (reg, val) in program) sid.Write((ushort)(0xD400 + reg), val);
+
+        var native = ViceNativeBridge.CreateMachine("c64");
+        try
+        {
+            Assert.True(ViceNativeBridge.SidExactOpen(native), "exact oracle failed to open");
+            ViceNativeBridge.SidExactReset(native);
+            Assert.True(ViceNativeBridge.SidExactSetSampling(native, 0, 44100.0), "oracle SAMPLE_FAST failed");
+            foreach (var (reg, val) in program) ViceNativeBridge.SidExactWrite(native, reg, val);
+
+            var mbuf = new short[512];
+            var obuf = new short[512];
+            int produced = 0;
+            while (produced < minSamples)
+            {
+                int mc = 4096, oc = 4096;
+                int mGot = sid.ClockBuffered(ref mc, mbuf);
+                int oGot = ViceNativeBridge.SidExactClockBuffered(native, ref oc, obuf);
+                Assert.Equal(oGot, mGot);
+                Assert.Equal(oc, mc);
+                for (int i = 0; i < mGot; i++)
+                {
+                    if (mbuf[i] != obuf[i])
+                        Assert.Fail($"FAST sample {produced + i}: managed {mbuf[i]} != oracle {obuf[i]}");
+                }
+                produced += mGot;
+            }
+        }
+        finally
+        {
+            ViceNativeBridge.DestroyMachine(native);
+        }
     }
 
     /// <summary>
-    /// FR: FR-SID-FILTER-CLOCK AC-04 (DIVERGENT, finding 16).
-    /// Use case: external filter sub-steps at delta_t_flt=8 (extfilt.h:134-152).
-    ///   S9 managed does not implement ext-filter sub-stepping.
-    /// Acceptance: pending - sub-stepping not in S9 scope.
+    /// FR: FR-SID-FILTER-CLOCK AC-03 (DIVERGENT, finding 16). TR-SID-ORACLE-002.
+    /// Use case: reSID Filter::clock(delta_t) sub-steps the integrators at
+    ///   delta_t_flt=3 over the SAMPLE_FAST window (filter8580new.h:888-927); the
+    ///   batched clock engine now implements it (ClockResidFilterBatched).
+    /// Acceptance: the managed Sid6581 output matches the c64 oracle bit-exact at
+    ///   SAMPLE_FAST across a band-pass program - only possible if the filter
+    ///   sub-steps at dt=3 exactly like reSID.
+    /// viceCite: filter8580new.h:872-892.
+    /// </summary>
+    [ViceFact]
+    [ParityAc("TEST-SID-FILTER-CLOCK-03", ParityTag.Divergent, pending: false)]
+    public void FilterClockSubStepping_DeltaTFlt3_BatchedLockstep()
+        => AssertFastBatchedLockstep(new (ushort, byte)[]
+        {
+            (0x15, 0x02), (0x16, 0x50), (0x17, 0x71), (0x18, 0x2F), // BP mode
+            (0x00, 0x00), (0x01, 0x30), (0x05, 0x00), (0x06, 0xF0), (0x04, 0x21),
+        }, 8000);
+
+    /// <summary>
+    /// FR: FR-SID-FILTER-CLOCK AC-04 (DIVERGENT, finding 16). TR-SID-ORACLE-002.
+    /// Use case: reSID ExternalFilter::clock(delta_t) sub-steps at delta_t_flt=8
+    ///   over the SAMPLE_FAST window with the shifted coefficients (extfilt.h:
+    ///   121-153); the batched clock engine now implements it
+    ///   (ClockResidExtFilterBatched).
+    /// Acceptance: the managed Sid6581 final output (post external filter) matches
+    ///   the c64 oracle bit-exact at SAMPLE_FAST - only possible if the external
+    ///   filter sub-steps at dt=8 exactly like reSID.
     /// viceCite: extfilt.h:134-152.
     /// </summary>
-    [Fact]
-    [ParityAc("TEST-SID-FILTER-CLOCK-04", ParityTag.Divergent, pending: true)]
-    public void ExtFiltSubStepping_DeltaTFlt8_NotYetImplemented()
-    {
-        Assert.Skip(
-            "TEST-SID-FILTER-CLOCK-04 pending: ExternalFilter::clock(delta_t_flt=8) " +
-            "sub-stepping (extfilt.h:134-152) deferred to a future slice. S9 uses dt=1.");
-    }
+    [ViceFact]
+    [ParityAc("TEST-SID-FILTER-CLOCK-04", ParityTag.Divergent, pending: false)]
+    public void ExtFiltSubStepping_DeltaTFlt8_BatchedLockstep()
+        => AssertFastBatchedLockstep(new (ushort, byte)[]
+        {
+            (0x15, 0x00), (0x16, 0x40), (0x17, 0x11), (0x18, 0x1F),
+            (0x00, 0x00), (0x01, 0x50), (0x05, 0x00), (0x06, 0xF0), (0x04, 0x21),
+        }, 8000);
 
     /// <summary>
     /// FR: FR-SID-FILTER-CLOCK AC-05 (DIVERGENT, finding 16).
