@@ -1197,19 +1197,32 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // Zero allocation. PLAN-VICEPARITY-001 (live-audio wiring slice).
     private void EmitLiveResampleTick()
     {
-        // Begin a new output-sample window when the previous one completed.
-        if (_liveDeltaTRemaining == 0)
-        {
-            int next = _liveSampleOffset + _cyclesPerSample;
-            _liveDeltaTRemaining = next >> 16;
-            _liveSampleOffset = next & 0xFFFF;
-        }
-
         PushResampleRingSample(ClipPcm16(_cycleExtFilterOutput));
 
-        if (--_liveDeltaTRemaining == 0)
+        // Close every output-sample window that ends at (or before) this cycle.
+        // Normally one Tick advances one cycle toward a ~22-cycle window, so this
+        // loop runs once and emits at most one sample. Under extreme slow-motion
+        // warp (SetRelativeSpeed below ~4.5%, cps < 1<<16) a window can span zero
+        // cycles; then it must emit immediately and open the next one - mirroring
+        // ClockResample's deltaTSample==0 path - rather than underflowing the
+        // countdown into a permanent stall.
+        while (true)
         {
-            AppendSampleToBuffer(AmplifyToPcm16(ConvolveResampleSample(_liveSampleOffset)) / 32768.0f);
+            if (_liveDeltaTRemaining == 0)
+            {
+                int next = _liveSampleOffset + _cyclesPerSample;
+                _liveDeltaTRemaining = next >> 16;
+                _liveSampleOffset = next & 0xFFFF;
+                if (_liveDeltaTRemaining == 0)
+                {
+                    AppendSampleToBuffer(AmplifyToPcm16(ConvolveResampleSample(_liveSampleOffset)) / 32768.0f);
+                    continue;
+                }
+            }
+
+            if (--_liveDeltaTRemaining == 0)
+                AppendSampleToBuffer(AmplifyToPcm16(ConvolveResampleSample(_liveSampleOffset)) / 32768.0f);
+            break;
         }
     }
 

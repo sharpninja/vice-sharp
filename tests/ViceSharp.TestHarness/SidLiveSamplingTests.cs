@@ -194,6 +194,39 @@ public sealed class SidLiveSamplingTests
         Assert.Equal(0, delta);
     }
 
+    /// <summary>
+    /// FR: TR-AUDIO-WARP-001, TR-SID-RESAMPLE-001.
+    /// Use case: extreme slow-motion warp (emulation speed below ~4.5%) drives
+    /// the resampler cadence below one cycle per output sample (deltaTSample==0);
+    /// the live tail must keep emitting (matching ClockResample's zero-cycle
+    /// window path) instead of underflowing its countdown and going permanently
+    /// silent.
+    /// Acceptance: at 2% speed the live tail emits a continuous stream across the
+    /// whole run - the sample count keeps growing in the second half, not just an
+    /// initial burst that then stops.
+    /// </summary>
+    [Fact]
+    public void ExtremeSlowWarp_KeepsEmitting_NoUnderflowStall()
+    {
+        var backend = new CollectingBackend();
+        var sid = new Sid6581(new BasicBus(), backend) { BaseAddress = 0xD400 };
+        sid.ConfigureAudioClock(PalClock);
+        sid.SetRelativeSpeed(2.0); // ~2% -> cps < 1<<16 -> zero-cycle windows
+        Program6581(sid);
+
+        for (int i = 0; i < 5000; i++) sid.Tick();
+        int firstHalf = backend.Samples.Count;
+        for (int i = 0; i < 5000; i++) sid.Tick();
+        int total = backend.Samples.Count;
+
+        // Without the zero-cycle-window fix the tail underflows on the very first
+        // window and stops (firstHalf ~= 0, total == firstHalf). With it, both
+        // halves stream continuously.
+        Assert.True(firstHalf > 1000, $"first half should stream, got {firstHalf}");
+        Assert.True(total - firstHalf > 1000,
+            $"second half should keep streaming (no stall), got {total - firstHalf}");
+    }
+
     private static IAudioBackend GetBackend(Sid6581 sid)
     {
         var f = typeof(Sid6581).GetField("_audioBackend",
