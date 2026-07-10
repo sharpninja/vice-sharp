@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Chocolatey package for ViceSharp. The version is set at pack time
-     (choco pack --version <tag>); the installer URL + checksum are injected
-     into tools/chocolateyinstall.ps1 by the PublishChocolatey Nuke target from
-     the GitHub release asset. This package downloads the MSI at install time
-     rather than embedding it, keeping the .nupkg small. -->
+<!-- Chocolatey package for ViceSharp. The version is stamped at pack time by
+     the Nuke PublishChocolatey target; the installer URL and checksum are
+     injected into tools/chocolateyinstall.ps1 from the GitHub release asset.
+     The MSI is downloaded at install time (not embedded), so the .nupkg stays
+     small. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>vice-sharp</id>

@@ -280,11 +280,25 @@ sealed partial class Build : NukeBuild
     /// target performs any publishing side effect. Call it as the first line of
     /// every publish target's Executes.
     /// </summary>
-    string RequireReleaseTag(string targetName) =>
-        HeadReleaseTagVersion()
-        ?? throw new InvalidOperationException(
+    string RequireReleaseTag(string targetName)
+    {
+        var version = HeadReleaseTagVersion();
+        if (version is not null)
+            return version;
+
+        // A dry-run rehearses the flow without publishing, so it does not need a
+        // real tag: fall back to the GitVersion so the version-dependent steps
+        // (URL, MSI stamp, manifests) still run.
+        if (PublishDryRun)
+        {
+            Serilog.Log.Warning("[dry-run] HEAD has no vX.Y.Z tag; using {Version} (GitVersion) for the rehearsal.", MsiVersion);
+            return MsiVersion;
+        }
+
+        throw new InvalidOperationException(
             $"{targetName} only publishes a tagged release: HEAD must carry exactly one vX.Y.Z tag. " +
             "Tag the release commit (git tag vX.Y.Z) and run from that commit.");
+    }
 
     // Shared by PackNuget (local flow, after Compile) and PublishNuget (the
     // Nuke-generated single-job release pipeline, which restores/builds and
@@ -439,7 +453,7 @@ sealed partial class Build : NukeBuild
             RequireReleaseTag(nameof(PublishNuget));
 
             var apiKey = Environment.GetEnvironmentVariable("NUGET_API_KEY");
-            Assert.True(!string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
+            Assert.True(PublishDryRun || !string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
 
             // Build + pack in-job (reproducible from the tagged checkout). Only
             // the bundle's package project graph needs a prior restore+build
@@ -452,6 +466,14 @@ sealed partial class Build : NukeBuild
                 .SetProjectFile(PackageProject)
                 .SetConfiguration(Configuration));
             PackAllNugetPackages();
+
+            if (PublishDryRun)
+            {
+                var packed = PackagesOutputDirectory.GlobFiles("*.nupkg");
+                Serilog.Log.Information("[dry-run] packed {Count} package(s); would validate the tag and push to {Source}.",
+                    packed.Count, NugetSource);
+                return;
+            }
 
             // PUBLISH-GATE: packages ship only from a tagged release commit
             // whose version is NEW: either a fresh minor (vX.Y.0, first tag
@@ -770,9 +792,12 @@ sealed partial class Build : NukeBuild
             // at it. Push the tag (which carries its commit + missing ancestors)
             // to GitHub, authenticating git through gh's credential helper. This
             // is the one point the release reaches out to the GitHub mirror.
-            RunProcess("git",
-                $"-c credential.helper= -c credential.helper=\"!gh auth git-credential\" push {repoUrl} {tag}",
-                throwOnNonZero: true);
+            if (PublishDryRun)
+                Serilog.Log.Information("[dry-run] would push tag {Tag} to {Repo}.", tag, repoUrl);
+            else
+                RunProcess("git",
+                    $"-c credential.helper= -c credential.helper=\"!gh auth git-credential\" push {repoUrl} {tag}",
+                    throwOnNonZero: true);
 
             // NuGet packages: packed in-process from the tagged checkout (the
             // nuget.org push stays in PublishNuget's own job; here we only need
@@ -781,24 +806,13 @@ sealed partial class Build : NukeBuild
             var assets = PackagesOutputDirectory.GlobFiles("*.nupkg")
                 .Select(p => p.ToString()).ToList();
 
-            // MSI: WiX packaging is Windows-only. Build it through a nested Nuke
-            // invocation so PublishMsi's Restore dependency runs (the generated
-            // release job invokes this target with --skip, so a DependsOn here
-            // would be skipped).
+            // MSI: WiX packaging is Windows-only. Build it (stamped with the tag)
+            // through a nested Nuke invocation so PublishMsi's Restore dependency
+            // runs (the generated release job invokes this target with --skip, so
+            // a DependsOn here would be skipped).
             if (OperatingSystem.IsWindows())
             {
-                // Note: interpolate the .ToString() of the script path. A bare
-                // `"..." + (RootDirectory / "build.ps1")` resolves through
-                // AbsolutePath's operators and tries to convert the left string
-                // to a (non-rooted) AbsolutePath, which throws.
-                var buildPs1 = (RootDirectory / "build.ps1").ToString();
-                // Override the MSI ProductVersion to the tag so the installer,
-                // the release, and the winget/scoop manifests all agree (bare
-                // GitVersion yields Major.Minor.<commit-height>, not the tag).
-                RunProcess("pwsh.exe",
-                    $"-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{buildPs1}\" PublishMsi --configuration Release --msi-version-override {version}",
-                    throwOnNonZero: true);
-                Assert.FileExists(MsiOutputPath);
+                BuildMsiLocally(version);
                 assets.Insert(0, MsiOutputPath);
             }
             else
@@ -807,6 +821,15 @@ sealed partial class Build : NukeBuild
             }
 
             var assetArgs = string.Join(" ", assets.Select(a => "\"" + a + "\""));
+
+            if (PublishDryRun)
+            {
+                Serilog.Log.Information(
+                    "[dry-run] would create/update GitHub release {Tag} on {Repo} with {Count} asset(s): {Assets}",
+                    tag, GitHubRepo, assets.Count,
+                    string.Join(", ", assets.Select(a => System.IO.Path.GetFileName(a))));
+                return;
+            }
 
             // Idempotent: create the release, or clobber-upload assets onto an
             // existing one so a re-run of the same tag does not fail.
@@ -1149,7 +1172,7 @@ sealed partial class Build : NukeBuild
             // Hash the exact MSI attached to the GitHub release (WiX MSIs are not
             // byte-reproducible, so a rebuilt MSI would checksum differently than
             // the asset winget actually downloads and validates).
-            var sha = Sha256Hex(DownloadReleasedMsi(version));
+            var sha = Sha256Hex(AcquireMsi(version));
             Serilog.Log.Information("Released MSI SHA256: {Sha}", sha);
 
             var (publisher, identifier) = SplitWingetPackageId(WingetPackageId);
@@ -1223,7 +1246,7 @@ ManifestVersion: 1.6.0
             // authenticate with WINGET_PAT or, failing that, the release agent's
             // gh CLI token.
             var wingetcreate = FindOnPath("wingetcreate.exe") ?? FindOnPath("wingetcreate");
-            if (wingetcreate is null)
+            if (wingetcreate is null && !PublishDryRun)
             {
                 // wingetcreate is NOT a dotnet global tool (not on nuget.org); it
                 // ships as a standalone exe. Download the self-contained build so
@@ -1247,24 +1270,26 @@ ManifestVersion: 1.6.0
                         .Output.Select(o => o.Text.Trim()).FirstOrDefault(t => t.Length > 0);
             }
 
-            if (wingetcreate is null)
+            // New-vs-update: a package already in winget-pkgs gets a canonical
+            // `update` (bumps only version + installer, preserving maintainer
+            // locale edits); a new one gets a first-time `submit` of the
+            // freshly-authored complete manifests.
+            var exists = WingetPackageExists(WingetPackageId);
+            var wingetCmd = exists
+                ? $"update {WingetPackageId} --version {version} --urls \"{ReleaseMsiUrl(version)}\" --submit"
+                : $"submit \"{manifestsDir}\"";
+            var mode = exists ? "update" : "first-time submit";
+
+            if (PublishDryRun)
+                Serilog.Log.Information("[dry-run] {Id} -> {Mode}; would run: wingetcreate {Cmd}", WingetPackageId, mode, wingetCmd);
+            else if (wingetcreate is null)
                 Serilog.Log.Warning("wingetcreate unavailable; manifests left in {Dir} for a manual winget-pkgs PR.", manifestsDir);
             else if (string.IsNullOrEmpty(token))
                 Serilog.Log.Warning("No WINGET_PAT and no gh token; manifests staged at {Dir} but NOT submitted.", manifestsDir);
-            else if (!WingetPackageExists(WingetPackageId))
-            {
-                // First-time: the package does not exist in winget-pkgs yet, so
-                // submit the freshly-authored complete manifests to create it.
-                Serilog.Log.Information("{Id} not in winget-pkgs; submitting the first-time manifests.", WingetPackageId);
-                RunProcess(wingetcreate, $"submit \"{manifestsDir}\" --token {token}", throwOnNonZero: true);
-            }
             else
             {
-                // Existing: canonical version bump. `update` fetches the current
-                // manifest and changes only the version + installer, preserving
-                // any locale edits made by winget-pkgs maintainers.
-                Serilog.Log.Information("{Id} exists in winget-pkgs; submitting a version update to {Version}.", WingetPackageId, version);
-                RunProcess(wingetcreate, $"update {WingetPackageId} --version {version} --urls \"{ReleaseMsiUrl(version)}\" --submit --token {token}", throwOnNonZero: true);
+                Serilog.Log.Information("{Id} -> {Mode}.", WingetPackageId, mode);
+                RunProcess(wingetcreate, $"{wingetCmd} --token {token}", throwOnNonZero: true);
             }
         });
 
@@ -1357,6 +1382,38 @@ ManifestVersion: 1.6.0
         return Convert.ToHexString(sha.ComputeHash(stream));
     }
 
+    [Parameter("Dry-run every publish target: do the local work (pack/build/hash/manifest) but skip every outward action (git tag push, GitHub release, nuget.org push, winget/choco/scoop submit) and log what would run.")]
+    readonly bool PublishDryRun = false;
+
+    /// <summary>Build the MSI locally via a nested Nuke invocation, stamped with the tag version.</summary>
+    void BuildMsiLocally(string version)
+    {
+        if (!OperatingSystem.IsWindows())
+            throw new InvalidOperationException("MSI packaging requires Windows.");
+        // Interpolate the path's .ToString(); a bare string + AbsolutePath
+        // concatenation resolves through AbsolutePath and throws (not rooted).
+        var buildPs1 = (RootDirectory / "build.ps1").ToString();
+        RunProcess("pwsh.exe",
+            $"-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{buildPs1}\" PublishMsi --configuration Release --msi-version-override {version}",
+            throwOnNonZero: true);
+        Assert.FileExists(MsiOutputPath);
+    }
+
+    /// <summary>
+    /// The MSI to hash for a package-manager manifest: the released asset in a
+    /// real run; the locally built MSI in a dry-run (no release exists to
+    /// download from, so build it once and reuse it).
+    /// </summary>
+    AbsolutePath AcquireMsi(string version)
+    {
+        if (!PublishDryRun)
+            return DownloadReleasedMsi(version);
+        if (!MsiOutputPath.FileExists())
+            BuildMsiLocally(version);
+        Serilog.Log.Information("[dry-run] hashing the locally built MSI {Msi}.", MsiOutputPath);
+        return MsiOutputPath;
+    }
+
     AbsolutePath ChocolateySourceDir => RootDirectory / "packaging" / "chocolatey";
     AbsolutePath ChocolateyOutputDir => ArtifactsDirectory / "chocolatey";
 
@@ -1382,7 +1439,7 @@ ManifestVersion: 1.6.0
             }
 
             var url = ReleaseMsiUrl(version);
-            var sha = Sha256Hex(DownloadReleasedMsi(version));
+            var sha = Sha256Hex(AcquireMsi(version));
 
             // Stage a copy of the package and inject the url + checksum into the
             // install script (the source stays a token template).
@@ -1402,6 +1459,12 @@ ManifestVersion: 1.6.0
 
             var nupkg = ChocolateyOutputDir.GlobFiles($"vice-sharp.{version}.nupkg").FirstOrDefault()
                 ?? throw new InvalidOperationException($"choco pack did not produce vice-sharp.{version}.nupkg.");
+
+            if (PublishDryRun)
+            {
+                Serilog.Log.Information("[dry-run] packed {Nupkg}; would push it to chocolatey.org.", nupkg);
+                return;
+            }
 
             // Secrets reach the self-hosted release agent through its machine
             // environment (the same way PublishNuget reads NUGET_API_KEY).
@@ -1434,8 +1497,17 @@ ManifestVersion: 1.6.0
             var version = RequireReleaseTag(nameof(PublishScoop));
 
             var url = ReleaseMsiUrl(version);
-            var sha = Sha256Hex(DownloadReleasedMsi(version)).ToLowerInvariant();
+            var sha = Sha256Hex(AcquireMsi(version)).ToLowerInvariant();
             var repoUrl = $"https://github.com/{GitHubRepo}.git";
+
+            if (PublishDryRun)
+            {
+                // Do not touch the working tree (no fetch/checkout) in a dry-run.
+                Serilog.Log.Information(
+                    "[dry-run] would set bucket/vice-sharp.json version={Version} url={Url} hash={Sha} and push it to {Repo} master.",
+                    version, url, sha, repoUrl);
+                return;
+            }
 
             // Base the manifest change on the mirror's current master so it lands
             // as a clean master commit (the pipeline runs on a detached tag).
