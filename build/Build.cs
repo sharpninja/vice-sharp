@@ -787,9 +787,13 @@ sealed partial class Build : NukeBuild
             // would be skipped).
             if (OperatingSystem.IsWindows())
             {
+                // Note: interpolate the .ToString() of the script path. A bare
+                // `"..." + (RootDirectory / "build.ps1")` resolves through
+                // AbsolutePath's operators and tries to convert the left string
+                // to a (non-rooted) AbsolutePath, which throws.
+                var buildPs1 = (RootDirectory / "build.ps1").ToString();
                 RunProcess("pwsh.exe",
-                    "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \""
-                    + (RootDirectory / "build.ps1") + "\" PublishMsi --configuration Release",
+                    $"-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{buildPs1}\" PublishMsi --configuration Release",
                     throwOnNonZero: true);
                 Assert.FileExists(MsiOutputPath);
                 assets.Insert(0, MsiOutputPath);
