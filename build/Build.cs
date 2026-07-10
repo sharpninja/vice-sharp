@@ -1254,16 +1254,20 @@ ManifestVersion: 1.6.0
             if (wingetcreate is null && !PublishDryRun)
             {
                 // wingetcreate is NOT a dotnet global tool (not on nuget.org); it
-                // ships as a standalone exe. Download the self-contained build so
-                // there is no .NET runtime version dependency on the agent.
-                Serilog.Log.Information("wingetcreate not found; downloading the standalone self-contained build.");
+                // ships as a standalone exe. Use the CURRENT build - the
+                // /self-contained aka.ms link is stale at 1.0.4.0, while
+                // /latest serves the current framework-dependent build.
+                Serilog.Log.Information("wingetcreate not found; downloading the current standalone build.");
                 var exe = TemporaryDirectory / "wingetcreate.exe";
                 using (var http = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromMinutes(5) })
                 {
-                    var bytes = http.GetByteArrayAsync("https://aka.ms/wingetcreate/latest/self-contained").GetAwaiter().GetResult();
+                    var bytes = http.GetByteArrayAsync("https://aka.ms/wingetcreate/latest").GetAwaiter().GetResult();
                     System.IO.File.WriteAllBytes(exe, bytes);
                 }
                 wingetcreate = exe.FileExists() ? exe.ToString() : null;
+                // The current build is framework-dependent and targets an older
+                // .NET; roll forward to whatever runtime the agent has installed.
+                Environment.SetEnvironmentVariable("DOTNET_ROLL_FORWARD", "LatestMajor");
             }
 
             // Token sources, in order: WINGET_PAT, then GITHUB_TOKEN (the
