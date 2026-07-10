@@ -844,6 +844,11 @@ sealed partial class Build : NukeBuild
                 RunProcess(gh, $"release create {tag} {assetArgs} --repo {GitHubRepo} --title {tag} --generate-notes", throwOnNonZero: true);
             }
 
+            // gh can leave the release as a DRAFT, whose asset download URLs are
+            // NOT public - which then 404s the winget/scoop/choco MSI download.
+            // Explicitly publish it (idempotent when already published).
+            RunProcess(gh, $"release edit {tag} --draft=false --repo {GitHubRepo}", throwOnNonZero: false);
+
             Serilog.Log.Information("GitHub release {Tag} published to {Repo} ({Count} asset(s)).", tag, GitHubRepo, assets.Count);
         });
 
@@ -1379,10 +1384,27 @@ ManifestVersion: 1.6.0
         var dest = TemporaryDirectory / "ViceSharp.released.msi";
         Serilog.Log.Information("Downloading released MSI: {Url}", url);
         using var http = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromMinutes(5) };
-        var bytes = http.GetByteArrayAsync(url).GetAwaiter().GetResult();
-        System.IO.File.WriteAllBytes(dest, bytes);
-        Serilog.Log.Information("Downloaded {Bytes:N0} bytes.", bytes.Length);
-        return dest;
+        http.DefaultRequestHeaders.UserAgent.ParseAdd("ViceSharp-build");
+        // Retry: the asset URL can 404 for a few seconds right after the release
+        // is published (propagation).
+        Exception? last = null;
+        for (var attempt = 1; attempt <= 5; attempt++)
+        {
+            try
+            {
+                var bytes = http.GetByteArrayAsync(url).GetAwaiter().GetResult();
+                System.IO.File.WriteAllBytes(dest, bytes);
+                Serilog.Log.Information("Downloaded {Bytes:N0} bytes.", bytes.Length);
+                return dest;
+            }
+            catch (Exception ex)
+            {
+                last = ex;
+                Serilog.Log.Warning("MSI download attempt {Attempt}/5 failed: {Message}", attempt, ex.Message);
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
+            }
+        }
+        throw new InvalidOperationException($"Failed to download the released MSI from {url} after 5 attempts.", last);
     }
 
     static string Sha256Hex(AbsolutePath file)
