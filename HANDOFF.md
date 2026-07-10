@@ -23,6 +23,24 @@
 - **Dependency wave S0-S8 complete** (TR-DEPS-202607-001 + TEST-DEPS-202607-001, both completed with evidence; commits `72696d9`, `055b9d5`, `26e5ca8`, `87eb80a`, `9214cdb`, `1cad822`+`1adf386`, `23d030a`, `0f5192f`): all 30 central entries at newest mutually compatible stables (Avalonia 12.0.5, Extensions/TestHost 10.0.9, Protobuf 3.35.1, Grpc.Tools 2.82.0, Test.Sdk 18.7.0, Roslyn pair 5.6.0, YamlDotNet 18.1.0, FluentAssertions 8.10.0, coverlet 10.0.1, aiUnit 2.1.3, RemoteControl 0.7.4); 5 dead pins removed; AiReview under CPM with inherited TreatWarningsAsErrors; vendored `nuget-local` feed DELETED (NuGet.config is nuget.org-only); `global.json` floor 10.0.301 (Roslyn 5.6 generator gate). Excluded as prerelease: xunit.v3 4.x, NSubstitute 6.x, Protobuf 4.x, Extensions 11.x.
 - **Test fixtures in repo** (`93cdc7e`): `vice-snapshot-20260630171307.vsf` (read by the residue probes and lockstep re-baseline suites at repo root; do not delete), `native/.build-nopatch.sh`, `native/.ccwrap/*`. Operator rule: if it is needed to run a test, it goes in the repo.
 
+## Iteration-1 completion (branch `fix/nativeresidue-002-drive-clock-hardening`, off `master`; NOT pushed)
+
+Working through the "complete outstanding iteration 1 work" plan. Done, all committed locally, gates green:
+- **Slice A - PLAN-NATIVERESIDUE-002** (710c1e9/8894f1a/9fb06dd/0691344): the two latent drive-clock bugs fixed; **BUG-LOCKSTEP-001 CLOSED** (full gate 0 failed / 2596 passed / 21 skipped). See docs/receipts-nativeresidue-002-2026-07-09.md.
+- **Slice F - BUG-TESTDEBT-001**: verified already fixed at HEAD (6a32e7c/77e7190), closed with receipt.
+- **Slice B - PLAN-VICEPARITY-001 S10** (67959e6/0fdaa6a/35d9e05): SID reSID data-bus read semantics ($19/$1A POT 0xFF, $1B/$1C OSC3/ENV3 latch, other reads = fading shared bus), per-model DataBusTtl virtual, Peek/Read split, dead-code retirement. Parity ratchet 405->419. Baseline gate 0 failed / 2603 passed / 21 skipped.
+
+Remaining (large SID slices; each needs the native-build recipe below):
+- **S11**: 8580 reSID filter port (filter8580new.cc m==1 branch) + write pipeline + per-model ttl(0xa2000)/scaleFactor(5); new shim exports vice_sid_exact_set_sampling + vice_sid_exact_clock_buffered; 25 ACs (FILTER-8580-01..14, 8580-01..11); flip DATABUS-07; ratchet ->444; oracle via "c64c" selector.
+- **S12**: amplify(scaleFactor)/clip PCM16 seam + extfilt enable branch; 7 ACs (OUTPUT-01..07); ratchet ->451.
+- **S13**: fixed-point Kaiser FIR resampler (fast/interpolate/resample) + the buffered-output shim export from S11; 6 ACs (OUTPUT-08..13); ratchet ->457.
+- **G (parked)**: ADO wiki push needs ADO_PAT.
+
+**Native build recipe (learned this session, load-bearing):** `make x64sc-program` does NOT rebuild changed VICE-core `.o` (they stay stale). Before rebuilding, delete the changed `.o` (and `libdrive.a` for drive files), then run under the MSYS2 MINGW64 login shell so the compiler gets a writable `/tmp`:
+`MSYSTEM=MINGW64 /c/msys64/usr/bin/bash.exe -lc 'rm -f <changed>.o; bash /f/GitHub/vice-sharp/native/.build-nopatch.sh'`. The dll is gitignored (built locally). Vendored edits go in native/patches/vice-shim-runtime.patch (regenerate via `git -C native/vice diff`; keep the 5 pre-existing hunks byte-identical).
+
+**Oracle note:** SidExactRead (read path) is the reliable bus observable; SidExactGetState().BusValue export is NOT a dependable live-latch snapshot (returned stale/garbage) - compare via the read path + managed spec constants.
+
 ## In flight (interrupted mid-task)
 
 Plugin reload + Agent Help (mcpserver core synced to 1.36.0, `mcpserver-repl` 1.4.5 confirmed on PATH):
