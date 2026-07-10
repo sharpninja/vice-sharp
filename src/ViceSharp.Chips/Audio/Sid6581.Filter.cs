@@ -288,11 +288,38 @@ public partial class Sid6581
     /// </summary>
     private void ClockResidExtFilter6581(short vi)
     {
+        if (!_extFilterEnabled)
+        {
+            // reSID ExternalFilter::clock disabled branch (extfilt.h:100-105):
+            // pass the input straight through (Vlp = Vi<<11, Vhp = 0), so
+            // output() = (Vlp - Vhp) >> 11 = Vi. VICE always enables the
+            // external filter; this branch exists for FR-SID-OUTPUT AC-03.
+            _extFiltVlp = vi << 11;
+            _extFiltVhp = 0;
+            return;
+        }
+
         int dVlp = ExtFiltW0lp1s7 * unchecked((int)(((uint)vi << 11) - (uint)_extFiltVlp)) >> 7;
         int dVhp = ExtFiltW0hp1s17 * (_extFiltVlp - _extFiltVhp) >> 17;
         _extFiltVlp += dVlp;
         _extFiltVhp += dVhp;
     }
+
+    // reSID ExternalFilter::enabled (extfilt.h:71), default true. VICE calls
+    // enable_external_filter(true) at every SID init (resid.cc:200); the managed
+    // chip mirrors that default. EnableExternalFilter(false) is a test-only
+    // toggle for FR-SID-OUTPUT AC-03. PLAN-VICEPARITY-001 S12.
+    private bool _extFilterEnabled = true;
+
+    /// <summary>
+    /// reSID ExternalFilter::enable_filter (extfilt.cc). When disabled the
+    /// external filter passes the chip output through unchanged; VICE always
+    /// enables it. PLAN-VICEPARITY-001 S12 (FR-SID-OUTPUT AC-03).
+    /// </summary>
+    internal void EnableExternalFilter(bool enable) => _extFilterEnabled = enable;
+
+    /// <summary>Whether the external output filter is engaged. Parity-test seam.</summary>
+    internal bool ExternalFilterEnabled => _extFilterEnabled;
 
     /// <summary>
     /// reSID ExternalFilter::output(). Returns (Vlp - Vhp) >> 11.

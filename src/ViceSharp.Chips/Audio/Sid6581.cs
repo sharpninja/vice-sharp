@@ -113,10 +113,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         if (UsesReSidFilter)
         {
             // reSID path: gain[vol] table already embeds the volume scaling;
-            // _cycleExtFilterOutput is the external-filter output in the reSID
-            // 16-bit range (shifted from ±32768). Normalize to [-1, 1].
-            // PLAN-VICEPARITY-001 S9 (FR-SID-MIXVOL AC-09..12).
-            return Math.Clamp(_cycleExtFilterOutput / 32768.0f, -1.0f, 1.0f);
+            // _cycleExtFilterOutput is the external-filter output SID::output()
+            // (extfilt, ±32768 range). reSID amplifies it by the per-model
+            // scaleFactor and integer-clips to 16 bits (amplify(), sid.cc:54-57,
+            // applied at emission sid.cc:886-888) before the host consumes it.
+            // The managed host contract is float [-1, 1], so the amplify/clip
+            // happens on the integer sample and the result is scaled by 1/2^15
+            // (lossless). The 6581 is 1.5x louder than the raw output (scale 3),
+            // matching VICE. PLAN-VICEPARITY-001 S12 (FR-SID-OUTPUT AC-01/05/06).
+            return AmplifyToPcm16(_cycleExtFilterOutput) / 32768.0f;
         }
 
         // FR-SID-010 digi playback: the 4-bit master-volume DAC ($D418 bits 0-3)
@@ -700,6 +705,25 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// PLAN-VICEPARITY-001 S11.
     /// </summary>
     protected virtual int OutputScaleFactor => 3;
+
+    /// <summary>
+    /// reSID clip(int) (sid.cc:42-52): saturating cast to a signed 16-bit
+    /// sample. Guards against overflow when the amplified output exceeds the
+    /// 16-bit range. PLAN-VICEPARITY-001 S12 (FR-SID-OUTPUT AC-06).
+    /// </summary>
+    internal static short ClipPcm16(int input)
+    {
+        if (input > 32767) return 32767;
+        if (input < -32768) return -32768;
+        return (short)input;
+    }
+
+    /// <summary>
+    /// reSID amplify(input, scaleFactor) (sid.cc:54-57):
+    /// clip((scaleFactor * input) / 2). C# integer division truncates toward
+    /// zero exactly like C++. PLAN-VICEPARITY-001 S12 (FR-SID-OUTPUT AC-05).
+    /// </summary>
+    internal short AmplifyToPcm16(int input) => ClipPcm16((OutputScaleFactor * input) / 2);
 
     private byte _busValue;
     private int _busValueTtl;
