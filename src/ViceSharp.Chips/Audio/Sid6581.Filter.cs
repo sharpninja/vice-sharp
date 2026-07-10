@@ -92,12 +92,6 @@ public partial class Sid6581
     // ----------------------------------------------------------------
 
     /// <summary>
-    /// True for the reSID two-integrator op-amp filter path (both 6581 and 8580).
-    /// PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-6581 / FR-SID-FILTER-CLOCK).
-    /// </summary>
-    protected virtual bool UsesReSidFilter => true;
-
-    /// <summary>
     /// The active reSID filter model tables. Base = 6581; Sid8580 overrides to
     /// the 8580 model. Must be private protected: the return type is an internal
     /// nested type (CS0050 if declared protected). PLAN-VICEPARITY-001 S11.
@@ -336,7 +330,7 @@ public partial class Sid6581
     /// reSID Filter::set_w0() 6581 path (filter8580new.cc:751-758):
     ///   Vw = Vw_bias + f0_dac[fc]; Vw_bias = 0 for 6581.
     ///   Vddt_Vw_2 = unsigned(kVddt-Vw) * unsigned(kVddt-Vw) >> 1
-    /// Called on $D415/$D416 writes when UsesReSidFilter is true.
+    /// Called on $D415/$D416 writes (via the SetW0 dispatch).
     /// PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-6581 AC-20).
     /// </summary>
     // VICE default 6581 filter bias: RESID_6581_FILTER_BIAS_DEFAULT = 500 (mV)
@@ -404,7 +398,7 @@ public partial class Sid6581
     /// <summary>
     /// Reset reSID filter state (filter8580new.cc:706-716, extfilt.cc:58-63).
     /// Zeroes all integrator state and re-applies set_w0 for fc=0.
-    /// Called by Reset() when UsesReSidFilter is true.
+    /// Called unconditionally by Reset() (reSID is the only filter path).
     /// PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-6581 AC-22).
     /// </summary>
     internal void ResetFilter6581()

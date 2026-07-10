@@ -95,7 +95,7 @@ SID waveform centering, PCM equivalency, and Pieces of Light runtime capture val
 - **Related FR Area(s):** FR-SID
 - **Canonical FR IDs:** FR-SID-014
 - **Canonical TR IDs:** TR-SID-EDGE-004
-- **Evidence:** `SidPcmEquivalencyTests`, `SidDeterminismTests`, `SidFilter6581Tests`, `Sid6581NonLinearCutoffTests`, `Sid8580FilterTests`, `validation-output/runtime/sid-goal-20260626-2351/vicesharp-pieces-release-space-final.mp4` (`SidCombinedWaveformTests` was retired in commit 3cfcdf7)
+- **Evidence:** `SidPcmEquivalencyTests`, `SidDeterminismTests`, `SidFilter6581DivergentParityTests`, `SidFilter8580DivergentParityTests`, `validation-output/runtime/sid-goal-20260626-2351/vicesharp-pieces-release-space-final.mp4` (the legacy Chamberlin-SVF suites `SidFilter6581Tests`/`Sid6581NonLinearCutoffTests`/`Sid8580FilterTests` were retired with the Chamberlin stack, PLAN-SIDCHAMBERLIN-001; `SidCombinedWaveformTests` retired in commit 3cfcdf7)
 
 ---
 

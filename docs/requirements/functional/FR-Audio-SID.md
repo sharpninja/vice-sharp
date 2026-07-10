@@ -130,7 +130,7 @@ The 6581 SID filter is a state-variable filter with low-pass, band-pass, and hig
 ### Traceability
 
 - **Interfaces:** `IAudioChip`, `IFilter`
-- **Test Suite:** `SidFilter6581Tests`, `Sid6581NonLinearCutoffTests`, `SidFilter6581DivergentParityTests`, `Sid8580FilterTests`
+- **Test Suite:** `SidFilter6581DivergentParityTests`, `SidFilter8580DivergentParityTests` (the reSID op-amp filter lockstep suites; the legacy Chamberlin-SVF suites `SidFilter6581Tests`/`Sid6581NonLinearCutoffTests`/`Sid8580FilterTests` were retired with the Chamberlin stack, PLAN-SIDCHAMBERLIN-001)
 
 ---
 

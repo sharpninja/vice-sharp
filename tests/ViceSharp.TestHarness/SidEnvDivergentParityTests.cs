@@ -121,32 +121,6 @@ public sealed class SidEnvDivergentParityTests
     }
 
     /// <summary>
-    /// Mirror of the exact GenerateSample arithmetic for a single active voice
-    /// whose 12-bit waveform index is <paramref name="waveformSample"/> and
-    /// whose envelope DAC level is <paramref name="envelopeDacLevel"/>, at
-    /// master volume 15 with filter mode bits clear:
-    /// envelopeAdjusted = (WaveDac[waveformSample] - 0x380) * dacLevel
-    /// (no >>8 shift; SANCTIONED REBASE S8), then envelopeAdjusted / 524288f
-    /// + 0.05f, clamped to [-1, 1].
-    /// wave_zero is 0x380 for the 6581 die (voice.cc:93).
-    /// After S7, WaveDac maps the 12-bit waveform index through the nonlinear
-    /// R-2R ladder before the wave_zero subtraction (dac.cc build_dac_table,
-    /// bits=12, 2R/R=2.20). After S8, no >>8 shift (voice.h:99-103).
-    /// Same operation sequence as Sid6581.GenerateSample, so float equality
-    /// is exact.
-    /// </summary>
-    private static float ExpectedSample(int waveformSample, int envelopeDacLevel)
-    {
-        // SANCTIONED REBASE (PLAN-VICEPARITY-001 S8): removed >> 8 and
-        // changed scale from 2048.0f to 524288.0f (= 2048 * 256).
-        var envelopeAdjusted = (_waveDac6581[waveformSample] - 0x380) * envelopeDacLevel;
-        const float VolumeFraction = 15 / 15.0f;
-        var voiceMix = envelopeAdjusted * VolumeFraction / 524288.0f;
-        const float DigiDcOffset = VolumeFraction * 0.05f;
-        return Math.Clamp(voiceMix + DigiDcOffset, -1.0f, 1.0f);
-    }
-
-    /// <summary>
     /// Independent test-side reference of reSID's 8-bit MOS 6581 envelope DAC,
     /// ported statement-for-statement from resid/dac.cc build_dac_table
     /// (dac.cc:76-137) with the EnvelopeGenerator constructor parameters
@@ -370,8 +344,8 @@ public sealed class SidEnvDivergentParityTests
     /// raw 0 due to MOSFET leakage; S3 rebase gave -893, -588, -340, -228,
     /// -105 with the old raw formula], while the linear counter gives divergent
     /// values at the non-plateau levels, so every non-plateau level is a strict
-    /// divergence witness. Exact float equality via the mirrored GenerateSample
-    /// arithmetic.
+    /// divergence witness. Asserted on the committed per-cycle voice output
+    /// (CycleVoiceOutputs), the reSID (wave_dac - wave_zero) * envelope_dac path.
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-ENV-50", ParityTag.Divergent, pending: false)]

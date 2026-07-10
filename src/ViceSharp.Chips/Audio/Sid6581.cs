@@ -53,12 +53,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // with a 2-cycle pipeline delay (wave.h:164-170). The reset seed is
     // 0x7ffffe (wave.cc:323). Output is 12 bits packed from SR bits
     // 20,18,14,11,9,5,2,0 into waveform bits 11-4 (wave.h:354-367).
-    // PLAN-VICEPARITY-001 S8 (FR-SID-VOICE): 20-bit voice output range is
-    // (wave12dac - wave_zero) * envelope_dac, no >>8 shift (voice.h:99-103).
-    // The product spans [-2048*255, 2047*255] = ~[-521984, 521985].
-    // GenerateSample divides by this scale to normalize to [-1,1] float.
-    // 524288 = 2048 * 256 (was 2048 when >>8 was applied; removing >>8 adds factor 256).
-    private const float VoiceOutputScale = 524288.0f;
     // Bit 19 of the 24-bit accumulator (the implementation stores the
     // 24-bit value in a uint; the upper byte is the phase output).
     private const uint NoiseClockBit = 1u << 19;
@@ -110,32 +104,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// </summary>
     public float GenerateSample()
     {
-        if (UsesReSidFilter)
-        {
-            // reSID path: gain[vol] table already embeds the volume scaling;
-            // _cycleExtFilterOutput is the external-filter output SID::output()
-            // (extfilt, ±32768 range). reSID amplifies it by the per-model
-            // scaleFactor and integer-clips to 16 bits (amplify(), sid.cc:54-57,
-            // applied at emission sid.cc:886-888) before the host consumes it.
-            // The managed host contract is float [-1, 1], so the amplify/clip
-            // happens on the integer sample and the result is scaled by 1/2^15
-            // (lossless). The 6581 is 1.5x louder than the raw output (scale 3),
-            // matching VICE. PLAN-VICEPARITY-001 S12 (FR-SID-OUTPUT AC-01/05/06).
-            return AmplifyToPcm16(_cycleExtFilterOutput) / 32768.0f;
-        }
-
-        // FR-SID-010 digi playback: the 4-bit master-volume DAC ($D418 bits 0-3)
-        // contributes a small DC offset proportional to volume even when no
-        // voices are gated. This is the rail that makes the famous Galway/
-        // Daglish 4-bit PCM technique audible on real SID hardware: rapid
-        // $D418 writes alone produce hearable PCM through the DAC nonlinearity.
-        // The chosen DC magnitude (DigiDcOffset) is modest enough to leave
-        // normal voice output dominant while still letting per-write volume
-        // changes register as audible amplitude.
-        float volumeFraction = _volume / 15.0f;
-        float voiceMix = _cycleExtFilterOutput * volumeFraction / VoiceOutputScale;
-        float digiDcOffset = volumeFraction * DigiDcOffset;
-        return Math.Clamp(voiceMix + digiDcOffset, -1.0f, 1.0f);
+        // reSID path (the only filter path since PLAN-VICEPARITY-001 S11):
+        // _cycleExtFilterOutput is the external-filter output SID::output()
+        // (extfilt, ±32768 range). reSID amplifies it by the per-model
+        // scaleFactor and integer-clips to 16 bits (amplify(), sid.cc:54-57,
+        // applied at emission sid.cc:886-888) before the host consumes it.
+        // The managed host contract is float [-1, 1], so the amplify/clip
+        // happens on the integer sample and the result is scaled by 1/2^15
+        // (lossless). The 6581 is 1.5x louder than the raw output (scale 3),
+        // matching VICE. PLAN-VICEPARITY-001 S12 (FR-SID-OUTPUT AC-01/05/06).
+        return AmplifyToPcm16(_cycleExtFilterOutput) / 32768.0f;
     }
 
     /// <summary>
@@ -407,34 +385,19 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// not the analog models.
     /// </summary>
     /// <summary>
-    /// Per-cycle filter chain dispatch.
-    /// For the 6581 path (UsesReSidFilter=true): runs reSID
-    /// Filter::clock() + Filter::output() + ExternalFilter::clock/output.
-    /// For the 8580 path: keeps the Chamberlin SVF path.
+    /// Per-cycle filter chain dispatch: runs reSID Filter::clock() +
+    /// Filter::output() + ExternalFilter::clock/output for both the 6581 and
+    /// the 8580 (one model-branched code path since PLAN-VICEPARITY-001 S11).
     /// PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-CLOCK AC-01..05).
     /// </summary>
     private void ClockFilterChain()
     {
-        if (UsesReSidFilter)
-        {
-            ClockResidFilter6581(_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
-            short filterRaw = ComputeResidFilterOutput6581();
-            _cycleFilterOutput = filterRaw;
-            ClockResidExtFilter6581(filterRaw);
-            _cycleExtFilterOutput = ResidExtFilterOutput6581();
-        }
-        else
-        {
-            _cycleFilterOutput = ApplyFilter(_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
-            _cycleExtFilterOutput = ClockExternalFilter(_cycleFilterOutput);
-        }
+        ClockResidFilter6581(_cycleVoiceOutput0, _cycleVoiceOutput1, _cycleVoiceOutput2);
+        short filterRaw = ComputeResidFilterOutput6581();
+        _cycleFilterOutput = filterRaw;
+        ClockResidExtFilter6581(filterRaw);
+        _cycleExtFilterOutput = ResidExtFilterOutput6581();
     }
-
-    /// <summary>
-    /// External-filter stage placeholder for the non-reSID (8580 SVF) path.
-    /// Unity gain. The reSID path uses ClockResidExtFilter6581 / ResidExtFilterOutput6581.
-    /// </summary>
-    private static int ClockExternalFilter(int filterOutput) => filterOutput;
 
     // FR-SID-ENV AC-50 [PLAN-VICEPARITY-001 S1]: reSID envelope DAC tables,
     // built once exactly like the EnvelopeGenerator constructor
@@ -536,146 +499,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
         return dac;
     }
-
-    /// <summary>
-    /// Per-step amplitude of the $D418 DAC DC offset used for digi playback
-    /// (FR-SID-010). Scales linearly with the 4-bit master-volume nibble;
-    /// at volume 15 the offset is DigiDcOffset, at volume 0 it is exactly
-    /// zero (silent rail preserved). Chosen small enough that normal voice
-    /// output dominates the mix.
-    /// </summary>
-    private const float DigiDcOffset = 0.05f;
-
-    // FR-SID-004 (BACKFILL-SID-001 filter slice): state-variable filter
-    // state. The Chamberlin SVF needs two persistent integrators (LP and
-    // BP); the HP tap is computed each step from the current LP, BP, the
-    // filter input and the resonance Q feedback, so it does not need its
-    // own state field.
-    // Chamberlin SVF integrator state. protected so Sid8580 can reuse the
-    // same state-variable filter topology with its own cutoff curve.
-    protected double _svfLowPass;
-    protected double _svfBandPass;
-
-    /// <summary>
-    /// FR-SID-004 (BACKFILL-SID-001 filter slice). State-variable filter
-    /// with per-voice routing, LP/BP/HP additive mode select, resonance
-    /// Q feedback, and soft-clipping for criterion 7 (resonance distortion).
-    /// The 11-bit cutoff register from $D415/$D416 is mapped through the
-    /// 6581 non-linear ("kinked") curve (criterion 6) to a frequency in
-    /// Hz, then converted to a Chamberlin SVF coefficient via
-    /// 2*sin(PI*f/Fs). Sid8580 and Sid8580D supply their own ApplyFilter
-    /// override - this implementation is 6581-only.
-    /// </summary>
-    protected virtual int ApplyFilter(int voice0, int voice1, int voice2)
-    {
-        // PLAN-VICEPARITY-001 S8 (FR-SID-MIXVOL AC-03..08, AC-11):
-        // reSID Filter::set_sum_mix() (filter8580new.cc:768-776) computes:
-        //   filt  = _filterControl & 0x0F  (per-voice routing from $D417)
-        //   mode  = _filterControl & 0xF0  (mode bits from $D418, inc. bit7=3OFF)
-        //   sum   = (enabled ? filt : 0x00) & voice_mask
-        //   mix   = (enabled ? (mode & 0x70) | (~(filt | (mode&0x80)>>5) & 0x0F) : 0x0F) & voice_mask
-        // sum   = filter input voices; mix lower nibble = direct-to-mixer voices.
-        // enabled = always true in this managed implementation (no power-down).
-        byte filt = (byte)(_filterControl & 0x0F);
-        byte mode = (byte)(_filterControl & 0xF0);
-        byte vm = _voiceMask;  // default 0x07 (filter8580new.cc:633)
-
-        // sum: voices routed to filter input (filter8580new.cc:772).
-        // FR-SID-MIXVOL AC-03: only voice_mask-enabled voices can enter filter.
-        byte sum = (byte)(filt & vm);
-
-        // mix lower nibble: direct-to-mixer voices (filter8580new.cc:773-775).
-        // 3OFF: (mode & 0x80) >> 5 = 0x04 when bit7 set -> removes voice3 bit.
-        // FR-SID-MIXVOL AC-04, AC-05: 3OFF removes voice3 from direct path.
-        byte v3offBit = (byte)((mode & 0x80) >> 5);          // 0x04 if 3OFF, 0x00 otherwise
-        byte directMask = (byte)((~(filt | v3offBit)) & 0x0F & vm);
-
-        // Build filter input sum from sum-masked voices.
-        int filterInput = 0;
-        if ((sum & 0x01) != 0) filterInput += voice0;
-        if ((sum & 0x02) != 0) filterInput += voice1;
-        if ((sum & 0x04) != 0) filterInput += voice2;
-
-        // Build direct-to-mixer (bypass) sum from directMask voices.
-        int bypassMix = 0;
-        if ((directMask & 0x01) != 0) bypassMix += voice0;
-        if ((directMask & 0x02) != 0) bypassMix += voice1;
-        if ((directMask & 0x04) != 0) bypassMix += voice2;
-
-        // FR-SID-004 ac.3 / FR-SID-MIXVOL AC-06: LP/BP/HP tap select from
-        // mode bits 4-6 ($D418 upper nibble bits 4-6). mix upper nibble =
-        // (mode & 0x70) in reSID. When no taps are set, filter is inactive
-        // (filter input voices do NOT reach the output; they go into the SVF
-        // but with no active tap there is no output path for them).
-        // FR-SID-MIXVOL AC-07: no-taps means filtered voices are NOT in output.
-        bool lp = (mode & 0x10) != 0;
-        bool bp = (mode & 0x20) != 0;
-        bool hp = (mode & 0x40) != 0;
-
-        if (!(lp || bp || hp))
-        {
-            // No mode taps: filter input voices are swallowed (no tap output).
-            // Only bypass (direct) voices reach the mixer.
-            return bypassMix;
-        }
-
-        // FR-SID-004 ac.1 + ac.6: 11-bit cutoff register mapped to Hz
-        // through the 6581 non-linear ("kinked") curve, then converted to
-        // the Chamberlin SVF coefficient via 2*sin(PI*f/Fs). Note that
-        // reg=0 maps to ~200Hz (not true 0), so the LP integrator no
-        // longer fully stalls at register zero - it accumulates a small
-        // amount of input per sample, matching real 6581 silicon which
-        // never has a zero cutoff. We clamp to 0.999 to keep the
-        // Chamberlin SVF stable up to coefficient ~1.4; anything beyond
-        // pushes the integrators into runaway.
-        double cutoffHz = MapCutoffRegToFrequency(_filterCutoff);
-        double cutoff = Math.Clamp(2.0 * Math.Sin(Math.PI * cutoffHz / SamplingRate), 0.0, 0.999);
-
-        // FR-SID-004 ac.2: resonance Q feedback from $D417 upper nibble
-        // (0..15). Q = 1.0 / (1.0 + res/4) gives a gentle resonance lift
-        // at res = 0 and substantial near-self-oscillation at res = 15.
-        double q = 1.0 / (1.0 + _filterResonance / 4.0);
-
-        // Chamberlin state-variable filter step. Computing HP from the
-        // current LP and BP makes the filter a one-pole-per-tap design
-        // with the resonance feedback closing the loop.
-        double hpOut = filterInput - _svfLowPass - q * _svfBandPass;
-        _svfBandPass += cutoff * hpOut;
-        _svfLowPass += cutoff * _svfBandPass;
-
-        // FR-SID-004 ac.7: soft-clip the SVF taps so extreme resonance
-        // can't drive the integrators past +/- input range. Real 6581
-        // silicon saturates rather than blowing up; tanh-style soft clip
-        // captures that. We clip _svfBandPass and _svfLowPass so the
-        // resonance feedback path stays bounded.
-        if (_svfBandPass > FilterSaturation) _svfBandPass = FilterSaturation;
-        else if (_svfBandPass < -FilterSaturation) _svfBandPass = -FilterSaturation;
-        if (_svfLowPass > FilterSaturation) _svfLowPass = FilterSaturation;
-        else if (_svfLowPass < -FilterSaturation) _svfLowPass = -FilterSaturation;
-
-        double tapSum = 0.0;
-        if (lp) tapSum += _svfLowPass;
-        if (bp) tapSum += _svfBandPass;
-        if (hp) tapSum += hpOut;
-
-        // Bypass voices add post-filter (they were never gated through it).
-        double mixed = tapSum + bypassMix;
-        return (int)mixed;
-    }
-
-    /// <summary>
-    /// FR-SID-004 acceptance criterion 7 saturation rail. The state-
-    /// variable filter's integrators saturate at this absolute value so
-    /// extreme resonance cannot generate NaN/Infinity or drive the
-    /// feedback loop past audible levels. Chosen to allow comfortable
-    /// signal headroom (8-bit voice * envelope ~ 255 max) while
-    /// preventing runaway feedback.
-    /// </summary>
-    // PLAN-VICEPARITY-001 S8 (FR-SID-VOICE): voice outputs are now 20-bit
-    // (no >>8), scaling by 256x. FilterSaturation scales proportionally:
-    // 2048 (old 12-bit range) * 256 = 524288. Prevents SVF runaway at high
-    // resonance while allowing the full 20-bit signal range to pass.
-    private const double FilterSaturation = 524288.0;
 
     private readonly IBus _bus;
 
@@ -1556,10 +1379,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         _filterResonance = 0;
         _filterControl = 0;
         _volume = 0;
-        _svfLowPass = 0.0;
-        _svfBandPass = 0.0;
-        if (UsesReSidFilter)
-            ResetFilter6581();
+        ResetFilter6581();
         // reSID SID::reset() clears the data bus (sid.cc:142-143); the
         // per-cycle chain outputs restart from silence.
         _busValue = 0;
@@ -1753,16 +1573,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         {
             case 0x15:
                 _filterCutoff = (_filterCutoff & 0x07F8) | (value & 0x07);
-                if (UsesReSidFilter) SetW0();
+                SetW0();
                 break;
             case 0x16:
                 _filterCutoff = (_filterCutoff & 0x0007) | ((value & 0xFF) << 3);
-                if (UsesReSidFilter) SetW0();
+                SetW0();
                 break;
             case 0x17:
                 _filterResonance = (byte)((value >> 4) & 0x0F);
                 _filterControl = (byte)((_filterControl & 0xF0) | (value & 0x0F));
-                if (UsesReSidFilter) SetSumMix_6581();
+                SetSumMix_6581();
                 break;
             case 0x18:
                 _volume = (byte)(value & 0x0F);
@@ -1771,7 +1591,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 // mode = v & 0xf0, vol = v & 0xf (filter8580new.cc:742-748).
                 // Previously masked 0x70 (dropped bit7). Must mask 0xF0.
                 _filterControl = (byte)((_filterControl & 0x0F) | (value & 0xF0));
-                if (UsesReSidFilter) SetSumMix_6581();
+                SetSumMix_6581();
                 break;
         }
     }
@@ -1815,46 +1635,4 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         return address >= BaseAddress && address < (BaseAddress + 0x20);
     }
 
-    /// <summary>
-    /// FR-SID-004 ac.6: 3-segment piecewise approximation of the 6581's
-    /// non-linear ("kinked") cutoff frequency curve. Real 6581 silicon
-    /// shows a flat low region (~200-300Hz across reg 0-0x200), a steep
-    /// middle (300-12300Hz across 0x200-0x600), and a flatter high
-    /// region (12300-15000Hz across 0x600-0x7FF). Public for tests; the
-    /// filter pipeline can adopt this via a future follow-up wiring slice.
-    /// Source: resid documentation + Bob Yannes interview.
-    /// </summary>
-    public static float MapCutoffRegToFrequency(int reg11)
-    {
-        if (reg11 < 0) reg11 = 0;
-        if (reg11 > 0x7FF) reg11 = 0x7FF;
-
-        if (reg11 < 0x200)
-        {
-            return 200f + (reg11 / 512f) * 100f;
-        }
-
-        if (reg11 < 0x600)
-        {
-            return 300f + ((reg11 - 0x200) / 1024f) * 12000f;
-        }
-
-        return 12300f + ((reg11 - 0x600) / 511f) * 2700f;
-    }
-
-    /// <summary>
-    /// FR-SID-003 / FR-SID-004 (8580 filter deepening). 8580 cutoff curve is
-    /// essentially linear from ~30Hz at register 0 to ~12,500Hz at register
-    /// 0x7FF, in contrast with the 6581's kinked three-segment curve. Source:
-    /// resid sid8580.c filter calibration tables + Bob Yannes interview. The
-    /// curve is monotone, continuous, and roughly 12kHz wide.
-    /// </summary>
-    public static float MapCutoffRegToFrequency8580(int reg11)
-    {
-        if (reg11 < 0) reg11 = 0;
-        if (reg11 > 0x7FF) reg11 = 0x7FF;
-        const float minHz = 30f;
-        const float maxHz = 12500f;
-        return minHz + (reg11 / 2047f) * (maxHz - minHz);
-    }
 }
