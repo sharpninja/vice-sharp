@@ -242,6 +242,12 @@ VICE_SHIM_API void vice_sid_exact_write(void* machine, uint16_t addr, uint8_t va
 VICE_SHIM_API uint8_t vice_sid_exact_read(void* machine, uint16_t addr);
 VICE_SHIM_API int16_t vice_sid_exact_output(void* machine);
 VICE_SHIM_API void vice_sid_exact_get_state(void* machine, struct vice_sid_exact_state* state);
+// Reconfigure the exact oracle's reSID sampling method (0=FAST 1=INTERPOLATE
+// 2=RESAMPLE 3=RESAMPLE_FASTMEM); clock_freq fixed at 985248.0. Returns 1 ok.
+VICE_SHIM_API int vice_sid_exact_set_sampling(void* machine, int method, double sample_freq, double pass_freq, double filter_scale);
+// Buffered clock path: clock up to `cycles`, write up to buffer_len samples,
+// return sample count; *cycles_remaining gets the unconsumed remainder.
+VICE_SHIM_API int vice_sid_exact_clock_buffered(void* machine, int cycles, int16_t* buffer, int buffer_len, int* cycles_remaining);
 
 struct vice_interrupt_state {
     uint8_t irq_asserted;

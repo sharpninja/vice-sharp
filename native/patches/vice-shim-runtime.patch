@@ -240,10 +240,10 @@ index 5d2c7309b1..1e9d2f2451 100644
    class State
    {
 diff --git a/vice/src/sid/resid.cc b/vice/src/sid/resid.cc
-index b68421226c..1727a8b53d 100644
+index b68421226c..0fa5efd16b 100644
 --- a/vice/src/sid/resid.cc
 +++ b/vice/src/sid/resid.cc
-@@ -449,4 +449,78 @@ sid_engine_t resid_hooks =
+@@ -449,4 +449,113 @@ sid_engine_t resid_hooks =
      resid_state_write
  };
  
@@ -319,6 +319,41 @@ index b68421226c..1727a8b53d 100644
 +        return;
 +    }
 +    psid->sid->vsharp_filter_probe(out);
++}
++
++/* VICE-Sharp S11: reconfigure the exact oracle's sampling method. Needed to
++ * observe the 8580 SAMPLE_FAST write pipeline (sid.cc:205-220) and to drive the
++ * buffered clock/FIR path for S13 resampler parity. clock_freq is passed
++ * through from the shim (985248.0 PAL); method is reSID's sampling_method enum
++ * order (0=FAST 1=INTERPOLATE 2=RESAMPLE 3=RESAMPLE_FASTMEM). Returns 1 on
++ * success, 0 on failure or null SID. */
++int resid_shim_set_sampling(sound_t *psid, int method, double clock_freq,
++                            double sample_freq, double pass_freq, double filter_scale)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return 0;
++    }
++    return psid->sid->set_sampling_parameters(
++               clock_freq, (reSID::sampling_method)method, sample_freq,
++               pass_freq, filter_scale)
++               ? 1 : 0;
++}
++
++/* VICE-Sharp S13: buffered clock path (reSID SID::clock(delta_t, buf, n)). On
++ * entry *delta_t is the cycle budget; on return it holds the unconsumed
++ * remainder. Returns the number of samples written to buf (at most n). */
++int resid_shim_clock_buffered(sound_t *psid, int *delta_t, int16_t *buf, int n)
++{
++    reSID::cycle_count dt;
++    int got;
++
++    if (psid == NULL || psid->sid == NULL || delta_t == NULL || buf == NULL || n < 0) {
++        return 0;
++    }
++    dt = (reSID::cycle_count)(*delta_t);
++    got = psid->sid->clock(dt, (short *)buf, n, 1);
++    *delta_t = (int)dt;
++    return got;
 +}
 +
  } // extern "C"

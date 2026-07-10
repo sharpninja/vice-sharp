@@ -152,6 +152,18 @@ public static class ViceNativeBridge
         return state;
     }
 
+    /// <summary>Reconfigure the exact oracle's reSID sampling method (0=FAST 1=INTERPOLATE 2=RESAMPLE 3=RESAMPLE_FASTMEM). Returns true on success.</summary>
+    public static bool SidExactSetSampling(IntPtr machine, int method, double sampleFreq, double passFreq = -1.0, double filterScale = 0.97)
+        => ViceNative.SidExactSetSampling(machine, method, sampleFreq, passFreq, filterScale) != 0;
+
+    /// <summary>Drive the exact oracle's buffered clock path. Returns samples written; cycles is updated to the unconsumed remainder.</summary>
+    public static int SidExactClockBuffered(IntPtr machine, ref int cycles, short[] buffer)
+    {
+        int got = ViceNative.SidExactClockBuffered(machine, cycles, buffer, buffer.Length, out int remaining);
+        cycles = remaining;
+        return got;
+    }
+
     /// <summary>
     /// PLAN-VICEPARITY-001 Phase 0 (P0-2) / TR-VIC-ORACLE-001. Per-pixel VIC
     /// oracle: copies the visible frame from VICE's viciisc raster draw buffer

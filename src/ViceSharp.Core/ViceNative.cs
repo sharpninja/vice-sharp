@@ -200,6 +200,12 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_get_state")]
     public static partial void SidExactGetState(IntPtr instance, ref ViceSidExactState state);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_set_sampling")]
+    public static partial int SidExactSetSampling(IntPtr instance, int method, double sampleFreq, double passFreq, double filterScale);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_sid_exact_clock_buffered")]
+    public static partial int SidExactClockBuffered(IntPtr instance, int cycles, [Out] short[] buffer, int bufferLength, out int cyclesRemaining);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_interrupt_get_state")]
     public static partial void GetInterruptState(IntPtr instance, ref ViceInterruptState state);
 

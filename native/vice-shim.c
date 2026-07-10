@@ -2169,6 +2169,9 @@ extern int resid_shim_output(sound_t *psid);
 extern void resid_shim_reset(sound_t *psid);
 extern void resid_shim_state_read(sound_t *psid, sid_snapshot_state_t *sid_state);
 extern void resid_shim_filter_probe(sound_t *psid, int *out);
+extern int resid_shim_set_sampling(sound_t *psid, int method, double clock_freq,
+    double sample_freq, double pass_freq, double filter_scale);
+extern int resid_shim_clock_buffered(sound_t *psid, int *delta_t, int16_t *buf, int n);
 
 VICE_SHIM_API int vice_sid_exact_open(void *machine)
 {
@@ -2312,4 +2315,54 @@ VICE_SHIM_API void vice_sid_exact_get_state(void *machine, struct vice_sid_exact
         resid_shim_filter_probe(g_shim_sid_psid, state->filter_probe);
     }
     LeaveCriticalSection(&g_state_lock);
+}
+
+/*
+ * Reconfigure the exact oracle's reSID sampling method (S11/S13). clock_freq is
+ * fixed at 985248.0 (PAL) to match vice_sid_exact_open. method is reSID's
+ * sampling_method order (0=FAST 1=INTERPOLATE 2=RESAMPLE 3=RESAMPLE_FASTMEM).
+ * Returns 1 on success, 0 on failure or inactive machine.
+ */
+VICE_SHIM_API int vice_sid_exact_set_sampling(void *machine, int method,
+    double sample_freq, double pass_freq, double filter_scale)
+{
+    int result = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL) {
+        result = resid_shim_set_sampling(g_shim_sid_psid, method, 985248.0,
+                                         sample_freq, pass_freq, filter_scale);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return result;
+}
+
+/*
+ * Drive the exact oracle's buffered clock path (reSID SID::clock(delta_t, buf,
+ * n), S13 resampler parity). Clocks up to `cycles` cycles, writes up to
+ * buffer_len samples, and (if non-null) returns the unconsumed cycle remainder
+ * in *cycles_remaining. Returns the number of samples written.
+ */
+VICE_SHIM_API int vice_sid_exact_clock_buffered(void *machine, int cycles,
+    int16_t *buffer, int buffer_len, int *cycles_remaining)
+{
+    int got = 0;
+    int dt = cycles;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && g_shim_sid_psid != NULL
+        && buffer != NULL && buffer_len >= 0) {
+        got = resid_shim_clock_buffered(g_shim_sid_psid, &dt, buffer, buffer_len);
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    if (cycles_remaining != NULL) {
+        *cycles_remaining = dt;
+    }
+    return got;
 }
