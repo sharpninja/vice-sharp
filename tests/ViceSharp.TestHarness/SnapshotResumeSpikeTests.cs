@@ -22,6 +22,7 @@ namespace ViceSharp.TestHarness;
 /// uses a shim-generated .vsf - the correct lockstep oracle - to get the managed
 /// divergence measurement. Exploratory: expected to be replaced by S1-S4.
 /// </summary>
+[Collection("NativeVice")]
 public sealed class SnapshotResumeSpikeTests
 {
     private const string ModelSelector = "c64";

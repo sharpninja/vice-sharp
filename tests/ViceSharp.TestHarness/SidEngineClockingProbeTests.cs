@@ -16,6 +16,7 @@ namespace ViceSharp.TestHarness;
 /// move after stepping. It does not assert engine parity; it answers "is reSID
 /// clocked?" so we know whether shim work is needed next.
 /// </summary>
+[Collection("NativeVice")]
 public sealed class SidEngineClockingProbeTests
 {
     private readonly ITestOutputHelper _output;

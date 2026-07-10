@@ -16,6 +16,7 @@ namespace ViceSharp.TestHarness;
 /// ported the reSID exponential-counter EnvelopeGenerator verbatim (rate-counter
 /// period, sustain, the exponential thresholds, and the 0x8000 ADSR delay bug).
 /// </summary>
+[Collection("NativeVice")]
 public sealed class SidEngineParityTests
 {
     private const double PalMasterClockHz = 985248.0;
