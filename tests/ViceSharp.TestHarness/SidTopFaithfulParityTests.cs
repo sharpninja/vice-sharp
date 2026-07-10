@@ -343,8 +343,11 @@ public sealed class SidTopFaithfulParityTests
         Assert.Equal(0x00, sid.Read(0xD41B));
         Assert.Equal(resetReference.Env3, sid.Read(0xD41C));
         Assert.Equal(0xE6, sid.Read(0xD41C));
-        Assert.Equal(0x00, sid.Read(0xD40F));
-        Assert.Equal(0x00, sid.Read(0xD412));
+        // Register-file inspection uses Peek: after S10, Read($D40F/$D412)
+        // returns the shared data bus (0xE6, latched by the ENV3 read above),
+        // while Peek is the side-effect-free view of the zeroed register file.
+        Assert.Equal(0x00, sid.Peek(0xD40F));
+        Assert.Equal(0x00, sid.Peek(0xD412));
         var state = CaptureVoiceState(sid);
         Assert.Equal((0u, 0u, 0u), (state.Acc0 & 0xFFFFFFu, state.Acc1 & 0xFFFFFFu, state.Acc2 & 0xFFFFFFu));
         Assert.Equal(resetReference.EnvelopeCounter, state.Env2);

@@ -531,18 +531,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// </summary>
     private const float DigiDcOffset = 0.05f;
 
-    /// <summary>
-    /// FR-SID-003 acceptance criterion 2 (BACKFILL-SID-001 / 8580 variant).
-    /// Hook applied to the AND-combine result when two or more waveform
-    /// bits are selected. The 6581 base implementation is a no-op (the
-    /// AND-combined value passes through unchanged); the 8580 override
-    /// applies the ~0.75 attenuation scalar that models the 8580 die's
-    /// reduced combined-waveform analog bleed. Single-waveform output is
-    /// never routed through this hook, so single-waveform behaviour is
-    /// identical across both die revisions.
-    /// </summary>
-    protected virtual byte ApplyCombinedBleed(byte andResult) => andResult;
-
     // FR-SID-004 (BACKFILL-SID-001 filter slice): state-variable filter
     // state. The Chamberlin SVF needs two persistent integrators (LP and
     // BP); the HP tap is computed each step from the current LP, BP, the
@@ -684,6 +672,13 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     // constructor seeds bus_value = 0, bus_value_ttl = 0, write_pipeline = 0
     // (sid.cc:80-82); the 6581 write-to-bus TTL is 0x1d00 (sid.cc:119).
     private const int DataBusTtl6581 = 0x1D00;
+
+    /// <summary>
+    /// Per-model data-bus fade TTL in cycles (reSID sid.cc:119). The 6581 uses
+    /// 0x1d00; the 8580 (0xa2000) overrides this in the S11 slice.
+    /// </summary>
+    protected virtual int DataBusTtl => DataBusTtl6581;
+
     private byte _busValue;
     private int _busValueTtl;
     private byte _writePipeline;
@@ -1178,20 +1173,6 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         _sampleBufferLen = 0;
     }
 
-    // ADSR rate tables (cycles per level) - virtual for override
-    protected static readonly ushort[] AttackRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
-    protected static readonly ushort[] DecayReleaseRates = { 9, 32, 63, 95, 149, 220, 267, 313, 392, 976, 1953, 2946, 4910, 9818, 29454, 65535 };
-    
-    /// <summary>
-    /// Virtual method to get attack rates (override in subclass)
-    /// </summary>
-    protected virtual ushort[] GetAttackRates() => AttackRates;
-    
-    /// <summary>
-    /// Virtual method to get decay/release rates (override in subclass)
-    /// </summary>
-    protected virtual ushort[] GetDecayReleaseRates() => DecayReleaseRates;
-
     public void Tick()
     {
         // PLAN-VICEPARITY-001 S1 (FR-SID-CLOCK AC-01/AC-09): reSID's
@@ -1508,23 +1489,35 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     public byte Read(ushort address)
     {
         int register = address & 0x1F;
-        
-        // VICE-style: Read back current values (not just registers)
+
+        // reSID SID::read (sid.cc:176-197) [PLAN-VICEPARITY-001 S10,
+        // FR-SID-POT / FR-SID-DATABUS]: $19/$1A latch the POT stub (0xff,
+        // pot.cc:25-29), $1B/$1C latch the OSC3/ENV3 readback, and every read
+        // returns the shared data bus. The register file is never read back;
+        // unreadable and write-only registers surface the last value driven onto
+        // the fading bus (bus_value), which ages to zero DataBusTtl cycles later.
         switch (register)
         {
-            case 0x1B: // OSC3: voice-3 selected-waveform readback.
-                // FR-SID-OSC3ENV3 AC-01/AC-02 [PLAN-VICEPARITY-001 S3]:
-                // reSID readOSC() always returns the osc3 latch's top 8 bits
-                // (osc3 >> 4, wave.cc:293-296), regardless of waveform-select
-                // state. With waveform 0 the Osc3 latch decays via floating-DAC
-                // fade (wave.h:499-503) starting from the last active output.
-                return (byte)(_voices[2].Osc3 >> 4);
-            case 0x1C: // ENV3: voice 3 envelope readback (reSID env3 = counter
-                       // sampled at the first phase of the cycle).
-                return _voices[2].Env.Env3;
+            case 0x19: // POTX
+            case 0x1A: // POTY
+                _busValue = 0xFF;
+                _busValueTtl = DataBusTtl;
+                break;
+            case 0x1B: // OSC3: voice-3 selected-waveform readback (osc3 >> 4,
+                       // wave.cc:293-296).
+                _busValue = (byte)(_voices[2].Osc3 >> 4);
+                _busValueTtl = DataBusTtl;
+                break;
+            case 0x1C: // ENV3: voice-3 envelope readback (counter sampled at the
+                       // first phase of the cycle).
+                _busValue = _voices[2].Env.Env3;
+                _busValueTtl = DataBusTtl;
+                break;
             default:
-                return _registers[register];
+                break;
         }
+
+        return _busValue;
     }
 
     public void Write(ushort address, byte value)
@@ -1537,7 +1530,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // on the 6581, sid.cc:119; the 8580 value and the read-side bus
         // semantics are FR-SID-DATABUS remediations).
         _busValue = value;
-        _busValueTtl = DataBusTtl6581;
+        _busValueTtl = DataBusTtl;
 
         int voiceIndex = register / 7;
 
@@ -1675,7 +1668,19 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
 
     public byte Peek(ushort address)
     {
-        return Read(address);
+        // Side-effect-free debug view [PLAN-VICEPARITY-001 S10]: unlike Read, it
+        // never mutates the data bus. Returns the register file for the readable/
+        // write-only storage, the POT stub for $19/$1A, and the live OSC3/ENV3
+        // latches for $1B/$1C. Snapshot round-trip probes rely on this to inspect
+        // write-only registers without perturbing the shared bus.
+        int register = address & 0x1F;
+        return register switch
+        {
+            0x19 or 0x1A => 0xFF,
+            0x1B => (byte)(_voices[2].Osc3 >> 4),
+            0x1C => _voices[2].Env.Env3,
+            _ => _registers[register],
+        };
     }
 
     /// <summary>

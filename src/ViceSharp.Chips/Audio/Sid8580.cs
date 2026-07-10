@@ -156,24 +156,4 @@ public partial class Sid8580 : Sid6581
 
         return (int)tapSum + bypassMix - DcOffset8580;
     }
-
-    /// <summary>
-    /// 8580 uses different ADSR rate tables.
-    /// </summary>
-    protected override ushort[] GetAttackRates() => _attackRates8580;
-    protected override ushort[] GetDecayReleaseRates() => _decayReleaseRates8580;
-
-    /// <summary>
-    /// FR-SID-003 acceptance criterion 2 (BACKFILL-SID-001 / 8580 combined
-    /// waveform variant). The 8580 die has different analog characteristics
-    /// than the 6581: when two or more waveform outputs drive the internal
-    /// combined-waveform node simultaneously, the 8580 produces a quieter,
-    /// slightly different output.
-    /// </summary>
-    protected override byte ApplyCombinedBleed(byte andResult)
-        => (byte)(andResult * 3 / 4);
-
-    // 8580 ADSR - different rates than 6581
-    private static readonly ushort[] _attackRates8580 = { 14, 49, 97, 146, 230, 342, 419, 489, 617, 1549, 3119, 4702, 7846, 15699, 47095, 65535 };
-    private static readonly ushort[] _decayReleaseRates8580 = { 14, 49, 97, 146, 230, 342, 419, 489, 617, 1549, 3119, 4702, 7846, 15699, 47095, 65535 };
 }

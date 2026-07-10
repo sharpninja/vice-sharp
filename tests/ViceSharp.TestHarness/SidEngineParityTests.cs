@@ -11,10 +11,10 @@ namespace ViceSharp.TestHarness;
 /// 1 cycle). The old SID lockstep only compared write-latch registers ($00-$18),
 /// which are engine-independent; these compare the engine-computed OSC3/ENV3.
 ///
-/// OSC3 (the voice-3 oscillator readback) is now cycle-exact between managed and
-/// reSID. ENV3 (the ADSR envelope) is not yet exact: managed attack runs ~4% fast
-/// and decay/release are linear vs reSID's exponential counter - a faithful reSID
-/// EnvelopeGenerator port is the remaining work and is tracked separately.
+/// OSC3 (the voice-3 oscillator readback) and ENV3 (the ADSR envelope) are both
+/// cycle-exact between managed and reSID as of PLAN-VICEPARITY-001 S1, which
+/// ported the reSID exponential-counter EnvelopeGenerator verbatim (rate-counter
+/// period, sustain, the exponential thresholds, and the 0x8000 ADSR delay bug).
 /// </summary>
 public sealed class SidEngineParityTests
 {
