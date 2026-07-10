@@ -1205,11 +1205,17 @@ ManifestVersion: 1.6.0
             var wingetcreate = FindOnPath("wingetcreate.exe") ?? FindOnPath("wingetcreate");
             if (wingetcreate is null)
             {
-                Serilog.Log.Information("wingetcreate not found; installing the Microsoft.WingetCreate .NET tool.");
-                var toolPath = TemporaryDirectory / "wingetcreate-tool";
-                RunProcess("dotnet", $"tool install Microsoft.WingetCreate --tool-path \"{toolPath}\"", throwOnNonZero: false);
-                var candidate = toolPath / "wingetcreate.exe";
-                wingetcreate = candidate.FileExists() ? candidate.ToString() : null;
+                // wingetcreate is NOT a dotnet global tool (not on nuget.org); it
+                // ships as a standalone exe. Download the self-contained build so
+                // there is no .NET runtime version dependency on the agent.
+                Serilog.Log.Information("wingetcreate not found; downloading the standalone self-contained build.");
+                var exe = TemporaryDirectory / "wingetcreate.exe";
+                using (var http = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromMinutes(5) })
+                {
+                    var bytes = http.GetByteArrayAsync("https://aka.ms/wingetcreate/latest/self-contained").GetAwaiter().GetResult();
+                    System.IO.File.WriteAllBytes(exe, bytes);
+                }
+                wingetcreate = exe.FileExists() ? exe.ToString() : null;
             }
 
             var token = Environment.GetEnvironmentVariable("WINGET_PAT");
