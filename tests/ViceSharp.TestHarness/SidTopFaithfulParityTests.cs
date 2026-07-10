@@ -407,7 +407,7 @@ public sealed class SidTopFaithfulParityTests
     /// (Commodore64.cs passes profile: null).
     /// Acceptance: SidFactory.Create(bus, profile: null, audioBackend: null,
     /// masterClockHz: 985248.0) returns an instance whose runtime type is
-    /// exactly Sid6581 (not the Sid8580 or Sid8580D die variants).
+    /// exactly Sid6581 (not the Sid8580 die variant).
     /// </summary>
     [Fact]
     [ParityAc("TEST-SID-VOICE-10", ParityTag.Faithful)]

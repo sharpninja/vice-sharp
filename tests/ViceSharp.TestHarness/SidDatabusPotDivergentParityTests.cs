@@ -364,18 +364,22 @@ public sealed class SidDatabusPotDivergentParityTests
     }
 
     /// <summary>
-    /// FR: FR-SID-DATABUS AC-07 (DIVERGENT, finding 21), TR: TR-SID-ORACLE-001,
+    /// FR: FR-SID-DATABUS AC-07 (DIVERGENT, finding 21), TR: TR-SID-ORACLE-002,
     /// TEST: TEST-SID-DATABUS-07.
-    /// Use case: the 8580 databus ttl is 0xa2000 (sid.cc), which needs the
-    /// per-model DataBusTtl override that lands with the 8580 slice (S11).
-    /// Acceptance: quarantined (pending) until S11 adds the Sid8580 override;
-    /// then the managed 8580 ttl equals 0xA2000 in lockstep with the c64c oracle.
+    /// Use case: the 8580 databus fade ttl is 0xa2000 cycles (sid.cc:119), vs
+    /// 0x1d00 on the 6581; a register write reloads the bus ttl to that value.
+    /// Acceptance: Sid8580 DataBusTtl == 0xA2000 and a write latches
+    /// DataBusValueTtl == 0xA2000 (unblocked by the PLAN-VICEPARITY-001 S11
+    /// per-model DataBusTtl override).
     /// </summary>
-    [ViceFact]
-    [ParityAc("TEST-SID-DATABUS-07", ParityTag.Divergent, pending: true)]
+    [Fact]
+    [ParityAc("TEST-SID-DATABUS-07", ParityTag.Divergent, pending: false)]
     public void DataBusTtl8580_Is0xA2000()
     {
-        Assert.Skip("8580 per-model databus_ttl (0xA2000) lands in PLAN-VICEPARITY-001 S11.");
+        var sid = new Sid8580(new BasicBus()) { BaseAddress = 0xD400 };
+        Assert.Equal(0xA2000, sid.DataBusTtlSeam);
+        sid.Write(0xD400, 0x77);
+        Assert.Equal(0xA2000, sid.DataBusValueTtl);
     }
 
     /// <summary>

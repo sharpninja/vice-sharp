@@ -58,6 +58,15 @@ public sealed class SidVoiceMixDivergentParityTests
     private static readonly ushort[] EnvDac6581 =
         Sid6581.BuildEnvelopeDacTable(8, 2.20, term: false);
 
+    /// <summary>
+    /// 8-bit envelope DAC for MOS 8580 (bits=8, 2R/R=2.00, terminated).
+    /// Matches reSID model_dac[MOS8580] (envelope.cc:167-168). PLAN-VICEPARITY-001
+    /// S11 routed the 8580 envelope through this nonlinear DAC (was a linear
+    /// identity stub); the filter lockstep vs the c64c oracle proves it.
+    /// </summary>
+    private static readonly ushort[] EnvDac8580 =
+        Sid6581.BuildEnvelopeDacTable(8, 2.00, term: true);
+
     // reSID wave_zero constants in 12-bit domain (voice.cc:93,97).
     private const int WaveZero6581 = 0x380;  // voice.cc:93
     private const int WaveZero8580 = 0x9e0;  // voice.cc:97
@@ -195,24 +204,24 @@ public sealed class SidVoiceMixDivergentParityTests
         var sid = BuildSid8580();
         PinAndRelease(sid);
 
-        // 8580 tri/saw pipeline adds 1-cycle delay; clock 1025 cycles to
-        // get osc3 = 0x400 (1024 cycles of saw accumulation + 1 pipeline).
+        // The value fed to the filter/mix is the CURRENT waveform_output
+        // (wave.h:588-592), NOT the delayed OSC3 readback latch: the 8580
+        // tri/saw one-cycle delay applies to readOSC only (PLAN-VICEPARITY-001
+        // S11, lockstep-proven vs the c64c oracle). So clock 1024 cycles to get
+        // the current sawtooth waveform_output = 0x400 (no pipeline compensation).
         sid.Write(0xD413, 0x00);
         sid.Write(0xD414, 0xF0);
         sid.Write(0xD40F, 0x10); // freq = 0x1000
         sid.Write(0xD412, 0x21); // sawtooth + gate
-        TickN(sid, 1025); // 1 extra for tri/saw pipeline on 8580
+        TickN(sid, 1024);
 
         byte envCounter = sid.Read(0xD41C);
-        // 8580 uses its own wave DAC and linear envelope DAC.
-        // With correct 12-bit wave_zero = 0x9e0 and no >>8:
+        // 8580 uses its own 12-bit wave DAC and its own nonlinear 8-bit
+        // envelope DAC (2R/R=2.00, terminated). With correct 12-bit
+        // wave_zero = 0x9e0 and no >>8:
         int osc3 = 0x400;
-        // Build 8580 envelope table (linear, since managed Sid8580 uses identity)
-        ushort[] envDac8580 = new ushort[256];
-        for (int i = 0; i < 256; i++) envDac8580[i] = (ushort)i;
-
-        int expected = (WaveDac8580[osc3] - 0x9e0) * envDac8580[envCounter];
-        int wrongWaveZero = (WaveDac8580[osc3] - 0x9E) * envDac8580[envCounter];
+        int expected = (WaveDac8580[osc3] - 0x9e0) * EnvDac8580[envCounter];
+        int wrongWaveZero = (WaveDac8580[osc3] - 0x9E) * EnvDac8580[envCounter];
         Assert.NotEqual(wrongWaveZero, expected); // sanity: diverge
         Assert.Equal(expected, sid.CycleVoiceOutputs.Voice2);
     }
@@ -302,18 +311,19 @@ public sealed class SidVoiceMixDivergentParityTests
         sid6581.Write(0xD412, 0x21); // Sawtooth + gate
         TickN(sid6581, 1024);
 
-        // 8580: tick 1025 cycles -> sawtooth with 1-cycle tri/saw pipeline delay
-        // (IsMos8580Wave=true): acc=0x401000 after 1025 cycles, OSC3 pipeline
-        // serves the acc value from cycle 1024 = 0x400000, osc3=0x400.
+        // 8580: the filter/mix input is the CURRENT waveform_output
+        // (wave.h:588-592); the tri/saw one-cycle delay applies to OSC3 readback
+        // only (PLAN-VICEPARITY-001 S11). So clock 1024 cycles (no pipeline
+        // compensation) to get the current sawtooth waveform_output = 0x400.
         PinAndRelease(sid8580);
         sid8580.Write(0xD413, 0x00);
         sid8580.Write(0xD414, 0xF0);
         sid8580.Write(0xD40F, 0x10); // freq = 0x1000
         sid8580.Write(0xD412, 0x21); // Sawtooth + gate
-        TickN(sid8580, 1025); // extra cycle for tri/saw pipeline on 8580
+        TickN(sid8580, 1024);
 
         // 6581: (WaveDac6581[0x400] - 0x380) * EnvDac6581[envCounter]
-        // 8580: (WaveDac8580[0x400] - 0x9e0) * LinearEnv[envCounter]
+        // 8580: (WaveDac8580[0x400] - 0x9e0) * EnvDac8580[envCounter]
         // These must differ because wave DAC parameters and wave_zero differ.
         int v6581 = sid6581.CycleVoiceOutputs.Voice2;
         int v8580 = sid8580.CycleVoiceOutputs.Voice2;
@@ -323,12 +333,9 @@ public sealed class SidVoiceMixDivergentParityTests
         // Verify each against its closed-form formula.
         byte env6581 = sid6581.Read(0xD41C);
         byte env8580 = sid8580.Read(0xD41C);
-        // 8580 uses linear envelope table: envDac[n] = n.
-        ushort[] envDac8580 = new ushort[256];
-        for (int i = 0; i < 256; i++) envDac8580[i] = (ushort)i;
 
         Assert.Equal((WaveDac6581[0x400] - WaveZero6581) * EnvDac6581[env6581], v6581);
-        Assert.Equal((WaveDac8580[0x400] - WaveZero8580) * envDac8580[env8580], v8580);
+        Assert.Equal((WaveDac8580[0x400] - WaveZero8580) * EnvDac8580[env8580], v8580);
     }
 
     /// <summary>

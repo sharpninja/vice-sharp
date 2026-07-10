@@ -22,7 +22,7 @@ namespace ViceSharp.TestHarness;
 public sealed class SidFilter6581DivergentParityTests
 {
     // Convenience accessor for the static model tables.
-    private static Sid6581.ResidFilter6581Model M => Sid6581.Model6581;
+    private static Sid6581.ResidFilterModel M => Sid6581.Model6581;
 
     // -----------------------------------------------------------------------
     // FR-SID-FILTER-6581 (DIVERGENT ACs)
@@ -296,7 +296,9 @@ public sealed class SidFilter6581DivergentParityTests
     [ParityAc("TEST-SID-FILTER-6581-14", ParityTag.Divergent, pending: false)]
     public void VcrKVg_65536_BoundaryValues()
     {
-        Assert.Equal(1 << 16, M.VcrKVg.Length);
+        // VcrKVg is 6581-only (null on the 8580 model); this is the 6581 model.
+        Assert.NotNull(M.VcrKVg);
+        Assert.Equal(1 << 16, M.VcrKVg!.Length);
         // i=0: Vg = kVddt_raw - sqrt(0) = kVddt_raw = N16*k*(Vdd-Vth)
         // vcr_kVg[0] = k*kVddt_raw - vmin_N16 = N16*(k*(Vdd-Vth)-vmin) = kVddt_int = 65535
         Assert.Equal(65535, M.VcrKVg[0]);
@@ -316,7 +318,9 @@ public sealed class SidFilter6581DivergentParityTests
     [ParityAc("TEST-SID-FILTER-6581-15", ParityTag.Divergent, pending: false)]
     public void VcrNIdsTerm_65536_ValidRange()
     {
-        Assert.Equal(1 << 16, M.VcrNIdsTerm.Length);
+        // VcrNIdsTerm is 6581-only (null on the 8580 model); this is the 6581 model.
+        Assert.NotNull(M.VcrNIdsTerm);
+        Assert.Equal(1 << 16, M.VcrNIdsTerm!.Length);
         // i=0: kVg_Vx = -32768; exp(large negative) -> log1p -> ~0
         Assert.Equal(0, M.VcrNIdsTerm[0]);
         // Higher i values should produce increasing EKV current
