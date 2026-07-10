@@ -792,8 +792,11 @@ sealed partial class Build : NukeBuild
                 // AbsolutePath's operators and tries to convert the left string
                 // to a (non-rooted) AbsolutePath, which throws.
                 var buildPs1 = (RootDirectory / "build.ps1").ToString();
+                // Override the MSI ProductVersion to the tag so the installer,
+                // the release, and the winget/scoop manifests all agree (bare
+                // GitVersion yields Major.Minor.<commit-height>, not the tag).
                 RunProcess("pwsh.exe",
-                    $"-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{buildPs1}\" PublishMsi --configuration Release",
+                    $"-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"{buildPs1}\" PublishMsi --configuration Release --msi-version-override {version}",
                     throwOnNonZero: true);
                 Assert.FileExists(MsiOutputPath);
                 assets.Insert(0, MsiOutputPath);
