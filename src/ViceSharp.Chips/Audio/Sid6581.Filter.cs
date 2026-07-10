@@ -52,7 +52,14 @@ public partial class Sid6581
     /// Exposes the 6581 model tables for test assertions.
     /// PLAN-VICEPARITY-001 S9 internal seam.
     /// </summary>
-    internal static readonly ResidFilter6581Model Model6581 = BuildResidModel6581();
+    internal static readonly ResidFilterModel Model6581 = BuildResidModel6581();
+
+    /// <summary>
+    /// Exposes the 8580 model tables for test assertions. Lazily built: the
+    /// ~65K-entry tables (opamp_rev, summer, mixer, 16x gain, 16x resonance)
+    /// are only constructed if an 8580 is instantiated. PLAN-VICEPARITY-001 S11.
+    /// </summary>
+    internal static readonly Lazy<ResidFilterModel> Model8580 = new(BuildResidModel8580);
 
     // ----------------------------------------------------------------
     // Per-instance filter state (reSID Filter / ExternalFilter fields)
@@ -66,8 +73,13 @@ public partial class Sid6581
     // Integrator internal state (x = opamp input, vc = capacitor charge)
     private int _vbpX, _vbpVc;
     private int _vlpX, _vlpVc;
-    // Vddt_Vw_2 = (kVddt-Vw)^2/2, set by SetW0_6581 on fc register write
+    // Vddt_Vw_2 = (kVddt-Vw)^2/2, set by SetW0_6581 on fc register write (6581)
     private int _vddt_Vw_2;
+    // n_dac = (n_param*f0_dac[fc])>>11, set by SetW0_8580 (8580; filter8580new.h:643)
+    private int _nDac;
+    // nVgt = DAC gate overdrive, seeded from NVgtDefault, mutated by
+    // AdjustFilterBias8580 (8580; filter8580new.h:640)
+    private int _nVgt;
     // Prescaled voice inputs (set by ClockResidFilter6581 each cycle)
     private int _rv1, _rv2, _rv3;
     // External filter state (extfilt.h:72-75)
@@ -80,11 +92,29 @@ public partial class Sid6581
     // ----------------------------------------------------------------
 
     /// <summary>
-    /// True for the MOS 6581 path: reSID two-integrator op-amp filter.
-    /// Sid8580 overrides to false to keep the Chamberlin SVF path.
+    /// True for the reSID two-integrator op-amp filter path (both 6581 and 8580).
     /// PLAN-VICEPARITY-001 S9 (FR-SID-FILTER-6581 / FR-SID-FILTER-CLOCK).
     /// </summary>
     protected virtual bool UsesReSidFilter => true;
+
+    /// <summary>
+    /// The active reSID filter model tables. Base = 6581; Sid8580 overrides to
+    /// the 8580 model. Must be private protected: the return type is an internal
+    /// nested type (CS0050 if declared protected). PLAN-VICEPARITY-001 S11.
+    /// </summary>
+    private protected virtual ResidFilterModel FilterModel => Model6581;
+
+    /// <summary>
+    /// Selects the 8580 integrator (solve_integrate_8580) over the 6581 one.
+    /// Distinct from IsMos8580Wave (waveform branch). PLAN-VICEPARITY-001 S11.
+    /// </summary>
+    protected virtual bool IsMos8580Filter => false;
+
+    /// <summary>
+    /// set_w0() dispatch: base runs the 6581 path; Sid8580 overrides to the
+    /// 8580 path. filter8580new.cc:751-765. PLAN-VICEPARITY-001 S11.
+    /// </summary>
+    private protected virtual void SetW0() => SetW0_6581();
 
     // ----------------------------------------------------------------
     // reSID Filter::clock() for the 6581 path
@@ -100,7 +130,7 @@ public partial class Sid6581
     /// </summary>
     private void ClockResidFilter6581(int rawVoice0, int rawVoice1, int rawVoice2)
     {
-        var m = Model6581;
+        var m = FilterModel;
 
         // Voice pre-scaling: v = ((raw * voice_scale_s14 + rnd.getNoise()) >> 18)
         // + voice_DC (filter8580new.h:701-703). reSID adds a per-draw dither from
@@ -143,9 +173,19 @@ public partial class Sid6581
             default:  Vi = _rv3 + _rv2 + _rv1; offset = SummerOffset4; break;
         }
 
-        // 6581 two-integrator filter (filter8580new.h:764-778)
-        _vlp = SolveIntegrate6581(1, _vbp, ref _vlpX, ref _vlpVc, m);
-        _vbp = SolveIntegrate6581(1, _vhp, ref _vbpX, ref _vbpVc, m);
+        // Two-integrator filter. 6581 uses the VCR/snake EKV integrator; 8580
+        // (filter8580new.h m==1) uses the simpler DAC-gated integrator.
+        // filter8580new.h:764-778 (6581) / :1913-1937 (8580).
+        if (IsMos8580Filter)
+        {
+            _vlp = SolveIntegrate8580(1, _vbp, ref _vlpX, ref _vlpVc, m);
+            _vbp = SolveIntegrate8580(1, _vhp, ref _vbpX, ref _vbpVc, m);
+        }
+        else
+        {
+            _vlp = SolveIntegrate6581(1, _vbp, ref _vlpX, ref _vlpVc, m);
+            _vbp = SolveIntegrate6581(1, _vhp, ref _vbpX, ref _vbpVc, m);
+        }
 
         // reSID summer index: offset + resonance[res][Vbp] + Vlp + Vi, using RAW
         // Vbp/Vlp (filter8580new.h:776). Vbp is asserted in [0, 1<<16) so the
@@ -176,7 +216,7 @@ public partial class Sid6581
     /// </summary>
     private short ComputeResidFilterOutput6581()
     {
-        var m = Model6581;
+        var m = FilterModel;
         int filterGain = m.FilterGain;
         // dc_offset = 32767 * (4096 - filterGain) (filter8580new.h:977)
         int dcOffset = 32767 * ((1 << 12) - filterGain);
@@ -292,6 +332,41 @@ public partial class Sid6581
     }
 
     /// <summary>
+    /// reSID Filter::set_w0() 8580 path (filter8580new.cc:760-764):
+    ///   n_dac = (n_param * f0_dac[fc]) >> 11
+    /// Called on $D415/$D416 writes and reset via the SetW0() dispatch when the
+    /// active model is the 8580. PLAN-VICEPARITY-001 S11 (FR-SID-FILTER-8580).
+    /// </summary>
+    internal void SetW0_8580()
+    {
+        var m = FilterModel;             // Model8580
+        int fc = _filterCutoff & 0x7FF;  // 11-bit cutoff register value
+        _nDac = (m.NParam * m.F0Dac[fc]) >> 11; // filter8580new.cc:763
+    }
+
+    // 8580 gate-voltage constants (filter8580new.cc:246/213/664).
+    private const double Vref8580 = 4.7975; // Vref (:246)
+    private const double Vth8580  = 0.80;   // model_filter_init[1].Vth (:213)
+    private const double Vmin8580 = 1.30;   // opamp_voltage_8580[0][0] (:664)
+
+    /// <summary>
+    /// reSID Filter::adjust_filter_bias() 8580 portion (filter8580new.cc:661-668):
+    ///   Vg  = Vref*(dac_bias*6/100 + 1.6);
+    ///   Vgt = Vg - Vth;
+    ///   nVgt = (int)(vo_N16*(Vgt - vmin) + 0.5)
+    /// Recomputes the per-instance DAC gate overdrive from user bias volts.
+    /// At biasVolts=0 this reproduces NVgtDefault (48019). vo_N16 = the 8580
+    /// model's VoN16. PLAN-VICEPARITY-001 S11 (FR-SID-FILTER-8580).
+    /// </summary>
+    internal void AdjustFilterBias8580(double biasVolts)
+    {
+        var m = FilterModel; // Model8580
+        double Vg  = Vref8580 * (biasVolts * 6.0 / 100.0 + 1.6); // :662
+        double Vgt = Vg - Vth8580;                               // :663
+        _nVgt = (int)(m.VoN16 * (Vgt - Vmin8580) + 0.5);         // :668
+    }
+
+    /// <summary>
     /// reSID Filter::set_sum_mix() (filter8580new.cc:768-776).
     /// Sum/mix masks are recomputed inline each cycle from _filterControl
     /// and _voiceMask; this hook is a no-op but marks the call site.
@@ -313,7 +388,12 @@ public partial class Sid6581
         _rv1 = 0; _rv2 = 0; _rv3 = 0;
         _extFiltVlp = 0;
         _extFiltVhp = 0;
-        SetW0_6581(); // apply f0_dac[0]
+        // 8580 DAC-gate state (harmless zero/default for the 6581 path).
+        // NVgtDefault is the reSID model_filter[1].vo_N16*(Vgt-vmin) seed
+        // (filter8580new.cc:600-603); AdjustFilterBias8580 mutates _nVgt.
+        _nDac = 0;
+        _nVgt = FilterModel.NVgtDefault;
+        SetW0(); // apply f0_dac[0] via the model-specific set_w0
     }
 
     // ----------------------------------------------------------------
@@ -328,6 +408,9 @@ public partial class Sid6581
     internal int ResidPrescaledV1 => _rv1;
     internal int ResidPrescaledV2 => _rv2;
     internal int ResidPrescaledV3 => _rv3;
+    // 8580 DAC-gate integrator state (PLAN-VICEPARITY-001 S11 parity seams).
+    internal int FilterNVgt => _nVgt;
+    internal int FilterNDac => _nDac;
 
     // ----------------------------------------------------------------
     // solve_integrate_6581 (filter8580new.h:1827-1875)
@@ -340,7 +423,7 @@ public partial class Sid6581
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private int SolveIntegrate6581(int dt, int vi, ref int vx, ref int vc,
-        ResidFilter6581Model m)
+        ResidFilterModel m)
     {
         int kVddt = m.KVddt;
 
@@ -357,7 +440,7 @@ public partial class Sid6581
         // kVg = vcr_kVg[(Vddt_Vw_2 + (Vgdt_2>>1)) >> 16]
         uint vcrIdx = ((uint)_vddt_Vw_2 + (Vgdt2 >> 1)) >> 16;
         if (vcrIdx > 65535u) vcrIdx = 65535u;
-        int kVg = m.VcrKVg[(int)vcrIdx];
+        int kVg = m.VcrKVg![(int)vcrIdx];
 
         // VCR voltages for EKV lookup (filter8580new.h:1849-1850)
         int Vgs = kVg - vx + (1 << 15);
@@ -367,7 +450,7 @@ public partial class Sid6581
 
         // VCR EKV current (filter8580new.h:1853)
         // int(unsigned(vcr_n_Ids_term[Vgs] - vcr_n_Ids_term[Vgd]) << 15)
-        int nIVcr = (int)(unchecked((uint)(m.VcrNIdsTerm[Vgs] - m.VcrNIdsTerm[Vgd])) << 15);
+        int nIVcr = (int)(unchecked((uint)(m.VcrNIdsTerm![Vgs] - m.VcrNIdsTerm![Vgd])) << 15);
 
         // Capacitor charge update (filter8580new.h:1856)
         vc -= (nISnake + nIVcr) * dt;
@@ -382,6 +465,41 @@ public partial class Sid6581
         return vx + (vc >> 14);
     }
 
+    /// <summary>
+    /// reSID solve_integrate_8580: one DAC-transconductance integrator step.
+    /// No VCR/snake branch; gate voltage is the DAC gate _nVgt (not kVddt),
+    /// current uses _nDac with the 8580-only extra >> 4, and Vgdt clamps to 0
+    /// in saturation. filter8580new.h:1912-1937.
+    /// PLAN-VICEPARITY-001 S11 (FR-SID-FILTER-8580).
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int SolveIntegrate8580(int dt, int vi, ref int vx, ref int vc,
+        ResidFilterModel m)
+    {
+        int nVgt = _nVgt; // per-instance DAC gate overdrive (seeded from NVgtDefault)
+
+        // Dac voltages (filter8580new.h:1921-1922). Vgdt clamps to 0 when
+        // vi >= nVgt: the triode/saturation switch.
+        uint Vgst = (uint)(nVgt - vx);
+        uint Vgdt = (uint)(vi < nVgt ? nVgt - vi : 0);
+
+        // Dac current, scaled m*2^30 then the 8580-only >> 4 (filter8580new.h:1925).
+        int nIRfc = (_nDac * ((int)(Vgst * Vgst - Vgdt * Vgdt) >> 15)) >> 4;
+
+        // Change in capacitor charge (filter8580new.h:1928). No vc_min/vc_max clamp.
+        vc -= nIRfc * dt;
+
+        // vx = g(vc) via opamp_rev (filter8580new.h:1931-1933). Native asserts
+        // the index in [0, 2^16); managed clamps for memory safety as 6581 does.
+        int opampIdx = (vc >> 15) + (1 << 15);
+        if (opampIdx < 0) opampIdx = 0;
+        else if (opampIdx > 65535) opampIdx = 65535;
+        vx = m.OpampRev[opampIdx];
+
+        // Return vo (filter8580new.h:1936). Asymmetric vc>>14 is intentional.
+        return vx + (vc >> 14);
+    }
+
     // ----------------------------------------------------------------
     // BuildResidModel6581: static table construction
     // Ports filter8580new.cc:244-625 for model m=0 (6581)
@@ -393,7 +511,7 @@ public partial class Sid6581
     /// filter8580new.cc:244-625, spline.h, dac.cc.
     /// PLAN-VICEPARITY-001 S9.
     /// </summary>
-    private static ResidFilter6581Model BuildResidModel6581()
+    private static ResidFilterModel BuildResidModel6581()
     {
         // -----------------------------------------------------------
         // MOS 6581 model_filter_init[0] (filter8580new.cc:179-202)
@@ -613,7 +731,7 @@ public partial class Sid6581
             }
         }
 
-        return new ResidFilter6581Model
+        return new ResidFilterModel
         {
             FilterGain    = filterGain,
             VoiceScaleS14 = voiceScaleS14,
@@ -633,6 +751,251 @@ public partial class Sid6581
             F0Dac         = f0dac,
             VcrKVg        = vcrKVg,
             VcrNIdsTerm   = vcrNIdsTerm,
+        };
+    }
+
+    // ----------------------------------------------------------------
+    // BuildResidModel8580: static table construction
+    // Ports filter8580new.cc:203-224 + :244-621 for model m=1 (8580).
+    // Mirrors BuildResidModel6581 structure; 8580 deltas are inline-cited.
+    // PLAN-VICEPARITY-001 S11.
+    // ----------------------------------------------------------------
+
+    /// <summary>
+    /// Build the complete reSID 8580 filter model tables.
+    /// filter8580new.cc:203-224 (model_filter_init[1]) + :524-621 (8580 branch).
+    /// PLAN-VICEPARITY-001 S11 (FR-SID-FILTER-8580).
+    /// </summary>
+    private static ResidFilterModel BuildResidModel8580()
+    {
+        // -----------------------------------------------------------
+        // MOS 8580 model_filter_init[1] (filter8580new.cc:203-224)
+        // -----------------------------------------------------------
+        const double voice_voltage_range = 0.24;    // :207 ("FIXME: Measure")
+        const double voice_DC_voltage    = 4.7975;  // :208 ("4.75V +1%")
+        const double Vdd  = 9.09;                    // :212 ("9V +1%")
+        const double Vth  = 0.80;                    // :213
+        const double k    = 1.0;                     // :215
+        const double uCox = 100e-6;                  // :216
+        const double C    = 22e-9;                   // :210 (22 nF)
+        const int    dac_bits = 11;                  // :258
+        const double Vref = 4.7975;                  // :246
+        // WL_vcr/WL_snake/dac_zero/dac_scale/dac_2R_div_R/dac_term (:217-223)
+        // are inert on the 8580 (no VCR/snake tables, no build_dac_table).
+
+        // opamp_voltage_8580: 23-point curve (filter8580new.cc:80-104).
+        // First (1.30,8.91) and last (8.91,1.30) rows are repeated to anchor
+        // the spline at AK and BK.
+        var opVin = new double[]
+        { 1.30, 1.30, 4.76, 4.77, 4.78, 4.785, 4.79, 4.795, 4.80, 4.805,
+          4.81, 4.815, 4.82, 4.825, 4.83, 4.84, 4.85, 4.87, 4.90, 5.00,
+          5.10, 8.91, 8.91 };
+        var opVout = new double[]
+        { 8.91, 8.91, 8.91, 8.90, 8.88, 8.86, 8.80, 8.60, 8.25, 7.50,
+          6.10, 4.05, 2.27, 1.65, 1.55, 1.47, 1.43, 1.37, 1.34, 1.30,
+          1.30, 1.30, 1.30 };
+        int opSize = opVin.Length; // 23 (.cc:205)
+
+        // -----------------------------------------------------------
+        // Normalization constants (filter8580new.cc:269-299)
+        // -----------------------------------------------------------
+        double vmin   = opVin[0];                             // 1.30 (:269)
+        double vmax   = Math.Max(opVout[0], k * (Vdd - Vth)); // max(8.91, 8.29)=8.91 (:270-272)
+        double denorm = vmax - vmin;                          // 7.61 (:273)
+        double norm   = 1.0 / denorm;                         // (:274)
+
+        double N16 = norm * ((1u << 16) - 1);                 // ~8611.70 (:277)
+        double N30 = norm * ((1u << 30) - 1);                 // (:278)
+        double N31 = norm * ((1u << 31) - 1);                 // (:279)
+        double vo_N16 = N16;                                  // (:280)
+
+        int filterGain    = (int)(1.0 * (1 << 12));           // 4096; scaleFactor=1.0 (:285-286)
+        double N14        = norm * (1u << 14);                // (:291)
+        int voiceScaleS14 = (int)(N14 * voice_voltage_range); // 516 (:292)
+        int voiceDC       = (int)(N16 * (voice_DC_voltage - vmin)); // 30119 (:293)
+        int kVddt_int     = (int)(N16 * (k * (Vdd - Vth) - vmin) + 0.5); // 60196 (:297)
+
+        // tmp_n_param[1] = denorm*(1<<13)*((uCox/2)*1e-6/C) (:299) -> ~141.684
+        double tmp_n_param = denorm * (1 << 13) * ((uCox / 2.0) * 1e-6 / C);
+
+        // 8580-branch scalars (filter8580new.cc:600-603)
+        int nParam = (int)(tmp_n_param * 32 + 0.5);           // 4534 (:600)
+        double Vgt = (Vref * 1.6) - Vth;                      // 6.876 (:602)
+        int nVgtDefault = (int)(N16 * (Vgt - vmin) + 0.5);    // 48019 (:603)
+
+        // -----------------------------------------------------------
+        // Scaled opamp points (filter8580new.cc:310-337), reversed order
+        // x = N16*(Vout-Vin)/2 + 32768;  y = N31*(Vin-vmin)
+        // -----------------------------------------------------------
+        var scX = new double[opSize];
+        var scY = new double[opSize];
+        for (int i = 0; i < opSize; i++)
+        {
+            int ri = opSize - 1 - i;
+            scX[ri] = N16 * (opVout[i] - opVin[i]) / 2.0 + (1 << 15);
+            scY[ri] = N31 * (opVin[i] - vmin);
+        }
+        if (scX[opSize - 1] > 65535.0)
+            scX[opSize - 1] = scX[opSize - 2] = 65535.0;
+
+        var voltages = new uint[1 << 16];
+        SplineInterpolate(scX, scY, opSize, voltages, 1.0);
+
+        // -----------------------------------------------------------
+        // opamp vx/dvx tables (filter8580new.cc:341-370)
+        // -----------------------------------------------------------
+        int ak = (int)(scX[0] + 0.5);
+        int bk = (int)(scX[opSize - 1] + 0.5);
+        var opampVx  = new int[1 << 16];
+        var opampDvx = new int[1 << 16];
+
+        uint fv = voltages[ak];
+        for (int j = ak; j < bk; j++)
+        {
+            uint fp = fv;
+            fv = voltages[j];
+            int df = (int)(fv - fp);
+            opampVx[j]  = (int)(fv > (0xFFFFu << 15) ? 0xFFFFu : fv >> 15);
+            opampDvx[j] = df >> (15 - 11);
+        }
+        opampDvx[ak] = opampDvx[ak + 1];
+
+        var opampRev = new ushort[1 << 16];
+        for (int i = 0; i < (1 << 16); i++)
+            opampRev[i] = (ushort)opampVx[i];
+
+        int vcMax = (int)(N30 * (opVout[0] - opVin[0]));                   //  1073741823 (:440)
+        int vcMin = (int)(N30 * (opVout[opSize - 1] - opVin[opSize - 1])); // -1073741823 (:441)
+
+        // -----------------------------------------------------------
+        // Summer table (filter8580new.cc:382-392) - model-independent
+        // -----------------------------------------------------------
+        var summer = new ushort[SummerTableSize];
+        {
+            int sumOff = 0;
+            for (int kk = 0; kk < 5; kk++)
+            {
+                int idiv  = 2 + kk;
+                double nId = (double)idiv;
+                int size  = idiv << 16;
+                int x = ak;
+                for (int vi = 0; vi < size; vi++)
+                    summer[sumOff + vi] = (ushort)SolveGainD(opampVx, opampDvx, nId, vi / idiv, ref x, kVddt_int, ak, bk);
+                sumOff += size;
+            }
+        }
+
+        // -----------------------------------------------------------
+        // Mixer table (filter8580new.cc:400-418) - divider = 5.0 (8580, :400)
+        // (This is the "OutputScaleFactor" mixer divider; see Sid8580 member.)
+        // -----------------------------------------------------------
+        var mixer = new ushort[MixerTableSize];
+        {
+            const double divider = 5.0;
+            int mixOff = 0;
+            int size = 1;
+            for (int l = 0; l < 8; l++)
+            {
+                int idiv  = l;
+                double nId = (double)(idiv << 3) / divider;
+                if (idiv == 0) idiv = 1;
+                int x = ak;
+                for (int vi = 0; vi < size; vi++)
+                    mixer[mixOff + vi] = (ushort)SolveGainD(opampVx, opampDvx, nId, vi / idiv, ref x, kVddt_int, ak, bk);
+                mixOff += size;
+                size = (l + 1) << 16;
+            }
+        }
+
+        // -----------------------------------------------------------
+        // Gain table [16][65536] - divider = 16.0 (8580, filter8580new.cc:425-432)
+        // -----------------------------------------------------------
+        var gain = new ushort[16][];
+        for (int n8 = 0; n8 < 16; n8++)
+        {
+            gain[n8] = new ushort[1 << 16];
+            double n = (double)n8 / 16.0;
+            int x = ak;
+            for (int vi = 0; vi < (1 << 16); vi++)
+                gain[n8][vi] = (ushort)SolveGainD(opampVx, opampDvx, n, vi, ref x, kVddt_int, ak, bk);
+        }
+
+        // -----------------------------------------------------------
+        // Resonance table [16][65536] - resGain[n8] direct index
+        // (filter8580new.cc:592-597; resGain at :135-153).
+        // Literal C++ R-ratio expressions for bit-exact doubles.
+        // -----------------------------------------------------------
+        double[] resGain =
+        {
+            (1.4 / 1.0),                        // :137
+            (((1.4 * 15.3) / (1.4 + 15.3)) / 1.0), // :138
+            (((1.4 * 7.3)  / (1.4 + 7.3))  / 1.0), // :139
+            (((1.4 * 4.7)  / (1.4 + 4.7))  / 1.0), // :140
+            (1.4 / 1.4),                        // :141
+            (((1.4 * 15.3) / (1.4 + 15.3)) / 1.4), // :142
+            (((1.4 * 7.3)  / (1.4 + 7.3))  / 1.4), // :143
+            (((1.4 * 4.7)  / (1.4 + 4.7))  / 1.4), // :144
+            (1.4 / 2.0),                        // :145
+            (((1.4 * 15.3) / (1.4 + 15.3)) / 2.0), // :146
+            (((1.4 * 7.3)  / (1.4 + 7.3))  / 2.0), // :147
+            (((1.4 * 4.7)  / (1.4 + 4.7))  / 2.0), // :148
+            (1.4 / 2.8),                        // :149
+            (((1.4 * 15.3) / (1.4 + 15.3)) / 2.8), // :150
+            (((1.4 * 7.3)  / (1.4 + 7.3))  / 2.8), // :151
+            (((1.4 * 4.7)  / (1.4 + 4.7))  / 2.8), // :152
+        };
+        var resonance = new ushort[16][];
+        for (int n8 = 0; n8 < 16; n8++)
+        {
+            resonance[n8] = new ushort[1 << 16];
+            int x = ak;
+            for (int vi = 0; vi < (1 << 16); vi++)
+                resonance[n8][vi] = (ushort)SolveGainD(opampVx, opampDvx, resGain[n8], vi, ref x, kVddt_int, ak, bk);
+        }
+
+        // -----------------------------------------------------------
+        // f0_dac[2048] parallel-NMOS W/L ladder, dacWL = 806
+        // (filter8580new.cc:605-620). NO N16/dac_zero/dac_scale normalization.
+        // -----------------------------------------------------------
+        var f0dac = new ushort[1 << dac_bits];
+        {
+            const uint dacWL = 806;                 // :608
+            f0dac[0] = (ushort)(dacWL >> 8);        // :609 -> 3
+            for (int n = 1; n < (1 << dac_bits); n++)
+            {
+                uint wl = 0;
+                for (int i = 0; i < dac_bits; i++)  // i = 0..10
+                {
+                    int bitmask = 1 << i;
+                    if ((n & bitmask) != 0)
+                        wl += dacWL * (uint)(bitmask << 1); // += 806 * 2^(i+1)  :616
+                }
+                f0dac[n] = (ushort)(wl >> 8);       // :619
+            }
+        }
+
+        return new ResidFilterModel
+        {
+            FilterGain    = filterGain,
+            VoiceScaleS14 = voiceScaleS14,
+            VoiceDC       = voiceDC,
+            KVddt         = kVddt_int,
+            AK            = ak,
+            BK            = bk,
+            VcMin         = vcMin,
+            VcMax         = vcMax,
+            NSnake        = 0,            // WL_snake = 0 (:219)
+            NParam        = nParam,       // :600
+            NVgtDefault   = nVgtDefault,  // :603
+            VoN16         = vo_N16,
+            OpampRev      = opampRev,
+            Summer        = summer,
+            Mixer         = mixer,
+            Gain          = gain,
+            Resonance     = resonance,
+            F0Dac         = f0dac,
+            VcrKVg        = null,         // 6581-only
+            VcrNIdsTerm   = null,         // 6581-only
         };
     }
 
@@ -772,7 +1135,7 @@ public partial class Sid6581
         => Math.Log(1.0 + x) - (((1.0 + x) - 1.0) - x) / (1.0 + x);
 
     // ----------------------------------------------------------------
-    // ResidFilter6581Model: table container
+    // ResidFilterModel: table container
     // ----------------------------------------------------------------
 
     /// <summary>
@@ -780,7 +1143,7 @@ public partial class Sid6581
     /// Internal for parity-test assertions.
     /// PLAN-VICEPARITY-001 S9.
     /// </summary>
-    internal sealed class ResidFilter6581Model
+    internal sealed class ResidFilterModel
     {
         public int FilterGain    { get; init; }  // (int)(0.93*4096) = 3809
         public int VoiceScaleS14 { get; init; }  // ~2442
@@ -790,7 +1153,9 @@ public partial class Sid6581
         public int BK            { get; init; }
         public int VcMin         { get; init; }
         public int VcMax         { get; init; }
-        public int NSnake        { get; init; }  // ~15
+        public int NSnake        { get; init; }  // 6581 only (0 for 8580; WL_snake=0 .cc:219)
+        public int NParam        { get; init; }  // 8580 only (0 for 6581; .cc:600)
+        public int NVgtDefault   { get; init; }  // 8580 only (0 for 6581; .cc:603, dac_bias=0)
         public double VoN16      { get; init; }
         public required ushort[]   OpampRev    { get; init; }
         public required ushort[]   Summer      { get; init; }
@@ -798,7 +1163,7 @@ public partial class Sid6581
         public required ushort[][] Gain        { get; init; }
         public required ushort[][] Resonance   { get; init; }
         public required ushort[]   F0Dac       { get; init; }
-        public required ushort[]   VcrKVg      { get; init; }
-        public required ushort[]   VcrNIdsTerm { get; init; }
+        public ushort[]? VcrKVg      { get; init; }  // 6581 only (null for 8580; .cc:487-499)
+        public ushort[]? VcrNIdsTerm { get; init; }  // 6581 only (null for 8580; .cc:509-523)
     }
 }

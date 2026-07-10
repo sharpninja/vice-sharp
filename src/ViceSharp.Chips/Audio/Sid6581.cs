@@ -236,10 +236,16 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
                 voice.WaveformAccumulator &= (uint)(waveformOutput << 12) | 0x7FFFFFu;
             }
 
+            // wave.h:588-592: the value fed to Voice::output() (and thus the
+            // filter) is ALWAYS the current waveform_output, DAC-mapped. Osc3 is
+            // a separate readback latch that on the 8580 tri/saw path lags one
+            // cycle (readOSC, wave.cc:293-295). PLAN-VICEPARITY-001 S11.
+            voice.WaveformOutput = (ushort)waveformOutput;
+
             if ((waveform & 0x3) != 0 && IsMos8580Wave)
             {
-                // wave.h:475-482: 8580 tri/saw output is delayed half a cycle,
-                // appearing as a one-cycle OSC3 delay through the pipeline.
+                // wave.h:475-482: 8580 tri/saw OSC3 readback is delayed half a
+                // cycle, appearing as a one-cycle OSC3 delay through the pipeline.
                 voice.Osc3 = (ushort)(voice.TriSawPipeline & (noPulse | voice.PulseLevel) & noNoiseOrNoiseOutput);
                 voice.TriSawPipeline = (ushort)wave12;
             }
@@ -267,16 +273,17 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     }
 
     /// <summary>
-    /// reSID wave_bitfade() (wave.cc:274-280): right-fold the Osc3 latch
-    /// one bit and re-arm the per-bit TTL if the result is nonzero.
-    /// Called by the waveform-0 path in <see cref="SetWaveformOutput"/>
-    /// when the floating-DAC TTL expires.
-    /// FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3].
+    /// reSID wave_bitfade() (wave.cc:274-280): right-fold the floating
+    /// waveform_output one bit, mirror it to the osc3 readback latch, and
+    /// re-arm the per-bit TTL if the result is nonzero. Called by the
+    /// waveform-0 path in <see cref="SetWaveformOutput"/> when the floating-DAC
+    /// TTL expires. FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3].
     /// </summary>
     private static void WaveBitFade(ref Voice voice)
     {
-        int output = voice.Osc3 & (voice.Osc3 >> 1);
-        voice.Osc3 = (ushort)output;
+        int output = voice.WaveformOutput & (voice.WaveformOutput >> 1);
+        voice.WaveformOutput = (ushort)output; // wave.cc:276
+        voice.Osc3 = (ushort)output;           // wave.cc:277 (osc3 = waveform_output)
         if (output != 0)
         {
             voice.FloatingOutputTtl = FloatingOutputTtlBit6581;
@@ -369,7 +376,7 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // reSID never special-cases "no waveform"; Voice::output() is always
         // (model_dac[waveform_output] - wave_zero) * envelope.output()
         // (voice.h:99-103). With no waveform selected, waveform_output is the
-        // floating-DAC latch (voice.Osc3) that fades to 0 via floating_output_ttl
+        // floating-DAC latch that fades to 0 via floating_output_ttl
         // (wave.h:501,546-551), so the voice still contributes a decaying DC bias
         // to the mix. PLAN-VICEPARITY-001 S9 (FR-SID-VOICE AC-04): route the
         // floating latch through the shared formula below rather than forcing 0.
@@ -378,7 +385,10 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // (voice.h:99-103, voice.cc:105-113). WaveZeroLevel is the 12-bit
         // constant (0x380 for 6581, 0x9e0 for 8580). WaveDacTable maps the
         // 12-bit oscillator output through the R-2R nonlinearity (S7).
-        return (WaveDacTable[voice.Osc3] - WaveZeroLevel) * EnvelopeDacTable[voice.Env.EnvelopeCounter];
+        // Uses WaveformOutput (the current DAC index, wave.h:588-592), NOT Osc3:
+        // on the 8580 tri/saw path Osc3 lags one cycle for OSC3 readback only.
+        // PLAN-VICEPARITY-001 S11 (FR-SID-FILTER-8580).
+        return (WaveDacTable[voice.WaveformOutput] - WaveZeroLevel) * EnvelopeDacTable[voice.Env.EnvelopeCounter];
     }
 
     /// <summary>
@@ -679,9 +689,25 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// </summary>
     protected virtual int DataBusTtl => DataBusTtl6581;
 
+    /// <summary>
+    /// reSID output amplify scaleFactor (sid.cc:105-121, set_chip_model):
+    /// 3 for the 6581, 5 for the 8580 - so the 6581 mixes 1.5x louder. reSID
+    /// applies it in amplify() at the sample-emission stage (sid.cc:886-888);
+    /// S12 wires it into the managed amplify/clip seam. Declared here (not yet
+    /// consumed on the per-cycle path) so FR-SID-8580 AC-02 and FR-SID-OUTPUT
+    /// AC-07 can lock the per-model constant. Distinct from the filter mixer
+    /// divider (filter8580new.cc:400: 6/5), which is baked into BuildResidModel*.
+    /// PLAN-VICEPARITY-001 S11.
+    /// </summary>
+    protected virtual int OutputScaleFactor => 3;
+
     private byte _busValue;
     private int _busValueTtl;
     private byte _writePipeline;
+    // reSID SID::write_address (sid.cc:207): the register offset held by the
+    // one-cycle write pipeline, committed by ConsumePipelinedWrite. Only used
+    // by the 8580 SAMPLE_FAST path. PLAN-VICEPARITY-001 S11.
+    private byte _writeAddress;
     private int _cycleVoiceOutput0;
     private int _cycleVoiceOutput1;
     private int _cycleVoiceOutput2;
@@ -694,8 +720,28 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     /// <summary>Data-bus fade TTL in cycles (reSID SID::bus_value_ttl). Parity-test seam.</summary>
     internal int DataBusValueTtl => _busValueTtl;
 
-    /// <summary>Pipelined-write slot (reSID SID::write_pipeline; always 0 on the 6581). Parity-test seam.</summary>
+    /// <summary>Pipelined-write slot (reSID SID::write_pipeline). Armed only on the 8580 SAMPLE_FAST path. Parity-test seam.</summary>
     internal byte PipelinedWriteSlot => _writePipeline;
+
+    /// <summary>reSID amplify scaleFactor (sid.cc:86/121): 3 (6581) / 5 (8580). Parity-test seam.</summary>
+    internal int OutputScaleFactorSeam => OutputScaleFactor;
+
+    /// <summary>reSID wave_zero (voice.cc:93/97): 0x380 (6581) / 0x9e0 (8580). Parity-test seam.</summary>
+    internal int WaveZeroLevelSeam => WaveZeroLevel;
+
+    /// <summary>reSID databus_ttl (sid.cc:119): 0x1d00 (6581) / 0xa2000 (8580). Parity-test seam.</summary>
+    internal int DataBusTtlSeam => DataBusTtl;
+
+    /// <summary>True when the active filter model is the 8580 (Model8580 + solve_integrate_8580). Parity-test seam.</summary>
+    internal bool IsMos8580FilterSeam => IsMos8580Filter;
+
+    /// <summary>
+    /// reSID sampling method (sid.h). Default SAMPLE_RESAMPLE, matching x64sc
+    /// (sid-resources.c:439-441), so the 8580 one-cycle write pipeline stays
+    /// inert in normal operation. The 8580 arms the pipeline only under
+    /// <see cref="SidSamplingMethod.Fast"/>. PLAN-VICEPARITY-001 S11.
+    /// </summary>
+    public SidSamplingMethod SamplingMethod { get; set; } = SidSamplingMethod.Resample;
 
     /// <summary>The three per-cycle voice outputs fed to the filter stage this cycle. Parity-test seam.</summary>
     internal (int Voice0, int Voice1, int Voice2) CycleVoiceOutputs =>
@@ -766,6 +812,12 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         // tri/saw OSC3 pipeline (wave.h:102-103), power-up seeded 0x555
         // (wave.cc:119) and deliberately untouched by reset (wave.cc:301-332).
         public ushort Osc3;
+        // reSID waveform_output (wave.h:113): the CURRENT 12-bit DAC index fed
+        // to Voice::output() -> the filter (wave.h:588-592). Distinct from Osc3,
+        // which on the 8580 tri/saw path is the one-cycle-delayed OSC3-readback
+        // latch (readOSC, wave.cc:293-295). Identical to Osc3 on the 6581 and on
+        // the 8580 pulse/noise path. PLAN-VICEPARITY-001 S11 (FR-SID-FILTER-8580).
+        public ushort WaveformOutput;
         public ushort PulseLevel;
         public ushort TriSawPipeline;
         /// <summary>
@@ -1097,6 +1149,15 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             _voices[v].ShiftRegisterReset = 0;
             _voices[v].ShiftPipeline = 0;
         }
+
+        // reSID seeds the 8580 DAC gate overdrive (nVgt) at model-build /
+        // init time (filter8580new.cc:603) and its Filter::reset() never clears
+        // it. Mirror that here: seed _nVgt at construction so the 8580
+        // integrator is valid before the first Reset() (the lockstep oracle
+        // likewise has nVgt set at init, surviving SidExactReset). For the 6581
+        // NVgtDefault is 0 (the 6581 integrator does not use it), so this is a
+        // no-op there. PLAN-VICEPARITY-001 S11 (FR-SID-FILTER-8580).
+        _nVgt = FilterModel.NVgtDefault;
     }
 
     /// <summary>
@@ -1373,18 +1434,20 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
     }
 
     /// <summary>
-    /// Pipelined-write slot of the per-cycle chain (reSID sid.h:231-234).
-    /// The 6581 commits every write immediately in Write(), so the slot is
-    /// always empty here; the MOS 8580 SAMPLE_FAST one-cycle write delay
-    /// that arms it (sid.cc:205-220, FR-SID-CLOCK AC-08) belongs to the
-    /// 8580/sampling slice. The chain still checks the slot every cycle,
-    /// exactly as reSID does.
+    /// Pipelined-write slot of the per-cycle chain (reSID sid.h:236-237): after
+    /// the filter and external filter clock, a pending 8580 SAMPLE_FAST write is
+    /// committed via <see cref="CommitWrite"/> using the latched write_address /
+    /// bus_value, then the slot clears (reSID's write() ends write_pipeline=0).
+    /// The 6581 (and the 8580 outside SAMPLE_FAST) never arm the slot, so this
+    /// is a no-op there; the chain still checks it every cycle, as reSID does.
+    /// PLAN-VICEPARITY-001 S11 (FR-SID-8580 AC-05/AC-06).
     /// </summary>
     private void ConsumePipelinedWrite()
     {
         if (_writePipeline != 0)
         {
             _writePipeline = 0;
+            CommitWrite(_writeAddress, _busValue);
         }
     }
 
@@ -1445,7 +1508,9 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
             // pulse level high (pulse_output = 0xfff, wave.cc:319), while
             // tri_saw_pipeline is deliberately NOT touched by reset
             // (wave.cc:301-332 never assigns it), so it is preserved here.
+            // wave.cc:551 reset(): osc3 = waveform_output = 0.
             voice.Osc3 = 0;
+            voice.WaveformOutput = 0;
             voice.PulseLevel = 0xFFF;
             // FR-SID-OSC3ENV3 AC-07 [PLAN-VICEPARITY-001 S3]: reset also
             // clears the floating-DAC TTL (floating_output_ttl = 0,
@@ -1525,13 +1590,35 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         int register = address & 0x1F;
         _registers[register] = value;
 
-        // reSID SID::write (sid.cc:205-220): every write drives the shared
+        // reSID SID::write (sid.cc:205-219): every write drives the shared
         // data bus; the value fades to zero databus_ttl cycles later (0x1d00
-        // on the 6581, sid.cc:119; the 8580 value and the read-side bus
-        // semantics are FR-SID-DATABUS remediations).
+        // on the 6581, sid.cc:119). The register offset is latched into the
+        // write pipeline slot; on the 8580 under SAMPLE_FAST the register
+        // EFFECT is deferred one cycle (SID-detection quirk), otherwise it is
+        // committed immediately. PLAN-VICEPARITY-001 S11 (FR-SID-8580 AC-04).
+        _writeAddress = (byte)register;
         _busValue = value;
         _busValueTtl = DataBusTtl;
 
+        if (SamplingMethod == SidSamplingMethod.Fast && IsMos8580Wave)
+        {
+            // Fake one-cycle pipeline delay on the MOS8580 (sid.cc:211-216).
+            _writePipeline = 1;
+        }
+        else
+        {
+            CommitWrite(register, value);
+        }
+    }
+
+    /// <summary>
+    /// Apply a register's side effects (reSID SID::write(), sid.cc:226+). Called
+    /// immediately by <see cref="Write"/> on the 6581 and on the 8580 outside
+    /// SAMPLE_FAST, or one cycle later by <see cref="ConsumePipelinedWrite"/>
+    /// when the 8580 SAMPLE_FAST pipeline flushes. PLAN-VICEPARITY-001 S11.
+    /// </summary>
+    private void CommitWrite(int register, byte value)
+    {
         int voiceIndex = register / 7;
 
         if (voiceIndex < 3)
@@ -1635,19 +1722,18 @@ public partial class Sid6581 : IClockedDevice, IAddressSpace, IAudioChip
         //                  bit  7   = voice 3 off (V3OFF / disable)
         //
         // We pack the lower nibble of $D417 (routing) and bits 4-6 of $D418
-        // (mode) into a single _filterControl byte using the same layout
-        // ApplyFilter already reads (bits 0-3 = routing, bits 4-6 = mode).
-        // That keeps Sid8580 and Sid8580D filter overrides binary-compatible
-        // with this slice (they read the same composite field).
+        // (mode) into a single _filterControl byte using the same layout the
+        // reSID filter model reads (bits 0-3 = routing, bits 4-6 = mode), shared
+        // unchanged by the 6581 and 8580 filter models.
         switch (register)
         {
             case 0x15:
                 _filterCutoff = (_filterCutoff & 0x07F8) | (value & 0x07);
-                if (UsesReSidFilter) SetW0_6581();
+                if (UsesReSidFilter) SetW0();
                 break;
             case 0x16:
                 _filterCutoff = (_filterCutoff & 0x0007) | ((value & 0xFF) << 3);
-                if (UsesReSidFilter) SetW0_6581();
+                if (UsesReSidFilter) SetW0();
                 break;
             case 0x17:
                 _filterResonance = (byte)((value >> 4) & 0x0F);
