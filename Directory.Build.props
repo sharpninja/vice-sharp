@@ -24,5 +24,14 @@
     <RepositoryUrl>https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>GPL-2.0-or-later</PackageLicenseExpression>
+    <!-- Every NuGet package ships a README: a per-project README.md next to the
+         csproj when one exists, otherwise the repository README. -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <_ViceSharpPackageReadme Condition="Exists('$(MSBuildProjectDirectory)/README.md')">$(MSBuildProjectDirectory)/README.md</_ViceSharpPackageReadme>
+    <_ViceSharpPackageReadme Condition="'$(_ViceSharpPackageReadme)' == ''">$(MSBuildThisFileDirectory)README.md</_ViceSharpPackageReadme>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(_ViceSharpPackageReadme)" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
 </Project>
