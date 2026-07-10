@@ -1261,7 +1261,12 @@ ManifestVersion: 1.6.0
                 wingetcreate = exe.FileExists() ? exe.ToString() : null;
             }
 
+            // Token sources, in order: WINGET_PAT, then GITHUB_TOKEN (the
+            // machine-env convention, like NUGET_API_KEY), then the gh CLI. The
+            // gh subprocess capture is the least reliable, so the env vars win.
             var token = Environment.GetEnvironmentVariable("WINGET_PAT");
+            if (string.IsNullOrEmpty(token))
+                token = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
             if (string.IsNullOrEmpty(token))
             {
                 var gh = FindOnPath("gh.exe") ?? FindOnPath("gh");
