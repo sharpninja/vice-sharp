@@ -1,13 +1,35 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-07-08T16:40:59.4082081+00:00",
+  "generatedAtUtc": "2026-07-10T19:25:35.2782598+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
     "Technical-Requirements.md",
     "Testing-Requirements.md",
     "TR-per-FR-Mapping.md",
-    "Requirements-Matrix.md"
+    "Requirements-Matrix.md",
+    "Project-Overview.md",
+    "User-Guide.md",
+    "VICE-Migration.md",
+    "ROM-Setup.md",
+    "Architecture.md",
+    "Public-API.md",
+    "PubSub.md",
+    "Video-Audio-Decoupling.md",
+    "State-Window.md",
+    "Iteration-Roadmap.md",
+    "AI-Review.md",
+    "Registry-of-Lore.md",
+    "Functional-Requirements-Overview.md",
+    "Technical-Requirements-Overview.md",
+    "Test-Requirements.md",
+    "X64sc-Model-Matrix.md",
+    "X64sc-Requirement-Coverage.md",
+    "Classic-VICE-Edge-Case-TR-Backfill.md",
+    "VICE-Source-Manifest.md",
+    "Machine-Architecture-Schema.md",
+    "Cross-Platform-Wireframes.md",
+    "Desktop-Windows-UI.md"
   ]
 }

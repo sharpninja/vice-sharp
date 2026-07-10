@@ -70,6 +70,11 @@ Scope: layer-1+
 **VIC-II cycle counter frame-periodic** — Managed VIC-II CycleCounter advances by exactly 19,656 per PAL frame. VICE vicii-cycle.c:576-598.
 Scope: layer-1+
 
+## TR-DEPS-202607-001
+
+**Dependency currency policy (2026-07 upgrade wave)** — Every NuGet dependency tracks the highest STABLE version mutually compatible with net10.0 and all other dependencies; Directory.Packages.props (CPM) is the single version source for all projects including tests/ViceSharp.AiReview.Tests; all packages resolve from nuget.org when published there (vendored nuget-local feed retires once SharpNinja.aiUnit and SharpNinja.Avalonia.RemoteControl.* map to nuget.org). Prereleases excluded. Locked targets and ceiling evidence recorded in the approved 2026-07-08 upgrade plan.
+Scope: layer-1+
+
 ## TR-DET-001
 
 **Bit-Exact Reproducibility Given Same Initial State and Inputs** — Given the same initial emulator state, ROM set, mounted media, inputs, and timing model, managed C64 PAL execution must produce deterministic CPU, bus, video, audio, interrupt, and memory-observable results.
@@ -203,6 +208,11 @@ Scope: layer-1+
 **Frame-snapshot ring reverse execution** — A frame-granular snapshot ring keyed by cycle backs RewindCycle/RewindFrame: restore nearest snapshot <= target, re-run deterministically to target. Replaces the NotImplemented host stubs. Bounded memory.
 Scope: layer-1+
 
+## TR-SID-AMPLIFY-001
+
+**SID output amplify/clip + external-filter enable (float host seam)** — PLAN-VICEPARITY-001 S12 aligns the managed SID audio-output stage with reSID. GenerateSample now applies reSID amplify(input, scaleFactor) = clip((scaleFactor*input)/2) (sid.cc:54-57) on the pre-amplify external-filter output SID::output() (=extfilt.output(), sid.h:190-194), then scales by 1/2^15 for the float [-1,1] host contract - lossless (every short is exact in float, /2^15 is exact) and C# int division truncates toward zero exactly like C++. The 6581 amplify scaleFactor is 3 and the 8580 is 5 (set_chip_model, sid.cc:86,121), so the 6581 mixes 1.5x louder, matching VICE. ClipPcm16 saturates to signed 16-bit [-32768,32767]. The external filter gained an enable flag (default true, mirroring VICE resid.cc:200 enable_external_filter(true)); the disabled branch passes through (Vlp=Vi<<11, Vhp=0, extfilt.h:100-105) and exists only to lock FR-SID-OUTPUT AC-03 (VICE always enables). CaptureAudioTap is unchanged (the amplify is on the float host path, not the capture tee). Verified: OUTPUT-01 composite lockstep vs the c64 oracle (SID::output() bit-exact + amplified-float identity); SidDigiPlaybackTests (range/relative assertions) survive the 1.5x change; LockstepValidation + audio suites + Category=Determinism green.
+Scope: layer-1+
+
 ## TR-SIDAUDIO-CLOCK-001
 
 **SID ticks once per phi2 cycle** — Sid6581.ClockDivisor is 1 so the SystemClock ticks the SID every master cycle; the 24-bit accumulator advances by Frequency per tick and the ADSR rate tables are resid phi2-cycle values. ConfigureAudioClock divides by ClockDivisor so the 44.1 kHz sample rate self-corrects.
@@ -222,6 +232,16 @@ Scope: layer-1+
 ## TR-SID-EDGE-004
 
 **reSID waveform DAC centering and normalized mix scale** — Sid6581 and Sid8580 subtract the model-specific waveform zero level before ADSR envelope application, preserve no-waveform silence relative to the D418 baseline, and normalize mixed output before host audio submission.
+Scope: layer-1+
+
+## TR-SID-ORACLE-002
+
+**SID exact-oracle sampling method + buffered clock exports** — Two shim exports added for SID parity beyond the single-cycle oracle: vice_sid_exact_set_sampling(machine, method, sampleFreq, passFreq, filterScale) reconfigures the private reSID engine sampling method (0=FAST 1=INTERPOLATE 2=RESAMPLE 3=RESAMPLE_FASTMEM; clock_freq fixed 985248.0 PAL) so the 8580 SAMPLE_FAST write pipeline is observable; vice_sid_exact_clock_buffered(machine, cycles, buffer, len, out remaining) drives reSID SID::clock(delta_t, buf, n) for the S13 fixed-point resampler FIR parity. Implemented as resid_shim_set_sampling / resid_shim_clock_buffered in native/vice/vice/src/sid/resid.cc, wrapped in native/vice-shim.c under g_state_lock + is_active_machine, declared in vice-shim.h, bound via ViceNative LibraryImport + ViceNativeBridge. 8580 lockstep uses the c64c machine selector (SidModel 1 = MOS8580). reSID filter dither is zeroed in the shim for bit-exact comparability. Build: resid.o archives into src/sid/libsid.a; delete both before rebuilding. Landed by commit 93aef16 (dll SHA256 b743c666).
+Scope: layer-1+
+
+## TR-SID-RESAMPLE-001
+
+**SID fixed-point sampling engine port (fast/interpolate/Kaiser-FIR resample)** — PLAN-VICEPARITY-001 S13 ports reSID's sampling engine (sid.cc:542-1038, sid.h:140-179) into src/ViceSharp.Chips/Audio/Sid6581.Sampling.cs. Constants FirN=125, FirRes=285, FirShift=15, RingSize=1<<14, FixpShift=16. SetSamplingParameters is a statement-for-statement port of set_sampling_parameters: the resampling constraint checks, cycles_per_sample = (int)(clock/sample*(1<<16)+0.5) 16.16 fixed point, the mirrored ring short[RingSize*2], the Kaiser-windowed sinc FIR table (I0 Bessel, beta=0.1102*(A-8.7), the only legitimate float stage, rounded to short round-half-away-from-zero). ClockBuffered mirrors SID::clock(delta_t, buf, n): clock_fast, clock_interpolate, clock_resample. It calls the managed single-cycle Tick() where reSID calls clock() and reads CycleExternalFilterOutput where reSID calls output(), so the emitted short stream is bit-exact vs the oracle. RESAMPLE_FASTMEM deliberately NOT ported. All buffers preallocated; zero per-sample allocation. Verified by OUTPUT-08..13 vs SidExactClockBuffered (TR-SID-ORACLE-002) on both 6581 (c64) and 8580 (c64c). Slice LW (commit 4924b94) COMPLETED the live-audio wiring: the live path now drives this SAMPLE_RESAMPLE engine one cycle per Tick (EmitLiveResampleTick), Resample-always (VICE x64sc default), bit-exact vs the buffered pull and zero-allocation; SetRelativeSpeed scales the 16.16 cadence only (warp = pitch, synthesis untouched). Benchmark SidSamplingBenchmarks: live tail ~0.30x real-time (100% speed holds). Post-review fix 9b00899 handles the zero-cycle-window underflow below ~4.5% warp. PLAN-VICEPARITY-001 CLOSED 466/466.
 Scope: layer-1+
 
 ## TR-SNAPFULL-001

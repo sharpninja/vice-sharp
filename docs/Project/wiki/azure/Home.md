@@ -1,8 +1,35 @@
 # Requirements
 
-- [Home](Home)
-- [Functional Requirements](Functional-Requirements)
-- [Technical Requirements](Technical-Requirements)
-- [Testing Requirements](Testing-Requirements)
-- [TR per FR Mapping](TR-per-FR-Mapping)
-- [Requirements Matrix](Requirements-Matrix)
+- Home
+  - [Home](Home)
+  - [Functional Requirements](Functional-Requirements)
+  - [Technical Requirements](Technical-Requirements)
+  - [Testing Requirements](Testing-Requirements)
+  - [TR per FR Mapping](TR-per-FR-Mapping)
+  - [Requirements Matrix](Requirements-Matrix)
+- Getting Started
+  - [Project Overview](Project-Overview)
+  - [User Guide](User-Guide)
+  - [Migrating from Classic VICE](VICE-Migration)
+  - [ROM Setup and Legal Sources](ROM-Setup)
+- Architecture
+  - [Architecture](Architecture)
+  - [Public API Reference](Public-API)
+  - [Pub-Sub and Mutation Queue](PubSub)
+  - [Video and Audio Decoupling](Video-Audio-Decoupling)
+  - [State Window (Design Proposal)](State-Window)
+  - [Iteration Roadmap](Iteration-Roadmap)
+  - [AI Code and Project Review (aiUnit)](AI-Review)
+  - [Registry of Lore](Registry-of-Lore)
+- Requirements
+  - [Functional Requirements Overview](Functional-Requirements-Overview)
+  - [Technical Requirements Overview](Technical-Requirements-Overview)
+  - [Test Requirements](Test-Requirements)
+  - [x64sc Model Matrix](X64sc-Model-Matrix)
+  - [x64sc Requirement Coverage](X64sc-Requirement-Coverage)
+  - [Classic VICE Edge-Case TR Backfill](Classic-VICE-Edge-Case-TR-Backfill)
+  - [VICE Source Manifest](VICE-Source-Manifest)
+- Reference
+  - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
+  - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)
+  - [Desktop UI Reference (Windows, Avalonia)](Desktop-Windows-UI)

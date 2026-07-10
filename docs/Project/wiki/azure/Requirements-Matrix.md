@@ -210,6 +210,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-CORE-CYCLE-001 | Tracked | Technical-Requirements.md |
 | TR-CORE-DET-001 | Tracked | Technical-Requirements.md |
 | TR-CPU-TICK-001 | Tracked | Technical-Requirements.md |
+| TR-DEPS-202607-001 | Tracked | Technical-Requirements.md |
 | TR-DRVLIFE-001 | Tracked | Technical-Requirements.md |
 | TR-IECDECODE-001 | Tracked | Technical-Requirements.md |
 | TR-IECELEC-001 | Tracked | Technical-Requirements.md |
@@ -225,9 +226,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-REMOTECTRL-001 | Tracked | Technical-Requirements.md |
 | TR-REMOTECTRL-SERVER-001 | Tracked | Technical-Requirements.md |
 | TR-REVEXEC-001 | Tracked | Technical-Requirements.md |
+| TR-SID-AMPLIFY-001 | Tracked | Technical-Requirements.md |
 | TR-SIDAUDIO-CLOCK-001 | Tracked | Technical-Requirements.md |
 | TR-SIDEBARUI-LAYOUT-001 | Tracked | Technical-Requirements.md |
 | TR-SID-EDGE-004 | Tracked | Technical-Requirements.md |
+| TR-SID-ORACLE-002 | Tracked | Technical-Requirements.md |
+| TR-SID-RESAMPLE-001 | Tracked | Technical-Requirements.md |
 | TR-SNAPFULL-001 | Tracked | Technical-Requirements.md |
 | TR-SNDREG-GATE-001 | Tracked | Technical-Requirements.md |
 | TR-SYS-SCHED-001 | Tracked | Technical-Requirements.md |
@@ -240,6 +244,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-VSFLOCKSTEP-RESUME-001 | Tracked | Technical-Requirements.md |
 | TEST-CHIPSTATE-001 | Tracked | Testing-Requirements.md |
 | TEST-CPUTICK-001 | Tracked | Testing-Requirements.md |
+| TEST-DEPS-202607-001 | Tracked | Testing-Requirements.md |
 | TEST-DRVLED-001 | Tracked | Testing-Requirements.md |
 | TEST-DRVLIFE-001 | Tracked | Testing-Requirements.md |
 | TEST-DRV-MOTOR-001 | Tracked | Testing-Requirements.md |
@@ -256,6 +261,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MED-003 | Tracked | Testing-Requirements.md |
 | TEST-MED-004 | Tracked | Testing-Requirements.md |
 | TEST-NATIVERESIDUE-001 | Tracked | Testing-Requirements.md |
+| TEST-NATIVERESIDUE-002 | Tracked | Testing-Requirements.md |
+| TEST-NATIVERESIDUE-003 | Tracked | Testing-Requirements.md |
 | TEST-PACESEL-001 | Tracked | Testing-Requirements.md |
 | TEST-PERF-RUNFRAME-001 | Tracked | Testing-Requirements.md |
 | TEST-PUBSUB-001 | Tracked | Testing-Requirements.md |

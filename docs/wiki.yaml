@@ -199,20 +199,26 @@ documents:
   - github
   - azure
 navigation:
-- document: home
+- title: Home
+  path: Home
   children:
+  - document: home
   - document: functional
   - document: technical
   - document: testing
   - document: mapping
   - document: matrix
-- document: project-overview
+- title: Getting Started
+  path: Getting-Started
   children:
+  - document: project-overview
   - document: user-guide
   - document: vice-migration
   - document: rom-setup
-- document: architecture
+- title: Architecture
+  path: Architecture
   children:
+  - document: architecture
   - document: public-api
   - document: pubsub
   - document: decoupling
@@ -220,15 +226,19 @@ navigation:
   - document: iteration-roadmap
   - document: ai-review
   - document: registry-of-lore
-- document: fr-overview
+- title: Requirements
+  path: Requirements
   children:
+  - document: fr-overview
   - document: tr-overview
   - document: test-requirements
   - document: x64sc-model-matrix
   - document: x64sc-requirement-coverage
   - document: vice-edge-case-backfill
   - document: vice-source-manifest
-- document: machine-architecture-schema
+- title: Reference
+  path: Reference
   children:
+  - document: machine-architecture-schema
   - document: cross-platform-wireframes
   - document: desktop-windows-ui
