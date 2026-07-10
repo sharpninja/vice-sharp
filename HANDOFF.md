@@ -1,6 +1,7 @@
-# ViceSharp Handoff - 2026-07-09
+# ViceSharp Handoff - 2026-07-10
 
-**Branch:** `main` at `93cdc7e` (origin and github both synced; default branch is `master`, work happens on `main`)
+**Branch:** `fix/nativeresidue-002-drive-clock-hardening` (off `master`; pushed to origin through the LW slice; CL closure commits local). The SID/VIC VICE-fidelity program **PLAN-VICEPARITY-001 is COMPLETE**: 466/466 parity ACs authored and passing, 0 pending SID ACs, every SID subsystem lockstep-verified bit-exact vs the native reSID oracle. See docs/receipts-viceparity-closure-2026-07-10.md.
+**Prior baseline branch:** `main` at `93cdc7e` (origin and github both synced; default branch is `master`)
 **Working tree:** clean
 **Latest release:** `v1.0.2` (2026-07-08), 13/13 NuGet packages verified on nuget.org
 **CI:** green streak on VICE-Sharp-CI runs 1072 and 1086-1096 (self-hosted Default pool)
@@ -30,11 +31,17 @@ Working through the "complete outstanding iteration 1 work" plan. Done, all comm
 - **Slice F - BUG-TESTDEBT-001**: verified already fixed at HEAD (6a32e7c/77e7190), closed with receipt.
 - **Slice B - PLAN-VICEPARITY-001 S10** (67959e6/0fdaa6a/35d9e05): SID reSID data-bus read semantics ($19/$1A POT 0xFF, $1B/$1C OSC3/ENV3 latch, other reads = fading shared bus), per-model DataBusTtl virtual, Peek/Read split, dead-code retirement. Parity ratchet 405->419. Baseline gate 0 failed / 2603 passed / 21 skipped.
 
-Remaining (large SID slices; each needs the native-build recipe below):
-- **S11**: 8580 reSID filter port (filter8580new.cc m==1 branch) + write pipeline + per-model ttl(0xa2000)/scaleFactor(5); new shim exports vice_sid_exact_set_sampling + vice_sid_exact_clock_buffered; 25 ACs (FILTER-8580-01..14, 8580-01..11); flip DATABUS-07; ratchet ->444; oracle via "c64c" selector.
-- **S12**: amplify(scaleFactor)/clip PCM16 seam + extfilt enable branch; 7 ACs (OUTPUT-01..07); ratchet ->451.
-- **S13**: fixed-point Kaiser FIR resampler (fast/interpolate/resample) + the buffered-output shim export from S11; 6 ACs (OUTPUT-08..13); ratchet ->457.
-- **G (parked)**: ADO wiki push needs ADO_PAT.
+**SID parity program COMPLETE (2026-07-10)** - all remaining slices landed:
+- **S11 / S11b**: 8580 reSID filter port (filter8580new m==1) + write pipeline + per-model ttl(0xA2000)/scaleFactor(5); shim exports vice_sid_exact_set_sampling + vice_sid_exact_clock_buffered; DATABUS-07 flipped; oracle via "c64c". Ratchet ->444.
+- **S12**: amplify(scaleFactor)/clip PCM16 seam + extfilt enable branch; OUTPUT-01..07. Ratchet ->451.
+- **S13**: fixed-point Kaiser FIR resampler (fast/interpolate/resample); OUTPUT-08..13. Ratchet ->457.
+- **CH**: retired the dead Chamberlin SVF stack (10 members + 7 guards + SidFilter6581Tests.cs). PLAN-SIDCHAMBERLIN-001 closed.
+- **BC**: ported reSID batched SID::clock(delta_t) (Sid6581.BatchedClock.cs); SAMPLE_FAST now value-bit-exact; un-pended the last 4 SID quarantines + authored the last 9 (EXTFILT-01..07, CLOCK-05/08). Ratchet ->466 with a strict completion pin (Assert.Equal(466, covered)).
+- **LW** (4924b94, pushed): live audio wired through the reSID SAMPLE_RESAMPLE engine (Resample always, VICE x64sc parity); push tail bit-exact vs the buffered pull; warp = cadence-only; zero-alloc; benchmark in SidSamplingBenchmarks.
+- **CL** (a38964b/e100433, local): NativeCollectionConventionTests + [Collection("NativeVice")] on the 6 native-bridge test classes.
+- **G**: DROPPED per operator (ADO wiki push).
+
+Closure gates: parity 466/0/0 (completion pin holds), determinism 5/0, XmlDocs green, full baseline 0 NEW failures (7 pre-existing VideoRendererTests only) on the clean re-run. One run-1 full-suite native ACCESS_VIOLATION did NOT reproduce (flaky native-shim instability; candidate PLAN-NATIVERESIDUE-002 follow-up, not a SID blocker) - see the closure receipts.
 
 **Native build recipe (learned this session, load-bearing):** `make x64sc-program` does NOT rebuild changed VICE-core `.o` (they stay stale). Before rebuilding, delete the changed `.o` (and `libdrive.a` for drive files), then run under the MSYS2 MINGW64 login shell so the compiler gets a writable `/tmp`:
 `MSYSTEM=MINGW64 /c/msys64/usr/bin/bash.exe -lc 'rm -f <changed>.o; bash /f/GitHub/vice-sharp/native/.build-nopatch.sh'`. The dll is gitignored (built locally). Vendored edits go in native/patches/vice-shim-runtime.patch (regenerate via `git -C native/vice diff`; keep the 5 pre-existing hunks byte-identical).
@@ -57,7 +64,7 @@ Plugin reload + Agent Help (mcpserver core synced to 1.36.0, `mcpserver-repl` 1.
 
 - Azure DevOps wiki push needs `ADO_PAT` set, then `tools/Publish-Wiki.ps1 -Target azure` (github wiki already published).
 - ~~Latent VICE bugs documented, not fixed~~ FIXED 2026-07-09 (PLAN-NATIVERESIDUE-002, branch `fix/nativeresidue-002-drive-clock-hardening`): drive `attach_clk`/`detach_clk`/`attach_detach_clk` uninitialized-stack read on `has_tde=0` restore (drive-snapshot.c zero-init) and `cycle_accum` omitted from `drivecpu_reset_clk` (drivecpu.c + drivecpu65c02.c) both fixed via the vendored runtime patch, plus a shim create-time drive-clock re-baseline. **BUG-LOCKSTEP-001 CLOSED**: full baseline gate 0 failed / 2596 passed / 21 skipped / 2617 total (was 136+2 lockstep failures). Receipts: docs/receipts-nativeresidue-002-2026-07-09.md. New residue candidates recorded there (live unit->type not re-baselined; drivecpu65c02 cycle_accum SMW/SMR width asymmetry). Build note: `make x64sc-program` does NOT rebuild changed VICE-core `.o`; delete the stale `.o`+`libdrive.a` and build under `MSYSTEM=MINGW64 bash -lc`.
-- VICE parity program (PLAN-VICEPARITY-001, SID S9 done bit-exact; VIC per-cycle work landed through V7 + audit phases): remaining slices tracked in MCP; the parity plan text lives in git history (the local plan file now holds the completed dependency plan).
+- ~~VICE parity program (PLAN-VICEPARITY-001) remaining slices~~ **COMPLETE 2026-07-10** (SID side fully bit-exact vs reSID; VIC per-cycle work landed through V7 + audit phases). Only manifest-wide pending AC left is TEST-VIC-FETCH-06 (VIC-II FAITHFUL-lock conflict, out of SID scope, needs the parity owner). Candidate follow-up: PLAN-NATIVERESIDUE-002 native-shim lifecycle hardening (a sustained-consecutive-native-load ACCESS_VIOLATION observed once, non-reproducing).
 
 ## Open TODO backlog (MCP store)
 
