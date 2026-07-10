@@ -430,6 +430,35 @@ VICE_SHIM_API void *vice_machine_create_model(const char *model_selector)
         }
     }
 
+    /* Machine-boundary drive-clock re-baseline (TEST-NATIVE-RESIDUE-03): a
+       fresh drive boots with attach_clk/detach_clk/attach_detach_clk = 0
+       (drive_init, drive.c). file_system_detach_disk_all() above sets detach_clk
+       (drive_image_detach, driveimage.c), and a has_tde=1 .vsf restore lands the
+       snapshot's clocks; both persist into the NEXT machine because
+       diskunit_context[] is process-global, forcing the write-protect sense
+       (drive-writeprotect.c) and rotation entry (rotation.c) windows on the next
+       1541 boot and shifting the IEC DATA timeline read at $DD00. No resource
+       path exists short of full drive_init, so poke the fields directly like the
+       vicii.rc/idle_state clears below. Must run AFTER the TDE re-baseline loop
+       (whose drive_enable can re-stamp attach_clk). cycle_accum is handled by
+       the patched drivecpu_reset_clk the TDE re-baseline already invokes. */
+    {
+        unsigned int clk_unit, clk_drive;
+        for (clk_unit = 0; clk_unit < NUM_DISK_UNITS; clk_unit++) {
+            if (diskunit_context[clk_unit] == NULL) {
+                continue;
+            }
+            for (clk_drive = 0; clk_drive < NUM_DRIVES; clk_drive++) {
+                drive_t *clk_dptr = diskunit_context[clk_unit]->drives[clk_drive];
+                if (clk_dptr != NULL) {
+                    clk_dptr->attach_clk = 0;
+                    clk_dptr->detach_clk = 0;
+                    clk_dptr->attach_detach_clk = 0;
+                }
+            }
+        }
+    }
+
     /* Machine-boundary residue clear (TEST-NATIVE-RESIDUE-01): a .vsf resume
        leaves the VIC row counter mid-frame, and NOTHING in viciisc ever
        re-zeroes vicii.rc (vicii.c powerup/reset skip it; only the monitor
@@ -566,6 +595,10 @@ static int vice_shim_selector_equals(const char *left, const char *right)
     return *left == '\0' && *right == '\0';
 }
 
+/* Forward-declared so destroy can close the private SID oracle renderer; the
+   definition and the reset-path caller live further down. */
+static void vice_shim_reset_sid_renderer_locked(void);
+
 VICE_SHIM_API void vice_machine_destroy(void *machine)
 {
     if (g_debug_reset_calls < 8) {
@@ -587,6 +620,11 @@ VICE_SHIM_API void vice_machine_destroy(void *machine)
     if (g_active_machine == instance) {
         vice_shim_detach_cartridge_locked();
         file_system_detach_disk_all();
+        /* Close the private reSID oracle renderer (g_shim_sid_psid) at the
+           machine boundary, symmetric with vice_machine_reset. SidExact* tests
+           open it without a Reset, so without this it leaks past DestroyMachine
+           into the next machine. Hygiene; no observable cross-machine surface. */
+        vice_shim_reset_sid_renderer_locked();
         g_active_machine = NULL;
         g_bootstrap_pending = 0;
         WakeAllConditionVariable(&g_state_cv);
@@ -596,8 +634,6 @@ VICE_SHIM_API void vice_machine_destroy(void *machine)
     instance->magic = 0;
     free(instance);
 }
-
-static void vice_shim_reset_sid_renderer_locked(void);
 
 VICE_SHIM_API void vice_machine_reset(void *machine)
 {
@@ -1520,6 +1556,32 @@ VICE_SHIM_API uint64_t vice_drivecpu_get_cycle_accum(void *machine, unsigned int
     LeaveCriticalSection(&g_state_lock);
 
     return value;
+}
+
+/*
+ * Test-only poison injector for TEST-NATIVE-RESIDUE-04. Writes
+ * drivecpu_context_t.cycle_accum directly so a test can plant a nonzero
+ * fractional accumulator on the process-global drive context, destroy the
+ * machine, and prove a freshly created machine re-baselines it to 0. cycle_accum
+ * cannot be driven nonzero deterministically from the managed side otherwise
+ * (single-stepping does not accumulate it and no shipped .vsf carries a nonzero
+ * value). Returns 0 on success, -1 when the machine is inactive, the unit is out
+ * of range, or the drive CPU is null.
+ */
+VICE_SHIM_API int vice_drivecpu_set_cycle_accum(void *machine, unsigned int unit, uint64_t value)
+{
+    int result = -1;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine) && vice_shim_valid_drive_unit_for_cpu(unit)) {
+        diskunit_context[unit - DRIVE_UNIT_MIN]->cpu->cycle_accum = (CLOCK)value;
+        result = 0;
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return result;
 }
 
 /*

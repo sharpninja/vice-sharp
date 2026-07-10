@@ -88,6 +88,7 @@ VICE_SHIM_API uint16_t vice_drivecpu_get_pc(void* machine, unsigned int unit);
 // (out-params zeroed); cycle_accum returns 0 on invalid machine/unit.
 VICE_SHIM_API int vice_drive_get_clock_residue(void* machine, unsigned int unit, uint64_t* attach_clk, uint64_t* detach_clk, uint64_t* attach_detach_clk);
 VICE_SHIM_API uint64_t vice_drivecpu_get_cycle_accum(void* machine, unsigned int unit);
+VICE_SHIM_API int vice_drivecpu_set_cycle_accum(void* machine, unsigned int unit, uint64_t value);
 
 // Per-unit true-drive emulation toggle. Returns 0 on success, non-zero on failure.
 VICE_SHIM_API int vice_drive_set_true_emulation(void* machine, unsigned int unit, int enabled);

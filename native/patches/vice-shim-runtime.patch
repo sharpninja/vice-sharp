@@ -46,6 +46,57 @@ index 5971a3c9d3..3ee311afbf 100644
  
  
  /* Skip cycle implementation */
+diff --git a/vice/src/drive/drive-snapshot.c b/vice/src/drive/drive-snapshot.c
+index 7417f7e60b..caf808abae 100644
+--- a/vice/src/drive/drive-snapshot.c
++++ b/vice/src/drive/drive-snapshot.c
+@@ -314,9 +314,13 @@ int drive_snapshot_read_module(snapshot_t *s)
+     char snap_module_name[8];
+     uint32_t rotation_table_ptr[NUM_DISK_UNITS];
+     int has_tde[NUM_DISK_UNITS];
+-    CLOCK attach_clk[NUM_DISK_UNITS];
+-    CLOCK detach_clk[NUM_DISK_UNITS];
+-    CLOCK attach_detach_clk[NUM_DISK_UNITS];
++    /* Zero-init: these are written only inside the per-unit if (has_tde[unr])
++       block below, but copied unconditionally into drive_t for every unit whose
++       type != DRIVE_TYPE_NONE. A has_tde=0 restore would otherwise copy in
++       uninitialized stack; 0 is the fresh-boot baseline (drive_init, drive.c). */
++    CLOCK attach_clk[NUM_DISK_UNITS] = {0};
++    CLOCK detach_clk[NUM_DISK_UNITS] = {0};
++    CLOCK attach_detach_clk[NUM_DISK_UNITS] = {0};
+     int sync_factor;
+     drive_t *drive;
+     diskunit_context_t *unit;
+diff --git a/vice/src/drive/drivecpu.c b/vice/src/drive/drivecpu.c
+index 493b92ab5c..fda4103248 100644
+--- a/vice/src/drive/drivecpu.c
++++ b/vice/src/drive/drivecpu.c
+@@ -188,6 +188,10 @@ void drivecpu_reset_clk(diskunit_context_t *drv)
+     drv->cpu->last_clk = maincpu_clk;
+     drv->cpu->last_exc_cycles = 0;
+     drv->cpu->stop_clk = 0;
++    /* cycle_accum is part of the derived clock state re-anchored here; leaving
++       it stale phase-shifts the drive CPU on any reset not followed by a
++       snapshot restore (the snapshot path re-writes it immediately after). */
++    drv->cpu->cycle_accum = 0;
+ }
+ 
+ /* called by drive_reset() (via machine_specific_reset()) */
+diff --git a/vice/src/drive/drivecpu65c02.c b/vice/src/drive/drivecpu65c02.c
+index 7da8730650..b2dc44a130 100644
+--- a/vice/src/drive/drivecpu65c02.c
++++ b/vice/src/drive/drivecpu65c02.c
+@@ -170,6 +170,10 @@ void drivecpu65c02_reset_clk(diskunit_context_t *drv)
+     drv->cpu->last_clk = maincpu_clk;
+     drv->cpu->last_exc_cycles = 0;
+     drv->cpu->stop_clk = 0;
++    /* Mirror drivecpu_reset_clk: re-anchor the fractional cycle accumulator so
++       a reset without a following snapshot restore does not leave it stale
++       (1581/2000/4000/CMDHD drives). */
++    drv->cpu->cycle_accum = 0;
+ }
+ 
+ void drivecpu65c02_reset(diskunit_context_t *drv)
 diff --git a/vice/src/mainc64cpu.c b/vice/src/mainc64cpu.c
 index 357b27452b..b94ee8587d 100644
 --- a/vice/src/mainc64cpu.c

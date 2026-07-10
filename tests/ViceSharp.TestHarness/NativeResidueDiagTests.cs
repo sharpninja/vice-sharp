@@ -116,46 +116,44 @@ public sealed class NativeResidueDiagTests
     /// Use case: the drive CPU carries a 16.16 fixed-point fractional cycle
     /// accumulator (drivecpu_context_t.cycle_accum) that drivecpu_reset_clk
     /// resets for last_clk/last_exc_cycles/stop_clk but NOT for cycle_accum. A
-    /// scratch machine that resumes a true-drive .vsf and runs drive activity
-    /// advances that fraction to a nonzero remainder; because diskunit_context[]
-    /// is process-global and never torn down, the next machine's create-time TDE
-    /// re-baseline calls drivecpu_reset_clk (which leaves the stale fraction),
-    /// phase-shifting the drive CPU and diverging the next kernal-boot lockstep
-    /// at cycle 167 (BUG-LOCKSTEP-001).
-    /// Acceptance: a machine created after the poison presents drive-8
-    /// cycle_accum == 0 (the fresh-boot baseline); the poison step first proves
-    /// the scratch drive carried a nonzero fraction.
+    /// .vsf resume restores it, and because diskunit_context[] is process-global
+    /// and never torn down, the next machine's create-time TDE re-baseline calls
+    /// drivecpu_reset_clk (which, unfixed, leaves the stale fraction), phase-
+    /// shifting the drive CPU and diverging the next kernal-boot lockstep at
+    /// cycle 167 (BUG-LOCKSTEP-001). cycle_accum cannot be driven nonzero
+    /// deterministically from the managed side (single-stepping does not
+    /// accumulate it and no shipped .vsf carries a nonzero value), so the poison
+    /// is planted directly on the global drive context via the test-only setter,
+    /// which is exactly the residue a .vsf resume leaves behind.
+    /// Acceptance: after planting a nonzero cycle_accum on a scratch machine and
+    /// destroying it, a freshly created machine presents drive-8 cycle_accum == 0
+    /// (the fresh-boot baseline). RED before the fix (the planted value leaks
+    /// through), GREEN after.
     /// </summary>
     [ViceFact]
-    public void FreshMachine_DriveCycleAccum_IsZero_AfterSnapshotResumeActivity()
+    public void FreshMachine_DriveCycleAccum_IsZero_AfterResidue()
     {
-        var vsf = Array.Find(SnapshotCandidates, File.Exists);
-        Assert.SkipWhen(vsf is null, "Staged demo .vsf snapshot not present.");
+        const ulong Poison = 0x1234;
 
-        ulong poisonAccum;
         var scratch = ViceNativeBridge.CreateMachine("c64");
         try
         {
-            ViceNativeBridge.ResetMachine(scratch);
-            Assert.True(ViceNativeBridge.ReadSnapshot(scratch, vsf!) == 0, "snapshot must resume");
-            for (var i = 0; i < 5000; i++)
-                ViceNativeBridge.StepCycle(scratch);
-            poisonAccum = ViceNativeBridge.GetDriveCycleAccum(scratch, Unit8);
+            Assert.True(ViceNativeBridge.SetDriveCycleAccum(scratch, Unit8, Poison) == 0,
+                "cycle_accum poison must write to the drive context");
+            // Poison proof: the value is really planted on the global context.
+            Assert.Equal(Poison, ViceNativeBridge.GetDriveCycleAccum(scratch, Unit8));
         }
         finally
         {
             ViceNativeBridge.DestroyMachine(scratch);
         }
 
-        Assert.True(poisonAccum != 0,
-            $"poison precondition: expected a nonzero drive-8 cycle_accum after snapshot activity (fixture may have changed), got {poisonAccum}");
-
         var check = ViceNativeBridge.CreateMachine("c64");
         try
         {
             var residue = ViceNativeBridge.GetDriveCycleAccum(check, Unit8);
             Assert.True(residue == 0,
-                $"drive-8 cycle_accum residue after snapshot resume: expected 0, got {residue} (scratch poison was {poisonAccum})");
+                $"drive-8 cycle_accum residue after a poisoned machine boundary: expected 0, got {residue} (poison was {Poison})");
         }
         finally
         {
@@ -240,9 +238,12 @@ public sealed class NativeResidueDiagTests
             Assert.True(rc == 0, "clock residue readout must succeed after resume");
             Assert.True(attach == 0 && detach == 0 && attachDetach == 0,
                 $"drive-8 clock residue after has_tde=0 resume: expected 0/0/0, got attach={attach} detach={detach} attachDetach={attachDetach}");
-            // Piggyback regression guard on the ba0f94f TDE re-baseline.
-            Assert.True(ViceNativeBridge.GetDriveTrueEmulation(mech, Unit8) == 1,
-                "true-drive emulation must be restored to the VICE default after resume");
+            // Confirms the has_tde=0 path was genuinely exercised: resuming a
+            // TDE-off snapshot honors its flag and leaves TDE disabled on this
+            // machine (only a subsequent machine CREATE re-baselines it to the
+            // VICE default of 1, per the ba0f94f re-baseline).
+            Assert.True(ViceNativeBridge.GetDriveTrueEmulation(mech, Unit8) == 0,
+                "a has_tde=0 resume must leave true-drive emulation disabled until the next create");
         }
         finally
         {

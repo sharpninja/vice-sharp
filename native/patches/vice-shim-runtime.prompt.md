@@ -59,6 +59,28 @@ Apply these changes against the classic VICE source tree rooted at
    #endif
    ```
 
+4. Drive-clock residue fixes (PLAN-NATIVERESIDUE-002, TEST-NATIVE-RESIDUE-03/04).
+   These make the drive-side clock state deterministic across the single-process
+   oracle's machine boundaries; upstream VICE leaves it stale.
+   - `vice/src/drive/drive-snapshot.c`, in `drive_snapshot_read_module`:
+     zero-initialize the three stack arrays so a `has_tde=0` restore copies 0
+     (the fresh-boot baseline) into `drive_t` instead of uninitialized stack:
+     ```c
+     CLOCK attach_clk[NUM_DISK_UNITS] = {0};
+     CLOCK detach_clk[NUM_DISK_UNITS] = {0};
+     CLOCK attach_detach_clk[NUM_DISK_UNITS] = {0};
+     ```
+   - `vice/src/drive/drivecpu.c`, in `drivecpu_reset_clk`: add
+     `drv->cpu->cycle_accum = 0;` after the `stop_clk` reset. `drivecpu_reset`
+     already zeroes the drive clock (`*(drv->clk_ptr) = 0`), so the fractional
+     carry must reset with it; the snapshot-read path re-writes it immediately
+     after via SMR_CLOCK, so restores are unaffected.
+   - `vice/src/drive/drivecpu65c02.c`, in `drivecpu65c02_reset_clk`: the same
+     `drv->cpu->cycle_accum = 0;` addition (1581/2000/4000/CMDHD drives).
+   The remaining machine-boundary persistence (a `has_tde=1` restore or the
+   shim's own disk-detach leaving nonzero clocks) is re-baselined directly in
+   `native/vice-shim.c` `vice_machine_create_model`, not here.
+
 Validation after reapplying the changes:
 - `native/build-vice-shim.sh` should build `native/vice_x64.dll`.
 - `dotnet build tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj`

@@ -43,6 +43,8 @@ public static class ViceNativeBridge
         => ViceNative.GetDriveClockResidue(machine, unit, out attachClk, out detachClk, out attachDetachClk);
     public static ulong GetDriveCycleAccum(IntPtr machine, uint unit)
         => ViceNative.GetDriveCycleAccum(machine, unit);
+    public static int SetDriveCycleAccum(IntPtr machine, uint unit, ulong value)
+        => ViceNative.SetDriveCycleAccum(machine, unit, value);
     public static int ReadSnapshot(IntPtr machine, string path) => ViceNative.ReadSnapshotNative(machine, path);
     public static int WriteSnapshot(IntPtr machine, string path) => ViceNative.WriteSnapshotNative(machine, path);
     public static int SetDriveTrueEmulation(IntPtr machine, uint unit, bool enabled)
