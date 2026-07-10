@@ -42,3 +42,27 @@ stages:
             displayName: 'Run: PublishGitHubRelease'
             inputs:
               script: './build.cmd PublishGitHubRelease --skip'
+      - job: PublishWinget
+        displayName: 'PublishWinget'
+        dependsOn: [ PublishGitHubRelease ]
+        steps:
+          - task: CmdLine@2
+            displayName: 'Run: PublishWinget'
+            inputs:
+              script: './build.cmd PublishWinget --skip'
+      - job: PublishChocolatey
+        displayName: 'PublishChocolatey'
+        dependsOn: [ PublishGitHubRelease ]
+        steps:
+          - task: CmdLine@2
+            displayName: 'Run: PublishChocolatey'
+            inputs:
+              script: './build.cmd PublishChocolatey --skip'
+      - job: PublishScoop
+        displayName: 'PublishScoop'
+        dependsOn: [ PublishGitHubRelease ]
+        steps:
+          - task: CmdLine@2
+            displayName: 'Run: PublishScoop'
+            inputs:
+              script: './build.cmd PublishScoop --skip'

@@ -30,7 +30,14 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [DefaultPoolAzurePipelines(
     "release",
     AzurePipelinesImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(PublishNuget), nameof(PublishGitHubRelease) },
+    InvokedTargets = new[]
+    {
+        nameof(PublishNuget),
+        nameof(PublishGitHubRelease),
+        nameof(PublishWinget),
+        nameof(PublishChocolatey),
+        nameof(PublishScoop),
+    },
     TriggerTagsInclude = new[] { "v*" },
     TriggerBranchesInclude = new string[0],
     CacheKeyFiles = new string[0])]
@@ -1108,34 +1115,30 @@ sealed partial class Build : NukeBuild
     /// otherwise the manifests are left in artifacts/winget/ for manual PR.
     /// </summary>
     Target PublishWinget => _ => _
-        .DependsOn(PublishMsi)
+        .DependsOn(PublishGitHubRelease)
         .Executes(() =>
         {
-            if (!MsiOutputPath.FileExists())
-                throw new InvalidOperationException(
-                    $"MSI not found at {MsiOutputPath}. PublishWinget depends on PublishMsi.");
+            var version = HeadReleaseTagVersion()
+                ?? throw new InvalidOperationException(
+                    "PublishWinget requires HEAD to carry exactly one vX.Y.Z release tag.");
 
             WingetOutputDir.CreateOrCleanDirectory();
 
-            // Compute SHA256 of the MSI (winget manifest requires it).
-            string sha;
-            using (var stream = System.IO.File.OpenRead(MsiOutputPath))
-            using (var sha256 = System.Security.Cryptography.SHA256.Create())
-            {
-                var hash = sha256.ComputeHash(stream);
-                sha = Convert.ToHexString(hash);
-            }
-            Serilog.Log.Information("MSI SHA256: {Sha}", sha);
+            // Hash the exact MSI attached to the GitHub release (WiX MSIs are not
+            // byte-reproducible, so a rebuilt MSI would checksum differently than
+            // the asset winget actually downloads and validates).
+            var sha = Sha256Hex(DownloadReleasedMsi(version));
+            Serilog.Log.Information("Released MSI SHA256: {Sha}", sha);
 
             var (publisher, identifier) = SplitWingetPackageId(WingetPackageId);
-            var manifestsDir = WingetOutputDir / "manifests" / publisher.Substring(0, 1).ToLowerInvariant() / publisher / identifier / MsiVersion;
+            var manifestsDir = WingetOutputDir / "manifests" / publisher.Substring(0, 1).ToLowerInvariant() / publisher / identifier / version;
             manifestsDir.CreateDirectory();
 
             // Version manifest (root).
             var versionYaml =
 $@"# yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.6.0.schema.json
 PackageIdentifier: {WingetPackageId}
-PackageVersion: {MsiVersion}
+PackageVersion: {version}
 DefaultLocale: en-US
 ManifestType: version
 ManifestVersion: 1.6.0
@@ -1146,7 +1149,7 @@ ManifestVersion: 1.6.0
             var installerYaml =
 $@"# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.6.0.schema.json
 PackageIdentifier: {WingetPackageId}
-PackageVersion: {MsiVersion}
+PackageVersion: {version}
 InstallerType: wix
 Scope: machine
 InstallModes:
@@ -1155,7 +1158,7 @@ InstallModes:
 UpgradeBehavior: install
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/sharpninja/vice-sharp/releases/download/v{MsiVersion}/ViceSharp.msi
+    InstallerUrl: https://github.com/sharpninja/vice-sharp/releases/download/v{version}/ViceSharp.msi
     InstallerSha256: {sha}
     InstallerType: wix
 ManifestType: installer
@@ -1167,7 +1170,7 @@ ManifestVersion: 1.6.0
             var localeYaml =
 $@"# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
 PackageIdentifier: {WingetPackageId}
-PackageVersion: {MsiVersion}
+PackageVersion: {version}
 PackageLocale: en-US
 Publisher: {publisher}
 PackageName: ViceSharp
@@ -1193,21 +1196,37 @@ ManifestVersion: 1.6.0
 
             Serilog.Log.Information("Winget manifests staged at {Dir}", manifestsDir);
 
-            // Optional: invoke `wingetcreate submit` if available.
+            // Submit the manifests as a PR to microsoft/winget-pkgs. Install the
+            // Microsoft.WingetCreate .NET tool if it is not already on PATH, and
+            // authenticate with WINGET_PAT or, failing that, the release agent's
+            // gh CLI token.
             var wingetcreate = FindOnPath("wingetcreate.exe") ?? FindOnPath("wingetcreate");
-            if (wingetcreate is not null)
+            if (wingetcreate is null)
             {
-                Serilog.Log.Information("Found wingetcreate at {Path}; submitting manifests", wingetcreate);
-                var token = Environment.GetEnvironmentVariable("WINGET_PAT");
-                var tokenArg = string.IsNullOrEmpty(token) ? string.Empty : $" --token {token}";
-                var args = $"submit \"{manifestsDir}\"{tokenArg}";
-                RunProcess(wingetcreate, args, throwOnNonZero: true);
+                Serilog.Log.Information("wingetcreate not found; installing the Microsoft.WingetCreate .NET tool.");
+                var toolPath = TemporaryDirectory / "wingetcreate-tool";
+                RunProcess("dotnet", $"tool install Microsoft.WingetCreate --tool-path \"{toolPath}\"", throwOnNonZero: false);
+                var candidate = toolPath / "wingetcreate.exe";
+                wingetcreate = candidate.FileExists() ? candidate.ToString() : null;
             }
+
+            var token = Environment.GetEnvironmentVariable("WINGET_PAT");
+            if (string.IsNullOrEmpty(token))
+            {
+                var gh = FindOnPath("gh.exe") ?? FindOnPath("gh");
+                if (gh is not null)
+                    token = ProcessTasks.StartProcess(gh, "auth token", RootDirectory, logOutput: false)
+                        .Output.Select(o => o.Text.Trim()).FirstOrDefault(t => t.Length > 0);
+            }
+
+            if (wingetcreate is null)
+                Serilog.Log.Warning("wingetcreate unavailable; manifests left in {Dir} for a manual winget-pkgs PR.", manifestsDir);
+            else if (string.IsNullOrEmpty(token))
+                Serilog.Log.Warning("No WINGET_PAT and no gh token; manifests staged at {Dir} but NOT submitted.", manifestsDir);
             else
             {
-                Serilog.Log.Information(
-                    "wingetcreate not on PATH; manifests left in {Dir} for manual PR to microsoft/winget-pkgs.",
-                    manifestsDir);
+                RunProcess(wingetcreate, $"submit \"{manifestsDir}\" --token {token}", throwOnNonZero: true);
+                Serilog.Log.Information("Submitted winget manifests for {Id} {Version}.", WingetPackageId, version);
             }
         });
 
@@ -1251,4 +1270,139 @@ ManifestVersion: 1.6.0
             throw new InvalidOperationException($"{System.IO.Path.GetFileName(fileName)} exited with code {p.ExitCode}.");
         return p.ExitCode;
     }
+
+    // ---- Package-manager publishing (winget / chocolatey / scoop) -----------
+    // All three key off the single GitHub release MSI asset. WiX MSIs are NOT
+    // byte-reproducible (per-build package code), so a checksum MUST be taken
+    // over the exact released asset, never a locally rebuilt MSI. Hence these
+    // targets DependsOn(PublishGitHubRelease) and download the released MSI.
+
+    string ReleaseMsiUrl(string version) =>
+        $"https://github.com/{GitHubRepo}/releases/download/v{version}/ViceSharp.msi";
+
+    /// <summary>Download the MSI attached to the GitHub release for <paramref name="version"/> and return its local path.</summary>
+    AbsolutePath DownloadReleasedMsi(string version)
+    {
+        var url = ReleaseMsiUrl(version);
+        var dest = TemporaryDirectory / "ViceSharp.released.msi";
+        Serilog.Log.Information("Downloading released MSI: {Url}", url);
+        using var http = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromMinutes(5) };
+        var bytes = http.GetByteArrayAsync(url).GetAwaiter().GetResult();
+        System.IO.File.WriteAllBytes(dest, bytes);
+        Serilog.Log.Information("Downloaded {Bytes:N0} bytes.", bytes.Length);
+        return dest;
+    }
+
+    static string Sha256Hex(AbsolutePath file)
+    {
+        using var stream = System.IO.File.OpenRead(file);
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        return Convert.ToHexString(sha.ComputeHash(stream));
+    }
+
+    AbsolutePath ChocolateySourceDir => RootDirectory / "packaging" / "chocolatey";
+    AbsolutePath ChocolateyOutputDir => ArtifactsDirectory / "chocolatey";
+
+    /// <summary>
+    /// Build + push the Chocolatey package for the HEAD vX.Y.Z tag: stage the
+    /// nuspec + tools, inject the released MSI URL + SHA256 into
+    /// chocolateyinstall.ps1, `choco pack`, then `choco push` to
+    /// community.chocolatey.org (subject to community moderation). The push is
+    /// skipped - package left under artifacts/chocolatey - when ChocoApiKey or
+    /// choco itself is unavailable.
+    /// </summary>
+    Target PublishChocolatey => _ => _
+        .DependsOn(PublishGitHubRelease)
+        .Executes(() =>
+        {
+            var version = HeadReleaseTagVersion()
+                ?? throw new InvalidOperationException(
+                    "PublishChocolatey requires HEAD to carry exactly one vX.Y.Z release tag.");
+
+            var choco = FindOnPath("choco.exe") ?? FindOnPath("choco");
+            if (choco is null)
+            {
+                Serilog.Log.Warning("choco not on PATH; skipping the Chocolatey package.");
+                return;
+            }
+
+            var url = ReleaseMsiUrl(version);
+            var sha = Sha256Hex(DownloadReleasedMsi(version));
+
+            // Stage a copy of the package and inject the url + checksum into the
+            // install script (the source stays a token template).
+            var stage = ChocolateyOutputDir / "pkg";
+            stage.CreateOrCleanDirectory();
+            (stage / "tools").CreateDirectory();
+            System.IO.File.Copy(ChocolateySourceDir / "vice-sharp.nuspec", stage / "vice-sharp.nuspec", overwrite: true);
+            System.IO.File.Copy(ChocolateySourceDir / "tools" / "chocolateyuninstall.ps1", stage / "tools" / "chocolateyuninstall.ps1", overwrite: true);
+            var install = System.IO.File.ReadAllText(ChocolateySourceDir / "tools" / "chocolateyinstall.ps1")
+                .Replace("__URL__", url)
+                .Replace("__SHA256__", sha);
+            System.IO.File.WriteAllText(stage / "tools" / "chocolateyinstall.ps1", install);
+
+            RunProcess(choco,
+                $"pack \"{stage / "vice-sharp.nuspec"}\" --version {version} --outputdirectory \"{ChocolateyOutputDir}\"",
+                throwOnNonZero: true);
+
+            var nupkg = ChocolateyOutputDir.GlobFiles($"vice-sharp.{version}.nupkg").FirstOrDefault()
+                ?? throw new InvalidOperationException($"choco pack did not produce vice-sharp.{version}.nupkg.");
+
+            // Secrets reach the self-hosted release agent through its machine
+            // environment (the same way PublishNuget reads NUGET_API_KEY).
+            var chocoApiKey = Environment.GetEnvironmentVariable("CHOCO_API_KEY");
+            if (string.IsNullOrWhiteSpace(chocoApiKey))
+            {
+                Serilog.Log.Warning("CHOCO_API_KEY not set; packed {Nupkg} but NOT pushing to chocolatey.org.", nupkg);
+                return;
+            }
+            RunProcess(choco, $"push \"{nupkg}\" --source https://push.chocolatey.org/ --api-key {chocoApiKey}", throwOnNonZero: true);
+            Serilog.Log.Information("Pushed {Nupkg} to chocolatey.org (pending community moderation).", nupkg);
+        });
+
+    AbsolutePath ScoopManifestPath => RootDirectory / "bucket" / "vice-sharp.json";
+
+    /// <summary>
+    /// Update the in-repo Scoop manifest (bucket/vice-sharp.json) for the HEAD
+    /// vX.Y.Z tag - version, released MSI URL, and SHA256 (lowercase hex) - and
+    /// push it to the GitHub mirror's default branch (authenticated via gh's
+    /// credential helper) so `scoop update` sees the new version. Users add the
+    /// bucket with:
+    ///   scoop bucket add vicesharp https://github.com/sharpninja/vice-sharp
+    /// The commit is based on the mirror's current master (not the detached tag
+    /// checkout), so it lands as a normal master commit.
+    /// </summary>
+    Target PublishScoop => _ => _
+        .DependsOn(PublishGitHubRelease)
+        .Executes(() =>
+        {
+            var version = HeadReleaseTagVersion()
+                ?? throw new InvalidOperationException(
+                    "PublishScoop requires HEAD to carry exactly one vX.Y.Z release tag.");
+
+            var url = ReleaseMsiUrl(version);
+            var sha = Sha256Hex(DownloadReleasedMsi(version)).ToLowerInvariant();
+            var repoUrl = $"https://github.com/{GitHubRepo}.git";
+
+            // Base the manifest change on the mirror's current master so it lands
+            // as a clean master commit (the pipeline runs on a detached tag).
+            RunProcess("git", $"fetch --depth 1 {repoUrl} master", throwOnNonZero: true);
+            RunProcess("git", "checkout -B scoop-publish FETCH_HEAD", throwOnNonZero: true);
+
+            var json = System.Text.Json.Nodes.JsonNode.Parse(System.IO.File.ReadAllText(ScoopManifestPath))!;
+            json["version"] = version;
+            json["architecture"]!["64bit"]!["url"] = url;
+            json["architecture"]!["64bit"]!["hash"] = sha;
+            var opts = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+            System.IO.File.WriteAllText(ScoopManifestPath, json.ToJsonString(opts) + "\n");
+
+            RunProcess("git", $"add \"{ScoopManifestPath}\"", throwOnNonZero: true);
+            RunProcess("git",
+                $"-c user.email=ci@vicesharp -c user.name=\"ViceSharp CI\" commit -m \"chore(scoop): vice-sharp {version}\"",
+                throwOnNonZero: false); // no-op if the manifest is unchanged
+            RunProcess("git",
+                $"-c credential.helper= -c credential.helper=\"!gh auth git-credential\" push {repoUrl} HEAD:master",
+                throwOnNonZero: true);
+            Serilog.Log.Information("Scoop manifest for {Version} pushed to the mirror's master.", version);
+        });
 }

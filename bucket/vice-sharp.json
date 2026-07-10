@@ -1,0 +1,33 @@
+{
+    "version": "0.0.0",
+    "description": "VICE-compatible Commodore 64 emulator (Avalonia GUI), cycle-exact with x64sc and bit-exact SID vs reSID.",
+    "homepage": "https://github.com/sharpninja/vice-sharp",
+    "license": "GPL-2.0-or-later",
+    "notes": [
+        "ViceSharp ships no Commodore ROMs. Set VICESHARP_ROM_PATH to a VICE data root (or put x64sc.exe on PATH).",
+        "Scoop extracts the MSI with lessmsi (no admin, portable). Launch: vice-sharp."
+    ],
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/sharpninja/vice-sharp/releases/download/v0.0.0/ViceSharp.msi",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+    },
+    "bin": "ViceSharp.Avalonia.exe",
+    "shortcuts": [
+        [
+            "ViceSharp.Avalonia.exe",
+            "ViceSharp"
+        ]
+    ],
+    "checkver": {
+        "github": "https://github.com/sharpninja/vice-sharp"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/sharpninja/vice-sharp/releases/download/v$version/ViceSharp.msi"
+            }
+        }
+    }
+}

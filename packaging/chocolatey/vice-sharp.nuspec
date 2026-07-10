@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chocolatey package for ViceSharp. The version is set at pack time
+     (choco pack --version <tag>); the installer URL + checksum are injected
+     into tools/chocolateyinstall.ps1 by the PublishChocolatey Nuke target from
+     the GitHub release asset. This package downloads the MSI at install time
+     rather than embedding it, keeping the .nupkg small. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>vice-sharp</id>
+    <version>0.0.0</version>
+    <packageSourceUrl>https://github.com/sharpninja/vice-sharp/tree/master/packaging/chocolatey</packageSourceUrl>
+    <owners>sharpninja</owners>
+    <title>ViceSharp</title>
+    <authors>sharpninja</authors>
+    <projectUrl>https://github.com/sharpninja/vice-sharp</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/sharpninja/vice-sharp/master/docs/assets/vicesharp.png</iconUrl>
+    <licenseUrl>https://github.com/sharpninja/vice-sharp/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/sharpninja/vice-sharp</projectSourceUrl>
+    <docsUrl>https://github.com/sharpninja/vice-sharp/wiki</docsUrl>
+    <bugTrackerUrl>https://github.com/sharpninja/vice-sharp/issues</bugTrackerUrl>
+    <tags>commodore c64 emulator vice retro sid vic-ii dotnet admin</tags>
+    <summary>VICE-compatible Commodore 64 emulator (Avalonia GUI).</summary>
+    <description>
+ViceSharp is a C#/.NET 10 reimplementation of a Commodore 64 that runs in
+cycle-exact lockstep with VICE's x64sc, with the SID audio path validated
+bit-for-bit against reSID. This package installs the ViceSharp Avalonia desktop
+GUI (a full host with monitor, drive/tape attach, debug stepping, snapshots,
+frame/audio capture, and cycle-accurate VIC-II / SID / CIA emulation) by
+downloading the signed MSI from the project's GitHub release.
+
+License: GPL-2.0-or-later (derivative of VICE). Ships no Commodore ROMs; point
+VICESHARP_ROM_PATH at a VICE data root.
+    </description>
+    <releaseNotes>https://github.com/sharpninja/vice-sharp/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
