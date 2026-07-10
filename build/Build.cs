@@ -1231,12 +1231,41 @@ ManifestVersion: 1.6.0
                 Serilog.Log.Warning("wingetcreate unavailable; manifests left in {Dir} for a manual winget-pkgs PR.", manifestsDir);
             else if (string.IsNullOrEmpty(token))
                 Serilog.Log.Warning("No WINGET_PAT and no gh token; manifests staged at {Dir} but NOT submitted.", manifestsDir);
+            else if (!WingetPackageExists(WingetPackageId))
+            {
+                // First-time: the package does not exist in winget-pkgs yet, so
+                // submit the freshly-authored complete manifests to create it.
+                Serilog.Log.Information("{Id} not in winget-pkgs; submitting the first-time manifests.", WingetPackageId);
+                RunProcess(wingetcreate, $"submit \"{manifestsDir}\" --token {token}", throwOnNonZero: true);
+            }
             else
             {
-                RunProcess(wingetcreate, $"submit \"{manifestsDir}\" --token {token}", throwOnNonZero: true);
-                Serilog.Log.Information("Submitted winget manifests for {Id} {Version}.", WingetPackageId, version);
+                // Existing: canonical version bump. `update` fetches the current
+                // manifest and changes only the version + installer, preserving
+                // any locale edits made by winget-pkgs maintainers.
+                Serilog.Log.Information("{Id} exists in winget-pkgs; submitting a version update to {Version}.", WingetPackageId, version);
+                RunProcess(wingetcreate, $"update {WingetPackageId} --version {version} --urls \"{ReleaseMsiUrl(version)}\" --submit --token {token}", throwOnNonZero: true);
             }
         });
+
+    /// <summary>
+    /// True when the package already exists in microsoft/winget-pkgs, so a
+    /// release should submit a version UPDATE rather than create a first-time
+    /// NEW package. Probes the manifests folder through the GitHub contents API
+    /// with the agent's gh CLI (no winget client needed on the agent). Falls
+    /// back to false (first-time submit) when gh is unavailable - a plain submit
+    /// also creates a new package, so this only affects new-vs-update wording.
+    /// </summary>
+    bool WingetPackageExists(string packageId)
+    {
+        var gh = FindOnPath("gh.exe") ?? FindOnPath("gh");
+        if (gh is null) return false;
+        var (publisher, identifier) = SplitWingetPackageId(packageId);
+        var path = $"manifests/{publisher.Substring(0, 1).ToLowerInvariant()}/{publisher}/{identifier}";
+        var exit = RunProcess(gh, $"api repos/microsoft/winget-pkgs/contents/{path} --silent", throwOnNonZero: false);
+        Serilog.Log.Information("winget-pkgs {Path} -> {Result}.", path, exit == 0 ? "exists (update)" : "not found (first-time)");
+        return exit == 0;
+    }
 
     static (string publisher, string identifier) SplitWingetPackageId(string id)
     {
