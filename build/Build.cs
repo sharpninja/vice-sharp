@@ -273,6 +273,19 @@ sealed partial class Build : NukeBuild
         return tags.Count == 1 ? tags[0].TrimStart('v') : null;
     }
 
+    /// <summary>
+    /// The single "only publish a tagged v* commit" guard shared by every
+    /// Publish* target. Returns the vX.Y.Z version (without the leading 'v')
+    /// when HEAD carries exactly one such tag; otherwise throws before the
+    /// target performs any publishing side effect. Call it as the first line of
+    /// every publish target's Executes.
+    /// </summary>
+    string RequireReleaseTag(string targetName) =>
+        HeadReleaseTagVersion()
+        ?? throw new InvalidOperationException(
+            $"{targetName} only publishes a tagged release: HEAD must carry exactly one vX.Y.Z tag. " +
+            "Tag the release commit (git tag vX.Y.Z) and run from that commit.");
+
     // Shared by PackNuget (local flow, after Compile) and PublishNuget (the
     // Nuke-generated single-job release pipeline, which restores/builds and
     // packs on one agent because the Azure generator never downloads
@@ -421,6 +434,10 @@ sealed partial class Build : NukeBuild
     Target PublishNuget => _ => _
         .Executes(() =>
         {
+            // Fail fast before building or packing anything if HEAD is not a
+            // tagged release (the detailed highest-build gate runs after pack).
+            RequireReleaseTag(nameof(PublishNuget));
+
             var apiKey = Environment.GetEnvironmentVariable("NUGET_API_KEY");
             Assert.True(!string.IsNullOrWhiteSpace(apiKey), "NUGET_API_KEY environment variable is not set");
 
@@ -741,9 +758,7 @@ sealed partial class Build : NukeBuild
         .Description("Create/update the GitHub release for the HEAD vX.Y.Z tag with the MSI + NuGet packages.")
         .Executes(() =>
         {
-            var version = HeadReleaseTagVersion()
-                ?? throw new InvalidOperationException(
-                    "PublishGitHubRelease requires HEAD to carry exactly one vX.Y.Z release tag.");
+            var version = RequireReleaseTag(nameof(PublishGitHubRelease));
             var tag = "v" + version;
 
             var gh = FindOnPath("gh.exe") ?? FindOnPath("gh")
@@ -1120,9 +1135,7 @@ sealed partial class Build : NukeBuild
         .DependsOn(PublishGitHubRelease)
         .Executes(() =>
         {
-            var version = HeadReleaseTagVersion()
-                ?? throw new InvalidOperationException(
-                    "PublishWinget requires HEAD to carry exactly one vX.Y.Z release tag.");
+            var version = RequireReleaseTag(nameof(PublishWinget));
 
             WingetOutputDir.CreateOrCleanDirectory();
 
@@ -1352,9 +1365,7 @@ ManifestVersion: 1.6.0
         .DependsOn(PublishGitHubRelease)
         .Executes(() =>
         {
-            var version = HeadReleaseTagVersion()
-                ?? throw new InvalidOperationException(
-                    "PublishChocolatey requires HEAD to carry exactly one vX.Y.Z release tag.");
+            var version = RequireReleaseTag(nameof(PublishChocolatey));
 
             var choco = FindOnPath("choco.exe") ?? FindOnPath("choco");
             if (choco is null)
@@ -1413,9 +1424,7 @@ ManifestVersion: 1.6.0
         .DependsOn(PublishGitHubRelease)
         .Executes(() =>
         {
-            var version = HeadReleaseTagVersion()
-                ?? throw new InvalidOperationException(
-                    "PublishScoop requires HEAD to carry exactly one vX.Y.Z release tag.");
+            var version = RequireReleaseTag(nameof(PublishScoop));
 
             var url = ReleaseMsiUrl(version);
             var sha = Sha256Hex(DownloadReleasedMsi(version)).ToLowerInvariant();
