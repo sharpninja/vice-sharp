@@ -34,3 +34,11 @@ stages:
             displayName: 'Run: PublishNuget'
             inputs:
               script: './build.cmd PublishNuget --skip'
+      - job: PublishGitHubRelease
+        displayName: 'PublishGitHubRelease'
+        dependsOn: [  ]
+        steps:
+          - task: CmdLine@2
+            displayName: 'Run: PublishGitHubRelease'
+            inputs:
+              script: './build.cmd PublishGitHubRelease --skip'

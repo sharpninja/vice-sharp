@@ -30,7 +30,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [DefaultPoolAzurePipelines(
     "release",
     AzurePipelinesImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(PublishNuget) },
+    InvokedTargets = new[] { nameof(PublishNuget), nameof(PublishGitHubRelease) },
     TriggerTagsInclude = new[] { "v*" },
     TriggerBranchesInclude = new string[0],
     CacheKeyFiles = new string[0])]
@@ -712,6 +712,85 @@ sealed partial class Build : NukeBuild
             Serilog.Log.Information("Invoking wiki publisher: {Script}", script);
             var args = "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \"" + script + "\" -Target both -RegenerateSource";
             RunProcess("pwsh.exe", args, throwOnNonZero: true);
+        });
+
+    [Parameter("owner/name of the GitHub mirror used for releases (gh --repo).")]
+    readonly string GitHubRepo = "sharpninja/vice-sharp";
+
+    /// <summary>
+    /// On a vX.Y.Z tag, create (or update) the GitHub release for that tag on
+    /// the GitHub mirror and attach the MSI installer plus the NuGet packages.
+    /// GitHub is a downstream mirror, so the tagged commit + tag are pushed to
+    /// it first (authenticated through the release agent's gh CLI). The target
+    /// is self-sufficient: the generated release job runs with --skip, so it
+    /// packs its own .nupkg files and builds the MSI via a nested Nuke
+    /// invocation rather than relying on DependsOn. Idempotent - a re-run of the
+    /// same tag clobber-uploads assets instead of failing. The nuget.org push
+    /// stays in PublishNuget's own job.
+    /// </summary>
+    Target PublishGitHubRelease => _ => _
+        .Description("Create/update the GitHub release for the HEAD vX.Y.Z tag with the MSI + NuGet packages.")
+        .Executes(() =>
+        {
+            var version = HeadReleaseTagVersion()
+                ?? throw new InvalidOperationException(
+                    "PublishGitHubRelease requires HEAD to carry exactly one vX.Y.Z release tag.");
+            var tag = "v" + version;
+
+            var gh = FindOnPath("gh.exe") ?? FindOnPath("gh")
+                ?? throw new InvalidOperationException(
+                    "gh CLI not found on PATH; the release agent must have an authenticated GitHub CLI.");
+
+            var repoUrl = $"https://github.com/{GitHubRepo}.git";
+            // The mirror must carry the tagged commit before a release can point
+            // at it. Push the tag (which carries its commit + missing ancestors)
+            // to GitHub, authenticating git through gh's credential helper. This
+            // is the one point the release reaches out to the GitHub mirror.
+            RunProcess("git",
+                $"-c credential.helper= -c credential.helper=\"!gh auth git-credential\" push {repoUrl} {tag}",
+                throwOnNonZero: true);
+
+            // NuGet packages: packed in-process from the tagged checkout (the
+            // nuget.org push stays in PublishNuget's own job; here we only need
+            // the .nupkg files as release assets).
+            PackAllNugetPackages();
+            var assets = PackagesOutputDirectory.GlobFiles("*.nupkg")
+                .Select(p => p.ToString()).ToList();
+
+            // MSI: WiX packaging is Windows-only. Build it through a nested Nuke
+            // invocation so PublishMsi's Restore dependency runs (the generated
+            // release job invokes this target with --skip, so a DependsOn here
+            // would be skipped).
+            if (OperatingSystem.IsWindows())
+            {
+                RunProcess("pwsh.exe",
+                    "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File \""
+                    + (RootDirectory / "build.ps1") + "\" PublishMsi --configuration Release",
+                    throwOnNonZero: true);
+                Assert.FileExists(MsiOutputPath);
+                assets.Insert(0, MsiOutputPath);
+            }
+            else
+            {
+                Serilog.Log.Warning("Skipping MSI asset: WiX packaging requires Windows.");
+            }
+
+            var assetArgs = string.Join(" ", assets.Select(a => "\"" + a + "\""));
+
+            // Idempotent: create the release, or clobber-upload assets onto an
+            // existing one so a re-run of the same tag does not fail.
+            var exists = RunProcess(gh, $"release view {tag} --repo {GitHubRepo}", throwOnNonZero: false) == 0;
+            if (exists)
+            {
+                Serilog.Log.Information("GitHub release {Tag} exists; uploading {Count} asset(s) with --clobber.", tag, assets.Count);
+                RunProcess(gh, $"release upload {tag} {assetArgs} --clobber --repo {GitHubRepo}", throwOnNonZero: true);
+            }
+            else
+            {
+                RunProcess(gh, $"release create {tag} {assetArgs} --repo {GitHubRepo} --title {tag} --generate-notes", throwOnNonZero: true);
+            }
+
+            Serilog.Log.Information("GitHub release {Tag} published to {Repo} ({Count} asset(s)).", tag, GitHubRepo, assets.Count);
         });
 
     // ---- MSI / winget pipeline ----------------------------------------------
