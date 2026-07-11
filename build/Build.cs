@@ -1376,6 +1376,46 @@ ManifestVersion: 1.6.0
         return p.ExitCode;
     }
 
+    // Like RunProcess but also returns the combined stdout+stderr so the caller
+    // can classify a non-zero exit (never throws on exit code).
+    static (int ExitCode, string Output) RunProcessCapture(string fileName, string args)
+    {
+        var psi = new System.Diagnostics.ProcessStartInfo(fileName, args)
+        {
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+        var sb = new System.Text.StringBuilder();
+        using var p = System.Diagnostics.Process.Start(psi)!;
+        p.OutputDataReceived += (_, e) => { if (e.Data != null) { Serilog.Log.Information(e.Data); lock (sb) sb.AppendLine(e.Data); } };
+        p.ErrorDataReceived  += (_, e) => { if (e.Data != null) { Serilog.Log.Warning(e.Data); lock (sb) sb.AppendLine(e.Data); } };
+        p.BeginOutputReadLine();
+        p.BeginErrorReadLine();
+        p.WaitForExit();
+        return (p.ExitCode, sb.ToString());
+    }
+
+    // True when a failed `choco push` was rejected for a reason a retry cannot
+    // fix without moderator action: a 403 (a new version of a brand-new package
+    // still pending moderation) or a 409 / duplicate (that version already
+    // pushed). These are external policy states, not build defects.
+    static bool IsChocoModerationRejection(string output)
+    {
+        if (string.IsNullOrEmpty(output))
+            return false;
+
+        string[] markers =
+        {
+            "Forbidden",
+            "Conflict",
+            "already been listed",
+            "already exists",
+            "A package version already exists",
+        };
+        return markers.Any(m => output.Contains(m, StringComparison.OrdinalIgnoreCase));
+    }
+
     // ---- Package-manager publishing (winget / chocolatey / scoop) -----------
     // All three key off the single GitHub release MSI asset. WiX MSIs are NOT
     // byte-reproducible (per-build package code), so a checksum MUST be taken
@@ -1514,8 +1554,31 @@ ManifestVersion: 1.6.0
                 Serilog.Log.Warning("CHOCO_API_KEY not set; packed {Nupkg} but NOT pushing to chocolatey.org.", nupkg);
                 return;
             }
-            RunProcess(choco, $"push \"{nupkg}\" --source https://push.chocolatey.org/ --api-key {chocoApiKey}", throwOnNonZero: true);
-            Serilog.Log.Information("Pushed {Nupkg} to chocolatey.org (pending community moderation).", nupkg);
+
+            var (pushExit, pushOutput) = RunProcessCapture(choco,
+                $"push \"{nupkg}\" --source https://push.chocolatey.org/ --api-key {chocoApiKey}");
+            if (pushExit == 0)
+            {
+                Serilog.Log.Information("Pushed {Nupkg} to chocolatey.org (pending community moderation).", nupkg);
+                return;
+            }
+
+            // chocolatey.org rejects a new version of a brand-new, not-yet-approved
+            // package while a prior version is still in the moderation queue (403
+            // Forbidden), and rejects an exact duplicate version (409 Conflict).
+            // Neither is a build defect and a retry cannot help until moderation
+            // clears, so warn and let the rest of the release stand rather than
+            // reddening an otherwise-successful publish.
+            if (IsChocoModerationRejection(pushOutput))
+            {
+                Serilog.Log.Warning(
+                    "chocolatey.org rejected the push for {Nupkg} (moderation/duplicate; choco exit {Exit}). "
+                    + "Package NOT updated - re-push once the pending version clears moderation.",
+                    nupkg, pushExit);
+                return;
+            }
+
+            throw new InvalidOperationException($"choco push failed with exit code {pushExit}.");
         });
 
     AbsolutePath ScoopManifestPath => RootDirectory / "bucket" / "vice-sharp.json";
