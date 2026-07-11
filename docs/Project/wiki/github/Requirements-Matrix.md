@@ -223,6 +223,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-PERF-ALLOC-001 | Tracked | Technical-Requirements.md |
 | TR-PERF-AOT-001 | Tracked | Technical-Requirements.md |
 | TR-PUBSUB-PERF-001 | Tracked | Technical-Requirements.md |
+| TR-QA-TESTSILENCE-001 | Tracked | Technical-Requirements.md |
 | TR-REMOTECTRL-001 | Tracked | Technical-Requirements.md |
 | TR-REMOTECTRL-SERVER-001 | Tracked | Technical-Requirements.md |
 | TR-REVEXEC-001 | Tracked | Technical-Requirements.md |
@@ -266,6 +267,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-PACESEL-001 | Tracked | Testing-Requirements.md |
 | TEST-PERF-RUNFRAME-001 | Tracked | Testing-Requirements.md |
 | TEST-PUBSUB-001 | Tracked | Testing-Requirements.md |
+| TEST-QA-TESTSILENCE-001 | Tracked | Testing-Requirements.md |
 | TEST-REMOTECTRL-001 | Tracked | Testing-Requirements.md |
 | TEST-REVEXEC-001 | Tracked | Testing-Requirements.md |
 | TEST-SID-002 | Tracked | Testing-Requirements.md |

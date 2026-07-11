@@ -212,6 +212,14 @@ Focused unit, smoke, and benchmark-probe coverage shall verify the Pub/Sub event
 - [x] The full solution builds after the Pub/Sub implementation. (evidence: dotnet build ViceSharp.slnx --no-restore => Build succeeded)
 
 
+## TEST-QA-TESTSILENCE
+
+### TEST-QA-TESTSILENCE-001
+
+WindowsAudioSessionMuteTests (tests/ViceSharp.TestHarness/Audio) verifies: when a render endpoint exists the fixture engages and the process Windows audio session reads muted (endpointExists equals IsEngaged, then muted is true); disposing an engaged fixture restores the prior mute state; and construction plus double-dispose never throw on any host. Validates TR-QA-TESTSILENCE-001.
+
+
+
 ## TEST-REMOTECTRL
 
 ### TEST-REMOTECTRL-001
