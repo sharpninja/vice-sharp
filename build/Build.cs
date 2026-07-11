@@ -24,8 +24,8 @@ using static Nuke.Common.Tools.Git.GitTasks;
     "ci",
     AzurePipelinesImage.WindowsLatest,
     InvokedTargets = new[] { nameof(CiTest) },
-    TriggerBranchesInclude = new[] { "master", "main", "feat/*" },
-    PullRequestsBranchesInclude = new[] { "master", "main" },
+    TriggerBranchesInclude = new[] { "main", "feat/*" },
+    PullRequestsBranchesInclude = new[] { "main" },
     CacheKeyFiles = new string[0])]
 [DefaultPoolAzurePipelines(
     "release",
@@ -1590,8 +1590,8 @@ ManifestVersion: 1.6.0
     /// credential helper) so `scoop update` sees the new version. Users add the
     /// bucket with:
     ///   scoop bucket add vicesharp https://github.com/sharpninja/vice-sharp
-    /// The commit is based on the mirror's current master (not the detached tag
-    /// checkout), so it lands as a normal master commit.
+    /// The commit is based on the mirror's current main (not the detached tag
+    /// checkout), so it lands as a normal main commit.
     /// </summary>
     Target PublishScoop => _ => _
         .DependsOn(PublishGitHubRelease)
@@ -1607,14 +1607,14 @@ ManifestVersion: 1.6.0
             {
                 // Do not touch the working tree (no fetch/checkout) in a dry-run.
                 Serilog.Log.Information(
-                    "[dry-run] would set bucket/vice-sharp.json version={Version} url={Url} hash={Sha} and push it to {Repo} master.",
+                    "[dry-run] would set bucket/vice-sharp.json version={Version} url={Url} hash={Sha} and push it to {Repo} main.",
                     version, url, sha, repoUrl);
                 return;
             }
 
-            // Base the manifest change on the mirror's current master so it lands
-            // as a clean master commit (the pipeline runs on a detached tag).
-            RunProcess("git", $"fetch --depth 1 {repoUrl} master", throwOnNonZero: true);
+            // Base the manifest change on the mirror's current main so it lands
+            // as a clean main commit (the pipeline runs on a detached tag).
+            RunProcess("git", $"fetch --depth 1 {repoUrl} main", throwOnNonZero: true);
             RunProcess("git", "checkout -B scoop-publish FETCH_HEAD", throwOnNonZero: true);
 
             var json = System.Text.Json.Nodes.JsonNode.Parse(System.IO.File.ReadAllText(ScoopManifestPath))!;
@@ -1629,8 +1629,8 @@ ManifestVersion: 1.6.0
                 $"-c user.email=ci@vicesharp -c user.name=\"ViceSharp CI\" commit -m \"chore(scoop): vice-sharp {version}\"",
                 throwOnNonZero: false); // no-op if the manifest is unchanged
             RunProcess("git",
-                $"-c credential.helper= -c credential.helper=\"!gh auth git-credential\" push {repoUrl} HEAD:master",
+                $"-c credential.helper= -c credential.helper=\"!gh auth git-credential\" push {repoUrl} HEAD:main",
                 throwOnNonZero: true);
-            Serilog.Log.Information("Scoop manifest for {Version} pushed to the mirror's master.", version);
+            Serilog.Log.Information("Scoop manifest for {Version} pushed to the mirror's main.", version);
         });
 }
