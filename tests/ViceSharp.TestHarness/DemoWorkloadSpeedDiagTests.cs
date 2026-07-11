@@ -14,7 +14,7 @@ using Xunit;
 /// the READY prompt, so the achievable core rate here is the honest ceiling
 /// the deployed app lives under.
 /// </summary>
-public sealed class DemoWorkloadSpeedDiagTests
+public sealed class DemoWorkloadSpeedDiagTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
     private const string DemoDiskPath =
         @"C:\Users\kingd\AppData\Local\Temp\ViceSharp\media\ce70ddf059e9474681016cdaa3772082-pieces_of_light.d64";

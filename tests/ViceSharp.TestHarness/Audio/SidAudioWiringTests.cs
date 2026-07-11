@@ -19,7 +19,7 @@ using Xunit;
 /// cycle-clocked SID). Also exercises the real winmm device path end-to-end.
 /// </summary>
 [Collection("NativeVice")]
-public sealed class SidAudioWiringTests
+public sealed class SidAudioWiringTests : IClassFixture<WindowsAudioSessionMute>
 {
     private sealed class CollectingAudioBackend : IAudioBackend
     {

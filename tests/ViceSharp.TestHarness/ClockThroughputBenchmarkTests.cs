@@ -27,7 +27,7 @@ using Xunit;
 ///   dotnet test --filter FullyQualifiedName~MeasureGuiFramePumpThroughput
 /// Results are written to artifacts/clock-benchmark.log.
 /// </summary>
-public sealed class ClockThroughputBenchmarkTests
+public sealed class ClockThroughputBenchmarkTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
     /// <summary>
     /// FR-PRF-001, TR-PERF-HARNESS.

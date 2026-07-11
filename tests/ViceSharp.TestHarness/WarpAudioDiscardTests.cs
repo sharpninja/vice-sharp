@@ -19,7 +19,7 @@ using Xunit;
 /// while the capture tap still feeds any attached recorder; leaving warp
 /// resumes live audio.
 /// </summary>
-public sealed class WarpAudioDiscardTests
+public sealed class WarpAudioDiscardTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
     private sealed class FakeBackend : IAudioBackend
     {

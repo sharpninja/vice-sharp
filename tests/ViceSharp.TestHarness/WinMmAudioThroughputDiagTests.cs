@@ -12,7 +12,7 @@ using Xunit;
 /// 44100 samples per emulated second, so the backend's accept rate IS the
 /// emulation speed ceiling whenever audio back-pressure engages.
 /// </summary>
-public sealed class WinMmAudioThroughputDiagTests
+public sealed class WinMmAudioThroughputDiagTests : IClassFixture<Audio.WindowsAudioSessionMute>
 {
     /// <summary>
     /// FR: FR-Audio-SID, TR: TR-AUDIO-PACE-001, TEST: TEST-AUDIO-PACE-01.
