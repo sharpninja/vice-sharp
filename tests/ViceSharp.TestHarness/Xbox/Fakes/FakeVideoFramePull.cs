@@ -27,6 +27,23 @@ public sealed class FakeVideoFramePull : ILocalVideoFramePull
     /// <summary>Byte value written to every pixel byte of the destination on a successful copy.</summary>
     public byte FillByte { get; set; } = 0xAB;
 
+    /// <summary>
+    /// Optional explicit source frame (S23). When set, a successful copy writes these
+    /// bytes verbatim into the destination instead of filling with <see cref="FillByte"/>,
+    /// letting a test assert a byte-exact round-trip of a known pattern.
+    /// </summary>
+    public byte[]? SourceFrame { get; set; }
+
+    /// <summary>
+    /// When <c>false</c>, <see cref="TryGetFrameGeometry"/> returns <c>false</c> (mirrors a
+    /// session that is unknown or has no video chip yet). Defaults to <c>true</c>: geometry
+    /// is available as soon as the session has a video chip, independent of frame publication.
+    /// </summary>
+    public bool GeometryAvailable { get; set; } = true;
+
+    /// <summary>Number of <see cref="TryGetFrameGeometry"/> calls received.</summary>
+    public int GeometryCount { get; private set; }
+
     /// <summary>The session id passed to the most recent <see cref="TryCopyFrameInto"/> call.</summary>
     public string? LastRequestedSessionId { get; private set; }
 
@@ -79,10 +96,36 @@ public sealed class FakeVideoFramePull : ILocalVideoFramePull
             return false;
         }
 
-        destination[..required].Fill(FillByte);
+        if (SourceFrame is not null)
+        {
+            SourceFrame.AsSpan(0, required).CopyTo(destination);
+        }
+        else
+        {
+            destination[..required].Fill(FillByte);
+        }
+
         width = Width;
         height = Height;
         cycle = Cycle;
+        return true;
+    }
+
+    /// <inheritdoc />
+    public bool TryGetFrameGeometry(string sessionId, out FrameGeometry geometry)
+    {
+        LastRequestedSessionId = sessionId;
+        GeometryCount++;
+
+        if (!GeometryAvailable)
+        {
+            geometry = default;
+            return false;
+        }
+
+        // BGRA8888 => 4 bytes per pixel. Geometry is chip-level: available before the
+        // first frame is published, mirroring the in-process head's TryGetFrameGeometry.
+        geometry = new FrameGeometry(Width, Height, checked(Width * Height * 4));
         return true;
     }
 }

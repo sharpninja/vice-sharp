@@ -35,4 +35,27 @@ public interface ILocalVideoFramePull
     /// small (the caller sizes to the frame length and retries next tick).
     /// </returns>
     bool TryCopyFrameInto(string sessionId, Span<byte> destination, out int width, out int height, out long cycle);
+
+    /// <summary>
+    /// Reports the session's video-frame geometry (width, height, and BGRA8888 buffer
+    /// byte length) so a render adapter can size its reused pull buffer ONCE, before the
+    /// first frame is committed.
+    /// </summary>
+    /// <remarks>
+    /// PLAN-XBOXUWP S23 (IMPL-XBOXUWP-023). Mirrors the in-process head's
+    /// <c>TryGetFrameGeometry</c> byte-for-byte so the head adapter stays a thin
+    /// pass-through. Geometry is available as soon as the session has a video chip -
+    /// independent of whether a frame has been published - which is what lets the pure
+    /// pull adapter allocate its buffer up front and then never reallocate per tick.
+    /// This is a PURE read: it never advances the machine.
+    /// </remarks>
+    /// <param name="sessionId">The session whose frame geometry is requested.</param>
+    /// <param name="geometry">
+    /// The frame geometry on success; otherwise <c>default</c> (all zero).
+    /// </param>
+    /// <returns>
+    /// <c>true</c> when the session exists and has a video chip; <c>false</c> when the
+    /// session is unknown or has no video chip.
+    /// </returns>
+    bool TryGetFrameGeometry(string sessionId, out FrameGeometry geometry);
 }
