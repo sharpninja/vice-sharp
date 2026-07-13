@@ -15,6 +15,17 @@ The operator approved this plan and locked these answers:
 - `ViceSharp.Xbox.ViewModels` references Abstractions + Protocol (settings gateway uses Protocol DTOs and `SettingsOptionCatalog`); ratified.
 - Gamepad `GamepadButtonFlags` uses the WinRT-identical bit layout (0x40 = DPadUp); ratified.
 
+## 0a. Validation tiers (updated 2026-07-13; supersedes the per-slice onConsole flags)
+
+Operator clarification: UWP apps (and `Windows.Gaming.Input` controller reading, Win2D, XAudio2) run on a Windows 11 dev PC, not only on the console. Functional validation of the WHOLE app, including live Xbox-controller input, is done on the dev machine. The physical Xbox console is required ONLY at Microsoft Store submission. Development is NOT gated on the console.
+
+Every slice is retagged to one of three tiers (this replaces the binary onConsole flag):
+- Tier H (headless / CI): pure logic + in-process host + ViewModels + manifest-shape tests. Runs via `dotnet build`/`dotnet test` on any net10.0 agent with NO UWP workload (the `ViceSharpXboxUwp=false` fallback). The bulk (S1-S33 except S34); gated automatically here.
+- Tier D (dev PC, UWP-on-Windows): needs the windows-app workload + an interactive Windows session + an Xbox controller. Covers the S34 UWP-XAML build and the live app/controller/audio/video/focus smokes formerly tagged on-console (old S36-S41). Run on the operator's dev PC; NO console needed.
+- Tier C (console / Store submission; DEFERRED, tracked not dropped): the genuinely console-only checks, validated only when preparing a Store submission: actual console deploy of the AOT MSIX, the AppContainer resource budget (~1GB / 2-4 cores / 45% GPU) and sustained PAL-50 perf ON the console, Xbox device-family behaviors (real-TV overscan, focus-engagement on the TV profile, Guide/Nexus shell reservation), and Store certification. NOT a development gate.
+
+Slice remap: S0 is now Tier D (dev-PC feasibility, below). Old S36-S41 become Tier D dev-PC smokes (run the UWP app on the Windows dev PC with a controller). A new DEFERRED S42 (Tier C) collects the console/Store-submission validation (console deploy, on-console perf budget, TV device-family behaviors, Store cert). Everything else is Tier H.
+
 ## 1. Locked decisions and scope
 
 ### Locked decisions (carried, not relitigated)
@@ -41,8 +52,8 @@ The operator approved this plan and locked these answers:
 
 There is exactly ONE global feasibility gate, S0. It retires the one unproven unknown before any production investment. Per R7, the per-section spikes (topology `XBOXTOPO-0`, in-proc `S4`, video-audio `XAV-7`, packaging `PKG-4`, test-strategy `S0`) collapse into this single gate, and ALL production slices in ALL subsystems depend on the S0 GO decision.
 
-S0 proves three things jointly:
-1. A modern-.NET Native-AOT UWP MSIX deploys and RUNS on the physical Dev-Mode console: `dotnet publish -r win-x64 /p:PublishAot=true` of a minimal probe links clean with 0 trim/AOT (IL2xxx/IL3xxx) warnings, and the probe MSIX sideloads via Dev Mode and renders one C64 frame plus reads the gamepad once on the console.
+S0 is a Tier D (dev PC) gate (per section 0a); the physical-console portion is deferred to Tier C (S42). S0 proves three things jointly on the Windows dev PC:
+1. A modern-.NET Native-AOT UWP MSIX builds/publishes clean and RUNS on the Windows 11 dev PC: `dotnet publish -r win-x64 /p:PublishAot=true` of a minimal probe links clean with 0 trim/AOT (IL2xxx/IL3xxx) warnings, and the probe app launches on the dev PC, renders one C64 frame, and reads a plugged-in Xbox controller once via `Windows.Gaming.Input`. (The equivalent deploy+run on the physical console is deferred to S42 / Store-submission prep.)
 2. The trimmed core graph links clean: the probe references Abstractions/Core/Chips/Architectures (and, for a smoke of the extracted-host shape, `Host.InProcess` once it exists; the probe itself uses direct-drive `ArchitectureBuilder.Build(descriptor).RunFrame()` per R2 so it does not block on the S1 extraction).
 3. Win2D + Native-AOT packaging is clean (R13): the probe hosts a `SwapChainPanel` + Win2D (`Microsoft.Graphics.Canvas` `CanvasSwapChain`), and the AOT/MSIX package includes the per-arch Win2D native binary for win-x64 with the required rd.xml/trimming annotations and no missing-intrinsic fault.
 

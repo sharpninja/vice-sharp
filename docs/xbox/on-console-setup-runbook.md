@@ -1,8 +1,16 @@
 # ViceSharp Xbox head: on-console setup and S0 execution runbook
 
-Audience: the operator setting up a physical Xbox (One / Series S|X) to build, sideload, and validate the `ViceSharp.Xbox` UWP head. This runbook is a deliverable of the plan (Slice S0 / S33) and GATES the on-console slices S0 and S36-S41. Off-console slices (S1-S35, except the S34 XAML build) need none of this.
+Audience: the operator preparing to SUBMIT the `ViceSharp.Xbox` UWP head to the Microsoft Store on a physical Xbox (One / Series S|X).
 
-Honesty note: modern-.NET Native-AOT UWP running on the physical Xbox console is exactly the unproven unknown that S0 exists to retire. Steps in section 5 onward are therefore the S0 experiment itself, not a guaranteed-working recipe. Items marked (VERIFY) are ones to confirm on first run rather than assume. Observation (from Microsoft docs, dated 2024-2026) vs inference is called out where it matters.
+IMPORTANT (updated 2026-07-13): the physical console is NOT needed for development or functional validation. UWP apps, `Windows.Gaming.Input` controller reading, Win2D, and XAudio2 all run on a Windows 11 dev PC, so the whole app (including live Xbox-controller input) is validated on the dev machine (plan Tier D). This console runbook applies only to the DEFERRED Tier C work: actual console deploy, the AppContainer resource budget and on-console PAL-50 perf, real-TV device-family behaviors, and Store certification. For day-to-day dev, skip to "Dev-PC path" below; use sections 1 and 4-8 only when preparing a Store submission.
+
+Dev-PC path (Tier D, primary for all development):
+1. Install the windows-app / UWP workload on your dev PC (section 2).
+2. Build and run the head on Windows: `dotnet build src/ViceSharp.Xbox/ViceSharp.Xbox.csproj -c Debug -p:ViceSharpXboxUwp=true`, then launch it on the desktop.
+3. Plug in an Xbox controller and validate the full app there (mapping, 10-foot UI focus, virtual keyboard, audio/video). No console required.
+4. The AOT publish check (`dotnet publish ... -p:PublishAot=true`) also runs on the dev PC (section 5).
+
+Honesty note: modern-.NET Native-AOT UWP running on the physical Xbox console (as opposed to the Windows dev PC) is the one thing this runbook cannot prove until Store-submission time. Sections 5-7 run on the dev PC (Tier D); the console-specific portions (section 6 deploy to console, section 7 on-console checks) are Tier C, done only at submission. Items marked (VERIFY) are ones to confirm on first run. Observation (Microsoft docs, 2024-2026) vs inference is called out where it matters.
 
 ## 0. What you need
 - An Xbox One or Series S|X console you can dedicate to Developer Mode.
