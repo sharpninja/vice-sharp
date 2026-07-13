@@ -86,6 +86,8 @@ public sealed class AppCommandDispatcher
     private readonly IEmulatorHost _host;
     private readonly ISnapshotService _snapshots;
     private readonly Action _onExit;
+    private readonly Action? _onOpenMenu;
+    private readonly Action? _onCloseMenu;
 
     private SnapshotDto? _quickSlot;
 
@@ -99,11 +101,21 @@ public sealed class AppCommandDispatcher
     /// through it (see the type remarks), but it is validated for non-null.
     /// </param>
     /// <param name="onExit">The application-exit callback fired by RequestExit.</param>
+    /// <param name="onOpenMenu">
+    /// Optional UI callback fired by <see cref="AppCommand.OpenMainMenu"/> (the Menu button). The
+    /// head uses it to reveal the shell menu over the always-running emulator. Null = no-op.
+    /// </param>
+    /// <param name="onCloseMenu">
+    /// Optional UI callback fired by <see cref="AppCommand.CloseMenu"/> (dismiss the menu back to
+    /// gameplay). The head uses it to hide the shell menu and expose the emulator. Null = no-op.
+    /// </param>
     public AppCommandDispatcher(
         IEmulatorHost host,
         ISnapshotService snapshots,
         ISettingsService settings,
-        Action onExit)
+        Action onExit,
+        Action? onOpenMenu = null,
+        Action? onCloseMenu = null)
     {
         ArgumentNullException.ThrowIfNull(host);
         ArgumentNullException.ThrowIfNull(snapshots);
@@ -113,6 +125,8 @@ public sealed class AppCommandDispatcher
         _host = host;
         _snapshots = snapshots;
         _onExit = onExit;
+        _onOpenMenu = onOpenMenu;
+        _onCloseMenu = onCloseMenu;
     }
 
     /// <summary>
@@ -182,12 +196,20 @@ public sealed class AppCommandDispatcher
                 _onExit();
                 break;
 
+            case AppCommand.OpenMainMenu:
+                // UI-only: reveal the shell menu over the running emulator (head callback).
+                _onOpenMenu?.Invoke();
+                break;
+
+            case AppCommand.CloseMenu:
+                // UI-only: dismiss the menu back to gameplay (head callback).
+                _onCloseMenu?.Invoke();
+                break;
+
             // UI-only + neutral commands are handled by the UI layer, and ToggleWarp is
             // never emitted by the Xbox pipeline (the WarpHold pair is used instead): no
             // host interaction for any of these.
             case AppCommand.None:
-            case AppCommand.OpenMainMenu:
-            case AppCommand.CloseMenu:
             case AppCommand.ToggleVirtualKeyboard:
             case AppCommand.ToggleWarp:
             case AppCommand.ConfirmYes:

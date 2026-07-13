@@ -265,13 +265,42 @@ public sealed partial class App : Application
             host.HostService,
             host.Snapshots,
             host.Settings,
-            onExit: Exit);
+            onExit: Exit,
+            onOpenMenu: ShowMenu,
+            onCloseMenu: HideMenu);
 
         _gamepad = new WinRtGamepadSource(host, InputContext, dispatcher, _sessionId);
 
-        // The Home page's Start/Resume intents drive the session lifecycle.
-        Home.StartNewRequested += (_, _) => host.ResetCold(_sessionId);
-        Home.ResumeRequested += (_, _) => host.Resume(_sessionId);
+        // The Home page's Start/Resume intents boot/resume the C64 AND dismiss the shell menu so
+        // the always-running emulator surface underneath becomes visible: HomePage paints an
+        // ~80%-opaque background over it, so the Frame must be collapsed to reveal the C64.
+        Home.StartNewRequested += (_, _) => { host.ResetCold(_sessionId); HideMenu(); };
+        Home.ResumeRequested += (_, _) => { host.Resume(_sessionId); HideMenu(); };
+    }
+
+    /// <summary>Reveals the shell-menu Frame over the running emulator (Menu button -> OpenMainMenu).</summary>
+    private void ShowMenu()
+    {
+        if (_frame is null)
+        {
+            return;
+        }
+
+        if (_frame.Content is null)
+        {
+            _frame.Navigate(typeof(HomePage));
+        }
+
+        _frame.Visibility = Visibility.Visible;
+    }
+
+    /// <summary>Hides the shell-menu Frame to expose the always-running emulator (Start/Resume, CloseMenu).</summary>
+    private void HideMenu()
+    {
+        if (_frame is not null)
+        {
+            _frame.Visibility = Visibility.Collapsed;
+        }
     }
 }
 #endif

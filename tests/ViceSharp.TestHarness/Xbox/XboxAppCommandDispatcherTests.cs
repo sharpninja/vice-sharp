@@ -275,6 +275,40 @@ public sealed class XboxAppCommandDispatcherTests
         Assert.Equal(0, settings.TotalCalls);
     }
 
+    /// <summary>
+    /// PLAN-XBOXUWP S40: when the head supplies the optional menu callbacks, OpenMainMenu fires
+    /// onOpenMenu and CloseMenu fires onCloseMenu (each exactly once) so the head can reveal/hide the
+    /// shell menu over the running emulator - still with NO host/snapshot/settings call and no exit.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public async Task OpenMainMenu_And_CloseMenu_FireTheirCallbacks_AndCallNoService()
+    {
+        var host = new RecordingEmulatorHost();
+        var snapshots = new RecordingSnapshotService();
+        var settings = new RecordingSettingsService();
+        var exit = new ExitProbe();
+        var openCount = 0;
+        var closeCount = 0;
+        var dispatcher = new AppCommandDispatcher(
+            host,
+            snapshots,
+            settings,
+            exit.Fire,
+            onOpenMenu: () => openCount++,
+            onCloseMenu: () => closeCount++);
+
+        await dispatcher.DispatchAsync(Session, AppCommand.OpenMainMenu, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.CloseMenu, TestContext.Current.CancellationToken);
+
+        Assert.Equal(1, openCount);
+        Assert.Equal(1, closeCount);
+        Assert.Equal(0, host.TotalCalls);
+        Assert.Equal(0, snapshots.TotalCalls);
+        Assert.Equal(0, settings.TotalCalls);
+        Assert.Equal(0, exit.Count);
+    }
+
     // ------------------------------------------------------------------
     // UI-only commands (handled by the UI layer, never the host)
     // ------------------------------------------------------------------
