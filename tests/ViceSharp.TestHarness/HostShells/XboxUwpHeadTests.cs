@@ -82,6 +82,61 @@ public sealed class XboxUwpHeadTests
         Assert.Contains("src/ViceSharp.Xbox/ViceSharp.Xbox.csproj", slnx);
     }
 
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void Csproj_FlipsUwpToTrue_UnderDebugUwpConfiguration()
+    {
+        var csproj = ReadCsproj();
+
+        // PLAN-XBOXUWP: the VS "Debug-UWP" solution configuration must flip the
+        // single ViceSharpXboxUwp chokepoint to true. A .slnx solution config
+        // cannot inject an MSBuild property (vs-solutionpersistence#128), so the
+        // head derives the boolean from the mapped $(Configuration) NAME.
+        const string debugUwpDerivation =
+            "<ViceSharpXboxUwp Condition=\"'$(ViceSharpXboxUwp)'=='' and '$(Configuration)'=='Debug-UWP'\">true</ViceSharpXboxUwp>";
+        const string fallbackDefault =
+            "<ViceSharpXboxUwp Condition=\"'$(ViceSharpXboxUwp)'==''\">false</ViceSharpXboxUwp>";
+
+        Assert.Contains(debugUwpDerivation, csproj);
+
+        // The workload-free net10.0 fallback default is preserved for
+        // Debug / Release / Any CPU / the CI path.
+        Assert.Contains(fallbackDefault, csproj);
+
+        // MSBuild evaluates properties top-to-bottom: the Debug-UWP derivation
+        // MUST precede the empty->false default, otherwise the property is
+        // already false by the time the derivation would fire.
+        Assert.True(
+            csproj.IndexOf(debugUwpDerivation, StringComparison.Ordinal)
+                < csproj.IndexOf(fallbackDefault, StringComparison.Ordinal),
+            "The Debug-UWP derivation must appear before the empty->false default.");
+    }
+
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void Slnx_DeclaresDebugUwpConfiguration()
+    {
+        var slnx = File.ReadAllText(Path.Combine(RepoRoot, "ViceSharp.slnx"));
+
+        // PLAN-XBOXUWP: a solution-level Debug-UWP BuildType + x64 Platform so the
+        // operator picks "Debug-UWP | x64" in VS and F5 launches the real UWP head.
+        Assert.Contains("<Configurations>", slnx);
+        Assert.Contains("<BuildType Name=\"Debug-UWP\" />", slnx);
+
+        // Re-listing the inferred configs is mandatory: an explicit <Configurations>
+        // block OVERRIDES the auto-inferred Debug/Release/Any CPU, so they must be
+        // restated or the CI Debug|Any CPU config disappears.
+        Assert.Contains("<BuildType Name=\"Debug\" />", slnx);
+        Assert.Contains("<BuildType Name=\"Release\" />", slnx);
+        Assert.Contains("<Platform Name=\"Any CPU\" />", slnx);
+        Assert.Contains("<Platform Name=\"x64\" />", slnx);
+
+        // Xbox is x64-only (Native AOT has no AnyCPU image): the head is disabled
+        // for Debug-UWP|Any CPU so a solution Platform=Any CPU cannot override the
+        // project's <Platform>x64</Platform> and mislabel the win-x64 AOT/MSIX output.
+        Assert.Contains("<Build Solution=\"Debug-UWP|Any CPU\" Project=\"false\" />", slnx);
+    }
+
     private static string ReadCsproj()
     {
         var csprojPath = Path.Combine(

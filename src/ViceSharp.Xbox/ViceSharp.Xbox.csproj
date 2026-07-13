@@ -19,6 +19,17 @@
     real XAML App entry point that slice S34 will add later.
   -->
   <PropertyGroup>
+    <!--
+      PLAN-XBOXUWP: the Visual Studio "Debug-UWP" solution configuration flips this
+      head to the real UWP TFM so the operator can select "Debug-UWP | x64" and F5
+      it. A .slnx solution config CANNOT inject an MSBuild property per project
+      (vs-solutionpersistence#128); the only signal it delivers is the mapped
+      $(Configuration) name, so the single ViceSharpXboxUwp chokepoint is derived
+      from $(Configuration)=='Debug-UWP'. This line MUST precede the empty->false
+      default below (MSBuild evaluates top-to-bottom), and an explicit
+      -p:ViceSharpXboxUwp from build/Build.cs (non-empty) still short-circuits both.
+    -->
+    <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'=='' and '$(Configuration)'=='Debug-UWP'">true</ViceSharpXboxUwp>
     <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'==''">false</ViceSharpXboxUwp>
 
     <OutputType>WinExe</OutputType>
