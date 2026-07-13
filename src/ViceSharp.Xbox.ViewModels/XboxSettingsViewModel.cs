@@ -3,6 +3,7 @@ namespace ViceSharp.Xbox.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,6 +48,11 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     private const double LimiterMinimumPercent = 1;
     private const double LimiterMaximumPercent = 100_000;
 
+    // The one implemented computer family: its C64 machine profiles are the selectable
+    // models. The "Minimal host" pseudo-profile (Machine=="minimal") is excluded by this
+    // same ordinal filter.
+    private const string C64FamilyId = "x64sc";
+
     private readonly IXboxSettingsGateway _gateway;
     private readonly string _sessionId;
     private readonly List<SettingsResourceValidationDto> _validationResults = new();
@@ -87,6 +93,7 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     private double _rightStickDeadzonePercent = 30;
 
     private IReadOnlyList<SettingsProfileDto> _profiles = Array.Empty<SettingsProfileDto>();
+    private IReadOnlyList<SettingsProfileDto> _models = Array.Empty<SettingsProfileDto>();
     private bool _isDirty;
     private bool _requiresRestart;
     private string _statusText = string.Empty;
@@ -103,6 +110,17 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         _gateway = gateway ?? throw new ArgumentNullException(nameof(gateway));
         _sessionId = sessionId ?? string.Empty;
         _baseline = CaptureBaseline();
+
+        // The Computer families: only the C64 is implemented today, so VIC-20 / C128 / PET /
+        // Plus4 are disabled placeholders (IsAvailable false) advertising the roadmap.
+        Computers = new ComputerOption[]
+        {
+            new("Commodore 64", C64FamilyId, true),
+            new("VIC-20", "xvic", false),
+            new("Commodore 128", "x128", false),
+            new("Commodore PET", "xpet", false),
+            new("Plus/4", "xplus4", false),
+        };
     }
 
     /// <inheritdoc />
@@ -144,7 +162,77 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     public IReadOnlyList<SettingsProfileDto> Profiles
     {
         get => _profiles;
-        private set => SetProperty(ref _profiles, value);
+        private set
+        {
+            if (!SetProperty(ref _profiles, value))
+                return;
+
+            // The Model picker is the C64 machine profiles from the current profile list; the
+            // "Minimal host" pseudo-profile (Machine=="minimal") is filtered out.
+            _models = BuildModels(value);
+            OnPropertyChanged(nameof(Models));
+            OnPropertyChanged(nameof(SelectedModel));
+            OnPropertyChanged(nameof(SelectedComputer));
+        }
+    }
+
+    /// <summary>
+    /// The selectable computer families (FR-XSET-002). Only the C64 (<c>x64sc</c>) is
+    /// implemented; the rest are disabled placeholders.
+    /// </summary>
+    public IReadOnlyList<ComputerOption> Computers { get; }
+
+    /// <summary>
+    /// The selectable machine models: the C64 (<c>x64sc</c>) profiles from
+    /// <see cref="Profiles"/>, with the non-selectable "Minimal host" pseudo-profile
+    /// excluded. Recomputed whenever <see cref="Profiles"/> changes.
+    /// </summary>
+    public IReadOnlyList<SettingsProfileDto> Models => _models;
+
+    /// <summary>
+    /// The model matching the current <see cref="SelectedProfileId"/>, or <c>null</c> when the
+    /// selection is not one of the selectable <see cref="Models"/>. Setting it routes through
+    /// the existing restart-gated <see cref="SelectedProfileId"/>; a <c>null</c> value or a DTO
+    /// whose id is not in <see cref="Models"/> is ignored (no change, no dirty flip).
+    /// </summary>
+    public SettingsProfileDto? SelectedModel
+    {
+        get => Models.FirstOrDefault(m => string.Equals(m.Id, SelectedProfileId, StringComparison.Ordinal));
+        set
+        {
+            if (value is not null && Models.Any(m => string.Equals(m.Id, value.Id, StringComparison.Ordinal)))
+                SelectedProfileId = value.Id;
+        }
+    }
+
+    /// <summary>
+    /// The <see cref="ComputerOption"/> reflecting the current model's machine family (the
+    /// <see cref="Models"/> are all C64), or <c>null</c> when no model is selected. The setter
+    /// is a no-op: model selection flows through <see cref="SelectedModel"/> and only the
+    /// implemented C64 family resolves, so reflecting the family here never mutates state.
+    /// </summary>
+    public ComputerOption? SelectedComputer
+    {
+        get
+        {
+            var machine = SelectedModel?.Machine;
+            return machine is null
+                ? null
+                : Computers.FirstOrDefault(c => string.Equals(c.FamilyId, machine, StringComparison.Ordinal));
+        }
+        set => _ = value;
+    }
+
+    private static IReadOnlyList<SettingsProfileDto> BuildModels(IReadOnlyList<SettingsProfileDto> profiles)
+    {
+        var models = new List<SettingsProfileDto>(profiles.Count);
+        foreach (var profile in profiles)
+        {
+            if (string.Equals(profile.Machine, C64FamilyId, StringComparison.Ordinal))
+                models.Add(profile);
+        }
+
+        return models;
     }
 
     // ---- Bindable emulator settings ------------------------------------------
@@ -237,7 +325,15 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     public string SelectedProfileId
     {
         get => _selectedProfileId;
-        set => SetSettingsProperty(ref _selectedProfileId, value ?? string.Empty);
+        set
+        {
+            if (!SetSettingsProperty(ref _selectedProfileId, value ?? string.Empty))
+                return;
+
+            // The Model/Computer pickers are projections of the selected profile id.
+            OnPropertyChanged(nameof(SelectedModel));
+            OnPropertyChanged(nameof(SelectedComputer));
+        }
     }
 
     // ---- Xbox-only preferences (FR-XSET-005) ---------------------------------

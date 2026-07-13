@@ -20,6 +20,9 @@
 
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="16" MaxWidth="900">
+                <ComboBox Header="Computer" ItemsSource="{Binding Computers}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedComputer, Mode=TwoWay}" />
+                <ComboBox Header="Model" ItemsSource="{Binding Models}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedModel, Mode=TwoWay}" />
+                <TextBlock Text="Restart required to change model." FontSize="18" Foreground="#FFDDAA88" />
                 <ComboBox Header="Renderer" ItemsSource="{Binding Renderers}" SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" />
                 <ComboBox Header="Display scale" ItemsSource="{Binding DisplayScales}" SelectedItem="{Binding SelectedDisplayScale, Mode=TwoWay}" />
                 <ComboBox Header="Palette" ItemsSource="{Binding Palettes}" SelectedItem="{Binding SelectedPalette, Mode=TwoWay}" />

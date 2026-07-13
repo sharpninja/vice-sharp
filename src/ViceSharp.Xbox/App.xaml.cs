@@ -37,6 +37,7 @@ public sealed partial class App : Application
     private InProcessSessionFacade? _facade;
     private WinRtGamepadSource? _gamepad;
     private VideoSurfaceHost? _videoSurface;
+    private VirtualKeyboardOverlay? _keyboardOverlay;
     private string _sessionId = string.Empty;
     private string _c64Directory = string.Empty;
     private Frame? _frame;
@@ -136,6 +137,7 @@ public sealed partial class App : Application
         root.Children.Add(frame);
 
         var keyboardOverlay = new VirtualKeyboardOverlay { Visibility = Visibility.Collapsed };
+        _keyboardOverlay = keyboardOverlay;
         var quickMenu = new QuickMenuOverlay { Visibility = Visibility.Collapsed };
         if (KeyboardVm is not null)
             keyboardOverlay.DataContext = KeyboardVm;
@@ -276,6 +278,36 @@ public sealed partial class App : Application
         // over the running emulator, so collapsing the Frame removes the card to reveal the full C64.
         Home.StartNewRequested += (_, _) => { host.ResetCold(_sessionId); HideMenu(); };
         Home.ResumeRequested += (_, _) => { host.Resume(_sessionId); HideMenu(); };
+    }
+
+    /// <summary>
+    /// Rebuilds the on-screen keyboard's ViewModel against the CURRENT session's keyboard-input
+    /// seam. A model-change apply requests a session rebuild under the SAME <see cref="SessionId"/>,
+    /// which leaves the boot-time <see cref="KeyboardVm"/> pointing at a now-dead
+    /// <c>IMachineKeyboardInput</c>; this re-fetches the live seam and re-points the overlay so
+    /// the virtual keyboard keeps driving the recreated machine. Fully guarded: it runs on the UI
+    /// thread and degrades (Debug trace) rather than throwing.
+    /// </summary>
+    internal void RebuildKeyboardForCurrentSession()
+    {
+        try
+        {
+            if (_host is null || string.IsNullOrEmpty(_sessionId))
+                return;
+
+            KeyboardVm = _host.GetKeyboardInput(_sessionId) is { } keyboard
+                ? new VirtualKeyboardViewModel(keyboard)
+                : null;
+
+            // Re-point a live overlay (if one was created) at the rebuilt VM, mirroring how
+            // OnLaunched binds it, so a keyboard already on screen binds the fresh input seam.
+            if (_keyboardOverlay is not null && KeyboardVm is not null)
+                _keyboardOverlay.DataContext = KeyboardVm;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] keyboard rebuild failed: {ex}");
+        }
     }
 
     /// <summary>Reveals the shell-menu Frame over the running emulator (Menu button -> OpenMainMenu).</summary>

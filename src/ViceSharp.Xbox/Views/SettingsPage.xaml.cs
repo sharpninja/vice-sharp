@@ -29,8 +29,33 @@ public sealed partial class SettingsPage : Page
 
     private async void OnApply(object sender, RoutedEventArgs e)
     {
-        if (ViewModel is not null)
-            await ViewModel.ApplySettingsAsync(restartSession: ViewModel.RequiresRestart);
+        if (ViewModel is null)
+            return;
+
+        // Capture the model id BEFORE apply: a model change requests a session rebuild (same
+        // SessionId), which invalidates the keyboard-input seam VirtualKeyboardViewModel cached
+        // at boot. Adopt-back may re-canonicalize the profile, so compare against the post-apply
+        // value.
+        var previousProfileId = ViewModel.SelectedProfileId;
+        var restart = ViewModel.RequiresRestart;
+
+        await ViewModel.ApplySettingsAsync(restartSession: restart);
+
+        if (restart
+            && !string.Equals(previousProfileId, ViewModel.SelectedProfileId, System.StringComparison.Ordinal))
+        {
+            // Rebuild the on-screen keyboard against the recreated session. Degrade on any
+            // failure: this runs on the UI thread and must never throw.
+            try
+            {
+                App.Instance.RebuildKeyboardForCurrentSession();
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"[ViceSharp.Xbox] keyboard rebuild after model change failed: {ex}");
+            }
+        }
     }
 
     private void OnRevert(object sender, RoutedEventArgs e) => ViewModel?.RevertSettings();
