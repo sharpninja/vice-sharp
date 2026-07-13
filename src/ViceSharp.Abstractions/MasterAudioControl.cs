@@ -1,14 +1,15 @@
-namespace ViceSharp.Host.Audio;
+namespace ViceSharp.Abstractions;
 
 /// <summary>
 /// Process-wide master output volume + mute for the emulator's audio. The audio
 /// backend multiplies its samples by <see cref="EffectiveGain"/> just before they
 /// reach the sound device, so this is the app's master level - independent of the
 /// emulated SID $D418 volume that programs write. The UI sets it on a UI thread;
-/// the audio thread reads it, so the fields are volatile. It lives in the host
-/// (not Abstractions) so the Avalonia UI can drive it directly - the same
-/// in-process coupling the lock-free video frame path uses - without crossing the
-/// runtime-internals boundary the UI is forbidden from referencing.
+/// the audio thread reads it, so the fields are volatile. It lives in Abstractions
+/// (the emulator contract) so ViewModels - which reference only Abstractions - can
+/// drive it directly, and every audio backend (desktop WinMm, Xbox XAudio2) shares
+/// this one master-gain path without crossing the runtime-internals boundary the UI
+/// is forbidden from referencing.
 /// </summary>
 public static class MasterAudioControl
 {

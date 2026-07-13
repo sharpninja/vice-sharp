@@ -290,24 +290,24 @@ public sealed class AttachPanelViewModelTests
     {
         try
         {
-            global::ViceSharp.Host.Audio.MasterAudioControl.Muted = false;
-            global::ViceSharp.Host.Audio.MasterAudioControl.Volume = 1f;
+            global::ViceSharp.Abstractions.MasterAudioControl.Muted = false;
+            global::ViceSharp.Abstractions.MasterAudioControl.Volume = 1f;
             var viewModel = new AttachPanelViewModel(new DisconnectedHostProtocolClient());
 
             viewModel.MasterVolumePercent = 40;
-            Assert.Equal(0.40f, global::ViceSharp.Host.Audio.MasterAudioControl.Volume, 2);
+            Assert.Equal(0.40f, global::ViceSharp.Abstractions.MasterAudioControl.Volume, 2);
 
             viewModel.Muted = true;
-            Assert.True(global::ViceSharp.Host.Audio.MasterAudioControl.Muted);
-            Assert.Equal(0f, global::ViceSharp.Host.Audio.MasterAudioControl.EffectiveGain);
+            Assert.True(global::ViceSharp.Abstractions.MasterAudioControl.Muted);
+            Assert.Equal(0f, global::ViceSharp.Abstractions.MasterAudioControl.EffectiveGain);
 
             viewModel.Muted = false;
-            Assert.Equal(0.40f, global::ViceSharp.Host.Audio.MasterAudioControl.EffectiveGain, 2);
+            Assert.Equal(0.40f, global::ViceSharp.Abstractions.MasterAudioControl.EffectiveGain, 2);
         }
         finally
         {
-            global::ViceSharp.Host.Audio.MasterAudioControl.Muted = false;
-            global::ViceSharp.Host.Audio.MasterAudioControl.Volume = 1f;
+            global::ViceSharp.Abstractions.MasterAudioControl.Muted = false;
+            global::ViceSharp.Abstractions.MasterAudioControl.Volume = 1f;
         }
     }
 

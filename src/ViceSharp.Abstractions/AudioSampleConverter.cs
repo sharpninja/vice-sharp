@@ -1,4 +1,4 @@
-namespace ViceSharp.Host.Audio;
+namespace ViceSharp.Abstractions;
 
 /// <summary>
 /// Converts SID float samples (nominally [-1, 1]) to clamped little-endian

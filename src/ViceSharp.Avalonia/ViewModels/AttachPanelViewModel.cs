@@ -162,7 +162,7 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     /// <summary>
     /// Mutes the emulator's audio output (the status-bar mute toggle). Drives the process-wide
-    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/> the audio backend reads.
+    /// <see cref="global::ViceSharp.Abstractions.MasterAudioControl"/> the audio backend reads.
     /// </summary>
     public bool Muted
     {
@@ -170,13 +170,13 @@ public sealed class AttachPanelViewModel : ObservableObject
         set
         {
             if (SetProperty(ref _muted, value))
-                global::ViceSharp.Host.Audio.MasterAudioControl.Muted = value;
+                global::ViceSharp.Abstractions.MasterAudioControl.Muted = value;
         }
     }
 
     /// <summary>
     /// Master output volume as a percentage 0-100 (the status-bar volume slider). Drives
-    /// <see cref="global::ViceSharp.Host.Audio.MasterAudioControl"/>.Volume (percent / 100).
+    /// <see cref="global::ViceSharp.Abstractions.MasterAudioControl"/>.Volume (percent / 100).
     /// </summary>
     public double MasterVolumePercent
     {
@@ -185,7 +185,7 @@ public sealed class AttachPanelViewModel : ObservableObject
         {
             var clamped = System.Math.Clamp(value, 0, 100);
             if (SetProperty(ref _masterVolumePercent, clamped))
-                global::ViceSharp.Host.Audio.MasterAudioControl.Volume = (float)(clamped / 100.0);
+                global::ViceSharp.Abstractions.MasterAudioControl.Volume = (float)(clamped / 100.0);
         }
     }
 
