@@ -136,6 +136,41 @@ public sealed class XboxManifestTests
         }
     }
 
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void Manifest_ReferencedVisualAssets_ExistOnDisk()
+    {
+        var document = XDocument.Load(ManifestPath);
+        var headDir = Path.GetDirectoryName(ManifestPath)!;
+
+        // Collect every manifest reference to a visual asset: the <Logo> element text plus any
+        // attribute value ending in .png (Square150x150Logo / Square44x44Logo / Wide310x150Logo /
+        // SplashScreen Image). MSIX registration fails (DEP0700 / 0x80073CF6) if any is missing
+        // from the package, so each referenced file MUST exist on disk under the head.
+        var references = document.Descendants()
+            .Where(e => string.Equals(e.Name.LocalName, "Logo", StringComparison.Ordinal))
+            .Select(e => e.Value)
+            .Concat(document.Descendants()
+                .Attributes()
+                .Select(a => a.Value)
+                .Where(v => v.EndsWith(".png", StringComparison.OrdinalIgnoreCase)))
+            .Select(r => r.Trim())
+            .Where(r => r.Length > 0)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        Assert.NotEmpty(references);
+
+        foreach (var reference in references)
+        {
+            var path = Path.Combine(headDir, reference.Replace('\\', Path.DirectorySeparatorChar));
+            Assert.True(
+                File.Exists(path),
+                $"Manifest references visual asset '{reference}' but '{path}' does not exist; "
+                    + "MSIX registration would fail with DEP0700 / 0x80073CF6.");
+        }
+    }
+
     private static System.Collections.Generic.IEnumerable<XElement> Elements(
         XDocument document,
         string localName)

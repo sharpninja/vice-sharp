@@ -121,6 +121,19 @@
     </Content>
   </ItemGroup>
 
+  <!--
+    UWP app visual assets. Package.appxmanifest references StoreLogo / Square150x150Logo /
+    Square44x44Logo / Wide310x150Logo / SplashScreen under Assets\; MSIX registration
+    (DEP0700 / 0x80073CF6) fails if any is missing from the package. Head-only (guarded), and
+    copied into the win-x64 layout so the register-from-layout F5 deploy finds them.
+  -->
+  <ItemGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <None Remove="Assets/*.png" />
+    <Content Include="Assets/*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
     <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" />
