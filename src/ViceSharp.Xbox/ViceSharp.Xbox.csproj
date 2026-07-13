@@ -36,6 +36,18 @@
     <RootNamespace>ViceSharp.Xbox</RootNamespace>
     <AssemblyName>ViceSharp.Xbox</AssemblyName>
 
+    <!--
+      The VS Configuration Manager validates the ViceSharp.slnx "Debug-UWP|x64" mapping
+      against this project's DECLARED configurations/platforms. SDK projects expose only
+      Debug/Release + AnyCPU by default, so VS rejects Debug-UWP|x64 as nonexistent, refuses
+      to switch, and keeps loading the head as the net10.0 fallback (which is why App.xaml's
+      Windows.UI.Xaml.Application does not resolve in the editor). Declaring Debug-UWP and x64
+      here makes the IDE accept the solution mapping. CLI MSBuild treats Configuration/Platform
+      as free-form and does not need this; only the IDE does.
+    -->
+    <Configurations>Debug;Release;Debug-UWP</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
+
     <TargetFramework Condition="'$(ViceSharpXboxUwp)'=='true'">net10.0-windows10.0.26100.0</TargetFramework>
     <TargetFramework Condition="'$(ViceSharpXboxUwp)'!='true'">net10.0</TargetFramework>
 

@@ -110,6 +110,13 @@ public sealed class XboxUwpHeadTests
             csproj.IndexOf(debugUwpDerivation, StringComparison.Ordinal)
                 < csproj.IndexOf(fallbackDefault, StringComparison.Ordinal),
             "The Debug-UWP derivation must appear before the empty->false default.");
+
+        // The VS Configuration Manager validates the .slnx Debug-UWP|x64 mapping against the
+        // project's DECLARED configurations/platforms; SDK defaults expose only Debug/Release
+        // + AnyCPU, so the head must declare Debug-UWP + x64 or the IDE rejects the solution
+        // mapping and keeps loading the net10.0 fallback (CLI MSBuild does not need this).
+        Assert.Contains("<Configurations>Debug;Release;Debug-UWP</Configurations>", csproj);
+        Assert.Contains("<Platforms>AnyCPU;x64</Platforms>", csproj);
     }
 
     [Fact]
