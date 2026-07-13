@@ -19,6 +19,7 @@
     <Project Path="src/ViceSharp.Protocol/ViceSharp.Protocol.csproj" />
     <Project Path="src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj" />
     <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj" />
+    <Project Path="src/ViceSharp.Xbox/ViceSharp.Xbox.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ViceSharp.AiReview.Tests/ViceSharp.AiReview.Tests.csproj" />

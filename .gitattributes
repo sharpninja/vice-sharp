@@ -8,6 +8,7 @@
 *.props   text eol=lf
 *.targets text eol=lf
 *.sln     text eol=lf
+*.slnx    text eol=lf
 *.json    text eol=lf
 *.md      text eol=lf
 *.xml     text eol=lf

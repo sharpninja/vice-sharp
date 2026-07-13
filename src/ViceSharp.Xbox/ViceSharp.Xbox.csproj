@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    PLAN-XBOXUWP S4 (IMPL-XBOXUWP-004): the true UWP-on-Xbox-console head.
+
+    ViceSharpXboxUwp toggles the target framework between the real UWP target
+    (net10.0-windows10.0.26100.0, which needs the windows-app / UWP workload)
+    and a workload-free net10.0 fallback. The fallback is the DEFAULT so the
+    whole solution still builds on CI agents that lack the UWP workload. This
+    mirrors the Host.Android fallback precedent (ViceSharpHostAndroidFallback).
+
+    This head reuses the managed C64 core plus the in-process host facade
+    (ViceSharp.Host.InProcess) only. It takes no desktop-UI, wire-protocol,
+    monitor, gRPC, or web-host dependency. The wire protocol arrives
+    transitively through the in-process host facade, which is intentional.
+
+    Program.cs (the trivial fallback entry point) compiles ONLY on the
+    net10.0 fallback: when ViceSharpXboxUwp=='true' the build defines the
+    HAS_UWP constant, which #if's Program.cs out so it cannot collide with the
+    real XAML App entry point that slice S34 will add later.
+  -->
+  <PropertyGroup>
+    <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'==''">false</ViceSharpXboxUwp>
+
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ViceSharp.Xbox</RootNamespace>
+    <AssemblyName>ViceSharp.Xbox</AssemblyName>
+
+    <TargetFramework Condition="'$(ViceSharpXboxUwp)'=='true'">net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetFramework Condition="'$(ViceSharpXboxUwp)'!='true'">net10.0</TargetFramework>
+
+    <!-- HAS_UWP guards Program.cs out of the real UWP build (see header). -->
+    <DefineConstants Condition="'$(ViceSharpXboxUwp)'=='true'">$(DefineConstants);HAS_UWP</DefineConstants>
+  </PropertyGroup>
+
+  <!-- UWP-on-Xbox-console-only knobs; inert on the net10.0 fallback build. -->
+  <PropertyGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <UseUwp>true</UseUwp>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Platform>x64</Platform>
+    <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
+    <PublishAot Condition="'$(Configuration)'=='Release'">true</PublishAot>
+    <AppxPackage>true</AppxPackage>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType>MSIX</WindowsPackageType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
+    <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" />
+    <ProjectReference Include="..\ViceSharp.Chips\ViceSharp.Chips.csproj" />
+    <ProjectReference Include="..\ViceSharp.Architectures\ViceSharp.Architectures.csproj" />
+    <ProjectReference Include="..\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj" />
+  </ItemGroup>
+</Project>
