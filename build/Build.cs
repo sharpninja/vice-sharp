@@ -1633,4 +1633,149 @@ ManifestVersion: 1.6.0
                 throwOnNonZero: true);
             Serilog.Log.Information("Scoop manifest for {Version} pushed to the mirror's main.", version);
         });
+
+    // ---- Xbox (UWP-on-console) head: PLAN-XBOXUWP S33 (IMPL-XBOXUWP-033) --------
+    // Three targets for the ViceSharp.Xbox head, split by where they can run:
+    //  - PublishXbox / DeployXbox: DEV-PC / MANUAL DEVICE targets. They need the
+    //    windows-app / UWP workload and (for deploy) a paired Dev-Mode console, so
+    //    they are NEVER wired into a CI/release pipeline. XboxCiConfigTests guards
+    //    their absence from azure-pipelines.{ci,release}.yml.
+    //  - ValidateXbox: the OFF-CONSOLE, workload-free gate. It runs on a plain
+    //    net10.0 agent (no UWP workload, no console): solution build + the
+    //    Category=Xbox tests + the Native-AOT link of the ViceSharpXboxUwp=false
+    //    fallback head. It may optionally be wired into CI.
+    // Rollback for a bad sideload is documented in
+    // docs/xbox/on-console-setup-runbook.md (WinAppDeployCmd uninstall + redeploy).
+
+    AbsolutePath XboxHeadProject => RootDirectory / "src" / "ViceSharp.Xbox" / "ViceSharp.Xbox.csproj";
+
+    AbsolutePath TestHarnessProject => RootDirectory / "tests" / "ViceSharp.TestHarness" / "ViceSharp.TestHarness.csproj";
+
+    [Parameter("DeployXbox: the Dev-Mode console IP (or host:port) passed to WinAppDeployCmd -ip.")]
+    readonly string XboxConsoleIp = null!;
+
+    [Parameter("DeployXbox: the Dev-Mode pairing PIN passed to WinAppDeployCmd -pin.")]
+    readonly string XboxPairingPin = null!;
+
+    [Parameter("DeployXbox: override the MSIX to sideload. Default: the newest .msix under the ViceSharp.Xbox build output.")]
+    readonly string XboxMsixPath = null!;
+
+    /// <summary>
+    /// DEV-PC / MANUAL (never CI): publish the <c>ViceSharp.Xbox</c>
+    /// UWP-on-Xbox-console head as a Release Native-AOT MSIX (the Store publish
+    /// path). Requires the windows-app / UWP workload
+    /// (<c>ViceSharpXboxUwp=true</c> switches the head to the
+    /// net10.0-windows UWP TFM); on a workload-less agent this target is simply
+    /// not invoked (CI never calls it), while the definition still compiles.
+    /// </summary>
+    Target PublishXbox => _ => _
+        .Description("DEV-PC/MANUAL (never CI): publish the ViceSharp.Xbox head as a Release Native-AOT MSIX. Requires the windows-app / UWP workload.")
+        .Executes(() =>
+        {
+            Serilog.Log.Information(
+                "Publishing the ViceSharp.Xbox UWP-on-console head (Release, Native AOT, win-x64, ViceSharpXboxUwp=true) -> MSIX. " +
+                "This needs the windows-app / UWP workload; see docs/xbox/on-console-setup-runbook.md.");
+            DotNetPublish(s => s
+                .SetProject(XboxHeadProject)
+                .SetConfiguration("Release")
+                .SetRuntime("win-x64")
+                .SetProperty("ViceSharpXboxUwp", "true")
+                .SetProperty("PublishAot", "true"));
+        });
+
+    /// <summary>
+    /// DEV-PC / MANUAL (never CI): sideload the packaged <c>ViceSharp.Xbox</c>
+    /// MSIX to a paired Dev-Mode console with <c>WinAppDeployCmd</c>
+    /// (<c>install -file &lt;msix&gt; -ip &lt;ip&gt; -pin &lt;pin&gt;</c>). Pass the
+    /// console with <c>--xbox-console-ip</c>, the Dev-Mode PIN with
+    /// <c>--xbox-pairing-pin</c>, and optionally an explicit MSIX with
+    /// <c>--xbox-msix-path</c>. Rollback (a bad sideload) is documented in
+    /// docs/xbox/on-console-setup-runbook.md: <c>WinAppDeployCmd uninstall</c> then
+    /// redeploy the prior known-good MSIX (or the Device Portal Add-app fallback).
+    /// </summary>
+    Target DeployXbox => _ => _
+        .Description("DEV-PC/MANUAL (never CI): sideload the ViceSharp.Xbox MSIX to a Dev-Mode console via WinAppDeployCmd. Params: --xbox-console-ip, --xbox-pairing-pin, [--xbox-msix-path].")
+        .Requires(() => XboxConsoleIp)
+        .Requires(() => XboxPairingPin)
+        .Executes(() =>
+        {
+            var msix = ResolveXboxMsix();
+            var winAppDeploy = FindOnPath("WinAppDeployCmd.exe") ?? FindOnPath("WinAppDeployCmd")
+                ?? throw new InvalidOperationException(
+                    "WinAppDeployCmd not found on PATH (it ships with the Windows 10/11 SDK). Install the "
+                  + "SDK, or use the Device Portal Add-app sideload documented in "
+                  + "docs/xbox/on-console-setup-runbook.md.");
+
+            Serilog.Log.Information("Sideloading {Msix} to console {Ip} via WinAppDeployCmd install.", msix, XboxConsoleIp);
+            RunProcess(winAppDeploy,
+                $"install -file \"{msix}\" -ip {XboxConsoleIp} -pin {XboxPairingPin}",
+                throwOnNonZero: true);
+            Serilog.Log.Information(
+                "Deployed {Msix} to {Ip}. To roll back: WinAppDeployCmd uninstall -package <PackageFullName> "
+              + "-ip {Ip} -pin <pin>, then redeploy the prior MSIX (docs/xbox/on-console-setup-runbook.md).",
+                msix, XboxConsoleIp, XboxConsoleIp);
+        });
+
+    /// <summary>
+    /// OFF-CONSOLE, workload-free Xbox gate (safe on a plain net10.0 CI agent, no
+    /// UWP workload, no console): (1) the whole solution builds (via
+    /// <see cref="Compile"/>), (2) the <c>Category=Xbox</c> tests pass, and (3) the
+    /// workload-free fallback head (<c>ViceSharpXboxUwp=false</c>, so the plain
+    /// net10.0 TFM) links clean under Native AOT - proving the reused managed core +
+    /// Host.InProcess graph is trim/AOT safe before any device slice. This is the CI-
+    /// eligible half of the Xbox build; the DEVICE targets (PublishXbox/DeployXbox)
+    /// stay manual.
+    /// </summary>
+    Target ValidateXbox => _ => _
+        .Description("OFF-CONSOLE, workload-free Xbox gate (plain net10.0 agent): solution build + Category=Xbox tests + Native-AOT link of the ViceSharpXboxUwp=false fallback head.")
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            // (1) Category=Xbox tests. Compile already built the solution in
+            // Configuration, so run the harness assembly with no rebuild/restore.
+            DotNetTest(s => s
+                .SetProjectFile(TestHarnessProject)
+                .SetConfiguration(Configuration)
+                .SetNoRestore(true)
+                .SetNoBuild(true)
+                .SetFilter("Category=Xbox"));
+
+            // (2) Native-AOT link of the workload-free fallback head. ViceSharpXboxUwp=false
+            // keeps the plain net10.0 TFM (no UWP workload needed) while PublishAot=true
+            // exercises the real trim/AOT link over the shipped core + Host.InProcess graph.
+            DotNetPublish(s => s
+                .SetProject(XboxHeadProject)
+                .SetConfiguration("Release")
+                .SetRuntime("win-x64")
+                .SetProperty("ViceSharpXboxUwp", "false")
+                .SetProperty("PublishAot", "true"));
+        });
+
+    /// <summary>
+    /// Resolves the MSIX <see cref="DeployXbox"/> sideloads: the explicit
+    /// <c>--xbox-msix-path</c> when given, else the newest <c>*.msix</c> under the
+    /// ViceSharp.Xbox build output (PublishXbox produces it). Throws a directive to
+    /// run PublishXbox / pass a path when none is found.
+    /// </summary>
+    AbsolutePath ResolveXboxMsix()
+    {
+        if (!string.IsNullOrWhiteSpace(XboxMsixPath))
+        {
+            var explicitPath = (AbsolutePath)XboxMsixPath;
+            if (!System.IO.File.Exists(explicitPath))
+                throw new InvalidOperationException($"--xbox-msix-path '{XboxMsixPath}' does not exist.");
+            return explicitPath;
+        }
+
+        var searchRoot = XboxHeadProject.Parent / "bin";
+        var newest = System.IO.Directory.Exists(searchRoot)
+            ? searchRoot.GlobFiles("**/*.msix")
+                .OrderByDescending(p => System.IO.File.GetLastWriteTimeUtc(p))
+                .FirstOrDefault()
+            : null;
+        return newest
+            ?? throw new InvalidOperationException(
+                "No MSIX found under the ViceSharp.Xbox build output. Run PublishXbox first "
+              + "(a dev PC with the windows-app / UWP workload), or pass --xbox-msix-path to a known-good MSIX.");
+    }
 }
