@@ -112,6 +112,33 @@ public sealed class XboxInputContext
     public InputContext Context => _context;
 
     /// <summary>
+    /// Sets the context the NEXT <see cref="Tick"/> will be evaluated in, WITHOUT
+    /// consuming a gamepad snapshot. This is the UI-driven context path: when a page
+    /// is navigated to or an overlay opens/closes, the shell (via the thin
+    /// ViewModels observer) requests the matching context here, distinct from the
+    /// gamepad Menu/View/Y button edges that <see cref="Tick"/> resolves. The machine
+    /// remains the SINGLE context authority (FR-XBOXUI-003): both paths write the one
+    /// <see cref="Context"/> field, so exactly one context is ever authoritative.
+    /// </summary>
+    /// <param name="context">The context to switch to for the next frame.</param>
+    /// <remarks>
+    /// PLAN-XBOXUWP S20 (IMPL-XBOXUWP-020), FR-XBOXUI-003 / TR-XBOXUI-003. When the
+    /// requested context is not <see cref="InputContext.ConfirmDialog"/>, any pending
+    /// confirm-gated command is dropped so a UI-driven context change cannot leave a
+    /// stale deferred action armed. Reads no wall-clock and no random source, so
+    /// determinism is preserved.
+    /// </remarks>
+    public void RequestContext(InputContext context)
+    {
+        _context = context;
+
+        if (context != InputContext.ConfirmDialog)
+        {
+            _pendingConfirmCommand = AppCommand.None;
+        }
+    }
+
+    /// <summary>
     /// Consumes one gamepad snapshot for one frame and resolves it into commands and
     /// the two joystick ports, applying the context gating.
     /// </summary>

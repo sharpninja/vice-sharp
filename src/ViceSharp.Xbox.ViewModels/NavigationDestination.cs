@@ -1,31 +1,55 @@
 namespace ViceSharp.Xbox.ViewModels;
 
 /// <summary>
-/// The top-level screens of the 10-foot (couch) UI that the shell can navigate
-/// between with a controller. The root shell view-model (S20) owns the current
-/// destination and drives the focus graph and the back-stack from it; every value
-/// here is a full-screen or full-overlay surface, not an in-screen focus target.
+/// The PUSHABLE full-screen pages of the 10-foot (couch) UI that the shell can
+/// navigate between with a controller. Each value is a distinct top-level page the
+/// <see cref="NavigationViewModel"/> pushes onto (and pops off) its explicit back
+/// stack.
 /// </summary>
+/// <remarks>
+/// <para>
+/// PLAN-XBOXUWP S20 (IMPL-XBOXUWP-020), FR-XBOXUI-001 / TR-XBOXUI-001. This is the
+/// reconciled page set that replaces the S19 placeholder
+/// (<c>Gameplay, MainMenu, Settings, Devices, Roms, VirtualKeyboard</c>), which
+/// conflated three different concepts. In the real topology:
+/// </para>
+/// <list type="bullet">
+///   <item><description>
+///   The always-present In-emulator (gameplay) view is NOT a destination: it is the
+///   permanent video surface that the pages overlay, modeled as
+///   <see cref="NavigationViewModel.Current"/> == <c>null</c> (an empty back stack),
+///   and it maps to <see cref="ViceSharp.Xbox.Input.InputContext.Gameplay"/>.
+///   </description></item>
+///   <item><description>
+///   The quick menu and the on-screen virtual keyboard are OVERLAY FLAGS
+///   (<see cref="NavigationViewModel.IsQuickMenuOpen"/> /
+///   <see cref="NavigationViewModel.IsVirtualKeyboardOpen"/>), not stack entries, so
+///   the Back control never dismisses an overlay by popping a page.
+///   </description></item>
+///   <item><description>
+///   ROM provisioning is hosted INSIDE <see cref="DeviceSetup"/> (there is no
+///   first-class <c>Roms</c> page), keeping the media-attach and ROM-set surfaces on
+///   one device page.
+///   </description></item>
+/// </list>
+/// </remarks>
 public enum NavigationDestination
 {
-    /// <summary>
-    /// The running emulator surface (the pulled video frame fills the screen). This
-    /// is the default destination; the locked joystick is live and no menu is shown.
-    /// </summary>
-    Gameplay,
+    /// <summary>The launch / home page (game library and top-level entry points).</summary>
+    Home,
 
-    /// <summary>The root 10-foot menu overlay, opened from <see cref="Gameplay"/>.</summary>
-    MainMenu,
-
-    /// <summary>The settings screen (display / audio / input / resource options).</summary>
+    /// <summary>The settings page (display / audio / input / resource options).</summary>
     Settings,
 
-    /// <summary>The device screen: attach, eject, and swap media in the drive slots.</summary>
-    Devices,
+    /// <summary>
+    /// The device-setup page: attach, eject, and swap media in the drive/tape/cartridge
+    /// slots, choose the drive model, and provision the machine ROM set.
+    /// </summary>
+    DeviceSetup,
 
-    /// <summary>The ROM browser used to pick or replace the active machine ROM set.</summary>
-    Roms,
+    /// <summary>The input-mapping page: view and rebind the controller bindings.</summary>
+    InputMapping,
 
-    /// <summary>The on-screen virtual keyboard overlay for text entry to the machine.</summary>
-    VirtualKeyboard,
+    /// <summary>The about page: GPL-2.0-or-later disclosure, VICE attribution, and source offer.</summary>
+    About,
 }
