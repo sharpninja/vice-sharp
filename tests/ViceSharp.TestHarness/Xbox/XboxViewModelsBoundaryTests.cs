@@ -61,6 +61,15 @@ public sealed class XboxViewModelsBoundaryTests
     /// ViceSharp.Abstractions, ViceSharp.Protocol and ViceSharp.Xbox.Input are
     /// deliberately NOT forbidden: they are the portable contracts the ViewModels
     /// are allowed to consume (TR-MVVM-001).
+    ///
+    /// <para>
+    /// The broad machine handle <c>IMachine</c> is checked separately as a whole word
+    /// (see <see cref="ViewModelsSources_DoNotReferenceEngineHostOrXamlInternals"/>):
+    /// the narrow Abstractions input contracts <c>IMachineJoystickInput</c> /
+    /// <c>IMachineKeyboardInput</c> are the plan-sanctioned S21 host-facade seam
+    /// surfaces and legitimately appear in ViewModels source, so a bare
+    /// substring match on "IMachine" would be a false positive.
+    /// </para>
     /// </summary>
     private static readonly string[] ForbiddenSourceIdentifiers =
     {
@@ -69,7 +78,6 @@ public sealed class XboxViewModelsBoundaryTests
         "ViceSharp.Architectures",
         "ViceSharp.Host",
         "IArchitectureBuilder",
-        "IMachine",
         "IVideoChip",
         "Grpc.",
         "Avalonia",
@@ -129,6 +137,13 @@ public sealed class XboxViewModelsBoundaryTests
 
         foreach (var forbidden in ForbiddenSourceIdentifiers)
             Assert.DoesNotContain(forbidden, source);
+
+        // The broad machine handle IMachine is forbidden, but the NARROW Abstractions
+        // input contracts IMachineJoystickInput / IMachineKeyboardInput are the
+        // plan-sanctioned S21 host-facade seam surfaces (IEmulatorSessionFacade returns
+        // them) and legitimately appear here. Match IMachine only as a whole word so the
+        // longer input-contract names are not false-positives.
+        Assert.DoesNotMatch(@"\bIMachine\b", source);
     }
 
     /// <summary>
