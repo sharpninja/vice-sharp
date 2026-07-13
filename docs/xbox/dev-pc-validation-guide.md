@@ -32,6 +32,13 @@ $msb = (& "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.ex
 # then: Add-AppxPackage the produced .msix (or its .appxbundle), or use the generated Install.ps1 in the AppPackages output.
 ```
 
+**Packaging is confirmed (verified 2026-07-13, headless).** `MSBuild.exe .../t:Restore,Publish /p:UapAppxPackageBuildMode=SideloadOnly` exits 0 and generates a valid `AppxManifest.xml` under `src\ViceSharp.Xbox\bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64\`: Identity `sharpninja.ViceSharp.Xbox`, Publisher `CN=ViceSharpDev`, DisplayName `ViceSharp`, **TargetDeviceFamily = Windows.Xbox + Windows.Desktop + Windows.Universal** (10.0.19041 .. 10.0.26100), **Capability = internetClient**. With signing disabled this yields a **registrable loose-file layout** (not a packed `.msix`). Fastest local deploy if you skip VS F5:
+```pwsh
+# from that win-x64 output dir, in a Dev-Mode PowerShell:
+Add-AppxPackage -Register .\AppxManifest.xml
+```
+For a packed, signed `.msix` (needed for console/Store, not for dev), enable signing with the self-signed cert from the setup runbook section 3 (`/p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=<thumb>`).
+
 ## C. Per-slice validation checklist
 
 ### S0 - feasibility GO / NO-GO (the gate everything depends on)
