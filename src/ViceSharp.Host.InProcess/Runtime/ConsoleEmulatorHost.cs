@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using ViceSharp.Abstractions;
 using ViceSharp.Core;
 using ViceSharp.Host.Services;
@@ -185,6 +186,9 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
     private readonly EmulatorHostService _hostService;
     private readonly InputServiceHost _input;
     private readonly LocalVideoFrameSource _video;
+    private readonly SettingsServiceHost _settings;
+    private readonly MediaServiceHost _media;
+    private readonly SnapshotServiceHost _snapshots;
     private readonly EmulationPumpService _pump;
     private readonly object _pumpGate = new();
     private bool _pumpStarted;
@@ -199,6 +203,12 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
         _video = new LocalVideoFrameSource(_registry);
         // AppContainer-safe managed gate (S2): no OS timer, no aux thread, no P/Invoke.
         _pump = new EmulationPumpService(_registry, new XboxManagedFrameGate());
+        // PLAN-XBOXUWP S34: the POCO settings/media/snapshot services over the same
+        // registry, so the UWP head's seam adapter can drive IXboxSettingsGateway and the
+        // AppCommandDispatcher without re-composing the graph. All Kestrel-free.
+        _settings = new SettingsServiceHost(_registry, runtimeFactory, _pump);
+        _media = new MediaServiceHost(_registry);
+        _snapshots = new SnapshotServiceHost(_registry);
         // Bridge the pump's per-frame boundary to the facade hook, wired once at
         // composition so it fires on both the live worker and synchronous PumpSession.
         _pump.FramePumped = (session, frame) => PerFrameInputHook?.Invoke(session.SessionId, frame);
@@ -215,6 +225,46 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
 
     /// <summary>The session registry backing this host (composition detail; exposed for the host head and tests).</summary>
     internal EmulatorRuntimeRegistry Registry => _registry;
+
+    /// <summary>
+    /// The emulator lifecycle/limiter/autostart service (PLAN-XBOXUWP S34). The UWP head's
+    /// <c>AppCommandDispatcher</c> routes resets, autostart, and warp through this.
+    /// </summary>
+    public IEmulatorHost HostService => _hostService;
+
+    /// <summary>
+    /// The input service (key/joystick state, keyboard-map list/select) (PLAN-XBOXUWP S34).
+    /// The head's settings gateway routes keyboard-map queries through this.
+    /// </summary>
+    public IInputService InputService => _input;
+
+    /// <summary>The session settings service (get/update/validate/profiles) (PLAN-XBOXUWP S34).</summary>
+    public ISettingsService Settings => _settings;
+
+    /// <summary>The media service (attach/detach/list) (PLAN-XBOXUWP S34).</summary>
+    public IMediaService Media => _media;
+
+    /// <summary>The snapshot service (quick save/load) (PLAN-XBOXUWP S34).</summary>
+    public ISnapshotService Snapshots => _snapshots;
+
+    /// <summary>
+    /// The machine-owned keyboard-input surface for a session, or <c>null</c> when the
+    /// session is unknown or has no keyboard device (PLAN-XBOXUWP S34). Mirrors the device
+    /// lookup <see cref="InputServiceHost"/> uses; drives the virtual-keyboard ViewModel.
+    /// </summary>
+    public IMachineKeyboardInput? GetKeyboardInput(string sessionId)
+        => _registry.TryGet(sessionId, out var session)
+            ? session.Machine.Devices.All.OfType<IMachineKeyboardInput>().FirstOrDefault()
+            : null;
+
+    /// <summary>
+    /// The machine-owned joystick/control-port surface for a session, or <c>null</c> when the
+    /// session is unknown or has no joystick device (PLAN-XBOXUWP S34).
+    /// </summary>
+    public IMachineJoystickInput? GetJoystickInput(string sessionId)
+        => _registry.TryGet(sessionId, out var session)
+            ? session.Machine.Devices.All.OfType<IMachineJoystickInput>().FirstOrDefault()
+            : null;
 
     /// <inheritdoc />
     public ConsoleSessionResult StartC64Session(ConsoleSessionOptions? options = null)

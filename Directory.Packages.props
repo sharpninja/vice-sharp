@@ -51,4 +51,7 @@
   <ItemGroup Label="UI - Remote Control (debug-only Avalonia visual-tree inspection over gRPC)">
     <PackageVersion Include="SharpNinja.Avalonia.RemoteControl.Server" Version="0.7.4" />
   </ItemGroup>
+  <ItemGroup Label="UI - Xbox UWP head (Win2D CanvasSwapChain; consumed only when ViceSharpXboxUwp=true)">
+    <PackageVersion Include="Win2D.uwp" Version="1.26.0" />
+  </ItemGroup>
 </Project>

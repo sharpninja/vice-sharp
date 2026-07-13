@@ -1,0 +1,18 @@
+<!--
+  PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the UWP Application definition. The manifest's
+  Application EntryPoint is "ViceSharp.Xbox.App" (see Package.appxmanifest). Processed only
+  by the real UWP build; inert on the workload-free net10.0 fallback (its code-behind is
+  #if HAS_UWP-guarded, and the fallback's WinExe entry point stays Program.cs).
+-->
+<Application
+    x:Class="ViceSharp.Xbox.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/FocusVisuals.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
