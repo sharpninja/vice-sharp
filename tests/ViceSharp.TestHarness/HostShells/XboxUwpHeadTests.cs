@@ -142,6 +142,27 @@ public sealed class XboxUwpHeadTests
         // for Debug-UWP|Any CPU so a solution Platform=Any CPU cannot override the
         // project's <Platform>x64</Platform> and mislabel the win-x64 AOT/MSIX output.
         Assert.Contains("<Build Solution=\"Debug-UWP|Any CPU\" Project=\"false\" />", slnx);
+
+        // A modern-.NET UWP app must run with MSIX package identity; without a <Deploy> rule
+        // (Deploy defaults false) VS F5 launches the bare unpackaged exe, which fail-fasts
+        // (0xC0000409) in the XAML/CoreApplication bootstrap before any window shows. (VS writes
+        // this element without an explicit Project attribute, so match the prefix.)
+        Assert.Contains("<Deploy Solution=\"Debug-UWP|x64\"", slnx);
+    }
+
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void LaunchSettings_SelectsMsixPackageActivation()
+    {
+        var path = Path.Combine(
+            RepoRoot, "src", "ViceSharp.Xbox", "Properties", "launchSettings.json");
+
+        Assert.True(File.Exists(path), $"Expected the packaged-launch profile at '{path}'.");
+
+        // commandName "MsixPackage" is what makes VS deploy + activate the REGISTERED package
+        // WITH identity, instead of running the raw output exe (the default "Project" launch
+        // that fail-fasts 0xC0000409 for lack of package identity).
+        Assert.Contains("\"commandName\": \"MsixPackage\"", File.ReadAllText(path));
     }
 
     private static string ReadCsproj()

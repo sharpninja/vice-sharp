@@ -354,7 +354,10 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             return EnsureStaging(width, height);
         }
 
-        return true;
+        // Swap chain exists and dimensions are unchanged. Retry staging if a prior EnsureStaging
+        // attempt failed (a one-off CreateTexture2D failure must not leave _staging NULL while we
+        // report the surface ready, or RenderFrame would Map a NULL ID3D11Resource* -> AV).
+        return _staging != IntPtr.Zero || EnsureStaging(width, height);
     }
 
     private bool EnsureStaging(int width, int height)

@@ -23,79 +23,60 @@
     -->
     <Project Path="src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.AdhocHelper/ViceSharp.AdhocHelper.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Architectures/ViceSharp.Architectures.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Chips/ViceSharp.Chips.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Console/ViceSharp.Console.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Core.Package/ViceSharp.Core.Package.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Core/ViceSharp.Core.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Host/ViceSharp.Host.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Host.Android/ViceSharp.Host.Android.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Host.InProcess/ViceSharp.Host.InProcess.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Host.iOS/ViceSharp.Host.iOS.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Host.MacOS/ViceSharp.Host.MacOS.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Host.Xbox/ViceSharp.Host.Xbox.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Launcher/ViceSharp.Launcher.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Monitor/ViceSharp.Monitor.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Protocol/ViceSharp.Protocol.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Xbox/ViceSharp.Xbox.csproj">
       <!--
@@ -108,28 +89,24 @@
         project's <Platform>x64</Platform> and mislabel the win-x64 AOT/MSIX output.
       -->
       <Build Solution="Debug-UWP|Any CPU" Project="false" />
+      <Deploy Solution="Debug-UWP|x64" />
     </Project>
     <Project Path="src/ViceSharp.Xbox.Input/ViceSharp.Xbox.Input.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="src/ViceSharp.Xbox.ViewModels/ViceSharp.Xbox.ViewModels.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ViceSharp.AiReview.Tests/ViceSharp.AiReview.Tests.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="tests/ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
     <Project Path="tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
-      <Platform Solution="*|x64" Project="Any CPU" />
     </Project>
   </Folder>
 </Solution>

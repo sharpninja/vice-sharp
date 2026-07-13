@@ -98,7 +98,18 @@ public sealed partial class App : Application
     /// <inheritdoc />
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        BuildHostAndSession();
+        try
+        {
+            BuildHostAndSession();
+        }
+        catch (Exception ex)
+        {
+            // Defensive (crash-diagnosis hardening): OnLaunched has no ambient handler, so any
+            // throw between here and Window.Activate would propagate unhandled and fail-fast
+            // (0xC0000409) with NO window - undiagnosable. Degrade instead: bring the shell up so
+            // the failure is visible/debuggable. Mirrors the App-ctor ConfigureDataPaths guard.
+            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] BuildHostAndSession failed: {ex}");
+        }
 
         // The root: an always-present in-emulator base view (the video surface), a
         // transparent Frame carrying the pushable pages above it, and the two overlays.
