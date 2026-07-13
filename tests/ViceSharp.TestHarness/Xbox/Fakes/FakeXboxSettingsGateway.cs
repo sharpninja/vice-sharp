@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ViceSharp.Abstractions;
 using ViceSharp.Protocol;
 using ViceSharp.Xbox.ViewModels;
 
@@ -85,6 +86,18 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
 
     /// <summary>The disk image path passed to the most recent <see cref="SetTrueDriveAsync"/> call.</summary>
     public string? TrueDriveDiskImagePath { get; private set; }
+
+    /// <summary>
+    /// PLAN-XBOXUWP S27. The drive-model integer (VICE drive type: 1541 / 1540 / 1542)
+    /// passed to the most recent <see cref="SetTrueDriveAsync"/> call.
+    /// </summary>
+    public int? TrueDriveModel { get; private set; }
+
+    /// <summary>
+    /// PLAN-XBOXUWP S27. The number of <see cref="SetTrueDriveAsync"/> calls received, so
+    /// the device-setup tests can prove an inactive-slot model change issues none.
+    /// </summary>
+    public int SetTrueDriveCallCount { get; private set; }
 
     /// <inheritdoc />
     public ValueTask<GetSettingsResponse> GetSettingsAsync(CancellationToken cancellationToken = default)
@@ -212,12 +225,15 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
         bool enabled,
         int driveDevice = 8,
         string? diskImagePath = null,
+        int driveModel = (int)DriveModel.C1541,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        SetTrueDriveCallCount++;
         TrueDrive = enabled;
         TrueDriveDevice = driveDevice;
         TrueDriveDiskImagePath = diskImagePath;
+        TrueDriveModel = driveModel;
         return ValueTask.CompletedTask;
     }
 

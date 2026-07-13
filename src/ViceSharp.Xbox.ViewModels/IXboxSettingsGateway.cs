@@ -2,6 +2,7 @@ namespace ViceSharp.Xbox.ViewModels;
 
 using System.Threading;
 using System.Threading.Tasks;
+using ViceSharp.Abstractions;
 using ViceSharp.Protocol;
 
 /// <summary>
@@ -108,11 +109,17 @@ public interface IXboxSettingsGateway
     /// <param name="enabled">Whether to enable cycle-accurate true-drive emulation.</param>
     /// <param name="driveDevice">The IEC device number (default 8).</param>
     /// <param name="diskImagePath">An optional disk image to re-attach after the rebuild.</param>
+    /// <param name="driveModel">
+    /// The drive model to build the rig as, expressed as VICE's canonical drive-type
+    /// number (see <see cref="DriveModel"/>): 1541, 1540, or 1542 for the 1541-II.
+    /// Defaults to the 1541.
+    /// </param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     ValueTask SetTrueDriveAsync(
         bool enabled,
         int driveDevice = 8,
         string? diskImagePath = null,
+        int driveModel = (int)DriveModel.C1541,
         CancellationToken cancellationToken = default);
 
     /// <summary>Lists the available settings profiles.</summary>
