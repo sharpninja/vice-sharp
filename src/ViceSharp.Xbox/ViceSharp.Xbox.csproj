@@ -32,14 +32,15 @@
     <DefineConstants Condition="'$(ViceSharpXboxUwp)'=='true'">$(DefineConstants);HAS_UWP</DefineConstants>
 
     <!--
-      PLAN-XBOXUWP S34: Win2D is the CanvasSwapChain video path. It is ON by default on the
-      real UWP build, but can be turned OFF (-p:ViceSharpXboxNoWin2D=true) so the rest of the
-      XAML head can be validated without the Win2D dependency (the surface then degrades to a
-      no-blit panel: the plan's Win2D->DX11 fallback). The WIN2D compile symbol gates the
-      Win2D-using code in VideoSurfaceHost, and the package reference below shares the switch.
+      FIX-XWIN2D-001: the video surface (VideoSurfaceHost) now renders through a raw Direct3D 11
+      composition swap chain hosted by a XAML SwapChainPanel - NO Win2D. Win2D.uwp was dropped
+      because its Microsoft.Graphics.Canvas.winmd is a Windows Metadata component that modern
+      .NET (UseUwp) cannot reference (build error NETSDK1130). The DX11 interop is [LibraryImport]
+      + blittable delegate* unmanaged vtable calls (mirrors XAudio2SourceVoiceDevice), so it needs
+      no NuGet/winmd dependency and stays Native-AOT clean. AllowUnsafeBlocks enables that interop;
+      it only affects the UWP build because VideoSurfaceHost.cs is entirely #if HAS_UWP-guarded.
     -->
-    <ViceSharpUseWin2D Condition="'$(ViceSharpXboxUwp)'=='true' and '$(ViceSharpXboxNoWin2D)'!='true'">true</ViceSharpUseWin2D>
-    <DefineConstants Condition="'$(ViceSharpUseWin2D)'=='true'">$(DefineConstants);WIN2D</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <!-- UWP-on-Xbox-console-only knobs; inert on the net10.0 fallback build. -->
@@ -116,12 +117,10 @@
   </ItemGroup>
 
   <!--
-    PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): Win2D (the CanvasSwapChain video surface) is a
-    UWP-only package. It is guarded behind the ViceSharpUseWin2D switch so the workload-free
-    net10.0 fallback restore NEVER pulls it (the VideoSurfaceHost that uses it is itself
-    #if HAS_UWP / #if WIN2D-guarded). The central version lives in Directory.Packages.props (CPM).
+    FIX-XWIN2D-001: the video surface uses raw Direct3D 11 (d3d11.dll / dxgi.dll, part of
+    Windows) via [LibraryImport] + vtable interop, so the head carries NO video-rendering
+    PackageReference. Win2D.uwp was removed because its .winmd is incompatible with modern
+    .NET UseUwp (NETSDK1130). No package to restore keeps the UWP build free of that blocker
+    and the workload-free net10.0 fallback restore unchanged.
   -->
-  <ItemGroup Condition="'$(ViceSharpUseWin2D)'=='true'">
-    <PackageReference Include="Win2D.uwp" />
-  </ItemGroup>
 </Project>

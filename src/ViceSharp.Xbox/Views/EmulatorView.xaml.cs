@@ -15,7 +15,7 @@ public sealed partial class EmulatorView : UserControl
     /// <summary>Creates the view and its video surface.</summary>
     public EmulatorView() => InitializeComponent();
 
-    /// <summary>The video surface hosting the ~50 Hz Win2D frame pull.</summary>
+    /// <summary>The video surface hosting the ~50 Hz Direct3D 11 frame pull.</summary>
     public VideoSurfaceHost SurfaceHost => VideoSurface;
 }
 #endif
