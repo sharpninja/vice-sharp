@@ -232,7 +232,7 @@ public sealed class InputServiceHost : IInputService
         {
             if (request.Payload is { Length: > 0 })
             {
-                temporaryPath = Path.Combine(Path.GetTempPath(), $"vice-sharp-{Guid.NewGuid():N}.vkm");
+                temporaryPath = HostKeymapWritePath.CreateTransientVkmPath();
                 File.WriteAllBytes(temporaryPath, request.Payload);
                 path = temporaryPath;
             }
