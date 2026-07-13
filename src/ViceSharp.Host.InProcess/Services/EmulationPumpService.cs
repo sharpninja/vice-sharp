@@ -40,6 +40,18 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
     private long _appliedWorkerAffinityMask;
 
     /// <summary>
+    /// Optional per-frame boundary hook (PLAN-XBOXUWP S3): invoked exactly once per
+    /// COMPLETED emulated frame, on the emulation worker thread, from inside
+    /// <see cref="DrainCompletedFrames"/> after the frame has been recorded. The
+    /// argument is the session and its post-increment <see cref="EmulatorRuntimeSession.FrameCount"/>.
+    /// The Xbox/UWP head wires this to sample controller input at the frame cadence.
+    /// Default null imposes zero per-frame overhead, so existing pump behaviour is
+    /// unchanged. Runs under the session lock, so a handler must stay short and must
+    /// not re-enter the pump.
+    /// </summary>
+    public Action<EmulatorRuntimeSession, long>? FramePumped { get; set; }
+
+    /// <summary>
     /// The CPU affinity mask the worker thread pinned itself to from
     /// VICESHARP_EMU_CPU (TR-HOST-AFFINITY-001), or null when unpinned.
     /// </summary>
@@ -287,17 +299,21 @@ public sealed class EmulationPumpService : IHostedService, IDisposable
             history.OnInstructionCompleted);
     }
 
-    private static void DrainCompletedFrames(EmulatorRuntimeSession session, FrameBookkeeping frame)
+    private void DrainCompletedFrames(EmulatorRuntimeSession session, FrameBookkeeping frame)
     {
         var pending = frame.PendingFrames;
         if (pending <= 0)
             return;
 
         frame.PendingFrames -= pending;
+        var framePumped = FramePumped;
         for (var i = 0; i < pending; i++)
         {
             session.RecordFrame();
             session.AdvanceHostAutomationFrame();
+            // Per-frame boundary hook (PLAN-XBOXUWP S3): fire once per completed frame
+            // with the up-to-date frame count. Null by default = zero overhead.
+            framePumped?.Invoke(session, session.FrameCount);
         }
     }
 
