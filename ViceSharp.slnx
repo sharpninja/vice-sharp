@@ -21,6 +21,7 @@
     <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj" />
     <Project Path="src/ViceSharp.Xbox/ViceSharp.Xbox.csproj" />
     <Project Path="src/ViceSharp.Xbox.Input/ViceSharp.Xbox.Input.csproj" />
+    <Project Path="src/ViceSharp.Xbox.ViewModels/ViceSharp.Xbox.ViewModels.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ViceSharp.AiReview.Tests/ViceSharp.AiReview.Tests.csproj" />
