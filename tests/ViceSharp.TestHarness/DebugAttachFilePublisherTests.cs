@@ -89,7 +89,7 @@ public sealed class DebugAttachFilePublisherTests
     private static object CreateState(string endpoint, string sessionId)
     {
         var state = DiagnosticsReflectionTestHelpers.CreateInstance(DiagnosticsReflectionTestHelpers.RequiredType(
-            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host"));
+            "ViceSharp.Host.Diagnostics.HostDiagnosticsState, ViceSharp.Host.InProcess"));
         DiagnosticsReflectionTestHelpers.Invoke(state, "UpdateEndpoint", new Uri(endpoint));
         DiagnosticsReflectionTestHelpers.Invoke(state, "UpdateCurrentSession", sessionId);
         return state;
