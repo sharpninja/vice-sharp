@@ -581,6 +581,21 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
         return true;
     }
 
+    /// <inheritdoc />
+    public bool SetRestoreState(bool pressed)
+    {
+        if (!_keyboardEnabled)
+            return false;
+
+        // RESTORE is a hardware NMI wired directly to the CPU, not a key-matrix key.
+        // Route straight to the dedicated RESTORE/NMI trigger on the matrix, never
+        // through SetKeyState / the keymap.
+        lock (_inputSync)
+            _keyboard.SetRestore(pressed);
+
+        return true;
+    }
+
     public bool SetJoystickState(int controlPort, byte directionMask, bool fireButton)
     {
         var port = controlPort switch

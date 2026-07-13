@@ -247,6 +247,8 @@ public sealed class HostMediaSimulatedLoadTests
             return true;
         }
 
+        public bool SetRestoreState(bool pressed) => true;
+
         public void Reset()
         {
         }

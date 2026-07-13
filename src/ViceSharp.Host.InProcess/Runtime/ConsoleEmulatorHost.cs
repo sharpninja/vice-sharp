@@ -97,6 +97,15 @@ public interface IConsoleEmulatorHost : IAsyncDisposable
 
     /// <summary>Sets a keyboard key state on a session.</summary>
     void SetKey(string sessionId, string key, bool pressed);
+
+    /// <summary>
+    /// Sets the C64 RESTORE line state on a session. RESTORE is a hardware NMI wired
+    /// directly to the CPU, not a key-matrix key: the virtual keyboard's RESTORE tile
+    /// drives this dedicated seam, never <see cref="SetKey"/>. Routes to the session's
+    /// <see cref="IMachineKeyboardInput.SetRestoreState(bool)"/> via the same device
+    /// lookup as <see cref="SetKey"/>.
+    /// </summary>
+    void SetRestoreState(string sessionId, bool pressed);
 }
 
 /// <summary>
@@ -329,6 +338,10 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
     /// <inheritdoc />
     public void SetKey(string sessionId, string key, bool pressed)
         => _input.SetKeyStateAsync(new SetKeyStateRequest(sessionId, key, pressed)).GetAwaiter().GetResult();
+
+    /// <inheritdoc />
+    public void SetRestoreState(string sessionId, bool pressed)
+        => _input.SetRestoreStateAsync(sessionId, pressed).GetAwaiter().GetResult();
 
     /// <inheritdoc />
     public async ValueTask DisposeAsync()

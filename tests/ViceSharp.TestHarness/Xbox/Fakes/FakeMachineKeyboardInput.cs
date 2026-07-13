@@ -26,12 +26,20 @@ public sealed class FakeMachineKeyboardInput : IMachineKeyboardInput
     /// <summary>Number of <see cref="SetKeyState"/> calls received.</summary>
     public int SetCount { get; private set; }
 
+    /// <summary>The pressed state passed to the most recent <see cref="SetRestoreState"/> call.</summary>
+    public bool LastRestorePressed { get; private set; }
+
+    /// <summary>Number of <see cref="SetRestoreState"/> calls received.</summary>
+    public int RestoreCount { get; private set; }
+
     /// <inheritdoc />
     public void Reset()
     {
         LastKey = null;
         LastPressed = false;
         SetCount = 0;
+        LastRestorePressed = false;
+        RestoreCount = 0;
     }
 
     /// <inheritdoc />
@@ -40,6 +48,14 @@ public sealed class FakeMachineKeyboardInput : IMachineKeyboardInput
         LastKey = key;
         LastPressed = pressed;
         SetCount++;
+        return true;
+    }
+
+    /// <inheritdoc />
+    public bool SetRestoreState(bool pressed)
+    {
+        LastRestorePressed = pressed;
+        RestoreCount++;
         return true;
     }
 }

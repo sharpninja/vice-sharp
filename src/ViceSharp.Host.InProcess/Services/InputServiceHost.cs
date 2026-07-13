@@ -41,6 +41,31 @@ public sealed class InputServiceHost : IInputService
         }
     }
 
+    /// <summary>
+    /// Sets the session machine's RESTORE line state. RESTORE is a hardware NMI wired
+    /// directly to the CPU, not a key-matrix key: this routes to the machine keyboard's
+    /// dedicated <see cref="IMachineKeyboardInput.SetRestoreState(bool)"/> seam via the
+    /// same device lookup as <see cref="SetKeyStateAsync"/>, never through SetKeyState.
+    /// This is an in-process (Xbox head) surface and is intentionally NOT part of the
+    /// gRPC <c>IInputService</c> contract.
+    /// </summary>
+    public ValueTask<InputCommandResponse> SetRestoreStateAsync(
+        string sessionId,
+        bool pressed,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (!_registry.TryGet(sessionId, out var session))
+            return ValueTask.FromResult(new InputCommandResponse(HostProtocolMapper.MissingSessionStatus(sessionId), null));
+
+        lock (session.InputStateSyncRoot)
+        {
+            ApplyRestoreStateToRuntime(session, pressed);
+            return ValueTask.FromResult(new InputCommandResponse(RpcStatus.Ok(), HostProtocolMapper.ToInputStateDto(session)));
+        }
+    }
+
     public ValueTask<InputCommandResponse> SetJoystickStateAsync(
         SetJoystickStateRequest request,
         CancellationToken cancellationToken = default)
@@ -150,6 +175,12 @@ public sealed class InputServiceHost : IInputService
             return true;
 
         return keyboardInput.SetKeyState(key, isPressed);
+    }
+
+    private static bool ApplyRestoreStateToRuntime(EmulatorRuntimeSession session, bool pressed)
+    {
+        var keyboardInput = session.Machine.Devices.All.OfType<IMachineKeyboardInput>().FirstOrDefault();
+        return keyboardInput is not null && keyboardInput.SetRestoreState(pressed);
     }
 
     private static bool ApplyJoystickStateToRuntime(

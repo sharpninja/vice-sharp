@@ -63,13 +63,28 @@ public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix
         {
             // VICE-style: RUN/STOP is row 7, col 7 (0x3F)
             if (keyCode == 0x3F) _stopKeyPressed = pressed;
-            // RESTORE is row 3, col 1 (0x31) - triggers NMI
-            if (keyCode == 0x31) _restoreKeyPressed = pressed;
-            
+
+            // NOTE: RESTORE is deliberately NOT handled here. On real C64 hardware
+            // RESTORE is not part of the 8x8 matrix at all: it is wired straight to
+            // the CPU NMI line through a monostable. Keycode 0x31 is the ordinary "*"
+            // matrix key (row 6, col 1) and must not fire RESTORE. The dedicated
+            // RESTORE/NMI trigger is driven exclusively via SetRestore(bool).
             _matrix[row, col] = pressed;
         }
     }
-    
+
+    /// <summary>
+    /// Set the dedicated RESTORE line state. RESTORE is not a key-matrix key on a C64:
+    /// it is wired directly to the CPU NMI line, so this drives ONLY the RESTORE/NMI
+    /// trigger and never a matrix cell (VICE handles RESTORE the same way, outside the
+    /// matrix scan).
+    /// </summary>
+    /// <param name="pressed">True to assert RESTORE (press), false to release.</param>
+    public void SetRestore(bool pressed)
+    {
+        _restoreKeyPressed = pressed;
+    }
+
     /// <summary>
     /// Check if RESTORE key is pressed (triggers NMI in VICE)
     /// </summary>
