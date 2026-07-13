@@ -142,6 +142,13 @@
     <ProjectReference Include="..\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj" />
 
     <!--
+      FR-XROM-002 (S40): the first-run ROM acquirer (RomProvisioning/RomFetchRomAcquirer) uses
+      RomFetch's RomProvider.DownloadRom directly. RomFetch already arrives transitively through
+      Host.InProcess; this makes the direct dependency explicit.
+    -->
+    <ProjectReference Include="..\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj" />
+
+    <!--
       PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the head now consumes the two portable UI
       libraries. Both are net10.0 with no XAML/UWP/Grpc/Avalonia dependency, so the
       references are UNCONDITIONAL and never perturb the workload-free fallback restore

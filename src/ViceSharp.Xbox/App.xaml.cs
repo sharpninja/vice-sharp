@@ -38,6 +38,9 @@ public sealed partial class App : Application
     private WinRtGamepadSource? _gamepad;
     private VideoSurfaceHost? _videoSurface;
     private string _sessionId = string.Empty;
+    private string _c64Directory = string.Empty;
+    private Frame? _frame;
+    private bool _bootStarted;
 
     /// <summary>Creates the application, bootstraps data paths, and disables mouse mode.</summary>
     public App()
@@ -85,6 +88,9 @@ public sealed partial class App : Application
     /// <summary>The on-screen virtual-keyboard ViewModel (built once the session exists).</summary>
     public VirtualKeyboardViewModel? KeyboardVm { get; private set; }
 
+    /// <summary>The first-run ROM-provisioning ViewModel (built only when boot is blocked at launch).</summary>
+    public XboxRomProvisioningViewModel? ProvisioningVm { get; private set; }
+
     /// <summary>The active emulator session id.</summary>
     public string SessionId => _sessionId;
 
@@ -100,15 +106,21 @@ public sealed partial class App : Application
     {
         try
         {
-            BuildHostAndSession();
+            // First-run gate: only build the host + C64 session when the ROMs are already present.
+            // Otherwise defer (no "c64 not registered" throw) and show the provisioning page; the
+            // post-download OnProvisioningChanged rebuilds the host once the ROMs land.
+            var assessment = string.IsNullOrEmpty(_c64Directory)
+                ? null
+                : new RomProvisionEvaluator().Evaluate(_c64Directory, RomProfile.Standard);
+
+            if (assessment is not null && !assessment.IsBootBlocked)
+                BuildHostAndSession();
         }
         catch (Exception ex)
         {
-            // Defensive (crash-diagnosis hardening): OnLaunched has no ambient handler, so any
-            // throw between here and Window.Activate would propagate unhandled and fail-fast
-            // (0xC0000409) with NO window - undiagnosable. Degrade instead: bring the shell up so
-            // the failure is visible/debuggable. Mirrors the App-ctor ConfigureDataPaths guard.
-            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] BuildHostAndSession failed: {ex}");
+            // Defensive: OnLaunched has no ambient handler, so any throw between here and
+            // Window.Activate would fail-fast (0xC0000409) with NO window. Degrade to the shell.
+            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] launch host build failed: {ex}");
         }
 
         // The root: an always-present in-emulator base view (the video surface), a
@@ -120,6 +132,7 @@ public sealed partial class App : Application
         root.Children.Add(emulatorView);
 
         var frame = new Frame { Background = null };
+        _frame = frame;
         root.Children.Add(frame);
 
         var keyboardOverlay = new VirtualKeyboardOverlay { Visibility = Visibility.Collapsed };
@@ -145,16 +158,62 @@ public sealed partial class App : Application
         Window.Current.Content = root;
         Window.Current.Activate();
 
-        // Start the pure render pull and the per-frame gamepad poll.
         if (VideoPull is not null)
         {
+            // ROMs were complete at launch: normal boot to Home.
             _videoSurface.Attach(VideoPull);
             _videoSurface.Start();
+            _gamepad?.Start();
+            _bootStarted = true;
+            frame.Navigate(typeof(HomePage));
         }
+        else
+        {
+            // First run / boot blocked: show the provisioning gate. No session, video, or gamepad
+            // until the ROMs are acquired; OnProvisioningChanged then rebuilds the host + boots.
+            ProvisioningVm = BuildProvisioningVm();
+            ProvisioningVm.PropertyChanged += OnProvisioningChanged;
+            frame.Navigate(typeof(RomProvisioningPage));
+        }
+    }
 
-        _gamepad?.Start();
+    private XboxRomProvisioningViewModel BuildProvisioningVm() =>
+        new(
+            new ViceSharp.Xbox.RomProvisioning.RomFetchRomAcquirer(),
+            new ViceSharp.Xbox.RomProvisioning.UwpStoragePicker(),
+            new RomProvisionEvaluator(),
+            _c64Directory,
+            RomProfile.Standard);
 
-        frame.Navigate(typeof(HomePage));
+    private void OnProvisioningChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        // React only to the boot-gate signals; RefreshAsync raises these repeatedly (import + download).
+        if (e.PropertyName is not (nameof(XboxRomProvisioningViewModel.IsBootBlocked)
+                or nameof(XboxRomProvisioningViewModel.State)))
+            return;
+        if (_bootStarted || ProvisioningVm is null || ProvisioningVm.IsBootBlocked)
+            return;
+
+        _bootStarted = true; // single-shot: the assessment can flip Complete more than once.
+        ProvisioningVm.PropertyChanged -= OnProvisioningChanged;
+        try
+        {
+            // Fresh ConsoleHostComposition.BuildDefault(): the new DefaultEmulatorRuntimeFactory
+            // re-scans LocalFolder\C64 (VICESHARP_ROM_PATH persists) and now registers "c64".
+            BuildHostAndSession();
+            if (VideoPull is not null)
+            {
+                _videoSurface?.Attach(VideoPull);
+                _videoSurface?.Start();
+            }
+
+            _gamepad?.Start();
+            _frame?.Navigate(typeof(HomePage));
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] post-provision boot failed: {ex}");
+        }
     }
 
     private void ConfigureDataPaths()
@@ -165,10 +224,17 @@ public sealed partial class App : Application
             var packagedC64 = Path.Combine(
                 Package.Current.InstalledLocation.Path, "Assets", "vice-data", "C64");
             XboxDataPathBridge.Configure(folder, packagedC64);
+
+            // The writable C64 ROM dir the first-run download lands in and the post-download
+            // factory re-scan reads (LocalFolder\C64). VICESHARP_ROM_PATH is set by Configure
+            // above and persists for the process, so the rebuilt factory finds it.
+            _c64Directory = folder.C64Path;
         }
         catch
         {
             // Design-time / un-packaged: leave the resolver on its default probe order.
+            try { _c64Directory = new LocalDataFolder(ApplicationData.Current.LocalFolder.Path).C64Path; }
+            catch { _c64Directory = string.Empty; }
         }
     }
 
