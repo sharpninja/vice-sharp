@@ -26,7 +26,13 @@ public static class AudioBackendFactory
         return null;
     }
 
-    private static bool IsAudioEnabled()
+    /// <summary>
+    /// The shared VICESHARP_AUDIO opt-in gate. Exposed to the assembly so the
+    /// console selector (<see cref="XboxAudioBackendFactory"/>) reuses the identical
+    /// gate and the desktop and Xbox heads can never diverge on when audio engages.
+    /// Unset (or "0") means silent; "1"/"true"/"on"/"yes" enables live audio.
+    /// </summary>
+    internal static bool IsAudioEnabled()
     {
         var value = Environment.GetEnvironmentVariable("VICESHARP_AUDIO");
         if (string.IsNullOrWhiteSpace(value))
