@@ -24,6 +24,15 @@ using System.Threading.Tasks;
 /// confirm-gated (<see cref="ConfirmDownload"/> then <see cref="DownloadAsync"/>) so a network
 /// fetch can never fire from a stray command.
 /// </remarks>
+/// <remarks>
+/// UI-thread dispatch: the network + file work runs on a BACKGROUND thread (the awaits keep
+/// <c>ConfigureAwait(false)</c>, so the download and the post-download evaluation never touch the
+/// UI thread), but the resulting <see cref="PropertyChanged"/> notifications are DISPATCHED to the
+/// UI <see cref="System.Threading.SynchronizationContext"/> captured at construction. Raising
+/// <see cref="PropertyChanged"/> off the UI thread would make the XAML binding marshal it and throw
+/// <c>RPC_E_WRONG_THREAD</c> (0x8001010E); see <c>RaisePropertyChanged</c>. When no context was
+/// captured (headless tests), notifications are raised inline, so test behavior is unchanged.
+/// </remarks>
 public sealed class XboxRomProvisioningViewModel : INotifyPropertyChanged
 {
     /// <summary>
@@ -42,6 +51,11 @@ public sealed class XboxRomProvisioningViewModel : INotifyPropertyChanged
     private RomProvisionAssessment? _assessment;
     private string _statusMessage = string.Empty;
     private bool _isDownloadConfirmed;
+
+    // Captured at construction (the UI dispatcher's context in the UWP head; typically null in
+    // headless tests). Background download/import continuations dispatch PropertyChanged here so the
+    // XAML binding never marshals it off the UI thread. See RaisePropertyChanged.
+    private readonly SynchronizationContext? _sync;
 
     /// <summary>Creates the provisioning ViewModel.</summary>
     /// <param name="acquirer">The verified-download seam.</param>
@@ -62,6 +76,10 @@ public sealed class XboxRomProvisioningViewModel : INotifyPropertyChanged
         _evaluator = evaluator ?? throw new ArgumentNullException(nameof(evaluator));
         _c64Directory = c64Directory ?? throw new ArgumentNullException(nameof(c64Directory));
         _profile = profile;
+
+        // The head constructs the VM on the UI thread, so this captures the UI dispatcher context;
+        // background continuations post PropertyChanged back to it.
+        _sync = SynchronizationContext.Current;
     }
 
     /// <inheritdoc />
@@ -74,9 +92,9 @@ public sealed class XboxRomProvisioningViewModel : INotifyPropertyChanged
         private set
         {
             _assessment = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Assessment)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(State)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsBootBlocked)));
+            RaisePropertyChanged(nameof(Assessment));
+            RaisePropertyChanged(nameof(State));
+            RaisePropertyChanged(nameof(IsBootBlocked));
         }
     }
 
@@ -228,6 +246,30 @@ public sealed class XboxRomProvisioningViewModel : INotifyPropertyChanged
         }
 
         field = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        RaisePropertyChanged(propertyName);
+    }
+
+    /// <summary>
+    /// Raises <see cref="PropertyChanged"/>, dispatching to the UI context captured at construction
+    /// when called from another thread (the background download/import), so the XAML binding never
+    /// marshals the notification off the UI thread (<c>RPC_E_WRONG_THREAD</c> / 0x8001010E). Inline
+    /// when already on that context, or when none was captured (headless tests).
+    /// </summary>
+    private void RaisePropertyChanged(string? propertyName)
+    {
+        var handler = PropertyChanged;
+        if (handler is null)
+        {
+            return;
+        }
+
+        if (_sync is null || SynchronizationContext.Current == _sync)
+        {
+            handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        else
+        {
+            _sync.Post(_ => handler(this, new PropertyChangedEventArgs(propertyName)), null);
+        }
     }
 }
