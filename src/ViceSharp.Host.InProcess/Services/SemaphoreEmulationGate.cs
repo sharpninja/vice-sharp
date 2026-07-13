@@ -16,9 +16,6 @@ namespace ViceSharp.Host.Services;
 /// </summary>
 public sealed partial class SemaphoreEmulationGate : IEmulationGate
 {
-    private const double PacingHz = 500.0;
-    private const long WarpBurstMultiplier = 64;
-
     private const uint CreateWaitableTimerHighResolution = 0x00000002;
     private const uint TimerAllAccess = 0x1F0003;
     private const uint WaitTimeoutInterval = 50; // ms; re-check _running if the timer stalls
@@ -153,6 +150,9 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
             advance(session, cyclesToAdvance);
     }
 
+    // Pacing math is shared with XboxManagedFrameGate via PacingMath (PLAN-XBOXUWP S2).
+    // These thin delegates preserve the internal test surface (SemaphoreEmulationGatePacingTests)
+    // while both gates compute from one implementation.
     internal static long ComputeLimitedAdvanceCycles(
         long frequencyHz,
         double limiterRatePercent,
@@ -162,19 +162,8 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
         long now,
         long totalCycles,
         out bool resync)
-    {
-        var deficit = ComputeRealtimeDeficit(
-            frequencyHz,
-            limiterRatePercent,
-            swFreq,
-            anchorWall,
-            anchorCycle,
-            now,
-            totalCycles,
-            out resync);
-
-        return deficit + ComputePacedQuantumCycles(frequencyHz, limiterRatePercent);
-    }
+        => PacingMath.ComputeLimitedAdvanceCycles(
+            frequencyHz, limiterRatePercent, swFreq, anchorWall, anchorCycle, now, totalCycles, out resync);
 
     internal static long ComputeRealtimeDeficit(
         long frequencyHz,
@@ -185,38 +174,13 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
         long now,
         long totalCycles,
         out bool resync)
-    {
-        resync = false;
-        var speed = Math.Clamp(limiterRatePercent, 1.0, 100_000.0) / 100.0;
-        var emulatedClkPerSecond = Math.Max(1, (long)(frequencyHz * speed));
-        var elapsedSeconds = (now - anchorWall) / (double)swFreq;
-        var deficit = (long)(emulatedClkPerSecond * elapsedSeconds) - (totalCycles - anchorCycle);
-
-        var stepCap = Math.Max(1, emulatedClkPerSecond / 4);
-        var catastrophic = emulatedClkPerSecond * 4;
-
-        if (deficit > catastrophic)
-        {
-            resync = true;
-            return stepCap;
-        }
-
-        if (deficit > stepCap)
-            return stepCap;
-
-        return deficit < 0 ? 0 : deficit;
-    }
+        => PacingMath.ComputeRealtimeDeficit(
+            frequencyHz, limiterRatePercent, swFreq, anchorWall, anchorCycle, now, totalCycles, out resync);
 
     private static long WarpSliceCycles(EmulatorRuntimeSession session)
     {
         lock (session.SyncRoot)
-            return Math.Max(1, (long)(session.Machine.Clock.FrequencyHz / PacingHz)) * WarpBurstMultiplier;
-    }
-
-    private static long ComputePacedQuantumCycles(long frequencyHz, double limiterRatePercent)
-    {
-        var speed = Math.Clamp(limiterRatePercent, 1.0, 100_000.0) / 100.0;
-        return Math.Max(1, (long)(frequencyHz * speed / PacingHz));
+            return PacingMath.WarpSliceCycles(session.Machine.Clock.FrequencyHz);
     }
 
     private void TimerLoop()
@@ -230,7 +194,7 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
     [SupportedOSPlatform("windows")]
     private bool RunHighResolutionTimer()
     {
-        var periodMs = Math.Max(1, (int)Math.Round(1000.0 / PacingHz));
+        var periodMs = Math.Max(1, (int)Math.Round(1000.0 / PacingMath.PacingHz));
         var handle = TryCreateHighResolutionTimer(periodMs);
         if (handle == IntPtr.Zero)
             return false;
@@ -253,7 +217,7 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
 
     private void RunFallbackTimer()
     {
-        var periodTicks = Stopwatch.Frequency / (long)PacingHz;
+        var periodTicks = Stopwatch.Frequency / (long)PacingMath.PacingHz;
         var next = Stopwatch.GetTimestamp() + periodTicks;
         while (_running)
         {
