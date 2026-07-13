@@ -165,6 +165,29 @@ public sealed class XboxUwpHeadTests
         Assert.Contains("\"commandName\": \"MsixPackage\"", File.ReadAllText(path));
     }
 
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void HomePage_IsAnOverlay_OverTheEmulator_PreservingHandlers()
+    {
+        var xaml = File.ReadAllText(
+            Path.Combine(RepoRoot, "src", "ViceSharp.Xbox", "Views", "HomePage.xaml"));
+
+        // Overlay: a transparent page + a bounded translucent card, so the always-running C64 shows
+        // behind/around it (was a full-page ~80%-opaque scrim that hid the emulator).
+        Assert.Contains("Background=\"Transparent\"", xaml);
+        Assert.DoesNotContain("#CC000000", xaml);
+        Assert.Contains("<Border", xaml);
+        Assert.Contains("Background=\"#C0101418\"", xaml);
+
+        // Every menu handler + the Resume gate must survive the overlay conversion.
+        foreach (var handler in new[] { "OnStart", "OnResume", "OnSettings", "OnDevices", "OnControls", "OnAbout" })
+        {
+            Assert.Contains($"Click=\"{handler}\"", xaml);
+        }
+
+        Assert.Contains("IsEnabled=\"{Binding CanResume}\"", xaml);
+    }
+
     private static string ReadCsproj()
     {
         var csprojPath = Path.Combine(

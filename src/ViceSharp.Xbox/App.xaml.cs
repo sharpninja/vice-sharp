@@ -272,8 +272,8 @@ public sealed partial class App : Application
         _gamepad = new WinRtGamepadSource(host, InputContext, dispatcher, _sessionId);
 
         // The Home page's Start/Resume intents boot/resume the C64 AND dismiss the shell menu so
-        // the always-running emulator surface underneath becomes visible: HomePage paints an
-        // ~80%-opaque background over it, so the Frame must be collapsed to reveal the C64.
+        // the always-running emulator is unobstructed: HomePage renders a translucent menu card
+        // over the running emulator, so collapsing the Frame removes the card to reveal the full C64.
         Home.StartNewRequested += (_, _) => { host.ResetCold(_sessionId); HideMenu(); };
         Home.ResumeRequested += (_, _) => { host.Resume(_sessionId); HideMenu(); };
     }

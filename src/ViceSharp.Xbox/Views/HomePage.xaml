@@ -1,51 +1,71 @@
 <!--
-  PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the launch / Home page. Binds HomeViewModel
-  (Title / CanResume + Start/Resume/About intents). Inert on the net10.0 fallback.
+  PLAN-XBOXUWP: the launch / Home menu, now an OVERLAY over the always-running emulator. The Page
+  is fully transparent so the EmulatorView base (and the running C64) shows through; the menu lives
+  in a bounded, translucent card kept inside the TV-safe area, so the emulator is visible around and
+  faintly behind the menu. Binds HomeViewModel (Title / CanResume + Start/Resume/About intents).
+  Start/Resume collapse the whole Frame (App.HideMenu) for the unobstructed emulator; the Menu
+  button re-shows it (App.ShowMenu). Inert on the net10.0 fallback.
 -->
 <Page
     x:Class="ViceSharp.Xbox.Views.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     RequiresPointer="Never"
-    Background="#CC000000">
+    Background="Transparent">
+    <!-- TV-safe inset (96,54) so the card never lands under a TV's overscan. -->
     <Grid Style="{StaticResource TvSafeAreaRootStyle}">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
-            <TextBlock
-                Text="{Binding Title}"
-                FontSize="72"
-                Foreground="White"
-                HorizontalAlignment="Center" />
-            <Button
-                Content="Start"
-                Style="{StaticResource TenFootButtonStyle}"
-                HorizontalAlignment="Center"
-                Click="OnStart" />
-            <Button
-                Content="Resume"
-                Style="{StaticResource TenFootButtonStyle}"
-                HorizontalAlignment="Center"
-                IsEnabled="{Binding CanResume}"
-                Click="OnResume" />
-            <Button
-                Content="Settings"
-                Style="{StaticResource TenFootButtonStyle}"
-                HorizontalAlignment="Center"
-                Click="OnSettings" />
-            <Button
-                Content="Devices"
-                Style="{StaticResource TenFootButtonStyle}"
-                HorizontalAlignment="Center"
-                Click="OnDevices" />
-            <Button
-                Content="Controls"
-                Style="{StaticResource TenFootButtonStyle}"
-                HorizontalAlignment="Center"
-                Click="OnControls" />
-            <Button
-                Content="About"
-                Style="{StaticResource TenFootButtonStyle}"
-                HorizontalAlignment="Center"
-                Click="OnAbout" />
-        </StackPanel>
+        <!--
+          Bounded, translucent menu card: a left-aligned, vertically-centred rail so the running
+          emulator shows around it on the right and faintly through the card. Change
+          HorizontalAlignment to "Center" for a centred card.
+        -->
+        <Border
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Background="#C0101418"
+            BorderBrush="#40FFFFFF"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="32">
+            <StackPanel Spacing="12" MinWidth="360">
+                <TextBlock
+                    Text="{Binding Title}"
+                    FontSize="56"
+                    Foreground="White"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,8" />
+                <Button
+                    Content="Start"
+                    Style="{StaticResource TenFootButtonStyle}"
+                    HorizontalAlignment="Stretch"
+                    Click="OnStart" />
+                <Button
+                    Content="Resume"
+                    Style="{StaticResource TenFootButtonStyle}"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="{Binding CanResume}"
+                    Click="OnResume" />
+                <Button
+                    Content="Settings"
+                    Style="{StaticResource TenFootButtonStyle}"
+                    HorizontalAlignment="Stretch"
+                    Click="OnSettings" />
+                <Button
+                    Content="Devices"
+                    Style="{StaticResource TenFootButtonStyle}"
+                    HorizontalAlignment="Stretch"
+                    Click="OnDevices" />
+                <Button
+                    Content="Controls"
+                    Style="{StaticResource TenFootButtonStyle}"
+                    HorizontalAlignment="Stretch"
+                    Click="OnControls" />
+                <Button
+                    Content="About"
+                    Style="{StaticResource TenFootButtonStyle}"
+                    HorizontalAlignment="Stretch"
+                    Click="OnAbout" />
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>
