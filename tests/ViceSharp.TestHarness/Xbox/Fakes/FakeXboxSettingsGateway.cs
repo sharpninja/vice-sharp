@@ -29,6 +29,33 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
     /// <summary>The request passed to the most recent <see cref="ValidateSettingsResourcesAsync"/> call.</summary>
     public ValidateSettingsResourcesRequest? LastValidateRequest { get; private set; }
 
+    /// <summary>
+    /// PLAN-XBOXUWP S26. When set, <see cref="GetSettingsAsync"/> returns these
+    /// canned session settings instead of the S21 default, letting the Settings
+    /// ViewModel tests seed specific stored ids (e.g. palette "pepto").
+    /// </summary>
+    public SessionSettingsDto? CannedSettings { get; set; }
+
+    /// <summary>
+    /// PLAN-XBOXUWP S26. When set, <see cref="UpdateSettingsAsync"/> returns these
+    /// host-canonical settings as the adopted result, letting the tests prove the
+    /// ViewModel re-binds from what the host returned (which may differ from what
+    /// was sent). When null the fake echoes the request back (the S21 behavior).
+    /// </summary>
+    public SessionSettingsDto? UpdateResponseOverride { get; set; }
+
+    /// <summary>
+    /// PLAN-XBOXUWP S26. When set, <see cref="ValidateSettingsResourcesAsync"/>
+    /// returns these canned per-resource validation results.
+    /// </summary>
+    public IReadOnlyList<SettingsResourceValidationDto>? CannedValidationResults { get; set; }
+
+    /// <summary>
+    /// PLAN-XBOXUWP S26. When set, <see cref="ListSettingsProfilesAsync"/> returns
+    /// these canned profiles instead of the single-profile S21 default.
+    /// </summary>
+    public IReadOnlyList<SettingsProfileDto>? CannedProfiles { get; set; }
+
     /// <summary>The slot passed to the most recent attach call.</summary>
     public MediaSlot? AttachedSlot { get; private set; }
 
@@ -66,7 +93,7 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
         GetSettingsCount++;
         return ValueTask.FromResult(new GetSettingsResponse(
             RpcStatus.Ok(),
-            new SessionSettingsDto(
+            CannedSettings ?? new SessionSettingsDto(
                 "c64",
                 new LimiterSettingsDto(100, true),
                 new DisplaySettingsDto("host", "vice", true, true, "2x", "visible-area", "vice-pixel-aspect"),
@@ -84,7 +111,7 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
         LastUpdateRequest = request;
         return ValueTask.FromResult(new UpdateSettingsResponse(
             RpcStatus.Ok(),
-            new SessionSettingsDto(
+            UpdateResponseOverride ?? new SessionSettingsDto(
                 string.IsNullOrWhiteSpace(request.ProfileId) ? "c64" : request.ProfileId,
                 request.Limiter ?? new LimiterSettingsDto(),
                 request.Display ?? new DisplaySettingsDto(),
@@ -103,7 +130,7 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
         LastValidateRequest = request;
         return ValueTask.FromResult(new ValidateSettingsResourcesResponse(
             RpcStatus.Ok(),
-            Array.Empty<SettingsResourceValidationDto>()));
+            CannedValidationResults ?? Array.Empty<SettingsResourceValidationDto>()));
     }
 
     /// <inheritdoc />
@@ -200,7 +227,7 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
         cancellationToken.ThrowIfCancellationRequested();
         return ValueTask.FromResult(new ListSettingsProfilesResponse(
             RpcStatus.Ok(),
-            new[]
+            CannedProfiles ?? new[]
             {
                 new SettingsProfileDto("c64", "C64 PAL", "x64sc", true, true, "test profile"),
             }));
