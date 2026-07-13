@@ -45,6 +45,19 @@
     <WindowsPackageType>MSIX</WindowsPackageType>
   </PropertyGroup>
 
+  <!--
+    PLAN-XBOXUWP S31 (IMPL-XBOXUWP-031): the Package.appxmanifest is fed to the
+    MSIX tooling ONLY on the real UWP build. Guarding the AppxManifest include
+    behind ViceSharpXboxUwp=='true' keeps it out of the workload-free net10.0
+    fallback build, which has no MSIX tooling and must stay green without the
+    windows-app / UWP workload.
+  -->
+  <ItemGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
     <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" />
