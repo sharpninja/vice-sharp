@@ -58,6 +58,35 @@
     </AppxManifest>
   </ItemGroup>
 
+  <!--
+    PLAN-XBOXUWP S32 (IMPL-XBOXUWP-032), areas XBOXPKG / XBOXGPL (R8): GPL
+    compliance packaging, head-only so the workload-free net10.0 fallback never
+    packs MSIX content (guarded by ViceSharpXboxUwp==true, mirroring the manifest).
+
+    - The GPL VICE *.vkm keymap data is VENDORED under Assets/vice-data/C64/ and
+      packaged into the MSIX at that same relative path, so first-run
+      XboxDataPathBridge seeding from InstalledLocation\Assets\vice-data\C64\*.vkm
+      has files to copy (FR-XROM-003). These are verbatim GPL-2.0-or-later VICE
+      data (attributed in THIRD_PARTY_NOTICES.md).
+    - COPYING (GPL-2.0 text) + THIRD_PARTY_NOTICES.md are bundled under Licenses/
+      to satisfy GPL section-1 (FR-XBOXGPL-006).
+
+    No Commodore ROM binary globs appear here: ROM images are Commodore-copyrighted
+    and are user-imported / fetched over HTTPS at runtime, never packaged.
+  -->
+  <ItemGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
+    <None Remove="Assets/vice-data/C64/*.vkm" />
+    <Content Include="Assets/vice-data/C64/*.vkm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\COPYING" Link="Licenses\COPYING">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\THIRD_PARTY_NOTICES.md" Link="Licenses\THIRD_PARTY_NOTICES.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
     <ProjectReference Include="..\ViceSharp.Core\ViceSharp.Core.csproj" />

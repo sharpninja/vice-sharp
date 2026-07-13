@@ -23,6 +23,12 @@
 # whitespace check so `git diff --check` does not flag generated .patch files.
 *.patch   text eol=lf -whitespace
 
+# VICE keymap files are vendored verbatim as GPL-2.0-or-later data (PLAN-XBOXUWP
+# S32; Xbox head Assets/vice-data/C64). Upstream ships them with intentional
+# trailing whitespace; they must be redistributed unmodified, so skip the
+# whitespace check and pin LF so `git diff --check` does not flag the vendored data.
+*.vkm     text eol=lf -whitespace
+
 # Binary files - never modify
 *.png     binary
 *.jpg     binary

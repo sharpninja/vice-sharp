@@ -10,6 +10,14 @@ ViceSharp is a derivative work of VICE and incorporates knowledge, algorithms, a
 
 ViceSharp is a clean-room C# port informed by VICE's architecture and behavior, not a direct code translation. VICE's GPL license applies to this derivative work.
 
+### Bundled VICE keymap data (`*.vkm`)
+
+- **License:** GPL-2.0-or-later
+- **Origin:** VICE `data/C64/*.vkm` keyboard mapping files
+- **Redistributed in:** the Xbox (UWP) head packages these under `Assets/vice-data/C64/*.vkm`
+
+The C64 keyboard keymap files (`*.vkm`) shipped with the ViceSharp Xbox head are verbatim GPL-2.0-or-later VICE data. They are redistributed here unmodified, under the same GPL-2.0-or-later license as the VICE project, so the emulator can seed its writable keymap folder on first run. No Commodore ROM images (`kernal-*.bin`, `basic-*.bin`, `chargen-*.bin`) are bundled; ROMs remain user-provided or fetched at runtime.
+
 ## resid / resid-fp
 
 - **Project:** SID chip emulation library by Dag Lem
