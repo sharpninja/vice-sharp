@@ -29,6 +29,13 @@
                 <ComboBox Header="Audio" ItemsSource="{Binding AudioModes}" SelectedItem="{Binding SelectedAudioMode, Mode=TwoWay}" />
                 <Slider Header="Master volume" Minimum="0" Maximum="100" Value="{Binding MasterVolumePercent, Mode=TwoWay}" />
                 <ToggleSwitch Header="Swap joystick ports" IsOn="{Binding SwapJoystickPorts, Mode=TwoWay}" />
+                <!--
+                  FEAT-XPERFHUD-001 toggle (operator 2026-07-14): show/hide the letterbox
+                  performance counters. Applies LIVE and persists immediately (head-local
+                  LocalSettings), independent of Apply/Revert: it is a display preference of
+                  this head, not a host session setting.
+                -->
+                <ToggleSwitch x:Name="PerfCountersToggle" Header="Performance counters" Toggled="OnPerfCountersToggled" />
                 <TextBlock Text="{Binding StatusText}" Foreground="#FFAADDAA" />
             </StackPanel>
         </ScrollViewer>

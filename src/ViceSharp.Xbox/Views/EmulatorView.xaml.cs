@@ -24,5 +24,15 @@ public sealed partial class EmulatorView : UserControl
 
     /// <summary>The video surface hosting the ~50 Hz Direct3D 11 frame pull.</summary>
     public VideoSurfaceHost SurfaceHost => VideoSurface;
+
+    /// <summary>
+    /// Shows or hides the letterbox performance HUD (FEAT-XPERFHUD-001 toggle). The stats
+    /// keep aggregating either way; only the display collapses.
+    /// </summary>
+    /// <param name="visible"><c>true</c> to show the HUD text.</param>
+    public void SetPerfStatsVisible(bool visible)
+        => PerfStats.Visibility = visible
+            ? Windows.UI.Xaml.Visibility.Visible
+            : Windows.UI.Xaml.Visibility.Collapsed;
 }
 #endif

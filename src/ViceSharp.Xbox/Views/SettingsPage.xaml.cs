@@ -23,9 +23,18 @@ public sealed partial class SettingsPage : Page
     protected override async void OnNavigatedTo(NavigationEventArgs e)
     {
         base.OnNavigatedTo(e);
+
+        // FEAT-XPERFHUD-001 toggle: reflect the persisted preference without firing Toggled
+        // side effects (setting IsOn raises Toggled; SetPerfHudVisible is idempotent).
+        PerfCountersToggle.IsOn = App.Instance.IsPerfHudVisible;
+
         if (ViewModel is not null)
             await ViewModel.RefreshAsync();
     }
+
+    // Applies + persists LIVE (head-local LocalSettings); independent of Apply/Revert.
+    private void OnPerfCountersToggled(object sender, RoutedEventArgs e)
+        => App.Instance.SetPerfHudVisible(PerfCountersToggle.IsOn);
 
     private async void OnApply(object sender, RoutedEventArgs e)
     {

@@ -41,6 +41,7 @@ public sealed partial class App : Application
     private InProcessSessionFacade? _facade;
     private WinRtGamepadSource? _gamepad;
     private VideoSurfaceHost? _videoSurface;
+    private EmulatorView? _emulatorView;
     private VirtualKeyboardOverlay? _keyboardOverlay;
     private string _sessionId = string.Empty;
     private string _c64Directory = string.Empty;
@@ -262,8 +263,13 @@ public sealed partial class App : Application
             handledEventsToo: true);
 
         var emulatorView = new EmulatorView();
+        _emulatorView = emulatorView;
         _videoSurface = emulatorView.SurfaceHost;
         root.Children.Add(emulatorView);
+
+        // FEAT-XPERFHUD-001 toggle: apply the persisted performance-counters preference
+        // (head-local UWP LocalSettings; default ON) to the freshly created HUD.
+        emulatorView.SetPerfStatsVisible(IsPerfHudVisible);
 
         var frame = new Frame { Background = null };
         _frame = frame;
@@ -695,6 +701,49 @@ public sealed partial class App : Application
     /// Called by the HomePage Close Menu button and its click-outside-the-card handler.
     /// </summary>
     internal void DismissMenu() => HideMenu();
+
+    /// <summary>
+    /// FEAT-XPERFHUD-001 toggle (operator 2026-07-14: "Need a toggle in settings for
+    /// performance counters"): the persisted show/hide preference for the letterbox HUD.
+    /// Head-local (UWP LocalSettings key "ShowPerfHud", persisted in real time), because HUD
+    /// visibility is a display preference of THIS head, not a host session setting. Defaults
+    /// to ON, and degrades to ON when LocalSettings is unavailable.
+    /// </summary>
+    internal bool IsPerfHudVisible
+    {
+        get
+        {
+            try
+            {
+                return ApplicationData.Current.LocalSettings.Values["ShowPerfHud"] is not bool visible
+                    || visible;
+            }
+            catch
+            {
+                return true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Persists the performance-counters preference and applies it to the live HUD
+    /// immediately (no restart). Called by the Settings page toggle.
+    /// </summary>
+    /// <param name="visible"><c>true</c> to show the letterbox HUD.</param>
+    internal void SetPerfHudVisible(bool visible)
+    {
+        try
+        {
+            ApplicationData.Current.LocalSettings.Values["ShowPerfHud"] = visible;
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "perf-HUD preference persist failed");
+        }
+
+        _emulatorView?.SetPerfStatsVisible(visible);
+        CreateLogger("App").LogInformation("perf HUD visibility set: {Visible}", visible);
+    }
 
     /// <summary>Hides the shell-menu Frame to expose the always-running emulator (Start/Resume, CloseMenu).</summary>
     private void HideMenu()

@@ -133,6 +133,21 @@ public sealed class XboxPerfStatsTests
         var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
         Assert.Contains("attachstats", app);
         Assert.Contains("setmachine", app);
+
+        // Operator 2026-07-14: "Need a toggle in settings for performance counters."
+        // The HUD is show/hideable from Settings, persisted per-head in real time via UWP
+        // LocalSettings (a head-local display pref, not a host session setting), default ON.
+        Assert.Contains("setperfhudvisible", app);
+        Assert.Contains("showperfhud", app);
+
+        Assert.Contains("setperfstatsvisible", viewCode);
+
+        var settingsXaml = ReadLower("src", "ViceSharp.Xbox", "Views", "SettingsPage.xaml");
+        Assert.Contains("performance counters", settingsXaml);
+        Assert.Contains("onperfcounterstoggled", settingsXaml);
+
+        var settingsCode = ReadLower("src", "ViceSharp.Xbox", "Views", "SettingsPage.xaml.cs");
+        Assert.Contains("setperfhudvisible", settingsCode);
     }
 
     private static string ReadLower(params string[] parts)
