@@ -950,6 +950,125 @@ sealed partial class Build : NukeBuild
     [Parameter("Store package (.msixupload/.appxupload/.msix/.appx) for ValidateStorePackage. When omitted, the newest upload package under src/ViceSharp.Xbox is used.")]
     readonly string? StorePackagePath;
 
+    [Parameter("UWP configuration for DeployXboxLocal: Release-UWP (default) or Debug-UWP.")]
+    readonly string XboxDeployConfiguration = "Release-UWP";
+
+    [Parameter("Launch the app after DeployXboxLocal refreshes the layout. Default: true.")]
+    readonly bool XboxLaunch = true;
+
+    /// <summary>
+    /// FEAT-XLOCALDEPLOY-001: builds the Xbox UWP head and refreshes the locally
+    /// REGISTERED loose-file AppX layout in place, then relaunches the app - the
+    /// session-proven dev loop as one command. Steps: stop a running instance (the
+    /// copy would hit locked files), Restore+Build the head with the vswhere-located
+    /// VS MSBuild (Restore heals the net10.0-fallback assets flip), robocopy the fresh
+    /// output over Get-AppxPackage's InstallLocation (manifest excluded: the layout
+    /// keeps its registered identity), and activate shell:AppsFolder. Prerequisite: a
+    /// one-time VS deploy (F5) so the package IS registered; diagnostics land in
+    /// LocalState\vicesharp.log.
+    /// </summary>
+    Target DeployXboxLocal => _ => _
+        .Executes(() =>
+        {
+            if (!string.Equals(XboxDeployConfiguration, "Release-UWP", StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(XboxDeployConfiguration, "Debug-UWP", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    $"--xbox-deploy-configuration '{XboxDeployConfiguration}' is not a UWP configuration (Release-UWP or Debug-UWP).");
+            }
+
+            // Windows PowerShell (5.1) hosts the Appx cmdlets natively; pwsh needs the
+            // compatibility shim, so the loop shells the classic host deliberately.
+            static string WinPs(string command)
+            {
+                var process = ProcessTasks.StartProcess(
+                    "powershell.exe",
+                    $"-NoProfile -NonInteractive -Command \"{command}\"",
+                    logOutput: false);
+                process.WaitForExit();
+                return string.Join('\n', process.Output.Select(o => o.Text)).Trim();
+            }
+
+            const string packageName = "sharpninja.ViceSharp.Xbox";
+            const string exeName = "ViceSharp.Xbox";
+
+            // 1. Stop a running instance: robocopy onto a running app hits locked files.
+            WinPs($"Stop-Process -Name '{exeName}' -Force -ErrorAction SilentlyContinue");
+
+            // 2. Build the head on the proven toolchain.
+            var msbuild = ResolveVsMsBuild();
+            var head = RootDirectory / "src" / "ViceSharp.Xbox" / "ViceSharp.Xbox.csproj";
+            var build = ProcessTasks.StartProcess(
+                msbuild,
+                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 /t:Restore,Build /v:m /nologo",
+                RootDirectory);
+            build.WaitForExit();
+            if (build.ExitCode != 0)
+                throw new InvalidOperationException($"MSBuild failed with exit code {build.ExitCode}.");
+
+            // 3. The registered layout is the deploy destination.
+            var installLocation = WinPs($"(Get-AppxPackage -Name '{packageName}').InstallLocation");
+            if (string.IsNullOrWhiteSpace(installLocation) || !Directory.Exists(installLocation))
+            {
+                throw new InvalidOperationException(
+                    $"Package '{packageName}' is not registered (Get-AppxPackage returned nothing). " +
+                    "Deploy once from Visual Studio (F5 with a UWP configuration) to register the loose-file layout, then rerun.");
+            }
+
+            var output = RootDirectory / "src" / "ViceSharp.Xbox" / "bin" / "x64" / XboxDeployConfiguration
+                / "net10.0-windows10.0.26100.0" / "win-x64";
+            if (!output.DirectoryExists())
+                throw new InvalidOperationException($"Build output not found at '{output}'.");
+
+            // 4. Refresh the layout in place (exit codes 0-7 are robocopy success).
+            var robocopy = ProcessTasks.StartProcess(
+                "robocopy",
+                $"\"{output}\" \"{installLocation}\" /S /XO /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP",
+                RootDirectory);
+            robocopy.WaitForExit();
+            if (robocopy.ExitCode > 7)
+                throw new InvalidOperationException($"robocopy failed with exit code {robocopy.ExitCode}.");
+
+            Serilog.Log.Information(
+                "Deployed {Configuration} build into the registered layout: {Layout}",
+                XboxDeployConfiguration, installLocation);
+
+            // 5. Relaunch (opt-out via --xbox-launch false). Diagnostics:
+            //    %LOCALAPPDATA%\Packages\<PFN>\LocalState\vicesharp.log
+            if (XboxLaunch)
+            {
+                var familyName = WinPs($"(Get-AppxPackage -Name '{packageName}').PackageFamilyName");
+                if (string.IsNullOrWhiteSpace(familyName))
+                    throw new InvalidOperationException("Could not resolve the PackageFamilyName for launch.");
+
+                WinPs($"Start-Process 'shell:AppsFolder\\{familyName}!App'");
+                Serilog.Log.Information(
+                    "Launched {Family}. Log: %LOCALAPPDATA%\\Packages\\{Family}\\LocalState\\vicesharp.log",
+                    familyName, familyName);
+            }
+        });
+
+    /// <summary>Locates the Visual Studio MSBuild (the proven UWP toolchain) via vswhere.</summary>
+    static AbsolutePath ResolveVsMsBuild()
+    {
+        var vswhere = (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+            / "Microsoft Visual Studio" / "Installer" / "vswhere.exe";
+        if (!vswhere.FileExists())
+            throw new InvalidOperationException($"vswhere.exe not found at '{vswhere}' (install Visual Studio).");
+
+        var probe = ProcessTasks.StartProcess(
+            vswhere,
+            "-latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe",
+            logOutput: false);
+        probe.WaitForExit();
+
+        var msbuild = probe.Output.Select(o => o.Text).FirstOrDefault(l => !string.IsNullOrWhiteSpace(l));
+        if (string.IsNullOrWhiteSpace(msbuild) || !File.Exists(msbuild))
+            throw new InvalidOperationException("vswhere found no MSBuild with the required components.");
+
+        return (AbsolutePath)msbuild;
+    }
+
     /// <summary>
     /// FEAT-XSTOREPIPE-001: local Microsoft Store certification pre-flight. Runs the
     /// Windows App Certification Kit (appcert.exe) against the Xbox head's Store
