@@ -26,6 +26,19 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
     {
     }
 
+    /// <summary>
+    /// FIX-XNOAUDIO-001: composes the default factory around an EXTERNALLY created live
+    /// audio backend (the UWP head's XAudio2 tap; the desktop path creates its own via
+    /// <see cref="CreateDefaultAudioTap"/>). An already-tapped backend passes through;
+    /// a raw device backend is wrapped so capture keeps working; <c>null</c> stays silent.
+    /// </summary>
+    /// <param name="audioBackend">The live audio backend, or <c>null</c> for silence.</param>
+    public DefaultEmulatorRuntimeFactory(IAudioBackend? audioBackend)
+        : this(audioBackend as CaptureAudioTap
+            ?? (audioBackend is null ? null : new CaptureAudioTap(audioBackend)))
+    {
+    }
+
     private DefaultEmulatorRuntimeFactory(CaptureAudioTap? audioTap)
         : this(CreateDefaultArchitectureBuilder(audioTap), CreateDefaultDescriptors(), CreateDefaultArchitectureId())
     {

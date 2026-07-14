@@ -442,11 +442,20 @@ public sealed partial class App : Application
         var log = CreateLogger("App");
         log.LogInformation("BuildHostAndSession: composing in-process host");
 
+        // FIX-XNOAUDIO-001 (operator: "No audio!"): live SID audio is ON by default for
+        // this interactive head, exactly like the desktop Program.cs; an explicit
+        // VICESHARP_AUDIO=0 still disables it. Without this the shared opt-in gate stayed
+        // unset in the packaged app and the backend was never created.
+        if (Environment.GetEnvironmentVariable("VICESHARP_AUDIO") is null)
+            Environment.SetEnvironmentVariable("VICESHARP_AUDIO", "1");
+
         // Produce the console XAudio2 backend (null when audio is disabled/headless). It is
         // decoupled from the SID ring and engages only when VICESHARP_AUDIO is enabled.
         AudioBackend = XboxAudioWiring.CreateBackend();
 
-        var host = ConsoleHostComposition.BuildDefault();
+        // FIX-XNOAUDIO-001 second gap: the backend must be THREADED into the host's
+        // architecture builder or the SID never reaches the device.
+        var host = ConsoleHostComposition.BuildDefault(AudioBackend);
         _host = host;
 
         // FEAT-XSETPERSIST-001: reuse the settings persisted by earlier applies. The persisted
@@ -532,8 +541,8 @@ public sealed partial class App : Application
 
         _gamepad = new WinRtGamepadSource(host, InputContext, dispatcher, _sessionId);
         log.LogInformation(
-            "BuildHostAndSession: built VideoPull={VideoPullCreated} gamepad={GamepadCreated} keyboardVm={KeyboardVmCreated}",
-            VideoPull is not null, _gamepad is not null, KeyboardVm is not null);
+            "BuildHostAndSession: built VideoPull={VideoPullCreated} gamepad={GamepadCreated} keyboardVm={KeyboardVmCreated} audio={AudioBackendCreated}",
+            VideoPull is not null, _gamepad is not null, KeyboardVm is not null, AudioBackend is not null);
 
         // The Home page's Start/Resume intents boot/resume the C64 AND dismiss the shell menu so
         // the always-running emulator is unobstructed: HomePage renders a translucent menu card

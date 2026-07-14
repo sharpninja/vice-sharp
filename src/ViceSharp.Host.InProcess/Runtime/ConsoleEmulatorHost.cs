@@ -175,6 +175,16 @@ public static class ConsoleHostComposition
     /// the real head uses.
     /// </summary>
     public static ConsoleHost BuildDefault() => new(new DefaultEmulatorRuntimeFactory());
+
+    /// <summary>
+    /// <see cref="BuildDefault()"/> with a live audio backend threaded into the default
+    /// architecture builder (FIX-XNOAUDIO-001: the UWP head created its XAudio2 backend
+    /// but had no composition path that carried it, so the SID never reached a device).
+    /// A <c>null</c> backend composes the same silent host as <see cref="BuildDefault()"/>.
+    /// </summary>
+    /// <param name="audioBackend">The live audio backend, or <c>null</c> for silence.</param>
+    public static ConsoleHost BuildDefault(IAudioBackend? audioBackend)
+        => new(new DefaultEmulatorRuntimeFactory(audioBackend));
 }
 
 /// <summary>
