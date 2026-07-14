@@ -96,6 +96,14 @@ public sealed class InProcessSessionFacade : IEmulatorSessionFacade, ILocalVideo
     /// <returns>The architecture's <see cref="VideoStandard"/>, or <c>null</c>.</returns>
     public VideoStandard? GetVideoStandard(string sessionId) => _host.GetVideoStandard(sessionId);
 
+    /// <summary>
+    /// The live machine profile's nominal clock in Hz for a session, or <c>null</c> when
+    /// unknown (FEAT-XPERFHUD-001). Read per call for the same model-change reason.
+    /// </summary>
+    /// <param name="sessionId">The session whose nominal clock is requested.</param>
+    /// <returns>The profile's nominal clock in Hz, or <c>null</c>.</returns>
+    public double? GetMachineClockHz(string sessionId) => _host.GetMachineClockHz(sessionId);
+
     // ---- ILocalVideoFramePull (pure sink) -----------------------------------
 
     /// <inheritdoc />

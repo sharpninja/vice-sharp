@@ -16,5 +16,21 @@
             x:Name="VideoSurface"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch" />
+
+        <!--
+          FEAT-XPERFHUD-001: live performance stats in the LEFT letterbox bar (the video is
+          centered with true-aspect letterboxing, so the left margin is black). Pure display:
+          the surface raises the pre-formatted text ~2x/second; never hit-testable.
+        -->
+        <TextBlock
+            x:Name="PerfStats"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Margin="16,0,0,0"
+            FontFamily="Consolas"
+            FontSize="16"
+            Foreground="#C084E184"
+            IsHitTestVisible="False"
+            TextWrapping="NoWrap" />
     </Grid>
 </UserControl>

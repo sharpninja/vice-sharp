@@ -18,6 +18,7 @@
 namespace ViceSharp.Xbox.Controls;
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
@@ -103,6 +104,10 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     // the session's standard via SetPixelAspect.
     private float _pixelAspect = 1f;
 
+    // FEAT-XPERFHUD-001: the letterbox performance HUD's rate aggregator (portable math);
+    // null until the head attaches it. Samples are recorded on the render-timer thread only.
+    private VideoPerfStatsViewModel? _stats;
+
     private IntPtr _device;       // ID3D11Device*
     private IntPtr _context;      // ID3D11DeviceContext* (immediate)
     private IntPtr _factory;      // IDXGIFactory2*
@@ -155,6 +160,20 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     public void SetPixelAspect(float pixelAspect)
         => _pixelAspect = pixelAspect > 0f ? pixelAspect : 1f;
 
+    /// <summary>
+    /// Raised (~2 Hz, on the render-timer/dispatcher thread) with the freshly formatted
+    /// letterbox performance-HUD text (FEAT-XPERFHUD-001).
+    /// </summary>
+    public event Action<string>? StatsTextUpdated;
+
+    /// <summary>
+    /// Attaches the performance-HUD rate aggregator this surface feeds per tick
+    /// (FEAT-XPERFHUD-001): one sample per present, one per newly committed frame.
+    /// </summary>
+    /// <param name="stats">The portable HUD rate math.</param>
+    public void AttachStats(VideoPerfStatsViewModel stats)
+        => _stats = stats ?? throw new ArgumentNullException(nameof(stats));
+
     /// <summary>Starts the render loop.</summary>
     public void Start() => _timer.Start();
 
@@ -192,6 +211,14 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         _renderTicks++;
         var trace = _renderTicks <= 15;
 
+        // FEAT-XPERFHUD-001: poll the HUD aggregator every tick (including bail paths, so the
+        // HUD keeps refreshing when paused/idle); it throttles itself to ~2 Hz internally.
+        if (_stats is not null
+            && _stats.TryComputeText(Stopwatch.GetTimestamp(), Stopwatch.Frequency, out var hudText))
+        {
+            StatsTextUpdated?.Invoke(hudText);
+        }
+
         var pull = _pull;
         if (pull is null)
         {
@@ -210,6 +237,10 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             if (trace) Diag("bail: pull.Tick()=false (no committed C64 frame yet)");
             return;
         }
+
+        // FEAT-XPERFHUD-001: one emulated-frame sample per pull (the aggregator dedupes
+        // repeated cycle stamps, so unchanged committed frames never count).
+        _stats?.RecordFrame(pull.Cycle, Stopwatch.GetTimestamp());
 
         // Physical pixel size of the panel (logical size * composition scale).
         var targetWidth = (int)Math.Round(_panel.ActualWidth * _panel.CompositionScaleX);
@@ -234,7 +265,12 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             return;
         }
 
-        RenderFrame(pull.Width, pull.Height, frame);
+        if (!RenderFrame(pull.Width, pull.Height, frame))
+            return;
+
+        // FEAT-XPERFHUD-001: one present sample per ACTUALLY presented frame (RenderFrame
+        // reports its internal GetBuffer/Map bails, which must not count as presents).
+        _stats?.RecordPresent(Stopwatch.GetTimestamp());
 
         if (!_presentedOnce)
         {
@@ -253,7 +289,12 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         App.CreateLogger("Video").LogInformation("tick {Tick}: {Message}", _renderTicks, message);
     }
 
-    private void RenderFrame(int sourceWidth, int sourceHeight, ReadOnlySpan<byte> source)
+    /// <summary>
+    /// Blits one frame into the staging texture, copies it to the back buffer, and presents.
+    /// Returns <c>false</c> on the internal GetBuffer/Map bails so the caller (and the HUD's
+    /// present counter, FEAT-XPERFHUD-001) knows nothing reached the screen this tick.
+    /// </summary>
+    private bool RenderFrame(int sourceWidth, int sourceHeight, ReadOnlySpan<byte> source)
     {
         // Acquire the current back buffer (flip model rotates buffers; always GetBuffer(0)).
         var getBuffer =
@@ -262,7 +303,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         var texIid = IidD3D11Texture2D;
         IntPtr backBuffer;
         if (getBuffer(_swapChain, 0, &texIid, &backBuffer) < 0 || backBuffer == IntPtr.Zero)
-            return;
+            return false;
 
         try
         {
@@ -271,7 +312,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
                 Slot(_context, SlotContextMap);
             D3D11MappedSubresource mapped;
             if (map(_context, _staging, 0, D3D11MapWrite, 0, &mapped) < 0 || mapped.PData == IntPtr.Zero)
-                return;
+                return false;
 
             PaintNearestNeighbor(sourceWidth, sourceHeight, source, (byte*)mapped.PData, (int)mapped.RowPitch);
 
@@ -289,6 +330,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
                 (delegate* unmanaged[Stdcall]<IntPtr, uint, uint, int>)
                 Slot(_swapChain, SlotPresent);
             present(_swapChain, 1, 0);
+            return true;
         }
         finally
         {

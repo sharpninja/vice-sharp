@@ -12,8 +12,15 @@ using ViceSharp.Xbox.Controls;
 /// </summary>
 public sealed partial class EmulatorView : UserControl
 {
-    /// <summary>Creates the view and its video surface.</summary>
-    public EmulatorView() => InitializeComponent();
+    /// <summary>Creates the view, its video surface, and the letterbox performance HUD.</summary>
+    public EmulatorView()
+    {
+        InitializeComponent();
+
+        // FEAT-XPERFHUD-001: the surface raises pre-formatted HUD text (~2 Hz) on the
+        // dispatcher thread that owns this view; display it in the left letterbox bar.
+        VideoSurface.StatsTextUpdated += text => PerfStats.Text = text;
+    }
 
     /// <summary>The video surface hosting the ~50 Hz Direct3D 11 frame pull.</summary>
     public VideoSurfaceHost SurfaceHost => VideoSurface;

@@ -279,6 +279,19 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
             ? session.Architecture.VideoStandard
             : null;
 
+    /// <summary>
+    /// The live machine profile's nominal clock in Hz for a session, or <c>null</c> when the
+    /// session is unknown or its architecture carries no profile (FEAT-XPERFHUD-001). Drives
+    /// the head's performance-HUD speed-percent line (measured cycle rate vs nominal).
+    /// </summary>
+    /// <param name="sessionId">The session whose nominal clock is requested.</param>
+    /// <returns>The profile's nominal clock in Hz, or <c>null</c>.</returns>
+    public double? GetMachineClockHz(string sessionId)
+        => _registry.TryGet(sessionId, out var session)
+            && session.Architecture is IProfiledArchitectureDescriptor profiled
+                ? profiled.MachineProfile.NominalClockHz
+                : null;
+
     /// <inheritdoc />
     public ConsoleSessionResult StartC64Session(ConsoleSessionOptions? options = null)
     {

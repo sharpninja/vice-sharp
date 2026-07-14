@@ -158,6 +158,13 @@ public sealed partial class App : Application
     /// <summary>The explicit couch-UI navigation back-stack + overlay flags.</summary>
     public NavigationViewModel Navigation { get; } = new();
 
+    /// <summary>
+    /// FEAT-XPERFHUD-001: the letterbox performance HUD's portable rate math. The video
+    /// surface records samples into it per render tick; its machine facts (nominal clock,
+    /// standard, pixel aspect) are set by <see cref="ApplyVideoAspectForCurrentSession"/>.
+    /// </summary>
+    internal VideoPerfStatsViewModel PerfStats { get; } = new();
+
     /// <summary>The single input-context authority the gamepad and navigation both drive.</summary>
     public XboxInputContext InputContext { get; } = new();
 
@@ -292,6 +299,7 @@ public sealed partial class App : Application
             // the Frame is empty, which it is at launch).
             log.LogInformation("Boot branch: emulator (VideoPull present) -> starting surface + gamepad");
             _videoSurface.Attach(VideoPull);
+            _videoSurface.AttachStats(PerfStats);
             ApplyVideoAspectForCurrentSession();
             _videoSurface.Start();
             log.LogInformation("video surface started");
@@ -478,9 +486,17 @@ public sealed partial class App : Application
             var aspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
 
             _videoSurface?.SetPixelAspect(aspect);
+
+            // FEAT-XPERFHUD-001: feed the HUD the same machine facts (nominal clock for the
+            // speed-percent line; 0 = unknown, which omits the line rather than fabricating).
+            var clockHz = _facade is not null && !string.IsNullOrEmpty(_sessionId)
+                ? _facade.GetMachineClockHz(_sessionId) ?? 0d
+                : 0d;
+            PerfStats.SetMachine(clockHz, standard == VideoStandard.Ntsc ? "NTSC" : "PAL", aspect);
+
             CreateLogger("App").LogInformation(
-                "video aspect applied: standard={Standard} pixelAspect={PixelAspect} surface={SurfacePresent}",
-                standard, aspect, _videoSurface is not null);
+                "video aspect applied: standard={Standard} pixelAspect={PixelAspect} clockHz={ClockHz} surface={SurfacePresent}",
+                standard, aspect, clockHz, _videoSurface is not null);
         }
         catch (Exception ex)
         {
