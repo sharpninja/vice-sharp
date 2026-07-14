@@ -26,10 +26,14 @@ namespace ViceSharp.Xbox.Input;
 public sealed class DirectionalRepeater
 {
     /// <summary>Delay (ms) after the initial press before the first auto-repeat.</summary>
-    public const double InitialDelayMs = 400.0;
+    public const double InitialDelayMs = 450.0;
 
-    /// <summary>Interval (ms) between successive auto-repeats after the initial delay.</summary>
-    public const double RepeatIntervalMs = 90.0;
+    /// <summary>
+    /// Interval (ms) between successive auto-repeats after the initial delay. Retuned
+    /// 2026-07-14 from 90 ms (~11 moves/s read as "too sensitive and skips buttons" on
+    /// the 10-foot menus) to 220 ms (~4.5 moves/s).
+    /// </summary>
+    public const double RepeatIntervalMs = 220.0;
 
     private const GamepadButtonFlags DirectionMask =
         GamepadButtonFlags.DPadUp | GamepadButtonFlags.DPadDown |

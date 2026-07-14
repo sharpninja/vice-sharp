@@ -323,6 +323,21 @@ public sealed partial class App : Application
         _ = new InputContextObserver(Navigation, InputContext);
 
         Window.Current.Content = root;
+
+        // FIX-XFOCUSGATE-001 (operator: "When emulator screen is not the focused
+        // surface, stop sending joystick input"): gate the global gamepad pump on
+        // window activation and force-release any held injected keys on deactivation
+        // (a KeyUp for a key held across a focus loss never arrives).
+        Window.Current.Activated += (_, e) =>
+        {
+            var active = e.WindowActivationState != Windows.UI.Core.CoreWindowActivationState.Deactivated;
+            _gamepad?.SetWindowActive(active);
+            if (!active)
+            {
+                ReleaseAllPressedKeys();
+            }
+        };
+
         Window.Current.Activate();
 
         if (VideoPull is not null)
@@ -824,6 +839,31 @@ public sealed partial class App : Application
             case Windows.System.VirtualKey.S: case Windows.System.VirtualKey.Down:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateDown);  e.Handled = true; return; } break;
             case Windows.System.VirtualKey.A: case Windows.System.VirtualKey.Left:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateLeft);  e.Handled = true; return; } break;
             case Windows.System.VirtualKey.D: case Windows.System.VirtualKey.Right: if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateRight); e.Handled = true; return; } break;
+
+            // FIX-XDPADSKIP-001 (operator: "Using the dpad to move between buttons is
+            // too sensitive and skips buttons"): the SAME physical press arrives twice:
+            // once through the polled pipeline (UiNavigate -> TryMoveFocus / UiActivate
+            // -> peer.Invoke) and once as a native Gamepad* virtual key driving XAML's
+            // XY focus engine - two moves (or two activations) per press. The polled
+            // pipeline is the single navigator: swallow the native gamepad keys while a
+            // menu or the virtual keyboard owns navigation.
+            case Windows.System.VirtualKey.GamepadDPadUp:
+            case Windows.System.VirtualKey.GamepadDPadDown:
+            case Windows.System.VirtualKey.GamepadDPadLeft:
+            case Windows.System.VirtualKey.GamepadDPadRight:
+            case Windows.System.VirtualKey.GamepadLeftThumbstickUp:
+            case Windows.System.VirtualKey.GamepadLeftThumbstickDown:
+            case Windows.System.VirtualKey.GamepadLeftThumbstickLeft:
+            case Windows.System.VirtualKey.GamepadLeftThumbstickRight:
+            case Windows.System.VirtualKey.GamepadA:
+            case Windows.System.VirtualKey.GamepadB:
+                if (IsMenuOpen || Navigation.IsVirtualKeyboardOpen)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                break;
         }
 
         // Physical keyboard -> C64 (menu closed only; key auto-repeat collapses onto the

@@ -227,6 +227,38 @@ public sealed class XboxKeyboardInputTests
         Assert.Empty(context.Tick(3, Triggers(rt: 0.9)).Commands);
     }
 
+    [Fact]
+    public void Head_GatesGamepadInput_OnWindowActivation()
+    {
+        // Operator 2026-07-14: "When emulator screen is not the focused surface, stop
+        // sending joystick input." Windows.Gaming.Input polls the gamepad GLOBALLY
+        // (even backgrounded), so the pump gates on window activation: deactivation
+        // pushes a one-shot neutral to both ports, stops polling, and force-releases
+        // any held injected keys.
+        var source = ReadLower("src", "ViceSharp.Xbox", "Platform", "WinRtGamepadSource.cs");
+        Assert.Contains("setwindowactive", source);
+        Assert.Contains("neutral", source);
+
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("setwindowactive", app);
+        Assert.Contains("windowactivationstate", app);
+        Assert.Contains("releaseallpressedkeys", app);
+    }
+
+    [Fact]
+    public void Head_SuppressesNativeGamepadFocus_WhileMenuOrKeyboardHandlesIt()
+    {
+        // Operator 2026-07-14: "Using the dpad to move between buttons is too sensitive
+        // and skips buttons." The SAME physical D-pad press reaches XAML twice: once via
+        // the polled pipeline (UiNavigate -> TryMoveFocus) and once as native
+        // GamepadDPad* KeyDown driving the XY focus engine - two moves per press. The
+        // root handler marks the gamepad virtual keys handled while the polled pipeline
+        // owns navigation.
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("gamepaddpadup", app);
+        Assert.Contains("gamepada", app);
+    }
+
     private static GamepadSnapshot Triggers(double lt = 0.0, double rt = 0.0)
         => new(0.0, 0.0, 0.0, 0.0, lt, rt, GamepadButtonFlags.None, 0UL);
 

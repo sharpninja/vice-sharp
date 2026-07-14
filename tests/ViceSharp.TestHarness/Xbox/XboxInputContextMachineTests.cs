@@ -354,10 +354,12 @@ public sealed class XboxInputContextMachineTests
     /// Use case: holding a direction in a menu emits the nav intent once on press,
     /// waits an initial delay, then auto-repeats so the user can scroll a long list
     /// without mashing; releasing resets the schedule.
-    /// Acceptance: with injected elapsed-ms, a fresh press emits once; nothing
-    /// repeats before <see cref="DirectionalRepeater.InitialDelayMs"/> (400 ms);
-    /// crossing 400 ms emits again; then it repeats every
-    /// <see cref="DirectionalRepeater.RepeatIntervalMs"/> (90 ms); release then
+    /// Acceptance (retuned 2026-07-14, operator: "Using the dpad to move between
+    /// buttons is too sensitive and skips buttons" - the 90 ms repeat was ~11 moves/s):
+    /// with injected elapsed-ms, a fresh press emits once; nothing repeats before
+    /// <see cref="DirectionalRepeater.InitialDelayMs"/> (450 ms); crossing 450 ms
+    /// emits again; then it repeats every
+    /// <see cref="DirectionalRepeater.RepeatIntervalMs"/> (220 ms); release then
     /// re-press emits a fresh intent.
     /// </summary>
     [Fact]
@@ -369,20 +371,20 @@ public sealed class XboxInputContextMachineTests
         // Fresh press -> one immediate nav.
         Assert.Equal(AppCommand.UiNavigateUp, repeater.Tick(GamepadButtonFlags.DPadUp, 0));
 
-        // Held but before the 400 ms initial delay -> nothing.
+        // Held but before the 450 ms initial delay -> nothing.
         Assert.Null(repeater.Tick(GamepadButtonFlags.DPadUp, 100)); // 100
         Assert.Null(repeater.Tick(GamepadButtonFlags.DPadUp, 100)); // 200
         Assert.Null(repeater.Tick(GamepadButtonFlags.DPadUp, 100)); // 300
-        Assert.Null(repeater.Tick(GamepadButtonFlags.DPadUp, 99));  // 399
+        Assert.Null(repeater.Tick(GamepadButtonFlags.DPadUp, 149)); // 449
 
-        // Crossing 400 ms -> first repeat.
-        Assert.Equal(AppCommand.UiNavigateUp, repeater.Tick(GamepadButtonFlags.DPadUp, 1)); // 400
+        // Crossing 450 ms -> first repeat.
+        Assert.Equal(AppCommand.UiNavigateUp, repeater.Tick(GamepadButtonFlags.DPadUp, 1)); // 450
 
-        // Not yet a full 90 ms since the first repeat -> nothing.
-        Assert.Null(repeater.Tick(GamepadButtonFlags.DPadUp, 89)); // 489
+        // Not yet a full 220 ms since the first repeat -> nothing.
+        Assert.Null(repeater.Tick(GamepadButtonFlags.DPadUp, 219)); // 669
 
-        // Crossing the next 90 ms -> another repeat.
-        Assert.Equal(AppCommand.UiNavigateUp, repeater.Tick(GamepadButtonFlags.DPadUp, 1)); // 490
+        // Crossing the next 220 ms -> another repeat.
+        Assert.Equal(AppCommand.UiNavigateUp, repeater.Tick(GamepadButtonFlags.DPadUp, 1)); // 670
 
         // Release resets the schedule.
         Assert.Null(repeater.Tick(GamepadButtonFlags.None, 1000));
@@ -414,9 +416,9 @@ public sealed class XboxInputContextMachineTests
     /// Use case: the context machine must feed the repeater elapsed-ms derived purely
     /// from the injected frame index (no wall-clock), so auto-repeat is deterministic
     /// and replayable.
-    /// Acceptance: holding DPadDown across frames at 20 ms/frame emits once on the
-    /// first frame, nothing through frame 19 (&lt; 400 ms), and repeats at frame 20
-    /// (== 400 ms held).
+    /// Acceptance (retuned 2026-07-14 with the slower repeat schedule): holding
+    /// DPadDown across frames at 20 ms/frame emits once on the first frame, nothing
+    /// through frame 22 (440 ms &lt; 450 ms), and repeats at frame 23 (460 ms held).
     /// </summary>
     [Fact]
     [Trait("Category", "Xbox")]
@@ -428,14 +430,14 @@ public sealed class XboxInputContextMachineTests
         // Frame 0: fresh press -> one nav.
         Assert.Contains(AppCommand.UiNavigateDown, machine.Tick(0, down).Commands);
 
-        // Frames 1..19 (20 ms each -> 20..380 ms held): no repeat before 400 ms.
-        for (long frame = 1; frame <= 19; frame++)
+        // Frames 1..22 (20 ms each -> 20..440 ms held): no repeat before 450 ms.
+        for (long frame = 1; frame <= 22; frame++)
         {
             Assert.DoesNotContain(AppCommand.UiNavigateDown, machine.Tick(frame, down).Commands);
         }
 
-        // Frame 20 (== 400 ms held): first repeat.
-        Assert.Contains(AppCommand.UiNavigateDown, machine.Tick(20, down).Commands);
+        // Frame 23 (460 ms held, past the 450 ms initial delay): first repeat.
+        Assert.Contains(AppCommand.UiNavigateDown, machine.Tick(23, down).Commands);
     }
 
     // ------------------------------------------------------------------

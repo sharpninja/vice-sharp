@@ -29,6 +29,11 @@ public sealed class WinRtGamepadSource
     private long _frameIndex;
     private XboxInputConfig _config = XboxInputConfig.Default;
 
+    // FIX-XFOCUSGATE-001 (operator: "When emulator screen is not the focused surface,
+    // stop sending joystick input"): Windows.Gaming.Input reads the gamepad GLOBALLY,
+    // so the pump self-gates on window activation.
+    private bool _windowActive = true;
+
     /// <summary>Creates the gamepad source and its per-frame poll timer (not yet started).</summary>
     /// <param name="host">The in-process host that receives joystick state.</param>
     /// <param name="context">The single input-context authority.</param>
@@ -58,8 +63,33 @@ public sealed class WinRtGamepadSource
     /// <summary>Stops the per-frame poll.</summary>
     public void Stop() => _timer.Stop();
 
+    /// <summary>
+    /// Gates the pump on window activation (FIX-XFOCUSGATE-001): the gamepad API is
+    /// global, so a backgrounded window would keep driving the C64. Deactivation pushes
+    /// a ONE-SHOT neutral to both control ports (releasing any held direction/fire) and
+    /// halts polling; reactivation resumes it (the context machine's prior snapshot
+    /// survives, so a button still held across the gap does not re-edge).
+    /// </summary>
+    /// <param name="active"><c>true</c> when the app window is the focused surface.</param>
+    public void SetWindowActive(bool active)
+    {
+        if (_windowActive == active)
+            return;
+
+        _windowActive = active;
+
+        if (!active)
+        {
+            _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick1, JoystickPortState.Neutral.DirectionMask, JoystickPortState.Neutral.Fire);
+            _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick2, JoystickPortState.Neutral.DirectionMask, JoystickPortState.Neutral.Fire);
+        }
+    }
+
     private void PollOnce()
     {
+        if (!_windowActive)
+            return;
+
         var gamepad = Gamepad.Gamepads.Count > 0 ? Gamepad.Gamepads[0] : null;
         var snapshot = gamepad is null ? GamepadSnapshot.Neutral : Read(gamepad);
 
