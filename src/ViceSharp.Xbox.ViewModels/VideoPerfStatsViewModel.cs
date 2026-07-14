@@ -141,8 +141,18 @@ public sealed class VideoPerfStatsViewModel
                 .AppendLine("%");
         }
 
-        builder.Append(_standardLabel)
-            .Append(' ')
+        // Machine line: label + nominal clock (MHz, omitted when unknown) + the LABELED
+        // composite Pixel Aspect Ratio. Operator feedback 2026-07-14: a bare "NTSC 0.75"
+        // read as a (wrong) clock value; PAR must say what it is.
+        builder.Append(_standardLabel);
+        if (_clockHz > 0)
+        {
+            builder.Append(' ')
+                .Append((_clockHz / 1_000_000d).ToString("0.00", CultureInfo.InvariantCulture))
+                .Append("MHz");
+        }
+
+        builder.Append(" PAR ")
             .Append(_pixelAspect.ToString("0.00", CultureInfo.InvariantCulture));
 
         text = builder.ToString();

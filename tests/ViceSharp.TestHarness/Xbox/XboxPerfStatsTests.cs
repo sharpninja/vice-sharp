@@ -82,7 +82,7 @@ public sealed class XboxPerfStatsTests
 
     [Fact]
     [Trait("Category", "Xbox")]
-    public void Compute_CarriesStandardLabel_AndPixelAspect()
+    public void Compute_CarriesStandardLabel_ClockAndPixelAspect()
     {
         var stats = new VideoPerfStatsViewModel();
         stats.SetMachine(1022727d, "NTSC", 0.75f);
@@ -90,8 +90,25 @@ public sealed class XboxPerfStatsTests
         stats.RecordPresent(0);
         Assert.True(stats.TryComputeText(now: 1000, frequency: 1000, out var text));
 
-        // TEST-XPERFHUD-001c.
-        Assert.Contains("NTSC 0.75", text);
+        // TEST-XPERFHUD-001c (operator 2026-07-14: "What does 'NTSC 0.75' mean? NTSC is
+        // over 1Mhz" - the bare number read as a clock). The machine line spells out BOTH:
+        // the nominal clock in MHz and the labeled composite Pixel Aspect Ratio.
+        Assert.Contains("NTSC 1.02MHz PAR 0.75", text);
+    }
+
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void Compute_OmitsClock_WhenUnknown_ButKeepsLabeledPar()
+    {
+        var stats = new VideoPerfStatsViewModel();
+        stats.SetMachine(0d, "PAL", 0.93650794f);
+
+        stats.RecordPresent(0);
+        Assert.True(stats.TryComputeText(now: 1000, frequency: 1000, out var text));
+
+        // No clock -> no MHz claim (never fabricate), but the PAR stays labeled.
+        Assert.Contains("PAL PAR 0.94", text);
+        Assert.DoesNotContain("MHz", text);
     }
 
     [Fact]
