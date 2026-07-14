@@ -330,6 +330,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             int hr = D3D11CreateDevice(
                 IntPtr.Zero, D3DDriverTypeHardware, IntPtr.Zero, flags,
                 IntPtr.Zero, 0, D3D11SdkVersion, out _device, out _, out _context);
+            Diag($"EnsureDevice: D3D11CreateDevice(HW) hr=0x{hr:X8} device=0x{_device:X} context=0x{_context:X}");
 
             if (hr < 0 || _device == IntPtr.Zero || _context == IntPtr.Zero)
             {
@@ -339,22 +340,33 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
                 hr = D3D11CreateDevice(
                     IntPtr.Zero, D3DDriverTypeWarp, IntPtr.Zero, flags,
                     IntPtr.Zero, 0, D3D11SdkVersion, out _device, out _, out _context);
+                Diag($"EnsureDevice: D3D11CreateDevice(WARP) hr=0x{hr:X8} device=0x{_device:X} context=0x{_context:X}");
             }
 
             if (hr < 0 || _device == IntPtr.Zero || _context == IntPtr.Zero)
+            {
+                Diag("EnsureDevice: no D3D11 device after HW+WARP -> FailDevice");
                 return FailDevice();
+            }
 
-            if (CreateDXGIFactory2(0, IidDxgiFactory2, out _factory) < 0 || _factory == IntPtr.Zero)
+            int factoryHr = CreateDXGIFactory2(0, IidDxgiFactory2, out _factory);
+            Diag($"EnsureDevice: CreateDXGIFactory2 hr=0x{factoryHr:X8} factory=0x{_factory:X}");
+            if (factoryHr < 0 || _factory == IntPtr.Zero)
                 return FailDevice();
 
             if (!EnsurePanelNative())
+            {
+                Diag("EnsureDevice: EnsurePanelNative failed -> FailDevice");
                 return FailDevice();
+            }
 
             _deviceReady = true;
+            Diag("EnsureDevice: OK (device + context + factory + panel-native all ready)");
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            Diag($"EnsureDevice threw: {ex}");
             return FailDevice();
         }
     }
@@ -364,13 +376,26 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         if (_panelNative != IntPtr.Zero)
             return true;
 
-        // Borrow the panel's native IInspectable and QueryInterface ISwapChainPanelNative
-        // through CsWinRT (AOT-safe: no reflection). TryAs returns an AddRef'd pointer we own.
-        IObjectReference? native = ((IWinRTObject)_panel).NativeObject;
-        if (native is null)
-            return false;
+        try
+        {
+            // Borrow the panel's native IInspectable and QueryInterface ISwapChainPanelNative
+            // through CsWinRT (AOT-safe: no reflection). TryAs returns an AddRef'd pointer we own.
+            IObjectReference? native = ((IWinRTObject)_panel).NativeObject;
+            if (native is null)
+            {
+                Diag("EnsurePanelNative: ((IWinRTObject)_panel).NativeObject is null");
+                return false;
+            }
 
-        return native.TryAs(IidSwapChainPanelNative, out _panelNative) >= 0 && _panelNative != IntPtr.Zero;
+            int hr = native.TryAs(IidSwapChainPanelNative, out _panelNative);
+            Diag($"EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x{hr:X8} ptr=0x{_panelNative:X}");
+            return hr >= 0 && _panelNative != IntPtr.Zero;
+        }
+        catch (Exception ex)
+        {
+            Diag($"EnsurePanelNative threw: {ex}");
+            return false;
+        }
     }
 
     private bool EnsureSwapChain(int width, int height)
