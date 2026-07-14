@@ -376,6 +376,16 @@ public sealed class XboxInputContext
                 commands.Add(AppCommand.CloseMenu);
                 next = InputContext.Gameplay;
             }
+            else if (viewEdge)
+            {
+                // FIX-XKBDINPUT-001 regression (operator: "The button you assigned for
+                // closing the keyboard should bring it back"): the keyboard opened from
+                // a PUSHED page (Controls) closes into MainMenu, not Gameplay - View
+                // must reopen it from here too, or it is unreachable until the page
+                // stack empties.
+                commands.Add(AppCommand.ToggleVirtualKeyboard);
+                next = InputContext.VirtualKeyboard;
+            }
             else
             {
                 if (aEdge)

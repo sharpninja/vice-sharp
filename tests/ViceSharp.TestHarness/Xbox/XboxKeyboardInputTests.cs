@@ -194,6 +194,29 @@ public sealed class XboxKeyboardInputTests
     }
 
     [Fact]
+    public void View_ReopensTheKeyboard_FromTheMainMenuContext()
+    {
+        // Operator 2026-07-14: "The button you assigned for closing the keyboard should
+        // bring it back." Regression: the keyboard opened from the Controls page (a
+        // PUSHED page), View closed it, the observer re-derived MainMenu (stack still
+        // non-empty), and the MainMenu branch ignored View - the keyboard could never
+        // return. View now toggles the keyboard from MainMenu as well.
+        var context = new XboxInputContext();
+
+        // Closing left us in MainMenu (a page is still pushed under the keyboard).
+        context.RequestContext(InputContext.MainMenu);
+        var res = TickPair(context, 1, GamepadButtonFlags.View);
+
+        Assert.Equal(new[] { AppCommand.ToggleVirtualKeyboard }, res.Commands);
+        Assert.Equal(InputContext.VirtualKeyboard, res.NextContext);
+
+        // And View from inside the keyboard still closes it.
+        res = TickPair(context, 3, GamepadButtonFlags.View);
+        Assert.Equal(new[] { AppCommand.ToggleVirtualKeyboard }, res.Commands);
+        Assert.Equal(InputContext.Gameplay, res.NextContext);
+    }
+
+    [Fact]
     public void MainMenuContext_Triggers_EmitNothing()
     {
         var context = new XboxInputContext();
