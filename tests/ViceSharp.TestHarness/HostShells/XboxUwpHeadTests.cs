@@ -113,10 +113,42 @@ public sealed class XboxUwpHeadTests
 
         // The VS Configuration Manager validates the .slnx Debug-UWP|x64 mapping against the
         // project's DECLARED configurations/platforms; SDK defaults expose only Debug/Release
-        // + AnyCPU, so the head must declare Debug-UWP + x64 or the IDE rejects the solution
-        // mapping and keeps loading the net10.0 fallback (CLI MSBuild does not need this).
-        Assert.Contains("<Configurations>Debug;Release;Debug-UWP</Configurations>", csproj);
+        // + AnyCPU, so the head must declare the UWP configs + x64 or the IDE rejects the
+        // solution mapping and keeps loading the net10.0 fallback (CLI MSBuild does not need this).
+        Assert.Contains("<Configurations>Debug;Release;Debug-UWP;Release-UWP</Configurations>", csproj);
         Assert.Contains("<Platforms>AnyCPU;x64</Platforms>", csproj);
+    }
+
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void Csproj_ReleaseUwp_IsXboxCompliantRelease()
+    {
+        var csproj = ReadCsproj();
+
+        // Operator 2026-07-14: "Need a Release-UWP target... Should compile with
+        // Xbox-compliant configuration." Release-UWP flips the SAME ViceSharpXboxUwp
+        // chokepoint (before the empty->false default), so the head builds the real UWP TFM.
+        const string releaseUwpDerivation =
+            "<ViceSharpXboxUwp Condition=\"'$(ViceSharpXboxUwp)'=='' and '$(Configuration)'=='Release-UWP'\">true</ViceSharpXboxUwp>";
+        const string fallbackDefault =
+            "<ViceSharpXboxUwp Condition=\"'$(ViceSharpXboxUwp)'==''\">false</ViceSharpXboxUwp>";
+
+        Assert.Contains(releaseUwpDerivation, csproj);
+        Assert.True(
+            csproj.IndexOf(releaseUwpDerivation, StringComparison.Ordinal)
+                < csproj.IndexOf(fallbackDefault, StringComparison.Ordinal),
+            "The Release-UWP derivation must appear before the empty->false default.");
+
+        // The SDK gives CUSTOM configuration names debug-ish defaults (Optimize=false, no
+        // TRACE), so Release-UWP must set release code-gen explicitly.
+        Assert.Contains("'$(Configuration)'=='Release-UWP'", csproj);
+        Assert.Contains("<Optimize>true</Optimize>", csproj);
+
+        // Xbox-compliant release = the plan's Native-AOT posture: PublishAot arms for
+        // Release-UWP (Debug-UWP stays JIT for F5 iteration).
+        Assert.Matches(
+            "PublishAot Condition=\"[^\"]*Release-UWP[^\"]*\">true</PublishAot>",
+            csproj);
     }
 
     [Fact]
@@ -148,6 +180,14 @@ public sealed class XboxUwpHeadTests
         // (0xC0000409) in the XAML/CoreApplication bootstrap before any window shows. (VS writes
         // this element without an explicit Project attribute, so match the prefix.)
         Assert.Contains("<Deploy Solution=\"Debug-UWP|x64\"", slnx);
+
+        // Operator 2026-07-14: the Release-UWP solution config mirrors the Debug-UWP wiring:
+        // declared build type, dependencies folded onto their ordinary Release build, the
+        // x64-only head rule, and the packaged-deploy rule.
+        Assert.Contains("<BuildType Name=\"Release-UWP\" />", slnx);
+        Assert.Contains("<BuildType Solution=\"Release-UWP|*\" Project=\"Release\" />", slnx);
+        Assert.Contains("<Build Solution=\"Release-UWP|Any CPU\" Project=\"false\" />", slnx);
+        Assert.Contains("<Deploy Solution=\"Release-UWP|x64\"", slnx);
     }
 
     [Fact]

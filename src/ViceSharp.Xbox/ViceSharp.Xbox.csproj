@@ -30,6 +30,12 @@
       -p:ViceSharpXboxUwp from build/Build.cs (non-empty) still short-circuits both.
     -->
     <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'=='' and '$(Configuration)'=='Debug-UWP'">true</ViceSharpXboxUwp>
+    <!--
+      Release-UWP (operator 2026-07-14): the Xbox-compliant release build of the same UWP
+      head - identical chokepoint flip, but with release code-gen and the plan's Native-AOT
+      posture (see the Release-UWP PropertyGroup and the PublishAot condition below).
+    -->
+    <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'=='' and '$(Configuration)'=='Release-UWP'">true</ViceSharpXboxUwp>
     <ViceSharpXboxUwp Condition="'$(ViceSharpXboxUwp)'==''">false</ViceSharpXboxUwp>
 
     <OutputType>WinExe</OutputType>
@@ -45,7 +51,7 @@
       here makes the IDE accept the solution mapping. CLI MSBuild treats Configuration/Platform
       as free-form and does not need this; only the IDE does.
     -->
-    <Configurations>Debug;Release;Debug-UWP</Configurations>
+    <Configurations>Debug;Release;Debug-UWP;Release-UWP</Configurations>
     <Platforms>AnyCPU;x64</Platforms>
 
     <TargetFramework Condition="'$(ViceSharpXboxUwp)'=='true'">net10.0-windows10.0.26100.0</TargetFramework>
@@ -66,6 +72,17 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <!--
+    Release-UWP code-gen: the SDK grants CUSTOM configuration names debug-ish defaults
+    (Optimize=false, no TRACE constant), so the Xbox-compliant release semantics are set
+    explicitly. DEBUG is deliberately NOT defined.
+  -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release-UWP'">
+    <Optimize>true</Optimize>
+    <DebugType>portable</DebugType>
+    <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+
   <!-- UWP-on-Xbox-console-only knobs; inert on the net10.0 fallback build. -->
   <PropertyGroup Condition="'$(ViceSharpXboxUwp)'=='true'">
     <UseUwp>true</UseUwp>
@@ -73,7 +90,12 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Platform>x64</Platform>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
-    <PublishAot Condition="'$(Configuration)'=='Release'">true</PublishAot>
+    <!--
+      The plan's Native-AOT posture: AOT for release-shaped UWP builds (the legacy bare
+      Release condition is kept; Release-UWP is the operator's Xbox-compliant target);
+      Debug-UWP stays JIT for fast F5 iteration.
+    -->
+    <PublishAot Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='Release-UWP'">true</PublishAot>
     <AppxPackage>true</AppxPackage>
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsPackageType>MSIX</WindowsPackageType>
