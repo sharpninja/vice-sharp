@@ -154,6 +154,16 @@
     <Content Include="Assets/*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!--
+      FEAT-XC64FONT-001: the PetMe64 C64 charset font for the virtual keyboard's keycaps,
+      vendored verbatim from VICE data/common with its Kreative Relay Fonts Free Use
+      License (redistribution requires the license text shipped verbatim + credit; see
+      THIRD_PARTY_NOTICES.md).
+    -->
+    <None Remove="Assets/Fonts/*.*" />
+    <Content Include="Assets/Fonts/*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

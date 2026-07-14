@@ -16,6 +16,14 @@
     <UserControl.Resources>
         <!-- Width units -> pixels (one key unit = 52 px at 10-foot scale). -->
         <controls:KeyWidthConverter x:Key="KeyWidth" UnitPixels="52" />
+
+        <!--
+            FEAT-XC64FONT-001 (operator: "Use open source C64 font for keycaps"): PetMe64,
+            Kreative Korporation's pixel-true C64 charset font, packaged from Assets/Fonts
+            (vendored from VICE data/common with its free-use license; credit in
+            THIRD_PARTY_NOTICES.md). Glyphs the font lacks fall back automatically.
+        -->
+        <FontFamily x:Key="C64KeycapFont">ms-appx:///Assets/Fonts/PetMe64.ttf#Pet Me 64</FontFamily>
     </UserControl.Resources>
 
     <!-- Slide up from the bottom edge when the dock becomes visible. -->
@@ -50,7 +58,8 @@
                                         MinHeight="52"
                                         Margin="3"
                                         Padding="0"
-                                        FontSize="16"
+                                        FontFamily="{StaticResource C64KeycapFont}"
+                                        FontSize="14"
                                         Click="OnKeyPressed" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -69,7 +78,8 @@
                             MinHeight="52"
                             Margin="3"
                             Padding="0"
-                            FontSize="16"
+                            FontFamily="{StaticResource C64KeycapFont}"
+                            FontSize="14"
                             Click="OnKeyPressed" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
