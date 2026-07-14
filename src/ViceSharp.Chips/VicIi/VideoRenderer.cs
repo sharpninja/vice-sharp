@@ -30,6 +30,20 @@ public sealed class VideoRenderer
         _ => 1.0f
     };
 
+    /// <summary>
+    /// The number of frame rows the given standard actually WRITES into the fixed
+    /// 384x<see cref="ScreenHeight"/> frame buffer. The renderer maps raster line
+    /// <see cref="PalFirstVisibleRasterLine"/> (16) to frame row 0 for every standard
+    /// (<see cref="RasterLineToFrameY"/>), so an NTSC machine's 262 raster lines fill rows
+    /// 0..245 (246 content rows) and leave the bottom 26 rows black, while PAL's 312 lines
+    /// cover the whole 272-row window. Displays crop to this height so NTSC content fills
+    /// the screen instead of carrying its in-frame black band (FIX-XNTSCFILL-001).
+    /// </summary>
+    /// <param name="visibleRasterLines">The standard's total raster-line count (262/312).</param>
+    /// <returns>The written content rows, clamped to 1..<see cref="ScreenHeight"/>.</returns>
+    public static int GetContentLines(int visibleRasterLines)
+        => System.Math.Clamp(visibleRasterLines - PalFirstVisibleRasterLine, 1, ScreenHeight);
+
     public readonly byte[] FrameBuffer = new byte[ScreenWidth * ScreenHeight * 4];
 
     private readonly Mos6569 _vic;

@@ -104,6 +104,15 @@ public sealed class InProcessSessionFacade : IEmulatorSessionFacade, ILocalVideo
     /// <returns>The profile's nominal clock in Hz, or <c>null</c>.</returns>
     public double? GetMachineClockHz(string sessionId) => _host.GetMachineClockHz(sessionId);
 
+    /// <summary>
+    /// The frame rows the session's standard actually writes into the fixed VIC frame buffer
+    /// (FIX-XNTSCFILL-001), or <c>null</c> when unknown. Read per call for the same
+    /// model-change reason.
+    /// </summary>
+    /// <param name="sessionId">The session whose frame content height is requested.</param>
+    /// <returns>The written content rows, or <c>null</c>.</returns>
+    public int? GetFrameContentHeight(string sessionId) => _host.GetFrameContentHeight(sessionId);
+
     // ---- ILocalVideoFramePull (pure sink) -----------------------------------
 
     /// <inheritdoc />

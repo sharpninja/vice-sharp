@@ -89,6 +89,40 @@ public sealed class XboxVideoAspectTests
 
     [Fact]
     [Trait("Category", "Xbox")]
+    public void ContentLines_CropTheStandardsVisibleWindow()
+    {
+        // Operator 2026-07-14: "NTSC mode should grow to fill the screen, and move to PAL
+        // from NTSC should shrink to fit." The VIC frame buffer is a FIXED 384x272 for both
+        // standards (VideoRenderer.ScreenHeight); the renderer maps raster line 16
+        // (PalFirstVisibleRasterLine) to frame row 0, so an NTSC machine (262 raster lines)
+        // writes rows 0..245 and leaves 26 black rows at the bottom. The display must crop
+        // to the standard's CONTENT lines and scale those to fill:
+        //   NTSC: 262 - 16 = 246 content rows (grow to fill),
+        //   PAL:  312 - 16 = 296 -> clamped to the 272-row frame (unchanged fit).
+        Assert.Equal(246, VideoRenderer.GetContentLines(262));
+        Assert.Equal(272, VideoRenderer.GetContentLines(312));
+
+        // Degenerate raster counts clamp instead of exploding.
+        Assert.Equal(1, VideoRenderer.GetContentLines(10));
+        Assert.Equal(272, VideoRenderer.GetContentLines(int.MaxValue));
+    }
+
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void Head_WiresContentCrop_SurfaceAndApp()
+    {
+        // Structural: the surface accepts the content height and the App feeds it from the
+        // live session alongside the pixel aspect.
+        var surface = ReadLower("src", "ViceSharp.Xbox", "Controls", "VideoSurfaceHost.cs");
+        Assert.Contains("setsourcecontentheight", surface);
+
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("getframecontentheight", app);
+        Assert.Contains("setsourcecontentheight", app);
+    }
+
+    [Fact]
+    [Trait("Category", "Xbox")]
     public void ComputeDrawRect_DegenerateInputs_AreSafe()
     {
         // TEST-XVIDEO-ASPECT-001c.

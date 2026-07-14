@@ -108,6 +108,10 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     // null until the head attaches it. Samples are recorded on the render-timer thread only.
     private VideoPerfStatsViewModel? _stats;
 
+    // FIX-XNTSCFILL-001: the active standard's written content rows (246 NTSC / 272 PAL);
+    // 0 = use the full source frame.
+    private int _sourceContentHeight;
+
     private IntPtr _device;       // ID3D11Device*
     private IntPtr _context;      // ID3D11DeviceContext* (immediate)
     private IntPtr _factory;      // IDXGIFactory2*
@@ -159,6 +163,17 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     /// <param name="pixelAspect">Display width per pixel width.</param>
     public void SetPixelAspect(float pixelAspect)
         => _pixelAspect = pixelAspect > 0f ? pixelAspect : 1f;
+
+    /// <summary>
+    /// Sets the number of source-frame rows that carry CONTENT for the active standard
+    /// (FIX-XNTSCFILL-001: the VIC frame is a fixed 384x272 for every standard, but NTSC only
+    /// writes rows 0..245, leaving an in-frame black band). The paint path crops to this many
+    /// top-anchored rows and scales THEM to the window, so NTSC grows to fill and switching
+    /// back to PAL shrinks to fit. Values outside 1..frame-height mean "use the full frame".
+    /// </summary>
+    /// <param name="contentHeight">The written content rows (246 NTSC, 272 PAL), or 0 = full.</param>
+    public void SetSourceContentHeight(int contentHeight)
+        => _sourceContentHeight = contentHeight;
 
     /// <summary>
     /// Raised (~2 Hz, on the render-timer/dispatcher thread) with the freshly formatted
@@ -358,8 +373,15 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         if (sourceWidth <= 0 || sourceHeight <= 0 || source.Length < sourceWidth * sourceHeight * 4)
             return;
 
+        // FIX-XNTSCFILL-001: crop to the standard's WRITTEN rows (top-anchored: the renderer
+        // maps its first visible raster line to frame row 0), so NTSC's 246 content rows fill
+        // the window instead of dragging the frame's black band along.
+        var visibleHeight = _sourceContentHeight > 0 && _sourceContentHeight < sourceHeight
+            ? _sourceContentHeight
+            : sourceHeight;
+
         var (drawX, drawY, drawWidth, drawHeight) = VideoDisplayGeometry.ComputeDrawRect(
-            targetWidth, targetHeight, sourceWidth, sourceHeight, _pixelAspect);
+            targetWidth, targetHeight, sourceWidth, visibleHeight, _pixelAspect);
         if (drawWidth <= 0 || drawHeight <= 0)
             return;
 
@@ -368,9 +390,10 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         {
             for (int dy = 0; dy < drawHeight; dy++)
             {
-                int sy = dy * sourceHeight / drawHeight;
-                if (sy >= sourceHeight)
-                    sy = sourceHeight - 1;
+                // Sample within the CROPPED content rows (FIX-XNTSCFILL-001).
+                int sy = dy * visibleHeight / drawHeight;
+                if (sy >= visibleHeight)
+                    sy = visibleHeight - 1;
 
                 uint* sourceRow = (uint*)(sourceBase + (long)sy * sourceStride);
                 uint* destinationRow = (uint*)(destination + (long)(drawY + dy) * destinationRowPitch) + drawX;

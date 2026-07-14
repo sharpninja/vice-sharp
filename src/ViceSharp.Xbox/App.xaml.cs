@@ -566,6 +566,14 @@ public sealed partial class App : Application
 
             _videoSurface?.SetPixelAspect(aspect);
 
+            // FIX-XNTSCFILL-001: crop the display to the standard's WRITTEN frame rows so an
+            // NTSC machine grows to fill the window (246 content rows of the fixed 272-row
+            // frame) and switching back to PAL shrinks to fit (the full 272).
+            var contentHeight = _facade is not null && !string.IsNullOrEmpty(_sessionId)
+                ? _facade.GetFrameContentHeight(_sessionId) ?? 0
+                : 0;
+            _videoSurface?.SetSourceContentHeight(contentHeight);
+
             // FEAT-XPERFHUD-001: feed the HUD the same machine facts (nominal clock for the
             // speed-percent line; 0 = unknown, which omits the line rather than fabricating).
             var clockHz = _facade is not null && !string.IsNullOrEmpty(_sessionId)
@@ -574,8 +582,8 @@ public sealed partial class App : Application
             PerfStats.SetMachine(clockHz, standard == VideoStandard.Ntsc ? "NTSC" : "PAL", aspect);
 
             CreateLogger("App").LogInformation(
-                "video aspect applied: standard={Standard} pixelAspect={PixelAspect} clockHz={ClockHz} surface={SurfacePresent}",
-                standard, aspect, clockHz, _videoSurface is not null);
+                "video aspect applied: standard={Standard} pixelAspect={PixelAspect} clockHz={ClockHz} contentRows={ContentRows} surface={SurfacePresent}",
+                standard, aspect, clockHz, contentHeight, _videoSurface is not null);
         }
         catch (Exception ex)
         {
@@ -680,6 +688,13 @@ public sealed partial class App : Application
 
         _frame.Visibility = Visibility.Visible;
     }
+
+    /// <summary>
+    /// Mouse-friendly menu dismissal (operator 2026-07-14): hides the shell menu WITHOUT any
+    /// host call, so the running emulator is revealed exactly as it was (no reset, no resume).
+    /// Called by the HomePage Close Menu button and its click-outside-the-card handler.
+    /// </summary>
+    internal void DismissMenu() => HideMenu();
 
     /// <summary>Hides the shell-menu Frame to expose the always-running emulator (Start/Resume, CloseMenu).</summary>
     private void HideMenu()

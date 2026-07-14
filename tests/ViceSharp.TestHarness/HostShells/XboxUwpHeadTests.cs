@@ -186,6 +186,12 @@ public sealed class XboxUwpHeadTests
         }
 
         Assert.Contains("IsEnabled=\"{Binding CanResume}\"", xaml);
+
+        // Operator 2026-07-14: "Need a mouse-friendly way to leave the menu without resetting
+        // the emulator." A dedicated Close Menu button plus click-on-background dismissal,
+        // BOTH pure UI (App.DismissMenu -> HideMenu; no host reset/resume call).
+        Assert.Contains("Click=\"OnCloseMenu\"", xaml);
+        Assert.Contains("PointerPressed=\"OnBackgroundDismiss\"", xaml);
     }
 
     private static string ReadCsproj()
