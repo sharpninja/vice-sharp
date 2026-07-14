@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -98,6 +99,9 @@ public partial class MainWindow : Window
 
         // The sidebar stretches to fill the width the aspect-sized display does not use.
         // Re-flow when the sidebar is collapsed/opened or flipped to the other edge.
+        // FIX-XASPECT-002: also re-feed the video surface's display aspect whenever the
+        // machine profile (PAL <-> NTSC) or the aspect-mode setting changes; both are raised
+        // by the picker AND by settings adopt-back after Apply/restart.
         _attachViewModel.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName is nameof(AttachPanelViewModel.IsPaneOpen)
@@ -106,7 +110,14 @@ public partial class MainWindow : Window
             {
                 ApplyContentLayout();
             }
+
+            if (e.PropertyName is nameof(AttachPanelViewModel.SelectedMachineProfile)
+                or nameof(AttachPanelViewModel.SelectedAspectMode))
+            {
+                UpdateVideoAspect();
+            }
         };
+        UpdateVideoAspect();
         ApplyContentLayout();
 
         Opened += (_, _) => _video.Focus();
@@ -153,6 +164,33 @@ public partial class MainWindow : Window
 
         var plus = rawVersion.IndexOf('+');
         return plus >= 0 ? rawVersion[..plus] : rawVersion;
+    }
+
+    // FIX-XASPECT-002 (operator 2026-07-14: PAL -> NTSC switch did not change the pixel size):
+    // feed the video surface the ACTIVE machine profile's composite pixel aspect (VICE vicii.c
+    // vicii_get_pixel_aspect via the Chips VideoRenderer table) and the aspect-mode setting,
+    // then re-size the surface's NATURAL width to the display aspect. The surface sits in a
+    // Stretch=Uniform Viewbox, so its natural Width/Height ratio IS the on-screen aspect
+    // (no internal letterbox), exactly matching the "wraps the image tightly" layout intent.
+    private void UpdateVideoAspect()
+    {
+        var profileId = _attachViewModel.SelectedMachineProfile?.Id;
+        var profile = ViceSharp.Architectures.C64.C64MachineProfiles.All.FirstOrDefault(
+            p => string.Equals(p.Id, profileId, StringComparison.OrdinalIgnoreCase)
+                || p.Aliases.Any(alias => string.Equals(alias, profileId, StringComparison.OrdinalIgnoreCase)));
+
+        var system = profile?.VideoStandard == ViceSharp.Abstractions.VideoStandard.Ntsc
+            ? ViceSharp.Chips.VicIi.Mos6569.TvSystem.NTSC
+            : ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL;
+        var pixelAspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
+
+        _video.PixelAspect = pixelAspect;
+        _video.AspectMode = _attachViewModel.SelectedAspectMode;
+
+        var displayAspect = VideoSurface.ComputeDisplayAspect(_attachViewModel.SelectedAspectMode, pixelAspect);
+        _video.Width = VideoSurface.SourceHeight * displayAspect;
+        _video.Height = VideoSurface.SourceHeight;
+        _video.InvalidateVisual();
     }
 
     // Lay out the content panel: the emulator display is docked to an edge and aspect-sized

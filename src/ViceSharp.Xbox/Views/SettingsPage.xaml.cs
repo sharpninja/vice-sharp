@@ -32,20 +32,22 @@ public sealed partial class SettingsPage : Page
         if (ViewModel is null)
             return;
 
-        // Capture the model id BEFORE apply: a model change requests a session rebuild (same
-        // SessionId), which invalidates the keyboard-input seam VirtualKeyboardViewModel cached
-        // at boot. Adopt-back may re-canonicalize the profile, so compare against the post-apply
-        // value.
-        var previousProfileId = ViewModel.SelectedProfileId;
+        // RequiresRestart is measured against the last-APPLIED baseline, so it is the one
+        // reliable "the session will be rebuilt" signal. (A prior guard also compared the
+        // SelectedProfileId captured here against its post-apply value, but the picker has
+        // ALREADY set the new profile before Apply is clicked, so the two always matched and
+        // the rebuild hooks below never fired on a real model change: the operator's
+        // PAL -> NTSC switch kept rendering with the PAL pixel aspect.)
         var restart = ViewModel.RequiresRestart;
 
         await ViewModel.ApplySettingsAsync(restartSession: restart);
 
-        if (restart
-            && !string.Equals(previousProfileId, ViewModel.SelectedProfileId, System.StringComparison.Ordinal))
+        if (restart)
         {
-            // Rebuild the on-screen keyboard against the recreated session. Degrade on any
-            // failure: this runs on the UI thread and must never throw.
+            // The rebuilt session (same SessionId) invalidated the keyboard-input seam the
+            // VirtualKeyboardViewModel cached at boot. Rebuild it; degrade on any failure:
+            // this runs on the UI thread and must never throw. Idempotent when the restart
+            // did not actually change the machine.
             try
             {
                 App.Instance.RebuildKeyboardForCurrentSession();
@@ -57,8 +59,8 @@ public sealed partial class SettingsPage : Page
             }
 
             // FIX-XASPECT-001: the recreated session may run a different video standard
-            // (PAL <-> NTSC model change); re-apply the true composite pixel aspect.
-            // (Internally guarded; never throws.)
+            // (PAL <-> NTSC model change); re-apply the true composite pixel aspect + the
+            // performance HUD's machine facts. (Internally guarded; never throws.)
             App.Instance.ApplyVideoAspectForCurrentSession();
         }
     }

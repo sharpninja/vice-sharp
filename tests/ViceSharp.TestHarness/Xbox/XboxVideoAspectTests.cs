@@ -117,6 +117,14 @@ public sealed class XboxVideoAspectTests
 
         var settingsPage = ReadLower("src", "ViceSharp.Xbox", "Views", "SettingsPage.xaml.cs");
         Assert.Contains("applyvideoaspectforcurrentsession", settingsPage);
+
+        // Regression (operator 2026-07-14: "After switching from PAL to NTSC, it does not
+        // appear that the NTSC pixel size is being used"): the old guard compared the
+        // SelectedProfileId captured at OnApply entry against its post-apply value, but the
+        // picker had ALREADY set the new profile before Apply was clicked, so the two always
+        // matched and the aspect re-apply (and keyboard rebuild) never fired on a real model
+        // change. The rebuild hooks must key off the restart flag, never that comparison.
+        Assert.DoesNotContain("previousprofileid", settingsPage);
     }
 
     private static string ReadLower(params string[] parts)

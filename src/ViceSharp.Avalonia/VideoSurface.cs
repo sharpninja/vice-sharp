@@ -18,6 +18,43 @@ public sealed class VideoSurface : Control
     public const int SourceWidth = 384;
     public const int SourceHeight = 272;
 
+    /// <summary>
+    /// FIX-XASPECT-002: the ACTIVE machine's composite pixel aspect ratio (display width per
+    /// pixel width; VICE vicii.c vicii_get_pixel_aspect: PAL 0.93650794, NTSC 0.75). The shell
+    /// re-feeds it whenever the machine profile changes, so a PAL -> NTSC model switch changes
+    /// the rendered proportions. 1.0 = square pixels until set.
+    /// </summary>
+    public double PixelAspect { get; set; } = 1.0;
+
+    /// <summary>
+    /// The display aspect mode from settings ("Square pixels" | "VICE pixel aspect" |
+    /// "Force 4:3"). Previously the setting existed but the surface ignored it and always
+    /// rendered square pixels; <see cref="Render"/> now honors it via
+    /// <see cref="ComputeDisplayAspect"/>.
+    /// </summary>
+    public string AspectMode { get; set; } = "VICE pixel aspect";
+
+    /// <summary>
+    /// Computes the display aspect (width/height) of the emulator frame for the given aspect
+    /// mode: "Square pixels" ignores the pixel aspect, "Force 4:3" pins the classic CRT frame,
+    /// anything else (the "VICE pixel aspect" default) multiplies the frame width by the
+    /// standard's composite pixel aspect. Non-positive pixel aspects degrade to square pixels.
+    /// </summary>
+    /// <param name="aspectMode">The display aspect mode label from settings.</param>
+    /// <param name="pixelAspect">The active standard's composite pixel aspect ratio.</param>
+    /// <returns>The frame's display aspect ratio (width over height).</returns>
+    public static double ComputeDisplayAspect(string? aspectMode, double pixelAspect)
+    {
+        if (string.Equals(aspectMode, "Square pixels", StringComparison.OrdinalIgnoreCase))
+            return (double)SourceWidth / SourceHeight;
+
+        if (string.Equals(aspectMode, "Force 4:3", StringComparison.OrdinalIgnoreCase))
+            return 4.0 / 3.0;
+
+        var aspect = pixelAspect > 0 ? pixelAspect : 1.0;
+        return SourceWidth * aspect / SourceHeight;
+    }
+
     public VideoSurface()
     {
         Focusable = true;
@@ -132,15 +169,17 @@ public sealed class VideoSurface : Control
 
     public override void Render(DrawingContext context)
     {
-        // VICE-style aspect ratio handling
-        // Each VIC chip has different pixel aspect ratios based on video standard
+        // VICE-style aspect ratio handling: each VIC standard has a different composite pixel
+        // aspect (FIX-XASPECT-002). Previously this used SourceWidth/SourceHeight directly,
+        // which is SQUARE pixels: the "VICE pixel aspect" setting was a no-op and a PAL -> NTSC
+        // model switch changed nothing on screen.
         double windowWidth = Bounds.Width;
         double windowHeight = Bounds.Height;
-        
+
         if (windowWidth <= 0 || windowHeight <= 0)
             return;
 
-        double displayAspect = (double)SourceWidth / SourceHeight;
+        double displayAspect = ComputeDisplayAspect(AspectMode, PixelAspect);
         
         double windowAspect = windowWidth / windowHeight;
         
