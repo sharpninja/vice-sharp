@@ -97,6 +97,15 @@ public sealed class InProcessSessionFacade : IEmulatorSessionFacade, ILocalVideo
     public VideoStandard? GetVideoStandard(string sessionId) => _host.GetVideoStandard(sessionId);
 
     /// <summary>
+    /// The live machine's frame refresh rate in Hz, or <c>null</c> when unknown
+    /// (FIX-XNTSCFPS-001: drives the render cadence; read per call so a model-change
+    /// rebuild under the same id is answered with the CURRENT machine's rate).
+    /// </summary>
+    /// <param name="sessionId">The session whose refresh rate is requested.</param>
+    /// <returns>The machine profile's refresh rate, or <c>null</c>.</returns>
+    public double? GetRefreshRateHz(string sessionId) => _host.GetRefreshRateHz(sessionId);
+
+    /// <summary>
     /// The live machine profile's nominal clock in Hz for a session, or <c>null</c> when
     /// unknown (FEAT-XPERFHUD-001). Read per call for the same model-change reason.
     /// </summary>

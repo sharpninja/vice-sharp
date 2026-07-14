@@ -593,6 +593,15 @@ public sealed partial class App : Application
                 : 0;
             _videoSurface?.SetSourceContentHeight(contentHeight);
 
+            // FIX-XNTSCFPS-001: pace the render loop at the ACTIVE machine's refresh rate
+            // (NTSC ~59.826 Hz, PAL ~50.125 Hz). The fixed 20 ms cadence capped every
+            // machine at ~50 fps nominal; with per-tick paint cost it fell to ~22 fps on
+            // the operator's HUD while SPD ~100% proved the emulation itself held real time.
+            var refreshHz = _facade is not null && !string.IsNullOrEmpty(_sessionId)
+                ? _facade.GetRefreshRateHz(_sessionId) ?? 0d
+                : 0d;
+            _videoSurface?.SetTargetRefreshRate(refreshHz);
+
             // FEAT-XPERFHUD-001: feed the HUD the same machine facts (nominal clock for the
             // speed-percent line; 0 = unknown, which omits the line rather than fabricating).
             var clockHz = _facade is not null && !string.IsNullOrEmpty(_sessionId)
@@ -601,8 +610,8 @@ public sealed partial class App : Application
             PerfStats.SetMachine(clockHz, standard == VideoStandard.Ntsc ? "NTSC" : "PAL", aspect);
 
             CreateLogger("App").LogInformation(
-                "video aspect applied: standard={Standard} pixelAspect={PixelAspect} clockHz={ClockHz} contentRows={ContentRows} surface={SurfacePresent}",
-                standard, aspect, clockHz, contentHeight, _videoSurface is not null);
+                "video aspect applied: standard={Standard} pixelAspect={PixelAspect} clockHz={ClockHz} contentRows={ContentRows} refreshHz={RefreshHz} surface={SurfacePresent}",
+                standard, aspect, clockHz, contentHeight, refreshHz, _videoSurface is not null);
         }
         catch (Exception ex)
         {

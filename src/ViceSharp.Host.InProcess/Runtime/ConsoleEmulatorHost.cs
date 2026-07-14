@@ -280,6 +280,18 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
             : null;
 
     /// <summary>
+    /// The live architecture's frame refresh rate in Hz (NTSC ~59.826, PAL ~50.125), or
+    /// <c>null</c> when the session is unknown or the architecture carries no machine
+    /// profile (FIX-XNTSCFPS-001: the head's render cadence tracks the ACTIVE machine).
+    /// </summary>
+    /// <param name="sessionId">The session whose refresh rate is requested.</param>
+    /// <returns>The machine profile's refresh rate, or <c>null</c>.</returns>
+    public double? GetRefreshRateHz(string sessionId)
+        => _registry.TryGet(sessionId, out var session)
+            ? (session.Architecture as IProfiledArchitectureDescriptor)?.MachineProfile.RefreshRateHz
+            : null;
+
+    /// <summary>
     /// The live machine profile's nominal clock in Hz for a session, or <c>null</c> when the
     /// session is unknown or its architecture carries no profile (FEAT-XPERFHUD-001). Drives
     /// the head's performance-HUD speed-percent line (measured cycle rate vs nominal).

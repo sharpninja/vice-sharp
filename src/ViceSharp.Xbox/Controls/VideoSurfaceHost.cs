@@ -112,6 +112,28 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     // 0 = use the full source frame.
     private int _sourceContentHeight;
 
+    // FIX-XNTSCFPS-001: geometry-cached blit state. The coordinate maps and the border
+    // clear are recomputed ONLY when the paint geometry changes; the steady-state hot path
+    // is row stretches + row copies (no per-pixel division, no full-target clear, and no
+    // allocation). _clearPending forces one full clear after any geometry change.
+    private int _geoTargetWidth;
+    private int _geoTargetHeight;
+    private int _geoSourceWidth;
+    private int _geoVisibleHeight;
+    private float _geoPixelAspect;
+    private int _geoDrawX;
+    private int _geoDrawY;
+    private int _geoDrawWidth;
+    private int _geoDrawHeight;
+    private int[] _xMap = Array.Empty<int>();
+    private int[] _yMap = Array.Empty<int>();
+    private uint[] _stretchedRow = Array.Empty<uint>();
+    private bool _clearPending = true;
+
+    // FIX-XNTSCFPS-001: every Nth HUD compute (~5 s) is mirrored into the log so cadence
+    // fixes are receipt-verifiable from LocalState\vicesharp.log without eyes on the HUD.
+    private int _hudComputeCount;
+
     private IntPtr _device;       // ID3D11Device*
     private IntPtr _context;      // ID3D11DeviceContext* (immediate)
     private IntPtr _factory;      // IDXGIFactory2*
@@ -176,6 +198,17 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         => _sourceContentHeight = contentHeight;
 
     /// <summary>
+    /// Sets the render cadence to the ACTIVE machine's refresh rate (FIX-XNTSCFPS-001:
+    /// NTSC ~59.826 Hz, PAL ~50.125 Hz; the fixed 20 ms interval capped NTSC at ~50 fps
+    /// before tick cost, which the operator's HUD surfaced as FPS 22.3 at SPD 98.6%).
+    /// Applied at boot and re-applied after a model-change session rebuild; takes effect
+    /// immediately on the running repeating timer.
+    /// </summary>
+    /// <param name="refreshHz">The machine refresh rate in Hz; non-positive = 20 ms default.</param>
+    public void SetTargetRefreshRate(double refreshHz)
+        => _timer.Interval = TimeSpan.FromMilliseconds(VideoCadence.IntervalMsFor(refreshHz));
+
+    /// <summary>
     /// Raised (~2 Hz, on the render-timer/dispatcher thread) with the freshly formatted
     /// letterbox performance-HUD text (FEAT-XPERFHUD-001).
     /// </summary>
@@ -232,6 +265,16 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             && _stats.TryComputeText(Stopwatch.GetTimestamp(), Stopwatch.Frequency, out var hudText))
         {
             StatsTextUpdated?.Invoke(hudText);
+
+            // FIX-XNTSCFPS-001: mirror every 10th HUD compute (~5 s) into the log so the
+            // cadence receipts are readable from LocalState\vicesharp.log headlessly.
+            if (++_hudComputeCount % 10 == 0)
+            {
+                App.CreateLogger("Video").LogInformation(
+                    "perf: {Hud} (interval {IntervalMs}ms)",
+                    hudText.Replace("\r", string.Empty).Replace('\n', ' '),
+                    _timer.Interval.TotalMilliseconds.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture));
+            }
         }
 
         var pull = _pull;
@@ -354,11 +397,14 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     }
 
     /// <summary>
-    /// Paints the target black and nearest-neighbor upscales the BGRA source into the centered,
-    /// window-filling draw rectangle computed by <see cref="VideoDisplayGeometry.ComputeDrawRect"/>
-    /// (FIX-XASPECT-001: fills the limiting panel axis, letterboxed, with the TRUE composite
-    /// pixel aspect of the active video standard). Alpha is IGNORE'd by the composition swap
-    /// chain, so the cleared borders read as opaque black.
+    /// Nearest-neighbor upscales the BGRA source into the centered, window-filling draw
+    /// rectangle computed by <see cref="VideoDisplayGeometry.ComputeDrawRect"/>
+    /// (FIX-XASPECT-001: letterboxed with the TRUE composite pixel aspect). FIX-XNTSCFPS-001
+    /// hot-path shape: the coordinate maps come from <see cref="NearestNeighborMap"/> and are
+    /// rebuilt only on geometry change (as is the one full black clear for the letterbox
+    /// borders, which are static between geometry changes); each painted row is stretched
+    /// ONCE into a cached row buffer and repeated rows are bulk-copied. Alpha is IGNORE'd by
+    /// the composition swap chain, so cleared borders read as opaque black.
     /// </summary>
     private void PaintNearestNeighbor(
         int sourceWidth, int sourceHeight, ReadOnlySpan<byte> source, byte* destination, int destinationRowPitch)
@@ -366,12 +412,11 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         int targetWidth = _targetWidth;
         int targetHeight = _targetHeight;
 
-        // Clear the whole target to black.
-        for (int y = 0; y < targetHeight; y++)
-            new Span<byte>(destination + (long)y * destinationRowPitch, targetWidth * 4).Clear();
-
         if (sourceWidth <= 0 || sourceHeight <= 0 || source.Length < sourceWidth * sourceHeight * 4)
+        {
+            ClearTarget(destination, destinationRowPitch, targetWidth, targetHeight);
             return;
+        }
 
         // FIX-XNTSCFILL-001: crop to the standard's WRITTEN rows (top-anchored: the renderer
         // maps its first visible raster line to frame row 0), so NTSC's 246 content rows fill
@@ -380,33 +425,83 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             ? _sourceContentHeight
             : sourceHeight;
 
-        var (drawX, drawY, drawWidth, drawHeight) = VideoDisplayGeometry.ComputeDrawRect(
-            targetWidth, targetHeight, sourceWidth, visibleHeight, _pixelAspect);
-        if (drawWidth <= 0 || drawHeight <= 0)
+        if (targetWidth != _geoTargetWidth || targetHeight != _geoTargetHeight
+            || sourceWidth != _geoSourceWidth || visibleHeight != _geoVisibleHeight
+            || _pixelAspect != _geoPixelAspect)
+        {
+            RebuildPaintGeometry(targetWidth, targetHeight, sourceWidth, visibleHeight);
+        }
+
+        if (_clearPending)
+        {
+            ClearTarget(destination, destinationRowPitch, targetWidth, targetHeight);
+            _clearPending = false;
+        }
+
+        if (_geoDrawWidth <= 0 || _geoDrawHeight <= 0)
             return;
 
         int sourceStride = sourceWidth * 4;
+        int drawX = _geoDrawX;
+        int drawY = _geoDrawY;
+        int drawWidth = _geoDrawWidth;
+        int drawHeight = _geoDrawHeight;
+        int lastStretchedSy = -1;
+
         fixed (byte* sourceBase = source)
+        fixed (int* xMap = _xMap)
+        fixed (uint* stretched = _stretchedRow)
         {
             for (int dy = 0; dy < drawHeight; dy++)
             {
-                // Sample within the CROPPED content rows (FIX-XNTSCFILL-001).
-                int sy = dy * visibleHeight / drawHeight;
-                if (sy >= visibleHeight)
-                    sy = visibleHeight - 1;
+                int sy = _yMap[dy];
 
-                uint* sourceRow = (uint*)(sourceBase + (long)sy * sourceStride);
-                uint* destinationRow = (uint*)(destination + (long)(drawY + dy) * destinationRowPitch) + drawX;
-
-                for (int dx = 0; dx < drawWidth; dx++)
+                // Stretch each SOURCE row once; duplicate destination rows reuse the buffer.
+                if (sy != lastStretchedSy)
                 {
-                    int sx = dx * sourceWidth / drawWidth;
-                    if (sx >= sourceWidth)
-                        sx = sourceWidth - 1;
-                    destinationRow[dx] = sourceRow[sx];
+                    uint* sourceRow = (uint*)(sourceBase + (long)sy * sourceStride);
+                    for (int dx = 0; dx < drawWidth; dx++)
+                        stretched[dx] = sourceRow[xMap[dx]];
+                    lastStretchedSy = sy;
                 }
+
+                Buffer.MemoryCopy(
+                    stretched,
+                    (uint*)(destination + (long)(drawY + dy) * destinationRowPitch) + drawX,
+                    (long)drawWidth * 4,
+                    (long)drawWidth * 4);
             }
         }
+    }
+
+    /// <summary>
+    /// Recomputes the draw rectangle, the precomputed nearest-neighbor coordinate maps, and
+    /// the stretched-row buffer for a new paint geometry, and schedules the one-time border
+    /// clear (FIX-XNTSCFPS-001). Allocation happens ONLY here, never on the steady-state path.
+    /// </summary>
+    private void RebuildPaintGeometry(int targetWidth, int targetHeight, int sourceWidth, int visibleHeight)
+    {
+        _geoTargetWidth = targetWidth;
+        _geoTargetHeight = targetHeight;
+        _geoSourceWidth = sourceWidth;
+        _geoVisibleHeight = visibleHeight;
+        _geoPixelAspect = _pixelAspect;
+
+        (_geoDrawX, _geoDrawY, _geoDrawWidth, _geoDrawHeight) = VideoDisplayGeometry.ComputeDrawRect(
+            targetWidth, targetHeight, sourceWidth, visibleHeight, _pixelAspect);
+
+        _xMap = NearestNeighborMap.Build(sourceWidth, _geoDrawWidth);
+        _yMap = NearestNeighborMap.Build(visibleHeight, _geoDrawHeight);
+        _stretchedRow = _geoDrawWidth > 0 ? new uint[_geoDrawWidth] : Array.Empty<uint>();
+        _clearPending = true;
+
+        Diag($"paint geometry: target {targetWidth}x{targetHeight}, src {sourceWidth}x{visibleHeight}, draw {_geoDrawWidth}x{_geoDrawHeight}+{_geoDrawX}+{_geoDrawY}, PAR {_pixelAspect}");
+    }
+
+    private static void ClearTarget(byte* destination, int destinationRowPitch, int targetWidth, int targetHeight)
+    {
+        for (int y = 0; y < targetHeight; y++)
+            new Span<byte>(destination + (long)y * destinationRowPitch, targetWidth * 4).Clear();
     }
 
     private bool EnsureDevice()
