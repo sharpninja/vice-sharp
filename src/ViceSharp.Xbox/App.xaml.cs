@@ -16,6 +16,7 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Microsoft.Extensions.Logging;
 using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Startup;
@@ -47,6 +48,15 @@ public sealed partial class App : Application
     /// <summary>Creates the application, bootstraps data paths, and disables mouse mode.</summary>
     public App()
     {
+        // Diagnostics FIRST (PLAN-XBOXUWP, area diagnostics): the deployed head boots to a black
+        // screen and exits with code 1 ~13s after launch (an unhandled exception on a
+        // background/timer thread). Debug.WriteLine is invisible in a packaged UWP app, so stand
+        // up the ILogger factory + a readable LocalState\vicesharp.log BEFORE anything that can
+        // throw, and register the global unhandled-exception handlers so the crashing exception is
+        // captured to the log instead of only dying with code 1.
+        ConfigureLogging();
+        RegisterGlobalExceptionHandlers();
+
         // Process-entry data-path bootstrap, BEFORE any host/ROM/keymap resolution.
         ConfigureDataPaths();
 
@@ -58,6 +68,92 @@ public sealed partial class App : Application
 
     /// <summary>The running application instance (the composition root the pages read from).</summary>
     public static App Instance => (App)Current;
+
+    /// <summary>
+    /// The process-wide logger factory built at construction. It fans out to the Debug and
+    /// Console sinks and (when the AppContainer LocalFolder is available) a
+    /// <see cref="ViceSharp.Xbox.Logging.FileLoggerProvider"/> that persists a readable
+    /// <c>LocalState\vicesharp.log</c>. <c>null</c> only if factory construction itself failed.
+    /// </summary>
+    public static ILoggerFactory? LoggerFactory { get; private set; }
+
+    /// <summary>
+    /// Creates a category logger from <see cref="LoggerFactory"/>, or a null logger when the
+    /// factory was not built. Never returns <c>null</c>, so callers (including
+    /// <see cref="ViceSharp.Xbox.Controls.VideoSurfaceHost"/>) can log unconditionally.
+    /// </summary>
+    /// <param name="category">The logger category (e.g. "App", "Video").</param>
+    /// <returns>An <see cref="ILogger"/> that is always safe to call.</returns>
+    internal static ILogger CreateLogger(string category) =>
+        (LoggerFactory ?? Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.Instance)
+            .CreateLogger(category);
+
+    private static void ConfigureLogging()
+    {
+        try
+        {
+            // LocalFolder is AppContainer-writable in a packaged UWP app but throws when the head
+            // is run un-packaged (design-time). Guard it: skip the file sink rather than fail.
+            string? logPath = null;
+            try
+            {
+                logPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "vicesharp.log");
+            }
+            catch
+            {
+                logPath = null;
+            }
+
+            LoggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(b =>
+            {
+                b.SetMinimumLevel(LogLevel.Trace);
+                b.AddDebug();
+                b.AddConsole();
+                if (logPath is not null)
+                    b.AddProvider(new ViceSharp.Xbox.Logging.FileLoggerProvider(logPath));
+            });
+
+            CreateLogger("App").LogInformation("App starting; log file: {LogPath}", logPath ?? "(none)");
+        }
+        catch (Exception ex)
+        {
+            // Logging must never take down the app it is diagnosing.
+            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] logging init failed: {ex}");
+        }
+    }
+
+    private void RegisterGlobalExceptionHandlers()
+    {
+        try
+        {
+            // UWP-level unhandled exceptions (UI thread + most framework paths). e.Handled=true
+            // keeps the process alive so the log survives and the user can read the crash cause.
+            this.UnhandledException += (s, e) =>
+            {
+                CreateLogger("App").LogError(e.Exception, "UWP UnhandledException: {Message}", e.Message);
+                e.Handled = true;
+            };
+
+            // CLR-level unhandled exceptions on background/threadpool threads (the ~13s code-1
+            // path). Cannot be cancelled; log it (critical) before the runtime tears down.
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+                CreateLogger("App").LogCritical(
+                    e.ExceptionObject as Exception,
+                    "AppDomain UnhandledException (terminating={Terminating})",
+                    e.IsTerminating);
+
+            // Faulted Tasks whose exception was never observed (a common silent-crash source).
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (s, e) =>
+            {
+                CreateLogger("App").LogError(e.Exception, "UnobservedTaskException");
+                e.SetObserved();
+            };
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] exception-handler registration failed: {ex}");
+        }
+    }
 
     /// <summary>The explicit couch-UI navigation back-stack + overlay flags.</summary>
     public NavigationViewModel Navigation { get; } = new();
@@ -106,6 +202,11 @@ public sealed partial class App : Application
     /// <inheritdoc />
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        var log = CreateLogger("App");
+        log.LogInformation(
+            "OnLaunched entry; c64Directory={C64Directory}",
+            string.IsNullOrEmpty(_c64Directory) ? "(none)" : _c64Directory);
+
         try
         {
             // First-run gate: only build the host + C64 session when the ROMs are already present.
@@ -115,14 +216,28 @@ public sealed partial class App : Application
                 ? null
                 : new RomProvisionEvaluator().Evaluate(_c64Directory, RomProfile.Standard);
 
+            if (assessment is null)
+                log.LogInformation("ROM assessment skipped (no c64 directory resolved)");
+            else
+                log.LogInformation(
+                    "ROM assessment: State={State} IsBootBlocked={IsBootBlocked}",
+                    assessment.State, assessment.IsBootBlocked);
+
             if (assessment is not null && !assessment.IsBootBlocked)
+            {
+                log.LogInformation("Boot not blocked: building host and session at launch");
                 BuildHostAndSession();
+            }
+            else
+            {
+                log.LogInformation("BuildHostAndSession NOT run at launch (deferred to provisioning gate)");
+            }
         }
         catch (Exception ex)
         {
             // Defensive: OnLaunched has no ambient handler, so any throw between here and
             // Window.Activate would fail-fast (0xC0000409) with NO window. Degrade to the shell.
-            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] launch host build failed: {ex}");
+            log.LogError(ex, "launch host build failed");
         }
 
         // The root: an always-present in-emulator base view (the video surface), a
@@ -175,9 +290,12 @@ public sealed partial class App : Application
             // menu HIDDEN. The always-present EmulatorView is the at-rest surface; the menu is
             // brought up on demand via the Menu button / ESC (ShowMenu navigates HomePage when
             // the Frame is empty, which it is at launch).
+            log.LogInformation("Boot branch: emulator (VideoPull present) -> starting surface + gamepad");
             _videoSurface.Attach(VideoPull);
             _videoSurface.Start();
+            log.LogInformation("video surface started");
             _gamepad?.Start();
+            log.LogInformation("gamepad started (present={GamepadPresent})", _gamepad is not null);
             _bootStarted = true;
             HideMenu();
         }
@@ -185,6 +303,7 @@ public sealed partial class App : Application
         {
             // First run / boot blocked: show the provisioning gate. No session, video, or gamepad
             // until the ROMs are acquired; OnProvisioningChanged then rebuilds the host + boots.
+            log.LogInformation("Boot branch: provisioning gate (no VideoPull) -> RomProvisioningPage");
             ProvisioningVm = BuildProvisioningVm();
             ProvisioningVm.PropertyChanged += OnProvisioningChanged;
             frame.Navigate(typeof(RomProvisioningPage));
@@ -230,7 +349,7 @@ public sealed partial class App : Application
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] post-provision boot failed: {ex}");
+            CreateLogger("App").LogError(ex, "post-provision boot failed");
         }
     }
 
@@ -258,6 +377,9 @@ public sealed partial class App : Application
 
     private void BuildHostAndSession()
     {
+        var log = CreateLogger("App");
+        log.LogInformation("BuildHostAndSession: composing in-process host");
+
         // Produce the console XAudio2 backend (null when audio is disabled/headless). It is
         // decoupled from the SID ring and engages only when VICESHARP_AUDIO is enabled.
         AudioBackend = XboxAudioWiring.CreateBackend();
@@ -267,6 +389,7 @@ public sealed partial class App : Application
 
         var session = host.StartC64Session();
         _sessionId = session.SessionId;
+        log.LogInformation("BuildHostAndSession: session started id={SessionId}", _sessionId);
 
         var facade = new InProcessSessionFacade(host, _sessionId);
         _facade = facade;
@@ -289,6 +412,9 @@ public sealed partial class App : Application
             onUiNavigate: HandleUiNavigate);
 
         _gamepad = new WinRtGamepadSource(host, InputContext, dispatcher, _sessionId);
+        log.LogInformation(
+            "BuildHostAndSession: built VideoPull={VideoPullCreated} gamepad={GamepadCreated} keyboardVm={KeyboardVmCreated}",
+            VideoPull is not null, _gamepad is not null, KeyboardVm is not null);
 
         // The Home page's Start/Resume intents boot/resume the C64 AND dismiss the shell menu so
         // the always-running emulator is unobstructed: HomePage renders a translucent menu card
@@ -323,7 +449,7 @@ public sealed partial class App : Application
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] keyboard rebuild failed: {ex}");
+            CreateLogger("App").LogError(ex, "keyboard rebuild failed");
         }
     }
 

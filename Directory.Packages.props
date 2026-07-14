@@ -48,6 +48,11 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.9" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.9" />
   </ItemGroup>
+  <ItemGroup Label="Logging (PLAN-XBOXUWP: Xbox UWP head diagnostics)">
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.9" />
+  </ItemGroup>
   <ItemGroup Label="UI - Remote Control (debug-only Avalonia visual-tree inspection over gRPC)">
     <PackageVersion Include="SharpNinja.Avalonia.RemoteControl.Server" Version="0.7.4" />
   </ItemGroup>

@@ -22,6 +22,7 @@ using System.Runtime.InteropServices;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
 using WinRT;
+using Microsoft.Extensions.Logging;
 using ViceSharp.Xbox.ViewModels;
 
 /// <summary>
@@ -132,6 +133,32 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
 
     private void RenderTick()
     {
+        try
+        {
+            RenderTickCore();
+        }
+        catch (Exception ex)
+        {
+            // ROOT CAUSE of the deployed code-1 crash: every native COM/pointer call in the render
+            // path (Slot vtable derefs, GetBuffer, Map, the nearest-neighbor span writes, Present,
+            // the CsWinRT panel-native QueryInterface) can throw. The DispatcherQueueTimer fires
+            // this ~50 Hz; for the first several seconds it bails early (pull.Tick()=false / panel
+            // not sized), but once the first C64 frame is committed AND the panel is sized it enters
+            // the real DX11 path and an uncaught throw here propagates to the XAML dispatcher and
+            // terminates the app with exit code 1. A render-loop fault must NEVER kill the app: log
+            // the full stack, disable the surface (degrade to silent no-blit), and keep the process
+            // and emulator alive.
+            _deviceFailed = true;
+            ReleaseNative();
+            App.CreateLogger("Video").LogError(
+                ex,
+                "RenderTick threw (tick {Tick}); disabling video surface -> silent no-blit",
+                _renderTicks);
+        }
+    }
+
+    private void RenderTickCore()
+    {
         _renderTicks++;
         var trace = _renderTicks <= 15;
 
@@ -183,8 +210,15 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         }
     }
 
-    private void Diag(string message) =>
-        System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox.Video] tick {_renderTicks}: {message}");
+    private void Diag(string message)
+    {
+        // Keep the original Debug trace AND route through ILogger so the one-shot render-pipeline
+        // traces land in the readable LocalState\vicesharp.log (Debug.WriteLine is invisible in a
+        // packaged UWP app). App.CreateLogger never returns null, so this is always safe.
+        var line = $"[ViceSharp.Xbox.Video] tick {_renderTicks}: {message}";
+        System.Diagnostics.Debug.WriteLine(line);
+        App.CreateLogger("Video").LogInformation("tick {Tick}: {Message}", _renderTicks, message);
+    }
 
     private void RenderFrame(int sourceWidth, int sourceHeight, ReadOnlySpan<byte> source)
     {
