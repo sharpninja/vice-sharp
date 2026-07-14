@@ -167,8 +167,16 @@ public sealed class VideoRenderer
                 borderPixel,
                 displayMode);
             uint pixel = background.Pixel;
-            
-            if (TryGetSpritePixel(x, lineNumber, background.IsForeground, out var spritePixel))
+
+            // FIX-XSPRITEDUP-001: in LIVE rendering the PixelSequencer output read by
+            // RenderBackgroundPixel ALREADY contains the sprite layer (DrawSprites8,
+            // VICE vicii-draw-cycle.c) at the exact DBUF positions; compositing the
+            // geometric sprite lookup on top painted every sprite a SECOND time, 8 px
+            // left of true (frame x = sprite X instead of sprite X + 8, vicii-draw.c:71
+            // DBUF_OFFSET). The geometric composite therefore serves ONLY the synthetic
+            // RenderFullFrame path, which has no sequencer line to read.
+            if (!_isLiveRender
+                && TryGetSpritePixel(x, lineNumber, background.IsForeground, out var spritePixel))
             {
                 pixel = spritePixel;
             }
