@@ -352,6 +352,49 @@ public sealed class XboxAppCommandDispatcherTests
         Assert.Equal(0, exit.Count);
     }
 
+    /// <summary>
+    /// FIX-XKBDINPUT-001 (TEST-XKBDIN-001c): the virtual-keyboard commands (overlay
+    /// toggle plus the operator's Y/X/LB/RB key chords) each fire the UI callback with
+    /// the exact command - still no host/snapshot/settings call and no exit.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public async Task KeyboardCommands_FireOnUiNavigateCallback_AndCallNoService()
+    {
+        var host = new RecordingEmulatorHost();
+        var snapshots = new RecordingSnapshotService();
+        var settings = new RecordingSettingsService();
+        var exit = new ExitProbe();
+        var received = new List<AppCommand>();
+        var dispatcher = new AppCommandDispatcher(
+            host,
+            snapshots,
+            settings,
+            exit.Fire,
+            onUiNavigate: cmd => received.Add(cmd));
+
+        await dispatcher.DispatchAsync(Session, AppCommand.ToggleVirtualKeyboard, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyDelete, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyRunStop, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyCursorLeft, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyShiftCursorLeft, TestContext.Current.CancellationToken);
+
+        Assert.Equal(
+            new[]
+            {
+                AppCommand.ToggleVirtualKeyboard,
+                AppCommand.KeyboardKeyDelete,
+                AppCommand.KeyboardKeyRunStop,
+                AppCommand.KeyboardKeyCursorLeft,
+                AppCommand.KeyboardKeyShiftCursorLeft,
+            },
+            received);
+        Assert.Equal(0, host.TotalCalls);
+        Assert.Equal(0, snapshots.TotalCalls);
+        Assert.Equal(0, settings.TotalCalls);
+        Assert.Equal(0, exit.Count);
+    }
+
     // ------------------------------------------------------------------
     // UI-only commands (handled by the UI layer, never the host)
     // ------------------------------------------------------------------

@@ -291,18 +291,58 @@ public sealed class XboxInputContext
                 next = InputContext.Gameplay;
             }
         }
-        else
+        else if (current == InputContext.VirtualKeyboard)
         {
-            // MainMenu or VirtualKeyboard.
+            // FIX-XKBDINPUT-001 (operator mapping): while the on-screen keyboard is open,
+            // the D-pad navigates the tiles (repeater above), A activates the FOCUSED tile
+            // (that is how RETURN and every letter is pressed), B closes the keyboard, and
+            // Y/X/LB/RB are dedicated key chords (INST/DEL, RUN/STOP, cursor-left,
+            // SHIFT+cursor-left). View still toggles the keyboard off; Menu still closes
+            // back to gameplay.
             if (menuEdge)
             {
                 commands.Add(AppCommand.CloseMenu);
                 next = InputContext.Gameplay;
             }
-            else if (viewEdge && current == InputContext.VirtualKeyboard)
+            else if (viewEdge || bEdge)
             {
-                // View toggles the virtual keyboard back off (Gameplay <-> VirtualKeyboard).
                 commands.Add(AppCommand.ToggleVirtualKeyboard);
+                next = InputContext.Gameplay;
+            }
+            else
+            {
+                if (aEdge)
+                {
+                    commands.Add(AppCommand.UiActivate);
+                }
+
+                if (DownEdge(GamepadButtonFlags.Y, in snapshot))
+                {
+                    commands.Add(AppCommand.KeyboardKeyDelete);
+                }
+
+                if (DownEdge(GamepadButtonFlags.X, in snapshot))
+                {
+                    commands.Add(AppCommand.KeyboardKeyRunStop);
+                }
+
+                if (DownEdge(GamepadButtonFlags.LeftShoulder, in snapshot))
+                {
+                    commands.Add(AppCommand.KeyboardKeyCursorLeft);
+                }
+
+                if (DownEdge(GamepadButtonFlags.RightShoulder, in snapshot))
+                {
+                    commands.Add(AppCommand.KeyboardKeyShiftCursorLeft);
+                }
+            }
+        }
+        else
+        {
+            // MainMenu.
+            if (menuEdge)
+            {
+                commands.Add(AppCommand.CloseMenu);
                 next = InputContext.Gameplay;
             }
             else

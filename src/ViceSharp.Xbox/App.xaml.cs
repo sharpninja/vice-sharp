@@ -43,6 +43,12 @@ public sealed partial class App : Application
     private VideoSurfaceHost? _videoSurface;
     private EmulatorView? _emulatorView;
     private VirtualKeyboardOverlay? _keyboardOverlay;
+
+    // FIX-XKBDINPUT-001: the machine keyboard seam physical keys inject through, plus the
+    // currently held (injected-down) key names so ups always pair with downs and the menu
+    // can force-release everything (no stuck C64 keys).
+    private IMachineKeyboardInput? _machineKeyboard;
+    private readonly System.Collections.Generic.HashSet<string> _pressedKeys = new(StringComparer.Ordinal);
     private string _sessionId = string.Empty;
     private string _c64Directory = string.Empty;
     private Frame? _frame;
@@ -267,6 +273,13 @@ public sealed partial class App : Application
             new Windows.UI.Xaml.Input.KeyEventHandler(OnRootKeyDown),
             handledEventsToo: true);
 
+        // FIX-XKBDINPUT-001: matching KeyUp handler so injected C64 keys are released
+        // exactly when the physical key is (down/up pairing, not down-only taps).
+        root.AddHandler(
+            Windows.UI.Xaml.UIElement.KeyUpEvent,
+            new Windows.UI.Xaml.Input.KeyEventHandler(OnRootKeyUp),
+            handledEventsToo: true);
+
         var emulatorView = new EmulatorView();
         _emulatorView = emulatorView;
         _videoSurface = emulatorView.SurfaceHost;
@@ -459,7 +472,8 @@ public sealed partial class App : Application
         VideoPull = new VideoFramePullViewModel((IEmulatorSessionFacade)facade, _sessionId);
         SettingsVm = new XboxSettingsViewModel(facade, _sessionId);
         DeviceSetupVm = new XboxDeviceSetupViewModel(facade);
-        KeyboardVm = host.GetKeyboardInput(_sessionId) is { } keyboard
+        _machineKeyboard = host.GetKeyboardInput(_sessionId);
+        KeyboardVm = _machineKeyboard is { } keyboard
             ? new VirtualKeyboardViewModel(keyboard)
             : null;
 
@@ -545,7 +559,8 @@ public sealed partial class App : Application
             if (_host is null || string.IsNullOrEmpty(_sessionId))
                 return;
 
-            KeyboardVm = _host.GetKeyboardInput(_sessionId) is { } keyboard
+            _machineKeyboard = _host.GetKeyboardInput(_sessionId);
+            KeyboardVm = _machineKeyboard is { } keyboard
                 ? new VirtualKeyboardViewModel(keyboard)
                 : null;
 
@@ -678,32 +693,147 @@ public sealed partial class App : Application
                 }
 
                 break;
+
+            // FIX-XKBDINPUT-001: the virtual-keyboard overlay toggle (View in gameplay,
+            // View/B while the keyboard is open) and the operator's key chords
+            // (Y=INST/DEL, X=RUN/STOP, LB=cursor-left, RB=SHIFT+cursor-left).
+            case ViceSharp.Xbox.Input.AppCommand.ToggleVirtualKeyboard:
+                ToggleKeyboardOverlay();
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardKeyDelete:
+                InjectC64Key("Delete");
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardKeyRunStop:
+                InjectC64Key("RunStop");
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardKeyCursorLeft:
+                InjectC64Key("Left");
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardKeyShiftCursorLeft:
+                InjectShiftedC64Key("Left");
+                break;
             default:
                 break;
         }
     }
 
     /// <summary>
+    /// Toggles the docked virtual-keyboard overlay via the navigation model's overlay flag
+    /// (K2: the dock shrinks the emulator row) and, when opening, moves XAML focus into the
+    /// keyboard so the D-pad immediately navigates tiles and A presses the focused tile
+    /// (FIX-XKBDINPUT-001).
+    /// </summary>
+    private void ToggleKeyboardOverlay()
+    {
+        Navigation.IsVirtualKeyboardOpen = !Navigation.IsVirtualKeyboardOpen;
+
+        if (Navigation.IsVirtualKeyboardOpen && _keyboardOverlay is not null)
+        {
+            var first = FocusManager.FindFirstFocusableElement(_keyboardOverlay);
+            (first as Windows.UI.Xaml.Controls.Control)?.Focus(Windows.UI.Xaml.FocusState.Programmatic);
+        }
+    }
+
+    /// <summary>Injects one C64 key down/up through the machine keyboard seam (chords).</summary>
+    /// <param name="keyName">The C64 keyboard-map key name.</param>
+    private void InjectC64Key(string keyName)
+    {
+        if (_machineKeyboard is not { } keyboard)
+            return;
+
+        keyboard.SetKeyState(keyName, true);
+        keyboard.SetKeyState(keyName, false);
+    }
+
+    /// <summary>Injects SHIFT + one C64 key (hardware-style wrap) through the seam.</summary>
+    /// <param name="keyName">The C64 keyboard-map key name to shift.</param>
+    private void InjectShiftedC64Key(string keyName)
+    {
+        if (_machineKeyboard is not { } keyboard)
+            return;
+
+        keyboard.SetKeyState("LeftShift", true);
+        keyboard.SetKeyState(keyName, true);
+        keyboard.SetKeyState(keyName, false);
+        keyboard.SetKeyState("LeftShift", false);
+    }
+
+    /// <summary>
     /// Root-level KeyDown handler (registered with handledEventsToo). ESC toggles the shell
-    /// menu; WASD/arrows drive focus navigation only while the menu is open (so they never
-    /// steal keys from a future C64-keyboard path). Tab and Enter/Space are left to native
-    /// XAML focus handling.
+    /// menu; WASD/arrows drive focus navigation only while the menu is open. With the menu
+    /// CLOSED, every mappable physical key types straight into the running C64
+    /// (FIX-XKBDINPUT-001, operator: "Emulator not receiving keyboard input"): the key is
+    /// injected DOWN here and released by <see cref="OnRootKeyUp"/>, with the held set
+    /// tracked so menu entry can force-release everything.
     /// </summary>
     private void OnRootKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
     {
         switch (e.Key)
         {
-            case Windows.System.VirtualKey.Escape: ToggleMenu(); e.Handled = true; break;
-            case Windows.System.VirtualKey.W: case Windows.System.VirtualKey.Up:    if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateUp);    e.Handled = true; } break;
-            case Windows.System.VirtualKey.S: case Windows.System.VirtualKey.Down:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateDown);  e.Handled = true; } break;
-            case Windows.System.VirtualKey.A: case Windows.System.VirtualKey.Left:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateLeft);  e.Handled = true; } break;
-            case Windows.System.VirtualKey.D: case Windows.System.VirtualKey.Right: if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateRight); e.Handled = true; } break;
+            case Windows.System.VirtualKey.Escape: ToggleMenu(); e.Handled = true; return;
+            case Windows.System.VirtualKey.W: case Windows.System.VirtualKey.Up:    if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateUp);    e.Handled = true; return; } break;
+            case Windows.System.VirtualKey.S: case Windows.System.VirtualKey.Down:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateDown);  e.Handled = true; return; } break;
+            case Windows.System.VirtualKey.A: case Windows.System.VirtualKey.Left:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateLeft);  e.Handled = true; return; } break;
+            case Windows.System.VirtualKey.D: case Windows.System.VirtualKey.Right: if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateRight); e.Handled = true; return; } break;
         }
+
+        // Physical keyboard -> C64 (menu closed only; key auto-repeat collapses onto the
+        // held set so the machine sees one clean down per physical press).
+        if (!IsMenuOpen
+            && _machineKeyboard is { } keyboard
+            && PhysicalKeyMap.TryTranslate((int)e.Key, out var keyName))
+        {
+            if (_pressedKeys.Add(keyName))
+            {
+                keyboard.SetKeyState(keyName, true);
+            }
+
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// Root-level KeyUp counterpart (FIX-XKBDINPUT-001): releases exactly the C64 keys this
+    /// app pressed (pairing through the held set, so ups after a menu force-release or for
+    /// keys the menu consumed are no-ops).
+    /// </summary>
+    private void OnRootKeyUp(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+    {
+        if (PhysicalKeyMap.TryTranslate((int)e.Key, out var keyName)
+            && _pressedKeys.Remove(keyName)
+            && _machineKeyboard is { } keyboard)
+        {
+            keyboard.SetKeyState(keyName, false);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// Force-releases every C64 key this app currently holds (FIX-XKBDINPUT-001): called on
+    /// menu entry so a key held while ESC/Menu fires can never stick down inside the machine.
+    /// </summary>
+    private void ReleaseAllPressedKeys()
+    {
+        if (_pressedKeys.Count == 0)
+            return;
+
+        if (_machineKeyboard is { } keyboard)
+        {
+            foreach (var key in _pressedKeys)
+            {
+                keyboard.SetKeyState(key, false);
+            }
+        }
+
+        _pressedKeys.Clear();
     }
 
     /// <summary>Reveals the shell-menu Frame over the running emulator (Menu button -> OpenMainMenu).</summary>
     private void ShowMenu()
     {
+        // FIX-XKBDINPUT-001: entering the menu force-releases any held C64 keys.
+        ReleaseAllPressedKeys();
+
         if (_frame is null)
         {
             return;

@@ -216,22 +216,28 @@ public sealed class AppCommandDispatcher
                 _onCloseMenu?.Invoke();
                 break;
 
-            // UI-only shell-menu navigation: pass the exact command to the head so it can
-            // drive XAML focus / activate the focused control / go back. Still no host call.
+            // UI-only shell-menu navigation plus the virtual-keyboard commands
+            // (FIX-XKBDINPUT-001: overlay toggle + the Y/X/LB/RB key chords): pass the
+            // exact command to the head so it can drive XAML focus / activate / go back /
+            // toggle the overlay / inject the chorded C64 key. Still no host call.
             case AppCommand.UiNavigateUp:
             case AppCommand.UiNavigateDown:
             case AppCommand.UiNavigateLeft:
             case AppCommand.UiNavigateRight:
             case AppCommand.UiActivate:
             case AppCommand.UiBack:
+            case AppCommand.ToggleVirtualKeyboard:
+            case AppCommand.KeyboardKeyDelete:
+            case AppCommand.KeyboardKeyRunStop:
+            case AppCommand.KeyboardKeyCursorLeft:
+            case AppCommand.KeyboardKeyShiftCursorLeft:
                 _onUiNavigate?.Invoke(command);
                 break;
 
-            // UI-only + neutral commands are handled by the UI layer, and ToggleWarp is
-            // never emitted by the Xbox pipeline (the WarpHold pair is used instead): no
-            // host interaction for any of these.
+            // Neutral commands are handled by the UI layer, and ToggleWarp is never
+            // emitted by the Xbox pipeline (the WarpHold pair is used instead): no host
+            // interaction for any of these.
             case AppCommand.None:
-            case AppCommand.ToggleVirtualKeyboard:
             case AppCommand.ToggleWarp:
             case AppCommand.ConfirmYes:
             case AppCommand.ConfirmNo:
