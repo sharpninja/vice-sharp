@@ -302,6 +302,28 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
             : null;
 
     /// <summary>
+    /// Whether the session's VIC currently runs the LOWERCASE ROM charset
+    /// (FEAT-XKEYCAPCASE-001): the <c>$D018</c> character base's bit 11 selects
+    /// <c>$1800</c> lowercase vs <c>$1000</c> uppercase/graphics. Read live per call so
+    /// SHIFT+C= (or a POKE 53272) is reflected on the next poll; unknown sessions or
+    /// machines without the C64 VIC report uppercase.
+    /// </summary>
+    /// <param name="sessionId">The session whose charset case is requested.</param>
+    /// <returns><c>true</c> while the lowercase charset is active.</returns>
+    public bool GetCharsetLowercase(string sessionId)
+    {
+        if (!_registry.TryGet(sessionId, out var session))
+            return false;
+
+        lock (session.SyncRoot)
+        {
+            return session.Machine.Devices.GetByRole(DeviceRole.VideoChip)
+                    is ViceSharp.Chips.VicIi.Mos6569 vic
+                && (vic.CharacterBase & 0x0800) != 0;
+        }
+    }
+
+    /// <summary>
     /// The live machine profile's nominal clock in Hz for a session, or <c>null</c> when the
     /// session is unknown or its architecture carries no profile (FEAT-XPERFHUD-001). Drives
     /// the head's performance-HUD speed-percent line (measured cycle rate vs nominal).

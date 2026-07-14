@@ -2,6 +2,7 @@ namespace ViceSharp.TestHarness.Xbox;
 
 using System;
 using System.IO;
+using ViceSharp.Xbox.ViewModels;
 using Xunit;
 
 /// <summary>
@@ -26,12 +27,65 @@ using Xunit;
 public sealed class XboxKeycapShiftTests
 {
     [Fact]
+    public void KeycapGlyphs_FollowTheMachineCharsetCase()
+    {
+        // FEAT-XKEYCAPCASE-001 (operator 2026-07-14: "virtual keyboard needs to know if
+        // computer is in upper or lower case characters and use the appropriate
+        // glyphs"): the C64 charset mode is VIC $D018's charset-base bit (bit 11 of the
+        // character base: $1000 uppercase/graphics, $1800 lowercase/uppercase).
+        Assert.False(VirtualKeycapGlyphs.IsLowercaseCharacterBase(0x1000));
+        Assert.True(VirtualKeycapGlyphs.IsLowercaseCharacterBase(0x1800));
+
+        var letter = new VirtualKeyEntry("A", "A", IsWide: false);
+
+        // Uppercase/graphics mode: letters render uppercase regardless of shift (the
+        // shifted glyphs are PETSCII graphics, which the keycaps do not fake).
+        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: false, lowercaseMode: false));
+        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: true, lowercaseMode: false));
+
+        // Lowercase/uppercase mode: unshifted types lowercase, shifted types uppercase.
+        Assert.Equal("a", VirtualKeycapGlyphs.For(letter, shifted: false, lowercaseMode: true));
+        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: true, lowercaseMode: true));
+
+        // Non-letter keys keep the FEAT-XKEYCAPSHIFT behavior in both modes.
+        var digit = new VirtualKeyEntry("1", "1", IsWide: false, ShiftedLabel: "!");
+        Assert.Equal("1", VirtualKeycapGlyphs.For(digit, shifted: false, lowercaseMode: true));
+        Assert.Equal("!", VirtualKeycapGlyphs.For(digit, shifted: true, lowercaseMode: true));
+
+        var wide = new VirtualKeyEntry("Return", "RETURN", IsWide: true);
+        Assert.Equal("RETURN", VirtualKeycapGlyphs.For(wide, shifted: true, lowercaseMode: true));
+    }
+
+    [Fact]
+    public void Head_PollsTheCharsetCase_IntoTheKeycaps()
+    {
+        // FEAT-XKEYCAPCASE-001 structural: the host/facade expose the live charset case
+        // (from the VIC character base) and the overlay polls it while visible.
+        var host = ReadLower("src", "ViceSharp.Host.InProcess", "Runtime", "ConsoleEmulatorHost.cs");
+        Assert.Contains("getcharsetlowercase", host);
+        Assert.Contains("characterbase", host);
+
+        var facade = ReadLower("src", "ViceSharp.Xbox", "Platform", "InProcessSessionFacade.cs");
+        Assert.Contains("getcharsetlowercase", facade);
+
+        var overlay = ReadLower("src", "ViceSharp.Xbox", "Controls", "VirtualKeyboardOverlay.xaml.cs");
+        Assert.Contains("ischarsetlowercase", overlay);
+        Assert.Contains("virtualkeycapglyphs.for", overlay);
+
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("getcharsetlowercase", app);
+    }
+
+    [Fact]
     public void Overlay_SwapsKeycaps_WithTheShiftVisual()
     {
         var overlay = ReadLower("src", "ViceSharp.Xbox", "Controls", "VirtualKeyboardOverlay.xaml.cs");
         Assert.Contains("refreshkeycaps", overlay);
         Assert.Contains("setexternalshift", overlay);
-        Assert.Contains("shiftedlabel", overlay);
+
+        // The shifted-legend selection lives in the shared glyph helper now
+        // (FEAT-XKEYCAPCASE-001 composes it with the charset case).
+        Assert.Contains("virtualkeycapglyphs.for", overlay);
     }
 
     [Fact]

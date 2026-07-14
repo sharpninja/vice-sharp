@@ -106,6 +106,15 @@ public sealed class InProcessSessionFacade : IEmulatorSessionFacade, ILocalVideo
     public double? GetRefreshRateHz(string sessionId) => _host.GetRefreshRateHz(sessionId);
 
     /// <summary>
+    /// Whether the live machine currently runs the LOWERCASE charset
+    /// (FEAT-XKEYCAPCASE-001): drives the virtual keyboard's letter keycap glyphs.
+    /// Read live per call (the mode flips at runtime via SHIFT+C=).
+    /// </summary>
+    /// <param name="sessionId">The session whose charset case is requested.</param>
+    /// <returns><c>true</c> while the lowercase charset is active.</returns>
+    public bool GetCharsetLowercase(string sessionId) => _host.GetCharsetLowercase(sessionId);
+
+    /// <summary>
     /// The live machine profile's nominal clock in Hz for a session, or <c>null</c> when
     /// unknown (FEAT-XPERFHUD-001). Read per call for the same model-change reason.
     /// </summary>

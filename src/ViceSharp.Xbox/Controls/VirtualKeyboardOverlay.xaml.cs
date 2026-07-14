@@ -2,6 +2,8 @@
 #if HAS_UWP
 namespace ViceSharp.Xbox.Controls;
 
+using System;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -10,18 +12,36 @@ using ViceSharp.Xbox.ViewModels;
 /// <summary>
 /// The on-screen virtual keyboard dock. Pressing a tile routes through the bound
 /// <see cref="VirtualKeyboardViewModel"/>, which injects the keystroke (or RESTORE /
-/// SHIFT-LOCK) on the machine keyboard seam. FEAT-XKEYCAPSHIFT-001: while SHIFT is
-/// effective (trigger hold, SHIFT-LOCK latch, or a momentary one-shot arm) each keycap
-/// swaps to its printable shifted legend (<see cref="VirtualKeyEntry.ShiftedLabel"/>)
-/// and back when shift clears.
+/// SHIFT-LOCK) on the machine keyboard seam. Keycap glyphs are LIVE
+/// (<see cref="VirtualKeycapGlyphs"/>): FEAT-XKEYCAPSHIFT-001 swaps the printable
+/// shifted legends while SHIFT is effective, and FEAT-XKEYCAPCASE-001 follows the
+/// machine's charset case (uppercase/graphics vs lowercase/uppercase, polled from the
+/// live VIC while the dock is visible) so letters read exactly as they will insert.
 /// </summary>
 public sealed partial class VirtualKeyboardOverlay : UserControl
 {
+    private readonly DispatcherQueueTimer _caseTimer;
+
     private bool _externalShift;
     private bool _appliedShift;
+    private bool _appliedLowercase;
 
-    /// <summary>Creates the overlay.</summary>
-    public VirtualKeyboardOverlay() => InitializeComponent();
+    /// <summary>Creates the overlay and its charset-case poll (runs only while loaded).</summary>
+    public VirtualKeyboardOverlay()
+    {
+        InitializeComponent();
+
+        // The charset mode flips at RUNTIME (SHIFT+C= / POKE 53272), so poll the live
+        // VIC at ~4 Hz while the dock is on screen; the apply path no-ops when nothing
+        // changed, so the steady-state cost is one facade read.
+        _caseTimer = DispatcherQueue.GetForCurrentThread().CreateTimer();
+        _caseTimer.Interval = TimeSpan.FromMilliseconds(250);
+        _caseTimer.IsRepeating = true;
+        _caseTimer.Tick += (_, _) => RefreshKeycaps();
+
+        Loaded += (_, _) => _caseTimer.Start();
+        Unloaded += (_, _) => _caseTimer.Stop();
+    }
 
     /// <summary>
     /// Sets the EXTERNAL shift state (the head's RT trigger-modifier hold,
@@ -39,22 +59,25 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     }
 
     /// <summary>
-    /// Re-evaluates the effective shift state and swaps every realized keycap between
-    /// its base and shifted legend. Called on external-shift edges and after every tile
-    /// press (the press may toggle the latch, arm/consume the one-shot, or leave both).
+    /// Re-evaluates the effective shift + charset-case state and swaps every realized
+    /// keycap glyph. Called on external-shift edges, after every tile press (the press
+    /// may toggle the latch or arm/consume the one-shot), and by the case poll.
     /// </summary>
     public void RefreshKeycaps()
     {
         var vm = DataContext as VirtualKeyboardViewModel;
         var shifted = _externalShift || vm is { ShiftLatched: true } || vm is { ShiftArmed: true };
-        if (shifted == _appliedShift)
+        var lowercase = App.Instance.IsCharsetLowercase();
+
+        if (shifted == _appliedShift && lowercase == _appliedLowercase)
             return;
 
         _appliedShift = shifted;
-        ApplyKeycaps(this, shifted);
+        _appliedLowercase = lowercase;
+        ApplyKeycaps(this, shifted, lowercase);
     }
 
-    private static void ApplyKeycaps(DependencyObject root, bool shifted)
+    private static void ApplyKeycaps(DependencyObject root, bool shifted, bool lowercase)
     {
         var count = VisualTreeHelper.GetChildrenCount(root);
         for (var i = 0; i < count; i++)
@@ -62,12 +85,10 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
             var child = VisualTreeHelper.GetChild(root, i);
             if (child is Button { DataContext: VirtualKeyEntry entry } button)
             {
-                button.Content = shifted && entry.ShiftedLabel is not null
-                    ? entry.ShiftedLabel
-                    : entry.DisplayLabel;
+                button.Content = VirtualKeycapGlyphs.For(entry, shifted, lowercase);
             }
 
-            ApplyKeycaps(child, shifted);
+            ApplyKeycaps(child, shifted, lowercase);
         }
     }
 

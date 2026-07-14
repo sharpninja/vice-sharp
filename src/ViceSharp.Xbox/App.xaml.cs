@@ -629,6 +629,26 @@ public sealed partial class App : Application
     }
 
     /// <summary>
+    /// FEAT-XKEYCAPCASE-001: whether the live machine currently runs the LOWERCASE
+    /// charset (drives the virtual keyboard's letter keycap glyphs). Guarded: reports
+    /// uppercase when the facade/session is not up yet.
+    /// </summary>
+    /// <returns><c>true</c> while the lowercase charset is active.</returns>
+    internal bool IsCharsetLowercase()
+    {
+        try
+        {
+            return _facade is not null
+                && !string.IsNullOrEmpty(_sessionId)
+                && _facade.GetCharsetLowercase(_sessionId);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
     /// FEAT-XDEFAULTCART-001: attaches the boot cartridge resolved from vice.ini (first
     /// boot: the embedded S-Blox default) and cold-resets so the cartridge actually boots
     /// (a cartridge only takes over at reset; VICE's CartridgeReset default does the same).
