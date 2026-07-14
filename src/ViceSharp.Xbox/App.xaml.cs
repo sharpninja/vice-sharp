@@ -252,7 +252,12 @@ public sealed partial class App : Application
 
         // The root: an always-present in-emulator base view (the video surface), a
         // transparent Frame carrying the pushable pages above it, and the two overlays.
+        // PLAN-XKEYBOARD-001 K2: two rows: the emulator lives in the star row and the
+        // virtual keyboard DOCKS in the bottom Auto row, so showing the keyboard SHRINKS
+        // the emulator instead of occluding it (the Auto row collapses when hidden).
         var root = new Grid();
+        root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+        root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         // Catch shell-menu keyboard navigation even when a focused child already handled the
         // key (handledEventsToo: true). ESC toggles the menu; WASD/arrows drive focus while the
@@ -265,19 +270,27 @@ public sealed partial class App : Application
         var emulatorView = new EmulatorView();
         _emulatorView = emulatorView;
         _videoSurface = emulatorView.SurfaceHost;
+        Grid.SetRow(emulatorView, 0);
         root.Children.Add(emulatorView);
 
         // FEAT-XPERFHUD-001 toggle: apply the persisted performance-counters preference
         // (head-local UWP LocalSettings; default ON) to the freshly created HUD.
         emulatorView.SetPerfStatsVisible(IsPerfHudVisible);
 
+        // The shell Frame and quick menu are full-window overlays (both rows); the
+        // keyboard dock owns the bottom row (K2: shrink, never occlude).
         var frame = new Frame { Background = null };
         _frame = frame;
+        Grid.SetRow(frame, 0);
+        Grid.SetRowSpan(frame, 2);
         root.Children.Add(frame);
 
         var keyboardOverlay = new VirtualKeyboardOverlay { Visibility = Visibility.Collapsed };
         _keyboardOverlay = keyboardOverlay;
+        Grid.SetRow(keyboardOverlay, 1);
         var quickMenu = new QuickMenuOverlay { Visibility = Visibility.Collapsed };
+        Grid.SetRow(quickMenu, 0);
+        Grid.SetRowSpan(quickMenu, 2);
         if (KeyboardVm is not null)
             keyboardOverlay.DataContext = KeyboardVm;
         root.Children.Add(keyboardOverlay);

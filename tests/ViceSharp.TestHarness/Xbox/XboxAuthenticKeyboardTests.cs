@@ -172,6 +172,51 @@ public sealed class XboxAuthenticKeyboardTests
         Assert.False(vm.ShiftArmed);
     }
 
+    [Fact]
+    public void Head_DocksKeyboard_BottomRow_WithRightFunctionColumn()
+    {
+        // PLAN-XKEYBOARD-001 K2 (structural; the #if HAS_UWP head cannot execute headless):
+        // the keyboard is NOT an overlay: it docks in a bottom Auto row so showing it
+        // SHRINKS the emulator's star row (never occludes), slides up via the native
+        // bottom-edge transition, renders the F1..F7 column on the RIGHT, and sizes tiles
+        // from the layout's true width units. The old full-screen scrim is gone.
+        var overlay = ReadLower("src", "ViceSharp.Xbox", "Controls", "VirtualKeyboardOverlay.xaml");
+        Assert.Contains("functionkeys", overlay);
+        Assert.Contains("edgeuithemetransition", overlay);
+        Assert.Contains("effectivewidthunits", overlay);
+        Assert.DoesNotContain("#cc000000", overlay);
+
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("rowdefinitions.add", app);
+        Assert.Contains("grid.setrow(keyboardoverlay, 1)", app);
+        Assert.Contains("grid.setrowspan(frame, 2)", app);
+    }
+
+    private static string ReadLower(params string[] parts)
+    {
+        var path = System.IO.Path.Combine(RepoRoot, System.IO.Path.Combine(parts));
+        Assert.True(System.IO.File.Exists(path), $"Expected source file at '{path}'.");
+        return System.IO.File.ReadAllText(path).ToLowerInvariant();
+    }
+
+    private static string RepoRoot
+    {
+        get
+        {
+            var directory = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
+            while (directory is not null
+                && !System.IO.File.Exists(System.IO.Path.Combine(directory.FullName, "ViceSharp.slnx")))
+            {
+                directory = directory.Parent;
+            }
+
+            if (directory is null)
+                throw new InvalidOperationException("Could not locate repository root.");
+
+            return directory.FullName;
+        }
+    }
+
     private static VirtualKeyEntry Single(VirtualKeyboardLayout layout, string keyName)
         => layout.AllKeys.Single(k => k.KeyName == keyName && k.Kind == AppKeyKind.Key);
 

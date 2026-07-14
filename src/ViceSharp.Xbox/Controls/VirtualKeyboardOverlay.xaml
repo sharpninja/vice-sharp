@@ -1,19 +1,42 @@
 <!--
-  PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the on-screen virtual C64 keyboard overlay. Binds
-  VirtualKeyboardViewModel.Rows; each tile presses through the machine keyboard seam. Inert
-  on the net10.0 fallback (its code-behind is #if HAS_UWP-guarded).
+  PLAN-XBOXUWP S34 + PLAN-XKEYBOARD-001 K2: the on-screen REAL C64 keyboard. NOT an
+  overlay: the App docks this control in the root grid's bottom Auto row, so showing it
+  SHRINKS the emulator's star row above (never occludes the display), and the native
+  bottom-edge transition slides it up. Binds VirtualKeyboardViewModel: the five physical
+  rows in the center, the F1..F7 function column on the RIGHT (as on the machine), and
+  every tile sized from the layout's true width units. Inert on the net10.0 fallback
+  (code-behind is #if HAS_UWP-guarded).
 -->
 <UserControl
     x:Class="ViceSharp.Xbox.Controls.VirtualKeyboardOverlay"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:ViceSharp.Xbox.Controls"
     RequiresPointer="Never">
-    <Grid Background="#CC000000" Padding="48">
-        <Border VerticalAlignment="Bottom" Background="#EE202020" CornerRadius="12" Padding="24">
-            <ItemsControl ItemsSource="{Binding Rows}">
+    <UserControl.Resources>
+        <!-- Width units -> pixels (one key unit = 52 px at 10-foot scale). -->
+        <controls:KeyWidthConverter x:Key="KeyWidth" UnitPixels="52" />
+    </UserControl.Resources>
+
+    <!-- Slide up from the bottom edge when the dock becomes visible. -->
+    <UserControl.Transitions>
+        <TransitionCollection>
+            <EdgeUIThemeTransition Edge="Bottom" />
+        </TransitionCollection>
+    </UserControl.Transitions>
+
+    <Border Background="#F0181C20" BorderBrush="#40FFFFFF" BorderThickness="0,1,0,0" Padding="16,12">
+        <Grid HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- The five physical rows. -->
+            <ItemsControl Grid.Column="0" ItemsSource="{Binding Rows}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <ItemsControl ItemsSource="{Binding}">
+                        <ItemsControl ItemsSource="{Binding}" HorizontalAlignment="Center">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
@@ -23,10 +46,11 @@
                                 <DataTemplate>
                                     <Button
                                         Content="{Binding DisplayLabel}"
-                                        MinWidth="56"
-                                        MinHeight="56"
-                                        Margin="4"
-                                        FontSize="22"
+                                        Width="{Binding EffectiveWidthUnits, Converter={StaticResource KeyWidth}}"
+                                        MinHeight="52"
+                                        Margin="3"
+                                        Padding="0"
+                                        FontSize="16"
                                         Click="OnKeyPressed" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -34,6 +58,22 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Border>
-    </Grid>
+
+            <!-- The function-key column, on the RIGHT like the physical machine. -->
+            <ItemsControl Grid.Column="1" ItemsSource="{Binding Layout.FunctionKeys}" Margin="16,0,0,0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Content="{Binding DisplayLabel}"
+                            Width="96"
+                            MinHeight="52"
+                            Margin="3"
+                            Padding="0"
+                            FontSize="16"
+                            Click="OnKeyPressed" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Border>
 </UserControl>
