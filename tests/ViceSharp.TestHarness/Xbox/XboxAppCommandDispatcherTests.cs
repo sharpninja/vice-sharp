@@ -375,6 +375,7 @@ public sealed class XboxAppCommandDispatcherTests
 
         await dispatcher.DispatchAsync(Session, AppCommand.ToggleVirtualKeyboard, TestContext.Current.CancellationToken);
         await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyDelete, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeySpace, TestContext.Current.CancellationToken);
         await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyRunStop, TestContext.Current.CancellationToken);
         await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyCursorLeft, TestContext.Current.CancellationToken);
         await dispatcher.DispatchAsync(Session, AppCommand.KeyboardKeyShiftCursorLeft, TestContext.Current.CancellationToken);
@@ -384,6 +385,7 @@ public sealed class XboxAppCommandDispatcherTests
             {
                 AppCommand.ToggleVirtualKeyboard,
                 AppCommand.KeyboardKeyDelete,
+                AppCommand.KeyboardKeySpace,
                 AppCommand.KeyboardKeyRunStop,
                 AppCommand.KeyboardKeyCursorLeft,
                 AppCommand.KeyboardKeyShiftCursorLeft,

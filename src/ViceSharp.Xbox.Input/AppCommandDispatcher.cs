@@ -228,6 +228,7 @@ public sealed class AppCommandDispatcher
             case AppCommand.UiBack:
             case AppCommand.ToggleVirtualKeyboard:
             case AppCommand.KeyboardKeyDelete:
+            case AppCommand.KeyboardKeySpace:
             case AppCommand.KeyboardKeyRunStop:
             case AppCommand.KeyboardKeyCursorLeft:
             case AppCommand.KeyboardKeyShiftCursorLeft:

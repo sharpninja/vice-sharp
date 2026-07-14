@@ -293,18 +293,18 @@ public sealed class XboxInputContext
         }
         else if (current == InputContext.VirtualKeyboard)
         {
-            // FIX-XKBDINPUT-001 (operator mapping): while the on-screen keyboard is open,
-            // the D-pad navigates the tiles (repeater above), A activates the FOCUSED tile
-            // (that is how RETURN and every letter is pressed), B closes the keyboard, and
-            // Y/X/LB/RB are dedicated key chords (INST/DEL, RUN/STOP, cursor-left,
-            // SHIFT+cursor-left). View still toggles the keyboard off; Menu still closes
-            // back to gameplay.
+            // FIX-XKBDINPUT-001 (operator mapping, remapped 2026-07-14): while the
+            // on-screen keyboard is open, the D-pad navigates the tiles (repeater above),
+            // A activates the FOCUSED tile (that is how RETURN and every letter is
+            // pressed), and the chords are X=INST/DEL, Y=SPACE, B=RUN/STOP,
+            // LB=cursor-left, RB=SHIFT+cursor-left. View toggles the keyboard off; Menu
+            // closes back to gameplay.
             if (menuEdge)
             {
                 commands.Add(AppCommand.CloseMenu);
                 next = InputContext.Gameplay;
             }
-            else if (viewEdge || bEdge)
+            else if (viewEdge)
             {
                 commands.Add(AppCommand.ToggleVirtualKeyboard);
                 next = InputContext.Gameplay;
@@ -316,12 +316,17 @@ public sealed class XboxInputContext
                     commands.Add(AppCommand.UiActivate);
                 }
 
-                if (DownEdge(GamepadButtonFlags.Y, in snapshot))
+                if (DownEdge(GamepadButtonFlags.X, in snapshot))
                 {
                     commands.Add(AppCommand.KeyboardKeyDelete);
                 }
 
-                if (DownEdge(GamepadButtonFlags.X, in snapshot))
+                if (DownEdge(GamepadButtonFlags.Y, in snapshot))
+                {
+                    commands.Add(AppCommand.KeyboardKeySpace);
+                }
+
+                if (bEdge)
                 {
                     commands.Add(AppCommand.KeyboardKeyRunStop);
                 }

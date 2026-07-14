@@ -694,14 +694,17 @@ public sealed partial class App : Application
 
                 break;
 
-            // FIX-XKBDINPUT-001: the virtual-keyboard overlay toggle (View in gameplay,
-            // View/B while the keyboard is open) and the operator's key chords
-            // (Y=INST/DEL, X=RUN/STOP, LB=cursor-left, RB=SHIFT+cursor-left).
+            // FIX-XKBDINPUT-001: the virtual-keyboard overlay toggle (View) and the
+            // operator's key chords (remapped 2026-07-14: X=INST/DEL, Y=SPACE,
+            // B=RUN/STOP, LB=cursor-left, RB=SHIFT+cursor-left).
             case ViceSharp.Xbox.Input.AppCommand.ToggleVirtualKeyboard:
                 ToggleKeyboardOverlay();
                 break;
             case ViceSharp.Xbox.Input.AppCommand.KeyboardKeyDelete:
                 InjectC64Key("Delete");
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardKeySpace:
+                InjectC64Key("Space");
                 break;
             case ViceSharp.Xbox.Input.AppCommand.KeyboardKeyRunStop:
                 InjectC64Key("RunStop");

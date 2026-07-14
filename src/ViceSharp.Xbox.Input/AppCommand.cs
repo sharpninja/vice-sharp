@@ -76,13 +76,19 @@ public enum AppCommand
     UiBack,
 
     /// <summary>
-    /// Virtual-keyboard chord (FIX-XKBDINPUT-001, operator mapping): inject INST/DEL
-    /// (Y button while the on-screen keyboard is open). UI-layer only.
+    /// Virtual-keyboard chord (FIX-XKBDINPUT-001, operator mapping 2026-07-14): inject
+    /// INST/DEL (X button while the on-screen keyboard is open). UI-layer only.
     /// </summary>
     KeyboardKeyDelete,
 
     /// <summary>
-    /// Virtual-keyboard chord: inject RUN/STOP (X button while the on-screen keyboard
+    /// Virtual-keyboard chord: inject SPACE (Y button while the on-screen keyboard is
+    /// open). UI-layer only.
+    /// </summary>
+    KeyboardKeySpace,
+
+    /// <summary>
+    /// Virtual-keyboard chord: inject RUN/STOP (B button while the on-screen keyboard
     /// is open). UI-layer only.
     /// </summary>
     KeyboardKeyRunStop,

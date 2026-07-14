@@ -100,27 +100,31 @@ public sealed class XboxKeyboardInputTests
     [Fact]
     public void KeyboardContext_ChordButtons_EmitTheOperatorMapping()
     {
-        // TEST-XKBDIN-001b: enter the VirtualKeyboard context via the View edge.
+        // TEST-XKBDIN-001b (remapped by the operator 2026-07-14: "X button goes to DEL,
+        // Y button goes to space bar, B button goes to RUN/STOP").
         var context = new XboxInputContext();
         context.RequestContext(InputContext.VirtualKeyboard);
 
         Assert.Equal(
             new[] { AppCommand.KeyboardKeyDelete },
-            Commands(context, 1, GamepadButtonFlags.Y));
+            Commands(context, 1, GamepadButtonFlags.X));
+        Assert.Equal(
+            new[] { AppCommand.KeyboardKeySpace },
+            Commands(context, 3, GamepadButtonFlags.Y));
         Assert.Equal(
             new[] { AppCommand.KeyboardKeyRunStop },
-            Commands(context, 3, GamepadButtonFlags.X));
+            Commands(context, 5, GamepadButtonFlags.B));
         Assert.Equal(
             new[] { AppCommand.KeyboardKeyCursorLeft },
-            Commands(context, 5, GamepadButtonFlags.LeftShoulder));
+            Commands(context, 7, GamepadButtonFlags.LeftShoulder));
         Assert.Equal(
             new[] { AppCommand.KeyboardKeyShiftCursorLeft },
-            Commands(context, 7, GamepadButtonFlags.RightShoulder));
+            Commands(context, 9, GamepadButtonFlags.RightShoulder));
 
         // A still activates the focused tile (that is how RETURN and every letter is
-        // pressed); B closes the keyboard and returns to Gameplay.
-        Assert.Equal(new[] { AppCommand.UiActivate }, Commands(context, 9, GamepadButtonFlags.A));
-        var resolution = TickPair(context, 11, GamepadButtonFlags.B);
+        // pressed); View (not B, which now types RUN/STOP) closes the keyboard.
+        Assert.Equal(new[] { AppCommand.UiActivate }, Commands(context, 11, GamepadButtonFlags.A));
+        var resolution = TickPair(context, 13, GamepadButtonFlags.View);
         Assert.Equal(new[] { AppCommand.ToggleVirtualKeyboard }, resolution.Commands);
         Assert.Equal(InputContext.Gameplay, resolution.NextContext);
     }
@@ -135,6 +139,14 @@ public sealed class XboxKeyboardInputTests
         Assert.Empty(Commands(context, 3, GamepadButtonFlags.X));
         Assert.Empty(Commands(context, 5, GamepadButtonFlags.LeftShoulder));
         Assert.Empty(Commands(context, 7, GamepadButtonFlags.RightShoulder));
+    }
+
+    [Fact]
+    public void Head_InjectsSpace_ForTheYChord()
+    {
+        // TEST-XKBDIN-001d (remap): the head routes KeyboardKeySpace to a SPACE injection.
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("keyboardkeyspace", app);
     }
 
     [Fact]
