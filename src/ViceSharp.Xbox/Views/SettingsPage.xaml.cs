@@ -2,6 +2,7 @@
 #if HAS_UWP
 namespace ViceSharp.Xbox.Views;
 
+using Microsoft.Extensions.Logging;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -29,7 +30,27 @@ public sealed partial class SettingsPage : Page
         PerfCountersToggle.IsOn = App.Instance.IsPerfHudVisible;
 
         if (ViewModel is not null)
+        {
             await ViewModel.RefreshAsync();
+
+            // FIX-XSETBLANK-001 diagnostics (operator 2026-07-14: "Settings broken", all
+            // pickers blank): the refresh outcome is otherwise invisible when StatusText
+            // sits below the scroll fold, so mirror the adopted state into the log.
+            App.CreateLogger("Settings").LogInformation(
+                "refresh: status='{Status}' computers={Computers} models={Models} renderers={Renderers} selComputer='{SelComputer}' selModel='{SelModel}' selRenderer='{SelRenderer}' volume={Volume}",
+                ViewModel.StatusText,
+                ViewModel.Computers.Count,
+                ViewModel.Models.Count,
+                ViewModel.Renderers.Count,
+                ViewModel.SelectedComputer?.DisplayName,
+                ViewModel.SelectedModel?.DisplayName,
+                ViewModel.SelectedRenderer,
+                ViewModel.MasterVolumePercent);
+        }
+        else
+        {
+            App.CreateLogger("Settings").LogWarning("refresh skipped: SettingsVm is null");
+        }
     }
 
     // Applies + persists LIVE (head-local LocalSettings); independent of Apply/Revert.

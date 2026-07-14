@@ -49,6 +49,10 @@ public sealed partial class App : Application
     // can force-release everything (no stuck C64 keys).
     private IMachineKeyboardInput? _machineKeyboard;
     private readonly System.Collections.Generic.HashSet<string> _pressedKeys = new(StringComparer.Ordinal);
+
+    // FEAT-XDEFAULTCART-001: the canonical vice.ini settings (Core INI reader/writer) the
+    // default-cartridge policy and user media selections persist through.
+    private ViceSharp.Core.Configuration.ViceSettings? _viceSettings;
     private string _sessionId = string.Empty;
     private string _c64Directory = string.Empty;
     private Frame? _frame;
@@ -483,6 +487,31 @@ public sealed partial class App : Application
         if (persisted is not null)
             _ = ReapplyPersistedSettingsAsync(facade, _sessionId, persisted);
 
+        // FEAT-XDEFAULTCART-001: the standing vice.ini cartridge (first boot: the embedded
+        // S-Blox default, extracted + recorded in vice.ini as normal) attaches at boot with a
+        // cart-boot cold reset; user media selections keep vice.ini current via the facade hook.
+        try
+        {
+            _viceSettings = ViceSharp.Core.Configuration.ViceSettings.OpenAt(ApplicationData.Current.LocalFolder.Path);
+            facade.MediaSelectionChanged = (slot, path) =>
+            {
+                try
+                {
+                    DefaultCartridgeBoot.NoteUserMediaSelection(_viceSettings!, slot, path);
+                }
+                catch (Exception ex)
+                {
+                    CreateLogger("App").LogError(ex, "recording media selection in vice.ini failed");
+                }
+            };
+
+            _ = AttachBootCartridgeAsync(facade, host, _sessionId, _viceSettings, _c64Directory);
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "default-cartridge boot wiring failed");
+        }
+
         // The facade implements both seam interfaces, so disambiguate the ctor overload.
         VideoPull = new VideoFramePullViewModel((IEmulatorSessionFacade)facade, _sessionId);
         SettingsVm = new XboxSettingsViewModel(facade, _sessionId);
@@ -587,6 +616,62 @@ public sealed partial class App : Application
         catch (Exception ex)
         {
             CreateLogger("App").LogError(ex, "keyboard rebuild failed");
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XDEFAULTCART-001: attaches the boot cartridge resolved from vice.ini (first
+    /// boot: the embedded S-Blox default) and cold-resets so the cartridge actually boots
+    /// (a cartridge only takes over at reset; VICE's CartridgeReset default does the same).
+    /// Fire-and-forget with logging: a failure costs only the default cartridge.
+    /// </summary>
+    private async Task AttachBootCartridgeAsync(
+        InProcessSessionFacade facade,
+        ViceSharp.Host.Runtime.ConsoleHost host,
+        string sessionId,
+        ViceSharp.Core.Configuration.ViceSettings settings,
+        string? c64Directory)
+    {
+        try
+        {
+            var cartridgeDirectory = string.IsNullOrEmpty(c64Directory)
+                ? Path.Combine(ApplicationData.Current.LocalFolder.Path, "C64")
+                : c64Directory;
+
+            var cartridge = DefaultCartridgeBoot.ResolveBootCartridge(settings, cartridgeDirectory);
+            if (cartridge is null)
+            {
+                CreateLogger("App").LogInformation("boot cartridge: none configured");
+                return;
+            }
+
+            var payload = await Task.Run(() => File.ReadAllBytes(cartridge)).ConfigureAwait(false);
+            var response = await facade.AttachMediaAsync(
+                    MediaSlot.Cartridge,
+                    cartridge,
+                    isReadOnly: true,
+                    payload,
+                    Path.GetFileName(cartridge))
+                .ConfigureAwait(false);
+
+            if (response.Status.IsSuccess)
+            {
+                // The cartridge maps in live; a cold reset makes it BOOT (cart takes over
+                // the reset vector, exactly like VICE's attach-with-CartridgeReset).
+                host.ResetCold(sessionId);
+                CreateLogger("App").LogInformation(
+                    "boot cartridge attached + cold reset: {Cartridge} ({Bytes} bytes)",
+                    cartridge, payload.Length);
+            }
+            else
+            {
+                CreateLogger("App").LogWarning(
+                    "boot cartridge attach failed: {Message}", response.Status.Message);
+            }
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "boot cartridge attach failed");
         }
     }
 

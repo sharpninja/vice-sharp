@@ -188,33 +188,65 @@ public sealed class InProcessSessionFacade : IEmulatorSessionFacade, ILocalVideo
     public ValueTask<ListMediaResponse> ListMediaAsync(CancellationToken cancellationToken = default)
         => _host.Media.ListMediaAsync(new SessionRequest(_sessionId), cancellationToken);
 
+    /// <summary>
+    /// FEAT-XDEFAULTCART-001: raised after every SUCCESSFUL media attach (with the media
+    /// path) or detach (<c>null</c>), so the head records the selection in the canonical
+    /// vice.ini (the default cartridge steps aside once the user picks other media).
+    /// </summary>
+    public Action<MediaSlot, string?>? MediaSelectionChanged { get; set; }
+
     /// <inheritdoc />
-    public ValueTask<AttachMediaResponse> AttachMediaAsync(
+    public async ValueTask<AttachMediaResponse> AttachMediaAsync(
         MediaSlot slot,
         string filePath,
         bool isReadOnly,
         CancellationToken cancellationToken = default)
-        => _host.Media.AttachMediaAsync(
-            new AttachMediaRequest(_sessionId, slot, filePath, DisplayName: "", IsReadOnly: isReadOnly),
-            cancellationToken);
+    {
+        var response = await _host.Media.AttachMediaAsync(
+                new AttachMediaRequest(_sessionId, slot, filePath, DisplayName: "", IsReadOnly: isReadOnly),
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        if (response.Status.IsSuccess)
+            MediaSelectionChanged?.Invoke(slot, filePath);
+
+        return response;
+    }
 
     /// <inheritdoc />
-    public ValueTask<AttachMediaResponse> AttachMediaAsync(
+    public async ValueTask<AttachMediaResponse> AttachMediaAsync(
         MediaSlot slot,
         string filePath,
         bool isReadOnly,
         byte[] payload,
         string displayName,
         CancellationToken cancellationToken = default)
-        => _host.Media.AttachMediaAsync(
-            new AttachMediaRequest(_sessionId, slot, filePath, displayName, isReadOnly, payload),
-            cancellationToken);
+    {
+        var response = await _host.Media.AttachMediaAsync(
+                new AttachMediaRequest(_sessionId, slot, filePath, displayName, isReadOnly, payload),
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        if (response.Status.IsSuccess)
+            MediaSelectionChanged?.Invoke(slot, filePath);
+
+        return response;
+    }
 
     /// <inheritdoc />
-    public ValueTask<DetachMediaResponse> DetachMediaAsync(
+    public async ValueTask<DetachMediaResponse> DetachMediaAsync(
         MediaSlot slot,
         CancellationToken cancellationToken = default)
-        => _host.Media.DetachMediaAsync(new DetachMediaRequest(_sessionId, slot), cancellationToken);
+    {
+        var response = await _host.Media
+            .DetachMediaAsync(new DetachMediaRequest(_sessionId, slot), cancellationToken)
+            .ConfigureAwait(false);
+
+        if (response.Status.IsSuccess)
+            MediaSelectionChanged?.Invoke(slot, null);
+
+        return response;
+    }
 
     /// <inheritdoc />
     public ValueTask<ListKeyboardMapsResponse> ListKeyboardMapsAsync(CancellationToken cancellationToken = default)

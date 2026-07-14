@@ -207,6 +207,15 @@
   </ItemGroup>
 
   <!--
+    FEAT-XDEFAULTCART-001: the S-Blox cartridge ships EMBEDDED (operator requirement) and
+    is extracted + recorded in vice.ini on first boot (DefaultCartridgeBoot). Unconditional:
+    the embedded stream is also what the headless fallback tests read.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="Assets/Cartridges/sblox.CRT" />
+  </ItemGroup>
+
+  <!--
     FIX-XWIN2D-001: the video surface uses raw Direct3D 11 (d3d11.dll / dxgi.dll, part of
     Windows) via [LibraryImport] + vtable interop, so the head carries NO video-rendering
     PackageReference. Win2D.uwp was removed because its .winmd is incompatible with modern
