@@ -125,15 +125,36 @@ public sealed class InProcessSessionFacade : IEmulatorSessionFacade, ILocalVideo
 
     // ---- IXboxSettingsGateway (settings / media / keyboard maps) -------------
 
+    /// <summary>
+    /// FEAT-XSETPERSIST-001: when set, every SUCCESSFUL settings update persists the
+    /// host-canonical snapshot the host returned to this JSON path IN REAL TIME (at the
+    /// moment of apply, not at exit), so the next app start can reuse it. Null = no
+    /// persistence (e.g. when the AppContainer LocalFolder is unavailable).
+    /// </summary>
+    public string? SettingsPersistPath { get; set; }
+
     /// <inheritdoc />
     public ValueTask<GetSettingsResponse> GetSettingsAsync(CancellationToken cancellationToken = default)
         => _host.Settings.GetSettingsAsync(new SessionRequest(_sessionId), cancellationToken);
 
     /// <inheritdoc />
-    public ValueTask<UpdateSettingsResponse> UpdateSettingsAsync(
+    public async ValueTask<UpdateSettingsResponse> UpdateSettingsAsync(
         UpdateSettingsRequest request,
         CancellationToken cancellationToken = default)
-        => _host.Settings.UpdateSettingsAsync(request, cancellationToken);
+    {
+        var response = await _host.Settings.UpdateSettingsAsync(request, cancellationToken).ConfigureAwait(false);
+
+        // FEAT-XSETPERSIST-001: persist the CANONICAL state the host returned (which may
+        // differ from what was requested) on every successful apply. Best-effort by design.
+        if (SettingsPersistPath is { Length: > 0 } path
+            && response.Status.IsSuccess
+            && response.Settings is not null)
+        {
+            XboxSettingsStore.TrySave(path, response.Settings);
+        }
+
+        return response;
+    }
 
     /// <inheritdoc />
     public ValueTask<ValidateSettingsResourcesResponse> ValidateSettingsResourcesAsync(

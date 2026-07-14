@@ -10,6 +10,7 @@ namespace ViceSharp.Xbox;
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Startup;
+using ViceSharp.Protocol;
 using ViceSharp.Xbox.Controls;
 using ViceSharp.Xbox.Input;
 using ViceSharp.Xbox.Platform;
@@ -396,12 +398,43 @@ public sealed partial class App : Application
         var host = ConsoleHostComposition.BuildDefault();
         _host = host;
 
-        var session = host.StartC64Session();
-        _sessionId = session.SessionId;
-        log.LogInformation("BuildHostAndSession: session started id={SessionId}", _sessionId);
+        // FEAT-XSETPERSIST-001: reuse the settings persisted by earlier applies. The persisted
+        // ProfileId boots the session as the last-configured machine directly (no
+        // boot-then-restart flicker); everything else is re-applied live after the facade is up.
+        var settingsPath = ResolveSettingsPersistPath();
+        SessionSettingsDto? persisted = null;
+        if (settingsPath is not null && XboxSettingsStore.TryLoad(settingsPath, out var loaded))
+            persisted = loaded;
 
-        var facade = new InProcessSessionFacade(host, _sessionId);
+        var session = persisted is not null
+            ? host.StartC64Session(new ConsoleSessionOptions(persisted.ProfileId))
+            : host.StartC64Session();
+        if (!session.Success && persisted is not null)
+        {
+            // The persisted profile no longer starts (e.g. its ROM set went missing):
+            // fall back to the default machine rather than failing the boot.
+            log.LogWarning(
+                "BuildHostAndSession: persisted profile '{ProfileId}' failed to start; falling back to default",
+                persisted.ProfileId);
+            persisted = null;
+            session = host.StartC64Session();
+        }
+        _sessionId = session.SessionId;
+        log.LogInformation(
+            "BuildHostAndSession: session started id={SessionId} (persisted profile: {PersistedProfile})",
+            _sessionId, persisted?.ProfileId ?? "(none)");
+
+        var facade = new InProcessSessionFacade(host, _sessionId)
+        {
+            SettingsPersistPath = settingsPath,
+        };
         _facade = facade;
+
+        // Re-apply the remaining persisted settings live (limiter/display/input/audio/resources;
+        // the profile already matches, so no restart occurs). Fire-and-forget with logging: boot
+        // must not block on it, and a failure only costs the restored preferences.
+        if (persisted is not null)
+            _ = ReapplyPersistedSettingsAsync(facade, _sessionId, persisted);
 
         // The facade implements both seam interfaces, so disambiguate the ctor overload.
         VideoPull = new VideoFramePullViewModel((IEmulatorSessionFacade)facade, _sessionId);
@@ -430,6 +463,52 @@ public sealed partial class App : Application
         // over the running emulator, so collapsing the Frame removes the card to reveal the full C64.
         Home.StartNewRequested += (_, _) => { host.ResetCold(_sessionId); HideMenu(); };
         Home.ResumeRequested += (_, _) => { host.Resume(_sessionId); HideMenu(); };
+    }
+
+    /// <summary>
+    /// FEAT-XSETPERSIST-001: the LocalState path of the real-time settings persistence file,
+    /// or <c>null</c> when the AppContainer LocalFolder is unavailable (persistence disabled).
+    /// </summary>
+    private static string? ResolveSettingsPersistPath()
+    {
+        try
+        {
+            return Path.Combine(ApplicationData.Current.LocalFolder.Path, "settings.json");
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XSETPERSIST-001: re-applies the persisted non-profile settings to the freshly
+    /// booted session (the profile already matched at StartC64Session, so this stays a live
+    /// apply with no restart). Failures are logged and cost only the restored preferences.
+    /// </summary>
+    private static async Task ReapplyPersistedSettingsAsync(
+        InProcessSessionFacade facade, string sessionId, SessionSettingsDto persisted)
+    {
+        try
+        {
+            var response = await facade.UpdateSettingsAsync(new UpdateSettingsRequest(
+                sessionId,
+                Limiter: persisted.Limiter,
+                Display: persisted.Display,
+                Input: persisted.Input,
+                ProfileId: persisted.ProfileId,
+                RestartSession: false,
+                Audio: persisted.Audio,
+                Resources: persisted.Resources)).ConfigureAwait(false);
+
+            CreateLogger("App").LogInformation(
+                "persisted settings re-applied: success={Success} profile={ProfileId}",
+                response.Status.IsSuccess, persisted.ProfileId);
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "persisted settings re-apply failed");
+        }
     }
 
     /// <summary>
