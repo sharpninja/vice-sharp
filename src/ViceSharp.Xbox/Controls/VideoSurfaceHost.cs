@@ -95,6 +95,12 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     private bool _deviceReady;
     private bool _deviceFailed;
 
+    // Dev-PC render diagnostics: the DX11 present path fails silently by design, so a black surface
+    // is otherwise undiagnosable. These trace the first frames + first present + failures to the
+    // Output window (prefixed "[ViceSharp.Xbox.Video]" for grep). Cheap: gated to the first ticks.
+    private int _renderTicks;
+    private bool _presentedOnce;
+
     /// <summary>Creates the surface and its repeating render timer (not yet started).</summary>
     public VideoSurfaceHost()
     {
@@ -126,25 +132,59 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
 
     private void RenderTick()
     {
+        _renderTicks++;
+        var trace = _renderTicks <= 15;
+
         var pull = _pull;
-        if (pull is null || _deviceFailed || !pull.Tick())
+        if (pull is null)
+        {
+            if (trace) Diag("bail: no pull adapter attached");
             return;
+        }
+
+        if (_deviceFailed)
+        {
+            if (trace) Diag("bail: DX11 device previously failed -> silent no-blit");
+            return;
+        }
+
+        if (!pull.Tick())
+        {
+            if (trace) Diag("bail: pull.Tick()=false (no committed C64 frame yet)");
+            return;
+        }
 
         // Physical pixel size of the panel (logical size * composition scale).
         var targetWidth = (int)Math.Round(_panel.ActualWidth * _panel.CompositionScaleX);
         var targetHeight = (int)Math.Round(_panel.ActualHeight * _panel.CompositionScaleY);
         if (targetWidth <= 0 || targetHeight <= 0)
+        {
+            if (trace)
+                Diag($"bail: panel not sized (ActualW={_panel.ActualWidth} ActualH={_panel.ActualHeight} scaleX={_panel.CompositionScaleX} scaleY={_panel.CompositionScaleY})");
             return;
+        }
 
         if (!EnsureDevice() || !EnsureSwapChain(targetWidth, targetHeight))
             return;
 
         var frame = pull.CurrentFrame;
         if (frame.Length == 0)
+        {
+            if (trace) Diag($"bail: empty frame (src {pull.Width}x{pull.Height})");
             return;
+        }
 
         RenderFrame(pull.Width, pull.Height, frame);
+
+        if (!_presentedOnce)
+        {
+            _presentedOnce = true;
+            Diag($"OK: first frame presented (target {targetWidth}x{targetHeight}, src {pull.Width}x{pull.Height}, {frame.Length} bytes)");
+        }
     }
+
+    private void Diag(string message) =>
+        System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox.Video] tick {_renderTicks}: {message}");
 
     private void RenderFrame(int sourceWidth, int sourceHeight, ReadOnlySpan<byte> source)
     {
@@ -327,17 +367,24 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             IntPtr swapChain;
             if (createSwapChain(_factory, _device, &description, IntPtr.Zero, &swapChain) < 0
                 || swapChain == IntPtr.Zero)
+            {
+                Diag("EnsureSwapChain: IDXGIFactory2.CreateSwapChainForComposition failed");
                 return false;
+            }
             _swapChain = swapChain;
 
             var setSwapChain =
                 (delegate* unmanaged[Stdcall]<IntPtr, IntPtr, int>)
                 Slot(_panelNative, SlotSetSwapChain);
             if (setSwapChain(_panelNative, _swapChain) < 0)
+            {
+                Diag("EnsureSwapChain: ISwapChainPanelNative.SetSwapChain failed");
                 return false;
+            }
 
             _targetWidth = width;
             _targetHeight = height;
+            Diag($"EnsureSwapChain: created + bound {width}x{height}");
             return EnsureStaging(width, height);
         }
 
@@ -392,6 +439,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     private bool FailDevice()
     {
         _deviceFailed = true;
+        Diag("FailDevice: DX11 unavailable (D3D11CreateDevice HW+WARP, the DXGI factory, or the panel-native QueryInterface failed) -> silent no-blit");
         ReleaseNative();
         return false;
     }
