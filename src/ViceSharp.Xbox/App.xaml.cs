@@ -292,6 +292,7 @@ public sealed partial class App : Application
             // the Frame is empty, which it is at launch).
             log.LogInformation("Boot branch: emulator (VideoPull present) -> starting surface + gamepad");
             _videoSurface.Attach(VideoPull);
+            ApplyVideoAspectForCurrentSession();
             _videoSurface.Start();
             log.LogInformation("video surface started");
             _gamepad?.Start();
@@ -450,6 +451,40 @@ public sealed partial class App : Application
         catch (Exception ex)
         {
             CreateLogger("App").LogError(ex, "keyboard rebuild failed");
+        }
+    }
+
+    /// <summary>
+    /// FIX-XASPECT-001: pushes the ACTIVE session's TRUE composite pixel aspect into the video
+    /// surface (VICE vicii.c vicii_get_pixel_aspect, mirrored by
+    /// <see cref="ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio"/>: PAL 0.93650794,
+    /// NTSC 0.75). Called at boot and re-called after a model-change apply restarts the session
+    /// under the same id (an NTSC model must not display with PAL geometry). The profile-level
+    /// <see cref="VideoStandard"/> enum carries Pal|Ntsc; the PAL-N / old-NTSC profile variants
+    /// collapse onto those two composite standards. Fully guarded: degrades to the last-applied
+    /// aspect and logs rather than throwing.
+    /// </summary>
+    internal void ApplyVideoAspectForCurrentSession()
+    {
+        try
+        {
+            var standard = _facade is not null && !string.IsNullOrEmpty(_sessionId)
+                ? _facade.GetVideoStandard(_sessionId)
+                : null;
+
+            var system = standard == VideoStandard.Ntsc
+                ? ViceSharp.Chips.VicIi.Mos6569.TvSystem.NTSC
+                : ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL;
+            var aspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
+
+            _videoSurface?.SetPixelAspect(aspect);
+            CreateLogger("App").LogInformation(
+                "video aspect applied: standard={Standard} pixelAspect={PixelAspect} surface={SurfacePresent}",
+                standard, aspect, _videoSurface is not null);
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "video aspect apply failed");
         }
     }
 

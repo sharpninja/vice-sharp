@@ -29,8 +29,9 @@ using ViceSharp.Xbox.ViewModels;
 /// The C64 video surface: a XAML <see cref="SwapChainPanel"/> backed by a raw Direct3D 11
 /// composition swap chain, driven by a <see cref="DispatcherQueueTimer"/> at ~50 Hz. Each
 /// tick pulls the latest committed frame through the pure <see cref="VideoFramePullViewModel"/>
-/// and nearest-neighbor upscales the 384x272 BGRA8888 source into the 90% TV-safe rectangle
-/// (letterboxed to preserve aspect ratio) of a CPU-write staging texture, which is copied to
+/// and nearest-neighbor upscales the 384x272 BGRA8888 source into the centered, window-filling
+/// draw rectangle (letterboxed with the active standard's TRUE composite pixel aspect,
+/// FIX-XASPECT-001) of a CPU-write staging texture, which is copied to
 /// the swap-chain back buffer and presented. The pull is a pure sink (it never advances the
 /// emulator), so the render loop can never perturb determinism or stall the worker.
 /// </summary>
@@ -97,6 +98,11 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     private readonly SwapChainPanel _panel = new();
     private VideoFramePullViewModel? _pull;
 
+    // FIX-XASPECT-001: the active video standard's composite pixel aspect ratio (display width
+    // per pixel width; VICE vicii_get_pixel_aspect). 1.0 = square pixels until the head applies
+    // the session's standard via SetPixelAspect.
+    private float _pixelAspect = 1f;
+
     private IntPtr _device;       // ID3D11Device*
     private IntPtr _context;      // ID3D11DeviceContext* (immediate)
     private IntPtr _factory;      // IDXGIFactory2*
@@ -139,6 +145,15 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     /// <param name="pull">The ~50 Hz frame-pull adapter.</param>
     public void Attach(VideoFramePullViewModel pull)
         => _pull = pull ?? throw new ArgumentNullException(nameof(pull));
+
+    /// <summary>
+    /// Sets the composite pixel aspect ratio of the active video standard (FIX-XASPECT-001,
+    /// VICE vicii_get_pixel_aspect: PAL 0.93650794, NTSC 0.75). Non-positive values degrade
+    /// to square pixels. Takes effect on the next render tick.
+    /// </summary>
+    /// <param name="pixelAspect">Display width per pixel width.</param>
+    public void SetPixelAspect(float pixelAspect)
+        => _pixelAspect = pixelAspect > 0f ? pixelAspect : 1f;
 
     /// <summary>Starts the render loop.</summary>
     public void Start() => _timer.Start();
@@ -282,9 +297,11 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     }
 
     /// <summary>
-    /// Paints the target black and nearest-neighbor upscales the BGRA source into the 90%
-    /// TV-safe rectangle, letterboxed to preserve the source aspect ratio. Alpha is IGNORE'd
-    /// by the composition swap chain, so the cleared borders read as opaque black.
+    /// Paints the target black and nearest-neighbor upscales the BGRA source into the centered,
+    /// window-filling draw rectangle computed by <see cref="VideoDisplayGeometry.ComputeDrawRect"/>
+    /// (FIX-XASPECT-001: fills the limiting panel axis, letterboxed, with the TRUE composite
+    /// pixel aspect of the active video standard). Alpha is IGNORE'd by the composition swap
+    /// chain, so the cleared borders read as opaque black.
     /// </summary>
     private void PaintNearestNeighbor(
         int sourceWidth, int sourceHeight, ReadOnlySpan<byte> source, byte* destination, int destinationRowPitch)
@@ -299,17 +316,10 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         if (sourceWidth <= 0 || sourceHeight <= 0 || source.Length < sourceWidth * sourceHeight * 4)
             return;
 
-        // 90% TV-safe rectangle; fit the source inside it preserving aspect ratio.
-        int safeWidth = (int)(targetWidth * 0.9);
-        int safeHeight = (int)(targetHeight * 0.9);
-        if (safeWidth <= 0 || safeHeight <= 0)
+        var (drawX, drawY, drawWidth, drawHeight) = VideoDisplayGeometry.ComputeDrawRect(
+            targetWidth, targetHeight, sourceWidth, sourceHeight, _pixelAspect);
+        if (drawWidth <= 0 || drawHeight <= 0)
             return;
-
-        double scale = Math.Min((double)safeWidth / sourceWidth, (double)safeHeight / sourceHeight);
-        int drawWidth = Math.Max(1, (int)(sourceWidth * scale));
-        int drawHeight = Math.Max(1, (int)(sourceHeight * scale));
-        int drawX = (targetWidth - drawWidth) / 2;
-        int drawY = (targetHeight - drawHeight) / 2;
 
         int sourceStride = sourceWidth * 4;
         fixed (byte* sourceBase = source)

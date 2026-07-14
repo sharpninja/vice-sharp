@@ -55,6 +55,11 @@ public sealed partial class SettingsPage : Page
                 System.Diagnostics.Debug.WriteLine(
                     $"[ViceSharp.Xbox] keyboard rebuild after model change failed: {ex}");
             }
+
+            // FIX-XASPECT-001: the recreated session may run a different video standard
+            // (PAL <-> NTSC model change); re-apply the true composite pixel aspect.
+            // (Internally guarded; never throws.)
+            App.Instance.ApplyVideoAspectForCurrentSession();
         }
     }
 

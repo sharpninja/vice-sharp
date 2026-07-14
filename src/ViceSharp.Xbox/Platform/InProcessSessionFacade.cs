@@ -87,6 +87,15 @@ public sealed class InProcessSessionFacade : IEmulatorSessionFacade, ILocalVideo
     /// <inheritdoc />
     public IMachineKeyboardInput? GetKeyboardInput(string sessionId) => _host.GetKeyboardInput(sessionId);
 
+    /// <summary>
+    /// The live architecture's video standard for a session, or <c>null</c> when unknown
+    /// (FIX-XASPECT-001). Read per call so a model-change session rebuild under the same id
+    /// is always answered with the CURRENT machine's standard.
+    /// </summary>
+    /// <param name="sessionId">The session whose video standard is requested.</param>
+    /// <returns>The architecture's <see cref="VideoStandard"/>, or <c>null</c>.</returns>
+    public VideoStandard? GetVideoStandard(string sessionId) => _host.GetVideoStandard(sessionId);
+
     // ---- ILocalVideoFramePull (pure sink) -----------------------------------
 
     /// <inheritdoc />

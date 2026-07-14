@@ -266,6 +266,19 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
             ? session.Machine.Devices.All.OfType<IMachineJoystickInput>().FirstOrDefault()
             : null;
 
+    /// <summary>
+    /// The live architecture's video standard (PAL/NTSC) for a session, or <c>null</c> when the
+    /// session is unknown (FIX-XASPECT-001). Drives the head's TRUE composite pixel-aspect
+    /// display: the aspect must track the ACTIVE session, including a model-change rebuild
+    /// under the same session id.
+    /// </summary>
+    /// <param name="sessionId">The session whose video standard is requested.</param>
+    /// <returns>The architecture's <see cref="VideoStandard"/>, or <c>null</c>.</returns>
+    public VideoStandard? GetVideoStandard(string sessionId)
+        => _registry.TryGet(sessionId, out var session)
+            ? session.Architecture.VideoStandard
+            : null;
+
     /// <inheritdoc />
     public ConsoleSessionResult StartC64Session(ConsoleSessionOptions? options = null)
     {
