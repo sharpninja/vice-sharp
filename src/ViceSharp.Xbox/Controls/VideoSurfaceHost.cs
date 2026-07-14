@@ -78,7 +78,15 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
 
     private static readonly Guid IidDxgiFactory2 = new("50c83a1c-e072-4c48-87b0-3630fa36a6d0");
     private static readonly Guid IidD3D11Texture2D = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
-    private static readonly Guid IidSwapChainPanelNative = new("63aad0b8-7c24-40ff-85a8-640d944cc325");
+    // FIX-XRENDERCRASH-001: this MUST be the SYSTEM-XAML (UWP, WinUI2-era) ISwapChainPanelNative
+    // from windows.ui.xaml.media.dxinterop.h (Windows SDK 10.0.26100, line 854:
+    // MIDL_INTERFACE("F92F19D2-3ADE-45A6-A20C-F6F1EA90554B")). The WinUI 3 header
+    // (microsoft.ui.xaml.media.dxinterop.h) declares a DIFFERENT ISwapChainPanelNative
+    // (63aad0b8-...; full value banned from this file by TEST-XVIDEO-IID-001b); UWP does not
+    // support WinUI 3, so QI'ing a
+    // Windows.UI.Xaml SwapChainPanel with the WinUI3 IID fails E_NOINTERFACE (0x80004002),
+    // which shipped as a permanently black emulator surface (vicesharp.log, 2026-07-14).
+    private static readonly Guid IidSwapChainPanelNative = new("f92f19d2-3ade-45a6-a20c-f6f1ea90554b");
 
     private readonly DispatcherQueueTimer _timer;
     private readonly SwapChainPanel _panel = new();
