@@ -32,6 +32,27 @@ public sealed class XboxVideoSurfaceInteropTests
     private const string UwpSwapChainPanelNativeIid = "f92f19d2-3ade-45a6-a20c-f6f1ea90554b";
     private const string WinUi3SwapChainPanelNativeIid = "63aad0b8-7c24-40ff-85a8-640d944cc325";
 
+    /// <summary>IDXGISwapChain2, from the Windows SDK 10.0.26100 dxgi1_3.h (line 395).</summary>
+    private const string DxgiSwapChain2Iid = "a8be2ac4-199f-4946-b331-79599fb98de7";
+
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void VideoSurface_AppliesInverseCompositionScale_ViaSetMatrixTransform()
+    {
+        // FIX-XCOMPSCALE-001 (TEST-XVIDEO-SCALE-001): the swap chain is sized in PHYSICAL
+        // pixels (panel logical size x CompositionScaleX/Y), so the surface must apply the
+        // INVERSE composition scale via IDXGISwapChain2::SetMatrixTransform (dxgi1_3.h vtbl
+        // slot 34; DXGI_MATRIX_3X2_F _11=1/scaleX, _22=1/scaleY). Without it XAML composition
+        // scales the buffer up by the composition scale AGAIN: on the operator's scale-2.5
+        // dev PC only the top-left ~40% of the C64 frame was visible, 2.5x oversized
+        // (vicesharp.log 2026-07-14: created + bound 3840x1980 at scaleX=2.5).
+        var source = ReadVideoSurfaceHost();
+
+        Assert.Contains(DxgiSwapChain2Iid, source);
+        Assert.Contains("slotswapchain2setmatrixtransform = 34", source);
+        Assert.Contains("applyinversecompositionscale", source);
+    }
+
     [Fact]
     [Trait("Category", "Xbox")]
     public void VideoSurface_QueriesUwpSwapChainPanelNative_NotTheWinUi3One()

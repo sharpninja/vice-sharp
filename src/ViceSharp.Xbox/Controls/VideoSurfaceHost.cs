@@ -67,6 +67,10 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     private const int SlotGetBuffer = 9;
     private const int SlotResizeBuffers = 13;
 
+    // IDXGISwapChain2 (IDXGISwapChain1 base): SetMatrixTransform is slot 34 (Windows SDK
+    // 10.0.26100 dxgi1_3.h C-style vtbl: ...GetFrameLatencyWaitableObject 33, SetMatrixTransform 34).
+    private const int SlotSwapChain2SetMatrixTransform = 34;
+
     // ID3D11DeviceContext (ID3D11DeviceChild base): Map 14, Unmap 15, CopyResource 47.
     private const int SlotContextMap = 14;
     private const int SlotContextUnmap = 15;
@@ -77,6 +81,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
     private const int SlotCreateSwapChainForComposition = 24;
 
     private static readonly Guid IidDxgiFactory2 = new("50c83a1c-e072-4c48-87b0-3630fa36a6d0");
+    private static readonly Guid IidDxgiSwapChain2 = new("a8be2ac4-199f-4946-b331-79599fb98de7");
     private static readonly Guid IidD3D11Texture2D = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
     // FIX-XRENDERCRASH-001: this MUST be the SYSTEM-XAML (UWP, WinUI2-era) ISwapChainPanelNative
     // from windows.ui.xaml.media.dxinterop.h (Windows SDK 10.0.26100, line 854:
@@ -101,6 +106,8 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
 
     private int _targetWidth;
     private int _targetHeight;
+    private float _appliedScaleX;
+    private float _appliedScaleY;
     private bool _deviceReady;
     private bool _deviceFailed;
 
@@ -199,8 +206,11 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
             return;
         }
 
-        if (!EnsureDevice() || !EnsureSwapChain(targetWidth, targetHeight))
+        if (!EnsureDevice()
+            || !EnsureSwapChain(targetWidth, targetHeight, _panel.CompositionScaleX, _panel.CompositionScaleY))
+        {
             return;
+        }
 
         var frame = pull.CurrentFrame;
         if (frame.Length == 0)
@@ -406,7 +416,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         }
     }
 
-    private bool EnsureSwapChain(int width, int height)
+    private bool EnsureSwapChain(int width, int height, float scaleX, float scaleY)
     {
         if (width <= 0 || height <= 0)
             return false;
@@ -451,6 +461,7 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
 
             _targetWidth = width;
             _targetHeight = height;
+            ApplyInverseCompositionScale(scaleX, scaleY);
             Diag($"EnsureSwapChain: created + bound {width}x{height}");
             return EnsureStaging(width, height);
         }
@@ -465,13 +476,67 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
 
             _targetWidth = width;
             _targetHeight = height;
+            ApplyInverseCompositionScale(scaleX, scaleY);
             return EnsureStaging(width, height);
         }
+
+        // Same dimensions but a changed composition scale (e.g. the user moved the window to a
+        // monitor with a different DPI while the physical size happened to match): re-apply the
+        // inverse transform so the content is not composition-scaled again.
+        if (_appliedScaleX != scaleX || _appliedScaleY != scaleY)
+            ApplyInverseCompositionScale(scaleX, scaleY);
 
         // Swap chain exists and dimensions are unchanged. Retry staging if a prior EnsureStaging
         // attempt failed (a one-off CreateTexture2D failure must not leave _staging NULL while we
         // report the surface ready, or RenderFrame would Map a NULL ID3D11Resource* -> AV).
         return _staging != IntPtr.Zero || EnsureStaging(width, height);
+    }
+
+    /// <summary>
+    /// FIX-XCOMPSCALE-001: the swap chain is sized in PHYSICAL pixels (panel logical size x
+    /// CompositionScaleX/Y), but XAML composition maps swap-chain content in LOGICAL pixels and
+    /// scales it by the composition scale. Without compensation the buffer renders composition-
+    /// scale-times too large (on a scale-2.5 dev PC only the top-left ~40% of the C64 frame was
+    /// visible, 2.5x oversized). The documented fix (DirectX-and-XAML interop; every UWP
+    /// SwapChainPanel sample) is IDXGISwapChain2::SetMatrixTransform with the INVERSE scale
+    /// (DXGI_MATRIX_3X2_F _11=1/scaleX, _22=1/scaleY). Failure is non-fatal: content stays
+    /// oversized rather than absent, and the hr lands in the on-device trace.
+    /// </summary>
+    private void ApplyInverseCompositionScale(float scaleX, float scaleY)
+    {
+        // QI the IDXGISwapChain1 for IDXGISwapChain2 (IUnknown::QueryInterface, slot 0).
+        var queryInterface =
+            (delegate* unmanaged[Stdcall]<IntPtr, Guid*, IntPtr*, int>)Slot(_swapChain, 0);
+        var iid = IidDxgiSwapChain2;
+        IntPtr swapChain2;
+        int hr = queryInterface(_swapChain, &iid, &swapChain2);
+        if (hr < 0 || swapChain2 == IntPtr.Zero)
+        {
+            Diag($"ApplyInverseCompositionScale: QI(IDXGISwapChain2) hr=0x{hr:X8} -> content stays composition-scaled");
+            return;
+        }
+
+        try
+        {
+            var matrix = new DxgiMatrix3x2F
+            {
+                M11 = scaleX > 0f ? 1f / scaleX : 1f,
+                M22 = scaleY > 0f ? 1f / scaleY : 1f,
+            };
+
+            var setMatrixTransform =
+                (delegate* unmanaged[Stdcall]<IntPtr, DxgiMatrix3x2F*, int>)
+                Slot(swapChain2, SlotSwapChain2SetMatrixTransform);
+            hr = setMatrixTransform(swapChain2, &matrix);
+
+            _appliedScaleX = scaleX;
+            _appliedScaleY = scaleY;
+            Diag($"ApplyInverseCompositionScale: SetMatrixTransform(1/{scaleX}, 1/{scaleY}) hr=0x{hr:X8}");
+        }
+        finally
+        {
+            Release(ref swapChain2);
+        }
     }
 
     private bool EnsureStaging(int width, int height)
@@ -522,6 +587,8 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         _deviceReady = false;
         _targetWidth = 0;
         _targetHeight = 0;
+        _appliedScaleX = 0f;
+        _appliedScaleY = 0f;
     }
 
     /// <summary>Reads vtable slot <paramref name="index"/> of the COM object at <paramref name="comObject"/>.</summary>
@@ -586,6 +653,18 @@ public sealed unsafe partial class VideoSurfaceHost : Grid
         public IntPtr PData;
         public uint RowPitch;
         public uint DepthPitch;
+    }
+
+    /// <summary>DXGI_MATRIX_3X2_F (dxgi1_3.h): six floats _11 _12 _21 _22 _31 _32.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    private struct DxgiMatrix3x2F
+    {
+        public float M11;
+        public float M12;
+        public float M21;
+        public float M22;
+        public float M31;
+        public float M32;
     }
 
     [LibraryImport("d3d11.dll")]
