@@ -727,9 +727,12 @@ public sealed partial class App : Application
                 break;
             case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierShiftDown:
                 InjectModifier("LeftShift", down: true);
+                // FEAT-XKEYCAPSHIFT-001: keycaps show the shifted legends while held.
+                _keyboardOverlay?.SetExternalShift(true);
                 break;
             case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierShiftUp:
                 InjectModifier("LeftShift", down: false);
+                _keyboardOverlay?.SetExternalShift(false);
                 break;
             default:
                 break;

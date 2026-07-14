@@ -65,20 +65,24 @@ public sealed class VirtualKeyboardLayout
     /// <returns>A new <see cref="VirtualKeyboardLayout"/> mirroring the physical machine.</returns>
     public static VirtualKeyboardLayout CreateAuthentic()
     {
-        static VirtualKeyEntry Key(string keyName, string? label = null, double width = 0) =>
-            new(keyName, label ?? keyName, IsWide: width > 1, AppKeyKind.Key, width);
+        static VirtualKeyEntry Key(string keyName, string? label = null, double width = 0, string? shifted = null) =>
+            new(keyName, label ?? keyName, IsWide: width > 1, AppKeyKind.Key, width, shifted);
 
         static IReadOnlyList<VirtualKeyEntry> Letters(string letters) =>
             letters.Select(c => Key(c.ToString())).ToArray();
 
         var rows = new List<IReadOnlyList<VirtualKeyEntry>>
         {
-            // Row 1: left-arrow, 1-0, +, -, pound, CLR/HOME, INST/DEL (16 keys).
+            // Row 1: left-arrow, 1-0, +, -, pound, CLR/HOME, INST/DEL (16 keys). The
+            // digit keys carry their printed shifted legends (FEAT-XKEYCAPSHIFT-001);
+            // SHIFT+0 is 0 on the machine, so 0 has none.
             new[]
             {
                 Key("LeftArrow", "←"),
-                Key("1"), Key("2"), Key("3"), Key("4"), Key("5"),
-                Key("6"), Key("7"), Key("8"), Key("9"), Key("0"),
+                Key("1", shifted: "!"), Key("2", shifted: "\""), Key("3", shifted: "#"),
+                Key("4", shifted: "$"), Key("5", shifted: "%"),
+                Key("6", shifted: "&"), Key("7", shifted: "'"), Key("8", shifted: "("),
+                Key("9", shifted: ")"), Key("0"),
                 Key("+"), Key("-"),
                 Key("Pound", "£"),
                 Key("Home", "CLR HOME"),
@@ -93,7 +97,8 @@ public sealed class VirtualKeyboardLayout
                 {
                     Key("@"),
                     Key("*"),
-                    Key("UpArrow", "↑"),
+                    // SHIFT + up-arrow types pi (the legend on the physical keycap).
+                    Key("UpArrow", "↑", shifted: "π"),
                     new VirtualKeyEntry("Restore", "RESTORE", IsWide: false, AppKeyKind.Restore),
                 })
                 .ToArray(),
@@ -108,8 +113,8 @@ public sealed class VirtualKeyboardLayout
                 .Concat(Letters("ASDFGHJKL"))
                 .Concat(new[]
                 {
-                    Key(":"),
-                    Key(";"),
+                    Key(":", shifted: "["),
+                    Key(";", shifted: "]"),
                     Key("="),
                     Key("Return", "RETURN", 2.0),
                 })
@@ -126,9 +131,9 @@ public sealed class VirtualKeyboardLayout
                 .Concat(Letters("ZXCVBNM"))
                 .Concat(new[]
                 {
-                    Key(","),
-                    Key("."),
-                    Key("/"),
+                    Key(",", shifted: "<"),
+                    Key(".", shifted: ">"),
+                    Key("/", shifted: "?"),
                     new VirtualKeyEntry("RightShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
                     Key("Down", "CRSR ⇕"),
                     Key("Right", "CRSR ⇔"),

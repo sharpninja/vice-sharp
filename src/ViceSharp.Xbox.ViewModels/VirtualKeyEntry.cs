@@ -31,12 +31,20 @@ namespace ViceSharp.Xbox.ViewModels;
 /// SPACE ~9, ordinary keys 1). Values not greater than zero mean "derive from
 /// <paramref name="IsWide"/>" (2 when wide, else 1); read <see cref="EffectiveWidthUnits"/>.
 /// </param>
+/// <param name="ShiftedLabel">
+/// FEAT-XKEYCAPSHIFT-001: the PRINTABLE character this key inserts while SHIFT is
+/// effective (the legend printed on the physical keycap top, e.g. "1" -&gt; "!",
+/// ":" -&gt; "["). <c>null</c> means the keycap does not change (letters and most keys
+/// produce mode-dependent PETSCII graphics under SHIFT/C=; showing nothing beats
+/// showing something wrong).
+/// </param>
 public sealed record VirtualKeyEntry(
     string KeyName,
     string DisplayLabel,
     bool IsWide,
     AppKeyKind Kind = AppKeyKind.Key,
-    double WidthUnits = 0)
+    double WidthUnits = 0,
+    string? ShiftedLabel = null)
 {
     /// <summary>
     /// The tile's width in key units: <see cref="WidthUnits"/> when positive, otherwise

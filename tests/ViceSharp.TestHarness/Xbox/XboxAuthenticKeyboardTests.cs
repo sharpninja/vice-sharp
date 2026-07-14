@@ -217,6 +217,41 @@ public sealed class XboxAuthenticKeyboardTests
         }
     }
 
+    [Fact]
+    public void AuthenticLayout_CarriesTheShiftedKeycapLegends()
+    {
+        // FEAT-XKEYCAPSHIFT-001 (operator 2026-07-14: "When holding SHIFT or C= modifiers,
+        // change the keycap to match the character to be inserted"): the PRINTABLE shifted
+        // pairs printed on the real C64 keycap tops. SHIFT+letters and C= combos produce
+        // PETSCII graphics (font-mapping follow-up); their ShiftedLabel stays null so the
+        // keycap is unchanged rather than wrong.
+        var layout = VirtualKeyboardLayout.Default;
+        var byName = layout.AllKeys
+            .Where(k => k.Kind == AppKeyKind.Key)
+            .ToDictionary(k => k.KeyName, k => k.ShiftedLabel);
+
+        Assert.Equal("!", byName["1"]);
+        Assert.Equal("\"", byName["2"]);
+        Assert.Equal("#", byName["3"]);
+        Assert.Equal("$", byName["4"]);
+        Assert.Equal("%", byName["5"]);
+        Assert.Equal("&", byName["6"]);
+        Assert.Equal("'", byName["7"]);
+        Assert.Equal("(", byName["8"]);
+        Assert.Equal(")", byName["9"]);
+        Assert.Equal("[", byName[":"]);
+        Assert.Equal("]", byName[";"]);
+        Assert.Equal("<", byName[","]);
+        Assert.Equal(">", byName["."]);
+        Assert.Equal("?", byName["/"]);
+        Assert.Equal("π", byName["UpArrow"]);
+
+        // No shifted legend -> null (letters, digits 0, SPACE, RETURN, F-keys, etc.).
+        Assert.Null(byName["A"]);
+        Assert.Null(byName["0"]);
+        Assert.Null(byName["Space"]);
+    }
+
     private static VirtualKeyEntry Single(VirtualKeyboardLayout layout, string keyName)
         => layout.AllKeys.Single(k => k.KeyName == keyName && k.Kind == AppKeyKind.Key);
 
