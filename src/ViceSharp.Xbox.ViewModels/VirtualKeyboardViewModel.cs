@@ -107,6 +107,17 @@ public sealed class VirtualKeyboardViewModel
     public bool ShiftLatched { get; set; }
 
     /// <summary>
+    /// Whether a momentary SHIFT tile has armed a ONE-SHOT shift (PLAN-XKEYBOARD-001 K1).
+    /// While armed, the next ordinary key press is wrapped in the arming tile's shift key
+    /// ("LeftShift"/"RightShift") down/up, exactly like holding SHIFT on hardware; a
+    /// function tile instead emits its shifted twin in place. Either way the arm clears
+    /// after that one press. Pressing the same or the other SHIFT tile toggles/re-arms.
+    /// </summary>
+    public bool ShiftArmed => _armedShiftKeyName is not null;
+
+    private string? _armedShiftKeyName;
+
+    /// <summary>
     /// The index into <see cref="AllKeys"/> of the currently focused tile, pressed by
     /// <see cref="PressCurrent"/>. Actual up/down/left/right focus movement is owned by the
     /// UI focus layer, which sets this index.
@@ -158,22 +169,57 @@ public sealed class VirtualKeyboardViewModel
                 ShiftLatched = !ShiftLatched;
                 break;
 
+            case AppKeyKind.ShiftMomentary:
+                // A momentary SHIFT arms a one-shot for the NEXT key (PLAN-XKEYBOARD-001
+                // K1); pressing it while armed disarms. Emits nothing by itself.
+                _armedShiftKeyName = _armedShiftKeyName is null ? entry.KeyName : null;
+                break;
+
             case AppKeyKind.Key:
             default:
-                var keyName = ResolveKeyName(entry.KeyName);
-                _keyboard.SetKeyState(keyName, true);
-                _keyboard.SetKeyState(keyName, false);
+                PressKey(entry.KeyName);
                 break;
         }
     }
 
     /// <summary>
-    /// Applies the shift-latch to an ordinary key name: with the latch engaged the function
-    /// keys map to their shifted twins in place; every other key is unchanged.
+    /// Emits one ordinary key press: the function twins map in place under the latch or an
+    /// armed one-shot; any other key pressed while a one-shot is armed is wrapped in the
+    /// arming SHIFT's down/up, exactly like holding SHIFT on hardware (CRSR-up/left, shifted
+    /// glyphs). The one-shot always clears after the press.
     /// </summary>
-    private string ResolveKeyName(string keyName)
+    private void PressKey(string baseKeyName)
     {
-        if (!ShiftLatched)
+        var armedShift = _armedShiftKeyName;
+        _armedShiftKeyName = null;
+
+        var keyName = ResolveKeyName(baseKeyName, shifted: ShiftLatched || armedShift is not null);
+
+        // A twin remap consumed the shift (the map name F2/F4/F6/F8 IS the shifted key).
+        var wrap = armedShift is not null && ReferenceEquals(keyName, baseKeyName);
+
+        if (wrap)
+        {
+            _keyboard.SetKeyState(armedShift!, true);
+        }
+
+        _keyboard.SetKeyState(keyName, true);
+        _keyboard.SetKeyState(keyName, false);
+
+        if (wrap)
+        {
+            _keyboard.SetKeyState(armedShift!, false);
+        }
+    }
+
+    /// <summary>
+    /// Applies shift to an ordinary key name: when shifted, the function keys map to their
+    /// twins in place; every other key returns the SAME string instance unchanged (the
+    /// caller uses reference identity to detect that no twin remap occurred).
+    /// </summary>
+    private static string ResolveKeyName(string keyName, bool shifted)
+    {
+        if (!shifted)
         {
             return keyName;
         }

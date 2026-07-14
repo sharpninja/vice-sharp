@@ -224,26 +224,28 @@ public sealed class VirtualKeyboardViewModelTests
     }
 
     /// <summary>
-    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006.
-    /// Use case: the RETURN, RUN/STOP, and SPACE tiles are physically double-width on a
-    /// C64 keyboard and must be flagged wide so the 10-foot layout can size them.
-    /// Acceptance: the tiles for "Return", "RunStop", and "Space" report
-    /// <see cref="VirtualKeyEntry.IsWide"/> true; a representative ordinary key ("A")
-    /// reports false.
+    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006 (widths updated by
+    /// PLAN-XKEYBOARD-001 K1 to the AUTHENTIC machine: RETURN and SPACE are the wide keys;
+    /// RUN/STOP is a standard-width key on real hardware, unlike the earlier stylized
+    /// layout that widened it).
+    /// Acceptance: "Return" and "Space" report <see cref="VirtualKeyEntry.IsWide"/> true;
+    /// "RunStop" and a representative ordinary key ("A") report false.
     /// </summary>
     [Fact]
-    public void WideTiles_AreFlagged_ForReturnRunStopAndSpace()
+    public void WideTiles_AreFlagged_ForReturnAndSpace()
     {
         var vm = new VirtualKeyboardViewModel(new SpyKeyboardInput());
 
         Assert.True(SingleByKeyName(vm, "Return").IsWide);
-        Assert.True(SingleByKeyName(vm, "RunStop").IsWide);
+        Assert.False(SingleByKeyName(vm, "RunStop").IsWide);
         Assert.True(SingleByKeyName(vm, "Space").IsWide);
         Assert.False(SingleByKeyName(vm, "A").IsWide);
     }
 
+    // PLAN-XKEYBOARD-001 K1: the authentic layout moved the function keys out of the rows
+    // into the right-hand FunctionKeys column, so tiles are looked up across ALL keys.
     private static VirtualKeyEntry SingleByKeyName(VirtualKeyboardViewModel vm, string keyName) =>
-        vm.Rows.SelectMany(row => row).Single(entry => entry.KeyName == keyName);
+        vm.AllKeys.Single(entry => entry.KeyName == keyName && entry.Kind == AppKeyKind.Key);
 
     private static int IndexOfKeyName(VirtualKeyboardViewModel vm, string keyName)
     {

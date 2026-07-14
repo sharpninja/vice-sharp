@@ -37,4 +37,15 @@ public enum AppKeyKind
     /// whose <see cref="VirtualKeyEntry.KeyName"/> is not a C64 keyboard-map key.
     /// </summary>
     Restore = 2,
+
+    /// <summary>
+    /// A momentary SHIFT key (the authentic keyboard's left/right SHIFT,
+    /// PLAN-XKEYBOARD-001 K1). Pressing it toggles the ONE-SHOT
+    /// <see cref="VirtualKeyboardViewModel.ShiftArmed"/> arm and emits nothing; the next
+    /// ordinary key press is wrapped in this tile's
+    /// <see cref="VirtualKeyEntry.KeyName"/> ("LeftShift"/"RightShift") down/up, exactly
+    /// like holding SHIFT on hardware (so CRSR-down becomes CRSR-up, etc.), and the arm
+    /// clears. Function tiles map to their shifted twin in place instead of wrapping.
+    /// </summary>
+    ShiftMomentary = 3,
 }
