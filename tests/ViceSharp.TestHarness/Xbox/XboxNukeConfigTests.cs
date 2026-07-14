@@ -129,7 +129,10 @@ public sealed class XboxNukeConfigTests
     /// </summary>
     private static string ExtractTargetBlock(string source, string targetName)
     {
-        var marker = "Target " + targetName;
+        // Anchor on the full declaration ("Target Name =>"), not the name prefix: a
+        // prefix match let "Target DeployXboxLocal" (FEAT-XLOCALDEPLOY-001) hijack the
+        // "DeployXbox" window and dangle this extractor at the wrong target.
+        var marker = "Target " + targetName + " =>";
         var start = source.IndexOf(marker, StringComparison.Ordinal);
         Assert.True(start >= 0, $"Target '{targetName}' not found in build/Build.cs.");
 
