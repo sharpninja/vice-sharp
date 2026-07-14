@@ -150,6 +150,64 @@ public sealed class XboxKeyboardInputTests
     }
 
     [Fact]
+    public void KeyboardContext_Triggers_HoldCommodoreAndShift()
+    {
+        // TEST-XKBDIN-001e (operator 2026-07-14: "Left Trigger = C= key, Right Trigger
+        // is SHIFT"): HOLD semantics with the shared trigger hysteresis - down once at
+        // the activate edge, silent while held (including inside the band), up once at
+        // the release edge.
+        var context = new XboxInputContext();
+        context.RequestContext(InputContext.VirtualKeyboard);
+        context.Tick(1, Snapshot(GamepadButtonFlags.None));
+
+        var res = context.Tick(2, Triggers(lt: 0.9));
+        Assert.Equal(new[] { AppCommand.KeyboardModifierCommodoreDown }, res.Commands);
+        Assert.Empty(context.Tick(3, Triggers(lt: 0.9)).Commands);
+        Assert.Empty(context.Tick(4, Triggers(lt: 0.5)).Commands);
+
+        res = context.Tick(5, Triggers(lt: 0.1));
+        Assert.Equal(new[] { AppCommand.KeyboardModifierCommodoreUp }, res.Commands);
+
+        res = context.Tick(6, Triggers(rt: 0.9));
+        Assert.Equal(new[] { AppCommand.KeyboardModifierShiftDown }, res.Commands);
+
+        res = context.Tick(7, Triggers());
+        Assert.Equal(new[] { AppCommand.KeyboardModifierShiftUp }, res.Commands);
+    }
+
+    [Fact]
+    public void KeyboardContext_ExitWhileTriggerHeld_ReleasesTheModifier()
+    {
+        // TEST-XKBDIN-001e: closing the keyboard (View) while a trigger modifier is held
+        // must release it on the way out - a modifier may never stick inside the machine.
+        var context = new XboxInputContext();
+        context.RequestContext(InputContext.VirtualKeyboard);
+        context.Tick(1, Snapshot(GamepadButtonFlags.None));
+        context.Tick(2, Triggers(rt: 0.9));
+
+        var res = context.Tick(
+            3, new GamepadSnapshot(0.0, 0.0, 0.0, 0.0, 0.0, 0.9, GamepadButtonFlags.View, 0UL));
+
+        Assert.Contains(AppCommand.KeyboardModifierShiftUp, res.Commands);
+        Assert.Contains(AppCommand.ToggleVirtualKeyboard, res.Commands);
+        Assert.Equal(InputContext.Gameplay, res.NextContext);
+    }
+
+    [Fact]
+    public void MainMenuContext_Triggers_EmitNothing()
+    {
+        var context = new XboxInputContext();
+        context.RequestContext(InputContext.MainMenu);
+        context.Tick(1, Snapshot(GamepadButtonFlags.None));
+
+        Assert.Empty(context.Tick(2, Triggers(lt: 0.9)).Commands);
+        Assert.Empty(context.Tick(3, Triggers(rt: 0.9)).Commands);
+    }
+
+    private static GamepadSnapshot Triggers(double lt = 0.0, double rt = 0.0)
+        => new(0.0, 0.0, 0.0, 0.0, lt, rt, GamepadButtonFlags.None, 0UL);
+
+    [Fact]
     public void Head_WiresPhysicalKeyboard_AndOverlayToggle()
     {
         // TEST-XKBDIN-001d: structural wiring of the #if HAS_UWP head.

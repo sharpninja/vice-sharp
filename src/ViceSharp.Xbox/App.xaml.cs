@@ -715,8 +715,45 @@ public sealed partial class App : Application
             case ViceSharp.Xbox.Input.AppCommand.KeyboardKeyShiftCursorLeft:
                 InjectShiftedC64Key("Left");
                 break;
+
+            // Trigger modifiers (operator 2026-07-14: LT = C=, RT = SHIFT): true HOLD
+            // semantics through the machine seam, tracked in the pressed set so menu
+            // entry / overlay close force-release them like any other held key.
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierCommodoreDown:
+                InjectModifier("Commodore", down: true);
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierCommodoreUp:
+                InjectModifier("Commodore", down: false);
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierShiftDown:
+                InjectModifier("LeftShift", down: true);
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierShiftUp:
+                InjectModifier("LeftShift", down: false);
+                break;
             default:
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Holds or releases one C64 modifier key through the machine seam, tracked in the
+    /// pressed set (so <see cref="ReleaseAllPressedKeys"/> covers a modifier left held
+    /// by any exit path). Idempotent per direction.
+    /// </summary>
+    private void InjectModifier(string keyName, bool down)
+    {
+        if (_machineKeyboard is not { } keyboard)
+            return;
+
+        if (down)
+        {
+            if (_pressedKeys.Add(keyName))
+                keyboard.SetKeyState(keyName, true);
+        }
+        else if (_pressedKeys.Remove(keyName))
+        {
+            keyboard.SetKeyState(keyName, false);
         }
     }
 
@@ -734,6 +771,12 @@ public sealed partial class App : Application
         {
             var first = FocusManager.FindFirstFocusableElement(_keyboardOverlay);
             (first as Windows.UI.Xaml.Controls.Control)?.Focus(Windows.UI.Xaml.FocusState.Programmatic);
+        }
+        else if (!Navigation.IsVirtualKeyboardOpen)
+        {
+            // Closing the keyboard force-releases anything still held (trigger modifiers
+            // included) so no key can stick inside the machine across the dismissal.
+            ReleaseAllPressedKeys();
         }
     }
 

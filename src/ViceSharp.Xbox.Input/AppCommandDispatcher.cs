@@ -232,6 +232,10 @@ public sealed class AppCommandDispatcher
             case AppCommand.KeyboardKeyRunStop:
             case AppCommand.KeyboardKeyCursorLeft:
             case AppCommand.KeyboardKeyShiftCursorLeft:
+            case AppCommand.KeyboardModifierCommodoreDown:
+            case AppCommand.KeyboardModifierCommodoreUp:
+            case AppCommand.KeyboardModifierShiftDown:
+            case AppCommand.KeyboardModifierShiftUp:
                 _onUiNavigate?.Invoke(command);
                 break;
 

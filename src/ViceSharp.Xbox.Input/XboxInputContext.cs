@@ -77,6 +77,13 @@ public sealed class XboxInputContext
     private bool _hasPriorFrame;
     private AppCommand _pendingConfirmCommand;
 
+    // FIX-XKBDINPUT-001 trigger modifiers (operator: LT = C=, RT = SHIFT while the
+    // virtual keyboard is open). Held phases latched across frames with the shared
+    // XboxSystemButtons trigger hysteresis; any exit from the keyboard context emits
+    // the paired releases so a modifier can never stick inside the machine.
+    private bool _keyboardCommodoreHeld;
+    private bool _keyboardShiftHeld;
+
     /// <summary>
     /// Creates a new input context machine.
     /// </summary>
@@ -135,6 +142,15 @@ public sealed class XboxInputContext
         if (context != InputContext.ConfirmDialog)
         {
             _pendingConfirmCommand = AppCommand.None;
+        }
+
+        if (context != InputContext.VirtualKeyboard)
+        {
+            // UI-driven exit from the keyboard: no Tick runs to emit the paired releases,
+            // so clear the trigger-modifier phases (the head's overlay-hide path releases
+            // the actual machine keys) and let re-entry start clean.
+            _keyboardCommodoreHeld = false;
+            _keyboardShiftHeld = false;
         }
     }
 
@@ -296,21 +312,31 @@ public sealed class XboxInputContext
             // FIX-XKBDINPUT-001 (operator mapping, remapped 2026-07-14): while the
             // on-screen keyboard is open, the D-pad navigates the tiles (repeater above),
             // A activates the FOCUSED tile (that is how RETURN and every letter is
-            // pressed), and the chords are X=INST/DEL, Y=SPACE, B=RUN/STOP,
-            // LB=cursor-left, RB=SHIFT+cursor-left. View toggles the keyboard off; Menu
-            // closes back to gameplay.
-            if (menuEdge)
+            // pressed), the chords are X=INST/DEL, Y=SPACE, B=RUN/STOP, LB=cursor-left,
+            // RB=SHIFT+cursor-left, and the triggers are HELD modifiers (LT=C=, RT=SHIFT,
+            // shared XboxSystemButtons hysteresis). View toggles the keyboard off; Menu
+            // closes back to gameplay; both exits release any held modifier.
+            if (menuEdge || viewEdge)
             {
-                commands.Add(AppCommand.CloseMenu);
-                next = InputContext.Gameplay;
-            }
-            else if (viewEdge)
-            {
-                commands.Add(AppCommand.ToggleVirtualKeyboard);
+                ReleaseKeyboardModifiers(commands);
+                commands.Add(menuEdge ? AppCommand.CloseMenu : AppCommand.ToggleVirtualKeyboard);
                 next = InputContext.Gameplay;
             }
             else
             {
+                UpdateKeyboardModifier(
+                    snapshot.LeftTrigger,
+                    ref _keyboardCommodoreHeld,
+                    AppCommand.KeyboardModifierCommodoreDown,
+                    AppCommand.KeyboardModifierCommodoreUp,
+                    commands);
+                UpdateKeyboardModifier(
+                    snapshot.RightTrigger,
+                    ref _keyboardShiftHeld,
+                    AppCommand.KeyboardModifierShiftDown,
+                    AppCommand.KeyboardModifierShiftUp,
+                    commands);
+
                 if (aEdge)
                 {
                     commands.Add(AppCommand.UiActivate);
@@ -366,6 +392,53 @@ public sealed class XboxInputContext
 
         // FR-CTX-002: joystick is inert (and A never fires) in every non-Gameplay context.
         return new InputResolution(next, commands, JoystickPortState.Neutral, JoystickPortState.Neutral);
+    }
+
+    /// <summary>
+    /// Advances one trigger-held modifier phase with the shared
+    /// <see cref="XboxSystemButtons"/> hysteresis and emits the paired down/up command
+    /// exactly on the phase edges (silent while held or released, including inside the
+    /// hysteresis band).
+    /// </summary>
+    private static void UpdateKeyboardModifier(
+        double triggerValue,
+        ref bool held,
+        AppCommand downCommand,
+        AppCommand upCommand,
+        List<AppCommand> commands)
+    {
+        bool heldNow = triggerValue >= XboxSystemButtons.TriggerActivate
+            ? true
+            : triggerValue <= XboxSystemButtons.TriggerRelease
+                ? false
+                : held;
+
+        if (heldNow == held)
+        {
+            return;
+        }
+
+        commands.Add(heldNow ? downCommand : upCommand);
+        held = heldNow;
+    }
+
+    /// <summary>
+    /// Emits the paired release for every held trigger modifier and clears the phases
+    /// (used on every exit from the VirtualKeyboard context so a modifier never sticks).
+    /// </summary>
+    private void ReleaseKeyboardModifiers(List<AppCommand> commands)
+    {
+        if (_keyboardCommodoreHeld)
+        {
+            commands.Add(AppCommand.KeyboardModifierCommodoreUp);
+            _keyboardCommodoreHeld = false;
+        }
+
+        if (_keyboardShiftHeld)
+        {
+            commands.Add(AppCommand.KeyboardModifierShiftUp);
+            _keyboardShiftHeld = false;
+        }
     }
 
     /// <summary>

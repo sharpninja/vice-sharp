@@ -104,4 +104,24 @@ public enum AppCommand
     /// keyboard is open). UI-layer only.
     /// </summary>
     KeyboardKeyShiftCursorLeft,
+
+    /// <summary>
+    /// Virtual-keyboard trigger modifier (operator 2026-07-14: "Left Trigger = C= key"):
+    /// the Commodore key goes DOWN when LT crosses the activate edge and stays held.
+    /// UI-layer only; always paired with <see cref="KeyboardModifierCommodoreUp"/>.
+    /// </summary>
+    KeyboardModifierCommodoreDown,
+
+    /// <summary>The paired Commodore-key release (LT crosses the release edge or the keyboard closes).</summary>
+    KeyboardModifierCommodoreUp,
+
+    /// <summary>
+    /// Virtual-keyboard trigger modifier ("Right Trigger is SHIFT"): the left SHIFT key
+    /// goes DOWN when RT crosses the activate edge and stays held. UI-layer only; always
+    /// paired with <see cref="KeyboardModifierShiftUp"/>.
+    /// </summary>
+    KeyboardModifierShiftDown,
+
+    /// <summary>The paired SHIFT release (RT crosses the release edge or the keyboard closes).</summary>
+    KeyboardModifierShiftUp,
 }
