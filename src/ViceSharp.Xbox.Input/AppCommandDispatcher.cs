@@ -88,6 +88,7 @@ public sealed class AppCommandDispatcher
     private readonly Action _onExit;
     private readonly Action? _onOpenMenu;
     private readonly Action? _onCloseMenu;
+    private readonly Action<AppCommand>? _onUiNavigate;
 
     private SnapshotDto? _quickSlot;
 
@@ -109,13 +110,21 @@ public sealed class AppCommandDispatcher
     /// Optional UI callback fired by <see cref="AppCommand.CloseMenu"/> (dismiss the menu back to
     /// gameplay). The head uses it to hide the shell menu and expose the emulator. Null = no-op.
     /// </param>
+    /// <param name="onUiNavigate">
+    /// Optional UI callback fired by the shell-menu navigation commands
+    /// (<see cref="AppCommand.UiNavigateUp"/>/<see cref="AppCommand.UiNavigateDown"/>/<see cref="AppCommand.UiNavigateLeft"/>/<see cref="AppCommand.UiNavigateRight"/>,
+    /// <see cref="AppCommand.UiActivate"/>, and <see cref="AppCommand.UiBack"/>), receiving the exact
+    /// command so the head can drive XAML focus navigation / activate the focused control / go back.
+    /// Null = no-op (these commands remain UI-layer-only). Fires no host/snapshot/settings call.
+    /// </param>
     public AppCommandDispatcher(
         IEmulatorHost host,
         ISnapshotService snapshots,
         ISettingsService settings,
         Action onExit,
         Action? onOpenMenu = null,
-        Action? onCloseMenu = null)
+        Action? onCloseMenu = null,
+        Action<AppCommand>? onUiNavigate = null)
     {
         ArgumentNullException.ThrowIfNull(host);
         ArgumentNullException.ThrowIfNull(snapshots);
@@ -127,6 +136,7 @@ public sealed class AppCommandDispatcher
         _onExit = onExit;
         _onOpenMenu = onOpenMenu;
         _onCloseMenu = onCloseMenu;
+        _onUiNavigate = onUiNavigate;
     }
 
     /// <summary>
@@ -206,6 +216,17 @@ public sealed class AppCommandDispatcher
                 _onCloseMenu?.Invoke();
                 break;
 
+            // UI-only shell-menu navigation: pass the exact command to the head so it can
+            // drive XAML focus / activate the focused control / go back. Still no host call.
+            case AppCommand.UiNavigateUp:
+            case AppCommand.UiNavigateDown:
+            case AppCommand.UiNavigateLeft:
+            case AppCommand.UiNavigateRight:
+            case AppCommand.UiActivate:
+            case AppCommand.UiBack:
+                _onUiNavigate?.Invoke(command);
+                break;
+
             // UI-only + neutral commands are handled by the UI layer, and ToggleWarp is
             // never emitted by the Xbox pipeline (the WarpHold pair is used instead): no
             // host interaction for any of these.
@@ -214,12 +235,6 @@ public sealed class AppCommandDispatcher
             case AppCommand.ToggleWarp:
             case AppCommand.ConfirmYes:
             case AppCommand.ConfirmNo:
-            case AppCommand.UiNavigateUp:
-            case AppCommand.UiNavigateDown:
-            case AppCommand.UiNavigateLeft:
-            case AppCommand.UiNavigateRight:
-            case AppCommand.UiActivate:
-            case AppCommand.UiBack:
                 break;
         }
 

@@ -309,6 +309,49 @@ public sealed class XboxAppCommandDispatcherTests
         Assert.Equal(0, exit.Count);
     }
 
+    /// <summary>
+    /// PLAN-XBOXUWP (keyboard + focus navigation): when the head supplies the optional
+    /// onUiNavigate callback, the shell-menu navigation commands
+    /// (UiNavigateUp/Down/Left/Right, UiActivate, UiBack) each fire it with the exact
+    /// command, in order, so the head can drive XAML focus / activate / go back - still
+    /// with NO host/snapshot/settings call and no exit.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public async Task UiNavigate_FiresOnUiNavigateCallback_WithTheCommand_AndCallsNoService()
+    {
+        var host = new RecordingEmulatorHost();
+        var snapshots = new RecordingSnapshotService();
+        var settings = new RecordingSettingsService();
+        var exit = new ExitProbe();
+        var received = new List<AppCommand>();
+        var dispatcher = new AppCommandDispatcher(
+            host,
+            snapshots,
+            settings,
+            exit.Fire,
+            onUiNavigate: cmd => received.Add(cmd));
+
+        await dispatcher.DispatchAsync(Session, AppCommand.UiNavigateUp, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.UiNavigateDown, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.UiActivate, TestContext.Current.CancellationToken);
+        await dispatcher.DispatchAsync(Session, AppCommand.UiBack, TestContext.Current.CancellationToken);
+
+        Assert.Equal(
+            new[]
+            {
+                AppCommand.UiNavigateUp,
+                AppCommand.UiNavigateDown,
+                AppCommand.UiActivate,
+                AppCommand.UiBack,
+            },
+            received);
+        Assert.Equal(0, host.TotalCalls);
+        Assert.Equal(0, snapshots.TotalCalls);
+        Assert.Equal(0, settings.TotalCalls);
+        Assert.Equal(0, exit.Count);
+    }
+
     // ------------------------------------------------------------------
     // UI-only commands (handled by the UI layer, never the host)
     // ------------------------------------------------------------------

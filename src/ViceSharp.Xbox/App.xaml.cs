@@ -15,6 +15,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using ViceSharp.Abstractions;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Startup;
@@ -128,6 +129,14 @@ public sealed partial class App : Application
         // transparent Frame carrying the pushable pages above it, and the two overlays.
         var root = new Grid();
 
+        // Catch shell-menu keyboard navigation even when a focused child already handled the
+        // key (handledEventsToo: true). ESC toggles the menu; WASD/arrows drive focus while the
+        // menu is open. Tab and Enter/Space are left to native XAML focus handling.
+        root.AddHandler(
+            Windows.UI.Xaml.UIElement.KeyDownEvent,
+            new Windows.UI.Xaml.Input.KeyEventHandler(OnRootKeyDown),
+            handledEventsToo: true);
+
         var emulatorView = new EmulatorView();
         _videoSurface = emulatorView.SurfaceHost;
         root.Children.Add(emulatorView);
@@ -162,12 +171,15 @@ public sealed partial class App : Application
 
         if (VideoPull is not null)
         {
-            // ROMs were complete at launch: normal boot to Home.
+            // ROMs were complete at launch: boot straight into the running C64 with the shell
+            // menu HIDDEN. The always-present EmulatorView is the at-rest surface; the menu is
+            // brought up on demand via the Menu button / ESC (ShowMenu navigates HomePage when
+            // the Frame is empty, which it is at launch).
             _videoSurface.Attach(VideoPull);
             _videoSurface.Start();
             _gamepad?.Start();
             _bootStarted = true;
-            frame.Navigate(typeof(HomePage));
+            HideMenu();
         }
         else
         {
@@ -210,7 +222,11 @@ public sealed partial class App : Application
             }
 
             _gamepad?.Start();
-            _frame?.Navigate(typeof(HomePage));
+
+            // After first-run ROM download, also boot straight into the running emulator with
+            // the shell menu hidden (menu is on-demand via Menu button / ESC), mirroring the
+            // normal-boot branch in OnLaunched.
+            HideMenu();
         }
         catch (Exception ex)
         {
@@ -269,7 +285,8 @@ public sealed partial class App : Application
             host.Settings,
             onExit: Exit,
             onOpenMenu: ShowMenu,
-            onCloseMenu: HideMenu);
+            onCloseMenu: HideMenu,
+            onUiNavigate: HandleUiNavigate);
 
         _gamepad = new WinRtGamepadSource(host, InputContext, dispatcher, _sessionId);
 
@@ -307,6 +324,88 @@ public sealed partial class App : Application
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"[ViceSharp.Xbox] keyboard rebuild failed: {ex}");
+        }
+    }
+
+    /// <summary>True when the shell-menu Frame is currently shown over the running emulator.</summary>
+    private bool IsMenuOpen => _frame is not null && _frame.Visibility == Visibility.Visible;
+
+    /// <summary>Toggles the shell menu: show it if hidden, hide it if shown (ESC / Menu button).</summary>
+    private void ToggleMenu()
+    {
+        if (IsMenuOpen)
+        {
+            HideMenu();
+        }
+        else
+        {
+            ShowMenu();
+        }
+    }
+
+    /// <summary>
+    /// Applies one shell-menu navigation command on the UI thread (invoked by the input
+    /// dispatcher's onUiNavigate callback and by the keyboard handler). Directional commands
+    /// move XAML focus, UiActivate invokes the focused Button, and UiBack pops the Frame's
+    /// back-stack (or hides the menu when there is nothing to go back to).
+    /// </summary>
+    /// <param name="command">The UI navigation command to apply.</param>
+    private void HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand command)
+    {
+        switch (command)
+        {
+            case ViceSharp.Xbox.Input.AppCommand.UiNavigateUp:
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Up);
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.UiNavigateDown:
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Down);
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.UiNavigateLeft:
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Left);
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.UiNavigateRight:
+                FocusManager.TryMoveFocus(FocusNavigationDirection.Right);
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.UiActivate:
+                if (FocusManager.GetFocusedElement() is Windows.UI.Xaml.Controls.Button b)
+                {
+                    var peer = new Windows.UI.Xaml.Automation.Peers.ButtonAutomationPeer(b);
+                    (peer.GetPattern(Windows.UI.Xaml.Automation.Peers.PatternInterface.Invoke)
+                        as Windows.UI.Xaml.Automation.Provider.IInvokeProvider)?.Invoke();
+                }
+
+                break;
+            case ViceSharp.Xbox.Input.AppCommand.UiBack:
+                if (_frame?.CanGoBack == true)
+                {
+                    _frame.GoBack();
+                }
+                else
+                {
+                    HideMenu();
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Root-level KeyDown handler (registered with handledEventsToo). ESC toggles the shell
+    /// menu; WASD/arrows drive focus navigation only while the menu is open (so they never
+    /// steal keys from a future C64-keyboard path). Tab and Enter/Space are left to native
+    /// XAML focus handling.
+    /// </summary>
+    private void OnRootKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Windows.System.VirtualKey.Escape: ToggleMenu(); e.Handled = true; break;
+            case Windows.System.VirtualKey.W: case Windows.System.VirtualKey.Up:    if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateUp);    e.Handled = true; } break;
+            case Windows.System.VirtualKey.S: case Windows.System.VirtualKey.Down:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateDown);  e.Handled = true; } break;
+            case Windows.System.VirtualKey.A: case Windows.System.VirtualKey.Left:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateLeft);  e.Handled = true; } break;
+            case Windows.System.VirtualKey.D: case Windows.System.VirtualKey.Right: if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateRight); e.Handled = true; } break;
         }
     }
 
