@@ -73,6 +73,24 @@ public sealed class XboxStorePipelineTests
     }
 
     [Fact]
+    public void WackPreflight_IsAnOptInNukeTarget()
+    {
+        // Operator 2026-07-14: WACK is NOT required for Store upload (Partner Center
+        // certifies every package); it ships as the opt-in Nuke target
+        // ValidateStorePackage, surfaced by the pipeline's runWack parameter.
+        var build = File.ReadAllText(Path.Combine(RepoRoot, "build", "Build.cs"));
+        Assert.Contains("Target ValidateStorePackage", build);
+        Assert.Contains("appcert.exe", build);
+        Assert.Contains("-appxpackagepath", build);
+        Assert.Contains("OVERALL_RESULT", build);
+        Assert.Contains("Session0", build);
+
+        var yml = ReadPipeline();
+        Assert.Contains("runWack", yml);
+        Assert.Contains("ValidateStorePackage", yml);
+    }
+
+    [Fact]
     public void OperatorGuide_DocumentsTheStoreSetup()
     {
         var doc = Path.Combine(RepoRoot, "docs", "xbox-store-publishing.md");

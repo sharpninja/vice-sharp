@@ -26,6 +26,10 @@ parameters:
     displayName: Agent pool (needs VS 18 MSBuild + UWP tooling + .NET 10 SDK)
     type: string
     default: Default
+  - name: runWack
+    displayName: Run the WACK pre-flight (needs an INTERACTIVE agent session + admin; Store certification runs regardless)
+    type: boolean
+    default: false
 
 trigger: none # Publish runs are deliberate: run the pipeline manually (or add a tag trigger later).
 
@@ -87,9 +91,28 @@ stages:
               Write-Host "Store upload package: $($upload.FullName)"
             displayName: Verify the upload package exists
 
+          # OPT-IN Store-certification pre-flight (Nuke ValidateStorePackage -> WACK):
+          # fails the build on any verdict but PASS, ~an hour before Partner Center
+          # certification would. appcert.exe cannot run in Session0: the agent must run
+          # as an interactive process, not a Windows service.
+          - ${{ if eq(parameters.runWack, true) }}:
+              - powershell: |
+                  $upload = Get-ChildItem "$(Build.ArtifactStagingDirectory)\AppxPackages" -Recurse `
+                    -Include *.msixupload, *.appxupload | Select-Object -First 1
+                  if (-not $upload) { throw 'No upload package to validate.' }
+                  ./build.ps1 ValidateStorePackage --store-package-path "$($upload.FullName)"
+                  if ($LASTEXITCODE -ne 0) { throw "ValidateStorePackage failed with exit code $LASTEXITCODE." }
+                displayName: WACK pre-flight (Nuke ValidateStorePackage)
+
           - publish: $(Build.ArtifactStagingDirectory)/AppxPackages
             artifact: store-upload
             displayName: Publish store-upload artifact
+
+          - ${{ if eq(parameters.runWack, true) }}:
+              - publish: artifacts/wack
+                artifact: wack-report
+                displayName: Publish WACK report
+                condition: succeededOrFailed()
 
   - stage: PublishToStore
     displayName: Publish to Microsoft Store (Xbox)

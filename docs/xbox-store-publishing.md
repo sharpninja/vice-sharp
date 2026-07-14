@@ -57,6 +57,24 @@ Store Developer CLI (msstore), behind a manual approval.
    commits it for certification.
 4. Track certification in Partner Center (or `msstore submission status $(STORE_APP_ID)`).
 
+## Optional WACK pre-flight (Nuke `ValidateStorePackage`)
+
+Store upload does NOT require running the Windows App Certification Kit: Partner
+Center runs the authoritative certification on every submitted package. The optional
+pre-flight merely fails the same checks about an hour earlier.
+
+- **Locally**: `./build.ps1 ValidateStorePackage` (newest upload package under
+  `src/ViceSharp.Xbox` is picked up automatically) or
+  `./build.ps1 ValidateStorePackage --store-package-path <path-to.msixupload>`.
+  The target extracts the inner `.msix` from an upload package, runs
+  `appcert.exe reset` + `appcert.exe test -appxpackagepath ... -reportoutputpath ...`,
+  and fails on any report `OVERALL_RESULT` other than `PASS`. The report lands under
+  `artifacts/wack/`.
+- **In the pipeline**: run with the `runWack` parameter set to true. Constraint: WACK
+  cannot run in Session0, so the agent must run INTERACTIVELY (a logged-on session,
+  not a Windows service) and elevated; the WACK report publishes as the `wack-report`
+  artifact even on failure.
+
 ## Known caveats (stated honestly)
 
 - **Native AOT**: Release-UWP arms `PublishAot`; the store package is produced by the

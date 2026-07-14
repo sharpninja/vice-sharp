@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
+using System.Xml.Linq;
 using Nuke.Common;
 using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.IO;
@@ -943,6 +946,100 @@ sealed partial class Build : NukeBuild
     AbsolutePath MsiOutputPath => InstallerOutputDir / "ViceSharp.msi";
 
     AbsolutePath WingetOutputDir => ArtifactsDirectory / "winget";
+
+    [Parameter("Store package (.msixupload/.appxupload/.msix/.appx) for ValidateStorePackage. When omitted, the newest upload package under src/ViceSharp.Xbox is used.")]
+    readonly string? StorePackagePath;
+
+    /// <summary>
+    /// FEAT-XSTOREPIPE-001: local Microsoft Store certification pre-flight. Runs the
+    /// Windows App Certification Kit (appcert.exe) against the Xbox head's Store
+    /// package and FAILS on any verdict other than PASS (verdict read from the report's
+    /// OVERALL_RESULT). Optional by policy: Partner Center runs the authoritative
+    /// certification on every upload; this target merely fails the same checks about an
+    /// hour earlier. Constraints (per the WACK documentation): appcert.exe requires an
+    /// ACTIVE USER SESSION (never Session0, so never a service-hosted agent) and admin
+    /// rights; the pipeline exposes it behind the opt-in runWack parameter.
+    /// </summary>
+    Target ValidateStorePackage => _ => _
+        .Executes(() =>
+        {
+            var package = ResolveStorePackage();
+            Serilog.Log.Information("WACK input package: {Package}", package);
+
+            // An .msixupload/.appxupload is a zip around the per-architecture package:
+            // extract and validate the inner .msix/.appx (appcert tests packages, not uploads).
+            var wackDirectory = ArtifactsDirectory / "wack";
+            wackDirectory.CreateDirectory();
+
+            var packagePath = package.ToString();
+            AbsolutePath msix = package;
+            if (packagePath.EndsWith(".msixupload", StringComparison.OrdinalIgnoreCase)
+                || packagePath.EndsWith(".appxupload", StringComparison.OrdinalIgnoreCase))
+            {
+                var extractDirectory = wackDirectory / "extracted";
+                extractDirectory.CreateOrCleanDirectory();
+                ZipFile.ExtractToDirectory(packagePath, extractDirectory, overwriteFiles: true);
+                msix = extractDirectory.GlobFiles("*.msix", "*.appx").FirstOrDefault()
+                    ?? throw new InvalidOperationException(
+                        $"The upload package '{package}' contains no .msix/.appx.");
+                Serilog.Log.Information("Extracted inner package: {Msix}", msix);
+            }
+
+            var appcert = (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+                / "Windows Kits" / "10" / "App Certification Kit" / "appcert.exe";
+            if (!appcert.FileExists())
+                throw new InvalidOperationException(
+                    $"appcert.exe not found at '{appcert}'. Install the Windows App Certification Kit (ships with the Windows SDK).");
+
+            var report = wackDirectory / $"wack-report-{DateTime.Now:yyyyMMdd-HHmmss}.xml";
+
+            // reset clears prior kit state; it needs admin, and a failure here surfaces
+            // again in the test run, so it is deliberately tolerant.
+            ProcessTasks.StartProcess(appcert, "reset", RootDirectory).WaitForExit();
+
+            var test = ProcessTasks.StartProcess(
+                appcert,
+                $"test -appxpackagepath \"{msix}\" -reportoutputpath \"{report}\"",
+                RootDirectory);
+            test.WaitForExit();
+
+            if (!report.FileExists())
+                throw new InvalidOperationException(
+                    $"WACK produced no report (appcert exit {test.ExitCode}). appcert.exe requires an active user session (never Session0) and admin rights.");
+
+            // The report is the verdict (appcert's exit code only says the run completed).
+            var overall = XDocument.Load(report).Root?.Attribute("OVERALL_RESULT")?.Value ?? "UNKNOWN";
+            Serilog.Log.Information("WACK OVERALL_RESULT={Result}; report: {Report}", overall, report);
+
+            if (!string.Equals(overall, "PASS", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException(
+                    $"WACK verdict '{overall}' (anything but PASS fails the pre-flight). Report: {report}");
+        });
+
+    /// <summary>
+    /// Resolves the Store package for <see cref="ValidateStorePackage"/>: the explicit
+    /// --store-package-path when given, else the newest upload package (or packaged
+    /// .msix) under the Xbox head.
+    /// </summary>
+    AbsolutePath ResolveStorePackage()
+    {
+        if (!string.IsNullOrWhiteSpace(StorePackagePath))
+        {
+            var explicitPath = (AbsolutePath)Path.GetFullPath(StorePackagePath);
+            if (!explicitPath.FileExists())
+                throw new InvalidOperationException($"--store-package-path '{explicitPath}' does not exist.");
+            return explicitPath;
+        }
+
+        var headDirectory = RootDirectory / "src" / "ViceSharp.Xbox";
+        var newest = headDirectory
+            .GlobFiles("**/*.msixupload", "**/*.appxupload", "AppPackages/**/*.msix")
+            .OrderByDescending(file => File.GetLastWriteTimeUtc(file))
+            .FirstOrDefault();
+
+        return newest ?? throw new InvalidOperationException(
+            "No Store package found under src/ViceSharp.Xbox. Build one (UapAppxPackageBuildMode=StoreUpload) or pass --store-package-path.");
+    }
 
     /// <summary>
     /// Publish the ViceSharp.Avalonia desktop GUI as a self-contained
