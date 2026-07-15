@@ -335,6 +335,40 @@ public sealed partial class App : Application
         Grid.SetColumn(frame, 1);
         root.Children.Add(frame);
 
+        // FEAT-XMENUSUBPAGE-001 (operator: "subpages from the menu need to expand
+        // fully"): the HOME rail keeps the docked right column; every other page
+        // spans BOTH columns and contracts again when navigation returns home. The
+        // frame supplies the OPAQUE backdrop while expanded - the pages' translucent
+        // washes were tuned for the empty right column, and the expanded page now
+        // sits over the paused emulator.
+        _frame.Navigated += (_, args) =>
+        {
+            if (args.SourcePageType == typeof(Views.HomePage))
+            {
+                Grid.SetColumnSpan(_frame, 1);
+                Grid.SetColumn(_frame, 1);
+                _frame.Background = null;
+            }
+            else
+            {
+                Grid.SetColumn(_frame, 0);
+                Grid.SetColumnSpan(_frame, 2);
+                _frame.Background = new Windows.UI.Xaml.Media.SolidColorBrush(
+                    Windows.UI.Color.FromArgb(0xFF, 0x10, 0x14, 0x18));
+            }
+        };
+
+        // FIX-XKBDPANEL-001 receipts posture: a page whose constructor or
+        // OnNavigatedTo throws makes Navigate silently refuse; log the reason.
+        _frame.NavigationFailed += (_, args) =>
+        {
+            CreateLogger("App").LogError(
+                args.Exception,
+                "navigation failed: {Page}",
+                args.SourcePageType?.FullName ?? "(unknown)");
+            args.Handled = true;
+        };
+
         var keyboardOverlay = new VirtualKeyboardOverlay { Visibility = Visibility.Collapsed };
         _keyboardOverlay = keyboardOverlay;
         Grid.SetRow(keyboardOverlay, 1);
@@ -870,13 +904,22 @@ public sealed partial class App : Application
 
                 break;
             case ViceSharp.Xbox.Input.AppCommand.UiBack:
-                if (_frame?.CanGoBack == true)
+                // FEAT-XMENUSUBPAGE-001 (operator: "Whenever there is a back button
+                // that can be clicked in the UI, the B button should go back, not
+                // close the menu panel"): PAGE-TYPE-driven, not stack-driven. Only the
+                // home rail dismisses; a subpage always steps back toward the rail,
+                // even with an empty back stack (reopened menus keep the last page).
+                if (_frame is null || _frame.Content is Views.HomePage or null)
+                {
+                    HideMenu();
+                }
+                else if (_frame.CanGoBack)
                 {
                     _frame.GoBack();
                 }
                 else
                 {
-                    HideMenu();
+                    _frame.Navigate(typeof(Views.HomePage));
                 }
 
                 break;
@@ -1191,6 +1234,11 @@ public sealed partial class App : Application
 
         _frame.Visibility = Visibility.Visible;
 
+        // FEAT-XMENUSUBPAGE-001: the shell owns the controller while the menu is up,
+        // pushed EXPLICITLY so every open path (controller Menu, ESC/F11, pause flows)
+        // agrees with the context machine.
+        InputContext?.RequestContext(ViceSharp.Xbox.Input.InputContext.MainMenu);
+
         // FEAT-XMENUFOCUS-001: every open lands focus on Close Menu. Navigation covers
         // the first open via OnNavigatedTo; re-shows only flip visibility, so drive it
         // here too (idempotent).
@@ -1388,6 +1436,15 @@ public sealed partial class App : Application
         {
             _frame.Visibility = Visibility.Collapsed;
         }
+
+        // FEAT-XMENUSUBPAGE-001: hand the controller back for EVERY dismissal path
+        // (mouse Close Menu, background click, B on the rail) - the context machine
+        // only self-transitions on its own Menu edge, so a mouse dismissal used to
+        // strand it in MainMenu with an inert joystick.
+        if (Navigation.IsVirtualKeyboardOpen)
+            InputContext?.RequestContext(ViceSharp.Xbox.Input.InputContext.VirtualKeyboard);
+        else
+            InputContext?.RequestContext(ViceSharp.Xbox.Input.InputContext.Gameplay);
 
         // FEAT-XMENUPAUSE-001: every dismissal path unfreezes the machine (idempotent).
         TryResumeEmulation();

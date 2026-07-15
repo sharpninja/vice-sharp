@@ -2,6 +2,7 @@
 #if HAS_UWP
 namespace ViceSharp.Xbox.Views;
 
+using Microsoft.Extensions.Logging;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -23,8 +24,17 @@ public sealed partial class DeviceSetupPage : Page
     protected override async void OnNavigatedTo(NavigationEventArgs e)
     {
         base.OnNavigatedTo(e);
-        if (ViewModel is not null)
-            await ViewModel.RefreshAsync();
+        try
+        {
+            if (ViewModel is not null)
+                await ViewModel.RefreshAsync();
+        }
+        catch (System.Exception ex)
+        {
+            // async-void: an unguarded throw here kills the app (or the navigation);
+            // a failed media listing must leave the page up with its empty cards.
+            App.CreateLogger("Devices").LogError(ex, "device refresh failed");
+        }
     }
 
     private void OnBack(object sender, RoutedEventArgs e)
