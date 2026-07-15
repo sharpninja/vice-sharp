@@ -75,6 +75,13 @@ public sealed partial class App : Application
 
         InitializeComponent();
 
+        // FIX-XKBDPANEL-001 receipts: {Binding} failures are debug-output-only by
+        // default; route them into the log (the keyboard dock realized zero tiles with
+        // ItemsSource null while its DataContext was a healthy VM).
+        DebugSettings.IsBindingTracingEnabled = true;
+        DebugSettings.BindingFailed += (_, args) =>
+            CreateLogger("Xaml").LogError("binding failed: {Message}", args.Message);
+
         // 10-foot UI: the pointer only appears when a control explicitly requests it.
         RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested;
     }
@@ -288,6 +295,25 @@ public sealed partial class App : Application
             Windows.UI.Xaml.UIElement.KeyUpEvent,
             new Windows.UI.Xaml.Input.KeyEventHandler(OnRootKeyUp),
             handledEventsToo: true);
+
+        // FIX-XKBDPANEL-001: routed KeyDown needs a focused XAML element; clicking the
+        // emulator surface (a SwapChainPanel, not focusable) or collapsing the focused
+        // keyboard tile leaves focus NOWHERE and the shell keys die. CoreWindow sees
+        // every key regardless; act on the shell toggles there when no element focus
+        // exists (the routed handler owns them otherwise, so no double-toggle).
+        Windows.UI.Core.CoreWindow.GetForCurrentThread().KeyDown += (_, args) =>
+        {
+            if (Windows.UI.Xaml.Input.FocusManager.GetFocusedElement() is not null)
+                return;
+
+            switch (args.VirtualKey)
+            {
+                case Windows.System.VirtualKey.Escape: ToggleMenu(); args.Handled = true; break;
+                case Windows.System.VirtualKey.F9: ToggleKeyboardOverlay(); args.Handled = true; break;
+                case Windows.System.VirtualKey.F11: ToggleMenu(); args.Handled = true; break;
+                default: break;
+            }
+        };
 
         var emulatorView = new EmulatorView();
         _emulatorView = emulatorView;
@@ -904,6 +930,44 @@ public sealed partial class App : Application
     }
 
     /// <summary>
+    /// Logs every ItemsControl under the overlay with its bound item count and realized
+    /// visual children (FIX-XKBDPANEL-001 receipts): distinguishes a dead BINDING
+    /// (Items.Count 0) from dead container REALIZATION (items bound, no visuals).
+    /// </summary>
+    private static void DescribeTree(DependencyObject root, Microsoft.Extensions.Logging.ILogger log)
+    {
+        var children = Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(root);
+        if (root is Windows.UI.Xaml.Controls.ItemsControl itemsControl)
+        {
+            log.LogInformation(
+                "keyboard tree: ItemsControl items={Items} visualChildren={Children} itemsSourceNull={SourceNull} dataContextType={Ctx}",
+                itemsControl.Items?.Count ?? -1,
+                children,
+                itemsControl.ItemsSource is null,
+                itemsControl.DataContext?.GetType().Name ?? "null");
+        }
+
+        for (var i = 0; i < children; i++)
+            DescribeTree(Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(root, i), log);
+    }
+
+    /// <summary>Counts realized Buttons under an element (FIX-XKBDPANEL-001 receipts).</summary>
+    private static int CountButtons(DependencyObject root)
+    {
+        var count = 0;
+        var children = Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(root);
+        for (var i = 0; i < children; i++)
+        {
+            var child = Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(root, i);
+            if (child is Windows.UI.Xaml.Controls.Button)
+                count++;
+            count += CountButtons(child);
+        }
+
+        return count;
+    }
+
+    /// <summary>
     /// Holds or releases one C64 modifier key through the machine seam, tracked in the
     /// pressed set (so <see cref="ReleaseAllPressedKeys"/> covers a modifier left held
     /// by any exit path). Idempotent per direction.
@@ -933,6 +997,30 @@ public sealed partial class App : Application
     private void ToggleKeyboardOverlay()
     {
         Navigation.IsVirtualKeyboardOpen = !Navigation.IsVirtualKeyboardOpen;
+
+        // FIX-XKBDPANEL-001 receipts: the panel-state facts at every toggle (the operator
+        // reported an EMPTY keyboard panel), logged with the realized tile count one
+        // layout pass after the flip.
+        if (Navigation.IsVirtualKeyboardOpen && _keyboardOverlay is { } overlay)
+        {
+            var log = CreateLogger("App");
+            log.LogInformation(
+                "keyboard open: vm={HasVm} keys={KeyCount}",
+                overlay.DataContext is VirtualKeyboardViewModel,
+                (overlay.DataContext as VirtualKeyboardViewModel)?.AllKeys.Count ?? -1);
+
+            _ = overlay.Dispatcher.RunAsync(
+                Windows.UI.Core.CoreDispatcherPriority.Low,
+                () =>
+                {
+                    log.LogInformation(
+                        "keyboard layout: size={Width}x{Height} buttons={Buttons}",
+                        (int)overlay.ActualWidth,
+                        (int)overlay.ActualHeight,
+                        CountButtons(overlay));
+                    DescribeTree(overlay, log);
+                });
+        }
 
         if (Navigation.IsVirtualKeyboardOpen && _keyboardOverlay is not null)
         {
@@ -984,6 +1072,15 @@ public sealed partial class App : Application
         switch (e.Key)
         {
             case Windows.System.VirtualKey.Escape: ToggleMenu(); e.Handled = true; return;
+            // FIX-XKBDPANEL-001: physical-keyboard toggles for the shell (F9 keyboard
+            // dock, F11 menu; both reserved-unmapped in PhysicalKeyMap), so the shell is
+            // exercisable without a controller - for the operator and the autonomous
+            // loop. NOT F10: Windows delivers F10 as a system key (WM_SYSKEYDOWN, menu
+            // activation), so it never reaches the CoreWindow KeyDown route. F11 also
+            // backstops ESC, which desktop UWP consumes before either key route in some
+            // focus states.
+            case Windows.System.VirtualKey.F9: ToggleKeyboardOverlay(); e.Handled = true; return;
+            case Windows.System.VirtualKey.F11: ToggleMenu(); e.Handled = true; return;
             case Windows.System.VirtualKey.W: case Windows.System.VirtualKey.Up:    if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateUp);    e.Handled = true; return; } break;
             case Windows.System.VirtualKey.S: case Windows.System.VirtualKey.Down:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateDown);  e.Handled = true; return; } break;
             case Windows.System.VirtualKey.A: case Windows.System.VirtualKey.Left:  if (IsMenuOpen) { HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand.UiNavigateLeft);  e.Handled = true; return; } break;
