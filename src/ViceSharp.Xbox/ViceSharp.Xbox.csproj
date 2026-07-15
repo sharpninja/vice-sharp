@@ -91,11 +91,15 @@
     <Platform>x64</Platform>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
     <!--
-      The plan's Native-AOT posture: AOT for release-shaped UWP builds (the legacy bare
-      Release condition is kept; Release-UWP is the operator's Xbox-compliant target);
-      Debug-UWP stays JIT for fast F5 iteration.
+      Native AOT is an EXPLICIT OPT-IN (FIX-XKBDPANEL-001): PublishAot=true at BUILD
+      time flips CsWinRT into its AOT binding mode and reflection {Binding} dies
+      app-wide (empty virtual keyboard, blank Settings pickers, missing menu title;
+      device A/B receipts 2026-07-14). Release-UWP BUILDS therefore stay JIT with
+      working bindings; publish flows that really AOT pass ViceSharpPublishAot=true
+      (or set PublishAot globally) once the bindings are AOT-safe (x:Bind /
+      generated bindable metadata).
     -->
-    <PublishAot Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='Release-UWP'">true</PublishAot>
+    <PublishAot Condition="'$(ViceSharpPublishAot)'=='true'">true</PublishAot>
     <AppxPackage>true</AppxPackage>
     <EnableMsixTooling>true</EnableMsixTooling>
     <WindowsPackageType>MSIX</WindowsPackageType>

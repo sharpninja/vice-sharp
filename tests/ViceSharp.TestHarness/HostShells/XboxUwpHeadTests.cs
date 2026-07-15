@@ -144,9 +144,18 @@ public sealed class XboxUwpHeadTests
         Assert.Contains("'$(Configuration)'=='Release-UWP'", csproj);
         Assert.Contains("<Optimize>true</Optimize>", csproj);
 
-        // Xbox-compliant release = the plan's Native-AOT posture: PublishAot arms for
-        // Release-UWP (Debug-UWP stays JIT for F5 iteration).
+        // FIX-XKBDPANEL-001 root cause: PublishAot=true at BUILD time flips CsWinRT
+        // into its AOT binding mode and reflection {Binding} dies APP-WIDE (empty
+        // virtual keyboard, blank Settings pickers, missing menu title). Receipts:
+        // clean Release-UWP A/B on device 2026-07-14 - PublishAot=false renders all 66
+        // tiles, PublishAot=true realizes zero (ItemsSource null, no BindingFailed).
+        // Posture now: AOT arms ONLY via the explicit ViceSharpPublishAot opt-in
+        // (store/publish flows pass it or set PublishAot globally); Release-UWP BUILDS
+        // stay JIT with working bindings.
         Assert.Matches(
+            "PublishAot Condition=\"[^\"]*ViceSharpPublishAot[^\"]*\">true</PublishAot>",
+            csproj);
+        Assert.DoesNotMatch(
             "PublishAot Condition=\"[^\"]*Release-UWP[^\"]*\">true</PublishAot>",
             csproj);
     }
