@@ -38,22 +38,23 @@ public sealed class XboxKeycapShiftTests
 
         var letter = new VirtualKeyEntry("A", "A", IsWide: false);
 
-        // Uppercase/graphics mode: letters render uppercase regardless of shift (the
-        // shifted glyphs are PETSCII graphics, which the keycaps do not fake).
-        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: false, lowercaseMode: false));
-        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: true, lowercaseMode: false));
+        // Uppercase/graphics mode: unshifted letters render uppercase; SHIFT shows the
+        // TRUE PETSCII right-keycap graphic (FEAT-XKEYCAPPETSCII-001 superseded the
+        // earlier keep-the-letter behavior; the glyph tests own the full table).
+        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: false, commodore: false, lowercaseMode: false));
+        Assert.Equal("♠", VirtualKeycapGlyphs.For(letter, shifted: true, commodore: false, lowercaseMode: false));
 
         // Lowercase/uppercase mode: unshifted types lowercase, shifted types uppercase.
-        Assert.Equal("a", VirtualKeycapGlyphs.For(letter, shifted: false, lowercaseMode: true));
-        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: true, lowercaseMode: true));
+        Assert.Equal("a", VirtualKeycapGlyphs.For(letter, shifted: false, commodore: false, lowercaseMode: true));
+        Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: true, commodore: false, lowercaseMode: true));
 
         // Non-letter keys keep the FEAT-XKEYCAPSHIFT behavior in both modes.
         var digit = new VirtualKeyEntry("1", "1", IsWide: false, ShiftedLabel: "!");
-        Assert.Equal("1", VirtualKeycapGlyphs.For(digit, shifted: false, lowercaseMode: true));
-        Assert.Equal("!", VirtualKeycapGlyphs.For(digit, shifted: true, lowercaseMode: true));
+        Assert.Equal("1", VirtualKeycapGlyphs.For(digit, shifted: false, commodore: false, lowercaseMode: true));
+        Assert.Equal("!", VirtualKeycapGlyphs.For(digit, shifted: true, commodore: false, lowercaseMode: true));
 
         var wide = new VirtualKeyEntry("Return", "RETURN", IsWide: true);
-        Assert.Equal("RETURN", VirtualKeycapGlyphs.For(wide, shifted: true, lowercaseMode: true));
+        Assert.Equal("RETURN", VirtualKeycapGlyphs.For(wide, shifted: true, commodore: false, lowercaseMode: true));
     }
 
     [Fact]

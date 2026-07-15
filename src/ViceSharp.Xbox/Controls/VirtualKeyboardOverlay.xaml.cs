@@ -23,7 +23,9 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     private readonly DispatcherQueueTimer _caseTimer;
 
     private bool _externalShift;
+    private bool _externalCommodore;
     private bool _appliedShift;
+    private bool _appliedCommodore;
     private bool _appliedLowercase;
 
     /// <summary>Creates the overlay and its charset-case poll (runs only while loaded).</summary>
@@ -59,6 +61,21 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     }
 
     /// <summary>
+    /// Sets the EXTERNAL C= state (the head's LT trigger-modifier hold,
+    /// FEAT-XKEYCAPPETSCII-001) and refreshes the keycaps to the PETSCII left-keycap
+    /// graphics while held. C= has no latch or one-shot; the trigger is its only source.
+    /// </summary>
+    /// <param name="held"><c>true</c> while the C= trigger modifier is held.</param>
+    public void SetExternalCommodore(bool held)
+    {
+        if (_externalCommodore == held)
+            return;
+
+        _externalCommodore = held;
+        RefreshKeycaps();
+    }
+
+    /// <summary>
     /// Re-evaluates the effective shift + charset-case state and swaps every realized
     /// keycap glyph. Called on external-shift edges, after every tile press (the press
     /// may toggle the latch or arm/consume the one-shot), and by the case poll.
@@ -67,17 +84,19 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     {
         var vm = DataContext as VirtualKeyboardViewModel;
         var shifted = _externalShift || vm is { ShiftLatched: true } || vm is { ShiftArmed: true };
+        var commodore = _externalCommodore;
         var lowercase = App.Instance.IsCharsetLowercase();
 
-        if (shifted == _appliedShift && lowercase == _appliedLowercase)
+        if (shifted == _appliedShift && commodore == _appliedCommodore && lowercase == _appliedLowercase)
             return;
 
         _appliedShift = shifted;
+        _appliedCommodore = commodore;
         _appliedLowercase = lowercase;
-        ApplyKeycaps(this, shifted, lowercase);
+        ApplyKeycaps(this, shifted, commodore, lowercase);
     }
 
-    private static void ApplyKeycaps(DependencyObject root, bool shifted, bool lowercase)
+    private static void ApplyKeycaps(DependencyObject root, bool shifted, bool commodore, bool lowercase)
     {
         var count = VisualTreeHelper.GetChildrenCount(root);
         for (var i = 0; i < count; i++)
@@ -85,10 +104,10 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
             var child = VisualTreeHelper.GetChild(root, i);
             if (child is Button { DataContext: VirtualKeyEntry entry } button)
             {
-                button.Content = VirtualKeycapGlyphs.For(entry, shifted, lowercase);
+                button.Content = VirtualKeycapGlyphs.For(entry, shifted, commodore, lowercase);
             }
 
-            ApplyKeycaps(child, shifted, lowercase);
+            ApplyKeycaps(child, shifted, commodore, lowercase);
         }
     }
 

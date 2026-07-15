@@ -850,9 +850,12 @@ public sealed partial class App : Application
             // entry / overlay close force-release them like any other held key.
             case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierCommodoreDown:
                 InjectModifier("Commodore", down: true);
+                // FEAT-XKEYCAPPETSCII-001: keycaps show the C= graphics while held.
+                _keyboardOverlay?.SetExternalCommodore(true);
                 break;
             case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierCommodoreUp:
                 InjectModifier("Commodore", down: false);
+                _keyboardOverlay?.SetExternalCommodore(false);
                 break;
             case ViceSharp.Xbox.Input.AppCommand.KeyboardModifierShiftDown:
                 InjectModifier("LeftShift", down: true);
