@@ -26,18 +26,24 @@
         Background="Transparent"
         PointerPressed="OnBackgroundDismiss">
         <!--
-          Bounded, OPAQUE menu card: a left-aligned, vertically-centred rail; the paused
-          emulator shows around it on the right, never through it.
+          FEAT-XMENUSLIDE-001 (operator 2026-07-14: "slide in from the right similar to
+          the keyboard instead of floating"): the OPAQUE menu is a full-height
+          right-edge panel that slides in with the same edge transition the keyboard
+          dock uses; the paused emulator shows to its left, never through it.
         -->
         <Border
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
             Background="#FF101418"
             BorderBrush="#40FFFFFF"
-            BorderThickness="1"
-            CornerRadius="10"
+            BorderThickness="1,0,0,0"
             Padding="16,14">
-            <StackPanel Spacing="6" MinWidth="300">
+            <Border.Transitions>
+                <TransitionCollection>
+                    <EdgeUIThemeTransition Edge="Right" />
+                </TransitionCollection>
+            </Border.Transitions>
+            <StackPanel Spacing="6" MinWidth="300" VerticalAlignment="Center">
                 <TextBlock
                     Text="{Binding Title}"
                     FontFamily="{StaticResource C64KeyFont}"

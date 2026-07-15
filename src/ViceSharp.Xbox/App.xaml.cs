@@ -779,11 +779,31 @@ public sealed partial class App : Application
         }
     }
 
+    // FIX-XDPADSKIP-002 (operator 2026-07-14: "dpad navigation is skipping buttons
+    // again"): every directional focus move funnels through HandleUiNavigate, so a
+    // short wall-clock throttle HERE collapses any double emission for one physical
+    // press (polled pipeline plus a native XY leak, stick-flicker re-arms) into a
+    // single move regardless of source. 120 ms sits well under the repeater's 220 ms
+    // interval, so held auto-repeat flows untouched.
+    private const long UiNavThrottleMs = 120;
+    private long _lastUiNavTimestamp;
+
+    private bool ThrottleUiNav()
+    {
+        var now = System.Diagnostics.Stopwatch.GetTimestamp();
+        if (now - _lastUiNavTimestamp < System.Diagnostics.Stopwatch.Frequency * UiNavThrottleMs / 1000)
+            return true;
+
+        _lastUiNavTimestamp = now;
+        return false;
+    }
+
     /// <summary>
     /// Applies one shell-menu navigation command on the UI thread (invoked by the input
     /// dispatcher's onUiNavigate callback and by the keyboard handler). Directional commands
-    /// move XAML focus, UiActivate invokes the focused Button, and UiBack pops the Frame's
-    /// back-stack (or hides the menu when there is nothing to go back to).
+    /// move XAML focus (throttled to one move per FIX-XDPADSKIP-002 window), UiActivate
+    /// invokes the focused Button, and UiBack pops the Frame's back-stack (or hides the
+    /// menu when there is nothing to go back to).
     /// </summary>
     /// <param name="command">The UI navigation command to apply.</param>
     private void HandleUiNavigate(ViceSharp.Xbox.Input.AppCommand command)
@@ -791,16 +811,20 @@ public sealed partial class App : Application
         switch (command)
         {
             case ViceSharp.Xbox.Input.AppCommand.UiNavigateUp:
-                FocusManager.TryMoveFocus(FocusNavigationDirection.Up);
+                if (!ThrottleUiNav())
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Up);
                 break;
             case ViceSharp.Xbox.Input.AppCommand.UiNavigateDown:
-                FocusManager.TryMoveFocus(FocusNavigationDirection.Down);
+                if (!ThrottleUiNav())
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Down);
                 break;
             case ViceSharp.Xbox.Input.AppCommand.UiNavigateLeft:
-                FocusManager.TryMoveFocus(FocusNavigationDirection.Left);
+                if (!ThrottleUiNav())
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Left);
                 break;
             case ViceSharp.Xbox.Input.AppCommand.UiNavigateRight:
-                FocusManager.TryMoveFocus(FocusNavigationDirection.Right);
+                if (!ThrottleUiNav())
+                    FocusManager.TryMoveFocus(FocusNavigationDirection.Right);
                 break;
             case ViceSharp.Xbox.Input.AppCommand.UiActivate:
                 if (FocusManager.GetFocusedElement() is Windows.UI.Xaml.Controls.Button b)

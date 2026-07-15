@@ -82,6 +82,34 @@ public sealed class XboxMenuFocusAndKeycapStyleTests
     }
 
     [Fact]
+    public void Menu_SlidesInFromTheRight_AsAnEdgePanel()
+    {
+        // FEAT-XMENUSLIDE-001 (operator 2026-07-14: "Change the menu to slide in from
+        // the right similar to the keyboard instead of floating"): the card is a
+        // full-height right-edge panel with the same edge transition the keyboard
+        // dock uses (bottom edge there, right edge here).
+        var xaml = ReadSource("src", "ViceSharp.Xbox", "Views", "HomePage.xaml");
+        Assert.Contains("EdgeUIThemeTransition", xaml);
+        Assert.Contains("Edge=\"Right\"", xaml);
+        Assert.Contains("HorizontalAlignment=\"Right\"", xaml);
+        Assert.Contains("VerticalAlignment=\"Stretch\"", xaml);
+    }
+
+    [Fact]
+    public void UiNavigation_IsThrottled_ToASingleNavigator()
+    {
+        // FIX-XDPADSKIP-002 (operator 2026-07-14: "dpad navigation is skipping buttons
+        // again"): every directional focus move funnels through HandleUiNavigate; a
+        // short wall-clock throttle there collapses any double-emission (polled
+        // pipeline + a native XY leak, stick flicker re-arms) into one move, whatever
+        // the source. The window sits below the repeater interval (220 ms) so held
+        // auto-repeat still flows.
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("throttleuinav", app);
+        Assert.Contains("uinavthrottlems", app);
+    }
+
+    [Fact]
     public void VirtualKeyboardTiles_UseTheKeycapTileStyle()
     {
         var overlay = ReadSource("src", "ViceSharp.Xbox", "Controls", "VirtualKeyboardOverlay.xaml");
