@@ -225,6 +225,28 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
     /// interrupt-enable mask (ciacore irq_enabled). Timers resume mid-count
     /// with no start-pipeline delay, matching VICE's restored ciat state.
     /// </summary>
+    /// <summary>
+    /// Symmetric capture of the state <see cref="InjectSnapshotState"/> restores
+    /// (FIX-XSNAPWARP-001: the in-app machine snapshot). The control registers are
+    /// reconstructed with the LIVE run bit (a one-shot underflow clears
+    /// <c>Running</c> without touching the stored control byte), so
+    /// capture-&gt;inject round-trips the timers exactly.
+    /// </summary>
+    /// <returns>The CIA snapshot state, field-for-field what injection consumes.</returns>
+    internal CiaSnapshotState CaptureSnapshotState() => new(
+        _portA,
+        _portB,
+        _portADir,
+        _portBDir,
+        _timerA.Counter,
+        _timerA.Latch,
+        _timerB.Counter,
+        _timerB.Latch,
+        (byte)((_timerA.Control & 0xFE) | (_timerA.Running ? 1 : 0)),
+        (byte)((_timerB.Control & 0xFE) | (_timerB.Running ? 1 : 0)),
+        _interruptFlags,
+        _interruptMask);
+
     internal void InjectSnapshotState(
         byte portA,
         byte portB,
