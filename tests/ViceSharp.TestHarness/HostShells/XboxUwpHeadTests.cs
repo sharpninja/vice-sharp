@@ -247,9 +247,12 @@ public sealed class XboxUwpHeadTests
             xaml.LastIndexOf("Click=\"", StringComparison.Ordinal));
 
         // Operator 2026-07-14: "Need a mouse-friendly way to leave the menu without resetting
-        // the emulator." A dedicated Close Menu button plus click-on-background dismissal
-        // (both now also resume the paused machine via HideMenu, FEAT-XMENUPAUSE-001).
-        Assert.Contains("PointerPressed=\"OnBackgroundDismiss\"", xaml);
+        // the emulator." The dedicated Close Menu button resumes the paused machine via
+        // HideMenu (FEAT-XMENUPAUSE-001). FEAT-XMENUSLIDE-001 removed the click-outside
+        // backdrop: the menu is a DOCKED right column now (no full-screen scrim), so
+        // clicks left of it land on the emulator view.
+        Assert.Contains("Click=\"OnCloseMenu\"", xaml);
+        Assert.DoesNotContain("OnBackgroundDismiss", xaml);
     }
 
     private static string ReadCsproj()

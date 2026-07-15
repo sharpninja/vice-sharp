@@ -51,16 +51,9 @@ public sealed partial class HomePage : Page
 
     // Mouse-friendly dismiss (operator 2026-07-14): leave the menu WITHOUT resetting or
     // resuming the emulator: pure UI (App.DismissMenu -> HideMenu), no host call at all.
+    // FEAT-XMENUSLIDE-001 removed the click-outside backdrop: the menu is a docked
+    // panel now, so clicks left of it land on the emulator view.
     private void OnCloseMenu(object sender, RoutedEventArgs e) => App.Instance.DismissMenu();
-
-    // Clicking the transparent background OUTSIDE the menu card dismisses too. Only fires
-    // for the root itself: clicks on the card and its buttons have their OriginalSource
-    // inside the Border subtree.
-    private void OnBackgroundDismiss(object sender, PointerRoutedEventArgs e)
-    {
-        if (ReferenceEquals(e.OriginalSource, BackgroundRoot))
-            App.Instance.DismissMenu();
-    }
 
     private void OnSettings(object sender, RoutedEventArgs e) => Push(NavigationDestination.Settings, typeof(SettingsPage));
 

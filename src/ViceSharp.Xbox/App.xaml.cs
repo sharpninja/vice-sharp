@@ -260,14 +260,19 @@ public sealed partial class App : Application
             log.LogError(ex, "launch host build failed");
         }
 
-        // The root: an always-present in-emulator base view (the video surface), a
-        // transparent Frame carrying the pushable pages above it, and the two overlays.
+        // The root: an always-present in-emulator base view (the video surface), the
+        // DOCKED shell Frame, and the two overlays.
         // PLAN-XKEYBOARD-001 K2: two rows: the emulator lives in the star row and the
         // virtual keyboard DOCKS in the bottom Auto row, so showing the keyboard SHRINKS
         // the emulator instead of occluding it (the Auto row collapses when hidden).
+        // FEAT-XMENUSLIDE-001 (operator 2026-07-14: "pinned and consuming space like
+        // the keyboard"): two columns the same way: the shell Frame DOCKS in the right
+        // Auto column, so showing the menu SHRINKS the emulator's star column.
         var root = new Grid();
         root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        root.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
         // Catch shell-menu keyboard navigation even when a focused child already handled the
         // key (handledEventsToo: true). ESC toggles the menu; WASD/arrows drive focus while the
@@ -294,12 +299,14 @@ public sealed partial class App : Application
         // (head-local UWP LocalSettings; default ON) to the freshly created HUD.
         emulatorView.SetPerfStatsVisible(IsPerfHudVisible);
 
-        // The shell Frame and quick menu are full-window overlays (both rows); the
-        // keyboard dock owns the bottom row (K2: shrink, never occlude).
-        var frame = new Frame { Background = null };
+        // The shell Frame DOCKS full-height in the right Auto column (shrink, never
+        // occlude, FEAT-XMENUSLIDE-001); the keyboard dock owns the bottom row of the
+        // emulator column (K2); the quick menu stays a full-window overlay.
+        var frame = new Frame { Background = null, MinWidth = 360 };
         _frame = frame;
         Grid.SetRow(frame, 0);
         Grid.SetRowSpan(frame, 2);
+        Grid.SetColumn(frame, 1);
         root.Children.Add(frame);
 
         var keyboardOverlay = new VirtualKeyboardOverlay { Visibility = Visibility.Collapsed };
@@ -308,6 +315,7 @@ public sealed partial class App : Application
         var quickMenu = new QuickMenuOverlay { Visibility = Visibility.Collapsed };
         Grid.SetRow(quickMenu, 0);
         Grid.SetRowSpan(quickMenu, 2);
+        Grid.SetColumnSpan(quickMenu, 2);
         if (KeyboardVm is not null)
             keyboardOverlay.DataContext = KeyboardVm;
         root.Children.Add(keyboardOverlay);

@@ -82,17 +82,24 @@ public sealed class XboxMenuFocusAndKeycapStyleTests
     }
 
     [Fact]
-    public void Menu_SlidesInFromTheRight_AsAnEdgePanel()
+    public void Menu_DocksInARightColumn_AndShrinksTheEmulator()
     {
-        // FEAT-XMENUSLIDE-001 (operator 2026-07-14: "Change the menu to slide in from
-        // the right similar to the keyboard instead of floating"): the card is a
-        // full-height right-edge panel with the same edge transition the keyboard
-        // dock uses (bottom edge there, right edge here).
+        // FEAT-XMENUSLIDE-001 (operator 2026-07-14: "INSTEAD of floating, ie. pinned
+        // and consuming space like the keyboard"): the shell Frame DOCKS in a right
+        // Auto column of the root grid, so showing the menu SHRINKS the emulator's
+        // star column (never occludes it), exactly like the keyboard's bottom Auto
+        // row. The page itself is the opaque panel (no full-screen scrim, no
+        // click-outside backdrop) and slides in with the keyboard's edge transition.
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("columndefinitions.add", app);
+        Assert.Contains("grid.setcolumn(frame, 1)", app);
+        Assert.Contains("grid.setrowspan(frame, 2)", app);
+
         var xaml = ReadSource("src", "ViceSharp.Xbox", "Views", "HomePage.xaml");
         Assert.Contains("EdgeUIThemeTransition", xaml);
         Assert.Contains("Edge=\"Right\"", xaml);
-        Assert.Contains("HorizontalAlignment=\"Right\"", xaml);
-        Assert.Contains("VerticalAlignment=\"Stretch\"", xaml);
+        Assert.DoesNotContain("TvSafeAreaRootStyle", xaml);
+        Assert.DoesNotContain("OnBackgroundDismiss", xaml);
     }
 
     [Fact]
