@@ -260,6 +260,25 @@ public sealed class XboxAuthenticKeyboardTests
         Assert.Null(byName["Space"]);
     }
 
+    [Fact]
+    public void RunStopAndShiftLock_CarryTheTwoLineKeycapLegends()
+    {
+        // Operator 2026-07-14: "RUN/STOP is two lines on keycap, as is [SHIFT] LOCK"
+        // and "the key is STOP and shifted state is RUN": the resting caps carry the
+        // authentic two-line legends; under SHIFT (or C=, which sends the same $83)
+        // the live keycap says RUN, the exact thing the chord inserts.
+        var layout = VirtualKeyboardLayout.Default;
+        var runStop = layout.AllKeys.Single(k => k.KeyName == "RunStop");
+        var shiftLock = layout.AllKeys.Single(k => k.Kind == AppKeyKind.ShiftLatch);
+
+        Assert.Equal("RUN\nSTOP", runStop.DisplayLabel);
+        Assert.Equal("RUN", runStop.ShiftedLabel);
+        Assert.Equal("SHIFT\nLOCK", shiftLock.DisplayLabel);
+
+        Assert.Equal("RUN", VirtualKeycapGlyphs.For(runStop, shifted: true, commodore: false, lowercaseMode: false));
+        Assert.Equal("RUN", VirtualKeycapGlyphs.For(runStop, shifted: false, commodore: true, lowercaseMode: false));
+    }
+
     private static VirtualKeyEntry Single(VirtualKeyboardLayout layout, string keyName)
         => layout.AllKeys.Single(k => k.KeyName == keyName && k.Kind == AppKeyKind.Key);
 

@@ -184,6 +184,11 @@ public sealed class XboxKeycapPetsciiGlyphTests
                 var glyph = VirtualKeycapGlyphs.For(entry, shifted, commodore, lowercase);
                 foreach (var rune in glyph.EnumerateRunes())
                 {
+                    // Newlines in two-line legends (RUN\nSTOP, SHIFT\nLOCK) are line
+                    // breaks the TextBlock lays out, not glyphs the font must map.
+                    if (rune.Value == '\n')
+                        continue;
+
                     Assert.True(
                         mapped.Contains(rune.Value),
                         $"Keycap '{entry.KeyName}' (shift={shifted} cbm={commodore} lc={lowercase}) " +

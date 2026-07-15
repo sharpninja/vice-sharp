@@ -119,11 +119,11 @@ public static class VirtualKeycapGlyphs
         ["UpArrow"] = ("π", "▒"),// $DE: same code as SHIFT+^
     };
 
-    // Keys whose C= chord emits the SAME printable as SHIFT (KERNAL C= table rows
-    // 3C/3E/3F/5B/5D and C=+9 = ')'): show the printed shifted legend.
+    // Keys whose C= chord emits the SAME code as SHIFT (KERNAL C= table rows
+    // 3C/3E/3F/5B/5D, C=+9 = ')' and C=+STOP = $83 RUN): show the shifted legend.
     private static readonly HashSet<string> CbmMatchesShiftPrintable = new()
     {
-        ",", ".", "/", ":", ";", "9",
+        ",", ".", "/", ":", ";", "9", "RunStop",
     };
 
     /// <summary>

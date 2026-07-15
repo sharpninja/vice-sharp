@@ -107,8 +107,10 @@ public sealed class VirtualKeyboardLayout
             // classic wide key closing the home row.
             new[]
                 {
-                    Key("RunStop", "RUN STOP"),
-                    new VirtualKeyEntry("Shift", "SHIFT LOCK", IsWide: false, AppKeyKind.ShiftLatch),
+                    // Authentic two-line caps (operator 2026-07-14): the key is STOP,
+                    // the shifted state is RUN, and SHIFT LOCK is the mechanical toggle.
+                    Key("RunStop", "RUN\nSTOP", shifted: "RUN"),
+                    new VirtualKeyEntry("Shift", "SHIFT\nLOCK", IsWide: false, AppKeyKind.ShiftLatch),
                 }
                 .Concat(Letters("ASDFGHJKL"))
                 .Concat(new[]
