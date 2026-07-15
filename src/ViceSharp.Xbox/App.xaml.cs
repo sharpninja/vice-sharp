@@ -1055,6 +1055,11 @@ public sealed partial class App : Application
         }
 
         _frame.Visibility = Visibility.Visible;
+
+        // FEAT-XMENUFOCUS-001: every open lands focus on Close Menu. Navigation covers
+        // the first open via OnNavigatedTo; re-shows only flip visibility, so drive it
+        // here too (idempotent).
+        (_frame.Content as Views.HomePage)?.FocusCloseMenu();
     }
 
     /// <summary>

@@ -221,8 +221,12 @@ public sealed class XboxUwpHeadTests
         Assert.DoesNotContain("#C0101418", xaml);
         Assert.Contains("<Border", xaml);
         Assert.Contains("Background=\"#FF101418\"", xaml);
+        // FEAT-XKEYCAPSTYLE-001 moved the keycap style (with its PetMe64 face) to the
+        // app-level Styles/C64Keycaps.xaml; the page consumes the shared resource.
         Assert.Contains("C64KeyButtonStyle", xaml);
-        Assert.Contains("PetMe64.ttf#Pet Me 64", xaml);
+        Assert.Contains(
+            "PetMe64.ttf#Pet Me 64",
+            File.ReadAllText(Path.Combine(RepoRoot, "src", "ViceSharp.Xbox", "Styles", "C64Keycaps.xaml")));
 
         // Menu redesign (operator 2026-07-14): SAVE/LOAD snapshot buttons, RESTART is
         // the LAST button, RESUME removed (dismissing the menu resumes the machine the

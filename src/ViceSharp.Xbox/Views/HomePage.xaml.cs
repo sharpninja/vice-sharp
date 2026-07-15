@@ -5,6 +5,7 @@ namespace ViceSharp.Xbox.Views;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 using ViceSharp.Xbox.ViewModels;
 
 /// <summary>The launch page. Its buttons raise the HomeViewModel intents and push pages.</summary>
@@ -15,9 +16,28 @@ public sealed partial class HomePage : Page
     {
         InitializeComponent();
         DataContext = App.Instance.Home;
+
+        // FEAT-XMENUFOCUS-001: programmatic focus can no-op before the first layout
+        // pass, so re-assert once the tree is live.
+        Loaded += (_, _) => FocusCloseMenu();
     }
 
     private HomeViewModel ViewModel => App.Instance.Home;
+
+    /// <summary>
+    /// FEAT-XMENUFOCUS-001 (operator 2026-07-14: "When opening the menu, always set
+    /// focus to the 'Close Menu' button"): programmatic focus on the TOP button so a
+    /// single press of A dismisses. Called on navigation here and by App.ShowMenu for
+    /// re-shows that only flip the Frame's visibility.
+    /// </summary>
+    internal void FocusCloseMenu() => CloseMenuButton.Focus(FocusState.Programmatic);
+
+    /// <inheritdoc />
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+        base.OnNavigatedTo(e);
+        FocusCloseMenu();
+    }
 
     // Menu redesign (operator 2026-07-14): RESTART (cold reset, the last button) reuses
     // the StartNew intent; RESUME is gone (dismissing the menu resumes the paused machine).

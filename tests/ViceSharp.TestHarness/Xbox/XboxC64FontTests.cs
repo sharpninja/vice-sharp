@@ -58,12 +58,18 @@ public sealed class XboxC64FontTests
     [Fact]
     public void KeyboardXaml_UsesThePackagedC64Font()
     {
+        // FEAT-XKEYCAPSTYLE-001: the font now rides in the shared app-level keycap
+        // style (Styles/C64Keycaps.xaml); the keyboard consumes it via the tile style.
         var xaml = File.ReadAllText(Path.Combine(
                 RepoRoot, "src", "ViceSharp.Xbox", "Controls", "VirtualKeyboardOverlay.xaml"))
             .ToLowerInvariant();
+        Assert.Contains("c64keycaptilestyle", xaml);
 
-        Assert.Contains("assets/fonts/petme64.ttf#pet me 64", xaml);
-        Assert.Contains("fontfamily", xaml);
+        var styles = File.ReadAllText(Path.Combine(
+                RepoRoot, "src", "ViceSharp.Xbox", "Styles", "C64Keycaps.xaml"))
+            .ToLowerInvariant();
+        Assert.Contains("assets/fonts/petme64.ttf#pet me 64", styles);
+        Assert.Contains("fontfamily", styles);
     }
 
     [Fact]

@@ -16,14 +16,6 @@
     <UserControl.Resources>
         <!-- Width units -> pixels (one key unit = 52 px at 10-foot scale). -->
         <controls:KeyWidthConverter x:Key="KeyWidth" UnitPixels="52" />
-
-        <!--
-            FEAT-XC64FONT-001 (operator: "Use open source C64 font for keycaps"): PetMe64,
-            Kreative Korporation's pixel-true C64 charset font, packaged from Assets/Fonts
-            (vendored from VICE data/common with its free-use license; credit in
-            THIRD_PARTY_NOTICES.md). Glyphs the font lacks fall back automatically.
-        -->
-        <FontFamily x:Key="C64KeycapFont">ms-appx:///Assets/Fonts/PetMe64.ttf#Pet Me 64</FontFamily>
     </UserControl.Resources>
 
     <!-- Slide up from the bottom edge when the dock becomes visible. -->
@@ -52,14 +44,16 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
+                                    <!--
+                                      FEAT-XKEYCAPSTYLE-001 (operator 2026-07-14: "Apply
+                                      CBM button style to the virtual keyboad"): the
+                                      app-level breadbin keycap tile style (PetMe64 face,
+                                      warm brown cap, raised-key bevel).
+                                    -->
                                     <Button
                                         Content="{Binding DisplayLabel}"
                                         Width="{Binding EffectiveWidthUnits, Converter={StaticResource KeyWidth}}"
-                                        MinHeight="52"
-                                        Margin="3"
-                                        Padding="0"
-                                        FontFamily="{StaticResource C64KeycapFont}"
-                                        FontSize="14"
+                                        Style="{StaticResource C64KeycapTileStyle}"
                                         Click="OnKeyPressed" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -75,11 +69,7 @@
                         <Button
                             Content="{Binding DisplayLabel}"
                             Width="96"
-                            MinHeight="52"
-                            Margin="3"
-                            Padding="0"
-                            FontFamily="{StaticResource C64KeycapFont}"
-                            FontSize="14"
+                            Style="{StaticResource C64KeycapTileStyle}"
                             Click="OnKeyPressed" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
