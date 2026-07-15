@@ -51,6 +51,13 @@ public sealed class XboxLocalDeployTargetTests
         Assert.Contains("Get-AppxPackage", build);
         Assert.Contains("Stop-Process", build);
         Assert.Contains("shell:AppsFolder", build);
+
+        // No timestamp filter on the refresh: the /S /XO shape skipped
+        // older-but-different files, so switching deploy configurations left a
+        // FRANKENBUILD layout (Release head over newer Debug core libs; session-hit
+        // 2026-07-14, EMU at 26%). The copy must be deterministic for whatever
+        // configuration was just built.
+        Assert.DoesNotContain("/S /XO", build);
     }
 
     private static string RepoRoot

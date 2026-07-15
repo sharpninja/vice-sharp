@@ -1030,9 +1030,13 @@ sealed partial class Build : NukeBuild
                 throw new InvalidOperationException($"Build output not found at '{output}'.");
 
             // 4. Refresh the layout in place (exit codes 0-7 are robocopy success).
+            //    NO /XO: the timestamp filter skipped older-but-different files, so
+            //    switching deploy configurations left a FRANKENBUILD layout (Release
+            //    head over newer Debug core libs). The layout must deterministically
+            //    mirror whatever was just built.
             var robocopy = ProcessTasks.StartProcess(
                 "robocopy",
-                $"\"{output}\" \"{installLocation}\" /S /XO /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP",
+                $"\"{output}\" \"{installLocation}\" /S /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP",
                 RootDirectory);
             robocopy.WaitForExit();
             if (robocopy.ExitCode > 7)
