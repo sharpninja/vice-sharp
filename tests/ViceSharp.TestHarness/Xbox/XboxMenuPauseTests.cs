@@ -34,6 +34,26 @@ public sealed class XboxMenuPauseTests
         Assert.Contains("menu closed: emulation resumed", app);
     }
 
+    [Fact]
+    public void Menu_SaveAndLoad_PersistSnapshotsToDisk()
+    {
+        // FEAT-XMENUSNAP-001 (operator 2026-07-14: "Add SAVE and LOAD buttons that can
+        // save and load snapshots"): the menu captures the PAUSED machine to a durable
+        // LocalState slot (AOT-safe source-generated JSON) and restores it on demand.
+        var app = File.ReadAllText(Path.Combine(RepoRoot, "src", "ViceSharp.Xbox", "App.xaml.cs"))
+            .ToLowerInvariant();
+
+        Assert.Contains("savesnapshotasync", app);
+        Assert.Contains("loadsnapshotasync", app);
+        Assert.Contains("snapshot-slot1.json", app);
+
+        // AOT/trim-safe serialization: the source-generated context, never the
+        // reflection JsonSerializer overloads.
+        var context = Path.Combine(RepoRoot, "src", "ViceSharp.Xbox", "Platform", "SnapshotJsonContext.cs");
+        Assert.True(File.Exists(context), $"Expected the snapshot JSON context at '{context}'.");
+        Assert.Contains("snapshotjsoncontext.default.snapshotdto", app);
+    }
+
     private static string RepoRoot
     {
         get

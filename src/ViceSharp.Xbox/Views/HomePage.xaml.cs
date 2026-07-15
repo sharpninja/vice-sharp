@@ -19,9 +19,15 @@ public sealed partial class HomePage : Page
 
     private HomeViewModel ViewModel => App.Instance.Home;
 
-    private void OnStart(object sender, RoutedEventArgs e) => ViewModel.StartNew();
+    // Menu redesign (operator 2026-07-14): RESTART (cold reset, the last button) reuses
+    // the StartNew intent; RESUME is gone (dismissing the menu resumes the paused machine).
+    private void OnRestart(object sender, RoutedEventArgs e) => ViewModel.StartNew();
 
-    private void OnResume(object sender, RoutedEventArgs e) => ViewModel.Resume();
+    // FEAT-XMENUSNAP-001: persist / restore a snapshot of the machine the menu is
+    // holding paused. Fire-and-forget: the App methods log, guard, and dismiss on success.
+    private void OnSave(object sender, RoutedEventArgs e) => _ = App.Instance.SaveSnapshotAsync();
+
+    private void OnLoad(object sender, RoutedEventArgs e) => _ = App.Instance.LoadSnapshotAsync();
 
     // Mouse-friendly dismiss (operator 2026-07-14): leave the menu WITHOUT resetting or
     // resuming the emulator: pure UI (App.DismissMenu -> HideMenu), no host call at all.

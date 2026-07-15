@@ -219,18 +219,27 @@ public sealed class XboxUwpHeadTests
         Assert.Contains("<Border", xaml);
         Assert.Contains("Background=\"#C0101418\"", xaml);
 
-        // Every menu handler + the Resume gate must survive the overlay conversion.
-        foreach (var handler in new[] { "OnStart", "OnResume", "OnSettings", "OnDevices", "OnControls", "OnAbout" })
+        // Menu redesign (operator 2026-07-14): SAVE/LOAD snapshot buttons, RESTART is
+        // the LAST button, RESUME removed (dismissing the menu resumes the machine the
+        // menu paused, FEAT-XMENUPAUSE-001), START renamed to RESTART.
+        foreach (var handler in new[]
+                 { "OnSave", "OnLoad", "OnSettings", "OnDevices", "OnControls", "OnAbout", "OnCloseMenu", "OnRestart" })
         {
             Assert.Contains($"Click=\"{handler}\"", xaml);
         }
 
-        Assert.Contains("IsEnabled=\"{Binding CanResume}\"", xaml);
+        Assert.DoesNotContain("OnResume", xaml);
+        Assert.DoesNotContain("CanResume", xaml);
+        Assert.DoesNotContain("Click=\"OnStart\"", xaml);
+
+        // RESTART is the last button on the card.
+        Assert.Equal(
+            xaml.IndexOf("Click=\"OnRestart\"", StringComparison.Ordinal),
+            xaml.LastIndexOf("Click=\"", StringComparison.Ordinal));
 
         // Operator 2026-07-14: "Need a mouse-friendly way to leave the menu without resetting
-        // the emulator." A dedicated Close Menu button plus click-on-background dismissal,
-        // BOTH pure UI (App.DismissMenu -> HideMenu; no host reset/resume call).
-        Assert.Contains("Click=\"OnCloseMenu\"", xaml);
+        // the emulator." A dedicated Close Menu button plus click-on-background dismissal
+        // (both now also resume the paused machine via HideMenu, FEAT-XMENUPAUSE-001).
         Assert.Contains("PointerPressed=\"OnBackgroundDismiss\"", xaml);
     }
 

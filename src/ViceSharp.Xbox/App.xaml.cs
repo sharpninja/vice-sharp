@@ -1055,6 +1055,98 @@ public sealed partial class App : Application
     }
 
     /// <summary>
+    /// FEAT-XMENUSNAP-001: the menu's durable snapshot slot in LocalState.
+    /// </summary>
+    private static string SnapshotSlotPath
+        => Path.Combine(ApplicationData.Current.LocalFolder.Path, "snapshot-slot1.json");
+
+    /// <summary>
+    /// FEAT-XMENUSNAP-001 (operator: "Add SAVE and LOAD buttons that can save and load
+    /// snapshots"): captures the machine - held PAUSED by the open menu, so the state is
+    /// frozen at a clean point - and persists it to the LocalState slot via the
+    /// AOT-safe source-generated JSON context. Dismisses the menu on success (which
+    /// resumes the machine); failures log and keep the menu up.
+    /// </summary>
+    internal async Task SaveSnapshotAsync()
+    {
+        try
+        {
+            if (_host is null || string.IsNullOrEmpty(_sessionId))
+                return;
+
+            var response = await _host.Snapshots
+                .CaptureSnapshotAsync(new SessionRequest(_sessionId));
+            if (!response.Status.IsSuccess || response.Snapshot is null)
+            {
+                CreateLogger("App").LogWarning(
+                    "snapshot save failed: {Message}", response.Status.Message);
+                return;
+            }
+
+            var json = System.Text.Json.JsonSerializer.Serialize(
+                response.Snapshot, SnapshotJsonContext.Default.SnapshotDto);
+            var path = SnapshotSlotPath;
+            await Task.Run(() => File.WriteAllText(path, json));
+
+            CreateLogger("App").LogInformation(
+                "snapshot saved: {Path} ({Bytes} payload bytes, cycle {Cycle})",
+                path, response.Snapshot.Payload.Length, response.Snapshot.Cycle);
+            HideMenu();
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "snapshot save failed");
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XMENUSNAP-001: restores the LocalState snapshot slot into the paused
+    /// machine and dismisses the menu (resuming at the restored state). A missing or
+    /// unreadable slot logs and keeps the menu up; nothing is fabricated.
+    /// </summary>
+    internal async Task LoadSnapshotAsync()
+    {
+        try
+        {
+            if (_host is null || string.IsNullOrEmpty(_sessionId))
+                return;
+
+            var path = SnapshotSlotPath;
+            if (!File.Exists(path))
+            {
+                CreateLogger("App").LogWarning("snapshot load: no saved snapshot at {Path}", path);
+                return;
+            }
+
+            var json = await Task.Run(() => File.ReadAllText(path));
+            var snapshot = System.Text.Json.JsonSerializer.Deserialize(
+                json, SnapshotJsonContext.Default.SnapshotDto);
+            if (snapshot is null)
+            {
+                CreateLogger("App").LogWarning("snapshot load: slot file was empty/invalid: {Path}", path);
+                return;
+            }
+
+            var response = await _host.Snapshots
+                .RestoreSnapshotAsync(new RestoreSnapshotRequest(_sessionId, snapshot));
+            if (!response.Status.IsSuccess)
+            {
+                CreateLogger("App").LogWarning(
+                    "snapshot restore failed: {Message}", response.Status.Message);
+                return;
+            }
+
+            CreateLogger("App").LogInformation(
+                "snapshot restored: {Path} (cycle {Cycle})", path, snapshot.Cycle);
+            HideMenu();
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "snapshot load failed");
+        }
+    }
+
+    /// <summary>
     /// FEAT-XMENUPAUSE-001: pauses the session for the shell menu. Guarded and
     /// session-locked (a menu opened before the host is built is a no-op).
     /// </summary>
