@@ -88,16 +88,4 @@ public sealed class XboxRomProvisioningDispatchTests
 
     private static string NewTempPath() =>
         Path.Combine(Path.GetTempPath(), "vicesharp-dispatch-" + Guid.NewGuid().ToString("N"));
-
-    /// <summary>A <see cref="SynchronizationContext"/> that counts posts and runs them inline (no message loop in a test).</summary>
-    private sealed class RecordingSyncContext : SynchronizationContext
-    {
-        public int PostCount { get; private set; }
-
-        public override void Post(SendOrPostCallback d, object? state)
-        {
-            PostCount++;
-            d(state);
-        }
-    }
 }

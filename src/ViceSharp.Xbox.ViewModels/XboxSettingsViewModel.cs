@@ -57,6 +57,13 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     private readonly string _sessionId;
     private readonly List<SettingsResourceValidationDto> _validationResults = new();
 
+    // UI-thread dispatch (FIX-XSETBLANK-001): the refresh continuations resume on the
+    // thread pool (ConfigureAwait(false)), and UWP bindings ignore PropertyChanged raised
+    // off the UI thread; the on-device receipt showed a fully populated VM behind blank
+    // pickers. Captured at construction (the page builds the VM on the UI thread) and
+    // posted to from any other thread, same as XboxRomProvisioningViewModel.
+    private readonly SynchronizationContext? _sync;
+
     // Non-bindable host state preserved across a round-trip (seeded on refresh/adopt,
     // echoed back on apply so we never fabricate ids the picker does not surface).
     private string _keyboardMapId = "c64:gtk3_pos";
@@ -109,6 +116,7 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     {
         _gateway = gateway ?? throw new ArgumentNullException(nameof(gateway));
         _sessionId = sessionId ?? string.Empty;
+        _sync = SynchronizationContext.Current;
         _baseline = CaptureBaseline();
 
         // The Computer families: only the C64 is implemented today, so VIC-20 / C128 / PET /
@@ -697,8 +705,19 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         return true;
     }
 
-    private void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        var handler = PropertyChanged;
+        if (handler is null)
+            return;
+
+        // Raise inline on the captured (UI) context; dispatch from anywhere else so the
+        // XAML bindings always hear the change (FIX-XSETBLANK-001).
+        if (_sync is null || SynchronizationContext.Current == _sync)
+            handler(this, new PropertyChangedEventArgs(propertyName));
+        else
+            _sync.Post(_ => handler(this, new PropertyChangedEventArgs(propertyName)), null);
+    }
 
     /// <summary>
     /// The immutable snapshot of the last-applied bindable state used for dirty comparison
