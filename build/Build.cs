@@ -1000,12 +1000,16 @@ sealed partial class Build : NukeBuild
             //    loads page XAML from the pri - without it a XAML-only change deploys
             //    STALE UI (operator 2026-07-14: "None of that is what I asked for";
             //    the restyled HomePage.xbf was fresh while the layout pri still served
-            //    the previous menu).
+            //    the previous menu). Restore is the /restore SWITCH, not an entry
+            //    target: /t:Restore,X evaluates the project ONCE, and after a fallback
+            //    (dotnet) restore the stale nuget.g.targets does not import the MSIX
+            //    targets, so GenerateProjectPriFile does not exist yet (MSB4057).
+            //    /restore restores and then RE-EVALUATES before building.
             var msbuild = ResolveVsMsBuild();
             var head = RootDirectory / "src" / "ViceSharp.Xbox" / "ViceSharp.Xbox.csproj";
             var build = ProcessTasks.StartProcess(
                 msbuild,
-                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 /t:Restore,Build,GenerateProjectPriFile /v:m /nologo",
+                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 /restore /t:Build,GenerateProjectPriFile /v:m /nologo",
                 RootDirectory);
             build.WaitForExit();
             if (build.ExitCode != 0)

@@ -36,8 +36,14 @@ public sealed class XboxLocalDeployTargetTests
 
         // GenerateProjectPriFile is mandatory: incremental Build leaves resources.pri
         // stale and UWP loads page XAML from the pri, so a XAML-only change would
-        // deploy the PREVIOUS UI (operator-hit 2026-07-14).
-        Assert.Contains("/t:Restore,Build,GenerateProjectPriFile", build);
+        // deploy the PREVIOUS UI (operator-hit 2026-07-14). And restore must be the
+        // /restore SWITCH, not a Restore entry target: /t:Restore,X evaluates the
+        // project ONCE with the pre-restore nuget.g.targets, so after a fallback
+        // (dotnet test) restore the MSIX targets are not imported and the pri entry
+        // target does not exist yet (MSB4057, session-hit 2026-07-14); /restore
+        // re-evaluates after restoring, which is exactly what it is for.
+        Assert.Contains("/restore /t:Build,GenerateProjectPriFile", build);
+        Assert.DoesNotContain("/t:Restore,Build,GenerateProjectPriFile", build);
         Assert.Contains("robocopy", build);
         Assert.Contains("/XF AppxManifest.xml", build);
 
