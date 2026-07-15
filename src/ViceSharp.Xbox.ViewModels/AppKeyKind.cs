@@ -40,12 +40,20 @@ public enum AppKeyKind
 
     /// <summary>
     /// A momentary SHIFT key (the authentic keyboard's left/right SHIFT,
-    /// PLAN-XKEYBOARD-001 K1). Pressing it toggles the ONE-SHOT
-    /// <see cref="VirtualKeyboardViewModel.ShiftArmed"/> arm and emits nothing; the next
-    /// ordinary key press is wrapped in this tile's
-    /// <see cref="VirtualKeyEntry.KeyName"/> ("LeftShift"/"RightShift") down/up, exactly
-    /// like holding SHIFT on hardware (so CRSR-down becomes CRSR-up, etc.), and the arm
-    /// clears. Function tiles map to their shifted twin in place instead of wrapping.
+    /// PLAN-XKEYBOARD-001 K1, revised by FEAT-XKBDSTICKY-001). Pressing it STICKS: the
+    /// machine key named by <see cref="VirtualKeyEntry.KeyName"/>
+    /// ("LeftShift"/"RightShift") goes DOWN immediately (live in the scanned matrix)
+    /// and stays down until the next ordinary key stroke completes (which releases it)
+    /// or the tile is pressed again (toggle off). Function tiles still map to their
+    /// shifted twin in place.
     /// </summary>
     ShiftMomentary = 3,
+
+    /// <summary>
+    /// The C= (Commodore) modifier key (FEAT-XKBDSTICKY-001, operator 2026-07-14: "C=
+    /// and SHIFT keys are modifiers and should be sticky when clicked until the next
+    /// key press which releases them"). Same sticky hold-the-line semantics as
+    /// <see cref="ShiftMomentary"/>, on the machine key "Commodore".
+    /// </summary>
+    CommodoreMomentary = 4,
 }

@@ -125,7 +125,8 @@ public sealed class VirtualKeyboardLayout
             // which is also how CRSR-up (SHIFT+down) and CRSR-left (SHIFT+right) work.
             new[]
                 {
-                    Key("Commodore", "C="),
+                    // C= is a sticky modifier tile (FEAT-XKBDSTICKY-001), not a keystroke.
+                    new VirtualKeyEntry("Commodore", "C=", IsWide: false, AppKeyKind.CommodoreMomentary),
                     new VirtualKeyEntry("LeftShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
                 }
                 .Concat(Letters("ZXCVBNM"))

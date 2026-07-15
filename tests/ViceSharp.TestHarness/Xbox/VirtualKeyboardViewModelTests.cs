@@ -45,12 +45,14 @@ using Xunit;
 public sealed class VirtualKeyboardViewModelTests
 {
     /// <summary>
-    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006.
+    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006 (FEAT-XKBDSTICKY-001: strokes are
+    /// now held across real scan time).
     /// Use case: the couch UI presses the on-screen RETURN tile to send a carriage return
-    /// to the running C64, which must arrive as the exact map key "Return".
-    /// Acceptance: pressing the RETURN tile emits exactly <c>SetKeyState("Return", true)</c>
-    /// then <c>SetKeyState("Return", false)</c> in that order, and makes no other keyboard
-    /// call (no additional SetKeyState, no SetRestoreState).
+    /// to the running C64, which must arrive as the exact map key "Return" and stay DOWN
+    /// until the stroke completes so the KERNAL matrix scan sees it.
+    /// Acceptance: pressing the RETURN tile emits exactly <c>SetKeyState("Return", true)</c>;
+    /// <see cref="VirtualKeyboardViewModel.CompletePress"/> then emits
+    /// <c>SetKeyState("Return", false)</c>; no other keyboard call is made.
     /// </summary>
     [Fact]
     public void PressReturnTile_EmitsReturnDownThenUp_AndNothingElse()
@@ -59,6 +61,9 @@ public sealed class VirtualKeyboardViewModelTests
         var vm = new VirtualKeyboardViewModel(spy);
 
         vm.Press(SingleByKeyName(vm, "Return"));
+        Assert.Equal(new[] { ("Return", true) }, spy.KeyStates);
+
+        vm.CompletePress();
 
         Assert.Equal(new[] { ("Return", true), ("Return", false) }, spy.KeyStates);
         Assert.Empty(spy.RestoreStates);
@@ -81,11 +86,16 @@ public sealed class VirtualKeyboardViewModelTests
     public void ShiftLatched_PressingFunctionTile_EmitsShiftedTwinInPlace(string baseKey, string shifted)
     {
         var spy = new SpyKeyboardInput();
+
+        // FEAT-XKBDSTICKY-001: engaging the latch holds the LeftShift matrix line.
         var vm = new VirtualKeyboardViewModel(spy) { ShiftLatched = true };
 
         vm.Press(SingleByKeyName(vm, baseKey));
+        vm.CompletePress();
 
-        Assert.Equal(new[] { (shifted, true), (shifted, false) }, spy.KeyStates);
+        Assert.Equal(
+            new[] { ("LeftShift", true), (shifted, true), (shifted, false) },
+            spy.KeyStates);
         Assert.Empty(spy.RestoreStates);
     }
 
@@ -146,13 +156,15 @@ public sealed class VirtualKeyboardViewModelTests
     }
 
     /// <summary>
-    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006.
-    /// Use case: the Shift tile is the shift-latch control, not a key press; toggling it
-    /// must arm/disarm the latch without sending any key or RESTORE to the machine.
+    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006 (FEAT-XKBDSTICKY-001: the latch is
+    /// scanned in real time).
+    /// Use case: the Shift tile is the shift-latch control; like the mechanical
+    /// SHIFT-LOCK it holds the LeftShift matrix line while engaged so the machine scan
+    /// sees it continuously.
     /// Acceptance: the single <see cref="AppKeyKind.ShiftLatch"/> tile starts with
     /// <see cref="VirtualKeyboardViewModel.ShiftLatched"/> false; pressing it once sets it
-    /// true, pressing it again sets it false; across both presses no SetKeyState or
-    /// SetRestoreState call is made.
+    /// true and holds LeftShift down; pressing it again sets it false and releases the
+    /// line; no RESTORE call is made.
     /// </summary>
     [Fact]
     public void PressShiftTile_TogglesLatch_WithoutEmittingAnyKeyOrRestore()
@@ -168,7 +180,7 @@ public sealed class VirtualKeyboardViewModelTests
         vm.Press(shift);
         Assert.False(vm.ShiftLatched);
 
-        Assert.Empty(spy.KeyStates);
+        Assert.Equal(new[] { ("LeftShift", true), ("LeftShift", false) }, spy.KeyStates);
         Assert.Empty(spy.RestoreStates);
     }
 
@@ -186,14 +198,19 @@ public sealed class VirtualKeyboardViewModelTests
         var spy = new SpyKeyboardInput();
         var vm = new VirtualKeyboardViewModel(spy) { ShiftLatched = true };
 
+        // FEAT-XKBDSTICKY-001: a new press finishes the previous stroke, and the latch
+        // (unlike a sticky momentary) survives every stroke.
         vm.Press(SingleByKeyName(vm, "F1"));
         Assert.True(vm.ShiftLatched);
 
         vm.Press(SingleByKeyName(vm, "F3"));
         Assert.True(vm.ShiftLatched);
 
+        vm.CompletePress();
+        Assert.True(vm.ShiftLatched);
+
         Assert.Equal(
-            new[] { ("F2", true), ("F2", false), ("F4", true), ("F4", false) },
+            new[] { ("LeftShift", true), ("F2", true), ("F2", false), ("F4", true), ("F4", false) },
             spy.KeyStates);
     }
 
@@ -218,6 +235,7 @@ public sealed class VirtualKeyboardViewModelTests
         Assert.Equal("A", vm.Selected.KeyName);
 
         vm.PressCurrent();
+        vm.CompletePress();
 
         Assert.Equal(new[] { ("A", true), ("A", false) }, spy.KeyStates);
         Assert.Empty(spy.RestoreStates);

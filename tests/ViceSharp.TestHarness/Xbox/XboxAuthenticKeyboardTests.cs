@@ -118,19 +118,22 @@ public sealed class XboxAuthenticKeyboardTests
     }
 
     [Fact]
-    public void MomentaryShift_WrapsTheNextKey_ThenDisarms()
+    public void MomentaryShift_HoldsTheLine_ThenReleasesWithTheStroke()
     {
         var spy = new AuthenticSpyKeyboard();
         var vm = new VirtualKeyboardViewModel(spy);
         var layout = vm.Layout;
 
-        // TEST-XKBD-K1d: arm LEFT SHIFT (no emission), press CRSR-down -> hardware-true
-        // shift wrap = CRSR-up; the arm then clears so the next press is plain.
+        // TEST-XKBD-K1d, revised by FEAT-XKBDSTICKY-001 (operator: sticky until the
+        // next key press releases them; scanned in real time): arming LEFT SHIFT
+        // presses the machine line IMMEDIATELY; CRSR-down goes down alongside it, and
+        // completing the stroke releases key first, then the sticky shift.
         vm.Press(layout.Rows[3][1]);
-        Assert.Empty(spy.KeyStates);
+        Assert.Equal(new[] { ("LeftShift", true) }, spy.KeyStates);
         Assert.True(vm.ShiftArmed);
 
         vm.Press(Single(layout, "Down"));
+        vm.CompletePress();
         Assert.Equal(
             new[] { ("LeftShift", true), ("Down", true), ("Down", false), ("LeftShift", false) },
             spy.KeyStates);
@@ -138,6 +141,7 @@ public sealed class XboxAuthenticKeyboardTests
 
         spy.KeyStates.Clear();
         vm.Press(Single(layout, "Down"));
+        vm.CompletePress();
         Assert.Equal(new[] { ("Down", true), ("Down", false) }, spy.KeyStates);
     }
 
@@ -150,6 +154,7 @@ public sealed class XboxAuthenticKeyboardTests
 
         vm.Press(layout.Rows[3][^3]);
         vm.Press(Single(layout, "Right"));
+        vm.CompletePress();
 
         Assert.Equal(
             new[] { ("RightShift", true), ("Right", true), ("Right", false), ("RightShift", false) },
@@ -163,12 +168,15 @@ public sealed class XboxAuthenticKeyboardTests
         var vm = new VirtualKeyboardViewModel(spy);
         var layout = vm.Layout;
 
-        // Armed shift + F1 = F2, emitted directly (the map resolves the twin name); no
-        // modifier wrap needed, and the arm clears.
+        // Armed shift + F1 = F2 (the map resolves the twin name) with the sticky shift
+        // line held around the stroke; the arm clears when the stroke completes.
         vm.Press(layout.Rows[3][1]);
         vm.Press(Single(layout, "F1"));
+        vm.CompletePress();
 
-        Assert.Equal(new[] { ("F2", true), ("F2", false) }, spy.KeyStates);
+        Assert.Equal(
+            new[] { ("LeftShift", true), ("F2", true), ("F2", false), ("LeftShift", false) },
+            spy.KeyStates);
         Assert.False(vm.ShiftArmed);
     }
 

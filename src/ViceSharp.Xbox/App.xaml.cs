@@ -1020,6 +1020,12 @@ public sealed partial class App : Application
     /// </summary>
     private void ReleaseAllPressedKeys()
     {
+        // FEAT-XKBDSTICKY-001: the virtual keyboard holds its own machine state (a
+        // pending stroke, sticky modifiers, the SHIFT-LOCK line); clear it on the same
+        // exits so nothing stays pressed behind the emulator's back.
+        KeyboardVm?.ReleaseAll();
+        _keyboardOverlay?.RefreshKeycaps();
+
         if (_pressedKeys.Count == 0)
             return;
 

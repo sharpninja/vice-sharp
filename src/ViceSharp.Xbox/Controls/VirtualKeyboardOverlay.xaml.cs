@@ -21,6 +21,7 @@ using ViceSharp.Xbox.ViewModels;
 public sealed partial class VirtualKeyboardOverlay : UserControl
 {
     private readonly DispatcherQueueTimer _caseTimer;
+    private readonly DispatcherQueueTimer _strokeTimer;
 
     private bool _externalShift;
     private bool _externalCommodore;
@@ -28,7 +29,7 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     private bool _appliedCommodore;
     private bool _appliedLowercase;
 
-    /// <summary>Creates the overlay and its charset-case poll (runs only while loaded).</summary>
+    /// <summary>Creates the overlay, its charset-case poll, and the stroke-hold timer.</summary>
     public VirtualKeyboardOverlay()
     {
         InitializeComponent();
@@ -40,6 +41,19 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
         _caseTimer.Interval = TimeSpan.FromMilliseconds(250);
         _caseTimer.IsRepeating = true;
         _caseTimer.Tick += (_, _) => RefreshKeycaps();
+
+        // FEAT-XKBDSTICKY-001 (operator: "The virtual keyboard should be scanned in
+        // real time"): a clicked key stays DOWN in the machine matrix for a real scan
+        // window (~5 frames) before CompletePress releases it (and any armed sticky
+        // modifiers); the old instant down+up raced the KERNAL's ~60 Hz scan.
+        _strokeTimer = DispatcherQueue.GetForCurrentThread().CreateTimer();
+        _strokeTimer.Interval = TimeSpan.FromMilliseconds(80);
+        _strokeTimer.IsRepeating = false;
+        _strokeTimer.Tick += (_, _) =>
+        {
+            (DataContext as VirtualKeyboardViewModel)?.CompletePress();
+            RefreshKeycaps();
+        };
 
         Loaded += (_, _) => _caseTimer.Start();
         Unloaded += (_, _) => _caseTimer.Stop();
@@ -84,7 +98,7 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     {
         var vm = DataContext as VirtualKeyboardViewModel;
         var shifted = _externalShift || vm is { ShiftLatched: true } || vm is { ShiftArmed: true };
-        var commodore = _externalCommodore;
+        var commodore = _externalCommodore || vm is { CommodoreArmed: true };
         var lowercase = App.Instance.IsCharsetLowercase();
 
         if (shifted == _appliedShift && commodore == _appliedCommodore && lowercase == _appliedLowercase)
@@ -118,8 +132,17 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
         {
             viewModel.Press(entry);
 
-            // The press may have toggled SHIFT-LOCK, armed a momentary shift, or consumed
-            // a one-shot: re-sync the keycaps to the new effective state.
+            // An ordinary key is now HELD in the matrix; schedule the stroke completion
+            // one real scan window out (restarting on fast typing is safe: Press already
+            // finished the previous stroke).
+            if (entry.Kind == AppKeyKind.Key)
+            {
+                _strokeTimer.Stop();
+                _strokeTimer.Start();
+            }
+
+            // The press may have toggled SHIFT-LOCK or a sticky modifier: re-sync the
+            // keycaps to the new effective state.
             RefreshKeycaps();
         }
     }

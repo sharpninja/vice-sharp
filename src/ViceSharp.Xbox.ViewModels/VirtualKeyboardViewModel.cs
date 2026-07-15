@@ -15,25 +15,30 @@ using ViceSharp.Abstractions;
 /// <para>
 /// The ViewModels project cannot reference the emulation engine, so the key strings live
 /// in the layout as hardcoded values; the S25 tests validate every one of them against
-/// the real C64 keyboard map. Pressing behaviour by tile kind:
+/// the real C64 keyboard map. FEAT-XKBDSTICKY-001 (operator 2026-07-14) made the keyboard
+/// STATE-DRIVEN so the machine's matrix scan sees it in real time. Behaviour by tile kind:
 /// </para>
 /// <list type="bullet">
-///   <item><description><see cref="AppKeyKind.Key"/>: emits
-///   <see cref="IMachineKeyboardInput.SetKeyState(string, bool)"/> down then up, once
-///   each, on the shift-resolved key name.</description></item>
-///   <item><description><see cref="AppKeyKind.ShiftLatch"/>: TOGGLES
-///   <see cref="ShiftLatched"/> and emits nothing.</description></item>
+///   <item><description><see cref="AppKeyKind.Key"/>: finishes any previous stroke, then
+///   presses the shift-resolved key name DOWN and holds it until
+///   <see cref="CompletePress"/> releases the key and the armed sticky
+///   modifiers.</description></item>
+///   <item><description><see cref="AppKeyKind.ShiftMomentary"/> /
+///   <see cref="AppKeyKind.CommodoreMomentary"/>: STICKY modifiers - arming presses the
+///   machine key immediately and holds its line; the next completed key stroke (or a
+///   second press of the tile) releases it.</description></item>
+///   <item><description><see cref="AppKeyKind.ShiftLatch"/>: toggles
+///   <see cref="ShiftLatched"/>, which HOLDS the LeftShift line while engaged (the
+///   mechanical SHIFT-LOCK).</description></item>
 ///   <item><description><see cref="AppKeyKind.Restore"/>: drives the dedicated RESTORE/NMI
 ///   seam <see cref="IMachineKeyboardInput.SetRestoreState(bool)"/> asserted then released,
 ///   and never <see cref="IMachineKeyboardInput.SetKeyState(string, bool)"/>.</description></item>
 /// </list>
 /// <para>
-/// Shift-latch semantics: the latch mirrors the C64 SHIFT-LOCK. It is a persistent latch,
-/// NOT a one-shot: once engaged it stays engaged across key presses until it is toggled
-/// off (via the SHIFT-LOCK tile or by setting <see cref="ShiftLatched"/>). While engaged,
-/// the only remapping is the function keys in place: F1-&gt;F2, F3-&gt;F4, F5-&gt;F6,
-/// F7-&gt;F8. All other keys emit their base name unchanged (a single key down/up, never a
-/// wrapped shift-plus-key sequence).
+/// Under the latch or an armed sticky shift, the function keys map to their twins in
+/// place (F1-&gt;F2, F3-&gt;F4, F5-&gt;F6, F7-&gt;F8); every other key emits its base
+/// name, with the shift line physically held so the machine resolves the chord exactly
+/// like hardware.
 /// </para>
 /// <para>
 /// This type holds no engine, host, or XAML reference beyond the narrow Abstractions input
@@ -100,22 +105,44 @@ public sealed class VirtualKeyboardViewModel
     public IReadOnlyList<VirtualKeyEntry> AllKeys => Layout.AllKeys;
 
     /// <summary>
-    /// Whether the SHIFT-LOCK latch is engaged. When engaged, pressing a function tile
-    /// emits its shifted twin in place (F1-&gt;F2, etc.). Setting it directly is equivalent
-    /// to toggling the SHIFT-LOCK tile. The latch persists across key presses until cleared.
+    /// Whether the SHIFT-LOCK latch is engaged. Like the mechanical SHIFT-LOCK it HOLDS
+    /// the LeftShift matrix line while engaged (FEAT-XKBDSTICKY-001: the keyboard is
+    /// scanned in real time), and function tiles emit their shifted twin in place
+    /// (F1-&gt;F2, etc.). Setting it directly is equivalent to toggling the SHIFT-LOCK
+    /// tile. The latch persists across key strokes until toggled off.
     /// </summary>
-    public bool ShiftLatched { get; set; }
+    public bool ShiftLatched
+    {
+        get => _shiftLatched;
+        set
+        {
+            if (_shiftLatched == value)
+                return;
+
+            _shiftLatched = value;
+            _keyboard.SetKeyState("LeftShift", value);
+        }
+    }
+
+    private bool _shiftLatched;
 
     /// <summary>
-    /// Whether a momentary SHIFT tile has armed a ONE-SHOT shift (PLAN-XKEYBOARD-001 K1).
-    /// While armed, the next ordinary key press is wrapped in the arming tile's shift key
-    /// ("LeftShift"/"RightShift") down/up, exactly like holding SHIFT on hardware; a
-    /// function tile instead emits its shifted twin in place. Either way the arm clears
-    /// after that one press. Pressing the same or the other SHIFT tile toggles/re-arms.
+    /// Whether a sticky SHIFT modifier is engaged (FEAT-XKBDSTICKY-001, operator: "C=
+    /// and SHIFT keys are modifiers and should be sticky when clicked until the next
+    /// key press which releases them"). The arming click presses the machine shift
+    /// IMMEDIATELY (live in the scanned matrix); completing the next ordinary key
+    /// stroke releases it, as does pressing the tile again.
     /// </summary>
-    public bool ShiftArmed => _armedShiftKeyName is not null;
+    public bool ShiftArmed => _armedStickies.Contains("LeftShift") || _armedStickies.Contains("RightShift");
 
-    private string? _armedShiftKeyName;
+    /// <summary>
+    /// Whether the sticky C= modifier is engaged. Same semantics as
+    /// <see cref="ShiftArmed"/>, on the machine key "Commodore".
+    /// </summary>
+    public bool CommodoreArmed => _armedStickies.Contains("Commodore");
+
+    private readonly HashSet<string> _armedStickies = new(StringComparer.Ordinal);
+    private string? _pendingKeyName;
 
     /// <summary>
     /// The index into <see cref="AllKeys"/> of the currently focused tile, pressed by
@@ -165,14 +192,13 @@ public sealed class VirtualKeyboardViewModel
                 break;
 
             case AppKeyKind.ShiftLatch:
-                // SHIFT-LOCK is a latching modifier, not a keystroke.
+                // SHIFT-LOCK is a latching modifier; the setter holds/releases the line.
                 ShiftLatched = !ShiftLatched;
                 break;
 
             case AppKeyKind.ShiftMomentary:
-                // A momentary SHIFT arms a one-shot for the NEXT key (PLAN-XKEYBOARD-001
-                // K1); pressing it while armed disarms. Emits nothing by itself.
-                _armedShiftKeyName = _armedShiftKeyName is null ? entry.KeyName : null;
+            case AppKeyKind.CommodoreMomentary:
+                ToggleSticky(entry.KeyName);
                 break;
 
             case AppKeyKind.Key:
@@ -183,33 +209,82 @@ public sealed class VirtualKeyboardViewModel
     }
 
     /// <summary>
-    /// Emits one ordinary key press: the function twins map in place under the latch or an
-    /// armed one-shot; any other key pressed while a one-shot is armed is wrapped in the
-    /// arming SHIFT's down/up, exactly like holding SHIFT on hardware (CRSR-up/left, shifted
-    /// glyphs). The one-shot always clears after the press.
+    /// Finishes the current key stroke (FEAT-XKBDSTICKY-001): releases the held key,
+    /// then every armed sticky modifier (hardware order: fingers leave the key before
+    /// the modifiers), clearing the arms. No-op when no stroke is pending, so sticky
+    /// modifiers stay engaged until an actual key press consumes them.
+    /// </summary>
+    public void CompletePress()
+    {
+        if (_pendingKeyName is null)
+            return;
+
+        _keyboard.SetKeyState(_pendingKeyName, false);
+        _pendingKeyName = null;
+
+        ReleaseStickies();
+    }
+
+    /// <summary>
+    /// Releases everything this keyboard holds on the machine: the pending key stroke,
+    /// the sticky modifiers, and the SHIFT-LOCK line. Called by the head whenever the
+    /// dock closes or the shell menu takes over, so nothing stays pressed behind the
+    /// emulator's back.
+    /// </summary>
+    public void ReleaseAll()
+    {
+        if (_pendingKeyName is not null)
+        {
+            _keyboard.SetKeyState(_pendingKeyName, false);
+            _pendingKeyName = null;
+        }
+
+        ReleaseStickies();
+        ShiftLatched = false;
+    }
+
+    /// <summary>
+    /// Toggles one sticky modifier (FEAT-XKBDSTICKY-001): arming presses the machine
+    /// key immediately so the matrix scan sees it in real time; toggling off (or the
+    /// next completed key stroke) releases it.
+    /// </summary>
+    private void ToggleSticky(string modifierKeyName)
+    {
+        if (_armedStickies.Remove(modifierKeyName))
+        {
+            _keyboard.SetKeyState(modifierKeyName, false);
+            return;
+        }
+
+        _armedStickies.Add(modifierKeyName);
+        _keyboard.SetKeyState(modifierKeyName, true);
+    }
+
+    private void ReleaseStickies()
+    {
+        if (_armedStickies.Count == 0)
+            return;
+
+        foreach (var modifier in _armedStickies)
+            _keyboard.SetKeyState(modifier, false);
+
+        _armedStickies.Clear();
+    }
+
+    /// <summary>
+    /// Starts one ordinary key stroke: any previous stroke completes first (no stuck
+    /// keys under fast typing), the function twins map in place under the latch or an
+    /// armed sticky shift, and the resolved key goes DOWN and STAYS down - the sticky
+    /// modifiers are already holding their lines - until <see cref="CompletePress"/>.
     /// </summary>
     private void PressKey(string baseKeyName)
     {
-        var armedShift = _armedShiftKeyName;
-        _armedShiftKeyName = null;
+        CompletePress();
 
-        var keyName = ResolveKeyName(baseKeyName, shifted: ShiftLatched || armedShift is not null);
-
-        // A twin remap consumed the shift (the map name F2/F4/F6/F8 IS the shifted key).
-        var wrap = armedShift is not null && ReferenceEquals(keyName, baseKeyName);
-
-        if (wrap)
-        {
-            _keyboard.SetKeyState(armedShift!, true);
-        }
+        var keyName = ResolveKeyName(baseKeyName, shifted: ShiftLatched || ShiftArmed);
 
         _keyboard.SetKeyState(keyName, true);
-        _keyboard.SetKeyState(keyName, false);
-
-        if (wrap)
-        {
-            _keyboard.SetKeyState(armedShift!, false);
-        }
+        _pendingKeyName = keyName;
     }
 
     /// <summary>
