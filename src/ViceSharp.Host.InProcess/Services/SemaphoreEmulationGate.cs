@@ -75,7 +75,14 @@ public sealed partial class SemaphoreEmulationGate : IEmulationGate
         foreach (var session in registry.Snapshot())
         {
             if (session.RunState != EmulatorRunState.Running)
+            {
+                // FIX-XMENUWARP-001 (shared with XboxManagedFrameGate): a paused
+                // session accrues no real-time debt; drop the anchor so resume
+                // re-primes from "now" instead of sprinting the pause away.
+                if (_anchors.TryGetValue(session, out var idleAnchor))
+                    idleAnchor.Primed = false;
                 continue;
+            }
 
             ranAny = true;
             var anchor = _anchors.GetValue(session, static _ => new Anchor());

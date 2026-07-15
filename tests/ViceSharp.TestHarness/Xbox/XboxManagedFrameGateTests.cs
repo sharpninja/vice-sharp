@@ -120,6 +120,55 @@ public sealed class XboxManagedFrameGateTests
         Assert.Equal(new[] { 0 }, sleeps); // warp -> sleep(0), runs flat out
     }
 
+    [Fact]
+    public void Tick_AfterPause_DoesNotSprintThePauseDuration()
+    {
+        // FIX-XMENUWARP-001 (operator 2026-07-14: "Emulator is put in Warp mode after
+        // closing menu"): the menu pause left the pacing anchor primed, so on resume
+        // the whole pause read as a real-time deficit and the gate sprinted at the
+        // step cap (a quarter clock-second per ~2ms tick) until the debt burned; a
+        // pause under the 4s catastrophic threshold never resynced. A session seen
+        // NOT Running must drop its anchor so resume re-primes from "now" and owes
+        // nothing.
+        var registry = new EmulatorRuntimeRegistry();
+        var session = CreateSession();
+        session.RunState = EmulatorRunState.Running;
+        session.SetLimiter(100, enabled: true);
+        registry.Add(session);
+
+        long now = 0;
+        long advanced = 0;
+        using var gate = new XboxManagedFrameGate(
+            sleep: static _ => { },
+            nowTicks: () => now,
+            stopwatchFrequency: 1_000_000);
+
+        // Prime + first paced tick at t=0.
+        gate.Tick(registry, (_, cycles) => { advanced += cycles; return cycles; });
+
+        // Menu opens: paused for two simulated seconds (well under the catastrophic
+        // threshold, squarely in the sprint window of the defect).
+        session.RunState = EmulatorRunState.Paused;
+        now = 1_000_000;
+        gate.Tick(registry, (_, cycles) => { advanced += cycles; return cycles; });
+        now = 2_000_000;
+
+        // Menu closes: the first resumed tick must advance ONE paced quantum (zero
+        // deficit), not the two paused seconds.
+        session.RunState = EmulatorRunState.Running;
+        advanced = 0;
+        gate.Tick(registry, (_, cycles) => { advanced += cycles; return cycles; });
+
+        long quantum;
+        lock (session.SyncRoot)
+            quantum = PacingMath.ComputePacedQuantumCycles(session.Machine.Clock.FrequencyHz, 100);
+
+        Assert.True(
+            advanced <= quantum,
+            $"resume after pause advanced {advanced} cycles; the pause must not be owed (quantum is {quantum}).");
+        Assert.True(advanced > 0, "the paced quantum still guarantees forward progress on resume");
+    }
+
     private static int ExpectedPacedSleepMs => Math.Max(1, (int)Math.Round(1000.0 / 500.0)); // PacingHz = 500 -> 2 ms
 
     private static EmulatorRuntimeSession CreateSession()

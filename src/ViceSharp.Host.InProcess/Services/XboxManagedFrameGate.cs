@@ -58,7 +58,15 @@ public sealed class XboxManagedFrameGate : IEmulationGate
         foreach (var session in registry.Snapshot())
         {
             if (session.RunState != EmulatorRunState.Running)
+            {
+                // FIX-XMENUWARP-001: a paused session accrues no real-time debt. Drop
+                // its anchor so resume re-primes from "now"; otherwise the pause reads
+                // as a deficit and the gate sprints at the step cap until it burns
+                // (pauses under the catastrophic threshold never resync).
+                if (_anchors.TryGetValue(session, out var idleAnchor))
+                    idleAnchor.Primed = false;
                 continue;
+            }
 
             ranAny = true;
             var anchor = _anchors.GetValue(session, static _ => new Anchor());
