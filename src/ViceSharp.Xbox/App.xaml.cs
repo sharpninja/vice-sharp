@@ -1037,6 +1037,10 @@ public sealed partial class App : Application
         // FIX-XKBDINPUT-001: entering the menu force-releases any held C64 keys.
         ReleaseAllPressedKeys();
 
+        // FEAT-XMENUPAUSE-001 (operator: "Emulator needs to pause when opening the menu
+        // and unpause when done"): the machine freezes while the shell menu is up.
+        TryPauseEmulation();
+
         if (_frame is null)
         {
             return;
@@ -1051,9 +1055,51 @@ public sealed partial class App : Application
     }
 
     /// <summary>
-    /// Mouse-friendly menu dismissal (operator 2026-07-14): hides the shell menu WITHOUT any
-    /// host call, so the running emulator is revealed exactly as it was (no reset, no resume).
-    /// Called by the HomePage Close Menu button and its click-outside-the-card handler.
+    /// FEAT-XMENUPAUSE-001: pauses the session for the shell menu. Guarded and
+    /// session-locked (a menu opened before the host is built is a no-op).
+    /// </summary>
+    private void TryPauseEmulation()
+    {
+        try
+        {
+            if (_host is null || string.IsNullOrEmpty(_sessionId))
+                return;
+
+            _host.Pause(_sessionId);
+            CreateLogger("App").LogInformation("menu open: emulation paused");
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "pausing for the menu failed");
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XMENUPAUSE-001: resumes the session when the shell menu goes away. The
+    /// host's Resume is idempotent, so boot-time HideMenu calls and the Home page's own
+    /// Resume/Start flows stay harmless.
+    /// </summary>
+    private void TryResumeEmulation()
+    {
+        try
+        {
+            if (_host is null || string.IsNullOrEmpty(_sessionId))
+                return;
+
+            _host.Resume(_sessionId);
+            CreateLogger("App").LogInformation("menu closed: emulation resumed");
+        }
+        catch (Exception ex)
+        {
+            CreateLogger("App").LogError(ex, "resuming after the menu failed");
+        }
+    }
+
+    /// <summary>
+    /// Mouse-friendly menu dismissal (operator 2026-07-14): hides the shell menu without
+    /// resetting anything; FEAT-XMENUPAUSE-001 then resumes the machine that ShowMenu
+    /// paused (the menu freezes gameplay; every dismissal unfreezes it). Called by the
+    /// HomePage Close Menu button and its click-outside-the-card handler.
     /// </summary>
     internal void DismissMenu() => HideMenu();
 
@@ -1107,6 +1153,9 @@ public sealed partial class App : Application
         {
             _frame.Visibility = Visibility.Collapsed;
         }
+
+        // FEAT-XMENUPAUSE-001: every dismissal path unfreezes the machine (idempotent).
+        TryResumeEmulation();
     }
 }
 #endif
