@@ -1,10 +1,11 @@
 <!--
   PLAN-XBOXUWP: the shell menu, an OVERLAY over the always-running emulator. The Page is fully
   transparent so the EmulatorView base (and the C64, held PAUSED while the menu is up,
-  FEAT-XMENUPAUSE-001) shows through; the menu lives in a bounded, translucent card kept inside
-  the TV-safe area. Menu redesign (operator 2026-07-14): Save/Load persist and restore a machine
-  snapshot (FEAT-XMENUSNAP-001), every dismissal resumes the machine, and Restart (cold reset)
-  is the LAST button. Inert on the net10.0 fallback.
+  FEAT-XMENUPAUSE-001) shows through AROUND the card; the card itself is FULLY OPAQUE with tight
+  padding so all eight buttons fit on screen, and the buttons are styled like C64 keycaps
+  (PetMe64 face, warm breadbin brown, raised-key bevel). Menu actions (operator 2026-07-14):
+  Save/Load persist and restore a machine snapshot (FEAT-XMENUSNAP-001), every dismissal resumes
+  the machine, and Restart (cold reset) is the LAST button. Inert on the net10.0 fallback.
 -->
 <Page
     x:Class="ViceSharp.Xbox.Views.HomePage"
@@ -12,6 +13,30 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     RequiresPointer="Never"
     Background="Transparent">
+    <Page.Resources>
+        <!-- The C64 charset face shipped for the virtual keyboard (FEAT-XC64FONT-001). -->
+        <FontFamily x:Key="C64MenuFont">ms-appx:///Assets/Fonts/PetMe64.ttf#Pet Me 64</FontFamily>
+
+        <!--
+          C64 keycap look (operator 2026-07-14: "Style the menu buttons like C64 Function
+          keys"): breadbin-brown cap, warm off-white legend in the PetMe64 face, and an
+          uneven border (light top/left, heavy bottom/right) for the raised-key bevel.
+          The default high-visibility focus rectangle stays for 10-foot navigation.
+        -->
+        <Style x:Key="C64KeyButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF40352C" />
+            <Setter Property="Foreground" Value="#FFE8E4D8" />
+            <Setter Property="BorderBrush" Value="#FF6B5B48" />
+            <Setter Property="BorderThickness" Value="2,2,4,5" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="FontFamily" Value="{StaticResource C64MenuFont}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Padding" Value="14,8" />
+            <Setter Property="MinHeight" Value="44" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+    </Page.Resources>
     <!--
       TV-safe inset (96,54) so the card never lands under a TV's overscan. The root is
       hit-testable (explicit transparent background) so a mouse click on the emulator area
@@ -23,59 +48,48 @@
         Background="Transparent"
         PointerPressed="OnBackgroundDismiss">
         <!--
-          Bounded, translucent menu card: a left-aligned, vertically-centred rail so the running
-          emulator shows around it on the right and faintly through the card. Change
-          HorizontalAlignment to "Center" for a centred card.
+          Bounded, OPAQUE menu card: a left-aligned, vertically-centred rail; the paused
+          emulator shows around it on the right, never through it.
         -->
         <Border
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Background="#C0101418"
+            Background="#FF101418"
             BorderBrush="#40FFFFFF"
             BorderThickness="1"
-            CornerRadius="12"
-            Padding="32">
-            <StackPanel Spacing="12" MinWidth="360">
+            CornerRadius="10"
+            Padding="16,14">
+            <StackPanel Spacing="6" MinWidth="300">
                 <TextBlock
                     Text="{Binding Title}"
-                    FontSize="56"
-                    Foreground="White"
+                    FontFamily="{StaticResource C64MenuFont}"
+                    FontSize="22"
+                    Foreground="#FFE8E4D8"
                     HorizontalAlignment="Center"
-                    Margin="0,0,0,8" />
-                <!--
-                  Menu redesign (operator 2026-07-14): SAVE/LOAD persist and restore a
-                  snapshot of the machine the menu is holding PAUSED; RESUME is gone
-                  (dismissing the menu resumes); RESTART (cold reset) is the LAST button.
-                -->
+                    Margin="0,0,0,6" />
                 <Button
                     Content="Save"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnSave" />
                 <Button
                     Content="Load"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnLoad" />
                 <Button
                     Content="Settings"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnSettings" />
                 <Button
                     Content="Devices"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnDevices" />
                 <Button
                     Content="Controls"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnControls" />
                 <Button
                     Content="About"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnAbout" />
                 <!--
                   Mouse-friendly dismiss (operator 2026-07-14): reveals the emulator and
@@ -84,13 +98,11 @@
                 -->
                 <Button
                     Content="Close Menu"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnCloseMenu" />
                 <Button
                     Content="Restart"
-                    Style="{StaticResource TenFootButtonStyle}"
-                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnRestart" />
             </StackPanel>
         </Border>

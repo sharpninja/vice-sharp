@@ -212,12 +212,17 @@ public sealed class XboxUwpHeadTests
         var xaml = File.ReadAllText(
             Path.Combine(RepoRoot, "src", "ViceSharp.Xbox", "Views", "HomePage.xaml"));
 
-        // Overlay: a transparent page + a bounded translucent card, so the always-running C64 shows
-        // behind/around it (was a full-page ~80%-opaque scrim that hid the emulator).
+        // Overlay: a transparent page + a bounded card. Operator 2026-07-14 restyle: the
+        // card is FULLY OPAQUE (the paused machine shows around it, not through it),
+        // padding is tight so all 8 buttons fit (Restart was clipped off the bottom),
+        // and the buttons are styled like C64 keycaps in the PetMe64 face.
         Assert.Contains("Background=\"Transparent\"", xaml);
         Assert.DoesNotContain("#CC000000", xaml);
+        Assert.DoesNotContain("#C0101418", xaml);
         Assert.Contains("<Border", xaml);
-        Assert.Contains("Background=\"#C0101418\"", xaml);
+        Assert.Contains("Background=\"#FF101418\"", xaml);
+        Assert.Contains("C64KeyButtonStyle", xaml);
+        Assert.Contains("PetMe64.ttf#Pet Me 64", xaml);
 
         // Menu redesign (operator 2026-07-14): SAVE/LOAD snapshot buttons, RESTART is
         // the LAST button, RESUME removed (dismissing the menu resumes the machine the
