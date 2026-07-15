@@ -995,12 +995,17 @@ sealed partial class Build : NukeBuild
             // 1. Stop a running instance: robocopy onto a running app hits locked files.
             WinPs($"Stop-Process -Name '{exeName}' -Force -ErrorAction SilentlyContinue");
 
-            // 2. Build the head on the proven toolchain.
+            // 2. Build the head on the proven toolchain. GenerateProjectPriFile is
+            //    EXPLICIT: incremental Build does not refresh resources.pri, and UWP
+            //    loads page XAML from the pri - without it a XAML-only change deploys
+            //    STALE UI (operator 2026-07-14: "None of that is what I asked for";
+            //    the restyled HomePage.xbf was fresh while the layout pri still served
+            //    the previous menu).
             var msbuild = ResolveVsMsBuild();
             var head = RootDirectory / "src" / "ViceSharp.Xbox" / "ViceSharp.Xbox.csproj";
             var build = ProcessTasks.StartProcess(
                 msbuild,
-                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 /t:Restore,Build /v:m /nologo",
+                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 /t:Restore,Build,GenerateProjectPriFile /v:m /nologo",
                 RootDirectory);
             build.WaitForExit();
             if (build.ExitCode != 0)

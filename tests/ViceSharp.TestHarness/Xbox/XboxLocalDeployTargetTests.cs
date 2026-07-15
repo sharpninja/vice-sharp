@@ -33,7 +33,11 @@ public sealed class XboxLocalDeployTargetTests
         Assert.Contains("Target DeployXboxLocal", build);
         Assert.Contains("XboxDeployConfiguration", build);
         Assert.Contains("XboxLaunch", build);
-        Assert.Contains("/t:Restore,Build", build);
+
+        // GenerateProjectPriFile is mandatory: incremental Build leaves resources.pri
+        // stale and UWP loads page XAML from the pri, so a XAML-only change would
+        // deploy the PREVIOUS UI (operator-hit 2026-07-14).
+        Assert.Contains("/t:Restore,Build,GenerateProjectPriFile", build);
         Assert.Contains("robocopy", build);
         Assert.Contains("/XF AppxManifest.xml", build);
 
