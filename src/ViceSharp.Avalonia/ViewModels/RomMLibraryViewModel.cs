@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RomM.Client;
@@ -116,6 +117,64 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
 
     /// <summary>Whether the library is connected.</summary>
     public bool IsConnected => _browse is not null;
+
+    /// <summary>AC-CONN-07. RomM servers found on the local network by the last scan.</summary>
+    public ObservableCollection<DiscoveredRomM> DiscoveredServers { get; } = new();
+
+    /// <summary>
+    /// AC-CONN-07. Scans the local subnet for RomM servers, fills <see cref="DiscoveredServers"/>, and
+    /// auto-selects the first hit into <see cref="BaseUrl"/> so Connect is one click away.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    public async Task ScanAsync(CancellationToken cancellationToken = default)
+    {
+        if (IsBusy)
+        {
+            return;
+        }
+
+        IsBusy = true;
+        DiscoveredServers.Clear();
+        Status = "Scanning the local network for RomM servers...";
+        try
+        {
+            IReadOnlyList<DiscoveredRomM> servers = await new RomMSubnetDiscovery()
+                .ScanAsync(cancellationToken: cancellationToken)
+                .ConfigureAwait(true);
+
+            foreach (DiscoveredRomM server in servers)
+            {
+                DiscoveredServers.Add(server);
+            }
+
+            if (servers.Count > 0)
+            {
+                BaseUrl = servers[0].BaseUrl.ToString();
+                Status = $"Found {servers.Count} RomM server(s). Selected {servers[0].BaseUrl}.";
+            }
+            else
+            {
+                Status = "No RomM servers found on the local network. Enter a URL manually.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Status = $"Scan failed: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    /// <summary>AC-CONN-07. Selects a discovered server into <see cref="BaseUrl"/>.</summary>
+    /// <param name="server">The discovered server to use.</param>
+    public void SelectDiscovered(DiscoveredRomM server)
+    {
+        ArgumentNullException.ThrowIfNull(server);
+        BaseUrl = server.BaseUrl.ToString();
+        Status = $"Selected {server.BaseUrl}. Click Connect.";
+    }
 
     /// <summary>Builds the gateway/browser and loads the first page, scoped to C64.</summary>
     /// <param name="cancellationToken">A cancellation token.</param>

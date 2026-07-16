@@ -20,6 +20,7 @@
             <TextBlock Text="RomM library" FontSize="40" Foreground="White" VerticalAlignment="Center" />
             <TextBox x:Name="UrlBox" PlaceholderText="http://host:8080/" Text="http://localhost:8080/" Width="360" />
             <PasswordBox x:Name="TokenBox" PlaceholderText="Client API token" Width="280" />
+            <Button Content="Scan LAN" Style="{StaticResource TenFootButtonStyle}" Click="OnScan" />
             <Button Content="Connect" Style="{StaticResource TenFootButtonStyle}" Click="OnConnect" />
         </StackPanel>
 

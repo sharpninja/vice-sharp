@@ -3,6 +3,7 @@
 namespace ViceSharp.Xbox.Views;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -24,6 +25,29 @@ public sealed partial class LibraryPage : Page
 
     /// <summary>Creates the page.</summary>
     public LibraryPage() => InitializeComponent();
+
+    // PLAN-ROMM-001 (AC-CONN-07): scan the local network and fill in the first RomM server found.
+    private async void OnScan(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            StatusText.Text = "Scanning the local network for RomM servers...";
+            IReadOnlyList<DiscoveredRomM> servers = await new RomMSubnetDiscovery().ScanAsync();
+            if (servers.Count > 0)
+            {
+                UrlBox.Text = servers[0].BaseUrl.ToString();
+                StatusText.Text = $"Found {servers.Count} server(s). Selected {servers[0].BaseUrl}. Connect to browse.";
+            }
+            else
+            {
+                StatusText.Text = "No RomM servers found on the local network. Enter a URL manually.";
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusText.Text = $"Scan failed: {ex.Message}";
+        }
+    }
 
     private async void OnConnect(object sender, RoutedEventArgs e)
     {

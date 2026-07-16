@@ -22,6 +22,8 @@ public sealed class LibraryView : UserControl
     private readonly TextBlock _status;
     private readonly Button _attach;
     private readonly Button _attachPlay;
+    private readonly TextBox _baseUrlBox;
+    private readonly ComboBox _discoveredBox;
     private readonly TextBlock _detailName;
     private readonly TextBlock _detailMeta;
     private readonly TextBlock _detailSummary;
@@ -36,11 +38,33 @@ public sealed class LibraryView : UserControl
         _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
         DataContext = viewModel;
 
-        var baseUrl = new TextBox { PlaceholderText = "http://localhost:8080/", Text = _viewModel.BaseUrl, MinWidth = 200 };
-        baseUrl.TextChanged += (_, _) => _viewModel.BaseUrl = baseUrl.Text ?? string.Empty;
+        _baseUrlBox = new TextBox { PlaceholderText = "http://localhost:8080/", Text = _viewModel.BaseUrl, MinWidth = 200 };
+        _baseUrlBox.TextChanged += (_, _) => _viewModel.BaseUrl = _baseUrlBox.Text ?? string.Empty;
 
         var token = new TextBox { PlaceholderText = "Client API token", PasswordChar = '•', MinWidth = 150 };
         token.TextChanged += (_, _) => _viewModel.Token = token.Text ?? string.Empty;
+
+        // AC-CONN-07: scan the LAN and offer the discovered servers instead of forcing a typed URL.
+        var scan = new Button { Content = "Scan LAN" };
+        scan.Click += async (_, _) => await _viewModel.ScanAsync();
+
+        _discoveredBox = new ComboBox
+        {
+            PlaceholderText = "Discovered...",
+            MinWidth = 160,
+            ItemsSource = _viewModel.DiscoveredServers,
+            ItemTemplate = new FuncDataTemplate<DiscoveredRomM>((server, _) => new TextBlock
+            {
+                Text = server is null ? string.Empty : $"{server.BaseUrl.Host}:{server.BaseUrl.Port}",
+            }),
+        };
+        _discoveredBox.SelectionChanged += (_, _) =>
+        {
+            if (_discoveredBox.SelectedItem is DiscoveredRomM server)
+            {
+                _viewModel.SelectDiscovered(server);
+            }
+        };
 
         var connect = new Button { Content = "Connect" };
         connect.Click += async (_, _) => await _viewModel.ConnectAsync();
@@ -52,7 +76,9 @@ public sealed class LibraryView : UserControl
             Children =
             {
                 new TextBlock { Text = "RomM", VerticalAlignment = VerticalAlignment.Center },
-                baseUrl,
+                _baseUrlBox,
+                scan,
+                _discoveredBox,
                 token,
                 connect,
             },
@@ -200,6 +226,10 @@ public sealed class LibraryView : UserControl
         else if (e.PropertyName == nameof(RomMLibraryViewModel.SelectedDetail))
         {
             UpdateDetail();
+        }
+        else if (e.PropertyName == nameof(RomMLibraryViewModel.BaseUrl) && _baseUrlBox.Text != _viewModel.BaseUrl)
+        {
+            _baseUrlBox.Text = _viewModel.BaseUrl;
         }
     }
 
