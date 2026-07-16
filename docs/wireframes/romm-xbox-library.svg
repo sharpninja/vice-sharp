@@ -1,0 +1,60 @@
+<svg width="100%" viewBox="0 0 680 462" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Xbox RomM library wireframe</title>
+<desc>Ten-foot Game Pass style RomM library. Single RomM source; platform bound to the active machine from Settings. No source or platform picker.</desc>
+<style>
+:root{--fg:#1a1a1a;--muted:#6a6a6a;--line:#8a8a8a;--blue:#2f6fed;--amber:#d08700;}
+@media (prefers-color-scheme:dark){:root{--fg:#f0f0f0;--muted:#9aa0a6;--line:#5a5f66;--blue:#5b8cff;--amber:#e0a200;}}
+svg{font-family:'Segoe UI',system-ui,sans-serif;}
+.c-gray rect,.c-gray circle{fill:none;stroke:var(--line);}
+.c-blue rect,.c-blue circle{fill:none;stroke:var(--blue);}
+.c-amber rect,.c-amber circle{fill:none;stroke:var(--amber);}
+text{fill:var(--fg);}
+.t{font-size:13px;fill:var(--fg);}
+.ts{font-size:11px;fill:var(--muted);}
+.th{font-size:18px;font-weight:600;fill:var(--fg);}
+</style>
+<g class="c-gray"><rect x="6" y="6" width="668" height="450" rx="12" stroke-width="0.5"/></g>
+<text class="th" x="24" y="34">RomM library</text>
+<text class="ts" x="548" y="34">3,412 C64 titles</text>
+<g class="c-gray"><rect x="24" y="50" width="466" height="28" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="36" y="69">Search C64 library...</text>
+<g class="c-gray"><rect x="502" y="50" width="148" height="28" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="514" y="69">Machine · C64</text>
+<g class="c-blue"><rect x="24" y="92" width="128" height="92" rx="8" stroke-width="2"/></g>
+<text class="t" x="28" y="200">Boulder Dash</text>
+<text class="ts" x="28" y="213">.d64</text>
+<g class="c-gray"><rect x="162" y="92" width="128" height="92" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="166" y="200">Paradroid</text>
+<text class="ts" x="166" y="213">.d64</text>
+<g class="c-gray"><rect x="300" y="92" width="128" height="92" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="304" y="200">Uridium</text>
+<text class="ts" x="304" y="213">.d64</text>
+<g class="c-gray"><rect x="438" y="92" width="128" height="92" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="442" y="200">Wizball</text>
+<text class="ts" x="442" y="213">.crt</text>
+<g class="c-gray"><rect x="24" y="218" width="128" height="92" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="28" y="326">Turrican</text>
+<text class="ts" x="28" y="339">.d64</text>
+<g class="c-gray"><rect x="162" y="218" width="128" height="92" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="166" y="326">Creatures</text>
+<text class="ts" x="166" y="339">.tap</text>
+<g class="c-gray"><rect x="300" y="218" width="128" height="92" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="304" y="326">Mayhem</text>
+<text class="ts" x="304" y="339">.d64</text>
+<g class="c-gray"><rect x="438" y="218" width="128" height="92" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="442" y="326">Armalyte</text>
+<text class="ts" x="442" y="339">.d64</text>
+<g class="c-gray"><rect x="590" y="92" width="60" height="218" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="620" y="112" text-anchor="middle">A</text>
+<text class="ts" x="620" y="140" text-anchor="middle">E</text>
+<text class="ts" x="620" y="168" text-anchor="middle">I</text>
+<text class="ts" x="620" y="196" text-anchor="middle">M</text>
+<text class="ts" x="620" y="224" text-anchor="middle">Q</text>
+<text class="ts" x="620" y="252" text-anchor="middle">U</text>
+<text class="ts" x="620" y="280" text-anchor="middle">Z</text>
+<text class="ts" x="620" y="304" text-anchor="middle">#</text>
+<g class="c-gray"><rect x="24" y="352" width="626" height="46" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="36" y="372">Selected  Boulder Dash · boulderdash.d64</text>
+<text class="ts" x="36" y="389">Slot  Drive 8 v      Downloading  ||||||||------  62%</text>
+<text class="ts" x="24" y="428">(A) Attach     (Y) Attach + autostart     (X) Add to list     (B) Back</text>
+</svg>
