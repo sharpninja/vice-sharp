@@ -98,6 +98,10 @@
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
+    <Project Path="src/ViceSharp.RomM/ViceSharp.RomM.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
     <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    PLAN-ROMM-001 L2 (IMPL-ROMM-003): the RomM + CSDb adapter. ALL HTTP / RomM.Client
+    access and all source-gen JSON live here so the portable VM library stays
+    transport-free (TR-ROMM-BOUNDARY-001). Packable to nuget.org (FR-ROMM-PKG-001).
+    RomM.Client.Csdb is added with the CSDb slice (L6), beside its first consumer.
+    AOT/trim/warnings-as-errors, Nullable, ImplicitUsings are inherited from
+    Directory.Build.props; all our JSON is source-gen (RomMJsonContext) so the trim
+    analyzer stays clean (TR-ROMM-JSON-001).
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackageId>ViceSharp.RomM</PackageId>
+    <Description>RomM and CSDb adapter for ViceSharp front-ends: implements the portable library gateways over the RomM REST client (PLAN-ROMM-001).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
+    <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RomM.Client" />
+  </ItemGroup>
+
+</Project>

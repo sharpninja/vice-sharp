@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
+    <ProjectReference Include="..\..\src\ViceSharp.RomM\ViceSharp.RomM.csproj" />
   </ItemGroup>
 
   <ItemGroup>
