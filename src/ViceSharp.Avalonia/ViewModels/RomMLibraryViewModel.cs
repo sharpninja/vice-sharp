@@ -19,10 +19,13 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
     private readonly string _cacheDir;
 
     private string _baseUrl = "http://localhost:8080/";
+    private string _bridgeUrl = "http://localhost:8090/";
     private string _token = string.Empty;
     private string _status = "Enter your RomM server URL and token, then Connect.";
     private bool _isBusy;
     private LibraryBrowseViewModel? _browse;
+    private CollectionsViewModel? _collections;
+    private CsdbDiscoveryViewModel? _csdb;
 
     /// <summary>Creates the host.</summary>
     /// <param name="shell">The shell launch surface (for the launcher).</param>
@@ -43,11 +46,32 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         set => SetProperty(ref _baseUrl, value);
     }
 
+    /// <summary>The csdb-bridge base URL (for the CSDb discovery tab).</summary>
+    public string BridgeUrl
+    {
+        get => _bridgeUrl;
+        set => SetProperty(ref _bridgeUrl, value);
+    }
+
     /// <summary>The client API token.</summary>
     public string Token
     {
         get => _token;
         set => SetProperty(ref _token, value);
+    }
+
+    /// <summary>The collections (lists) view-model, or <c>null</c> before Connect.</summary>
+    public CollectionsViewModel? Collections
+    {
+        get => _collections;
+        private set => SetProperty(ref _collections, value);
+    }
+
+    /// <summary>The CSDb discovery view-model, or <c>null</c> before Connect.</summary>
+    public CsdbDiscoveryViewModel? Csdb
+    {
+        get => _csdb;
+        private set => SetProperty(ref _csdb, value);
     }
 
     /// <summary>A human-readable status line.</summary>
@@ -114,6 +138,25 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
 
             Browse = browse;
             Status = $"Connected: {browse.Total} C64 titles.";
+
+            // Lists (collections). A failure here must not tear down the working library connection.
+            try
+            {
+                var collections = new CollectionsViewModel(new RomMCollectionsGateway(client));
+                await collections.RefreshAsync(includeSmartVirtual: true, cancellationToken).ConfigureAwait(true);
+                Collections = collections;
+            }
+            catch (Exception ex)
+            {
+                Status = $"Connected; collections unavailable ({ex.Message}).";
+            }
+
+            // CSDb discovery via the bridge sidecar (optional; absent bridge just leaves the tab idle).
+            if (Uri.TryCreate(BridgeUrl, UriKind.Absolute, out Uri? bridgeUri))
+            {
+                var bridgeHttp = new System.Net.Http.HttpClient { BaseAddress = bridgeUri };
+                Csdb = new CsdbDiscoveryViewModel(new BridgeCsdbGateway(bridgeHttp, client.Tasks));
+            }
         }
         catch (Exception ex)
         {

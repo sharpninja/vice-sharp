@@ -1422,4 +1422,10 @@ public enum SidebarTab
 
     /// <summary>PLAN-ROMM-001: the RomM game library tab.</summary>
     Library,
+
+    /// <summary>PLAN-ROMM-001: the RomM list-management tab.</summary>
+    Lists,
+
+    /// <summary>PLAN-ROMM-001: the CSDb discovery tab.</summary>
+    CsdbDiscovery,
 }
