@@ -64,4 +64,10 @@ public enum NavigationDestination
 
     /// <summary>PLAN-ROMM-001 (AC-XUI-06): the RomM list-management page (user collections).</summary>
     Lists,
+
+    /// <summary>
+    /// PLAN-ROMM-001 X4 (FR-CSDB-001): the CSDb discovery page - search scene releases and ingest a
+    /// capped selection into RomM via the csdb-bridge sidecar.
+    /// </summary>
+    Csdb,
 }
