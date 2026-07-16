@@ -22,6 +22,12 @@ public sealed class LibraryView : UserControl
     private readonly TextBlock _status;
     private readonly Button _attach;
     private readonly Button _attachPlay;
+    private readonly TextBlock _detailName;
+    private readonly TextBlock _detailMeta;
+    private readonly TextBlock _detailSummary;
+    private readonly ItemsControl _detailFiles;
+    private readonly ComboBox _listPicker;
+    private readonly Button _addToList;
 
     /// <summary>Creates the view over its host view-model.</summary>
     /// <param name="viewModel">The RomM library host view-model.</param>
@@ -78,6 +84,11 @@ public sealed class LibraryView : UserControl
                 _viewModel.Browse.SelectedTile = _list.SelectedItem as RomTile;
             }
 
+            if (_list.SelectedItem is RomTile selected)
+            {
+                _ = _viewModel.ShowDetailAsync(selected.Id);
+            }
+
             UpdateButtons();
         };
 
@@ -108,12 +119,67 @@ public sealed class LibraryView : UserControl
         var top = new StackPanel { Spacing = 8, Children = { connectRow, search, actionRow, _status } };
         DockPanel.SetDock(top, Dock.Top);
 
+        // AC-AUI-03: the right-hand details pane (cover placeholder, metadata, About, files, add-to-list),
+        // fed by RomMLibraryViewModel.SelectedDetail when a title is selected.
+        _detailName = new TextBlock { FontWeight = FontWeight.SemiBold, FontSize = 16, TextWrapping = TextWrapping.Wrap };
+        _detailMeta = new TextBlock { FontSize = 11, Foreground = new SolidColorBrush(Color.FromRgb(150, 156, 168)) };
+        _detailSummary = new TextBlock { FontSize = 12, TextWrapping = TextWrapping.Wrap };
+        _detailFiles = new ItemsControl
+        {
+            ItemTemplate = new FuncDataTemplate<RomFile>((file, _) => new TextBlock
+            {
+                Text = file is null ? string.Empty : $"{file.FileName}  ({file.SizeBytes} bytes)",
+                FontSize = 11,
+                Foreground = new SolidColorBrush(Color.FromRgb(176, 184, 196)),
+            }),
+        };
+
+        _listPicker = new ComboBox { PlaceholderText = "Add to list...", MinWidth = 160, ItemTemplate = CollectionTemplate() };
+        _addToList = new Button { Content = "Add" };
+        _addToList.Click += async (_, _) => await AddSelectedToListAsync();
+
+        var detailPanel = new StackPanel
+        {
+            Width = 240,
+            Margin = new Thickness(12, 0, 0, 0),
+            Spacing = 8,
+            Children =
+            {
+                new Border { Height = 150, Background = new SolidColorBrush(Color.FromRgb(26, 30, 36)) },
+                _detailName,
+                _detailMeta,
+                new TextBlock { Text = "About", FontWeight = FontWeight.SemiBold, FontSize = 12 },
+                _detailSummary,
+                new TextBlock { Text = "Files", FontWeight = FontWeight.SemiBold, FontSize = 12 },
+                _detailFiles,
+                new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 6,
+                    Children = { _listPicker, _addToList },
+                },
+            },
+        };
+        DockPanel.SetDock(detailPanel, Dock.Right);
+
         var root = new DockPanel { Margin = new Thickness(10) };
         root.Children.Add(top);
+        root.Children.Add(detailPanel);
         root.Children.Add(_list);
         Content = root;
 
         _viewModel.PropertyChanged += OnViewModelChanged;
+    }
+
+    private static FuncDataTemplate<LibraryCollection> CollectionTemplate() =>
+        new((collection, _) => new TextBlock { Text = collection?.Name ?? string.Empty });
+
+    private async Task AddSelectedToListAsync()
+    {
+        if (_viewModel.SelectedDetail is { } detail && _listPicker.SelectedItem is LibraryCollection target && !target.ReadOnly)
+        {
+            await detail.AddToCollectionAsync(target.Id);
+        }
     }
 
     private void OnViewModelChanged(object? sender, PropertyChangedEventArgs e)
@@ -127,6 +193,23 @@ public sealed class LibraryView : UserControl
             _list.ItemsSource = _viewModel.Browse?.Items;
             UpdateButtons();
         }
+        else if (e.PropertyName == nameof(RomMLibraryViewModel.Collections))
+        {
+            _listPicker.ItemsSource = _viewModel.Collections?.Collections;
+        }
+        else if (e.PropertyName == nameof(RomMLibraryViewModel.SelectedDetail))
+        {
+            UpdateDetail();
+        }
+    }
+
+    private void UpdateDetail()
+    {
+        RomDetail? detail = _viewModel.SelectedDetail?.Detail;
+        _detailName.Text = detail?.Name ?? string.Empty;
+        _detailMeta.Text = detail?.PlatformSlug is { Length: > 0 } slug ? slug.ToUpperInvariant() : string.Empty;
+        _detailSummary.Text = string.IsNullOrWhiteSpace(detail?.Summary) ? "(no description)" : detail!.Summary;
+        _detailFiles.ItemsSource = detail?.Files;
     }
 
     private void UpdateButtons()

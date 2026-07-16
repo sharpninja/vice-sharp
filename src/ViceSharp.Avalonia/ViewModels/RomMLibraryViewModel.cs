@@ -26,6 +26,9 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
     private LibraryBrowseViewModel? _browse;
     private CollectionsViewModel? _collections;
     private CsdbDiscoveryViewModel? _csdb;
+    private IRomMLibraryGateway? _gateway;
+    private IRomMCollectionsGateway? _collectionsGateway;
+    private RomDetailViewModel? _selectedDetail;
 
     /// <summary>Creates the host.</summary>
     /// <param name="shell">The shell launch surface (for the launcher).</param>
@@ -72,6 +75,16 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
     {
         get => _csdb;
         private set => SetProperty(ref _csdb, value);
+    }
+
+    /// <summary>
+    /// AC-AUI-03. The selected title's detail view-model (cover/metadata/files/add-to-list), or
+    /// <c>null</c> until a tile is opened.
+    /// </summary>
+    public RomDetailViewModel? SelectedDetail
+    {
+        get => _selectedDetail;
+        private set => SetProperty(ref _selectedDetail, value);
     }
 
     /// <summary>A human-readable status line.</summary>
@@ -130,6 +143,9 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
 
             IRomMClient client = RomMClient.Create(options);
             var gateway = new RomMLibraryGateway(client);
+            _gateway = gateway;
+            var collectionsGateway = new RomMCollectionsGateway(client);
+            _collectionsGateway = collectionsGateway;
             var machine = new FixedMachineProvider(LibraryMachine.C64);
             var launcher = new AvaloniaGameLauncher(_shell);
             var browse = new LibraryBrowseViewModel(gateway, launcher, machine, _cacheDir);
@@ -142,7 +158,7 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             // Lists (collections). A failure here must not tear down the working library connection.
             try
             {
-                var collections = new CollectionsViewModel(new RomMCollectionsGateway(client));
+                var collections = new CollectionsViewModel(collectionsGateway);
                 await collections.RefreshAsync(includeSmartVirtual: true, cancellationToken).ConfigureAwait(true);
                 Collections = collections;
             }
@@ -165,6 +181,30 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    /// <summary>
+    /// AC-AUI-03. Fetches the given ROM's detail and publishes it as <see cref="SelectedDetail"/> for the
+    /// details pane. A failure surfaces on the status line and leaves the previous detail in place.
+    /// </summary>
+    /// <param name="romId">The ROM id to open.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    public async Task ShowDetailAsync(int romId, CancellationToken cancellationToken = default)
+    {
+        if (_gateway is null || _collectionsGateway is null)
+        {
+            return;
+        }
+
+        try
+        {
+            RomDetail detail = await _gateway.GetRomAsync(romId, cancellationToken).ConfigureAwait(true);
+            SelectedDetail = new RomDetailViewModel(detail, _collectionsGateway);
+        }
+        catch (Exception ex)
+        {
+            Status = $"Details unavailable: {ex.Message}";
         }
     }
 
