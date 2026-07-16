@@ -416,6 +416,12 @@ sealed partial class Build : NukeBuild
                 ("ViceSharp.Host.Android", false, false, true),
                 ("ViceSharp.Host.iOS", false, false, true),
                 ("ViceSharp.Host.Xbox", false, false, true),
+                // PLAN-ROMM-001 L8: the RomM library integration packages. Plain
+                // libraries with real published-package dependencies (Protocol, and
+                // for the adapter also Library.ViewModels + RomM.Client[.Csdb]); no
+                // dep-rewrite, no embedding, no tool payload.
+                ("ViceSharp.Library.ViewModels", false, false, false),
+                ("ViceSharp.RomM", false, false, false),
             };
 
             foreach (var spec in individual)
