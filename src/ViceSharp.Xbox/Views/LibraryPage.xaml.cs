@@ -70,6 +70,21 @@ public sealed partial class LibraryPage : Page
         }
     }
 
+    // PLAN-ROMM-001 (AC-XUI-05): open the selected title's details page. Hands the details page the
+    // server URL + token + rom id so it can rebuild the gateways and fetch the detail itself.
+    private void OnDetails(object sender, RoutedEventArgs e)
+    {
+        if (ResultsList.SelectedItem is not RomTile tile)
+        {
+            StatusText.Text = "Select a title first.";
+            return;
+        }
+
+        var request = new GameDetailsRequest(UrlBox.Text, TokenBox.Password, tile.Id);
+        App.Instance.Navigation.Push(ViceSharp.Xbox.ViewModels.NavigationDestination.GameDetails);
+        Frame?.Navigate(typeof(GameDetailsPage), request);
+    }
+
     private void OnBack(object sender, RoutedEventArgs e)
     {
         App.Instance.Navigation.GoBack();
