@@ -62,6 +62,10 @@
                     Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnCsdb" />
                 <Button
+                    Content="Lists"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnLists" />
+                <Button
                     Content="Settings"
                     Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnSettings" />

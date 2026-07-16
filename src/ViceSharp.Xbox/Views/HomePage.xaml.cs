@@ -61,6 +61,9 @@ public sealed partial class HomePage : Page
     // PLAN-ROMM-001 X4 (FR-CSDB-001): open the CSDb discovery page.
     private void OnCsdb(object sender, RoutedEventArgs e) => Push(NavigationDestination.Csdb, typeof(CsdbPage));
 
+    // PLAN-ROMM-001 X3 (AC-XUI-06): open the RomM list-management page.
+    private void OnLists(object sender, RoutedEventArgs e) => Push(NavigationDestination.Lists, typeof(ListsPage));
+
     private void OnSettings(object sender, RoutedEventArgs e) => Push(NavigationDestination.Settings, typeof(SettingsPage));
 
     private void OnDevices(object sender, RoutedEventArgs e) => Push(NavigationDestination.DeviceSetup, typeof(DeviceSetupPage));
