@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj" />
+    <ProjectReference Include="..\..\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj" />
     <ProjectReference Include="..\..\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
   </ItemGroup>
 

@@ -193,6 +193,9 @@
     -->
     <ProjectReference Include="..\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj" />
     <ProjectReference Include="..\ViceSharp.Xbox.Input\ViceSharp.Xbox.Input.csproj" />
+    <!-- PLAN-ROMM-001 X1: the portable RomM library ViewModels (Protocol-only); the
+         XboxGameLauncher implements its IGameLauncher seam over the in-process facade. -->
+    <ProjectReference Include="..\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
   </ItemGroup>
 
   <!--
