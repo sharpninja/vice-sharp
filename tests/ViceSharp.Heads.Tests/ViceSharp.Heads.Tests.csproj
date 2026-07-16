@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    PLAN-ROMM-001: unit tests for the head-side RomM glue (launchers, nav) that build
+    against the managed head assemblies only (ViceSharp.Avalonia; ViceSharp.Xbox resolves
+    as its net10.0 fallback under a plain dotnet build). It deliberately does NOT reference
+    the native TestHarness, so it stays fast and needs no native toolchain / UWP workload.
+    Tests are tagged [Trait("Category","Heads")] so they run apart from the Library gate.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <IsAotCompatible>false</IsAotCompatible>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj" />
+    <ProjectReference Include="..\..\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+
+</Project>

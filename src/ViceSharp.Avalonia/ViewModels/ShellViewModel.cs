@@ -11,7 +11,7 @@ namespace ViceSharp.Avalonia.ViewModels;
 /// route to the host and/or the <see cref="AttachPanelViewModel"/>. Keeping this
 /// off the Window makes the menu wiring unit-testable against a mock host.
 /// </summary>
-public sealed class ShellViewModel
+public sealed class ShellViewModel : IGameLaunchTarget
 {
     private readonly IHostProtocolClient _host;
 
@@ -182,6 +182,33 @@ public sealed class ShellViewModel
             ? $"Started {Path.GetFileName(filePath)}"
             : startStatus.Message);
         return startStatus;
+    }
+
+    /// <summary>
+    /// PLAN-ROMM-001 (AC-LAUNCH-06): attach a specific file to <paramref name="slot"/> WITHOUT starting
+    /// it (the RomM "attach only" path). Returns Ok when the slot reports attached, else a failure with
+    /// the validation reason.
+    /// </summary>
+    public async Task<RpcStatus> AttachFileAsync(MediaSlot slot, string filePath, CancellationToken ct = default)
+    {
+        var target = FindSlot(slot);
+        if (target is null)
+        {
+            var invalid = RpcStatus.InvalidArgument($"No media slot for {slot}.");
+            Panel.ReportStatus(invalid.Message);
+            return invalid;
+        }
+
+        await Panel.AttachAsync(target, filePath, ct).ConfigureAwait(true);
+        if (target.IsAttached)
+        {
+            return RpcStatus.Ok();
+        }
+
+        var reason = string.IsNullOrWhiteSpace(target.ValidationError) ? Panel.StatusText : target.ValidationError;
+        var failed = RpcStatus.FailedPrecondition(reason);
+        Panel.ReportStatus(failed.Message);
+        return failed;
     }
 
     /// <summary>Detach media from the given slot.</summary>

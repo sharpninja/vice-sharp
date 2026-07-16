@@ -151,5 +151,9 @@
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
+    <Project Path="tests/ViceSharp.Heads.Tests/ViceSharp.Heads.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
   </Folder>
 </Solution>

@@ -56,6 +56,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ViceSharp.Host\ViceSharp.Host.csproj" />
     <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+    <!-- PLAN-ROMM-001 A1: the portable library ViewModels (Protocol-only) that the
+         Steam-style RomM library UI binds to; the AvaloniaGameLauncher implements
+         its IGameLauncher seam. Allowed by AvaloniaBoundaryTests (not a runtime project). -->
+    <ProjectReference Include="..\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
   </ItemGroup>
 
   <!-- BRANDING-ICON-001: pack the app icon PNG so the Avalonia runtime can
