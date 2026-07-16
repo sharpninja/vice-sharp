@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="RomM.Client" />
+    <PackageReference Include="RomM.Client.Csdb" />
   </ItemGroup>
 
   <ItemGroup>

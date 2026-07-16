@@ -18,4 +18,6 @@ namespace ViceSharp.RomM;
 [JsonSerializable(typeof(RomMCollectionDto))]
 [JsonSerializable(typeof(List<RomMCollectionDto>))]
 [JsonSerializable(typeof(RomMCollectionRomsPayload))]
+[JsonSerializable(typeof(RomMBridgeIngestRequest))]
+[JsonSerializable(typeof(RomMBridgeIngestResponse))]
 internal sealed partial class RomMJsonContext : JsonSerializerContext;
