@@ -25,4 +25,9 @@
     <PackageReference Include="RomM.Client" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Exposes the internal source-gen JSON context + wire DTOs to the test vessel. -->
+    <InternalsVisibleTo Include="ViceSharp.Library.Tests" />
+  </ItemGroup>
+
 </Project>

@@ -15,7 +15,7 @@ namespace ViceSharp.Library.Tests.Adapter;
 /// </summary>
 internal sealed class FakeRomMHandler : HttpMessageHandler
 {
-    public sealed record Captured(HttpMethod Method, Uri Uri, string? Authorization);
+    public sealed record Captured(HttpMethod Method, Uri Uri, string? Authorization, string? Body);
 
     private readonly Func<HttpRequestMessage, HttpResponseMessage> _responder;
 
@@ -23,10 +23,13 @@ internal sealed class FakeRomMHandler : HttpMessageHandler
 
     public List<Captured> Requests { get; } = new();
 
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        Requests.Add(new Captured(request.Method, request.RequestUri!, request.Headers.Authorization?.ToString()));
-        return Task.FromResult(_responder(request));
+        string? body = request.Content is null
+            ? null
+            : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        Requests.Add(new Captured(request.Method, request.RequestUri!, request.Headers.Authorization?.ToString(), body));
+        return _responder(request);
     }
 
     /// <summary>Number of recorded requests whose absolute path starts with <paramref name="prefix"/>.</summary>
