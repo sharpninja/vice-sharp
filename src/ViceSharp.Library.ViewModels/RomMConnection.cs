@@ -11,6 +11,12 @@ public enum RomMAuthMode
 
     /// <summary>A token obtained through the device-pairing flow.</summary>
     DevicePair = 2,
+
+    /// <summary>
+    /// AC-CONN-07. A Client API Token auto-provisioned from a csdb-bridge on the same subnet
+    /// (GET /romm/v1/connection), so the client did not have to pair or type a token.
+    /// </summary>
+    SubnetShared = 3,
 }
 
 /// <summary>
