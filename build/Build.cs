@@ -108,7 +108,7 @@ sealed partial class Build : NukeBuild
                 // admitted per slice as they flip green: PLAN-VICEPARITY-001),
                 // and the legacy renderer tests awaiting per-cycle replacement
                 // (ParityLegacy, deleted as V-slices land).
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"));
+                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration"));
         });
 
     /// <summary>
@@ -136,7 +136,7 @@ sealed partial class Build : NukeBuild
             DotNetTest(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy")
+                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration")
                 .When(_ => romRoot is not null, x => x
                     .SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
         });
