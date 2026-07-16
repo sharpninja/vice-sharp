@@ -64,5 +64,12 @@
 
   <Capabilities>
     <Capability Name="internetClient" />
+    <!--
+      PLAN-ROMM-001 (AC-CONN-07): the RomM library scans the LOCAL subnet for the
+      server and connects to it, so it needs the private-network capability in
+      addition to internetClient. Without this the UWP sandbox silently blocks every
+      local-address probe/connection and the LAN scan finds nothing.
+    -->
+    <Capability Name="privateNetworkClientServer" />
   </Capabilities>
 </Package>
