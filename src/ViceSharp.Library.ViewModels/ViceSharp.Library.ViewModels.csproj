@@ -20,4 +20,9 @@
     <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Exposes the debounce/rescope test seams (PendingSearch/PendingRescope) to the vessel. -->
+    <InternalsVisibleTo Include="ViceSharp.Library.Tests" />
+  </ItemGroup>
+
 </Project>
