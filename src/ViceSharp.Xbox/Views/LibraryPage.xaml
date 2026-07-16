@@ -1,0 +1,45 @@
+<!--
+  PLAN-ROMM-001 X3 (AC-XUI-02): the RomM game library page (10-foot). Connect to the RomM server,
+  browse the C64 library, and Attach / Attach+play the selection via the XboxGameLauncher. Inert on
+  the net10.0 fallback (the code-behind is #if HAS_UWP-guarded).
+-->
+<Page
+    x:Class="ViceSharp.Xbox.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    RequiresPointer="Never"
+    Background="#EE000000">
+    <Grid Style="{StaticResource TvSafeAreaRootStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,12">
+            <TextBlock Text="RomM library" FontSize="40" Foreground="White" VerticalAlignment="Center" />
+            <TextBox x:Name="UrlBox" PlaceholderText="http://host:8080/" Text="http://localhost:8080/" Width="360" />
+            <PasswordBox x:Name="TokenBox" PlaceholderText="Client API token" Width="280" />
+            <Button Content="Connect" Style="{StaticResource TenFootButtonStyle}" Click="OnConnect" />
+        </StackPanel>
+
+        <ListView x:Name="ResultsList" Grid.Row="1" SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,4">
+                        <TextBlock Text="{Binding Name}" FontSize="24" Foreground="White" />
+                        <TextBlock Text="{Binding FileName}" FontSize="16" Foreground="#FFBBBBBB" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
+            <Button Content="Attach + play" Style="{StaticResource TenFootButtonStyle}" Click="OnAttachPlay" />
+            <Button Content="Attach" Style="{StaticResource TenFootButtonStyle}" Click="OnAttach" />
+            <Button Content="Load more" Style="{StaticResource TenFootButtonStyle}" Click="OnLoadMore" />
+            <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
+            <TextBlock x:Name="StatusText" Text="Enter your RomM URL and token, then Connect." Foreground="#FFDDDDDD" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="700" />
+        </StackPanel>
+    </Grid>
+</Page>

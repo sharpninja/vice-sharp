@@ -54,6 +54,10 @@
                     Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnLoad" />
                 <Button
+                    Content="Library"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnLibrary" />
+                <Button
                     Content="Settings"
                     Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnSettings" />

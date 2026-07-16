@@ -220,6 +220,21 @@ public sealed partial class App : Application
     public string SessionId => _sessionId;
 
     /// <summary>
+    /// PLAN-ROMM-001 (X2/X3): builds the RomM game launcher over the active in-process session, so the
+    /// library page can attach + boot a downloaded title. Throws until the session exists.
+    /// </summary>
+    public ViceSharp.Library.ViewModels.IGameLauncher CreateRomMGameLauncher()
+    {
+        if (_facade is null || _host is null || string.IsNullOrEmpty(_sessionId))
+        {
+            throw new InvalidOperationException("The emulator session is not built yet.");
+        }
+
+        return new ViceSharp.Xbox.RomM.XboxGameLauncher(
+            new ViceSharp.Xbox.RomM.XboxLaunchSession(_facade, _host, _sessionId));
+    }
+
+    /// <summary>
     /// The console (XAudio2) live-audio backend produced by the Xbox audio wiring, or
     /// <c>null</c> when audio is disabled/headless. Exposed so the SID output path is wired
     /// to it during dev-PC iteration.

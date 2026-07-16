@@ -196,6 +196,9 @@
     <!-- PLAN-ROMM-001 X1: the portable RomM library ViewModels (Protocol-only); the
          XboxGameLauncher implements its IGameLauncher seam over the in-process facade. -->
     <ProjectReference Include="..\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
+    <!-- PLAN-ROMM-001 X3: the RomM adapter (RomMLibraryGateway over RomM.Client) the
+         LibraryPage constructs on Connect. -->
+    <ProjectReference Include="..\ViceSharp.RomM\ViceSharp.RomM.csproj" />
   </ItemGroup>
 
   <!--
