@@ -38,10 +38,20 @@ curl http://localhost:8080/api/heartbeat
 
 Creating the RomM admin account and minting the token is a **human step** - account
 creation and authentication are not automated by the agent. In the RomM web UI
-(`http://localhost:8080`): complete the first-run setup wizard, sign in, then
-**Settings -> API -> generate a Client API Token** (`rmm_...`). Seed a small C64 library
-so browse/download has something to return (add a couple of `.d64`/`.crt` titles for the
-`c64` platform).
+(`http://localhost:8080`): complete the first-run setup wizard, sign in, then generate a
+**Client API Token** (`rmm_...`). Seed a small C64 library so browse/download has
+something to return (add a couple of `.d64`/`.crt` titles for the `c64` platform).
+
+> **No pairing code required.** RomM 5.0.0 supports long-lived Client API Tokens created
+> directly (`POST /api/client-tokens`, or the web UI's client-tokens page) - the same
+> mechanism the csdb-bridge uses via `ROMM_API_TOKEN` (`f:\github\romm/docker-compose.yml`).
+> The device-pairing / OAuth device-code flows (`/api/client-tokens/pair/{code}/status`,
+> `/api/auth/device/*`) are a convenience for typing-averse 10-foot UIs, NOT a requirement:
+> hand the client a pre-generated token and it connects with no code. RomM has **no
+> anonymous/no-auth API mode** (endpoints return HTTP 403 without a token), so a token is
+> always needed - it just doesn't have to come from a pairing code. ViceSharp accepts the
+> token directly (token box on every RomM page + `FileRomMConnectionStore`), so
+> `RomMPairingCoordinator` is optional.
 
 ## C. Run the automatable gateway/VM E2E suite
 
