@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using ViceSharp.Library.ViewModels;
 
 namespace ViceSharp.RomM;
 
@@ -20,4 +21,5 @@ namespace ViceSharp.RomM;
 [JsonSerializable(typeof(RomMCollectionRomsPayload))]
 [JsonSerializable(typeof(RomMBridgeIngestRequest))]
 [JsonSerializable(typeof(RomMBridgeIngestResponse))]
+[JsonSerializable(typeof(RomMConnection))]
 internal sealed partial class RomMJsonContext : JsonSerializerContext;
