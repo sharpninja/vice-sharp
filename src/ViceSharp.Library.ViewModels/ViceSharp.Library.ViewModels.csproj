@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    PLAN-ROMM-001 L1 (IMPL-ROMM-002): the portable, source-agnostic game-library
+    ViewModels + seams + DTOs. References EXACTLY ViceSharp.Protocol (for MediaSlot);
+    no HTTP, no RomM client, no engine (Core/Chips/Architectures), no host, no desktop
+    UI, no WinRT. Packable to nuget.org (FR-ROMM-PKG-001, AC-PKG-01/03; enforced by
+    LibraryViewModelsBoundaryTests). AOT/trim/warnings-as-errors, Nullable,
+    ImplicitUsings, RootNamespace and AssemblyName are inherited from
+    Directory.Build.props and NOT overridden here.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackageId>ViceSharp.Library.ViewModels</PackageId>
+    <Description>Portable, source-agnostic game-library ViewModels and seams for ViceSharp front-ends (PLAN-ROMM-001).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+  </ItemGroup>
+
+</Project>

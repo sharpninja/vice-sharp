@@ -82,6 +82,10 @@
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
+    <Project Path="src/ViceSharp.Library.ViewModels/ViceSharp.Library.ViewModels.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
     <Project Path="src/ViceSharp.Monitor/ViceSharp.Monitor.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
