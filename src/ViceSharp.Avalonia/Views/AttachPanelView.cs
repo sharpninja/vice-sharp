@@ -16,10 +16,13 @@ public sealed class AttachPanelView : UserControl
     private static readonly Thickness SlotPadding = new(8);
     private static readonly IBrush SlotBorderBrush = new SolidColorBrush(Color.FromRgb(74, 78, 86));
 
-    public AttachPanelView(AttachPanelViewModel viewModel)
+    private readonly RomMLibraryViewModel? _library;
+
+    public AttachPanelView(AttachPanelViewModel viewModel, RomMLibraryViewModel? library = null)
     {
         ArgumentNullException.ThrowIfNull(viewModel);
         ViewModel = viewModel;
+        _library = library;
         DataContext = viewModel;
         Content = BuildContent();
     }
@@ -92,6 +95,12 @@ public sealed class AttachPanelView : UserControl
         tabs.Items.Add(new TabItem { Header = "Settings", Content = new SettingsView { DataContext = ViewModel } });
         tabs.Items.Add(new TabItem { Header = "Monitor", Content = CreateMonitorPanel(includePopOut: true) });
         tabs.Items.Add(new TabItem { Header = "History", Content = new TickHistoryView { DataContext = ViewModel.TickHistory } });
+
+        // PLAN-ROMM-001: the RomM game library tab (SidebarTab.Library == index 4), present only when
+        // the head supplied a library host view-model.
+        if (_library is not null)
+            tabs.Items.Add(new TabItem { Header = "Library", Content = new LibraryView(_library) });
+
         tabs.SelectedIndex = (int)ViewModel.ActiveTab;
         tabs.SelectionChanged += (_, _) =>
         {

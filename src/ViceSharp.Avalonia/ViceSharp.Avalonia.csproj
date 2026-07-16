@@ -60,6 +60,9 @@
          Steam-style RomM library UI binds to; the AvaloniaGameLauncher implements
          its IGameLauncher seam. Allowed by AvaloniaBoundaryTests (not a runtime project). -->
     <ProjectReference Include="..\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj" />
+    <!-- PLAN-ROMM-001 A2/A3: the RomM adapter (RomMLibraryGateway over RomM.Client) the
+         desktop head constructs on Connect. Also boundary-safe (not a runtime project). -->
+    <ProjectReference Include="..\ViceSharp.RomM\ViceSharp.RomM.csproj" />
   </ItemGroup>
 
   <!-- BRANDING-ICON-001: pack the app icon PNG so the Avalonia runtime can

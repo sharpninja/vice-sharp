@@ -56,7 +56,11 @@ public partial class MainWindow : Window
         _shell = new ShellViewModel(_hostClient, _attachViewModel);
         DataContext = _attachViewModel;
 
-        _attachPanel = new AttachPanelView(_attachViewModel)
+        // PLAN-ROMM-001 (A2/A3): the desktop RomM library tab. The launcher drives the shell; downloads
+        // land in the per-user cache. Runtime browse/attach against a live server is the [V] E2E step.
+        var romMLibrary = new RomMLibraryViewModel(_shell, RomMCacheDirectory());
+
+        _attachPanel = new AttachPanelView(_attachViewModel, romMLibrary)
         {
             PickFileAsync = PickMediaFileAsync,
             PickKeyboardMapFileAsync = PickKeyboardMapFileAsync,
@@ -289,6 +293,12 @@ public partial class MainWindow : Window
 
         base.OnClosed(e);
     }
+
+    /// <summary>PLAN-ROMM-001: the per-user cache directory RomM downloads land in.</summary>
+    private static string RomMCacheDirectory() => System.IO.Path.Combine(
+        System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+        "ViceSharp",
+        "romm-cache");
 
     private static HostConnection CreateHostClient()
     {
