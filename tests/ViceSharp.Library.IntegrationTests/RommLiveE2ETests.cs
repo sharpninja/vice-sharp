@@ -31,6 +31,21 @@ public sealed class RommLiveE2ETests : IClassFixture<RommLiveFixture>
         _fixture.Client.Should().NotBeNull();
     }
 
+    /// <summary>The real subnet discovery finds the configured RomM server on the LAN (AC-CONN-07).</summary>
+    [Fact]
+    [Trait("AC", "AC-CONN-07")]
+    public async Task Discovery_FindsServerOnLan()
+    {
+        Assert.SkipUnless(RommLiveFixture.Enabled, RommLiveFixture.SkipReason);
+        CancellationToken ct = TestContext.Current.CancellationToken;
+
+        var configured = new Uri(_fixture.BaseUrl);
+        IReadOnlyList<DiscoveredRomM> found = await new RomMSubnetDiscovery()
+            .ScanAsync(port: configured.Port, cancellationToken: ct);
+
+        found.Should().Contain(d => d.BaseUrl.Host == configured.Host);
+    }
+
     /// <summary>The active machine's slug resolves to a numeric platform id.</summary>
     [Fact]
     [Trait("AC", "AC-BROWSE-02")]
