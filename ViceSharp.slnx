@@ -139,5 +139,9 @@
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
+    <Project Path="tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
   </Folder>
 </Solution>
