@@ -86,19 +86,22 @@ public sealed class XAudio2SourceVoiceBackendTests
 
     /// <summary>
     /// FR: FR-XAUDIO-003, TR: TR-XAUDIO-002, TEST: TEST-XAUDIO-004.
-    /// Use case: the emulation worker submits SID fragments far faster than the device
-    /// can drain them. The backend must NEVER block the worker; a full ring drops the
-    /// oldest fragment (drop-oldest) so the producer always makes progress, and the
-    /// reported queue can never exceed the ring capacity.
+    /// Use case: the emulation worker submits SID fragments far faster than the device can
+    /// drain them (or a single batch exceeds the ring). The backend must NEVER block the
+    /// worker AND must never let the device hold more outstanding buffers than its native
+    /// ring has slots - submitting past that would overwrite a slot XAudio2 is still
+    /// playing, which is exactly the progressive-crackle defect. So the producer makes
+    /// progress by DROPPING the excess fragment (drop-newest), not by growing the device
+    /// queue unbounded.
     /// Acceptance: over an opened device, submitting many times the ring capacity of
-    /// fragments completes near-instantly (non-blocking, well under a generous timeout);
-    /// every submit reaches the device (producer never stalled); QueuedSampleCount is in
-    /// [0, ring-capacity] after every single submit and equals exactly the ring capacity
-    /// once saturated (drop-oldest holds it at the cap, never above).
+    /// fragments completes near-instantly (non-blocking); QueuedSampleCount is in
+    /// [0, ring-capacity] after every single submit and saturates at the cap; and the
+    /// device's outstanding queue high-water NEVER exceeds the native ring capacity
+    /// (BuffersQueued bounded), so no queued slot is ever overwritten.
     /// </summary>
     [Fact]
     [Trait("Category", "Xbox")]
-    public void OpenDevice_SubmitBeyondCapacity_IsNonBlocking_DropsOldest_QueuedNeverExceedsCapacity()
+    public void OpenDevice_SubmitBeyondCapacity_IsNonBlocking_BoundsDeviceQueue_QueuedNeverExceedsCapacity()
     {
         var fake = new FakeSourceVoiceDevice(openSucceeds: true);
         using var backend = new XAudio2SourceVoiceBackend(() => fake);
@@ -106,7 +109,7 @@ public sealed class XAudio2SourceVoiceBackendTests
         Assert.Equal(0, backend.QueuedSampleCount);
 
         var oneFragment = new float[FragmentSamples];
-        var submissions = RingFragments * 50;   // far past ring capacity.
+        var submissions = RingFragments * 50;   // far past ring capacity, device never draining.
 
         var stopwatch = Stopwatch.StartNew();
         for (var i = 0; i < submissions; i++)
@@ -121,8 +124,75 @@ public sealed class XAudio2SourceVoiceBackendTests
             stopwatch.Elapsed < TimeSpan.FromSeconds(5),
             $"SubmitSamples blocked the producer: {submissions} over-capacity submits took {stopwatch.Elapsed}.");
 
-        Assert.Equal(submissions, fake.SubmitCalls);       // Producer never stalled; every fragment flowed.
+        // The device queue is BOUNDED to the native ring: excess fragments are dropped, not
+        // piled onto XAudio2 where they would overwrite still-queued native slots.
+        Assert.True(
+            fake.MaxBuffersQueued <= RingFragments,
+            $"device queue grew to {fake.MaxBuffersQueued}, past the {RingFragments}-slot native ring (slot overwrite).");
         Assert.Equal(RingCapacitySamples, backend.QueuedSampleCount); // Saturated ring == exactly capacity.
+    }
+
+    /// <summary>
+    /// FR: FR-XAUDIO-003, TR: TR-XAUDIO-002, TEST: TEST-XAUDIO-004.
+    /// Use case: this is the fix for the "music gets progressively worse / crackles more the
+    /// longer it plays" defect. The device owns only <c>BufferFragmentCount</c> native ring
+    /// slots and reuses them round-robin, so the backend must never let the number of
+    /// outstanding (submitted-but-unplayed) buffers exceed that count - otherwise a slot
+    /// still queued for playback is overwritten by a newer fragment, and the corruption
+    /// escalates as the queue grows.
+    /// Acceptance: submitting a hundred times the ring capacity into a device that is NOT
+    /// draining never drives the device's outstanding queue past the native ring capacity.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void OpenDevice_DeviceQueue_NeverExceedsNativeRing_PreventsSlotOverwrite()
+    {
+        var fake = new FakeSourceVoiceDevice(openSucceeds: true);
+        using var backend = new XAudio2SourceVoiceBackend(() => fake);
+
+        var oneFragment = new float[FragmentSamples];
+        for (var i = 0; i < RingFragments * 100; i++)
+            backend.SubmitSamples(oneFragment);
+
+        Assert.True(
+            fake.MaxBuffersQueued <= RingFragments,
+            $"device outstanding queue reached {fake.MaxBuffersQueued}, exceeding the {RingFragments} native slots: " +
+            "XAudio2 would be playing a native slot this backend has already overwritten (progressive crackle).");
+    }
+
+    /// <summary>
+    /// FR: FR-XAUDIO-003, TR: TR-XAUDIO-002, TEST: TEST-XAUDIO-004.
+    /// Use case: bounding the device queue must not permanently wedge output - once the
+    /// device plays (drains) the queued buffers, the backend must resume submitting so the
+    /// music keeps flowing at steady state.
+    /// Acceptance: after the device queue saturates (only the ring's worth of buffers
+    /// reached the device), simulating the device playing everything lets subsequent
+    /// submits reach the device again, still without exceeding the native ring.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void OpenDevice_ResumesSubmitting_WhenDeviceDrains()
+    {
+        var fake = new FakeSourceVoiceDevice(openSucceeds: true);
+        using var backend = new XAudio2SourceVoiceBackend(() => fake);
+
+        var oneFragment = new float[FragmentSamples];
+        for (var i = 0; i < RingFragments * 4; i++)   // saturate; device not draining.
+            backend.SubmitSamples(oneFragment);
+
+        var submittedWhenFull = fake.SubmitCalls;
+        Assert.Equal(RingFragments, submittedWhenFull);   // only the ring's worth reached the device.
+
+        fake.Play(RingFragments);                         // the device plays everything queued.
+        for (var i = 0; i < RingFragments; i++)
+            backend.SubmitSamples(oneFragment);
+
+        Assert.True(
+            fake.SubmitCalls > submittedWhenFull,
+            "submits did not resume after the device drained: output would wedge to silence.");
+        Assert.True(
+            fake.MaxBuffersQueued <= RingFragments,
+            $"device queue grew to {fake.MaxBuffersQueued}, past the {RingFragments}-slot native ring.");
     }
 
     /// <summary>
@@ -266,14 +336,26 @@ public sealed class XAudio2SourceVoiceBackendTests
     /// <summary>
     /// A fake <see cref="ISourceVoiceDevice"/> that records the backend's device
     /// interaction so the ring / submit / pause / degrade LOGIC is asserted off-console
-    /// without opening a real XAudio2 device. Its Open() outcome is deterministic; when
-    /// it succeeds it reports a growing in-flight count so the backend's drop-oldest cap
-    /// (queued clamped to ring capacity) is exercised. Only ever touched under the
-    /// backend's internal lock, so it needs no synchronization of its own.
+    /// without opening a real XAudio2 device. Its Open() outcome is deterministic.
+    ///
+    /// <para>It models a REAL source voice: <see cref="SubmitBuffer"/> adds one buffer to
+    /// the outstanding (submitted-but-not-yet-played) queue, <see cref="BuffersQueued"/>
+    /// reports that live outstanding count, <see cref="Play"/> simulates the device
+    /// playing (draining) buffers, and <see cref="Stop"/> flushes the queue to empty
+    /// (mirroring the real device's FlushSourceBuffers). This is what lets the tests prove
+    /// the backend BOUNDS the device queue to the native ring capacity - the real device
+    /// owns only <c>bufferFragmentCount</c> native slots, so any outstanding count above
+    /// that would mean XAudio2 is still playing a slot the backend has overwritten.</para>
+    ///
+    /// <see cref="MaxBuffersQueued"/> is the high-water outstanding count observed, so a
+    /// test can assert the queue never grew past the native ring. Touched under the
+    /// backend's internal lock on the submit/stop paths; <see cref="Play"/> is only called
+    /// from a single-threaded test between submit bursts.
     /// </summary>
     private sealed class FakeSourceVoiceDevice : ISourceVoiceDevice
     {
         private readonly bool _openSucceeds;
+        private int _outstanding;
 
         public FakeSourceVoiceDevice(bool openSucceeds) => _openSucceeds = openSucceeds;
 
@@ -287,21 +369,37 @@ public sealed class XAudio2SourceVoiceBackendTests
 
         public int DisposeCalls { get; private set; }
 
+        /// <summary>The highest outstanding (submitted-but-unplayed) buffer count ever observed.</summary>
+        public int MaxBuffersQueued { get; private set; }
+
         public bool Open(int sampleRate, int channels, int fragmentBytes, int bufferFragmentCount)
         {
             OpenCalls++;
             return _openSucceeds;
         }
 
-        public void SubmitBuffer(ReadOnlySpan<byte> pcm) => SubmitCalls++;
+        public void SubmitBuffer(ReadOnlySpan<byte> pcm)
+        {
+            SubmitCalls++;
+            _outstanding++;
+            if (_outstanding > MaxBuffersQueued)
+                MaxBuffersQueued = _outstanding;
+        }
 
-        // Report a monotonically growing in-flight count; the backend clamps it to the
-        // ring capacity, so a saturated ring reports exactly capacity queued.
-        public int BuffersQueued => SubmitCalls;
+        // The live outstanding queue, exactly as the real device's XAudio2 GetState reports it.
+        public int BuffersQueued => _outstanding;
+
+        /// <summary>Simulates the device playing (draining) <paramref name="count"/> buffers.</summary>
+        public void Play(int count) => _outstanding = Math.Max(0, _outstanding - count);
 
         public void Start() => StartCalls++;
 
-        public void Stop() => StopCalls++;
+        // The real device's Stop() calls FlushSourceBuffers, emptying the queued buffers.
+        public void Stop()
+        {
+            StopCalls++;
+            _outstanding = 0;
+        }
 
         public void Dispose() => DisposeCalls++;
     }

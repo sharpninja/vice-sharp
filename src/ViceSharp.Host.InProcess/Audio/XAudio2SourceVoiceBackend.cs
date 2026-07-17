@@ -111,21 +111,32 @@ public sealed class XAudio2SourceVoiceBackend : IAudioBackend, IDisposable
             if (_disposed || !_open || _paused)
                 return;
 
-            ReconcileDrainedLocked();
-
             var offset = 0;
             while (offset < samples.Length)
             {
                 var take = Math.Min(FragmentSampleCount, samples.Length - offset);
                 var pcmBytes = take * BytesPerSample;
 
+                // Bound the DEVICE queue to the native ring capacity. The device owns only
+                // BufferFragmentCount native slots and reuses them round-robin, so once that
+                // many buffers are outstanding (submitted but not yet played), submitting one
+                // more would overwrite a slot XAudio2 is still playing -> escalating crackle
+                // that gets worse the longer music runs. Reconcile to the device's live queue
+                // and, when the ring is full, DROP this fragment (drop-newest) instead of
+                // submitting it. The producer still never blocks. When queued < capacity the
+                // slot about to be written was played at least one buffer ago, so it is free.
+                ReconcileDrainedLocked();
+                if (_queued >= BufferFragmentCount)
+                {
+                    offset += take;
+                    continue;
+                }
+
                 AudioSampleConverter.ConvertToPcm16(
                     samples.Slice(offset, take),
                     _scratch.AsSpan(0, pcmBytes),
                     MasterAudioControl.EffectiveGain);
 
-                // Drop-oldest when the ring is full; the producer never blocks and the
-                // queued count is held at the ring capacity, never above.
                 var write = XAudio2AudioMath.Enqueue(_head, _queued, BufferFragmentCount);
                 _head = write.Head;
                 _queued = write.QueuedFragmentCount;
