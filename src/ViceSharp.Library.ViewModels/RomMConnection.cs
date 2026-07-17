@@ -13,17 +13,21 @@ public enum RomMAuthMode
     DevicePair = 2,
 
     /// <summary>
-    /// AC-CONN-07. A Client API Token auto-provisioned from a csdb-bridge on the same subnet
-    /// (GET /romm/v1/connection), so the client did not have to pair or type a token.
+    /// AC-CONN-07. Auto-provisioned from a csdb-bridge on the same subnet (GET /romm/v1/connection): the
+    /// bridge ensured a RomM user for the Xbox user id and returned its credentials, so the client did not
+    /// have to pair or type anything. Authenticate via the OAuth password grant using
+    /// <see cref="RomMConnection.Username"/> and <see cref="RomMConnection.Token"/> (the shared password).
     /// </summary>
     SubnetShared = 3,
 }
 
 /// <summary>
-/// FR-ROMM-CONN-001. A persisted RomM connection: the server base URL, how its token was obtained, and
-/// the token itself.
+/// FR-ROMM-CONN-001. A persisted RomM connection: the server base URL, how its credential was obtained,
+/// the credential itself, and (for OAuth-password / bridge-provisioned connections) the username to log
+/// in with.
 /// </summary>
 /// <param name="BaseUrl">The RomM server base URL.</param>
-/// <param name="AuthMode">How the token was obtained.</param>
-/// <param name="Token">The bearer token.</param>
-public sealed record RomMConnection(string BaseUrl, RomMAuthMode AuthMode, string Token);
+/// <param name="AuthMode">How the credential was obtained.</param>
+/// <param name="Token">The bearer token, or the password for OAuth-password / bridge-provisioned modes.</param>
+/// <param name="Username">The login username for OAuth-password / bridge-provisioned modes; else <c>null</c>.</param>
+public sealed record RomMConnection(string BaseUrl, RomMAuthMode AuthMode, string Token, string? Username = null);

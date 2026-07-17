@@ -24,18 +24,22 @@ public sealed class RomMBridgeConnectionSourceTests
 
         static HttpResponseMessage Router(HttpRequestMessage req) =>
             req.RequestUri!.AbsolutePath == "/romm/v1/connection"
-                ? FakeRomMHandler.Json("""{"url":"http://192.168.1.77:8080","token":"rmm_abc123"}""")
+                ? FakeRomMHandler.Json("""{"url":"http://192.168.1.77:8080","username":"xbox-user-1","password":"rmm_abc123"}""")
                 : FakeRomMHandler.NotFound();
 
         var handler = new FakeRomMHandler(Router);
         var source = new RomMBridgeConnectionSource(handler);
 
-        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), ct);
+        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), "xbox-user-1", ct);
 
         conn.Should().NotBeNull();
         conn!.BaseUrl.Should().Be("http://192.168.1.77:8080");
+        conn.Username.Should().Be("xbox-user-1");
         conn.Token.Should().Be("rmm_abc123");
         conn.AuthMode.Should().Be(RomMAuthMode.SubnetShared);
+
+        // The Xbox user id is passed to the bridge so it can provision + scope the account.
+        handler.Requests.Should().ContainSingle(r => r.Uri.Query.Contains("user_id=xbox-user-1"));
     }
 
     [Fact]
@@ -50,7 +54,7 @@ public sealed class RomMBridgeConnectionSourceTests
         var handler = new FakeRomMHandler(Router);
         var source = new RomMBridgeConnectionSource(handler);
 
-        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), ct);
+        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), "xbox-user-1", ct);
 
         conn.Should().BeNull();
     }
@@ -67,7 +71,7 @@ public sealed class RomMBridgeConnectionSourceTests
         var handler = new FakeRomMHandler(Router);
         var source = new RomMBridgeConnectionSource(handler);
 
-        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), ct);
+        RomMConnection? conn = await source.FetchAsync(new Uri("http://192.168.1.77:8090/"), "xbox-user-1", ct);
 
         conn.Should().BeNull();
     }
