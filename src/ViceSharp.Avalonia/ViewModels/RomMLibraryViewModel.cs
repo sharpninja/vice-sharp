@@ -136,6 +136,7 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         IsBusy = true;
         DiscoveredServers.Clear();
         Status = "Scanning the local network for RomM servers...";
+        RomMConnection? auto = null;
         try
         {
             IReadOnlyList<DiscoveredRomM> servers = await new RomMSubnetDiscovery()
@@ -150,7 +151,17 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             if (servers.Count > 0)
             {
                 BaseUrl = servers[0].BaseUrl.ToString();
-                Status = $"Found {servers.Count} RomM server(s). Selected {servers[0].BaseUrl}.";
+
+                // AC-CONN-07: try zero-touch login via the co-located bridge (:8090), using the desktop OS
+                // user name as the RomM user id. Falls back to manual token entry when no bridge answers.
+                var bridgeUrl = new UriBuilder(servers[0].BaseUrl) { Port = 8090, Path = "/" }.Uri;
+                auto = await new RomMBridgeConnectionSource()
+                    .FetchAsync(bridgeUrl, Environment.UserName, cancellationToken)
+                    .ConfigureAwait(true);
+
+                Status = auto is not null
+                    ? $"Found {servers[0].BaseUrl}; signing in via the bridge as {Environment.UserName}..."
+                    : $"Found {servers.Count} RomM server(s). Selected {servers[0].BaseUrl}.";
             }
             else
             {
@@ -164,6 +175,14 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         finally
         {
             IsBusy = false;
+        }
+
+        // Auto-connect outside the busy guard (ConnectAsync manages IsBusy itself).
+        if (auto is not null)
+        {
+            BaseUrl = auto.BaseUrl;
+            Token = auto.Token;
+            await ConnectAsync(cancellationToken).ConfigureAwait(true);
         }
     }
 
