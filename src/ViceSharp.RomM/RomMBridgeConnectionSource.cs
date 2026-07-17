@@ -62,8 +62,10 @@ public sealed class RomMBridgeConnectionSource
     }
 
     /// <summary>
-    /// Parses a bridge connection body (<c>{ url, username, password }</c>) into a bridge-provisioned,
-    /// OAuth-password <see cref="RomMConnection"/>, or <c>null</c> when incomplete.
+    /// Parses a bridge connection body (<c>{ url, token }</c>) into a bridge-provisioned, per-user bearer
+    /// <see cref="RomMConnection"/>, or <c>null</c> when incomplete. The bridge has already provisioned the
+    /// user and minted a per-user access token, so the client holds a token scoped to its own user (never
+    /// the admin token) and uses it as a bearer.
     /// </summary>
     /// <param name="json">The response body.</param>
     internal static RomMConnection? Parse(string json)
@@ -77,15 +79,13 @@ public sealed class RomMBridgeConnectionSource
             }
 
             string? url = GetString(doc.RootElement, "url");
-            string? username = GetString(doc.RootElement, "username");
-            // The password doubles as the shared token; accept either key.
-            string? password = GetString(doc.RootElement, "password") ?? GetString(doc.RootElement, "token");
-            if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            string? token = GetString(doc.RootElement, "token");
+            if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(token))
             {
                 return null;
             }
 
-            return new RomMConnection(url, RomMAuthMode.SubnetShared, password, username);
+            return new RomMConnection(url, RomMAuthMode.SubnetShared, token);
         }
         catch (JsonException)
         {

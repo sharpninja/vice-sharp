@@ -74,8 +74,9 @@ public sealed class RommLiveFixture : IAsyncLifetime
                 .ConfigureAwait(false);
             if (connection is not null)
             {
+                // The bridge returns a per-user access token; use it as a bearer.
                 baseUrl = connection.BaseUrl;
-                auth = RomMAuth.OAuthPassword(connection.Username ?? userId, connection.Token);
+                auth = RomMAuth.ClientApiToken(connection.Token);
             }
         }
 

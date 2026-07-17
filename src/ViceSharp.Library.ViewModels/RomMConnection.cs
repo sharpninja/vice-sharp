@@ -14,9 +14,9 @@ public enum RomMAuthMode
 
     /// <summary>
     /// AC-CONN-07. Auto-provisioned from a csdb-bridge on the same subnet (GET /romm/v1/connection): the
-    /// bridge ensured a RomM user for the Xbox user id and returned its credentials, so the client did not
-    /// have to pair or type anything. Authenticate via the OAuth password grant using
-    /// <see cref="RomMConnection.Username"/> and <see cref="RomMConnection.Token"/> (the shared password).
+    /// bridge ensured a RomM user for the Xbox user id, logged in as that user, and returned a PER-USER
+    /// access token (never the admin token). The client did not have to pair or type anything; it uses
+    /// <see cref="RomMConnection.Token"/> as a bearer and re-requests the endpoint when the token expires.
     /// </summary>
     SubnetShared = 3,
 }
