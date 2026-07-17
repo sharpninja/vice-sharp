@@ -177,10 +177,10 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             IsBusy = false;
         }
 
-        // Auto-connect outside the busy guard (ConnectAsync manages IsBusy itself).
+        // Auto-connect outside the busy guard (ConnectAsync manages IsBusy itself). Keep the DISCOVERED
+        // RomM URL (already in BaseUrl); the bridge's returned url may be its internal docker hostname.
         if (auto is not null)
         {
-            BaseUrl = auto.BaseUrl;
             Token = auto.Token;
             await ConnectAsync(cancellationToken).ConfigureAwait(true);
         }

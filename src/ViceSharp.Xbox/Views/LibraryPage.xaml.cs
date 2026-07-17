@@ -54,8 +54,10 @@ public sealed partial class LibraryPage : Page
             RomMConnection? connection = await new RomMBridgeConnectionSource().FetchAsync(bridgeUrl, userId);
             if (connection is not null)
             {
+                // Connect to the DISCOVERED RomM URL (the bridge may return its internal docker hostname);
+                // use only the per-user token from the bridge.
                 StatusText.Text = "Signing in as this Xbox user via the bridge...";
-                await ConnectWithAsync(connection.BaseUrl, connection.Token);
+                await ConnectWithAsync(server.BaseUrl.ToString(), connection.Token);
                 return;
             }
 

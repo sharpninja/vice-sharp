@@ -74,8 +74,8 @@ public sealed class RommLiveFixture : IAsyncLifetime
                 .ConfigureAwait(false);
             if (connection is not null)
             {
-                // The bridge returns a per-user access token; use it as a bearer.
-                baseUrl = connection.BaseUrl;
+                // Use the configured external RomM URL (the bridge's returned url may be the internal
+                // docker hostname); take only the per-user access token from the bridge, as a bearer.
                 auth = RomMAuth.ClientApiToken(connection.Token);
             }
         }
