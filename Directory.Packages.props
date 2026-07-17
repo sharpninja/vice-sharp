@@ -57,7 +57,7 @@
     <PackageVersion Include="SharpNinja.Avalonia.RemoteControl.Server" Version="0.7.4" />
   </ItemGroup>
   <ItemGroup Label="RomM library integration (PLAN-ROMM-001; consumed from nuget.org)">
-    <PackageVersion Include="RomM.Client" Version="1.0.0" />
-    <PackageVersion Include="RomM.Client.Csdb" Version="1.0.0" />
+    <PackageVersion Include="RomM.Client" Version="1.0.1" />
+    <PackageVersion Include="RomM.Client.Csdb" Version="1.0.1" />
   </ItemGroup>
 </Project>
