@@ -76,10 +76,11 @@ public sealed class RomMCollectionsGateway : IRomMCollectionsGateway
         // RomM's PUT requires the full rom_ids set; fetch the current membership first.
         LibraryCollection current = await GetOneAsync(id, cancellationToken).ConfigureAwait(false);
 
+        // RomM parses rom_ids as a JSON array string (an empty collection must send "[]", not "").
         using var form = new MultipartFormDataContent
         {
             { new StringContent(newName), "name" },
-            { new StringContent(string.Join(",", current.RomIds)), "rom_ids" },
+            { new StringContent("[" + string.Join(",", current.RomIds) + "]"), "rom_ids" },
         };
 
         using HttpResponseMessage response = await _client.Transport
