@@ -7,6 +7,7 @@
     x:Class="ViceSharp.Xbox.Views.LibraryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:lvm="using:ViceSharp.Library.ViewModels"
     RequiresPointer="Never"
     Background="#EE000000">
     <Grid Style="{StaticResource TvSafeAreaRootStyle}">
@@ -26,10 +27,10 @@
 
         <ListView x:Name="ResultsList" Grid.Row="1" SelectionMode="Single">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="lvm:RomTile">
                     <StackPanel Margin="0,4">
-                        <TextBlock Text="{Binding Name}" FontSize="24" Foreground="White" />
-                        <TextBlock Text="{Binding FileName}" FontSize="16" Foreground="#FFBBBBBB" />
+                        <TextBlock Text="{x:Bind Name}" FontSize="24" Foreground="White" />
+                        <TextBlock Text="{x:Bind FileName}" FontSize="16" Foreground="#FFBBBBBB" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
