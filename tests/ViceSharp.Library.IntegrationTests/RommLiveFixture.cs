@@ -1,5 +1,6 @@
 using RomM.Client;
 using RomM.Client.Auth;
+using ViceSharp.Library.ViewModels;
 using ViceSharp.RomM;
 using Xunit;
 
@@ -55,10 +56,33 @@ public sealed class RommLiveFixture : IAsyncLifetime
             return;
         }
 
-        var options = new RomMClientOptions { BaseAddress = new Uri(BaseUrl) };
+        string baseUrl = BaseUrl;
+        RomMAuth? auth = null;
+
         if (!string.IsNullOrWhiteSpace(Token))
         {
-            options.Auth = RomMAuth.ClientApiToken(Token);
+            // Explicit Client API Token.
+            auth = RomMAuth.ClientApiToken(Token);
+        }
+        else if (!string.IsNullOrWhiteSpace(BridgeUrl))
+        {
+            // No token supplied: self-provision from the LAN bridge (GET /romm/v1/connection). The bridge
+            // ensures a RomM user for the id and returns creds; authenticate via the OAuth password grant.
+            string userId = Environment.GetEnvironmentVariable("VICESHARP_ROMM_USER_ID") ?? "vicesharp-e2e";
+            RomMConnection? connection = await new RomMBridgeConnectionSource()
+                .FetchAsync(new Uri(BridgeUrl), userId, CancellationToken.None)
+                .ConfigureAwait(false);
+            if (connection is not null)
+            {
+                baseUrl = connection.BaseUrl;
+                auth = RomMAuth.OAuthPassword(connection.Username ?? userId, connection.Token);
+            }
+        }
+
+        var options = new RomMClientOptions { BaseAddress = new Uri(baseUrl) };
+        if (auth is not null)
+        {
+            options.Auth = auth;
         }
 
         Client = RomMClient.Create(options);

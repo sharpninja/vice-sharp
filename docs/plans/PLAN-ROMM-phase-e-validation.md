@@ -55,6 +55,13 @@ something to return (add a couple of `.d64`/`.crt` titles for the `c64` platform
 
 ## C. Run the automatable gateway/VM E2E suite
 
+Two ways to authenticate. **(1) Explicit token** - set `VICESHARP_ROMM_TOKEN`. **(2) Bridge
+self-provision (no token)** - set only `VICESHARP_CSDB_BRIDGE_URL` (and leave the token
+unset); the fixture calls the bridge `GET /romm/v1/connection?user_id=...` (default id
+`vicesharp-e2e`, override with `VICESHARP_ROMM_USER_ID`), which ensures a RomM user and
+returns its credentials, and the suite logs in via the OAuth password grant. Requires the
+bridge redeployed with the `/romm/v1/connection` endpoint and an **admin** `ROMM_API_TOKEN`.
+
 ```pwsh
 cd f:\github\vice-sharp-romm      # (or the worktree: f:\github\vice-sharp-romm)
 $env:VICESHARP_ROMM_INTEGRATION = '1'
