@@ -613,6 +613,15 @@ public sealed partial class App : Application
             ? new VirtualKeyboardViewModel(keyboard)
             : null;
 
+        // FIX-XKBDEMPTY-001: bind a live overlay to the fresh VM here too. When ROMs are
+        // unprovisioned at launch, BuildHostAndSession is DEFERRED to the provisioning gate,
+        // so the overlay was already created with a null KeyboardVm and OnLaunched's one-shot
+        // 'if (KeyboardVm is not null) DataContext = KeyboardVm' was skipped -> the virtual
+        // keyboard stays empty (dataContextType=null) until a settings apply. Re-pointing here
+        // covers that deferred path; it is a no-op on the normal boot path (the overlay is
+        // built after this, and OnLaunched then binds it).
+        BindOverlayToKeyboardVm();
+
         var dispatcher = new AppCommandDispatcher(
             host.HostService,
             host.Snapshots,
@@ -702,13 +711,24 @@ public sealed partial class App : Application
 
             // Re-point a live overlay (if one was created) at the rebuilt VM, mirroring how
             // OnLaunched binds it, so a keyboard already on screen binds the fresh input seam.
-            if (_keyboardOverlay is not null && KeyboardVm is not null)
-                _keyboardOverlay.DataContext = KeyboardVm;
+            BindOverlayToKeyboardVm();
         }
         catch (Exception ex)
         {
             CreateLogger("App").LogError(ex, "keyboard rebuild failed");
         }
+    }
+
+    /// <summary>
+    /// Re-points a live virtual-keyboard overlay at the current <see cref="KeyboardVm"/>.
+    /// A no-op until both the overlay and the VM exist, so it is safe to call from every
+    /// path that (re)builds <see cref="KeyboardVm"/> (boot, deferred post-provision boot,
+    /// and a session rebuild). UI-thread only: it assigns a XAML DataContext.
+    /// </summary>
+    private void BindOverlayToKeyboardVm()
+    {
+        if (_keyboardOverlay is not null && KeyboardVm is not null)
+            _keyboardOverlay.DataContext = KeyboardVm;
     }
 
     /// <summary>
