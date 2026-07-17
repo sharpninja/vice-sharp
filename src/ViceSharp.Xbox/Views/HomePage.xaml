@@ -28,7 +28,7 @@
         </Border.Transitions>
         <StackPanel Spacing="6" MinWidth="300" VerticalAlignment="Center">
                 <TextBlock
-                    Text="{Binding Title}"
+                    Text="{x:Bind ViewModel.Title}"
                     FontFamily="{StaticResource C64KeyFont}"
                     FontSize="22"
                     Foreground="#FFE8E4D8"

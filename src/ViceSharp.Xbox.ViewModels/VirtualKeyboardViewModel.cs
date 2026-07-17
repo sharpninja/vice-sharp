@@ -2,6 +2,7 @@ namespace ViceSharp.Xbox.ViewModels;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ViceSharp.Abstractions;
 
 /// <summary>
@@ -99,6 +100,10 @@ public sealed class VirtualKeyboardViewModel
 
     /// <summary>The layout tiles grouped into display rows (top to bottom, left to right).</summary>
     public IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> Rows => Layout.Rows;
+
+    /// <summary>The rows as named <see cref="VirtualKeyboardRow"/> wrappers, so the nested keyboard
+    /// DataTemplate can bind with a compiled {x:Bind} that declares an x:DataType.</summary>
+    public IReadOnlyList<VirtualKeyboardRow> KeyRows => Layout.Rows.Select(row => new VirtualKeyboardRow(row)).ToList();
 
     /// <summary>The layout tiles flattened in row-major order; the index space of
     /// <see cref="SelectedIndex"/>.</summary>

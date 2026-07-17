@@ -4,10 +4,14 @@ namespace ViceSharp.Xbox.Views;
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using ViceSharp.Xbox.ViewModels;
 
 /// <summary>The read-only controller-mapping page. Its Rows come from InputMappingViewModel.</summary>
 public sealed partial class InputMappingPage : Page
 {
+    /// <summary>The bound view-model (for {x:Bind}).</summary>
+    private InputMappingViewModel ViewModel => App.Instance.InputMappingVm;
+
     /// <summary>Creates the page and binds the shared InputMappingViewModel.</summary>
     public InputMappingPage()
     {

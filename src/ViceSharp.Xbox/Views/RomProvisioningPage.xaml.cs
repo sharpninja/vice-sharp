@@ -2,7 +2,6 @@
 #if HAS_UWP
 namespace ViceSharp.Xbox.Views;
 
-using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -19,13 +18,13 @@ public sealed partial class RomProvisioningPage : Page
     /// <summary>Creates the page and binds the shared provisioning ViewModel.</summary>
     public RomProvisioningPage()
     {
+        ViewModel = App.Instance.ProvisioningVm!;
+        DataContext = ViewModel;
         InitializeComponent();
-        DataContext = App.Instance.ProvisioningVm;
     }
 
-    private XboxRomProvisioningViewModel ViewModel =>
-        App.Instance.ProvisioningVm
-            ?? throw new InvalidOperationException("The provisioning ViewModel is not built.");
+    /// <summary>The bound view-model. Assigned before InitializeComponent for {x:Bind}.</summary>
+    public XboxRomProvisioningViewModel ViewModel { get; }
 
     /// <inheritdoc />
     protected override async void OnNavigatedTo(NavigationEventArgs e)

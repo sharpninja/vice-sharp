@@ -29,10 +29,17 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     private bool _appliedCommodore;
     private bool _appliedLowercase;
 
+    /// <summary>The bound view-model, projected from the externally-set DataContext (for {x:Bind}).</summary>
+    private VirtualKeyboardViewModel? ViewModel => DataContext as VirtualKeyboardViewModel;
+
     /// <summary>Creates the overlay, its charset-case poll, and the stroke-hold timer.</summary>
     public VirtualKeyboardOverlay()
     {
         InitializeComponent();
+
+        // DataContext (the VirtualKeyboardViewModel) is assigned externally by App, so refresh the
+        // compiled {x:Bind} bindings whenever it changes.
+        DataContextChanged += (_, _) => Bindings.Update();
 
         // The charset mode flips at RUNTIME (SHIFT+C= / POKE 53272), so poll the live
         // VIC at ~4 Hz while the dock is on screen; the apply path no-ops when nothing

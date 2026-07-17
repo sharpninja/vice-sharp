@@ -14,15 +14,19 @@ public sealed partial class HomePage : Page
     /// <summary>Creates the page and binds the shared HomeViewModel.</summary>
     public HomePage()
     {
+        // {x:Bind} (AOT-safe) resolves against this page and evaluates during
+        // InitializeComponent, so ViewModel must be assigned BEFORE it.
+        ViewModel = App.Instance.Home;
+        DataContext = ViewModel;
         InitializeComponent();
-        DataContext = App.Instance.Home;
 
         // FEAT-XMENUFOCUS-001: programmatic focus can no-op before the first layout
         // pass, so re-assert once the tree is live.
         Loaded += (_, _) => FocusCloseMenu();
     }
 
-    private HomeViewModel ViewModel => App.Instance.Home;
+    /// <summary>The bound view-model. Assigned before InitializeComponent for {x:Bind}.</summary>
+    public HomeViewModel ViewModel { get; }
 
     /// <summary>
     /// FEAT-XMENUFOCUS-001 (operator 2026-07-14: "When opening the menu, always set

@@ -12,12 +12,12 @@
     <Grid Style="{StaticResource TvSafeAreaRootStyle}">
         <ScrollViewer>
             <StackPanel Spacing="16" MaxWidth="1200">
-                <TextBlock Text="{Binding ProjectName}" FontSize="56" Foreground="White" />
-                <TextBlock Text="{Binding Version}" FontSize="24" Foreground="#FFBBBBBB" />
-                <TextBlock Text="{Binding LicenseIdentifier}" FontSize="28" Foreground="White" />
-                <TextBlock Text="{Binding AttributionText}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
-                <TextBlock Text="{Binding SourceOfferText}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
-                <TextBlock Text="{Binding SourceUrl}" Foreground="#FF8CB4FF" />
+                <TextBlock Text="{x:Bind ViewModel.ProjectName}" FontSize="56" Foreground="White" />
+                <TextBlock Text="{x:Bind ViewModel.Version}" FontSize="24" Foreground="#FFBBBBBB" />
+                <TextBlock Text="{x:Bind ViewModel.LicenseIdentifier}" FontSize="28" Foreground="White" />
+                <TextBlock Text="{x:Bind ViewModel.AttributionText}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
+                <TextBlock Text="{x:Bind ViewModel.SourceOfferText}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
+                <TextBlock Text="{x:Bind ViewModel.SourceUrl}" Foreground="#FF8CB4FF" />
                 <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
             </StackPanel>
         </ScrollViewer>
