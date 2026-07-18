@@ -5,23 +5,34 @@ using System.Collections.Generic;
 /// <summary>
 /// FEAT-XKEYCAPCASE-001 + FEAT-XKEYCAPPETSCII-001 (operator 2026-07-14: "When holding
 /// SHIFT or C= modifiers, change the keycap to match the character to be inserted" and
-/// "map the font glyphs to the keyboard"). Pure keycap-glyph selection for the virtual
-/// keyboard: composes the machine's ACTIVE charset case (the video chip's
-/// character-base bit: <c>$1000</c> uppercase/graphics, <c>$1800</c>
-/// lowercase/uppercase) with the effective SHIFT and C= chord state, and shows the
-/// TRUE PETSCII graphic each chord inserts.
+/// "map the font glyphs to the keyboard"; corrected 2026-07-18 "The C= line is very, very
+/// wrong"). Pure keycap-glyph selection for the virtual keyboard: composes the machine's
+/// ACTIVE charset case with the effective SHIFT and C= chord state, and shows the TRUE
+/// PETSCII graphic each chord inserts.
 /// </summary>
 /// <remarks>
 /// Ground truth: the KERNAL keyboard decode tables (901227-03: unshifted <c>$EB81</c>,
-/// SHIFT <c>$EBC2</c>, C= <c>$EC03</c>) give the PETSCII code per chord; the classic
-/// C64 PETSCII-to-Unicode recode tables (uppercase and lowercase sets) give the glyph,
-/// using the CUS points (U+F1xx) that the shipped PetMe64 face maps directly. SHIFT
-/// letters are PETSCII <c>$C1-$DA</c>: graphics in uppercase mode, plain capitals in
-/// lowercase mode. C= letters are the scattered <c>$A1-$BF</c> graphics, identical in
-/// both modes. Portable (System only, TR-MVVM-001).
+/// SHIFT <c>$EBC2</c>, C= <c>$EC03</c>) give the PETSCII code per chord. The vendored
+/// PetMe64 face maps the WHOLE PETSCII set at its private-use range <c>U+F100..U+F1FF</c>,
+/// where <c>U+F1<i>nn</i></c> renders the C64 uppercase/graphics glyph for PETSCII code
+/// <c>$<i>nn</i></c> (verified against the TTF cmap and by rendering). So every SHIFT/C=
+/// graphic is just <c>U+F100 + petscii</c> - no hand-picked Unicode approximations, which
+/// is what previously went wrong: the CUS entries were keyed to the punctuation/digit
+/// PETSCII codes (<c>$22..$2C</c>, <c>$30..$38</c>) and so drew <c>" # $ % ...</c> and
+/// <c>0 1 2 ...</c> instead of the block/corner graphics.
+///
+/// <para>SHIFT+letter is PETSCII <c>$C1-$DA</c> (graphics in uppercase mode; the plain
+/// capital in lowercase mode, since those codes ARE the capitals there). C=+letter is the
+/// scattered <c>$A1-$BF</c> graphics, identical in both charset sets. The handful of
+/// charset-dependent punctuation chords keep an explicit lowercase glyph. US and UK C64
+/// keyboards are identical (same KERNAL, same PETSCII), so NTSC and PAL share these
+/// glyphs. Portable (System only, TR-MVVM-001).</para>
 /// </remarks>
 public static class VirtualKeycapGlyphs
 {
+    /// <summary>The PetMe64 private-use base: <c>U+F100 + petscii</c> renders PETSCII <c>$petscii</c>.</summary>
+    private const int PetsciiGlyphBase = 0xF100;
+
     /// <summary>
     /// Whether a VIC character base selects the LOWERCASE ROM charset (bit 11: the
     /// <c>$1800</c> bank vs the <c>$1000</c> uppercase/graphics bank). Custom charsets
@@ -32,91 +43,42 @@ public static class VirtualKeycapGlyphs
     public static bool IsLowercaseCharacterBase(int characterBase)
         => (characterBase & 0x0800) != 0;
 
-    // SHIFT+letter, uppercase/graphics mode: PETSCII $C1-$DA in letter order (the
-    // RIGHT graphic printed on the physical keycap fronts).
-    private static readonly Dictionary<string, string> ShiftLetterGraphics = new()
+    // C=+letter -> the scattered PETSCII $A1-$BF codes from the KERNAL C= table $EC03
+    // (the LEFT keycap graphic). Identical in both charset sets.
+    private static readonly Dictionary<string, int> CbmLetterPetscii = new()
     {
-        ["A"] = "♠", // $C1 black spade
-        ["B"] = "│", // $C2 vertical line
-        ["C"] = "─", // $C3 horizontal line
-        ["D"] = "", // $C4 horizontal one quarter up (CUS)
-        ["E"] = "", // $C5 horizontal two quarters up (CUS)
-        ["F"] = "", // $C6 horizontal one quarter down (CUS)
-        ["G"] = "", // $C7 vertical one quarter left (CUS)
-        ["H"] = "", // $C8 vertical one quarter right (CUS)
-        ["I"] = "╮", // $C9 arc down-left
-        ["J"] = "╰", // $CA arc up-right
-        ["K"] = "╯", // $CB arc up-left
-        ["L"] = "", // $CC eighth block up and right (CUS)
-        ["M"] = "╲", // $CD diagonal upper-left to lower-right
-        ["N"] = "╱", // $CE diagonal upper-right to lower-left
-        ["O"] = "", // $CF eighth block down and right (CUS)
-        ["P"] = "", // $D0 eighth block down and left (CUS)
-        ["Q"] = "●", // $D1 black circle
-        ["R"] = "", // $D2 horizontal two quarters down (CUS)
-        ["S"] = "♥", // $D3 black heart
-        ["T"] = "", // $D4 vertical two quarters left (CUS)
-        ["U"] = "╭", // $D5 arc down-right
-        ["V"] = "╳", // $D6 diagonal cross
-        ["W"] = "○", // $D7 white circle
-        ["X"] = "♣", // $D8 black club
-        ["Y"] = "", // $D9 vertical two quarters right (CUS)
-        ["Z"] = "♦", // $DA black diamond
+        ["A"] = 0xB0, ["B"] = 0xBF, ["C"] = 0xBC, ["D"] = 0xAC, ["E"] = 0xB1, ["F"] = 0xBB,
+        ["G"] = 0xA5, ["H"] = 0xB4, ["I"] = 0xA2, ["J"] = 0xB5, ["K"] = 0xA1, ["L"] = 0xB6,
+        ["M"] = 0xA7, ["N"] = 0xAA, ["O"] = 0xB9, ["P"] = 0xAF, ["Q"] = 0xAB, ["R"] = 0xB2,
+        ["S"] = 0xAE, ["T"] = 0xA3, ["U"] = 0xB8, ["V"] = 0xBE, ["W"] = 0xB3, ["X"] = 0xBD,
+        ["Y"] = 0xB7, ["Z"] = 0xAD,
     };
 
-    // C=+letter: the scattered PETSCII $A1-$BF codes from the KERNAL C= table (the
-    // LEFT keycap graphic). The $A1-$BF glyphs are the same in both charset sets.
-    private static readonly Dictionary<string, string> CbmLetterGraphics = new()
+    // SHIFT+punctuation graphics: the KERNAL SHIFT table $EBC2 PETSCII code (the RIGHT
+    // keycap graphic) plus the lowercase-charset glyph for the few codes that differ
+    // between the two charsets (the single-charset PetMe64 face has no lowercase graphic
+    // for those, so a Unicode stand-in is used there; uppercase - the boot mode - is the
+    // authentic PetMe64 glyph).
+    private static readonly Dictionary<string, (int Petscii, string Lowercase)> ShiftSpecials = new()
     {
-        ["A"] = "┌", // $B0 down-right corner
-        ["B"] = "", // $BF two small squares diagonal (CUS)
-        ["C"] = "", // $BC small square upper right (CUS)
-        ["D"] = "", // $AC small square lower right (CUS)
-        ["E"] = "┴", // $B1 up and horizontal
-        ["F"] = "", // $BB small square lower left (CUS)
-        ["G"] = "▏", // $A5 left one eighth block
-        ["H"] = "▎", // $B4 left one quarter block
-        ["I"] = "▄", // $A2 lower half block
-        ["J"] = "▍", // $B5 left three eighths block
-        ["K"] = "▌", // $A1 left half block
-        ["L"] = "", // $B6 right three eighths block (CUS)
-        ["M"] = "▕", // $A7 right one eighth block
-        ["N"] = "", // $AA right one quarter block (CUS)
-        ["O"] = "▃", // $B9 lower three eighths block
-        ["P"] = "▂", // $AF lower one quarter block
-        ["Q"] = "├", // $AB vertical and right
-        ["R"] = "┬", // $B2 down and horizontal
-        ["S"] = "┐", // $AE down-left corner
-        ["T"] = "▔", // $A3 upper one eighth block
-        ["U"] = "", // $B8 upper three eighths block (CUS)
-        ["V"] = "", // $BE small square upper left (CUS)
-        ["W"] = "┤", // $B3 vertical and left
-        ["X"] = "┘", // $BD up-left corner
-        ["Y"] = "", // $B7 upper one quarter block (CUS)
-        ["Z"] = "└", // $AD up-right corner
+        ["@"] = (0xBA, "✓"),      // eighth block up-left / check mark
+        ["*"] = (0xC0, "─"),      // horizontal line (same both sets)
+        ["+"] = (0xDB, "┼"),      // cross (same both sets)
+        ["-"] = (0xDD, "│"),      // vertical line (same both sets)
+        ["Pound"] = (0xA9, ""),        // upper-left triangle / shade-slashed (no lowercase glyph)
+        ["UpArrow"] = (0xDE, "▒"),// pi / medium shade
     };
 
-    // SHIFT punctuation graphics, (uppercase-set, lowercase-set) per key: PETSCII
-    // $BA/$C0/$DB/$DD/$A9/$DE render differently across the two charsets.
-    private static readonly Dictionary<string, (string Uppercase, string Lowercase)> ShiftSpecialGraphics = new()
+    // C=+punctuation graphics: the KERNAL C= table $EC03 PETSCII code plus the
+    // lowercase-charset stand-in for the codes that differ between charsets.
+    private static readonly Dictionary<string, (int Petscii, string Lowercase)> CbmSpecials = new()
     {
-        ["@"] = ("", "✓"),      // $BA: eighth block up-left (CUS) / check mark
-        ["*"] = ("─", "─"),      // $C0: horizontal line
-        ["+"] = ("┼", "┼"),      // $DB: cross
-        ["-"] = ("│", "│"),      // $DD: vertical line
-        ["Pound"] = ("◤", ""),  // $A9: upper-left triangle / shade slashed right (CUS)
-        ["UpArrow"] = ("π", "▒"),// $DE: pi / medium shade
-    };
-
-    // C= punctuation graphics, (uppercase-set, lowercase-set) per key.
-    private static readonly Dictionary<string, (string Uppercase, string Lowercase)> CbmSpecialGraphics = new()
-    {
-        ["@"] = ("▁", "▁"),      // $A4: lower one eighth block
-        ["*"] = ("◥", ""),      // $DF: upper-right triangle / shade slashed left (CUS)
-        ["+"] = ("▒", "▒"),      // $A6: medium shade
-        ["-"] = ("", ""),      // $DC: left-half shade (CUS)
-        ["Pound"] = ("", ""),  // $A8: lower-half shade (CUS)
-        ["UpArrow"] = ("π", "▒"),// $DE: same code as SHIFT+^
+        ["@"] = (0xA4, "▁"),      // lower one eighth block
+        ["*"] = (0xDF, ""),            // upper-right triangle / shade-slashed (no lowercase glyph)
+        ["+"] = (0xA6, "▒"),      // medium shade
+        ["-"] = (0xDC, ""),            // left-half shade (no lowercase glyph)
+        ["Pound"] = (0xA8, ""),        // lower-half shade (no lowercase glyph)
+        ["UpArrow"] = (0xDE, "▒"),// same $DE as SHIFT+UpArrow
     };
 
     // Keys whose C= chord emits the SAME code as SHIFT (KERNAL C= table rows
@@ -142,10 +104,10 @@ public static class VirtualKeycapGlyphs
 
         if (commodore)
         {
-            if (CbmLetterGraphics.TryGetValue(entry.KeyName, out var cbmGraphic))
-                return cbmGraphic;
-            if (CbmSpecialGraphics.TryGetValue(entry.KeyName, out var cbmSpecial))
-                return lowercaseMode ? cbmSpecial.Lowercase : cbmSpecial.Uppercase;
+            if (IsLetterKey(entry))
+                return Graphic(CbmLetterPetscii[entry.KeyName]);
+            if (CbmSpecials.TryGetValue(entry.KeyName, out var cbm))
+                return lowercaseMode ? cbm.Lowercase : Graphic(cbm.Petscii);
             if (CbmMatchesShiftPrintable.Contains(entry.KeyName) && entry.ShiftedLabel is not null)
                 return entry.ShiftedLabel;
 
@@ -157,13 +119,13 @@ public static class VirtualKeycapGlyphs
         {
             if (IsLetterKey(entry))
             {
-                // Uppercase/graphics mode: the PETSCII right-keycap graphic. Lowercase
-                // mode: SHIFT types the plain capital.
-                return lowercaseMode ? entry.KeyName : ShiftLetterGraphics[entry.KeyName];
+                // Uppercase/graphics mode: the PETSCII right-keycap graphic ($C1-$DA).
+                // Lowercase mode: those same codes ARE the plain capitals.
+                return lowercaseMode ? entry.KeyName : Graphic(0xC1 + (entry.KeyName[0] - 'A'));
             }
 
-            if (ShiftSpecialGraphics.TryGetValue(entry.KeyName, out var shiftSpecial))
-                return lowercaseMode ? shiftSpecial.Lowercase : shiftSpecial.Uppercase;
+            if (ShiftSpecials.TryGetValue(entry.KeyName, out var shift))
+                return lowercaseMode ? shift.Lowercase : Graphic(shift.Petscii);
 
             if (entry.ShiftedLabel is not null)
                 return entry.ShiftedLabel;
@@ -181,6 +143,9 @@ public static class VirtualKeycapGlyphs
 
         return entry.DisplayLabel;
     }
+
+    /// <summary>The PetMe64 keycap glyph for a PETSCII code: <c>U+F100 + petscii</c>.</summary>
+    private static string Graphic(int petscii) => ((char)(PetsciiGlyphBase + petscii)).ToString();
 
     private static bool IsLetterKey(VirtualKeyEntry entry)
         => entry.KeyName.Length == 1 && entry.KeyName[0] is >= 'A' and <= 'Z';

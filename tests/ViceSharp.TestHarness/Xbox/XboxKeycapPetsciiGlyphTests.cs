@@ -42,51 +42,58 @@ using Xunit;
 [Trait("Category", "Xbox")]
 public sealed class XboxKeycapPetsciiGlyphTests
 {
-    // TEST-XKEYGLYPH-001a: ROM receipt: SHIFT table $EBC2 maps letters to $C1-$DA;
-    // recode uppercase set: $C1 spade, $D3 heart, $D8 club, $DA diamond, $D1 black
-    // circle, $D7 white circle, $C9/$CA/$CB/$D5 arcs, $CD/$CE diagonals.
+    // TEST-XKEYGLYPH-001a: ROM receipt: SHIFT table $EBC2 maps letters to $C1-$DA
+    // ($C1 spade, $D3 heart, $D8 club, $DA diamond, $D1 black circle, $D7 white circle,
+    // $C9/$CA/$CB/$D5 arcs, $CD/$CE diagonals). The keycap draws the PETSCII glyph the
+    // vendored PetMe64 face maps at U+F100+code (Glyph), so the render is the exact C64
+    // graphic - not a Unicode look-alike, and never the punctuation the CUS codes used to
+    // point at.
     [Theory]
-    [InlineData("A", "♠")] // spade
-    [InlineData("S", "♥")] // heart
-    [InlineData("X", "♣")] // club
-    [InlineData("Z", "♦")] // diamond
-    [InlineData("Q", "●")] // black circle
-    [InlineData("W", "○")] // white circle
-    [InlineData("U", "╭")] // arc down-right
-    [InlineData("I", "╮")] // arc down-left
-    [InlineData("J", "╰")] // arc up-right
-    [InlineData("K", "╯")] // arc up-left
-    [InlineData("M", "╲")] // diagonal upper-left to lower-right
-    [InlineData("N", "╱")] // diagonal upper-right to lower-left
-    [InlineData("V", "╳")] // diagonal cross
-    [InlineData("B", "│")] // vertical line
-    [InlineData("C", "─")] // horizontal line
-    public void ShiftedLetter_UppercaseMode_ShowsPetsciiRightGraphic(string key, string expected)
+    [InlineData("A", 0xC1)] // spade
+    [InlineData("S", 0xD3)] // heart
+    [InlineData("X", 0xD8)] // club
+    [InlineData("Z", 0xDA)] // diamond
+    [InlineData("Q", 0xD1)] // black circle
+    [InlineData("W", 0xD7)] // white circle
+    [InlineData("U", 0xD5)] // arc down-right
+    [InlineData("I", 0xC9)] // arc down-left
+    [InlineData("J", 0xCA)] // arc up-right
+    [InlineData("K", 0xCB)] // arc up-left
+    [InlineData("M", 0xCD)] // diagonal upper-left to lower-right
+    [InlineData("N", 0xCE)] // diagonal upper-right to lower-left
+    [InlineData("V", 0xD6)] // diagonal cross
+    [InlineData("B", 0xC2)] // vertical line
+    [InlineData("C", 0xC3)] // horizontal line
+    [InlineData("D", 0xC4)] // was blank/wrong before the U+F1xx fix
+    [InlineData("Y", 0xD9)] // was blank/wrong before the U+F1xx fix
+    public void ShiftedLetter_UppercaseMode_ShowsPetsciiRightGraphic(string key, int petscii)
     {
         var entry = Find(key);
-        Assert.Equal(expected, VirtualKeycapGlyphs.For(entry, shifted: true, commodore: false, lowercaseMode: false));
+        Assert.Equal(Glyph(petscii), VirtualKeycapGlyphs.For(entry, shifted: true, commodore: false, lowercaseMode: false));
     }
 
     // TEST-XKEYGLYPH-001b: ROM receipt: C= table $EC03: A=$B0, S=$AE, Z=$AD, X=$BD
     // (the four box corners), Q=$AB, W=$B3, E=$B1, R=$B2 (the tees), I=$A2, K=$A1.
     [Theory]
-    [InlineData("A", "┌")] // down-right corner
-    [InlineData("S", "┐")] // down-left corner
-    [InlineData("Z", "└")] // up-right corner
-    [InlineData("X", "┘")] // up-left corner
-    [InlineData("Q", "├")] // vertical and right
-    [InlineData("W", "┤")] // vertical and left
-    [InlineData("E", "┴")] // up and horizontal
-    [InlineData("R", "┬")] // down and horizontal
-    [InlineData("I", "▄")] // lower half block
-    [InlineData("K", "▌")] // left half block
-    [InlineData("T", "▔")] // upper one eighth block
-    [InlineData("G", "▏")] // left one eighth block
-    public void CommodoreLetter_ShowsPetsciiLeftGraphic_BothModes(string key, string expected)
+    [InlineData("A", 0xB0)] // down-right corner
+    [InlineData("S", 0xAE)] // down-left corner
+    [InlineData("Z", 0xAD)] // up-right corner
+    [InlineData("X", 0xBD)] // up-left corner
+    [InlineData("Q", 0xAB)] // vertical and right
+    [InlineData("W", 0xB3)] // vertical and left
+    [InlineData("E", 0xB1)] // up and horizontal
+    [InlineData("R", 0xB2)] // down and horizontal
+    [InlineData("I", 0xA2)] // lower half block
+    [InlineData("K", 0xA1)] // left half block
+    [InlineData("T", 0xA3)] // upper one eighth block
+    [InlineData("G", 0xA5)] // left one eighth block
+    [InlineData("B", 0xBF)] // was digit '8' before the U+F1xx fix
+    [InlineData("N", 0xAA)] // was digit '0' before the U+F1xx fix
+    public void CommodoreLetter_ShowsPetsciiLeftGraphic_BothModes(string key, int petscii)
     {
         var entry = Find(key);
-        Assert.Equal(expected, VirtualKeycapGlyphs.For(entry, shifted: false, commodore: true, lowercaseMode: false));
-        Assert.Equal(expected, VirtualKeycapGlyphs.For(entry, shifted: false, commodore: true, lowercaseMode: true));
+        Assert.Equal(Glyph(petscii), VirtualKeycapGlyphs.For(entry, shifted: false, commodore: true, lowercaseMode: false));
+        Assert.Equal(Glyph(petscii), VirtualKeycapGlyphs.For(entry, shifted: false, commodore: true, lowercaseMode: true));
     }
 
     /// <summary>All 26 letters carry a non-letter graphic for both chords in uppercase mode.</summary>
@@ -114,31 +121,43 @@ public sealed class XboxKeycapPetsciiGlyphTests
         Assert.Equal("A", VirtualKeycapGlyphs.For(entry, shifted: true, commodore: false, lowercaseMode: true));
     }
 
-    // TEST-XKEYGLYPH-001d: mode-aware punctuation chords. PETSCII $DE is pi in the
-    // uppercase set and medium shade in the lowercase set; $A9/$BA/$DF likewise differ.
+    // TEST-XKEYGLYPH-001d: uppercase-mode punctuation chords draw the exact PETSCII glyph
+    // (U+F100+code) from the KERNAL SHIFT $EBC2 / C= $EC03 tables. This is the fix for the
+    // "C= line very wrong" report: the codes were previously punctuation/digit PETSCII.
     [Theory]
-    [InlineData("UpArrow", true, false, false, "π")]  // SHIFT+^ uc: pi
-    [InlineData("UpArrow", true, false, true, "▒")]   // SHIFT+^ lc: medium shade
-    [InlineData("UpArrow", false, true, false, "π")]  // C=+^ sends the same $DE
-    [InlineData("Pound", true, false, false, "◤")]    // SHIFT+pound uc: upper-left triangle
-    [InlineData("Pound", true, false, true, "")]     // SHIFT+pound lc: shade slashed right (CUS)
-    [InlineData("Pound", false, true, false, "")]    // C=+pound: lower-half shade (CUS)
-    [InlineData("@", true, false, false, "")]        // SHIFT+@ uc: eighth block up-left (CUS)
-    [InlineData("@", true, false, true, "✓")]         // SHIFT+@ lc: check mark
-    [InlineData("@", false, true, false, "▁")]        // C=+@: lower one eighth block
-    [InlineData("*", true, false, false, "─")]        // SHIFT+*: horizontal line
-    [InlineData("*", false, true, false, "◥")]        // C=+* uc: upper-right triangle
-    [InlineData("*", false, true, true, "")]         // C=+* lc: shade slashed left (CUS)
-    [InlineData("+", true, false, false, "┼")]        // SHIFT++: cross
-    [InlineData("+", false, true, false, "▒")]        // C=++: medium shade
-    [InlineData("-", true, false, false, "│")]        // SHIFT+-: vertical line
-    [InlineData("-", false, true, false, "")]        // C=+-: left-half shade (CUS)
-    public void PunctuationChords_FollowTheModeAwareTables(
-        string key, bool shifted, bool commodore, bool lowercase, string expected)
+    [InlineData("UpArrow", true, false, 0xDE)]  // SHIFT+^ : pi
+    [InlineData("UpArrow", false, true, 0xDE)]  // C=+^ : same $DE
+    [InlineData("Pound", true, false, 0xA9)]    // SHIFT+pound : upper-left triangle
+    [InlineData("Pound", false, true, 0xA8)]    // C=+pound : lower-half shade
+    [InlineData("@", true, false, 0xBA)]        // SHIFT+@ : eighth block up-left
+    [InlineData("@", false, true, 0xA4)]        // C=+@ : lower one eighth block
+    [InlineData("*", true, false, 0xC0)]        // SHIFT+* : horizontal line
+    [InlineData("*", false, true, 0xDF)]        // C=+* : filled triangle
+    [InlineData("+", true, false, 0xDB)]        // SHIFT++ : cross
+    [InlineData("+", false, true, 0xA6)]        // C=++ : medium shade
+    [InlineData("-", true, false, 0xDD)]        // SHIFT+- : vertical line
+    [InlineData("-", false, true, 0xDC)]        // C=+- : left-half shade
+    public void PunctuationChords_UppercaseMode_ShowPetsciiGraphic(string key, bool shifted, bool commodore, int petscii)
     {
         var entry = Find(key);
-        Assert.Equal(expected, VirtualKeycapGlyphs.For(entry, shifted, commodore, lowercase));
+        Assert.Equal(Glyph(petscii), VirtualKeycapGlyphs.For(entry, shifted, commodore, lowercaseMode: false));
     }
+
+    // TEST-XKEYGLYPH-001d (lowercase): the charset-dependent codes keep a lowercase stand-in
+    // on the single-charset PetMe64 face; the shade-slashed CUS ones have no lowercase glyph.
+    [Theory]
+    [InlineData("UpArrow", true, false, "▒")]   // SHIFT+^ lc: medium shade
+    [InlineData("@", true, false, "✓")]          // SHIFT+@ lc: check mark
+    [InlineData("Pound", true, false, "")]       // SHIFT+pound lc: no lowercase graphic
+    [InlineData("*", false, true, "")]           // C=+* lc: no lowercase graphic
+    public void PunctuationChords_LowercaseStandins(string key, bool shifted, bool commodore, string expected)
+    {
+        var entry = Find(key);
+        Assert.Equal(expected, VirtualKeycapGlyphs.For(entry, shifted, commodore, lowercaseMode: true));
+    }
+
+    /// <summary>The PetMe64 keycap glyph for a PETSCII code: U+F100+code (the font's PETSCII PUA range).</summary>
+    private static string Glyph(int petscii) => ((char)(0xF100 + petscii)).ToString();
 
     /// <summary>C= chords that emit the same printable as SHIFT show the printed legend; C=+digit color chords keep the digit.</summary>
     [Fact]
