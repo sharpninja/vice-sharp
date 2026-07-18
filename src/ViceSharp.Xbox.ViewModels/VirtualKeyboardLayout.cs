@@ -85,8 +85,8 @@ public sealed class VirtualKeyboardLayout
                 Key("9", shifted: ")"), Key("0"),
                 Key("+"), Key("-"),
                 Key("Pound", "£"),
-                Key("Home", "CLR HOME"),
-                Key("Delete", "INST DEL"),
+                Key("Home", "CLR\nHOME"),
+                Key("Delete", "INST\nDEL"),
             },
 
             // Row 2: CTRL, Q-P, @, *, up-arrow, RESTORE (15 keys). RESTORE sits at the
@@ -141,8 +141,8 @@ public sealed class VirtualKeyboardLayout
                     Key(".", shifted: ">"),
                     Key("/", shifted: "?"),
                     new VirtualKeyEntry("RightShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
-                    Key("Down", "CRSR ⇕"),
-                    Key("Right", "CRSR ⇔"),
+                    Key("Down", "CRSR\n⇕"),
+                    Key("Right", "CRSR\n⇔"),
                 })
                 .ToArray(),
 

@@ -57,4 +57,39 @@ public sealed record VirtualKeyEntry(
     /// derived from <see cref="IsWide"/> (2 for wide tiles, 1 for ordinary ones).
     /// </summary>
     public double EffectiveWidthUnits => WidthUnits > 0 ? WidthUnits : (IsWide ? 2.0 : 1.0);
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001 (operator 2026-07-18 "reconcile with real C64 keyboard"): the
+    /// legend point size for this cap, scaled to the longest label line so single-character
+    /// legends sit LARGE like the machine, while multi-character legends (RESTORE, RETURN,
+    /// CLR/HOME, ...) shrink to fit their cap instead of clipping.
+    /// </summary>
+    public double DisplayFontSize
+    {
+        get
+        {
+            var longest = 0;
+            var current = 0;
+            foreach (var ch in DisplayLabel)
+            {
+                if (ch == '\n')
+                {
+                    current = 0;
+                    continue;
+                }
+
+                current++;
+                if (current > longest)
+                    longest = current;
+            }
+
+            return longest switch
+            {
+                <= 1 => 24,
+                <= 3 => 18,
+                <= 5 => 14,
+                _ => 11,
+            };
+        }
+    }
 }

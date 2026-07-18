@@ -54,6 +54,7 @@
                                     <Button
                                         Content="{x:Bind DisplayLabel}"
                                         Width="{x:Bind EffectiveWidthUnits, Converter={StaticResource KeyWidth}}"
+                                        FontSize="{x:Bind DisplayFontSize}"
                                         Style="{StaticResource C64KeycapTileStyle}"
                                         Click="OnKeyPressed" />
                                 </DataTemplate>
@@ -69,7 +70,8 @@
                     <DataTemplate x:DataType="vm:VirtualKeyEntry">
                         <Button
                             Content="{x:Bind DisplayLabel}"
-                            Width="96"
+                            Width="{x:Bind EffectiveWidthUnits, Converter={StaticResource KeyWidth}}"
+                            FontSize="{x:Bind DisplayFontSize}"
                             Style="{StaticResource C64KeycapTileStyle}"
                             Click="OnKeyPressed" />
                     </DataTemplate>

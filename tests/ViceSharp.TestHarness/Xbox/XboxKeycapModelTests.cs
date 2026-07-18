@@ -54,6 +54,21 @@ public sealed class XboxKeycapModelTests
         Assert.Equal(new[] { "F1", "F3", "F5", "F7" }, functionCaps);
     }
 
+    // "reconcile with real C64 keyboard": single-char legends stay large; multi-char
+    // legends shrink to their longest line so RESTORE/RETURN/CLR-HOME fit instead of clipping.
+    [Theory]
+    [InlineData("A", 24.0)]
+    [InlineData("£", 24.0)]
+    [InlineData("C=", 18.0)]
+    [InlineData("CTRL", 14.0)]
+    [InlineData("SHIFT", 14.0)]
+    [InlineData("RETURN", 11.0)]
+    [InlineData("RESTORE", 11.0)]
+    [InlineData("CLR\nHOME", 14.0)]
+    [InlineData("RUN\nSTOP", 14.0)]
+    public void DisplayFontSize_ScalesToLongestLabelLine(string label, double expected)
+        => Assert.Equal(expected, new VirtualKeyEntry(label, label, IsWide: false).DisplayFontSize);
+
     [Theory]
     [InlineData("c64c", null, KeycapSkin.C64C)]
     [InlineData("c64", "C64C PAL", KeycapSkin.C64C)]
