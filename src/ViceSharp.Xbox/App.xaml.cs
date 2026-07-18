@@ -407,6 +407,10 @@ public sealed partial class App : Application
                 Navigation.IsVirtualKeyboardOpen ? Visibility.Visible : Visibility.Collapsed;
             quickMenu.Visibility =
                 Navigation.IsQuickMenuOpen ? Visibility.Visible : Visibility.Collapsed;
+
+            // FEAT-XKBDJOYDETACH-001: detach the gamepad from the C64 joysticks while the
+            // on-screen keyboard is up (the stick/D-pad drive the keyboard); restore on close.
+            _gamepad?.SetKeyboardActive(Navigation.IsVirtualKeyboardOpen);
         };
 
         // Reconcile the single input context with the navigation stack (kept alive for the

@@ -34,6 +34,11 @@ public sealed class WinRtGamepadSource
     // so the pump self-gates on window activation.
     private bool _windowActive = true;
 
+    // FEAT-XKBDJOYDETACH-001 (operator: "When virtual keyboard is active, detach gamepad
+    // from joysticks. Restore on closing"): while the on-screen keyboard is up the
+    // stick/D-pad drive the keyboard, so the C64 joysticks are held neutral.
+    private bool _keyboardActive;
+
     /// <summary>Creates the gamepad source and its per-frame poll timer (not yet started).</summary>
     /// <param name="host">The in-process host that receives joystick state.</param>
     /// <param name="context">The single input-context authority.</param>
@@ -85,6 +90,29 @@ public sealed class WinRtGamepadSource
         }
     }
 
+    /// <summary>
+    /// FEAT-XKBDJOYDETACH-001 (operator: "When virtual keyboard is active, detach gamepad
+    /// from joysticks. Restore on closing virtual keyboard"): while the on-screen keyboard is
+    /// up the stick/D-pad drive the keyboard, so both C64 joysticks are held NEUTRAL. Entry
+    /// pushes a one-shot neutral to release any held direction/fire; closing lets the next
+    /// poll drive the joysticks from gameplay again. The context still ticks (keyboard chords
+    /// and navigation keep flowing) - only the joystick OUTPUT is detached.
+    /// </summary>
+    /// <param name="active"><c>true</c> while the virtual keyboard is open.</param>
+    public void SetKeyboardActive(bool active)
+    {
+        if (_keyboardActive == active)
+            return;
+
+        _keyboardActive = active;
+
+        if (active)
+        {
+            _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick1, JoystickPortState.Neutral.DirectionMask, JoystickPortState.Neutral.Fire);
+            _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick2, JoystickPortState.Neutral.DirectionMask, JoystickPortState.Neutral.Fire);
+        }
+    }
+
     private void PollOnce()
     {
         if (!_windowActive)
@@ -95,9 +123,12 @@ public sealed class WinRtGamepadSource
 
         var resolution = _context.Tick(_frameIndex++, snapshot);
 
-        // Push both control ports (explicit, swap-immune mapping).
-        _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick1, resolution.Joy1.DirectionMask, resolution.Joy1.Fire);
-        _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick2, resolution.Joy2.DirectionMask, resolution.Joy2.Fire);
+        // FEAT-XKBDJOYDETACH-001: keep both joysticks detached (neutral) while the virtual
+        // keyboard is up; otherwise push the resolved ports (explicit, swap-immune mapping).
+        var joy1 = _keyboardActive ? JoystickPortState.Neutral : resolution.Joy1;
+        var joy2 = _keyboardActive ? JoystickPortState.Neutral : resolution.Joy2;
+        _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick1, joy1.DirectionMask, joy1.Fire);
+        _host.SetJoystick(_sessionId, ConsoleJoyPort.Joystick2, joy2.DirectionMask, joy2.Fire);
 
         // Dispatch discrete commands off the poll thread (each host call locks internally).
         foreach (var command in resolution.Commands)
