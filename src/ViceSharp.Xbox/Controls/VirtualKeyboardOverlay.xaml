@@ -37,7 +37,7 @@
             <ItemsControl Grid.Column="0" ItemsSource="{x:Bind ViewModel.KeyRows}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:VirtualKeyboardRow">
-                        <ItemsControl ItemsSource="{x:Bind Keys}" HorizontalAlignment="Center">
+                        <ItemsControl ItemsSource="{x:Bind Keys}" HorizontalAlignment="Left">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />

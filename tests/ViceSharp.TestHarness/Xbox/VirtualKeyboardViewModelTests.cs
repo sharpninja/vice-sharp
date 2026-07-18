@@ -242,12 +242,12 @@ public sealed class VirtualKeyboardViewModelTests
     }
 
     /// <summary>
-    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006 (widths updated by
-    /// PLAN-XKEYBOARD-001 K1 to the AUTHENTIC machine: RETURN and SPACE are the wide keys;
-    /// RUN/STOP is a standard-width key on real hardware, unlike the earlier stylized
-    /// layout that widened it).
-    /// Acceptance: "Return" and "Space" report <see cref="VirtualKeyEntry.IsWide"/> true;
-    /// "RunStop" and a representative ordinary key ("A") report false.
+    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006. Widths corrected 2026-07-18 to the
+    /// authentic MechBoard64 spec (operator: the special keys "don't match up to the virtual
+    /// keyboard"): RETURN (2u), SPACE (9u) AND the 1.5u modifiers - including RUN/STOP - are
+    /// all wider than a unit key; only ordinary 1u keys are not.
+    /// Acceptance: "Return", "Space" and "RunStop" report <see cref="VirtualKeyEntry.IsWide"/>
+    /// true; a representative ordinary key ("A") reports false.
     /// </summary>
     [Fact]
     public void WideTiles_AreFlagged_ForReturnAndSpace()
@@ -255,7 +255,7 @@ public sealed class VirtualKeyboardViewModelTests
         var vm = new VirtualKeyboardViewModel(new SpyKeyboardInput());
 
         Assert.True(SingleByKeyName(vm, "Return").IsWide);
-        Assert.False(SingleByKeyName(vm, "RunStop").IsWide);
+        Assert.True(SingleByKeyName(vm, "RunStop").IsWide);   // 1.5u modifier (MechBoard64)
         Assert.True(SingleByKeyName(vm, "Space").IsWide);
         Assert.False(SingleByKeyName(vm, "A").IsWide);
     }

@@ -99,7 +99,8 @@ public sealed class VirtualKeyboardLayout
                     Key("*"),
                     // SHIFT + up-arrow types pi (the legend on the physical keycap).
                     Key("UpArrow", "↑", shifted: "π"),
-                    new VirtualKeyEntry("Restore", "RESTORE", IsWide: false, AppKeyKind.Restore),
+                    // RESTORE is a 1.5u key on the real machine (MechBoard64 spec).
+                    new VirtualKeyEntry("Restore", "RESTORE", IsWide: true, AppKeyKind.Restore, 1.5),
                 })
                 .ToArray(),
 
@@ -109,8 +110,9 @@ public sealed class VirtualKeyboardLayout
                 {
                     // Authentic two-line caps (operator 2026-07-14): the key is STOP,
                     // the shifted state is RUN, and SHIFT LOCK is the mechanical toggle.
-                    Key("RunStop", "RUN\nSTOP", shifted: "RUN"),
-                    new VirtualKeyEntry("Shift", "SHIFT\nLOCK", IsWide: false, AppKeyKind.ShiftLatch),
+                    // RUN/STOP and SHIFT LOCK are 1.5u keys (MechBoard64 spec).
+                    Key("RunStop", "RUN\nSTOP", 1.5, "RUN"),
+                    new VirtualKeyEntry("Shift", "SHIFT\nLOCK", IsWide: true, AppKeyKind.ShiftLatch, 1.5),
                 }
                 .Concat(Letters("ASDFGHJKL"))
                 .Concat(new[]
@@ -128,7 +130,8 @@ public sealed class VirtualKeyboardLayout
             new[]
                 {
                     // C= is a sticky modifier tile (FEAT-XKBDSTICKY-001), not a keystroke.
-                    new VirtualKeyEntry("Commodore", "C=", IsWide: false, AppKeyKind.CommodoreMomentary),
+                    // C= is a 1.5u key on the real machine (MechBoard64 spec).
+                    new VirtualKeyEntry("Commodore", "C=", IsWide: true, AppKeyKind.CommodoreMomentary, 1.5),
                     new VirtualKeyEntry("LeftShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
                 }
                 .Concat(Letters("ZXCVBNM"))
@@ -148,12 +151,17 @@ public sealed class VirtualKeyboardLayout
         };
 
         // The function column, rendered on the RIGHT like the physical machine's F-keys.
+        // 1.5u keys (MechBoard64 spec), tagged IsFunctionCap so a per-model skin can give
+        // them the breadbin's dark-brown function-key palette.
+        static VirtualKeyEntry FunctionKey(string keyName, string label) =>
+            new(keyName, label, IsWide: true, AppKeyKind.Key, WidthUnits: 1.5, ShiftedLabel: null, IsFunctionCap: true);
+
         var functionKeys = new[]
         {
-            Key("F1", "F1  F2"),
-            Key("F3", "F3  F4"),
-            Key("F5", "F5  F6"),
-            Key("F7", "F7  F8"),
+            FunctionKey("F1", "F1  F2"),
+            FunctionKey("F3", "F3  F4"),
+            FunctionKey("F5", "F5  F6"),
+            FunctionKey("F7", "F7  F8"),
         };
 
         return new VirtualKeyboardLayout(rows, functionKeys);

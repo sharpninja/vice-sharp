@@ -44,6 +44,10 @@ public sealed partial class App : Application
     private EmulatorView? _emulatorView;
     private VirtualKeyboardOverlay? _keyboardOverlay;
 
+    // FEAT-XKEYCAPMODEL-001: the boot machine profile id, used to skin the keycaps for the
+    // emulated model until the live Settings selection supersedes it.
+    private string? _activeProfileId;
+
     // FIX-XKBDINPUT-001: the machine keyboard seam physical keys inject through, plus the
     // currently held (injected-down) key names so ups always pair with downs and the menu
     // can force-release everything (no stuck C64 keys).
@@ -563,6 +567,7 @@ public sealed partial class App : Application
             session = host.StartC64Session();
         }
         _sessionId = session.SessionId;
+        _activeProfileId = persisted?.ProfileId;
         log.LogInformation(
             "BuildHostAndSession: session started id={SessionId} (persisted profile: {PersistedProfile})",
             _sessionId, persisted?.ProfileId ?? "(none)");
@@ -728,7 +733,25 @@ public sealed partial class App : Application
     private void BindOverlayToKeyboardVm()
     {
         if (_keyboardOverlay is not null && KeyboardVm is not null)
+        {
             _keyboardOverlay.DataContext = KeyboardVm;
+            // FEAT-XKEYCAPMODEL-001: skin the keycaps for the emulated machine model.
+            _keyboardOverlay.ApplySkin(ResolveKeycapSkin());
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001: the keycap skin for the active machine, from the live Settings
+    /// model selection (preferred) or the persisted boot profile. Unknown / breadbin-class
+    /// machines resolve to the breadbin skin.
+    /// </summary>
+    private KeycapSkin ResolveKeycapSkin()
+    {
+        var id = SettingsVm?.SelectedProfileId;
+        if (string.IsNullOrEmpty(id))
+            id = _activeProfileId;
+
+        return KeycapSkinResolver.Resolve(id, id);
     }
 
     /// <summary>

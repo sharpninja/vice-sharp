@@ -29,6 +29,11 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     private bool _appliedCommodore;
     private bool _appliedLowercase;
 
+    // FEAT-XKEYCAPMODEL-001: the emulated-model keycap skin and whether it has been applied
+    // to the realized tiles yet (they materialize only after the dock is shown/laid out).
+    private KeycapSkin _skin = KeycapSkin.Breadbin;
+    private bool _skinApplied;
+
     /// <summary>The bound view-model, projected from the externally-set DataContext (for {x:Bind}).</summary>
     private VirtualKeyboardViewModel? ViewModel => DataContext as VirtualKeyboardViewModel;
 
@@ -47,7 +52,15 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
         _caseTimer = DispatcherQueue.GetForCurrentThread().CreateTimer();
         _caseTimer.Interval = TimeSpan.FromMilliseconds(250);
         _caseTimer.IsRepeating = true;
-        _caseTimer.Tick += (_, _) => RefreshKeycaps();
+        _caseTimer.Tick += (_, _) =>
+        {
+            RefreshKeycaps();
+
+            // Keep retrying the skin until the tiles have realized (drop-in cheap: cached
+            // brushes, and it stops once applied).
+            if (!_skinApplied)
+                TryApplySkin();
+        };
 
         // FEAT-XKBDSTICKY-001 (operator: "The virtual keyboard should be scanned in
         // real time"): a clicked key stays DOWN in the machine matrix for a real scan
@@ -62,8 +75,53 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
             RefreshKeycaps();
         };
 
-        Loaded += (_, _) => _caseTimer.Start();
+        Loaded += (_, _) =>
+        {
+            _caseTimer.Start();
+            TryApplySkin();
+        };
         Unloaded += (_, _) => _caseTimer.Stop();
+    }
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001: sets the keycap skin for the emulated model. Idempotent and
+    /// safe to call before the tiles realize; the skin is (re)applied as soon as they do.
+    /// </summary>
+    /// <param name="skin">The skin for the active machine model.</param>
+    public void ApplySkin(KeycapSkin skin)
+    {
+        _skin = skin;
+        _skinApplied = false;
+        TryApplySkin();
+    }
+
+    /// <summary>Walks the realized tiles and paints them with the current skin; no-op until they exist.</summary>
+    private void TryApplySkin()
+    {
+        if (ApplySkinColors(this, KeycapSkinPalette.For(_skin)))
+            _skinApplied = true;
+    }
+
+    private static bool ApplySkinColors(DependencyObject root, KeycapSkinPalette.SkinBrushes palette)
+    {
+        var painted = false;
+        var count = VisualTreeHelper.GetChildrenCount(root);
+        for (var i = 0; i < count; i++)
+        {
+            var child = VisualTreeHelper.GetChild(root, i);
+            if (child is Button { DataContext: VirtualKeyEntry entry } button)
+            {
+                var group = entry.IsFunctionCap ? palette.Function : palette.Main;
+                button.Background = group.Cap;
+                button.Foreground = group.Legend;
+                button.BorderBrush = group.Border;
+                painted = true;
+            }
+
+            painted |= ApplySkinColors(child, palette);
+        }
+
+        return painted;
     }
 
     /// <summary>

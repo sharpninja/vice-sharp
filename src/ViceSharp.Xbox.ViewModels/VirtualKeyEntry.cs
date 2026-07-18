@@ -38,13 +38,19 @@ namespace ViceSharp.Xbox.ViewModels;
 /// produce mode-dependent PETSCII graphics under SHIFT/C=; showing nothing beats
 /// showing something wrong).
 /// </param>
+/// <param name="IsFunctionCap">
+/// FEAT-XKEYCAPMODEL-001: <c>true</c> for the F1/F3/F5/F7 function keys, so a head that
+/// skins the keycaps per emulated model (the breadbin's dark-brown function keys vs the
+/// beige main keys) can pick the function palette without hard-coding key names in the view.
+/// </param>
 public sealed record VirtualKeyEntry(
     string KeyName,
     string DisplayLabel,
     bool IsWide,
     AppKeyKind Kind = AppKeyKind.Key,
     double WidthUnits = 0,
-    string? ShiftedLabel = null)
+    string? ShiftedLabel = null,
+    bool IsFunctionCap = false)
 {
     /// <summary>
     /// The tile's width in key units: <see cref="WidthUnits"/> when positive, otherwise
