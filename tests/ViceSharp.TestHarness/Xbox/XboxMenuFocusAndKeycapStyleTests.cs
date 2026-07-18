@@ -67,8 +67,11 @@ public sealed class XboxMenuFocusAndKeycapStyleTests
         var styles = ReadSource("src", "ViceSharp.Xbox", "Styles", "C64Keycaps.xaml");
         Assert.Contains("C64KeyButtonStyle", styles);
         Assert.Contains("C64KeycapTileStyle", styles);
-        // The breadbin identity: warm brown cap + PetMe64 face + raised-key bevel.
-        Assert.Contains("#FF40352C", styles);
+        // FEAT-XKEYCAPMODEL-001: the menu keycap colours are per-model brushes App repaints
+        // (operator: "Menu colors should match virtual keyboard based on exact model"); the
+        // breadbin default is the dark-brown function-key cap.
+        Assert.Contains("C64MenuCapBrush", styles);
+        Assert.Contains("#FF5A3B1E", styles);
         Assert.Contains("PetMe64.ttf#Pet Me 64", styles);
         Assert.Contains("2,2,4,5", styles);
 

@@ -732,11 +732,38 @@ public sealed partial class App : Application
     /// </summary>
     private void BindOverlayToKeyboardVm()
     {
+        var skin = ResolveKeycapSkin();
+
+        // FEAT-XKEYCAPMODEL-001: the shell menu tracks the same model skin as the keyboard.
+        ApplyMenuBrushes(skin);
+
         if (_keyboardOverlay is not null && KeyboardVm is not null)
         {
             _keyboardOverlay.DataContext = KeyboardVm;
-            // FEAT-XKEYCAPMODEL-001: skin the keycaps for the emulated machine model.
-            _keyboardOverlay.ApplySkin(ResolveKeycapSkin());
+            _keyboardOverlay.ApplySkin(skin);
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001 (operator 2026-07-18: "Menu colors should match virtual keyboard
+    /// based on exact model"): repaints the shell menu keycap brushes for the emulated model
+    /// (its function-key palette, matching the keyboard's function keys). Mutating the shared
+    /// brushes recolours every menu button live.
+    /// </summary>
+    private static void ApplyMenuBrushes(KeycapSkin skin)
+    {
+        var menu = Controls.KeycapSkinPalette.For(skin).Function;
+        SetBrushColor("C64MenuCapBrush", menu.Cap.Color);
+        SetBrushColor("C64MenuLegendBrush", menu.Legend.Color);
+        SetBrushColor("C64MenuBorderBrush", menu.Border.Color);
+
+        static void SetBrushColor(string key, Windows.UI.Color color)
+        {
+            if (Application.Current.Resources.ContainsKey(key)
+                && Application.Current.Resources[key] is Windows.UI.Xaml.Media.SolidColorBrush brush)
+            {
+                brush.Color = color;
+            }
         }
     }
 
