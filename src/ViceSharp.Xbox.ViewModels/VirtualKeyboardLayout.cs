@@ -110,9 +110,10 @@ public sealed class VirtualKeyboardLayout
                 {
                     // Authentic two-line caps (operator 2026-07-14): the key is STOP,
                     // the shifted state is RUN, and SHIFT LOCK is the mechanical toggle.
-                    // RUN/STOP and SHIFT LOCK are 1.5u keys (MechBoard64 spec).
-                    Key("RunStop", "RUN\nSTOP", 1.5, "RUN"),
-                    new VirtualKeyEntry("Shift", "SHIFT\nLOCK", IsWide: true, AppKeyKind.ShiftLatch, 1.5),
+                    // RUN/STOP and SHIFT LOCK are 1u; only RETURN is wide in this row, so rows 3-4
+                    // finish slightly LEFT of rows 1-2 (operator 2026-07-18).
+                    Key("RunStop", "RUN\nSTOP", shifted: "RUN"),
+                    new VirtualKeyEntry("Shift", "SHIFT\nLOCK", IsWide: false, AppKeyKind.ShiftLatch),
                 }
                 .Concat(Letters("ASDFGHJKL"))
                 .Concat(new[]
@@ -120,7 +121,7 @@ public sealed class VirtualKeyboardLayout
                     Key(":", shifted: "["),
                     Key(";", shifted: "]"),
                     Key("="),
-                    Key("Return", "RETURN", 2.0),
+                    Key("Return", "RETURN", 1.5),
                 })
                 .ToArray(),
 
@@ -129,10 +130,13 @@ public sealed class VirtualKeyboardLayout
             // which is also how CRSR-up (SHIFT+down) and CRSR-left (SHIFT+right) work.
             new[]
                 {
-                    // C= is a sticky modifier tile (FEAT-XKBDSTICKY-001), not a keystroke.
-                    // C= is a 1.5u key on the real machine (MechBoard64 spec).
-                    new VirtualKeyEntry("Commodore", "C=", IsWide: true, AppKeyKind.CommodoreMomentary, 1.5),
-                    new VirtualKeyEntry("LeftShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
+                    // C= is a sticky modifier tile (FEAT-XKBDSTICKY-001), not a keystroke; a 1u key.
+                    // The two bottom-row SHIFTs are 1.25u (narrower than CTRL/RESTORE's 1.5u), so
+                    // this row totals 15.5u and its right edge aligns with row 3's RETURN, both
+                    // finishing LEFT of the full-width rows 1-2 as on the real machine (operator
+                    // 2026-07-18: "first two rows ... slightly longer than the next two rows").
+                    new VirtualKeyEntry("Commodore", "C=", IsWide: false, AppKeyKind.CommodoreMomentary),
+                    new VirtualKeyEntry("LeftShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.25),
                 }
                 .Concat(Letters("ZXCVBNM"))
                 .Concat(new[]
@@ -140,7 +144,7 @@ public sealed class VirtualKeyboardLayout
                     Key(",", shifted: "<"),
                     Key(".", shifted: ">"),
                     Key("/", shifted: "?"),
-                    new VirtualKeyEntry("RightShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
+                    new VirtualKeyEntry("RightShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.25),
                     Key("Down", "CRSR\n⇕"),
                     Key("Right", "CRSR\n⇔"),
                 })

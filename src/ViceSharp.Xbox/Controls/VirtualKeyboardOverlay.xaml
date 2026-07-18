@@ -17,6 +17,8 @@
     <UserControl.Resources>
         <!-- Width units -> pixels (one key unit = 52 px at 10-foot scale). -->
         <controls:KeyWidthConverter x:Key="KeyWidth" UnitPixels="52" />
+        <!-- Row Centered flag -> HorizontalAlignment (the space-bar row centres under the block). -->
+        <controls:RowAlignmentConverter x:Key="RowAlign" />
     </UserControl.Resources>
 
     <!-- Slide up from the bottom edge when the dock becomes visible. -->
@@ -37,7 +39,7 @@
             <ItemsControl Grid.Column="0" ItemsSource="{x:Bind ViewModel.KeyRows}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:VirtualKeyboardRow">
-                        <ItemsControl ItemsSource="{x:Bind Keys}" HorizontalAlignment="Left">
+                        <ItemsControl ItemsSource="{x:Bind Keys}" HorizontalAlignment="{x:Bind Centered, Converter={StaticResource RowAlign}}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />

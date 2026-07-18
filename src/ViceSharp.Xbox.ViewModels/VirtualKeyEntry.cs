@@ -83,13 +83,17 @@ public sealed record VirtualKeyEntry(
                     longest = current;
             }
 
-            return longest switch
-            {
-                <= 1 => 24,
-                <= 3 => 18,
-                <= 5 => 14,
-                _ => 11,
-            };
+            if (longest < 1)
+                longest = 1;
+
+            // Fit the longest label LINE to the cap WIDTH: one key unit renders at ~52 px and
+            // the PetMe64 face is monospace, so a glyph's advance is ~= its point size. The
+            // 0.82 factor leaves margin/bevel room; the clamp keeps single-char legends large
+            // without letting a wide cap blow the legend up, and never shrinks below readable.
+            const double unitPixels = 52.0;
+            double capWidth = EffectiveWidthUnits * unitPixels;
+            double fit = capWidth * 0.82 / longest;
+            return System.Math.Clamp(System.Math.Floor(fit), 9.0, 22.0);
         }
     }
 }

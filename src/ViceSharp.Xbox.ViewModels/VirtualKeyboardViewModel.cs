@@ -103,7 +103,13 @@ public sealed class VirtualKeyboardViewModel
 
     /// <summary>The rows as named <see cref="VirtualKeyboardRow"/> wrappers, so the nested keyboard
     /// DataTemplate can bind with a compiled {x:Bind} that declares an x:DataType.</summary>
-    public IReadOnlyList<VirtualKeyboardRow> KeyRows => Layout.Rows.Select(row => new VirtualKeyboardRow(row)).ToList();
+    public IReadOnlyList<VirtualKeyboardRow> KeyRows => Layout.Rows
+        .Select(row => new VirtualKeyboardRow(row, IsSpaceRow(row)))
+        .ToList();
+
+    // FEAT-XKEYCAPMODEL-001: the lone space-bar row is centred under the block, not left-aligned.
+    private static bool IsSpaceRow(IReadOnlyList<VirtualKeyEntry> row) =>
+        row.Count == 1 && row[0].KeyName == "Space";
 
     /// <summary>The layout tiles flattened in row-major order; the index space of
     /// <see cref="SelectedIndex"/>.</summary>
