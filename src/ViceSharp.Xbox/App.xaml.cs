@@ -253,6 +253,19 @@ public sealed partial class App : Application
             "OnLaunched entry; c64Directory={C64Directory}",
             string.IsNullOrEmpty(_c64Directory) ? "(none)" : _c64Directory);
 
+        // FIX-XDOUBLEBOOT-001 (operator: "Joysticks are still active from gamepad" - the
+        // detach armed only the newest pump): OnLaunched is called again on every re-
+        // activation, and without this guard it recomposed the whole shell a SECOND time -
+        // a second host+session, a second gamepad pump (the old one leaked, still polling
+        // and pushing to its now-hidden session), and a duplicate StateChanged subscriber.
+        // Compose exactly once; a re-activation just re-activates the existing window.
+        if (Window.Current.Content is not null)
+        {
+            log.LogInformation("OnLaunched re-entry: shell already composed, re-activating window only");
+            Window.Current.Activate();
+            return;
+        }
+
         try
         {
             // First-run gate: only build the host + C64 session when the ROMs are already present.
@@ -531,6 +544,17 @@ public sealed partial class App : Application
     private void BuildHostAndSession()
     {
         var log = CreateLogger("App");
+
+        // FIX-XDOUBLEBOOT-001 defense-in-depth: a host+session+gamepad pump is built exactly
+        // once. If one already exists (the OnLaunched guard should prevent re-entry, and the
+        // provisioning gate is single-shot), never build a SECOND - a leaked pump would keep
+        // polling the gamepad and pushing to an orphaned session.
+        if (_gamepad is not null)
+        {
+            log.LogWarning("BuildHostAndSession ignored: a session + gamepad pump already exists");
+            return;
+        }
+
         log.LogInformation("BuildHostAndSession: composing in-process host");
 
         // FIX-XNOAUDIO-001 (operator: "No audio!"): live SID audio is ON by default for
@@ -640,7 +664,14 @@ public sealed partial class App : Application
             onCloseMenu: HideMenu,
             onUiNavigate: HandleUiNavigate);
 
-        _gamepad = new WinRtGamepadSource(host, InputContext, dispatcher, _sessionId);
+        var gamepadLog = CreateLogger("Gamepad");
+        _gamepad = new WinRtGamepadSource(
+            host,
+            InputContext,
+            dispatcher,
+            _sessionId,
+            msg => gamepadLog.LogInformation("{Msg}", msg),
+            isKeyboardOpen: () => Navigation.IsVirtualKeyboardOpen);
         log.LogInformation(
             "BuildHostAndSession: built VideoPull={VideoPullCreated} gamepad={GamepadCreated} keyboardVm={KeyboardVmCreated} audio={AudioBackendCreated}",
             VideoPull is not null, _gamepad is not null, KeyboardVm is not null, AudioBackend is not null);
