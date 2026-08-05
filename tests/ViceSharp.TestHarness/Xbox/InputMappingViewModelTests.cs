@@ -151,6 +151,35 @@ public sealed class InputMappingViewModelTests
         Assert.Equal(1, raised);
     }
 
+    /// <summary>
+    /// FEAT-XCTRLBIND-001: remappable system buttons can be rebound, saved, reloaded;
+    /// Menu/View stay locked; last assignment wins for a shared command.
+    /// </summary>
+    [Fact]
+    public void Rebind_Save_Load_AndReset_Work_AndLocksHold()
+    {
+        var store = new InMemoryBindingStore();
+        var vm = new InputMappingViewModel(store);
+
+        Assert.False(vm.TryRebind(BindableInput.Menu, AppCommand.ColdReset));
+        Assert.False(vm.TryRebind(BindableInput.View, AppCommand.ColdReset));
+        Assert.True(vm.TryRebind(BindableInput.X, AppCommand.ColdReset));
+        // Last assignment wins: Y previously had WarmReset; give WarmReset to X's prior owner path
+        // by rebinding Y to ColdReset - X should drop ColdReset.
+        Assert.True(vm.TryRebind(BindableInput.Y, AppCommand.ColdReset));
+        Assert.DoesNotContain(vm.Profile.Gameplay, b => b.Input == BindableInput.X && b.Command == AppCommand.ColdReset);
+        Assert.Contains(vm.Profile.Gameplay, b => b.Input == BindableInput.Y && b.Command == AppCommand.ColdReset);
+
+        vm.Save();
+        var reloaded = new InputMappingViewModel(store);
+        Assert.Contains(reloaded.Profile.Gameplay, b => b.Input == BindableInput.Y && b.Command == AppCommand.ColdReset);
+
+        reloaded.ResetToDefaults();
+        Assert.Contains(reloaded.Profile.Gameplay, b => b.Input == BindableInput.X && b.Command == AppCommand.AutostartDrive8);
+        Assert.Contains(reloaded.Rows, r => r.InputLabel == "Menu" && r.IsLocked);
+        Assert.Contains(reloaded.Rows, r => r.InputLabel == "X" && !r.IsLocked);
+    }
+
     private static void AssertRow(
         System.Collections.Generic.IReadOnlyList<InputMappingRow> rows,
         string inputLabel,

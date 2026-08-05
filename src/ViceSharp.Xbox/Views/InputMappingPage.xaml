@@ -1,7 +1,7 @@
 <!--
-  PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the read-only input-mapping page. Binds
-  InputMappingViewModel.Rows (locked joystick + system-button scheme) and offers a jump to
-  the on-screen virtual keyboard. Inert on the net10.0 fallback.
+  PLAN-XBOXUWP S34 + FEAT-XCTRLBIND-001: Controls page. Shows locked joystick rows and
+  remappable system buttons. Save/Reset persist via IBindingStore; Cycle rebinds the
+  selected unlocked row through the next AppCommand. Inert on the net10.0 fallback.
 -->
 <Page
     x:Class="ViceSharp.Xbox.Views.InputMappingPage"
@@ -15,11 +15,16 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="Controls" FontSize="48" Foreground="White" Margin="0,0,0,16" />
 
-        <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.Rows, Mode=OneWay}" SelectionMode="Single">
+        <ListView
+            x:Name="MappingList"
+            Grid.Row="1"
+            ItemsSource="{x:Bind ViewModel.Rows, Mode=OneWay}"
+            SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="vm:InputMappingRow">
                     <Grid>
@@ -34,7 +39,17 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock
+            Grid.Row="2"
+            Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"
+            FontSize="20"
+            Foreground="#FFAADDAA"
+            Margin="0,8,0,8" />
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cycle command" Style="{StaticResource TenFootButtonStyle}" Click="OnCycleCommand" />
+            <Button Content="Save" Style="{StaticResource TenFootButtonStyle}" Click="OnSave" />
+            <Button Content="Reset defaults" Style="{StaticResource TenFootButtonStyle}" Click="OnReset" />
             <Button Content="Virtual keyboard" Style="{StaticResource TenFootButtonStyle}" Click="OnVirtualKeyboard" />
             <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
         </StackPanel>
