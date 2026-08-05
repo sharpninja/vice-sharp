@@ -57,6 +57,7 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     // models. The "Minimal host" pseudo-profile (Machine=="minimal") is excluded by this
     // same ordinal filter.
     private const string C64FamilyId = "x64sc";
+    private const string Vic20FamilyId = "xvic";
 
     private readonly IXboxSettingsGateway _gateway;
     private readonly string _sessionId;
@@ -124,17 +125,21 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         _sync = SynchronizationContext.Current;
         _baseline = CaptureBaseline();
 
-        // The Computer families: only the C64 is implemented today, so VIC-20 / C128 / PET /
-        // Plus4 are disabled placeholders (IsAvailable false) advertising the roadmap.
-        Computers = new ComputerOption[]
-        {
-            new("Commodore 64", C64FamilyId, true),
-            new("VIC-20", "xvic", false),
-            new("Commodore 128", "x128", false),
-            new("Commodore PET", "xpet", false),
-            new("Plus/4", "xplus4", false),
-        };
+        // Iteration 2: VIC-20 is selectable (ROMs via VICESHARP_ROM_PATH). C128/PET/Plus4 remain roadmap placeholders.
+        Computers = CreateDefaultComputerOptions();
     }
+
+    /// <summary>
+    /// Shared computer-family catalog for Xbox settings and heads tests.
+    /// </summary>
+    public static ComputerOption[] CreateDefaultComputerOptions() =>
+    [
+        new("Commodore 64", C64FamilyId, true),
+        new("VIC-20", "xvic", true),
+        new("Commodore 128", "x128", false),
+        new("Commodore PET", "xpet", false),
+        new("Plus/4", "xplus4", false),
+    ];
 
     /// <inheritdoc />
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -180,10 +185,8 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
             if (!SetProperty(ref _profiles, value))
                 return;
 
-            // The Model picker is the C64 machine profiles from the current profile list; the
-            // "Minimal host" pseudo-profile (Machine=="minimal") is filtered out.
-            _models = BuildModels(value);
-            OnPropertyChanged(nameof(Models));
+            // Model picker: implemented families (C64 + VIC-20); "Minimal host" excluded.
+            RebuildModelsForSelectedFamily();
             OnPropertyChanged(nameof(SelectedModel));
             OnPropertyChanged(nameof(SelectedComputer));
             RefreshSelectedModelRomStatus();
@@ -191,15 +194,14 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// The selectable computer families (FR-XSET-002). Only the C64 (<c>x64sc</c>) is
-    /// implemented; the rest are disabled placeholders.
+    /// The selectable computer families (FR-XSET-002). C64 and VIC-20 are implemented;
+    /// C128 / PET / Plus4 remain disabled placeholders.
     /// </summary>
     public IReadOnlyList<ComputerOption> Computers { get; }
 
     /// <summary>
-    /// The selectable machine models: the C64 (<c>x64sc</c>) profiles from
-    /// <see cref="Profiles"/>, with the non-selectable "Minimal host" pseudo-profile
-    /// excluded. Recomputed whenever <see cref="Profiles"/> changes.
+    /// Models for the selected computer family (C64 <c>x64sc</c> or VIC-20 <c>xvic</c>)
+    /// from <see cref="Profiles"/>, excluding the "Minimal host" pseudo-profile.
     /// </summary>
     public IReadOnlyList<SettingsProfileDto> Models => _models;
 
@@ -220,34 +222,84 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// The <see cref="ComputerOption"/> reflecting the current model's machine family (the
-    /// <see cref="Models"/> are all C64), or <c>null</c> when no model is selected. The setter
-    /// is a no-op: model selection flows through <see cref="SelectedModel"/> and only the
-    /// implemented C64 family resolves, so reflecting the family here never mutates state.
+    /// Computer family for the current model. Setting to an available family selects that
+    /// family's default model (first matching profile) so the Model combo refreshes.
     /// </summary>
     public ComputerOption? SelectedComputer
     {
         get
         {
-            var machine = SelectedModel?.Machine;
+            var machine = SelectedModel?.Machine
+                ?? Profiles.FirstOrDefault(p => string.Equals(p.Id, SelectedProfileId, StringComparison.Ordinal))?.Machine;
             return machine is null
                 ? null
                 : Computers.FirstOrDefault(c => string.Equals(c.FamilyId, machine, StringComparison.Ordinal));
         }
-        set => _ = value;
+        set
+        {
+            if (value is null || !value.IsAvailable)
+                return;
+
+            if (SelectedComputer is not null
+                && string.Equals(SelectedComputer.FamilyId, value.FamilyId, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            var defaultId = value.FamilyId switch
+            {
+                Vic20FamilyId => "vic20",
+                C64FamilyId => "c64",
+                _ => null
+            };
+
+            var match = Profiles.FirstOrDefault(p =>
+                string.Equals(p.Machine, value.FamilyId, StringComparison.Ordinal)
+                && (defaultId is null || string.Equals(p.Id, defaultId, StringComparison.Ordinal)))
+                ?? Profiles.FirstOrDefault(p => string.Equals(p.Machine, value.FamilyId, StringComparison.Ordinal));
+
+            if (match is null)
+                return;
+
+            SelectedProfileId = match.Id;
+            RebuildModelsForSelectedFamily();
+            OnPropertyChanged(nameof(SelectedComputer));
+            OnPropertyChanged(nameof(SelectedModel));
+        }
     }
 
-    private static IReadOnlyList<SettingsProfileDto> BuildModels(IReadOnlyList<SettingsProfileDto> profiles)
+    private void RebuildModelsForSelectedFamily()
+    {
+        var family = Profiles.FirstOrDefault(p => string.Equals(p.Id, SelectedProfileId, StringComparison.Ordinal))?.Machine
+            ?? C64FamilyId;
+        _models = BuildModels(Profiles, family);
+        OnPropertyChanged(nameof(Models));
+    }
+
+    private static IReadOnlyList<SettingsProfileDto> BuildModels(
+        IReadOnlyList<SettingsProfileDto> profiles,
+        string? familyFilter = null)
     {
         var models = new List<SettingsProfileDto>(profiles.Count);
         foreach (var profile in profiles)
         {
-            if (string.Equals(profile.Machine, C64FamilyId, StringComparison.Ordinal))
-                models.Add(profile);
+            if (!IsImplementedMachineFamily(profile.Machine))
+                continue;
+            if (familyFilter is not null
+                && !string.Equals(profile.Machine, familyFilter, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            models.Add(profile);
         }
 
         return models;
     }
+
+    private static bool IsImplementedMachineFamily(string machine)
+        => string.Equals(machine, C64FamilyId, StringComparison.Ordinal)
+            || string.Equals(machine, Vic20FamilyId, StringComparison.Ordinal);
 
     // ---- Bindable emulator settings ------------------------------------------
 
@@ -344,7 +396,8 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
             if (!SetSettingsProperty(ref _selectedProfileId, value ?? string.Empty))
                 return;
 
-            // The Model/Computer pickers are projections of the selected profile id.
+            // Model list is per computer family; rebuild when the profile family may change.
+            RebuildModelsForSelectedFamily();
             OnPropertyChanged(nameof(SelectedModel));
             OnPropertyChanged(nameof(SelectedComputer));
             RefreshSelectedModelRomStatus();

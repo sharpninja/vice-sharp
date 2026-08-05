@@ -16,4 +16,7 @@ public interface ILocalDataFolder
 
     /// <summary>The <c>C64</c> subdirectory under <see cref="RootPath"/> holding C64 ROMs and keymaps.</summary>
     string C64Path { get; }
+
+    /// <summary>The <c>VIC20</c> subdirectory under <see cref="RootPath"/> holding VIC-20 ROMs.</summary>
+    string Vic20Path { get; }
 }

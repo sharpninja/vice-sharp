@@ -191,12 +191,20 @@ public partial class MainWindow : Window
         // (PAL 0.93650794 / 272, NTSC 0.75 / 246). Profile id is the host-canonical selector
         // already on the attach panel.
         var profileId = _attachViewModel.SelectedMachineProfile?.Id ?? string.Empty;
+        // Vic20 aliases: vic20, vic20pal, vic20ntsc, xvic-ntsc (not bare C64 "pal"/"ntsc").
+        var isVic20 = profileId.Contains("vic20", StringComparison.OrdinalIgnoreCase)
+            || profileId.Contains("xvic", StringComparison.OrdinalIgnoreCase);
         var isNtsc = profileId.Contains("ntsc", StringComparison.OrdinalIgnoreCase);
-        var pixelAspect = isNtsc ? 0.75 : 0.93650794;
+
+        // VIC-I is near-square pixels; C64 VIC-II uses classic PAL/NTSC PAR tables.
+        var pixelAspect = isVic20 ? 1.0 : (isNtsc ? 0.75 : 0.93650794);
 
         _video.PixelAspect = pixelAspect;
         _video.AspectMode = _attachViewModel.SelectedAspectMode;
-        _video.ContentHeight = isNtsc ? VideoSurface.NtscContentHeight : VideoSurface.SourceHeight;
+        // C64 crops NTSC to written rows; Vic20 frames are already the full char+border buffer.
+        _video.ContentHeight = isVic20
+            ? VideoSurface.SourceHeight
+            : (isNtsc ? VideoSurface.NtscContentHeight : VideoSurface.SourceHeight);
         _video.InvalidateMeasure();
         _video.InvalidateVisual();
     }

@@ -72,6 +72,34 @@ documents:
   platforms:
   - github
   - azure
+- id: privacy
+  title: Privacy Policy
+  source: docs/PRIVACY.md
+  target: Privacy-Policy.md
+  platforms:
+  - github
+  - azure
+- id: xbox-store-publishing
+  title: Xbox Microsoft Store Publishing
+  source: docs/xbox-store-publishing.md
+  target: Xbox-Store-Publishing.md
+  platforms:
+  - github
+  - azure
+- id: store-listing-copy
+  title: Store Listing Copy
+  source: docs/xbox/store-listing-copy.md
+  target: Store-Listing-Copy.md
+  platforms:
+  - github
+  - azure
+- id: gpl-store-section6
+  title: GPL vs Microsoft Store Review
+  source: docs/xbox/gpl-store-section6-review.md
+  target: GPL-Store-Section6-Review.md
+  platforms:
+  - github
+  - azure
 - id: architecture
   title: Architecture
   source: docs/Architecture.md
@@ -215,6 +243,7 @@ navigation:
   - document: user-guide
   - document: vice-migration
   - document: rom-setup
+  - document: privacy
 - title: Architecture
   path: Architecture
   children:
@@ -236,6 +265,12 @@ navigation:
   - document: x64sc-requirement-coverage
   - document: vice-edge-case-backfill
   - document: vice-source-manifest
+- title: Store and Xbox
+  path: Store-and-Xbox
+  children:
+  - document: xbox-store-publishing
+  - document: store-listing-copy
+  - document: gpl-store-section6
 - title: Reference
   path: Reference
   children:

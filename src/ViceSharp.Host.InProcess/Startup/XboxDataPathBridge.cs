@@ -44,9 +44,12 @@ public static class XboxDataPathBridge
 
         var root = folder.RootPath;
         var c64Path = folder.C64Path;
+        var vic20Path = folder.Vic20Path;
 
         // (1) The resolver only accepts a data root that already contains a C64 subdirectory.
         Directory.CreateDirectory(c64Path);
+        // Iteration 2: VIC-20 ROM tree lives beside C64 under the same data root.
+        Directory.CreateDirectory(vic20Path);
 
         // (2) Point the resolver at the writable root BEFORE anything resolves ROMs/keymaps.
         Environment.SetEnvironmentVariable(DataRootEnvironmentVariable, root);
@@ -59,6 +62,10 @@ public static class XboxDataPathBridge
 
         // (4) Seed packaged keymaps without ever clobbering a user-edited destination.
         var seeded = SeedKeymaps(packagedAssetsC64Path, c64Path);
+
+        // (5) Best-effort VIC-20 ROM download so profile switch can build a machine.
+        //     Idempotent; failures leave IsComplete false and Create reports clearly.
+        Vic20RomBootstrap.Ensure(root);
 
         // Redirect the transient keymap write-path off the read-only OS temp directory.
         HostKeymapWritePath.RedirectTo(root);

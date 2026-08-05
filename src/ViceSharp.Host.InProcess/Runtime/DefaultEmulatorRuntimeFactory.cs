@@ -1,6 +1,7 @@
 using System.IO;
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
+using ViceSharp.Architectures.Vic20;
 using ViceSharp.Core;
 using ViceSharp.Core.Media;
 using ViceSharp.Host.Audio;
@@ -147,6 +148,14 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
             foreach (var alias in c64Descriptor.Profile.Aliases)
                 yield return (alias, descriptor);
         }
+
+        if (descriptor is Vic20Descriptor vic20Descriptor)
+        {
+            yield return (vic20Descriptor.Profile.Id, descriptor);
+            yield return ("xvic", descriptor);
+            foreach (var alias in vic20Descriptor.Profile.Aliases)
+                yield return (alias, descriptor);
+        }
     }
 
     // Wrap the platform real-time backend in a recording tap so a
@@ -166,38 +175,81 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
 
     private static IArchitectureBuilder CreateDefaultArchitectureBuilder(IAudioBackend? audioBackend)
     {
-        return TryFindC64RomBasePath(out var romBasePath)
-            ? new ArchitectureBuilder(CreateC64RomProvider(romBasePath), audioBackend)
-            : new ArchitectureBuilder(audioBackend);
+        if (TryFindRomBasePath(out var romBasePath, requireC64: true, requireVic20: false)
+            || TryFindRomBasePath(out romBasePath, requireC64: false, requireVic20: true))
+        {
+            return new ArchitectureBuilder(CreateC64RomProvider(romBasePath), audioBackend);
+        }
+
+        return new ArchitectureBuilder(audioBackend);
     }
 
     private static IEnumerable<IArchitectureDescriptor> CreateDefaultDescriptors()
     {
         yield return MinimalHostArchitectureDescriptor.Instance;
 
-        if (TryFindC64RomBasePath(out _))
+        // Register every C64 profile when a data root with C64/ is present.
+        if (TryFindRomBasePath(out var c64Root, requireC64: true, requireVic20: false))
         {
             foreach (var profile in C64MachineProfiles.All)
                 yield return new C64Descriptor(profile);
+
+            // Iteration 2: always register VIC-20 profiles when the same data root
+            // exists so settings Apply+Restart can target "vic20" / "vic20ntsc".
+            // Machine build still requires VIC20 ROMs under dataRoot/VIC20/.
+            foreach (var profile in Vic20MachineProfiles.All)
+                yield return new Vic20Descriptor(profile);
+            _ = c64Root;
+        }
+        else if (TryFindRomBasePath(out _, requireC64: false, requireVic20: true))
+        {
+            foreach (var profile in Vic20MachineProfiles.All)
+                yield return new Vic20Descriptor(profile);
         }
     }
 
     private static string CreateDefaultArchitectureId()
     {
-        return TryFindC64RomBasePath(out _) ? "c64" : MinimalHostArchitectureDescriptor.ArchitectureId;
+        return TryFindRomBasePath(out _, requireC64: true, requireVic20: false)
+            ? "c64"
+            : MinimalHostArchitectureDescriptor.ArchitectureId;
     }
 
     private static bool TryFindC64RomBasePath(out string romBasePath)
+        => TryFindRomBasePath(out romBasePath, requireC64: true, requireVic20: false);
+
+    private static bool TryFindRomBasePath(out string romBasePath, bool requireC64, bool requireVic20)
     {
         var dataRoots = ViceDataPathResolver.FindDataRoots();
         foreach (var dataRoot in dataRoots)
         {
             var provider = CreateC64RomProvider(dataRoot, dataRoots.Where(path => !string.Equals(path, dataRoot, StringComparison.OrdinalIgnoreCase)));
-            if (new C64RomSet().IsComplete(provider))
+            var c64Ok = !requireC64 || new C64RomSet().IsComplete(provider);
+            var vicOk = !requireVic20 || new Vic20RomSet().IsComplete(provider);
+            if (c64Ok && vicOk)
             {
                 romBasePath = dataRoot;
                 return true;
             }
+        }
+
+        // Repo-vendored VICE data (test/dev checkouts without PATH x64sc).
+        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+        {
+            if (!File.Exists(Path.Combine(dir.FullName, "ViceSharp.slnx")))
+                continue;
+            var data = Path.Combine(dir.FullName, "native", "vice", "vice", "data");
+            if (!Directory.Exists(data))
+                break;
+            var provider = new RomProvider(data, []);
+            var c64Ok = !requireC64 || new C64RomSet().IsComplete(provider);
+            var vicOk = !requireVic20 || new Vic20RomSet().IsComplete(provider);
+            if (c64Ok && vicOk)
+            {
+                romBasePath = data;
+                return true;
+            }
+            break;
         }
 
         romBasePath = string.Empty;

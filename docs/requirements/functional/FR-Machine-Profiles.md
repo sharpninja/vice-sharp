@@ -144,24 +144,25 @@ The Commodore 128 features dual CPUs (MOS 8502 and Zilog Z80), 128KB RAM, an 80-
 
 **ID:** FR-PRF-005
 **Title:** Commodore VIC-20 Machine Profile
-**Priority:** P2 -- Enhancement
-**Iteration:** 3
+**Priority:** P0 -- Critical
+**Iteration:** 2
 
 ### Description
 
-The VIC-20 uses the MOS 6502 CPU, MOS 6560 (NTSC) or MOS 6561 (PAL) VIC chip (not VIC-II), two MOS 6522 VIA chips, and 5KB of RAM (expandable). The display and sound capabilities differ significantly from the C64.
+The VIC-20 uses the MOS 6502 CPU, MOS 6560 (NTSC) or MOS 6561 (PAL) VIC chip (not VIC-II), two MOS 6522 VIA chips, and 5KB of RAM (expandable). The display and sound capabilities differ significantly from the C64. Default floppy on unit 8 is the Commodore 1540 (`DriveModel.C1540`), not the 1541. See also `FR-VIC20.md`.
 
 ### Acceptance Criteria
 
 1. CPU: Standard MOS 6502 (not 6510; no built-in I/O port).
-2. VIC chip: MOS 6560/6561 with 22-column text display and 4-voice sound.
-3. VIA: Two MOS 6522 VIAs (per FR-VIA-004) instead of CIAs.
+2. VIC chip: MOS 6560/6561 with 22-column text display and 4-voice sound (stub allowed in early slices).
+3. VIA: Two MOS 6522 VIAs (per FR-VIA-004 / FR-VIC20-003) instead of CIAs.
 4. RAM: 5KB base (1KB at $0000, 4KB at $1000) expandable to 32KB+ with cartridge RAM.
-5. ROM: BASIC V2, VIC-20 KERNAL, Character Generator.
+5. ROM: BASIC V2, VIC-20 KERNAL, Character Generator (VICE VIC20 data names).
 6. Memory map differs significantly from C64.
-7. Sound uses the VIC chip's 4 voices (3 square wave + 1 noise) instead of SID.
-8. Selectable via `IMachineProfile.LoadProfile("vic20")`.
+7. Sound uses the VIC chip's 4 voices (3 square wave + 1 noise) instead of SID (MVP may be silent).
+8. Selectable via profile aliases such as `vic20`, `vic20pal`, `vic20ntsc` (family `xvic`).
 9. Memory expansion configurations (3KB, 8KB, 16KB, 24KB, 32KB) are selectable.
+10. Default drive unit 8 model is 1540 (FR-VIC20-006).
 
 ### Source References
 

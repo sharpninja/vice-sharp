@@ -48,12 +48,16 @@ public sealed class LockstepValidator : IDisposable
         byte diskDriveNumber = 8,
         bool recordRecentTrace = true)
     {
+        var isVic20 = ViceNativeXvic.IsVic20ModelSelector(modelSelector);
+
         if (diskImage is not null || !string.IsNullOrWhiteSpace(diskPath))
         {
             if (diskImage is null)
                 throw new ArgumentException("Managed disk image bytes are required when a native disk path is supplied.", nameof(diskImage));
             if (string.IsNullOrWhiteSpace(diskPath))
                 throw new ArgumentException("Native disk path is required when managed disk image bytes are supplied.", nameof(diskPath));
+            if (isVic20)
+                throw new NotSupportedException("Vic20 native lockstep with true-drive disk attach is not wired yet (host-only N1 path).");
 
             var rig = CreateC64WithTrueDrive(modelSelector, diskPath, diskDriveNumber);
             _machine = rig.Host;
@@ -61,7 +65,9 @@ public sealed class LockstepValidator : IDisposable
         }
         else
         {
-            _machine = MachineTestFactory.CreateC64Machine(modelSelector);
+            _machine = isVic20
+                ? MachineTestFactory.CreateVic20Machine(modelSelector)
+                : MachineTestFactory.CreateC64Machine(modelSelector);
         }
 
         _native = ViceNative.CreateInstance(modelSelector);

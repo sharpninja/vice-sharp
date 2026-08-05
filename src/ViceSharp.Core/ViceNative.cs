@@ -28,7 +28,26 @@ public static unsafe partial class ViceNative
 
     static ViceNative()
     {
-        NativeLibrary.SetDllImportResolver(typeof(ViceNative).Assembly, ResolveLibrary);
+        // Combined resolver: vice_x64 (this class) and vice_xvic (ViceNativeXvic).
+        // Only one SetDllImportResolver is allowed per assembly.
+        NativeLibrary.SetDllImportResolver(typeof(ViceNative).Assembly, ResolveLibraryCombined);
+    }
+
+    private static IntPtr ResolveLibraryCombined(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
+    {
+        if (string.Equals(libraryName, LibraryName, StringComparison.Ordinal))
+        {
+            var path = ResolvedLibraryPath.Value;
+            return path is null ? IntPtr.Zero : NativeLibrary.Load(path);
+        }
+
+        if (string.Equals(libraryName, "vice_xvic", StringComparison.Ordinal))
+        {
+            var path = ViceNativeXvic.ResolvedPath;
+            return path is null ? IntPtr.Zero : NativeLibrary.Load(path);
+        }
+
+        return IntPtr.Zero;
     }
 
     public static bool IsAvailable => ResolvedLibraryPath.Value is not null;
@@ -214,6 +233,10 @@ public static unsafe partial class ViceNative
 
     public static IViceNative CreateInstance(string? modelSelector = null)
     {
+        // Vic20 models route to the separate xvic oracle (vice_xvic.dll).
+        if (ViceNativeXvic.IsVic20ModelSelector(modelSelector))
+            return ViceNativeXvic.CreateInstance(modelSelector);
+
         if (!IsAvailable)
             throw new DllNotFoundException(AvailabilityMessage);
 
@@ -527,15 +550,6 @@ public static unsafe partial class ViceNative
         public ulong NmiDelayCycles;
     }
 
-    private static IntPtr ResolveLibrary(string libraryName, Assembly _, DllImportSearchPath? __)
-    {
-        if (!string.Equals(libraryName, LibraryName, StringComparison.Ordinal))
-            return IntPtr.Zero;
-
-        var path = ResolvedLibraryPath.Value;
-        return path is null ? IntPtr.Zero : NativeLibrary.Load(path);
-    }
-
     private static string? FindLibraryPath()
     {
         foreach (var candidatePath in EnumerateCandidateLibraryPaths())
@@ -591,8 +605,12 @@ public static unsafe partial class ViceNative
                 Directory.CreateSymbolicLink(expectedDataDirectory, dataRoot);
             }
 
-            if (!Directory.Exists(Path.Combine(expectedDataDirectory, "C64")))
+            // Accept C64 or VIC20 ROM trees (multi-machine native oracles).
+            if (!Directory.Exists(Path.Combine(expectedDataDirectory, "C64"))
+                && !Directory.Exists(Path.Combine(expectedDataDirectory, "VIC20")))
+            {
                 return false;
+            }
 
             relocatedLibraryPath = Path.Combine(runtimeDirectory, Path.GetFileName(sourceLibraryPath));
             return File.Exists(relocatedLibraryPath);

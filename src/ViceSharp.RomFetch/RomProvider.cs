@@ -118,6 +118,11 @@ public class RomProvider : IRomProvider
         ["basic"] = ["basic-901226-01.bin"],
         ["kernal"] = ["kernal-901227-03.bin"],
         ["characters"] = ["chargen-901225-01.bin"],
+        // VIC-20: full filenames double as download keys (dots in kernal names).
+        ["basic-901486-01.bin"] = ["basic-901486-01.bin"],
+        ["kernal.901486-07.bin"] = ["kernal.901486-07.bin"],
+        ["kernal.901486-06.bin"] = ["kernal.901486-06.bin"],
+        ["chargen-901460-03.bin"] = ["chargen-901460-03.bin"],
     };
 
     private static readonly Dictionary<string, RomEntry> RomDatabase = new()
@@ -127,6 +132,19 @@ public class RomProvider : IRomProvider
         ["basic"] = new RomEntry("https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/C64/basic-901226-01.bin", Convert.FromHexString("89878CEA0A268734696DE11C4BAE593EAAA506465D2029D619C0E0CBCCDFA62D")),
         ["kernal"] = new RomEntry("https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/C64/kernal-901227-03.bin", Convert.FromHexString("83C60D47047D7BEAB8E5B7BF6F67F80DAA088B7A6A27DE0D7E016F6484042721")),
         ["characters"] = new RomEntry("https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/C64/chargen-901225-01.bin", Convert.FromHexString("FD0D53B8480E86163AC98998976C72CC58D5DD8EB824ED7B829774E74213B420")),
+        // VIC-20 (Iteration 2): download keys are the VICE data filenames under VIC20/.
+        ["basic-901486-01.bin"] = new RomEntry(
+            "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/VIC20/basic-901486-01.bin",
+            Convert.FromHexString("8BE2D882E0EEB1C6923A43660236EA69D43CA8A3BD0613B1B6C910601584FBED")),
+        ["kernal.901486-07.bin"] = new RomEntry(
+            "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/VIC20/kernal.901486-07.bin",
+            Convert.FromHexString("FF6D1416B91A71F5240A5BB8ADC9FDC1B955374C48322CA47B3E436334F168FB")),
+        ["kernal.901486-06.bin"] = new RomEntry(
+            "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/VIC20/kernal.901486-06.bin",
+            Convert.FromHexString("8FC94BD895F488AC0AE1A52ABDC32988CD63C777770B89A9D415513098535CC2")),
+        ["chargen-901460-03.bin"] = new RomEntry(
+            "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/VIC20/chargen-901460-03.bin",
+            Convert.FromHexString("BDA280726CFE069CA70EF5E2F2D95A29F69D3950C859A12E6979464963FCF502")),
     };
 
     private sealed record RomEntry(string Url, byte[] Sha256);

@@ -1,15 +1,33 @@
 # ViceSharp Handoff - 2026-08-05
 
-**Active branch:** `feat/xbox-uwp-app` (off `main`) at `3804a1d`. **Pushed to GitHub `origin`** (`https://github.com/sharpninja/vice-sharp.git`; origin is the default approved remote). Azure DevOps remote remains as `azure`.
-**Prior iteration-1 baseline:** `main` at `v1.0.2` (2026-07-08); **PLAN-VICEPARITY-001 COMPLETE**. Detail preserved in the dated sections below.
-**Working tree:** untracked scratch (`docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md`, AiReview appsettings) is not part of the plan.
+**Active branch:** `feat/iteration2-vic20` (off `main` @ v1.2.1 line). Iteration 2 = overall project VIC-20 (not RomM Phase E).
+**Prior release baseline:** `main` at **v1.2.1** (NuGet + winget published). Iteration 1 C64 complete.
+**Working tree noise (do not commit):** untracked `docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md`, `manifests/`.
+
+## Iteration 2 VIC-20 IN PROGRESS (2026-08-05) - GOAL NOT COMPLETE
+
+- **Branch:** `feat/iteration2-vic20` (off main / v1.2.1). Locked: **default drive 8 = 1540**.
+- **Plan:** session `plan.md` status refresh - Tier A polish + Tier B **native xvic lockstep**.
+- **Proven:** READY on Avalonia + UWP (`3583 BYTES FREE`); profile switch; char-mode `Mos6561` with **border strips + $900F decode** (Slice I MVP); open-bus RAM; VIA matrix; 1540 default; managed determinism.
+- **Native xvic oracle (N0) SHIPPED locally:** `native/vice_xvic.dll` via `native/build-vice-shim-xvic.sh` + `vice-shim-vic20.c`; hosted `vic20cpu.c` / `mainviccpu.c` (`VICE_SHIM_HOSTED` CLK_INC + bootstrap). Managed route: `ViceNative.CreateInstance("vic20"|"vic20ntsc"|"xvic")` -> `ViceNativeXvic` / `vice_xvic.dll` (separate from C64 `vice_x64`).
+- **Lockstep receipts (N1):** create/reset/step green; A/X/Y/S/PC lockstep green through **4096** cycles (PAL/NTSC theories); VIC raster advances; `LockstepValidator("vic20")` constructs. **Known lag:** P.C first diverges at **cycle 25** on kernal `CMP $A003,X` (`$FD44 DD 03 A0`) - managed staged Carry lags native EXPORT (documented in `Vic20NativeLockstepTests.NativeXvic_Managed_PCarry_DocumentedLag`). First **PC** diverge near **cycle 5005** (follow-up). Full Vic20 filter was 68 pass earlier; re-run after N1 edits.
+- **Remaining:** fix P.C / extend lockstep past 5k; N2 multi-cycle suite + CI ROMs for VIC20; J expansion UX, K input E2E, L cart/disk, M snapshots; O docs/CI; Tier A polish.
+- **Do not** claim Iteration 2 complete; do not commit untracked `docs/S-Blox/`, reviews, manifests. Build oracle with MSYS2: `MSYSTEM=MINGW64 bash -lc 'cd /f/GitHub/vice-sharp/native && bash ./build-vice-shim-xvic.sh'`.
 
 ## PLAN-XBOXUWP + PLAN-ROMM resume snapshot (2026-08-05)
 
 - **Track 1 (Xbox Tier D residuals) largely SHIPPED this session:** FEAT-XAOTBIND-001 (x:Bind migration), FEAT-XOCTOPUS-001 (CI/release Octopus LEGION2 steps), FIX-ROMLESSVIC-001 (merged test), FIX-XKBDNMI-001 (RESTORE asserts NMI), FEAT-XCTRLBIND-001 (Controls remapping), FEAT-XROMPICK-001 (model ROM readiness).
 - **Track 2 (RomM):** merged `feat/romm-integration` into this branch (`3804a1d`). Portable `ViceSharp.Library.ViewModels` + `ViceSharp.RomM`, Xbox/Avalonia library UI, LAN bridge connection path present. Gate after merge: **Category=Xbox|RomM|Library 546/546** (0 fail, 0 skip).
 - **Deploy loop:** `./build.ps1 DeployXboxLocal` (VS MSBuild Release-UWP). End CLI batches with Debug-UWP restore for operator VS F5. PublishAot stays opt-in (`ViceSharpPublishAot=true`); Release-UWP JIT.
-- **OPEN:** B-on-controller operator verification; S42 Tier-C console/Store (deferred); MCP TODO reconcile (mark completed IMPL-XBOXUWP / IMPL-ROMM ids done with receipts); device smoke for RomM Library after merge; optional full baseline suite.
+- **Track 3 (Microsoft Store / S42) IN PROGRESS 2026-08-05:**
+  - Phase 0 **GO with mitigations**: `docs/xbox/gpl-store-section6-review.md`
+  - Privacy: `docs/PRIVACY.md` (listing URL source)
+  - Listing copy + screenshot runbook: `docs/xbox/store-listing-copy.md`
+  - GPL gate receipt: `XboxGplComplianceTests` **5 passed / 0 failed / 0 skipped** (Release)
+  - ADO gaps: variable group `xbox-store-publish` **missing**; pipeline `azure-pipelines-xbox-store.yml` **not registered** (project has VICE-Sharp-CI id 15, VICE-Sharp-Release id 16 only); environment `xbox-store` not confirmed
+  - **Operator guide (step-by-step + links):** `docs/xbox/store-next-steps-guide.md`
+  - **Next operator:** Partner Center reserve name + fill 8 vars; create ADO var group + environment approval; register Store pipeline; capture screenshots; S42 console matrix
+- **OPEN:** B-on-controller operator verification; S42 Tier-C console deploy + cert; Partner Center + ADO wiring; MCP TODO reconcile; device smoke for RomM Library after merge.
 - **Parallel worktrees (reference):** `F:\GitHub\vice-sharp-romm` (`feat/romm-integration`, source of merge); romless repro merged via FIX-ROMLESSVIC-001.
 
 ## How to resume

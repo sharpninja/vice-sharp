@@ -1,5 +1,6 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Audio;
+using ViceSharp.Chips.Vic;
 using ViceSharp.Chips.VicIi;
 using ViceSharp.Chips.Cia;
 using ViceSharp.Chips.Cpu;
@@ -7,6 +8,7 @@ using ViceSharp.Chips.Pla;
 using ViceSharp.Chips.IEC;
 using ViceSharp.Chips.Serial;
 using ViceSharp.Chips.Tape;
+using ViceSharp.Core.Vic20;
 using ViceSharp.Core.Wiring;
 using ViceSharp.RomFetch;
 
@@ -39,6 +41,11 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
     {
         if (IsC1541Machine(descriptor))
             return BuildC1541Machine(descriptor);
+
+        // VIC-20 before C64: both expose VideoChip; Vic20 is identified by Via1/Via2
+        // (or xvic family profile), not by CIA/PLA roles.
+        if (IsVic20Machine(descriptor))
+            return BuildVic20Machine(descriptor);
 
         if (IsC64Machine(descriptor))
             return BuildC64Machine(descriptor);
@@ -234,10 +241,149 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             || roles.Contains(DeviceRole.AudioChip);
     }
 
+    private static bool IsVic20Machine(IArchitectureDescriptor descriptor)
+    {
+        if (descriptor is IProfiledArchitectureDescriptor profiled
+            && string.Equals(profiled.MachineProfile.Family, "xvic", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var roles = descriptor.Devices.Select(x => x.Role).ToHashSet();
+        return roles.Contains(DeviceRole.Via1) && roles.Contains(DeviceRole.Via2);
+    }
+
     private static bool IsC1541Machine(IArchitectureDescriptor descriptor)
     {
         var roles = descriptor.Devices.Select(x => x.Role).ToHashSet();
         return roles.Contains(DeviceRole.DriveCpu) && roles.Contains(DeviceRole.DriveRom);
+    }
+
+    /// <summary>
+    /// Build a VIC-20: Mos6502, dual Via6522 ($9110 NMI / $9120 IRQ), Mos6561 VIC-I,
+    /// base + expansion RAM, BASIC/KERNAL/chargen, keyboard matrix, optional cart.
+    /// </summary>
+    /// <remarks>FR-PRF-005, FR-VIC20-001..006.</remarks>
+    private IMachine BuildVic20Machine(IArchitectureDescriptor descriptor)
+    {
+        if (_romProvider is null)
+            throw new InvalidOperationException($"{descriptor.MachineName} requires an IRomProvider.");
+
+        if (descriptor.RequiredRoms is not null && !descriptor.RequiredRoms.IsComplete(_romProvider))
+            throw new InvalidOperationException(
+                $"Required ROM set for {descriptor.MachineName} is missing or invalid.");
+
+        var bus = new BasicBus();
+        var deviceRegistry = new DeviceRegistry();
+        var irqLine = new InterruptLine(InterruptType.Irq);
+        var nmiLine = new InterruptLine(InterruptType.Nmi);
+        var cpu = new Mos6502(bus);
+        var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine, nmiLine);
+        var profile = (descriptor as IProfiledArchitectureDescriptor)?.MachineProfile;
+        var expansion = Vic20MemoryLayout.ParseBoardModel(profile?.BoardModel);
+
+        // Expansion-aware system RAM: only installed BLKs claim the bus.
+        // Uninstalled regions fall through to BasicBus last-data open bus
+        // (VICE vic20_cpu_last_data). ROMs and I/O overlay via register order.
+        var ram = new Vic20SystemRam(expansion);
+        bus.RegisterDevice(ram);
+        deviceRegistry.Add(ram, DeviceRole.SystemRam);
+
+        var architectureKey = descriptor.RequiredRoms?.Architecture ?? "VIC20";
+        var basicName = profile?.BasicRomName ?? "basic-901486-01.bin";
+        var kernalName = profile?.KernalRomName ?? "kernal.901486-07.bin";
+        var characterName = profile?.CharacterRomName ?? "chargen-901460-03.bin";
+
+        var basic = _romProvider.LoadRom(basicName, architectureKey).ToArray();
+        var kernal = _romProvider.LoadRom(kernalName, architectureKey).ToArray();
+        var character = _romProvider.LoadRom(characterName, architectureKey).ToArray();
+
+        // ROM images also live under RomDevice overlays; mirror into RAM store only
+        // for any peek path that falls through (not used for C000/E000/8000 once ROMs register).
+        ram.LoadBytes(0xC000, basic);
+        ram.LoadBytes(0xE000, kernal);
+        ram.LoadBytes(0x8000, character);
+
+        var basicRom = new RomDevice(0xC000, 0xDFFF, basic);
+        var kernalRom = new RomDevice(0xE000, 0xFFFF, kernal);
+        var chargenRom = new RomDevice(0x8000, 0x8FFF, character);
+        bus.RegisterDevice(basicRom);
+        bus.RegisterDevice(kernalRom);
+        bus.RegisterDevice(chargenRom);
+        deviceRegistry.Add(basicRom, DeviceRole.BasicRom);
+        deviceRegistry.Add(kernalRom, DeviceRole.KernalRom);
+        deviceRegistry.Add(chargenRom, DeviceRole.ChargenRom);
+
+        // Color RAM at $9400-$97FF (1KB; only low nibble used on real hardware).
+        var colorRam = new RamDevice(0x9400, 0x97FF, new byte[0x0400]);
+        bus.RegisterDevice(colorRam);
+
+        // VIA1 @ $9110 -> NMI, VIA2 @ $9120 -> IRQ (VIC-20 board wiring).
+        var via1 = new Via6522(bus, nmiLine)
+        {
+            Id = new DeviceId(0x0005),
+            Name = "VIA1",
+            SourceId = new DeviceId(0x0005),
+            BaseAddress = 0x9110,
+            Size = 0x0010,
+        };
+        var via2 = new Via6522(bus, irqLine)
+        {
+            Id = new DeviceId(0x0006),
+            Name = "VIA2",
+            SourceId = new DeviceId(0x0006),
+            BaseAddress = 0x9120,
+            Size = 0x0010,
+        };
+        bus.RegisterDevice(via1);
+        bus.RegisterDevice(via2);
+        clock.Register(via1);
+        clock.Register(via2);
+        deviceRegistry.Add(via1, DeviceRole.Via1);
+        deviceRegistry.Add(via2, DeviceRole.Via2);
+
+        var keyboard = new Vic20KeyboardMatrix();
+        keyboard.Connect(via2, via1);
+        keyboard.AttachOutputLatches(via2);
+        deviceRegistry.Add(keyboard);
+
+        // Optional MVP cart: descriptor may expose a Vic20Cartridge via IDevice on Devices
+        // list is declarative only; runtime attach uses WithCartridge extension on profiled
+        // descriptors that implement IVic20CartridgeHost (checked by reflection-free type).
+        if (descriptor is IVic20CartridgeHost cartHost && cartHost.Cartridge is not null)
+        {
+            bus.RegisterDevice(cartHost.Cartridge);
+            deviceRegistry.Add(cartHost.Cartridge, DeviceRole.CartridgePort);
+        }
+
+        var vic = new Mos6561(irqLine)
+        {
+            Id = new DeviceId(0x0003),
+            Name = "VIC-I",
+            SourceId = new DeviceId(0x0003),
+            BaseAddress = 0x9000,
+            Size = 0x0010,
+            MemoryPeek = addr => bus.Peek(addr),
+            CharacterRomBase = 0x8000,
+        };
+        var cyclesPerLine = profile?.CyclesPerLine ?? 71;
+        var rasterLines = profile?.RasterLines ?? 312;
+        var visibleLines = profile?.VideoStandard == VideoStandard.Ntsc ? 234 : 284;
+        vic.ConfigureTiming(cyclesPerLine, rasterLines, visibleLines, columns: 22, rows: 23);
+        bus.RegisterDevice(vic);
+        clock.Register(vic);
+        deviceRegistry.Add(vic, DeviceRole.VideoChip);
+
+        clock.Register(cpu);
+        deviceRegistry.Add(cpu, DeviceRole.Cpu);
+
+        if (profile is not null)
+            deviceRegistry.Add(new SystemCore(profile.SystemCore), DeviceRole.SystemCore);
+
+        var pubSub = ConnectMachinePubSub(bus, cpu);
+        var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, pubSub);
+        machine.Reset();
+        return machine;
     }
 
     private IMachine BuildC1541Machine(IArchitectureDescriptor descriptor)
