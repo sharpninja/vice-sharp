@@ -10,6 +10,19 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
+  <!--
+    FIX-XNTSCFPS-001: the SDK grants CUSTOM configuration names debug-ish code-gen defaults
+    (Optimize=false, no TRACE). Under a VS solution build the Release-UWP config remaps every
+    non-head project onto plain Release, but a CLI build of the head flows Configuration=
+    Release-UWP down the P2P graph, silently producing UNOPTIMIZED emulator cores (measured
+    on-device 2026-07-14: SPD 43% vs 98.6% for the same head). Release-UWP therefore means
+    release code-gen for EVERY project, however it is reached.
+  -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release-UWP'">
+    <Optimize>true</Optimize>
+    <DefineConstants>$(DefineConstants);TRACE;RELEASE</DefineConstants>
+  </PropertyGroup>
+
 
   <PropertyGroup>
     <RootNamespace>ViceSharp.$(MSBuildProjectName.Replace('ViceSharp.',''))</RootNamespace>

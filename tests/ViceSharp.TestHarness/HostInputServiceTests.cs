@@ -432,15 +432,25 @@ public sealed class HostInputServiceTests
 
         public List<KeyTransition> Transitions { get; } = new();
 
+        public List<bool> RestoreTransitions { get; } = new();
+
         public bool SetKeyState(string key, bool pressed)
         {
             Transitions.Add(new KeyTransition(key, pressed));
             return true;
         }
 
+        public bool SetRestoreState(bool pressed)
+        {
+            // RESTORE is the dedicated NMI seam, recorded apart from matrix key transitions.
+            RestoreTransitions.Add(pressed);
+            return true;
+        }
+
         public void Reset()
         {
             Transitions.Clear();
+            RestoreTransitions.Clear();
         }
     }
 

@@ -1,27 +1,163 @@
 <Solution>
+  <Configurations>
+    <!--
+      PLAN-XBOXUWP: an explicit <Configurations> block OVERRIDES the auto-inferred
+      Debug/Release x Any CPU, so those are re-listed here. "Debug-UWP" is the net-new
+      build type that flips ViceSharp.Xbox to the real UWP TFM (the head's csproj derives
+      ViceSharpXboxUwp from $(Configuration)=='Debug-UWP'; a .slnx config cannot inject an
+      MSBuild property). "Any CPU" is listed first so it stays the solution default: a bare
+      `dotnet build ViceSharp.slnx -c Debug` resolves Debug|Any CPU exactly as before.
+    -->
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Debug-UWP" />
+    <BuildType Name="Release-UWP" />
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
   <Folder Name="/src/">
-    <Project Path="src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj" />
-    <Project Path="src/ViceSharp.AdhocHelper/ViceSharp.AdhocHelper.csproj" />
-    <Project Path="src/ViceSharp.Architectures/ViceSharp.Architectures.csproj" />
-    <Project Path="src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj" />
-    <Project Path="src/ViceSharp.Chips/ViceSharp.Chips.csproj" />
-    <Project Path="src/ViceSharp.Console/ViceSharp.Console.csproj" />
-    <Project Path="src/ViceSharp.Core.Package/ViceSharp.Core.Package.csproj" />
-    <Project Path="src/ViceSharp.Core/ViceSharp.Core.csproj" />
-    <Project Path="src/ViceSharp.Host/ViceSharp.Host.csproj" />
-    <Project Path="src/ViceSharp.Host.Android/ViceSharp.Host.Android.csproj" />
-    <Project Path="src/ViceSharp.Host.iOS/ViceSharp.Host.iOS.csproj" />
-    <Project Path="src/ViceSharp.Host.MacOS/ViceSharp.Host.MacOS.csproj" />
-    <Project Path="src/ViceSharp.Host.Xbox/ViceSharp.Host.Xbox.csproj" />
-    <Project Path="src/ViceSharp.Launcher/ViceSharp.Launcher.csproj" />
-    <Project Path="src/ViceSharp.Monitor/ViceSharp.Monitor.csproj" />
-    <Project Path="src/ViceSharp.Protocol/ViceSharp.Protocol.csproj" />
-    <Project Path="src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj" />
-    <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj" />
+    <!--
+      Every non-head project folds the new Debug-UWP / x64 solution axes back onto its
+      ordinary Debug | Any CPU build (correct DEBUG constant + bin/Debug output). These
+      rules are INERT under Debug|Any CPU (they only trigger for BuildType Debug-UWP or
+      Platform x64), so the CI project graph (`dotnet build -c Debug`) is identical to today.
+    -->
+    <Project Path="src/ViceSharp.Abstractions/ViceSharp.Abstractions.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.AdhocHelper/ViceSharp.AdhocHelper.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Architectures/ViceSharp.Architectures.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Avalonia/ViceSharp.Avalonia.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Chips/ViceSharp.Chips.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Console/ViceSharp.Console.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Core.Package/ViceSharp.Core.Package.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Core/ViceSharp.Core.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Host/ViceSharp.Host.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Host.Android/ViceSharp.Host.Android.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Host.InProcess/ViceSharp.Host.InProcess.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Host.iOS/ViceSharp.Host.iOS.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Host.MacOS/ViceSharp.Host.MacOS.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Host.Xbox/ViceSharp.Host.Xbox.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Launcher/ViceSharp.Launcher.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Library.ViewModels/ViceSharp.Library.ViewModels.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Monitor/ViceSharp.Monitor.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Protocol/ViceSharp.Protocol.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.RomM/ViceSharp.RomM.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.SourceGen/ViceSharp.SourceGen.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Xbox/ViceSharp.Xbox.csproj">
+      <!--
+        The HEAD. NO BuildType/Platform remap: under Debug-UWP|x64 the default name
+        pass-through delivers Configuration=Debug-UWP, Platform=x64 - exactly what the
+        csproj gate needs to flip ViceSharpXboxUwp=true (net10.0-windows UWP head).
+        Under Debug|* and Release|* it passes through as the net10.0 fallback (the gate
+        stays false). Disable the Debug-UWP|Any CPU combo: Xbox is x64-only (Native AOT
+        has no AnyCPU image), so a solution Platform=Any CPU must not override the
+        project's <Platform>x64</Platform> and mislabel the win-x64 AOT/MSIX output.
+      -->
+      <Build Solution="Debug-UWP|Any CPU" Project="false" />
+      <Deploy Solution="Debug-UWP|x64" />
+      <!--
+        Release-UWP (operator 2026-07-14): same head wiring as Debug-UWP - name pass-through
+        flips ViceSharpXboxUwp with release code-gen + PublishAot; x64-only; packaged deploy.
+      -->
+      <Build Solution="Release-UWP|Any CPU" Project="false" />
+      <Deploy Solution="Release-UWP|x64" />
+    </Project>
+    <Project Path="src/ViceSharp.Xbox.Input/ViceSharp.Xbox.Input.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.Xbox.ViewModels/ViceSharp.Xbox.ViewModels.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/ViceSharp.AiReview.Tests/ViceSharp.AiReview.Tests.csproj" />
-    <Project Path="tests/ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj" />
-    <Project Path="tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj" />
+    <Project Path="tests/ViceSharp.AiReview.Tests/ViceSharp.AiReview.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.Heads.Tests/ViceSharp.Heads.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.Library.IntegrationTests/ViceSharp.Library.IntegrationTests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
   </Folder>
 </Solution>

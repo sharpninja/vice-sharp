@@ -36,6 +36,15 @@
     <ProjectReference Include="../../src/ViceSharp.Host.MacOS/ViceSharp.Host.MacOS.csproj" />
     <ProjectReference Include="../../src/ViceSharp.Launcher/ViceSharp.Launcher.csproj" />
     <ProjectReference Include="../../src/ViceSharp.Protocol/ViceSharp.Protocol.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.Xbox.Input/ViceSharp.Xbox.Input.csproj" />
+    <ProjectReference Include="../../src/ViceSharp.Xbox.ViewModels/ViceSharp.Xbox.ViewModels.csproj" />
+    <!--
+      S40: reaches the head's RomProvisioning/RomFetchRomAcquirer (the only portable, non-UWP
+      type the Xbox tests need from the head). Under `dotnet test` the head restores as its
+      net10.0 fallback (ViceSharpXboxUwp=false) - a plain library-shaped assembly; its
+      #if HAS_UWP UWP surface is not compiled or referenced.
+    -->
+    <ProjectReference Include="../../src/ViceSharp.Xbox/ViceSharp.Xbox.csproj" />
     <ProjectReference Include="../ViceSharp.Benchmarks/ViceSharp.Benchmarks.csproj" />
   </ItemGroup>
 

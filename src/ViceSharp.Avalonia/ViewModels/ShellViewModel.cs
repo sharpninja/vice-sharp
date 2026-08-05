@@ -11,7 +11,7 @@ namespace ViceSharp.Avalonia.ViewModels;
 /// route to the host and/or the <see cref="AttachPanelViewModel"/>. Keeping this
 /// off the Window makes the menu wiring unit-testable against a mock host.
 /// </summary>
-public sealed class ShellViewModel
+public sealed class ShellViewModel : IGameLaunchTarget
 {
     private readonly IHostProtocolClient _host;
 
@@ -25,6 +25,12 @@ public sealed class ShellViewModel
 
     /// <summary>The peripherals/settings panel view-model the shell hosts.</summary>
     public AttachPanelViewModel Panel { get; }
+
+    /// <summary>
+    /// Optional: focus the emulator video surface after autoplay. Wired by the main window
+    /// so Library / Lists attach+play and Run 8 return keyboard focus to the machine.
+    /// </summary>
+    public Action? FocusEmulator { get; set; }
 
     // ---- Transport (return the host response so the shell can apply status) ---
 
@@ -44,7 +50,16 @@ public sealed class ShellViewModel
 
     public ValueTask<EmulatorCommandResponse> WarmResetAsync(CancellationToken ct = default) => _host.WarmResetAsync(ct);
 
-    public ValueTask<EmulatorCommandResponse> AutostartDrive8Async(CancellationToken ct = default) => _host.ResetAndAutostartDrive8Async(ct);
+    /// <summary>Reset and autostart Drive 8, then focus the emulator control for input.</summary>
+    public async ValueTask<EmulatorCommandResponse> AutostartDrive8Async(CancellationToken ct = default)
+    {
+        var response = await _host.ResetAndAutostartDrive8Async(ct).ConfigureAwait(true);
+        RequestFocusEmulator();
+        return response;
+    }
+
+    /// <summary>Move keyboard focus to the emulator surface when a host has wired <see cref="FocusEmulator"/>.</summary>
+    public void RequestFocusEmulator() => FocusEmulator?.Invoke();
 
     /// <summary>Capture the current frame to <paramref name="filePath"/> as a screenshot
     /// ("png" or "bmp"). Wired to Snapshot -&gt; Save screenshot... (x64sc screenshot parity).</summary>
@@ -178,10 +193,41 @@ public sealed class ShellViewModel
             startStatus = (await _host.ColdResetAsync(ct).ConfigureAwait(true)).Status;
         }
 
+        // Autoplay always returns focus to the emulator so joystick/keyboard go to the machine
+        // (Library / Lists attach+play, drop-to-start, not only drag-drop on the video host).
+        RequestFocusEmulator();
+
         Panel.ReportStatus(startStatus.IsSuccess
             ? $"Started {Path.GetFileName(filePath)}"
             : startStatus.Message);
         return startStatus;
+    }
+
+    /// <summary>
+    /// PLAN-ROMM-001 (AC-LAUNCH-06): attach a specific file to <paramref name="slot"/> WITHOUT starting
+    /// it (the RomM "attach only" path). Returns Ok when the slot reports attached, else a failure with
+    /// the validation reason.
+    /// </summary>
+    public async Task<RpcStatus> AttachFileAsync(MediaSlot slot, string filePath, CancellationToken ct = default)
+    {
+        var target = FindSlot(slot);
+        if (target is null)
+        {
+            var invalid = RpcStatus.InvalidArgument($"No media slot for {slot}.");
+            Panel.ReportStatus(invalid.Message);
+            return invalid;
+        }
+
+        await Panel.AttachAsync(target, filePath, ct).ConfigureAwait(true);
+        if (target.IsAttached)
+        {
+            return RpcStatus.Ok();
+        }
+
+        var reason = string.IsNullOrWhiteSpace(target.ValidationError) ? Panel.StatusText : target.ValidationError;
+        var failed = RpcStatus.FailedPrecondition(reason);
+        Panel.ReportStatus(failed.Message);
+        return failed;
     }
 
     /// <summary>Detach media from the given slot.</summary>

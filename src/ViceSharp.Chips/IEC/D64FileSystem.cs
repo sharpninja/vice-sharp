@@ -20,14 +20,15 @@ public sealed class D64FileSystem
     private const int DirectoryEntrySize = 32;
     private const int DirectoryEntryCount = 8;
 
-    // Directory slot field offsets (relative to the start of a 32-byte slot).
-    private const int SlotTypeOffset = 0;
-    private const int SlotTrackOffset = 1;
-    private const int SlotSectorOffset = 2;
-    private const int SlotNameOffset = 3;
+    // Directory slot field offsets relative to slotBase = index * 32 (VICE vdrive-dir.h).
+    // Bytes 0-1 of slot 0 are the next-directory T/S link for the sector; file fields start at +2.
+    private const int SlotTypeOffset = 2;
+    private const int SlotTrackOffset = 3;
+    private const int SlotSectorOffset = 4;
+    private const int SlotNameOffset = 5;
     private const int SlotNameLength = 16;
-    private const int SlotBlocksLowOffset = 0x1E;
-    private const int SlotBlocksHighOffset = 0x1F;
+    private const int SlotBlocksLowOffset = 30;  // SLOT_NR_BLOCKS
+    private const int SlotBlocksHighOffset = 31;
 
     // BAM (track 18 / sector 0) disk header fields for a 1541 image.
     private const int BamDiskNameOffset = 0x90;
@@ -61,24 +62,33 @@ public sealed class D64FileSystem
                 break;
 
             var dir = _image.GetSector(track, sector);
+            // Guard undersized buffers (should be 256); never throw out of the pump thread.
+            if (dir.Length < SectorSize)
+                break;
+
             for (var index = 0; index < DirectoryEntryCount; index++)
             {
-                var entryOffset = 2 + index * DirectoryEntrySize;
-                var typeByte = dir[entryOffset + SlotTypeOffset];
+                // VICE: slot base is index * 32 (not 2 + index * 32). Using 2+n*32 made the
+                // 8th entry's block-count field land at offsets 256/257 and crash autostart.
+                var slotBase = index * DirectoryEntrySize;
+                if (slotBase + SlotBlocksHighOffset >= dir.Length)
+                    break;
+
+                var typeByte = dir[slotBase + SlotTypeOffset];
 
                 // VICE vdrive-dir: a slot with a zero type byte is empty/unused.
                 if (typeByte == 0)
                     continue;
 
-                var name = dir.Slice(entryOffset + SlotNameOffset, SlotNameLength).ToArray();
-                var blocks = dir[entryOffset + SlotBlocksLowOffset]
-                             | (dir[entryOffset + SlotBlocksHighOffset] << 8);
+                var name = dir.Slice(slotBase + SlotNameOffset, SlotNameLength).ToArray();
+                var blocks = dir[slotBase + SlotBlocksLowOffset]
+                             | (dir[slotBase + SlotBlocksHighOffset] << 8);
 
                 entries.Add(new D64DirectoryEntry(
                     name,
                     typeByte,
-                    dir[entryOffset + SlotTrackOffset],
-                    dir[entryOffset + SlotSectorOffset],
+                    dir[slotBase + SlotTrackOffset],
+                    dir[slotBase + SlotSectorOffset],
                     blocks));
             }
 

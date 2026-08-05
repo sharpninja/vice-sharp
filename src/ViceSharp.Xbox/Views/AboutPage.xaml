@@ -1,0 +1,25 @@
+<!--
+  PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the About / GPL disclosure page. Binds AboutViewModel
+  (license identity, VICE attribution, source offer + URL, build version). Inert on the
+  net10.0 fallback.
+-->
+<Page
+    x:Class="ViceSharp.Xbox.Views.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    RequiresPointer="Never"
+    Background="#EE000000">
+    <Grid Style="{StaticResource TvSafeAreaRootStyle}">
+        <ScrollViewer>
+            <StackPanel Spacing="16" MaxWidth="1200">
+                <TextBlock Text="{x:Bind ViewModel.ProjectName, Mode=OneWay}" FontSize="56" Foreground="White" />
+                <TextBlock Text="{x:Bind ViewModel.Version, Mode=OneWay}" FontSize="24" Foreground="#FFBBBBBB" />
+                <TextBlock Text="{x:Bind ViewModel.LicenseIdentifier, Mode=OneWay}" FontSize="28" Foreground="White" />
+                <TextBlock Text="{x:Bind ViewModel.AttributionText, Mode=OneWay}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
+                <TextBlock Text="{x:Bind ViewModel.SourceOfferText, Mode=OneWay}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
+                <TextBlock Text="{x:Bind ViewModel.SourceUrl, Mode=OneWay}" Foreground="#FF8CB4FF" />
+                <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

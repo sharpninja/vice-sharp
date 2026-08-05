@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using ViceSharp.Abstractions;
 
 namespace ViceSharp.Core.Input;
@@ -5,11 +7,22 @@ namespace ViceSharp.Core.Input;
 /// <summary>
 /// C64 8×8 Keyboard Matrix implementation.
 /// </summary>
-public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix
+/// <remarks>
+/// FIX-XKBDNMI-001: RESTORE is an <see cref="IInterruptSource"/> on the CPU NMI
+/// line (open-drain with CIA2 TOD/NMI). Press asserts; release deasserts. The
+/// SystemClock edge-latches NMI on the low-going edge.
+/// </remarks>
+public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix, IInterruptSource
 {
     public DeviceId Id => new DeviceId(0x0008);
     public string Name => "C64 Keyboard Matrix";
     public bool IsConnected => true;
+
+    /// <inheritdoc />
+    public DeviceId SourceId => Id;
+
+    /// <inheritdoc />
+    public IReadOnlyList<IInterruptLine> ConnectedLines { get; private set; } = Array.Empty<IInterruptLine>();
 
     /// <inheritdoc />
     public void Poll()
@@ -25,9 +38,30 @@ public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix
     // VICE-style: RESTORE key is special (NMI trigger)
     private bool _restoreKeyPressed;
     private bool _stopKeyPressed;
+    private IInterruptLine? _nmiLine;
 
     public C64KeyboardMatrix()
     {
+    }
+
+    /// <summary>
+    /// FIX-XKBDNMI-001: attach this matrix as a source on the machine NMI line so
+    /// <see cref="SetRestore"/> can assert/release the edge-triggered CPU NMI.
+    /// </summary>
+    /// <param name="nmiLine">The C64 NMI open-drain line (shared with CIA2). Null is allowed for matrix-only unit tests.</param>
+    public void ConnectNmiLine(IInterruptLine? nmiLine)
+    {
+        // Release any prior assertion before rewiring.
+        if (_restoreKeyPressed && _nmiLine is not null)
+            _nmiLine.Release(this);
+
+        _nmiLine = nmiLine;
+        ConnectedLines = nmiLine is null
+            ? Array.Empty<IInterruptLine>()
+            : new IInterruptLine[] { nmiLine };
+
+        if (_restoreKeyPressed && _nmiLine is not null)
+            _nmiLine.Assert(this);
     }
 
     /// <inheritdoc />
@@ -47,7 +81,8 @@ public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix
     public void ClearKeys()
     {
         Array.Clear(_matrix);
-        _restoreKeyPressed = false;
+        // Drop RESTORE via the seam so the NMI line is released if we were asserting.
+        SetRestore(false);
         _stopKeyPressed = false;
     }
 
@@ -63,13 +98,43 @@ public sealed class C64KeyboardMatrix : IInputSource, IKeyboardMatrix
         {
             // VICE-style: RUN/STOP is row 7, col 7 (0x3F)
             if (keyCode == 0x3F) _stopKeyPressed = pressed;
-            // RESTORE is row 3, col 1 (0x31) - triggers NMI
-            if (keyCode == 0x31) _restoreKeyPressed = pressed;
-            
+
+            // NOTE: RESTORE is deliberately NOT handled here. On real C64 hardware
+            // RESTORE is not part of the 8x8 matrix at all: it is wired straight to
+            // the CPU NMI line through a monostable. Keycode 0x31 is the ordinary "*"
+            // matrix key (row 6, col 1) and must not fire RESTORE. The dedicated
+            // RESTORE/NMI trigger is driven exclusively via SetRestore(bool).
             _matrix[row, col] = pressed;
         }
     }
-    
+
+    /// <summary>
+    /// Set the dedicated RESTORE line state. RESTORE is not a key-matrix key on a C64:
+    /// it is wired directly to the CPU NMI line, so this drives ONLY the RESTORE/NMI
+    /// trigger and never a matrix cell (VICE handles RESTORE the same way, outside the
+    /// matrix scan).
+    /// </summary>
+    /// <param name="pressed">True to assert RESTORE (press), false to release.</param>
+    /// <remarks>
+    /// FIX-XKBDNMI-001: when an NMI line is connected, press asserts this source on the
+    /// open-drain NMI line and release deasserts it. SystemClock edge-latches NMI on the
+    /// assert edge so a held RESTORE does not re-fire until release+press.
+    /// </remarks>
+    public void SetRestore(bool pressed)
+    {
+        if (pressed == _restoreKeyPressed)
+            return;
+
+        _restoreKeyPressed = pressed;
+        if (_nmiLine is null)
+            return;
+
+        if (pressed)
+            _nmiLine.Assert(this);
+        else
+            _nmiLine.Release(this);
+    }
+
     /// <summary>
     /// Check if RESTORE key is pressed (triggers NMI in VICE)
     /// </summary>

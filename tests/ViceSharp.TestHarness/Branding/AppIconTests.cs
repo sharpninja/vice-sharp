@@ -72,6 +72,37 @@ public sealed class AppIconTests
         window.Should().Contain("vicesharp-icon.png", "the window Icon must reference the generated PNG");
     }
 
+    /// <summary>
+    /// BRANDING-ICON-001: UWP/Xbox package logos must be real assets (not the purple VS placeholders)
+    /// and must be wired in Package.appxmanifest to the same approved mark as Avalonia.
+    /// </summary>
+    [Theory]
+    [InlineData("Square44x44Logo.png")]
+    [InlineData("Square150x150Logo.png")]
+    [InlineData("StoreLogo.png")]
+    [InlineData("Wide310x150Logo.png")]
+    [InlineData("SplashScreen.png")]
+    public void Windows_UwpXbox_HasPackageLogos(string fileName)
+    {
+        AssertFileNonEmpty(
+            PathUnder("src", "ViceSharp.Xbox", "Assets", fileName),
+            $"the UWP package logo {fileName} (generated from logo.svg / Avalonia mark)");
+        // Placeholders shipped at a few hundred bytes; real mark assets are larger.
+        new FileInfo(PathUnder("src", "ViceSharp.Xbox", "Assets", fileName)).Length
+            .Should().BeGreaterThan(1000, $"{fileName} must not be the purple VS placeholder stub");
+    }
+
+    [Fact]
+    public void Windows_UwpXbox_ManifestWiresPackageLogos()
+    {
+        var manifest = File.ReadAllText(PathUnder("src", "ViceSharp.Xbox", "Package.appxmanifest"));
+        manifest.Should().Contain("Assets\\StoreLogo.png", "Properties/Logo must point at StoreLogo");
+        manifest.Should().Contain("Assets\\Square150x150Logo.png", "Square150x150Logo must be wired");
+        manifest.Should().Contain("Assets\\Square44x44Logo.png", "Square44x44Logo must be wired");
+        manifest.Should().Contain("Assets\\Wide310x150Logo.png", "Wide310x150Logo must be wired");
+        manifest.Should().Contain("Assets\\SplashScreen.png", "SplashScreen must be wired");
+    }
+
     [Fact]
     public void MacOS_HasIcnsWiredInPlistAndProject()
     {

@@ -1,0 +1,93 @@
+<!--
+  PLAN-XBOXUWP: the shell menu. FEAT-XMENUSLIDE-001 (operator 2026-07-14: "pinned and
+  consuming space like the keyboard", NOT floating): the Page IS the opaque right-dock
+  panel; the App grid docks the shell Frame in a right Auto column, so showing the menu
+  SHRINKS the emulator's star column (the C64 held PAUSED while it is up,
+  FEAT-XMENUPAUSE-001) exactly like the keyboard's bottom Auto row - never an overlay.
+  It slides in with the keyboard's edge transition. Buttons use the app-level C64 keycap
+  style (Styles/C64Keycaps.xaml). Menu actions: Close Menu is the FIRST button and takes
+  focus on every open (FEAT-XMENUFOCUS-001), Save/Load persist and restore a machine
+  snapshot (FEAT-XMENUSNAP-001), every dismissal resumes the machine, and Restart (cold
+  reset) is the LAST button. Inert on the net10.0 fallback.
+-->
+<Page
+    x:Class="ViceSharp.Xbox.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ViceSharp.Xbox.ViewModels"
+    RequiresPointer="Never"
+    Background="Transparent">
+    <Border
+        Background="#FF101418"
+        BorderBrush="#40FFFFFF"
+        BorderThickness="1,0,0,0"
+        Padding="16,14">
+        <Border.Transitions>
+            <TransitionCollection>
+                <EdgeUIThemeTransition Edge="Right" />
+            </TransitionCollection>
+        </Border.Transitions>
+        <StackPanel Spacing="6" MinWidth="300" VerticalAlignment="Center">
+                <!-- FEAT-XAOTBIND-001: compiled bind; reflection {Binding} dies under AOT. -->
+                <TextBlock
+                    Text="{x:Bind ViewModel.Title, Mode=OneWay}"
+                    FontFamily="{StaticResource C64KeyFont}"
+                    FontSize="22"
+                    Foreground="#FFE8E4D8"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,6" />
+                <!--
+                  FEAT-XMENUFOCUS-001 (operator 2026-07-14): Close Menu is the TOP
+                  button and receives focus on every menu open, so a single press of A
+                  dismisses, restoring the emulator's full width and resuming it
+                  (FEAT-XMENUPAUSE-001).
+                -->
+                <Button
+                    x:Name="CloseMenuButton"
+                    Content="Close Menu"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnCloseMenu" />
+                <Button
+                    Content="Save"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnSave" />
+                <Button
+                    Content="Load"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnLoad" />
+                <!-- PLAN-ROMM-001: restored after merge dropped these home-rail entries. -->
+                <Button
+                    Content="Library"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnLibrary" />
+                <Button
+                    Content="Lists"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnLists" />
+                <Button
+                    Content="CSDb"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnCsdb" />
+                <Button
+                    Content="Settings"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnSettings" />
+                <Button
+                    Content="Devices"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnDevices" />
+                <Button
+                    Content="Controls"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnControls" />
+                <Button
+                    Content="About"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnAbout" />
+                <Button
+                    Content="Restart"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnRestart" />
+            </StackPanel>
+    </Border>
+</Page>

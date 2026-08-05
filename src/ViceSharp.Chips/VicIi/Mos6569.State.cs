@@ -111,6 +111,27 @@ public partial class Mos6569 : IStatefulDevice
         _pixelSequencer.SeedCregsFromRegisters();
     }
 
+    /// <summary>
+    /// Symmetric capture of the state <see cref="InjectSnapshotState"/> restores
+    /// (FIX-XSNAPWARP-001: the in-app machine snapshot): the 64-byte register file,
+    /// the raster phase (line + in-line cycle), the .vsf badline/display latches, and
+    /// the mid-frame video counters (vc/vcbase/rc/vmli/refresh/sprite-DMA) that only
+    /// re-derive at frame top.
+    /// </summary>
+    /// <returns>The VIC snapshot state, field-for-field what injection consumes.</returns>
+    public VicSnapshotState CaptureSnapshotState() => new(
+        _registers.AsSpan(0, VicRegisterBytes).ToArray(),
+        CurrentRasterLine,
+        (byte)RasterX,
+        _allowBadLines,
+        _idleState,
+        _videoCounter,
+        _vcBase,
+        _rowCounter,
+        (byte)_videoMatrixLineIndex,
+        _refreshCounter,
+        _spriteDmaActiveMask);
+
     public void CaptureState(Span<byte> destination)
     {
         _registers.AsSpan(0, VicRegisterBytes).CopyTo(destination);

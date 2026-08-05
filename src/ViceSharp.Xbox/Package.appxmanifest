@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  PLAN-XBOXUWP S31 (IMPL-XBOXUWP-031): UWP-on-Xbox-console head manifest.
+
+  This manifest is processed ONLY by the real UWP build
+  (ViceSharpXboxUwp==true, see ViceSharp.Xbox.csproj). The workload-free
+  net10.0 fallback build ignores it (no AppxManifest include), so the whole
+  solution keeps building on agents without the windows-app / UWP workload.
+
+  - Identity Publisher matches the S0 self-signed dev cert subject
+    (CN=ViceSharpDev, per docs/xbox/on-console-setup-runbook.md) so the
+    sideloaded MSIX validates on the Dev-Mode console.
+  - TargetDeviceFamily Windows.Xbox is the shipping target; Windows.Desktop is
+    added so the operator can sideload/validate the same MSIX on the dev PC
+    (the off-console validation path the runbook uses for S0).
+  - internetClient is a GENERAL (not restricted) capability, declared because
+    the operator chose the verified-HTTPS ROM download from the VICE GitHub
+    mirror (FR-XROM-002) as the primary ROM-acquisition path.
+  - Version is a static placeholder here; the Nuke PublishXbox target stamps the
+    real MsiVersion/GitVersion at package time.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  IgnorableNamespaces="uap">
+
+  <Identity
+    Name="sharpninja.ViceSharp.Xbox"
+    Publisher="CN=ViceSharpDev"
+    Version="1.0.0.0"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>ViceSharp</DisplayName>
+    <PublisherDisplayName>ViceSharpDev</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Xbox" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+
+  <Applications>
+    <Application
+      Id="App"
+      Executable="ViceSharp.Xbox.exe"
+      EntryPoint="ViceSharp.Xbox.App">
+      <uap:VisualElements
+        DisplayName="ViceSharp"
+        Description="ViceSharp Commodore 64 emulator for Xbox"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="ViceSharp" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <!--
+      PLAN-ROMM-001 (AC-CONN-07): the RomM library scans the LOCAL subnet for the
+      server and connects to it, so it needs the private-network capability in
+      addition to internetClient. Without this the UWP sandbox silently blocks every
+      local-address probe/connection and the LAN scan finds nothing.
+    -->
+    <Capability Name="privateNetworkClientServer" />
+  </Capabilities>
+</Package>

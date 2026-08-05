@@ -1,0 +1,53 @@
+<!--
+  FEAT-XKEYCAPSTYLE-001 (operator 2026-07-14: "Apply CBM button style to the virtual
+  keyboad"): the shared C64 breadbin keycap look, promoted from HomePage-local resources
+  to an app-level dictionary so the shell menu AND the virtual keyboard read the same:
+  warm breadbin-brown cap, off-white legend in the PetMe64 face, and an uneven border
+  (light top/left, heavy bottom/right) for the raised-key bevel. The default
+  high-visibility focus rectangle stays for 10-foot navigation. Merged by App.xaml;
+  inert on the workload-free net10.0 fallback (no XAML compiler without UseUwp).
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- The C64 charset face shipped for the keycaps (FEAT-XC64FONT-001). -->
+    <FontFamily x:Key="C64KeyFont">ms-appx:///Assets/Fonts/PetMe64.ttf#Pet Me 64</FontFamily>
+
+    <!-- FEAT-XKEYCAPMODEL-001 (operator 2026-07-18: "Menu colors should match virtual
+         keyboard based on exact model"): the shell menu keycap brushes, repainted per
+         emulated model by App.ApplyMenuBrushes so the menu tracks the virtual keyboard.
+         The defaults are the breadbin function-key palette (dark brown cap, beige legend);
+         mutating these brushes' Color updates every menu button live. -->
+    <SolidColorBrush x:Key="C64MenuCapBrush" Color="#FF5A3B1E" />
+    <SolidColorBrush x:Key="C64MenuLegendBrush" Color="#FFD8C7A0" />
+    <SolidColorBrush x:Key="C64MenuBorderBrush" Color="#FF3A2612" />
+
+    <!-- Menu-sized keycap (the shell menu's C64-function-key buttons). -->
+    <Style x:Key="C64KeyButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource C64MenuCapBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource C64MenuLegendBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource C64MenuBorderBrush}" />
+        <Setter Property="BorderThickness" Value="2,2,4,5" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="FontFamily" Value="{StaticResource C64KeyFont}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Padding" Value="14,8" />
+        <Setter Property="MinHeight" Value="44" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+
+    <!-- Tile-sized keycap (the virtual keyboard's 66 keys + function column):
+         same identity, tighter metrics so the full board fits the dock. -->
+    <Style x:Key="C64KeycapTileStyle" TargetType="Button" BasedOn="{StaticResource C64KeyButtonStyle}">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="3" />
+        <Setter Property="MinHeight" Value="52" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="BorderThickness" Value="1,1,3,4" />
+    </Style>
+
+</ResourceDictionary>

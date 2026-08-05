@@ -1,0 +1,53 @@
+<!--
+  PLAN-XBOXUWP S40 (IMPL-XBOXUWP-040), area XROM. The first-run ROM-provisioning gate.
+  Shown before boot when the C64 ROMs are missing; binds XboxRomProvisioningViewModel
+  (App.Instance.ProvisioningVm). Inert on the net10.0 fallback (no XAML compiled there).
+-->
+<Page
+    x:Class="ViceSharp.Xbox.Views.RomProvisioningPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    RequiresPointer="Never"
+    Background="#CC000000">
+    <Grid Style="{StaticResource TvSafeAreaRootStyle}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="24" MaxWidth="1000">
+            <TextBlock
+                Text="Set up your Commodore 64"
+                FontSize="52"
+                Foreground="White"
+                HorizontalAlignment="Center"
+                TextWrapping="Wrap"
+                TextAlignment="Center" />
+            <TextBlock
+                Text="ViceSharp ships no ROMs. Download the three core C64 ROMs (BASIC, KERNAL, character generator) from the VICE GitHub mirror over verified HTTPS, or import them from USB."
+                FontSize="24"
+                Foreground="#DDDDDD"
+                HorizontalAlignment="Center"
+                TextWrapping="Wrap"
+                TextAlignment="Center" />
+            <TextBlock
+                Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                FontSize="22"
+                Foreground="#FFD54F"
+                HorizontalAlignment="Center"
+                TextWrapping="Wrap"
+                TextAlignment="Center" />
+            <ProgressRing
+                IsActive="{x:Bind ViewModel.IsDownloadConfirmed, Mode=OneWay}"
+                Width="48"
+                Height="48"
+                HorizontalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="24">
+                <Button
+                    x:Name="DownloadButton"
+                    Content="Download core ROM set"
+                    Style="{StaticResource TenFootButtonStyle}"
+                    Click="OnDownload" />
+                <Button
+                    Content="Import from USB..."
+                    Style="{StaticResource TenFootButtonStyle}"
+                    Click="OnImport" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,38 @@
+<!--
+  PLAN-XBOXUWP S34 (IMPL-XBOXUWP-034): the always-present In-emulator (base) view. It hosts
+  the permanent video surface the pushable pages overlay. Modeled as a UserControl because
+  it is placed directly in the shell root (never navigated to on the Frame). Inert on the
+  workload-free net10.0 fallback (its code-behind is #if HAS_UWP-guarded).
+-->
+<UserControl
+    x:Class="ViceSharp.Xbox.Views.EmulatorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:ViceSharp.Xbox.Controls"
+    RequiresPointer="Never"
+    Background="Black">
+    <!-- Black root so letterbox + video area receive right-click (SwapChainPanel may not). -->
+    <Grid Background="Black">
+        <controls:VideoSurfaceHost
+            x:Name="VideoSurface"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsHitTestVisible="False" />
+
+        <!--
+          FEAT-XPERFHUD-001: live performance stats in the LEFT letterbox bar (the video is
+          centered with true-aspect letterboxing, so the left margin is black). Pure display:
+          the surface raises the pre-formatted text ~2x/second; never hit-testable.
+        -->
+        <TextBlock
+            x:Name="PerfStats"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Margin="16,0,0,0"
+            FontFamily="Consolas"
+            FontSize="16"
+            Foreground="#C084E184"
+            IsHitTestVisible="False"
+            TextWrapping="NoWrap" />
+    </Grid>
+</UserControl>

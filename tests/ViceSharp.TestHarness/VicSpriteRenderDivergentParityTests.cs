@@ -621,6 +621,63 @@ public sealed class VicSpriteRenderDivergentParityTests
     }
 
     // ----------------------------------------------------------------
+    // FIX-XSPRITEDUP-001: live render must not composite sprites twice
+    // ----------------------------------------------------------------
+
+    /// <summary>
+    /// FR-VIC-SPRITE-RENDER, FIX-XSPRITEDUP-001 (operator 2026-07-14, S-Blox on BOTH
+    /// heads: "Sprites are being duplicated on the screen... the one on the right is
+    /// correctly located", present before any sprite movement).
+    /// Use case: in LIVE rendering the PixelSequencer already draws the sprite layer
+    /// into LineIndices at the VICE-exact DBUF positions (DrawSprites8,
+    /// vicii-draw-cycle.c); the geometric <c>TryGetSpritePixel</c> overlay then
+    /// composited the SAME sprite a second time at frame x = sprite X, which sits 8 px
+    /// LEFT of the sequencer's correct frame x = sprite X + 8 (vicii-draw.c:71
+    /// DBUF_OFFSET mapping) - a left-offset ghost of every sprite, on every head.
+    /// Acceptance: with sprite 0 opaque at X=50/Y=100 over an all-background line, the
+    /// live-rendered frame shows the sprite at frame x 58 (sequencer, correct) and PURE
+    /// BACKGROUND across the ghost zone frame x 50..57.
+    /// </summary>
+    [Fact]
+    public void LiveRender_DrawsEachSpriteOnce_NoGeometricGhostToTheLeft()
+    {
+        var vic = BuildVicWithSprites();
+        vic.Phi1MemoryReader = _ => 0x00; // all-background graphics line
+
+        vic.Write(0xD011, 0x1B); // DEN|RSEL|YSCROLL=3
+        vic.Write(0xD016, 0x08); // CSEL=1
+        vic.Write(SpriteX0Hi, 0);
+        vic.Write(SpriteX0Lo, 50);
+        vic.Write(SpriteY0, 100);
+        vic.Write(SpriteEnable, 0x01);
+        vic.Write(0xD027, 0x02); // sprite 0 color = 2 (red)
+
+        // Y=100 starts DMA on line 100 (s-access latch window at cycle 57); the sbuf
+        // then RENDERS on line 101. Advance into line 102 so NotifyLineCompleted(101)
+        // has fired (live path).
+        AdvanceTo(vic, 100, 57);
+        LatchOpaqueData(vic, 0);
+        AdvanceTo(vic, 102, 0);
+
+        int frameY = 101 - VideoRenderer.PalFirstVisibleRasterLine;
+        int rowOffset = frameY * VideoRenderer.ScreenWidth * 4;
+        const uint BgColor = 0xFF000000u; // $D021=0 (black), BGRA
+
+        // The sequencer-drawn sprite is present at its VICE-exact position
+        // (sprite X=50 -> frame x 58: vicii-draw.c:71 DBUF_OFFSET mapping).
+        uint atCorrect = System.BitConverter.ToUInt32(vic.FrameBuffer, rowOffset + (58 * 4));
+        Assert.NotEqual(BgColor, atCorrect);
+
+        // The ghost zone (frame x = raw sprite X .. +7) must be pure background: the
+        // duplicated geometric composite painted red here.
+        for (int x = 50; x < 58; x++)
+        {
+            uint pixel = System.BitConverter.ToUInt32(vic.FrameBuffer, rowOffset + (x * 4));
+            Assert.Equal(BgColor, pixel);
+        }
+    }
+
+    // ----------------------------------------------------------------
     // Test helpers
     // ----------------------------------------------------------------
 

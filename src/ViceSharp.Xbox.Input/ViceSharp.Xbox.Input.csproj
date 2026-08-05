@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    PLAN-XBOXUWP S7 (IMPL-XBOXUWP-007): the portable, unit-testable input layer
+    shared by the mapper (S8/S9) and the context state machine (S10/S11).
+
+    net10.0 with ZERO Windows.*/WinRT/Grpc/AspNetCore/Avalonia dependency. All
+    build knobs that matter here - IsAotCompatible, EnableTrimAnalyzer,
+    TreatWarningsAsErrors, Nullable, ImplicitUsings, RootNamespace, AssemblyName
+    - are inherited from Directory.Build.props and MUST NOT be overridden.
+
+    References Abstractions + Protocol only (both portable; Protocol carries
+    InputPort, consumed by later slices). No Core/Chips/Architectures/Host/UI.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj" />
+    <ProjectReference Include="..\ViceSharp.Protocol\ViceSharp.Protocol.csproj" />
+  </ItemGroup>
+
+</Project>

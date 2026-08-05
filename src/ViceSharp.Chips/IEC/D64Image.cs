@@ -153,15 +153,16 @@ public sealed class D64Image
             var directory = GetSector(directoryTrack, directorySector);
             for (var index = 0; index < DirectoryEntryCount; index++)
             {
-                var entryOffset = 2 + index * DirectoryEntrySize;
-                var fileType = (byte)(directory[entryOffset] & FileTypeMask);
-                var fileTrack = directory[entryOffset + 1];
-                var fileSector = directory[entryOffset + 2];
+                // VICE vdrive-dir: slot base is index * 32; type/track/name at +2/+3/+5.
+                var slotBase = index * DirectoryEntrySize;
+                var fileType = (byte)(directory[slotBase + 2] & FileTypeMask);
+                var fileTrack = directory[slotBase + 3];
+                var fileSector = directory[slotBase + 4];
 
                 if (fileTrack == 0 || fileType != FileTypePrg)
                     continue;
 
-                var fileName = DecodeDirectoryFileName(directory.Slice(entryOffset + 3, 16));
+                var fileName = DecodeDirectoryFileName(directory.Slice(slotBase + 5, 16));
                 return TryReadProgram(fileName, fileTrack, fileSector, out program, out error);
             }
 

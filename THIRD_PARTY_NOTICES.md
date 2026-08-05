@@ -10,6 +10,23 @@ ViceSharp is a derivative work of VICE and incorporates knowledge, algorithms, a
 
 ViceSharp is a clean-room C# port informed by VICE's architecture and behavior, not a direct code translation. VICE's GPL license applies to this derivative work.
 
+### Bundled VICE keymap data (`*.vkm`)
+
+- **License:** GPL-2.0-or-later
+- **Origin:** VICE `data/C64/*.vkm` keyboard mapping files
+- **Redistributed in:** the Xbox (UWP) head packages these under `Assets/vice-data/C64/*.vkm`
+
+The C64 keyboard keymap files (`*.vkm`) shipped with the ViceSharp Xbox head are verbatim GPL-2.0-or-later VICE data. They are redistributed here unmodified, under the same GPL-2.0-or-later license as the VICE project, so the emulator can seed its writable keymap folder on first run. No Commodore ROM images (`kernal-*.bin`, `basic-*.bin`, `chargen-*.bin`) are bundled; ROMs remain user-provided or fetched at runtime.
+
+### Bundled PetMe64 font (`PetMe64.ttf`)
+
+- **Author:** Kreative Korporation (Kreative Software), https://www.kreativekorp.com/software/fonts/c64/
+- **License:** Kreative Software Relay Fonts Free Use License 1.2f (redistributable free of charge with the license included verbatim and credit given; see `src/ViceSharp.Xbox/Assets/Fonts/PetMe-FreeLicense.txt`)
+- **Origin:** VICE `data/common/PetMe64.ttf` (VICE bundles the PetMe font family under the same license)
+- **Redistributed in:** the Xbox (UWP) head packages the font under `Assets/Fonts/` and renders the virtual keyboard's keycaps with it (family "Pet Me 64")
+
+The PetMe64 TrueType font reproduces the Commodore 64's character set pixel-for-pixel. It is redistributed unmodified together with its verbatim license text, with credit to Kreative Korporation as the license requires.
+
 ## resid / resid-fp
 
 - **Project:** SID chip emulation library by Dag Lem

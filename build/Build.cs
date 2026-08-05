@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
+using System.Xml.Linq;
 using Nuke.Common;
 using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.IO;
@@ -105,7 +108,7 @@ sealed partial class Build : NukeBuild
                 // admitted per slice as they flip green: PLAN-VICEPARITY-001),
                 // and the legacy renderer tests awaiting per-cycle replacement
                 // (ParityLegacy, deleted as V-slices land).
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"));
+                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration"));
         });
 
     /// <summary>
@@ -133,7 +136,7 @@ sealed partial class Build : NukeBuild
             DotNetTest(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
-                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy")
+                .SetFilter("Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration")
                 .When(_ => romRoot is not null, x => x
                     .SetProcessEnvironmentVariable("VICESHARP_ROM_PATH", romRoot)));
         });
@@ -413,6 +416,12 @@ sealed partial class Build : NukeBuild
                 ("ViceSharp.Host.Android", false, false, true),
                 ("ViceSharp.Host.iOS", false, false, true),
                 ("ViceSharp.Host.Xbox", false, false, true),
+                // PLAN-ROMM-001 L8: the RomM library integration packages. Plain
+                // libraries with real published-package dependencies (Protocol, and
+                // for the adapter also Library.ViewModels + RomM.Client[.Csdb]); no
+                // dep-rewrite, no embedding, no tool payload.
+                ("ViceSharp.Library.ViewModels", false, false, false),
+                ("ViceSharp.RomM", false, false, false),
             };
 
             foreach (var spec in individual)
@@ -943,6 +952,232 @@ sealed partial class Build : NukeBuild
     AbsolutePath MsiOutputPath => InstallerOutputDir / "ViceSharp.msi";
 
     AbsolutePath WingetOutputDir => ArtifactsDirectory / "winget";
+
+    [Parameter("Store package (.msixupload/.appxupload/.msix/.appx) for ValidateStorePackage. When omitted, the newest upload package under src/ViceSharp.Xbox is used.")]
+    readonly string? StorePackagePath;
+
+    [Parameter("UWP configuration for DeployXboxLocal: Release-UWP (default) or Debug-UWP.")]
+    readonly string XboxDeployConfiguration = "Release-UWP";
+
+    [Parameter("Launch the app after DeployXboxLocal refreshes the layout. Default: true.")]
+    readonly bool XboxLaunch = true;
+
+    /// <summary>
+    /// FEAT-XLOCALDEPLOY-001: builds the Xbox UWP head and refreshes the locally
+    /// REGISTERED loose-file AppX layout in place, then relaunches the app - the
+    /// session-proven dev loop as one command. Steps: stop a running instance (the
+    /// copy would hit locked files), Restore+Build the head with the vswhere-located
+    /// VS MSBuild (Restore heals the net10.0-fallback assets flip), robocopy the fresh
+    /// output over Get-AppxPackage's InstallLocation (manifest excluded: the layout
+    /// keeps its registered identity), and activate shell:AppsFolder. Prerequisite: a
+    /// one-time VS deploy (F5) so the package IS registered; diagnostics land in
+    /// LocalState\vicesharp.log.
+    /// </summary>
+    Target DeployXboxLocal => _ => _
+        .Executes(() =>
+        {
+            if (!string.Equals(XboxDeployConfiguration, "Release-UWP", StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(XboxDeployConfiguration, "Debug-UWP", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    $"--xbox-deploy-configuration '{XboxDeployConfiguration}' is not a UWP configuration (Release-UWP or Debug-UWP).");
+            }
+
+            // Windows PowerShell (5.1) hosts the Appx cmdlets natively; pwsh needs the
+            // compatibility shim, so the loop shells the classic host deliberately.
+            static string WinPs(string command)
+            {
+                var process = ProcessTasks.StartProcess(
+                    "powershell.exe",
+                    $"-NoProfile -NonInteractive -Command \"{command}\"",
+                    logOutput: false);
+                process.WaitForExit();
+                return string.Join('\n', process.Output.Select(o => o.Text)).Trim();
+            }
+
+            const string packageName = "sharpninja.ViceSharp.Xbox";
+            const string exeName = "ViceSharp.Xbox";
+
+            // 1. Stop a running instance: robocopy onto a running app hits locked files.
+            WinPs($"Stop-Process -Name '{exeName}' -Force -ErrorAction SilentlyContinue");
+
+            // 2. Build the head on the proven toolchain. GenerateProjectPriFile is
+            //    EXPLICIT: incremental Build does not refresh resources.pri, and UWP
+            //    loads page XAML from the pri - without it a XAML-only change deploys
+            //    STALE UI (operator 2026-07-14: "None of that is what I asked for";
+            //    the restyled HomePage.xbf was fresh while the layout pri still served
+            //    the previous menu). Restore is the /restore SWITCH, not an entry
+            //    target: /t:Restore,X evaluates the project ONCE, and after a fallback
+            //    (dotnet) restore the stale nuget.g.targets does not import the MSIX
+            //    targets, so GenerateProjectPriFile does not exist yet (MSB4057).
+            //    /restore restores and then RE-EVALUATES before building.
+            var msbuild = ResolveVsMsBuild();
+            var head = RootDirectory / "src" / "ViceSharp.Xbox" / "ViceSharp.Xbox.csproj";
+            var build = ProcessTasks.StartProcess(
+                msbuild,
+                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 /restore /t:Build,GenerateProjectPriFile /v:m /nologo",
+                RootDirectory);
+            build.WaitForExit();
+            if (build.ExitCode != 0)
+                throw new InvalidOperationException($"MSBuild failed with exit code {build.ExitCode}.");
+
+            // 3. The registered layout is the deploy destination.
+            var installLocation = WinPs($"(Get-AppxPackage -Name '{packageName}').InstallLocation");
+            if (string.IsNullOrWhiteSpace(installLocation) || !Directory.Exists(installLocation))
+            {
+                throw new InvalidOperationException(
+                    $"Package '{packageName}' is not registered (Get-AppxPackage returned nothing). " +
+                    "Deploy once from Visual Studio (F5 with a UWP configuration) to register the loose-file layout, then rerun.");
+            }
+
+            var output = RootDirectory / "src" / "ViceSharp.Xbox" / "bin" / "x64" / XboxDeployConfiguration
+                / "net10.0-windows10.0.26100.0" / "win-x64";
+            if (!output.DirectoryExists())
+                throw new InvalidOperationException($"Build output not found at '{output}'.");
+
+            // 4. Refresh the layout in place (exit codes 0-7 are robocopy success).
+            //    NO /XO: the timestamp filter skipped older-but-different files, so
+            //    switching deploy configurations left a FRANKENBUILD layout (Release
+            //    head over newer Debug core libs). The layout must deterministically
+            //    mirror whatever was just built.
+            var robocopy = ProcessTasks.StartProcess(
+                "robocopy",
+                $"\"{output}\" \"{installLocation}\" /S /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP",
+                RootDirectory);
+            robocopy.WaitForExit();
+            if (robocopy.ExitCode > 7)
+                throw new InvalidOperationException($"robocopy failed with exit code {robocopy.ExitCode}.");
+
+            Serilog.Log.Information(
+                "Deployed {Configuration} build into the registered layout: {Layout}",
+                XboxDeployConfiguration, installLocation);
+
+            // 5. Relaunch (opt-out via --xbox-launch false). Diagnostics:
+            //    %LOCALAPPDATA%\Packages\<PFN>\LocalState\vicesharp.log
+            if (XboxLaunch)
+            {
+                var familyName = WinPs($"(Get-AppxPackage -Name '{packageName}').PackageFamilyName");
+                if (string.IsNullOrWhiteSpace(familyName))
+                    throw new InvalidOperationException("Could not resolve the PackageFamilyName for launch.");
+
+                WinPs($"Start-Process 'shell:AppsFolder\\{familyName}!App'");
+                Serilog.Log.Information(
+                    "Launched {Family}. Log: %LOCALAPPDATA%\\Packages\\{Family}\\LocalState\\vicesharp.log",
+                    familyName, familyName);
+            }
+        });
+
+    /// <summary>Locates the Visual Studio MSBuild (the proven UWP toolchain) via vswhere.</summary>
+    static AbsolutePath ResolveVsMsBuild()
+    {
+        var vswhere = (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+            / "Microsoft Visual Studio" / "Installer" / "vswhere.exe";
+        if (!vswhere.FileExists())
+            throw new InvalidOperationException($"vswhere.exe not found at '{vswhere}' (install Visual Studio).");
+
+        var probe = ProcessTasks.StartProcess(
+            vswhere,
+            "-latest -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe",
+            logOutput: false);
+        probe.WaitForExit();
+
+        var msbuild = probe.Output.Select(o => o.Text).FirstOrDefault(l => !string.IsNullOrWhiteSpace(l));
+        if (string.IsNullOrWhiteSpace(msbuild) || !File.Exists(msbuild))
+            throw new InvalidOperationException("vswhere found no MSBuild with the required components.");
+
+        return (AbsolutePath)msbuild;
+    }
+
+    /// <summary>
+    /// FEAT-XSTOREPIPE-001: local Microsoft Store certification pre-flight. Runs the
+    /// Windows App Certification Kit (appcert.exe) against the Xbox head's Store
+    /// package and FAILS on any verdict other than PASS (verdict read from the report's
+    /// OVERALL_RESULT). Optional by policy: Partner Center runs the authoritative
+    /// certification on every upload; this target merely fails the same checks about an
+    /// hour earlier. Constraints (per the WACK documentation): appcert.exe requires an
+    /// ACTIVE USER SESSION (never Session0, so never a service-hosted agent) and admin
+    /// rights; the pipeline exposes it behind the opt-in runWack parameter.
+    /// </summary>
+    Target ValidateStorePackage => _ => _
+        .Executes(() =>
+        {
+            var package = ResolveStorePackage();
+            Serilog.Log.Information("WACK input package: {Package}", package);
+
+            // An .msixupload/.appxupload is a zip around the per-architecture package:
+            // extract and validate the inner .msix/.appx (appcert tests packages, not uploads).
+            var wackDirectory = ArtifactsDirectory / "wack";
+            wackDirectory.CreateDirectory();
+
+            var packagePath = package.ToString();
+            AbsolutePath msix = package;
+            if (packagePath.EndsWith(".msixupload", StringComparison.OrdinalIgnoreCase)
+                || packagePath.EndsWith(".appxupload", StringComparison.OrdinalIgnoreCase))
+            {
+                var extractDirectory = wackDirectory / "extracted";
+                extractDirectory.CreateOrCleanDirectory();
+                ZipFile.ExtractToDirectory(packagePath, extractDirectory, overwriteFiles: true);
+                msix = extractDirectory.GlobFiles("*.msix", "*.appx").FirstOrDefault()
+                    ?? throw new InvalidOperationException(
+                        $"The upload package '{package}' contains no .msix/.appx.");
+                Serilog.Log.Information("Extracted inner package: {Msix}", msix);
+            }
+
+            var appcert = (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)
+                / "Windows Kits" / "10" / "App Certification Kit" / "appcert.exe";
+            if (!appcert.FileExists())
+                throw new InvalidOperationException(
+                    $"appcert.exe not found at '{appcert}'. Install the Windows App Certification Kit (ships with the Windows SDK).");
+
+            var report = wackDirectory / $"wack-report-{DateTime.Now:yyyyMMdd-HHmmss}.xml";
+
+            // reset clears prior kit state; it needs admin, and a failure here surfaces
+            // again in the test run, so it is deliberately tolerant.
+            ProcessTasks.StartProcess(appcert, "reset", RootDirectory).WaitForExit();
+
+            var test = ProcessTasks.StartProcess(
+                appcert,
+                $"test -appxpackagepath \"{msix}\" -reportoutputpath \"{report}\"",
+                RootDirectory);
+            test.WaitForExit();
+
+            if (!report.FileExists())
+                throw new InvalidOperationException(
+                    $"WACK produced no report (appcert exit {test.ExitCode}). appcert.exe requires an active user session (never Session0) and admin rights.");
+
+            // The report is the verdict (appcert's exit code only says the run completed).
+            var overall = XDocument.Load(report).Root?.Attribute("OVERALL_RESULT")?.Value ?? "UNKNOWN";
+            Serilog.Log.Information("WACK OVERALL_RESULT={Result}; report: {Report}", overall, report);
+
+            if (!string.Equals(overall, "PASS", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException(
+                    $"WACK verdict '{overall}' (anything but PASS fails the pre-flight). Report: {report}");
+        });
+
+    /// <summary>
+    /// Resolves the Store package for <see cref="ValidateStorePackage"/>: the explicit
+    /// --store-package-path when given, else the newest upload package (or packaged
+    /// .msix) under the Xbox head.
+    /// </summary>
+    AbsolutePath ResolveStorePackage()
+    {
+        if (!string.IsNullOrWhiteSpace(StorePackagePath))
+        {
+            var explicitPath = (AbsolutePath)Path.GetFullPath(StorePackagePath);
+            if (!explicitPath.FileExists())
+                throw new InvalidOperationException($"--store-package-path '{explicitPath}' does not exist.");
+            return explicitPath;
+        }
+
+        var headDirectory = RootDirectory / "src" / "ViceSharp.Xbox";
+        var newest = headDirectory
+            .GlobFiles("**/*.msixupload", "**/*.appxupload", "AppPackages/**/*.msix")
+            .OrderByDescending(file => File.GetLastWriteTimeUtc(file))
+            .FirstOrDefault();
+
+        return newest ?? throw new InvalidOperationException(
+            "No Store package found under src/ViceSharp.Xbox. Build one (UapAppxPackageBuildMode=StoreUpload) or pass --store-package-path.");
+    }
 
     /// <summary>
     /// Publish the ViceSharp.Avalonia desktop GUI as a self-contained
@@ -1633,4 +1868,149 @@ ManifestVersion: 1.6.0
                 throwOnNonZero: true);
             Serilog.Log.Information("Scoop manifest for {Version} pushed to the mirror's main.", version);
         });
+
+    // ---- Xbox (UWP-on-console) head: PLAN-XBOXUWP S33 (IMPL-XBOXUWP-033) --------
+    // Three targets for the ViceSharp.Xbox head, split by where they can run:
+    //  - PublishXbox / DeployXbox: DEV-PC / MANUAL DEVICE targets. They need the
+    //    windows-app / UWP workload and (for deploy) a paired Dev-Mode console, so
+    //    they are NEVER wired into a CI/release pipeline. XboxCiConfigTests guards
+    //    their absence from azure-pipelines.{ci,release}.yml.
+    //  - ValidateXbox: the OFF-CONSOLE, workload-free gate. It runs on a plain
+    //    net10.0 agent (no UWP workload, no console): solution build + the
+    //    Category=Xbox tests + the Native-AOT link of the ViceSharpXboxUwp=false
+    //    fallback head. It may optionally be wired into CI.
+    // Rollback for a bad sideload is documented in
+    // docs/xbox/on-console-setup-runbook.md (WinAppDeployCmd uninstall + redeploy).
+
+    AbsolutePath XboxHeadProject => RootDirectory / "src" / "ViceSharp.Xbox" / "ViceSharp.Xbox.csproj";
+
+    AbsolutePath TestHarnessProject => RootDirectory / "tests" / "ViceSharp.TestHarness" / "ViceSharp.TestHarness.csproj";
+
+    [Parameter("DeployXbox: the Dev-Mode console IP (or host:port) passed to WinAppDeployCmd -ip.")]
+    readonly string XboxConsoleIp = null!;
+
+    [Parameter("DeployXbox: the Dev-Mode pairing PIN passed to WinAppDeployCmd -pin.")]
+    readonly string XboxPairingPin = null!;
+
+    [Parameter("DeployXbox: override the MSIX to sideload. Default: the newest .msix under the ViceSharp.Xbox build output.")]
+    readonly string XboxMsixPath = null!;
+
+    /// <summary>
+    /// DEV-PC / MANUAL (never CI): publish the <c>ViceSharp.Xbox</c>
+    /// UWP-on-Xbox-console head as a Release Native-AOT MSIX (the Store publish
+    /// path). Requires the windows-app / UWP workload
+    /// (<c>ViceSharpXboxUwp=true</c> switches the head to the
+    /// net10.0-windows UWP TFM); on a workload-less agent this target is simply
+    /// not invoked (CI never calls it), while the definition still compiles.
+    /// </summary>
+    Target PublishXbox => _ => _
+        .Description("DEV-PC/MANUAL (never CI): publish the ViceSharp.Xbox head as a Release Native-AOT MSIX. Requires the windows-app / UWP workload.")
+        .Executes(() =>
+        {
+            Serilog.Log.Information(
+                "Publishing the ViceSharp.Xbox UWP-on-console head (Release, Native AOT, win-x64, ViceSharpXboxUwp=true) -> MSIX. " +
+                "This needs the windows-app / UWP workload; see docs/xbox/on-console-setup-runbook.md.");
+            DotNetPublish(s => s
+                .SetProject(XboxHeadProject)
+                .SetConfiguration("Release")
+                .SetRuntime("win-x64")
+                .SetProperty("ViceSharpXboxUwp", "true")
+                .SetProperty("PublishAot", "true"));
+        });
+
+    /// <summary>
+    /// DEV-PC / MANUAL (never CI): sideload the packaged <c>ViceSharp.Xbox</c>
+    /// MSIX to a paired Dev-Mode console with <c>WinAppDeployCmd</c>
+    /// (<c>install -file &lt;msix&gt; -ip &lt;ip&gt; -pin &lt;pin&gt;</c>). Pass the
+    /// console with <c>--xbox-console-ip</c>, the Dev-Mode PIN with
+    /// <c>--xbox-pairing-pin</c>, and optionally an explicit MSIX with
+    /// <c>--xbox-msix-path</c>. Rollback (a bad sideload) is documented in
+    /// docs/xbox/on-console-setup-runbook.md: <c>WinAppDeployCmd uninstall</c> then
+    /// redeploy the prior known-good MSIX (or the Device Portal Add-app fallback).
+    /// </summary>
+    Target DeployXbox => _ => _
+        .Description("DEV-PC/MANUAL (never CI): sideload the ViceSharp.Xbox MSIX to a Dev-Mode console via WinAppDeployCmd. Params: --xbox-console-ip, --xbox-pairing-pin, [--xbox-msix-path].")
+        .Requires(() => XboxConsoleIp)
+        .Requires(() => XboxPairingPin)
+        .Executes(() =>
+        {
+            var msix = ResolveXboxMsix();
+            var winAppDeploy = FindOnPath("WinAppDeployCmd.exe") ?? FindOnPath("WinAppDeployCmd")
+                ?? throw new InvalidOperationException(
+                    "WinAppDeployCmd not found on PATH (it ships with the Windows 10/11 SDK). Install the "
+                  + "SDK, or use the Device Portal Add-app sideload documented in "
+                  + "docs/xbox/on-console-setup-runbook.md.");
+
+            Serilog.Log.Information("Sideloading {Msix} to console {Ip} via WinAppDeployCmd install.", msix, XboxConsoleIp);
+            RunProcess(winAppDeploy,
+                $"install -file \"{msix}\" -ip {XboxConsoleIp} -pin {XboxPairingPin}",
+                throwOnNonZero: true);
+            Serilog.Log.Information(
+                "Deployed {Msix} to {Ip}. To roll back: WinAppDeployCmd uninstall -package <PackageFullName> "
+              + "-ip {Ip} -pin <pin>, then redeploy the prior MSIX (docs/xbox/on-console-setup-runbook.md).",
+                msix, XboxConsoleIp, XboxConsoleIp);
+        });
+
+    /// <summary>
+    /// OFF-CONSOLE, workload-free Xbox gate (safe on a plain net10.0 CI agent, no
+    /// UWP workload, no console): (1) the whole solution builds (via
+    /// <see cref="Compile"/>), (2) the <c>Category=Xbox</c> tests pass, and (3) the
+    /// workload-free fallback head (<c>ViceSharpXboxUwp=false</c>, so the plain
+    /// net10.0 TFM) links clean under Native AOT - proving the reused managed core +
+    /// Host.InProcess graph is trim/AOT safe before any device slice. This is the CI-
+    /// eligible half of the Xbox build; the DEVICE targets (PublishXbox/DeployXbox)
+    /// stay manual.
+    /// </summary>
+    Target ValidateXbox => _ => _
+        .Description("OFF-CONSOLE, workload-free Xbox gate (plain net10.0 agent): solution build + Category=Xbox tests + Native-AOT link of the ViceSharpXboxUwp=false fallback head.")
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            // (1) Category=Xbox tests. Compile already built the solution in
+            // Configuration, so run the harness assembly with no rebuild/restore.
+            DotNetTest(s => s
+                .SetProjectFile(TestHarnessProject)
+                .SetConfiguration(Configuration)
+                .SetNoRestore(true)
+                .SetNoBuild(true)
+                .SetFilter("Category=Xbox"));
+
+            // (2) Native-AOT link of the workload-free fallback head. ViceSharpXboxUwp=false
+            // keeps the plain net10.0 TFM (no UWP workload needed) while PublishAot=true
+            // exercises the real trim/AOT link over the shipped core + Host.InProcess graph.
+            DotNetPublish(s => s
+                .SetProject(XboxHeadProject)
+                .SetConfiguration("Release")
+                .SetRuntime("win-x64")
+                .SetProperty("ViceSharpXboxUwp", "false")
+                .SetProperty("PublishAot", "true"));
+        });
+
+    /// <summary>
+    /// Resolves the MSIX <see cref="DeployXbox"/> sideloads: the explicit
+    /// <c>--xbox-msix-path</c> when given, else the newest <c>*.msix</c> under the
+    /// ViceSharp.Xbox build output (PublishXbox produces it). Throws a directive to
+    /// run PublishXbox / pass a path when none is found.
+    /// </summary>
+    AbsolutePath ResolveXboxMsix()
+    {
+        if (!string.IsNullOrWhiteSpace(XboxMsixPath))
+        {
+            var explicitPath = (AbsolutePath)XboxMsixPath;
+            if (!System.IO.File.Exists(explicitPath))
+                throw new InvalidOperationException($"--xbox-msix-path '{XboxMsixPath}' does not exist.");
+            return explicitPath;
+        }
+
+        var searchRoot = XboxHeadProject.Parent / "bin";
+        var newest = System.IO.Directory.Exists(searchRoot)
+            ? searchRoot.GlobFiles("**/*.msix")
+                .OrderByDescending(p => System.IO.File.GetLastWriteTimeUtc(p))
+                .FirstOrDefault()
+            : null;
+        return newest
+            ?? throw new InvalidOperationException(
+                "No MSIX found under the ViceSharp.Xbox build output. Run PublishXbox first "
+              + "(a dev PC with the windows-app / UWP workload), or pass --xbox-msix-path to a known-good MSIX.");
+    }
 }

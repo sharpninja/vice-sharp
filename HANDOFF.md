@@ -1,10 +1,16 @@
-# ViceSharp Handoff - 2026-07-10
+# ViceSharp Handoff - 2026-08-05
 
-**Branch:** `fix/nativeresidue-002-drive-clock-hardening` (off `master`; pushed to origin through the LW slice; CL closure commits local). The SID/VIC VICE-fidelity program **PLAN-VICEPARITY-001 is COMPLETE**: 466/466 parity ACs authored and passing, 0 pending SID ACs, every SID subsystem lockstep-verified bit-exact vs the native reSID oracle. See docs/receipts-viceparity-closure-2026-07-10.md.
-**Prior baseline branch:** `main` at `93cdc7e` (origin and github both synced; default branch is `master`)
-**Working tree:** clean
-**Latest release:** `v1.0.2` (2026-07-08), 13/13 NuGet packages verified on nuget.org
-**CI:** green streak on VICE-Sharp-CI runs 1072 and 1086-1096 (self-hosted Default pool)
+**Active branch:** `feat/xbox-uwp-app` (off `main`) at `3804a1d`. **Pushed to GitHub `origin`** (`https://github.com/sharpninja/vice-sharp.git`; origin is the default approved remote). Azure DevOps remote remains as `azure`.
+**Prior iteration-1 baseline:** `main` at `v1.0.2` (2026-07-08); **PLAN-VICEPARITY-001 COMPLETE**. Detail preserved in the dated sections below.
+**Working tree:** untracked scratch (`docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md`, AiReview appsettings) is not part of the plan.
+
+## PLAN-XBOXUWP + PLAN-ROMM resume snapshot (2026-08-05)
+
+- **Track 1 (Xbox Tier D residuals) largely SHIPPED this session:** FEAT-XAOTBIND-001 (x:Bind migration), FEAT-XOCTOPUS-001 (CI/release Octopus LEGION2 steps), FIX-ROMLESSVIC-001 (merged test), FIX-XKBDNMI-001 (RESTORE asserts NMI), FEAT-XCTRLBIND-001 (Controls remapping), FEAT-XROMPICK-001 (model ROM readiness).
+- **Track 2 (RomM):** merged `feat/romm-integration` into this branch (`3804a1d`). Portable `ViceSharp.Library.ViewModels` + `ViceSharp.RomM`, Xbox/Avalonia library UI, LAN bridge connection path present. Gate after merge: **Category=Xbox|RomM|Library 546/546** (0 fail, 0 skip).
+- **Deploy loop:** `./build.ps1 DeployXboxLocal` (VS MSBuild Release-UWP). End CLI batches with Debug-UWP restore for operator VS F5. PublishAot stays opt-in (`ViceSharpPublishAot=true`); Release-UWP JIT.
+- **OPEN:** B-on-controller operator verification; S42 Tier-C console/Store (deferred); MCP TODO reconcile (mark completed IMPL-XBOXUWP / IMPL-ROMM ids done with receipts); device smoke for RomM Library after merge; optional full baseline suite.
+- **Parallel worktrees (reference):** `F:\GitHub\vice-sharp-romm` (`feat/romm-integration`, source of merge); romless repro merged via FIX-ROMLESSVIC-001.
 
 ## How to resume
 
