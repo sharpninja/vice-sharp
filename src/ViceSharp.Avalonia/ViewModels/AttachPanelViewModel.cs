@@ -1418,5 +1418,14 @@ public enum SidebarTab
     Peripherals,
     Settings,
     Monitor,
-    History
+    History,
+
+    /// <summary>PLAN-ROMM-001: the RomM game library tab.</summary>
+    Library,
+
+    /// <summary>PLAN-ROMM-001: the RomM list-management tab.</summary>
+    Lists,
+
+    /// <summary>PLAN-ROMM-001: the CSDb discovery tab.</summary>
+    CsdbDiscovery,
 }

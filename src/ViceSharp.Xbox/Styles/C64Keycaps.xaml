@@ -14,11 +14,20 @@
     <!-- The C64 charset face shipped for the keycaps (FEAT-XC64FONT-001). -->
     <FontFamily x:Key="C64KeyFont">ms-appx:///Assets/Fonts/PetMe64.ttf#Pet Me 64</FontFamily>
 
+    <!-- FEAT-XKEYCAPMODEL-001 (operator 2026-07-18: "Menu colors should match virtual
+         keyboard based on exact model"): the shell menu keycap brushes, repainted per
+         emulated model by App.ApplyMenuBrushes so the menu tracks the virtual keyboard.
+         The defaults are the breadbin function-key palette (dark brown cap, beige legend);
+         mutating these brushes' Color updates every menu button live. -->
+    <SolidColorBrush x:Key="C64MenuCapBrush" Color="#FF5A3B1E" />
+    <SolidColorBrush x:Key="C64MenuLegendBrush" Color="#FFD8C7A0" />
+    <SolidColorBrush x:Key="C64MenuBorderBrush" Color="#FF3A2612" />
+
     <!-- Menu-sized keycap (the shell menu's C64-function-key buttons). -->
     <Style x:Key="C64KeyButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="#FF40352C" />
-        <Setter Property="Foreground" Value="#FFE8E4D8" />
-        <Setter Property="BorderBrush" Value="#FF6B5B48" />
+        <Setter Property="Background" Value="{StaticResource C64MenuCapBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource C64MenuLegendBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource C64MenuBorderBrush}" />
         <Setter Property="BorderThickness" Value="2,2,4,5" />
         <Setter Property="CornerRadius" Value="6" />
         <Setter Property="FontFamily" Value="{StaticResource C64KeyFont}" />

@@ -2,6 +2,7 @@ namespace ViceSharp.Xbox.ViewModels;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ViceSharp.Abstractions;
 
 /// <summary>
@@ -97,12 +98,21 @@ public sealed class VirtualKeyboardViewModel
     /// <summary>The layout this view-model presents.</summary>
     public VirtualKeyboardLayout Layout { get; }
 
-    /// <summary>The layout tiles grouped into display rows (top to bottom, left to right).</summary>
     /// <summary>
-    /// Display rows as <see cref="VirtualKeyRow"/> (FEAT-XAOTBIND-001: named type for
-    /// compiled <c>{x:Bind Keys}</c> on the keyboard overlay).
+    /// Layout tiles as <see cref="VirtualKeyboardRow"/> wrappers (FEAT-XAOTBIND-001 /
+    /// FEAT-XKEYCAPMODEL-001): nested keyboard DataTemplates use compiled
+    /// <c>{x:Bind Keys}</c> with optional centered space-bar row.
     /// </summary>
-    public IReadOnlyList<VirtualKeyRow> Rows => Layout.Rows;
+    public IReadOnlyList<VirtualKeyboardRow> KeyRows => Layout.Rows
+        .Select(row => new VirtualKeyboardRow(row, IsSpaceRow(row)))
+        .ToList();
+
+    /// <summary>Alias for tests that still walk rows as nested key lists.</summary>
+    public IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> Rows => Layout.Rows;
+
+    // FEAT-XKEYCAPMODEL-001: the lone space-bar row is centred under the block, not left-aligned.
+    private static bool IsSpaceRow(IReadOnlyList<VirtualKeyEntry> row) =>
+        row.Count == 1 && row[0].KeyName == "Space";
 
     /// <summary>The layout tiles flattened in row-major order; the index space of
     /// <see cref="SelectedIndex"/>.</summary>

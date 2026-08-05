@@ -38,17 +38,62 @@ namespace ViceSharp.Xbox.ViewModels;
 /// produce mode-dependent PETSCII graphics under SHIFT/C=; showing nothing beats
 /// showing something wrong).
 /// </param>
+/// <param name="IsFunctionCap">
+/// FEAT-XKEYCAPMODEL-001: <c>true</c> for the F1/F3/F5/F7 function keys, so a head that
+/// skins the keycaps per emulated model (the breadbin's dark-brown function keys vs the
+/// beige main keys) can pick the function palette without hard-coding key names in the view.
+/// </param>
 public sealed record VirtualKeyEntry(
     string KeyName,
     string DisplayLabel,
     bool IsWide,
     AppKeyKind Kind = AppKeyKind.Key,
     double WidthUnits = 0,
-    string? ShiftedLabel = null)
+    string? ShiftedLabel = null,
+    bool IsFunctionCap = false)
 {
     /// <summary>
     /// The tile's width in key units: <see cref="WidthUnits"/> when positive, otherwise
     /// derived from <see cref="IsWide"/> (2 for wide tiles, 1 for ordinary ones).
     /// </summary>
     public double EffectiveWidthUnits => WidthUnits > 0 ? WidthUnits : (IsWide ? 2.0 : 1.0);
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001 (operator 2026-07-18 "reconcile with real C64 keyboard"): the
+    /// legend point size for this cap, scaled to the longest label line so single-character
+    /// legends sit LARGE like the machine, while multi-character legends (RESTORE, RETURN,
+    /// CLR/HOME, ...) shrink to fit their cap instead of clipping.
+    /// </summary>
+    public double DisplayFontSize
+    {
+        get
+        {
+            var longest = 0;
+            var current = 0;
+            foreach (var ch in DisplayLabel)
+            {
+                if (ch == '\n')
+                {
+                    current = 0;
+                    continue;
+                }
+
+                current++;
+                if (current > longest)
+                    longest = current;
+            }
+
+            if (longest < 1)
+                longest = 1;
+
+            // Fit the longest label LINE to the cap WIDTH: one key unit renders at ~52 px and
+            // the PetMe64 face is monospace, so a glyph's advance is ~= its point size. The
+            // 0.82 factor leaves margin/bevel room; the clamp keeps single-char legends large
+            // without letting a wide cap blow the legend up, and never shrinks below readable.
+            const double unitPixels = 52.0;
+            double capWidth = EffectiveWidthUnits * unitPixels;
+            double fit = capWidth * 0.82 / longest;
+            return System.Math.Clamp(System.Math.Floor(fit), 9.0, 22.0);
+        }
+    }
 }

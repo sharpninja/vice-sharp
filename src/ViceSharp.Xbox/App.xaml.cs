@@ -44,6 +44,10 @@ public sealed partial class App : Application
     private EmulatorView? _emulatorView;
     private VirtualKeyboardOverlay? _keyboardOverlay;
 
+    // FEAT-XKEYCAPMODEL-001: the boot machine profile id, used to skin the keycaps for the
+    // emulated model until the live Settings selection supersedes it.
+    private string? _activeProfileId;
+
     // FIX-XKBDINPUT-001: the machine keyboard seam physical keys inject through, plus the
     // currently held (injected-down) key names so ups always pair with downs and the menu
     // can force-release everything (no stuck C64 keys).
@@ -220,6 +224,21 @@ public sealed partial class App : Application
     public string SessionId => _sessionId;
 
     /// <summary>
+    /// PLAN-ROMM-001 (X2/X3): builds the RomM game launcher over the active in-process session, so the
+    /// library page can attach + boot a downloaded title. Throws until the session exists.
+    /// </summary>
+    public ViceSharp.Library.ViewModels.IGameLauncher CreateRomMGameLauncher()
+    {
+        if (_facade is null || _host is null || string.IsNullOrEmpty(_sessionId))
+        {
+            throw new InvalidOperationException("The emulator session is not built yet.");
+        }
+
+        return new ViceSharp.Xbox.RomM.XboxGameLauncher(
+            new ViceSharp.Xbox.RomM.XboxLaunchSession(_facade, _host, _sessionId));
+    }
+
+    /// <summary>
     /// The console (XAudio2) live-audio backend produced by the Xbox audio wiring, or
     /// <c>null</c> when audio is disabled/headless. Exposed so the SID output path is wired
     /// to it during dev-PC iteration.
@@ -233,6 +252,19 @@ public sealed partial class App : Application
         log.LogInformation(
             "OnLaunched entry; c64Directory={C64Directory}",
             string.IsNullOrEmpty(_c64Directory) ? "(none)" : _c64Directory);
+
+        // FIX-XDOUBLEBOOT-001 (operator: "Joysticks are still active from gamepad" - the
+        // detach armed only the newest pump): OnLaunched is called again on every re-
+        // activation, and without this guard it recomposed the whole shell a SECOND time -
+        // a second host+session, a second gamepad pump (the old one leaked, still polling
+        // and pushing to its now-hidden session), and a duplicate StateChanged subscriber.
+        // Compose exactly once; a re-activation just re-activates the existing window.
+        if (Window.Current.Content is not null)
+        {
+            log.LogInformation("OnLaunched re-entry: shell already composed, re-activating window only");
+            Window.Current.Activate();
+            return;
+        }
 
         try
         {
@@ -388,6 +420,10 @@ public sealed partial class App : Application
                 Navigation.IsVirtualKeyboardOpen ? Visibility.Visible : Visibility.Collapsed;
             quickMenu.Visibility =
                 Navigation.IsQuickMenuOpen ? Visibility.Visible : Visibility.Collapsed;
+
+            // FEAT-XKBDJOYDETACH-001: detach the gamepad from the C64 joysticks while the
+            // on-screen keyboard is up (the stick/D-pad drive the keyboard); restore on close.
+            _gamepad?.SetKeyboardActive(Navigation.IsVirtualKeyboardOpen);
         };
 
         // Reconcile the single input context with the navigation stack (kept alive for the
@@ -508,6 +544,17 @@ public sealed partial class App : Application
     private void BuildHostAndSession()
     {
         var log = CreateLogger("App");
+
+        // FIX-XDOUBLEBOOT-001 defense-in-depth: a host+session+gamepad pump is built exactly
+        // once. If one already exists (the OnLaunched guard should prevent re-entry, and the
+        // provisioning gate is single-shot), never build a SECOND - a leaked pump would keep
+        // polling the gamepad and pushing to an orphaned session.
+        if (_gamepad is not null)
+        {
+            log.LogWarning("BuildHostAndSession ignored: a session + gamepad pump already exists");
+            return;
+        }
+
         log.LogInformation("BuildHostAndSession: composing in-process host");
 
         // FIX-XNOAUDIO-001 (operator: "No audio!"): live SID audio is ON by default for
@@ -548,6 +595,7 @@ public sealed partial class App : Application
             session = host.StartC64Session();
         }
         _sessionId = session.SessionId;
+        _activeProfileId = persisted?.ProfileId;
         log.LogInformation(
             "BuildHostAndSession: session started id={SessionId} (persisted profile: {PersistedProfile})",
             _sessionId, persisted?.ProfileId ?? "(none)");
@@ -601,6 +649,15 @@ public sealed partial class App : Application
             ? new VirtualKeyboardViewModel(keyboard)
             : null;
 
+        // FIX-XKBDEMPTY-001: bind a live overlay to the fresh VM here too. When ROMs are
+        // unprovisioned at launch, BuildHostAndSession is DEFERRED to the provisioning gate,
+        // so the overlay was already created with a null KeyboardVm and OnLaunched's one-shot
+        // 'if (KeyboardVm is not null) DataContext = KeyboardVm' was skipped -> the virtual
+        // keyboard stays empty (dataContextType=null) until a settings apply. Re-pointing here
+        // covers that deferred path; it is a no-op on the normal boot path (the overlay is
+        // built after this, and OnLaunched then binds it).
+        BindOverlayToKeyboardVm();
+
         var dispatcher = new AppCommandDispatcher(
             host.HostService,
             host.Snapshots,
@@ -610,7 +667,14 @@ public sealed partial class App : Application
             onCloseMenu: HideMenu,
             onUiNavigate: HandleUiNavigate);
 
-        _gamepad = new WinRtGamepadSource(host, InputContext, dispatcher, _sessionId);
+        var gamepadLog = CreateLogger("Gamepad");
+        _gamepad = new WinRtGamepadSource(
+            host,
+            InputContext,
+            dispatcher,
+            _sessionId,
+            msg => gamepadLog.LogInformation("{Msg}", msg),
+            isKeyboardOpen: () => Navigation.IsVirtualKeyboardOpen);
         log.LogInformation(
             "BuildHostAndSession: built VideoPull={VideoPullCreated} gamepad={GamepadCreated} keyboardVm={KeyboardVmCreated} audio={AudioBackendCreated}",
             VideoPull is not null, _gamepad is not null, KeyboardVm is not null, AudioBackend is not null);
@@ -690,13 +754,69 @@ public sealed partial class App : Application
 
             // Re-point a live overlay (if one was created) at the rebuilt VM, mirroring how
             // OnLaunched binds it, so a keyboard already on screen binds the fresh input seam.
-            if (_keyboardOverlay is not null && KeyboardVm is not null)
-                _keyboardOverlay.DataContext = KeyboardVm;
+            BindOverlayToKeyboardVm();
         }
         catch (Exception ex)
         {
             CreateLogger("App").LogError(ex, "keyboard rebuild failed");
         }
+    }
+
+    /// <summary>
+    /// Re-points a live virtual-keyboard overlay at the current <see cref="KeyboardVm"/>.
+    /// A no-op until both the overlay and the VM exist, so it is safe to call from every
+    /// path that (re)builds <see cref="KeyboardVm"/> (boot, deferred post-provision boot,
+    /// and a session rebuild). UI-thread only: it assigns a XAML DataContext.
+    /// </summary>
+    private void BindOverlayToKeyboardVm()
+    {
+        var skin = ResolveKeycapSkin();
+
+        // FEAT-XKEYCAPMODEL-001: the shell menu tracks the same model skin as the keyboard.
+        ApplyMenuBrushes(skin);
+
+        if (_keyboardOverlay is not null && KeyboardVm is not null)
+        {
+            _keyboardOverlay.DataContext = KeyboardVm;
+            _keyboardOverlay.ApplySkin(skin);
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001 (operator 2026-07-18: "Menu colors should match virtual keyboard
+    /// based on exact model"): repaints the shell menu keycap brushes for the emulated model
+    /// (its function-key palette, matching the keyboard's function keys). Mutating the shared
+    /// brushes recolours every menu button live.
+    /// </summary>
+    private static void ApplyMenuBrushes(KeycapSkin skin)
+    {
+        var menu = Controls.KeycapSkinPalette.For(skin).Function;
+        SetBrushColor("C64MenuCapBrush", menu.Cap.Color);
+        SetBrushColor("C64MenuLegendBrush", menu.Legend.Color);
+        SetBrushColor("C64MenuBorderBrush", menu.Border.Color);
+
+        static void SetBrushColor(string key, Windows.UI.Color color)
+        {
+            if (Application.Current.Resources.ContainsKey(key)
+                && Application.Current.Resources[key] is Windows.UI.Xaml.Media.SolidColorBrush brush)
+            {
+                brush.Color = color;
+            }
+        }
+    }
+
+    /// <summary>
+    /// FEAT-XKEYCAPMODEL-001: the keycap skin for the active machine, from the live Settings
+    /// model selection (preferred) or the persisted boot profile. Unknown / breadbin-class
+    /// machines resolve to the breadbin skin.
+    /// </summary>
+    private KeycapSkin ResolveKeycapSkin()
+    {
+        var id = SettingsVm?.SelectedProfileId;
+        if (string.IsNullOrEmpty(id))
+            id = _activeProfileId;
+
+        return KeycapSkinResolver.Resolve(id, id);
     }
 
     /// <summary>

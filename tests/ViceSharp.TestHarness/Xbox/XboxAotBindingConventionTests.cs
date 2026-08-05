@@ -17,7 +17,7 @@ using Xunit;
 /// Use case: Release/AOT-safe XAML keeps Settings, keyboard, and menu titles visible.
 /// Acceptance: every <c>*.xaml</c> under <c>src/ViceSharp.Xbox</c> contains zero
 /// reflection <c>{Binding</c> tokens (comments stripped so XML-doc examples do not
-/// false-positive); HomePage and keyboard rows use <c>x:Bind</c> / <c>VirtualKeyRow</c>.
+/// false-positive); HomePage and keyboard rows use <c>x:Bind</c> / <c>VirtualKeyboardRow</c>.
 /// </remarks>
 [Trait("Category", "Xbox")]
 public sealed class XboxAotBindingConventionTests
@@ -67,22 +67,22 @@ public sealed class XboxAotBindingConventionTests
     /// FEAT-XAOTBIND-001.
     /// Use case: HomePage title and keyboard rows must use compiled binds.
     /// Acceptance: HomePage has <c>x:Bind ViewModel.Title</c>; keyboard row template
-    /// uses <c>VirtualKeyRow</c> and <c>x:Bind Keys</c>.
+    /// uses <c>VirtualKeyboardRow</c> and <c>x:Bind Keys</c>.
     /// </summary>
     [Fact]
-    public void HomeAndKeyboard_UseCompiledBinds_AndVirtualKeyRow()
+    public void HomeAndKeyboard_UseCompiledBinds_AndVirtualKeyboardRow()
     {
         var home = StripXmlComments(File.ReadAllText(Path.Combine(RepoRoot, "src", "ViceSharp.Xbox", "Views", "HomePage.xaml")));
         Assert.Contains("x:Bind ViewModel.Title", home, StringComparison.Ordinal);
         Assert.DoesNotContain("{Binding", home, StringComparison.Ordinal);
 
         var keyboard = StripXmlComments(File.ReadAllText(Path.Combine(RepoRoot, "src", "ViceSharp.Xbox", "Controls", "VirtualKeyboardOverlay.xaml")));
-        Assert.Contains("x:DataType=\"vm:VirtualKeyRow\"", keyboard, StringComparison.Ordinal);
+        Assert.Contains("x:DataType=\"vm:VirtualKeyboardRow\"", keyboard, StringComparison.Ordinal);
         Assert.Contains("x:Bind Keys", keyboard, StringComparison.Ordinal);
         Assert.DoesNotContain("{Binding", keyboard, StringComparison.Ordinal);
 
-        var rowType = Path.Combine(RepoRoot, "src", "ViceSharp.Xbox.ViewModels", "VirtualKeyRow.cs");
-        Assert.True(File.Exists(rowType), "Expected VirtualKeyRow.cs for compiled row binds.");
+        var rowType = Path.Combine(RepoRoot, "src", "ViceSharp.Xbox.ViewModels", "VirtualKeyboardRow.cs");
+        Assert.True(File.Exists(rowType), "Expected VirtualKeyboardRow.cs for compiled row binds.");
     }
 
     private static string StripXmlComments(string text)

@@ -1,0 +1,41 @@
+<svg width="100%" viewBox="0 0 680 462" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Avalonia game details wireframe</title>
+<desc>Desktop game details view: breadcrumb, cover, metadata, actions, description, files table and collection membership.</desc>
+<style>
+:root{--fg:#1a1a1a;--muted:#6a6a6a;--line:#8a8a8a;--blue:#2f6fed;--amber:#d08700;}
+@media (prefers-color-scheme:dark){:root{--fg:#f0f0f0;--muted:#9aa0a6;--line:#5a5f66;--blue:#5b8cff;--amber:#e0a200;}}
+svg{font-family:'Segoe UI',system-ui,sans-serif;}
+.c-gray rect,.c-gray circle{fill:none;stroke:var(--line);}
+.c-blue rect,.c-blue circle{fill:none;stroke:var(--blue);}
+.c-amber rect,.c-amber circle{fill:none;stroke:var(--amber);}
+text{fill:var(--fg);}
+.t{font-size:13px;fill:var(--fg);}
+.ts{font-size:11px;fill:var(--muted);}
+.th{font-size:18px;font-weight:600;fill:var(--fg);}
+</style>
+<text class="ts" x="24" y="28">Library  /  Boulder Dash</text>
+<g class="c-gray"><rect x="24" y="44" width="190" height="220" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="119" y="158" text-anchor="middle">cover</text>
+<text class="th" x="232" y="62">Boulder Dash</text>
+<text class="ts" x="232" y="82">C64 · 1984 · Disk</text>
+<text class="ts" x="232" y="110">Publisher  First Star Software</text>
+<text class="ts" x="232" y="132">Genre      Action / dig</text>
+<text class="ts" x="232" y="154">Players    1-2</text>
+<text class="ts" x="232" y="176">Rating     4.6 / 5  (1,204)</text>
+<text class="ts" x="232" y="198">Size       170 KB · 1 file</text>
+<g class="c-blue"><rect x="470" y="44" width="186" height="32" rx="8" stroke-width="0.5"/></g>
+<text class="t" x="563" y="65" text-anchor="middle">Attach + play</text>
+<g class="c-gray"><rect x="470" y="84" width="186" height="30" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="563" y="104" text-anchor="middle">Attach only</text>
+<g class="c-gray"><rect x="470" y="122" width="186" height="30" rx="8" stroke-width="0.5"/></g>
+<text class="ts" x="563" y="142" text-anchor="middle">Add to list v</text>
+<text class="ts" x="470" y="182">In: Favorites, Shmups</text>
+<text class="t" x="24" y="292">About</text>
+<text class="ts" x="24" y="314">Dig through caves collecting diamonds, outrun falling boulders,</text>
+<text class="ts" x="24" y="332">and beat the timer across 16 caves. A Commodore classic.</text>
+<text class="t" x="24" y="364">Files</text>
+<g class="c-gray"><rect x="24" y="374" width="632" height="26" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="36" y="391">boulderdash.d64          170 KB          disk          -> Drive 8</text>
+<g class="c-gray"><rect x="6" y="434" width="668" height="22" rx="6" stroke-width="0.5"/></g>
+<text class="ts" x="18" y="449">Connected  romm.local · C64 · Drive 8 empty</text>
+</svg>

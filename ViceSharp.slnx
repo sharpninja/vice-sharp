@@ -82,6 +82,10 @@
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
+    <Project Path="src/ViceSharp.Library.ViewModels/ViceSharp.Library.ViewModels.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
     <Project Path="src/ViceSharp.Monitor/ViceSharp.Monitor.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
@@ -91,6 +95,10 @@
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
     <Project Path="src/ViceSharp.RomFetch/ViceSharp.RomFetch.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="src/ViceSharp.RomM/ViceSharp.RomM.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
@@ -136,6 +144,18 @@
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>
     <Project Path="tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.Library.Tests/ViceSharp.Library.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.Heads.Tests/ViceSharp.Heads.Tests.csproj">
+      <BuildType Solution="Debug-UWP|*" Project="Debug" />
+      <BuildType Solution="Release-UWP|*" Project="Release" />
+    </Project>
+    <Project Path="tests/ViceSharp.Library.IntegrationTests/ViceSharp.Library.IntegrationTests.csproj">
       <BuildType Solution="Debug-UWP|*" Project="Debug" />
       <BuildType Solution="Release-UWP|*" Project="Release" />
     </Project>

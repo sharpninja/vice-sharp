@@ -242,10 +242,9 @@ public sealed class VirtualKeyboardViewModelTests
     }
 
     /// <summary>
-    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006 (widths updated by
-    /// PLAN-XKEYBOARD-001 K1 to the AUTHENTIC machine: RETURN and SPACE are the wide keys;
-    /// RUN/STOP is a standard-width key on real hardware, unlike the earlier stylized
-    /// layout that widened it).
+    /// FR-XBOXUI-006, TR-XBOXUI-006, TEST-XBOXUI-006. Widths reconciled with the real machine
+    /// (operator 2026-07-18): RETURN (1.5u) and SPACE (9u) are wide; RUN/STOP is a plain 1u key
+    /// again (so rows 3-4 finish left of rows 1-2), like ordinary keys.
     /// Acceptance: "Return" and "Space" report <see cref="VirtualKeyEntry.IsWide"/> true;
     /// "RunStop" and a representative ordinary key ("A") report false.
     /// </summary>
@@ -255,7 +254,7 @@ public sealed class VirtualKeyboardViewModelTests
         var vm = new VirtualKeyboardViewModel(new SpyKeyboardInput());
 
         Assert.True(SingleByKeyName(vm, "Return").IsWide);
-        Assert.False(SingleByKeyName(vm, "RunStop").IsWide);
+        Assert.False(SingleByKeyName(vm, "RunStop").IsWide);  // 1u key again
         Assert.True(SingleByKeyName(vm, "Space").IsWide);
         Assert.False(SingleByKeyName(vm, "A").IsWide);
     }

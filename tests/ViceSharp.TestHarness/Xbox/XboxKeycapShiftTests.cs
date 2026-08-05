@@ -42,7 +42,8 @@ public sealed class XboxKeycapShiftTests
         // TRUE PETSCII right-keycap graphic (FEAT-XKEYCAPPETSCII-001 superseded the
         // earlier keep-the-letter behavior; the glyph tests own the full table).
         Assert.Equal("A", VirtualKeycapGlyphs.For(letter, shifted: false, commodore: false, lowercaseMode: false));
-        Assert.Equal("♠", VirtualKeycapGlyphs.For(letter, shifted: true, commodore: false, lowercaseMode: false));
+        // SHIFT+A is PETSCII $C1 (spade); the keycap draws the PetMe64 glyph at U+F100+$C1.
+        Assert.Equal(((char)0xF1C1).ToString(), VirtualKeycapGlyphs.For(letter, shifted: true, commodore: false, lowercaseMode: false));
 
         // Lowercase/uppercase mode: unshifted types lowercase, shifted types uppercase.
         Assert.Equal("a", VirtualKeycapGlyphs.For(letter, shifted: false, commodore: false, lowercaseMode: true));

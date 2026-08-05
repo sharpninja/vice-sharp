@@ -17,6 +17,8 @@
     <UserControl.Resources>
         <!-- Width units -> pixels (one key unit = 52 px at 10-foot scale). -->
         <controls:KeyWidthConverter x:Key="KeyWidth" UnitPixels="52" />
+        <!-- Row Centered flag -> HorizontalAlignment (the space-bar row centres under the block). -->
+        <controls:RowAlignmentConverter x:Key="RowAlign" />
     </UserControl.Resources>
 
     <!-- Slide up from the bottom edge when the dock becomes visible. -->
@@ -34,12 +36,10 @@
             </Grid.ColumnDefinitions>
 
             <!-- The five physical rows. -->
-            <ItemsControl Grid.Column="0" ItemsSource="{x:Bind ViewModel.Rows, Mode=OneWay}">
+            <ItemsControl Grid.Column="0" ItemsSource="{x:Bind ViewModel.KeyRows}">
                 <ItemsControl.ItemTemplate>
-                    <!-- FEAT-XAOTBIND-001: VirtualKeyRow gives a typed Keys property so
-                         the nested ItemsSource never needs reflection {Binding}. -->
-                    <DataTemplate x:DataType="vm:VirtualKeyRow">
-                        <ItemsControl ItemsSource="{x:Bind Keys, Mode=OneWay}" HorizontalAlignment="Center">
+                    <DataTemplate x:DataType="vm:VirtualKeyboardRow">
+                        <ItemsControl ItemsSource="{x:Bind Keys}" HorizontalAlignment="{x:Bind Centered, Converter={StaticResource RowAlign}}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
@@ -56,6 +56,7 @@
                                     <Button
                                         Content="{x:Bind DisplayLabel}"
                                         Width="{x:Bind EffectiveWidthUnits, Converter={StaticResource KeyWidth}}"
+                                        FontSize="{x:Bind DisplayFontSize}"
                                         Style="{StaticResource C64KeycapTileStyle}"
                                         Click="OnKeyPressed" />
                                 </DataTemplate>
@@ -66,12 +67,13 @@
             </ItemsControl>
 
             <!-- The function-key column, on the RIGHT like the physical machine. -->
-            <ItemsControl Grid.Column="1" ItemsSource="{x:Bind ViewModel.Layout.FunctionKeys, Mode=OneWay}" Margin="16,0,0,0">
+            <ItemsControl Grid.Column="1" ItemsSource="{x:Bind ViewModel.Layout.FunctionKeys}" Margin="16,0,0,0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:VirtualKeyEntry">
                         <Button
                             Content="{x:Bind DisplayLabel}"
-                            Width="96"
+                            Width="{x:Bind EffectiveWidthUnits, Converter={StaticResource KeyWidth}}"
+                            FontSize="{x:Bind DisplayFontSize}"
                             Style="{StaticResource C64KeycapTileStyle}"
                             Click="OnKeyPressed" />
                     </DataTemplate>

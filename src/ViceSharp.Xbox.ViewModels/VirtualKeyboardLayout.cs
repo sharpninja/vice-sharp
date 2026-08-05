@@ -27,7 +27,7 @@ using System.Linq;
 public sealed class VirtualKeyboardLayout
 {
     private VirtualKeyboardLayout(
-        IReadOnlyList<VirtualKeyRow> rows,
+        IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> rows,
         IReadOnlyList<VirtualKeyEntry> functionKeys)
     {
         Rows = rows;
@@ -45,10 +45,8 @@ public sealed class VirtualKeyboardLayout
     /// The tiles grouped into their display rows, top to bottom, left to right. The
     /// function keys are NOT part of the rows: they live in <see cref="FunctionKeys"/>
     /// and render as a column on the right, as on the physical machine.
-    /// Each row is a <see cref="VirtualKeyRow"/> so XAML can <c>{x:Bind Keys}</c>
-    /// without reflection (FEAT-XAOTBIND-001).
     /// </summary>
-    public IReadOnlyList<VirtualKeyRow> Rows { get; }
+    public IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> Rows { get; }
 
     /// <summary>
     /// The function-key column (F1/F3/F5/F7), rendered on the RIGHT of the keyboard
@@ -73,15 +71,13 @@ public sealed class VirtualKeyboardLayout
         static IReadOnlyList<VirtualKeyEntry> Letters(string letters) =>
             letters.Select(c => Key(c.ToString())).ToArray();
 
-        static VirtualKeyRow Row(params VirtualKeyEntry[] keys) => new(keys);
-        static VirtualKeyRow RowFrom(IEnumerable<VirtualKeyEntry> keys) => new(keys.ToArray());
-
-        var rows = new List<VirtualKeyRow>
+        var rows = new List<IReadOnlyList<VirtualKeyEntry>>
         {
             // Row 1: left-arrow, 1-0, +, -, pound, CLR/HOME, INST/DEL (16 keys). The
             // digit keys carry their printed shifted legends (FEAT-XKEYCAPSHIFT-001);
             // SHIFT+0 is 0 on the machine, so 0 has none.
-            Row(
+            new[]
+            {
                 Key("LeftArrow", "←"),
                 Key("1", shifted: "!"), Key("2", shifted: "\""), Key("3", shifted: "#"),
                 Key("4", shifted: "$"), Key("5", shifted: "%"),
@@ -89,12 +85,13 @@ public sealed class VirtualKeyboardLayout
                 Key("9", shifted: ")"), Key("0"),
                 Key("+"), Key("-"),
                 Key("Pound", "£"),
-                Key("Home", "CLR HOME"),
-                Key("Delete", "INST DEL")),
+                Key("Home", "CLR\nHOME"),
+                Key("Delete", "INST\nDEL"),
+            },
 
             // Row 2: CTRL, Q-P, @, *, up-arrow, RESTORE (15 keys). RESTORE sits at the
             // row's right end on the machine and drives the NMI seam, never the matrix.
-            RowFrom(new[] { Key("Ctrl", "CTRL", 1.5) }
+            new[] { Key("Ctrl", "CTRL", 1.5) }
                 .Concat(Letters("QWERTYUIOP"))
                 .Concat(new[]
                 {
@@ -102,15 +99,19 @@ public sealed class VirtualKeyboardLayout
                     Key("*"),
                     // SHIFT + up-arrow types pi (the legend on the physical keycap).
                     Key("UpArrow", "↑", shifted: "π"),
-                    new VirtualKeyEntry("Restore", "RESTORE", IsWide: false, AppKeyKind.Restore),
-                })),
+                    // RESTORE is a 1.5u key on the real machine (MechBoard64 spec).
+                    new VirtualKeyEntry("Restore", "RESTORE", IsWide: true, AppKeyKind.Restore, 1.5),
+                })
+                .ToArray(),
 
             // Row 3: RUN/STOP, SHIFT-LOCK, A-L, :, ;, =, RETURN (15 keys). RETURN is the
             // classic wide key closing the home row.
-            RowFrom(new[]
+            new[]
                 {
                     // Authentic two-line caps (operator 2026-07-14): the key is STOP,
                     // the shifted state is RUN, and SHIFT LOCK is the mechanical toggle.
+                    // RUN/STOP and SHIFT LOCK are 1u; only RETURN is wide in this row, so rows 3-4
+                    // finish slightly LEFT of rows 1-2 (operator 2026-07-18).
                     Key("RunStop", "RUN\nSTOP", shifted: "RUN"),
                     new VirtualKeyEntry("Shift", "SHIFT\nLOCK", IsWide: false, AppKeyKind.ShiftLatch),
                 }
@@ -120,17 +121,22 @@ public sealed class VirtualKeyboardLayout
                     Key(":", shifted: "["),
                     Key(";", shifted: "]"),
                     Key("="),
-                    Key("Return", "RETURN", 2.0),
-                })),
+                    Key("Return", "RETURN", 1.5),
+                })
+                .ToArray(),
 
             // Row 4: C=, SHIFT, Z-M, comma, period, slash, SHIFT, CRSR down, CRSR right
             // (15 keys). The two momentary SHIFTs wrap the NEXT key press hardware-style,
             // which is also how CRSR-up (SHIFT+down) and CRSR-left (SHIFT+right) work.
-            RowFrom(new[]
+            new[]
                 {
-                    // C= is a sticky modifier tile (FEAT-XKBDSTICKY-001), not a keystroke.
+                    // C= is a sticky modifier tile (FEAT-XKBDSTICKY-001), not a keystroke; a 1u key.
+                    // The two bottom-row SHIFTs are 1.25u (narrower than CTRL/RESTORE's 1.5u), so
+                    // this row totals 15.5u and its right edge aligns with row 3's RETURN, both
+                    // finishing LEFT of the full-width rows 1-2 as on the real machine (operator
+                    // 2026-07-18: "first two rows ... slightly longer than the next two rows").
                     new VirtualKeyEntry("Commodore", "C=", IsWide: false, AppKeyKind.CommodoreMomentary),
-                    new VirtualKeyEntry("LeftShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
+                    new VirtualKeyEntry("LeftShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.25),
                 }
                 .Concat(Letters("ZXCVBNM"))
                 .Concat(new[]
@@ -138,22 +144,28 @@ public sealed class VirtualKeyboardLayout
                     Key(",", shifted: "<"),
                     Key(".", shifted: ">"),
                     Key("/", shifted: "?"),
-                    new VirtualKeyEntry("RightShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
-                    Key("Down", "CRSR ⇕"),
-                    Key("Right", "CRSR ⇔"),
-                })),
+                    new VirtualKeyEntry("RightShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.25),
+                    Key("Down", "CRSR\n⇕"),
+                    Key("Right", "CRSR\n⇔"),
+                })
+                .ToArray(),
 
             // Row 5: the space bar.
-            Row(Key("Space", "SPACE", 9.0)),
+            new[] { Key("Space", "SPACE", 9.0) },
         };
 
         // The function column, rendered on the RIGHT like the physical machine's F-keys.
+        // 1.5u keys (MechBoard64 spec), tagged IsFunctionCap so a per-model skin can give
+        // them the breadbin's dark-brown function-key palette.
+        static VirtualKeyEntry FunctionKey(string keyName, string label) =>
+            new(keyName, label, IsWide: true, AppKeyKind.Key, WidthUnits: 1.5, ShiftedLabel: null, IsFunctionCap: true);
+
         var functionKeys = new[]
         {
-            Key("F1", "F1  F2"),
-            Key("F3", "F3  F4"),
-            Key("F5", "F5  F6"),
-            Key("F7", "F7  F8"),
+            FunctionKey("F1", "F1  F2"),
+            FunctionKey("F3", "F3  F4"),
+            FunctionKey("F5", "F5  F6"),
+            FunctionKey("F7", "F7  F8"),
         };
 
         return new VirtualKeyboardLayout(rows, functionKeys);
