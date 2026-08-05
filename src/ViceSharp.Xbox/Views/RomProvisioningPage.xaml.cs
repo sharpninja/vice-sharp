@@ -24,7 +24,7 @@ public sealed partial class RomProvisioningPage : Page
     }
 
     /// <summary>The compiled-binding ({x:Bind}) source: the shared provisioning ViewModel.</summary>
-    public XboxRomProvisioningViewModel ViewModel { get; }
+    public XboxRomProvisioningViewModel? ViewModel { get; }
 
     /// <inheritdoc />
     protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -33,11 +33,14 @@ public sealed partial class RomProvisioningPage : Page
 
         // 10-foot UI: land gamepad focus on the primary action.
         DownloadButton.Focus(FocusState.Programmatic);
-        await ViewModel.RefreshAsync();
+        if (ViewModel is not null)
+            await ViewModel.RefreshAsync();
     }
 
     private async void OnDownload(object sender, RoutedEventArgs e)
     {
+        if (ViewModel is null)
+            return;
         // Honor the confirm gate immediately before the verified download.
         ViewModel.ConfirmDownload();
         await ViewModel.DownloadAsync();
@@ -45,6 +48,8 @@ public sealed partial class RomProvisioningPage : Page
 
     private async void OnImport(object sender, RoutedEventArgs e)
     {
+        if (ViewModel is null)
+            return;
         // Import each core role in turn (each pick is size/MD5-validated + written by the VM).
         await ViewModel.ImportAsync(RomRole.Basic);
         await ViewModel.ImportAsync(RomRole.Kernal);
