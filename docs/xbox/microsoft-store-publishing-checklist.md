@@ -9,8 +9,10 @@ finished during the Partner Center draft.
 Current state (from the repo):
 - Head project: `src/ViceSharp.Xbox/ViceSharp.Xbox.csproj` (UWP TFM when `ViceSharpXboxUwp=true`).
 - Manifest: `src/ViceSharp.Xbox/Package.appxmanifest` - identity `sharpninja.ViceSharp.Xbox`, `Publisher="CN=ViceSharpDev"` (a **dev cert**, not a Store identity).
-- Packaging: Nuke `PublishXbox` -> Release Native-AOT MSIX (win-x64); `ValidateStorePackage` -> WACK/appcert gate; `DeployXbox` -> sideload.
+- Packaging: Nuke `PublishXbox` -> Release Native-AOT MSIX (win-x64); `ValidateStorePackage` -> WACK/appcert gate; `DeployXbox` -> sideload. Store upload path: `azure-pipelines-xbox-store.yml` + `Set-StoreIdentity.ps1` (unsigned `.msixupload`).
 - License: GPL-2.0-or-later (VICE derivative). No Commodore ROMs are shipped.
+- **2026-08-05 progress:** Phase 0 legal memo GO-with-mitigations (`gpl-store-section6-review.md`); privacy policy (`docs/PRIVACY.md`); listing copy (`store-listing-copy.md`); GPL gate green (`XboxGplComplianceTests` 5/0/0). ADO: `xbox-store-publish` variable group **not yet created**; Store pipeline YAML **not yet registered** (only VICE-Sharp-CI / VICE-Sharp-Release).
+- **Operator next-moves guide (links + order):** [store-next-steps-guide.md](store-next-steps-guide.md)
 
 ---
 
@@ -27,20 +29,17 @@ Current state (from the repo):
   - `Package/Identity/Name` (e.g. `1234SharpNinja.ViceSharp`)
   - `Package/Identity/Publisher` (e.g. `CN=XXXXXXXX-....`)
   - `Package/Properties/PublisherDisplayName`
-- [ ] **(blocker)** Replace the dev values in `Package.appxmanifest`:
-  - `Identity/@Name` `sharpninja.ViceSharp.Xbox` -> Store `Name`
-  - `Identity/@Publisher` `CN=ViceSharpDev` -> Store `Publisher`
-  - `Properties/PublisherDisplayName` `ViceSharpDev` -> Store `PublisherDisplayName`
-  - Keep `Version` as a placeholder; `PublishXbox`/GitVersion stamps the real one at pack time. The Store requires each submission's `Version` to be **higher than the last accepted** and the **revision (4th) field to be 0**.
-- [ ] Do **not** commit the Store `Publisher` GUID to a public dev-cert flow that expects `CN=ViceSharpDev`; keep the dev-cert identity for local sideload on a separate, non-Store manifest/config if you still sideload.
+- [x] **Do not permanently replace** the dev identity in `Package.appxmanifest` for day-to-day sideload. The Store pipeline stamps identity at pack time via `build/Set-StoreIdentity.ps1` (FEAT-XSTOREPIPE-001). Keep repo at `CN=ViceSharpDev` for Dev Mode.
+- [ ] Keep package `Version` monotonic vs last accepted submission; **revision (4th) field must be 0**.
 
 ## 3. Licensing and Store-policy compliance (critical for a VICE derivative)
 
-- [ ] **(blocker)** **GPL-2.0-or-later source offer**: the Store distributes a binary of GPL software, so the listing (or the in-app About page) must carry a written offer of source and a link to the corresponding source. Confirm the About page GPL-2.0 disclosure + VICE attribution + source offer is present and reachable in the shipping build.
-- [ ] **(blocker)** Include full **third-party/OSS notices** (VICE, reSID, any bundled fonts/assets) in-app and/or in the listing.
-- [ ] **(blocker)** **No Commodore ROMs** are shipped (correct today). Do not add any ROM to the package; the app acquires ROMs at runtime per `docs/ROMs.md`. Shipping copyrighted Commodore KERNAL/BASIC ROMs would fail both IP policy and legality.
-- [ ] **Emulator policy**: the current Microsoft Store policy permits emulators of non-Microsoft platforms. State clearly in the description that ViceSharp emulates the Commodore 64 (a non-Microsoft system) and that the user supplies their own software/ROMs. Avoid any language or bundled content implying piracy.
-- [ ] Confirm the app name/icon/screenshots do not use Commodore trademarks in a way that implies endorsement; use "Commodore 64" descriptively only.
+- [x] **(blocker)** **GPL-2.0-or-later source offer**: About page + `AboutInfo` (tested by `XboxGplComplianceTests`). Listing boilerplate in `store-listing-copy.md`.
+- [x] **(blocker)** **Third-party/OSS notices**: `THIRD_PARTY_NOTICES.md` + package Licenses content (GPL tests).
+- [x] **(blocker)** **No Commodore ROMs** shipped (FR-XROM-003; `Head_ShipsNoCommodoreRomBinaries_AndCsprojHasNoRomBinGlob`).
+- [x] **Emulator policy** language drafted in `store-listing-copy.md` (paste into Partner Center).
+- [x] **Section-6 decision memo**: `gpl-store-section6-review.md` -> **GO with mitigations** (2026-08-05).
+- [x] **Privacy policy**: `docs/PRIVACY.md` (public URL for listing).
 
 ## 4. Manifest and capability review
 

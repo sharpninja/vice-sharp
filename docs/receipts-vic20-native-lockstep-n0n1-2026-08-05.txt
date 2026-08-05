@@ -1,0 +1,7 @@
+ViceSharp Phase 2 N0/N1 receipts 2026-08-05T14:31:19.1360069-05:00
+vice_xvic.dll: 10909818 bytes @ 08/05/2026 19:26:44
+Vic20 filter: 77 passed / 0 failed / 0 skipped
+N0: create vic20/vic20ntsc/xvic, reset, step, cycle advance
+N1: A/X/Y/S/PC lockstep 64..4096 cycles PAL+NTSC; P.C lag cycle 25 documented; LockstepValidator Vic20 ctor
+Build: native/build-vice-shim-xvic.sh (MSYS2 MINGW64)
+Sources: vice-shim-vic20.c, mainviccpu hosted, vic20cpu hosted, ViceNative.Xvic.cs

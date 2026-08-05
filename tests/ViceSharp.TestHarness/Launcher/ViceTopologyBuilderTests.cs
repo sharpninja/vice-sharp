@@ -88,17 +88,46 @@ public sealed class ViceTopologyBuilderTests
     /// FR/TR: CLI-LAUNCHER-001
     /// Use case: Unsupported binaries throw a clear error rather than
     /// generating broken YAML.
-    /// Acceptance: x128 / xvic / etc. throw NotSupportedException.
+    /// Acceptance: x128 / xpet / etc. throw NotSupportedException.
+    /// (xvic is supported as of Iteration 2 Slice A.)
     /// </summary>
     [Theory]
     [InlineData("x128")]
-    [InlineData("xvic")]
     [InlineData("xpet")]
     public void UnsupportedBinary_Throws(string binaryName)
     {
         var args = ViceArgsParser.Parse(binaryName, Array.Empty<string>());
 
         Assert.Throws<NotSupportedException>(() => ViceTopologyBuilder.BuildYaml(args));
+    }
+
+    /// <summary>
+    /// FR-VIC20-006 / CLI-LAUNCHER-001 / Iteration 2 Slice A.
+    /// Use case: xvic binary name resolves to a Vic20 host topology; optional
+    /// drive 8 uses 1540 DOS by default.
+    /// Acceptance: YAML contains kind Vic20; with -8 image, dos1540 is set.
+    /// </summary>
+    [Fact]
+    public void XvicBinary_BuildsVic20Topology()
+    {
+        var args = ViceArgsParser.Parse("xvic", Array.Empty<string>());
+
+        var yaml = ViceTopologyBuilder.BuildYaml(args);
+
+        yaml.Should().Contain("kind: Vic20");
+        yaml.Should().Contain("xvic-host");
+    }
+
+    [Fact]
+    public void XvicBinary_WithDrive8_DefaultsTo1540Dos()
+    {
+        var args = ViceArgsParser.Parse("xvic", new[] { "-8", "game.d64" });
+
+        var yaml = ViceTopologyBuilder.BuildYaml(args);
+
+        yaml.Should().Contain("kind: Vic20");
+        yaml.Should().Contain("dosRomName: dos1540-325302+3-01.bin");
+        yaml.Should().Contain("game.d64");
     }
 
     /// <summary>

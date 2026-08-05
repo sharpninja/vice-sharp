@@ -1,7 +1,10 @@
 using ViceSharp.Abstractions;
 using ViceSharp.Architectures.C64;
+using ViceSharp.Architectures.Vic20;
 using ViceSharp.Host.Runtime;
+using ViceSharp.Host.Startup;
 using ViceSharp.Protocol;
+using ViceSharp.RomFetch;
 
 namespace ViceSharp.Host.Services;
 
@@ -362,7 +365,28 @@ public sealed class SettingsServiceHost : ISettingsService
             true,
             $"{profile.VideoStandard} {profile.NominalClockHz / 1_000_000.0:0.000} MHz, {profile.CyclesPerLine}x{profile.RasterLines}, {profile.VicIIModel}/{profile.SidModel}, ROM {profile.RomSet}.")));
 
+        // Iteration 2: VIC-20 PAL/NTSC for Avalonia + UWP pickers.
+        var vic20RomsReady = IsVic20RomSetComplete();
+        profiles.AddRange(Vic20MachineProfiles.All.Select(profile => new SettingsProfileDto(
+            profile.Id,
+            profile.DisplayName,
+            profile.Family,
+            string.Equals(currentProfileId, profile.Id, StringComparison.OrdinalIgnoreCase),
+            vic20RomsReady,
+            $"{profile.VideoStandard} {profile.NominalClockHz / 1_000_000.0:0.000} MHz, {profile.CyclesPerLine}x{profile.RasterLines}, {profile.VicIIModel}, drive8={profile.DefaultDriveModel}, ROM {profile.RomSet}.")));
+
         return profiles.ToArray();
+    }
+
+    private static bool IsVic20RomSetComplete()
+    {
+        foreach (var root in ViceDataPathResolver.FindDataRoots())
+        {
+            if (Vic20RomBootstrap.IsComplete(root))
+                return true;
+        }
+
+        return false;
     }
 
     private EmulatorRuntimeSession CreateRestartedSession(
@@ -376,6 +400,17 @@ public sealed class SettingsServiceHost : ISettingsService
         ResourceSettingsDto resources,
         KeyboardMapDto? selectedKeyboardMap)
     {
+        // Before building a VIC-20 session, ensure ROMs under dataRoot/VIC20 (download if needed).
+        if (Vic20MachineProfiles.TryResolve(profileId, out _))
+        {
+            foreach (var root in ViceDataPathResolver.FindDataRoots())
+            {
+                Vic20RomBootstrap.Ensure(root);
+                if (Vic20RomBootstrap.IsComplete(root))
+                    break;
+            }
+        }
+
         var created = _runtimeFactory.Create(new CreateEmulatorSessionRequest(profileId));
         return new EmulatorRuntimeSession(current.SessionId, created.Architecture, created.Machine)
         {
@@ -477,6 +512,12 @@ public sealed class SettingsServiceHost : ISettingsService
         if (C64MachineProfiles.TryResolve(profileId, out var profile))
         {
             resolvedProfileId = profile.Id;
+            return true;
+        }
+
+        if (Vic20MachineProfiles.TryResolve(profileId, out var vic20Profile))
+        {
+            resolvedProfileId = vic20Profile.Id;
             return true;
         }
 

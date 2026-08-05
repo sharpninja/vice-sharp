@@ -47,14 +47,18 @@ at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
 
 **Goal:** Add VIC-20 as a second architecture.
 
-- MOS 6502 CPU (reuse 6510 core minus I/O port)
-- VIC (6560/6561) video chip
-- VIA x2 (6522) - replaces CIA
-- 5KB base RAM + expansion addressing
-- VIC-20 cartridge types
-- VIC-20 keyboard matrix
+**Status (2026-08-05):** COMPLETE on branch `feat/iteration2-vic20`.
 
-**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime.
+- MOS 6502 CPU (reuse 6510 core minus I/O port)
+- VIC-I (6560/6561) character-mode video (`Mos6561`) with PAL/NTSC timing
+- VIA x2 (shared `Via6522`) at $9110 NMI / $9120 IRQ; keyboard matrix + joystick glue
+- 5KB base RAM + expansion packs (3K/8K/16K/24K/32K)
+- MVP cartridge map (BLK PRG/raw) and READY boot proof with official ROMs
+- Default drive unit 8 = **1540** (`DriveModel.C1540`); C64 remains 1541
+- Launcher `xvic` topology; host session create; Xbox computer picker enables VIC-20
+- Multi-frame managed determinism gate (native `xvic` lockstep optional when binary present)
+
+**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime. Met via READY fingerprint, character frames, session factory, and focused `FullyQualifiedName~Vic20` gate.
 
 ## Iteration 3: C128
 

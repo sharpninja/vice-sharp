@@ -35,8 +35,7 @@ public sealed class XboxComputerModelPickerTests
         new ResourceSettingsDto("auto-detect"));
 
     /// <summary>
-    /// A "Minimal host" pseudo-profile (Machine=="minimal", MUST be filtered out) plus three
-    /// selectable C64 profiles (Machine=="x64sc").
+    /// Minimal host (filtered out) + C64 + VIC-20 profiles as returned by SettingsServiceHost.
     /// </summary>
     private static SettingsProfileDto[] SeededProfiles() => new[]
     {
@@ -44,16 +43,17 @@ public sealed class XboxComputerModelPickerTests
         new SettingsProfileDto("c64", "Commodore 64 PAL", "x64sc", true, true),
         new SettingsProfileDto("c64c", "Commodore 64C PAL", "x64sc", false, true),
         new SettingsProfileDto("ntsc", "Commodore 64 NTSC", "x64sc", false, true),
+        new SettingsProfileDto("vic20", "Commodore VIC-20 PAL", "xvic", false, true),
+        new SettingsProfileDto("vic20ntsc", "Commodore VIC-20 NTSC", "xvic", false, true),
     };
 
     private static XboxSettingsViewModel BuildSeededVm(FakeXboxSettingsGateway fake) =>
         new(fake, SessionId);
 
     /// <summary>
-    /// TEST-XSET-001. Use case: the Model picker lists the selectable C64 machine profiles
-    /// and never the non-selectable "Minimal host" pseudo-profile.
-    /// Acceptance: after <see cref="XboxSettingsViewModel.RefreshAsync"/>, Models is exactly
-    /// the three x64sc entries in order and contains no Machine=="minimal" entry.
+    /// TEST-XSET-001. Use case: Model picker lists the active computer family's profiles
+    /// (C64 when profile is c64) and never the "Minimal host" pseudo-profile.
+    /// Acceptance: after refresh on c64, Models is the three x64sc entries; no minimal.
     /// </summary>
     [Fact]
     public async Task Models_ExcludesMinimalHost_ListsC64Profiles()
@@ -75,10 +75,34 @@ public sealed class XboxComputerModelPickerTests
     }
 
     /// <summary>
+    /// Iteration 2: selecting VIC-20 computer surfaces VIC-20 PAL/NTSC models.
+    /// </summary>
+    [Fact]
+    public async Task Models_WhenVic20Selected_ListsVic20Variants()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = SettingsWithProfile("c64"),
+            CannedProfiles = SeededProfiles(),
+        };
+        var vm = BuildSeededVm(fake);
+        await vm.RefreshAsync(ct);
+
+        var vicFamily = Assert.Single(vm.Computers, c => c.FamilyId == "xvic");
+        vm.SelectedComputer = vicFamily;
+
+        Assert.Equal("vic20", vm.SelectedProfileId);
+        Assert.Equal(2, vm.Models.Count);
+        Assert.All(vm.Models, m => Assert.Equal("xvic", m.Machine));
+        Assert.Equal(new[] { "vic20", "vic20ntsc" }, vm.Models.Select(m => m.Id).ToArray());
+    }
+
+    /// <summary>
     /// TEST-XSET-001. Use case: the Computer picker offers the implemented C64 plus disabled
     /// placeholders for the not-yet-ported machines.
-    /// Acceptance: Computers contains "Commodore 64" (x64sc) with IsAvailable true and the
-    /// VIC-20 / C128 / PET / Plus4 families with IsAvailable false.
+    /// Acceptance: Computers contains "Commodore 64" (x64sc) and "VIC-20" (xvic)
+    /// with IsAvailable true; C128 / PET / Plus4 remain disabled placeholders.
     /// </summary>
     [Fact]
     public void Computers_ListsC64EnabledPlusDisabledPlaceholders()
@@ -89,11 +113,14 @@ public sealed class XboxComputerModelPickerTests
         Assert.Equal("Commodore 64", c64.DisplayName);
         Assert.True(c64.IsAvailable);
 
+        var vic = Assert.Single(vm.Computers, c => c.FamilyId == "xvic");
+        Assert.Equal("VIC-20", vic.DisplayName);
+        Assert.True(vic.IsAvailable);
+
         Assert.All(
-            vm.Computers.Where(c => c.FamilyId != "x64sc"),
+            vm.Computers.Where(c => c.FamilyId is not ("x64sc" or "xvic")),
             c => Assert.False(c.IsAvailable));
 
-        Assert.Contains(vm.Computers, c => c.FamilyId == "xvic");
         Assert.Contains(vm.Computers, c => c.FamilyId == "x128");
         Assert.Contains(vm.Computers, c => c.FamilyId == "xpet");
         Assert.Contains(vm.Computers, c => c.FamilyId == "xplus4");

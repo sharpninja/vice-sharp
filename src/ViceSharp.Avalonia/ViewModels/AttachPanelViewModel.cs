@@ -68,7 +68,9 @@ public sealed class AttachPanelViewModel : ObservableObject
         [
             new MachineProfileOption("c64", "C64 PAL", "Placeholder until host profile enumeration is available.", true),
             new MachineProfileOption("ntsc", "C64 NTSC", "Placeholder until host profile enumeration is available.", true),
-            new MachineProfileOption("c64c", "C64C PAL", "Placeholder until host profile enumeration is available.", true)
+            new MachineProfileOption("c64c", "C64C PAL", "Placeholder until host profile enumeration is available.", true),
+            new MachineProfileOption("vic20", "VIC-20 PAL", "Placeholder until host profile enumeration is available.", true),
+            new MachineProfileOption("vic20ntsc", "VIC-20 NTSC", "Placeholder until host profile enumeration is available.", true)
         ];
         _selectedMachineProfile = MachineProfiles[0];
         _appliedSettings = CaptureSettings();

@@ -114,7 +114,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Machine | Target Iteration | State | % |
 |---------|:----------------:|:----:|:----:|
 | SX-64 | 1 | ⚪ | 0% |
-| VIC-20 (MOS 6502 + VIC + VIA x2) | 2 | ⚪ | 0% |
+| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ✅ | 100% |
 | C128 (MOS 8502 + VIC-IIe + Z80) | 3 | ⚪ | 0% |
 | PET (MOS 6502 + PIA/VIA + CRTC) | 4 | ⚪ | 0% |
 | Plus/4 / C16 (MOS 7501 + TED) | 5 | ⚪ | 0% |
@@ -138,7 +138,7 @@ Dashboard is regenerated as subagent slices land. Latest validation gate at v1.0
 |---------|-------------|--------|
 | C64 / C64C | MOS 6510 + VIC-II + SID + CIA x2 | Iteration 1 |
 | SX-64 | Same as C64 (built-in monitor + 1541) | Iteration 1 |
-| VIC-20 | MOS 6502 + VIC + VIA x2 | Iteration 2 |
+| VIC-20 | MOS 6502 + VIC-I + VIA x2 | Iteration 2 (complete on `feat/iteration2-vic20`) |
 | C128 | MOS 8502 + VIC-IIe + SID + CIA x2 + Z80 | Iteration 3 |
 | PET | MOS 6502 + PIA/VIA + CRTC | Iteration 4 |
 | Plus/4 / C16 | MOS 7501 + TED | Iteration 5 |
@@ -186,7 +186,7 @@ ViceSharp is designed as a **library-first emulator**:
 - **ViceSharp.Abstractions** - 33+ public interfaces defining the emulator contract
 - **ViceSharp.Core** - bus, clock, devices, mutation queue, pub/sub
 - **ViceSharp.Chips** - CPU (6502/6510/8502), VIC-II, SID, CIA, VIA, PLA
-- **ViceSharp.Architectures** - machine definitions: C64 and the C1541 true drive today, plus ad-hoc and multisystem topologies (VIC-20, C128, PET, Plus/4 planned for iterations 2-5)
+- **ViceSharp.Architectures** - machine definitions: C64, VIC-20 (Iteration 2), and the C1541 true drive, plus ad-hoc and multisystem topologies (C128, PET, Plus/4 planned for iterations 3-5)
 - **ViceSharp.SourceGen** - Roslyn source generator for device registration boilerplate
 - **ViceSharp.Host** - composition boundary: emulator sessions, media, snapshots, diagnostics, and the gRPC host surface
 - **ViceSharp.Protocol** - gRPC/protobuf contracts and generated client/server types
