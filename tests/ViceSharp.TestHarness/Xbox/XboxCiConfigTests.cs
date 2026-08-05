@@ -67,6 +67,33 @@ public sealed class XboxCiConfigTests
         }
     }
 
+    /// <summary>
+    /// FEAT-XOCTOPUS-001 (operator 2026-08-05: finish LEGION2 Octopus release steps).
+    /// Use case: after a green CI/release job, optionally create and deploy an Octopus
+    /// release on PAYTON-LEGION2 when <c>OCTOPUS_API_KEY</c> is present.
+    /// Acceptance: both pipeline YAMLs declare an "Octopus LEGION2 release" step that
+    /// no-ops without the key, invokes <c>octopus.exe</c> release create/deploy when
+    /// set, and respects <c>SkipOctopus</c>.
+    /// </summary>
+    [Fact]
+    public void CiPipelines_DeclareOptionalOctopusLegion2ReleaseStep()
+    {
+        foreach (var relative in PipelineFiles)
+        {
+            var path = Path.Combine(RepoRoot, relative);
+            Assert.True(File.Exists(path), $"Expected the CI pipeline file at '{path}'.");
+
+            var yaml = File.ReadAllText(path);
+            Assert.Contains("Octopus LEGION2 release", yaml, StringComparison.Ordinal);
+            Assert.Contains("OCTOPUS_API_KEY", yaml, StringComparison.Ordinal);
+            Assert.Contains("octopus.exe", yaml, StringComparison.Ordinal);
+            Assert.Contains("release create", yaml, StringComparison.Ordinal);
+            Assert.Contains("release deploy", yaml, StringComparison.Ordinal);
+            Assert.Contains("SkipOctopus", yaml, StringComparison.Ordinal);
+            Assert.Contains("PAYTON-LEGION2:8066", yaml, StringComparison.Ordinal);
+        }
+    }
+
     private static string RepoRoot
     {
         get
