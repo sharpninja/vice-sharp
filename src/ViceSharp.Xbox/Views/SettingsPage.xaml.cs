@@ -14,11 +14,13 @@ public sealed partial class SettingsPage : Page
     /// <summary>Creates the page and binds the shared XboxSettingsViewModel.</summary>
     public SettingsPage()
     {
+        ViewModel = App.Instance.SettingsVm;
+        DataContext = ViewModel;
         InitializeComponent();
-        DataContext = App.Instance.SettingsVm;
     }
 
-    private XboxSettingsViewModel? ViewModel => App.Instance.SettingsVm;
+    /// <summary>The bound settings ViewModel (the shared <see cref="App.SettingsVm"/>), the source for compiled {x:Bind} paths.</summary>
+    public XboxSettingsViewModel? ViewModel { get; }
 
     /// <inheritdoc />
     protected override async void OnNavigatedTo(NavigationEventArgs e)

@@ -29,10 +29,25 @@ public sealed partial class VirtualKeyboardOverlay : UserControl
     private bool _appliedCommodore;
     private bool _appliedLowercase;
 
+    /// <summary>
+    /// The bound <see cref="VirtualKeyboardViewModel"/> (the control's
+    /// <see cref="FrameworkElement.DataContext"/>), projected as the compiled-binding
+    /// ({x:Bind}) source root. The host assigns the DataContext externally (App startup and
+    /// the machine-rebuild path); this exposes it so the XAML resolves <c>ViewModel.*</c>
+    /// paths, and <see cref="FrameworkElement.DataContextChanged"/> re-runs the compiled
+    /// bindings whenever the DataContext is (re)assigned.
+    /// </summary>
+    public VirtualKeyboardViewModel? ViewModel => DataContext as VirtualKeyboardViewModel;
+
     /// <summary>Creates the overlay, its charset-case poll, and the stroke-hold timer.</summary>
     public VirtualKeyboardOverlay()
     {
         InitializeComponent();
+
+        // The DataContext (the VirtualKeyboardViewModel) is assigned by the host AFTER
+        // construction and again on a machine rebuild; keep the compiled {x:Bind} paths
+        // (rooted at ViewModel => DataContext) in sync each time it changes.
+        DataContextChanged += (_, _) => Bindings.Update();
 
         // The charset mode flips at RUNTIME (SHIFT+C= / POKE 53272), so poll the live
         // VIC at ~4 Hz while the dock is on screen; the apply path no-ops when nothing

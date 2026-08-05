@@ -20,15 +20,15 @@
 
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="16" MaxWidth="900">
-                <ComboBox Header="Computer" ItemsSource="{Binding Computers}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedComputer, Mode=TwoWay}" />
-                <ComboBox Header="Model" ItemsSource="{Binding Models}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedModel, Mode=TwoWay}" />
+                <ComboBox Header="Computer" ItemsSource="{x:Bind ViewModel.Computers, Mode=OneWay}" DisplayMemberPath="DisplayName" SelectedItem="{x:Bind ViewModel.SelectedComputer, Mode=TwoWay}" />
+                <ComboBox Header="Model" ItemsSource="{x:Bind ViewModel.Models, Mode=OneWay}" DisplayMemberPath="DisplayName" SelectedItem="{x:Bind ViewModel.SelectedModel, Mode=TwoWay}" />
                 <TextBlock Text="Restart required to change model." FontSize="18" Foreground="#FFDDAA88" />
-                <ComboBox Header="Renderer" ItemsSource="{Binding Renderers}" SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" />
-                <ComboBox Header="Display scale" ItemsSource="{Binding DisplayScales}" SelectedItem="{Binding SelectedDisplayScale, Mode=TwoWay}" />
-                <ComboBox Header="Palette" ItemsSource="{Binding Palettes}" SelectedItem="{Binding SelectedPalette, Mode=TwoWay}" />
-                <ComboBox Header="Audio" ItemsSource="{Binding AudioModes}" SelectedItem="{Binding SelectedAudioMode, Mode=TwoWay}" />
-                <Slider Header="Master volume" Minimum="0" Maximum="100" Value="{Binding MasterVolumePercent, Mode=TwoWay}" />
-                <ToggleSwitch Header="Swap joystick ports" IsOn="{Binding SwapJoystickPorts, Mode=TwoWay}" />
+                <ComboBox Header="Renderer" ItemsSource="{x:Bind ViewModel.Renderers, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedRenderer, Mode=TwoWay}" />
+                <ComboBox Header="Display scale" ItemsSource="{x:Bind ViewModel.DisplayScales, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedDisplayScale, Mode=TwoWay}" />
+                <ComboBox Header="Palette" ItemsSource="{x:Bind ViewModel.Palettes, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedPalette, Mode=TwoWay}" />
+                <ComboBox Header="Audio" ItemsSource="{x:Bind ViewModel.AudioModes, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedAudioMode, Mode=TwoWay}" />
+                <Slider Header="Master volume" Minimum="0" Maximum="100" Value="{x:Bind ViewModel.MasterVolumePercent, Mode=TwoWay}" />
+                <ToggleSwitch Header="Swap joystick ports" IsOn="{x:Bind ViewModel.SwapJoystickPorts, Mode=TwoWay}" />
                 <!--
                   FEAT-XPERFHUD-001 toggle (operator 2026-07-14): show/hide the letterbox
                   performance counters. Applies LIVE and persists immediately (head-local
@@ -36,12 +36,12 @@
                   this head, not a host session setting.
                 -->
                 <ToggleSwitch x:Name="PerfCountersToggle" Header="Performance counters" Toggled="OnPerfCountersToggled" />
-                <TextBlock Text="{Binding StatusText}" Foreground="#FFAADDAA" />
+                <TextBlock Text="{x:Bind ViewModel.StatusText, Mode=OneWay}" Foreground="#FFAADDAA" />
             </StackPanel>
         </ScrollViewer>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Apply" Style="{StaticResource TenFootButtonStyle}" IsEnabled="{Binding IsDirty}" Click="OnApply" />
+            <Button Content="Apply" Style="{StaticResource TenFootButtonStyle}" IsEnabled="{x:Bind ViewModel.IsDirty, Mode=OneWay}" Click="OnApply" />
             <Button Content="Revert" Style="{StaticResource TenFootButtonStyle}" Click="OnRevert" />
             <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
         </StackPanel>

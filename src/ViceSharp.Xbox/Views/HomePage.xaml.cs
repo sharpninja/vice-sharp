@@ -11,18 +11,22 @@ using ViceSharp.Xbox.ViewModels;
 /// <summary>The launch page. Its buttons raise the HomeViewModel intents and push pages.</summary>
 public sealed partial class HomePage : Page
 {
+    /// <summary>The compiled-binding source for this page (also the DataContext).</summary>
+    public HomeViewModel ViewModel { get; }
+
     /// <summary>Creates the page and binds the shared HomeViewModel.</summary>
     public HomePage()
     {
+        // FEAT-XAOTBIND-001: assign ViewModel before InitializeComponent so {x:Bind}
+        // can resolve at first load (same pattern as Settings/About/InputMapping).
+        ViewModel = App.Instance.Home;
+        DataContext = ViewModel;
         InitializeComponent();
-        DataContext = App.Instance.Home;
 
         // FEAT-XMENUFOCUS-001: programmatic focus can no-op before the first layout
         // pass, so re-assert once the tree is live.
         Loaded += (_, _) => FocusCloseMenu();
     }
-
-    private HomeViewModel ViewModel => App.Instance.Home;
 
     /// <summary>
     /// FEAT-XMENUFOCUS-001 (operator 2026-07-14: "When opening the menu, always set

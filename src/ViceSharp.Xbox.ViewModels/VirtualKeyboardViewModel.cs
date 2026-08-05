@@ -98,7 +98,11 @@ public sealed class VirtualKeyboardViewModel
     public VirtualKeyboardLayout Layout { get; }
 
     /// <summary>The layout tiles grouped into display rows (top to bottom, left to right).</summary>
-    public IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> Rows => Layout.Rows;
+    /// <summary>
+    /// Display rows as <see cref="VirtualKeyRow"/> (FEAT-XAOTBIND-001: named type for
+    /// compiled <c>{x:Bind Keys}</c> on the keyboard overlay).
+    /// </summary>
+    public IReadOnlyList<VirtualKeyRow> Rows => Layout.Rows;
 
     /// <summary>The layout tiles flattened in row-major order; the index space of
     /// <see cref="SelectedIndex"/>.</summary>

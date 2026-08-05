@@ -4,15 +4,20 @@ namespace ViceSharp.Xbox.Views;
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using ViceSharp.Xbox.ViewModels;
 
 /// <summary>The read-only controller-mapping page. Its Rows come from InputMappingViewModel.</summary>
 public sealed partial class InputMappingPage : Page
 {
+    /// <summary>The shared input-mapping ViewModel, bound by compiled {x:Bind}.</summary>
+    public InputMappingViewModel ViewModel { get; }
+
     /// <summary>Creates the page and binds the shared InputMappingViewModel.</summary>
     public InputMappingPage()
     {
+        ViewModel = App.Instance.InputMappingVm;
+        DataContext = ViewModel;
         InitializeComponent();
-        DataContext = App.Instance.InputMappingVm;
     }
 
     private void OnVirtualKeyboard(object sender, RoutedEventArgs e)

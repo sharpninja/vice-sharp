@@ -14,6 +14,7 @@
     x:Class="ViceSharp.Xbox.Views.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:ViceSharp.Xbox.ViewModels"
     RequiresPointer="Never"
     Background="Transparent">
     <Border
@@ -27,8 +28,9 @@
             </TransitionCollection>
         </Border.Transitions>
         <StackPanel Spacing="6" MinWidth="300" VerticalAlignment="Center">
+                <!-- FEAT-XAOTBIND-001: compiled bind; reflection {Binding} dies under AOT. -->
                 <TextBlock
-                    Text="{Binding Title}"
+                    Text="{x:Bind ViewModel.Title, Mode=OneWay}"
                     FontFamily="{StaticResource C64KeyFont}"
                     FontSize="22"
                     Foreground="#FFE8E4D8"

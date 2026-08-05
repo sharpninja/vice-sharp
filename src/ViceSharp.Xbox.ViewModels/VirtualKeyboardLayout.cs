@@ -27,7 +27,7 @@ using System.Linq;
 public sealed class VirtualKeyboardLayout
 {
     private VirtualKeyboardLayout(
-        IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> rows,
+        IReadOnlyList<VirtualKeyRow> rows,
         IReadOnlyList<VirtualKeyEntry> functionKeys)
     {
         Rows = rows;
@@ -45,8 +45,10 @@ public sealed class VirtualKeyboardLayout
     /// The tiles grouped into their display rows, top to bottom, left to right. The
     /// function keys are NOT part of the rows: they live in <see cref="FunctionKeys"/>
     /// and render as a column on the right, as on the physical machine.
+    /// Each row is a <see cref="VirtualKeyRow"/> so XAML can <c>{x:Bind Keys}</c>
+    /// without reflection (FEAT-XAOTBIND-001).
     /// </summary>
-    public IReadOnlyList<IReadOnlyList<VirtualKeyEntry>> Rows { get; }
+    public IReadOnlyList<VirtualKeyRow> Rows { get; }
 
     /// <summary>
     /// The function-key column (F1/F3/F5/F7), rendered on the RIGHT of the keyboard
@@ -71,13 +73,15 @@ public sealed class VirtualKeyboardLayout
         static IReadOnlyList<VirtualKeyEntry> Letters(string letters) =>
             letters.Select(c => Key(c.ToString())).ToArray();
 
-        var rows = new List<IReadOnlyList<VirtualKeyEntry>>
+        static VirtualKeyRow Row(params VirtualKeyEntry[] keys) => new(keys);
+        static VirtualKeyRow RowFrom(IEnumerable<VirtualKeyEntry> keys) => new(keys.ToArray());
+
+        var rows = new List<VirtualKeyRow>
         {
             // Row 1: left-arrow, 1-0, +, -, pound, CLR/HOME, INST/DEL (16 keys). The
             // digit keys carry their printed shifted legends (FEAT-XKEYCAPSHIFT-001);
             // SHIFT+0 is 0 on the machine, so 0 has none.
-            new[]
-            {
+            Row(
                 Key("LeftArrow", "←"),
                 Key("1", shifted: "!"), Key("2", shifted: "\""), Key("3", shifted: "#"),
                 Key("4", shifted: "$"), Key("5", shifted: "%"),
@@ -86,12 +90,11 @@ public sealed class VirtualKeyboardLayout
                 Key("+"), Key("-"),
                 Key("Pound", "£"),
                 Key("Home", "CLR HOME"),
-                Key("Delete", "INST DEL"),
-            },
+                Key("Delete", "INST DEL")),
 
             // Row 2: CTRL, Q-P, @, *, up-arrow, RESTORE (15 keys). RESTORE sits at the
             // row's right end on the machine and drives the NMI seam, never the matrix.
-            new[] { Key("Ctrl", "CTRL", 1.5) }
+            RowFrom(new[] { Key("Ctrl", "CTRL", 1.5) }
                 .Concat(Letters("QWERTYUIOP"))
                 .Concat(new[]
                 {
@@ -100,12 +103,11 @@ public sealed class VirtualKeyboardLayout
                     // SHIFT + up-arrow types pi (the legend on the physical keycap).
                     Key("UpArrow", "↑", shifted: "π"),
                     new VirtualKeyEntry("Restore", "RESTORE", IsWide: false, AppKeyKind.Restore),
-                })
-                .ToArray(),
+                })),
 
             // Row 3: RUN/STOP, SHIFT-LOCK, A-L, :, ;, =, RETURN (15 keys). RETURN is the
             // classic wide key closing the home row.
-            new[]
+            RowFrom(new[]
                 {
                     // Authentic two-line caps (operator 2026-07-14): the key is STOP,
                     // the shifted state is RUN, and SHIFT LOCK is the mechanical toggle.
@@ -119,13 +121,12 @@ public sealed class VirtualKeyboardLayout
                     Key(";", shifted: "]"),
                     Key("="),
                     Key("Return", "RETURN", 2.0),
-                })
-                .ToArray(),
+                })),
 
             // Row 4: C=, SHIFT, Z-M, comma, period, slash, SHIFT, CRSR down, CRSR right
             // (15 keys). The two momentary SHIFTs wrap the NEXT key press hardware-style,
             // which is also how CRSR-up (SHIFT+down) and CRSR-left (SHIFT+right) work.
-            new[]
+            RowFrom(new[]
                 {
                     // C= is a sticky modifier tile (FEAT-XKBDSTICKY-001), not a keystroke.
                     new VirtualKeyEntry("Commodore", "C=", IsWide: false, AppKeyKind.CommodoreMomentary),
@@ -140,11 +141,10 @@ public sealed class VirtualKeyboardLayout
                     new VirtualKeyEntry("RightShift", "SHIFT", IsWide: false, AppKeyKind.ShiftMomentary, 1.5),
                     Key("Down", "CRSR ⇕"),
                     Key("Right", "CRSR ⇔"),
-                })
-                .ToArray(),
+                })),
 
             // Row 5: the space bar.
-            new[] { Key("Space", "SPACE", 9.0) },
+            Row(Key("Space", "SPACE", 9.0)),
         };
 
         // The function column, rendered on the RIGHT like the physical machine's F-keys.

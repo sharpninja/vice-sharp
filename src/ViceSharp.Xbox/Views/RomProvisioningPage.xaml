@@ -26,14 +26,14 @@
                 TextWrapping="Wrap"
                 TextAlignment="Center" />
             <TextBlock
-                Text="{Binding StatusMessage}"
+                Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
                 FontSize="22"
                 Foreground="#FFD54F"
                 HorizontalAlignment="Center"
                 TextWrapping="Wrap"
                 TextAlignment="Center" />
             <ProgressRing
-                IsActive="{Binding IsDownloadConfirmed}"
+                IsActive="{x:Bind ViewModel.IsDownloadConfirmed, Mode=OneWay}"
                 Width="48"
                 Height="48"
                 HorizontalAlignment="Center" />

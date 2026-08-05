@@ -14,11 +14,13 @@ public sealed partial class DeviceSetupPage : Page
     /// <summary>Creates the page and binds the shared XboxDeviceSetupViewModel.</summary>
     public DeviceSetupPage()
     {
+        ViewModel = App.Instance.DeviceSetupVm;
+        DataContext = ViewModel;
         InitializeComponent();
-        DataContext = App.Instance.DeviceSetupVm;
     }
 
-    private XboxDeviceSetupViewModel? ViewModel => App.Instance.DeviceSetupVm;
+    /// <summary>The shared device-setup view-model this page binds against (x:Bind root).</summary>
+    public XboxDeviceSetupViewModel? ViewModel { get; }
 
     /// <inheritdoc />
     protected override async void OnNavigatedTo(NavigationEventArgs e)
