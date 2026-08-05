@@ -340,7 +340,8 @@ public sealed partial class App : Application
 
             switch (args.VirtualKey)
             {
-                case Windows.System.VirtualKey.Escape: ToggleMenu(); args.Handled = true; break;
+                // FEAT-XKBD-ESC-001: ESC closes the virtual keyboard when open, else menu.
+                case Windows.System.VirtualKey.Escape: HandleEscapeShellKey(); args.Handled = true; break;
                 case Windows.System.VirtualKey.F9: ToggleKeyboardOverlay(); args.Handled = true; break;
                 case Windows.System.VirtualKey.F11: ToggleMenu(); args.Handled = true; break;
                 default: break;
@@ -1226,18 +1227,33 @@ public sealed partial class App : Application
     }
 
     /// <summary>
-    /// Root-level KeyDown handler (registered with handledEventsToo). ESC toggles the shell
-    /// menu; WASD/arrows drive focus navigation only while the menu is open. With the menu
-    /// CLOSED, every mappable physical key types straight into the running C64
-    /// (FIX-XKBDINPUT-001, operator: "Emulator not receiving keyboard input"): the key is
-    /// injected DOWN here and released by <see cref="OnRootKeyUp"/>, with the held set
-    /// tracked so menu entry can force-release everything.
+    /// FEAT-XKBD-ESC-001 (operator 2026-08-05): ESC shell key. If the virtual-keyboard
+    /// dock is open, close it (and release held keys via <see cref="ToggleKeyboardOverlay"/>);
+    /// otherwise toggle the shell menu. Shared by the routed and CoreWindow handlers so
+    /// focus-nowhere does not re-open the menu while the keyboard is up.
+    /// </summary>
+    private void HandleEscapeShellKey()
+    {
+        if (Navigation.IsVirtualKeyboardOpen)
+            ToggleKeyboardOverlay();
+        else
+            ToggleMenu();
+    }
+
+    /// <summary>
+    /// Root-level KeyDown handler (registered with handledEventsToo). ESC closes the
+    /// virtual keyboard when open, otherwise toggles the shell menu; WASD/arrows drive
+    /// focus navigation only while the menu is open. With the menu CLOSED, every mappable
+    /// physical key types straight into the running C64 (FIX-XKBDINPUT-001, operator:
+    /// "Emulator not receiving keyboard input"): the key is injected DOWN here and
+    /// released by <see cref="OnRootKeyUp"/>, with the held set tracked so menu entry can
+    /// force-release everything.
     /// </summary>
     private void OnRootKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
     {
         switch (e.Key)
         {
-            case Windows.System.VirtualKey.Escape: ToggleMenu(); e.Handled = true; return;
+            case Windows.System.VirtualKey.Escape: HandleEscapeShellKey(); e.Handled = true; return;
             // FIX-XKBDPANEL-001: physical-keyboard toggles for the shell (F9 keyboard
             // dock, F11 menu; both reserved-unmapped in PhysicalKeyMap), so the shell is
             // exercisable without a controller - for the operator and the autonomous

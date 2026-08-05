@@ -71,7 +71,7 @@ public sealed class XboxKeyboardInputTests
     }
 
     [Theory]
-    [InlineData(27)]   // Escape: reserved for the shell menu toggle.
+    [InlineData(27)]   // Escape: reserved for shell (close keyboard if open, else menu).
     [InlineData(9)]    // Tab: left to XAML focus.
     [InlineData(120)]  // F9-F12: reserved for app shortcuts.
     [InlineData(123)]
@@ -273,6 +273,37 @@ public sealed class XboxKeyboardInputTests
         Assert.Contains("togglekeyboardoverlay", app);
         Assert.Contains("keyboardkeydelete", app);
         Assert.Contains("keyboardkeyshiftcursorleft", app);
+    }
+
+    /// <summary>
+    /// FEAT-XKBD-ESC-001 (operator 2026-08-05: "Hitting ESC key should close the virtual keyboard").
+    /// Use case: with the on-screen C64 keyboard docked, ESC dismisses it without opening
+    /// the shell menu; with the keyboard closed, ESC still toggles the menu.
+    /// Acceptance: App.xaml.cs routes Escape through a shared handler that checks
+    /// IsVirtualKeyboardOpen first (close via ToggleKeyboardOverlay) before ToggleMenu;
+    /// both the routed KeyDown and CoreWindow focus-nowhere backstop use that path.
+    /// </summary>
+    [Fact]
+    public void Escape_ClosesVirtualKeyboard_BeforeTogglingMenu()
+    {
+        var app = ReadLower("src", "ViceSharp.Xbox", "App.xaml.cs");
+        Assert.Contains("handleescapeshellkey", app);
+        Assert.Contains("isvirtualkeyboardopen", app);
+
+        // The Escape cases must not call ToggleMenu alone; they go through the shared
+        // helper that prioritizes keyboard dismissal.
+        var escapeIdx = 0;
+        var escapeHits = 0;
+        while ((escapeIdx = app.IndexOf("virtualkey.escape", escapeIdx, StringComparison.Ordinal)) >= 0)
+        {
+            escapeHits++;
+            var window = app.Substring(escapeIdx, Math.Min(120, app.Length - escapeIdx));
+            Assert.Contains("handleescapeshellkey", window);
+            Assert.DoesNotContain("togglemenu()", window);
+            escapeIdx += "virtualkey.escape".Length;
+        }
+
+        Assert.True(escapeHits >= 2, "Expected Escape handling on both routed and CoreWindow paths.");
     }
 
     private static IReadOnlyList<AppCommand> Commands(
