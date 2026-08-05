@@ -178,15 +178,13 @@ public partial class MainWindow : Window
     // (no internal letterbox), exactly matching the "wraps the image tightly" layout intent.
     private void UpdateVideoAspect()
     {
-        var profileId = _attachViewModel.SelectedMachineProfile?.Id;
-        var profile = ViceSharp.Architectures.C64.C64MachineProfiles.All.FirstOrDefault(
-            p => string.Equals(p.Id, profileId, StringComparison.OrdinalIgnoreCase)
-                || p.Aliases.Any(alias => string.Equals(alias, profileId, StringComparison.OrdinalIgnoreCase)));
-
-        var system = profile?.VideoStandard == ViceSharp.Abstractions.VideoStandard.Ntsc
-            ? ViceSharp.Chips.VicIi.Mos6569.TvSystem.NTSC
-            : ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL;
-        var pixelAspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
+        // TR-MVVM-001 / AvaloniaBoundaryTests: do not reference Architectures or Chips
+        // from the Avalonia head. PAR literals mirror VICE vicii_get_pixel_aspect /
+        // VideoRenderer.GetPixelAspectRatio (PAL 0.93650794, NTSC 0.75). Profile id is
+        // the host-canonical selector already on the attach panel.
+        var profileId = _attachViewModel.SelectedMachineProfile?.Id ?? string.Empty;
+        var isNtsc = profileId.Contains("ntsc", StringComparison.OrdinalIgnoreCase);
+        var pixelAspect = isNtsc ? 0.75 : 0.93650794;
 
         _video.PixelAspect = pixelAspect;
         _video.AspectMode = _attachViewModel.SelectedAspectMode;
