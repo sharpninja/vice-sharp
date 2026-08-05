@@ -112,7 +112,8 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             cia2PortAInputMask: cia2PortAInputMask,
             cia2Connected: cia2Connected,
             defaultCartridgeMappingMode: defaultCartridgeMappingMode,
-            cpuPcReader: () => cpu.PC);
+            cpuPcReader: () => cpu.PC,
+            nmiLine: nmiLine);
         cpu.ShouldDeferAbsoluteStore = memory.ShouldDeferCpuAbsoluteStore;
         cpu.ShouldDelayNextFetchAfterWrite = memory.ShouldDelayCpuFetchAfterWrite;
         var iecBusConnected = profile?.SystemCore.IecBusConnected ?? true;

@@ -133,6 +133,67 @@ public sealed class XboxRestoreSeamTests
         Assert.False(matrix.IsRestorePressed);
     }
 
+    /// <summary>
+    /// FIX-XKBDNMI-001 / FR-XKBD-001.
+    /// Use case: pressing RESTORE must assert the open-drain NMI line (edge-latched by
+    /// SystemClock into a real CPU NMI); holding must not re-assert; release clears;
+    /// "*" still never touches NMI.
+    /// Acceptance: isolated matrix+line unit proves Assert/Release; on a live C64,
+    /// SetRestoreState(true) makes the NMI line asserted via the keyboard source and
+    /// a subsequent instruction-boundary step consumes the latched NMI (PC vectors to
+    /// the NMI handler at $FFFA/$FFFB after the next boundary).
+    /// </summary>
+    [Fact]
+    public void Restore_AssertsNmiLine_AndEdgeLatchesCpuNmi()
+    {
+        // Unit: ConnectNmiLine + SetRestore drives the open-drain line.
+        var line = new ViceSharp.Core.InterruptLine(InterruptType.Nmi);
+        var matrix = new C64KeyboardMatrix();
+        matrix.ConnectNmiLine(line);
+
+        Assert.False(line.IsAsserted);
+        matrix.SetRestore(true);
+        Assert.True(matrix.IsRestorePressed);
+        Assert.True(line.IsAsserted);
+
+        // Hold does not re-toggle the source (still asserted once).
+        matrix.SetRestore(true);
+        Assert.True(line.IsAsserted);
+
+        matrix.SetRestore(false);
+        Assert.False(matrix.IsRestorePressed);
+        Assert.False(line.IsAsserted);
+
+        matrix.SetKey(0x31, true);
+        Assert.False(line.IsAsserted);
+
+        // Integration: live C64 machine wires RESTORE through C64MemoryMap to the NMI line.
+        var machine = MachineTestFactory.CreateC64Machine();
+        var liveMatrix = machine.Devices.All.OfType<IKeyboardMatrix>().Single();
+        var keyboardInput = machine.Devices.All.OfType<IMachineKeyboardInput>().Single();
+
+        // Warm a few frames so we are past reset vectors and at instruction boundaries.
+        for (var i = 0; i < 5; i++)
+            machine.RunFrame();
+
+        var cpu = machine.Devices.All.OfType<ICpu>().Single();
+        var pcBefore = cpu.PC;
+
+        keyboardInput.SetRestoreState(true);
+        Assert.True(liveMatrix.IsRestorePressed);
+
+        // Advance enough instructions for the edge latch + instruction-boundary NMI service.
+        // NMI takes the vector at $FFFA/$FFFB; after service PC lands off the prior stream.
+        for (var i = 0; i < 32; i++)
+            machine.StepInstruction();
+
+        // NMI service should move PC off the pre-press stream (vector fetch).
+        Assert.NotEqual(pcBefore, cpu.PC);
+
+        keyboardInput.SetRestoreState(false);
+        Assert.False(liveMatrix.IsRestorePressed);
+    }
+
     private static ConsoleHostDependencies MinimalDependencies() =>
         new([MinimalHostArchitectureDescriptor.Instance], MinimalHostArchitectureDescriptor.ArchitectureId);
 
