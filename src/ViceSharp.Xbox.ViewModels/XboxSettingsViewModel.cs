@@ -48,6 +48,11 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     private const double LimiterMinimumPercent = 1;
     private const double LimiterMaximumPercent = 100_000;
 
+    // FEAT-XROMPICK-001: optional ROM readiness evaluator for the model picker.
+    private RomProvisionEvaluator? _romEvaluator;
+    private string _c64RomDirectory = string.Empty;
+    private string _selectedModelRomStatus = "ROM readiness: not configured.";
+
     // The one implemented computer family: its C64 machine profiles are the selectable
     // models. The "Minimal host" pseudo-profile (Machine=="minimal") is excluded by this
     // same ordinal filter.
@@ -181,6 +186,7 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Models));
             OnPropertyChanged(nameof(SelectedModel));
             OnPropertyChanged(nameof(SelectedComputer));
+            RefreshSelectedModelRomStatus();
         }
     }
 
@@ -341,7 +347,63 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
             // The Model/Computer pickers are projections of the selected profile id.
             OnPropertyChanged(nameof(SelectedModel));
             OnPropertyChanged(nameof(SelectedComputer));
+            RefreshSelectedModelRomStatus();
         }
+    }
+
+    /// <summary>
+    /// FEAT-XROMPICK-001: human-readable ROM readiness for the selected model
+    /// (Complete / Partial / Not provisioned / Ultimax kernal-optional). Hard boot
+    /// block remains the ROM provisioning page; this is guidance only.
+    /// </summary>
+    public string SelectedModelRomStatus
+    {
+        get => _selectedModelRomStatus;
+        private set => SetProperty(ref _selectedModelRomStatus, value);
+    }
+
+    /// <summary>
+    /// FEAT-XROMPICK-001: attach a <see cref="RomProvisionEvaluator"/> and the writable
+    /// C64 ROM directory so the model picker can surface readiness. Call after construction
+    /// (App composition) before the player opens Settings.
+    /// </summary>
+    public void ConfigureRomReadiness(RomProvisionEvaluator evaluator, string c64RomDirectory)
+    {
+        _romEvaluator = evaluator ?? throw new ArgumentNullException(nameof(evaluator));
+        _c64RomDirectory = c64RomDirectory ?? string.Empty;
+        RefreshSelectedModelRomStatus();
+    }
+
+    /// <summary>
+    /// Maps a settings profile id to a <see cref="RomProfile"/> for readiness evaluation.
+    /// Ultimax-named profiles use the kernal-optional rule; everything else is Standard.
+    /// </summary>
+    public static RomProfile ResolveRomProfile(string? profileId)
+    {
+        if (string.IsNullOrEmpty(profileId))
+            return RomProfile.Standard;
+        return profileId.Contains("ultimax", StringComparison.OrdinalIgnoreCase)
+            ? RomProfile.Ultimax
+            : RomProfile.Standard;
+    }
+
+    private void RefreshSelectedModelRomStatus()
+    {
+        if (_romEvaluator is null || string.IsNullOrWhiteSpace(_c64RomDirectory))
+        {
+            SelectedModelRomStatus = "ROM readiness: open the ROM page to provision core ROMs.";
+            return;
+        }
+
+        var assessment = _romEvaluator.Evaluate(_c64RomDirectory, ResolveRomProfile(SelectedProfileId));
+        SelectedModelRomStatus = assessment.State switch
+        {
+            RomProvisionState.Complete => "ROMs: ready for this model.",
+            RomProvisionState.Partial => "ROMs: partial - provision missing roles before boot.",
+            RomProvisionState.NotProvisioned => "ROMs: not provisioned - open the ROM page.",
+            RomProvisionState.Invalid => "ROMs: invalid files detected - re-import or download.",
+            _ => $"ROMs: {assessment.State}.",
+        };
     }
 
     // ---- Xbox-only preferences (FR-XSET-005) ---------------------------------

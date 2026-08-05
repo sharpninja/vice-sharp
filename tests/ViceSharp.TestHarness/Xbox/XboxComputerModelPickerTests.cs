@@ -1,5 +1,6 @@
 namespace ViceSharp.TestHarness.Xbox;
 
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ViceSharp.Protocol;
@@ -206,5 +207,44 @@ public sealed class XboxComputerModelPickerTests
         vm.SelectedModel = unknown;
         Assert.Equal("c64", vm.SelectedProfileId);
         Assert.False(vm.IsDirty);
+    }
+
+    /// <summary>
+    /// FEAT-XROMPICK-001. Use case: Settings model picker surfaces ROM readiness so the
+    /// player knows a model will boot-block before they restart.
+    /// Acceptance: empty C64 dir reports not provisioned; complete synthetic set reports
+    /// ready; Ultimax profile id maps to kernal-optional; unconfigured evaluator shows
+    /// the open-ROM-page guidance.
+    /// </summary>
+    [Fact]
+    public void SelectedModelRomStatus_ReflectsProvisionEvaluator()
+    {
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = SettingsWithProfile("c64"),
+            CannedProfiles = SeededProfiles(),
+        };
+        var vm = BuildSeededVm(fake);
+        Assert.Contains("not configured", vm.SelectedModelRomStatus, StringComparison.OrdinalIgnoreCase);
+
+        var empty = Path.Combine(Path.GetTempPath(), "vicesharp-rom-status-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(empty);
+        try
+        {
+            var evaluator = new RomProvisionEvaluator(RomProvisionTestData.Catalog);
+            vm.ConfigureRomReadiness(evaluator, empty);
+            Assert.Contains("not provisioned", vm.SelectedModelRomStatus, StringComparison.OrdinalIgnoreCase);
+
+            RomProvisionTestData.WriteValidSet(empty);
+            vm.ConfigureRomReadiness(evaluator, empty);
+            Assert.Contains("ready", vm.SelectedModelRomStatus, StringComparison.OrdinalIgnoreCase);
+
+            Assert.Equal(RomProfile.Ultimax, XboxSettingsViewModel.ResolveRomProfile("c64-ultimax"));
+            Assert.Equal(RomProfile.Standard, XboxSettingsViewModel.ResolveRomProfile("c64"));
+        }
+        finally
+        {
+            try { Directory.Delete(empty, recursive: true); } catch { /* best effort */ }
+        }
     }
 }

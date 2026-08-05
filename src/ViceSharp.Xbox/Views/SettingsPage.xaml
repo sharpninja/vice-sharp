@@ -23,6 +23,8 @@
                 <ComboBox Header="Computer" ItemsSource="{x:Bind ViewModel.Computers, Mode=OneWay}" DisplayMemberPath="DisplayName" SelectedItem="{x:Bind ViewModel.SelectedComputer, Mode=TwoWay}" />
                 <ComboBox Header="Model" ItemsSource="{x:Bind ViewModel.Models, Mode=OneWay}" DisplayMemberPath="DisplayName" SelectedItem="{x:Bind ViewModel.SelectedModel, Mode=TwoWay}" />
                 <TextBlock Text="Restart required to change model." FontSize="18" Foreground="#FFDDAA88" />
+                <!-- FEAT-XROMPICK-001: per-model ROM readiness (guidance; boot block stays on ROM page). -->
+                <TextBlock Text="{x:Bind ViewModel.SelectedModelRomStatus, Mode=OneWay}" FontSize="18" Foreground="#FF88CCFF" />
                 <ComboBox Header="Renderer" ItemsSource="{x:Bind ViewModel.Renderers, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedRenderer, Mode=TwoWay}" />
                 <ComboBox Header="Display scale" ItemsSource="{x:Bind ViewModel.DisplayScales, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedDisplayScale, Mode=TwoWay}" />
                 <ComboBox Header="Palette" ItemsSource="{x:Bind ViewModel.Palettes, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedPalette, Mode=TwoWay}" />
