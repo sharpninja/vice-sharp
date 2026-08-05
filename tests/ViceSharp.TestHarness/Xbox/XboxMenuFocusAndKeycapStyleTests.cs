@@ -47,6 +47,35 @@ public sealed class XboxMenuFocusAndKeycapStyleTests
         Assert.True(restart > closeMenu && restart > save, "Restart must stay the LAST button.");
     }
 
+    /// <summary>
+    /// PLAN-ROMM-001: home rail must expose RomM entry points (lost in a merge, restored).
+    /// Acceptance: Library / Lists / CSDb buttons exist, navigate handlers push the matching
+    /// destinations, and Library sits after Load and before Settings.
+    /// </summary>
+    [Fact]
+    public void HomeMenu_ExposesRomMLibraryListsAndCsdb()
+    {
+        var xaml = ReadSource("src", "ViceSharp.Xbox", "Views", "HomePage.xaml");
+        var load = xaml.IndexOf("Content=\"Load\"", StringComparison.Ordinal);
+        var library = xaml.IndexOf("Content=\"Library\"", StringComparison.Ordinal);
+        var lists = xaml.IndexOf("Content=\"Lists\"", StringComparison.Ordinal);
+        var csdb = xaml.IndexOf("Content=\"CSDb\"", StringComparison.Ordinal);
+        var settings = xaml.IndexOf("Content=\"Settings\"", StringComparison.Ordinal);
+
+        Assert.True(load >= 0 && library >= 0 && lists >= 0 && csdb >= 0 && settings >= 0);
+        Assert.True(load < library && library < lists && lists < csdb && csdb < settings,
+            "Expected order: Load, Library, Lists, CSDb, Settings.");
+
+        var code = ReadSource("src", "ViceSharp.Xbox", "Views", "HomePage.xaml.cs");
+        Assert.Contains("OnLibrary", code, StringComparison.Ordinal);
+        Assert.Contains("NavigationDestination.Library", code, StringComparison.Ordinal);
+        Assert.Contains("typeof(LibraryPage)", code, StringComparison.Ordinal);
+        Assert.Contains("NavigationDestination.Lists", code, StringComparison.Ordinal);
+        Assert.Contains("typeof(ListsPage)", code, StringComparison.Ordinal);
+        Assert.Contains("NavigationDestination.Csdb", code, StringComparison.Ordinal);
+        Assert.Contains("typeof(CsdbPage)", code, StringComparison.Ordinal);
+    }
+
     [Fact]
     public void MenuOpen_FocusesCloseMenu_OnBothOpenPaths()
     {

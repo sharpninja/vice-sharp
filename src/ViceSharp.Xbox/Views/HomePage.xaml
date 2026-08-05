@@ -55,6 +55,19 @@
                     Content="Load"
                     Style="{StaticResource C64KeyButtonStyle}"
                     Click="OnLoad" />
+                <!-- PLAN-ROMM-001: restored after merge dropped these home-rail entries. -->
+                <Button
+                    Content="Library"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnLibrary" />
+                <Button
+                    Content="Lists"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnLists" />
+                <Button
+                    Content="CSDb"
+                    Style="{StaticResource C64KeyButtonStyle}"
+                    Click="OnCsdb" />
                 <Button
                     Content="Settings"
                     Style="{StaticResource C64KeyButtonStyle}"

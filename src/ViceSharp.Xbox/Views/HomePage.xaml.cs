@@ -59,6 +59,18 @@ public sealed partial class HomePage : Page
     // panel now, so clicks left of it land on the emulator view.
     private void OnCloseMenu(object sender, RoutedEventArgs e) => App.Instance.DismissMenu();
 
+    // PLAN-ROMM-001 (AC-XUI-01): open the RomM game library browser.
+    private void OnLibrary(object sender, RoutedEventArgs e) =>
+        Push(NavigationDestination.Library, typeof(LibraryPage));
+
+    // PLAN-ROMM-001 X3 (AC-XUI-06): open RomM list/collections management.
+    private void OnLists(object sender, RoutedEventArgs e) =>
+        Push(NavigationDestination.Lists, typeof(ListsPage));
+
+    // PLAN-ROMM-001 X4 (FR-CSDB-001): open CSDb discovery + ingest.
+    private void OnCsdb(object sender, RoutedEventArgs e) =>
+        Push(NavigationDestination.Csdb, typeof(CsdbPage));
+
     private void OnSettings(object sender, RoutedEventArgs e) => Push(NavigationDestination.Settings, typeof(SettingsPage));
 
     private void OnDevices(object sender, RoutedEventArgs e) => Push(NavigationDestination.DeviceSetup, typeof(DeviceSetupPage));
