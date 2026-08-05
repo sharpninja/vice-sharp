@@ -592,6 +592,9 @@ public sealed partial class App : Application
         // The facade implements both seam interfaces, so disambiguate the ctor overload.
         VideoPull = new VideoFramePullViewModel((IEmulatorSessionFacade)facade, _sessionId);
         SettingsVm = new XboxSettingsViewModel(facade, _sessionId);
+        // FEAT-XROMPICK-001: model picker shows ROM readiness from the LocalFolder C64 dir.
+        if (!string.IsNullOrWhiteSpace(_c64Directory))
+            SettingsVm.ConfigureRomReadiness(new RomProvisionEvaluator(), _c64Directory);
         DeviceSetupVm = new XboxDeviceSetupViewModel(facade);
         _machineKeyboard = host.GetKeyboardInput(_sessionId);
         KeyboardVm = _machineKeyboard is { } keyboard

@@ -34,13 +34,16 @@ public sealed partial class SettingsPage : Page
         if (ViewModel is not null)
         {
             await ViewModel.RefreshAsync();
+            // FEAT-XAOTBIND-001: re-run compiled binds after async refresh (ROM status, pickers).
+            Bindings.Update();
 
             // FIX-XSETBLANK-001 diagnostics (operator 2026-07-14: "Settings broken", all
             // pickers blank): the refresh outcome is otherwise invisible when StatusText
             // sits below the scroll fold, so mirror the adopted state into the log.
             App.CreateLogger("Settings").LogInformation(
-                "refresh: status='{Status}' computers={Computers} models={Models} renderers={Renderers} selComputer='{SelComputer}' selModel='{SelModel}' selRenderer='{SelRenderer}' volume={Volume}",
+                "refresh: status='{Status}' rom='{Rom}' computers={Computers} models={Models} renderers={Renderers} selComputer='{SelComputer}' selModel='{SelModel}' selRenderer='{SelRenderer}' volume={Volume}",
                 ViewModel.StatusText,
+                ViewModel.SelectedModelRomStatus,
                 ViewModel.Computers.Count,
                 ViewModel.Models.Count,
                 ViewModel.Renderers.Count,
