@@ -1,7 +1,10 @@
 <!--
-  PLAN-ROMM-001 X3 (AC-XUI-02): the RomM game library page (10-foot). Connect to the RomM server,
-  browse the C64 library, and Attach / Attach+play the selection via the XboxGameLauncher. Inert on
-  the net10.0 fallback (the code-behind is #if HAS_UWP-guarded).
+  PLAN-ROMM-001 X3 (AC-XUI-02): the RomM game library page (10-foot, Game-Pass style, per
+  docs/wireframes/romm-xbox-library.svg): a count header + search box + read-only machine
+  indicator, a virtualized cover-tile grid, an A-Z jump strip, a selected-game bar (slot +
+  download progress), and the A/Y/X/B action bar. Auto-connects on open (scan + csdb-bridge as
+  the Xbox user); the connection panel only surfaces when auto-connect could not sign in. Inert
+  on the net10.0 fallback (the code-behind is #if HAS_UWP-guarded).
 -->
 <Page
     x:Class="ViceSharp.Xbox.Views.LibraryPage"
@@ -9,40 +12,108 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:lvm="using:ViceSharp.Library.ViewModels"
     RequiresPointer="Never"
-    Background="#EE000000">
+    Background="#F00A0A0A">
     <Grid Style="{StaticResource TvSafeAreaRootStyle}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,12">
-            <TextBlock Text="RomM library" FontSize="40" Foreground="White" VerticalAlignment="Center" />
-            <TextBox x:Name="UrlBox" PlaceholderText="http://host:8080/" Text="http://localhost:8080/" Width="360" />
-            <PasswordBox x:Name="TokenBox" PlaceholderText="Client API token" Width="280" />
-            <Button Content="Scan LAN" Style="{StaticResource TenFootButtonStyle}" Click="OnScan" />
-            <Button Content="Connect" Style="{StaticResource TenFootButtonStyle}" Click="OnConnect" />
-        </StackPanel>
+        <!-- Header: title, search, machine indicator + count. -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="RomM library" FontSize="40" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center" />
+            <TextBox x:Name="SearchBox" Grid.Column="1" Margin="28,0,28,0" MaxWidth="560" HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center" PlaceholderText="Search C64 library..." TextChanged="OnSearchChanged" />
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                <Border Background="#22FFFFFF" CornerRadius="16" Padding="14,6">
+                    <TextBlock x:Name="MachineText" Text="Machine - C64" Foreground="White" FontSize="18" />
+                </Border>
+                <TextBlock x:Name="CountText" Text="" Foreground="#FFB8B8B8" FontSize="18" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
 
-        <ListView x:Name="ResultsList" Grid.Row="1" SelectionMode="Single">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="lvm:RomTile">
-                    <StackPanel Margin="0,4">
-                        <TextBlock Text="{x:Bind Name}" FontSize="24" Foreground="White" />
-                        <TextBlock Text="{x:Bind FileName}" FontSize="16" Foreground="#FFBBBBBB" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <!-- Browse area: the cover-tile grid + the A-Z jump strip. -->
+        <Grid x:Name="BrowseArea" Grid.Row="1" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
-            <Button Content="Attach + play" Style="{StaticResource TenFootButtonStyle}" Click="OnAttachPlay" />
-            <Button Content="Attach" Style="{StaticResource TenFootButtonStyle}" Click="OnAttach" />
-            <Button Content="Details" Style="{StaticResource TenFootButtonStyle}" Click="OnDetails" />
-            <Button Content="Load more" Style="{StaticResource TenFootButtonStyle}" Click="OnLoadMore" />
-            <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
-            <TextBlock x:Name="StatusText" Text="Enter your RomM URL and token, then Connect." Foreground="#FFDDDDDD" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="700" />
-        </StackPanel>
+            <GridView x:Name="TilesView" Grid.Column="0" SelectionMode="Single" IsItemClickEnabled="True"
+                      ItemClick="OnTileClick" SelectionChanged="OnSelectionChanged"
+                      ContainerContentChanging="OnTileContainerChanging"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,8,8">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="lvm:RomTile">
+                        <Grid Width="164" Height="170" Margin="6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Background="#1AFFFFFF" CornerRadius="8" BorderBrush="#33FFFFFF" BorderThickness="1">
+                                <Grid>
+                                    <TextBlock Text="{x:Bind Name}" Foreground="#FF8A8A8A" FontSize="14" TextAlignment="Center"
+                                               TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" />
+                                    <Image x:Name="CoverImage" Stretch="UniformToFill" />
+                                </Grid>
+                            </Border>
+                            <StackPanel Grid.Row="1" Margin="2,6,2,0">
+                                <TextBlock Text="{x:Bind Name}" Foreground="White" FontSize="16" TextTrimming="CharacterEllipsis" MaxLines="1" />
+                                <TextBlock Text="{x:Bind FileName}" Foreground="#FF9A9A9A" FontSize="13" TextTrimming="CharacterEllipsis" MaxLines="1" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+
+            <Border Grid.Column="1" Background="#14FFFFFF" CornerRadius="8" Padding="3" Margin="8,0,0,8">
+                <StackPanel x:Name="AzStrip" Orientation="Vertical" />
+            </Border>
+        </Grid>
+
+        <!-- Connection panel: shown only until the page connects (auto or manual). -->
+        <Border x:Name="ConnectPanel" Grid.Row="1" Background="#CC141414" CornerRadius="12" Padding="28"
+                HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="740">
+            <StackPanel Spacing="12">
+                <TextBlock Text="Connect to your RomM server" FontSize="26" Foreground="White" />
+                <TextBox x:Name="UrlBox" PlaceholderText="http://host:8080/" Text="http://localhost:8080/" />
+                <PasswordBox x:Name="TokenBox" PlaceholderText="Client API token (optional when a bridge is present)" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Content="Scan LAN" Style="{StaticResource TenFootButtonStyle}" Click="OnScan" />
+                    <Button Content="Connect" Style="{StaticResource TenFootButtonStyle}" Click="OnConnect" />
+                </StackPanel>
+                <TextBlock x:Name="ConnectStatus" Text="Scanning the local network for RomM..." Foreground="#FFDDDDDD" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <!-- Selected-game bar: selection, slot picker, download progress. -->
+        <Border Grid.Row="2" Background="#26FFFFFF" CornerRadius="8" Padding="16,10" Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock x:Name="SelectedText" Text="No game selected" Foreground="White" FontSize="18" />
+                    <TextBlock x:Name="StatusText" Text="" Foreground="#FFCFCFCF" FontSize="14" Margin="0,2,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <TextBlock Text="Slot" Foreground="#FFCFCFCF" VerticalAlignment="Center" />
+                    <ComboBox x:Name="SlotBox" Width="150" SelectionChanged="OnSlotChanged" />
+                    <ProgressBar x:Name="DownloadBar" Width="220" Minimum="0" Maximum="1" Value="0" VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Gamepad action bar. -->
+        <TextBlock Grid.Row="3" Margin="4,12,0,0" Foreground="#FFE0E0E0" FontSize="18"
+                   Text="(A) Attach     (Y) Attach + autostart     (X) Add to list     (B) Back" />
     </Grid>
 </Page>
