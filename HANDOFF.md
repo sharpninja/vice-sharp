@@ -1,17 +1,16 @@
-# ViceSharp Handoff - 2026-07-14
+# ViceSharp Handoff - 2026-08-05
 
-**Active branch:** `feat/xbox-uwp-app` (off `main`) at `a199063`. **PLAN-XBOXUWP** (the UWP-on-Xbox-console head) is deep in dev-PC bring-up; ~65 commits local, **NOT pushed** (Azure DevOps `origin` only, on explicit request). The full running detail lives in the auto-memory `project_xbox_uwp_app.md`; the snapshot below is the resume state.
-**Parallel worktree (ACTIVE TASK 2026-07-14 23:31):** `F:\GitHub\vice-sharp-romless` on branch `fix/romless-vic-content` (off `ed0b67f`) processes `docs/romless-vic-badline-fix.md` (VIC-II raises zero bad lines for a KERNAL-less host-driven machine; bitmap renders black). Repro test already present in that worktree. MCP TODO `FIX-ROMLESSVIC-001` (high, Chips).
-**Prior iteration-1 baseline:** `main`/`master` at `v1.0.2` (2026-07-08); **PLAN-VICEPARITY-001 COMPLETE** (466/466 SID parity ACs bit-exact vs reSID). Detail preserved in the dated sections below.
-**feat/xbox-uwp-app working tree:** the `tests/ViceSharp.AiReview.Tests/appsettings.aiunit.json` edit and untracked `docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md` are uncommitted scratch, not part of the plan.
+**Active branch:** `feat/xbox-uwp-app` (off `main`) at `3804a1d`. **Pushed to GitHub `origin`** (`https://github.com/sharpninja/vice-sharp.git`; origin is the default approved remote). Azure DevOps remote remains as `azure`.
+**Prior iteration-1 baseline:** `main` at `v1.0.2` (2026-07-08); **PLAN-VICEPARITY-001 COMPLETE**. Detail preserved in the dated sections below.
+**Working tree:** untracked scratch (`docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md`, AiReview appsettings) is not part of the plan.
 
-## PLAN-XBOXUWP resume snapshot (2026-07-14)
+## PLAN-XBOXUWP + PLAN-ROMM resume snapshot (2026-08-05)
 
-- **Runs and renders the C64 on the dev PC.** The whole app (UWP + Windows.Gaming.Input + raw-DX11 SwapChainPanel + XAudio2) validates on Windows 11; the physical console is only needed at Store submission (slice S42, deferred). Autonomous on-device loop this session: build via VS MSBuild, `./build.ps1 DeployXboxLocal`, drive with computer-use, read receipts from `%LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log`.
-- **Deploy loop:** `./build.ps1 DeployXboxLocal` (stop app -> VS MSBuild `/p:Configuration=Release-UWP /p:Platform=x64 /restore /t:Build,GenerateProjectPriFile` -> robocopy `/S` -no-`/XO`- over the registered AppX layout -> `shell:AppsFolder` launch). Dev toggles: **F9** virtual keyboard, **F11** menu (F10 is a Windows system key; ESC works but is eaten in some focus states; a CoreWindow.KeyDown backstop covers focus-nowhere). **End every CLI batch with a Debug-UWP restore** (`/p:Configuration=Debug-UWP /p:Platform=x64 /t:Restore`) or the operator's VS F5 fails NETSDK1005.
-- **CRITICAL finding FIX-XKBDPANEL-001:** `PublishAot=true` at BUILD time flips CsWinRT into AOT binding mode and kills every reflection `{Binding}` app-wide (empty keyboard, blank Settings, no menu title) with no exception and no BindingFailed. AOT is now an explicit opt-in via `ViceSharpPublishAot=true`; Release-UWP builds stay JIT (SPD ~101%). **Store-AOT requires an AOT-safe-bindings slice (x:Bind / generated bindable metadata) BEFORE anyone re-arms PublishAot.**
-- **Latest shipped (device-verified):** FIX-XKBDPANEL-001 (AOT opt-in + `/XO` Frankenbuild fix + F9/F11 + BindingFailed logging), FEAT-XMENUSUBPAGE-001 (B steps back on subpages / dismisses only on the home rail; subpages expand across both columns over an opaque backdrop and contract to the docked rail). Gate: **Category=Xbox 501/501**.
-- **OPEN:** Controls-page keyboard-shortcut config (operator-requested, never started); B-on-controller verification (needs the operator's controller); FIX-XKBDNMI-001 (RESTORE -> CPU NMI edge unwired); per-model ROM-availability in the picker; S42 Tier-C console/Store (deferred); MCP `sessionlog.completeTurn` is flaky (complete turns directly, verify).
+- **Track 1 (Xbox Tier D residuals) largely SHIPPED this session:** FEAT-XAOTBIND-001 (x:Bind migration), FEAT-XOCTOPUS-001 (CI/release Octopus LEGION2 steps), FIX-ROMLESSVIC-001 (merged test), FIX-XKBDNMI-001 (RESTORE asserts NMI), FEAT-XCTRLBIND-001 (Controls remapping), FEAT-XROMPICK-001 (model ROM readiness).
+- **Track 2 (RomM):** merged `feat/romm-integration` into this branch (`3804a1d`). Portable `ViceSharp.Library.ViewModels` + `ViceSharp.RomM`, Xbox/Avalonia library UI, LAN bridge connection path present. Gate after merge: **Category=Xbox|RomM|Library 546/546** (0 fail, 0 skip).
+- **Deploy loop:** `./build.ps1 DeployXboxLocal` (VS MSBuild Release-UWP). End CLI batches with Debug-UWP restore for operator VS F5. PublishAot stays opt-in (`ViceSharpPublishAot=true`); Release-UWP JIT.
+- **OPEN:** B-on-controller operator verification; S42 Tier-C console/Store (deferred); MCP TODO reconcile (mark completed IMPL-XBOXUWP / IMPL-ROMM ids done with receipts); device smoke for RomM Library after merge; optional full baseline suite.
+- **Parallel worktrees (reference):** `F:\GitHub\vice-sharp-romm` (`feat/romm-integration`, source of merge); romless repro merged via FIX-ROMLESSVIC-001.
 
 ## How to resume
 
