@@ -123,11 +123,16 @@ public sealed class RomMLibraryGateway : IRomMLibraryGateway
         string dest = Path.Combine(dir, fileName);
         MediaKind kind = MediaExtensionMap.Resolve(fileName)?.Kind ?? MediaKind.Program;
 
-        if (expectedSizeBytes > 0 && File.Exists(dest) && new FileInfo(dest).Length == expectedSizeBytes)
+        if (File.Exists(dest))
         {
-            // Reuse: an identical file is already cached, so no re-download.
-            progress?.Report(1.0);
-            return new AcquiredGame(dest, fileName, kind);
+            long length = new FileInfo(dest).Length;
+            // Reuse when size matches the known size, or when size is unknown but a non-empty
+            // cache entry already exists (Recents relaunch without a second download).
+            if (length > 0 && (expectedSizeBytes <= 0 || length == expectedSizeBytes))
+            {
+                progress?.Report(1.0);
+                return new AcquiredGame(dest, fileName, kind);
+            }
         }
 
         await using Stream source = await _client.Roms
@@ -163,7 +168,10 @@ public sealed class RomMLibraryGateway : IRomMLibraryGateway
             rom.PlatformSlug,
             rom.FsSizeBytes,
             ExtractCover(rom.ExtensionData),
-            MediaExtensionMap.IsLaunchable(fileName));
+            MediaExtensionMap.IsLaunchable(fileName),
+            GetString(rom.ExtensionData, "regions"),
+            GetString(rom.ExtensionData, "languages"),
+            GetString(rom.ExtensionData, "revision"));
     }
 
     private static (string? OrderBy, string? OrderDir) MapOrder(LibraryOrder order) => order switch
@@ -236,12 +244,44 @@ public sealed class RomMLibraryGateway : IRomMLibraryGateway
 
         try
         {
-            return JsonSerializer.Deserialize(element.GetRawText(), CharIndexTypeInfo) ?? EmptyCharIndex;
+            Dictionary<string, int>? raw =
+                JsonSerializer.Deserialize(element.GetRawText(), CharIndexTypeInfo);
+            return NormalizeCharIndex(raw);
         }
         catch (JsonException)
         {
             return EmptyCharIndex;
         }
+    }
+
+    /// <summary>
+    /// RomM 5.x emits lowercase letter keys (<c>a</c>..<c>z</c>). The A-Z strip and
+    /// <see cref="LibraryBrowseViewModel.JumpToLetterAsync"/> look up uppercase keys, so normalize here.
+    /// </summary>
+    private static IReadOnlyDictionary<string, int> NormalizeCharIndex(IReadOnlyDictionary<string, int>? raw)
+    {
+        if (raw is null || raw.Count == 0)
+        {
+            return EmptyCharIndex;
+        }
+
+        var normalized = new Dictionary<string, int>(raw.Count, StringComparer.OrdinalIgnoreCase);
+        foreach (KeyValuePair<string, int> pair in raw)
+        {
+            if (string.IsNullOrEmpty(pair.Key))
+            {
+                continue;
+            }
+
+            string key = pair.Key.ToUpperInvariant();
+            // Prefer the earliest offset when the server emits both cases.
+            if (!normalized.TryGetValue(key, out int existing) || pair.Value < existing)
+            {
+                normalized[key] = pair.Value;
+            }
+        }
+
+        return normalized.Count == 0 ? EmptyCharIndex : normalized;
     }
 
     private static string? GetString(IDictionary<string, JsonElement>? ext, string key) =>

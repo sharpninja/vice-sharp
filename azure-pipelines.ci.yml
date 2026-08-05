@@ -40,30 +40,3 @@ stages:
             displayName: 'Run: CiTest'
             inputs:
               script: './build.cmd CiTest --skip'
-
-          # FEAT-XOCTOPUS-001: optional LEGION2 Octopus release after green CiTest.
-          # No-ops without OCTOPUS_API_KEY; skip with SkipOctopus=true.
-          - pwsh: |
-              if (-not $env:OCTOPUS_API_KEY) {
-                Write-Host 'OCTOPUS_API_KEY not set; skipping Octopus LEGION2 release'
-                exit 0
-              }
-              $url = if ($env:OCTOPUS_URL) { $env:OCTOPUS_URL.TrimEnd('/') } else { 'http://PAYTON-LEGION2:8066' }
-              $env:OCTOPUS_URL = $url
-              $env:OCTOPUS_SPACE = if ($env:OCTOPUS_SPACE) { $env:OCTOPUS_SPACE } else { 'Default' }
-              $project = 'vice-sharp'
-              $version = ('$(Build.BuildNumber)' -replace '[^0-9A-Za-z\.\-_+]', '-')
-              if ([string]::IsNullOrWhiteSpace($version)) { $version = '0.0.$(Build.BuildId)' }
-              $octo = 'C:\Program Files\Octopus CLI\octopus.exe'
-              if (-not (Test-Path $octo)) { throw "octopus CLI missing: $octo" }
-              Write-Host "Octopus $url project=$project version=$version"
-              & $octo release create --project $project --version $version --packageVersion $version --releaseNotes "ADO $(Build.DefinitionName) $(Build.SourceVersion)" --ignoreExisting --no-prompt
-              if ($LASTEXITCODE -ne 0) { throw "octopus release create failed exit $LASTEXITCODE" }
-              & $octo release deploy --project $project --version $version --deployTo Development --progress --no-prompt
-              if ($LASTEXITCODE -ne 0) { Write-Warning "octopus deploy Development exit $LASTEXITCODE (release still created)" }
-            displayName: Octopus LEGION2 release
-            condition: and(succeeded(), ne(variables['SkipOctopus'], 'true'))
-            env:
-              OCTOPUS_API_KEY: $(OCTOPUS_API_KEY)
-              OCTOPUS_URL: $(OCTOPUS_URL)
-              OCTOPUS_SPACE: $(OCTOPUS_SPACE)

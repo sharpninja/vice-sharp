@@ -36,12 +36,17 @@ public sealed class RomMCollectionsGateway : IRomMCollectionsGateway
         CancellationToken cancellationToken = default)
     {
         var result = new List<LibraryCollection>();
-        result.AddRange(await GetListAsync("api/collections", readOnly: false, cancellationToken).ConfigureAwait(false));
+        result.AddRange(await GetListAsync("api/collections", readOnly: false, optional: false, cancellationToken)
+            .ConfigureAwait(false));
 
         if (includeSmartVirtual)
         {
-            result.AddRange(await GetListAsync("api/collections/smart", readOnly: true, cancellationToken).ConfigureAwait(false));
-            result.AddRange(await GetListAsync("api/collections/virtual", readOnly: true, cancellationToken).ConfigureAwait(false));
+            // Smart/virtual endpoints vary by RomM version (e.g. virtual can return 422). They are
+            // decorative rails only: never fail the whole Lists connect when one is unavailable.
+            result.AddRange(await GetListAsync("api/collections/smart", readOnly: true, optional: true, cancellationToken)
+                .ConfigureAwait(false));
+            result.AddRange(await GetListAsync("api/collections/virtual", readOnly: true, optional: true, cancellationToken)
+                .ConfigureAwait(false));
         }
 
         return result;
@@ -117,15 +122,40 @@ public sealed class RomMCollectionsGateway : IRomMCollectionsGateway
             .ConfigureAwait(false);
     }
 
-    private async Task<List<LibraryCollection>> GetListAsync(string url, bool readOnly, CancellationToken cancellationToken)
+    private async Task<List<LibraryCollection>> GetListAsync(
+        string url,
+        bool readOnly,
+        bool optional,
+        CancellationToken cancellationToken)
     {
-        using HttpResponseMessage response = await _client.Transport
-            .SendAsync(HttpMethod.Get, url, cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+        try
+        {
+            using HttpResponseMessage response = await _client.Transport
+                .SendAsync(HttpMethod.Get, url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
-        string json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-        List<RomMCollectionDto> dtos = JsonSerializer.Deserialize(json, ListInfo) ?? new List<RomMCollectionDto>();
-        return dtos.Select(d => Map(d, readOnly)).ToList();
+            if (!response.IsSuccessStatusCode)
+            {
+                if (optional)
+                {
+                    return new List<LibraryCollection>();
+                }
+
+                throw new HttpRequestException(
+                    $"RomM GET {url} failed with {(int)response.StatusCode} ({response.StatusCode}).");
+            }
+
+            string json = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            List<RomMCollectionDto> dtos = JsonSerializer.Deserialize(json, ListInfo) ?? new List<RomMCollectionDto>();
+            return dtos.Select(d => Map(d, readOnly)).ToList();
+        }
+        catch (Exception ex) when (optional
+            && ex is not OperationCanceledException
+            && cancellationToken.IsCancellationRequested == false)
+        {
+            // Optional smart/virtual lists: transport may throw on 4xx before we see the status.
+            return new List<LibraryCollection>();
+        }
     }
 
     private async Task<LibraryCollection> GetOneAsync(int id, CancellationToken cancellationToken)

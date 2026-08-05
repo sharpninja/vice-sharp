@@ -1,7 +1,8 @@
 <!--
-  PLAN-ROMM-001 X3 (AC-XUI-05): the RomM game-details page (10-foot). Presents the selected ROM's cover,
-  metadata, description, and files, and adds it to a chosen list. Binds RomDetailViewModel. Inert on the
-  net10.0 fallback (the code-behind is #if HAS_UWP-guarded).
+  PLAN-ROMM-001 X3 (AC-XUI-05): the RomM game-details page (10-foot). Presents the selected game's
+  cover, metadata, description, and a variant picker (language / region / revision). The user picks
+  a variant then attaches, attaches+autostarts, or adds it to a list. Binds RomDetailViewModel.
+  Inert on the net10.0 fallback (the code-behind is #if HAS_UWP-guarded).
 -->
 <Page
     x:Class="ViceSharp.Xbox.Views.GameDetailsPage"
@@ -28,30 +29,48 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Width="260" Height="260" Background="#FF1A1E24" VerticalAlignment="Top">
+            <Border Grid.Column="0" Width="260" Height="260" Background="#FF1A1E24" VerticalAlignment="Top" CornerRadius="8">
                 <Image x:Name="CoverImage" Stretch="Uniform" />
             </Border>
 
-            <StackPanel Grid.Column="1" Margin="24,0,0,0" Spacing="14">
-                <TextBlock Text="About" FontSize="24" Foreground="White" />
-                <TextBlock x:Name="SummaryText" Text="" FontSize="20" Foreground="#FFDDDDDD" TextWrapping="Wrap" MaxWidth="900" />
+            <ScrollViewer Grid.Column="1" Margin="24,0,0,0" VerticalScrollBarVisibility="Auto">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="About" FontSize="24" Foreground="White" />
+                    <TextBlock x:Name="SummaryText" Text="" FontSize="20" Foreground="#FFDDDDDD" TextWrapping="Wrap" MaxWidth="900" />
 
-                <TextBlock Text="Files" FontSize="24" Foreground="White" Margin="0,10,0,0" />
-                <ListView x:Name="FilesList" SelectionMode="None" MaxHeight="240">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="lvm:RomFile">
-                            <TextBlock Text="{x:Bind FileName}" FontSize="20" Foreground="#FFDDDDDD" Margin="0,2" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
+                    <TextBlock Text="Variants" FontSize="24" Foreground="White" Margin="0,10,0,0" />
+                    <TextBlock Text="Pick the language, region, or revision to attach." FontSize="16" Foreground="#FFAAAAAA" />
+                    <ListView x:Name="VariantsList" SelectionMode="Single" MaxHeight="320"
+                              SelectionChanged="OnVariantSelectionChanged">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="lvm:RomTile">
+                                <StackPanel Margin="0,6" Spacing="2">
+                                    <TextBlock Text="{x:Bind VariantLabel}" FontSize="20" Foreground="#FFEEEEEE" TextWrapping="Wrap" />
+                                    <TextBlock Text="{x:Bind FileName}" FontSize="14" Foreground="#FF999999" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <TextBlock Text="Files" FontSize="24" Foreground="White" Margin="0,10,0,0" />
+                    <ListView x:Name="FilesList" SelectionMode="None" MaxHeight="160">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="lvm:RomFile">
+                                <TextBlock Text="{x:Bind FileName}" FontSize="18" Foreground="#FFDDDDDD" Margin="0,2" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
-            <ComboBox x:Name="ListPicker" PlaceholderText="Add to list..." Width="280" DisplayMemberPath="Name" />
+            <Button Content="(A) Attach" Style="{StaticResource TenFootButtonStyle}" Click="OnAttach" />
+            <Button Content="(Y) Attach + autostart" Style="{StaticResource TenFootButtonStyle}" Click="OnAttachAutostart" />
+            <ComboBox x:Name="ListPicker" PlaceholderText="Add to list..." Width="240" DisplayMemberPath="Name" VerticalAlignment="Center" />
             <Button Content="Add to list" Style="{StaticResource TenFootButtonStyle}" Click="OnAddToList" />
-            <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
-            <TextBlock x:Name="StatusText" Text="Loading..." Foreground="#FFDDDDDD" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="640" />
+            <Button Content="(B) Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />
+            <TextBlock x:Name="StatusText" Text="Loading..." Foreground="#FFDDDDDD" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="480" />
         </StackPanel>
     </Grid>
 </Page>

@@ -27,9 +27,12 @@ public sealed class AvaloniaGameLauncher : IGameLauncher
     {
         ArgumentNullException.ThrowIfNull(game);
 
+        // Stay on the UI SynchronizationContext: DropAndStart/Attach update AttachPanelView
+        // controls. ConfigureAwait(false) caused InvalidOperationException (cross-thread) on
+        // attach + autoplay after gRPC resumed on a thread-pool thread.
         RpcStatus status = autostart
-            ? await _target.DropAndStartFileAsync(game.LocalPath, cancellationToken).ConfigureAwait(false)
-            : await _target.AttachFileAsync(slot, game.LocalPath, cancellationToken).ConfigureAwait(false);
+            ? await _target.DropAndStartFileAsync(game.LocalPath, cancellationToken).ConfigureAwait(true)
+            : await _target.AttachFileAsync(slot, game.LocalPath, cancellationToken).ConfigureAwait(true);
 
         return new LaunchOutcome(status.IsSuccess, status.Message);
     }

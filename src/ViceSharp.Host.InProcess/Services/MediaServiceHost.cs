@@ -39,23 +39,29 @@ public sealed class MediaServiceHost : IMediaService
         var payload = File.ReadAllBytes(mediaPath);
         lock (session.SyncRoot)
         {
-            var validationError = ValidateMedia(session, request.Slot, payload, out var runtimePayload);
+            var validationError = ValidateMedia(
+                session,
+                request.Slot,
+                payload,
+                request.DisplayName ?? mediaPath,
+                out var runtimePayload,
+                out var effectiveSlot);
             if (!string.IsNullOrEmpty(validationError))
                 return ValueTask.FromResult(new AttachMediaResponse(RpcStatus.InvalidArgument(validationError), null));
 
-            var appliedToRuntime = TryApplyMediaToRuntime(session, request.Slot, runtimePayload, out var applyError);
+            var appliedToRuntime = TryApplyMediaToRuntime(session, effectiveSlot, runtimePayload, out var applyError);
             var displayName = string.IsNullOrWhiteSpace(request.DisplayName)
                 ? Path.GetFileName(mediaPath)
                 : request.DisplayName;
             var attachment = new MediaAttachmentDto(
-                request.Slot,
+                effectiveSlot,
                 mediaPath,
                 displayName,
                 true,
                 request.IsReadOnly,
                 appliedToRuntime,
                 applyError);
-            session.MediaAttachments[request.Slot] = attachment;
+            session.MediaAttachments[effectiveSlot] = attachment;
             return ValueTask.FromResult(new AttachMediaResponse(RpcStatus.Ok(), attachment));
         }
     }
@@ -115,20 +121,44 @@ public sealed class MediaServiceHost : IMediaService
         EmulatorRuntimeSession session,
         MediaSlot slot,
         byte[] payload,
-        out byte[] runtimePayload)
+        string displayName,
+        out byte[] runtimePayload,
+        out MediaSlot effectiveSlot)
     {
         runtimePayload = payload;
+        effectiveSlot = slot;
+
+        // T64 is a PRG archive, not TAP pulse data. Extract the first file into a single-file D64
+        // on Drive 8 so LOAD"*",8,1 / autostart work (same approach VICE uses with device traps).
+        if (T64Image.TryOpen(payload, out T64Image? t64) && t64 is not null)
+        {
+            if (!t64.TryExtractFirstProgram(out byte[] prg) || prg.Length < 3)
+            {
+                return "T64 image has no loadable program entry.";
+            }
+
+            string baseName = Path.GetFileNameWithoutExtension(displayName);
+            if (string.IsNullOrWhiteSpace(baseName))
+            {
+                baseName = "PROGRAM";
+            }
+
+            runtimePayload = D64SingleFileBuilder.FromPrg(prg, baseName);
+            effectiveSlot = MediaSlot.Drive8;
+            return null;
+        }
+
         return slot switch
         {
             MediaSlot.Drive8 => IecD64Attachment.TryAttach(8, payload, out _)
                 ? null
-                : "Drive 8 media must be a supported D64 image.",
+                : "Drive 8 media must be a supported D64 image (or T64 archive).",
             MediaSlot.Drive9 => IecD64Attachment.TryAttach(9, payload, out _)
                 ? null
                 : "Drive 9 media must be a supported D64 image.",
             MediaSlot.Tape => TapImage.TryAttach(payload, out _)
                 ? null
-                : "Tape media must be a supported TAP image.",
+                : "Tape media must be a supported TAP image (T64 is attached via Drive 8).",
             MediaSlot.Cartridge => TryValidateCartridge(session, payload, out runtimePayload),
             _ => $"Media slot '{slot}' is not supported."
         };

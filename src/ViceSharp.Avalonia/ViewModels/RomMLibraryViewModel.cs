@@ -4,105 +4,100 @@ using System.Runtime.CompilerServices;
 using RomM.Client;
 using RomM.Client.Auth;
 using ViceSharp.Library.ViewModels;
+using ViceSharp.Protocol;
 using ViceSharp.RomM;
 
 namespace ViceSharp.Avalonia.ViewModels;
 
 /// <summary>
-/// PLAN-ROMM-001 (FR-ROMM-AVUI-001). The desktop head's RomM library host: it collects the connection
-/// details, builds the <see cref="RomMLibraryGateway"/> over a <see cref="RomMClient"/> on Connect, and
-/// exposes a wired <see cref="LibraryBrowseViewModel"/> (over an <see cref="AvaloniaGameLauncher"/>) that
-/// the <c>LibraryView</c> binds to. On-device browse/attach/launch is the [V] E2E step.
+/// PLAN-ROMM-001 (FR-ROMM-AVUI-001). Desktop RomM host: auto-connect (remembered server first),
+/// shared <see cref="LibraryBrowseViewModel"/> with Recents, collections, and CSDb.
 /// </summary>
 public sealed class RomMLibraryViewModel : INotifyPropertyChanged
 {
     private readonly IGameLaunchTarget _shell;
     private readonly string _cacheDir;
+    private readonly IRomMConnectionStore _connectionStore;
+    private readonly IRecentsStore _recentsStore;
 
     private string _baseUrl = "http://localhost:8080/";
     private string _bridgeUrl = "http://localhost:8090/";
     private string _token = string.Empty;
-    private string _status = "Enter your RomM server URL and token, then Connect.";
+    private string _status = "Looking for a remembered RomM server...";
     private bool _isBusy;
+    private bool _autoConnectTried;
     private LibraryBrowseViewModel? _browse;
     private CollectionsViewModel? _collections;
     private CsdbDiscoveryViewModel? _csdb;
     private IRomMLibraryGateway? _gateway;
     private IRomMCollectionsGateway? _collectionsGateway;
     private RomDetailViewModel? _selectedDetail;
+    private IReadOnlyList<RecentGame> _recentGames = Array.Empty<RecentGame>();
+    private IReadOnlyList<RomTile> _listMemberTiles = Array.Empty<RomTile>();
+    private RomTile? _selectedListTile;
 
     /// <summary>Creates the host.</summary>
-    /// <param name="shell">The shell launch surface (for the launcher).</param>
-    /// <param name="cacheDir">The local download cache root.</param>
     public RomMLibraryViewModel(IGameLaunchTarget shell, string cacheDir)
     {
         _shell = shell ?? throw new ArgumentNullException(nameof(shell));
         _cacheDir = cacheDir ?? throw new ArgumentNullException(nameof(cacheDir));
+        Directory.CreateDirectory(_cacheDir);
+        string stateDir = Path.GetDirectoryName(_cacheDir) ?? _cacheDir;
+        _connectionStore = new FileRomMConnectionStore(Path.Combine(stateDir, "romm-connection.json"));
+        _recentsStore = new FileRecentsStore(Path.Combine(stateDir, "romm-recents.json"));
     }
 
     /// <inheritdoc />
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    /// <summary>The RomM server base URL.</summary>
     public string BaseUrl
     {
         get => _baseUrl;
         set => SetProperty(ref _baseUrl, value);
     }
 
-    /// <summary>The csdb-bridge base URL (for the CSDb discovery tab).</summary>
     public string BridgeUrl
     {
         get => _bridgeUrl;
         set => SetProperty(ref _bridgeUrl, value);
     }
 
-    /// <summary>The client API token.</summary>
     public string Token
     {
         get => _token;
         set => SetProperty(ref _token, value);
     }
 
-    /// <summary>The collections (lists) view-model, or <c>null</c> before Connect.</summary>
     public CollectionsViewModel? Collections
     {
         get => _collections;
         private set => SetProperty(ref _collections, value);
     }
 
-    /// <summary>The CSDb discovery view-model, or <c>null</c> before Connect.</summary>
     public CsdbDiscoveryViewModel? Csdb
     {
         get => _csdb;
         private set => SetProperty(ref _csdb, value);
     }
 
-    /// <summary>
-    /// AC-AUI-03. The selected title's detail view-model (cover/metadata/files/add-to-list), or
-    /// <c>null</c> until a tile is opened.
-    /// </summary>
     public RomDetailViewModel? SelectedDetail
     {
         get => _selectedDetail;
         private set => SetProperty(ref _selectedDetail, value);
     }
 
-    /// <summary>A human-readable status line.</summary>
     public string Status
     {
         get => _status;
         private set => SetProperty(ref _status, value);
     }
 
-    /// <summary>Whether a connect/search is in flight.</summary>
     public bool IsBusy
     {
         get => _isBusy;
         private set => SetProperty(ref _isBusy, value);
     }
 
-    /// <summary>The wired browser, or <c>null</c> before Connect.</summary>
     public LibraryBrowseViewModel? Browse
     {
         get => _browse;
@@ -111,21 +106,53 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             if (SetProperty(ref _browse, value))
             {
                 OnPropertyChanged(nameof(IsConnected));
+                OnPropertyChanged(nameof(IsShowingRecents));
             }
         }
     }
 
-    /// <summary>Whether the library is connected.</summary>
     public bool IsConnected => _browse is not null;
 
-    /// <summary>AC-CONN-07. RomM servers found on the local network by the last scan.</summary>
+    public bool IsShowingRecents => _browse?.IsShowingRecents == true;
+
     public ObservableCollection<DiscoveredRomM> DiscoveredServers { get; } = new();
 
+    /// <summary>Local Recents (newest first), refreshed on connect and after attach.</summary>
+    public IReadOnlyList<RecentGame> RecentGames
+    {
+        get => _recentGames;
+        private set => SetProperty(ref _recentGames, value);
+    }
+
+    /// <summary>Titles currently shown for the selected list on the Lists tab.</summary>
+    public IReadOnlyList<RomTile> ListMemberTiles
+    {
+        get => _listMemberTiles;
+        private set => SetProperty(ref _listMemberTiles, value);
+    }
+
+    /// <summary>Selected title on the Lists tab for attach.</summary>
+    public RomTile? SelectedListTile
+    {
+        get => _selectedListTile;
+        set => SetProperty(ref _selectedListTile, value);
+    }
+
     /// <summary>
-    /// AC-CONN-07. Scans the local subnet for RomM servers, fills <see cref="DiscoveredServers"/>, and
-    /// auto-selects the first hit into <see cref="BaseUrl"/> so Connect is one click away.
+    /// Prefer remembered server; only scan when offline. Safe to call multiple times (once-only gate).
     /// </summary>
-    /// <param name="cancellationToken">A cancellation token.</param>
+    public async Task TryAutoConnectAsync(CancellationToken cancellationToken = default)
+    {
+        if (_autoConnectTried || IsConnected || IsBusy)
+        {
+            return;
+        }
+
+        _autoConnectTried = true;
+        await AutoConnectCoreAsync(forceScan: false, cancellationToken).ConfigureAwait(true);
+    }
+
+    /// <summary>Force a LAN scan (Scan LAN button).</summary>
     public async Task ScanAsync(CancellationToken cancellationToken = default)
     {
         if (IsBusy)
@@ -133,61 +160,99 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             return;
         }
 
+        await AutoConnectCoreAsync(forceScan: true, cancellationToken).ConfigureAwait(true);
+    }
+
+    private async Task AutoConnectCoreAsync(bool forceScan, CancellationToken cancellationToken)
+    {
         IsBusy = true;
         DiscoveredServers.Clear();
-        Status = "Scanning the local network for RomM servers...";
-        RomMConnection? auto = null;
         try
         {
-            IReadOnlyList<DiscoveredRomM> servers = await new RomMSubnetDiscovery()
-                .ScanAsync(cancellationToken: cancellationToken)
-                .ConfigureAwait(true);
+            Uri? baseUrl = null;
+            RomMConnection? saved = null;
 
-            foreach (DiscoveredRomM server in servers)
+            if (!forceScan)
             {
-                DiscoveredServers.Add(server);
-            }
-
-            if (servers.Count > 0)
-            {
-                BaseUrl = servers[0].BaseUrl.ToString();
-
-                // AC-CONN-07: try zero-touch login via the co-located bridge (:8090), using the desktop OS
-                // user name as the RomM user id. Falls back to manual token entry when no bridge answers.
-                var bridgeUrl = new UriBuilder(servers[0].BaseUrl) { Port = 8090, Path = "/" }.Uri;
-                auto = await new RomMBridgeConnectionSource()
-                    .FetchAsync(bridgeUrl, Environment.UserName, cancellationToken)
-                    .ConfigureAwait(true);
-
-                Status = auto is not null
-                    ? $"Found {servers[0].BaseUrl}; signing in via the bridge as {Environment.UserName}..."
-                    : $"Found {servers.Count} RomM server(s). Selected {servers[0].BaseUrl}.";
+                Status = "Looking for a remembered RomM server...";
+                var locator = new RomMServerLocator(_connectionStore, new RomMHeartbeatProbe(), new RomMSubnetDiscovery());
+                RomMLocateResult located = await locator.LocateAsync(cancellationToken: cancellationToken).ConfigureAwait(true);
+                Status = located.StatusMessage;
+                baseUrl = located.BaseUrl;
+                saved = located.SavedConnection;
+                if (located.ScannedNetwork && baseUrl is not null)
+                {
+                    DiscoveredServers.Add(new DiscoveredRomM(baseUrl, null, null));
+                }
             }
             else
             {
-                Status = "No RomM servers found on the local network. Enter a URL manually.";
+                Status = "Scanning the local network for RomM servers...";
+                IReadOnlyList<DiscoveredRomM> servers = await new RomMSubnetDiscovery()
+                    .ScanAsync(cancellationToken: cancellationToken)
+                    .ConfigureAwait(true);
+                foreach (DiscoveredRomM server in servers)
+                {
+                    DiscoveredServers.Add(server);
+                }
+
+                if (servers.Count == 0)
+                {
+                    Status = "No RomM servers found on the local network. Enter a URL manually.";
+                    return;
+                }
+
+                baseUrl = servers[0].BaseUrl;
+                Status = $"Found {baseUrl}.";
             }
+
+            if (baseUrl is null)
+            {
+                return;
+            }
+
+            BaseUrl = baseUrl.ToString();
+
+            if (saved is { Token.Length: > 0 })
+            {
+                Token = saved.Token;
+                Status = $"Reconnecting to {baseUrl}...";
+                if (await TryConnectInternalAsync(baseUrl.ToString(), saved.Token, saved.AuthMode, cancellationToken)
+                        .ConfigureAwait(true))
+                {
+                    return;
+                }
+
+                Status = "Saved token failed; trying the bridge...";
+            }
+
+            var bridgeUrl = new UriBuilder(baseUrl) { Port = 8090, Path = "/" }.Uri;
+            RomMConnection? bridge = await new RomMBridgeConnectionSource()
+                .FetchAsync(bridgeUrl, Environment.UserName, cancellationToken)
+                .ConfigureAwait(true);
+            if (bridge is not null)
+            {
+                Token = bridge.Token;
+                Status = $"Signing in via the bridge as {Environment.UserName}...";
+                if (await TryConnectInternalAsync(baseUrl.ToString(), bridge.Token, RomMAuthMode.SubnetShared, cancellationToken)
+                        .ConfigureAwait(true))
+                {
+                    return;
+                }
+            }
+
+            Status = $"Found {baseUrl}. Enter a Client API token and Connect.";
         }
         catch (Exception ex)
         {
-            Status = $"Scan failed: {ex.Message}";
+            Status = $"Auto-connect failed: {ex.Message}";
         }
         finally
         {
             IsBusy = false;
         }
-
-        // Auto-connect outside the busy guard (ConnectAsync manages IsBusy itself). Keep the DISCOVERED
-        // RomM URL (already in BaseUrl); the bridge's returned url may be its internal docker hostname.
-        if (auto is not null)
-        {
-            Token = auto.Token;
-            await ConnectAsync(cancellationToken).ConfigureAwait(true);
-        }
     }
 
-    /// <summary>AC-CONN-07. Selects a discovered server into <see cref="BaseUrl"/>.</summary>
-    /// <param name="server">The discovered server to use.</param>
     public void SelectDiscovered(DiscoveredRomM server)
     {
         ArgumentNullException.ThrowIfNull(server);
@@ -195,8 +260,7 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         Status = $"Selected {server.BaseUrl}. Click Connect.";
     }
 
-    /// <summary>Builds the gateway/browser and loads the first page, scoped to C64.</summary>
-    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <summary>Manual Connect from the UI.</summary>
     public async Task ConnectAsync(CancellationToken cancellationToken = default)
     {
         if (IsBusy)
@@ -207,16 +271,33 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         IsBusy = true;
         try
         {
-            if (!Uri.TryCreate(BaseUrl, UriKind.Absolute, out Uri? uri))
+            await TryConnectInternalAsync(BaseUrl, Token, RomMAuthMode.ClientToken, cancellationToken)
+                .ConfigureAwait(true);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task<bool> TryConnectInternalAsync(
+        string serverUrl,
+        string? token,
+        RomMAuthMode authMode,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!Uri.TryCreate(serverUrl, UriKind.Absolute, out Uri? uri))
             {
                 Status = "Invalid server URL.";
-                return;
+                return false;
             }
 
             var options = new RomMClientOptions { BaseAddress = uri };
-            if (!string.IsNullOrWhiteSpace(Token))
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                options.Auth = RomMAuth.ClientApiToken(Token.Trim());
+                options.Auth = RomMAuth.ClientApiToken(token.Trim());
             }
 
             IRomMClient client = RomMClient.Create(options);
@@ -226,14 +307,35 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             _collectionsGateway = collectionsGateway;
             var machine = new FixedMachineProvider(LibraryMachine.C64);
             var launcher = new AvaloniaGameLauncher(_shell);
-            var browse = new LibraryBrowseViewModel(gateway, launcher, machine, _cacheDir);
+            var browse = new LibraryBrowseViewModel(
+                gateway, launcher, machine, _cacheDir, recents: _recentsStore);
 
             await browse.InitializeAsync(cancellationToken).ConfigureAwait(true);
 
             Browse = browse;
+            Token = token ?? string.Empty;
+            BaseUrl = uri.ToString();
             Status = $"Connected: {browse.Total} C64 titles.";
+            OnPropertyChanged(nameof(IsShowingRecents));
 
-            // Lists (collections). A failure here must not tear down the working library connection.
+            try
+            {
+                await _connectionStore
+                    .SaveAsync(
+                        new RomMConnection(
+                            uri.ToString().TrimEnd('/') + "/",
+                            authMode,
+                            token ?? string.Empty),
+                        cancellationToken)
+                    .ConfigureAwait(true);
+            }
+            catch
+            {
+                // best-effort
+            }
+
+            RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+
             try
             {
                 var collections = new CollectionsViewModel(collectionsGateway);
@@ -245,29 +347,21 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
                 Status = $"Connected; collections unavailable ({ex.Message}).";
             }
 
-            // CSDb discovery via the bridge sidecar (optional; absent bridge just leaves the tab idle).
             if (Uri.TryCreate(BridgeUrl, UriKind.Absolute, out Uri? bridgeUri))
             {
                 var bridgeHttp = new System.Net.Http.HttpClient { BaseAddress = bridgeUri };
                 Csdb = new CsdbDiscoveryViewModel(new BridgeCsdbGateway(bridgeHttp, client.Tasks));
             }
+
+            return true;
         }
         catch (Exception ex)
         {
             Status = $"Connect failed: {ex.Message}";
-        }
-        finally
-        {
-            IsBusy = false;
+            return false;
         }
     }
 
-    /// <summary>
-    /// AC-AUI-03. Fetches the given ROM's detail and publishes it as <see cref="SelectedDetail"/> for the
-    /// details pane. A failure surfaces on the status line and leaves the previous detail in place.
-    /// </summary>
-    /// <param name="romId">The ROM id to open.</param>
-    /// <param name="cancellationToken">A cancellation token.</param>
     public async Task ShowDetailAsync(int romId, CancellationToken cancellationToken = default)
     {
         if (_gateway is null || _collectionsGateway is null)
@@ -286,26 +380,198 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         }
     }
 
-    /// <summary>Sets the (debounced) search term.</summary>
-    /// <param name="term">The search text.</param>
     public void Search(string term)
     {
-        if (Browse is not null)
+        if (Browse is not null && !Browse.IsShowingRecents)
         {
             Browse.SearchText = term;
         }
     }
 
-    /// <summary>Loads the next page.</summary>
-    /// <param name="cancellationToken">A cancellation token.</param>
     public Task LoadMoreAsync(CancellationToken cancellationToken = default) =>
         Browse?.LoadMoreAsync(cancellationToken) ?? Task.CompletedTask;
 
-    /// <summary>Attaches the selection (optionally booting it).</summary>
-    /// <param name="autostart">Whether to boot after attaching.</param>
-    /// <param name="cancellationToken">A cancellation token.</param>
-    public Task AttachAsync(bool autostart, CancellationToken cancellationToken = default) =>
-        Browse?.AttachAsync(autostart, cancellationToken) ?? Task.CompletedTask;
+    public Task JumpToLetterAsync(char letter, CancellationToken cancellationToken = default) =>
+        Browse?.JumpToLetterAsync(letter, cancellationToken) ?? Task.CompletedTask;
+
+    public async Task ToggleRecentsAsync(CancellationToken cancellationToken = default)
+    {
+        if (Browse is null)
+        {
+            return;
+        }
+
+        if (Browse.IsShowingRecents)
+        {
+            await Browse.ReloadAsync(cancellationToken).ConfigureAwait(true);
+            Status = $"Library: {Browse.Total} titles.";
+        }
+        else
+        {
+            await Browse.ShowRecentsAsync(cancellationToken).ConfigureAwait(true);
+            Status = Browse.StatusMessage;
+            RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+        }
+
+        OnPropertyChanged(nameof(IsShowingRecents));
+    }
+
+    public async Task<LaunchOutcome> AttachAsync(bool autostart, CancellationToken cancellationToken = default)
+    {
+        if (Browse is null)
+        {
+            return new LaunchOutcome(false, "Not connected.");
+        }
+
+        LaunchOutcome outcome = await Browse.AttachAsync(autostart, cancellationToken).ConfigureAwait(true);
+        Status = Browse.StatusMessage;
+        if (outcome.Success)
+        {
+            RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+        }
+
+        return outcome;
+    }
+
+    /// <summary>Loads members for a collection (or Recents) into <see cref="ListMemberTiles"/>.</summary>
+    public async Task LoadListMembersAsync(LibraryCollection? collection, CancellationToken cancellationToken = default)
+    {
+        SelectedListTile = null;
+        if (collection is null)
+        {
+            ListMemberTiles = Array.Empty<RomTile>();
+            return;
+        }
+
+        if (collection.Id == -1)
+        {
+            RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+            ListMemberTiles = RecentGames.Select(g => g.ToTile()).ToList();
+            Status = $"Recents: {ListMemberTiles.Count} game(s).";
+            return;
+        }
+
+        if (_gateway is null)
+        {
+            ListMemberTiles = Array.Empty<RomTile>();
+            return;
+        }
+
+        Status = "Loading list titles...";
+        var tiles = new List<RomTile>();
+        foreach (int romId in collection.RomIds)
+        {
+            try
+            {
+                RomDetail detail = await _gateway.GetRomAsync(romId, cancellationToken).ConfigureAwait(true);
+                RomFile? file = detail.Files.FirstOrDefault(f => f.Launchable) ?? detail.Files.FirstOrDefault();
+                string fileName = file?.FileName ?? detail.Name;
+                tiles.Add(new RomTile(
+                    detail.Id,
+                    detail.Name,
+                    fileName,
+                    detail.PlatformSlug,
+                    file is { SizeBytes: > 0 } ? file.SizeBytes : null,
+                    detail.Cover,
+                    file?.Launchable ?? MediaExtensionMap.IsLaunchable(fileName)));
+            }
+            catch
+            {
+                tiles.Add(new RomTile(romId, $"Rom #{romId}", string.Empty, null, null, null, false));
+            }
+        }
+
+        ListMemberTiles = tiles;
+        Status = $"{collection.Name}: {tiles.Count} title(s).";
+    }
+
+    /// <summary>Attach from the Lists tab selection (uses download cache when present).</summary>
+    public async Task<LaunchOutcome> AttachListSelectionAsync(bool autostart, CancellationToken cancellationToken = default)
+    {
+        if (_gateway is null || SelectedListTile is not { } tile || !tile.Launchable)
+        {
+            return new LaunchOutcome(false, "Select a launchable title first.");
+        }
+
+        try
+        {
+            Status = "Downloading...";
+            AcquiredGame game = await _gateway
+                .DownloadAsync(tile.Id, tile.FileName, tile.SizeBytes ?? 0, _cacheDir, null, cancellationToken)
+                .ConfigureAwait(true);
+            Status = "Starting...";
+            var launcher = new AvaloniaGameLauncher(_shell);
+            MediaSlot slot = MediaExtensionMap.Resolve(tile.FileName)?.Slot ?? MediaSlot.Drive8;
+            LaunchOutcome outcome = await launcher.LaunchAsync(game, slot, autostart, cancellationToken).ConfigureAwait(true);
+            Status = outcome.Message;
+            if (outcome.Success)
+            {
+                await _recentsStore.RecordAsync(RecentGame.FromTile(tile), cancellationToken: cancellationToken)
+                    .ConfigureAwait(true);
+                RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+            }
+
+            return outcome;
+        }
+        catch (Exception ex)
+        {
+            Status = $"Attach failed: {ex.Message}";
+            return new LaunchOutcome(false, Status);
+        }
+    }
+
+    /// <summary>Collections rail including a synthetic Recents row when non-empty.</summary>
+    public async Task<IReadOnlyList<LibraryCollection>> GetListsRailAsync(CancellationToken cancellationToken = default)
+    {
+        // Load first, then assign only when the sequence of ids changed. Assigning a fresh list
+        // instance every call raised RecentGames and used to re-enter ListsView.RefreshRailAsync.
+        IReadOnlyList<RecentGame> loaded = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+        if (!SameRecentIds(_recentGames, loaded))
+        {
+            RecentGames = loaded;
+        }
+
+        var rows = new List<LibraryCollection>();
+        if (_recentGames.Count > 0)
+        {
+            rows.Add(new LibraryCollection(
+                -1,
+                "Recents",
+                _recentGames.Count,
+                ReadOnly: true,
+                _recentGames.Select(g => g.Id).ToList()));
+        }
+
+        if (Collections is not null)
+        {
+            rows.AddRange(Collections.Collections);
+        }
+
+        return rows;
+    }
+
+    private static bool SameRecentIds(IReadOnlyList<RecentGame> a, IReadOnlyList<RecentGame> b)
+    {
+        if (ReferenceEquals(a, b))
+        {
+            return true;
+        }
+
+        if (a.Count != b.Count)
+        {
+            return false;
+        }
+
+        for (var i = 0; i < a.Count; i++)
+        {
+            if (a[i].Id != b[i].Id)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     private bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
@@ -323,10 +589,7 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
-/// <summary>
-/// PLAN-ROMM-001 (AC-BROWSE-02). A fixed <see cref="ICurrentMachineProvider"/> for the desktop head's
-/// current machine (the library is scoped to it; the desktop machine does not change mid-session here).
-/// </summary>
+/// <summary>Fixed machine provider for the desktop library (C64).</summary>
 internal sealed class FixedMachineProvider : ICurrentMachineProvider
 {
     private readonly LibraryMachine _machine;

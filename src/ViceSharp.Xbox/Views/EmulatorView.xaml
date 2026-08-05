@@ -11,11 +11,13 @@
     xmlns:controls="using:ViceSharp.Xbox.Controls"
     RequiresPointer="Never"
     Background="Black">
-    <Grid>
+    <!-- Black root so letterbox + video area receive right-click (SwapChainPanel may not). -->
+    <Grid Background="Black">
         <controls:VideoSurfaceHost
             x:Name="VideoSurface"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" />
+            VerticalAlignment="Stretch"
+            IsHitTestVisible="False" />
 
         <!--
           FEAT-XPERFHUD-001: live performance stats in the LEFT letterbox bar (the video is

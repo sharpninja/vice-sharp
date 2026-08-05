@@ -29,8 +29,17 @@ public sealed class XboxGameLauncher : IGameLauncher
 
         byte[] payload = await File.ReadAllBytesAsync(game.LocalPath, cancellationToken).ConfigureAwait(false);
 
+        // T64 is remapped to Drive 8 as a single-file D64 inside the media host; keep slot aligned
+        // so autostart uses LOAD"*",8 rather than a useless cold reset on the datasette.
+        MediaSlot effectiveSlot = slot;
+        if (game.FileName.EndsWith(".t64", StringComparison.OrdinalIgnoreCase)
+            || game.Kind == MediaKind.Tape && MediaExtensionMap.Resolve(game.FileName)?.Slot == MediaSlot.Drive8)
+        {
+            effectiveSlot = MediaSlot.Drive8;
+        }
+
         bool attached = await _session
-            .AttachMediaAsync(slot, game.LocalPath, isReadOnly: true, payload, game.FileName, cancellationToken)
+            .AttachMediaAsync(effectiveSlot, game.LocalPath, isReadOnly: true, payload, game.FileName, cancellationToken)
             .ConfigureAwait(false);
 
         if (!attached)
@@ -40,7 +49,7 @@ public sealed class XboxGameLauncher : IGameLauncher
 
         if (autostart)
         {
-            if (slot == MediaSlot.Drive8)
+            if (effectiveSlot == MediaSlot.Drive8)
             {
                 await _session.AutostartDrive8Async(cancellationToken).ConfigureAwait(false);
             }
@@ -53,3 +62,4 @@ public sealed class XboxGameLauncher : IGameLauncher
         return new LaunchOutcome(true, autostart ? $"Started {game.FileName}" : $"Attached {game.FileName}");
     }
 }
+

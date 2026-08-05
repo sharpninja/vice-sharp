@@ -61,7 +61,7 @@ internal static class RomMFixtures
           "total": 2,
           "limit": 50,
           "offset": 0,
-          "char_index": {"B":0,"H":1}
+          "char_index": {"b":0,"h":1}
         }
         """;
 

@@ -22,8 +22,9 @@ using ViceSharp.Xbox.RomM;
 
 /// <summary>
 /// PLAN-ROMM-001 (AC-XUI-02). The RomM library page (Game-Pass style, per
-/// docs/wireframes/romm-xbox-library.svg): auto-connects on open (scan + csdb-bridge as the Xbox
-/// user), then browses the C64 library as a cover-tile grid with search, an A-Z jump strip, a
+/// docs/wireframes/romm-xbox-library.svg): auto-connects on open (remembered server first; LAN scan
+/// only when that server is offline; csdb-bridge for zero-touch auth), then browses the C64 library
+/// as a cover-tile grid with search, an A-Z jump strip, a
 /// selected-game bar (slot + download progress) and the A/Y/X/B action bar. Builds a
 /// <see cref="LibraryBrowseViewModel"/> over a <see cref="RomMLibraryGateway"/>, the head's
 /// <see cref="XboxGameLauncher"/>, and an <see cref="XboxCoverImageLoader"/> for the covers.
@@ -32,6 +33,9 @@ public sealed partial class LibraryPage : Page
 {
     private LibraryBrowseViewModel? _browse;
     private XboxCoverImageLoader? _coverLoader;
+    private IRecentsStore? _recents;
+    private string? _serverUrl;
+    private string? _token;
     private bool _autoConnectTried;
     private bool _loadingMore;
 
@@ -64,35 +68,72 @@ public sealed partial class LibraryPage : Page
         _ = AutoConnectAsync();
     }
 
-    // PLAN-ROMM-001 (AC-CONN-07): on open, scan the LAN for RomM and sign in ZERO-TOUCH via the
-    // co-located csdb-bridge as the current Xbox user. Leaves the connection panel up for manual
-    // entry when nothing is reachable.
-    private async Task AutoConnectAsync()
+    // PLAN-ROMM-001 (AC-CONN-05/07): prefer the last remembered RomM server; only scan the LAN when
+    // nothing is saved or that server no longer answers heartbeat. Zero-touch sign-in still uses the
+    // co-located csdb-bridge when a token is not already stored.
+    private async Task AutoConnectAsync(bool forceScan = false)
     {
         try
         {
-            ConnectStatus.Text = "Scanning the local network for RomM...";
-            IReadOnlyList<DiscoveredRomM> servers = await new RomMSubnetDiscovery().ScanAsync();
-            if (servers.Count == 0)
+            IRomMConnectionStore store = CreateConnectionStore();
+            Uri? baseUrl = null;
+            RomMConnection? saved = null;
+
+            if (!forceScan)
             {
-                ConnectStatus.Text = "No RomM servers found. Enter a URL and token, then Connect.";
+                ConnectStatus.Text = "Looking for a remembered RomM server...";
+                var locator = new RomMServerLocator(store, new RomMHeartbeatProbe(), new RomMSubnetDiscovery());
+                RomMLocateResult located = await locator.LocateAsync();
+                ConnectStatus.Text = located.StatusMessage;
+                baseUrl = located.BaseUrl;
+                saved = located.SavedConnection;
+            }
+            else
+            {
+                ConnectStatus.Text = "Scanning the local network for RomM...";
+                IReadOnlyList<DiscoveredRomM> servers = await new RomMSubnetDiscovery().ScanAsync();
+                if (servers.Count == 0)
+                {
+                    ConnectStatus.Text = "No RomM servers found. Enter a URL and token, then Connect.";
+                    return;
+                }
+
+                baseUrl = servers[0].BaseUrl;
+                ConnectStatus.Text = $"Found {baseUrl}.";
+            }
+
+            if (baseUrl is null)
+            {
                 return;
             }
 
-            DiscoveredRomM server = servers[0];
-            UrlBox.Text = server.BaseUrl.ToString();
+            UrlBox.Text = baseUrl.ToString();
 
-            var bridgeUrl = new UriBuilder(server.BaseUrl) { Port = 8090, Path = "/" }.Uri;
+            // Prefer a stored token when the remembered server is still up.
+            if (saved is { Token.Length: > 0 })
+            {
+                ConnectStatus.Text = $"Reconnecting to {baseUrl}...";
+                if (await TryConnectWithAsync(baseUrl.ToString(), saved.Token, saved.AuthMode))
+                {
+                    return;
+                }
+
+                ConnectStatus.Text = "Saved token failed; trying the bridge...";
+            }
+
+            var bridgeUrl = new UriBuilder(baseUrl) { Port = 8090, Path = "/" }.Uri;
             string userId = await GetXboxUserIdAsync();
-            RomMConnection? connection = await new RomMBridgeConnectionSource().FetchAsync(bridgeUrl, userId);
-            if (connection is not null)
+            RomMConnection? bridge = await new RomMBridgeConnectionSource().FetchAsync(bridgeUrl, userId);
+            if (bridge is not null)
             {
                 ConnectStatus.Text = "Signing in as this Xbox user via the bridge...";
-                await ConnectWithAsync(server.BaseUrl.ToString(), connection.Token);
-                return;
+                if (await TryConnectWithAsync(baseUrl.ToString(), bridge.Token, RomMAuthMode.SubnetShared))
+                {
+                    return;
+                }
             }
 
-            ConnectStatus.Text = $"Found {server.BaseUrl}. Enter a Client API token and Connect.";
+            ConnectStatus.Text = $"Found {baseUrl}. Enter a Client API token and Connect.";
         }
         catch (Exception ex)
         {
@@ -100,24 +141,30 @@ public sealed partial class LibraryPage : Page
         }
     }
 
-    private async void OnScan(object sender, RoutedEventArgs e) => await AutoConnectAsync();
+    private async void OnScan(object sender, RoutedEventArgs e) => await AutoConnectAsync(forceScan: true);
 
     private async void OnConnect(object sender, RoutedEventArgs e)
     {
         string? token = string.IsNullOrWhiteSpace(TokenBox.Password) ? null : TokenBox.Password.Trim();
-        await ConnectWithAsync(UrlBox.Text, token);
+        await TryConnectWithAsync(UrlBox.Text, token, RomMAuthMode.ClientToken);
     }
 
-    // Builds the browse VM + cover loader against the given server + optional bearer token, wires
-    // the reactive fields, and swaps the connection panel for the browse grid on success.
-    private async Task ConnectWithAsync(string serverUrl, string? token)
+    private static IRomMConnectionStore CreateConnectionStore()
+    {
+        string path = System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "romm-connection.json");
+        return new FileRomMConnectionStore(path);
+    }
+
+    // Builds the browse VM + cover loader; on success persists the connection so the next open can
+    // skip the LAN scan when this server is still reachable.
+    private async Task<bool> TryConnectWithAsync(string serverUrl, string? token, RomMAuthMode authMode)
     {
         try
         {
             if (!Uri.TryCreate(serverUrl, UriKind.Absolute, out Uri? uri))
             {
                 ConnectStatus.Text = "Invalid server URL.";
-                return;
+                return false;
             }
 
             var options = new RomMClientOptions { BaseAddress = uri };
@@ -130,23 +177,34 @@ public sealed partial class LibraryPage : Page
             var gateway = new RomMLibraryGateway(client);
             IGameLauncher launcher = App.Instance.CreateRomMGameLauncher();
             string cacheDir = System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "romm-cache");
+            _recents = new FileRecentsStore(
+                System.IO.Path.Combine(ApplicationData.Current.LocalFolder.Path, "romm-recents.json"));
 
-            var browse = new LibraryBrowseViewModel(gateway, launcher, new C64MachineProvider(), cacheDir);
+            var browse = new LibraryBrowseViewModel(
+                gateway, launcher, new C64MachineProvider(), cacheDir, recents: _recents);
             browse.PropertyChanged += OnBrowsePropertyChanged;
             await browse.InitializeAsync();
 
             _browse = browse;
+            _serverUrl = uri.ToString();
+            _token = token;
             _coverLoader = new XboxCoverImageLoader(uri, token);
 
             TilesView.ItemsSource = browse.Items;
             ConnectPanel.Visibility = Visibility.Collapsed;
             BrowseArea.Visibility = Visibility.Visible;
-            UpdateCount();
+            UpdateBrowseChrome();
             TilesView.Focus(FocusState.Programmatic);
+
+            await CreateConnectionStore().SaveAsync(
+                new RomMConnection(uri.ToString().TrimEnd('/') + "/", authMode, token ?? string.Empty));
+
+            return true;
         }
         catch (Exception ex)
         {
             ConnectStatus.Text = $"Connect failed: {ex.Message}";
+            return false;
         }
     }
 
@@ -155,7 +213,8 @@ public sealed partial class LibraryPage : Page
         switch (e.PropertyName)
         {
             case nameof(LibraryBrowseViewModel.Total):
-                UpdateCount();
+            case nameof(LibraryBrowseViewModel.IsShowingRecents):
+                UpdateBrowseChrome();
                 break;
             case nameof(LibraryBrowseViewModel.StatusMessage):
                 StatusText.Text = _browse?.StatusMessage ?? string.Empty;
@@ -166,11 +225,55 @@ public sealed partial class LibraryPage : Page
         }
     }
 
-    private void UpdateCount() => CountText.Text = _browse is null ? string.Empty : $"{_browse.Total:N0} {ActiveMachineLabel()} titles";
+    private void UpdateBrowseChrome()
+    {
+        if (_browse is null)
+        {
+            CountText.Text = string.Empty;
+            return;
+        }
+
+        if (_browse.IsShowingRecents)
+        {
+            TitleText.Text = "Recents";
+            CountText.Text = $"{_browse.Total:N0} recent";
+            RecentsButton.Content = "All games";
+            SearchBox.IsEnabled = false;
+            AzScroll.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            TitleText.Text = "RomM library";
+            CountText.Text = $"{_browse.Total:N0} {ActiveMachineLabel()} titles";
+            RecentsButton.Content = "Recents";
+            SearchBox.IsEnabled = true;
+            AzScroll.Visibility = Visibility.Visible;
+        }
+    }
+
+    private async void OnRecentsToggle(object sender, RoutedEventArgs e)
+    {
+        if (_browse is null)
+        {
+            return;
+        }
+
+        if (_browse.IsShowingRecents)
+        {
+            await _browse.ReloadAsync();
+        }
+        else
+        {
+            await _browse.ShowRecentsAsync();
+        }
+
+        UpdateBrowseChrome();
+        StatusText.Text = _browse.StatusMessage;
+    }
 
     private void OnSearchChanged(object sender, TextChangedEventArgs e)
     {
-        if (_browse is not null)
+        if (_browse is not null && !_browse.IsShowingRecents)
         {
             _browse.SearchText = SearchBox.Text;
         }
@@ -183,20 +286,37 @@ public sealed partial class LibraryPage : Page
             return;
         }
 
-        _browse.SelectedTile = TilesView.SelectedItem as RomTile;
-        RomTile? tile = _browse.SelectedTile;
-        SelectedText.Text = tile is null ? "No game selected" : $"Selected  {tile.Name} · {tile.FileName}";
-        SyncSlotToSelection();
+        if (TilesView.SelectedItem is GameGroup group)
+        {
+            _browse.SelectedGroup = group;
+            SelectedText.Text = group.HasMultipleVariants
+                ? $"Selected  {group.Name} · {group.VariantCount} variants"
+                : $"Selected  {group.Name} · {group.Primary.FileName}";
+            SyncSlotToSelection();
+            return;
+        }
+
+        _browse.SelectedGroup = null;
+        SelectedText.Text = "No game selected";
     }
 
-    private async void OnTileClick(object sender, ItemClickEventArgs e)
+    private void OnTileClick(object sender, ItemClickEventArgs e)
     {
-        if (e.ClickedItem is RomTile tile && _browse is not null)
+        if (e.ClickedItem is not GameGroup group || _browse is null)
         {
-            TilesView.SelectedItem = tile;
-            _browse.SelectedTile = tile;
-            await AttachAsync(autostart: false);
+            return;
         }
+
+        TilesView.SelectedItem = group;
+        _browse.SelectedGroup = group;
+        // Multi-variant games open the detail picker; single-variant attaches immediately.
+        if (group.HasMultipleVariants)
+        {
+            OpenDetails(group);
+            return;
+        }
+
+        _ = AttachAsync(autostart: false);
     }
 
     private async void OnPageKeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
@@ -204,17 +324,16 @@ public sealed partial class LibraryPage : Page
         switch (e.Key)
         {
             case Windows.System.VirtualKey.GamepadA:
-                // A = attach selected tile (same as click-to-attach without autostart).
                 e.Handled = true;
-                await AttachAsync(autostart: false);
+                await HandlePrimaryActionAsync(autostart: false);
                 break;
             case Windows.System.VirtualKey.GamepadY:
                 e.Handled = true;
-                await AttachAsync(autostart: true);
+                await HandlePrimaryActionAsync(autostart: true);
                 break;
             case Windows.System.VirtualKey.GamepadX:
                 e.Handled = true;
-                StatusText.Text = "Add to list: open Lists from the shell menu.";
+                OnAddToList();
                 break;
             case Windows.System.VirtualKey.GamepadB:
             case Windows.System.VirtualKey.Escape:
@@ -222,6 +341,65 @@ public sealed partial class LibraryPage : Page
                 OnBack();
                 break;
         }
+    }
+
+    /// <summary>
+    /// A/Y and the action-bar buttons: open the variant picker when the selection has multiple
+    /// ROMs; otherwise attach the single variant (optionally with autostart).
+    /// </summary>
+    private async Task HandlePrimaryActionAsync(bool autostart)
+    {
+        if (_browse?.SelectedGroup is { HasMultipleVariants: true } group)
+        {
+            OpenDetails(group);
+            return;
+        }
+
+        await AttachAsync(autostart);
+    }
+
+    private async void OnAttachClick(object sender, RoutedEventArgs e) =>
+        await HandlePrimaryActionAsync(autostart: false);
+
+    private async void OnAttachAutostartClick(object sender, RoutedEventArgs e) =>
+        await HandlePrimaryActionAsync(autostart: true);
+
+    private void OnAddToListClick(object sender, RoutedEventArgs e) => OnAddToList();
+
+    private void OnBackClick(object sender, RoutedEventArgs e) => OnBack();
+
+    private void OnAddToList()
+    {
+        if (_browse?.SelectedGroup is { } group)
+        {
+            OpenDetails(group);
+            return;
+        }
+
+        StatusText.Text = "Select a game first.";
+    }
+
+    private void OpenDetails(GameGroup group)
+    {
+        if (string.IsNullOrWhiteSpace(_serverUrl))
+        {
+            StatusText.Text = "Not connected.";
+            return;
+        }
+
+        var request = new GameDetailsRequest(
+            _serverUrl,
+            _token,
+            group.Name,
+            group.Variants.ToList());
+
+        if (Frame is not null)
+        {
+            Frame.Navigate(typeof(GameDetailsPage), request);
+            return;
+        }
+
+        StatusText.Text = "Cannot open details (no frame).";
     }
 
     private void OnBack()
@@ -232,10 +410,10 @@ public sealed partial class LibraryPage : Page
     }
 
     // Lazily loads each realized tile's cover art (virtualization-friendly), guarding against the
-    // container being recycled to a different tile before the fetch completes.
+    // container being recycled to a different group before the fetch completes.
     private void OnTileContainerChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
     {
-        if (args.InRecycleQueue || args.Item is not RomTile tile)
+        if (args.InRecycleQueue || args.Item is not GameGroup group)
         {
             return;
         }
@@ -248,18 +426,37 @@ public sealed partial class LibraryPage : Page
             _ = LoadMoreAsync();
         }
 
-        if (args.ItemContainer.ContentTemplateRoot is not FrameworkElement root || root.FindName("CoverImage") is not Image image)
+        if (args.ItemContainer.ContentTemplateRoot is not FrameworkElement root)
+        {
+            return;
+        }
+
+        if (root.FindName("VariantBadge") is Border badge && root.FindName("VariantBadgeText") is TextBlock badgeText)
+        {
+            if (group.HasMultipleVariants)
+            {
+                badge.Visibility = Visibility.Visible;
+                badgeText.Text = group.VariantCount.ToString();
+            }
+            else
+            {
+                badge.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        if (root.FindName("CoverImage") is not Image image)
         {
             return;
         }
 
         image.Source = null;
-        if (_coverLoader is null || tile.Cover is null)
+        CoverRef? cover = group.Cover;
+        if (_coverLoader is null || cover is null)
         {
             return;
         }
 
-        _ = LoadCoverAsync(image, args.ItemContainer, tile);
+        _ = LoadCoverAsync(image, args.ItemContainer, group, cover);
     }
 
     private async Task LoadMoreAsync()
@@ -277,12 +474,15 @@ public sealed partial class LibraryPage : Page
         }
     }
 
-    private async Task LoadCoverAsync(Image image, SelectorItem container, RomTile tile)
+    private async Task LoadCoverAsync(Image image, SelectorItem container, GameGroup group, CoverRef cover)
     {
         try
         {
-            var source = await _coverLoader!.LoadCoverAsync(tile.Cover, CancellationToken.None);
-            if (source is not null && container.Content is RomTile current && current.Id == tile.Id)
+            var source = await _coverLoader!.LoadCoverAsync(cover, CancellationToken.None);
+            if (source is not null
+                && container.Content is GameGroup current
+                && string.Equals(current.Name, group.Name, StringComparison.OrdinalIgnoreCase)
+                && current.Primary.Id == group.Primary.Id)
             {
                 image.Source = source;
             }
@@ -314,8 +514,14 @@ public sealed partial class LibraryPage : Page
             return;
         }
 
-        await _browse.AttachAsync(autostart);
+        LaunchOutcome outcome = await _browse.AttachAsync(autostart);
         StatusText.Text = _browse.StatusMessage;
+
+        // Autostart hands control to the running C64: leave the library and resume the emulator.
+        if (autostart && outcome.Success)
+        {
+            App.Instance.DismissMenu();
+        }
     }
 
     private void BuildAzStrip()
@@ -327,19 +533,24 @@ public sealed partial class LibraryPage : Page
             {
                 Content = target.ToString(),
                 Width = 40,
-                Height = 34,
+                Height = 32,
                 Margin = new Thickness(0, 1, 0, 1),
                 Padding = new Thickness(0),
-                FontSize = 16,
+                FontSize = 15,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
+                // Gamepad focus scrolls the letter into view inside AzScroll.
+                UseSystemFocusVisuals = true,
             };
             button.Click += async (_, _) =>
             {
                 if (_browse is not null)
                 {
                     await _browse.JumpToLetterAsync(target);
+                    // Keep the pressed letter visible after the grid reloads.
+                    button.StartBringIntoView();
                 }
             };
+            button.GotFocus += (_, _) => button.StartBringIntoView();
             AzStrip.Children.Add(button);
         }
     }

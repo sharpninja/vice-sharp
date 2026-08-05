@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Avalonia;
+using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Abstractions;
@@ -55,7 +57,8 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         Slots =
         [
-            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64"], trueDrive: true),
+            // *.t64: archive of PRGs; media host converts to single-file D64 on Drive 8.
+            new AttachSlotViewModel(MediaSlot.Drive8, "Drive 8", "Disk", ["*.d64", "*.g64", "*.t64"], trueDrive: true),
             new AttachSlotViewModel(MediaSlot.Drive9, "Drive 9", "Disk", ["*.d64", "*.g64"]),
             new AttachSlotViewModel(MediaSlot.Tape, "Tape", "Tape", ["*.tap"]),
             new AttachSlotViewModel(MediaSlot.Cartridge, "Cartridge", "Cart", ["*.crt", "*.bin", "*.rom"])
@@ -539,14 +542,15 @@ public sealed class AttachPanelViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(filePath))
         {
-            slot.MarkError("No file selected.");
+            await RunOnUiAsync(() => slot.MarkError("No file selected.")).ConfigureAwait(false);
             return;
         }
 
         byte[]? payload = null;
         if (File.Exists(filePath))
-            payload = await File.ReadAllBytesAsync(filePath, cancellationToken).ConfigureAwait(true);
+            payload = await File.ReadAllBytesAsync(filePath, cancellationToken).ConfigureAwait(false);
 
+        // Host/gRPC uses ConfigureAwait(false) internally; never assume we are on the UI thread.
         var response = payload is { Length: > 0 }
             ? await _hostClient.AttachMediaAsync(
                 slot.Slot,
@@ -554,38 +558,67 @@ public sealed class AttachPanelViewModel : ObservableObject
                 slot.IsReadOnly,
                 payload,
                 Path.GetFileName(filePath),
-                cancellationToken).ConfigureAwait(true)
+                cancellationToken).ConfigureAwait(false)
             : await _hostClient.AttachMediaAsync(slot.Slot, filePath, slot.IsReadOnly, cancellationToken)
-                .ConfigureAwait(true);
+                .ConfigureAwait(false);
 
-        if (!response.Status.IsSuccess)
+        await RunOnUiAsync(async () =>
         {
-            slot.MarkError(response.Status.Message);
-            StatusText = response.Status.Message;
+            if (!response.Status.IsSuccess)
+            {
+                slot.MarkError(response.Status.Message);
+                StatusText = response.Status.Message;
+                return;
+            }
+
+            if (response.Attachment is not null)
+            {
+                slot.ApplyAttachment(response.Attachment, filePath);
+                if (slot.SupportsTrueDrive && slot.TrueDrive)
+                {
+                    _applyingTrueDrive = true;
+                    try
+                    {
+                        await ApplyTrueDriveSelectionAsync(slot, cancellationToken).ConfigureAwait(true);
+                    }
+                    finally
+                    {
+                        _applyingTrueDrive = false;
+                    }
+
+                    StatusText = $"Attached; True Drive enabled for {slot.Title} (session restarted)";
+                    return;
+                }
+            }
+
+            StatusText = "Attached";
+        }).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Run UI-facing work on the Avalonia UI thread when a live app exists; otherwise inline
+    /// (unit tests have no dispatcher loop, so InvokeAsync would hang forever).
+    /// </summary>
+    private static Task RunOnUiAsync(Action action)
+    {
+        if (Dispatcher.UIThread.CheckAccess() || Application.Current is null)
+        {
+            action();
+            return Task.CompletedTask;
+        }
+
+        return Dispatcher.UIThread.InvokeAsync(action).GetTask();
+    }
+
+    private static async Task RunOnUiAsync(Func<Task> action)
+    {
+        if (Dispatcher.UIThread.CheckAccess() || Application.Current is null)
+        {
+            await action().ConfigureAwait(false);
             return;
         }
 
-        if (response.Attachment is not null)
-        {
-            slot.ApplyAttachment(response.Attachment, filePath);
-            if (slot.SupportsTrueDrive && slot.TrueDrive)
-            {
-                _applyingTrueDrive = true;
-                try
-                {
-                    await ApplyTrueDriveSelectionAsync(slot, cancellationToken).ConfigureAwait(true);
-                }
-                finally
-                {
-                    _applyingTrueDrive = false;
-                }
-
-                StatusText = $"Attached; True Drive enabled for {slot.Title} (session restarted)";
-                return;
-            }
-        }
-
-        StatusText = "Attached";
+        await Dispatcher.UIThread.InvokeAsync(action).ConfigureAwait(false);
     }
 
     /// <summary>

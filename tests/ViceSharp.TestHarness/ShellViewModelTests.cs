@@ -234,6 +234,9 @@ public sealed class ShellViewModelTests
             .Returns(new ValueTask<AttachMediaResponse>(
                 new AttachMediaResponse(RpcStatus.Ok(), Attachment(MediaSlot.Drive8, path))));
 
+        var focusCount = 0;
+        shell.FocusEmulator = () => focusCount++;
+
         var status = await shell.DropAndStartFileAsync(path, TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.Ok, status.Code);
@@ -241,6 +244,7 @@ public sealed class ShellViewModelTests
         await host.Received(1).ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
         await host.DidNotReceive().ColdResetAsync(Arg.Any<CancellationToken>());
         Assert.Equal("Started demo.d64", panel.StatusText);
+        Assert.Equal(1, focusCount);
     }
 
     /// <summary>
@@ -259,6 +263,9 @@ public sealed class ShellViewModelTests
             .Returns(new ValueTask<AttachMediaResponse>(
                 new AttachMediaResponse(RpcStatus.Ok(), Attachment(MediaSlot.Cartridge, path))));
 
+        var focusCount = 0;
+        shell.FocusEmulator = () => focusCount++;
+
         var status = await shell.DropAndStartFileAsync(path, TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.Ok, status.Code);
@@ -266,6 +273,23 @@ public sealed class ShellViewModelTests
         await host.Received(1).ColdResetAsync(Arg.Any<CancellationToken>());
         await host.DidNotReceive().ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
         Assert.Equal("Started fastload.CRT", panel.StatusText);
+        Assert.Equal(1, focusCount);
+    }
+
+    /// <summary>
+    /// Autoplay (Run 8) must request emulator focus so keyboard/gamepad target the machine.
+    /// </summary>
+    [Fact]
+    public async Task AutostartDrive8_RequestsFocusEmulator()
+    {
+        var (shell, host, _) = CreateShell();
+        var focusCount = 0;
+        shell.FocusEmulator = () => focusCount++;
+
+        await shell.AutostartDrive8Async(TestContext.Current.CancellationToken);
+
+        await host.Received(1).ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
+        Assert.Equal(1, focusCount);
     }
 
     /// <summary>
@@ -279,6 +303,9 @@ public sealed class ShellViewModelTests
     {
         var (shell, host, panel) = CreateShell();
 
+        var focusCount = 0;
+        shell.FocusEmulator = () => focusCount++;
+
         var status = await shell.DropAndStartFileAsync(@"C:\notes\readme.txt", TestContext.Current.CancellationToken);
 
         Assert.Equal(RpcStatusCode.InvalidArgument, status.Code);
@@ -287,6 +314,7 @@ public sealed class ShellViewModelTests
             Arg.Any<MediaSlot>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
         await host.DidNotReceive().ColdResetAsync(Arg.Any<CancellationToken>());
         await host.DidNotReceive().ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
+        Assert.Equal(0, focusCount);
     }
 
     /// <summary>

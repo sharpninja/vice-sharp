@@ -19,6 +19,7 @@ public sealed class MediaExtensionMapTests
     [InlineData("game.g64", MediaSlot.Drive8, MediaKind.Disk, true)]
     [InlineData("side.d81", MediaSlot.Drive8, MediaKind.Disk, true)]
     [InlineData("creatures.tap", MediaSlot.Tape, MediaKind.Tape, true)]
+    [InlineData("game.t64", MediaSlot.Drive8, MediaKind.Tape, true)]
     [InlineData("wizball.crt", MediaSlot.Cartridge, MediaKind.Cartridge, true)]
     [InlineData("dump.bin", MediaSlot.Cartridge, MediaKind.Cartridge, true)]
     public void Extension_MapsSlot(string fileName, MediaSlot slot, MediaKind kind, bool launchable)

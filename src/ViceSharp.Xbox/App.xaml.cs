@@ -328,6 +328,13 @@ public sealed partial class App : Application
             new Windows.UI.Xaml.Input.KeyEventHandler(OnRootKeyUp),
             handledEventsToo: true);
 
+        // FEAT-XMENURCLICK-001: right-click unused chrome (emulator surface, empty page
+        // areas) toggles the shell menu; interactive controls keep their own right-click.
+        root.AddHandler(
+            Windows.UI.Xaml.UIElement.RightTappedEvent,
+            new Windows.UI.Xaml.Input.RightTappedEventHandler(OnRootRightTapped),
+            handledEventsToo: true);
+
         // FIX-XKBDPANEL-001: routed KeyDown needs a focused XAML element; clicking the
         // emulator surface (a SwapChainPanel, not focusable) or collapsing the focused
         // keyboard tile leaves focus NOWHERE and the shell keys die. CoreWindow sees
@@ -958,7 +965,7 @@ public sealed partial class App : Application
     /// <summary>True when the shell-menu Frame is currently shown over the running emulator.</summary>
     private bool IsMenuOpen => _frame is not null && _frame.Visibility == Visibility.Visible;
 
-    /// <summary>Toggles the shell menu: show it if hidden, hide it if shown (ESC / Menu button).</summary>
+    /// <summary>Toggles the shell menu: show it if hidden, hide it if shown (ESC / Menu button / right-click chrome).</summary>
     private void ToggleMenu()
     {
         if (IsMenuOpen)
@@ -969,6 +976,46 @@ public sealed partial class App : Application
         {
             ShowMenu();
         }
+    }
+
+    /// <summary>
+    /// FEAT-XMENURCLICK-001: right-click on unused areas toggles the shell menu. Skips buttons,
+    /// text fields, lists, and other interactive controls so their own gestures still work.
+    /// </summary>
+    private void OnRootRightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+    {
+        if (IsInteractiveVisual(e.OriginalSource as Windows.UI.Xaml.DependencyObject))
+        {
+            return;
+        }
+
+        ToggleMenu();
+        e.Handled = true;
+    }
+
+    /// <summary>Walks the visual tree: true when <paramref name="source"/> is (or is under) an input control.</summary>
+    private static bool IsInteractiveVisual(Windows.UI.Xaml.DependencyObject? source)
+    {
+        for (Windows.UI.Xaml.DependencyObject? node = source;
+             node is not null;
+             node = Windows.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
+        {
+            // Base types cover subclasses (Button/HyperlinkButton, Slider, ListViewItem, ...).
+            switch (node)
+            {
+                case Windows.UI.Xaml.Controls.Primitives.ButtonBase:
+                case Windows.UI.Xaml.Controls.TextBox:
+                case Windows.UI.Xaml.Controls.PasswordBox:
+                case Windows.UI.Xaml.Controls.ComboBox:
+                case Windows.UI.Xaml.Controls.ListViewBase:
+                case Windows.UI.Xaml.Controls.Primitives.SelectorItem:
+                case Windows.UI.Xaml.Controls.ToggleSwitch:
+                case Windows.UI.Xaml.Controls.Primitives.RangeBase:
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     // FIX-XDPADSKIP-002 (operator 2026-07-14: "dpad navigation is skipping buttons
@@ -1366,10 +1413,9 @@ public sealed partial class App : Application
             return;
         }
 
-        if (_frame.Content is null)
-        {
-            _frame.Navigate(typeof(HomePage));
-        }
+        // Always open on the top-level Home rail. Dismissing from Library/Lists/Settings used to
+        // leave that subpage mounted, so the next open skipped the main menu.
+        ResetMenuToHome();
 
         _frame.Visibility = Visibility.Visible;
 
@@ -1378,10 +1424,36 @@ public sealed partial class App : Application
         // agrees with the context machine.
         InputContext?.RequestContext(ViceSharp.Xbox.Input.InputContext.MainMenu);
 
-        // FEAT-XMENUFOCUS-001: every open lands focus on Close Menu. Navigation covers
-        // the first open via OnNavigatedTo; re-shows only flip visibility, so drive it
-        // here too (idempotent).
+        // FEAT-XMENUFOCUS-001: every open lands focus on Close Menu.
         (_frame.Content as Views.HomePage)?.FocusCloseMenu();
+    }
+
+    /// <summary>
+    /// Navigates the shell Frame to <see cref="Views.HomePage"/> and clears the back stack so B does
+    /// not walk through previous subpages after a reopen.
+    /// </summary>
+    private void ResetMenuToHome()
+    {
+        if (_frame is null)
+        {
+            return;
+        }
+
+        if (_frame.Content is not Views.HomePage)
+        {
+            _frame.Navigate(typeof(Views.HomePage));
+        }
+
+        // Drop any residual subpage history (Navigate-to-same-type can leave prior entries).
+        while (_frame.CanGoBack)
+        {
+            _frame.BackStack.RemoveAt(_frame.BackStack.Count - 1);
+        }
+
+        // Ensure docked single-column layout (subpages expand to full width).
+        Grid.SetColumnSpan(_frame, 1);
+        Grid.SetColumn(_frame, 1);
+        _frame.Background = null;
     }
 
     /// <summary>
@@ -1574,6 +1646,8 @@ public sealed partial class App : Application
         if (_frame is not null)
         {
             _frame.Visibility = Visibility.Collapsed;
+            // Next open starts at the top-level rail (not the last Library/Lists/Settings page).
+            ResetMenuToHome();
         }
 
         // FEAT-XMENUSUBPAGE-001: hand the controller back for EVERY dismissal path

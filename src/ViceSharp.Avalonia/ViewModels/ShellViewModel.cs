@@ -26,6 +26,12 @@ public sealed class ShellViewModel : IGameLaunchTarget
     /// <summary>The peripherals/settings panel view-model the shell hosts.</summary>
     public AttachPanelViewModel Panel { get; }
 
+    /// <summary>
+    /// Optional: focus the emulator video surface after autoplay. Wired by the main window
+    /// so Library / Lists attach+play and Run 8 return keyboard focus to the machine.
+    /// </summary>
+    public Action? FocusEmulator { get; set; }
+
     // ---- Transport (return the host response so the shell can apply status) ---
 
     public ValueTask<EmulatorCommandResponse> PauseAsync(CancellationToken ct = default) => _host.PauseAsync(ct);
@@ -44,7 +50,16 @@ public sealed class ShellViewModel : IGameLaunchTarget
 
     public ValueTask<EmulatorCommandResponse> WarmResetAsync(CancellationToken ct = default) => _host.WarmResetAsync(ct);
 
-    public ValueTask<EmulatorCommandResponse> AutostartDrive8Async(CancellationToken ct = default) => _host.ResetAndAutostartDrive8Async(ct);
+    /// <summary>Reset and autostart Drive 8, then focus the emulator control for input.</summary>
+    public async ValueTask<EmulatorCommandResponse> AutostartDrive8Async(CancellationToken ct = default)
+    {
+        var response = await _host.ResetAndAutostartDrive8Async(ct).ConfigureAwait(true);
+        RequestFocusEmulator();
+        return response;
+    }
+
+    /// <summary>Move keyboard focus to the emulator surface when a host has wired <see cref="FocusEmulator"/>.</summary>
+    public void RequestFocusEmulator() => FocusEmulator?.Invoke();
 
     /// <summary>Capture the current frame to <paramref name="filePath"/> as a screenshot
     /// ("png" or "bmp"). Wired to Snapshot -&gt; Save screenshot... (x64sc screenshot parity).</summary>
@@ -177,6 +192,10 @@ public sealed class ShellViewModel : IGameLaunchTarget
         {
             startStatus = (await _host.ColdResetAsync(ct).ConfigureAwait(true)).Status;
         }
+
+        // Autoplay always returns focus to the emulator so joystick/keyboard go to the machine
+        // (Library / Lists attach+play, drop-to-start, not only drag-drop on the video host).
+        RequestFocusEmulator();
 
         Panel.ReportStatus(startStatus.IsSuccess
             ? $"Started {Path.GetFileName(filePath)}"

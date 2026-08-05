@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ViceSharp.Avalonia.Host;
@@ -29,9 +30,15 @@ public partial class MainWindow : Window
     private readonly VideoSurface _video;
     private IDisposable? _warpModeSubscription;
     private bool _videoRecordingHotkeyActive;
+    private bool _isEmulatorFullscreen;
+    private WindowState _windowStateBeforeFullscreen = WindowState.Normal;
+    private bool _paneOpenBeforeFullscreen = true;
     private DockPanel? _contentPanel;
     private ContentControl? _sidebarHost;
     private ContentControl? _videoHost;
+    private Control? _menuBar;
+    private Control? _statusBar;
+    private Control? _iecMonitor;
 
     public MainWindow()
     {
@@ -66,16 +73,14 @@ public partial class MainWindow : Window
             PickKeyboardMapFileAsync = PickKeyboardMapFileAsync,
             PopOutMonitorRequested = OpenMonitorWindow
         };
-        // Fixed natural size; a Viewbox (set on PART_VideoHost below) scales it uniformly so
-        // the display control wraps the image tightly (no internal letterbox) and the sidebar
-        // can fill right up to it.
-        _video = new VideoSurface
-        {
-            Width = VideoSurface.SourceWidth,
-            Height = VideoSurface.SourceHeight
-        };
+        // VideoSurface measures itself to fill available height (and grow width by display
+        // aspect). No Viewbox: a fixed natural size + Uniform Viewbox locked height to ~272px
+        // and left black chrome under NTSC.
+        _video = new VideoSurface();
         _video.KeyDown += OnVideoKeyDown;
         _video.KeyUp += OnVideoKeyUp;
+        // Autoplay (drop, Library attach+play, Lists attach+play, Run 8) focuses the video surface.
+        _shell.FocusEmulator = FocusEmulatorSurface;
         AddHandler(KeyDownEvent, OnGlobalKeyDown, RoutingStrategies.Tunnel);
 
         // Inject the live views into the declarative shell's named hosts. The
@@ -84,19 +89,23 @@ public partial class MainWindow : Window
         if (this.FindControl<Panel>("PART_StatusHost") is { } statusHost)
             statusHost.DataContext = _statusBarViewModel;
 
+        _menuBar = this.FindControl<Control>("PART_Menu");
+        _statusBar = this.FindControl<Control>("PART_StatusBar");
         if (this.FindControl<Views.IecMonitorView>("PART_IecMonitor") is { } iecMonitor)
+        {
             iecMonitor.DataContext = _iecMonitorViewModel;
+            _iecMonitor = iecMonitor;
+        }
+
         _sidebarHost = this.FindControl<ContentControl>("PART_SidebarHost");
         if (_sidebarHost is not null)
             _sidebarHost.Content = _attachPanel;
         _videoHost = this.FindControl<ContentControl>("PART_VideoHost");
         if (_videoHost is not null)
         {
-            _videoHost.Content = new Viewbox
-            {
-                Stretch = global::Avalonia.Media.Stretch.Uniform,
-                Child = _video
-            };
+            _videoHost.HorizontalContentAlignment = HorizontalAlignment.Left;
+            _videoHost.VerticalContentAlignment = VerticalAlignment.Stretch;
+            _videoHost.Content = _video;
             ConfigureVideoDropSurface(_videoHost);
         }
         _contentPanel = this.FindControl<DockPanel>("PART_ContentPanel");
@@ -172,26 +181,23 @@ public partial class MainWindow : Window
 
     // FIX-XASPECT-002 (operator 2026-07-14: PAL -> NTSC switch did not change the pixel size):
     // feed the video surface the ACTIVE machine profile's composite pixel aspect (VICE vicii.c
-    // vicii_get_pixel_aspect via the Chips VideoRenderer table) and the aspect-mode setting,
-    // then re-size the surface's NATURAL width to the display aspect. The surface sits in a
-    // Stretch=Uniform Viewbox, so its natural Width/Height ratio IS the on-screen aspect
-    // (no internal letterbox), exactly matching the "wraps the image tightly" layout intent.
+    // vicii_get_pixel_aspect via the Chips VideoRenderer table) and the aspect-mode setting.
+    // FIX-XNTSCFILL-001: crop NTSC to written rows (246) so the in-frame black band does not
+    // waste vertical space; MeasureOverride then fills available panel height.
     private void UpdateVideoAspect()
     {
         // TR-MVVM-001 / AvaloniaBoundaryTests: do not reference Architectures or Chips
-        // from the Avalonia head. PAR literals mirror VICE vicii_get_pixel_aspect /
-        // VideoRenderer.GetPixelAspectRatio (PAL 0.93650794, NTSC 0.75). Profile id is
-        // the host-canonical selector already on the attach panel.
+        // from the Avalonia head. PAR / content-height literals mirror VICE + VideoRenderer
+        // (PAL 0.93650794 / 272, NTSC 0.75 / 246). Profile id is the host-canonical selector
+        // already on the attach panel.
         var profileId = _attachViewModel.SelectedMachineProfile?.Id ?? string.Empty;
         var isNtsc = profileId.Contains("ntsc", StringComparison.OrdinalIgnoreCase);
         var pixelAspect = isNtsc ? 0.75 : 0.93650794;
 
         _video.PixelAspect = pixelAspect;
         _video.AspectMode = _attachViewModel.SelectedAspectMode;
-
-        var displayAspect = VideoSurface.ComputeDisplayAspect(_attachViewModel.SelectedAspectMode, pixelAspect);
-        _video.Width = VideoSurface.SourceHeight * displayAspect;
-        _video.Height = VideoSurface.SourceHeight;
+        _video.ContentHeight = isNtsc ? VideoSurface.NtscContentHeight : VideoSurface.SourceHeight;
+        _video.InvalidateMeasure();
         _video.InvalidateVisual();
     }
 
@@ -199,10 +205,28 @@ public partial class MainWindow : Window
     // (VideoSurface.MeasureOverride), and the sidebar is the stretched fill (last) child that
     // consumes the rest. Flipping DockSide moves the display's dock edge; collapsing hides the
     // sidebar and reorders so the display becomes the fill child and covers the window.
+    // Emulator fullscreen (F11 / Alt+Enter): chrome hidden, video fills and is centered.
     private void ApplyContentLayout()
     {
         if (_contentPanel is null || _sidebarHost is null || _videoHost is null)
             return;
+
+        if (_isEmulatorFullscreen)
+        {
+            _sidebarHost.IsVisible = false;
+            _videoHost.ClearValue(DockPanel.DockProperty);
+            MoveToEnd(_videoHost); // undocked last child fills the content area
+            _videoHost.HorizontalContentAlignment = HorizontalAlignment.Center;
+            _videoHost.VerticalContentAlignment = VerticalAlignment.Center;
+            _video.HorizontalAlignment = HorizontalAlignment.Center;
+            _video.VerticalAlignment = VerticalAlignment.Center;
+            return;
+        }
+
+        _videoHost.HorizontalContentAlignment = HorizontalAlignment.Left;
+        _videoHost.VerticalContentAlignment = VerticalAlignment.Stretch;
+        _video.HorizontalAlignment = HorizontalAlignment.Left;
+        _video.VerticalAlignment = VerticalAlignment.Stretch;
 
         if (_attachViewModel.IsPaneOpen)
         {
@@ -214,8 +238,91 @@ public partial class MainWindow : Window
         else
         {
             _sidebarHost.IsVisible = false;
-            MoveToFront(_sidebarHost); // display is last => fills the window
+            _videoHost.ClearValue(DockPanel.DockProperty);
+            MoveToEnd(_videoHost); // display is last => fills the window
         }
+    }
+
+    /// <summary>
+    /// True for F11 (no Ctrl/Alt/Shift) or Alt+Enter / Alt+Return. Used by the shell hotkeys
+    /// that toggle emulator-only fullscreen.
+    /// </summary>
+    public static bool IsEmulatorFullscreenHotkey(Key key, KeyModifiers modifiers)
+    {
+        var relevant = modifiers & (KeyModifiers.Alt | KeyModifiers.Control | KeyModifiers.Shift);
+        if (key == Key.F11)
+            return relevant == KeyModifiers.None;
+
+        return (key is Key.Return or Key.Enter)
+            && (relevant & KeyModifiers.Alt) != 0
+            && (relevant & (KeyModifiers.Control | KeyModifiers.Shift)) == 0;
+    }
+
+    /// <summary>
+    /// Toggle emulator-only fullscreen: full-screen window, chrome (menu/status/sidebar) hidden,
+    /// video surface centered. F11 and Alt+Enter both toggle.
+    /// </summary>
+    public void ToggleEmulatorFullscreen()
+    {
+        if (_isEmulatorFullscreen)
+            ExitEmulatorFullscreen();
+        else
+            EnterEmulatorFullscreen();
+    }
+
+    private void EnterEmulatorFullscreen()
+    {
+        if (_isEmulatorFullscreen)
+            return;
+
+        _isEmulatorFullscreen = true;
+        _windowStateBeforeFullscreen = WindowState == WindowState.FullScreen
+            ? WindowState.Normal
+            : WindowState;
+        _paneOpenBeforeFullscreen = _attachViewModel.IsPaneOpen;
+
+        if (_menuBar is not null)
+            _menuBar.IsVisible = false;
+        if (_statusBar is not null)
+            _statusBar.IsVisible = false;
+        if (_iecMonitor is not null)
+            _iecMonitor.IsVisible = false;
+
+        ApplyContentLayout();
+        WindowState = WindowState.FullScreen;
+        FocusEmulatorSurface();
+    }
+
+    private void ExitEmulatorFullscreen()
+    {
+        if (!_isEmulatorFullscreen)
+            return;
+
+        _isEmulatorFullscreen = false;
+
+        if (_menuBar is not null)
+            _menuBar.IsVisible = true;
+        if (_statusBar is not null)
+            _statusBar.IsVisible = true;
+        // IEC monitor visibility is driven by true-drive presence elsewhere; restore visible
+        // so its own bindings can re-collapse if unused.
+        if (_iecMonitor is not null)
+            _iecMonitor.IsVisible = true;
+
+        WindowState = _windowStateBeforeFullscreen;
+        if (_paneOpenBeforeFullscreen != _attachViewModel.IsPaneOpen)
+            _attachViewModel.IsPaneOpen = _paneOpenBeforeFullscreen;
+
+        ApplyContentLayout();
+        FocusEmulatorSurface();
+    }
+
+    private void MoveToEnd(Control child)
+    {
+        var children = _contentPanel!.Children;
+        var index = children.IndexOf(child);
+        if (index >= 0 && index < children.Count - 1)
+            children.Move(index, children.Count - 1);
     }
 
     private void MoveToFront(Control child)
@@ -336,6 +443,9 @@ public partial class MainWindow : Window
 
     private void OnMenuExit(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => Close();
 
+    private void OnMenuToggleFullscreen(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+        => ToggleEmulatorFullscreen();
+
     private void OnMenuPause(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _ = RunCommandAsync(() => _shell.PauseAsync().AsTask());
 
@@ -362,6 +472,17 @@ public partial class MainWindow : Window
 
     private void OnRunDrive8(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _ = RunCommandAsync(() => _shell.AutostartDrive8Async().AsTask());
+
+    /// <summary>Focus the emulator display so autoplay leaves keyboard/gamepad on the machine.</summary>
+    private void FocusEmulatorSurface()
+    {
+        void focus() => _video.Focus();
+
+        if (Dispatcher.UIThread.CheckAccess())
+            focus();
+        else
+            Dispatcher.UIThread.Post(focus);
+    }
 
     private void OnMenuToggleWarp(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
         => _ = _shell.ToggleWarpAsync();
@@ -852,6 +973,14 @@ public partial class MainWindow : Window
 
     private async void OnVideoKeyDown(object? sender, KeyEventArgs e)
     {
+        // Fullscreen before host key inject so Alt+Enter / F11 never reach the C64.
+        if (IsEmulatorFullscreenHotkey(e.Key, e.KeyModifiers))
+        {
+            e.Handled = true;
+            ToggleEmulatorFullscreen();
+            return;
+        }
+
         // Warp toggle: Alt+W (or Ctrl+W as fallback), like classic VICE
         if ((e.Key == Key.W) && (e.KeyModifiers.HasFlag(KeyModifiers.Alt) || e.KeyModifiers.HasFlag(KeyModifiers.Control)))
         {
@@ -866,6 +995,13 @@ public partial class MainWindow : Window
 
     private async void OnGlobalKeyDown(object? sender, KeyEventArgs e)
     {
+        if (IsEmulatorFullscreenHotkey(e.Key, e.KeyModifiers))
+        {
+            e.Handled = true;
+            ToggleEmulatorFullscreen();
+            return;
+        }
+
         if (!IsVideoRecordingHotkey(e))
             return;
 
@@ -898,6 +1034,15 @@ public partial class MainWindow : Window
 
     private async void OnVideoKeyUp(object? sender, KeyEventArgs e)
     {
+        // Do not inject F11 / Alt+Enter release into the emulated keyboard.
+        if (IsEmulatorFullscreenHotkey(e.Key, e.KeyModifiers)
+            || e.Key is Key.F11
+            || ((e.Key is Key.Return or Key.Enter) && e.KeyModifiers.HasFlag(KeyModifiers.Alt)))
+        {
+            e.Handled = true;
+            return;
+        }
+
         await SendKeyStateAsync(e, false).ConfigureAwait(true);
     }
 

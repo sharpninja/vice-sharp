@@ -17,7 +17,8 @@ public static class MediaExtensionMap
         [".d71"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: true),
         [".d81"] = new(MediaKind.Disk, MediaSlot.Drive8, IsLaunchable: true),
         [".tap"] = new(MediaKind.Tape, MediaSlot.Tape, IsLaunchable: true),
-        [".t64"] = new(MediaKind.Tape, MediaSlot.Tape, IsLaunchable: true),
+        // T64 is a file archive (not TAP pulses). Attach materializes a single-file D64 on Drive 8.
+        [".t64"] = new(MediaKind.Tape, MediaSlot.Drive8, IsLaunchable: true),
         [".crt"] = new(MediaKind.Cartridge, MediaSlot.Cartridge, IsLaunchable: true),
         [".bin"] = new(MediaKind.Cartridge, MediaSlot.Cartridge, IsLaunchable: true),
         [".rom"] = new(MediaKind.Cartridge, MediaSlot.Cartridge, IsLaunchable: true),

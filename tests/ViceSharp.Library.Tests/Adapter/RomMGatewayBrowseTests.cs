@@ -38,8 +38,10 @@ public sealed class RomMGatewayBrowseTests
         page.Items[1].FileName.Should().Be("hello.prg");
         page.Items[1].Launchable.Should().BeFalse();
 
+        // RomM emits lowercase keys; the gateway normalizes to uppercase for the A-Z strip.
         page.CharIndex.Should().Contain(new KeyValuePair<string, int>("B", 0));
         page.CharIndex.Should().Contain(new KeyValuePair<string, int>("H", 1));
+        page.CharIndex.Keys.Should().OnlyContain(k => k == k.ToUpperInvariant());
     }
 
     /// <summary>AC-BROWSE-02: the platform slug resolves (and caches) to a numeric id that scopes the query.</summary>

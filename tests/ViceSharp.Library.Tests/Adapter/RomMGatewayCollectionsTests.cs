@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http;
 using FluentAssertions;
 using ViceSharp.Library.ViewModels;
@@ -40,6 +41,35 @@ public sealed class RomMGatewayCollectionsTests
         favorites.Count.Should().Be(12);
         favorites.RomIds.Should().Equal(10, 11);
         cols.Single(c => c.Name == "Recently Added").ReadOnly.Should().BeTrue();
+    }
+
+    /// <summary>
+    /// RomM 5.x can return 422 for /api/collections/virtual; Lists auto-connect must still succeed.
+    /// </summary>
+    [Fact]
+    [Trait("AC", "AC-COLLECT-01")]
+    public async Task List_VirtualEndpoint422_IsIgnored()
+    {
+        var ct = TestContext.Current.CancellationToken;
+
+        static HttpResponseMessage Router(HttpRequestMessage req) => req.RequestUri!.AbsolutePath switch
+        {
+            "/api/collections" => FakeRomMHandler.Json("""[{"id":1,"name":"Favorites","rom_count":1,"rom_ids":[10]}]"""),
+            "/api/collections/smart" => FakeRomMHandler.Json("[]"),
+            "/api/collections/virtual" => new HttpResponseMessage(HttpStatusCode.UnprocessableEntity)
+            {
+                Content = new StringContent("""{"detail":"not supported"}"""),
+            },
+            _ => FakeRomMHandler.NotFound(),
+        };
+
+        var handler = new FakeRomMHandler(Router);
+        await using var client = RomMFixtures.Client(handler);
+        var gateway = new RomMCollectionsGateway(client);
+
+        IReadOnlyList<LibraryCollection> cols = await gateway.GetCollectionsAsync(includeSmartVirtual: true, ct);
+
+        cols.Should().ContainSingle(c => c.Name == "Favorites");
     }
 
     /// <summary>AC-COLLECT-02: create POSTs to /api/collections and returns the created collection.</summary>
