@@ -15,17 +15,17 @@ using Nuke.Common.Tools.Git;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 
-// Nuke-generated Azure DevOps pipelines (regenerated on every local build run),
-// both dispatching to the self-hosted "Default" agent pool via
-// DefaultPoolAzurePipelinesAttribute (the runners carry the native toolchain
-// and the NUGET_API_KEY environment - no pipeline secret, no vmImage):
-// - azure-pipelines.ci.yml: Test on branch pushes.
-// - azure-pipelines.release.yml: PublishNuget on v* tags only - the tag-gated
-//   reproducible NuGet release path (single self-sufficient job; PublishNuget's
-//   own gate re-verifies tag/version/pack integrity).
+// Azure DevOps pipelines (hand-maintained YAML: AutoGenerate = false).
+// Pipeline definitions in ADO are wired to GitHub sharpninja/vice-sharp (not
+// Azure Repos) so v* tags and main pushes on origin fire CI/release.
+// Both dispatch to the self-hosted "Default" agent pool via
+// DefaultPoolAzurePipelinesAttribute (native toolchain + NUGET_API_KEY).
+// - azure-pipelines.ci.yml: CiTest on branch pushes + optional Octopus release.
+// - azure-pipelines.release.yml: PublishNuget/Winget/etc. on v* tags + Octopus.
 [DefaultPoolAzurePipelines(
     "ci",
     AzurePipelinesImage.WindowsLatest,
+    AutoGenerate = false,
     InvokedTargets = new[] { nameof(CiTest) },
     TriggerBranchesInclude = new[] { "main", "feat/*" },
     PullRequestsBranchesInclude = new[] { "main" },
@@ -33,6 +33,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [DefaultPoolAzurePipelines(
     "release",
     AzurePipelinesImage.WindowsLatest,
+    AutoGenerate = false,
     // All package-manager publishers run on a v* tag. PublishChocolatey packs
     // the package and pushes only when CHOCO_API_KEY is set in the agent env
     // (else it stages the .nupkg and warns), so it is safe to run either way.
