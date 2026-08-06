@@ -107,8 +107,8 @@ public sealed class Via6522T2Pb6Tests
     /// time-based countdown (phi2 mode); the chip must not strand the counter
     /// in either path.
     /// Acceptance: Load T2 = 0x05, set ACR = 0x20 (pulse mode); 100 phi2 ticks
-    /// leave T2 unchanged. Switch to ACR = 0x00 (phi2 mode); 6 more phi2 ticks
-    /// drive counter 5,4,3,2,1,0 -> underflow and IFR bit 5 is set.
+    /// leave T2 unchanged. Switch to ACR = 0x00 (phi2 mode); N+2 more phi2
+    /// ticks drive counter 5..0 then underflow and IFR bit 5 is set.
     /// </summary>
     [Fact]
     public void T2PulseCount_SwitchBackToPhi2Mode_ResumesPhi2Countdown()
@@ -123,7 +123,7 @@ public sealed class Via6522T2Pb6Tests
 
         via.Write(Base + 0x0B, 0x00); // ACR bit 5 = 0 (phi2)
 
-        for (int i = 0; i < 6; i++) via.Tick();
+        for (int i = 0; i < 6; i++) via.Tick(); // N+1
 
         (via.Read(Base + 0x0D) & IfrT2).Should().Be(IfrT2);
     }

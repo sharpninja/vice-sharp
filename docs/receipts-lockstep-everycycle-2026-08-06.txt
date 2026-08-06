@@ -1,0 +1,40 @@
+# Vic20 every-cycle CPU lockstep receipts (2026-08-06)
+
+Oracle: vice_xvic.dll model=vic20
+PAL clock: 1108405 Hz
+
+## Longest every-cycle matched run (live)
+
+- Command: $env:VICESHARP_LOCKSTEP_2S=1; dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal
+- matchedCycles=517828 (before residual diverge at 517829)
+- machineSec ~= 517828 / 1108405 ~= 0.467 s PAL
+- Residual (not fixed this slice): c=517829 INC zp mid-instruction P (Z) lag vs xvic after STA (zp),Y in BASIC path (nP=$21 mP=$23)
+- Log: C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-v2.log
+
+## Focused permanent gate (500000 cycles)
+
+- Command: dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Vic20DivergeProbe.EveryCycle_CpuRegs_Match_FocusedWindow|FullyQualifiedName~Vic20NativeLockstep|FullyQualifiedName~Vic20LockstepScaffold
+- RESULT: Passed 25 Failed 0 Skipped 0
+- matchedCycles=500000 full CPU A/X/Y/S/P/PC every cycle
+- machineSec ~= 500000 / 1108405 ~= 0.451 s PAL
+- Log: C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-final-gates.log (and vic20-gates-500k-v11.log)
+
+## Baseline (start of this goal work)
+
+- first diverge was 5023 (STA (zp),Y PC) after prior session fixed through ~5005 BNE
+- Log: C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-diverge-baseline.log
+
+## Fixes applied (VICE-facing)
+
+1. Full-length taken branch when prior trailing dwell at next PC == 2 or after soft CMP
+2. Not-taken branch final-PC hold when clean FETCH
+3. JSR non-overlapped path after full-length branch / deferred zp RMW
+4. Soft-defer implied (incl ASL/ROL/LSR/ROR A) and immediate loads in non-overlapped region
+5. STA (zp),Y hold + soft CMP commit; no STA->RTS collapse in non-overlapped region
+6. Vic20SystemRam power-on fill: VICE factory FF/00 alternate (value_invert=1)
+
+## Permanent tests
+
+- Vic20DivergeProbe.EveryCycle_CpuRegs_Match_FocusedWindow (500k, always on)
+- Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal (env VICESHARP_LOCKSTEP_2S=1)
+- BranchCycleCountTests marked Explicit

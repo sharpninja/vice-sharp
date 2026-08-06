@@ -42,12 +42,16 @@ public sealed class Vic20SystemRam : IMemory
     public void Write(ushort address, byte value) => _memory[address] = value;
 
     /// <summary>
-    /// Clear only installed RAM; open-bus regions stay non-sticky (no store).
-    /// Does not call C64-specific power-on patterns.
+    /// Power-on fill matching VICE VIC-20 factory RAM init
+    /// (<c>ram.c</c>: RAMInitStartValue=255, RAMInitValueInvert=1, offset=0):
+    /// alternating <c>0xFF</c>/<c>0x00</c> by address byte. Open-bus regions are
+    /// not claimed on the bus; values written here are unused for uninstalled BLK.
     /// </summary>
     public void Reset()
     {
-        Array.Clear(_memory);
+        // VICE vic20 factory: start_value=255, value_invert=1 => FF,00,FF,00,...
+        for (var i = 0; i < _memory.Length; i++)
+            _memory[i] = (byte)((i & 1) == 0 ? 0xFF : 0x00);
     }
 
     /// <summary>Force a store regardless of expansion (ROM load / factory only).</summary>

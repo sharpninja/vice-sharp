@@ -23,6 +23,9 @@ VICE_SHIM_API int vice_machine_attach_cartridge(void* machine, const uint8_t* im
 VICE_SHIM_API int vice_machine_attach_disk(void* machine, unsigned int unit, unsigned int drive, const char* path);
 VICE_SHIM_API int vice_machine_detach_disk(void* machine, unsigned int unit, unsigned int drive);
 VICE_SHIM_API uint8_t vice_machine_peek_ram(void* machine, uint16_t address);
+// Side-effect-free full-space peek (RAM/ROM/I/O). Used by Vic20 lockstep for
+// VIA ($9110/$9120) and VIC-I ($9000) samples. Prefer over peek_ram for I/O.
+VICE_SHIM_API uint8_t vice_machine_peek_bus(void* machine, uint16_t address);
 VICE_SHIM_API uint8_t vice_machine_read(void* machine, uint16_t address);
 VICE_SHIM_API void vice_machine_write(void* machine, uint16_t address, uint8_t value);
 VICE_SHIM_API int vice_machine_get_model(void* machine);

@@ -735,6 +735,10 @@ public static unsafe partial class ViceNative
 
         public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
 
+        /// <inheritdoc />
+        /// <remarks>C64 path: physical RAM peek (I/O uses dedicated CIA/VIC APIs).</remarks>
+        public byte PeekBus(ushort address) => PeekRamNative(_instance, address);
+
         public MachineState GetState()
         {
             return new MachineState

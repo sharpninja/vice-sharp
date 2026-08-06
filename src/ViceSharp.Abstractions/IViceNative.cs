@@ -41,6 +41,13 @@ public interface IViceNative : IDisposable
     byte PeekRam(ushort address);
 
     /// <summary>
+    /// Side-effect-free peek of the full native address space (RAM/ROM/I/O).
+    /// Used for Vic20 lockstep samples of VIA ($9110/$9120) and VIC-I ($9000).
+    /// C64 implementations may fall back to <see cref="PeekRam"/>.
+    /// </summary>
+    byte PeekBus(ushort address);
+
+    /// <summary>
     /// Load a VICE snapshot (.vsf) into the native machine, resuming it from the
     /// staged state. The cycle counter is re-baselined so <see cref="GetState"/>
     /// reports cycles elapsed since the load point. Returns 0 on success.

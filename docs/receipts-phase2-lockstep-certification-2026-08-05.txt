@@ -1,0 +1,39 @@
+# Phase 2 VIC-20 lockstep certification
+
+Certified: 2026-08-05T16:29:17.9569595-05:00
+Oracle: F:\GitHub\vice-sharp\native\vice_xvic.dll (len=10911412, mtimeUtc=2026-08-05T19:54:11.3168663Z)
+ROM root: F:\GitHub\vice-sharp\native\vice\vice\data
+Branch context: feat/iteration2-vic20
+
+## Commands and results (live this session)
+
+1) Lockstep + scaffold (real xvic create/step/compare path)
+   Command:
+     dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "FullyQualifiedName~Vic20NativeLockstep|FullyQualifiedName~Vic20LockstepScaffold"
+   Result: exit 0; Total 24; Passed 24; Failed 0; Skipped 0
+   Log: C:\Users\kingd\AppData\Local\Temp\grok-goal-607a2dad3956\implementer\cert-lockstep.log
+   Coverage certified:
+   - Native create for vic20 / vic20ntsc / xvic
+   - CPU A/X/Y/S/P/PC lockstep through 5000 cycles (PAL + NTSC theories)
+   - Dual VIA control peeks $9110/$9120 (DDRA/DDRB/ACR/PCR/IER) at 64/256/1024
+   - VIC-I static peeks + VICE raster encoding $9003/$9004 through 5000
+   - PeekBus / vice_machine_peek_bus production path
+
+2) Full Vic20 filter
+   Command:
+     dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --no-build --filter "FullyQualifiedName~Vic20"
+   Result: exit 0; Total 87; Passed 87; Failed 0; Skipped 0
+   Log: C:\Users\kingd\AppData\Local\Temp\grok-goal-607a2dad3956\implementer\cert-vic20-filter.log
+
+## Certification statement
+
+Phase 2 native lockstep gate is CERTIFIED PASS against VICE xvic for the bounded windows above.
+Managed Vic20 and native vice_xvic agree on CPU, dual-VIA control samples, and basic VIC-I samples on the shipped create/step/PeekBus path.
+
+## Explicit non-claims (exact-VICE residual)
+
+- Not certified: multi-frame / full-boot bit-exact lockstep past the first PC-lag window (~cycle 5005 mid-instruction lag can widen later).
+- Not certified: full kernal video-init window (~hundreds of thousands of cycles) register-for-register.
+- Not certified: cart/disk/true-drive Vic20 lockstep.
+
+Those residuals are exact-VICE debt, not waived by this certification.

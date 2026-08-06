@@ -19,6 +19,14 @@ Unit tests covering ExecutedCycles increments per executed (non-stolen) cycle, p
 
 
 
+## TEST-CTX
+
+### TEST-CTX-001
+
+Full transition table + menu neutralization + neutral push + UI-nav mapping. Acceptance: every (state,input) edge deterministic; A does not fire in menu; one-shot neutral push emitted.
+
+
+
 ## TEST-DEPS
 
 ### TEST-DEPS-202607-001
@@ -49,6 +57,46 @@ After SetMotor(true) and 300,000 Tick() calls, MotorRotationCycles>0. Before 300
 
 
 
+## TEST-DRV-TYPE
+
+### TEST-DRV-TYPE-001
+
+DriveTypeShimTests (Collection NativeVice): vice_drive_set_type sets Drive8Type and vice_drive_get_type reads it back; out-of-range units rejected; after set+reset the native drive PC lands in $8000-$FFFF for 32KB-ROM models (proves memiec re-init); vice_drivecpu_get_clk is monotonic under stepping; vice_drivecpu_execute_all callable; Drive8Type re-baselines to 1541 on the next machine create (no cross-test residue).
+
+
+
+## TEST-DRV1540-LOCKSTEP
+
+### TEST-DRV1540-LOCKSTEP-001
+
+Boot witness: drive {PC,A,X,Y,P,SP} equals native x64sc (Drive8Type=1540, TDE=1) at equal drive clocks sampled every 19,656 host cycles over 2M host cycles, plus host CPU state. Media gate: KERNAL-CLOSE anchored LOAD convergence from frostpoint.d64 over 30 emulated seconds.
+
+
+
+## TEST-DRV1541II-LOCKSTEP
+
+### TEST-DRV1541II-LOCKSTEP-001
+
+Boot witness + anchored D64 LOAD gate vs native x64sc with Drive8Type=1542, same procedure as TEST-DRV1540-LOCKSTEP-001.
+
+
+
+## TEST-DRV1571-LOCKSTEP
+
+### TEST-DRV1571-LOCKSTEP-001
+
+Boot witness (no disk; WD1770 idle-state parity implied) + anchored LOAD gates from BOTH frostpoint.d64 and a committed canonical frostpoint.d71 (349,696 bytes, size-pinned) vs native x64sc with Drive8Type=1571.
+
+
+
+## TEST-DRV1581-LOCKSTEP
+
+### TEST-DRV1581-LOCKSTEP-001
+
+Boot witness + anchored LOAD gate from a committed canonical frostpoint.d81 (819,200 bytes, size-pinned) vs native x64sc with Drive8Type=1581; the LOAD exercises the WD1770 type-2 read path end-to-end.
+
+
+
 ## TEST-DRVLED
 
 ### TEST-DRVLED-001
@@ -70,6 +118,19 @@ Attach creates+clocks+bus-connects the drive instance; detach unregisters from c
 ### TEST-DRVTRUE-001
 
 VM: TrueDrive toggles per drive (default off). Runtime: with TrueDrive on, the session uses the coordinator true-drive 1541 path (LOAD works); with it off, the simulated drive is used and existing tests stay green.
+
+
+
+## TEST-GAMEPAD
+
+### TEST-GAMEPAD-001
+
+Off-console converter/merge/SOCD/fire/profile/pump behavior. Acceptance: 0 failed/0 skipped.
+
+
+### TEST-GAMEPAD-002
+
+On-console live-controller smoke. Acceptance: live pad drives JOY2/JOY1 with fire per mapping.
 
 
 
@@ -134,6 +195,32 @@ Snapshot reports idle all-high/no-talkers; single puller -> line low + talker; m
 ### TEST-IECTRACE-001
 
 Edge capture order + cycle stamps; step-boundary marks; ring bound; rewind re-derivation equals original trace.
+
+
+
+## TEST-INPROC
+
+### TEST-INPROC-001
+
+Assembly-reference (no ASP.NET in the portable lib) + moved-type re-run. Acceptance: EmulationPumpService.Assembly == Host.InProcess with no Microsoft.AspNetCore.* referenced.
+
+
+### TEST-INPROC-002
+
+Facade + determinism gate (bit-exact TotalCycles across two runs) + explicit-port + geometry + single-worker. Acceptance: bit-exact repro; BufferLength==FrameBuffer.Length; AppliedWorkerAffinityMask==null.
+
+
+### TEST-INPROC-003
+
+Gate zero-P/Invoke + inline-sleep-seam + no-thread-growth + Pause-unparks. Acceptance: no [DllImport]/[LibraryImport]; no new timer thread; Pause unparks.
+
+
+
+## TEST-INPROC-DEVICE
+
+### TEST-INPROC-DEVICE
+
+On-console boot throughput (>=100 frames/2s, unpinned, two emulation threads). Acceptance: sustained on-device throughput.
 
 
 
@@ -285,6 +372,32 @@ ViceGateSoundRegulatorTests (13) cover EvaluateSound outcomes and boundary, gate
 - [x] Warp selects Warp regulator even when audio buffer is full
 
 
+## TEST-SYSBTN
+
+### TEST-SYSBTN-001
+
+Binding table + edge/LT-hysteresis + swap-flag (off-console). Acceptance: Default matches locked table; Press once; LT one On + one Off.
+
+
+### TEST-SYSBTN-002
+
+Dispatcher command->host mapping (fakes). Acceptance: each command maps to one correct host call; Swap issues no ISettingsService call.
+
+
+### TEST-SYSBTN-003
+
+Source-gen round-trip + reset-to-defaults + remap. Acceptance: profile round-trips byte-identical; ResetToDefaults yields Default.
+
+
+
+## TEST-SYSBTN-DEVICE
+
+### TEST-SYSBTN-DEVICE
+
+On-console button response (Menu/X/LT/A gating). Acceptance: system-button behaviors confirmed on device.
+
+
+
 ## TEST-SYSINDEP
 
 ### TEST-SYSINDEP-001
@@ -306,6 +419,29 @@ With tape inserted, MotorEnabled=true, PlayPressed=true: TryReadNextPulse return
 ### TEST-TAPE-SENSE-001
 
 SenseLine==false when PlayPressed or RecordPressed, true otherwise. TryWritePulse returns true only when MotorEnabled && RecordPressed, incrementing RecordedPulseCount. 7 pass.
+
+
+
+## TEST-TESTGATE
+
+### TEST-TESTGATE-002
+
+XboxTestConventionTests: Category=Xbox uses plain [Fact]/[Theory] + [Trait], never [ViceFact]/Assert.Skip, so 0-skipped is genuine per slice scope. Acceptance: each slice trx within its --filter reports Failed=0 and Skipped=0. (Shaped TEST id created to carry the plan's named XboxTestConventionTests, which the store rejects as a raw testId.)
+
+
+### TEST-TESTGATE-008
+
+AOT proxy + on-console feasibility (= S0). Acceptance: the three S0 go/no-go criteria GREEN.
+
+
+### TEST-TESTGATE-009
+
+DesktopRegressionGuard. Acceptance: Determinism pass-count == baseline; AvaloniaBoundaryTests green; AOT 0 warnings.
+
+
+### TEST-TESTGATE-010
+
+On-console device checklists. Acceptance: device slices marked onConsole; checklists recorded.
 
 
 
@@ -338,6 +474,24 @@ Focused ViewModel and protocol tests shall prove IEC activity appears in both pe
 - [ ] ViewModel tests prove peripherals panel drive entries show IEC active and idle states from host telemetry.
 - [ ] ViewModel tests prove status bar IEC activity uses the same source while preserving status fields.
 - [ ] Focused UI tests run with zero failed and zero skipped tests.
+
+
+## TEST-UI-DEVCARDART
+
+### TEST-UI-DEVCARDART-001
+
+DeviceArtKeyTests: slot-kind defaults (Drive8/9 to Breadbin, Tape to Datasette, Cartridge to Cartridge); model mapping rows (1540/1541 to Breadbin, 1541-II, 1571, 1581, SFD-1001, CMD-HD, CMD-FD/fd2000, unknown/empty to Breadbin); AllKeys superset of every resolvable key; DeviceArtKey PropertyChanged on ApplyAttachment; MarkEmpty retains last model.
+
+
+### TEST-UI-DEVCARDART-002
+
+DeviceArtAssetTests: every SVG source exists with a viewBox; DeviceArt.axaml exists, XML-parses, DrawingImage key set is a superset of the catalog keys, all 6 brushes present; per-SVG sha256 (CRLF-normalized) matches the generated source comments and the comment set equals the SVG file set; PeripheralCardView/App.axaml wiring text-asserts.
+
+
+### TEST-UI-DEVCARDART-003
+
+DeviceArtHeadlessTests (AvaloniaFact): AvaloniaXamlLoader loads DeviceArt.axaml; every catalog key resolves to a DrawingImage with non-null Drawing; DeviceArtKeyConverter returns null without throwing for unknown keys.
+
 
 
 ## TEST-UIFLYOUT
@@ -396,3 +550,189 @@ SnapshotResumeSpikeTests.ExternalX64ScVsf_FullyResumes_CpuMatchesSnapshot loads 
 
 **Acceptance Criteria:**
 - [ ] dotnet test ...TestHarness --filter ExternalX64ScVsf_FullyResumes => passed; rc=0, err=0, MAINCPU regs match.
+
+
+## TEST-XAUDIO
+
+### TEST-XAUDIO-001
+
+Factory-null + SID inert. Acceptance: headless CreateDefault() null; SID null-backend IsAudioTimingSource==false, no samples.
+
+
+### TEST-XAUDIO-002
+
+XAudio2AudioMath queue/ring boundaries. Acceptance: full ring RoomAvailable false + drop-oldest; empty under-run silence; index wraps.
+
+
+### TEST-XAUDIO-003
+
+Volume/mute gain-once. Acceptance: EffectiveGain applied once in AudioSampleConverter.
+
+
+### TEST-XAUDIO-004
+
+Non-blocking submit + Pause unparks worker (off-console). Acceptance: SubmitSamples non-blocking; Pause releases waiter/unparks worker.
+
+
+
+## TEST-XAUDIO-DEVICE
+
+### TEST-XAUDIO-DEVICE
+
+On-console audio smoke. Acceptance: SID audible; mute silences; suspend/resume clean.
+
+
+
+## TEST-XBOXAOT
+
+### TEST-XBOXAOT-001
+
+Off-console AOT/trim link gate 0 IL warnings + reflection-free audit. Acceptance: publish exit 0, 0 IL2xxx/IL3xxx; ViceNative uncalled.
+
+
+
+## TEST-XBOXCI
+
+### TEST-XBOXCI-001
+
+azure-pipelines.*.yml exclude device targets. Acceptance: no PublishXbox/DeployXbox in CI/release YAMLs.
+
+
+
+## TEST-XBOXDEPLOY
+
+### TEST-XBOXDEPLOY-007
+
+On-console install/launch/first-frame + rollback. Acceptance: MSIX deploys clean; first frame; rollback documented/works.
+
+
+
+## TEST-XBOXGPL
+
+### TEST-XBOXGPL-001
+
+License/vkm/no-ROM/source-URL staging. Acceptance: Licenses/ contents + vkm present + no ROM *.bin + compiled SourceUrl.
+
+
+
+## TEST-XBOXPKG
+
+### TEST-XBOXPKG-001
+
+Csproj/slnx shape. Acceptance: core refs present, forbidden refs absent, slnx builds.
+
+
+### TEST-XBOXPKG-003
+
+Manifest XML + capability rule. Acceptance: Windows.Xbox device family, x64, internetClient-iff-download-kept.
+
+
+
+## TEST-XBOXTOPO
+
+### TEST-XBOXTOPO-001
+
+Csproj shape + reference-ban. Acceptance: conditional TFM + core refs present; banned refs absent.
+
+
+### TEST-XBOXTOPO-002
+
+Default-props solution build needs no UWP workload. Acceptance: slnx build exit 0 workload-absent.
+
+
+
+## TEST-XBOXUI
+
+### TEST-XBOXUI-001
+
+NavigationViewModel push/GoBack stack correctness; overlays push no stack entry. Acceptance: Settings->DeviceSetup, GoBack twice -> Home in order.
+
+
+### TEST-XBOXUI-002a
+
+FocusMapBuilder BuildGrid(3,2) edges correct, top-edge Up null, no wrap.
+
+
+### TEST-XBOXUI-002b
+
+On-console focus-visual smoke. Acceptance: high-visibility focus in TV-safe rect.
+
+
+### TEST-XBOXUI-003
+
+InputContext observer: quick menu -> non-Gameplay; closing with empty stack -> Gameplay.
+
+
+### TEST-XBOXUI-004
+
+Simulated navigation/overlay toggles never stop/dispose the pull adapter.
+
+
+### TEST-XBOXUI-005a
+
+Cadence: 10 fires/200ms -> 10 pulls +/-1.
+
+
+### TEST-XBOXUI-005b
+
+VideoSurfacePureSink forbidden-identifier scan (no RunFrame/StepInstruction/Reset/SetJoystickState/SetKeyState).
+
+
+### TEST-XBOXUI-006
+
+RETURN tile emits SetKeyState("Return",true) then false; shift-latch+F1 emits "F2"; every KeyName in known-good list; RESTORE tile calls SetRestoreState.
+
+
+### TEST-XBOXUI-007
+
+Boundary: ViewModels reference only Abstractions+Protocol+Xbox.Input; forbidden-identifier scan (no Core/Chips/Architectures/Host/Avalonia/Grpc/XAML).
+
+
+### TEST-XBOXUI-008
+
+AboutViewModel LicenseIdentifier=="GPL-2.0-or-later", AttributionText contains "VICE", SourceOfferText non-empty + URL.
+
+
+
+## TEST-XKBD
+
+### TEST-XKBD-001
+
+Off-console facade + ViewModel test against a fake/spy keyboard input. Acceptance: SetRestoreState routes to NMI path keycode 0x31 distinct from SetKeyState.
+
+
+
+## TEST-XSET
+
+### TEST-XSET-001
+
+Umbrella off-console suite (XboxDataPathBridgeTests, SettingsOptionCatalogTests, XboxSettingsViewModelTests, XboxDeviceSetupViewModelTests, RomProvisionEvaluatorTests, XboxRomProvisioningViewModelTests, XboxUiStateStoreTests, XboxViewModelBindabilityTests). Acceptance: 0 failed/0 skipped per slice filter.
+
+
+
+## TEST-XSET-DEVICE
+
+### TEST-XSET-DEVICE
+
+On-console first-run provisioning + persistence E2E. Acceptance: ROMs provisioned + boot to READY; setting persists across relaunch; d64 attach with drive-model selector.
+
+
+
+## TEST-XVIDEO
+
+### TEST-XVIDEO-001
+
+Pure byte-exact copy + no-advance spy. Acceptance: 384x272 BGRA copy sized from FrameGeometry.BufferLength; core never advanced.
+
+
+### TEST-XVIDEO-002
+
+GC.GetAllocatedBytes delta==0 steady-state render tick. Acceptance: zero-allocation over steady-state window.
+
+
+
+## TEST-XVIDEO-DEVICE
+
+### TEST-XVIDEO-DEVICE
+
+On-console video smoke. Acceptance: image correct, letterboxed, no tear.

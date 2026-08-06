@@ -64,11 +64,13 @@ public sealed class Vic20KeyboardMatrix : IDevice
 
         if (via1 is not null)
         {
-            // VIA1 Port A: joystick up/down/left/fire (bits 2..5 typical VICE mapping).
+            // VIA1 Port A: IEC CLK/DATA in (bits 0/1) plus joystick up/down/left/fire
+            // (bits 2..5, VICE vic20via1.c). Default base is Vic20IecPort idle $7E
+            // when no prior PortAInput was installed.
             var prev = via1.PortAInput;
             via1.PortAInput = () =>
             {
-                var baseVal = prev?.Invoke() ?? 0xFF;
+                var baseVal = prev?.Invoke() ?? Vic20IecPort.IdlePortAInput;
                 return (byte)(baseVal & ComposeVia1JoystickMask());
             };
         }

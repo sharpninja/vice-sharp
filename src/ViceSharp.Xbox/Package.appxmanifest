@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   PLAN-XBOXUWP S31 (IMPL-XBOXUWP-031): UWP-on-Xbox-console head manifest.
 
@@ -19,49 +19,32 @@
   - Version is a static placeholder here; the Nuke PublishXbox target stamps the
     real MsiVersion/GitVersion at package time.
 -->
-<Package
-  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap">
-
-  <Identity
-    Name="sharpninja.ViceSharp.Xbox"
-    Publisher="CN=ViceSharpDev"
-    Version="1.0.0.0"
-    ProcessorArchitecture="x64" />
-
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap">
+  <Identity Name="sharpninja.ViceSharp.Xbox" Publisher="CN=ViceSharpDev" Version="1.0.0.0" ProcessorArchitecture="x64" />
   <Properties>
     <DisplayName>ViceSharp</DisplayName>
     <PublisherDisplayName>ViceSharpDev</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Xbox" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
     <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
   </Dependencies>
-
   <Resources>
-    <Resource Language="x-generate" />
+    <!--
+      Partner Center rejects the VS placeholder language "x-generate".
+      en-US is the default listing language; add more Resource entries when locales ship.
+    -->
+    <Resource Language="en-US" />
   </Resources>
-
   <Applications>
-    <Application
-      Id="App"
-      Executable="ViceSharp.Xbox.exe"
-      EntryPoint="ViceSharp.Xbox.App">
-      <uap:VisualElements
-        DisplayName="ViceSharp"
-        Description="ViceSharp Commodore 64 emulator for Xbox"
-        BackgroundColor="transparent"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png">
+    <Application Id="App" Executable="ViceSharp.Xbox.exe" EntryPoint="ViceSharp.Xbox.App">
+      <uap:VisualElements DisplayName="ViceSharp" Description="ViceSharp Commodore 64 emulator for Xbox" BackgroundColor="transparent" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="ViceSharp" />
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
-
   <Capabilities>
     <Capability Name="internetClient" />
     <!--

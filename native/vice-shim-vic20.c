@@ -50,7 +50,12 @@
 #include "vic20/vic20model.h"
 #include "vic20/victypes.h"
 #include "vic20/vic.h"
+#include "vic20/vic20via.h"
+#include "vic20/vic-mem.h"
 #include "vice-shim-runtime.h"
+
+/* mem_bank_peek is the public side-effect-free peek used by the monitor. */
+extern uint8_t mem_bank_peek(int bank, uint16_t addr, void *context);
 
 int archdep_init(int *argc, char **argv);
 
@@ -630,6 +635,34 @@ VICE_SHIM_API uint8_t vice_machine_peek_ram(void *machine, uint16_t address)
     EnterCriticalSection(&g_state_lock);
     if (vice_shim_is_active_machine(machine)) {
         value = mem_ram[address];
+    }
+    LeaveCriticalSection(&g_state_lock);
+
+    return value;
+}
+
+/*
+ * Side-effect-free bus peek for lockstep I/O samples (VIA1 $9110, VIA2 $9120,
+ * VIC-I $9000). Uses device peeks so timers/IFR are not cleared the way a CPU
+ * mem_read would. Other addresses use mem_bank_peek (monitor path).
+ */
+VICE_SHIM_API uint8_t vice_machine_peek_bus(void *machine, uint16_t address)
+{
+    uint8_t value = 0xff;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        if (address >= 0x9110 && address <= 0x911f) {
+            value = via1_peek(address);
+        } else if (address >= 0x9120 && address <= 0x912f) {
+            value = via2_peek(address);
+        } else if (address >= 0x9000 && address <= 0x900f) {
+            value = vic_peek(address);
+        } else {
+            value = mem_bank_peek(0, address, NULL);
+        }
     }
     LeaveCriticalSection(&g_state_lock);
 

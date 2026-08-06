@@ -63,6 +63,9 @@ public static unsafe partial class ViceNativeXvic
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_peek_ram")]
     private static partial byte PeekRamNative(IntPtr instance, ushort address);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_peek_bus")]
+    private static partial byte PeekBusNative(IntPtr instance, ushort address);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_disk", StringMarshalling = StringMarshalling.Utf8)]
     private static partial int AttachDiskNative(IntPtr instance, uint unit, uint drive, string path);
 
@@ -317,6 +320,9 @@ public static unsafe partial class ViceNativeXvic
         }
 
         public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
+
+        /// <inheritdoc />
+        public byte PeekBus(ushort address) => PeekBusNative(_instance, address);
 
         public MachineState GetState()
         {

@@ -37,8 +37,8 @@ public sealed class Via6522Timer2Tests
     /// tick after the high byte write loads the counter, and underflow must
     /// latch IFR bit 5.
     /// Acceptance: Latch lo = 0x05, write hi = 0x00 (loads counter to 0x0005
-    /// and starts T2). After 6 ticks (counter walks 5,4,3,2,1,0 then underflows
-    /// on the next zero-state tick) IFR bit 5 is set.
+    /// and starts T2). After N+2 ticks (VICE: 5,4,3,2,1,0,underflow) IFR bit 5
+    /// is set.
     /// </summary>
     [Fact]
     public void T2Phi2_CountdownToUnderflow_SetsIfrBit5()
@@ -48,7 +48,7 @@ public sealed class Via6522Timer2Tests
         via.Write(Base + 0x08, 0x05); // T2 latch lo
         via.Write(Base + 0x09, 0x00); // T2 hi: load counter to 0x0005 + start
 
-        for (int i = 0; i < 6; i++) via.Tick();
+        for (int i = 0; i < 6; i++) via.Tick(); // N+1
 
         (via.Read(Base + 0x0D) & IfrT2).Should().Be(IfrT2);
     }
@@ -70,7 +70,7 @@ public sealed class Via6522Timer2Tests
         via.Write(Base + 0x08, 0x02); // T2 latch lo
         via.Write(Base + 0x09, 0x00); // load + start
 
-        for (int i = 0; i < 3; i++) via.Tick();
+        for (int i = 0; i < 3; i++) via.Tick(); // N+1
 
         irq.IsAsserted.Should().BeTrue();
         var ifrBeforeRead = via.Peek(Base + 0x0D);
@@ -101,7 +101,7 @@ public sealed class Via6522Timer2Tests
         via.Write(Base + 0x08, 0x01); // T2 latch lo
         via.Write(Base + 0x09, 0x00); // load + start
 
-        for (int i = 0; i < 2; i++) via.Tick();
+        for (int i = 0; i < 2; i++) via.Tick(); // N+1
         (via.Read(Base + 0x0D) & IfrT2).Should().Be(IfrT2);
 
         _ = via.Read(Base + 0x08); // clear IFR bit 5
@@ -130,7 +130,7 @@ public sealed class Via6522Timer2Tests
         via.Write(Base + 0x08, 0x01); // T2 latch lo
         via.Write(Base + 0x09, 0x00); // load + start
 
-        for (int i = 0; i < 2; i++) via.Tick();
+        for (int i = 0; i < 2; i++) via.Tick(); // N+1
         (via.Read(Base + 0x0D) & IfrT2).Should().Be(IfrT2);
 
         // Reload + clear: write hi with a new value.

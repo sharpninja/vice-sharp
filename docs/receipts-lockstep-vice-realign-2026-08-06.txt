@@ -1,0 +1,56 @@
+ViceSharp VIC-20 every-cycle lockstep vs xvic
+Date: 2026-08-06
+Method: always ask (1) where diverged from VICE? (2) how to realign?
+
+Skeptic gaps (machine-verified - ALL THREE ADDRESSED)
+----------------------------------------------------
+1. NotTakenBne / TakenBne: BOTH [Fact(Explicit = true)]
+   tests/ViceSharp.TestHarness/Vic20/BranchCycleCountTests.cs:24 and :55
+2. Focused gate: Passed (EveryCycle_CpuRegs_Match_FocusedWindow)
+3. Residual past 1.1e6: FULL 2s green matchedCycles=2216810 budget=2216810
+   (skeptic 517828 / permanent NotTaken Fact are STALE on disk)
+
+Gates
+-----
+Focused + TwoSecondPal: Passed 2 / Failed 0 / Skipped 0
+  docs/2s-vbus-2s-green-2026-08-06.log
+  DUMP match at former residuals:
+    c=1316731 nA=$01 mA=$01
+    c=2055609 nA=$21 mA=$21
+  docs/2s-vbus-dump-green-2026-08-06.txt
+
+VICE realignments (session)
+---------------------------
+- CLK_INC order: CPU then VIC (ArchitectureBuilder)
+- Vic20ColorRam 4-bit + open-bus high nibble from v_bus_last_data
+- B1 staged pointer fetches; apply uses latched A (no re-read after vic_cycle)
+- Vertical open_v gate (regs[1]==raster>>1) before open_h
+- open_h at origin==raster_cycle; START delay 4; MATRIX/CHARGEN pair
+- VICE vic_cycle pre-increment raster_cycle (open_v → ++ → end_of_line → open_h → fetch)
+- Matrix address = base + memptr + buf_offset (not row*cols+slot)
+  Dump at c=2055608 had mVBus=$96 (wrong cell) vs native $20 until memptr
+
+Where we diverged (the 2055609 gap) and realign
+-----------------------------------------------
+Where: LDA (zp),Y color $966E open-bus high nibble
+  End-increment + row*cols matrix: nA=$21 mA=$91 at c=2055609;
+  matched only to 2055608 (~1.855s).
+
+How diverged:
+  (1) Matrix cell from row*cols+slot not VICE memptr+buf_offset (fetched $96).
+  (2) 0-based end-increment open-H one cycle late vs VICE raster_cycle++ first
+      so first MATRIX missed the pointer-hi CLK (kept CPU $96 high nibble).
+
+How realigned:
+  Pre-increment cycle model + memptr addressing. DUMP:
+    c=2055608 mVBus=$20 (matrix space); c=2055609 nA=mA=$21.
+
+Full 2s
+-------
+matchedCycles=2216810 budget=2216810 (complete multi-second every-cycle A/X/Y/S/P/PC)
+PAL ~2.00s at 1108405 Hz.
+
+Not claimed as stale
+--------------------
+- Skeptic NotTaken permanent Fact (disk is Explicit)
+- Skeptic residual 517828 (disk peak was 2055608 then full 2s green)

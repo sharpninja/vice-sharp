@@ -314,8 +314,10 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         deviceRegistry.Add(kernalRom, DeviceRole.KernalRom);
         deviceRegistry.Add(chargenRom, DeviceRole.ChargenRom);
 
-        // Color RAM at $9400-$97FF (1KB; only low nibble used on real hardware).
-        var colorRam = new RamDevice(0x9400, 0x97FF, new byte[0x0400]);
+        // Color RAM at $9400-$97FF: 4-bit cells + open-bus high nibble
+        // (VICE colorram_read/store). Full-byte RAM regressed LDA (zp),Y of
+        // color cells (c=577850 mA=$01 nA=$91 at $966E).
+        var colorRam = new Vic20ColorRam(bus);
         bus.RegisterDevice(colorRam);
 
         // VIA1 @ $9110 -> NMI, VIA2 @ $9120 -> IRQ (VIC-20 board wiring).
@@ -337,10 +339,18 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         };
         bus.RegisterDevice(via1);
         bus.RegisterDevice(via2);
+        // Phi2 order: VIA then CPU then VIC. End-of-cycle T1 peeks match VICE
+        // export after CLK_INC; Via6522 presents pre-Tick counters on CPU Read
+        // so LOAD matches VICE access at maincpu_clk before that advance.
         clock.Register(via1);
         clock.Register(via2);
         deviceRegistry.Add(via1, DeviceRole.Via1);
         deviceRegistry.Add(via2, DeviceRole.Via2);
+
+        // VICE vic20iec.c / vic20via1.c: VIA1 PA0/PA1/PA7 are IEC CLK in / DATA
+        // in / ATN out. Idle open bus reads $7E (not $FF). Without this, every-
+        // cycle lockstep fails on LDA $911F (c=522370 m=$7F n=$7E).
+        Vic20IecPort.AttachIdleVia1PortA(via1);
 
         var keyboard = new Vic20KeyboardMatrix();
         keyboard.Connect(via2, via1);
@@ -363,7 +373,12 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             SourceId = new DeviceId(0x0003),
             BaseAddress = 0x9000,
             Size = 0x0010,
+            // Peek only (no C-bus last-data side effects). Color nibble is
+            // raw low 4 bits from the cell for display.
             MemoryPeek = addr => bus.Peek(addr),
+            // VICE vic_cycle_fetch: refresh v_bus_last_data from matrix/chargen.
+            // Color RAM open-bus high nibble is (v_bus_last_data & 0xf0).
+            VBusFetch = (screen, colorNib) => bus.NoteVicDisplayFetch(screen, colorNib),
             CharacterRomBase = 0x8000,
         };
         var cyclesPerLine = profile?.CyclesPerLine ?? 71;
@@ -371,11 +386,14 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var visibleLines = profile?.VideoStandard == VideoStandard.Ntsc ? 234 : 284;
         vic.ConfigureTiming(cyclesPerLine, rasterLines, visibleLines, columns: 22, rows: 23);
         bus.RegisterDevice(vic);
-        clock.Register(vic);
-        deviceRegistry.Add(vic, DeviceRole.VideoChip);
-
+        // VICE CLK_INC: CPU bus access first, then vic_cycle() (vic20cpu.c).
+        // Register CPU before VIC so Phi2 tick order matches that interleave;
+        // VIC-before-CPU made color RAM LDA (zp),Y see the same-cycle matrix
+        // V-bus high (mA=$21 nA=$01 at c=1316731).
         clock.Register(cpu);
         deviceRegistry.Add(cpu, DeviceRole.Cpu);
+        clock.Register(vic);
+        deviceRegistry.Add(vic, DeviceRole.VideoChip);
 
         if (profile is not null)
             deviceRegistry.Add(new SystemCore(profile.SystemCore), DeviceRole.SystemCore);

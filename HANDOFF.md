@@ -1,18 +1,29 @@
-# ViceSharp Handoff - 2026-08-05
+# ViceSharp Handoff - 2026-08-06
 
 **Active branch:** `feat/iteration2-vic20` (off `main` @ v1.2.1 line). Iteration 2 = overall project VIC-20 (not RomM Phase E).
 **Prior release baseline:** `main` at **v1.2.1** (NuGet + winget published). Iteration 1 C64 complete.
-**Working tree noise (do not commit):** untracked `docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md`, `manifests/`.
+**Working tree noise (do not commit):** untracked `docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md`, `manifests/`, many `docs/*-2026-08-06.log` lockstep artifacts.
 
-## Iteration 2 VIC-20 IN PROGRESS (2026-08-05) - GOAL NOT COMPLETE
+## VIC-20 every-cycle lockstep - PAL + NTSC 10s GREEN (2026-08-06)
+
+- **PAL TenSecondPal:** matchedCycles = 11_084_050 / budget 11_084_050 (~35 s). Log: `docs/10s-lockstep-2026-08-06.log`. Receipt: `docs/receipts-lockstep-10s-2026-08-06.txt`.
+- **NTSC TenSecondNtsc:** matchedCycles = 10_227_270 / budget 10_227_270 (~37 s). Log: `docs/10s-lockstep-ntsc-2026-08-06.log`. Receipt: `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`.
+- **PAL TwoSecondPal** (VICESHARP_LOCKSTEP_2S=1): Passed ~8 s. FocusedWindow: Passed.
+- **Via6522 unit:** 48/0/0 after bus-visible T1/T2 change.
+- **Where diverged (NTSC residual c=521027):** soft-BIT $9124 (VIA2 T1) V flag only (nP=$E5 mP=$A5).
+- **How diverged:** (1) soft-apply re-LOADed T1; VICE BIT(GET_ABS) loads once. (2) VIA Tick before CPU made CPU Read see post-Tick T1; VICE LOAD is at maincpu_clk before CLK_INC (saw $C0 V=1 vs managed $BF V=0).
+- **How realigned:** SoftDeferBitBody latches one GET; soft-apply N/V/Z from latch. Via6522 captures pre-Tick `_t1BusVisible`/`_t2BusVisible` for Read; Peek stays post-Tick (export match). Rejected CPU-before-VIA Phi2 reorder (broke free-run phase).
+- Env: `VICESHARP_LOCKSTEP_10S=1` for 10s gates; `VICESHARP_LOCKSTEP_2S=1` for 2s. Run NTSC and PAL in **isolated processes** (failed NTSC can poison later PAL short runs at c=5513).
+
+## Iteration 2 VIC-20 - native lockstep gate GREEN (2026-08-05)
 
 - **Branch:** `feat/iteration2-vic20` (off main / v1.2.1). Locked: **default drive 8 = 1540**.
-- **Plan:** session `plan.md` status refresh - Tier A polish + Tier B **native xvic lockstep**.
-- **Proven:** READY on Avalonia + UWP (`3583 BYTES FREE`); profile switch; char-mode `Mos6561` with **border strips + $900F decode** (Slice I MVP); open-bus RAM; VIA matrix; 1540 default; managed determinism.
-- **Native xvic oracle (N0) SHIPPED locally:** `native/vice_xvic.dll` via `native/build-vice-shim-xvic.sh` + `vice-shim-vic20.c`; hosted `vic20cpu.c` / `mainviccpu.c` (`VICE_SHIM_HOSTED` CLK_INC + bootstrap). Managed route: `ViceNative.CreateInstance("vic20"|"vic20ntsc"|"xvic")` -> `ViceNativeXvic` / `vice_xvic.dll` (separate from C64 `vice_x64`).
-- **Lockstep receipts (N1):** create/reset/step green; A/X/Y/S/PC lockstep green through **4096** cycles (PAL/NTSC theories); VIC raster advances; `LockstepValidator("vic20")` constructs. **Known lag:** P.C first diverges at **cycle 25** on kernal `CMP $A003,X` (`$FD44 DD 03 A0`) - managed staged Carry lags native EXPORT (documented in `Vic20NativeLockstepTests.NativeXvic_Managed_PCarry_DocumentedLag`). First **PC** diverge near **cycle 5005** (follow-up). Full Vic20 filter was 68 pass earlier; re-run after N1 edits.
-- **Remaining:** fix P.C / extend lockstep past 5k; N2 multi-cycle suite + CI ROMs for VIC20; J expansion UX, K input E2E, L cart/disk, M snapshots; O docs/CI; Tier A polish.
-- **Do not** claim Iteration 2 complete; do not commit untracked `docs/S-Blox/`, reviews, manifests. Build oracle with MSYS2: `MSYSTEM=MINGW64 bash -lc 'cd /f/GitHub/vice-sharp/native && bash ./build-vice-shim-xvic.sh'`.
+- **Native xvic oracle:** `native/vice_xvic.dll` via `native/build-vice-shim-xvic.sh` + `vice-shim-vic20.c`; hosted `vic20cpu.c` / `mainviccpu.c` (`VICE_SHIM_HOSTED`). Managed: `ViceNative.CreateInstance("vic20"|"vic20ntsc"|"xvic")` -> `ViceNativeXvic`.
+- **Open-bus (FR-VIC20-002):** `BasicBus` last-data latch; BASIC/KERNAL ROM reads do **not** refresh last-data (VICE `vic20memrom_*`); chargen does; uninstalled BLK falls through (not sticky 0xFF). Fixes kernal `CMP $A003,X` Carry/N vs xvic.
+- **Lockstep receipts (criterion 3):** full **A/X/Y/S/P/PC** through **5000** cycles; **dual VIA** control peeks ($9110/$9120 DDRA/DDRB/ACR/PCR/IER) at 64/256/1024; **VIC-I** static peeks + VICE raster encoding ($9003/$9004) through 5000. Vic20 filter **87/0/0**. API: `IViceNative.PeekBus` / `vice_machine_peek_bus`. Mos6561 power-on zeros + raster encoding match VICE. Receipts: `docs/receipts-vic20-phase2-verify-2026-08-05.txt`. CI: VIC20 + dos1540 in `EnsureCiRomRoot`.
+- **Residual:** intermittent mid-instruction PC lag after cycle ~5005 (control-flow diverge later; deeper CPU staging for multi-frame bit-exact).
+- **Still open (Tier A polish):** J expansion UX, K input E2E, L cart/disk, M snapshots.
+- **Do not** commit untracked `docs/S-Blox/`, reviews, manifests. Rebuild oracle: `MSYSTEM=MINGW64 bash -lc 'cd /f/GitHub/vice-sharp/native && bash ./build-vice-shim-xvic.sh'`.
 
 ## PLAN-XBOXUWP + PLAN-ROMM resume snapshot (2026-08-05)
 

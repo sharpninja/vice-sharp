@@ -1,0 +1,31 @@
+# 10-second machine-time lockstep run (live)
+
+Target: 10s of VICE machine time vs managed Vic20
+Oracle: vice_xvic.dll
+ROM: native/vice/vice/data
+Clocks (VICE vic20.h / Vic20MachineProfile): PAL 1108405 Hz, NTSC 1022727 Hz
+
+## Budgets
+- PAL (vic20): 10 * 1108405 = 11_084_050 cycles
+- NTSC (vic20ntsc): 10 * 1022727 = 10_227_270 cycles
+
+## Result: FAIL (diverge long before 10s)
+
+### vic20 (PAL)
+- targetCycles=11084050
+- matchedCycles=5004
+- RESULT=DIVERGE firstCpu=5005 machineSec=0.004515s (~4.5 ms)
+- detail: nPC=$FDB1 mPC=$FDB3 (A/X/Y/S/P still match at first PC lag)
+- wallMs=31 (stopped at first diverge)
+
+### vic20ntsc (NTSC)
+- targetCycles=10227270
+- matchedCycles=5004
+- RESULT=DIVERGE firstCpu=5005 machineSec=0.004894s (~4.9 ms)
+- detail: nPC=$FDB1 mPC=$FDB3 (A/X/Y/S/P still match at first PC lag)
+- wallMs=409
+
+## Interpretation
+Full 10s exact-VICE CPU lockstep is NOT achieved.
+Certified window remains 5000 cycles; first PC mid-instruction lag is at cycle 5005 (BNE $FDB1 path).
+Log: lockstep-10s.log in SCRATCH

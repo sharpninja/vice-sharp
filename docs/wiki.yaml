@@ -100,6 +100,13 @@ documents:
   platforms:
   - github
   - azure
+- id: store-next-steps
+  title: Store Next Steps Guide
+  source: docs/xbox/store-next-steps-guide.md
+  target: Store-Next-Steps-Guide.md
+  platforms:
+  - github
+  - azure
 - id: architecture
   title: Architecture
   source: docs/Architecture.md
@@ -271,6 +278,7 @@ navigation:
   - document: xbox-store-publishing
   - document: store-listing-copy
   - document: gpl-store-section6
+  - document: store-next-steps
 - title: Reference
   path: Reference
   children:

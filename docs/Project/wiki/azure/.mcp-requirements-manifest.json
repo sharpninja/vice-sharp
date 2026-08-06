@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-07-11T02:14:26.9087239+00:00",
+  "generatedAtUtc": "2026-08-06T16:09:44.562505+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -13,6 +13,11 @@
     "User-Guide.md",
     "VICE-Migration.md",
     "ROM-Setup.md",
+    "Privacy-Policy.md",
+    "Xbox-Store-Publishing.md",
+    "Store-Listing-Copy.md",
+    "GPL-Store-Section6-Review.md",
+    "Store-Next-Steps-Guide.md",
     "Architecture.md",
     "Public-API.md",
     "PubSub.md",

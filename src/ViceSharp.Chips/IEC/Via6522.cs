@@ -72,6 +72,21 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     private ushort _t2Counter;
     private bool _t1Running;
     private bool _t2Running;
+    /// <summary>
+    /// VICE continuous T1 period is (latch + 2): N..0 then one phi2 before
+    /// reload. Free-run only; one-shot fires on the 0 sample.
+    /// </summary>
+    private bool _t1ZeroStatePending;
+    /// <summary>
+    /// Timer values visible to CPU bus access this phi2. VICE viacore reads T1/T2
+    /// at <c>maincpu_clk</c> before CLK_INC advances rclk; Vic20 Phi2 ticks VIA
+    /// before the CPU so post-Tick <see cref="_t1Counter"/> matches export peeks.
+    /// Capture pre-Tick counters at the start of <see cref="Tick"/> and return
+    /// them from <see cref="Read"/> (NTSC soft-BIT $9124 c=521027: LOAD $C0 V=1
+    /// while end-of-cycle peek is $BF).
+    /// </summary>
+    private ushort _t1BusVisible;
+    private ushort _t2BusVisible;
 
     private byte _sr;
     private byte _acr;
@@ -169,8 +184,11 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
         _t1Counter = 0xFFFF;
         _t1Latch = 0xFFFF;
         _t2Counter = 0xFFFF;
+        _t1BusVisible = 0xFFFF;
+        _t2BusVisible = 0xFFFF;
         _t1Running = false;
         _t2Running = false;
+        _t1ZeroStatePending = false;
         _sr = 0;
         _acr = 0;
         _pcr = 0;
@@ -232,15 +250,16 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0x04: // T1C-L: read low + clear T1 flag
                 _ifr &= unchecked((byte)~IfrTimer1);
                 RefreshIrq();
-                return (byte)(_t1Counter & 0xFF);
-            case 0x05: return (byte)(_t1Counter >> 8);
+                // Pre-Tick bus-visible (VICE LOAD at maincpu_clk before CLK_INC).
+                return (byte)(_t1BusVisible & 0xFF);
+            case 0x05: return (byte)(_t1BusVisible >> 8);
             case 0x06: return (byte)(_t1Latch & 0xFF);
             case 0x07: return (byte)(_t1Latch >> 8);
             case 0x08: // T2C-L: read low + clear T2 flag
                 _ifr &= unchecked((byte)~IfrTimer2);
                 RefreshIrq();
-                return (byte)(_t2Counter & 0xFF);
-            case 0x09: return (byte)(_t2Counter >> 8);
+                return (byte)(_t2BusVisible & 0xFF);
+            case 0x09: return (byte)(_t2BusVisible >> 8);
             case 0x0A:
                 // Reading SR clears the SR IFR flag and rearms an 8-bit shift
                 // transfer for the active mode (common 6522 idiom for chained
@@ -308,7 +327,13 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             case 0x05:
                 _t1Latch = (ushort)((value << 8) | (_t1Latch & 0x00FF));
                 _t1Counter = _t1Latch;
+                // Same-cycle CPU read after T1H write sees the loaded value
+                // (VICE store at current rclk; no CLK_INC between write and a
+                // following read in the same instruction is rare, but bus
+                // visible must track the write).
+                _t1BusVisible = _t1Latch;
                 _t1Running = true;
+                _t1ZeroStatePending = false;
                 // PB7 timer mode init: ACR bit 7 = 1 + bit 6 = 0 (one-shot)
                 // drives PB7 low at T1 start; the bit returns high on the
                 // first underflow. Continuous mode leaves the toggle state
@@ -328,9 +353,11 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
                 break;
             case 0x08:
                 _t2Counter = (ushort)((_t2Counter & 0xFF00) | value);
+                _t2BusVisible = _t2Counter;
                 break;
             case 0x09:
                 _t2Counter = (ushort)((value << 8) | (_t2Counter & 0x00FF));
+                _t2BusVisible = _t2Counter;
                 _t2Running = true;
                 _ifr &= unchecked((byte)~IfrTimer2);
                 RefreshIrq();
@@ -448,6 +475,12 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
     /// <inheritdoc />
     public void Tick()
     {
+        // Snapshot pre-advance counters for CPU Read this phi2 (VICE access at
+        // maincpu_clk before CLK_INC). Peek keeps post-Tick counters so end-of-
+        // cycle dumps match native export after maincpu_clk++.
+        _t1BusVisible = _t1Counter;
+        _t2BusVisible = _t2Counter;
+
         // CA2/CB2 pulse-output mode 101: each non-zero counter represents one
         // remaining phi2 cycle that the corresponding line must stay low. The
         // trigger (ORA read for CA2, ORB write for CB2) sets the counter to 1
@@ -469,25 +502,44 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
 
         if (_t1Running)
         {
-            if (_t1Counter == 0)
+            // VICE viacore.c continuous T1 period is (latch+2): N..0, FFFF, reload.
+            // One-shot fires on the 0 sample (N+1); free-run spends one extra
+            // phi2 in the 0/FFFF state before reload so periods do not drift
+            // early vs xvic (c=577679 nIrqClk lag with N+1 free-run).
+            var t1Continuous = (_acr & AcrT1ContinuousMask) != 0;
+            if (_t1ZeroStatePending)
             {
+                _t1ZeroStatePending = false;
                 _ifr |= IfrTimer1;
                 RefreshIrq();
-                // T1 underflow with PB7 routing enabled: continuous mode
-                // (ACR bit 6 = 1) inverts PB7 on every underflow; one-shot
-                // mode (ACR bit 6 = 0) drives PB7 high on the first (and
-                // only) underflow.
                 if ((_acr & AcrT1Pb7Mask) != 0)
                 {
-                    if ((_acr & AcrT1ContinuousMask) != 0)
+                    if (t1Continuous)
                         _pb7TimerToggle = !_pb7TimerToggle;
                     else
                         _pb7TimerToggle = true;
                 }
-                if ((_acr & AcrT1ContinuousMask) != 0)
+                if (t1Continuous)
                     _t1Counter = _t1Latch;
                 else
                     _t1Running = false;
+            }
+            else if (_t1Counter == 0)
+            {
+                if (t1Continuous)
+                {
+                    // Free-run: hold 0 for one phi2, fire+reload next tick.
+                    _t1ZeroStatePending = true;
+                }
+                else
+                {
+                    // One-shot: fire on the 0 sample (N+1 from load).
+                    _ifr |= IfrTimer1;
+                    RefreshIrq();
+                    if ((_acr & AcrT1Pb7Mask) != 0)
+                        _pb7TimerToggle = true;
+                    _t1Running = false;
+                }
             }
             else
             {
@@ -495,12 +547,7 @@ public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
             }
         }
 
-        // T2 phi2 countdown is gated by ACR bit 5: 0 = phi2 ticks decrement T2,
-        // 1 = pulse-count mode counting negative edges on PB6 (driven by
-        // TriggerPb6). In pulse-count mode this Tick path is bypassed entirely
-        // so phi2 cannot advance the counter. T2 is one-shot: after underflow
-        // latches IFR bit 5 the running flag drops, matching the spec that T2
-        // does not auto-reload.
+        // T2 is one-shot (no free-run): fire on the 0 sample (N+1).
         if (_t2Running && (_acr & AcrT2PulseCountMask) == 0)
         {
             if (_t2Counter == 0)

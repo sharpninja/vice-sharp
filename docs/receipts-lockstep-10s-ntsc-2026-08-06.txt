@@ -1,0 +1,58 @@
+ViceSharp VIC-20 every-cycle lockstep vs xvic - 10s NTSC
+Date: 2026-08-06
+
+Budget
+------
+TenSecondNtscCycles = 10 * 1_022_727 = 10_227_270
+Test: Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc
+Model: vic20ntsc (native CreateInstance + CreateVic20Machine)
+Env: VICESHARP_LOCKSTEP_10S=1
+
+Result: GREEN
+-------------
+Passed 1 / Failed 0 / Skipped 0
+Duration: 37 s
+Log: docs/10s-lockstep-ntsc-2026-08-06.log
+Dump through former residual: docs/ntsc-bit-dump.txt
+  c=521027 nP=$E5 mP=$E5 m$9124=n$9124=$BE mis=False
+
+PAL still green (isolated runs)
+-------------------------------
+FocusedWindow: Passed
+TwoSecondPal: (VICESHARP_LOCKSTEP_2S=1) re-verified separately
+TenSecondPal: Passed ~35 s, budget 11_084_050
+Via6522 unit: Passed 48 / 0 failed
+
+Where diverged (c=521027, fixed)
+--------------------------------
+After RTS; soft-deferred BIT $9124 (VIA2 T1 low); PLA starts.
+  Was: nP=$E5 mP=$A5 (V only). Peeks matched ($BE) at end of cycle.
+
+How diverged from VICE
+----------------------
+1. Soft-deferred BIT re-ran ExecuteOpcode on soft-apply, so a second LOAD of
+   T1 after another phi2 advance (VICE BIT(GET_ABS) loads once in 6510dtvcore.c).
+2. Vic20 Phi2 ticks VIA before CPU so end-of-cycle T1 peeks match VICE export
+   after maincpu_clk++. CPU Read of T1 used the post-Tick counter. VICE LOAD
+   is at maincpu_clk before CLK_INC, so native BIT saw $C0 (V=1) while managed
+   soft-GET saw $BF (V=0) on the data-read host sample.
+
+How realigned
+-------------
+1. SoftDeferBitBody latches the single GET; soft-apply sets N/V/Z from the
+   latch and advances PC (no second bus read).
+2. Via6522: at Tick start, capture _t1BusVisible/_t2BusVisible = pre-Tick
+   counters; Read returns bus-visible; Peek returns live post-Tick counters.
+   Matches VICE access-at-rclk vs export-after-CLK_INC without reordering Phi2
+   (CPU-before-VIA broke free-run phase: early T1 stuck $FFFF, later n-1).
+
+Rejected
+--------
+- CPU-before-VIA Phi2 reorder: T1 peeks diverged globally (not VICE-aligned).
+- Soft-BIT fuse-after-RTS / early-flag-only experiments: PAL regressions.
+
+Run
+---
+$env:VICESHARP_LOCKSTEP_10S='1'
+dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release `
+  --filter "FullyQualifiedName~Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc"

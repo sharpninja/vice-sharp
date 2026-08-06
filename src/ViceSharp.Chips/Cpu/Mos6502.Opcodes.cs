@@ -307,7 +307,8 @@ partial class Mos6502
             case 0x68: A = Pop(); UpdateNZ(A); break;
 
             // PLP - Pull Processor Status
-            case 0x28: P = (byte)((Pop() & ~0x10) | (P & 0x10)); break;
+            // VICE LOCAL_SET_STATUS keeps P_BREAK from the stack; LOCAL_STATUS ORs U.
+            case 0x28: P = (byte)(Pop() | 0x20); break;
 
             // BIT - Bit Test
             case 0x24:

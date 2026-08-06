@@ -79,6 +79,13 @@ Scope: layer-1+
 - [ ] ICpu exposes a per-instance ExecutedCycles counter and TargetClockHz.
 - [ ] MachineState carries a per-CPU breakdown (id, executedCycles, targetHz) for host and peripheral CPUs.
 
+## TR-CTX-001
+
+**Resolve is pure/deterministic** — Resolve is pure/deterministic. Acceptance: verified by TEST-CTX-001.
+**Covered by:** FR: FR-CTX-001, FR-CTX-002, FR-CTX-003, FR-CTX-004, FR-SYSBTN-002, FR-SYSBTN-003, FR-SYSBTN-007; TEST: TEST-CTX-001
+**Status:** pending
+Scope: layer-1+
+
 ## TR-CYCLE-001
 
 **VIC-II cycle counter frame-periodic** — Managed VIC-II CycleCounter advances by exactly 19,656 per PAL frame. VICE vicii-cycle.c:576-598.
@@ -109,10 +116,62 @@ Scope: layer-1+
 **Status:** closed
 Scope: layer-1+
 
+## TR-DRV-FDD-001
+
+**MFM floppy drive model port** — MfmFloppyDrive.cs ports native fdd.c: init state write_protect=1, disk_change=1, rate=2, tracks=83 (:92-115); CRC-1021 table (:117-135); raw-track build (:435-557: 6250-byte track, D81 ISO layout gap2=22 gap3=35 sector_size=2 head_invert=1 image_sectors=40 per :192-209); flush-back parser (:265-433); Rotate (:559-576); Read/Write with the 0x100 sync-mark ninth bit (:626-680); SeekPulse clamped 0..83 with current_half_track=(track+1)*2 (:690-727). Buffers allocated once at image attach; Read/Write/Rotate zero-allocation. IMfmDiskImage span-based sector access implemented by D81Image.
+**Status:** pending
+Scope: layer-1+
+
 ## TR-DRVLIFE-001
 
 **Drive attach/detach lifecycle** — Enabling a drive creates/starts the drive instance, registers it on the clock and connects it to the always-on IEC bus; disabling stops it, unregisters from the clock and disconnects from the bus.
 **Covered by:** FR: FR-DRVLED-001, FR-DRVTRUE-001, FR-IECLOAD-001; TEST: TEST-DRVLED-001, TEST-DRVTRUE-001, TEST-DRVLIFE-001, TEST-IECELEC-001, TEST-IECLOAD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-DRV-PACE-001
+
+**Drive pacing via native 16.16 accumulator** — SystemCoordinator.SynchronizePeripheralSystemsToHost replaces the linear hostCycles*driveHz/hostRate target with native drivecpu.c:381-394 semantics: per peripheral (lastHostCycles, ulong cycleAccum); cycleAccum += syncFactor*delta; target += cycleAccum>>16; cycleAccum &= 0xFFFF; syncFactor = multiplier * floor(65536*driveHz/hostHz) per drivesync.c:41-57. The 1571 exposes a runtime clock multiplier (IDriveClockMultiplier, VIA1 PA bit 5) applied at the next sync; the 1581 runs at its fixed 2 MHz descriptor frequency. Reset re-anchors the accumulator to 0. Witness: managed pacer target equals native vice_drivecpu_get_clk at every 19,656-cycle sample.
+**Status:** pending
+Scope: layer-1+
+
+## TR-DRV-WD1770-001
+
+**WD1770 FDC statement-for-statement port** — New chip directory src/ViceSharp.Chips/Fdc/. Wd1770.cs ports native wd1770.c exactly: commands/status (:68-140), state (:142-167), lazy catch-up Execute() microcode (:204-817) that runs only at register access (no per-cycle tick), store/read/peek (:821-922), reset (:931-941), SetSide/SetMotor/DiskChange (:983-996), register decode & 3. Constants: clock_frequency=2 always, is1772=0, dden=0 (no runtime setter in native). Timing: PREPARE=48, BYTE_RATE=64 drive-cycles/byte, SETTLING=60000, STEP_RATE table per :54-63. The IRQ output stays internal state (native never wires it to the drive CPU). POCO state mirroring the native snapshot list; IStatefulDevice; zero-allocation hot ops.
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-001
+
+**Portable input lib, zero Windows.*** — Portable net10.0 lib, zero Windows.* reference, IsAotCompatible/TreatWarningsAsErrors clean. Acceptance: verified by TEST-GAMEPAD-001 / harness build.
+**Covered by:** FR: FR-GAMEPAD-009; TEST: TEST-CTX-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-002
+
+**XboxJoystickMapper pure, hysteresis threaded** — XboxJoystickMapper pure, no static mutable state/IO/clock, hysteresis threaded. Acceptance: verified by TEST-GAMEPAD-001.
+**Covered by:** FR: FR-GAMEPAD-001, FR-GAMEPAD-002, FR-GAMEPAD-003, FR-GAMEPAD-004, FR-GAMEPAD-005, FR-GAMEPAD-006; TEST: TEST-GAMEPAD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-003
+
+**Explicit Joystick1/Joystick2 only** — Explicit InputPort.Joystick1/Joystick2 only, never PrimaryJoystick. Acceptance: verified by TEST-GAMEPAD-001.
+**Covered by:** FR: FR-GAMEPAD-007; TEST: TEST-GAMEPAD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-004
+
+**Device add/remove drained inside Tick** — Device add/remove drained on the emulation thread inside Tick. Acceptance: verified by TEST-GAMEPAD-001.
+**Covered by:** FR: FR-GAMEPAD-008; TEST: TEST-GAMEPAD-001, TEST-GAMEPAD-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-GAMEPAD-005
+
+**Delta emission only on change** — Delta emission only on change. Acceptance: verified by TEST-GAMEPAD-001.
 **Status:** pending
 Scope: layer-1+
 
@@ -170,6 +229,38 @@ Scope: layer-1+
 
 **IEC trace recorder (edge + step marks)** — IecBusTraceRecorder subscribes to bus.LineChanged, cycle-stamps each edge from SystemClock plus a sample per step boundary, into a bounded ring; re-derives deterministically after rewind; inactive unless the monitor is open.
 **Covered by:** FR: FR-IECMON-001; TEST: TEST-IECDECODE-001, TEST-IECMON-001, TEST-IECTRACE-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-001
+
+**Portable lib, no ASP.NET FrameworkReference** — Portable net10.0 lib, IsAotCompatible, no ASP.NET FrameworkReference. Acceptance: verified by TEST-INPROC-001.
+**Covered by:** FR: FR-INPROC-001; TEST: TEST-INPROC-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-002
+
+**XboxManagedFrameGate zero P/Invoke, idempotent** — XboxManagedFrameGate zero P/Invoke, no aux timer thread, idempotent Start/Stop. Acceptance: verified by TEST-INPROC-003.
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-003
+
+**Pacing does not affect emulated cycle results** — Pacing does not affect emulated cycle results; deterministic advance bit-exact. Acceptance: verified by TEST-INPROC-002.
+**Covered by:** FR: FR-INPROC-002, FR-INPROC-003; TEST: TEST-INPROC-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-004
+
+**Single unpinned pump worker** — Single unpinned pump worker, VICESHARP_EMU_CPU unset -> AppliedWorkerAffinityMask==null. Acceptance: verified by TEST-INPROC-002.
+**Status:** pending
+Scope: layer-1+
+
+## TR-INPROC-005
+
+**One managed pacing gate; audio decoupled ring** — One managed pacing gate; audio decoupled via ring buffer, SubmitSamples non-blocking, Pause() unparks the worker (supersedes TR-XPACE; single gate). Acceptance: verified by TEST-INPROC-003, TEST-XAUDIO-004.
 **Status:** pending
 Scope: layer-1+
 
@@ -271,6 +362,30 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-ROMM-BOUNDARY-001
+
+**Adapter isolates HTTP from the VM library** — PLAN-ROMM-001. All HTTP/RomM.Client access lives in ViceSharp.RomM; ViceSharp.Library.ViewModels has no System.Net.Http reference and references only ViceSharp.Protocol. Verified by LibraryViewModelsBoundaryTests.NoHttp (covers AC-PKG-03).
+**Status:** pending
+Scope: layer-1+
+
+## TR-ROMM-JSON-001
+
+**Source-gen JSON for all new adapter DTOs** — PLAN-ROMM-001. 100% of new adapter DTOs (Collections/Search/cover/char_index/pairing) serialize and deserialize reflection-free via RomMJsonContext (satisfies IsAotCompatible/EnableTrimAnalyzer/TreatWarningsAsErrors). Verified by RomMJsonContextTests.AllTypes_SourceGen.
+**Status:** pending
+Scope: layer-1+
+
+## TR-ROMM-NUGET-001
+
+**nuget.org-only package resolution** — PLAN-ROMM-001. RomM.Client 1.0.0 and RomM.Client.Csdb 1.0.0 resolve from nuget.org only; NuGet.config stays clear + nuget.org; packages pinned in Directory.Packages.props (CPM). Verified by NuGetConfigTests + DirectoryPackagesTests.RommPinned.
+**Status:** pending
+Scope: layer-1+
+
+## TR-ROMM-THREAD-001
+
+**Captured-SynchronizationContext PropertyChanged dispatch** — PLAN-ROMM-001. LibraryObservableObject posts PropertyChanged off-context to the captured UI SynchronizationContext and raises inline when already on-context, preventing RPC_E_WRONG_THREAD in UWP XAML binding. Verified by LibraryObservableObjectTests.Dispatch (covers AC-BROWSE-08).
+**Status:** pending
+Scope: layer-1+
+
 ## TR-SID-AMPLIFY-001
 
 **SID output amplify/clip + external-filter enable (float host seam)** — PLAN-VICEPARITY-001 S12 aligns the managed SID audio-output stage with reSID. GenerateSample now applies reSID amplify(input, scaleFactor) = clip((scaleFactor*input)/2) (sid.cc:54-57) on the pre-amplify external-filter output SID::output() (=extfilt.output(), sid.h:190-194), then scales by 1/2^15 for the float [-1,1] host contract - lossless (every short is exact in float, /2^15 is exact) and C# int division truncates toward zero exactly like C++. The 6581 amplify scaleFactor is 3 and the 8580 is 5 (set_chip_model, sid.cc:86,121), so the 6581 mixes 1.5x louder, matching VICE. ClipPcm16 saturates to signed 16-bit [-32768,32767]. The external filter gained an enable flag (default true, mirroring VICE resid.cc:200 enable_external_filter(true)); the disabled branch passes through (Vlp=Vi<<11, Vhp=0, extfilt.h:100-105) and exists only to lock FR-SID-OUTPUT AC-03 (VICE always enables). CaptureAudioTap is unchanged (the amplify is on the float host path, not the capture tee). Verified: OUTPUT-01 composite lockstep vs the c64 oracle (SID::output() bit-exact + amplified-float identity); SidDigiPlaybackTests (range/relative assertions) survive the 1.5x change; LockstepValidation + audio suites + Category=Determinism green.
@@ -333,6 +448,34 @@ Scope: layer-1+
 - [x] EvaluateSound returns BackPressure at or over high-water, Advance below, NotTimingSource when inactive
 - [x] Gate Tick selects Sound/Vsync/Warp and exposes it via LastRegulator
 
+## TR-SYSBTN-001
+
+**Portable lib, no WinRT/ASP.NET, zero reflection** — Portable lib (no WinRT/ASP.NET, IsAotCompatible, zero reflection). Acceptance: verified by TEST-SYSBTN-001.
+**Covered by:** FR: FR-SYSBTN-001; TEST: TEST-SYSBTN-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-SYSBTN-002
+
+**Edge-triggered activation (Press/Hold/Toggle)** — Edge-triggered activation (Press once/Hold paired/Toggle). Acceptance: verified by TEST-SYSBTN-001.
+**Covered by:** FR: FR-SYSBTN-005; TEST: TEST-SYSBTN-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-SYSBTN-003
+
+**Source-gen JsonSerializerContext persistence** — Source-gen JsonSerializerContext persistence, no reflection. Acceptance: verified by TEST-SYSBTN-003.
+**Covered by:** FR: FR-SYSBTN-008; TEST: TEST-SYSBTN-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-SYSBTN-004
+
+**State-mutating dispatch marshaled to session lock** — State-mutating dispatch marshaled onto the session lock, not the input thread. Acceptance: verified by TEST-SYSBTN-002.
+**Covered by:** FR: FR-SYSBTN-004, FR-SYSBTN-006; TEST: TEST-SYSBTN-002
+**Status:** pending
+Scope: layer-1+
+
 ## TR-SYS-SCHED-001
 
 **Single-worker interleave scheduling with IEC bus-event sync** — One emulation worker interleaves systems with per-system deficit pacing and resynchronizes at InterSystemBus.LineChanged; lazy sync-on-IEC-access retained as the fine-grained backstop.
@@ -355,6 +498,27 @@ Scope: layer-1+
 **Datasette motor 32,000-cycle ramp before pulse delivery** — Datasette.Tick() enforces 32,000-cycle motor ramp (MOTOR_DELAY=32000, datasette/datasette.c:62) before TryReadNextPulse delivers pulses. Ramp only activates when Tick() is used as timing. Motor off resets ramp.
 **Covered by:** FR: BACKFILL-MEDIA-001, RUNTIME-TAPE-002; TEST: TEST-DRV-MOTOR-001, TEST-TAPE-RAMP-001, TEST-TAPE-SENSE-001
 **Status:** closed
+Scope: layer-1+
+
+## TR-TESTGATE-001
+
+**Category=Xbox tests are non-skipping** — Xbox off-console tests use plain [Fact]/[Theory] + [Trait("Category","Xbox")], never [ViceFact]/Assert.Skip, so Category=Xbox is genuinely non-skipping. Acceptance: verified by XboxTestConventionTests.
+**Covered by:** FR: FR-TESTGATE-002; TEST: TEST-TESTGATE-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-TESTGATE-003
+
+**Documented gate command set** — The gate command set is dotnet build slnx + scoped dotnet test + dotnet publish AOT + a documented on-console checklist. Acceptance: verified by TEST-TESTGATE-009.
+**Covered by:** FR: FR-TESTGATE-001, FR-TESTGATE-003; TEST: TEST-TESTGATE-008, TEST-TESTGATE-009
+**Status:** pending
+Scope: layer-1+
+
+## TR-TESTGATE-004
+
+**Head validated by raw-file-read** — Head validated by raw-file-read (harness references the portable libs, not the head). Acceptance: verified by slice audit / TEST-TESTGATE-010.
+**Covered by:** FR: FR-TESTGATE-004; TEST: TEST-TESTGATE-010
+**Status:** pending
 Scope: layer-1+
 
 ## TR-TICKHIST-CAPTURE-001
@@ -407,6 +571,12 @@ Scope: layer-1+
 ## TR-UIAXAML-VIEWS-001
 
 **All Avalonia views authored in AXAML + MVVM** — Every Avalonia view in ViceSharp.Avalonia is authored declaratively in AXAML with MVVM bindings (no imperative control-tree construction in code-behind), to ease maintenance. The shell window, the sidebar, each per-peripheral control, and the settings panel are AXAML UserControls/Windows bound to view models; code-behind is limited to InitializeComponent and thin glue.
+**Status:** pending
+Scope: layer-1+
+
+## TR-UI-DEVART-001
+
+**Device art SVG-to-XAML pipeline and resource-key contract** — Device art is authored as constrained SVGs in assets-src/device-art/ (viewBox required; svg/g/path/rect/circle/ellipse only; no transforms/gradients/filters/text; fills from 6 placeholder hexes) and shipped exclusively as one generated merged ResourceDictionary src/ViceSharp.Avalonia/Assets/DeviceArt/DeviceArt.axaml of DrawingImage resources under the DeviceArt.* key contract, produced by tools/generate-device-art.py (Python stdlib only, deterministic output, per-source sha256 sync comments over CRLF-normalized bytes). No runtime SVG dependency; normal builds and CI never invoke Python; generated output must stay hash-synced to its sources (test-enforced). Placeholder colors map to shared DeviceArt*Brush resources tuned to the dark palette.
 **Status:** pending
 Scope: layer-1+
 
@@ -472,4 +642,175 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] A v1.2 MAINCPU module resumes (ane/lxa/jammed skipped by version) and a current v1.4 module is unaffected; verified by full external-.vsf load and the unchanged round-trip test.
 - [ ] The fix is reproduced by build-vice-shim.sh applying vice-shim-runtime.patch (reverse-apply check passes against the working tree).
+
+## TR-XAUDIO-001
+
+**XAudio2 backend Native-AOT + AppContainer safe** — XAudio2 backend Native-AOT + AppContainer safe (no winmm/kernel32/reflection, DisableRuntimeMarshalling-compatible blittable interop). Acceptance: verified by TEST-XAUDIO-001/002.
+**Covered by:** FR: FR-XAUDIO-001, FR-XAV-001; TEST: TEST-XAUDIO-DEVICE, TEST-XAUDIO-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XAUDIO-002
+
+**Audio decoupled via lock-free ring buffer** — Audio decoupled via lock-free ring buffer; SubmitSamples non-blocking; no audio-as-clock back-pressure; Pause unblocks. Acceptance: verified by TEST-XAUDIO-004.
+**Covered by:** FR: FR-XAUDIO-003; TEST: TEST-XAUDIO-004, TEST-XAUDIO-DEVICE
+**Status:** pending
+Scope: layer-1+
+
+## TR-XAUDIO-003
+
+**MasterAudioControl + AudioSampleConverter in Abstractions** — MasterAudioControl + AudioSampleConverter relocated to Abstractions, one master gain / one float->PCM16 shared by both backends, no behavior change. Acceptance: verified by TEST-XAUDIO-003, PortableAudioTypesLocationTests.
+**Covered by:** FR: FR-XAUDIO-002; TEST: TEST-XAUDIO-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXAOT-001
+
+**Core+Host.InProcess graph links clean under AOT** — Core+Host.InProcess graph links clean under Native AOT, 0 IL2xxx/IL3xxx. Acceptance: verified by TEST-XBOXAOT-001.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXAOT-002
+
+**MSIX manifest declares Windows.Xbox** — ViceSharpXboxUwp=true emits an MSIX whose manifest declares Windows.Xbox. Acceptance: verified by XboxManifestTests / device.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXAOT-003
+
+**No shipped Xbox path invokes ViceNative/WinMm P/Invoke** — No shipped Xbox path invokes ViceNative/WinMm/winmm-kernel32 P/Invoke. Acceptance: verified by TEST-XBOXAOT-001.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXCI-005
+
+**Nuke Xbox targets absent from CI/release YAMLs** — Nuke PublishXbox/DeployXbox/ValidateXbox exist and are absent from both CI/release YAMLs; ValidateXbox runs off-console. Acceptance: verified by TEST-XBOXCI-001.
+**Covered by:** FR: FR-XBOXGPL-006; TEST: TEST-XBOXGPL-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXPKG-002
+
+**Conditional-TFM fallback + head-only UWP guarded** — ViceSharpXboxUwp conditional-TFM fallback + head-only UWP/XAML/manifest/MSIX guarded so a workload-less agent builds slnx. Acceptance: verified by TEST-XBOXPKG-001.
+**Covered by:** FR: FR-XBOXPKG-001, FR-XBOXPKG-003; TEST: TEST-XBOXPKG-001, TEST-XBOXPKG-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXTOPO-001
+
+**TFM-conditional fallback (default net10.0)** — TFM-conditional fallback (ViceSharpXboxUwp default false=net10.0) so slnx builds with no UWP workload. Acceptance: verified by TEST-XBOXTOPO-002.
+**Covered by:** FR: FR-XBOXTOPO-001; TEST: TEST-XBOXTOPO-001, TEST-XBOXTOPO-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXTOPO-002
+
+**Head references only core + Host.InProcess** — Head references only Abstractions/Core/Chips/Architectures + Host.InProcess (R2 amendment); bans Host/Avalonia/Protocol-Grpc/Monitor and Grpc.*/AspNetCore.*/Avalonia.*. Acceptance: verified by TEST-XBOXTOPO-001.
+**Covered by:** FR: FR-XBOXTOPO-001; TEST: TEST-XBOXTOPO-001, TEST-XBOXTOPO-002
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXTOPO-003
+
+**Desktop-intact regression guard** — Regression / desktop-intact guard: existing desktop + Host.Xbox scaffold + tests stay green. Acceptance: verified by TEST-TESTGATE-009.
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-001
+
+**Explicit navigation stack independent of Frame journal** — Explicit navigation stack independent of the Frame journal; overlays tracked separately. Acceptance: verified by TEST-XBOXUI-001.
+**Covered by:** FR: FR-XBOXUI-001; TEST: TEST-XBOXUI-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-002
+
+**RequiresPointer=Never + XYFocus + safe-area margin** — RequiresPointer=Never shared style + explicit XYFocus from FocusMap + 90% safe-area root margin. Acceptance: verified by TEST-XBOXUI-002a/002b.
+**Covered by:** FR: FR-XBOXUI-002; TEST: TEST-XBOXUI-002a, TEST-XBOXUI-002b
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-003
+
+**InputContext observer over single authority** — InputContext observer over the single XboxInputContext authority. Acceptance: verified by TEST-XBOXUI-003.
+**Covered by:** FR: FR-XBOXUI-003; TEST: TEST-XBOXUI-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-004
+
+**VideoSurfaceHost + pull timer constructed once** — VideoSurfaceHost + pull timer constructed once at shell level, never disposed by navigation. Acceptance: verified by TEST-XBOXUI-004.
+**Covered by:** FR: FR-XBOXUI-004; TEST: TEST-XBOXUI-004
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-005
+
+**SwapChainPanel + Win2D pull into pinned buffer** — SwapChainPanel + Win2D pull into a pinned buffer, nearest-neighbor into the TV-safe rect. Acceptance: verified by TEST-XBOXUI-005a/005b.
+**Covered by:** FR: FR-XBOXUI-005; TEST: TEST-XBOXUI-005a, TEST-XBOXUI-005b
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-006
+
+**VirtualKeyboardLayout names from C64KeyboardMap** — VirtualKeyboardLayout names from the C64KeyboardMap alias set. Acceptance: verified by TEST-XBOXUI-006.
+**Covered by:** FR: FR-XBOXUI-006; TEST: TEST-XBOXUI-006
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-007
+
+**TR-MVVM-001 applied (Abstractions + Protocol)** — = TR-MVVM-001 applied (ViewModels reference Abstractions + Protocol). Acceptance: verified by TEST-XBOXUI-007.
+**Covered by:** FR: FR-XBOXUI-007; TEST: TEST-XBOXUI-007
+**Status:** pending
+Scope: layer-1+
+
+## TR-XBOXUI-008
+
+**Fixed disclosure strings from one constants file** — Fixed disclosure strings from one constants file. Acceptance: verified by TEST-XBOXUI-008.
+**Covered by:** FR: FR-XBOXUI-008; TEST: TEST-XBOXUI-008
+**Status:** pending
+Scope: layer-1+
+
+## TR-XKBD-001
+
+**RESTORE trigger is a distinct seam path** — The RESTORE trigger is a distinct seam path; determinism preserved (pushed through the same input seam), no change to per-cycle advance. Acceptance: verified by TEST-XKBD-001.
+**Covered by:** FR: FR-XKBD-001; TEST: TEST-XKBD-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XMVVM-001
+
+**Xbox ViewModels reference only Abstractions + Protocol** — Xbox ViewModels reference only Abstractions + Protocol; UWP APIs isolated behind the head. Acceptance: verified by TEST-XBOXUI-007, boundary tests.
+**Covered by:** FR: FR-XDEV-001, FR-XDEV-002, FR-XDEV-003, FR-XSET-002, FR-XSET-003, FR-XSET-004; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XPATH-001
+
+**Startup path bridge to AppContainer writable root** — Startup path bridge makes the unmodified ViceDataPathResolver resolve the AppContainer writable root; keymap writes land in LocalFolder. Acceptance: verified by TEST-XSET-001, XboxDataPathBridgeTests.
+**Covered by:** FR: FR-XROM-001, FR-XROM-002, FR-XROM-003; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XPERSIST-001
+
+**Xbox prefs persist via ViceSettings INI** — Xbox prefs persist via the portable ViceSettings INI [ViceSharpXbox], not Avalonia SessionPersistence. Acceptance: verified by TEST-XSET-001, XboxUiStateStoreTests.
+**Covered by:** FR: FR-XSET-005; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XSET-002
+
+**SettingsOptionCatalog single-sourced in Protocol** — SettingsOptionCatalog single-sourced in Protocol, byte-identical to desktop. Acceptance: verified by TEST-XSET-001, SettingsOptionCatalogTests.
+**Covered by:** FR: FR-XSET-001; TEST: TEST-XSET-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-XVIDEO-001
+
+**Win2D SwapChainPanel pure read-only sink** — Win2D SwapChainPanel pure read-only sink, BGRA passthrough, zero per-frame allocation, FrameGeometry-sized. Acceptance: verified by TEST-XVIDEO-001/002.
+**Covered by:** FR: FR-XVIDEO-001, FR-XVIDEO-002; TEST: TEST-XVIDEO-DEVICE, TEST-XVIDEO-001, TEST-XVIDEO-002
+**Status:** pending
+Scope: layer-1+
 

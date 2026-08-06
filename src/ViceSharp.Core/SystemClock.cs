@@ -28,6 +28,14 @@ public sealed class SystemClock : IClock
     private long _cycle;
     private bool _nmiWasAsserted;
     private bool _nmiPending;
+    /// <summary>
+    /// VICE <c>INTERRUPT_DELAY</c> (interrupt.h): cycles after IRQ line assert
+    /// before dispatch is eligible. <c>interrupt_check_irq_delay</c> uses
+    /// <c>irq_clk + INTERRUPT_DELAY</c> (+1 when last opcode DELAYS_INTERRUPT).
+    /// </summary>
+    private const int InterruptDelayCycles = 2;
+    /// <summary>Cycle when IRQ line last rose; <see cref="long.MaxValue"/> when clear.</summary>
+    private long _irqAssertCycle = long.MaxValue;
 
     public long TotalCycles => _cycle;
     public long FrequencyHz { get; }
@@ -64,6 +72,12 @@ public sealed class SystemClock : IClock
         _cpu = cpu;
         _irqLine = irqLine;
         _nmiLine = nmiLine;
+        // Soft-deferred imm commits on the same host tick as the next FETCH;
+        // VICE DO_INTERRUPT runs before that FETCH. CPU invokes this after the
+        // soft commit and before reading the next opcode (NTSC c=520829).
+        // Phi2 order is VIA then CPU (IRQ line updated); timer CPU reads use
+        // Via6522 pre-Tick bus-visible counters (VICE LOAD before CLK_INC).
+        cpu.TrySampleInterruptBeforeFetch = TryDispatchInterrupts;
     }
 
     public void Step()
@@ -81,21 +95,68 @@ public sealed class SystemClock : IClock
             mandatoryCpuSkip: cpuCycleStealMandatory);
 
         UpdateNmiEdgeLatch();
+        UpdateIrqAssertClock();
 
         if (cpuSkipped)
             return;
 
         // Check for pending interrupts after all devices have ticked.
-        // This allows CIA/VIC to assert interrupt lines during their Tick().
-        if (_cpu != null && _nmiPending && _cpu.IsInstructionBoundary)
+        // Soft-deferred imm may also sample mid-CPU-tick via TrySampleInterruptBeforeFetch.
+        TryDispatchInterrupts();
+    }
+
+    private void TryDispatchInterrupts()
+    {
+        if (_cpu is null)
+            return;
+
+        // VICE interrupt_check_irq_delay: fire when cpu_clk >= irq_clk +
+        // INTERRUPT_DELAY (2), plus one when last opcode DELAYS_INTERRUPT.
+        if (_nmiPending && _cpu.IsInstructionBoundary)
         {
             _nmiPending = false;
             _cpu.Nmi();
+            return;
         }
-        else if (_cpu != null && _irqLine != null && _irqLine.IsAsserted && _cpu.IsInstructionBoundary)
+
+        if (_irqLine != null
+            && _irqLine.IsAsserted
+            && _cpu.IsInstructionBoundary
+            && IsIrqDelayElapsed())
         {
             _cpu.Irq();
         }
+    }
+
+    private void UpdateIrqAssertClock()
+    {
+        if (_irqLine is null)
+            return;
+
+        if (_irqLine.IsAsserted)
+        {
+            if (_irqAssertCycle == long.MaxValue)
+                _irqAssertCycle = _cycle;
+        }
+        else
+        {
+            _irqAssertCycle = long.MaxValue;
+        }
+    }
+
+    private bool IsIrqDelayElapsed()
+    {
+        if (_irqAssertCycle == long.MaxValue || _cpu is null)
+            return false;
+
+        // VICE interrupt_check_irq_delay: irq_clk + INTERRUPT_DELAY (2), plus
+        // one when last opcode DELAYS_INTERRUPT. After color-RAM open-bus
+        // realign (c=596152 managed irq mid-push while nIrqClk still future),
+        // apply the full VICE delay; arming absorbs the first dummy only.
+        var threshold = _irqAssertCycle + InterruptDelayCycles;
+        if (_cpu.LastOpcodeDelaysInterrupt)
+            threshold++;
+        return _cycle >= threshold;
     }
 
     // PERF-CLOCK-001: iterate pre-sorted phase arrays directly instead of the
@@ -212,6 +273,7 @@ public sealed class SystemClock : IClock
             nmi.Clear();
         _nmiWasAsserted = false;
         _nmiPending = false;
+        _irqAssertCycle = long.MaxValue;
     }
 
     // PERF-CLOCK-001: rebuild dispatch arrays whenever the device set changes.

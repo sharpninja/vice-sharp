@@ -10,6 +10,7 @@
   - [User Guide](User-Guide)
   - [Migrating from Classic VICE](VICE-Migration)
   - [ROM Setup and Legal Sources](ROM-Setup)
+  - [Privacy Policy](Privacy-Policy)
 - Architecture
   - [Architecture](Architecture)
   - [Public API Reference](Public-API)
@@ -27,6 +28,11 @@
   - [x64sc Requirement Coverage](X64sc-Requirement-Coverage)
   - [Classic VICE Edge-Case TR Backfill](Classic-VICE-Edge-Case-TR-Backfill)
   - [VICE Source Manifest](VICE-Source-Manifest)
+- Store and Xbox
+  - [Xbox Microsoft Store Publishing](Xbox-Store-Publishing)
+  - [Store Listing Copy](Store-Listing-Copy)
+  - [GPL vs Microsoft Store Review](GPL-Store-Section6-Review)
+  - [Store Next Steps Guide](Store-Next-Steps-Guide)
 - Reference
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)

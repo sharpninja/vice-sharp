@@ -21,6 +21,43 @@ public sealed class BasicBus : IBus
     private byte _lastBusValue = 0xFF;
 
     /// <summary>
+    /// Last data on the VIC-20 V-bus (VD0-VD7). VICE <c>vic20_v_bus_last_data</c>:
+    /// updated after V-bus region CPU access (<c>vic20_mem_v_bus_read/store</c>)
+    /// and color RAM r/w. Color RAM high nibble is open-bus from this latch.
+    /// </summary>
+    private byte _vBusLastData = 0xFF;
+
+    /// <summary>Last data byte on the multi-device C-bus (open-bus).</summary>
+    public byte LastBusValue => _lastBusValue;
+
+    /// <summary>Last data byte on the VIC-20 V-bus (color RAM open-bus high nibble).</summary>
+    public byte VBusLastData => _vBusLastData;
+
+    /// <summary>
+    /// Record a V-bus sample after a CPU access to V-bus space ($0000-$1FFF,
+    /// $8000-$9FFF) or color RAM. Mirrors VICE <c>vic20_mem_v_bus_read</c> /
+    /// colorram_read assignment of <c>vic20_v_bus_last_data</c>.
+    /// </summary>
+    public void NoteVBusData(byte value) => _vBusLastData = value;
+
+    /// <summary>
+    /// VIC display fetch (VICE <c>vic_cycle_fetch</c>): screen byte becomes
+    /// <c>vic20_v_bus_last_data</c>. Color high nibble for a following CPU
+    /// color RAM read is taken from this value's high nibble.
+    /// </summary>
+    public void NoteVicDisplayFetch(byte screenData, byte colorNibble)
+    {
+        // VICE: v_bus_last_data = screen (b); v_bus_last_high = color (c).
+        // colorram_read uses (v_bus_last_data & 0xf0) for the open-bus high
+        // nibble. Keep screen as the data latch.
+        _vBusLastData = screenData;
+    }
+
+    /// <summary>V-bus region for VIC-20 CPU map (low RAM + $8000-$9FFF I/O/ROM).</summary>
+    public static bool IsVic20VBusAddress(ushort address)
+        => address <= 0x1FFF || address is >= 0x8000 and <= 0x9FFF;
+
+    /// <summary>
     /// Connect the machine pub/sub so each write publishes a <see cref="MemoryWriteEvent"/>
     /// (gated on <see cref="IPubSub.SubscriptionCount"/>: zero cost when nobody listens) for
     /// the time-travel debugger's write-delta capture.
@@ -47,6 +84,13 @@ public sealed class BasicBus : IBus
                 // unchanged; chargen and non-ROM devices refresh it.
                 if (DeviceReadUpdatesOpenBusLastData(device, address))
                     _lastBusValue = value;
+                // VICE zero_read / ram_read_v_bus / chargen: after C-bus last
+                // data, refresh V-bus latch (vic20_mem_v_bus_read). Color RAM
+                // updates V-bus inside its own Read (colorram_read).
+                if (device is not Vic20.Vic20ColorRam
+                    && IsVic20VBusAddress(address)
+                    && DeviceReadUpdatesOpenBusLastData(device, address))
+                    _vBusLastData = _lastBusValue;
                 return value;
             }
         }
@@ -77,6 +121,9 @@ public sealed class BasicBus : IBus
                 device.Write(address, value);
                 // Dummy store to ROM still updates last-data in VICE (store_dummy_c_bus).
                 _lastBusValue = value;
+                // VICE zero_store / ram_store_v_bus / colorram_store.
+                if (device is not Vic20.Vic20ColorRam && IsVic20VBusAddress(address))
+                    _vBusLastData = value;
                 return;
             }
         }

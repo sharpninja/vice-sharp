@@ -49,9 +49,41 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     private int _frameHeight;
     private byte[] _frameBuffer;
     private ushort _rasterLine;
+    /// <summary>Screen code latched by the last matrix fetch (for chargen row).</summary>
+    private byte _vBusMatrixCode;
+    /// <summary>VICE <c>vic.fetch_state</c> simplified for V-bus open-bus.</summary>
+    private enum VBusFetchState : byte
+    {
+        Idle = 0,
+        Start = 1,
+        Matrix = 2,
+        Chargen = 3,
+        Done = 4,
+    }
+
+    private VBusFetchState _vBusFetchState = VBusFetchState.Idle;
+    /// <summary>VICE <c>vic.buf_offset</c>: START delay, then column index.</summary>
+    private int _vBusBufOffset;
+    /// <summary>True while vertical display flipflop is open (VICE VIC_AREA_DISPLAY).</summary>
+    private bool _vBusDisplayArea;
+    /// <summary>VICE <c>vic.memptr</c> — video matrix row base (not row*cols).</summary>
+    private int _memptr;
+    private int _memptrInc;
+    private int _ycounter;
+    private int _rowCounter;
+    private int _textLines = 23;
+    private int _textCols = 22;
+    private bool _lineWasBlank = true;
 
     /// <summary>Bus peek for screen/color/chargen data (board provides).</summary>
     public Func<ushort, byte>? MemoryPeek { get; set; }
+
+    /// <summary>
+    /// Optional V-bus activity hook (VIC-20). Invoked when VIC would drive
+    /// VD0-VD7 / color high during a display fetch. Args: (vBusData, colorHighNibble0_15).
+    /// Mirrors VICE <c>vic_cycle_fetch</c> updating <c>vic20_v_bus_last_data</c>.
+    /// </summary>
+    public Action<byte, byte>? VBusFetch { get; set; }
 
     /// <summary>Optional base of character ROM (default $8000).</summary>
     public ushort CharacterRomBase { get; set; } = 0x8000;
@@ -81,6 +113,12 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         _irqLine is null ? Array.Empty<IInterruptLine>() : new[] { _irqLine };
 
     public ushort CurrentRasterLine => _rasterLine;
+    /// <summary>Phi2 index within the current raster line (0 .. CyclesPerLine-1).</summary>
+    public int CycleInLine => _cycleInLine;
+    /// <summary>Diagnostic: V-bus fetch FSM state (0=Idle..4=Done).</summary>
+    public int DebugVBusFetchState => (int)_vBusFetchState;
+    /// <summary>Diagnostic: V-bus column/delay counter.</summary>
+    public int DebugVBusBufOffset => _vBusBufOffset;
     public int CyclesPerLine => _cyclesPerLine;
     public int VisibleLines => _visibleLines;
     public int TotalLines => _totalLines;
@@ -110,8 +148,11 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     public byte Read(ushort address)
     {
         var reg = (byte)((address - BaseAddress) & 0x0F);
+        // VICE vic-mem.c: reg 3 bit7 = raster bit0; reg 4 = raster >> 1.
+        if (reg == 0x03)
+            return (byte)(((_rasterLine & 1) << 7) | (_regs[0x03] & ~0x80));
         if (reg == 0x04)
-            return (byte)(_rasterLine & 0xFF);
+            return (byte)(_rasterLine >> 1);
         return _regs[reg];
     }
 
@@ -125,25 +166,180 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
 
     public void Tick()
     {
+        // VICE vic20cpu.c CLK_INC: CPU bus access first, then vic_cycle().
+        // SystemClock registers CPU before VIC so this Tick runs after the CPU.
+        //
+        // VICE vic_cycle order: open_v → raster_cycle++ → end_of_line →
+        // open_h / memptr → fetch. Matrix addr = base+memptr+buf_offset.
+        // VICE open_v: area IDLE and regs[1]==(raster_line>>1). reg1==0 on
+        // line 0 opens immediately (do not require reg1!=0).
+        var reg1 = _regs[0x01];
+        if (!_vBusDisplayArea && (_rasterLine >> 1) == reg1)
+            _vBusDisplayArea = true;
+
         _cycleInLine++;
-        if (_cycleInLine < _cyclesPerLine)
+        if (_cycleInLine >= _cyclesPerLine)
+        {
+            // VICE end_of_line: capture blank_this_line into line_was_blank,
+            // then default blank_this_line=1 for the next line (after memptr).
+            if (_vBusDisplayArea)
+                _ycounter++;
+            _cycleInLine = 0;
+            _vBusFetchState = VBusFetchState.Idle;
+            _vBusBufOffset = 0;
+            // _lineWasBlank still holds prior line until handle_memptr below.
+            _rasterLine++;
+            if (_rasterLine >= _totalLines)
+            {
+                _rasterLine = 0;
+                _vBusDisplayArea = false;
+                _memptr = 0;
+                _memptrInc = 0;
+                _ycounter = 0;
+                _rowCounter = 0;
+                _lineWasBlank = true;
+                RenderCharacterFrame();
+                FrameCompleted?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        // Latch text geometry at VICE raster_cycle==1.
+        if (_cycleInLine == 1)
+        {
+            var cols = _regs[0x02] & 0x7F;
+            _textCols = cols > 0 ? cols : _columns;
+            var lines = (_regs[0x03] & 0x7E) >> 1;
+            if (lines > 0)
+                _textLines = lines;
+        }
+
+        // VICE open_h when origin==raster_cycle.
+        var origin = _regs[0x00] & 0x7F;
+        if (_vBusDisplayArea
+            && _vBusFetchState is VBusFetchState.Idle or VBusFetchState.Done
+            && origin == _cycleInLine
+            && _textCols > 0)
+        {
+            _vBusFetchState = VBusFetchState.Start;
+            _vBusBufOffset = 4;
+            _memptrInc = 0;
+        }
+
+        // VICE: handle_memptr when DISPLAY and raster_cycle==0 (uses prior
+        // line's blank flag), then arm blank for the new line.
+        if (_vBusDisplayArea && _cycleInLine == 0)
+        {
+            HandleMemptr();
+            _lineWasBlank = true;
+        }
+
+        PerformDisplayVBusFetch();
+    }
+
+    /// <summary>VICE <c>vic_cycle_handle_memptr</c>.</summary>
+    private void HandleMemptr()
+    {
+        // Character height 8: step row when ycounter hits 8 (or 16 for double).
+        const int rowIncreaseLine = 8;
+        if (_ycounter == rowIncreaseLine || _ycounter == 2 * rowIncreaseLine)
+        {
+            _ycounter = 0;
+            _memptrInc = _lineWasBlank ? 0 : _textCols;
+            _rowCounter++;
+            if (_rowCounter >= _textLines)
+                _vBusDisplayArea = false;
+        }
+
+        _memptr += _memptrInc;
+        _memptrInc = 0;
+    }
+
+    /// <summary>
+    /// VICE <c>vic_cycle_fetch</c>: START is no_fetch (even when entering MATRIX);
+    /// matrix addr = base + memptr + buf_offset.
+    /// </summary>
+    private void PerformDisplayVBusFetch()
+    {
+        if (VBusFetch is null || MemoryPeek is null)
             return;
 
-        _cycleInLine = 0;
-        _rasterLine++;
-        if (_rasterLine < _totalLines)
+        // VICE VIC_FETCH_START: --buf; on zero enter MATRIX; always no_fetch.
+        if (_vBusFetchState == VBusFetchState.Start)
+        {
+            _vBusBufOffset--;
+            if (_vBusBufOffset == 0)
+            {
+                _vBusFetchState = _textCols > 0 ? VBusFetchState.Matrix : VBusFetchState.Done;
+                _vBusBufOffset = 0;
+            }
+            return;
+        }
+
+        if (_vBusFetchState is not (VBusFetchState.Matrix or VBusFetchState.Chargen))
             return;
 
-        _rasterLine = 0;
-        RenderCharacterFrame();
-        FrameCompleted?.Invoke(this, EventArgs.Empty);
+        var reg2 = _regs[0x02];
+        var reg5 = _regs[0x05];
+        // VICE: (((r5&0xf0)<<6)|((r2&0x80)<<2)) + memptr + buf_offset, then
+        // 14→16 bit fix: msb = ~((addr&0x2000)<<2) & 0x8000.
+        var matrixBase = ((reg5 & 0xF0) << 6) | ((reg2 & 0x80) << 2);
+        var slot = _vBusBufOffset;
+        if (slot < 0 || slot >= _textCols)
+            return;
+
+        var rawAddr = matrixBase + _memptr + slot;
+        var msb = (~((rawAddr & 0x2000) << 2)) & 0x8000;
+        var screenAddr = (ushort)((rawAddr & 0x1FFF) | msb);
+        var colorAddr = (ushort)(0x9400 + ((_memptr + slot) & 0x03FF));
+        var colorNibble = (byte)(MemoryPeek(colorAddr) & 0x0F);
+
+        if (_vBusFetchState == VBusFetchState.Matrix)
+        {
+            _vBusMatrixCode = MemoryPeek(screenAddr);
+            VBusFetch(_vBusMatrixCode, colorNibble);
+            _vBusFetchState = VBusFetchState.Chargen;
+            // Mark line as having displayed content.
+            _lineWasBlank = false;
+            return;
+        }
+
+        // Chargen: VICE addr from regs[5] low + char*height + ycounter.
+        var charHeight = 8;
+        var chargenBase = (reg5 & 0x0F) << 10;
+        var chargenRaw = chargenBase + (_vBusMatrixCode * charHeight) + (_ycounter & 7);
+        var cMsb = (~((chargenRaw & 0x2000) << 2)) & 0x8000;
+        var chargenAddr = (ushort)((chargenRaw & 0x1FFF) | cMsb);
+        // Unexpanded chargen often at $8000; fall back if base 0.
+        if ((reg5 & 0x0F) == 0)
+            chargenAddr = (ushort)(CharacterRomBase + (_vBusMatrixCode * 8) + (_ycounter & 7));
+        var chargenByte = MemoryPeek(chargenAddr);
+        VBusFetch(chargenByte, colorNibble);
+        _vBusBufOffset++;
+        if (_vBusBufOffset >= _textCols)
+            _vBusFetchState = VBusFetchState.Done;
+        else
+            _vBusFetchState = VBusFetchState.Matrix;
     }
 
     public void Reset()
     {
         ResetRegisters();
-        _cycleInLine = 0;
+        // VICE vic_reset: raster_cycle = 6 (maincpu_clk = 6). Start 0 left a
+        // permanent +6 nCyc lead so native was FETCH_DONE while we still
+        // chargen'd (c=3533371 nA=$91 mA=$01, nCyc=61 mCyc=55).
+        _cycleInLine = 6;
         _rasterLine = 0;
+        _vBusMatrixCode = 0;
+        _vBusFetchState = VBusFetchState.Idle;
+        _vBusBufOffset = 0;
+        _vBusDisplayArea = false;
+        _memptr = 0;
+        _memptrInc = 0;
+        _ycounter = 0;
+        _rowCounter = 0;
+        _textLines = 23;
+        _textCols = 22;
+        _lineWasBlank = true;
         Array.Clear(_frameBuffer);
     }
 
@@ -164,17 +360,10 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
 
     private void ResetRegisters()
     {
+        // Power-on zeros match VICE vic_reset / unprogrammed chip state. KERNAL
+        // programs geometry ($9000-$9005) and colors ($900F) during boot; lockstep
+        // against xvic requires the same starting point (not pre-seeded READY defaults).
         Array.Clear(_regs);
-        // Unexpanded VIC-20 KERNAL-like defaults so ResolveScreenBase => $1E00.
-        _regs[0x00] = 5;
-        _regs[0x01] = 25;
-        _regs[0x02] = unchecked((byte)(22 | 0x80));
-        _regs[0x03] = (23 << 1);
-        _regs[0x05] = 0xF0;
-        _regs[0x0E] = 0;
-        // Typical READY look: cyan-ish border (3) + white bg (1) = $1B often after init;
-        // power-on default before KERNAL is model-dependent; start with cyan border / light bg.
-        _regs[0x0F] = 0x1B;
     }
 
     private void EnsureFrameBufferSize()

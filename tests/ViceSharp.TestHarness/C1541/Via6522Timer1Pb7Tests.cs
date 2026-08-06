@@ -56,8 +56,8 @@ public sealed class Via6522Timer1Pb7Tests
     /// Use case: ACR bit 7 = 1 + bit 6 = 1 puts T1 into continuous free-run
     /// mode with PB7 toggling on every underflow. With latch = N and DDRB bit
     /// 7 = 1 the port-B PB7 bit must invert once per underflow.
-    /// Acceptance: Latch = 5; after N+1 ticks PB7 has toggled exactly once;
-    /// after another N+1 ticks (10 total) PB7 has toggled a second time.
+    /// Acceptance: Latch = 5; after N+2 ticks PB7 has toggled exactly once;
+    /// after another N+2 ticks PB7 has toggled a second time (VICE latch+2).
     /// </summary>
     [Fact]
     public void Acr7And6Set_Pb7TogglesOnEachT1Underflow()
@@ -70,12 +70,12 @@ public sealed class Via6522Timer1Pb7Tests
 
         var initial = (byte)(via.Read(Base + 0x00) & Pb7);
 
-        for (int i = 0; i < 6; i++) via.Tick(); // first underflow at tick 6
+        for (int i = 0; i < 7; i++) via.Tick(); // first underflow at tick N+2=7
 
         var afterFirst = (byte)(via.Read(Base + 0x00) & Pb7);
         afterFirst.Should().NotBe(initial);
 
-        for (int i = 0; i < 6; i++) via.Tick(); // second underflow
+        for (int i = 0; i < 7; i++) via.Tick(); // second underflow
 
         var afterSecond = (byte)(via.Read(Base + 0x00) & Pb7);
         afterSecond.Should().NotBe(afterFirst);
@@ -101,16 +101,14 @@ public sealed class Via6522Timer1Pb7Tests
 
         var initial = (byte)(via.Read(Base + 0x00) & Pb7);
 
-        // 10 underflows: first at tick 3, then each subsequent on cycle latch+1
-        // After T1C-H write the counter is reloaded from latch (2). Tick 1->1,
-        // tick 2->0, tick 3->underflow + reload to 2. So underflows happen at
-        // ticks 3, 6, 9, ... -> 3 * N ticks for N underflows.
-        for (int i = 0; i < 30; i++) via.Tick();
+        // 10 underflows: period = latch+2 = 4 ticks (VICE). Underflows at
+        // ticks 4, 8, 12, ... -> 4 * N ticks for N underflows.
+        for (int i = 0; i < 40; i++) via.Tick();
 
         var afterEven = (byte)(via.Read(Base + 0x00) & Pb7);
         afterEven.Should().Be(initial); // 10 toggles == back to start
 
-        for (int i = 0; i < 3; i++) via.Tick(); // one more underflow
+        for (int i = 0; i < 4; i++) via.Tick(); // one more underflow
 
         var afterOdd = (byte)(via.Read(Base + 0x00) & Pb7);
         afterOdd.Should().NotBe(initial);
@@ -157,7 +155,7 @@ public sealed class Via6522Timer1Pb7Tests
         via.Write(Base + 0x04, 0x03); // T1L-L = 3
         via.Write(Base + 0x05, 0x00); // T1C-H = 0 (start: PB7 -> low)
 
-        // Tick a few cycles short of underflow: PB7 must still be low.
+        // Tick short of underflow (N+1=4 for one-shot N=3): PB7 still low.
         for (int i = 0; i < 3; i++) via.Tick();
         (via.Read(Base + 0x00) & Pb7).Should().Be(0);
 

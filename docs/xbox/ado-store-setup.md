@@ -19,9 +19,11 @@ Pipelines > Library > + Variable group.
 | `PARTNER_CENTER_CLIENT_ID` | no | Entra app registration client id |
 | `PARTNER_CENTER_CLIENT_SECRET` | **yes** | Entra client secret |
 | `STORE_APP_ID` | no | Partner Center product / Store id |
-| `STORE_IDENTITY_NAME` | no | Package/Identity/Name |
-| `STORE_PUBLISHER` | no | Package/Identity/Publisher (`CN={GUID}`) |
-| `STORE_PUBLISHER_DISPLAY_NAME` | no | Publisher display name |
+| `STORE_IDENTITY_NAME` | no | `10557PaytonByrd.Vice` (see [store-product-identity.md](store-product-identity.md)) |
+| `STORE_PUBLISHER` | no | `CN=45CF5BAC-327F-4E0C-B949-F93013DE843B` |
+| `STORE_PUBLISHER_DISPLAY_NAME` | no | `Sharp Ninja` |
+
+Full reserved identity including PFN / Package SID: [store-product-identity.md](store-product-identity.md).
 
 CLI alternative (after secrets are ready; fill values yourself):
 

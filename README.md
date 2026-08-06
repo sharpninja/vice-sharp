@@ -2,7 +2,7 @@
 
 A C# port of [VICE](https://vice-emu.sourceforge.io/) (Versatile Commodore Emulator) targeting .NET 10.
 
-> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`, and the validation baseline at the v1.0.2 release is `2594 passed / 21 skipped / 0 failed` (2615 total) in `ViceSharp.TestHarness`. See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md).
+> **Iteration 1 (C64) is complete.** The managed C64 core runs in cycle-exact lockstep with VICE's `x64sc`. **Iteration 2 (VIC-20)** every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` is green for **10 s PAL** (11_084_050 cycles) and **10 s NTSC** (10_227_270 cycles). See [docs/Iteration-Roadmap.md](docs/Iteration-Roadmap.md) and [HANDOFF.md](HANDOFF.md).
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compati
 
 ## Install
 
-The current release is **v1.0.2** (released 2026-07-08): 13 NuGet packages on [nuget.org](https://www.nuget.org/packages?q=ViceSharp) plus an MSI / winget desktop package.
+The current published line is **v1.2.1** (GitVersion `next-version`; NuGet + MSI / winget). 13 NuGet packages on [nuget.org](https://www.nuget.org/packages?q=ViceSharp) plus an MSI / winget desktop package.
 
 ```pwsh
 # Desktop UI as a dotnet global tool (command: vicesharp)
@@ -52,12 +52,19 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
 
 ✅ **Iteration 0 (Foundations)**: Complete. All core primitives implemented, lock-free and zero allocation.
 ✅ **Iteration 1 (C64 Bringup)**: **Complete (Phase 1 closed 2026-05-31; diagnostics/attach surface updated 2026-06-25)**:
-  - `ViceSharp.TestHarness` gate green at v1.0.2: 2594 passed / 21 skipped / 0 failed (2615 total, single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`)
   - x64sc lockstep and D64 attach paths are covered across deterministic no-cartridge variants
   - Perf: 11.5M+ cycles/sec under release JIT (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps; 1173% PAL real-time)
   - Snapshot/capture/input/testbench/launcher surfaces are in place, including gRPC capture and diagnostics services
   - Desktop packaging is self-contained JIT + ReadyToRun through Nuke `PublishMsi`; native ahead-of-time publishing is no longer a project requirement
   - External debuggers can attach deterministically through `%LOCALAPPDATA%\ViceSharp\debug-attach.json` and `DiagnosticsService`
+
+✅ **Iteration 2 (VIC-20)**: **Core + every-cycle native lockstep (2026-08-06)**:
+  - Managed VIC-20 (PAL/NTSC), dual VIA, VIC-I, color RAM open-bus, default drive 8 = 1540
+  - Native oracle: `vice_xvic.dll` / `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
+  - Every-cycle A/X/Y/S/P/PC vs xvic: **TenSecondPal** 11_084_050 and **TenSecondNtsc** 10_227_270 green
+  - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`
+  - Gates (env): `VICESHARP_LOCKSTEP_10S=1`, `VICESHARP_LOCKSTEP_2S=1`; filter `FullyQualifiedName~Vic20DivergeProbe`
+  - Tier-A polish still open: expansion UX, input E2E, cart/disk depth, snapshots (see [HANDOFF.md](HANDOFF.md))
 
 Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
@@ -70,7 +77,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-07-08` at HEAD `534cded` (v1.0.2 tagged and released; VIC-II per-cycle parity remediation and reSID re-baseline in progress; see `docs/handoff.md`). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. 8580 SID: real Chamberlin SVF on linear cutoff curve. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-06` on `main` (published line **v1.2.1**; VIC-20 every-cycle 10s PAL+NTSC lockstep green; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
 
 **Legend**: State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -114,7 +121,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Machine | Target Iteration | State | % |
 |---------|:----------------:|:----:|:----:|
 | SX-64 | 1 | ⚪ | 0% |
-| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ✅ | 100% |
+| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ✅ | 95% |
 | C128 (MOS 8502 + VIC-IIe + Z80) | 3 | ⚪ | 0% |
 | PET (MOS 6502 + PIA/VIA + CRTC) | 4 | ⚪ | 0% |
 | Plus/4 / C16 (MOS 7501 + TED) | 5 | ⚪ | 0% |
@@ -130,7 +137,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
 | Completion Dashboard (this section) | ✅ | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
 
-Dashboard is regenerated as subagent slices land. Latest validation gate at v1.0.2 (2026-07-08): `2594 passed / 21 skipped / 0 failed` (2615 total), single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`.
+Dashboard is regenerated as subagent slices land. VIC-20 every-cycle lockstep (2026-08-06): PAL 10 s and NTSC 10 s green (`Vic20DivergeProbe`); see durable receipts under `docs/receipts-lockstep-10s-*.txt`. Full-suite baseline totals still wobble with theory-row serialization; use 0 failed as the green criterion (see [HANDOFF.md](HANDOFF.md)).
 
 ## Supported Machines (planned)
 
@@ -138,7 +145,7 @@ Dashboard is regenerated as subagent slices land. Latest validation gate at v1.0
 |---------|-------------|--------|
 | C64 / C64C | MOS 6510 + VIC-II + SID + CIA x2 | Iteration 1 |
 | SX-64 | Same as C64 (built-in monitor + 1541) | Iteration 1 |
-| VIC-20 | MOS 6502 + VIC-I + VIA x2 | Iteration 2 (complete on `feat/iteration2-vic20`) |
+| VIC-20 | MOS 6502 + VIC-I + VIA x2 | Iteration 2 (core + 10 s lockstep on `main`) |
 | C128 | MOS 8502 + VIC-IIe + SID + CIA x2 + Z80 | Iteration 3 |
 | PET | MOS 6502 + PIA/VIA + CRTC | Iteration 4 |
 | Plus/4 / C16 | MOS 7501 + TED | Iteration 5 |

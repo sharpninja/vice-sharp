@@ -47,14 +47,25 @@ at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
 
 **Goal:** Add VIC-20 as a second architecture.
 
-- MOS 6502 CPU (reuse 6510 core minus I/O port)
-- VIC (6560/6561) video chip
-- VIA x2 (6522) - replaces CIA
-- 5KB base RAM + expansion addressing
-- VIC-20 cartridge types
-- VIC-20 keyboard matrix
+**Status (2026-08-06):** Core complete on `main` (merged from `feat/iteration2-vic20`). Every-cycle native lockstep green for multi-second PAL and NTSC.
 
-**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime.
+- MOS 6502 CPU (reuse 6510 core minus I/O port)
+- VIC-I (6560/6561) character-mode video (`Mos6561`) with PAL/NTSC timing
+- VIA x2 (shared `Via6522`) at $9110 NMI / $9120 IRQ; keyboard matrix + joystick glue
+- VIA timer CPU `Read` uses pre-Tick bus-visible counters (VICE LOAD at `maincpu_clk` before `CLK_INC`); peeks stay post-Tick
+- Color RAM 4-bit + V-bus open-bus high nibble (`Vic20ColorRam` / `BasicBus`)
+- 5KB base RAM + expansion packs (3K/8K/16K/24K/32K)
+- MVP cartridge map (BLK PRG/raw) and READY boot proof with official ROMs
+- Default drive unit 8 = **1540** (`DriveModel.C1540`); C64 remains 1541
+- Launcher `xvic` topology; host session create; Xbox computer picker enables VIC-20
+- Native oracle: `native/vice_xvic.dll` via `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
+- Every-cycle A/X/Y/S/P/PC lockstep vs xvic:
+  - **PAL 10 s:** 11_084_050 cycles (`EveryCycle_CpuRegs_Match_TenSecondPal`)
+  - **NTSC 10 s:** 10_227_270 cycles (`EveryCycle_CpuRegs_Match_TenSecondNtsc`)
+  - Env: `VICESHARP_LOCKSTEP_10S=1` (and `VICESHARP_LOCKSTEP_2S=1` for 2 s PAL)
+  - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`
+
+**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Tier-A polish (expansion UX, input E2E, cart/disk depth, snapshots) remains open; see `HANDOFF.md`.
 
 ## Iteration 3: C128
 
