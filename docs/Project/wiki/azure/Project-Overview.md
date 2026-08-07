@@ -26,7 +26,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compati
 
 ## Install
 
-The current published line is **v1.2.1** (GitVersion `next-version`; NuGet + MSI / winget). 13 NuGet packages on [nuget.org](https://www.nuget.org/packages?q=ViceSharp) plus an MSI / winget desktop package.
+The current line is **v1.2.2** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
 
 ```pwsh
 # Desktop UI as a dotnet global tool (command: vicesharp)
@@ -77,7 +77,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-06` on `main` (published line **v1.2.1**; VIC-20 every-cycle 10s PAL+NTSC lockstep green; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-06` on `main` (line **v1.2.2**; VIC-20 every-cycle 10s PAL+NTSC lockstep green; Store art + CC BY-SA C= logo attribution; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
 
 **Legend**: State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -223,6 +223,16 @@ Copyright (c) 2026 ViceSharp Contributors.
 Licensed under the **GNU General Public License v2.0 or later** (GPL-2.0-or-later). See [COPYING](COPYING) for the full license text.
 
 ViceSharp is a derivative work of VICE, which is also licensed under GPL-2.0-or-later. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution details.
+
+### Commodore C= logo (CC BY-SA 4.0)
+
+Store and branding assets may include the **Commodore C= logo** from Wikimedia Commons:
+
+- **File:** [Commodore C= logo.svg](https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg)
+- **Author:** Alien426
+- **License:** [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/)
+
+Local copies and ShareAlike notes live under `docs/xbox/store-screenshots/` (`Commodore_C_logo.svg`, `LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt`).
 
 ## Contributing
 

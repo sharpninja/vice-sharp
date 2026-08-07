@@ -100,16 +100,26 @@ commodore, c64, emulator, vice, retrogaming, 6502, romm
 - Markets: worldwide free markets initially (operator may restrict later)
 - Device families: **Xbox** and **Windows Desktop** (matches Package.appxmanifest)
 
-## Xbox poster art (Store)
+## Store / Xbox marketing art
 
-Partner Center Xbox poster (portrait) assets - exact pixels verified:
+All logo marks use the **official Commodore C= logo** (CC BY-SA 4.0):
 
-| Size | Path |
-| --- | --- |
-| 720 × 1080 | [store-screenshots/xbox-poster-720x1080.png](store-screenshots/xbox-poster-720x1080.png) |
-| 1440 × 2160 | [store-screenshots/xbox-poster-1440x2160.png](store-screenshots/xbox-poster-1440x2160.png) |
+- Source: https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg  
+- Attribution: see `store-screenshots/LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt`  
+- Local files: `Commodore_C_logo.svg`, `Commodore_C_logo-1280.png`
 
-Title on art: **Vice#**. Source composite: `store-screenshots/xbox-poster-source.jpg`.
+| Asset | Size | Path |
+| --- | --- | --- |
+| Poster | 720×1080 | [store-screenshots/xbox-poster-720x1080.png](store-screenshots/xbox-poster-720x1080.png) |
+| Poster | 1440×2160 | [store-screenshots/xbox-poster-1440x2160.png](store-screenshots/xbox-poster-1440x2160.png) |
+| Box art 1:1 | 2160×2160 | [store-screenshots/xbox-boxart-2160x2160.png](store-screenshots/xbox-boxart-2160x2160.png) |
+| Super hero 16:9 | 3840×2160 | [store-screenshots/xbox-superhero-3840x2160.png](store-screenshots/xbox-superhero-3840x2160.png) |
+| Branded key art | 584×800 | [store-screenshots/branded-key-art-584x800.png](store-screenshots/branded-key-art-584x800.png) |
+| Titled hero art | 1920×1080 | [store-screenshots/titled-hero-art-1920x1080.png](store-screenshots/titled-hero-art-1920x1080.png) |
+| Featured promo square | 1080×1080 | [store-screenshots/featured-promo-square-1080x1080.png](store-screenshots/featured-promo-square-1080x1080.png) (no title) |
+| App tile | 300 / 150 / 71 | `app-tile-*.png` (logo only) |
+
+Titled assets: **Vice#** in Pet Me 64 under the C= mark. Solid `#101014` backgrounds.
 
 ## Screenshot capture runbook
 

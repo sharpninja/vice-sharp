@@ -35,6 +35,8 @@
   - [Store Listing Copy](Store-Listing-Copy)
   - [GPL vs Microsoft Store Review](GPL-Store-Section6-Review)
   - [Store Next Steps Guide](Store-Next-Steps-Guide)
+  - [Store Product Identity](Store-Product-Identity)
+  - [ADO Store Pipeline Setup](ADO-Store-Setup)
 - Reference
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)
