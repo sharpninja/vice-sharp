@@ -89,4 +89,26 @@ public sealed class AboutViewModelTests
         var vm = new AboutViewModel();
         Assert.False(string.IsNullOrWhiteSpace(vm.Version));
     }
+
+    /// <summary>
+    /// CC BY-SA 4.0 Commodore C= logo attribution guard.
+    /// Use case: product branding that uses the Wikimedia C= logo must disclose
+    /// author, license, and source URL on the About surface.
+    /// Acceptance: <see cref="AboutInfo.LogoAttributionText"/> mentions CC BY-SA,
+    /// Alien426, and the commons URL; ViewModel surfaces the same constant.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void LogoAttributionText_MentionsCcBySa_AndSurfacedFromConstants()
+    {
+        Assert.False(string.IsNullOrWhiteSpace(AboutInfo.LogoAttributionText));
+        Assert.Contains("CC BY-SA 4.0", AboutInfo.LogoAttributionText, StringComparison.Ordinal);
+        Assert.Contains("Alien426", AboutInfo.LogoAttributionText, StringComparison.Ordinal);
+        Assert.Contains("commons.wikimedia.org", AboutInfo.LogoAttributionText, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains(AboutInfo.LogoSourceUrl, AboutInfo.LogoAttributionText, StringComparison.Ordinal);
+        Assert.Contains(AboutInfo.LogoLicenseUrl, AboutInfo.LogoAttributionText, StringComparison.Ordinal);
+
+        var vm = new AboutViewModel();
+        Assert.Equal(AboutInfo.LogoAttributionText, vm.LogoAttributionText);
+    }
 }

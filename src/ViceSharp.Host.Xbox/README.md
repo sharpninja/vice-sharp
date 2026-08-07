@@ -94,3 +94,9 @@ dotnet test ViceSharp.slnx --filter "FullyQualifiedName~XboxHostShell"
 
 The test asserts the csproj exists, targets `net10.0`, and references both
 `ViceSharp.Avalonia` and `ViceSharp.Host`.
+
+## Third-party attribution
+
+### Commodore C= logo (CC BY-SA 4.0)
+
+The Commodore C= logo used in ViceSharp product branding (where present) is from Wikimedia Commons ([Commodore C= logo.svg](https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg)) by Alien426, licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See the repository `THIRD_PARTY_NOTICES.md` for full third-party attribution.

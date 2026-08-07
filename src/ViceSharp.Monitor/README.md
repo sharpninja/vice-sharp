@@ -17,3 +17,7 @@ dotnet add package ViceSharp.Monitor
 This is a library, not a standalone tool. It builds on `ViceSharp.Abstractions`, `ViceSharp.Chips`, and `ViceSharp.Core`: construct a `Monitor` around an `IMachine` and drive it with `ExecuteCommand`, or attach a `DeterministicTraceLogger` to a machine to capture VICE-format traces. ViceSharp ships no Commodore ROMs; the machine you attach the monitor to needs ROMs supplied via `VICESHARP_ROM_PATH` (see `docs/ROMs.md`).
 
 License: GPL-2.0-or-later (derivative of VICE). Part of the ViceSharp project: https://github.com/sharpninja/vice-sharp
+
+### Commodore C= logo (CC BY-SA 4.0)
+
+The Commodore C= logo used in ViceSharp product branding (where present) is from Wikimedia Commons ([Commodore C= logo.svg](https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg)) by Alien426, licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See the repository `THIRD_PARTY_NOTICES.md` for full third-party attribution.

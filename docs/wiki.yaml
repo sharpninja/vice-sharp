@@ -107,6 +107,20 @@ documents:
   platforms:
   - github
   - azure
+- id: store-product-identity
+  title: Store Product Identity
+  source: docs/xbox/store-product-identity.md
+  target: Store-Product-Identity.md
+  platforms:
+  - github
+  - azure
+- id: ado-store-setup
+  title: ADO Store Pipeline Setup
+  source: docs/xbox/ado-store-setup.md
+  target: ADO-Store-Setup.md
+  platforms:
+  - github
+  - azure
 - id: architecture
   title: Architecture
   source: docs/Architecture.md
@@ -279,6 +293,8 @@ navigation:
   - document: store-listing-copy
   - document: gpl-store-section6
   - document: store-next-steps
+  - document: store-product-identity
+  - document: ado-store-setup
 - title: Reference
   path: Reference
   children:

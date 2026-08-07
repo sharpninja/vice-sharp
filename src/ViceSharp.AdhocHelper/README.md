@@ -21,3 +21,7 @@ Requires the .NET 10 SDK. It depends on `ViceSharp.Architectures` (which supplie
 Ad-hoc machine YAML must set `schemaVersion: 1`. Supported chip types are `Mos6502`, `Mos6526`, `Mos6569`, and `Sid6581`; `machine.videoStandard` is `Pal` or `Ntsc`. The helper only edits and validates machine definitions: it does not run an emulated machine, and it ships no Commodore ROMs.
 
 License: GPL-2.0-or-later (derivative of VICE). Part of the ViceSharp project: https://github.com/sharpninja/vice-sharp
+
+### Commodore C= logo (CC BY-SA 4.0)
+
+The Commodore C= logo used in ViceSharp product branding (where present) is from Wikimedia Commons ([Commodore C= logo.svg](https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg)) by Alien426, licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See the repository `THIRD_PARTY_NOTICES.md` for full third-party attribution.

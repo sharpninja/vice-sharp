@@ -46,5 +46,11 @@
 
   <ItemGroup>
     <None Include="$(_ViceSharpPackageReadme)" Pack="true" PackagePath="\" Visible="false" />
+    <!-- Ship third-party notices (incl. CC BY-SA 4.0 C= logo attribution) with every NuGet package. -->
+    <None Include="$(MSBuildThisFileDirectory)THIRD_PARTY_NOTICES.md"
+          Pack="true"
+          PackagePath="\"
+          Visible="false"
+          Condition="Exists('$(MSBuildThisFileDirectory)THIRD_PARTY_NOTICES.md')" />
   </ItemGroup>
 </Project>

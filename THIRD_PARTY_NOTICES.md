@@ -73,6 +73,17 @@ The following community-documented file formats are implemented:
 - **PRG** — program file format
 - **P00** — PC64 file format
 
+## Commodore C= logo (Wikimedia Commons)
+
+- **File:** Commodore C= logo.svg
+- **Source:** https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg
+- **Author:** Alien426 (Wikimedia Commons)
+- **License:** Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+  https://creativecommons.org/licenses/by-sa/4.0/
+- **Used in:** Microsoft Store / Xbox marketing assets under `docs/xbox/store-screenshots/` (posters, box art, super-hero art, key/hero art, featured promo square, app tile icons); local copies `Commodore_C_logo.svg` and `Commodore_C_logo-1280.png` with attribution file `LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt`.
+
+This mark is **not** a Commodore system ROM and is separate from GPL VICE content. When redistributed (including derivative marketing composites that include the mark), attribution and ShareAlike terms of CC BY-SA 4.0 apply. The product name **Vice#** and ViceSharp wordmarks are separate from this logo.
+
 ## NuGet Dependencies
 
 See `Directory.Packages.props` for the complete list of NuGet package dependencies and their respective licenses.

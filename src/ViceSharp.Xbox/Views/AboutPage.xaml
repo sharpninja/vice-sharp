@@ -16,6 +16,7 @@
                 <TextBlock Text="{x:Bind ViewModel.Version, Mode=OneWay}" FontSize="24" Foreground="#FFBBBBBB" />
                 <TextBlock Text="{x:Bind ViewModel.LicenseIdentifier, Mode=OneWay}" FontSize="28" Foreground="White" />
                 <TextBlock Text="{x:Bind ViewModel.AttributionText, Mode=OneWay}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
+                <TextBlock Text="{x:Bind ViewModel.LogoAttributionText, Mode=OneWay}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
                 <TextBlock Text="{x:Bind ViewModel.SourceOfferText, Mode=OneWay}" TextWrapping="Wrap" Foreground="#FFDDDDDD" />
                 <TextBlock Text="{x:Bind ViewModel.SourceUrl, Mode=OneWay}" Foreground="#FF8CB4FF" />
                 <Button Content="Back" Style="{StaticResource TenFootButtonStyle}" Click="OnBack" />

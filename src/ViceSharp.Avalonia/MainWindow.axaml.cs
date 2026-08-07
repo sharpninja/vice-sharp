@@ -851,17 +851,25 @@ public partial class MainWindow : Window
 
     private void OnMenuAbout(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
+        // Legal text shared with the Xbox About surface (AboutInfo) so attributions
+        // cannot drift between heads.
         var about = new Window
         {
             Title = "About ViceSharp",
-            Width = 360,
-            Height = 180,
-            CanResize = false,
+            Width = 520,
+            Height = 360,
+            CanResize = true,
             Content = new TextBlock
             {
                 Margin = new global::Avalonia.Thickness(16),
                 TextWrapping = global::Avalonia.Media.TextWrapping.Wrap,
-                Text = "ViceSharp\nA C# .NET 10 port of the VICE Commodore 64 emulator."
+                Text =
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.ProjectName + "\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.LicenseIdentifier + "\n\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.AttributionText + "\n\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.LogoAttributionText + "\n\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceOfferText + "\n" +
+                    global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceUrl
             }
         };
         about.ShowDialog(this);

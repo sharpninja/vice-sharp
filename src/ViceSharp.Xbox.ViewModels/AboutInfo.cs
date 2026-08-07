@@ -3,7 +3,8 @@ namespace ViceSharp.Xbox.ViewModels;
 /// <summary>
 /// PLAN-XBOXUWP S30 (IMPL-XBOXUWP-030), area XBOXUI. The SINGLE home for the fixed
 /// legal-disclosure text shown on the About page: the SPDX license identifier, the
-/// VICE attribution, the written source offer, and the source-repository URL.
+/// VICE attribution, the Commodore C= logo attribution (CC BY-SA 4.0), the written
+/// source offer, and the source-repository URL.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -62,6 +63,26 @@ public static class AboutInfo
     public const string SourceOfferText =
         "Complete corresponding source code for ViceSharp is available under " +
         "GPL-2.0-or-later at " + SourceUrl + ".";
+
+    /// <summary>
+    /// Wikimedia Commons page for the official Commodore C= logo SVG used in product branding.
+    /// </summary>
+    public const string LogoSourceUrl =
+        "https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg";
+
+    /// <summary>
+    /// License deed for the Commodore C= logo (CC BY-SA 4.0).
+    /// </summary>
+    public const string LogoLicenseUrl = "https://creativecommons.org/licenses/by-sa/4.0/";
+
+    /// <summary>
+    /// Required CC BY-SA 4.0 attribution for the Commodore C= logo (Wikimedia Commons,
+    /// author Alien426). Shown on About screens whenever branding uses that mark.
+    /// </summary>
+    public const string LogoAttributionText =
+        "Commodore C= logo: Wikimedia Commons file \"Commodore C= logo.svg\" by Alien426, " +
+        "licensed under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). " +
+        "Source: " + LogoSourceUrl + "  License: " + LogoLicenseUrl;
 
     /// <summary>
     /// The fallback version string used when the running assembly does not carry a

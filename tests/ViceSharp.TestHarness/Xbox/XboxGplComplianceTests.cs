@@ -106,6 +106,12 @@ public sealed class XboxGplComplianceTests
         // The vkm keymap note: the bundled keymap data is disclosed as GPL VICE data.
         Assert.Contains("keymap", notices, StringComparison.OrdinalIgnoreCase);
         Assert.Contains(".vkm", notices, StringComparison.OrdinalIgnoreCase);
+
+        // Commodore C= logo (Wikimedia / CC BY-SA 4.0) used in product branding.
+        Assert.Contains("Commodore C=", notices, StringComparison.Ordinal);
+        Assert.Contains("CC BY-SA 4.0", notices, StringComparison.Ordinal);
+        Assert.Contains("Alien426", notices, StringComparison.Ordinal);
+        Assert.Contains("commons.wikimedia.org", notices, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

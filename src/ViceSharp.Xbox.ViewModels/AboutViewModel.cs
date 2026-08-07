@@ -5,8 +5,8 @@ using System.Reflection;
 /// <summary>
 /// PLAN-XBOXUWP S30 (IMPL-XBOXUWP-030), area XBOXUI, TEST-XBOXUI-008. The About page
 /// ViewModel: a read-only surface over the fixed legal disclosure in
-/// <see cref="AboutInfo"/> (license identity, VICE attribution, source offer, source
-/// URL) plus the running build <see cref="Version"/>.
+/// <see cref="AboutInfo"/> (license identity, VICE attribution, C= logo attribution,
+/// source offer, source URL) plus the running build <see cref="Version"/>.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -47,6 +47,12 @@ public sealed class AboutViewModel
 
     /// <summary>The public source-repository URL (<see cref="AboutInfo.SourceUrl"/>).</summary>
     public string SourceUrl => AboutInfo.SourceUrl;
+
+    /// <summary>
+    /// CC BY-SA 4.0 attribution for the Commodore C= logo
+    /// (<see cref="AboutInfo.LogoAttributionText"/>).
+    /// </summary>
+    public string LogoAttributionText => AboutInfo.LogoAttributionText;
 
     /// <summary>
     /// The running build version, resolved from this assembly at construction with a
