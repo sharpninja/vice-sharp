@@ -75,6 +75,8 @@ The following community-documented file formats are implemented:
 
 ## Commodore C= logo (Wikimedia Commons)
 
+**Requirement:** FR-XBOXGPL-007 (see `docs/requirements/functional/FR-Xbox-Branding.md`).
+
 - **File:** Commodore C= logo.svg
 - **Source:** https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg
 - **Author:** Alien426 (Wikimedia Commons)

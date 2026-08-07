@@ -36,6 +36,8 @@ This document serves as the master index for all ViceSharp Functional Requiremen
 | FR-Storage-Drives.md | Disk Drives | FR-DRV-001 .. FR-DRV-006 |
 | FR-Storage-Tape.md | Tape / Datasette | FR-TAP-001 .. FR-TAP-005 |
 | FR-Video-VIC-II.md | Video (VIC-II) | FR-VIC-001 .. FR-VIC-010 |
+| FR-VIC20.md | VIC-20 machine (Iteration 2) | FR-VIC20-001 .. (see file) |
+| FR-Xbox-Branding.md | Store / branding marks | FR-XBOXGPL-007 |
 
 ## Traceability Matrix -- FR to Interface to Iteration
 

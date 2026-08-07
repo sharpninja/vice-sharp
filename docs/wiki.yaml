@@ -184,6 +184,13 @@ documents:
   platforms:
   - github
   - azure
+- id: fr-xbox-branding
+  title: FR Xbox Branding (C= logo attribution)
+  source: docs/requirements/functional/FR-Xbox-Branding.md
+  target: FR-Xbox-Branding.md
+  platforms:
+  - github
+  - azure
 - id: tr-overview
   title: Technical Requirements Overview
   source: docs/requirements/technical/TR-Overview.md
@@ -280,6 +287,7 @@ navigation:
   path: Requirements
   children:
   - document: fr-overview
+  - document: fr-xbox-branding
   - document: tr-overview
   - document: test-requirements
   - document: x64sc-model-matrix
