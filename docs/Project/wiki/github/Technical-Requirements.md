@@ -689,6 +689,17 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-XBOXGPL-BRAND-001
+
+**C= logo provenance and multi-surface attribution plumbing** — Branding assets under docs/xbox/store-screenshots must derive from the Wikimedia
+Commons Commodore C= logo.svg (local SVG + rasterization). Attribution must be
+centralized in THIRD_PARTY_NOTICES.md and AboutInfo.LogoAttributionText /
+LogoSourceUrl / LogoLicenseUrl, packed into NuGet via Directory.Build.props,
+mirrored in package README files, and bound on Xbox AboutPage and Avalonia About.
+**Covered by:** FR: FR-XBOXGPL-007; TEST: TEST-XBOXGPL-002
+**Status:** completed
+Scope: layer-1+
+
 ## TR-XBOXPKG-002
 
 **Conditional-TFM fallback + head-only UWP guarded** — ViceSharpXboxUwp conditional-TFM fallback + head-only UWP/XAML/manifest/MSIX guarded so a workload-less agent builds slnx. Acceptance: verified by TEST-XBOXPKG-001.

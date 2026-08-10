@@ -38,16 +38,44 @@ public static unsafe partial class ViceNative
         if (string.Equals(libraryName, LibraryName, StringComparison.Ordinal))
         {
             var path = ResolvedLibraryPath.Value;
-            return path is null ? IntPtr.Zero : NativeLibrary.Load(path);
+            return path is null ? IntPtr.Zero : LoadNativeWithSiblingSearch(path);
         }
 
         if (string.Equals(libraryName, "vice_xvic", StringComparison.Ordinal))
         {
             var path = ViceNativeXvic.ResolvedPath;
-            return path is null ? IntPtr.Zero : NativeLibrary.Load(path);
+            return path is null ? IntPtr.Zero : LoadNativeWithSiblingSearch(path);
         }
 
         return IntPtr.Zero;
+    }
+
+    /// <summary>
+    /// Load a MinGW-built vice_*.dll so sibling runtime DLLs (libstdc++-6, zlib1, …)
+    /// in the same directory are found. Plain <see cref="NativeLibrary.Load(string)"/>
+    /// often fails with 0x8007007E when those deps are not on PATH.
+    /// </summary>
+    private static IntPtr LoadNativeWithSiblingSearch(string fullPath)
+    {
+        var dir = Path.GetDirectoryName(fullPath);
+        if (!string.IsNullOrEmpty(dir))
+            NativeMethods.SetDllDirectory(dir);
+        try
+        {
+            return NativeLibrary.Load(fullPath);
+        }
+        finally
+        {
+            if (!string.IsNullOrEmpty(dir))
+                NativeMethods.SetDllDirectory(null!);
+        }
+    }
+
+    private static class NativeMethods
+    {
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetDllDirectory(string? lpPathName);
     }
 
     public static bool IsAvailable => ResolvedLibraryPath.Value is not null;
@@ -303,6 +331,47 @@ public static unsafe partial class ViceNative
         var result = SetKeyboardMatrixKeyNative(instance, row, column, pressed ? 1 : 0);
         if (result != 0)
             throw new InvalidOperationException($"Native VICE failed to set keyboard matrix key row {row}, column {column}. Error code: {result}.");
+    }
+
+    /// <summary>Native layout for <c>vice_vic20_get_video_state</c> (Pack=1).</summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct ViceVic20VideoState
+    {
+        public uint Cycle;
+        public ushort RasterLine;
+        public byte RasterCycle;
+        public byte Area;
+        public byte FetchState;
+        public byte TextCols;
+        public byte TextLines;
+        public byte YCounter;
+        public byte RowCounter;
+        public byte BlankThisLine;
+        public byte LineWasBlank;
+        public byte CharHeight;
+        public ushort Memptr;
+        public ushort MemptrInc;
+        public fixed byte Regs[16];
+        public fixed byte Cbuf[32];
+        public fixed byte Gbuf[32];
+
+        public readonly byte[] GetRegs()
+        {
+            fixed (byte* p = Regs)
+                return new ReadOnlySpan<byte>(p, 16).ToArray();
+        }
+
+        public readonly byte[] GetCbuf()
+        {
+            fixed (byte* p = Cbuf)
+                return new ReadOnlySpan<byte>(p, 32).ToArray();
+        }
+
+        public readonly byte[] GetGbuf()
+        {
+            fixed (byte* p = Gbuf)
+                return new ReadOnlySpan<byte>(p, 32).ToArray();
+        }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -771,6 +840,9 @@ public static unsafe partial class ViceNative
                 IdleState = state.IdleState
             };
         }
+
+        public Vic20VideoLockstepState GetVic20VideoState()
+            => throw new NotSupportedException("VIC-I video lockstep export is only available on the xvic (VIC-20) oracle.");
 
         public NativeCiaState GetCiaState(int ciaIndex)
         {

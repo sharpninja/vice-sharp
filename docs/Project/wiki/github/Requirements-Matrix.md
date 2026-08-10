@@ -253,6 +253,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-XAUDIO-003 | Tracked | Functional-Requirements.md |
 | FR-XAV-001 | Tracked | Functional-Requirements.md |
 | FR-XBOXGPL-006 | Tracked | Functional-Requirements.md |
+| FR-XBOXGPL-007 | Tracked | Functional-Requirements.md |
 | FR-XBOXPKG-001 | Tracked | Functional-Requirements.md |
 | FR-XBOXPKG-003 | Tracked | Functional-Requirements.md |
 | FR-XBOXTOPO-001 | Tracked | Functional-Requirements.md |
@@ -351,6 +352,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-XBOXAOT-002 | Tracked | Technical-Requirements.md |
 | TR-XBOXAOT-003 | Tracked | Technical-Requirements.md |
 | TR-XBOXCI-005 | Tracked | Technical-Requirements.md |
+| TR-XBOXGPL-BRAND-001 | Tracked | Technical-Requirements.md |
 | TR-XBOXPKG-002 | Tracked | Technical-Requirements.md |
 | TR-XBOXTOPO-001 | Tracked | Technical-Requirements.md |
 | TR-XBOXTOPO-002 | Tracked | Technical-Requirements.md |
@@ -445,6 +447,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-XBOXCI-001 | Tracked | Testing-Requirements.md |
 | TEST-XBOXDEPLOY-007 | Tracked | Testing-Requirements.md |
 | TEST-XBOXGPL-001 | Tracked | Testing-Requirements.md |
+| TEST-XBOXGPL-002 | Tracked | Testing-Requirements.md |
 | TEST-XBOXPKG-001 | Tracked | Testing-Requirements.md |
 | TEST-XBOXPKG-003 | Tracked | Testing-Requirements.md |
 | TEST-XBOXTOPO-001 | Tracked | Testing-Requirements.md |

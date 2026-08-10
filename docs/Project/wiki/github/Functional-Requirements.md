@@ -625,6 +625,25 @@ Scope: layer-1+
 The MSIX bundles COPYING + THIRD_PARTY_NOTICES.md (incl. vkm GPL attribution) + the *.vkm Content, bundles zero ROM *.bin, and exposes the source URL; the release attaches MSIX + source archive. Acceptance: staging test asserts Licenses/ contents + vkm Assets present + no kernal/basic/chargen *.bin + compiled SourceUrl.
 Scope: layer-1+
 
+## FR-XBOXGPL-007 Official Commodore C= logo source and CC BY-SA 4.0 attribution
+
+When ViceSharp product branding uses the Commodore C= logo mark, the logo asset
+must be the officially published Wikimedia Commons file "Commodore C= logo.svg"
+(CC BY-SA 4.0, author Alien426; https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg).
+The project must retain a local copy of the source SVG (and any rasterization used
+for packaging) plus a written attribution. Attribution text must be disclosed in
+THIRD_PARTY_NOTICES.md, shipped with every NuGet package payload, surfaced in
+product/package README files, and shown on About dialogs for Xbox UWP and Avalonia
+desktop heads. ShareAlike obligations apply to derivative branding that includes
+the mark. This requirement is separate from FR-XBOXGPL-006 (GPL/VICE license payload).
+Scope: layer-1+
+**Acceptance Criteria:**
+- [x] Branding assets use the Wikimedia Commons Commodore C= logo.svg (or a direct rasterization thereof), not an unattributed third-party redraw. (evidence: docs/xbox/store-screenshots/Commodore_C_logo.svg; docs/xbox/store-screenshots/LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt)
+- [x] THIRD_PARTY_NOTICES.md names the file, author Alien426, CC BY-SA 4.0, and the commons URL. (evidence: THIRD_PARTY_NOTICES.md; tests/ViceSharp.TestHarness/Xbox/XboxGplComplianceTests.cs)
+- [x] Every NuGet package packs THIRD_PARTY_NOTICES.md at package root via Directory.Build.props. (evidence: Directory.Build.props)
+- [x] Root README and per-package README files include CC BY-SA 4.0 C= logo attribution. (evidence: README.md; src/**/README.md)
+- [x] About surfaces expose LogoAttributionText (or equivalent) with CC BY-SA 4.0, Alien426, and commons URL for Xbox and Avalonia. (evidence: src/ViceSharp.Xbox.ViewModels/AboutInfo.cs; AboutPage.xaml; MainWindow.axaml.cs OnMenuAbout; AboutViewModelTests)
+
 ## FR-XBOXPKG-001 Head csproj references only core + Host.InProcess
 
 The head csproj references only the managed core (+ Host.InProcess) and none of Host/Grpc.AspNetCore/AspNetCore.App/Avalonia. Acceptance: csproj + slnx text test asserts presence of core refs + absence of forbidden refs; slnx builds.

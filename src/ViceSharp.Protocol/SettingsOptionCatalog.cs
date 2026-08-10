@@ -205,4 +205,51 @@ public static class SettingsOptionCatalog
     /// <summary>Maps a stored pacing-strategy id back to its display label.</summary>
     public static string FromPacingStrategyId(string id) =>
         string.Equals(id, "semaphore", StringComparison.OrdinalIgnoreCase) ? "Semaphore" : "VICE";
+
+    /// <summary>
+    /// VIC-20 system RAM presets (xvic -memory labels). "Custom" is UI-only when
+    /// block toggles do not match a named preset.
+    /// </summary>
+    public static IReadOnlyList<string> Vic20MemoryPresets { get; } =
+    [
+        "Unexpanded",
+        "3K",
+        "8K",
+        "16K",
+        "24K",
+        "All",
+        "Custom",
+    ];
+
+    /// <summary>Maps a VIC-20 memory preset label to an xvic -memory id string.</summary>
+    public static string ToVic20MemoryId(string preset) => preset switch
+    {
+        "3K" => "3k",
+        "8K" => "8k",
+        "16K" => "16k",
+        "24K" => "24k",
+        "All" => "all",
+        "Custom" => "custom",
+        _ => "none",
+    };
+
+    /// <summary>Maps an xvic -memory id (or canonical format) to a preset label.</summary>
+    public static string FromVic20MemoryId(string memorySpec)
+    {
+        if (string.IsNullOrWhiteSpace(memorySpec))
+            return "Unexpanded";
+
+        var id = memorySpec.Trim().ToLowerInvariant();
+        return id switch
+        {
+            "none" or "" => "Unexpanded",
+            "3k" => "3K",
+            "8k" => "8K",
+            "16k" => "16K",
+            "24k" => "24K",
+            "all" => "All",
+            "custom" => "Custom",
+            _ => "Custom",
+        };
+    }
 }

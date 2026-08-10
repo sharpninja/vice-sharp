@@ -3,6 +3,7 @@
 ## User guides
 
 - [USER-GUIDE.md](USER-GUIDE.md) - install, first run, CLI launcher, machine YAML, disk images, capture, diagnostics attach, what works today
+- [FlashCart-Builder.md](FlashCart-Builder.md) - VIC-20 FE3 / Ultimem / Mega-Cart flash image builder (Avalonia + Xbox)
 - [VICE-MIGRATION.md](VICE-MIGRATION.md) - swap classic VICE for ViceSharp: binary + flag mapping, behaviour caveats, bug compatibility
 - [ROMs.md](ROMs.md) - legal ROM options, environment variable, expected directory layout
 - [PRIVACY.md](PRIVACY.md) - privacy policy (store listing source)
@@ -32,8 +33,11 @@
 - [receipts-lockstep-10s-2026-08-06.txt](receipts-lockstep-10s-2026-08-06.txt) - VIC-20 PAL 10 s every-cycle A/X/Y/S/P/PC vs xvic
 - [receipts-lockstep-10s-ntsc-2026-08-06.txt](receipts-lockstep-10s-ntsc-2026-08-06.txt) - VIC-20 NTSC 10 s (soft-BIT / VIA bus-visible realign)
 - [receipts-lockstep-vice-realign-2026-08-06.txt](receipts-lockstep-vice-realign-2026-08-06.txt) - VICE realign notes (V-bus, color RAM, order)
+- [audit-vic20-vs-vice-2026-08-07.md](audit-vic20-vs-vice-2026-08-07.md) - VIC-20 vs xvic Exact/Partial/Missing matrix (rebaselined 2026-08-08)
+- [receipts/hostile-validator-20260808T094911Z.md](receipts/hostile-validator-20260808T094911Z.md) - hostile AGREE: READY first_x borders
+- [receipts/hostile-validator-20260808T103211Z.md](receipts/hostile-validator-20260808T103211Z.md) - hostile AGREE: flash cart builder
 
-Ephemeral intermediate probe logs (`docs/*-focused-*.log`, `docs/2s-*.log` from debug slices) are not wiki content; prefer durable receipts above.
+Ephemeral intermediate probe logs (`docs/*-focused-*.log`, `docs/2s-*.log`, `docs/10s-*.log`, `docs/xvic-*` captures from debug slices) are not wiki content; prefer durable receipts above.
 
 ## Continuity
 

@@ -80,14 +80,66 @@ public sealed class AboutViewModelTests
     /// <summary>
     /// TEST-XBOXUI-008 (IMPL-XBOXUWP-030) version-surface guard.
     /// Use case: the About page shows the running build version alongside the legal text.
-    /// Acceptance: <see cref="AboutViewModel.Version"/> is a non-empty string.
+    /// Acceptance: <see cref="AboutViewModel.Version"/> is a non-empty string and is never
+    /// the unstamped SDK default <c>1.0.0.0</c> (or bare <c>1.0.0</c>).
     /// </summary>
     [Fact]
     [Trait("Category", "Xbox")]
-    public void Version_IsNonEmpty()
+    public void Version_IsNonEmpty_AndNotSdkDefault()
     {
         var vm = new AboutViewModel();
         Assert.False(string.IsNullOrWhiteSpace(vm.Version));
+        Assert.NotEqual("1.0.0.0", vm.Version, StringComparer.Ordinal);
+        Assert.NotEqual("1.0.0", vm.Version, StringComparer.Ordinal);
+        Assert.NotEqual("0.0.0.0", vm.Version, StringComparer.Ordinal);
+        Assert.NotEqual("0.0.0", vm.Version, StringComparer.Ordinal);
+    }
+
+    /// <summary>
+    /// Prefer AssemblyInformationalVersion (GitVersion / MSBuild Version stamp) over
+    /// AssemblyVersion, strip build-metadata (+Branch.Sha...), and ignore unstamped
+    /// SDK defaults so About never shows 1.0.0.0 when product version is known.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void ResolveDisplayVersion_PrefersInformational_StripsMetadata_IgnoresSdkDefault()
+    {
+        Assert.Equal(
+            "1.2.7",
+            AboutViewModel.ResolveDisplayVersion(
+                "1.2.7+Branch.main.Sha.deadbeef",
+                "1.0.0.0"));
+
+        Assert.Equal(
+            "1.2.2",
+            AboutViewModel.ResolveDisplayVersion(
+                informationalVersion: null,
+                assemblyVersion: "1.2.2.0"));
+
+        Assert.Equal(
+            AboutInfo.Version,
+            AboutViewModel.ResolveDisplayVersion(
+                informationalVersion: null,
+                assemblyVersion: "1.0.0.0"));
+
+        Assert.Equal(
+            AboutInfo.Version,
+            AboutViewModel.ResolveDisplayVersion(
+                informationalVersion: "1.0.0",
+                assemblyVersion: "1.0.0.0"));
+    }
+
+    /// <summary>
+    /// Product fallback must track the GitVersion next-version base (not the SDK default).
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Xbox")]
+    public void AboutInfo_Version_IsProductBase_NotSdkDefault()
+    {
+        Assert.False(string.IsNullOrWhiteSpace(AboutInfo.Version));
+        Assert.NotEqual("1.0.0", AboutInfo.Version, StringComparer.Ordinal);
+        Assert.NotEqual("1.0.0.0", AboutInfo.Version, StringComparer.Ordinal);
+        Assert.StartsWith("1.2.", AboutInfo.Version, StringComparison.Ordinal);
     }
 
     /// <summary>

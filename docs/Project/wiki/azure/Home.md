@@ -10,6 +10,7 @@
 - Getting Started
   - [Project Overview](Project-Overview)
   - [User Guide](User-Guide)
+  - [Flash Cart Image Builder](Flash-Cart-Builder)
   - [Migrating from Classic VICE](VICE-Migration)
   - [ROM Setup and Legal Sources](ROM-Setup)
   - [Privacy Policy](Privacy-Policy)
@@ -20,10 +21,12 @@
   - [Video and Audio Decoupling](Video-Audio-Decoupling)
   - [State Window (Design Proposal)](State-Window)
   - [Iteration Roadmap](Iteration-Roadmap)
+  - [VIC-20 vs VICE Implementation Audit](VIC20-vs-VICE-Audit)
   - [AI Code and Project Review (aiUnit)](AI-Review)
   - [Registry of Lore](Registry-of-Lore)
 - Requirements
   - [Functional Requirements Overview](Functional-Requirements-Overview)
+  - [FR Xbox Branding (C= logo attribution)](FR-Xbox-Branding)
   - [Technical Requirements Overview](Technical-Requirements-Overview)
   - [Test Requirements](Test-Requirements)
   - [x64sc Model Matrix](X64sc-Model-Matrix)

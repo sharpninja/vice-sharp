@@ -2,7 +2,11 @@
 #if HAS_UWP
 namespace ViceSharp.Xbox.Views;
 
+using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.Extensions.Logging;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -74,33 +78,101 @@ public sealed partial class SettingsPage : Page
         // the rebuild hooks below never fired on a real model change: the operator's
         // PAL -> NTSC switch kept rendering with the PAL pixel aspect.)
         var restart = ViewModel.RequiresRestart;
+        var profile = ViewModel.SelectedProfileId;
+        App.CreateLogger("Settings").LogInformation(
+            "apply: begin restart={Restart} profile='{Profile}' dirty={Dirty}",
+            restart, profile, ViewModel.IsDirty);
 
-        await ViewModel.ApplySettingsAsync(restartSession: restart);
-
-        if (restart)
+        try
         {
-            // The rebuilt session (same SessionId) invalidated the keyboard-input seam the
-            // VirtualKeyboardViewModel cached at boot. Rebuild it; degrade on any failure:
-            // this runs on the UI thread and must never throw. Idempotent when the restart
-            // did not actually change the machine.
-            try
+            await ViewModel.ApplySettingsAsync(restartSession: restart);
+
+            if (restart)
             {
-                App.Instance.RebuildKeyboardForCurrentSession();
-            }
-            catch (System.Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    $"[ViceSharp.Xbox] keyboard rebuild after model change failed: {ex}");
+                // The rebuilt session (same SessionId) invalidated the keyboard-input seam the
+                // VirtualKeyboardViewModel cached at boot. Rebuild it; degrade on any failure:
+                // this runs on the UI thread and must never throw. Idempotent when the restart
+                // did not actually change the machine.
+                try
+                {
+                    App.Instance.RebuildKeyboardForCurrentSession();
+                }
+                catch (System.Exception ex)
+                {
+                    App.CreateLogger("Settings").LogError(ex, "keyboard rebuild after model change failed");
+                }
+
+                // FIX-XASPECT-001: the recreated session may run a different video standard
+                // (PAL <-> NTSC model change); re-apply the true composite pixel aspect + the
+                // performance HUD's machine facts. (Internally guarded; never throws.)
+                App.Instance.ApplyVideoAspectForCurrentSession();
             }
 
-            // FIX-XASPECT-001: the recreated session may run a different video standard
-            // (PAL <-> NTSC model change); re-apply the true composite pixel aspect + the
-            // performance HUD's machine facts. (Internally guarded; never throws.)
-            App.Instance.ApplyVideoAspectForCurrentSession();
+            App.CreateLogger("Settings").LogInformation(
+                "apply: done status='{Status}' profile='{Profile}' restart={Restart}",
+                ViewModel.StatusText, ViewModel.SelectedProfileId, restart);
+        }
+        catch (System.Exception ex)
+        {
+            // Stack overflows still kill the process; other apply failures should stay visible.
+            App.CreateLogger("Settings").LogError(ex, "apply: failed profile='{Profile}' restart={Restart}", profile, restart);
         }
     }
 
     private void OnRevert(object sender, RoutedEventArgs e) => ViewModel?.RevertSettings();
+
+    private async void OnAttachExpansionCartImage(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is null)
+            return;
+
+        try
+        {
+            var picker = new FileOpenPicker { SuggestedStartLocation = PickerLocationId.Downloads };
+            picker.FileTypeFilter.Add(".bin");
+            picker.FileTypeFilter.Add(".rom");
+            picker.FileTypeFilter.Add(".crt");
+            picker.FileTypeFilter.Add("*");
+
+            StorageFile? file = await picker.PickSingleFileAsync();
+            if (file is null)
+                return;
+
+            var buffer = await FileIO.ReadBufferAsync(file);
+            var bytes = buffer.ToArray();
+            await ViewModel.AttachExpansionCartImageAsync(
+                file.Path,
+                bytes,
+                file.Name);
+            Bindings.Update();
+        }
+        catch (Exception ex)
+        {
+            App.CreateLogger("Settings").LogError(ex, "expansion cart image attach failed");
+        }
+    }
+
+    private async void OnEjectExpansionCartImage(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is null)
+            return;
+
+        try
+        {
+            await ViewModel.EjectExpansionCartImageAsync();
+            Bindings.Update();
+        }
+        catch (Exception ex)
+        {
+            App.CreateLogger("Settings").LogError(ex, "expansion cart image eject failed");
+        }
+    }
+
+    private void OnOpenFlashCartBuilder(object sender, RoutedEventArgs e)
+    {
+        App.Instance.Navigation.Push(NavigationDestination.FlashCartBuilder);
+        Frame?.Navigate(typeof(FlashCartBuilderPage));
+    }
 
     private void OnBack(object sender, RoutedEventArgs e)
     {

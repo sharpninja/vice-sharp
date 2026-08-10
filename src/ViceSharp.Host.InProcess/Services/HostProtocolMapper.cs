@@ -129,7 +129,13 @@ internal static class HostProtocolMapper
             session.DisplaySettings,
             session.InputSettings,
             session.AudioSettings,
-            session.ResourceSettings);
+            session.ResourceSettings,
+            session.Vic20MemorySpec,
+            session.FileSystemIecRootPath,
+            session.FileSystemIecUnit,
+            session.Vic20ExpansionCartKind,
+            session.Vic20ExpansionWriteBack,
+            session.Vic20ExpansionConfigPreset);
     }
 
     public static RpcStatus MissingSessionStatus(string sessionId)

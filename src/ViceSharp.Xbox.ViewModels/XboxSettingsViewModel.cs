@@ -1,12 +1,14 @@
 namespace ViceSharp.Xbox.ViewModels;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using ViceSharp.Abstractions;
 using ViceSharp.Protocol;
 
 /// <summary>
@@ -97,6 +99,10 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     private string _selectedPacingStrategy = SettingsOptionCatalog.PacingStrategies[0];
     private double _limiterRatePercent = 100;
     private string _selectedProfileId = string.Empty;
+    private readonly Vic20MemoryUiState _vic20Memory = new("none");
+    private string _fileSystemIecRootPath = "";
+    private int _fileSystemIecUnit = 9;
+    private readonly ExpansionCartManageState _expansionCart = new();
 
     // Xbox-only preferences (FR-XSET-005): not emulator settings.
     private double _masterVolumePercent = 100;
@@ -106,7 +112,21 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     private double _rightStickDeadzonePercent = 30;
 
     private IReadOnlyList<SettingsProfileDto> _profiles = Array.Empty<SettingsProfileDto>();
-    private IReadOnlyList<SettingsProfileDto> _models = Array.Empty<SettingsProfileDto>();
+
+    /// <summary>
+    /// Host-derived model lists keyed by computer family id (<c>x64sc</c>, <c>xvic</c>).
+    /// Built once per host <see cref="Profiles"/> catalog load. Values are stable
+    /// <see cref="IList{T}"/> instances; the bound <see cref="Models"/> property only
+    /// switches which entry is published when the selected computer changes.
+    /// </summary>
+    private readonly ConcurrentDictionary<string, IList<SettingsProfileDto>> _modelsByComputer =
+        new(StringComparer.Ordinal);
+
+    /// <summary>Currently published model list (dict entry for the selected computer).</summary>
+    private IList<SettingsProfileDto> _models = Array.Empty<SettingsProfileDto>();
+
+    private static readonly IList<SettingsProfileDto> EmptyModels = Array.Empty<SettingsProfileDto>();
+
     private bool _isDirty;
     private bool _requiresRestart;
     private string _statusText = string.Empty;
@@ -185,10 +205,10 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
             if (!SetProperty(ref _profiles, value))
                 return;
 
-            // Model picker: implemented families (C64 + VIC-20); "Minimal host" excluded.
-            RebuildModelsForSelectedFamily();
-            OnPropertyChanged(nameof(SelectedModel));
-            OnPropertyChanged(nameof(SelectedComputer));
+            // Host catalog is SSOT: fill ConcurrentDictionary once; publish Models for computer.
+            BuildModelsByComputerOnce();
+            PublishModelsForSelectedComputer();
+            NotifyModelPickerSelection();
             RefreshSelectedModelRomStatus();
         }
     }
@@ -200,10 +220,12 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     public IReadOnlyList<ComputerOption> Computers { get; }
 
     /// <summary>
-    /// Models for the selected computer family (C64 <c>x64sc</c> or VIC-20 <c>xvic</c>)
-    /// from <see cref="Profiles"/>, excluding the "Minimal host" pseudo-profile.
+    /// Observable model list for the Model ComboBox. Always the
+    /// <see cref="_modelsByComputer"/> entry for the selected computer (stable instance
+    /// within that computer). Raises <see cref="PropertyChanged"/> only when the published
+    /// list instance changes (host catalog load or computer switch), not on PAL/NTSC.
     /// </summary>
-    public IReadOnlyList<SettingsProfileDto> Models => _models;
+    public IList<SettingsProfileDto> Models => _models;
 
     /// <summary>
     /// The model matching the current <see cref="SelectedProfileId"/>, or <c>null</c> when the
@@ -216,7 +238,12 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         get => Models.FirstOrDefault(m => string.Equals(m.Id, SelectedProfileId, StringComparison.Ordinal));
         set
         {
-            if (value is not null && Models.Any(m => string.Equals(m.Id, value.Id, StringComparison.Ordinal)))
+            // WinUI ComboBox TwoWay often writes null while ItemsSource/SelectedItem settle.
+            if (_modelPickerBusy || value is null)
+                return;
+            if (string.Equals(value.Id, SelectedProfileId, StringComparison.Ordinal))
+                return;
+            if (Models.Any(m => string.Equals(m.Id, value.Id, StringComparison.Ordinal)))
                 SelectedProfileId = value.Id;
         }
     }
@@ -237,7 +264,7 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         }
         set
         {
-            if (value is null || !value.IsAvailable)
+            if (_modelPickerBusy || value is null || !value.IsAvailable)
                 return;
 
             if (SelectedComputer is not null
@@ -261,40 +288,74 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
             if (match is null)
                 return;
 
+            // SelectedProfileId switches family key, notifies Models (dict entry) + selection.
             SelectedProfileId = match.Id;
-            RebuildModelsForSelectedFamily();
-            OnPropertyChanged(nameof(SelectedComputer));
-            OnPropertyChanged(nameof(SelectedModel));
         }
     }
 
-    private void RebuildModelsForSelectedFamily()
+    // Blocks ComboBox write-back while we push SelectedModel/SelectedComputer.
+    private bool _modelPickerBusy;
+
+    /// <summary>
+    /// Fills <see cref="_modelsByComputer"/> once from the host <see cref="Profiles"/> catalog.
+    /// Call only when Profiles is replaced.
+    /// </summary>
+    private void BuildModelsByComputerOnce()
     {
-        var family = Profiles.FirstOrDefault(p => string.Equals(p.Id, SelectedProfileId, StringComparison.Ordinal))?.Machine
-            ?? C64FamilyId;
-        _models = BuildModels(Profiles, family);
+        _modelsByComputer.Clear();
+        foreach (var group in Profiles.GroupBy(p => p.Machine, StringComparer.Ordinal))
+        {
+            if (!IsImplementedMachineFamily(group.Key))
+                continue;
+
+            // One stable IList per computer key for the life of this catalog snapshot.
+            _modelsByComputer[group.Key] = group.ToList();
+        }
+    }
+
+    /// <summary>
+    /// Publishes <see cref="Models"/> as the dict entry for the selected computer.
+    /// No-op (no PropertyChanged) when the list instance is already the active one.
+    /// </summary>
+    private void PublishModelsForSelectedComputer()
+    {
+        var family = ResolveSelectedComputerFamilyId();
+        var list = _modelsByComputer.TryGetValue(family, out var models) ? models : EmptyModels;
+        if (ReferenceEquals(_models, list))
+            return;
+
+        _models = list;
         OnPropertyChanged(nameof(Models));
     }
 
-    private static IReadOnlyList<SettingsProfileDto> BuildModels(
-        IReadOnlyList<SettingsProfileDto> profiles,
-        string? familyFilter = null)
+    /// <summary>Computer family id for the active selection (<c>x64sc</c> / <c>xvic</c>).</summary>
+    private string ResolveSelectedComputerFamilyId()
     {
-        var models = new List<SettingsProfileDto>(profiles.Count);
-        foreach (var profile in profiles)
+        var fromProfile = Profiles
+            .FirstOrDefault(p => string.Equals(p.Id, SelectedProfileId, StringComparison.Ordinal))
+            ?.Machine;
+        if (!string.IsNullOrEmpty(fromProfile) && IsImplementedMachineFamily(fromProfile))
+            return fromProfile!;
+
+        return C64FamilyId;
+    }
+
+    private void NotifyModelPickerSelection()
+    {
+        if (_modelPickerBusy)
+            return;
+
+        _modelPickerBusy = true;
+        try
         {
-            if (!IsImplementedMachineFamily(profile.Machine))
-                continue;
-            if (familyFilter is not null
-                && !string.Equals(profile.Machine, familyFilter, StringComparison.Ordinal))
-            {
-                continue;
-            }
-
-            models.Add(profile);
+            OnPropertyChanged(nameof(SelectedModel));
+            OnPropertyChanged(nameof(SelectedComputer));
+            OnPropertyChanged(nameof(IsVic20Selected));
         }
-
-        return models;
+        finally
+        {
+            _modelPickerBusy = false;
+        }
     }
 
     private static bool IsImplementedMachineFamily(string machine)
@@ -396,10 +457,9 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
             if (!SetSettingsProperty(ref _selectedProfileId, value ?? string.Empty))
                 return;
 
-            // Model list is per computer family; rebuild when the profile family may change.
-            RebuildModelsForSelectedFamily();
-            OnPropertyChanged(nameof(SelectedModel));
-            OnPropertyChanged(nameof(SelectedComputer));
+            // Switches published Models only when the computer key changes (dict lookup).
+            PublishModelsForSelectedComputer();
+            NotifyModelPickerSelection();
             RefreshSelectedModelRomStatus();
         }
     }
@@ -409,6 +469,371 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
     /// (Complete / Partial / Not provisioned / Ultimax kernal-optional). Hard boot
     /// block remains the ROM provisioning page; this is guidance only.
     /// </summary>
+    /// <summary>True when the selected model is VIC-20 family.</summary>
+    public bool IsVic20Selected
+    {
+        get
+        {
+            var machine = SelectedModel?.Machine ?? "";
+            var id = SelectedProfileId ?? "";
+            return string.Equals(machine, "vic20", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(machine, Vic20FamilyId, StringComparison.OrdinalIgnoreCase)
+                || id.StartsWith("vic20", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    public IReadOnlyList<string> Vic20MemoryPresets => SettingsOptionCatalog.Vic20MemoryPresets;
+
+    public string SelectedVic20MemoryPreset
+    {
+        get => _vic20Memory.PresetLabel;
+        set
+        {
+            // WinUI ComboBox TwoWay often writes null/empty while updating SelectedItem.
+            // Mapping that to Unexpanded oscillates with "All" and stack-overflows
+            // (STATUS_STACK_OVERFLOW / System.StackOverflowException in WinRT.Runtime).
+            if (_vic20MemoryNotifyBusy || string.IsNullOrWhiteSpace(value))
+                return;
+            if (string.Equals(value, _vic20Memory.PresetLabel, StringComparison.Ordinal))
+                return;
+            if (!_vic20Memory.SetFromPresetLabel(value))
+                return;
+            NotifyVic20Memory();
+        }
+    }
+
+    public bool Vic20Blk0
+    {
+        get => _vic20Memory.Blk0;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk0Bit, value))
+                NotifyVic20Memory();
+        }
+    }
+
+    public bool Vic20Blk1
+    {
+        get => _vic20Memory.Blk1;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk1Bit, value))
+                NotifyVic20Memory();
+        }
+    }
+
+    public bool Vic20Blk2
+    {
+        get => _vic20Memory.Blk2;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk2Bit, value))
+                NotifyVic20Memory();
+        }
+    }
+
+    public bool Vic20Blk3
+    {
+        get => _vic20Memory.Blk3;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk3Bit, value))
+                NotifyVic20Memory();
+        }
+    }
+
+    public bool Vic20Blk5
+    {
+        get => _vic20Memory.Blk5;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk5Bit, value))
+                NotifyVic20Memory();
+        }
+    }
+
+    public string FileSystemIecRootPath
+    {
+        get => _fileSystemIecRootPath;
+        set => SetSettingsProperty(ref _fileSystemIecRootPath, value ?? "");
+    }
+
+    public int FileSystemIecUnit
+    {
+        get => _fileSystemIecUnit;
+        set => SetSettingsProperty(ref _fileSystemIecUnit, value);
+    }
+
+    public IReadOnlyList<string> ExpansionCartKinds => ExpansionCartManageState.CartKinds;
+
+    public string SelectedExpansionCartKind
+    {
+        get => _expansionCart.CartKind;
+        set
+        {
+            var next = string.IsNullOrWhiteSpace(value) ? "none" : value;
+            if (string.Equals(_expansionCart.CartKind, next, StringComparison.Ordinal))
+                return;
+
+            _expansionCart.CartKind = next;
+            // Keep preset in the new list so SelectedItem stays a member of ItemsSource.
+            var presets = _expansionCart.AvailablePresets;
+            if (presets.Count > 0
+                && !presets.Contains(_expansionCart.ConfigPreset, StringComparer.Ordinal))
+            {
+                _expansionCart.ConfigPreset = presets[0];
+            }
+
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ExpansionCartPresets));
+            OnPropertyChanged(nameof(SelectedExpansionCartPreset));
+            OnPropertyChanged(nameof(ShowExpansionCartContentUi));
+            if (!_suppressTracking)
+                RecomputeDirtyState();
+        }
+    }
+
+    public bool ExpansionCartWriteBack
+    {
+        get => _expansionCart.WriteBack;
+        set
+        {
+            if (_expansionCart.WriteBack == value)
+                return;
+            _expansionCart.WriteBack = value;
+            OnPropertyChanged();
+            if (!_suppressTracking)
+                RecomputeDirtyState();
+        }
+    }
+
+    public IReadOnlyList<string> ExpansionCartPresets => _expansionCart.AvailablePresets;
+
+    public string SelectedExpansionCartPreset
+    {
+        get => _expansionCart.ConfigPreset;
+        set
+        {
+            // Ignore ComboBox clear while ItemsSource settles; never map null to a value
+            // that is not in AvailablePresets (null↔start oscillation = stack overflow).
+            if (string.IsNullOrWhiteSpace(value))
+                return;
+            if (string.Equals(_expansionCart.ConfigPreset, value, StringComparison.Ordinal))
+                return;
+            if (!_expansionCart.AvailablePresets.Contains(value, StringComparer.Ordinal))
+                return;
+
+            _expansionCart.ConfigPreset = value;
+            OnPropertyChanged();
+            if (!_suppressTracking)
+                RecomputeDirtyState();
+        }
+    }
+
+    /// <summary>
+    /// Display status for the attached FE3 / Ultimem / Mega-Cart image (empty when none).
+    /// Content is managed via <see cref="AttachExpansionCartImageAsync"/> / eject, not kind alone.
+    /// </summary>
+    public string ExpansionCartImageStatus
+    {
+        get => _expansionCartImageStatus;
+        private set => SetProperty(ref _expansionCartImageStatus, value);
+    }
+
+    /// <summary>True when a cartridge-slot image is currently attached for expansion flash.</summary>
+    public bool HasExpansionCartImage
+    {
+        get => _hasExpansionCartImage;
+        private set => SetProperty(ref _hasExpansionCartImage, value);
+    }
+
+    /// <summary>
+    /// True when VIC-20 is selected and cart kind is FE3, Ultimem, or Mega-Cart
+    /// (content attach UI is relevant).
+    /// </summary>
+    public bool ShowExpansionCartContentUi
+    {
+        get
+        {
+            if (!IsVic20Selected)
+                return false;
+            var kind = SelectedExpansionCartKind;
+            return kind is "fe3" or "ultimem" or "megacart"
+                || HasExpansionCartImage;
+        }
+    }
+
+    /// <summary>
+    /// Attaches an expansion-cart flash image (FE3 / Ultimem / Mega-Cart) through
+    /// <see cref="MediaSlot.Cartridge"/>. Host sizes detect kind. Write-back maps to
+    /// non-read-only when <see cref="ExpansionCartWriteBack"/> is true.
+    /// </summary>
+    public async Task AttachExpansionCartImageAsync(
+        string filePath,
+        byte[]? payload = null,
+        string? displayName = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(filePath) && (payload is null || payload.Length == 0))
+        {
+            StatusText = "No expansion cart image selected.";
+            return;
+        }
+
+        var readOnly = !ExpansionCartWriteBack;
+        var name = string.IsNullOrWhiteSpace(displayName)
+            ? System.IO.Path.GetFileName(filePath)
+            : displayName!;
+
+        AttachMediaResponse response;
+        if (payload is { Length: > 0 })
+        {
+            response = await _gateway
+                .AttachMediaAsync(
+                    MediaSlot.Cartridge,
+                    filePath ?? name,
+                    readOnly,
+                    payload,
+                    name,
+                    cancellationToken)
+                .ConfigureAwait(false);
+        }
+        else
+        {
+            response = await _gateway
+                .AttachMediaAsync(MediaSlot.Cartridge, filePath!, readOnly, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        if (!response.Status.IsSuccess)
+        {
+            StatusText = response.Status.Message;
+            return;
+        }
+
+        ApplyExpansionCartAttachment(response.Attachment);
+        // Host may have auto-set kind from size; re-pull settings when possible.
+        var settings = await _gateway.GetSettingsAsync(cancellationToken).ConfigureAwait(false);
+        if (settings.Status.IsSuccess && settings.Settings is not null)
+        {
+            var kind = settings.Settings.Vic20ExpansionCartKind;
+            if (!string.IsNullOrWhiteSpace(kind) && !string.Equals(kind, "none", StringComparison.OrdinalIgnoreCase))
+            {
+                _suppressTracking = true;
+                try
+                {
+                    SelectedExpansionCartKind = kind;
+                }
+                finally
+                {
+                    _suppressTracking = false;
+                }
+            }
+        }
+
+        StatusText = $"Expansion cart image attached: {name}";
+        OnPropertyChanged(nameof(ShowExpansionCartContentUi));
+    }
+
+    /// <summary>Ejects the FE3 / Ultimem / Mega-Cart (or generic) cartridge-slot image.</summary>
+    public async Task EjectExpansionCartImageAsync(CancellationToken cancellationToken = default)
+    {
+        var response = await _gateway
+            .DetachMediaAsync(MediaSlot.Cartridge, cancellationToken)
+            .ConfigureAwait(false);
+        if (!response.Status.IsSuccess)
+        {
+            StatusText = response.Status.Message;
+            return;
+        }
+
+        ClearExpansionCartAttachment();
+        StatusText = "Expansion cart image ejected.";
+        OnPropertyChanged(nameof(ShowExpansionCartContentUi));
+    }
+
+    /// <summary>Refreshes expansion-cart image status from host media list.</summary>
+    public async Task RefreshExpansionCartMediaAsync(CancellationToken cancellationToken = default)
+    {
+        var response = await _gateway.ListMediaAsync(cancellationToken).ConfigureAwait(false);
+        if (!response.Status.IsSuccess)
+            return;
+
+        var cart = response.Attachments.FirstOrDefault(a => a.Slot == MediaSlot.Cartridge);
+        if (cart is not null)
+            ApplyExpansionCartAttachment(cart);
+        else
+            ClearExpansionCartAttachment();
+
+        OnPropertyChanged(nameof(ShowExpansionCartContentUi));
+    }
+
+    private void ApplyExpansionCartAttachment(MediaAttachmentDto? attachment)
+    {
+        if (attachment is null)
+        {
+            ClearExpansionCartAttachment();
+            return;
+        }
+
+        _expansionCart.ImagePath = attachment.FilePath ?? "";
+        HasExpansionCartImage = true;
+        var label = string.IsNullOrWhiteSpace(attachment.DisplayName)
+            ? System.IO.Path.GetFileName(attachment.FilePath)
+            : attachment.DisplayName;
+        ExpansionCartImageStatus = string.IsNullOrWhiteSpace(label)
+            ? "Image attached"
+            : $"Image: {label}";
+    }
+
+    private void ClearExpansionCartAttachment()
+    {
+        _expansionCart.ImagePath = "";
+        HasExpansionCartImage = false;
+        ExpansionCartImageStatus = "No flash/ROM image attached.";
+    }
+
+    // Blocks TwoWay write-backs while we push memory PropertyChanged (ComboBox/ToggleSwitch).
+    private bool _vic20MemoryNotifyBusy;
+    private string _expansionCartImageStatus = "No flash/ROM image attached.";
+    private bool _hasExpansionCartImage;
+
+    private void NotifyVic20Memory()
+    {
+        if (_vic20MemoryNotifyBusy)
+            return;
+
+        _vic20MemoryNotifyBusy = true;
+        try
+        {
+            OnPropertyChanged(nameof(SelectedVic20MemoryPreset));
+            OnPropertyChanged(nameof(Vic20Blk0));
+            OnPropertyChanged(nameof(Vic20Blk1));
+            OnPropertyChanged(nameof(Vic20Blk2));
+            OnPropertyChanged(nameof(Vic20Blk3));
+            OnPropertyChanged(nameof(Vic20Blk5));
+            // Do not notify IsVic20Selected here: memory map does not change machine family,
+            // and re-running visibility bindings multiplies ComboBox write-back risk.
+        }
+        finally
+        {
+            _vic20MemoryNotifyBusy = false;
+        }
+
+        if (!_suppressTracking)
+            RecomputeDirtyState();
+    }
+
     public string SelectedModelRomStatus
     {
         get => _selectedModelRomStatus;
@@ -564,6 +989,9 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         IsDirty = false;
         RequiresRestart = false;
         StatusText = "Settings loaded from host.";
+
+        // Expansion cart flash/ROM content is media-slot state, not a settings DTO field.
+        await RefreshExpansionCartMediaAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -684,6 +1112,20 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         SelectedPacingStrategy = SettingsOptionCatalog.FromPacingStrategyId(settings.Limiter.PacingStrategy);
         LimiterRatePercent = settings.Limiter.RatePercent;
         SelectedProfileId = settings.ProfileId;
+        PublishModelsForSelectedComputer();
+        _vic20Memory.SetFromSpec(settings.Vic20MemorySpec);
+        FileSystemIecRootPath = settings.FileSystemIecRootPath ?? "";
+        FileSystemIecUnit = settings.FileSystemIecUnit is >= 8 and <= 11 ? settings.FileSystemIecUnit : 9;
+        SelectedExpansionCartKind = string.IsNullOrWhiteSpace(settings.Vic20ExpansionCartKind) ? "none" : settings.Vic20ExpansionCartKind;
+        ExpansionCartWriteBack = settings.Vic20ExpansionWriteBack;
+        var preset = string.IsNullOrWhiteSpace(settings.Vic20ExpansionConfigPreset) ? "start" : settings.Vic20ExpansionConfigPreset;
+        // Assign only when the preset is valid for the kind (avoids empty-list ComboBox SO).
+        if (_expansionCart.AvailablePresets.Contains(preset, StringComparer.Ordinal))
+            SelectedExpansionCartPreset = preset;
+        OnPropertyChanged(nameof(IsVic20Selected));
+        OnPropertyChanged(nameof(ShowExpansionCartContentUi));
+        // Re-entrancy-safe push of memory bindables (same path as user preset edits).
+        NotifyVic20Memory();
     }
 
     private UpdateSettingsRequest BuildUpdateRequest(bool restartSession) => new(
@@ -694,7 +1136,13 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         SelectedProfileId,
         restartSession,
         BuildAudio(),
-        BuildResources());
+        BuildResources(),
+        IsVic20Selected ? _vic20Memory.MemorySpec : null,
+        FileSystemIecRootPath,
+        FileSystemIecUnit,
+        SelectedExpansionCartKind,
+        ExpansionCartWriteBack,
+        SelectedExpansionCartPreset);
 
     private ValidateSettingsResourcesRequest BuildValidateRequest() => new(
         _sessionId,
@@ -746,7 +1194,13 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         Muted,
         TvSafeAreaInsetPercent,
         LeftStickDeadzonePercent,
-        RightStickDeadzonePercent);
+        RightStickDeadzonePercent,
+        _vic20Memory.MemorySpec,
+        FileSystemIecRootPath,
+        FileSystemIecUnit,
+        SelectedExpansionCartKind,
+        ExpansionCartWriteBack,
+        SelectedExpansionCartPreset);
 
     private void RestoreBaseline(SettingsBaseline baseline)
     {
@@ -768,6 +1222,14 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         TvSafeAreaInsetPercent = baseline.TvSafeAreaInsetPercent;
         LeftStickDeadzonePercent = baseline.LeftStickDeadzonePercent;
         RightStickDeadzonePercent = baseline.RightStickDeadzonePercent;
+        _vic20Memory.SetFromSpec(baseline.Vic20MemorySpec);
+        FileSystemIecRootPath = baseline.FileSystemIecRootPath;
+        FileSystemIecUnit = baseline.FileSystemIecUnit;
+        SelectedExpansionCartKind = baseline.ExpansionCartKind;
+        ExpansionCartWriteBack = baseline.ExpansionWriteBack;
+        SelectedExpansionCartPreset = baseline.ExpansionPreset;
+        OnPropertyChanged(nameof(IsVic20Selected));
+        NotifyVic20Memory();
     }
 
     private void RecomputeDirtyState()
@@ -776,7 +1238,8 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         IsDirty = !current.Equals(_baseline);
         RequiresRestart =
             !string.Equals(current.ProfileId, _baseline.ProfileId, StringComparison.Ordinal)
-            || !string.Equals(current.ResourceMode, _baseline.ResourceMode, StringComparison.Ordinal);
+            || !string.Equals(current.ResourceMode, _baseline.ResourceMode, StringComparison.Ordinal)
+            || !string.Equals(current.Vic20MemorySpec, _baseline.Vic20MemorySpec, StringComparison.Ordinal);
     }
 
     private void ReplaceValidationResults(IReadOnlyList<SettingsResourceValidationDto> resources)
@@ -856,5 +1319,11 @@ public sealed class XboxSettingsViewModel : INotifyPropertyChanged
         bool Muted,
         double TvSafeAreaInsetPercent,
         double LeftStickDeadzonePercent,
-        double RightStickDeadzonePercent);
+        double RightStickDeadzonePercent,
+        string Vic20MemorySpec,
+        string FileSystemIecRootPath,
+        int FileSystemIecUnit,
+        string ExpansionCartKind,
+        bool ExpansionWriteBack,
+        string ExpansionPreset);
 }

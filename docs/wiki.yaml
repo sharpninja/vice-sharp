@@ -72,6 +72,13 @@ documents:
   platforms:
   - github
   - azure
+- id: flash-cart-builder
+  title: Flash Cart Image Builder
+  source: docs/FlashCart-Builder.md
+  target: Flash-Cart-Builder.md
+  platforms:
+  - github
+  - azure
 - id: privacy
   title: Privacy Policy
   source: docs/PRIVACY.md
@@ -160,6 +167,13 @@ documents:
   title: Iteration Roadmap
   source: docs/Iteration-Roadmap.md
   target: Iteration-Roadmap.md
+  platforms:
+  - github
+  - azure
+- id: audit-vic20-vs-vice
+  title: VIC-20 vs VICE Implementation Audit
+  source: docs/audit-vic20-vs-vice-2026-08-07.md
+  target: VIC20-vs-VICE-Audit.md
   platforms:
   - github
   - azure
@@ -269,6 +283,7 @@ navigation:
   children:
   - document: project-overview
   - document: user-guide
+  - document: flash-cart-builder
   - document: vice-migration
   - document: rom-setup
   - document: privacy
@@ -281,6 +296,7 @@ navigation:
   - document: decoupling
   - document: state-window
   - document: iteration-roadmap
+  - document: audit-vic20-vs-vice
   - document: ai-review
   - document: registry-of-lore
 - title: Requirements

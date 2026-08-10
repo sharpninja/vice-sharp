@@ -58,13 +58,15 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
   - Desktop packaging is self-contained JIT + ReadyToRun through Nuke `PublishMsi`; native ahead-of-time publishing is no longer a project requirement
   - External debuggers can attach deterministically through `%LOCALAPPDATA%\ViceSharp\debug-attach.json` and `DiagnosticsService`
 
-✅ **Iteration 2 (VIC-20)**: **Core + every-cycle native lockstep (2026-08-06)**:
+✅ **Iteration 2 (VIC-20)**: **Core + every-cycle native lockstep + present-path + expansion UX (2026-08-08)**:
   - Managed VIC-20 (PAL/NTSC), dual VIA, VIC-I, color RAM open-bus, default drive 8 = 1540
   - Native oracle: `vice_xvic.dll` / `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
   - Every-cycle A/X/Y/S/P/PC vs xvic: **TenSecondPal** 11_084_050 and **TenSecondNtsc** 10_227_270 green
-  - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`
+  - READY present geometry Exact-scoped: VICE `first_x` crop (PAL first_x=48), L+R border bands, paper origin 48 (not invent `src=0` or paper strip)
+  - Settings: wrap BLK0/1/2/3/5 toggles; FE3 / Ultimem / Mega-Cart attach/eject; portable [Flash Cart Builder](docs/FlashCart-Builder.md) (Avalonia dialog + Xbox page)
+  - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`; hostile AGREE `docs/receipts/hostile-validator-20260808T094911Z.md` (borders), `docs/receipts/hostile-validator-20260808T103211Z.md` (flash builder)
   - Gates (env): `VICESHARP_LOCKSTEP_10S=1`, `VICESHARP_LOCKSTEP_2S=1`; filter `FullyQualifiedName~Vic20DivergeProbe`
-  - Tier-A polish still open: expansion UX, input E2E, cart/disk depth, snapshots (see [HANDOFF.md](HANDOFF.md))
+  - Still open: full FE3 flash040 FSM, pixel framebuffer lockstep vs xvic, input E2E, snapshots (see [HANDOFF.md](HANDOFF.md))
 
 Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
@@ -77,7 +79,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-06` on `main` (line **v1.2.2**; VIC-20 every-cycle 10s PAL+NTSC lockstep green; Store art + CC BY-SA C= logo attribution; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-10` on `main` (GitVersion base **v1.2.2**; local MSI/deploy line **1.2.7** from commits-since-version; VIC-20 every-cycle 10s lockstep + READY first_x borders + flash cart builder; Store art + CC BY-SA C= logo attribution; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. PLATFORM-CROSS-001: macOS, Xbox, Android, iOS host shells scaffolded.
 
 **Legend**: State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -121,7 +123,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Machine | Target Iteration | State | % |
 |---------|:----------------:|:----:|:----:|
 | SX-64 | 1 | ⚪ | 0% |
-| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ✅ | 95% |
+| VIC-20 (MOS 6502 + VIC-I + VIA x2) | 2 | ✅ | 97% |
 | C128 (MOS 8502 + VIC-IIe + Z80) | 3 | ⚪ | 0% |
 | PET (MOS 6502 + PIA/VIA + CRTC) | 4 | ⚪ | 0% |
 | Plus/4 / C16 (MOS 7501 + TED) | 5 | ⚪ | 0% |

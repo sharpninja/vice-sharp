@@ -86,7 +86,9 @@ public static class AboutInfo
 
     /// <summary>
     /// The fallback version string used when the running assembly does not carry a
-    /// resolvable version (see <see cref="AboutViewModel.Version"/>).
+    /// resolvable product version (see <see cref="AboutViewModel.Version"/>).
+    /// Matches <c>GitVersion.yml</c> <c>next-version</c> major.minor.patch base;
+    /// stamped builds prefer <see cref="System.Reflection.AssemblyInformationalVersionAttribute"/>.
     /// </summary>
-    public const string Version = "1.0.0";
+    public const string Version = "1.2.2";
 }

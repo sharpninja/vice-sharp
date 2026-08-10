@@ -125,6 +125,31 @@ struct vice_vic_state {
 
 VICE_SHIM_API void vice_vic_get_state(void* machine, struct vice_vic_state* state);
 
+/* VIC-I (VIC-20) every-cycle video pipeline export for lockstep vs managed Mos6561.
+ * Mirrors vic.area / fetch_state / memptr / cbuf / gbuf / regs from victypes.h.
+ * Not used by C64SC (zeros if called on wrong machine). */
+struct vice_vic20_video_state {
+    uint32_t cycle;
+    uint16_t raster_line;
+    uint8_t raster_cycle;
+    uint8_t area;
+    uint8_t fetch_state;
+    uint8_t text_cols;
+    uint8_t text_lines;
+    uint8_t ycounter;
+    uint8_t row_counter;
+    uint8_t blank_this_line;
+    uint8_t line_was_blank;
+    uint8_t char_height;
+    uint16_t memptr;
+    uint16_t memptr_inc;
+    uint8_t regs[16];
+    uint8_t cbuf[32];
+    uint8_t gbuf[32];
+};
+
+VICE_SHIM_API void vice_vic20_get_video_state(void* machine, struct vice_vic20_video_state* state);
+
 // Visible frame capture (for native visible raster/pixel checkpoints under display-mode effects, e.g. invalid ECM COL_NONE black per vicii-draw-cycle.c:133-141 etc.).
 // Returns non-zero on success; fills buffer with BGRA (320x200 recommended). Authentic from native VICE vicii state.
 VICE_SHIM_API int vice_machine_capture_visible_frame(void* machine, uint8_t* buffer, int length, int* width, int* height);

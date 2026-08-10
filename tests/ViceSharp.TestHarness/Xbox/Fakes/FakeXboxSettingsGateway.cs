@@ -122,15 +122,24 @@ public sealed class FakeXboxSettingsGateway : IXboxSettingsGateway
     {
         cancellationToken.ThrowIfCancellationRequested();
         LastUpdateRequest = request;
+        var baseline = CannedSettings;
         return ValueTask.FromResult(new UpdateSettingsResponse(
             RpcStatus.Ok(),
             UpdateResponseOverride ?? new SessionSettingsDto(
-                string.IsNullOrWhiteSpace(request.ProfileId) ? "c64" : request.ProfileId,
-                request.Limiter ?? new LimiterSettingsDto(),
-                request.Display ?? new DisplaySettingsDto(),
-                request.Input ?? new InputSettingsDto(),
-                request.Audio ?? new AudioSettingsDto(),
-                request.Resources ?? new ResourceSettingsDto()),
+                string.IsNullOrWhiteSpace(request.ProfileId)
+                    ? (baseline?.ProfileId ?? "c64")
+                    : request.ProfileId,
+                request.Limiter ?? baseline?.Limiter ?? new LimiterSettingsDto(),
+                request.Display ?? baseline?.Display ?? new DisplaySettingsDto(),
+                request.Input ?? baseline?.Input ?? new InputSettingsDto(),
+                request.Audio ?? baseline?.Audio ?? new AudioSettingsDto(),
+                request.Resources ?? baseline?.Resources ?? new ResourceSettingsDto(),
+                Vic20MemorySpec: request.Vic20MemorySpec ?? baseline?.Vic20MemorySpec ?? "",
+                FileSystemIecRootPath: request.FileSystemIecRootPath ?? baseline?.FileSystemIecRootPath ?? "",
+                FileSystemIecUnit: request.FileSystemIecUnit ?? baseline?.FileSystemIecUnit ?? 9,
+                Vic20ExpansionCartKind: request.Vic20ExpansionCartKind ?? baseline?.Vic20ExpansionCartKind ?? "none",
+                Vic20ExpansionWriteBack: request.Vic20ExpansionWriteBack ?? baseline?.Vic20ExpansionWriteBack ?? false,
+                Vic20ExpansionConfigPreset: request.Vic20ExpansionConfigPreset ?? baseline?.Vic20ExpansionConfigPreset ?? "start"),
             Array.Empty<SettingApplyDiagnosticDto>()));
     }
 

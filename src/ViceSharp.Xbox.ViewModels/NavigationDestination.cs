@@ -70,4 +70,9 @@ public enum NavigationDestination
     /// capped selection into RomM via the csdb-bridge sidecar.
     /// </summary>
     Csdb,
+
+    /// <summary>
+    /// FR-FLASHCART-001: build FE3 / Ultimem / Mega-Cart flash images from bank imports.
+    /// </summary>
+    FlashCartBuilder,
 }

@@ -1,8 +1,63 @@
-# ViceSharp Handoff - 2026-08-06
+# ViceSharp Handoff - 2026-08-10
 
-**Active branch:** `feat/iteration2-vic20` (off `main` @ v1.2.1 line). Iteration 2 = overall project VIC-20 (not RomM Phase E).
-**Prior release baseline:** `main` at **v1.2.1** (NuGet + winget published). Iteration 1 C64 complete.
-**Working tree noise (do not commit):** untracked `docs/S-Blox/`, `docs/reviews/*`, `docs/romless-vic-badline-fix.md`, `manifests/`, many `docs/*-2026-08-06.log` lockstep artifacts.
+**Active branch:** `main` (GitVersion base **v1.2.2**; local MSI/deploy line **1.2.7** from commits-since-version). Iteration 1 C64 complete; Iteration 2 VIC-20 core + lockstep + present-path + expansion UX on tree.
+**Remotes:** `origin` = GitHub `sharpninja/vice-sharp` (downstream); Azure DevOps `azure` is source of truth for package/CI when both are used. Default push target per AGENTS: `origin` unless operator says otherwise.
+**Working tree noise (do not commit unless operator asks):** untracked `docs/S-Blox/`, `docs/reviews/*`, bulk `docs/2s-*`, `docs/10s-*`, `docs/*-focused-*.log`, `docs/_deploy-*`, `docs/xvic-*` probe captures, `manifests/` winget copies. Prefer durable receipts under `docs/receipts*` and `docs/receipts/`.
+
+## Session closeout 2026-08-10 (refresh-docs + wrap-up)
+
+### What landed on the working tree (pre-commit / commit this wrap-up)
+
+1. **VIC-I READY present path (Exact-scoped geometry)**
+   - `Mos6561`: full-line paint + border blank outside paper; crop via VICE `ComputeViewportFirstX` (READY PAL first_x=48, L+R 48, paper origin 48). Rejected invent crop `src=0` and continuous paper strip.
+   - Tests: `Vic20VideoTests` geometry/latch/space; audit rebaselined `docs/audit-vic20-vs-vice-2026-08-07.md`.
+   - Hostile AGREE: `docs/receipts/hostile-validator-20260808T094911Z.md`.
+
+2. **VIC-20 expansion Settings UX**
+   - Avalonia: `WrapPanel` BLK0/1/2/3/5; expansion cart kind/preset/write-back; Build cart image dialog.
+   - Xbox UWP: `VariableSizedWrapGrid` for BLKs (no WrapPanel); attach/eject expansion image; navigate to FlashCartBuilder page.
+   - Protocol/host: expansion cart manage state, media size detect, settings option catalog.
+
+3. **Flash Cart Image Builder (Byrd slice)**
+   - Core: `src/ViceSharp.Core/FlashCarts/*` (profiles FE3 512K, Ultimem 1MB, MegaCart+NVRAM, EasyFlash layout).
+   - Portable `FlashCartImageBuilderViewModel`; FE3 presets on expansion cart surface.
+   - UI: Avalonia `FlashCartBuilderView`; Xbox `FlashCartBuilderPage`.
+   - Tests: `tests/ViceSharp.TestHarness/FlashCart/*`.
+   - Hostile AGREE: `docs/receipts/hostile-validator-20260808T103211Z.md`.
+   - Residual **Partial**: FE3 flash040 program/erase FSM vs full VICE.
+
+4. **Deploy evidence (local lab)**
+   - Desktop: Nuke `InstallMsi` ProductVersion **1.2.7** succeeded (`docs/_deploy-desktop-2026-08-08_045501.log`).
+   - Xbox: `DeployXboxLocal` used in-session (see deploy logs under `docs/_deploy-xbox-*`).
+
+5. **Docs refresh this turn**
+   - README Iteration 2 + dashboard date; USER-GUIDE VIC-20 row; Iteration-Roadmap; new `docs/FlashCart-Builder.md`; wiki.yaml + docs/README index; this handoff.
+
+### Exact vs Partial discipline
+
+- Exact only with VICE file+function + matching managed control + hostile AGREE when claiming Exact.
+- Do **not** claim whole-machine Exact or pixel framebuffer lockstep vs xvic (still Missing / Partial per audit).
+- CPU every-cycle 10s lockstep remains green (separate from video FB).
+
+### Resume next
+
+1. Optional: FE3 flash040 residual (TDD first).
+2. Optional: pixel framebuffer compare vs xvic (`capture_visible_frame` / present path).
+3. Optional: re-run desktop InstallMsi if Avalonia builder only was built after last MSI.
+4. Store/Partner Center ADO wiring still open (see Store section below).
+5. Query MCP TODO store for live backlog; snapshot list at bottom is stale.
+
+### Validation commands (focused)
+
+```pwsh
+dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "FullyQualifiedName~FlashCart"
+dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "FullyQualifiedName~Vic20Video"
+git diff --check
+```
+
+Full baseline (long): filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy` (expect 0 failed; skips allowed only if pre-existing category policy).
+
+---
 
 ## VIC-20 every-cycle lockstep - PAL + NTSC 10s GREEN (2026-08-06)
 

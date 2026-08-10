@@ -1,7 +1,7 @@
 {
   "schema": "mcp-requirements-wiki/v1",
   "platform": "azure",
-  "generatedAtUtc": "2026-08-07T02:28:44.9985875+00:00",
+  "generatedAtUtc": "2026-08-10T13:09:54.4905001+00:00",
   "documents": [
     "Home.md",
     "Functional-Requirements.md",
@@ -13,6 +13,7 @@
     "User-Guide.md",
     "VICE-Migration.md",
     "ROM-Setup.md",
+    "Flash-Cart-Builder.md",
     "Privacy-Policy.md",
     "Xbox-Store-Publishing.md",
     "Store-Listing-Copy.md",
@@ -26,9 +27,11 @@
     "Video-Audio-Decoupling.md",
     "State-Window.md",
     "Iteration-Roadmap.md",
+    "VIC20-vs-VICE-Audit.md",
     "AI-Review.md",
     "Registry-of-Lore.md",
     "Functional-Requirements-Overview.md",
+    "FR-Xbox-Branding.md",
     "Technical-Requirements-Overview.md",
     "Test-Requirements.md",
     "X64sc-Model-Matrix.md",

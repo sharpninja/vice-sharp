@@ -10,7 +10,7 @@ namespace ViceSharp.Architectures.Vic20;
 /// FR-PRF-005, FR-VIC20-001..006.
 /// VIA and video board wiring live in Core builder; shared chips stay machine-agnostic.
 /// </remarks>
-public sealed class Vic20Descriptor : IProfiledArchitectureDescriptor, IVic20CartridgeHost
+public sealed class Vic20Descriptor : IProfiledArchitectureDescriptor, IVic20CartridgeHost, IVic20RamConfiguration
 {
     public Vic20Descriptor()
         : this(Vic20MachineProfiles.Default)
@@ -63,9 +63,16 @@ public sealed class Vic20Descriptor : IProfiledArchitectureDescriptor, IVic20Car
         Profile.KernalRomName,
         Profile.CharacterRomName);
 
+    /// <summary>Optional xvic-style memory override (settings); null uses <see cref="Vic20MachineProfile.Expansion"/>.</summary>
+    public Vic20RamBlocks? RamBlocksOverride { get; init; }
+
     /// <summary>Clone with a different expansion pack.</summary>
     public Vic20Descriptor WithExpansion(Vic20Expansion expansion)
         => new(Profile with { Expansion = expansion }, Cartridge);
+
+    /// <summary>Clone with xvic RAM block flags (custom maps e.g. 60,a0).</summary>
+    public Vic20Descriptor WithRamBlocks(Vic20RamBlocks blocks)
+        => new(Profile, Cartridge) { RamBlocksOverride = blocks };
 
     /// <summary>Clone with an attached MVP cartridge.</summary>
     public Vic20Descriptor WithCartridge(Vic20Cartridge cartridge)

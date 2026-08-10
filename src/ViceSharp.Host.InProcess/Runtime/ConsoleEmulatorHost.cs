@@ -339,16 +339,39 @@ public sealed class ConsoleHost : IConsoleEmulatorHost, IConsoleDeterministicSte
     /// <summary>
     /// The number of frame rows the session's video standard actually writes into the fixed
     /// VIC frame buffer (FIX-XNTSCFILL-001: NTSC 246 of 272; PAL the full 272), or <c>null</c>
-    /// when the session is unknown or has no VIC-II video chip. Displays crop to this height
-    /// so NTSC content fills the screen instead of carrying its in-frame black band.
+    /// when the session is unknown or has no video chip. VIC-I reports its full frame height
+    /// (xvic normal-border geometry). Displays crop to this height so NTSC content fills
+    /// the screen instead of carrying its in-frame black band.
     /// </summary>
     /// <param name="sessionId">The session whose frame content height is requested.</param>
     /// <returns>The written content rows, or <c>null</c>.</returns>
     public int? GetFrameContentHeight(string sessionId)
-        => _registry.TryGet(sessionId, out var session)
-            && session.Machine.Devices.GetByRole(DeviceRole.VideoChip) is Chips.VicIi.Mos6569 vic
-                ? Chips.VicIi.VideoRenderer.GetContentLines(vic.VisibleLines)
-                : null;
+    {
+        if (!_registry.TryGet(sessionId, out var session))
+            return null;
+        var chip = session.Machine.Devices.GetByRole(DeviceRole.VideoChip);
+        return chip switch
+        {
+            Chips.VicIi.Mos6569 vicIi => Chips.VicIi.VideoRenderer.GetContentLines(vicIi.VisibleLines),
+            Chips.Vic.Mos6561 vicI => vicI.FrameHeight,
+            _ => null,
+        };
+    }
+
+    /// <summary>
+    /// VIC-I composite pixel aspect (VICE <c>vic_get_pixel_aspect</c>), or false when the
+    /// session is not a VIC-20 / has no Mos6561.
+    /// </summary>
+    public bool TryGetVicIPixelAspect(string sessionId, out float aspect)
+    {
+        aspect = 1f;
+        if (!_registry.TryGet(sessionId, out var session))
+            return false;
+        if (session.Machine.Devices.GetByRole(DeviceRole.VideoChip) is not Chips.Vic.Mos6561 vic)
+            return false;
+        aspect = vic.PixelAspectRatio;
+        return true;
+    }
 
     /// <inheritdoc />
     public ConsoleSessionResult StartC64Session(ConsoleSessionOptions? options = null)

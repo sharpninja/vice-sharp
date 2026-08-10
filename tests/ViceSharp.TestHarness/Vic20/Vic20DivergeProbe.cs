@@ -91,7 +91,9 @@ public sealed class Vic20DivergeProbe
 
     /// <summary>
     /// Steps managed Vic20 and native xvic together; returns matched cycle count.
-    /// Throws with a ring dump on first A/X/Y/S/P/PC mismatch.
+    /// Throws with a ring dump on first A/X/Y/S/P/PC mismatch, and (unless
+    /// VICESHARP_LOCKSTEP_VIDEO=0) on first VIC-I video pipeline mismatch.
+    /// Video is tracked like CPU: every phi2 after step, not end-of-frame only.
     /// </summary>
     public static int RunEveryCycle(int budget, string modelSelector = "vic20")
     {
@@ -100,6 +102,11 @@ public sealed class Vic20DivergeProbe
         var managed = MachineTestFactory.CreateVic20Machine(modelSelector);
         managed.Reset();
         var cpu = managed.Devices.GetAll<Mos6502>().First();
+        var vic = managed.Devices.GetAll<Mos6561>().FirstOrDefault();
+        var trackVideo = !string.Equals(
+            Environment.GetEnvironmentVariable("VICESHARP_LOCKSTEP_VIDEO"),
+            "0",
+            StringComparison.Ordinal);
 
         var log = new StringBuilder();
         const int pre = 12;
@@ -114,13 +121,21 @@ public sealed class Vic20DivergeProbe
             var n = native.GetState();
             var m = managed.GetState();
             var mismatch = n.PC != m.PC || n.A != m.A || n.X != m.X || n.Y != m.Y || n.S != m.S || n.P != m.P;
+            string? videoDetail = null;
+            if (trackVideo && vic is not null)
+            {
+                var nv = native.GetVic20VideoState();
+                var mv = vic.CaptureVideoLockstepState((uint)i);
+                videoDetail = Vic20VideoLockstep.DescribeMismatch(nv, mv);
+            }
+
             var line =
                 $"c={i} nPC=${n.PC:X4} mPC=${m.PC:X4} nA=${n.A:X2} mA=${m.A:X2} nX=${n.X:X2} mX=${m.X:X2} " +
                 $"nY=${n.Y:X2} mY=${m.Y:X2} nS=${n.S:X2} mS=${m.S:X2} nP=${n.P:X2} mP=${m.P:X2} " +
                 $"dbgCyc={cpu.DebugCycle} op=${cpu.DebugOpcode:X2} trail={cpu.DebugPriorTrailingAtNextPc} " +
                 $"nonOvlR={cpu.DebugNonOverlappedRegion} nonOvlF={cpu.DebugNonOverlappedFetchPhase} " +
                 $"dly={cpu.DebugDelayNextFetch} stg={cpu.DebugStagedMemoryReadCompleted} " +
-                $"irq={cpu.DebugInterruptSequenceRemaining} mis={mismatch}";
+                $"irq={cpu.DebugInterruptSequenceRemaining} mis={mismatch} vmis={videoDetail is not null}";
 
             ring[ringAt] = line;
             ringAt = (ringAt + 1) % pre;
@@ -150,9 +165,19 @@ public sealed class Vic20DivergeProbe
                             $"m$912B=${managed.Bus.Peek(0x912B):X2} n$912B=${native.PeekBus(0x912B):X2} " +
                             $"m$912D=${managed.Bus.Peek(0x912D):X2} n$912D=${native.PeekBus(0x912D):X2} " +
                             $"m$912E=${managed.Bus.Peek(0x912E):X2} n$912E=${native.PeekBus(0x912E):X2} " +
-                            $"mis={mismatch}{Environment.NewLine}");
+                            $"mis={mismatch} vmis={videoDetail}{Environment.NewLine}");
                     }
                 }
+            }
+
+            if (videoDetail is not null)
+            {
+                var startV = (ringAt - ringCount + pre) % pre;
+                for (var k = 0; k < ringCount; k++)
+                    log.AppendLine(ring[(startV + k) % pre]);
+                log.AppendLine($"VIDEO: {videoDetail}");
+                throw new Xunit.Sdk.XunitException(
+                    $"VIDEO DIV first={i} matchedCycles={i - 1} budget={budget}\n{log}");
             }
 
             if (!mismatch)
@@ -208,7 +233,6 @@ public sealed class Vic20DivergeProbe
                 var nPtrHi = native.PeekBus((byte)(zp + 1));
                 var nEff = (ushort)((nPtrLo | (nPtrHi << 8)) + n.Y);
                 var mVBus = managed.Bus is BasicBus bb ? bb.VBusLastData : (byte)0;
-                var vic = managed.Devices.GetAll<Mos6561>().FirstOrDefault();
                 log.AppendLine(
                     $"indy: zp=${zp:X2} mPtr=${ptrHi:X2}{ptrLo:X2} nPtr=${nPtrHi:X2}{nPtrLo:X2} " +
                     $"mEff=${eff:X4}=${managed.Bus.Peek(eff):X2} nEff=${nEff:X4}=${native.PeekBus(nEff):X2} " +

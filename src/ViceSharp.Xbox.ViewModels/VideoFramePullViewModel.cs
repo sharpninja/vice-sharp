@@ -17,10 +17,10 @@ using System;
 /// stall the emulation worker.
 /// </para>
 /// <para>
-/// The pull buffer is allocated exactly ONCE, from the first available
-/// <see cref="FrameGeometry"/>, and reused for every subsequent tick, so the ~50 Hz pull
-/// allocates nothing on its steady-state path (zero-allocation hot path). There is no
-/// lock and no core-advancing call.
+/// The pull buffer is sized from live <see cref="FrameGeometry"/> and reused while the
+/// length is sufficient, so the ~50 Hz pull allocates nothing on its steady-state path.
+/// It may grow once when geometry expands (VIC-20 boots with unprogrammed columns/rows,
+/// then KERNAL expands the frame). There is no lock and no core-advancing call.
 /// </para>
 /// </remarks>
 public sealed class VideoFramePullViewModel
@@ -80,8 +80,8 @@ public sealed class VideoFramePullViewModel
         _hasFrame && _buffer is not null ? _buffer.AsSpan(0, _bufferLength) : ReadOnlySpan<byte>.Empty;
 
     /// <summary>
-    /// Pulls ONE latest committed frame into the reused buffer. Allocates the buffer once
-    /// (on the first available geometry) and never reallocates thereafter.
+    /// Pulls ONE latest committed frame into the reused buffer. Grows the buffer when the
+    /// live frame is larger than a prior geometry (VIC-20 post-KERNAL resize).
     /// </summary>
     /// <returns>
     /// <c>true</c> when a frame was copied; <c>false</c> before the first published frame
@@ -89,24 +89,51 @@ public sealed class VideoFramePullViewModel
     /// </returns>
     public bool Tick()
     {
+        EnsureBufferCapacity();
+
         var buffer = _buffer;
         if (buffer is null)
-        {
-            if (!_frames.TryGetFrameGeometry(_sessionId, out var geometry) || geometry.BufferLength <= 0)
-                return false;
-
-            buffer = new byte[geometry.BufferLength];
-            _buffer = buffer;
-            _bufferLength = geometry.BufferLength;
-        }
+            return false;
 
         if (!_frames.TryCopyFrameInto(_sessionId, buffer, out var width, out var height, out var cycle))
-            return false;
+        {
+            // Published frame grew past our buffer after the geometry query: grow and retry once.
+            if (!EnsureBufferCapacity(forceRefresh: true) || _buffer is null)
+                return false;
+            buffer = _buffer;
+            if (!_frames.TryCopyFrameInto(_sessionId, buffer, out width, out height, out cycle))
+                return false;
+        }
+
+        // Published length may be smaller than capacity after a grow; expose only the frame.
+        var needed = height > 0 && width > 0 ? width * height * 4 : 0;
+        if (needed > 0 && needed <= buffer.Length)
+            _bufferLength = needed;
 
         _width = width;
         _height = height;
         _cycle = cycle;
         _hasFrame = true;
+        return true;
+    }
+
+    /// <summary>
+    /// Ensures <see cref="_buffer"/> can hold the current session geometry.
+    /// Returns false when geometry is not available yet.
+    /// </summary>
+    private bool EnsureBufferCapacity(bool forceRefresh = false)
+    {
+        if (!_frames.TryGetFrameGeometry(_sessionId, out var geometry) || geometry.BufferLength <= 0)
+            return _buffer is not null;
+
+        if (_buffer is not null && _buffer.Length >= geometry.BufferLength && !forceRefresh)
+            return true;
+
+        if (_buffer is not null && _buffer.Length >= geometry.BufferLength)
+            return true;
+
+        _buffer = new byte[geometry.BufferLength];
+        _bufferLength = geometry.BufferLength;
         return true;
     }
 

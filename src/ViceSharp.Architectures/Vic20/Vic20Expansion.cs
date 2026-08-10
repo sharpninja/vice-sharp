@@ -1,5 +1,6 @@
 using CoreLayout = ViceSharp.Core.Vic20.Vic20MemoryLayout;
 using CoreExpansion = ViceSharp.Core.Vic20.Vic20ExpansionKind;
+using CoreBlocks = ViceSharp.Core.Vic20.Vic20RamBlocks;
 
 namespace ViceSharp.Architectures.Vic20;
 
@@ -18,15 +19,24 @@ public enum Vic20Expansion
 }
 
 /// <summary>
-/// Architecture-layer facade over <see cref="CoreLayout"/>.
+/// Architecture-layer facade over <see cref="CoreLayout"/> (xvic RAM blocks).
 /// </summary>
 public static class Vic20MemoryLayout
 {
     public const ushort UnexpandedScreenBase = CoreLayout.UnexpandedScreenBase;
 
+    public static CoreBlocks ToBlocks(Vic20Expansion expansion)
+        => CoreLayout.ToBlocks((CoreExpansion)(int)expansion);
+
     public static bool IsInstalledRam(Vic20Expansion expansion, ushort address)
-        => CoreLayout.IsInstalledRam((CoreExpansion)(int)expansion, address);
+        => CoreLayout.IsInstalledRam(ToBlocks(expansion), address);
+
+    public static bool IsInstalledRam(CoreBlocks blocks, ushort address)
+        => CoreLayout.IsInstalledRam(blocks, address);
 
     public static IReadOnlyList<(ushort Start, ushort End)> ExpansionRegions(Vic20Expansion expansion)
-        => CoreLayout.ExpansionRegions((CoreExpansion)(int)expansion);
+        => CoreLayout.ExpansionRegions(ToBlocks(expansion));
+
+    public static IReadOnlyList<(ushort Start, ushort End)> ExpansionRegions(CoreBlocks blocks)
+        => CoreLayout.ExpansionRegions(blocks);
 }

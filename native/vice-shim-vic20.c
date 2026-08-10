@@ -506,6 +506,17 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
     machine_powerup();
     mem_powerup();
     vic_reset();
+    /* vic_reset omits several vic_init fields (victypes / vic.c). Re-baseline
+     * for every-cycle video lockstep across repeated machine create/reset. */
+    vic.line_was_blank = 0;
+    vic.char_height = 8;
+    vic.row_increase_line = 8;
+    vic.pending_text_cols = 22;
+    vic.text_cols = 0;
+    vic.text_lines = 23;
+    vic.row_counter = 0;
+    vic.memptr = 0;
+    vic.memptr_inc = 0;
     maincpu_reset();
     vice_shim_reset_cpu_state_locked();
     LeaveCriticalSection(&g_state_lock);
@@ -1107,6 +1118,42 @@ VICE_SHIM_API void vice_vic_get_state(void *machine, struct vice_vic_state *stat
         state->idle_state = (uint8_t)vic.fetch_state;
         memcpy(state->registers, vic.regs, sizeof(vic.regs));
         memcpy(state->registers_peek, vic.regs, sizeof(vic.regs));
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+/*
+ * Full VIC-I video pipeline snapshot for every-cycle lockstep (not CPU-only).
+ * Source: vic.* fields in victypes.h / vic-cycle.c after CLK_INC / vic_cycle().
+ */
+VICE_SHIM_API void vice_vic20_get_video_state(void *machine, struct vice_vic20_video_state *state)
+{
+    if (state == NULL) {
+        return;
+    }
+
+    memset(state, 0, sizeof(*state));
+
+    vice_shim_ensure_sync_primitives();
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        state->cycle = (uint32_t)maincpu_clk;
+        state->raster_line = (uint16_t)vic.raster_line;
+        state->raster_cycle = (uint8_t)vic.raster_cycle;
+        state->area = (uint8_t)vic.area;
+        state->fetch_state = (uint8_t)vic.fetch_state;
+        state->text_cols = (uint8_t)vic.text_cols;
+        state->text_lines = (uint8_t)vic.text_lines;
+        state->ycounter = (uint8_t)vic.raster.ycounter;
+        state->row_counter = (uint8_t)vic.row_counter;
+        state->blank_this_line = (uint8_t)(vic.raster.blank_this_line ? 1 : 0);
+        state->line_was_blank = (uint8_t)(vic.line_was_blank ? 1 : 0);
+        state->char_height = (uint8_t)vic.char_height;
+        state->memptr = (uint16_t)vic.memptr;
+        state->memptr_inc = (uint16_t)vic.memptr_inc;
+        memcpy(state->regs, vic.regs, 16);
+        memcpy(state->cbuf, vic.cbuf, sizeof(state->cbuf));
+        memcpy(state->gbuf, vic.gbuf, sizeof(state->gbuf));
     }
     LeaveCriticalSection(&g_state_lock);
 }

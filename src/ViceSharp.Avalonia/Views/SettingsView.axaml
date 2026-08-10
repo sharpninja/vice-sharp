@@ -39,6 +39,43 @@
                 <TextBlock Classes="hint" Text="{Binding SelectedMachineProfile.StatusText}" />
             </StackPanel>
 
+            <!-- VIC-20 system RAM (xvic -memory): presets + BLK0/1/2/3/5 -->
+            <StackPanel Spacing="7" IsVisible="{Binding IsVic20Selected}">
+                <TextBlock Classes="section" Text="VIC-20 memory (xvic)" />
+                <ComboBox Classes="row" ItemsSource="{Binding Vic20MemoryPresets}"
+                          SelectedItem="{Binding SelectedVic20MemoryPreset, Mode=TwoWay}" />
+                <WrapPanel Orientation="Horizontal">
+                    <CheckBox Content="BLK0 $0400" IsChecked="{Binding Vic20Blk0, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK1 $2000" IsChecked="{Binding Vic20Blk1, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK2 $4000" IsChecked="{Binding Vic20Blk2, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK3 $6000" IsChecked="{Binding Vic20Blk3, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK5 $A000" IsChecked="{Binding Vic20Blk5, Mode=TwoWay}" Margin="0,0,12,6" />
+                </WrapPanel>
+                <TextBlock Classes="hint" Text="Matches xvic -memory none/3k/8k/16k/24k/all or 0,1,2,3,5. Apply + Restart rebuilds the map." />
+            </StackPanel>
+
+            <StackPanel Spacing="7" IsVisible="{Binding IsVic20Selected}">
+                <TextBlock Classes="section" Text="VIC-20 expansion cart" />
+                <ComboBox Classes="row" ItemsSource="{Binding ExpansionCartKinds}"
+                          SelectedItem="{Binding SelectedExpansionCartKind, Mode=TwoWay}" />
+                <ComboBox Classes="row" ItemsSource="{Binding ExpansionCartPresets}"
+                          SelectedItem="{Binding SelectedExpansionCartPreset, Mode=TwoWay}" />
+                <CheckBox Content="Write image on detach/exit" IsChecked="{Binding ExpansionCartWriteBack, Mode=TwoWay}" />
+                <Button Content="Build cart image…" Click="OnOpenFlashCartBuilder" HorizontalAlignment="Left" />
+                <TextBlock Classes="hint" Text="FE3 / Ultimem / Mega-Cart: build multi-bank flash/ROM images, or attach a .bin via Cartridge slot. Presets set control registers." />
+            </StackPanel>
+
+            <StackPanel Spacing="7">
+                <TextBlock Classes="section" Text="uIEC / filesystem IEC" />
+                <TextBox Watermark="Host folder or SD mount path"
+                         Text="{Binding FileSystemIecRootPath, Mode=TwoWay}" />
+                <DockPanel LastChildFill="True">
+                    <TextBlock Classes="rowlabel" Text="Unit" DockPanel.Dock="Left" />
+                    <NumericUpDown Minimum="8" Maximum="11" Value="{Binding FileSystemIecUnit, Mode=TwoWay}" />
+                </DockPanel>
+                <TextBlock Classes="hint" Text="Maps a PC path (including SD card) as a filesystem IEC unit (default 9 so unit 8 stays free for true-drive)." />
+            </StackPanel>
+
             <StackPanel Spacing="7">
                 <TextBlock Classes="section" Text="Limiter" />
                 <TextBlock FontSize="13" FontWeight="SemiBold"

@@ -39,6 +39,10 @@ public sealed class AttachPanelViewModel : ObservableObject
     private bool _swapJoystickPorts;
     private string _selectedResourceMode = "Auto detect";
     private string _selectedPacingStrategy = "VICE";
+    private readonly Vic20MemoryUiState _vic20Memory = new("none");
+    private string _fileSystemIecRootPath = "";
+    private int _fileSystemIecUnit = 9;
+    private readonly ExpansionCartManageState _expansionCart = new();
     private bool _saveSettingsOnExit;
     private bool _saveTransientValuesOnExit;
     private string _settingsStatusText = "Settings will load from the connected host.";
@@ -446,6 +450,199 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         get => _selectedPacingStrategy;
         set => SetSettingsProperty(ref _selectedPacingStrategy, value);
+    }
+
+    /// <summary>True when the selected machine profile is VIC-20 (xvic).</summary>
+    public bool IsVic20Selected =>
+        SelectedMachineProfile.Id is "vic20" or "vic20ntsc"
+        || SelectedMachineProfile.Id.StartsWith("vic20", StringComparison.OrdinalIgnoreCase);
+
+    public IReadOnlyList<string> Vic20MemoryPresets => SettingsOptionCatalog.Vic20MemoryPresets;
+
+    public string SelectedVic20MemoryPreset
+    {
+        get => _vic20Memory.PresetLabel;
+        set
+        {
+            // ComboBox TwoWay may write null/empty mid-update; ignore to avoid All<->none oscillation.
+            if (_vic20MemoryNotifyBusy || string.IsNullOrWhiteSpace(value))
+                return;
+            if (string.Equals(value, _vic20Memory.PresetLabel, StringComparison.Ordinal))
+                return;
+            if (!_vic20Memory.SetFromPresetLabel(value))
+                return;
+            NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk0
+    {
+        get => _vic20Memory.Blk0;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk0Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk1
+    {
+        get => _vic20Memory.Blk1;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk1Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk2
+    {
+        get => _vic20Memory.Blk2;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk2Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk3
+    {
+        get => _vic20Memory.Blk3;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk3Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public bool Vic20Blk5
+    {
+        get => _vic20Memory.Blk5;
+        set
+        {
+            if (_vic20MemoryNotifyBusy)
+                return;
+            if (_vic20Memory.TrySetBit(Vic20MemoryUiState.Blk5Bit, value))
+                NotifyVic20MemoryChanged();
+        }
+    }
+
+    public string Vic20MemorySpec => _vic20Memory.MemorySpec;
+
+    public string FileSystemIecRootPath
+    {
+        get => _fileSystemIecRootPath;
+        set => SetSettingsProperty(ref _fileSystemIecRootPath, value ?? "");
+    }
+
+    public int FileSystemIecUnit
+    {
+        get => _fileSystemIecUnit;
+        set => SetSettingsProperty(ref _fileSystemIecUnit, value);
+    }
+
+    public IReadOnlyList<string> ExpansionCartKinds => ExpansionCartManageState.CartKinds;
+
+    public string SelectedExpansionCartKind
+    {
+        get => _expansionCart.CartKind;
+        set
+        {
+            var next = string.IsNullOrWhiteSpace(value) ? "none" : value;
+            if (string.Equals(_expansionCart.CartKind, next, StringComparison.Ordinal))
+                return;
+
+            _expansionCart.CartKind = next;
+            var presets = _expansionCart.AvailablePresets;
+            if (presets.Count > 0
+                && !presets.Contains(_expansionCart.ConfigPreset, StringComparer.Ordinal))
+            {
+                _expansionCart.ConfigPreset = presets[0];
+            }
+
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ExpansionCartPresets));
+            OnPropertyChanged(nameof(SelectedExpansionCartPreset));
+            MarkSettingsDirty();
+        }
+    }
+
+    public bool ExpansionCartWriteBack
+    {
+        get => _expansionCart.WriteBack;
+        set
+        {
+            if (_expansionCart.WriteBack == value)
+                return;
+            _expansionCart.WriteBack = value;
+            OnPropertyChanged();
+            MarkSettingsDirty();
+        }
+    }
+
+    public IReadOnlyList<string> ExpansionCartPresets => _expansionCart.AvailablePresets;
+
+    public string SelectedExpansionCartPreset
+    {
+        get => _expansionCart.ConfigPreset;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return;
+            if (string.Equals(_expansionCart.ConfigPreset, value, StringComparison.Ordinal))
+                return;
+            if (!_expansionCart.AvailablePresets.Contains(value, StringComparer.Ordinal))
+                return;
+
+            _expansionCart.ConfigPreset = value;
+            OnPropertyChanged();
+            MarkSettingsDirty();
+        }
+    }
+
+    private bool _vic20MemoryNotifyBusy;
+
+    private void NotifyVic20MemoryChanged()
+    {
+        if (_vic20MemoryNotifyBusy)
+            return;
+
+        _vic20MemoryNotifyBusy = true;
+        try
+        {
+            OnPropertyChanged(nameof(SelectedVic20MemoryPreset));
+            OnPropertyChanged(nameof(Vic20Blk0));
+            OnPropertyChanged(nameof(Vic20Blk1));
+            OnPropertyChanged(nameof(Vic20Blk2));
+            OnPropertyChanged(nameof(Vic20Blk3));
+            OnPropertyChanged(nameof(Vic20Blk5));
+            OnPropertyChanged(nameof(Vic20MemorySpec));
+        }
+        finally
+        {
+            _vic20MemoryNotifyBusy = false;
+        }
+
+        MarkSettingsDirty(restart: true);
+    }
+
+    private void MarkSettingsDirty(bool restart = false)
+    {
+        if (_refreshingSettingsFromHost)
+            return;
+        _hasPendingSettingsChanges = true;
+        if (restart)
+            _requiresRestart = true;
+        OnPropertyChanged(nameof(HasPendingSettingsChanges));
+        OnPropertyChanged(nameof(RequiresRestart));
     }
 
     public string SettingsStatusText
@@ -949,6 +1146,12 @@ public sealed class AttachPanelViewModel : ObservableObject
         _swapJoystickPorts = settings.Input.SwapJoystickPorts;
         _selectedResourceMode = FromResourceModeId(settings.Resources?.Mode ?? new ResourceSettingsDto().Mode);
         _selectedPacingStrategy = FromPacingStrategyId(settings.Limiter.PacingStrategy);
+        _vic20Memory.SetFromSpec(settings.Vic20MemorySpec);
+        _fileSystemIecRootPath = settings.FileSystemIecRootPath ?? "";
+        _fileSystemIecUnit = settings.FileSystemIecUnit is >= 8 and <= 11 ? settings.FileSystemIecUnit : 9;
+        _expansionCart.CartKind = string.IsNullOrWhiteSpace(settings.Vic20ExpansionCartKind) ? "none" : settings.Vic20ExpansionCartKind;
+        _expansionCart.WriteBack = settings.Vic20ExpansionWriteBack;
+        _expansionCart.ConfigPreset = string.IsNullOrWhiteSpace(settings.Vic20ExpansionConfigPreset) ? "start" : settings.Vic20ExpansionConfigPreset;
 
         OnPropertyChanged(nameof(LimiterRatePercent));
         OnPropertyChanged(nameof(LimiterEnabled));
@@ -966,6 +1169,19 @@ public sealed class AttachPanelViewModel : ObservableObject
         OnPropertyChanged(nameof(SwapJoystickPorts));
         OnPropertyChanged(nameof(SelectedResourceMode));
         OnPropertyChanged(nameof(SelectedPacingStrategy));
+        OnPropertyChanged(nameof(IsVic20Selected));
+        OnPropertyChanged(nameof(SelectedVic20MemoryPreset));
+        OnPropertyChanged(nameof(Vic20Blk0));
+        OnPropertyChanged(nameof(Vic20Blk1));
+        OnPropertyChanged(nameof(Vic20Blk2));
+        OnPropertyChanged(nameof(Vic20Blk3));
+        OnPropertyChanged(nameof(Vic20Blk5));
+        OnPropertyChanged(nameof(FileSystemIecRootPath));
+        OnPropertyChanged(nameof(FileSystemIecUnit));
+        OnPropertyChanged(nameof(SelectedExpansionCartKind));
+        OnPropertyChanged(nameof(ExpansionCartWriteBack));
+        OnPropertyChanged(nameof(SelectedExpansionCartPreset));
+        OnPropertyChanged(nameof(ExpansionCartPresets));
     }
 
     public void ApplyWarpMode(WarpModeEvent warpMode)
@@ -1000,7 +1216,13 @@ public sealed class AttachPanelViewModel : ObservableObject
             GetSelectedMachineProfileId(),
             restartSession,
             new AudioSettingsDto(ToAudioModeId(SelectedAudioMode)),
-            new ResourceSettingsDto(ToResourceModeId(SelectedResourceMode)));
+            new ResourceSettingsDto(ToResourceModeId(SelectedResourceMode)),
+            IsVic20Selected ? Vic20MemorySpec : null,
+            FileSystemIecRootPath,
+            FileSystemIecUnit,
+            SelectedExpansionCartKind,
+            ExpansionCartWriteBack,
+            SelectedExpansionCartPreset);
     }
 
     private ValidateSettingsResourcesRequest CreateValidateSettingsRequest()
@@ -1223,7 +1445,9 @@ public sealed class AttachPanelViewModel : ObservableObject
 
     private static bool IsRestartRelevant(string propertyName)
     {
-        return propertyName is nameof(SelectedMachineProfile) or nameof(SelectedResourceMode);
+        return propertyName is nameof(SelectedMachineProfile) or nameof(SelectedResourceMode)
+            or nameof(SelectedVic20MemoryPreset) or nameof(Vic20Blk0) or nameof(Vic20Blk1)
+            or nameof(Vic20Blk2) or nameof(Vic20Blk3) or nameof(Vic20Blk5);
     }
 
     private SettingsSnapshot CaptureSettings()

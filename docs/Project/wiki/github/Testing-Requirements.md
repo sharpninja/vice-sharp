@@ -614,6 +614,12 @@ On-console install/launch/first-frame + rollback. Acceptance: MSIX deploys clean
 License/vkm/no-ROM/source-URL staging. Acceptance: Licenses/ contents + vkm present + no ROM *.bin + compiled SourceUrl.
 
 
+### TEST-XBOXGPL-002
+
+Automated tests must fail if C= logo attribution is missing from THIRD_PARTY_NOTICES.md
+or from AboutInfo/AboutViewModel. Cover Alien426, CC BY-SA 4.0, and commons.wikimedia.org.
+
+
 
 ## TEST-XBOXPKG
 

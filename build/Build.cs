@@ -1018,11 +1018,21 @@ sealed partial class Build : NukeBuild
             //    (dotnet) restore the stale nuget.g.targets does not import the MSIX
             //    targets, so GenerateProjectPriFile does not exist yet (MSB4057).
             //    /restore restores and then RE-EVALUATES before building.
+            // Stamp the same product version the MSI uses so About (and assembly
+            // metadata) show 1.2.N instead of the unstamped SDK default 1.0.0.0.
+            var productVersion = MsiVersion;
+            Serilog.Log.Information(
+                "Stamping Xbox assemblies with Version/InformationalVersion={Version}",
+                productVersion);
+
             var msbuild = ResolveVsMsBuild();
             var head = RootDirectory / "src" / "ViceSharp.Xbox" / "ViceSharp.Xbox.csproj";
             var build = ProcessTasks.StartProcess(
                 msbuild,
-                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 /restore /t:Build,GenerateProjectPriFile /v:m /nologo",
+                $"\"{head}\" /p:Configuration={XboxDeployConfiguration} /p:Platform=x64 " +
+                $"/p:Version={productVersion} /p:AssemblyVersion={productVersion}.0 " +
+                $"/p:FileVersion={productVersion}.0 /p:InformationalVersion={productVersion} " +
+                $"/restore /t:Build,GenerateProjectPriFile /v:m /nologo",
                 RootDirectory);
             build.WaitForExit();
             if (build.ExitCode != 0)

@@ -96,6 +96,9 @@ public static unsafe partial class ViceNativeXvic
     [LibraryImport(LibraryName, EntryPoint = "vice_vic_get_state")]
     public static partial void GetVicState(IntPtr instance, ref ViceNative.ViceVicState state);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_vic20_get_video_state")]
+    public static partial void GetVic20VideoState(IntPtr instance, ref ViceNative.ViceVic20VideoState state);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pipeline_state")]
     public static partial void GetCpuPipelineState(IntPtr instance, ref ViceNative.ViceCpuPipelineState state);
 
@@ -178,6 +181,18 @@ public static unsafe partial class ViceNativeXvic
                 CreateRuntimeDirectoryName(sourceLibraryPath, dataRoot));
             Directory.CreateDirectory(runtimeDirectory);
             CopyNativeRuntimeFiles(sourceDirectory, runtimeDirectory);
+            // Test bin often has only vice_xvic.dll; MinGW deps (libstdc++-6, zlib1, …)
+            // live next to the authoritative build under repo native/. Walk parents.
+            foreach (var root in EnumerateSearchRoots(sourceDirectory))
+            {
+                var repoNative = Path.Combine(root, "native");
+                if (!Directory.Exists(repoNative))
+                    continue;
+                if (string.Equals(Path.GetFullPath(sourceDirectory), Path.GetFullPath(repoNative), StringComparison.OrdinalIgnoreCase))
+                    continue;
+                CopyNativeRuntimeFiles(repoNative, runtimeDirectory);
+                break;
+            }
 
             var expectedDataDirectory = Path.Combine(runtimeDirectory, "vice", "vice", "data");
             if (!Directory.Exists(expectedDataDirectory))
@@ -354,6 +369,32 @@ public static unsafe partial class ViceNativeXvic
                 Registers = state.GetRegisters(),
                 AllowBadLines = state.AllowBadLines,
                 IdleState = state.IdleState
+            };
+        }
+
+        public Vic20VideoLockstepState GetVic20VideoState()
+        {
+            var state = new ViceNative.ViceVic20VideoState();
+            ViceNativeXvic.GetVic20VideoState(_instance, ref state);
+            return new Vic20VideoLockstepState
+            {
+                Cycle = state.Cycle,
+                RasterLine = state.RasterLine,
+                RasterCycle = state.RasterCycle,
+                Area = state.Area,
+                FetchState = state.FetchState,
+                TextCols = state.TextCols,
+                TextLines = state.TextLines,
+                YCounter = state.YCounter,
+                RowCounter = state.RowCounter,
+                BlankThisLine = state.BlankThisLine,
+                LineWasBlank = state.LineWasBlank,
+                CharHeight = state.CharHeight,
+                Memptr = state.Memptr,
+                MemptrInc = state.MemptrInc,
+                Regs = state.GetRegs(),
+                Cbuf = state.GetCbuf(),
+                Gbuf = state.GetGbuf(),
             };
         }
 

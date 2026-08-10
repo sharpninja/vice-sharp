@@ -166,7 +166,29 @@ public sealed class SettingsServiceHost : ISettingsService
                 ? currentProfileId
                 : ResolveProfileId(request.ProfileId);
             var profileChanged = !string.Equals(requestedProfileId, currentProfileId, StringComparison.OrdinalIgnoreCase);
-            var restartRelevant = profileChanged || request.Display is not null || request.Input is not null || request.Resources is not null;
+
+            // VIC-20 system RAM (xvic -memory): validate and detect change.
+            string? requestedMemorySpec = null;
+            var memoryChanged = false;
+            if (request.Vic20MemorySpec is not null)
+            {
+                if (!ViceSharp.Core.Vic20.Vic20MemoryLayout.TryParseMemorySpec(request.Vic20MemorySpec, out var parsedBlocks))
+                {
+                    return ValueTask.FromResult(new UpdateSettingsResponse(
+                        RpcStatus.InvalidArgument($"Unsupported VIC-20 memory spec '{request.Vic20MemorySpec}'."),
+                        null,
+                        []));
+                }
+
+                requestedMemorySpec = ViceSharp.Core.Vic20.Vic20MemoryLayout.FormatMemorySpec(parsedBlocks);
+                memoryChanged = !string.Equals(
+                    requestedMemorySpec,
+                    string.IsNullOrWhiteSpace(session.Vic20MemorySpec) ? "none" : session.Vic20MemorySpec,
+                    StringComparison.OrdinalIgnoreCase);
+            }
+
+            var restartRelevant = profileChanged || memoryChanged
+                || request.Display is not null || request.Input is not null || request.Resources is not null;
 
             if (request.RestartSession && restartRelevant)
             {
@@ -181,6 +203,8 @@ public sealed class SettingsServiceHost : ISettingsService
                 var selectedKeyboardMap = string.Equals(inputSettings.KeyboardMapId, session.SelectedKeyboardMapId, StringComparison.OrdinalIgnoreCase)
                     ? session.SelectedKeyboardMap
                     : null;
+                var memorySpecForRestart = requestedMemorySpec
+                    ?? (string.IsNullOrWhiteSpace(session.Vic20MemorySpec) ? "none" : session.Vic20MemorySpec);
 
                 EmulatorRuntimeSession restarted;
                 try
@@ -194,7 +218,8 @@ public sealed class SettingsServiceHost : ISettingsService
                         inputSettings,
                         audioSettings,
                         resourceSettings,
-                        selectedKeyboardMap);
+                        selectedKeyboardMap,
+                        memorySpecForRestart);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -202,6 +227,38 @@ public sealed class SettingsServiceHost : ISettingsService
                         RpcStatus.FailedPrecondition(ex.Message),
                         HostProtocolMapper.ToSettingsDto(session),
                         diagnostics));
+                }
+
+                // PAL/NTSC (and other restarts) must not wipe expansion cart / uIEC selection.
+                // Prefer request values when the client sent them; else keep session values.
+                var expansionKind = request.Vic20ExpansionCartKind ?? restarted.Vic20ExpansionCartKind;
+                var expansionWriteBack = request.Vic20ExpansionWriteBack ?? restarted.Vic20ExpansionWriteBack;
+                var expansionPreset = request.Vic20ExpansionConfigPreset ?? restarted.Vic20ExpansionConfigPreset;
+                ApplyVic20ExpansionSettings(
+                    restarted,
+                    new UpdateSettingsRequest(
+                        request.SessionId,
+                        Vic20ExpansionCartKind: expansionKind,
+                        Vic20ExpansionWriteBack: expansionWriteBack,
+                        Vic20ExpansionConfigPreset: expansionPreset),
+                    diagnostics);
+
+                if (request.FileSystemIecRootPath is not null || request.FileSystemIecUnit is not null)
+                {
+                    ApplyFileSystemIecSettings(
+                        restarted,
+                        request.FileSystemIecRootPath ?? restarted.FileSystemIecRootPath,
+                        request.FileSystemIecUnit ?? restarted.FileSystemIecUnit,
+                        diagnostics);
+                }
+                else if (!string.IsNullOrWhiteSpace(restarted.FileSystemIecRootPath)
+                         || restarted.FileSystemIecUnit is >= 8 and <= 11)
+                {
+                    ApplyFileSystemIecSettings(
+                        restarted,
+                        restarted.FileSystemIecRootPath,
+                        restarted.FileSystemIecUnit,
+                        diagnostics);
                 }
 
                 AddLimiterDiagnostic(request, diagnostics);
@@ -214,6 +271,16 @@ public sealed class SettingsServiceHost : ISettingsService
                         true,
                         false,
                         $"Profile '{requestedProfileId}' was applied by restarting the host session from active profile '{currentProfileId}'."));
+                }
+
+                if (memoryChanged)
+                {
+                    diagnostics.Add(new SettingApplyDiagnosticDto(
+                        "vic20.memory",
+                        SettingApplyScope.RestartRequired,
+                        true,
+                        false,
+                        $"VIC-20 memory '{memorySpecForRestart}' was applied by restarting the host session."));
                 }
 
                 if (request.Display is not null)
@@ -278,6 +345,30 @@ public sealed class SettingsServiceHost : ISettingsService
                     false,
                     true,
                     $"Profile '{requestedProfileId}' is staged and requires session restart to replace active profile '{currentProfileId}'."));
+            }
+
+            if (memoryChanged && requestedMemorySpec is not null)
+            {
+                // Stage for next restart; do not mutate machine until RestartSession.
+                session.Vic20MemorySpec = requestedMemorySpec;
+                diagnostics.Add(new SettingApplyDiagnosticDto(
+                    "vic20.memory",
+                    SettingApplyScope.RestartRequired,
+                    false,
+                    true,
+                    $"VIC-20 memory '{requestedMemorySpec}' is staged and requires session restart."));
+            }
+
+            if (request.FileSystemIecRootPath is not null || request.FileSystemIecUnit is not null)
+            {
+                ApplyFileSystemIecSettings(session, request.FileSystemIecRootPath, request.FileSystemIecUnit, diagnostics);
+            }
+
+            if (request.Vic20ExpansionWriteBack is not null
+                || request.Vic20ExpansionConfigPreset is not null
+                || request.Vic20ExpansionCartKind is not null)
+            {
+                ApplyVic20ExpansionSettings(session, request, diagnostics);
             }
 
             if (request.Display is not null)
@@ -398,7 +489,8 @@ public sealed class SettingsServiceHost : ISettingsService
         InputSettingsDto input,
         AudioSettingsDto audio,
         ResourceSettingsDto resources,
-        KeyboardMapDto? selectedKeyboardMap)
+        KeyboardMapDto? selectedKeyboardMap,
+        string vic20MemorySpec = "none")
     {
         // Before building a VIC-20 session, ensure ROMs under dataRoot/VIC20 (download if needed).
         if (Vic20MachineProfiles.TryResolve(profileId, out _))
@@ -411,7 +503,9 @@ public sealed class SettingsServiceHost : ISettingsService
             }
         }
 
-        var created = _runtimeFactory.Create(new CreateEmulatorSessionRequest(profileId));
+        var created = _runtimeFactory.Create(new CreateEmulatorSessionRequest(
+            profileId,
+            Vic20MemorySpec: Vic20MachineProfiles.TryResolve(profileId, out _) ? vic20MemorySpec : string.Empty));
         return new EmulatorRuntimeSession(current.SessionId, created.Architecture, created.Machine)
         {
             PowerState = current.PowerState,
@@ -429,7 +523,14 @@ public sealed class SettingsServiceHost : ISettingsService
             AudioSettings = audio,
             ResourceSettings = resources,
             SelectedKeyboardMapId = input.KeyboardMapId,
-            SelectedKeyboardMap = selectedKeyboardMap
+            SelectedKeyboardMap = selectedKeyboardMap,
+            Vic20MemorySpec = created.Vic20MemorySpec,
+            // Timing-only profile switches (PAL/NTSC) must not reset cart/uIEC UI state.
+            FileSystemIecRootPath = current.FileSystemIecRootPath,
+            FileSystemIecUnit = current.FileSystemIecUnit,
+            Vic20ExpansionCartKind = current.Vic20ExpansionCartKind,
+            Vic20ExpansionWriteBack = current.Vic20ExpansionWriteBack,
+            Vic20ExpansionConfigPreset = current.Vic20ExpansionConfigPreset,
         };
     }
 
@@ -491,6 +592,119 @@ public sealed class SettingsServiceHost : ISettingsService
                 false,
                 true,
                 "Keyboard map id was stored; select the map through InputService to validate and apply runtime VKM translation."));
+        }
+    }
+
+    private static void ApplyFileSystemIecSettings(
+        EmulatorRuntimeSession session,
+        string? rootPath,
+        int? unit,
+        List<SettingApplyDiagnosticDto> diagnostics)
+    {
+        var fs = session.Machine.Devices.GetAll<ViceSharp.Core.Iec.FileSystemIecDevice>().FirstOrDefault();
+        if (fs is null)
+        {
+            diagnostics.Add(new SettingApplyDiagnosticDto(
+                "iec.filesystem",
+                SettingApplyScope.Live,
+                false,
+                false,
+                "No filesystem IEC device on this machine."));
+            return;
+        }
+
+        // True-drive claims unit 8 when the session is a true-drive rig.
+        int? reservedTrueDrive = FindTrueDriveReservedUnit(session);
+
+        try
+        {
+            if (unit is not null)
+            {
+                fs.SetUnitNumber(unit.Value, reservedTrueDrive);
+                session.FileSystemIecUnit = unit.Value;
+            }
+            else if (session.FileSystemIecUnit != fs.UnitNumber)
+            {
+                fs.SetUnitNumber(session.FileSystemIecUnit, reservedTrueDrive);
+            }
+
+            if (rootPath is not null)
+                session.FileSystemIecRootPath = rootPath;
+
+            if (!string.IsNullOrWhiteSpace(session.FileSystemIecRootPath))
+                fs.AttachDirectory(session.FileSystemIecRootPath);
+            else
+                fs.Detach();
+
+            diagnostics.Add(new SettingApplyDiagnosticDto(
+                "iec.filesystem",
+                SettingApplyScope.Live,
+                true,
+                false,
+                string.IsNullOrWhiteSpace(session.FileSystemIecRootPath)
+                    ? $"Filesystem IEC unit {fs.UnitNumber} detached."
+                    : $"Filesystem IEC unit {fs.UnitNumber} root '{session.FileSystemIecRootPath}'."));
+        }
+        catch (Exception ex)
+        {
+            diagnostics.Add(new SettingApplyDiagnosticDto(
+                "iec.filesystem",
+                SettingApplyScope.Live,
+                false,
+                false,
+                ex.Message));
+        }
+    }
+
+    /// <summary>Unit reserved by true-drive (if any); used to prevent fsdevice double-claim.</summary>
+    private static int? FindTrueDriveReservedUnit(EmulatorRuntimeSession session)
+    {
+        // True-drive C64 rig mounts D64 on emulated 1541 as unit 8 by default.
+        if (session.Machine is ViceSharp.Core.CoordinatorMachine)
+            return 8;
+        return null;
+    }
+
+    private static void ApplyVic20ExpansionSettings(
+        EmulatorRuntimeSession session,
+        UpdateSettingsRequest request,
+        List<SettingApplyDiagnosticDto> diagnostics)
+    {
+        if (request.Vic20ExpansionWriteBack is not null)
+            session.Vic20ExpansionWriteBack = request.Vic20ExpansionWriteBack.Value;
+        if (request.Vic20ExpansionConfigPreset is not null)
+            session.Vic20ExpansionConfigPreset = request.Vic20ExpansionConfigPreset;
+        if (request.Vic20ExpansionCartKind is not null)
+            session.Vic20ExpansionCartKind = request.Vic20ExpansionCartKind;
+
+        var port = session.Machine.Devices.GetAll<ViceSharp.Core.Vic20.IVic20ExpansionCartPort>().FirstOrDefault();
+        if (port is null)
+            return;
+
+        port.WriteBack = session.Vic20ExpansionWriteBack;
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(session.Vic20ExpansionConfigPreset)
+                && port.AttachedKind != ViceSharp.Core.Vic20.Vic20ExpansionCartKind.None)
+            {
+                port.ApplyConfigPreset(session.Vic20ExpansionConfigPreset);
+            }
+
+            diagnostics.Add(new SettingApplyDiagnosticDto(
+                "vic20.expansion",
+                SettingApplyScope.Live,
+                true,
+                false,
+                $"VIC-20 expansion '{session.Vic20ExpansionCartKind}' preset '{session.Vic20ExpansionConfigPreset}' writeBack={session.Vic20ExpansionWriteBack}."));
+        }
+        catch (Exception ex)
+        {
+            diagnostics.Add(new SettingApplyDiagnosticDto(
+                "vic20.expansion",
+                SettingApplyScope.Live,
+                false,
+                false,
+                ex.Message));
         }
     }
 

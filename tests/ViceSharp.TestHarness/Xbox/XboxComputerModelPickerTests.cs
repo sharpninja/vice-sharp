@@ -99,6 +99,49 @@ public sealed class XboxComputerModelPickerTests
     }
 
     /// <summary>
+    /// SSOT: ConcurrentDictionary built once from host Profiles; observable Models is
+    /// the dict entry for the selected computer. PAL/NTSC keeps the same IList instance
+    /// and does not raise Models PropertyChanged; computer switch publishes the other key.
+    /// </summary>
+    [Fact]
+    public async Task Models_ObservableList_IsDictEntryForSelectedComputer()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = SettingsWithProfile("vic20"),
+            CannedProfiles = SeededProfiles(),
+        };
+        var vm = BuildSeededVm(fake);
+        await vm.RefreshAsync(ct);
+
+        var modelsChanged = 0;
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(XboxSettingsViewModel.Models))
+                modelsChanged++;
+        };
+
+        var vicList = vm.Models;
+        Assert.Equal(2, vicList.Count);
+        Assert.IsAssignableFrom<System.Collections.Generic.IList<SettingsProfileDto>>(vicList);
+
+        modelsChanged = 0;
+        vm.SelectedProfileId = "vic20ntsc";
+        Assert.Same(vicList, vm.Models);
+        Assert.Equal(0, modelsChanged);
+
+        vm.SelectedProfileId = "vic20";
+        Assert.Same(vicList, vm.Models);
+        Assert.Equal(0, modelsChanged);
+
+        vm.SelectedComputer = vm.Computers.Single(c => c.FamilyId == "x64sc");
+        Assert.NotSame(vicList, vm.Models);
+        Assert.Equal(1, modelsChanged);
+        Assert.All(vm.Models, m => Assert.Equal("x64sc", m.Machine));
+    }
+
+    /// <summary>
     /// TEST-XSET-001. Use case: the Computer picker offers the implemented C64 plus disabled
     /// placeholders for the not-yet-ported machines.
     /// Acceptance: Computers contains "Commodore 64" (x64sc) and "VIC-20" (xvic)
@@ -203,6 +246,70 @@ public sealed class XboxComputerModelPickerTests
         Assert.NotNull(fake.LastUpdateRequest);
         Assert.Equal("c64c", fake.LastUpdateRequest!.ProfileId);
         Assert.True(fake.LastUpdateRequest.RestartSession);
+    }
+
+    /// <summary>
+    /// Regression: VIC-20 PAL -&gt; NTSC Apply restarts the host then AdoptSettings rebinds
+    /// SelectedProfileId/SelectedModel. WinUI ComboBox TwoWay write-back plus Models list
+    /// rebuild caused STATUS_STACK_OVERFLOW (operator 2026-08-07).
+    /// Acceptance: simulated ComboBox echo stays shallow; apply adopts vic20ntsc.
+    /// </summary>
+    [Fact]
+    public async Task Vic20PalToNtsc_Apply_SurvivesTwoWayModelPickerReentrancy()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = SettingsWithProfile("vic20"),
+            CannedProfiles = SeededProfiles(),
+            UpdateResponseOverride = SettingsWithProfile("vic20ntsc"),
+        };
+        var vm = BuildSeededVm(fake);
+        await vm.RefreshAsync(ct);
+        Assert.Equal("vic20", vm.SelectedProfileId);
+
+        var depth = 0;
+        var maxDepth = 0;
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is not (
+                nameof(XboxSettingsViewModel.SelectedProfileId)
+                or nameof(XboxSettingsViewModel.SelectedModel)
+                or nameof(XboxSettingsViewModel.SelectedComputer)
+                or nameof(XboxSettingsViewModel.Models)
+                or nameof(XboxSettingsViewModel.IsVic20Selected)))
+            {
+                return;
+            }
+
+            depth++;
+            maxDepth = Math.Max(maxDepth, depth);
+            try
+            {
+                // Mirror WinUI: intermediate null clear + write-back of current selection.
+                vm.SelectedModel = null;
+                vm.SelectedComputer = null;
+                vm.SelectedModel = vm.SelectedModel;
+                vm.SelectedComputer = vm.SelectedComputer;
+                vm.SelectedProfileId = vm.SelectedProfileId;
+            }
+            finally
+            {
+                depth--;
+            }
+        };
+
+        vm.SelectedModel = vm.Models.Single(m => m.Id == "vic20ntsc");
+        Assert.Equal("vic20ntsc", vm.SelectedProfileId);
+        Assert.True(vm.RequiresRestart);
+        Assert.True(maxDepth < 12, $"Select NTSC re-entrancy depth {maxDepth}");
+
+        maxDepth = 0;
+        await vm.ApplySettingsAsync(restartSession: true, ct);
+        Assert.True(maxDepth < 12, $"Apply adopt re-entrancy depth {maxDepth}");
+        Assert.Equal("vic20ntsc", vm.SelectedProfileId);
+        Assert.Equal("vic20ntsc", vm.SelectedModel?.Id);
+        Assert.False(vm.IsDirty);
     }
 
     /// <summary>

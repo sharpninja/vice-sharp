@@ -85,8 +85,11 @@ public sealed class Vic20MemoryMapTests
         machine.Bus.Write(0x1000, 0x11);
         machine.Reset();
 
-        // After reset, installed main RAM is cleared — not C64 screen-space $20 fill.
-        Assert.Equal(0x00, machine.Bus.Read(0x1000));
+        // After reset, installed main RAM is VICE factory pattern (FF/00 by address),
+        // not C64 screen-space $20 fill (vic20 ram.c start_value=255, invert=1).
+        Assert.Equal(0xFF, machine.Bus.Read(0x1000));
+        Assert.Equal(0x00, machine.Bus.Read(0x1001));
+        Assert.NotEqual(0x20, machine.Bus.Read(0x1000));
         // Open 3K window is not sticky RAM: write latches, then installed RAM overwrites last-data.
         machine.Bus.Write(0x0400, 0x11);
         Assert.Equal(0x11, machine.Bus.Read(0x0400));

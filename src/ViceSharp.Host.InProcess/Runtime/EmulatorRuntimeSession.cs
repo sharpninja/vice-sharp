@@ -267,6 +267,22 @@ public sealed class EmulatorRuntimeSession
 
     public ResourceSettingsDto ResourceSettings { get; set; } = new();
 
+    /// <summary>
+    /// xvic -memory style VIC-20 expansion (none/3k/8k/16k/24k/all or block list).
+    /// Empty means default unexpanded for VIC-20; ignored for other machines.
+    /// </summary>
+    public string Vic20MemorySpec { get; set; } = "none";
+
+    public string FileSystemIecRootPath { get; set; } = "";
+
+    public int FileSystemIecUnit { get; set; } = 9;
+
+    public string Vic20ExpansionCartKind { get; set; } = "none";
+
+    public bool Vic20ExpansionWriteBack { get; set; }
+
+    public string Vic20ExpansionConfigPreset { get; set; } = "start";
+
     public long FrameCount { get; private set; }
 
     public double MeasuredFramesPerSecond { get; private set; }

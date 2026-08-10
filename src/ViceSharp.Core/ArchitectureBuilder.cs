@@ -202,6 +202,9 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             deviceRegistry.Add(drive8);
         if (drive9 is not null)
             deviceRegistry.Add(drive9);
+        // Host-backed IEC filesystem (uIEC/fsdevice-style) for all IEC machines.
+        var c64FsIec = new ViceSharp.Core.Iec.FileSystemIecDevice(unitNumber: 9);
+        deviceRegistry.Add(c64FsIec);
         if (datasette is not null)
             deviceRegistry.Add(datasette);
         if (datasetteCia1FlagBinding is not null)
@@ -280,12 +283,15 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var cpu = new Mos6502(bus);
         var clock = new SystemClock(descriptor.MasterClockHz, cpu, irqLine, nmiLine);
         var profile = (descriptor as IProfiledArchitectureDescriptor)?.MachineProfile;
-        var expansion = Vic20MemoryLayout.ParseBoardModel(profile?.BoardModel);
+        // Prefer explicit xvic RAM block override (settings); else BoardModel preset.
+        var ramBlocks = descriptor is IVic20RamConfiguration { RamBlocksOverride: { } overrideBlocks }
+            ? overrideBlocks
+            : Vic20MemoryLayout.ToBlocks(Vic20MemoryLayout.ParseBoardModel(profile?.BoardModel));
 
         // Expansion-aware system RAM: only installed BLKs claim the bus.
         // Uninstalled regions fall through to BasicBus last-data open bus
         // (VICE vic20_cpu_last_data). ROMs and I/O overlay via register order.
-        var ram = new Vic20SystemRam(expansion);
+        var ram = new Vic20SystemRam(ramBlocks);
         bus.RegisterDevice(ram);
         deviceRegistry.Add(ram, DeviceRole.SystemRam);
 
@@ -397,6 +403,16 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
 
         if (profile is not null)
             deviceRegistry.Add(new SystemCore(profile.SystemCore), DeviceRole.SystemCore);
+
+        // FE3 / Ultimem / Mega-Cart attach port (empty until media attaches).
+        // CartridgePort role is shared with MVP Vic20Cartridge host; both register.
+        var expansionCartPort = new Vic20ExpansionCartPort(bus);
+        deviceRegistry.Add(expansionCartPort, DeviceRole.CartridgePort);
+
+        // Host-backed IEC filesystem device (uIEC/fsdevice-style); default unit 9
+        // so unit 8 remains free for true-drive 1540 when attached.
+        var fsIec = new ViceSharp.Core.Iec.FileSystemIecDevice(unitNumber: 9);
+        deviceRegistry.Add(fsIec);
 
         var pubSub = ConnectMachinePubSub(bus, cpu);
         var machine = new Machine(descriptor, bus, clock, deviceRegistry, cpu, pubSub);

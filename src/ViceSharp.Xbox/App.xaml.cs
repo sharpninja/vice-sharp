@@ -921,10 +921,22 @@ public sealed partial class App : Application
                 ? _facade.GetVideoStandard(_sessionId)
                 : null;
 
-            var system = standard == VideoStandard.Ntsc
-                ? ViceSharp.Chips.VicIi.Mos6569.TvSystem.NTSC
-                : ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL;
-            var aspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
+            // VIC-I (xvic) uses a different composite PAR table than VIC-II (x64sc).
+            // VICE vic.c vic_get_pixel_aspect: PAL 1.66574/2, NTSC 1.50411/2.
+            float aspect;
+            if (_host is not null
+                && !string.IsNullOrEmpty(_sessionId)
+                && _host.TryGetVicIPixelAspect(_sessionId, out var vicIAspect))
+            {
+                aspect = vicIAspect;
+            }
+            else
+            {
+                var system = standard == VideoStandard.Ntsc
+                    ? ViceSharp.Chips.VicIi.Mos6569.TvSystem.NTSC
+                    : ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL;
+                aspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
+            }
 
             _videoSurface?.SetPixelAspect(aspect);
 

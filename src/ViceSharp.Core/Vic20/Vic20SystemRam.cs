@@ -9,15 +9,20 @@ namespace ViceSharp.Core.Vic20;
 /// (VICE <c>vic20_cpu_last_data</c> / <c>read_unconnected_c_bus</c>) so KERNAL
 /// expansion probes see last-bus data, not a sticky store or fixed 0xFF.
 /// </summary>
-/// <remarks>FR-VIC20-002.</remarks>
+/// <remarks>FR-VIC20-002. Expansion uses xvic-compatible <see cref="Vic20RamBlocks"/>.</remarks>
 public sealed class Vic20SystemRam : IMemory
 {
     private readonly byte[] _memory = new byte[65536];
-    private readonly Vic20ExpansionKind _expansion;
+    private readonly Vic20RamBlocks _ramBlocks;
 
     public Vic20SystemRam(Vic20ExpansionKind expansion = Vic20ExpansionKind.Unexpanded)
+        : this(Vic20MemoryLayout.ToBlocks(expansion))
     {
-        _expansion = expansion;
+    }
+
+    public Vic20SystemRam(Vic20RamBlocks ramBlocks)
+    {
+        _ramBlocks = ramBlocks;
         Id = new DeviceId(0x0101);
         Reset();
     }
@@ -25,7 +30,16 @@ public sealed class Vic20SystemRam : IMemory
     public DeviceId Id { get; }
     public string Name => "VIC-20 system RAM";
     public Span<byte> Span => _memory;
-    public Vic20ExpansionKind Expansion => _expansion;
+
+    /// <summary>Installed expansion blocks (xvic RAMBlock0/1/2/3/5).</summary>
+    public Vic20RamBlocks RamBlocks => _ramBlocks;
+
+    /// <summary>
+    /// Legacy preset view of <see cref="RamBlocks"/> when the map matches a
+    /// named pack; custom combinations report <see cref="Vic20ExpansionKind.Unexpanded"/>.
+    /// Prefer <see cref="RamBlocks"/> for custom maps.
+    /// </summary>
+    public Vic20ExpansionKind Expansion => Vic20MemoryLayout.ToExpansionKind(_ramBlocks);
 
     /// <inheritdoc />
     /// <remarks>
@@ -33,7 +47,7 @@ public sealed class Vic20SystemRam : IMemory
     /// open bus. Installed base/expansion RAM is normal R/W.
     /// </remarks>
     public bool HandlesAddress(ushort address)
-        => Vic20MemoryLayout.IsInstalledRam(_expansion, address);
+        => Vic20MemoryLayout.IsInstalledRam(_ramBlocks, address);
 
     public byte Read(ushort address) => _memory[address];
 

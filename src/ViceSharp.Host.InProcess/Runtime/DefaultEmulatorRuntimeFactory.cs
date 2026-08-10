@@ -103,6 +103,15 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
         if (!_descriptors.TryGetValue(architectureId, out var descriptor))
             throw new InvalidOperationException($"Architecture '{architectureId}' is not registered.");
 
+        // VIC-20 xvic -memory override (settings / create request).
+        var memorySpec = string.IsNullOrWhiteSpace(request.Vic20MemorySpec) ? "none" : request.Vic20MemorySpec.Trim();
+        if (descriptor is Vic20Descriptor vic20Base
+            && !string.IsNullOrWhiteSpace(request.Vic20MemorySpec)
+            && ViceSharp.Core.Vic20.Vic20MemoryLayout.TryParseMemorySpec(request.Vic20MemorySpec, out var ramBlocks))
+        {
+            descriptor = vic20Base.WithRamBlocks(ramBlocks);
+        }
+
         var isTrueDriveRig = trueDrive && descriptor is C64Descriptor;
         var machine = isTrueDriveRig
             ? C64TrueDriveRigBuilder.Build(_architectureBuilder, descriptor, driveDevice, diskImagePath)
@@ -114,6 +123,11 @@ public sealed class DefaultEmulatorRuntimeFactory : IEmulatorRuntimeFactory
             // Expose the live audio tap so sound capture can attach a recorder
             // (null for explicit-builder test rigs with no live audio path).
             AudioCaptureTap = _audioTap,
+            Vic20MemorySpec = descriptor is Vic20Descriptor
+                ? (ViceSharp.Core.Vic20.Vic20MemoryLayout.TryParseMemorySpec(memorySpec, out var formatted)
+                    ? ViceSharp.Core.Vic20.Vic20MemoryLayout.FormatMemorySpec(formatted)
+                    : "none")
+                : string.Empty,
         };
 
         // The true-drive rig boots with the disk inserted at build time, so the

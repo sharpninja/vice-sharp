@@ -71,6 +71,12 @@ public interface IViceNative : IDisposable
     NativeVicState GetVicState();
 
     /// <summary>
+    /// VIC-I video pipeline snapshot for every-cycle lockstep (xvic only).
+    /// C64 native implementations throw <see cref="NotSupportedException"/>.
+    /// </summary>
+    Vic20VideoLockstepState GetVic20VideoState();
+
+    /// <summary>
     /// Get the main-CPU resume/pipeline state (TR-LOCKSTEP-VSF-001): the
     /// .vsf-restored in-flight context beyond the plain register file (last
     /// opcode info, pending BA-low stall flags, the 6510 processor port that
@@ -231,4 +237,36 @@ public readonly struct NativeVicState
     /// state (vicii.idle_state).
     /// </summary>
     public byte IdleState { get; init; }
+}
+
+/// <summary>
+/// VIC-I (VIC-20) video pipeline snapshot for every-cycle lockstep vs xvic
+/// (<c>vice_vic20_get_video_state</c> / managed <c>Mos6561.CaptureVideoLockstepState</c>).
+/// Tracks video the same way CPU lockstep tracks A/X/Y/S/P/PC: per phi2 after
+/// <c>vic_cycle</c>, not end-of-frame pixels alone.
+/// </summary>
+public readonly struct Vic20VideoLockstepState
+{
+    public uint Cycle { get; init; }
+    public ushort RasterLine { get; init; }
+    public byte RasterCycle { get; init; }
+    /// <summary>VICE <c>vic.area</c> (IDLE/PENDING/DISPLAY/DONE).</summary>
+    public byte Area { get; init; }
+    /// <summary>VICE <c>vic.fetch_state</c>.</summary>
+    public byte FetchState { get; init; }
+    public byte TextCols { get; init; }
+    public byte TextLines { get; init; }
+    public byte YCounter { get; init; }
+    public byte RowCounter { get; init; }
+    public byte BlankThisLine { get; init; }
+    public byte LineWasBlank { get; init; }
+    public byte CharHeight { get; init; }
+    public ushort Memptr { get; init; }
+    public ushort MemptrInc { get; init; }
+    /// <summary>Raw $9000-$900F store (16 bytes); not bus peeks with live raster bits.</summary>
+    public byte[]? Regs { get; init; }
+    /// <summary>VICE <c>vic.cbuf</c> color nybbles for the current line (up to 32).</summary>
+    public byte[]? Cbuf { get; init; }
+    /// <summary>VICE <c>vic.gbuf</c> glyph bytes for the current line (up to 32).</summary>
+    public byte[]? Gbuf { get; init; }
 }

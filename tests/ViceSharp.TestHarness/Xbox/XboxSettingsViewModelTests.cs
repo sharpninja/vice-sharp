@@ -2,6 +2,9 @@ namespace ViceSharp.TestHarness.Xbox;
 
 using System.Linq;
 using System.Threading.Tasks;
+using ViceSharp.Abstractions;
+using ViceSharp.Core.FlashCarts;
+using ViceSharp.Core.Vic20;
 using ViceSharp.Protocol;
 using ViceSharp.TestHarness.Xbox.Fakes;
 using ViceSharp.Xbox.ViewModels;
@@ -33,6 +36,224 @@ public sealed class XboxSettingsViewModelTests
         new InputSettingsDto("c64:gtk3_pos", InputPort.Joystick2, false, "keyboard-joystick"),
         new AudioSettingsDto("enabled"),
         new ResourceSettingsDto("auto-detect"));
+
+    private static SessionSettingsDto Vic20Settings(string memorySpec = "none") => new(
+        "vic20",
+        new LimiterSettingsDto(100, true, "vice"),
+        new DisplaySettingsDto("host", "vice", true, true, "2x", "visible-area", "vice-pixel-aspect"),
+        new InputSettingsDto("c64:gtk3_pos", InputPort.Joystick2, false, "keyboard-joystick"),
+        new AudioSettingsDto("enabled"),
+        new ResourceSettingsDto("auto-detect"),
+        Vic20MemorySpec: memorySpec);
+
+    /// <summary>
+    /// Regression: cart kind "none" with empty AvailablePresets left SelectedExpansionCartPreset
+    /// "start" outside ItemsSource; UWP ComboBox TwoWay null-cleared and re-set forever
+    /// (stack overflow on Settings Apply / AdoptSettings). NonePresets must keep "start" in list.
+    /// </summary>
+    /// <summary>
+    /// Built FE3 image from core builder attaches through the same cart media path as UI.
+    /// </summary>
+    [Fact]
+    public async Task ExpansionCartImage_AttachBuiltFe3Image_UsesCartridgeSlot()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = Vic20Settings("all") with { ProfileId = "vic20", Vic20ExpansionCartKind = "fe3" },
+            CannedProfiles = [new SettingsProfileDto("vic20", "VIC-20 PAL", "xvic", true, true, "vic20 pal")],
+        };
+        var vm = new XboxSettingsViewModel(fake, SessionId);
+        await vm.RefreshAsync(ct);
+
+        var img = new FlashImageBuilder(FlashCartProfiles.Fe3).Build();
+        await vm.AttachExpansionCartImageAsync(@"C:\built\fe3.bin", img, "fe3.bin", ct);
+
+        Assert.Equal(MediaSlot.Cartridge, fake.AttachedSlot);
+        Assert.Equal(FinalExpansion3Cartridge.FlashSize, fake.AttachedPayload?.Length);
+        Assert.True(vm.HasExpansionCartImage);
+    }
+
+    /// <summary>
+    /// UWP must manage FE3/Ultimem/Mega-Cart image content (attach/eject), not kind alone.
+    /// </summary>
+    [Fact]
+    public async Task ExpansionCartImage_AttachAndEject_UpdatesStatusAndMediaSlot()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = Vic20Settings("all") with
+            {
+                ProfileId = "vic20",
+                Vic20ExpansionCartKind = "fe3",
+                Vic20ExpansionWriteBack = true,
+                Vic20ExpansionConfigPreset = "start",
+            },
+            CannedProfiles =
+            [
+                new SettingsProfileDto("vic20", "VIC-20 PAL", "xvic", true, true, "vic20 pal"),
+            ],
+        };
+        var vm = new XboxSettingsViewModel(fake, SessionId);
+        await vm.RefreshAsync(ct);
+
+        Assert.False(vm.HasExpansionCartImage);
+        Assert.Contains("No flash", vm.ExpansionCartImageStatus, StringComparison.OrdinalIgnoreCase);
+
+        var payload = new byte[0x80000]; // FE3-sized
+        await vm.AttachExpansionCartImageAsync(@"C:\carts\fe3.bin", payload, "fe3.bin", ct);
+
+        Assert.True(vm.HasExpansionCartImage);
+        Assert.Contains("fe3.bin", vm.ExpansionCartImageStatus, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(MediaSlot.Cartridge, fake.AttachedSlot);
+        Assert.False(fake.AttachedReadOnly); // write-back on → not read-only
+        Assert.Equal(0x80000, fake.AttachedPayload?.Length);
+
+        await vm.EjectExpansionCartImageAsync(ct);
+        Assert.False(vm.HasExpansionCartImage);
+        Assert.Equal(MediaSlot.Cartridge, fake.DetachedSlot);
+        Assert.Contains("No flash", vm.ExpansionCartImageStatus, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task ExpansionCartNone_PresetStaysInItemsSource_SurvivesTwoWayEcho()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = Vic20Settings("none"),
+            CannedProfiles =
+            [
+                new SettingsProfileDto("vic20", "VIC-20 PAL", "xvic", true, true, "vic20 pal"),
+                new SettingsProfileDto("vic20ntsc", "VIC-20 NTSC", "xvic", false, true, "vic20 ntsc"),
+            ],
+            UpdateResponseOverride = Vic20Settings("none") with { ProfileId = "vic20" },
+        };
+        var vm = new XboxSettingsViewModel(fake, SessionId);
+        await vm.RefreshAsync(ct);
+
+        Assert.Equal("none", vm.SelectedExpansionCartKind);
+        Assert.Contains("start", vm.ExpansionCartPresets);
+        Assert.Equal("start", vm.SelectedExpansionCartPreset);
+
+        var depth = 0;
+        var maxDepth = 0;
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is not (
+                nameof(XboxSettingsViewModel.SelectedExpansionCartKind)
+                or nameof(XboxSettingsViewModel.SelectedExpansionCartPreset)
+                or nameof(XboxSettingsViewModel.ExpansionCartPresets)))
+            {
+                return;
+            }
+
+            depth++;
+            maxDepth = Math.Max(maxDepth, depth);
+            try
+            {
+                vm.SelectedExpansionCartPreset = null!;
+                vm.SelectedExpansionCartPreset = "";
+                vm.SelectedExpansionCartPreset = vm.SelectedExpansionCartPreset;
+                vm.SelectedExpansionCartKind = vm.SelectedExpansionCartKind;
+            }
+            finally
+            {
+                depth--;
+            }
+        };
+
+        // Apply path: host returns same settings (PAL restart adopt).
+        vm.SelectedProfileId = "vic20";
+        await vm.ApplySettingsAsync(restartSession: true, ct);
+
+        Assert.True(maxDepth < 12, $"Expansion cart TwoWay depth {maxDepth}");
+        Assert.Equal("start", vm.SelectedExpansionCartPreset);
+        Assert.Contains("start", vm.ExpansionCartPresets);
+    }
+
+    /// <summary>
+    /// Regression: UWP TwoWay ComboBox/ToggleSwitch write-back re-enters setters when
+    /// PropertyChanged fires for the same values. Unbounded re-notify caused
+    /// STATUS_STACK_OVERFLOW (0xc00000fd) in Windows.UI.Xaml.dll when selecting RAM preset
+    /// "All" (WER 2026-08-06, ViceSharp.Xbox 1.2.7).
+    /// Acceptance: simulated TwoWay echo of every memory property stays within a shallow
+    /// re-entrancy budget; preset "All" maps to xvic "all" and RequiresRestart.
+    /// </summary>
+    [Fact]
+    public async Task SelectedVic20MemoryPreset_All_SurvivesTwoWayBindingReentrancy()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var fake = new FakeXboxSettingsGateway
+        {
+            CannedSettings = Vic20Settings("none"),
+            CannedProfiles =
+            [
+                new SettingsProfileDto("vic20", "VIC-20 PAL", "xvic", true, true, "vic20 pal"),
+                new SettingsProfileDto("vic20ntsc", "VIC-20 NTSC", "xvic", false, true, "vic20 ntsc"),
+            ],
+        };
+        var vm = new XboxSettingsViewModel(fake, SessionId);
+        await vm.RefreshAsync(ct);
+        Assert.True(vm.IsVic20Selected);
+        Assert.Equal("Unexpanded", vm.SelectedVic20MemoryPreset);
+
+        var depth = 0;
+        var maxDepth = 0;
+        var nullClears = 0;
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is not (
+                nameof(XboxSettingsViewModel.SelectedVic20MemoryPreset)
+                or nameof(XboxSettingsViewModel.Vic20Blk0)
+                or nameof(XboxSettingsViewModel.Vic20Blk1)
+                or nameof(XboxSettingsViewModel.Vic20Blk2)
+                or nameof(XboxSettingsViewModel.Vic20Blk3)
+                or nameof(XboxSettingsViewModel.Vic20Blk5)))
+            {
+                return;
+            }
+
+            depth++;
+            maxDepth = Math.Max(maxDepth, depth);
+            try
+            {
+                // Mirror WinUI ComboBox: intermediate null/empty clear, then write-back.
+                if (e.PropertyName == nameof(XboxSettingsViewModel.SelectedVic20MemoryPreset))
+                {
+                    nullClears++;
+                    vm.SelectedVic20MemoryPreset = null!;
+                    vm.SelectedVic20MemoryPreset = "";
+                }
+
+                vm.SelectedVic20MemoryPreset = vm.SelectedVic20MemoryPreset;
+                vm.Vic20Blk0 = vm.Vic20Blk0;
+                vm.Vic20Blk1 = vm.Vic20Blk1;
+                vm.Vic20Blk2 = vm.Vic20Blk2;
+                vm.Vic20Blk3 = vm.Vic20Blk3;
+                vm.Vic20Blk5 = vm.Vic20Blk5;
+            }
+            finally
+            {
+                depth--;
+            }
+        };
+
+        vm.SelectedVic20MemoryPreset = "All";
+
+        Assert.True(maxDepth < 12, $"TwoWay re-entrancy depth {maxDepth} suggests notify loop.");
+        Assert.True(nullClears > 0, "Expected ComboBox-style null clear simulation.");
+        Assert.Equal("All", vm.SelectedVic20MemoryPreset);
+        Assert.True(vm.Vic20Blk0 && vm.Vic20Blk1 && vm.Vic20Blk2 && vm.Vic20Blk3 && vm.Vic20Blk5);
+        Assert.True(vm.IsDirty);
+        Assert.True(vm.RequiresRestart);
+
+        // Second selection (Apply/Adopt re-push of same map) must not re-enter deeply.
+        maxDepth = 0;
+        vm.SelectedVic20MemoryPreset = "All";
+        Assert.True(maxDepth < 4, $"Re-select All depth {maxDepth} should be near-zero with guards.");
+    }
 
     /// <summary>
     /// FR-XSET-001, TR-XMVVM-001. TEST-XSET-001.

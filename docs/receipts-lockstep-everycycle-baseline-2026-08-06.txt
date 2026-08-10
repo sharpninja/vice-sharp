@@ -1,0 +1,7 @@
+# Every-cycle baseline snapshot 2026-08-06
+Command: dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Vic20DivergeProbe
+Oracle: vice_xvic.dll model=vic20
+RESULT: DIV first=5023
+detail: nPC=$FE96 mPC=$FE98 on STA (zp),Y $91 (A/X/Y/S/P match)
+Note: cycles 1-5022 full CPU match after full-length BNE/JSR path fixes
+Log: C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-diverge-baseline.log

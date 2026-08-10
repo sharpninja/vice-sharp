@@ -122,4 +122,36 @@ public sealed class VideoFramePullViewModelTests
         Assert.Equal(1000, copied);
         Assert.Equal(0, delta);
     }
+
+    /// <summary>
+    /// Regression: VIC-20 first publishes a small pre-KERNAL frame, then expands.
+    /// A one-shot buffer sized to the first geometry permanently failed TryCopy
+    /// (dest too small) and left the Xbox surface stuck at 40x40 / no video.
+    /// </summary>
+    [Fact]
+    public void Tick_WhenGeometryGrows_ReallocatesAndCopiesLargerFrame()
+    {
+        var fake = new FakeVideoFramePull();
+        // Pre-KERNAL 1x1 character cell + borders ≈ 40x40.
+        fake.PublishFrame(40, 40, cycle: 100);
+        var pump = new VideoFramePullViewModel(fake, "xbox-session");
+        Assert.True(pump.Tick());
+        Assert.Equal(40, pump.Width);
+        Assert.Equal(40, pump.Height);
+
+        // Post-KERNAL 22x23 character area.
+        var largeW = 16 * 2 + 22 * 8;
+        var largeH = 16 * 2 + 23 * 8;
+        var large = new byte[largeW * largeH * 4];
+        large.AsSpan().Fill(0x5A);
+        fake.SourceFrame = large;
+        fake.PublishFrame(largeW, largeH, cycle: 200_000);
+
+        Assert.True(pump.Tick());
+        Assert.Equal(largeW, pump.Width);
+        Assert.Equal(largeH, pump.Height);
+        Assert.Equal(200_000, pump.Cycle);
+        Assert.Equal(large.Length, pump.CurrentFrame.Length);
+        Assert.True(pump.CurrentFrame.SequenceEqual(large));
+    }
 }

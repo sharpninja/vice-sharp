@@ -169,6 +169,14 @@ public sealed class MediaServiceHost : IMediaService
         byte[] payload,
         out byte[] runtimePayload)
     {
+        // VIC-20 expansion carts (FE3 512K, Ultimem >=1MB, Mega-Cart >=64K) are accepted
+        // when the machine exposes IVic20ExpansionCartPort — before C64 CRT validation.
+        if (IsVic20ExpansionCartPayload(session, payload))
+        {
+            runtimePayload = payload;
+            return null;
+        }
+
         try
         {
             runtimePayload = StandardCartridgeImage.FromBytes(payload).ToArray();
@@ -182,9 +190,39 @@ public sealed class MediaServiceHost : IMediaService
                 return null;
             }
 
+            // Vic20 MVP BLK cart (raw up to 16K) when expansion port present
+            var hasVic20Port = session.Machine.Devices
+                .GetAll<ViceSharp.Core.Vic20.IVic20ExpansionCartPort>()
+                .Any();
+            if (hasVic20Port && payload.Length is > 0 and <= 0x4000)
+            {
+                runtimePayload = payload;
+                return null;
+            }
+
             runtimePayload = payload;
-            return $"Cartridge media must be a supported generic CRT, raw 8K, raw 16K, or profile-compatible C64GS image. {ex.Message}";
+            return $"Cartridge media must be a supported generic CRT, raw 8K/16K, C64GS, or VIC-20 expansion (FE3/Ultimem/Mega-Cart) image. {ex.Message}";
         }
+    }
+
+    /// <summary>
+    /// True when payload is a VIC-20 FE3/Ultimem/Mega-Cart sized image on a machine
+    /// that has <see cref="ViceSharp.Core.Vic20.IVic20ExpansionCartPort"/>.
+    /// </summary>
+    private static bool IsVic20ExpansionCartPayload(EmulatorRuntimeSession session, byte[] payload)
+    {
+        var port = session.Machine.Devices
+            .GetAll<ViceSharp.Core.Vic20.IVic20ExpansionCartPort>()
+            .FirstOrDefault();
+        if (port is null)
+            return false;
+
+        // FE3 flash 512K (+ optional NVRAM trailer), Ultimem >= 1MB, Mega-Cart >= 64K
+        if (payload.Length >= 0x80000)
+            return true;
+        if (payload.Length >= 0x10000)
+            return true; // Mega-Cart style multi-bank ROM
+        return false;
     }
 
     private static bool IsGameSystemCartridgePayload(EmulatorRuntimeSession session, byte[] payload)
@@ -212,6 +250,39 @@ public sealed class MediaServiceHost : IMediaService
 
         if (slot != MediaSlot.Cartridge)
             return false;
+
+        // VIC-20 expansion carts (FE3 / Ultimem / Mega-Cart) when size looks like FE3 flash.
+        var vic20Port = session.Machine.Devices.GetAll<ViceSharp.Core.Vic20.IVic20ExpansionCartPort>().FirstOrDefault();
+        if (vic20Port is not null && payload.Length >= 0x10000)
+        {
+            try
+            {
+                // Prefer FE3 for 512K flash images; larger → Ultimem; Mega-Cart when NVRAM trailing.
+                if (payload.Length is >= 0x80000 and <= 0x80000 + 0x2000)
+                {
+                    vic20Port.AttachFinalExpansion3(payload.AsSpan(0, 0x80000));
+                    session.Vic20ExpansionCartKind = "fe3";
+                    return true;
+                }
+
+                if (payload.Length >= 0x100000)
+                {
+                    vic20Port.AttachUltimem(payload);
+                    session.Vic20ExpansionCartKind = "ultimem";
+                    return true;
+                }
+
+                // Mega-Cart: ROM banks (at least 64K)
+                vic20Port.AttachMegaCart(payload);
+                session.Vic20ExpansionCartKind = "megacart";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return false;
+            }
+        }
 
         var cartridgePort = session.Machine.Devices.GetAll<ICartridgePort>().SingleOrDefault();
         if (cartridgePort is null)
@@ -242,6 +313,20 @@ public sealed class MediaServiceHost : IMediaService
 
         if (slot != MediaSlot.Cartridge)
             return false;
+
+        // VIC-20 FE3 / Ultimem / Mega-Cart
+        var vic20Port = session.Machine.Devices
+            .GetAll<ViceSharp.Core.Vic20.IVic20ExpansionCartPort>()
+            .FirstOrDefault();
+        if (vic20Port is not null
+            && vic20Port.AttachedKind != ViceSharp.Core.Vic20.Vic20ExpansionCartKind.None)
+        {
+            if (vic20Port.WriteBack)
+                _ = vic20Port.FlushImage();
+            vic20Port.Eject();
+            session.Vic20ExpansionCartKind = "none";
+            return true;
+        }
 
         var cartridgePort = session.Machine.Devices.GetAll<ICartridgePort>().SingleOrDefault();
         if (cartridgePort is null)
