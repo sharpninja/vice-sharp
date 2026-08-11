@@ -419,6 +419,16 @@ public static unsafe partial class ViceNativeXvic
             return res != 0 && width > 0 && height > 0;
         }
 
+        public bool TryCaptureFrameIndices(byte[] indexBuffer, out int width, out int height)
+        {
+            width = 0;
+            height = 0;
+            if (indexBuffer is null || indexBuffer.Length < 1)
+                return false;
+            var res = CaptureFrameIndices(_instance, indexBuffer, indexBuffer.Length, out width, out height);
+            return res != 0 && width > 0 && height > 0;
+        }
+
         public NativeCiaState GetCiaState(int ciaIndex)
         {
             // Vic20 has VIA not CIA; export zeros for interface parity.

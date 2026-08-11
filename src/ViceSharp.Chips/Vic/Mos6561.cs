@@ -160,6 +160,9 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     private int _frameWidth;
     private int _frameHeight;
     private byte[] _frameBuffer;
+    /// <summary>Palette-index canvas (one byte per pixel), parallel to BGRA FrameBuffer.</summary>
+    private byte[] _indexFrameBuffer = Array.Empty<byte>();
+    private byte[] _indexLineBuffer = Array.Empty<byte>();
     /// <summary>
     /// VICE full raster line buffer (screen_width * VIC_PIXEL_WIDTH), before
     /// normal-border crop into <see cref="_frameBuffer"/>.
@@ -249,6 +252,11 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     public int TotalLines => _totalLines;
     public bool IsVBlank => _rasterLine >= _visibleLines;
     public byte[] FrameBuffer => _frameBuffer;
+    /// <summary>
+    /// Palette-index framebuffer (one byte per pixel, same geometry as <see cref="FrameBuffer"/>).
+    /// Primary Exact compare path vs xvic <c>vice_vic_capture_frame_indices</c> (FR-VIC20-001 / AC-PX-02).
+    /// </summary>
+    public byte[] IndexFrameBuffer => _indexFrameBuffer;
     public int FrameWidth => _frameWidth;
     public int FrameHeight => _frameHeight;
     public int TextColumns => _columns;
@@ -572,16 +580,21 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
 
         var regF = _regs[0x0F];
         var regE = _regs[0x0E];
-        var bg = Palette[BackgroundColorIndex(regF)];
-        var border = Palette[BorderColorIndex(regF)];
+        var bgIdx = (byte)BackgroundColorIndex(regF);
+        var borderIdx = (byte)BorderColorIndex(regF);
+        var auxIdx = (byte)((regE >> 4) & 0x0F);
+        var bg = Palette[bgIdx];
+        var border = Palette[borderIdx];
         var reverseMode = InvertScreenMode(regF);
-        var aux = Palette[(regE >> 4) & 0x0F];
+        var aux = Palette[auxIdx];
         var line = _lineBuffer;
+        var indexLine = _indexLineBuffer;
         var lineW = _lineBufferWidth;
 
         // VICE: whole physical line is border/idle, then draw_line paints open region
         // (vic-draw.c), then raster_line_draw_borders blanks outside [xstart,xstop].
         FillRow(line, 0, lineW, border);
+        FillIndexRow(indexLine, 0, lineW, borderIdx);
 
         // EndOfLine assigned _lineWasBlank = blank_this_line for THIS completed line.
         // Non-blank: open horizontal flipflop fetched cbuf/gbuf (vic-draw draw_line).
@@ -595,6 +608,7 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
                 var originX = _displayXStart;
                 // mc_border color is border (c[1] in vic-draw.c) for std/MC.
                 var mcBorder = border;
+                var mcBorderIdx = borderIdx;
 
                 for (var col = 0; col < cols; col++)
                 {
@@ -605,7 +619,8 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
                     var dr = reverse ? (byte)~d : d;
                     var c0 = bg;
                     var c1 = mcBorder;
-                    var c2 = Palette[b & 0x07];
+                    var c2Idx = (byte)(b & 0x07);
+                    var c2 = Palette[c2Idx];
                     var c3 = aux;
                     var multi = (b & 0x08) != 0;
                     var cellX = originX + col * 8 * PixelWidth;
@@ -625,12 +640,22 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
                             2 => c2,
                             _ => c3,
                         };
+                        var idx = slot switch
+                        {
+                            0 => bgIdx,
+                            1 => mcBorderIdx,
+                            2 => c2Idx,
+                            _ => auxIdx,
+                        };
                         var xPix = pos * PixelWidth;
                         for (var sx = 0; sx < PixelWidth; sx++)
                         {
                             var px = cellX + xPix + sx;
                             if ((uint)px < (uint)lineW)
+                            {
                                 WritePixel(line, px * 4, color);
+                                indexLine[px] = idx;
+                            }
                         }
                     }
                 }
@@ -638,12 +663,16 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
                 // VICE raster_line_draw_borders: blank left of display_xstart and
                 // right of display_xstop on the full line (closed borders).
                 if (_displayXStart > 0)
+                {
                     FillRow(line, 0, Math.Min(_displayXStart, lineW), border);
+                    FillIndexRow(indexLine, 0, Math.Min(_displayXStart, lineW), borderIdx);
+                }
                 if (_displayXStop > 0 && _displayXStop < lineW)
                 {
                     var rightStart = _displayXStop;
                     // display_xstop is exclusive-ish end of gfx in VICE (blank from xstop to end).
                     FillRow(line, rightStart * 4, lineW - rightStart, border);
+                    FillIndexRow(indexLine, rightStart, lineW - rightStart, borderIdx);
                 }
             }
         }
@@ -669,9 +698,13 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         var src = firstX * 4;
         var dst = fbY * _frameWidth * 4;
         Buffer.BlockCopy(line, src, _frameBuffer, dst, copyW * 4);
+        Buffer.BlockCopy(indexLine, firstX, _indexFrameBuffer, fbY * _frameWidth, copyW);
         // If the slice is short of canvas width, pad with border (should not happen for READY).
         if (copyW < _frameWidth)
+        {
             FillRow(_frameBuffer, dst + copyW * 4, _frameWidth - copyW, border);
+            FillIndexRow(_indexFrameBuffer, fbY * _frameWidth + copyW, _frameWidth - copyW, borderIdx);
+        }
     }
 
     /// <summary>
@@ -728,8 +761,11 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         Array.Clear(_cbuf);
         Array.Clear(_gbuf);
         Array.Clear(_frameBuffer);
+        Array.Clear(_indexFrameBuffer);
         if (_lineBuffer.Length > 0)
             Array.Clear(_lineBuffer);
+        if (_indexLineBuffer.Length > 0)
+            Array.Clear(_indexLineBuffer);
     }
 
     /// <summary>
@@ -802,7 +838,8 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         var last = IsNtsc ? NtscNormalLastDisplayedLine : PalNormalLastDisplayedLine;
         var h = last - first + 1;
         if (displayWidth == _frameWidth && h == _frameHeight
-            && _frameBuffer is not null && _frameBuffer.Length == displayWidth * h * 4)
+            && _frameBuffer is not null && _frameBuffer.Length == displayWidth * h * 4
+            && _indexFrameBuffer.Length == displayWidth * h)
         {
             return;
         }
@@ -810,15 +847,18 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         _frameWidth = displayWidth;
         _frameHeight = h;
         _frameBuffer = new byte[_frameWidth * _frameHeight * 4];
+        _indexFrameBuffer = new byte[_frameWidth * _frameHeight];
     }
 
     private void EnsureLineBufferSize()
     {
         var w = FullScreenWidthUnits * PixelWidth;
-        if (w == _lineBufferWidth && _lineBuffer.Length == w * 4)
+        if (w == _lineBufferWidth && _lineBuffer.Length == w * 4
+            && _indexLineBuffer.Length == w)
             return;
         _lineBufferWidth = w;
         _lineBuffer = new byte[w * 4];
+        _indexLineBuffer = new byte[w];
     }
 
     /// <summary>
@@ -851,6 +891,13 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
             fb[i + 2] = r;
             fb[i + 3] = 0xFF;
         }
+    }
+
+    private static void FillIndexRow(byte[] indices, int start, int width, byte colorIndex)
+    {
+        var end = Math.Min(start + width, indices.Length);
+        for (var i = start; i < end; i++)
+            indices[i] = colorIndex;
     }
 
     private static void FillSolid(byte[] fb, uint color)

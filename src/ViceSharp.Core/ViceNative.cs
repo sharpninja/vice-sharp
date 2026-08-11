@@ -851,6 +851,14 @@ public static unsafe partial class ViceNative
             return res != 0 && width > 0 && height > 0;
         }
 
+        public bool TryCaptureFrameIndices(byte[] indexBuffer, out int width, out int height)
+        {
+            // C64 path: index capture uses vice_vic_capture_frame_indices when available.
+            width = 0;
+            height = 0;
+            return false;
+        }
+
         public Vic20VideoLockstepState GetVic20VideoState()
             => throw new NotSupportedException("VIC-I video lockstep export is only available on the xvic (VIC-20) oracle.");
 

@@ -84,6 +84,13 @@ public interface IViceNative : IDisposable
     bool TryCaptureVisibleFrame(byte[] bgraBuffer, out int width, out int height);
 
     /// <summary>
+    /// Capture the visible framebuffer as palette indices (one byte per pixel).
+    /// Primary Exact path for VIC-20 pixel lockstep (FR-VIC20-001 / AC-PX-02).
+    /// Returns false when unsupported or buffer too small.
+    /// </summary>
+    bool TryCaptureFrameIndices(byte[] indexBuffer, out int width, out int height);
+
+    /// <summary>
     /// Get the main-CPU resume/pipeline state (TR-LOCKSTEP-VSF-001): the
     /// .vsf-restored in-flight context beyond the plain register file (last
     /// opcode info, pending BA-low stall flags, the 6510 processor port that

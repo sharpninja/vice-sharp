@@ -9,7 +9,7 @@
 
 **Process note:** All VIC-20 / VICE-faithfulness work uses a **hostile validator** (independent read-only agent; assumes overclaim; Exact requires VICE file+function + matching managed control flow).
 
-**Video lockstep:** Native `vice_vic20_get_video_state` + managed `CaptureVideoLockstepState`. Tests: `Vic20VideoLockstep` (2k + 500k). CPU probe also compares video unless `VICESHARP_LOCKSTEP_VIDEO=0`. Pixel framebuffer compare vs xvic still **Missing** (`capture_visible_frame` stub).
+**Video lockstep:** Native `vice_vic20_get_video_state` + managed `CaptureVideoLockstepState`. Tests: `Vic20VideoLockstep` (2k + 500k). CPU probe also compares video unless `VICESHARP_LOCKSTEP_VIDEO=0`. Pixel capture: xvic `capture_visible_frame` + indices wired; index SequenceEqual lockstep in progress (FR-VIC20-001 / PLAN-VIC20-EXACT-001 Phase A).
 
 ---
 
