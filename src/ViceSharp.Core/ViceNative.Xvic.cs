@@ -99,6 +99,17 @@ public static unsafe partial class ViceNativeXvic
     [LibraryImport(LibraryName, EntryPoint = "vice_vic20_get_video_state")]
     public static partial void GetVic20VideoState(IntPtr instance, ref ViceNative.ViceVic20VideoState state);
 
+    /// <summary>
+    /// Capture the visible VIC-I canvas as BGRA (palette-expanded).
+    /// Returns non-zero on success. PAL normal is 448x284.
+    /// </summary>
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_capture_visible_frame")]
+    public static partial int CaptureVisibleFrame(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
+
+    /// <summary>Capture palette-index frame (one byte per pixel).</summary>
+    [LibraryImport(LibraryName, EntryPoint = "vice_vic_capture_frame_indices")]
+    public static partial int CaptureFrameIndices(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pipeline_state")]
     public static partial void GetCpuPipelineState(IntPtr instance, ref ViceNative.ViceCpuPipelineState state);
 
@@ -396,6 +407,16 @@ public static unsafe partial class ViceNativeXvic
                 Cbuf = state.GetCbuf(),
                 Gbuf = state.GetGbuf(),
             };
+        }
+
+        public bool TryCaptureVisibleFrame(byte[] bgraBuffer, out int width, out int height)
+        {
+            width = 0;
+            height = 0;
+            if (bgraBuffer is null || bgraBuffer.Length < 4)
+                return false;
+            var res = CaptureVisibleFrame(_instance, bgraBuffer, bgraBuffer.Length, out width, out height);
+            return res != 0 && width > 0 && height > 0;
         }
 
         public NativeCiaState GetCiaState(int ciaIndex)

@@ -1,15 +1,17 @@
 using ViceSharp.Abstractions;
+using ViceSharp.Core.FlashCarts;
 
 namespace ViceSharp.Core.Vic20;
 
 /// <summary>
-/// VIC-20 Final Expansion 3 (VICE finalexpansion.c v3.2) MVP.
-/// 512K SRAM + 512K flash; REGA $9C02 / REGB $9C03; RAM modes for BLK0/1/2/3/5.
+/// VIC-20 Final Expansion 3 (VICE finalexpansion.c v3.2).
+/// 512K SRAM + 512K flash (AM29F040B via <see cref="Flash040Core"/>);
+/// REGA $9C02 / REGB $9C03; RAM modes for BLK0/1/2/3/5.
 /// </summary>
 /// <remarks>
-/// Where diverged: full flash040 program path deferred; START/FLASH menu boot
-/// needs user flash image. Realign: REGA/REGB bit fields and RAM1/SUPER_RAM/ROM_RAM
-/// maps match VICE tables for host RAM Manager presets.
+/// MODE_FLASH stores route through flash040 (not raw array pokes). Erase latency
+/// is instant (Partial vs VICE multi-second erase_alarm). START/FLASH menu boot
+/// still needs a user flash image with cart software.
 /// </remarks>
 public sealed class FinalExpansion3Cartridge : IAddressSpace
 {
@@ -38,11 +40,18 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
     public const byte RegBBlk3Off = 0x08;
     public const byte RegBBlk5Off = 0x10;
 
+    // VICE finalexpansion.c BLK*_BASE
+    private const int Blk0Base = 0x0000;
+    private const int Blk1Base = 0x0000;
+    private const int Blk2Base = 0x2000;
+    private const int Blk3Base = 0x4000;
+    private const int Blk5Base = 0x6000;
+
     private readonly byte[] _flash;
     private readonly byte[] _sram;
+    private readonly Flash040Core _flash040;
     private byte _registerA;
     private byte _registerB;
-    private bool _flashDirty;
 
     public FinalExpansion3Cartridge(ReadOnlySpan<byte> flashImage)
     {
@@ -51,6 +60,7 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
         var copy = Math.Min(flashImage.Length, FlashSize);
         if (copy > 0)
             flashImage[..copy].CopyTo(_flash);
+        _flash040 = new Flash040Core(_flash);
         Id = new DeviceId(0x0C10);
         PowerUp();
     }
@@ -59,7 +69,7 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
     public string Name => "Final Expansion 3";
     public byte RegisterA => _registerA;
     public byte RegisterB => _registerB;
-    public bool FlashDirty => _flashDirty;
+    public bool FlashDirty => _flash040.Dirty;
     public bool WriteBack { get; set; }
 
     public void PowerUp()
@@ -67,10 +77,10 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
         // VICE powerup: START mode, bank 0, registers enabled.
         _registerA = ModeStart;
         _registerB = 0;
+        _flash040.Reset();
     }
 
     public void Reset() => PowerUp();
-
     public void ApplyConfigPreset(string presetId)
     {
         switch (presetId.Trim().ToLowerInvariant())
@@ -148,11 +158,18 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
         if (address is >= 0x9C00 and <= 0x9FFF)
             return ReadIo3(address);
         if (TryMap(address, isWrite: false, out var offset, out var useFlash))
-            return useFlash ? _flash[offset] : _sram[offset];
+            return useFlash ? _flash040.Read((uint)offset) : _sram[offset];
         return 0xFF;
     }
 
-    public byte Peek(ushort address) => Read(address);
+    public byte Peek(ushort address)
+    {
+        if (address is >= 0x9C00 and <= 0x9FFF)
+            return ReadIo3(address);
+        if (TryMap(address, isWrite: false, out var offset, out var useFlash))
+            return useFlash ? _flash040.Peek((uint)offset) : _sram[offset];
+        return 0xFF;
+    }
 
     public void Write(ushort address, byte value)
     {
@@ -165,21 +182,28 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
         if (!TryMap(address, isWrite: true, out var offset, out var useFlash))
             return;
 
+        var mode = (byte)(_registerA & RegAModeMask);
+        // VICE: only MODE_FLASH stores go to flash040core_store; other modes that
+        // use flash for read still write cart RAM (or ignore).
+        if (mode == ModeFlash && useFlash)
+        {
+            _flash040.Store((uint)offset, value);
+            return;
+        }
+
         if (useFlash)
         {
-            _flash[offset] = value;
-            _flashDirty = true;
+            // START / SUPER_ROM / ROM_RAM: VICE stores to cart_ram, not flash.
+            // Keep flash image read-only unless MODE_FLASH program path.
+            return;
         }
-        else
-        {
-            _sram[offset] = value;
-        }
+
+        _sram[offset] = value;
     }
 
     public byte[] GetFlashImage() => _flash.ToArray();
 
-    public void ClearFlashDirty() => _flashDirty = false;
-
+    public void ClearFlashDirty() => _flash040.ClearDirty();
     private byte ReadIo3(ushort address)
     {
         return (address & 0x03) switch
@@ -303,11 +327,20 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
         }
         else
         {
-            // ROM modes: banked flash
-            offset = (bank * 0x8000) + windowBase + local;
+            // ROM/FLASH modes: VICE calc_addr(addr, bank, BLK*_BASE)
+            // faddr = (addr & 0x1fff) | (bank * 0x8000) | base
+            var blkBase = address switch
+            {
+                >= 0x0400 and <= 0x0FFF => Blk0Base,
+                >= 0x2000 and <= 0x3FFF => Blk1Base,
+                >= 0x4000 and <= 0x5FFF => Blk2Base,
+                >= 0x6000 and <= 0x7FFF => Blk3Base,
+                >= 0xA000 and <= 0xBFFF => Blk5Base,
+                _ => 0,
+            };
+            offset = (int)(((uint)address & 0x1FFF) | ((uint)bank * 0x8000) | (uint)blkBase);
             useFlash = true;
         }
-
         var size = useFlash ? FlashSize : SramSize;
         if (offset < 0 || offset >= size)
             return false;

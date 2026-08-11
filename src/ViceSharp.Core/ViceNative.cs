@@ -841,6 +841,16 @@ public static unsafe partial class ViceNative
             };
         }
 
+        public bool TryCaptureVisibleFrame(byte[] bgraBuffer, out int width, out int height)
+        {
+            width = 0;
+            height = 0;
+            if (bgraBuffer is null || bgraBuffer.Length < 4)
+                return false;
+            var res = CaptureVisibleFrame(_instance, bgraBuffer, bgraBuffer.Length, out width, out height);
+            return res != 0 && width > 0 && height > 0;
+        }
+
         public Vic20VideoLockstepState GetVic20VideoState()
             => throw new NotSupportedException("VIC-I video lockstep export is only available on the xvic (VIC-20) oracle.");
 

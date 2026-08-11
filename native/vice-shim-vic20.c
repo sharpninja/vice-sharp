@@ -47,6 +47,8 @@
 #include "snapshot.h"
 #include "sysfile.h"
 #include "video.h"
+#include "palette.h"
+#include "videoarch.h" /* headless video_canvas_s for frame capture */
 #include "vic20/vic20model.h"
 #include "vic20/victypes.h"
 #include "vic20/vic.h"
@@ -1158,24 +1160,150 @@ VICE_SHIM_API void vice_vic20_get_video_state(void *machine, struct vice_vic20_v
     LeaveCriticalSection(&g_state_lock);
 }
 
+/*
+ * VIC-I visible canvas capture (Iteration 2 pixel FB path).
+ * Mirrors C64 vice_shim_vic_visible_window_locked but uses vic.* not vicii.*.
+ * Canvas size: display_width * VIC_PIXEL_WIDTH x (last - first + 1)
+ * (vic_set_geometry). PAL normal: 448 x 284.
+ */
+static int vice_shim_vic20_visible_window_locked(
+    const uint8_t **out_base, int *out_stride, int *out_w, int *out_h)
+{
+    unsigned int fbw;
+    unsigned int first_line;
+    unsigned int last_line;
+    unsigned int first_x;
+
+    if (vic.raster.canvas == NULL
+        || vic.raster.canvas->draw_buffer == NULL
+        || vic.raster.canvas->draw_buffer->draw_buffer == NULL
+        || vic.raster.geometry == NULL) {
+        return 0;
+    }
+
+    first_line = (unsigned int)vic.first_displayed_line;
+    last_line = (unsigned int)vic.last_displayed_line;
+    if (last_line < first_line
+        || last_line >= vic.raster.geometry->screen_size.height) {
+        return 0;
+    }
+
+    /* Full draw-buffer row pitch (bytes = geometry width units; VIC_PIXEL is
+     * two identical index bytes when VIC_DUPLICATES_PIXELS is set). */
+    fbw = vic.raster.geometry->screen_size.width
+          + vic.raster.geometry->extra_offscreen_border_left
+          + vic.raster.geometry->extra_offscreen_border_right;
+
+    /* Visible canvas origin: screenshot path uses extra_left + viewport->first_x
+     * (raster_screenshot / video_viewport first_x crop). */
+    first_x = 0;
+    if (vic.raster.canvas->viewport != NULL) {
+        first_x = (unsigned int)vic.raster.canvas->viewport->first_x;
+    }
+
+    *out_base = vic.raster.canvas->draw_buffer->draw_buffer
+                + first_line * fbw
+                + vic.raster.geometry->extra_offscreen_border_left
+                + first_x;
+    *out_stride = (int)fbw;
+    *out_w = (int)(vic.display_width * VIC_PIXEL_WIDTH);
+    *out_h = (int)(last_line - first_line + 1);
+    return 1;
+}
+
 VICE_SHIM_API int vice_machine_capture_visible_frame(void *machine, uint8_t *buffer, int length, int *width, int *height)
 {
-    (void)machine;
-    (void)buffer;
-    (void)length;
-    (void)width;
-    (void)height;
-    return 0;
+    const uint8_t *base = NULL;
+    int stride = 0;
+    int w = 0;
+    int h = 0;
+    int ok = 0;
+    const palette_t *pal = NULL;
+
+    if (width) {
+        *width = 0;
+    }
+    if (height) {
+        *height = 0;
+    }
+
+    vice_shim_ensure_sync_primitives();
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)
+        && vice_shim_vic20_visible_window_locked(&base, &stride, &w, &h)) {
+        if (width) {
+            *width = w;
+        }
+        if (height) {
+            *height = h;
+        }
+        pal = vic.raster.canvas != NULL ? vic.raster.canvas->palette : NULL;
+        if (buffer != NULL && length >= w * h * 4 && pal != NULL && pal->entries != NULL) {
+            int row;
+            int x;
+            for (row = 0; row < h; row++) {
+                const uint8_t *src = base + (size_t)row * stride;
+                uint8_t *dst = buffer + (size_t)row * w * 4;
+                for (x = 0; x < w; x++) {
+                    /* VIC_DUPLICATES_PIXELS: each logical pixel is a color index
+                     * byte (doub table stores idx in both bytes of uint16). */
+                    unsigned int idx = src[x];
+                    if (idx >= pal->num_entries) {
+                        idx = 0;
+                    }
+                    dst[(x * 4) + 0] = pal->entries[idx].blue;
+                    dst[(x * 4) + 1] = pal->entries[idx].green;
+                    dst[(x * 4) + 2] = pal->entries[idx].red;
+                    dst[(x * 4) + 3] = 0xFF;
+                }
+            }
+            ok = 1;
+        } else if (buffer == NULL && w > 0 && h > 0) {
+            /* size probe */
+            ok = 1;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+    return ok;
 }
 
 VICE_SHIM_API int vice_vic_capture_frame_indices(void *machine, uint8_t *buffer, int length, int *width, int *height)
 {
-    (void)machine;
-    (void)buffer;
-    (void)length;
-    (void)width;
-    (void)height;
-    return 0;
+    const uint8_t *base = NULL;
+    int stride = 0;
+    int w = 0;
+    int h = 0;
+    int ok = 0;
+    int row;
+
+    if (width) {
+        *width = 0;
+    }
+    if (height) {
+        *height = 0;
+    }
+
+    vice_shim_ensure_sync_primitives();
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)
+        && vice_shim_vic20_visible_window_locked(&base, &stride, &w, &h)) {
+        if (width) {
+            *width = w;
+        }
+        if (height) {
+            *height = h;
+        }
+        if (buffer != NULL && length >= w * h) {
+            for (row = 0; row < h; row++) {
+                memcpy(buffer + (size_t)row * w, base + (size_t)row * stride, (size_t)w);
+            }
+            ok = 1;
+        } else if (buffer == NULL && w > 0 && h > 0) {
+            ok = 1;
+        }
+    }
+    LeaveCriticalSection(&g_state_lock);
+    return ok;
 }
 
 VICE_SHIM_API int vice_vic_get_graphics_priority_at_raster(void *machine, uint16_t raster_line, uint8_t *pri_buffer, int length)

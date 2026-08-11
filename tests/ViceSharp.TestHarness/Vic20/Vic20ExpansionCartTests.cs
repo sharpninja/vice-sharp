@@ -40,15 +40,20 @@ public sealed class Vic20ExpansionCartTests
     [Fact]
     public void Fe3_WriteBack_FlushReturnsDirtyFlash()
     {
-        var cart = new FinalExpansion3Cartridge(new byte[FinalExpansion3Cartridge.FlashSize]);
+        var image0 = new byte[FinalExpansion3Cartridge.FlashSize];
+        Array.Fill(image0, (byte)0xFF);
+        var cart = new FinalExpansion3Cartridge(image0);
         cart.WriteBack = true;
-        cart.ApplyConfigPreset("start");
-        // START maps BLK5 to flash; write dirties flash when mode allows
+        // MODE_FLASH + AM29F040B program sequence (not a raw poke).
         cart.Write(0x9C02, FinalExpansion3Cartridge.ModeFlash);
+        cart.Write(0xA555, 0xAA);
+        cart.Write(0xA2AA, 0x55);
+        cart.Write(0xA555, 0xA0);
         cart.Write(0xA010, 0x42);
         Assert.True(cart.FlashDirty);
         var image = cart.GetFlashImage();
         Assert.Equal(FinalExpansion3Cartridge.FlashSize, image.Length);
+        Assert.Equal(0x42, image[0x6010]);
     }
 
     [Fact]

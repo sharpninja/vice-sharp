@@ -77,6 +77,13 @@ public interface IViceNative : IDisposable
     Vic20VideoLockstepState GetVic20VideoState();
 
     /// <summary>
+    /// Capture the visible framebuffer as BGRA (presentation surface).
+    /// VIC-20 (xvic): normal-border canvas (PAL 448x284). C64 may support full
+    /// 384x272. Returns false when the shim has no canvas or the buffer is too small.
+    /// </summary>
+    bool TryCaptureVisibleFrame(byte[] bgraBuffer, out int width, out int height);
+
+    /// <summary>
     /// Get the main-CPU resume/pipeline state (TR-LOCKSTEP-VSF-001): the
     /// .vsf-restored in-flight context beyond the plain register file (last
     /// opcode info, pending BA-low stall flags, the 6510 processor port that

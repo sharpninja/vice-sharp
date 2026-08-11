@@ -1,7 +1,7 @@
 # ViceSharp Handoff - 2026-08-10
 
 **Active branch:** `main` (GitVersion base **v1.2.2**; local MSI/deploy line **1.2.7** from commits-since-version). Iteration 1 C64 complete; Iteration 2 VIC-20 core + lockstep + present-path + expansion UX on tree.
-**Remotes:** `origin` = GitHub `sharpninja/vice-sharp` (downstream); Azure DevOps `azure` is source of truth for package/CI when both are used. Default push target per AGENTS: `origin` unless operator says otherwise.
+**Remotes:** `origin` = GitHub `sharpninja/vice-sharp` is the source of truth (operator 2026-08-10: Azure DevOps `azure` remote is **retired / not used**). Push only to `origin` unless the operator explicitly revives ADO.
 **Working tree noise (do not commit unless operator asks):** untracked `docs/S-Blox/`, `docs/reviews/*`, bulk `docs/2s-*`, `docs/10s-*`, `docs/*-focused-*.log`, `docs/_deploy-*`, `docs/xvic-*` probe captures, `manifests/` winget copies. Prefer durable receipts under `docs/receipts*` and `docs/receipts/`.
 
 ## Session closeout 2026-08-10 (refresh-docs + wrap-up)
@@ -24,7 +24,7 @@
    - UI: Avalonia `FlashCartBuilderView`; Xbox `FlashCartBuilderPage`.
    - Tests: `tests/ViceSharp.TestHarness/FlashCart/*`.
    - Hostile AGREE: `docs/receipts/hostile-validator-20260808T103211Z.md`.
-   - Residual **Partial**: FE3 flash040 program/erase FSM vs full VICE.
+   - FE3 MODE_FLASH now routes through managed `Flash040Core` (AM29F040B). Erase **latency** still instant (Partial vs VICE multi-second erase_alarm).
 
 4. **Deploy evidence (local lab)**
    - Desktop: Nuke `InstallMsi` ProductVersion **1.2.7** succeeded (`docs/_deploy-desktop-2026-08-08_045501.log`).
@@ -39,12 +39,26 @@
 - Do **not** claim whole-machine Exact or pixel framebuffer lockstep vs xvic (still Missing / Partial per audit).
 - CPU every-cycle 10s lockstep remains green (separate from video FB).
 
+### Shipped 2026-08-11 (FE3 flash040 + pixel FB capture)
+
+1. **FE3 flash040 (command FSM)**
+   - `Flash040Core` (TYPE_B): unlock AA/55, byte program AND, chip/sector erase, autoselect IDs.
+   - `FinalExpansion3Cartridge` MODE_FLASH stores/reads via flash040; raw pokes no longer dirty flash.
+   - Tests: `Flash040CoreTests`, `Fe3Flash040Tests`. Residual: erase latency instant.
+
+2. **Pixel FB vs xvic**
+   - `vice_machine_capture_visible_frame` / indices on xvic: visible window = first_displayed_line + extra_left + viewport `first_x`, BGRA via palette.
+   - `IViceNative.TryCaptureVisibleFrame`; Vic20PixelFrameTests: PAL 448x284 after boot, geometry match managed.
+   - Full pixel SequenceEqual ratchet still open (palette path differences).
+
+3. **Azure remote retired** (operator): do not push `azure`; `origin` only.
+
 ### Resume next
 
-1. Optional: FE3 flash040 residual (TDD first).
-2. Optional: pixel framebuffer compare vs xvic (`capture_visible_frame` / present path).
+1. Optional: full-frame BGRA SequenceEqual managed vs xvic (palette align).
+2. Optional: FE3 erase_alarm cycle latency (match VICE multi-second erase).
 3. Optional: re-run desktop InstallMsi if Avalonia builder only was built after last MSI.
-4. Store/Partner Center ADO wiring still open (see Store section below).
+4. Store/Partner Center listing work still open (see Store section below); no ADO git remote.
 5. Query MCP TODO store for live backlog; snapshot list at bottom is stale.
 
 ### Validation commands (focused)

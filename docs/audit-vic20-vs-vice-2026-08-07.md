@@ -65,6 +65,7 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 - **Status:**  
   - **Exact** for normal READY present window (PAL first_x=48, L+R borders, paper origin 48): tests `ReadyPal_NormalBorderWindow_*`, `ViewportFirstX_ReadyPal_*`, `SpaceGlyph_PaintsBackgroundPaper_*`  
   - **Partial** overall draw (no half_char / old_mc mid-line path, no raster cache)  
+  - **Pixel FB capture:** xvic `capture_visible_frame` wired (first_x crop + palette BGRA); geometry match tests green; full bit-exact SequenceEqual still open  
 - **Not Invented:** crop is not `src=0`; paper is not a continuous invent strip.
 
 ### VIC-I mem / regs
@@ -122,7 +123,7 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 
 ### Cartridges
 
-- **Status:** **Stub** (MVP FE3/Ultimem/MegaCart); full VICE cart suite **Missing**. No Exact claim.
+- **Status:** **Partial** (FE3 MODE_FLASH via managed flash040 TYPE_B command FSM; Ultimem/MegaCart MVP). Full VICE cart suite still **Missing**. FE3 erase latency instant (Partial). No whole-cart Exact claim.
 
 ### Snapshots
 
