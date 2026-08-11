@@ -47,27 +47,28 @@ at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
 
 **Goal:** Add VIC-20 as a second architecture.
 
-**Status (2026-08-10):** Core complete on `main` (merged from `feat/iteration2-vic20`). Every-cycle native lockstep green for multi-second PAL and NTSC. READY present-path and expansion flash cart UX landed 2026-08-08.
+**Status (2026-08-11):** Core complete on `main`. Every-cycle native lockstep green for multi-second PAL and NTSC. READY present-path, expansion UX, FE3 flash040 command FSM, and xvic visible-frame capture landed.
 
 - MOS 6502 CPU (reuse 6510 core minus I/O port)
 - VIC-I (6560/6561) character-mode video (`Mos6561`) with PAL/NTSC timing
 - VIA x2 (shared `Via6522`) at $9110 NMI / $9120 IRQ; keyboard matrix + joystick glue
 - VIA timer CPU `Read` uses pre-Tick bus-visible counters (VICE LOAD at `maincpu_clk` before `CLK_INC`); peeks stay post-Tick
 - Color RAM 4-bit + V-bus open-bus high nibble (`Vic20ColorRam` / `BasicBus`)
-- 5KB base RAM + expansion packs (3K/8K/16K/24K/32K); Settings wrap BLK0/1/2/3/5 toggles (Avalonia `WrapPanel`, Xbox `VariableSizedWrapGrid`)
-- Cartridge map: BLK PRG/raw + FE3 / Ultimem / Mega-Cart attach/eject; portable Flash Cart Image Builder (see `docs/FlashCart-Builder.md`)
-- READY present geometry Exact-scoped: VICE viewport `first_x` crop (PAL 48), L+R borders, paper origin (hostile AGREE borders receipt)
+- 5KB base RAM + expansion packs; Avalonia Settings wrap BLK0/1/2/3/5 toggles (product path)
+- Cartridge map: BLK PRG/raw + FE3 / Ultimem / Mega-Cart attach; Flash Cart Builder (`docs/FlashCart-Builder.md`); FE3 MODE_FLASH via `Flash040Core` (erase latency Partial)
+- READY present geometry Exact-scoped: VICE viewport `first_x` crop (PAL 48), L+R borders, paper origin
+- xvic pixel FB capture: PAL normal 448x284 BGRA; full SequenceEqual ratchet open
 - Default drive unit 8 = **1540** (`DriveModel.C1540`); C64 remains 1541
-- Launcher `xvic` topology; host session create; Xbox computer picker enables VIC-20
+- Launcher `xvic` topology; host session create; product shells Avalonia + Console (Xbox UWP cancelled)
 - Native oracle: `native/vice_xvic.dll` via `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
 - Every-cycle A/X/Y/S/P/PC lockstep vs xvic:
   - **PAL 10 s:** 11_084_050 cycles (`EveryCycle_CpuRegs_Match_TenSecondPal`)
   - **NTSC 10 s:** 10_227_270 cycles (`EveryCycle_CpuRegs_Match_TenSecondNtsc`)
   - Env: `VICESHARP_LOCKSTEP_10S=1` (and `VICESHARP_LOCKSTEP_2S=1` for 2 s PAL)
   - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`
-- Audit matrix: `docs/audit-vic20-vs-vice-2026-08-07.md` (Exact only for named rules; pixel FB lockstep Missing)
+- Audit matrix: `docs/audit-vic20-vs-vice-2026-08-07.md` (Exact only for named rules)
 
-**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Remaining polish: FE3 flash040 residual, pixel framebuffer lockstep vs xvic, input E2E, snapshots; see `HANDOFF.md`.
+**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Remaining polish: FE3 erase latency, full pixel SequenceEqual, input E2E, snapshots, zip virtual media (`PLAN-ZIPMEDIA-001`); see `HANDOFF.md`.
 
 ## Iteration 3: C128
 

@@ -29,24 +29,20 @@ Settings (VIC-20 machine selected) → **VIC-20 expansion cart** → **Build car
 
 BLK0/1/2/3/5 RAM toggles use a horizontal `WrapPanel` so they wrap on narrow Settings panes.
 
-### Xbox UWP
+### Xbox UWP (legacy, frozen)
 
-Settings (VIC-20 selected) → expansion cart section:
-
-- Cart kind / preset combo boxes (FE3 presets include flash / super-rom / rom-ram / ram2 style options)
-- Attach image / Eject image
-- **Build cart image** navigates to `FlashCartBuilderPage` (`NavigationDestination.FlashCartBuilder`)
-
-BLK toggles use `VariableSizedWrapGrid` (UWP has no `WrapPanel`).
+Xbox UWP / Dev-Mode sideload is **cancelled** (`PLAN-XBOXUWP-END-001`). The existing
+`FlashCartBuilderPage` and Settings expansion UI under `src/ViceSharp.Xbox*` remain in
+the tree as frozen legacy only. Do not treat them as a product deploy path.
 
 ## Attach path
 
-Built or external images attach through the media/cartridge slot with size-based detection for FE3 / Ultimem / Mega-Cart. Expansion cart state is exposed via protocol (`ExpansionCartManageState`) and settings host APIs on Xbox (`XboxSettingsViewModel`) and Avalonia settings surfaces.
+Built or external images attach through the media/cartridge slot with size-based detection for FE3 / Ultimem / Mega-Cart. Expansion cart state is exposed via protocol (`ExpansionCartManageState`) and Avalonia settings host surfaces (product path). Xbox settings APIs remain in tree as frozen legacy only.
 
 ## Accuracy notes
 
 - Image sizes and bank geometry for the three VIC-20 profiles are Exact against the matching cartridge type constants (hostile validator receipt `docs/receipts/hostile-validator-20260808T103211Z.md`).
-- FE3 runtime: presets and banked flash image attach are in scope; residual **Partial** flash040 program/erase FSM vs full VICE FE3 flash model.
+- FE3 runtime: MODE_FLASH stores go through managed `Flash040Core` (AM29F040B unlock, byte program AND, chip/sector erase, autoselect IDs). Erase **latency** is instant (Partial vs VICE multi-second `erase_alarm`).
 - Mega-Cart NVRAM secondary blob size is Exact; full Mega-Cart mapper runtime depth remains Partial / Stub per `docs/audit-vic20-vs-vice-2026-08-07.md`.
 
 ## Tests

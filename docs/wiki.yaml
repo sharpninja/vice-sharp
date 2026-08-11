@@ -87,42 +87,42 @@ documents:
   - github
   - azure
 - id: xbox-store-publishing
-  title: Xbox Microsoft Store Publishing
+  title: "[Archival] Xbox Microsoft Store Publishing (cancelled)"
   source: docs/xbox-store-publishing.md
   target: Xbox-Store-Publishing.md
   platforms:
   - github
   - azure
 - id: store-listing-copy
-  title: Store Listing Copy
+  title: "[Archival] Store Listing Copy (cancelled)"
   source: docs/xbox/store-listing-copy.md
   target: Store-Listing-Copy.md
   platforms:
   - github
   - azure
 - id: gpl-store-section6
-  title: GPL vs Microsoft Store Review
+  title: "[Archival] GPL vs Microsoft Store Review (cancelled)"
   source: docs/xbox/gpl-store-section6-review.md
   target: GPL-Store-Section6-Review.md
   platforms:
   - github
   - azure
 - id: store-next-steps
-  title: Store Next Steps Guide
+  title: "[Archival] Store Next Steps Guide (cancelled)"
   source: docs/xbox/store-next-steps-guide.md
   target: Store-Next-Steps-Guide.md
   platforms:
   - github
   - azure
 - id: store-product-identity
-  title: Store Product Identity
+  title: "[Archival] Store Product Identity (cancelled)"
   source: docs/xbox/store-product-identity.md
   target: Store-Product-Identity.md
   platforms:
   - github
   - azure
 - id: ado-store-setup
-  title: ADO Store Pipeline Setup
+  title: "[Archival] ADO Store Pipeline Setup (cancelled)"
   source: docs/xbox/ado-store-setup.md
   target: ADO-Store-Setup.md
   platforms:
@@ -310,8 +310,8 @@ navigation:
   - document: x64sc-requirement-coverage
   - document: vice-edge-case-backfill
   - document: vice-source-manifest
-- title: Store and Xbox
-  path: Store-and-Xbox
+- title: Archival Cancelled Store and Xbox
+  path: Archival-Cancelled-Store-and-Xbox
   children:
   - document: xbox-store-publishing
   - document: store-listing-copy

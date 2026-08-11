@@ -191,7 +191,7 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | Cartridge ports / user port as live CPU attachment | Substrate ready | `IInterSystemBus` supports `UserPort` and `CartPort` bus kinds; chip-level bindings are in for CIA2 / VIA1 / VIA2 / GAME / EXROM. Cartridge-as-running-CPU sample topology is future work. |
 | VIC-20 host (MOS 6502 + VIC-I + VIA x2 + 1540 default) | Working core | Managed core + 10 s every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` (PAL and NTSC). READY present uses VICE `first_x` crop with L+R borders. Settings: BLK wrap toggles, FE3/Ultimem/Mega-Cart attach, Flash Cart Builder ([FlashCart-Builder.md](FlashCart-Builder.md)). Pixel FB lockstep vs xvic still open. |
 | C128 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException` for those machines. |
-| Host UI (Avalonia, monitor, gRPC control, Xbox UWP) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Xbox Settings includes VIC-20 expansion + flash builder page. |
+| Host UI (Avalonia desktop + Console; gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Supported product shells: Avalonia desktop and Console. Xbox UWP head is frozen legacy (platform track cancelled 2026-08-11). |
 
 ### Warp, speed limiter, and speed controls
 

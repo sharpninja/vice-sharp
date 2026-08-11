@@ -1,5 +1,11 @@
 # Publishing the Xbox UWP head to the Microsoft Store
 
+> **CANCELLED 2026-08-11.** Microsoft Store publication is abandoned (emulators are
+> not allowed). Local Xbox UWP / Dev-Mode sideload is also cancelled
+> (`PLAN-XBOXUWP-END-001`). Do not run Partner Center, Store cert, Store pipeline,
+> or DeployXboxLocal as active product work. This document is archival.
+> `IMPL-XBOXUWP-042` and the Xbox platform track are closed cancelled.
+
 FEAT-XSTOREPIPE-001 (PLAN-XBOXUWP S42). The pipeline `azure-pipelines-xbox-store.yml`
 builds the Release-UWP head, produces an UNSIGNED Store upload package
 (`.msixupload`), and publishes it to Partner Center through the official Microsoft

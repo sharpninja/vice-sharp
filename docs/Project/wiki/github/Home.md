@@ -33,13 +33,13 @@
   - [x64sc Requirement Coverage](X64sc-Requirement-Coverage)
   - [Classic VICE Edge-Case TR Backfill](Classic-VICE-Edge-Case-TR-Backfill)
   - [VICE Source Manifest](VICE-Source-Manifest)
-- Store and Xbox
-  - [Xbox Microsoft Store Publishing](Xbox-Store-Publishing)
-  - [Store Listing Copy](Store-Listing-Copy)
-  - [GPL vs Microsoft Store Review](GPL-Store-Section6-Review)
-  - [Store Next Steps Guide](Store-Next-Steps-Guide)
-  - [Store Product Identity](Store-Product-Identity)
-  - [ADO Store Pipeline Setup](ADO-Store-Setup)
+- Archival Cancelled Store and Xbox
+  - [[Archival] Xbox Microsoft Store Publishing (cancelled)](Xbox-Store-Publishing)
+  - [[Archival] Store Listing Copy (cancelled)](Store-Listing-Copy)
+  - [[Archival] GPL vs Microsoft Store Review (cancelled)](GPL-Store-Section6-Review)
+  - [[Archival] Store Next Steps Guide (cancelled)](Store-Next-Steps-Guide)
+  - [[Archival] Store Product Identity (cancelled)](Store-Product-Identity)
+  - [[Archival] ADO Store Pipeline Setup (cancelled)](ADO-Store-Setup)
 - Reference
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)
