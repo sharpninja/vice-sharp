@@ -1,0 +1,13 @@
+
+native\vice\vice\src\.vice-shim-configure-flags:1:--enable-option-checking=fatal --enable-headlessui --disable-arch 
+--disable-html-docs --disable-pdf-docs --disable-catweasel --disable-hardsid --disable-ethernet --disable-midi 
+--disable-parsid --disable-realdevice --disable-rs232 --disable-openmp --disable-ipv6 --with-resid --without-flac 
+--without-gif --without-lame --without-mpg123 --without-portaudio --without-vorbis --without-libcurl 
+--without-libieee1284 --without-unzip-bin --without-png
+--enable-option-checking=fatal --enable-headlessui --disable-arch --disable-html-docs --disable-pdf-docs --disable-catweasel --disable-hardsid --disable-ethernet --disable-midi --disable-parsid --disable-realdevice --disable-rs232 --disable-openmp --disable-ipv6 --with-resid --without-flac --without-gif --without-lame --without-mpg123 --without-portaudio --without-vorbis --without-libcurl --without-libieee1284 --without-unzip-bin --without-png
+True
+
+Length        : 14583843
+LastWriteTime : 7/13/2026 4:49:02 AM
+
+

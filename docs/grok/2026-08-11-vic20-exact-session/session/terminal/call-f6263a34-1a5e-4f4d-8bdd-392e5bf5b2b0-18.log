@@ -1,0 +1,159 @@
+=== F:\GitHub\vice-sharp\src\ViceSharp.Chips\Vic ===
+src\ViceSharp.Chips\Vic\Mos6561.cs
+src\ViceSharp.Chips\Vic\VicIStub.cs
+=== F:\GitHub\vice-sharp\src\ViceSharp.Chips\Via ===
+(missing)
+=== F:\GitHub\vice-sharp\src\ViceSharp.Chips\Cpu ===
+src\ViceSharp.Chips\Cpu\Mos6502.Addressing.cs
+src\ViceSharp.Chips\Cpu\Mos6502.cs
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs
+=== F:\GitHub\vice-sharp\src\ViceSharp.Core\Vic20 ===
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs
+src\ViceSharp.Core\Vic20\IVic20CartridgeHost.cs
+src\ViceSharp.Core\Vic20\IVic20ExpansionCartPort.cs
+src\ViceSharp.Core\Vic20\IVic20RamConfiguration.cs
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs
+src\ViceSharp.Core\Vic20\UltimemCartridge.cs
+src\ViceSharp.Core\Vic20\Vic20Cartridge.cs
+src\ViceSharp.Core\Vic20\Vic20ColorRam.cs
+src\ViceSharp.Core\Vic20\Vic20ExpansionCartKind.cs
+src\ViceSharp.Core\Vic20\Vic20ExpansionCartPort.cs
+src\ViceSharp.Core\Vic20\Vic20IecPort.cs
+src\ViceSharp.Core\Vic20\Vic20KeyboardMatrix.cs
+src\ViceSharp.Core\Vic20\Vic20MemoryLayout.cs
+src\ViceSharp.Core\Vic20\Vic20SystemRam.cs
+=== F:\GitHub\vice-sharp\src\ViceSharp.Architectures\Vic20 ===
+src\ViceSharp.Architectures\Vic20\Vic20Descriptor.cs
+src\ViceSharp.Architectures\Vic20\Vic20Expansion.cs
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs
+src\ViceSharp.Architectures\Vic20\Vic20SystemCoreDefinition.cs
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs
+=== ArchitectureBuilder Vic20 ===
+
+LineNumber Line
+---------- ----
+         8 using ViceSharp.Chips.IEC;
+        11 using ViceSharp.Core.Vic20;
+        45         // VIC-20 before C64: both expose VideoChip; Vic20 is identified by Via1/Via2
+        47         if (IsVic20Machine(descriptor))
+        48             return BuildVic20Machine(descriptor);
+       126         var iecBusConnected = profile?.SystemCore.IecBusConnected ?? true;
+       128         var drive8 = iecBusConnected ? new IecDrive(8) : null;
+       129         var drive9 = iecBusConnected ? new IecDrive(9) : null;
+       131         // DD-IEC-1: the IEC serial bus is always present on a C64 (it hangs off
+       137         var iecBus = iecBusConnected ? IecInterSystemBus.Create() : null;
+       138         if (iecBus is not null)
+       140             drive8?.ConnectIecBus(iecBus);
+       141             drive9?.ConnectIecBus(iecBus);
+       197         if (iecBus is not null)
+       198             deviceRegistry.Add(new IecBusDevice(iecBus));
+       205         // Host-backed IEC filesystem (uIEC/fsdevice-style) for all IEC machines.
+       206         var c64FsIec = new ViceSharp.Core.Iec.FileSystemIecDevice(unitNumber: 9);
+       207         deviceRegistry.Add(c64FsIec);
+       247     private static bool IsVic20Machine(IArchitectureDescriptor descriptor)
+       266     /// Build a VIC-20: Mos6502, dual Via6522 ($9110 NMI / $9120 IRQ), Mos6561 VIC-I,
+       269     /// <remarks>FR-PRF-005, FR-VIC20-001..006.</remarks>
+       270     private IMachine BuildVic20Machine(IArchitectureDescriptor descriptor)
+       287         var ramBlocks = descriptor is IVic20RamConfiguration { RamBlocksOverride: { } overrideBlocks }
+       289             : Vic20MemoryLayout.ToBlocks(Vic20MemoryLayout.ParseBoardModel(profile?.BoardModel));
+       293         // (VICE vic20_cpu_last_data). ROMs and I/O overlay via register order.
+       294         var ram = new Vic20SystemRam(ramBlocks);
+       298         var architectureKey = descriptor.RequiredRoms?.Architecture ?? "VIC20";
+       326         var colorRam = new Vic20ColorRam(bus);
+       330         var via1 = new Via6522(bus, nmiLine)
+       338         var via2 = new Via6522(bus, irqLine)
+       349         // export after CLK_INC; Via6522 presents pre-Tick counters on CPU Read
+       356         // VICE vic20iec.c / vic20via1.c: VIA1 PA0/PA1/PA7 are IEC CLK in / DATA
+       359         Vic20IecPort.AttachIdleVia1PortA(via1);
+       361         var keyboard = new Vic20KeyboardMatrix();
+       366         // Optional MVP cart: descriptor may expose a Vic20Cartridge via IDevice on Devices
+       368         // descriptors that implement IVic20CartridgeHost (checked by reflection-free type).
+       369         if (descriptor is IVic20CartridgeHost cartHost && cartHost.Cartridge is not null)
+       375         var vic = new Mos6561(irqLine)
+       395         // VICE CLK_INC: CPU bus access first, then vic_cycle() (vic20cpu.c).
+       408         // CartridgePort role is shared with MVP Vic20Cartridge host; both register.
+       409         var expansionCartPort = new Vic20ExpansionCartPort(bus);
+       412         // Host-backed IEC filesystem device (uIEC/fsdevice-style); default unit 9
+       414         var fsIec = new ViceSharp.Core.Iec.FileSystemIecDevice(unitNumber: 9);
+       415         deviceRegistry.Add(fsIec);
+       450         var vias = new List<ViceSharp.Chips.IEC.Via6522>(viaDescriptors.Length);
+       453             var via = new ViceSharp.Chips.IEC.Via6522(bus, irqLine)
+       494         deviceRegistry.Add(new C1541IecInterfaceDevice(deviceNumber));
+
+=== cart tree VICE ===
+
+=== managed cart ===
+Name               Length
+----               ------
+behrbonz.c           8872
+behrbonz.h           1568
+behrbonz.o          17403
+debugcart.c          4699
+debugcart.h          1163
+debugcart.o         10111
+finalexpansion.c    30989
+finalexpansion.h     2452
+finalexpansion.o    71601
+ioramcart.c          9209
+ioramcart.h          1429
+ioramcart.o         18564
+libmascuerade.a      3630
+libvic20cart.a     601236
+Makefile            25741
+Makefile.am          1040
+Makefile.in         25871
+mascuerade-stubs.c   1427
+mascuerade-stubs.h   1386
+mascuerade-stubs.o   3209
+megacart.c          23174
+megacart.h           2046
+megacart.o          47558
+mikroassembler.c     7531
+mikroassembler.h     1710
+mikroassembler.o    17185
+minimon.c           28842
+minimon.h            1918
+minimon.o           60925
+rabbit.c             8537
+rabbit.h             1408
+rabbit.o            15195
+superexpander.c      6893
+superexpander.h      1647
+superexpander.o     16577
+ultimem.c           30899
+ultimem.h            2112
+ultimem.o           44652
+vic-fp.c            18222
+vic-fp.h             2118
+vic-fp.o            37393
+vic20-generic.c     29540
+vic20-generic.h      2262
+vic20-generic.o     47149
+vic20-ieee488.c      5985
+vic20-ieee488.h      1304
+vic20-ieee488.o     11445
+vic20-midi.c         5890
+vic20-midi.h         1443
+vic20-midi.o          713
+vic20-sidcart.c     10400
+vic20-sidcart.o     24075
+vic20cart.c         53326
+vic20cart.h          2079
+vic20cart.o         97606
+vic20cartmem.c      20808
+vic20cartmem.h       1957
+vic20cartmem.o      39511
+writenow.c           7225
+writenow.h           1472
+writenow.o          14309
+                        1
+                        1
+                        1
+                        1
+                        1
+                        1
+                        1
+                        1
+                        1
+

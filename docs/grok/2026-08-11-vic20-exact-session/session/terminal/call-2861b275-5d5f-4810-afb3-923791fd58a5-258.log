@@ -1,0 +1,30 @@
+native/vice/vice/src\aciacore.c:288:        mycpu_set_irq(int_num, value);
+native/vice/vice/src\aciacore.c:314:static int acia_set_irq(int new_irq_res, void *param)
+native/vice/vice/src\cbm2\cbm2acia1.c:68:#define mycpu_set_irq(b, a) tpicore_set_int(machine_context.tpi1, 4, (a))
+native/vice/vice/src\c128\c128cia1.c:80:    interrupt_set_irq(maincpu_int_status, cia_context->int_num, value, clk);
+native/vice/vice/src\cbm2\cbm2tpi1.c:66:    maincpu_set_irq(int_num, value);
+native/vice/vice/src\c64dtv\c64dtvblitter.c:408:        maincpu_set_irq(c64dtv_blitter_int_num, 1);
+native/vice/vice/src\c64dtv\c64dtvblitter.c:505:        maincpu_set_irq(c64dtv_blitter_int_num, 0);
+native/vice/vice/src\c64dtv\c64dtvcia1.c:74:    interrupt_set_irq(maincpu_int_status, cia_context->int_num, value, clk);
+native/vice/vice/src\c64dtv\c64dtvdma.c:352:        maincpu_set_irq(c64dtv_dma_int_num, 1);
+native/vice/vice/src\c64dtv\c64dtvdma.c:386:        maincpu_set_irq(c64dtv_dma_int_num, 0);
+native/vice/vice/src\c64\c64cia1.c:97:    interrupt_set_irq(maincpu_int_status, cia_context->int_num, value, clk);
+native/vice/vice/src\core\ciacore.c:157:static void cia_set_irq_flag(cia_context_t *cia_context, CLOCK rclk, unsigned int bits);
+native/vice/vice/src\core\ciacore.c:240:        cia_set_irq_flag(cia_context, rclk, CIA_IM_TOD);
+native/vice/vice/src\core\ciacore.c:255:        cia_set_irq_flag(cia_context, rclk, CIA_IM_TA);
+native/vice/vice/src\core\ciacore.c:265:        cia_set_irq_flag(cia_context, rclk, CIA_IM_TB);
+native/vice/vice/src\core\ciacore.c:282:        cia_set_irq_flag(cia_context, rclk, CIA_IM_TB);
+native/vice/vice/src\core\ciacore.c:379:    /* Not done here but in cia_set_irq_flag()
+native/vice/vice/src\core\ciacore.c:399:    /* Not done here but in cia_set_irq_flag()
+native/vice/vice/src\core\ciacore.c:592:static void cia_set_irq_flag(cia_context_t *cia_context, CLOCK rclk, unsigned int bits)
+native/vice/vice/src\core\ciacore.c:1602:    cia_set_irq_flag(cia_context, rclk, flag);
+native/vice/vice/src\core\ciacore.c:1806:        cia_set_irq_flag(cia_context, rclk, CIA_IM_SDR);
+native/vice/vice/src\core\riotcore.c:53:        riot_context->set_irq(riot_context, 1, *(riot_context->clk_ptr));
+native/vice/vice/src\core\riotcore.c:56:        riot_context->set_irq(riot_context, 0, *(riot_context->clk_ptr));
+native/vice/vice/src\core\riotcore.c:118:    riot_context->set_irq(riot_context, 0, *(riot_context->clk_ptr));
+native/vice/vice/src\c64\vsidcia1.c:71:    interrupt_set_irq(maincpu_int_status, cia_context->int_num, value, clk);
+native/vice/vice/src\drive\tcbm\glue1551.c:134:        interrupt_set_irq(drv->cpu->int_status,
+native/vice/vice/src\drive\tcbm\glue1551.c:140:        interrupt_set_irq(drv->cpu->int_status,
+native/vice/vice/src\drive\ieee\via1d2031.c:88:    interrupt_set_irq(dc->cpu->int_status, int_num, value, rclk);
+native/vice/vice/src\drive\ieee\riot2d.c:67:static void set_irq(riot_context_t *riot_context, int fl, CLOCK clk)
+native/vice/vice/src\drive\ieee\riot2d.c:75:    interrupt_set_irq(dc->cpu->int_status, (riot2p->int_num),

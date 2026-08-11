@@ -1,0 +1,72 @@
+
+c=27 nPC=$FD49 mPC=$FD49 nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD nP=$A5 mP=$A5 dbgCyc=0 op=$D0 
+bound=False trail=1 fullBr=False mis=False
+c=28 nPC=$FD4C mPC=$FD4C nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD nP=$A5 mP=$A5 dbgCyc=5 op=$60 
+bound=False trail=0 fullBr=False mis=False
+c=29 nPC=$FD4C mPC=$FD4C nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD nP=$A5 mP=$A5 dbgCyc=4 op=$60 
+bound=False trail=0 fullBr=False mis=False
+c=30 nPC=$FD4C mPC=$FD4C nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD nP=$A5 mP=$A5 dbgCyc=3 op=$60 
+bound=False trail=0 fullBr=False mis=False
+c=4990 nPC=$FDB8 mPC=$FDB8 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$60 
+bound=True trail=2 fullBr=False mis=False
+c=4991 nPC=$FDB8 mPC=$FDB8 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=2 op=$A5 
+bound=False trail=0 fullBr=False mis=False
+c=4992 nPC=$FDB8 mPC=$FDB8 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$A5 
+bound=False trail=0 fullBr=False mis=False
+c=4993 nPC=$FDBA mPC=$FDBA nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=0 op=$A5 
+bound=True trail=0 fullBr=False mis=False
+c=4994 nPC=$FDBA mPC=$FDBA nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=1 op=$F0 
+bound=False trail=0 fullBr=False mis=False
+c=4995 nPC=$FDBC mPC=$FDBC nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=0 op=$F0 
+bound=False trail=0 fullBr=False mis=False
+c=4996 nPC=$FDDE mPC=$FDDE nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=2 op=$90 
+bound=False trail=0 fullBr=False mis=False
+c=4997 nPC=$FDDE mPC=$FDDE nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=1 op=$90 
+bound=False trail=0 fullBr=False mis=False
+c=4998 nPC=$FDE0 mPC=$FDE0 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=0 op=$90 
+bound=False trail=0 fullBr=False mis=False
+c=4999 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=4 op=$E6 
+bound=False trail=0 fullBr=False mis=False
+c=5000 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=3 op=$E6 
+bound=False trail=0 fullBr=False mis=False
+c=5001 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=2 op=$E6 
+bound=False trail=0 fullBr=False mis=False
+c=5002 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$E6 
+bound=False trail=0 fullBr=False mis=False
+c=5003 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$E6 
+bound=True trail=0 fullBr=False mis=False
+c=5004 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$D0 
+bound=False trail=0 fullBr=False mis=False
+c=5005 nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$D0 
+bound=False trail=0 fullBr=False mis=True
+c=5006 nPC=$FDB3 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=5 op=$20 
+bound=False trail=0 fullBr=False mis=True
+c=5007 nPC=$FDB5 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=4 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=5008 nPC=$FDB5 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=4 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=5009 nPC=$FDB5 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FC nP=$24 mP=$24 dbgCyc=3 op=$20 
+bound=False trail=0 fullBr=False mis=True
+c=5010 nPC=$FDB7 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FC mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$20 
+bound=False trail=0 fullBr=False mis=True
+c=5011 nPC=$FDB7 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=5012 nPC=$FDB7 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$20 
+bound=False trail=0 fullBr=False mis=True
+c=5013 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=4 op=$B1 
+bound=False trail=1 fullBr=False mis=False
+c=5014 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=3 op=$B1 
+bound=False trail=1 fullBr=False mis=False
+c=5015 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$B1 
+bound=False trail=1 fullBr=False mis=False
+c=5016 nPC=$FE91 mPC=$FE91 nA=$00 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$B1 
+bound=False trail=1 fullBr=False mis=True
+c=5017 nPC=$FE91 mPC=$FE93 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$B1 
+bound=True trail=1 fullBr=False mis=True
+c=5018 nPC=$FE93 mPC=$FE93 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$AA 
+bound=False trail=0 fullBr=False mis=False
+c=5019 nPC=$FE93 mPC=$FE94 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$AA 
+bound=True trail=0 fullBr=False mis=True
+c=5020 nPC=$FE94 mPC=$FE94 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$A9 
+bound=False trail=0 fullBr=False mis=False
+

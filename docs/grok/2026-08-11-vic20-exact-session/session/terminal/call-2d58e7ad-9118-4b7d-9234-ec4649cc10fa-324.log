@@ -1,0 +1,24 @@
+[feat/xbox-uwp-app 3ba3068] feat(xbox): ESC closes virtual keyboard when open [FEAT-XKBD-ESC-001]
+ 2 files changed, 56 insertions(+), 9 deletions(-)
+To https://github.com/sharpninja/vice-sharp.git
+   f67eeb9..3ba3068  feat/xbox-uwp-app -> feat/xbox-uwp-app
+03:57:01 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').PackageFamilyName""
+03:57:02 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Start-Process 'shell:AppsFolder\sharpninja.ViceSharp.Xbox_wbxy578d68v3y!App'""
+03:57:02 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: %LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[WRN] : Configuration files for AzurePipelines (release) have changed.
+[WRN] : Configuration files for AzurePipelines (ci) have changed.
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+DeployXboxLocal    Succeeded       0:27
+───────────────────────────────────────
+Total                              0:27
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 3:57:02 AM. ＼（＾ᴗ＾）／

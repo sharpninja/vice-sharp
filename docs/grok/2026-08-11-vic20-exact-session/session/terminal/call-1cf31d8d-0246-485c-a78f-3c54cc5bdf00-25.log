@@ -1,0 +1,81 @@
+[xUnit.net 00:00:01.96]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=000002411e3b0980
+xvic vice_machine_step_cycle call=1 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000002411e3b0980
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_create call=2 model=vic20
+xvic vice_machine_reset call=2 machine=000002411e3b0710
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstepDiag.Dump_ReadyPal_IndexHistogram [4 s]
+xvic vice_machine_create call=3 model=vic20ntsc
+xvic vice_machine_reset call=3 machine=000002411e3b0940
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_BusyPal_SequenceEqual [4 s]
+xvic vice_machine_create call=4 model=vic20
+xvic vice_machine_reset call=4 machine=000002411e3b06c0
+[xUnit.net 00:00:15.56]     ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual [FAIL]
+[xUnit.net 00:00:15.56]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:15.56]       Expected: 234
+[xUnit.net 00:00:15.56]       Actual:   233
+[xUnit.net 00:00:15.56]       Stack Trace:
+[xUnit.net 00:00:15.56]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PixelLockstep.cs(49,0): at ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual()
+[xUnit.net 00:00:15.56]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:00:15.56]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual [4 s]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 234
+Actual:   233
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PixelLockstep.cs:line 49
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+xvic vice_machine_create call=5 model=vic20
+xvic vice_machine_reset call=5 machine=000002411e3b0960
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Bgra_ReadyPal_SequenceEqual [3 s]
+xvic vice_machine_create call=6 model=vic20
+xvic vice_machine_reset call=6 machine=000002411e3b0930
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Index_ReadyPal_SequenceEqual [3 s]
+xvic vice_machine_create call=7 model=vic20
+xvic vice_machine_reset call=7 machine=000002411e3b0850
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelFrameTests.CaptureFrameIndices_DimensionsMatchBgra [3 s]
+xvic vice_machine_create call=8 model=vic20
+xvic vice_machine_reset call=8 machine=000002411e3b0930
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelFrameTests.CaptureVisibleFrame_AfterBoot_ReturnsPalNormalCanvas [2 s]
+[xUnit.net 00:00:32.76]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelFrameTests.ManagedAndNative_FrameGeometry_MatchAfterBoot [3 s]
+
+Test Run Failed.
+Total tests: 8
+     Passed: 7
+     Failed: 1
+ Total time: 33.2831 Seconds
+EXIT=1

@@ -1,0 +1,60 @@
+HEALTH={"status":"Healthy","version":"1.4.25+28f56515ca1a806f60a6617d3b742e8e3b58b854","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.4411},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.0232}],"storage":"reachable"}
+{
+  "items": [
+    {
+      "id": "PLAN-VIC20-EXACT-001",
+      "title": "Bit-exact whole VIC-20 vs xvic (pixel FB, carts, sound, lockstep)",
+      "section": "Vic20",
+      "priority": "high",
+      "done": false,
+      "estimate": "multi-phase",
+      "note": null,
+      "description": [
+        "BDPv4 plan for full bit-exact VIC-20 parity with xvic (CPU, video state, pixel FB, carts, sound, snapshots).",
+        "Phases A-G; IEEE/rsuser/printer Explicit Missing exclude; Xbox/Store cancelled.",
+        "Plan file in session; FR/TR/TEST with AC and 100% TDD coverage."
+      ],
+      "technicalDetails": null,
+      "implementationTasks": [
+        {
+          "task": "Phase A: Pixel FB index+BGRA Exact (FR-VIC20-PIXEL-001)",
+          "done": false
+        },
+        {
+          "task": "Phase B: VIC-I cycle/draw residual",
+          "done": false
+        },
+        {
+          "task": "Phase C: Full cart parity + FE3 erase latency",
+          "done": false
+        },
+        {
+          "task": "Phase D: Full sound parity",
+          "done": false
+        },
+        {
+          "task": "Phase E: Bus/VIA/input residual + workload CPU lockstep",
+          "done": false
+        },
+        {
+          "task": "Phase F: Snapshots",
+          "done": false
+        },
+        {
+          "task": "Phase G: Whole-machine claim + hostile AGREE",
+          "done": false
+        }
+      ],
+      "completedDate": null,
+      "doneSummary": null,
+      "remaining": "Phase A kickoff - pixel index SequenceEqual",
+      "priorityNote": null,
+      "reference": null,
+      "phase": null,
+      "dependsOn": null,
+      "functionalRequirements": null,
+      "technicalRequirements": null
+    }
+  ],
+  "totalCount": 1
+}

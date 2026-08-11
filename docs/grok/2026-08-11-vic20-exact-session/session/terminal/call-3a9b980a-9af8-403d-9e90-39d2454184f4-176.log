@@ -1,0 +1,4 @@
+MSBuild=C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe
+
+C:\Program Files\dotnet\sdk\10.0.302\Sdks\Microsoft.NET.Sdk\targets\Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1005: Assets file 'F:\GitHub\vice-sharp\src\ViceSharp.Xbox\obj\project.assets.json' doesn't have a target for 'net10.0-windows10.0.26100.0'. Ensure that restore has run and that you have included 'net10.0-windows10.0.26100.0' in the TargetFrameworks for your project. [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+1

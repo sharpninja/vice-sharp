@@ -1,0 +1,23 @@
+
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\x64\Release-UWP\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\x64\Release-UWP\net10.0\ViceSharp.Chips.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\x64\Release-UWP\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\x64\Release-UWP\net10.0\ViceSharp.Core.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\x64\Release-UWP\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\x64\Release-UWP\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\x64\Release-UWP\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\x64\Release-UWP\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\x64\Release-UWP\net10.0\ViceSharp.RomM.dll
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(15,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(16,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(17,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(18,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(19,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(20,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\HomePage.xaml(33,21): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\ViceSharp.Xbox.dll

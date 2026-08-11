@@ -1,0 +1,40 @@
+using System.Collections.Generic;
+using System.Linq;
+using ViceSharp.Abstractions;
+using ViceSharp.Chips.Cpu;
+using ViceSharp.Chips.VicIi;
+using Xunit;
+
+namespace ViceSharp.TestHarness;
+
+/// <summary>
+/// FIX-ROMLESSVIC-001. The "ROM-less" display path: the host parks the 6510 in a RAM
+/// <c>JMP *</c> loop (no KERNAL) and drives the VIC-II directly. The VIC-II is pure
+/// managed C# and needs no ROMs to rasterise a bitmap, so a host that sets DEN and
+/// programs bitmap mode must get real content.
+/// </summary>
+/// <remarks>
+/// These tests assert the VICE-CORRECT, requirement-derived observables, established
+/// against the native x64sc oracle (vice_x64.dll) for this exact scenario:
+///   * Bad-line firing is bit-exact with VICE. Native x64sc (KERNAL text, yscroll 3)
+///     and the managed parked-CPU machine (host-written DEN, yscroll 3) raise an
+///     IDENTICAL bad-line set: 25 lines, rasters 51..243 step 8, allow_bad_lines armed
+///     in both. The managed VIC does NOT diverge from VICE, so the allow_bad_lines
+///     $30 latch is deliberately left unchanged (Mos6569.cs:1297-1299 / 3101-3102).
+///   * <see cref="Mos6569.BadLineCountThisFrame"/> is a PER-FRAME counter reset at
+///     start-of-frame (Mos6569.cs:1526). A full <see cref="IMachine.RunFrame"/> steps
+///     exactly one PAL frame and lands on that reset, so reading the counter AFTER
+///     RunFrame always yields 0 even though 25 bad lines fired during the frame. The
+///     bad-line test therefore samples DURING the frame; the render test asserts the
+///     real user-visible deliverable (content, not background-only), which is immune to
+///     the frame boundary.
+///   * A ROM-less machine also resets the VIC bank to 3; the bitmap at $2000 lives in
+///     bank 0, so the bank must be programmed with a CPU store to $DD00 (a raw bus
+///     write does not move it). The render test performs that companion setup exactly
+///     as the real host (CbmEngine BuildRomless) does.
+/// </remarks>
+public sealed class RomlessBadLineTests
+{
+    /// <summary>
+    /// FR: FR-VIC-CYCLE (allow_bad_lines armed by DEN at raster $30, CPU-independent;
+    /// VICE viciisc/vicii-cycle.c:523-526). TR: TR-CYCLE-001.

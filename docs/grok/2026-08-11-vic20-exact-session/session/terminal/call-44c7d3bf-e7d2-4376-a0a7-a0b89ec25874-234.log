@@ -1,0 +1,17 @@
+
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.41]       DIV c=5005 nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD 
+nP=$24 mP=$24
+[xUnit.net 00:00:02.41]     ViceSharp.TestHarness.Vic20.Vic20PcDivergeProbe.Probe_FirstDiverge [FAIL]
+[xUnit.net 00:00:02.41]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PcDivergeProbe.cs(21,0): 
+at ViceSharp.TestHarness.Vic20.Vic20PcDivergeProbe.Probe_FirstDiverge()
+  Failed ViceSharp.TestHarness.Vic20.Vic20PcDivergeProbe.Probe_FirstDiverge [481 ms]
+   DIV c=5005 nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24
+     at ViceSharp.TestHarness.Vic20.Vic20PcDivergeProbe.Probe_FirstDiverge() in 
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PcDivergeProbe.cs:line 21
+Test Run Failed.
+Total tests: 1
+     Failed: 1
+ Total time: 2.9944 Seconds
+EXIT=1
+

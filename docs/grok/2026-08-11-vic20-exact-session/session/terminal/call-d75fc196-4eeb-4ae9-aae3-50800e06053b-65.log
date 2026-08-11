@@ -1,0 +1,15 @@
+
+LineNumber Line
+---------- ----
+       240     vic_reset();
+       257 void vic_reset(void)
+       284     screenshot->screen_ptr = (vic.regs[0x02] & 0x80) ? mem_ram + 0x1e00 : mem_ram + 0x1000;
+       285     switch (vic.regs[0x05] & 0xf) {
+       347     screenshot->color_ram_ptr = (vic.regs[0x02] & 0x80) ? mem_ram + 0x9600 : mem_ram + 0x9400;
+       464     matrix_base = ((vic.regs[5] & 0xf0) << 6) | ((vic.regs[2] & 0x80) << 2);
+       465     char_base = (vic.regs[5] & 0xf) << 10;
+       498     cols = vic.regs[2] & 0x7f;
+       499     lines = (vic.regs[3] & 0x7e) >> 1;
+       500     xstart = (vic.regs[0] & 0x7f) * 4;
+       501     ystart = vic.regs[1] << 1;
+

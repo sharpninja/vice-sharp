@@ -1,0 +1,42 @@
+2026-08-07 00:05:34.750 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-07 00:05:34.865 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-07 00:05:34.873 [Information] App: ROM assessment: State=Complete IsBootBlocked=False
+2026-08-07 00:05:34.874 [Information] App: Boot not blocked: building host and session at launch
+2026-08-07 00:05:34.877 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-07 00:05:35.611 [Information] App: BuildHostAndSession: session started id=emulator-3acef178c1524d3dbd9e5319b3192ed5 (persisted profile: vic20)
+2026-08-07 00:05:35.634 [Information] App: persisted settings re-applied: success=True profile=vic20
+2026-08-07 00:05:35.641 [Information] App: boot cartridge: none configured
+2026-08-07 00:05:35.677 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=False audio=True
+2026-08-07 00:05:35.780 [Information] App: Boot branch: emulator (VideoPull present) -> starting surface + gamepad
+2026-08-07 00:05:35.782 [Information] App: video aspect applied: standard=Pal pixelAspect=0.93650794 clockHz=1108405 contentRows=0 refreshHz=50.03633983387505 surface=True
+2026-08-07 00:05:35.783 [Information] App: video surface started
+2026-08-07 00:05:35.783 [Information] App: gamepad started (present=True)
+2026-08-07 00:05:35.793 [Information] App: menu closed: emulation resumed
+2026-08-07 00:05:35.821 [Information] Video: tick 1: bail: panel not sized (ActualW=0 ActualH=0 scaleX=2.5 scaleY=2.5)
+2026-08-07 00:05:35.856 [Information] Gamepad: poll thread=4
+2026-08-07 00:05:35.857 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-07 00:05:35.891 [Information] Video: tick 2: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x26AB3CD7100 context=0x27669A74108
+2026-08-07 00:05:35.893 [Information] Video: tick 2: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x26AB3CDCB00
+2026-08-07 00:05:35.893 [Information] Video: tick 2: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x276695EBD78
+2026-08-07 00:05:35.894 [Information] Video: tick 2: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-07 00:05:35.897 [Information] Video: tick 2: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-07 00:05:35.898 [Information] Video: tick 2: EnsureSwapChain: created + bound 3840x1980
+2026-08-07 00:05:35.900 [Information] Video: tick 2: paint geometry: target 3840x1980, src 40x40, draw 1854x1980+993+0, PAR 0.93650794
+2026-08-07 00:05:35.917 [Information] Video: tick 2: OK: first frame presented (target 3840x1980, src 40x40, 6400 bytes)
+2026-08-07 00:05:36.100 [Information] Video: tick 12: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:05:36.112 [Information] Video: tick 13: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:05:36.127 [Information] Video: tick 14: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:05:36.143 [Information] Video: tick 15: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-07 00:05:40.892 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:05:45.970 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:05:51.054 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:05:56.131 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:01.213 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:06.292 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:11.358 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:16.436 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:21.517 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:26.598 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:31.679 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:36.760 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-07 00:06:41.840 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)

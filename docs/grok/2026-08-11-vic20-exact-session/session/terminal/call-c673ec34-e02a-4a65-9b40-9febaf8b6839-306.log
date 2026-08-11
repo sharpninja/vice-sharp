@@ -1,0 +1,6 @@
+
+src\ViceSharp.RomFetch\ViceRomCatalog.cs:58:            ["VIC20"] = Sys("VIC20",
+src\ViceSharp.RomFetch\ViceRomCatalog.cs:59:                Role("kernal", "kernal.901486-07.bin", 
+"kernal.901486-06.bin", "kernal.901486-02.bin"),
+src\ViceSharp.RomFetch\ViceRomCatalog.cs:60:                Role("basic", "basic-901486-01.bin"),
+

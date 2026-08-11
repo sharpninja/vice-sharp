@@ -1,0 +1,5 @@
+Select-String: 
+Line |
+   2 |  . harp.Avalonia" -Pattern "PAR|PixelAspect|TryGetVicI" -Recurse -Includ .
+     |                                                         ~~~~~~~~
+     | A parameter cannot be found that matches parameter name 'Recurse'.

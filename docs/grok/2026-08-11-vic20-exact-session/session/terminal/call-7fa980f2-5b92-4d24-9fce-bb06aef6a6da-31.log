@@ -1,0 +1,2 @@
+native/vice/vice/src/vic20/vic20cpu.c:57:        vic_cycle();                                   \
+native/vice/vice/src/vic20/vic20cpu.c:65:#define CLK_INC() maincpu_clk++; vic_cycle()

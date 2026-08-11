@@ -1,0 +1,47 @@
+Desktop log: docs\_deploy-desktop-2026-08-08_045348.log
+Xbox log: docs\_deploy-xbox-2026-08-08_045348.log
+Started Desktop PID=56596 Xbox PID=13744
+Desktop exit=0 Xbox exit=0
+--- Desktop tail ---
+Access to the path 'F:\GitHub\vice-sharp\.nuke\temp\build.2026-08-08_01-55-57.log' is denied.
+--- Xbox tail ---
+04:54:03 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 1.33 sec).
+04:54:03 [DBG]   Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj (in 1.33 sec).
+04:54:05 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\x64\Release-UWP\net10.0\ViceSharp.Abstractions.dll
+04:54:09 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\x64\Release-UWP\net10.0\ViceSharp.Chips.dll
+04:54:09 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\x64\Release-UWP\net10.0\ViceSharp.RomFetch.dll
+04:54:10 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\x64\Release-UWP\net10.0\ViceSharp.Core.dll
+04:54:11 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\x64\Release-UWP\net10.0\ViceSharp.Architectures.dll
+04:54:11 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\x64\Release-UWP\net10.0\ViceSharp.Monitor.dll
+04:54:11 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\x64\Release-UWP\net10.0\ViceSharp.Protocol.dll
+04:54:12 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\x64\Release-UWP\net10.0\ViceSharp.Host.InProcess.dll
+04:54:12 [DBG]   ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.Input.dll
+04:54:12 [DBG]   ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.ViewModels.dll
+04:54:12 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Library.ViewModels.dll
+04:54:12 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\x64\Release-UWP\net10.0\ViceSharp.RomM.dll
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(15,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(16,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(17,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(18,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(19,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(20,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(21,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:24 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\HomePage.xaml(33,21): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+04:54:27 [DBG]   ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\ViceSharp.Xbox.dll
+04:54:28 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').InstallLocation""
+04:54:30 [INF] > C:\Windows\System32\Robocopy.exe "F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64" "C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout" /S /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP
+04:54:30 [DBG] 
+04:54:30 [INF] Deployed Release-UWP build into the registered layout: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+04:54:30 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').PackageFamilyName""
+04:54:31 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Start-Process 'shell:AppsFolder\sharpninja.ViceSharp.Xbox_wbxy578d68v3y!App'""
+04:54:31 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: %LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+?
+อออออออออออออออออออออออออออออออออออออออ
+TargetÿÿÿÿÿÿÿÿÿÿÿÿÿStatusÿÿÿÿÿÿDuration
+ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+DeployXboxLocalÿÿÿÿSucceededÿÿÿÿÿÿÿ0:34
+ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+Totalÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ0:34
+อออออออออออออออออออออออออออออออออออออออ
+?
+Build succeeded on 8/8/2026 4:54:31 AM. \(^?^)/

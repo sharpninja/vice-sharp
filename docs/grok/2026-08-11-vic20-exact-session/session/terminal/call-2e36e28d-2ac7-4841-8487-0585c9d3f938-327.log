@@ -1,0 +1,11 @@
+
+13:13:56 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command 
+""Stop-Process -Name 'ViceSharp.Xbox' -Force -ErrorAction SilentlyContinue""
+13:14:14 [INF] Deployed Release-UWP build into the registered layout: 
+C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+13:14:15 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: 
+%LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+DeployXboxLocal    Succeeded       0:18
+Build succeeded on 8/5/2026 1:14:15 PM. ＼（＾ᴗ＾）／
+exit: 0
+

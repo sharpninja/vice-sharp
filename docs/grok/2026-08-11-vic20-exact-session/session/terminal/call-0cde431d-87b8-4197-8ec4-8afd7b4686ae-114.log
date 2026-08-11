@@ -1,0 +1,25 @@
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Library.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.93]     ViceSharp.Library.Tests.Packaging.DirectoryPackagesTests.RommPinned(packageId: "RomM.Client", expectedVersion: "1.0.0") [FAIL]
+[xUnit.net 00:00:00.93]     ViceSharp.Library.Tests.Packaging.DirectoryPackagesTests.RommPinned(packageId: "RomM.Client.Csdb", expectedVersion: "1.0.0") [FAIL]
+  Failed ViceSharp.Library.Tests.Packaging.DirectoryPackagesTests.RommPinned(packageId: "RomM.Client", expectedVersion: "1.0.0") [123 ms]
+  Error Message:
+   Expected Versions[packageId] to be "1.0.0", but "1.0.1" differs near "1" (index 4).
+  Stack Trace:
+     at FluentAssertions.Primitives.StringAssertions`1.Be(String expected, String because, Object[] becauseArgs)
+   at ViceSharp.Library.Tests.Packaging.DirectoryPackagesTests.RommPinned(String packageId, String expectedVersion) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\Packaging\DirectoryPackagesTests.cs:line 25
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed ViceSharp.Library.Tests.Packaging.DirectoryPackagesTests.RommPinned(packageId: "RomM.Client.Csdb", expectedVersion: "1.0.0") [1 ms]
+  Error Message:
+   Expected Versions[packageId] to be "1.0.0", but "1.0.1" differs near "1" (index 4).
+  Stack Trace:
+     at FluentAssertions.Primitives.StringAssertions`1.Be(String expected, String because, Object[] becauseArgs)
+   at ViceSharp.Library.Tests.Packaging.DirectoryPackagesTests.RommPinned(String packageId, String expectedVersion) in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\Packaging\DirectoryPackagesTests.cs:line 25
+   at InvokeStub_DirectoryPackagesTests.RommPinned(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+Failed!  - Failed:     2, Passed:    76, Skipped:     0, Total:    78, Duration: 158 ms - ViceSharp.Library.Tests.dll (net10.0)

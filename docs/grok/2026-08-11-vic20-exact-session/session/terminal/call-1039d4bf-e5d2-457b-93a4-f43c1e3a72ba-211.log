@@ -1,0 +1,19 @@
+Get-ChildItem: 
+Line |
+   2 |  . 68v3y\LocalState\romm-cache" -Recurse -Filter "*.d64","*.D64" -ErrorA .
+     |                                                  ~~~~~~~~~~~~~~~
+     | Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'Filter'. Specified method is not supported.
+
+FullName                                                                                                      Length
+--------                                                                                                      ------
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-review\Release\net10.0\Fixtures\D64\Elise.d64            174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-review\Release\net10.0\Fixtures\D64\frostpoint.d64       174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-review\Release\net10.0\Fixtures\D64\pieces_of_light.d64  174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-s3slice\Release\net10.0\Fixtures\D64\Elise.d64           174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-s3slice\Release\net10.0\Fixtures\D64\frostpoint.d64      174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-s3slice\Release\net10.0\Fixtures\D64\pieces_of_light.d64 174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-s4slice\Release\net10.0\Fixtures\D64\Elise.d64           174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-s4slice\Release\net10.0\Fixtures\D64\frostpoint.d64      174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-s4slice\Release\net10.0\Fixtures\D64\pieces_of_light.d64 174848
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin-v3slice\Release\net10.0\Fixtures\D64\Elise.d64           174848
+

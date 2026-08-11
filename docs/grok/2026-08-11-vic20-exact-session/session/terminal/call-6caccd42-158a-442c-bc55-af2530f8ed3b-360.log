@@ -1,0 +1,10 @@
+
+[xUnit.net 00:00:02.00]       DIV c=27 nPC=$FD49 mPC=$FD47 nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD 
+nP=$A5 mP=$A5
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge [109 ms]
+   DIV c=27 nPC=$FD49 mPC=$FD47 nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD nP=$A5 mP=$A5
+Test Run Failed.
+Total tests: 1
+     Failed: 1
+EXIT=1
+

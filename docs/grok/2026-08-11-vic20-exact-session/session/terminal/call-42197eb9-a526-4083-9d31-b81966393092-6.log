@@ -1,0 +1,64 @@
+
+Hash                                                             Path
+----                                                             ----
+01EFA977BE7E53BFD866242DE4947AACA8E70DDE57D0D0DD990B4D5DC93C74A1 C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sh.
+01EFA977BE7E53BFD866242DE4947AACA8E70DDE57D0D0DD990B4D5DC93C74A1 F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact.
+01EFA977BE7E53BFD866242DE4947AACA8E70DDE57D0D0DD990B4D5DC93C74A1 C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sh.
+01EFA977BE7E53BFD866242DE4947AACA8E70DDE57D0D0DD990B4D5DC93C74A1 F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact.
+454596C0ADB4B3BCC33D909C3B7B8110C45A354757F89C74452DACE7E41E7564 C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sh.
+454596C0ADB4B3BCC33D909C3B7B8110C45A354757F89C74452DACE7E41E7564 F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact.
+
+[33mcommit f45bbc278406a2fde9faca2bef5064584f36c29b[m
+Author: Sharp Ninja <ninja@thesharp.ninja>
+Date:   Tue Aug 11 18:32:43 2026 -0500
+
+    docs(grok): archive session transcript, plan, and goal plan
+    
+    Capture the 2026-08-11 VIC-20/xvic parity Grok session under docs/grok for audit:
+    raw chat_history, human-readable TRANSCRIPT, session BDPv4 plan, and goal harness plan/state/classifiers.
+
+ .../2026-08-11-vic20-exact-session/TRANSCRIPT.md   | 16828 [32m+++++++++++++++++++[m
+ .../chat_history.jsonl                             |   769 [32m+[m
+ .../goal/goal-classifier-32799c5b1a25-2.md         |   317 [32m+[m
+ .../goal/goal-classifier-607a2dad3956-2.md         |   310 [32m+[m
+ .../goal/goal-classifier-7d45b1115e21-2.md         |   248 [32m+[m
+ .../goal/goal-classifier-a8b508754f9e-2.md         |   450 [32m+[m
+ .../goal/goal-classifier-c660a9d0ca87-2.md         |   273 [32m+[m
+ .../goal/goal-classifier-f7270d7293dd-1.md         |   223 [32m+[m
+ .../goal/plan.baseline.md                          |    50 [32m+[m
+ .../2026-08-11-vic20-exact-session/goal/plan.md    |    50 [32m+[m
+ .../2026-08-11-vic20-exact-session/goal/state.json |    61 [32m+[m
+ docs/grok/2026-08-11-vic20-exact-session/plan.md   |   400 [32m+[m
+ docs/grok/README.md                                |    17 [32m+[m
+ 13 files changed, 19996 insertions(+)
+ad6fc34e3171b0a188e0436c7bc554e6fca73b60
+f45bbc278406a2fde9faca2bef5064584f36c29b
+ad6fc34e3171b0a188e0436c7bc554e6fca73b60	refs/tags/Grok
+[33mf45bbc2[m docs(grok): archive session transcript, plan, and goal plan
+# Plan: Finish bit-exact VIC-20 / xvic plan (Phases A–G) without stopping for user input
+
+## Goal kind
+code-change
+
+
+Name                              Length
+----                              ------
+goal-classifier-32799c5b1a25-2.md  15513
+goal-classifier-607a2dad3956-2.md  15865
+goal-classifier-7d45b1115e21-2.md  12185
+goal-classifier-a8b508754f9e-2.md  23567
+goal-classifier-c660a9d0ca87-2.md  15747
+goal-classifier-f7270d7293dd-1.md  10754
+plan.baseline.md                    6872
+plan.md                             6872
+state.json                          5870
+goal-classifier-32799c5b1a25-2.md  15513
+goal-classifier-607a2dad3956-2.md  15865
+goal-classifier-7d45b1115e21-2.md  12185
+goal-classifier-a8b508754f9e-2.md  23567
+goal-classifier-c660a9d0ca87-2.md  15747
+goal-classifier-f7270d7293dd-1.md  10754
+plan.baseline.md                    6872
+plan.md                             6872
+state.json                          5870
+

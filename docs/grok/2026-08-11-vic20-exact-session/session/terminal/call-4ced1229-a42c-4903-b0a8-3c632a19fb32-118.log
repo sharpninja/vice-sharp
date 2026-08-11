@@ -1,0 +1,106 @@
+
+> src\ViceSharp.Chips\Vic\Mos6561.cs:178:    private int _textCols = 0;
+> src\ViceSharp.Chips\Vic\Mos6561.cs:179:    private int _pendingTextCols = 22;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:180:    private int _charHeight = 8;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:181:    private bool _lineWasBlank;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:182:    private bool _blankThisLine;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:183:    /// <summary>VICE <c>vic.raster.display_xstart</c> in full-line 
+pixels.</summary>
+  src\ViceSharp.Chips\Vic\Mos6561.cs:184:    private int _displayXStart;
+> src\ViceSharp.Chips\Vic\Mos6561.cs:275:            TextCols = (byte)Math.Clamp(_textCols, 0, 255),
+  src\ViceSharp.Chips\Vic\Mos6561.cs:276:            TextLines = (byte)Math.Clamp(_textLines, 0, 255),
+  src\ViceSharp.Chips\Vic\Mos6561.cs:277:            YCounter = (byte)Math.Clamp(_ycounter, 0, 255),
+  src\ViceSharp.Chips\Vic\Mos6561.cs:278:            RowCounter = (byte)Math.Clamp(_rowCounter, 0, 255),
+  src\ViceSharp.Chips\Vic\Mos6561.cs:279:            BlankThisLine = (byte)(_blankThisLine ? 1 : 0),
+  src\ViceSharp.Chips\Vic\Mos6561.cs:280:            LineWasBlank = (byte)(_lineWasBlank ? 1 : 0),
+> src\ViceSharp.Chips\Vic\Mos6561.cs:299:        _textCols = _columns;
+> src\ViceSharp.Chips\Vic\Mos6561.cs:300:        _pendingTextCols = _columns;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:301:        _textLines = _rows;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:302:        EnsureFrameBufferSize();
+  src\ViceSharp.Chips\Vic\Mos6561.cs:303:    }
+  src\ViceSharp.Chips\Vic\Mos6561.cs:304:
+  src\ViceSharp.Chips\Vic\Mos6561.cs:305:    public bool HandlesAddress(ushort address)
+> src\ViceSharp.Chips\Vic\Mos6561.cs:363:            LatchColumns();
+  src\ViceSharp.Chips\Vic\Mos6561.cs:364:
+  src\ViceSharp.Chips\Vic\Mos6561.cs:365:        PerformFetch();
+  src\ViceSharp.Chips\Vic\Mos6561.cs:366:    }
+  src\ViceSharp.Chips\Vic\Mos6561.cs:367:
+  src\ViceSharp.Chips\Vic\Mos6561.cs:368:    /// <summary>VICE <c>vic_cycle_open_v</c>.</summary>
+> src\ViceSharp.Chips\Vic\Mos6561.cs:392:        _textCols = _pendingTextCols;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:393:    }
+  src\ViceSharp.Chips\Vic\Mos6561.cs:394:
+  src\ViceSharp.Chips\Vic\Mos6561.cs:395:    /// <summary>VICE <c>vic_cycle_start_fetch</c>.</summary>
+  src\ViceSharp.Chips\Vic\Mos6561.cs:396:    private void StartFetch()
+  src\ViceSharp.Chips\Vic\Mos6561.cs:397:    {
+> src\ViceSharp.Chips\Vic\Mos6561.cs:398:        _textCols = _pendingTextCols;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:399:        // xstop = display_xstart/pw + text_cols*8, then * pw (vic-cycle.c).
+> src\ViceSharp.Chips\Vic\Mos6561.cs:400:        var xstopUnits = _displayXStart / PixelWidth + _textCols * 8;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:401:        var screenW = FullScreenWidthUnits;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:402:        if (xstopUnits >= screenW)
+  src\ViceSharp.Chips\Vic\Mos6561.cs:403:            xstopUnits = screenW - 1;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:404:        _displayXStop = xstopUnits * PixelWidth;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:405:
+> src\ViceSharp.Chips\Vic\Mos6561.cs:406:        if (_textCols > 0)
+  src\ViceSharp.Chips\Vic\Mos6561.cs:407:        {
+  src\ViceSharp.Chips\Vic\Mos6561.cs:408:            _blankThisLine = false;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:409:            _fetchState = FetchState.Matrix;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:410:            _bufOffset = 0;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:411:        }
+> src\ViceSharp.Chips\Vic\Mos6561.cs:459:            _memptrInc = _lineWasBlank ? 0 : _textCols;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:460:            _rowCounter++;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:461:            if (_rowCounter == _textLines)
+  src\ViceSharp.Chips\Vic\Mos6561.cs:462:                _area = VicArea.Done;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:463:        }
+  src\ViceSharp.Chips\Vic\Mos6561.cs:464:
+> src\ViceSharp.Chips\Vic\Mos6561.cs:470:    private void LatchColumns()
+  src\ViceSharp.Chips\Vic\Mos6561.cs:471:    {
+  src\ViceSharp.Chips\Vic\Mos6561.cs:472:        var maxCols = IsNtsc ? 31 : 32;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:473:        // VICE: MIN(regs[2] & 0x7f, max_text_cols) - no eager live text_cols.
+> src\ViceSharp.Chips\Vic\Mos6561.cs:474:        _pendingTextCols = Math.Min(_regs[0x02] & 0x7F, maxCols);
+> src\ViceSharp.Chips\Vic\Mos6561.cs:475:        if (_pendingTextCols > 0)
+> src\ViceSharp.Chips\Vic\Mos6561.cs:476:            _columns = _pendingTextCols;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:477:    }
+  src\ViceSharp.Chips\Vic\Mos6561.cs:478:
+  src\ViceSharp.Chips\Vic\Mos6561.cs:479:    /// <summary>VICE <c>vic_cycle_latch_rows</c>.</summary>
+  src\ViceSharp.Chips\Vic\Mos6561.cs:480:    private void LatchRows()
+  src\ViceSharp.Chips\Vic\Mos6561.cs:481:    {
+> src\ViceSharp.Chips\Vic\Mos6561.cs:551:                if (_bufOffset >= _textCols)
+  src\ViceSharp.Chips\Vic\Mos6561.cs:552:                    _fetchState = FetchState.Done;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:553:                else
+  src\ViceSharp.Chips\Vic\Mos6561.cs:554:                    _fetchState = FetchState.Matrix;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:555:                return;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:556:            }
+> src\ViceSharp.Chips\Vic\Mos6561.cs:586:            var cols = Math.Clamp(_textCols, 0, MaxTextCols);
+  src\ViceSharp.Chips\Vic\Mos6561.cs:587:            if (cols > 0)
+  src\ViceSharp.Chips\Vic\Mos6561.cs:588:            {
+  src\ViceSharp.Chips\Vic\Mos6561.cs:589:                var originX = _displayXStart;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:590:                var paperW = cols * 8 * PixelWidth;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:591:                // Continuous paper strip for this scanline (bg), then ink on 
+top.
+> src\ViceSharp.Chips\Vic\Mos6561.cs:685:        var cols = _textCols;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:686:        if (cols <= 0)
+> src\ViceSharp.Chips\Vic\Mos6561.cs:687:            cols = _pendingTextCols;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:688:        if (cols <= 0)
+  src\ViceSharp.Chips\Vic\Mos6561.cs:689:            cols = Math.Min(_regs[0x02] & 0x7F, MaxTextCols);
+  src\ViceSharp.Chips\Vic\Mos6561.cs:690:        if (cols <= 0)
+  src\ViceSharp.Chips\Vic\Mos6561.cs:691:            cols = 22;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:692:        return cols * 8 * PixelWidth;
+> src\ViceSharp.Chips\Vic\Mos6561.cs:710:        _textCols = 0;
+> src\ViceSharp.Chips\Vic\Mos6561.cs:711:        _pendingTextCols = 22;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:712:        _charHeight = 8;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:713:        // VICE raster_reset: blank_this_line = 0 (raster.c).
+  src\ViceSharp.Chips\Vic\Mos6561.cs:714:        _lineWasBlank = false;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:715:        _blankThisLine = false;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:716:        _displayXStart = 0;
+> src\ViceSharp.Chips\Vic\Mos6561.cs:750:        _pendingTextCols = Math.Min(_regs[0x02] & 0x7F, IsNtsc ? 31 : 32);
+> src\ViceSharp.Chips\Vic\Mos6561.cs:751:        if (_pendingTextCols == 0)
+> src\ViceSharp.Chips\Vic\Mos6561.cs:752:            _pendingTextCols = 22; // unprogrammed: VICE vic_init default
+  src\ViceSharp.Chips\Vic\Mos6561.cs:753:        var rows = (_regs[0x03] & 0x7E) >> 1;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:754:        _textLines = rows > 0 ? rows : 23;
+> src\ViceSharp.Chips\Vic\Mos6561.cs:755:        _textCols = 0;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:756:        _charHeight = (_regs[0x03] & 0x01) != 0 ? 16 : 8;
+  src\ViceSharp.Chips\Vic\Mos6561.cs:757:        Array.Clear(_cbuf);
+  src\ViceSharp.Chips\Vic\Mos6561.cs:758:        Array.Clear(_gbuf);
+  src\ViceSharp.Chips\Vic\Mos6561.cs:759:        FillSolid(_frameBuffer, Palette[BorderColorIndex(_regs[0x0F])]);
+  src\ViceSharp.Chips\Vic\Mos6561.cs:760:
+

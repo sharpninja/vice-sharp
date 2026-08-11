@@ -1,0 +1,6 @@
+
+build\Build.cs:128:    /// EnsureCiRomRoot downloads the required dumps (hash-pinned) from the
+build\Build.cs:136:            var romRoot = EnsureCiRomRoot();
+build\Build.cs:152:    static string? EnsureCiRomRoot()
+build\Build.cs:166:        var romRoot = RootDirectory / "artifacts" / "vice-data";
+

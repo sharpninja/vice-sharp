@@ -1,0 +1,14 @@
+
+artifacts\installer\install-redeploy.log:9:Action ended 16:27:30: LaunchConditions. Return value 3.
+artifacts\installer\install-redeploy.log:10:Action ended 16:27:30: INSTALL. Return value 3.
+artifacts\installer\install-redeploy.log:101:MSI (s) (3C:D0) [16:27:30:613]: Product: ViceSharp -- Installation failed.
+artifacts\installer\install-redeploy.log:103:MSI (s) (3C:D0) [16:27:30:613]: Windows Installer installed the product. 
+Product Name: ViceSharp. Product Version: 1.2.13. Product Language: 0. Manufacturer: sharpninja. Installation success 
+or error status: 1603.
+artifacts\installer\install.log:9:Action ended 16:26:46: LaunchConditions. Return value 3.
+artifacts\installer\install.log:10:Action ended 16:26:46: INSTALL. Return value 3.
+artifacts\installer\install.log:101:MSI (s) (3C:14) [16:26:46:750]: Product: ViceSharp -- Installation failed.
+artifacts\installer\install.log:103:MSI (s) (3C:14) [16:26:46:753]: Windows Installer installed the product. Product 
+Name: ViceSharp. Product Version: 1.2.13. Product Language: 0. Manufacturer: sharpninja. Installation success or error 
+status: 1603.
+

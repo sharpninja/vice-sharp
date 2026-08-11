@@ -1,0 +1,44 @@
+v1.1.0	Latest	v1.1.0	2026-07-11T00:33:57Z
+v1.0.5		v1.0.5	2026-07-10T23:48:00Z
+v1.0.3		v1.0.3	2026-07-10T22:04:25Z
+Native VICE Windows x64 bundle 2026-06-09		native-win-x64-20260609	2026-06-09T01:03:06Z
+[
+  {
+    "appendCommitMessageToRunName": true,
+    "buildNumber": "20260715.1",
+    "buildNumberRevision": 1,
+    "controller": null,
+    "definition": {
+      "createdDate": null,
+      "drafts": [],
+      "id": 15,
+      "name": "VICE-Sharp-CI",
+      "path": "\\",
+      "project": {
+        "abbreviation": null,
+        "defaultTeamImageUrl": null,
+        "description": "C# port of VICE (Versatile Commodore Emulator) - cycle-accurate, AoT-compiled, .NET 10",
+        "id": "3ca5a0e9-1589-454e-b762-343056e0a17c",
+        "lastUpdateTime": "2026-07-11T02:46:26.207Z",
+        "name": "VICE-Sharp",
+        "revision": 86,
+        "state": "wellFormed",
+        "url": "https://dev.azure.com/McpServer/_apis/projects/3ca5a0e9-1589-454e-b762-343056e0a17c",
+        "visibility": "private"
+      },
+      "queueStatus": "enabled",
+      "revision": 3,
+      "type": "build",
+      "uri": "vstfs:///Build/Definition/15",
+      "url": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/Definitions/15?revision=3"
+    },
+    "deleted": null,
+    "deletedBy": null,
+    "deletedDate": null,
+    "deletedReason": null,
+    "demands": null,
+    "finishTime": "2026-07-15T05:29:37.340741+00:00",
+    "id": 1222,
+    "keepForever": true,
+    "lastChangedBy": {
+      "descriptor": "s2s.MDAwMDAwMDItMDAwMC04ODg4LTgwMDAtMDAwMDAwMDAwMDAwQDJjODk1OTA4LTA0ZTAtNDk1Mi04OWZkLTU0YjAwNDZkNjI4OA",

@@ -1,0 +1,82 @@
+55573
+30:    private MachineProfileOption _selectedMachineProfile;
+67:        MachineProfiles =
+69:            new MachineProfileOption("c64", "C64 PAL", "Placeholder until host profile enumeration is available.", true),
+70:            new MachineProfileOption("ntsc", "C64 NTSC", "Placeholder until host profile enumeration is available.", true),
+71:            new MachineProfileOption("c64c", "C64C PAL", "Placeholder until host profile enumeration is available.", true),
+72:            new MachineProfileOption("vic20", "VIC-20 PAL", "Placeholder until host profile enumeration is available.", true),
+73:            new MachineProfileOption("vic20ntsc", "VIC-20 NTSC", "Placeholder until host profile enumeration is available.", true)
+75:        _selectedMachineProfile = MachineProfiles[0];
+100:    public ObservableCollection<MachineProfileOption> MachineProfiles { get; }
+161:    /// Apply a horizontal drag delta from the inner-edge splitter. When anchored Left the
+244:    public KeyboardMapDto? SelectedKeyboardMap
+268:                ScheduleLiveLimiterApply();
+273:    private CancellationTokenSource? _liveLimiterApplyCts;
+277:    // actually reaches 50% without the Apply button - same live semantics as
+279:    // ApplyWarpMode/ApplySettingsFromHost, which write the field directly
+281:    private void ScheduleLiveLimiterApply()
+283:        _liveLimiterApplyCts?.Cancel();
+285:        _liveLimiterApplyCts = cts;
+286:        _ = ApplyLimiterLiveAsync(cts.Token);
+289:    private async Task ApplyLimiterLiveAsync(CancellationToken cancellationToken)
+334:    /// Apply the speed the button shows: "100%" leaves warp, sets the
+339:    public async Task CycleSpeedAsync(CancellationToken cancellationToken = default)
+351:        await ApplySettingsAsync(restartRequired: false, cancellationToken).ConfigureAwait(true);
+372:    public MachineProfileOption SelectedMachineProfile
+374:        get => _selectedMachineProfile;
+380:            SetSettingsProperty(ref _selectedMachineProfile, value);
+384:    public string SelectedRenderer
+390:    public string SelectedDisplayScale
+396:    public string SelectedCropMode
+402:    public string SelectedAspectMode
+408:    public string SelectedPalette
+414:    public string SelectedAudioMode
+420:    public string SelectedInputMode
+426:    public string SelectedPrimaryJoystickPort
+438:    public string SelectedResourceMode
+445:    public string SelectedPacingStrategy
+506:    public async Task RefreshAsync(CancellationToken cancellationToken = default)
+521:            slot?.ApplyAttachment(attachment);
+530:    public void ApplyStatus(EmulatorStatusDto status)
+541:    public async Task AttachAsync(AttachSlotViewModel slot, string filePath, CancellationToken cancellationToken = default)
+578:                slot.ApplyAttachment(response.Attachment, filePath);
+584:                        await ApplyTrueDriveSelectionAsync(slot, cancellationToken).ConfigureAwait(true);
+615:    private static async Task RunOnUiAsync(Func<Task> action)
+631:    public async Task AttachFromPickerAsync(AttachSlotViewModel slot, CancellationToken cancellationToken = default)
+657:            await ApplyTrueDriveSelectionAsync(active, CancellationToken.None).ConfigureAwait(true);
+672:    private async Task ApplyTrueDriveSelectionAsync(AttachSlotViewModel? active, CancellationToken cancellationToken)
+691:    public async Task EjectAsync(AttachSlotViewModel slot, CancellationToken cancellationToken = default)
+707:    public async Task RefreshKeyboardMapsAsync(CancellationToken cancellationToken = default)
+731:    public async Task SelectKeyboardMapAsync(string keyboardMapId, CancellationToken cancellationToken = default)
+737:        ApplyKeyboardMapResponse(response);
+33:///   last-applied baseline sets <see cref="IsDirty"/>.</description></item>
+35:///   <see cref="RequiresRestart"/> (other changes apply live).</description></item>
+36:///   <item><description>Host-canonical adoption: <see cref="ApplySettingsAsync"/> re-binds
+190:            OnPropertyChanged(nameof(SelectedModel));
+192:            RefreshSelectedModelRomStatus();
+214:    public SettingsProfileDto? SelectedModel
+232:            var machine = SelectedModel?.Machine
+267:            OnPropertyChanged(nameof(SelectedModel));
+401:            OnPropertyChanged(nameof(SelectedModel));
+403:            RefreshSelectedModelRomStatus();
+412:    public string SelectedModelRomStatus
+427:        RefreshSelectedModelRomStatus();
+443:    private void RefreshSelectedModelRomStatus()
+447:            SelectedModelRomStatus = "ROM readiness: open the ROM page to provision core ROMs.";
+452:        SelectedModelRomStatus = assessment.State switch
+502:    public bool IsDirty
+512:    public bool RequiresRestart
+536:    /// (<see cref="IsDirty"/> and <see cref="RequiresRestart"/> both cleared).
+564:        IsDirty = false;
+565:        RequiresRestart = false;
+572:    /// was sent), updates the last-applied baseline, and clears <see cref="IsDirty"/>.
+579:    public async Task ApplySettingsAsync(bool restartSession, CancellationToken cancellationToken = default)
+603:        IsDirty = false;
+604:        RequiresRestart = false;
+611:    /// <see cref="UpdateSettingsRequest"/> or clear <see cref="IsDirty"/>.
+642:    /// results, and clears <see cref="IsDirty"/> / <see cref="RequiresRestart"/>.
+657:        IsDirty = false;
+658:        RequiresRestart = false;
+776:        IsDirty = !current.Equals(_baseline);
+777:        RequiresRestart =
+839:    /// and revert. Structural record equality drives <see cref="IsDirty"/>.

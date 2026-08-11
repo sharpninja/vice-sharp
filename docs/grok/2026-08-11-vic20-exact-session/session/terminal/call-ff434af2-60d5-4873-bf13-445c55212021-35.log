@@ -1,0 +1,18 @@
+
+native\vice\vice\src\vic20\vic20.h:36:#define VIC20_PAL_SCREEN_LINES          312
+native\vice\vice\src\vic20\vic20.h:39:#define VIC20_PAL_CYCLES_PER_RFSH (VIC20_PAL_SCREEN_LINES * 
+VIC20_PAL_CYCLES_PER_LINE)
+native\vice\vice\src\vic20\vic20.h:49:#define VIC20_NTSC_SCREEN_LINES         261 /* really 262, but first and last 
+add up to one complete line */
+native\vice\vice\src\vic20\vic20.h:52:#define VIC20_NTSC_CYCLES_PER_RFSH (VIC20_NTSC_SCREEN_LINES * 
+VIC20_NTSC_CYCLES_PER_LINE)
+native\vice\vice\src\vic20\vic20.h:49:#define VIC20_NTSC_SCREEN_LINES         261 /* really 262, but first and last Select-String: 
+
+add up to one complete line */
+native\vice\vice\src\vic20\vic20.h:52:#define VIC20_NTSC_CYCLES_PER_RFSH (VIC20_NTSC_SCREEN_LINES * 
+VIC20_NTSC_CYCLES_PER_LINE)
+
+Line |
+  25 |  Select-String -Path "F:\GitHub\vice-sharp\native\vice\vice\src\includ .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'F:\GitHub\vice-sharp\native\vice\vice\src\include' because it does not exist.

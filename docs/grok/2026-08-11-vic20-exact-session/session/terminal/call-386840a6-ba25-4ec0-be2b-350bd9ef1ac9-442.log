@@ -1,0 +1,18 @@
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:29:   DIV 
+first=503725 matchedCycles=503724 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:36:c=503720 
+nPC=$FE2B mPC=$FE2B nA=$DE mA=$DE nX=$00 mX=$00 nY=$FF mY=$FF nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=2 op=$8E mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:37:c=503721 
+nPC=$FE2E mPC=$FE2E nA=$DE mA=$DE nX=$00 mX=$00 nY=$FF mY=$FF nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=1 op=$8E mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:38:c=503722 
+nPC=$FE2E mPC=$FE2E nA=$DE mA=$DE nX=$00 mX=$00 nY=$FF mY=$FF nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=0 op=$8E mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:39:c=503723 
+nPC=$FE2E mPC=$FE2E nA=$DE mA=$DE nX=$00 mX=$00 nY=$FF mY=$FF nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=5 op=$20 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:40:c=503724 
+nPC=$FE2E mPC=$FE2E nA=$DE mA=$DE nX=$00 mX=$00 nY=$FF mY=$FF nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=4 op=$20 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:41:c=503725 
+nPC=$FE30 mPC=$FE2E nA=$DE mA=$DE nX=$00 mX=$00 nY=$FF mY=$FF nS=$FC mS=$FD nP=$26 mP=$26 dbgCyc=3 op=$20 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-everycycle-2s-pal-final.log:42:bus: 
+m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+

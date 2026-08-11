@@ -1,0 +1,15 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.cs:353:            _cycle = GetCycleCount(_opcode);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:926:        _cycle = Math.Max(0, GetCycleCount(_opcode) - 1);
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1408:            0xC9 or 0xC5 or 0xD5 or 0xCD or 0xDD or 0xD9 or 0xC1 or 0xD1 or
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1461:    private partial int GetCycleCount(byte opcode);
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:51:    private partial int GetCycleCount(byte opcode) => 
+OpCycleCounts[opcode];
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:136:        return (opcode & 0x0F) is 0x19 or 0x1D or 0x1E or 0x39 or 0x3D 
+or 0x3E or 0x59 or 0x5D or 0x5E or 0x79 or 0x7D or 0x7E or 0xB1 or 0xB9 or 0xBD or 0xD1 or 0xD9 or 0xDD or 0xF1 or 
+0xF9 or 0xFD;
+src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs:400:            case 0xDD: Compare(A, AbsoluteX()); break;
+Mos6502.Addressing.cs
+Mos6502.cs
+Mos6502.Opcodes.cs
+

@@ -1,0 +1,5 @@
+DD 03 A0 D0 03 CA D0 F5 60 41 30 C3 C2 CD A2 6D A0 FD 18 86 C3
+native/vice/vice/src\mos6510dtv.h:199:#define MOS6510DTV_REGS_GET_STATUS(regs)       \
+native/vice/vice/src\mos6510.h:134:#define MOS6510_REGS_GET_STATUS(regs)          \
+native/vice/vice/src\wdc65816.h:200:#define WDC65816_REGS_GET_STATUS(regs) \
+native/vice/vice/src\r65c02.h:131:#define R65C02_REGS_GET_STATUS(regs)           \

@@ -1,0 +1,25 @@
+2728
+xvic vice_machine_step_cycle call=11 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_create call=2 model=vic20
+xvic vice_machine_reset call=2 machine=0000022b4f6c0800
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstepDiag.Dump_ReadyPal_IndexHistogram [4 s]
+
+Id  : 39244
+CPU : 2.65625
+WS  : 115232768
+
+Id  : 37532
+CPU : 921.421875
+WS  : 82993152
+

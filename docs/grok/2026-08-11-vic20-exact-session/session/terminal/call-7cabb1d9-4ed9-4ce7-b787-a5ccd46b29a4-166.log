@@ -1,0 +1,12 @@
+
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:24:    [Fact(Explicit = true)]
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:55:    [Fact(Explicit = true)]
+DUMP c=1316730 nA=$96 mA=$96 mVBus=$00 mRast=137 mCyc=35 mFetch=2 mBuf=10 mis=False
+DUMP c=1316731 nA=$01 mA=$01 mVBus=$20 mRast=137 mCyc=36 mFetch=3 mBuf=10 mis=False
+DUMP c=2055607 nA=$96 mA=$96 mVBus=$6E mRast=248 mCyc=15 mFetch=2 mBuf=0 mis=False
+DUMP c=2055608 nA=$96 mA=$96 mVBus=$20 mRast=248 mCyc=16 mFetch=3 mBuf=0 mis=False
+DUMP c=2055609 nA=$21 mA=$21 mVBus=$00 mRast=248 mCyc=17 mFetch=2 mBuf=1 mis=False
+docs\2s-vbus-2s-green-2026-08-06.log:25:A total of 1 test files matched the specified pattern.
+docs\2s-vbus-2s-green-2026-08-06.log:27:Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, 
+Duration: 10 s - ViceSharp.TestHarness.dll (net10.0)
+

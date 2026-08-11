@@ -1,0 +1,6 @@
+
+native\vice\vice\src\vic20\vic-timing.h:53:#define VIC_NTSC_NORMAL_FIRST_DISPLAYED_LINE        28
+native\vice\vice\src\vic20\vic-timing.h:54:#define VIC_NTSC_NORMAL_LAST_DISPLAYED_LINE         261
+native\vice\vice\src\vic20\vic-timing.h:55:#define VIC_NTSC_NORMAL_DISPLAY_WIDTH               200
+native\vice\vice\src\vic20\vic-timing.h:56:#define VIC_NTSC_NORMAL_LEFTBORDERWIDTH             4
+

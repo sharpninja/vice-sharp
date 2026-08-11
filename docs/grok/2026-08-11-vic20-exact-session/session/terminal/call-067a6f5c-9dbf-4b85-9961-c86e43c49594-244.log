@@ -1,0 +1,63 @@
+
+src\ViceSharp.Core\ArchitectureBuilder.cs:62:        var cpu = new Mos6502(bus);
+src\ViceSharp.Core\ArchitectureBuilder.cs:80:    private static LockFreePubSub ConnectMachinePubSub(BasicBus bus, 
+Mos6502 cpu)
+src\ViceSharp.Core\ArchitectureBuilder.cs:100:        var cpu = new Mos6502(bus);
+src\ViceSharp.Core\ArchitectureBuilder.cs:263:    /// Build a VIC-20: Mos6502, dual Via6522 ($9110 NMI / $9120 IRQ), 
+Mos6561 VIC-I,
+src\ViceSharp.Core\ArchitectureBuilder.cs:280:        var cpu = new Mos6502(bus);
+src\ViceSharp.Core\ArchitectureBuilder.cs:324:        var via1 = new Via6522(bus, nmiLine)
+src\ViceSharp.Core\ArchitectureBuilder.cs:332:        var via2 = new Via6522(bus, irqLine)
+src\ViceSharp.Core\ArchitectureBuilder.cs:366:        var vic = new Mos6561(irqLine)
+src\ViceSharp.Core\ArchitectureBuilder.cs:381:        var cyclesPerLine = profile?.CyclesPerLine ?? 71;
+src\ViceSharp.Core\ArchitectureBuilder.cs:383:        var visibleLines = profile?.VideoStandard == VideoStandard.Ntsc 
+? 234 : 284;
+src\ViceSharp.Core\ArchitectureBuilder.cs:384:        vic.ConfigureTiming(cyclesPerLine, rasterLines, visibleLines, 
+columns: 22, rows: 23);
+src\ViceSharp.Core\ArchitectureBuilder.cs:416:        var cpu = new Mos6502(bus);
+src\ViceSharp.Core\ArchitectureBuilder.cs:431:        var vias = new 
+List<ViceSharp.Chips.IEC.Via6522>(viaDescriptors.Length);
+src\ViceSharp.Core\ArchitectureBuilder.cs:434:            var via = new ViceSharp.Chips.IEC.Via6522(bus, irqLine)
+src\ViceSharp.Core\ArchitectureBuilder.cs:520:    private static Mos6526 CreateC64Cia(IBus bus, IInterruptLine line, 
+ushort baseAddress, long masterClockHz)
+src\ViceSharp.Core\ArchitectureBuilder.cs:522:        return new Mos6526(bus, line)
+src\ViceSharp.Core\ArchitectureBuilder.cs:530:    private static Mos6569 CreateVicII(
+src\ViceSharp.Core\ArchitectureBuilder.cs:538:            "Mos6569R1" => new Mos6569R1(bus, irqLine),
+src\ViceSharp.Core\ArchitectureBuilder.cs:539:            "Mos6567R56A" => new Mos6567R56A(bus, irqLine),
+src\ViceSharp.Core\ArchitectureBuilder.cs:540:            "Mos6567R8" => new Mos6567(bus, irqLine),
+src\ViceSharp.Core\ArchitectureBuilder.cs:541:            "Mos6572" => new Mos6572(bus, irqLine),
+src\ViceSharp.Core\ArchitectureBuilder.cs:543:            "Mos8565" => new Mos8565(bus, irqLine),
+src\ViceSharp.Core\ArchitectureBuilder.cs:544:            _ => descriptor.VideoStandard == VideoStandard.Ntsc
+src\ViceSharp.Core\ArchitectureBuilder.cs:545:                ? new Mos6567(bus, irqLine)
+src\ViceSharp.Core\ArchitectureBuilder.cs:546:                : new Mos6569(bus, irqLine)
+src\ViceSharp.Core\ArchitectureBuilder.cs:552:        var system = profile.VideoStandard == VideoStandard.Ntsc
+src\ViceSharp.Core\ArchitectureBuilder.cs:553:            ? Mos6569.TvSystem.NTSC
+src\ViceSharp.Core\ArchitectureBuilder.cs:554:            : string.Equals(profile.VicIIModel, "Mos6572", 
+StringComparison.OrdinalIgnoreCase)
+src\ViceSharp.Core\ArchitectureBuilder.cs:555:                ? Mos6569.TvSystem.PALN
+src\ViceSharp.Core\ArchitectureBuilder.cs:556:                : Mos6569.TvSystem.PAL;
+src\ViceSharp.Architectures\Vic20\Vic20Descriptor.cs:63:        Profile.KernalRomName,
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:36:    string KernalRomName = Vic20ViceRomNames.KernalPal,
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:80:        KernalRomName: Vic20ViceRomNames.KernalPal);
+src\ViceSharp.Architectures\Vic20\Vic20MachineProfile.cs:92:        KernalRomName: Vic20ViceRomNames.KernalNtsc);
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:6:/// Required VIC-20 ROM set (BASIC, KERNAL, character generator).
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:17:            Vic20ViceRomNames.KernalPal,
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:25:        string kernalRomName,
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:34:        KernalRomName = string.IsNullOrWhiteSpace(kernalRomName)
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:35:            ? Vic20ViceRomNames.KernalPal
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:36:            : kernalRomName;
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:47:    public string KernalRomName { get; }
+src\ViceSharp.Architectures\Vic20\Vic20RomSet.cs:55:            && provider.IsAvailable(KernalRomName, Architecture)
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:5:/// <c>VIC20/</c>. Note that kernal images use a dot 
+separator in the part
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:19:    /// <summary>PAL KERNAL (8192 bytes) at $E000-$FFFF. 
+VICE default for PAL.</summary>
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:20:    public const string KernalPal = "kernal.901486-07.bin";
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:22:    /// <summary>NTSC KERNAL (8192 bytes) at $E000-$FFFF. 
+VICE default for NTSC.</summary>
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:23:    public const string KernalNtsc = "kernal.901486-06.bin";
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:25:    /// <summary>Older kernal revision still listed in the 
+VICE catalog.</summary>
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:26:    public const string KernalRev2 = "kernal.901486-02.bin";
+src\ViceSharp.Architectures\Vic20\Vic20ViceRomNames.cs:37:    /// <summary>KERNAL ROM size in bytes.</summary>
+

@@ -1,0 +1,51 @@
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceSharp.RomFetch.csproj (in 605 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Architectures\ViceSharp.Architectures.csproj (in 605 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Monitor\ViceSharp.Monitor.csproj (in 605 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\ViceSharp.Xbox.ViewModels.csproj (in 605 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Console\ViceSharp.Console.csproj (in 605 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\ViceSharp.Host.InProcess.csproj (in 641 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj (in 648 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\ViceSharp.Abstractions.csproj (in 1 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Host\ViceSharp.Host.csproj (in 658 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Launcher\ViceSharp.Launcher.csproj (in 4 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\ViceSharp.AdhocHelper.csproj (in 679 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj (in 679 ms).
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\ViceSharp.Host.MacOS.csproj (in 679 ms).
+  Restored F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\ViceSharp.Benchmarks.csproj (in 81 ms).
+  Restored F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj (in 789 ms).
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.44]     ViceSharp.TestHarness.Xbox.XboxAotBindingConventionTests.HomeAndKeyboard_UseCompiledBinds_AndVirtualKeyRow [FAIL]
+  Failed ViceSharp.TestHarness.Xbox.XboxAotBindingConventionTests.HomeAndKeyboard_UseCompiledBinds_AndVirtualKeyRow [3 ms]
+  Error Message:
+   Assert.DoesNotContain() Failure: Sub-string found
+                                     ↓ (pos 1586)
+String: ···"ompiled bind; reflection {Binding} dies under AOT."···
+Found:  "{Binding"
+  Stack Trace:
+     at ViceSharp.TestHarness.Xbox.XboxAotBindingConventionTests.HomeAndKeyboard_UseCompiledBinds_AndVirtualKeyRow() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Xbox\XboxAotBindingConventionTests.cs:line 77
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:    25, Skipped:     0, Total:    26, Duration: 570 ms - ViceSharp.TestHarness.dll (net10.0)

@@ -1,0 +1,36 @@
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.55]     ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Exp8KMachine_Blk1IsWritable_Blk2OpenBusNonSticky [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Exp8KMachine_Blk1IsWritable_Blk2OpenBusNonSticky [4 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 120
+Actual:   119
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Exp8KMachine_Blk1IsWritable_Blk2OpenBusNonSticky() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemoryMapTests.cs:line 110
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.56]     ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_Reset_DoesNotApplyC64InitPattern [FAIL]
+[xUnit.net 00:00:03.56]     ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_OpenBusExpansion_WriteDoesNotStick [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_Reset_DoesNotApplyC64InitPattern [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 120
+Actual:   17
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_Reset_DoesNotApplyC64InitPattern() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemoryMapTests.cs:line 90
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_OpenBusExpansion_WriteDoesNotStick [5 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 120
+Actual:   90
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_OpenBusExpansion_WriteDoesNotStick() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemoryMapTests.cs:line 50
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     3, Passed:    75, Skipped:     0, Total:    78, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+TEST_EXIT=1

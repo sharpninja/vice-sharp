@@ -1,0 +1,48 @@
+roms unauth fail: Response status code does not indicate success: 403 (Forbidden).
+status: 403
+
+SCREENSCRAPER_USER=
+DB_USER=romm-user
+ROMM_AUTH_SECRET_KEY=generate-with-openssl-rand-hex-32
+RETROACHIEVEMENTS_API_KEY=
+SCREENSCRAPER_PASSWORD=
+HASHEOUS_API_ENABLED=true
+DB_PASSWD=change-me-db-password
+STEAMGRIDDB_API_KEY=
+SCREENSCRAPER_DEV_PASSWORD=gdDFD4GFg3Rm
+
+FullName       : C:\deploy\RomM-clean\docs\todo.yaml
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 129d2cdb-e246-44d0-8a6a-a7d96bdab4e2
+
+
+FullName       : C:\deploy\RomM-clean\docs\wiki.yaml
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 129d2cdb-e246-44d0-8a6a-a7d96bdab4e2
+
+
+FullName       : C:\deploy\RomM-clean\runtime\config
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 129d2cdb-e246-44d0-8a6a-a7d96bdab4e2
+
+
+FullName       : C:\deploy\RomM-clean\runtime\config\config.yml
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 129d2cdb-e246-44d0-8a6a-a7d96bdab4e2
+
+
+FullName       : C:\deploy\RomM-clean\services\csdb-bridge\src\CsdbBridge\Configuration
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 129d2cdb-e246-44d0-8a6a-a7d96bdab4e2
+
+
+FullName       : C:\deploy\RomM-clean\.env
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 129d2cdb-e246-44d0-8a6a-a7d96bdab4e2
+
+
+FullName       : C:\deploy\RomM-clean\docker-compose.yml
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 129d2cdb-e246-44d0-8a6a-a7d96bdab4e2
+
+

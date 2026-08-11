@@ -1,0 +1,9 @@
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [3 s]
+   DIV first=520829 matchedCycles=520828 budget=10227270
+c=520829 nPC=$EA97 mPC=$EA99 nA=$20 mA=$20 nX=$14 mX=$14 nY=$01 mY=$01 nS=$ED mS=$EE nP=$21 mP=$31 dbgCyc=4 op=$91 
+trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1 WALL_MS=24999
+

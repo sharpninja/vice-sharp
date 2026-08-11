@@ -1,0 +1,70 @@
+
+docs\2s-bccsta-2026-08-06.log:16:c=540339 nPC=$D946 mPC=$D946 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=5 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bccsta-2026-08-06.log:17:c=540340 nPC=$D946 mPC=$D946 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=4 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bccsta-2026-08-06.log:18:c=540341 nPC=$D946 mPC=$D946 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$FA mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=3 op=$60 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=True
+docs\2s-bcs-stage-2026-08-06.log:16:c=541557 nPC=$D946 mPC=$D946 nA=$AE mA=$AE nX=$61 mX=$61 nY=$00 mY=$00 nS=$F5 
+mS=$F5 nP=$A0 mP=$A0 dbgCyc=5 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bcs-stage-2026-08-06.log:17:c=541558 nPC=$D946 mPC=$D946 nA=$AE mA=$AE nX=$61 mX=$61 nY=$00 mY=$00 nS=$F5 
+mS=$F5 nP=$A0 mP=$A0 dbgCyc=4 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bcs-stage-2026-08-06.log:18:c=541559 nPC=$D946 mPC=$D946 nA=$AE mA=$AE nX=$61 mX=$61 nY=$00 mY=$00 nS=$F5 
+mS=$F6 nP=$A0 mP=$A0 dbgCyc=3 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=True
+docs\2s-beq-2026-08-06.log:8:c=522457 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 
+nP=$A5 mP=$A5 dbgCyc=5 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-beq-2026-08-06.log:9:c=522458 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 
+nP=$A5 mP=$A5 dbgCyc=4 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-beq-2026-08-06.log:10:c=522459 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 
+nP=$A5 mP=$A5 dbgCyc=3 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-beq-2026-08-06.log:11:c=522460 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E7 mS=$E7 
+nP=$A5 mP=$A5 dbgCyc=2 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-beq-2026-08-06.log:12:c=522461 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 
+nP=$A5 mP=$A5 dbgCyc=1 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-beq-2026-08-06.log:13:c=522462 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 
+nP=$A5 mP=$A5 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=True stg=False irq=0 mis=False
+docs\2s-beq-2026-08-06.log:14:c=522463 nPC=$EB15 mPC=$EB15 nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 
+nP=$A5 mP=$A5 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:7:c=532013 nPC=$E10E mPC=$E10E nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F7 mS=$F7 
+nP=$A0 mP=$A0 dbgCyc=5 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:8:c=532014 nPC=$E10E mPC=$E10E nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F7 mS=$F7 
+nP=$A0 mP=$A0 dbgCyc=4 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:9:c=532015 nPC=$E10E mPC=$E10E nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F7 mS=$F7 
+nP=$A0 mP=$A0 dbgCyc=3 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:10:c=532016 nPC=$E10E mPC=$E10E nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F8 mS=$F8 
+nP=$A0 mP=$A0 dbgCyc=2 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:11:c=532017 nPC=$E10E mPC=$E10E nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=1 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:12:c=532018 nPC=$E10E mPC=$E10E nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=True stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:13:c=532019 nPC=$CB4A mPC=$CB4A nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:16:c=532022 nPC=$CB4C mPC=$CB4C nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=5 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:17:c=532023 nPC=$CB4C mPC=$CB4C nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=4 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beqpla-2026-08-06.log:18:c=532024 nPC=$CB4C mPC=$CB4C nA=$93 mA=$93 nX=$18 mX=$18 nY=$00 mY=$00 nS=$FA mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=3 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True
+docs\2s-bit5-2026-08-06.log:7:c=522458 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 
+nP=$A5 mP=$A5 dbgCyc=4 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bit5-2026-08-06.log:8:c=522459 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 
+nP=$A5 mP=$A5 dbgCyc=3 op=$60 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\6510dtvcore.c
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\6510core.c
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\6510core.h
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\6510dtvcore.c
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h
+
+
+FullName : F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h
+
+

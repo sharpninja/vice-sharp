@@ -1,0 +1,64 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════════════
+║ DeployXboxLocal
+╬═══════════
+​
+03:38:40 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Stop-Process -Name 'ViceSharp.Xbox' -Force -ErrorAction SilentlyContinue""
+03:38:41 [INF] > "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
+03:38:41 [INF] > "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe" "F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj" /p:Configuration=Release-UWP /p:Platform=x64 /restore /t:Build,GenerateProjectPriFile /v:m /nologo
+03:38:41 [DBG] 
+03:38:41 [DBG]   Determining projects to restore...
+03:38:42 [DBG]   All projects are up-to-date for restore.
+03:38:43 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\x64\Release-UWP\net10.0\ViceSharp.Abstractions.dll
+03:38:43 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\x64\Release-UWP\net10.0\ViceSharp.Chips.dll
+03:38:43 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\x64\Release-UWP\net10.0\ViceSharp.RomFetch.dll
+03:38:43 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\x64\Release-UWP\net10.0\ViceSharp.Core.dll
+03:38:43 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\x64\Release-UWP\net10.0\ViceSharp.Architectures.dll
+03:38:43 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\x64\Release-UWP\net10.0\ViceSharp.Monitor.dll
+03:38:44 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\x64\Release-UWP\net10.0\ViceSharp.Protocol.dll
+03:38:44 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\x64\Release-UWP\net10.0\ViceSharp.Host.InProcess.dll
+03:38:44 [DBG]   ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.Input.dll
+03:38:44 [DBG]   ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Xbox.ViewModels.dll
+03:38:44 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\x64\Release-UWP\net10.0\ViceSharp.Library.ViewModels.dll
+03:38:44 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\x64\Release-UWP\net10.0\ViceSharp.RomM.dll
+03:38:53 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(15,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+03:38:53 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(16,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+03:38:53 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(17,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+03:38:53 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(18,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+03:38:53 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(19,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+03:38:53 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\AboutPage.xaml(20,28): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+03:38:53 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views\HomePage.xaml(33,21): XamlCompiler warning WMC1506: OneWay bindings require at least one of their steps to support raising notifications when their value changes [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+03:38:55 [DBG]   ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\ViceSharp.Xbox.dll
+03:38:55 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').InstallLocation""
+03:38:57 [ERR] Target DeployXboxLocal has thrown an exception
+System.InvalidOperationException: Package 'sharpninja.ViceSharp.Xbox' is not registered (Get-AppxPackage returned nothing). Deploy once from Visual Studio (F5 with a UWP configuration) to register the loose-file layout, then rerun.
+   at Build.<get_DeployXboxLocal>b__97_1() in F:\GitHub\vice-sharp\build\Build.cs:line 1028
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] DeployXboxLocal: Target DeployXboxLocal has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+DeployXboxLocal    Failed          0:16   // InvalidOperationException: Package 'sharpninja.ViceSharp.Xbox' is not registered (Get-AppxPackage returned nothing). Deploy once from Visual Studio (F5 with a UWP configuration) to register the loose-file layout, then rerun.
+───────────────────────────────────────
+Total                              0:16
+═══════════════════════════════════════
+​
+Build failed on 8/5/2026 3:38:57 AM. (╯°□°）╯︵ ┻━┻

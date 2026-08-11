@@ -1,0 +1,45 @@
+
+Line                                                                                                               File
+                                                                                                                   name
+----                                                                                                               ----
+    public int FrameWidth => VideoRenderer.ScreenWidth;                                                            Mos.
+    private readonly bool[] _leftBorderOpenByRasterLine = new bool[512];                                           Mos.
+    private readonly bool[] _rightBorderOpenByRasterLine = new bool[512];                                          Mos.
+    // NTSC-65 (cycle_tab_ntsc, vicii-chip-model.c:272-403): sprite 3's s-pair                                     Mos.
+    public int LeftBorderPixel => Csel ? 24 : 31;                                                                  Mos.
+    public int RightBorderEndPixel => Csel ? 344 : 335;                                                            Mos.
+    public bool IsRasterLineRightBorderOpen(int rasterLine) =>                                                     Mos.
+        (uint)rasterLine < (uint)_rightBorderOpenByRasterLine.Length &&                                            Mos.
+        _rightBorderOpenByRasterLine[rasterLine];                                                                  Mos.
+    public bool IsRasterLineLeftBorderOpen(int rasterLine) =>                                                      Mos.
+        (uint)rasterLine < (uint)_leftBorderOpenByRasterLine.Length &&                                             Mos.
+        _leftBorderOpenByRasterLine[rasterLine];                                                                   Mos.
+        int leftBorderPixel = (IsRasterLineLeftBorderOpen(rasterLine) || AllowSpritesInBorder)                     Mos.
+            : LeftBorderPixel;                                                                                     Mos.
+        int rightBorderEndPixel = (IsRasterLineRightBorderOpen(rasterLine) || AllowSpritesInBorder)                Mos.
+            ? VideoRenderer.ScreenWidth                                                                            Mos.
+            : RightBorderEndPixel;                                                                                 Mos.
+        return xVicPixel >= leftBorderPixel && xVicPixel < rightBorderEndPixel;                                    Mos.
+        int screenX = xVicPixel - LeftBorderPixel;                                                                 Mos.
+                bool leftBorderOpen = !_mainBorderActive;                                                          Mos.
+                CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);                            Mos.
+        bool leftBorderOpen = !_mainBorderActive;                                                                  Mos.
+        CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen);                                    Mos.
+        Array.Clear(_leftBorderOpenByRasterLine, 0, _leftBorderOpenByRasterLine.Length);                           Mos.
+        Array.Clear(_rightBorderOpenByRasterLine, 0, _rightBorderOpenByRasterLine.Length);                         Mos.
+        CaptureHorizontalBorderForLineStart(CurrentRasterLine, leftBorderOpen: false);                             Mos.
+        if (RasterX == LeftBorderCheckCycle)                                                                       Mos.
+        if (RasterX == RightBorderCheckCycle)                                                                      Mos.
+    private int LeftBorderCheckCycle  => Csel ? 16 : 17;                                                           Mos.
+    private int RightBorderCheckCycle => Csel ? 56 : 55;                                                           Mos.
+    private void CaptureHorizontalBorderForLineStart(int rasterLine, bool leftBorderOpen)                          Mos.
+        if ((uint)rasterLine >= (uint)_leftBorderOpenByRasterLine.Length)                                          Mos.
+        _leftBorderOpenByRasterLine[rasterLine] = leftBorderOpen;                                                  Mos.
+        _mainBorderOpenedThisLine = leftBorderOpen;                                                                Mos.
+        if ((uint)rasterLine >= (uint)_rightBorderOpenByRasterLine.Length)                                         Mos.
+        _rightBorderOpenByRasterLine[rasterLine] = !_verticalBorderActive && !_mainBorderActive;                   Mos.
+    // VICE sources: same as Compute (chip-model.c:272-403/437-566 + cycle.c:118/502).                             Mos.
+    // VICE sources: vicii-chip-model.c:272-403/437-566 (cycle_tab_ntsc/ntsc_old SprDma*/BaSpr* tables).           Mos.
+    // VICE sources: vicii-chip-model.c:272-403/437-566 (cycle_tab_* check points), vicii-cycle.c:118/499/502/503. Mos.
+        // VICE sources: vicii-chip-model.c:272-403/437-566 (cycle_tab_ntsc/ntsc_old SprDma*/BaSpr*),              Mos.
+

@@ -1,0 +1,44 @@
+
+DirListing     : 
+Labels         : {"com.docker.compose.config-hash":"f3b4c066788b00375bd489357da87410c51ad9809c06fae12dc010edea78ea91","
+                 com.docker.compose.container-number":"1","com.docker.compose.depends_on":"romm-db:service_healthy:true
+                 ","com.docker.compose.image":"sha256:0a4f6a6844588061695e1b66fde33601dcec633bf0493bfa5b76b410e67da761"
+                 ,"com.docker.compose.oneoff":"False","com.docker.compose.project":"romm","com.docker.compose.project.c
+                 onfig_files":"C:\\deploy\\RomM-clean\\docker-compose.yml","com.docker.compose.project.working_dir":"C:
+                 \\deploy\\RomM-clean","com.docker.compose.service":"romm","com.docker.compose.version":"5.3.0","org.op
+                 encontainers.image.created":"2026-07-15T15:48:38.301Z","org.opencontainers.image.description":"\"RomM 
+                 (ROM Manager) allows you to scan, enrich, and browse your game collection with a clean and responsive 
+                 interface. With support for multiple platforms, various naming schemes and custom tags, RomM is a 
+                 must-have for anyone who plays on emulators.\"","org.opencontainers.image.licenses":"\"AGPLv3\"","org.
+                 opencontainers.image.revision":"b85ecc5aee44e206daf5e33b867be8216a151525","org.opencontainers.image.so
+                 urce":"https://github.com/rommapp/romm","org.opencontainers.image.title":"\"rommapp/romm\"","org.openc
+                 ontainers.image.url":"https://github.com/rommapp/romm","org.opencontainers.image.version":""}
+WorkingDir     : docker.exe : template parsing error: template: :1: function "com" not defined
+                 At line:6 char:19
+                 + ... rkingDir = (& docker inspect romm --format '{{index .Config.Labels "c ...
+                 +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     + CategoryInfo          : NotSpecified: (template parsin...om" not defined:String) [], 
+                 RemoteException
+                     + FullyQualifiedErrorId : NativeCommandError
+Project        : docker.exe : template parsing error: template: :1: function "com" not defined
+                 At line:7 char:16
+                 + ...  Project = (& docker inspect romm --format '{{index .Config.Labels "c ...
+                 +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     + CategoryInfo          : NotSpecified: (template parsin...om" not defined:String) [], 
+                 RemoteException
+                     + FullyQualifiedErrorId : NativeCommandError
+ConfigFiles    : docker.exe : template parsing error: template: :1: function "com" not defined
+                 At line:8 char:20
+                 + ... figFiles = (& docker inspect romm --format '{{index .Config.Labels "c ...
+                 +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     + CategoryInfo          : NotSpecified: (template parsin...om" not defined:String) [], 
+                 RemoteException
+                     + FullyQualifiedErrorId : NativeCommandError
+Ports          : csdb-bridge 0.0.0.0:8090->8090/tcp, [::]:8090->8090/tcp Up 6 days
+                 romm 0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp Up 6 days
+                 romm-db 3306/tcp Up 6 days (healthy)
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : bd8e0af5-d9e8-4f91-9184-811042074f88
+
+=== from LEGION2 to PAYTON-DESKTOP:8080 ===
+OK status=200 len=5826

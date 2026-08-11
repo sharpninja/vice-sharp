@@ -1,0 +1,62 @@
+=== search_term=3-D%20Adventure&platform_ids=4&order_by=name&order_dir=asc&limit=5 total=1 ===
+  [0] id=140 name=3-D Adventure sort=000000000003-d adventure
+=== search_term=Hopper%20Copper&platform_ids=4&order_by=name&order_dir=asc&limit=3 total=2 ===
+  [0] id=5086 name=Hopper Copper sort=hopper copper
+  [1] id=6312 name=Hopper Copper sort=hopper copper
+=== search_term=Hellowoon&platform_ids=4&order_by=name&order_dir=asc&limit=3 total=11 ===
+  [0] id=2346 name=Hellowoon: Das Geheimnis des Zauberstabs sort=hellowoon: das geheimnis des zauberstabs
+  [1] id=324 name=Hellowoon: Das Geheimnis des Zauberstabs sort=hellowoon: das geheimnis des zauberstabs
+  [2] id=4172 name=Hellowoon: Das Geheimnis des Zauberstabs sort=hellowoon: das geheimnis des zauberstabs
+=== offset=0&limit=20&platform_ids=4&order_by=name&order_dir=asc total=6772 ===
+  [0] id=12 name=.gb64-import-state sort=.gb000000000064-import-state
+  [1] id=8 name='04 Lucky Poker Game, The sort='000000000004 lucky poker game, the
+  [2] id=9 name='Twas the Night Before Christmas sort='twas the night before christmas
+  [3] id=1 name=#2 v abc sort=#000000000002 v abc
+  [4] id=2 name=$#!7 sort=$#!000000000007
+  [5] id=4 name=$100 Box sort=$000000000100 box
+  [6] id=5 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [7] id=32 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [8] id=35 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [9] id=37 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [10] id=38 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [11] id=39 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [12] id=41 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [13] id=4184 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [14] id=4185 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [15] id=4188 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [16] id=96 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [17] id=4213 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [18] id=6535 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+  [19] id=2017 name=The $100,000 Pyramid sort=$000000000100,000000000000 pyramid
+=== offset=3000&limit=30&platform_ids=4&order_by=name&order_dir=asc total=6772 ===
+  [0] id=1979 name=BMX Jungle Bike sort=bmx jungle bike
+  [1] id=5929 name=BMX Kidz sort=bmx kidz
+  [2] id=1980 name=BMX Kidz sort=bmx kidz
+  [3] id=1981 name=BMX Ninja sort=bmx ninja
+  [4] id=1982 name=BMX Number Jump sort=bmx number jump
+  [5] id=1983 name=BMX Racers sort=bmx racers
+  [6] id=1984 name=BMX Racers sort=bmx racers
+  [7] id=1985 name=BMX Racers sort=bmx racers
+  [8] id=1986 name=BMX Rekencross sort=bmx rekencross
+  [9] id=1987 name=BMX Simulator sort=bmx simulator
+  [10] id=1988 name=BMX Simulator II: Dirt Biking sort=bmx simulator ii: dirt biking
+  [11] id=1989 name=BMX Stunts sort=bmx stunts
+  [12] id=1990 name=BMX Trials sort=bmx trials
+  [13] id=3205 name=Bndrsntch sort=bndrsntch
+  [14] id=3206 name=Bo-Ball sort=bo-ball
+  [15] id=3207 name=Boatrace sort=boatrace
+  [16] id=3208 name=Boats sort=boats
+  [17] id=3209 name=Bob sort=bob
+  [18] id=3210 name=Bob Moran - Rittertum sort=bob moran - rittertum
+  [19] id=3211 name=Bob Moran - Science Fiction sort=bob moran - science fiction
+  [20] id=1042 name=Bob Morane: Science Fiction 1 sort=bob morane: science fiction 000000000001
+  [21] id=295 name=Bob Morane: Science Fiction 1 sort=bob morane: science fiction 000000000001
+  [22] id=5568 name=Bob Morane: Science Fiction 1 sort=bob morane: science fiction 000000000001
+  [23] id=3212 name=Bob Nixie and the Castle of the Illusion sort=bob nixie and the castle of the illusion
+  [24] id=3214 name=Bob the Porcupine sort=bob the porcupine
+  [25] id=200 name=Bob Winner sort=bob winner
+  [26] id=3216 name=Bob's Full House sort=bob's full house
+  [27] id=3217 name=Bobby Bearing sort=bobby bearing
+  [28] id=3218 name=Bobby Bounce Back sort=bobby bounce back
+  [29] id=3219 name=Bobix sort=bobix
+char_index H=6450 #=3 0=23 3= a=299

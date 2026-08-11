@@ -1,0 +1,39 @@
+
+docs\2s-irqrmw-2026-08-06.log:6:   DIV first=540740 matchedCycles=540739 budget=2216810
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:7:1. NotTakenBne / TakenBne: both [Fact(Explicit = true)] 
+BranchCycleCountTests.cs:24,55
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:9:3. Residual honesty: matchedCycles below - NOT multi-second, NOT 
+1.1e6
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:18:  matchedCycles=540739  DIV first=540740  budget=2216810
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:24:Skeptic residual:     matchedCycles=517828
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:25:Session resume:       matchedCycles=522468
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:26:BPL restage start:    matchedCycles=540200
+docs\receipts-lockstep-vice-realign-2026-08-06.txt:27:Current residual:     matchedCycles=540739
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:04.09]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [2 s]
+  Error Message:
+   DIV first=540740 matchedCycles=540739 budget=2216810
+c=540729 nPC=$D89E mPC=$D89E nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F5 mS=$F5 nP=$23 mP=$23 dbgCyc=3 op=$56 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540730 nPC=$D8A0 mPC=$D8A0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F5 mS=$F5 nP=$21 mP=$21 dbgCyc=2 op=$56 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540731 nPC=$D8A0 mPC=$D8A0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F5 mS=$F5 nP=$21 mP=$21 dbgCyc=1 op=$56 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540732 nPC=$D8A0 mPC=$D8A0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F5 mS=$F5 nP=$21 mP=$21 dbgCyc=0 op=$56 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540733 nPC=$D8A0 mPC=$D8A0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F5 mS=$F5 nP=$21 mP=$21 dbgCyc=5 op=$20 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540734 nPC=$D8A0 mPC=$D8A0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F5 mS=$F5 nP=$21 mP=$21 dbgCyc=4 op=$20 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540735 nPC=$D8A2 mPC=$D8A2 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F4 mS=$F4 nP=$21 mP=$21 dbgCyc=3 op=$20 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540736 nPC=$D8A2 mPC=$D8A2 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F3 mS=$F3 nP=$21 mP=$21 dbgCyc=2 op=$20 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540737 nPC=$D8A2 mPC=$D8A2 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F3 mS=$F3 nP=$21 mP=$21 dbgCyc=1 op=$20 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540738 nPC=$D9B0 mPC=$D9B0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F3 mS=$F3 nP=$21 mP=$21 dbgCyc=0 op=$20 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540739 nPC=$D9B0 mPC=$D9B0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F3 mS=$F3 nP=$21 mP=$21 dbgCyc=5 op=$76 trail=4 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=540740 nPC=$D9B0 mPC=$D9B0 nA=$00 mA=$00 nX=$61 mX=$61 nY=$FE mY=$FE nS=$F2 mS=$F3 nP=$21 mP=$21 dbgCyc=4 op=$76 trail=4 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 123
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 47
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+

@@ -1,0 +1,91 @@
+native/vice/vice/src/vic20\vic20-cmdline-options.c:86:/* This function parses the mem config string given as `-memory' and returns
+native/vice/vice/src/vic20\vic20-cmdline-options.c:101: * example: xvic -memory ""
+native/vice/vice/src/vic20\vic20-cmdline-options.c:105: *          xvic -memory 60,a0
+native/vice/vice/src/vic20\vic20-cmdline-options.c:235:    { "-memory", CALL_FUNCTION, CMDLINE_ATTRIB_NEED_ARGS,
+native/vice/vice/src/vic20\vic20mem.c:2: * vic20mem.c -- VIC20 memory handling.
+native/vice/vice/src/vic20\vic20memsnapshot.c:2: * vic20memsnapshot.c - VIC20 memory snapshot handling.
+native/vice/vice/src/vic20\cart\vic20cartmem.c:2: * vic20cartmem.c -- VIC20 Cartridge memory handling.
+native/vice/vice/src\cartridge.h:220:#define CARTRIDGE_EASYFLASH            32 /* easyflash.c */
+native/vice/vice/src\cartridge.h:223:#define CARTRIDGE_EASYFLASH_XBANK      33 /* easyflash.c */
+native/vice/vice/src\cartridge.h:322:#define CARTRIDGE_NAME_EASYFLASH          "EasyFlash" /* see http://skoe.de/easyflash/ */
+native/vice/vice/src\cartridge.h:323:#define CARTRIDGE_NAME_EASYFLASH_XBANK    "EasyFlash Xbank" /* see http://skoe.de/easyflash/ */
+native/vice/vice/src\arch\sdl\menu_c64cart.c:694:/* EasyFlash */
+native/vice/vice/src\arch\sdl\menu_c64cart.c:696:UI_MENU_DEFINE_TOGGLE(EasyFlashJumper)
+native/vice/vice/src\arch\sdl\menu_c64cart.c:697:UI_MENU_DEFINE_TOGGLE(EasyFlashWriteCRT)
+native/vice/vice/src\arch\sdl\menu_c64cart.c:698:UI_MENU_DEFINE_TOGGLE(EasyFlashOptimizeCRT)
+native/vice/vice/src\arch\sdl\menu_c64cart.c:703:static ui_menu_entry_t easyflash_cart_menu[] = {
+native/vice/vice/src\arch\sdl\menu_c64cart.c:706:        .callback = toggle_EasyFlashJumper_callback
+native/vice/vice/src\arch\sdl\menu_c64cart.c:710:        .callback = toggle_EasyFlashWriteCRT_callback
+native/vice/vice/src\arch\sdl\menu_c64cart.c:714:        .callback = toggle_EasyFlashOptimizeCRT_callback
+native/vice/vice/src\arch\sdl\menu_c64cart.c:1729:    { easyflash_cart_menu,      EASYFLASH_OFFSET_FLUSH,     CARTRIDGE_EASYFLASH },
+native/vice/vice/src\arch\sdl\menu_c64cart.c:1758:    { easyflash_cart_menu,      EASYFLASH_OFFSET_SAVE,      CARTRIDGE_EASYFLASH },
+native/vice/vice/src\arch\sdl\menu_c64cart.c:1918:        .data     = (ui_callback_data_t)easyflash_cart_menu
+native/vice/vice/src\arch\sdl\menu_c64cart.c:2078:        .data     = (ui_callback_data_t)easyflash_cart_menu
+native/vice/vice/src\arch\sdl\menu_c64cart.c:2221:        .data     = (ui_callback_data_t)easyflash_cart_menu
+native/vice/vice/src\c64\cart\c64cartmem.c:72:#include "easyflash.h"
+native/vice/vice/src\c64\cart\c64cartmem.c:572:        easyflash    (Allow writing at ROML at 8000-9FFF in Ultimax mode.)
+native/vice/vice/src\c64\cart\c64cartmem.c:637:            return easyflash_roml_read(addr);
+native/vice/vice/src\c64\cart\c64cartmem.c:831:            easyflash_roml_store(addr, value);
+native/vice/vice/src\c64\cart\c64cartmem.c:918:            return easyflash_romh_read(addr);
+native/vice/vice/src\c64\cart\c64cartmem.c:1058:            return easyflash_romh_read(addr);
+native/vice/vice/src\c64\cart\c64cartmem.c:1205:            easyflash_romh_store(addr, value);
+native/vice/vice/src\c64\cart\c64cart.c:82:#include "easyflash.h"
+
+    Directory: F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Views
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---            8/5/2026 11:20 AM           3680 SettingsPage.xaml
+-a---            8/5/2026 11:20 AM           4875 SettingsPage.xaml.cs
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\publish\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin-review\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin-s3slice\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin-s4slice\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin-v2slice\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin-v3slice\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin-v5slice\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin-verify\Release\net10.0\appsettings.json
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\obj\Debug\net10.0\DotnetToolSettings.xml
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\obj\Debug\net10.0\ViceSharp.Avalonia.toolssettingsinput.cache
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\SettingsView.axaml
+
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views\SettingsView.axaml.cs
+
+

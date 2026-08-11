@@ -1,0 +1,53 @@
+BranchCycleCountTests.cs
+MediaServiceHostVic20ExpansionTests.cs
+Vic20BoardWiringTests.cs
+Vic20BootProofTests.cs
+Vic20DeterminismTests.cs
+Vic20DivergeProbe.cs
+Vic20DriveDefaultTests.cs
+Vic20ExpansionCartTests.cs
+Vic20HeadsTests.cs
+Vic20KeyboardTests.cs
+Vic20LockstepScaffoldTests.cs
+Vic20MemoryMapTests.cs
+Vic20MemorySettingsRestartTests.cs
+Vic20NativeLockstepTests.cs
+Vic20PixelFrameTests.cs
+Vic20RamBlocksTests.cs
+Vic20SettingsRestartPreservesExpansionTests.cs
+Vic20SkeletonTests.cs
+Vic20Via1IecPortTests.cs
+Vic20VideoLockstep.cs
+Vic20VideoPumpSmokeTests.cs
+Vic20VideoTests.cs
+FinalExpansion3Cartridge.cs
+IVic20CartridgeHost.cs
+IVic20ExpansionCartPort.cs
+IVic20RamConfiguration.cs
+MegaCartCartridge.cs
+UltimemCartridge.cs
+Vic20Cartridge.cs
+Vic20ColorRam.cs
+Vic20ExpansionCartKind.cs
+Vic20ExpansionCartPort.cs
+Vic20IecPort.cs
+Vic20KeyboardMatrix.cs
+Vic20MemoryLayout.cs
+Vic20SystemRam.cs
+
+src\ViceSharp.Chips\Vic\Mos6561.cs:11:/// mid-line, sound) is not claimed - see <c>docs/audit-vic20-vs-vice-*.md</c>.
+src\ViceSharp.Chips\Vic\Mos6561.cs:328:        // Sound $900A-$900E: register store only. VICE vic20sound.c is 
+Explicit Missing
+src\ViceSharp.Chips\Vic\Mos6561.cs:329:        // (not Exact). Do not claim audio parity until ported.
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:16:public sealed class FinalExpansion3Cartridge : IAddressSpace
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs:8:public sealed class MegaCartCartridge : IAddressSpace
+src\ViceSharp.Core\Vic20\UltimemCartridge.cs:8:public sealed class UltimemCartridge : IAddressSpace
+src\ViceSharp.Core\Vic20\Vic20Cartridge.cs:9:public sealed class Vic20Cartridge : IAddressSpace
+src\ViceSharp.Core\Vic20\Vic20ColorRam.cs:13:public sealed class Vic20ColorRam : IMemory
+src\ViceSharp.Core\Vic20\Vic20ExpansionCartPort.cs:9:public sealed class Vic20ExpansionCartPort : 
+IVic20ExpansionCartPort, IDevice
+src\ViceSharp.Core\Vic20\Vic20IecPort.cs:25:public static class Vic20IecPort
+src\ViceSharp.Core\Vic20\Vic20KeyboardMatrix.cs:11:public sealed class Vic20KeyboardMatrix : IDevice
+src\ViceSharp.Core\Vic20\Vic20MemoryLayout.cs:47:public static class Vic20MemoryLayout
+src\ViceSharp.Core\Vic20\Vic20SystemRam.cs:13:public sealed class Vic20SystemRam : IMemory
+

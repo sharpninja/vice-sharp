@@ -1,0 +1,35 @@
+2: * vic20via1.c - VIA1 emulation in the VIC20.
+62:void via1_store(uint16_t addr, uint8_t data)
+64:    viacore_store(machine_context.via1, addr, data);
+67:uint8_t via1_read(uint16_t addr)
+69:    return viacore_read(machine_context.via1, addr);
+72:uint8_t via1_peek(uint16_t addr)
+74:    return viacore_peek(machine_context.via1, addr);
+103:void via1_set_tape_sense(int v)
+109:void via1_set_tape_write_in(int v)
+114:void via1_set_tape_motor_in(int v)
+119:static void via1_internal_lightpen_check(uint8_t pa)
+128:void via1_check_lightpen(void)
+130:    uint8_t pa = machine_context.via1->via[VIA_PRA] | ~(machine_context.via1->via[VIA_DDRA]);
+132:    via1_internal_lightpen_check(pa);
+145:    via1_internal_lightpen_check(byte);
+265:void via1_init(via_context_t *via_context)
+267:    viacore_init(machine_context.via1, maincpu_alarm_context,
+271:void vic20via1_setup_context(machine_context_t *machinecontext)
+275:    machinecontext->via1 = lib_malloc(sizeof(via_context_t));
+276:    via = machinecontext->via1;
+285:    via->my_module_name = lib_msprintf("VIA1");
+
+Name
+----
+vic20ieeevia.h
+vic20ieeevia1.c
+vic20ieeevia1.o
+vic20ieeevia2.c
+vic20ieeevia2.o
+vic20via.h
+vic20via1.c
+vic20via1.o
+vic20via2.c
+vic20via2.o
+

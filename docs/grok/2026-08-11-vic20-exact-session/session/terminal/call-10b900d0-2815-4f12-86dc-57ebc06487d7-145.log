@@ -1,0 +1,119 @@
+
+README.md
+docs/Project/wiki/azure/.mcp-requirements-manifest.json
+docs/Project/wiki/azure/.order
+docs/Project/wiki/azure/Functional-Requirements.md
+docs/Project/wiki/azure/GPL-Store-Section6-Review.md
+docs/Project/wiki/azure/Getting-Started/.order
+docs/Project/wiki/azure/Home.md
+docs/Project/wiki/azure/Iteration-Roadmap.md
+docs/Project/wiki/azure/Privacy-Policy.md
+docs/Project/wiki/azure/Project-Overview.md
+docs/Project/wiki/azure/Requirements-Matrix.md
+docs/Project/wiki/azure/Store-Listing-Copy.md
+docs/Project/wiki/azure/Store-Next-Steps-Guide.md
+docs/Project/wiki/azure/Store-and-Xbox/.order
+docs/Project/wiki/azure/TR-per-FR-Mapping.md
+docs/Project/wiki/azure/Technical-Requirements.md
+docs/Project/wiki/azure/Testing-Requirements.md
+docs/Project/wiki/azure/Xbox-Store-Publishing.md
+docs/Project/wiki/github/.mcp-requirements-manifest.json
+docs/Project/wiki/github/Functional-Requirements.md
+docs/Project/wiki/github/GPL-Store-Section6-Review.md
+docs/Project/wiki/github/Home.md
+docs/Project/wiki/github/Iteration-Roadmap.md
+docs/Project/wiki/github/Privacy-Policy.md
+docs/Project/wiki/github/Project-Overview.md
+docs/Project/wiki/github/Requirements-Matrix.md
+docs/Project/wiki/github/Store-Listing-Copy.md
+docs/Project/wiki/github/Store-Next-Steps-Guide.md
+docs/Project/wiki/github/TR-per-FR-Mapping.md
+docs/Project/wiki/github/Technical-Requirements.md
+docs/Project/wiki/github/Testing-Requirements.md
+docs/Project/wiki/github/Xbox-Store-Publishing.md
+docs/Project/wiki/github/_Sidebar.md
+docs/README.md
+docs/receipts-lockstep-10s-2026-08-05.txt
+docs/receipts-lockstep-10s-2026-08-06.txt
+docs/receipts-lockstep-10s-ntsc-2026-08-06.txt
+docs/receipts-lockstep-everycycle-2026-08-06.txt
+docs/receipts-lockstep-vice-realign-2026-08-06.txt
+docs/receipts-phase2-lockstep-certification-2026-08-05.txt
+docs/receipts-vic20-phase2-verify-2026-08-05.txt
+docs/requirements/requirements-wiki-documents.zip
+docs/wiki.yaml
+native/vice-shim-vic20.c
+src/ViceSharp.Chips/Cpu/Mos6502.Opcodes.cs
+src/ViceSharp.Chips/Cpu/Mos6502.cs
+src/ViceSharp.Chips/IEC/Via6522.cs
+src/ViceSharp.Core/Vic20/Vic20ColorRam.cs
+src/ViceSharp.Core/Vic20/Vic20IecPort.cs
+src/ViceSharp.Core/Vic20/Vic20KeyboardMatrix.cs
+src/ViceSharp.Core/Vic20/Vic20SystemRam.cs
+tests/ViceSharp.TestHarness/C1541/Via6522BehaviorTests.cs
+tests/ViceSharp.TestHarness/C1541/Via6522T2Pb6Tests.cs
+tests/ViceSharp.TestHarness/C1541/Via6522Timer1Pb7Tests.cs
+tests/ViceSharp.TestHarness/C1541/Via6522Timer2Tests.cs
+tests/ViceSharp.TestHarness/Vic20/BranchCycleCountTests.cs
+tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs
+tests/ViceSharp.TestHarness/Vic20/Vic20NativeLockstepTests.cs
+tests/ViceSharp.TestHarness/Vic20/Vic20Via1IecPortTests.cs
+---
+## main...origin/main
+M  HANDOFF.md
+M  README.md
+A  docs/10s-lockstep-2026-08-06.log
+A  docs/10s-lockstep-ntsc-2026-08-06.log
+M  docs/Iteration-Roadmap.md
+M  docs/Project/wiki/azure/.mcp-requirements-manifest.json
+M  docs/Project/wiki/azure/.order
+M  docs/Project/wiki/azure/Functional-Requirements.md
+A  docs/Project/wiki/azure/GPL-Store-Section6-Review.md
+M  docs/Project/wiki/azure/Getting-Started/.order
+M  docs/Project/wiki/azure/Home.md
+M  docs/Project/wiki/azure/Iteration-Roadmap.md
+A  docs/Project/wiki/azure/Privacy-Policy.md
+M  docs/Project/wiki/azure/Project-Overview.md
+[main 3d3b6e4] fix(vic20): 10s PAL+NTSC every-cycle lockstep vs xvic
+ 88 files changed, 7787 insertions(+), 305 deletions(-)
+ create mode 100644 docs/10s-lockstep-2026-08-06.log
+ create mode 100644 docs/10s-lockstep-ntsc-2026-08-06.log
+ create mode 100644 docs/Project/wiki/azure/GPL-Store-Section6-Review.md
+ create mode 100644 docs/Project/wiki/azure/Privacy-Policy.md
+ create mode 100644 docs/Project/wiki/azure/Store-Listing-Copy.md
+ create mode 100644 docs/Project/wiki/azure/Store-Next-Steps-Guide.md
+ create mode 100644 docs/Project/wiki/azure/Store-and-Xbox/.order
+ create mode 100644 docs/Project/wiki/azure/Xbox-Store-Publishing.md
+ create mode 100644 docs/Project/wiki/github/GPL-Store-Section6-Review.md
+ create mode 100644 docs/Project/wiki/github/Privacy-Policy.md
+ create mode 100644 docs/Project/wiki/github/Store-Listing-Copy.md
+ create mode 100644 docs/Project/wiki/github/Store-Next-Steps-Guide.md
+ create mode 100644 docs/Project/wiki/github/Xbox-Store-Publishing.md
+ create mode 100644 docs/ntsc-bit-dump.txt
+ create mode 100644 docs/receipts-lockstep-10s-2026-08-05.txt
+ create mode 100644 docs/receipts-lockstep-10s-2026-08-06.txt
+ create mode 100644 docs/receipts-lockstep-10s-ntsc-2026-08-06.txt
+ create mode 100644 docs/receipts-lockstep-everycycle-2026-08-06.txt
+ create mode 100644 docs/receipts-lockstep-vice-realign-2026-08-06.txt
+ create mode 100644 docs/receipts-phase2-lockstep-certification-2026-08-05.txt
+ create mode 100644 docs/receipts-vic20-phase2-verify-2026-08-05.txt
+ create mode 100644 docs/xbox/store-product-identity.md
+ create mode 100644 docs/xbox/store-screenshots/app-tile-150x150.png
+ create mode 100644 docs/xbox/store-screenshots/app-tile-300x300.png
+ create mode 100644 docs/xbox/store-screenshots/app-tile-71x71.png
+ create mode 100644 docs/xbox/store-screenshots/branded-key-art-584x800.png
+ create mode 100644 docs/xbox/store-screenshots/featured-promo-square-1080x1080.png
+ create mode 100644 docs/xbox/store-screenshots/titled-hero-art-1920x1080.png
+ create mode 100644 docs/xbox/store-screenshots/xbox-boxart-2160x2160.png
+ create mode 100644 docs/xbox/store-screenshots/xbox-poster-1440x2160.png
+ create mode 100644 docs/xbox/store-screenshots/xbox-poster-720x1080.png
+ create mode 100644 docs/xbox/store-screenshots/xbox-poster-source.jpg
+ create mode 100644 docs/xbox/store-screenshots/xbox-superhero-3840x2160.png
+ create mode 100644 src/ViceSharp.Core/Vic20/Vic20ColorRam.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/Vic20IecPort.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/BranchCycleCountTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20Via1IecPortTests.cs
+[33m3d3b6e4[m fix(vic20): 10s PAL+NTSC every-cycle lockstep vs xvic
+3d3b6e47377ea0a033a5d4aa99d0060c8c046480
+

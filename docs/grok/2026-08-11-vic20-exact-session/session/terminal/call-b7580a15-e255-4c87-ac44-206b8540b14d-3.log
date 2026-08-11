@@ -1,0 +1,107 @@
+accuracy-first-verify-sources.md
+approve-before-execute.md
+bring-the-receipts.md
+lab-authorization.md
+log-decisions-as-conclusions.md
+never-skip-explicit-actions.md
+no-attitude-honesty-tell.md
+no-python-lab.md
+no-shortcuts-precision-over-convenience.md
+philosophical-dialogue-mode.md
+PROFILE.md
+session-turn-title-summary.md
+user-payton-byrd.md
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:04.29]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [2 s]
+  Error Message:
+   DIV first=553377 matchedCycles=553376 budget=2216810
+c=553366 nPC=$F3F5 mPC=$F3F5 nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$31 mP=$31 dbgCyc=1 op=$E4 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553367 nPC=$F3F7 mPC=$F3F7 nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$33 mP=$33 dbgCyc=0 op=$E4 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553368 nPC=$F3F7 mPC=$F3F7 nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$33 mP=$33 dbgCyc=1 op=$B0 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553369 nPC=$F3F9 mPC=$F3F9 nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$33 mP=$33 dbgCyc=0 op=$B0 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553370 nPC=$F3FC mPC=$F3FC nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$33 mP=$33 dbgCyc=2 op=$E4 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553371 nPC=$F3FC mPC=$F3FC nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$33 mP=$33 dbgCyc=1 op=$E4 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553372 nPC=$F3FC mPC=$F3FC nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$33 mP=$33 dbgCyc=0 op=$E4 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553373 nPC=$F3FE mPC=$F3FE nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$31 mP=$31 dbgCyc=2 op=$B0 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553374 nPC=$F3FE mPC=$F3FE nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$31 mP=$31 dbgCyc=1 op=$B0 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553375 nPC=$F400 mPC=$F400 nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$31 mP=$31 dbgCyc=0 op=$B0 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=553376 nPC=$F403 mPC=$F403 nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$31 mP=$31 dbgCyc=2 op=$86 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=553377 nPC=$F403 mPC=$F405 nA=$00 mA=$00 nX=$03 mX=$03 nY=$01 mY=$01 nS=$FB mS=$FB nP=$31 mP=$31 dbgCyc=1 op=$86 trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 123
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 47
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+---RECEIPT---
+ViceSharp VIC-20 every-cycle lockstep vs xvic - VICE realign session
+Date: 2026-08-06
+Method: always ask (1) where did we diverge from VICE? (2) how do we get back in line?
+
+Skeptic gaps (machine-verified on disk)
+---------------------------------------
+1. NotTakenBne / TakenBne: BOTH [Fact(Explicit = true)]
+   BranchCycleCountTests.cs:24 TakenBne, :55 NotTakenBne
+   (skeptic claim that NotTaken is permanent Fact is STALE)
+2. Focused every-cycle gate: EveryCycle_CpuRegs_Match_FocusedWindow (500_000)
+3. Residual honesty: matchedCycles below - NOT multi-second, NOT 1.1e6
+
+Gates (machine-verified)
+------------------------
+Focused 500k + Via1Iec + Vic20NativeLockstepTests:
+  FOCUSED_EXIT=0, Passed 20 / Failed 0
+  latest: implementer focused-rora2.log
+
+2s (VICESHARP_LOCKSTEP_2S=1):
+  matchedCycles=554365  DIV first=554366  budget=2216810
+  ~0.500 s PAL (554365/1108405) - NOT multi-second, NOT 1.1e6
+  receipt: docs/2s-rora-trail2-2026-08-06.log
+
+Progress
+--------
+Skeptic residual:     matchedCycles=517828
+Prior IRQ residual:   matchedCycles=540739
+Session start residual: matchedCycles=541186 (EOR zp after B1)
+Current residual:     matchedCycles=554365
+Net vs skeptic:       +36537 every-cycle matches
+Net this continuation: +13179 from 541186
+
+VICE realignments this continuation
+-----------------------------------
+1. Fuse zp/abs ALU after B1 trail==1 (EOR zp c=541187)
+2. Post-indy fuse chain for not-taken BMI, implied, LDA# after JMP/ROL A
+3. skip-soft-imm latched at fetch (one insn window; c=518756 over-fuse fixed)
+4. Soft-imm fuse after load-branch BCC only (sticky armed on skip-hold)
+5. JMP abs fuse after fused non-load imm trail==1
+6. Taken-branch staged fallthrough after imm/compare trail==1
+7. RTS overlapped: trail>=2 after full-length taken; trail==1 after load
+8. zp,X shift cycle-1 only after taken-branch lag (not not-taken)
+9. ROR A soft after shift trail==2 only (not trail==3)
+
+Current residual (VICE-facing)
+------------------------------
+Where:
+  c=554366 CMP abs,X $DD at $E914 after taken BPL loop
+  nPC=$E914 nP=$30 mPC=$E917 mP=$B0 (native pre-commit; managed fused)
+
+Evidence: docs/2s-rora-trail2-2026-08-06.log
+
+How diverged:
+  Staged CMP abs,X commits flags/PC on final data-read sample while VICE
+  still exports opcode PC / pre-op P (trail==1 after taken BPL).
+
+How to realign:
+  Soft-defer CMP abs,X body after taken branch trail==1 (same family as
+  soft zp compare after branch).
+
+Not done / do not claim
+-----------------------
+- Full 2s every-cycle green
+- Match past ~1.1e6 cycles
+- Multi-second lockstep (still ~0.500 s)
+---HOLD LOGIC---

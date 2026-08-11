@@ -1,0 +1,12 @@
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll 
+(net10.0)
+DUMP c=1 nA=$00 mA=$00 mVBus=$FF mRast=0 mCyc=1 mFetch=0 mBuf=0 mCols=22 m$9002=$00 n$9002=$00 mis=False
+DUMP c=6 nA=$00 mA=$00 mVBus=$FF mRast=0 mCyc=6 mFetch=0 mBuf=0 mCols=22 m$9002=$00 n$9002=$00 mis=False
+DUMP c=65 nA=$00 mA=$00 mVBus=$00 mRast=0 mCyc=65 mFetch=0 mBuf=0 mCols=22 m$9002=$00 n$9002=$00 mis=False
+DUMP c=71 nA=$00 mA=$00 mVBus=$00 mRast=1 mCyc=0 mFetch=0 mBuf=0 mCols=22 m$9002=$00 n$9002=$00 mis=False
+DUMP c=72 nA=$00 mA=$00 mVBus=$00 mRast=1 mCyc=1 mFetch=0 mBuf=0 mCols=22 m$9002=$00 n$9002=$00 mis=False
+DUMP c=100 nA=$00 mA=$00 mVBus=$00 mRast=1 mCyc=29 mFetch=0 mBuf=0 mCols=22 m$9002=$00 n$9002=$00 mis=False
+DUMP c=5000 nA=$00 mA=$00 mVBus=$00 mRast=70 mCyc=30 mFetch=0 mBuf=0 mCols=22 m$9002=$00 n$9002=$00 mis=False
+done
+

@@ -1,0 +1,19 @@
+pixel_index_pal EXIT=0 P=1 F=0 S=0 MS=14854
+pixel_index_ntsc EXIT=0 P=1 F=0 S=0 MS=15720
+pixel_busy EXIT=0 P=1 F=0 S=0 MS=16051
+pixel_bgra EXIT=0 P=1 F=0 S=0 MS=14067
+pixel_frame EXIT=0 P=1 F=0 S=0 MS=11683
+video_2k EXIT=0 P=2 F=0 S=0 MS=7936
+sound EXIT=0 P=8 F=0 S=0 MS=7985
+flash EXIT=0 P=12 F=0 S=0 MS=6532
+cart EXIT=0 P=7 F=0 S=0 MS=6922
+workload_pal EXIT=0 P=1 F=0 S=0 MS=10550
+workload_ntsc EXIT=0 P=1 F=0 S=0 MS=9291
+snapshot EXIT=0 P=4 F=0 S=0 MS=9199
+keyboard EXIT=0 P=6 F=0 S=0 MS=8385
+
+===== UMBRELLA SUMMARY =====
+Passed=46 Failed=0 Skipped=0 anyNonZeroExit=0
+Criterion: Failed=0 Skipped=0 and all part EXIT=0
+Date: 2026-08-11T15:44:23.6554892-05:00
+OVERALL_EXIT=0

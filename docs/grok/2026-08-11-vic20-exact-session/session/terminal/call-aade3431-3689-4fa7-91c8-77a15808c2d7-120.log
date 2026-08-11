@@ -1,0 +1,12 @@
+
+native\vice\vice\src\raster\raster.h:66:    struct geometry_s *geometry;
+native\vice\vice\src\raster\raster.h:81:    uint8_t *draw_buffer_ptr;
+native\vice\vice\src\raster\raster.h:85:    uint8_t *fake_draw_buffer_line;
+native\vice\vice\src\raster\raster.h:194:void raster_set_geometry(raster_t *raster,
+native\vice\vice\src\raster\raster.h:211:void raster_draw_buffer_ptr_update(raster_t *raster);
+Select-String: 
+
+Line |
+   3 |  Select-String -Path 'F:\GitHub\vice-sharp\native\vice\vice\src\video\ .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'F:\GitHub\vice-sharp\native\vice\vice\src\video\video.h' because it does not exist.

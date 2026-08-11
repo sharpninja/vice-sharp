@@ -1,0 +1,147 @@
+
+
+Name            : sharpninja.ViceSharp.Xbox
+PackageFullName : sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+InstallLocation : 
+
+
+
+
+
+Name            : sharpninja.github.io-3E8176AD
+PackageFullName : sharpninja.github.io-3E8176AD_1.0.0.1_neutral__rta6bb6b6h9he
+InstallLocation : C:\Program Files\WindowsApps\sharpninja.github.io-3E8176AD_1.0.0.1_neutral__rta6bb6b6h9he
+
+Name            : sharpninja.ViceSharp.Xbox
+PackageFullName : sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+InstallLocation : 
+
+
+
+
+
+TimeCreated      : 8/5/2026 3:39:10 AM
+Id               : 493
+LevelDisplayName : Warning
+Msg              : There were 5 additional files that failed to be deleted under the folder \\?\C:\Program 
+                   Files\WindowsApps\Deleted.
+
+TimeCreated      : 8/5/2026 3:39:10 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.GetHelp_10.2409.41742.0_
+                   x64__8wekyb3d8bbwe11e06141-4474-455f-a9c0-a878f2844f4a\Microsoft.DiaSymReader.Native.amd64.dll faile
+
+TimeCreated      : 8/5/2026 3:39:10 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.DesktopAppInstaller_1.30
+                   .80.0_x64__8wekyb3d8bbwe972aaac5-7498-4da9-9442-88e6138722ba\DotNet\Microsoft.DiaSymReader.Native.am
+
+TimeCreated      : 8/5/2026 3:39:10 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.DesktopAppInstaller_1.30
+                   .80.0_x64__8wekyb3d8bbwe972aaac5-7498-4da9-9442-88e6138722ba\DotNet\getfilesiginforedist.dll failed.
+
+TimeCreated      : 8/5/2026 3:39:10 AM
+Id               : 613
+LevelDisplayName : Information
+Msg              : Performance summary of Deployment Register operation on Package 
+                   sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y: Failed to reach state Resolved
+                   Overall time: 109 ms (Active time: 109 ms)
+                   Gap: 4
+
+TimeCreated      : 8/5/2026 3:39:10 AM
+Id               : 404
+LevelDisplayName : Error
+Msg              : AppX Deployment operation failed for package sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y 
+                   with error 0x80073CF9. The specific error text for this failure is: Deployment Register operation 
+                   with
+
+TimeCreated      : 8/5/2026 3:39:10 AM
+Id               : 401
+LevelDisplayName : Error
+Msg              : Deployment Register operation with target volume C: on Package 
+                   sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y from:  (AppxManifest.xml)  failed with error 
+                   0x80070003. See http://go.microsoft.com
+
+TimeCreated      : 8/5/2026 3:39:09 AM
+Id               : 605
+LevelDisplayName : Information
+Msg              : Error 0x80070003: Failure in the Resolved state handler.
+
+TimeCreated      : 8/5/2026 3:39:09 AM
+Id               : 854
+LevelDisplayName : Information
+Msg              : Successfully added the following uri(s) to be processed:  F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bi
+                   n\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\AppxManifest.xml.
+
+TimeCreated      : 8/5/2026 3:39:09 AM
+Id               : 607
+LevelDisplayName : Information
+Msg              : Deployment Register operation on package sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y has 
+                   been de-queued and is running for user SID S-1-5-21-3617676308-3098392272-2605596663-1001.
+
+TimeCreated      : 8/5/2026 3:39:09 AM
+Id               : 10002
+LevelDisplayName : Verbose
+Msg              : Creating Resiliency File C:\ProgramData\Microsoft\Windows\AppRepository\1b8cb790-ee6a-4eeb-ac41-fffc
+                   660879d2_S-1-5-21-3617676308-3098392272-2605596663-1001_277.rslc for Register Operation on Package s
+
+TimeCreated      : 8/5/2026 3:39:09 AM
+Id               : 603
+LevelDisplayName : Information
+Msg              : Started deployment Register operation on a package with main parameter AppxManifest.xml and Options 
+                   ForceApplicationShutdownOption,DevelopmentModeOption and 0. See http://go.microsoft.com/fwlink/?Link
+
+TimeCreated      : 8/5/2026 3:35:55 AM
+Id               : 493
+LevelDisplayName : Warning
+Msg              : There were 5 additional files that failed to be deleted under the folder \\?\C:\Program 
+                   Files\WindowsApps\Deleted.
+
+TimeCreated      : 8/5/2026 3:35:55 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.GetHelp_10.2409.41742.0_
+                   x64__8wekyb3d8bbwe11e06141-4474-455f-a9c0-a878f2844f4a\Microsoft.DiaSymReader.Native.amd64.dll faile
+
+TimeCreated      : 8/5/2026 3:35:55 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.DesktopAppInstaller_1.30
+                   .80.0_x64__8wekyb3d8bbwe972aaac5-7498-4da9-9442-88e6138722ba\DotNet\Microsoft.DiaSymReader.Native.am
+
+TimeCreated      : 8/5/2026 3:35:55 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.DesktopAppInstaller_1.30
+                   .80.0_x64__8wekyb3d8bbwe972aaac5-7498-4da9-9442-88e6138722ba\DotNet\getfilesiginforedist.dll failed.
+
+TimeCreated      : 8/5/2026 3:29:55 AM
+Id               : 493
+LevelDisplayName : Warning
+Msg              : There were 5 additional files that failed to be deleted under the folder \\?\C:\Program 
+                   Files\WindowsApps\Deleted.
+
+TimeCreated      : 8/5/2026 3:29:55 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.GetHelp_10.2409.41742.0_
+                   x64__8wekyb3d8bbwe11e06141-4474-455f-a9c0-a878f2844f4a\Microsoft.DiaSymReader.Native.amd64.dll faile
+
+TimeCreated      : 8/5/2026 3:29:55 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.DesktopAppInstaller_1.30
+                   .80.0_x64__8wekyb3d8bbwe972aaac5-7498-4da9-9442-88e6138722ba\DotNet\Microsoft.DiaSymReader.Native.am
+
+TimeCreated      : 8/5/2026 3:29:55 AM
+Id               : 471
+LevelDisplayName : Information
+Msg              : error 0x5: Deleting file \\?\C:\Program Files\WindowsApps\Deleted\Microsoft.DesktopAppInstaller_1.30
+                   .80.0_x64__8wekyb3d8bbwe972aaac5-7498-4da9-9442-88e6138722ba\DotNet\getfilesiginforedist.dll failed.
+
+
+

@@ -1,0 +1,52 @@
+cleared C:\Users\kingd\AppData\Local\Temp\ViceSharpNative
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:03.05]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [FAIL]
+[xUnit.net 00:00:03.05]       CPU mismatch after 256 cycles model=vic20ntsc: native PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$25; managed PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$24
+[xUnit.net 00:00:03.05]       Stack Trace:
+[xUnit.net 00:00:03.05]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(48,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles)
+[xUnit.net 00:00:03.05]            at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+[xUnit.net 00:00:03.05]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:03.06]       CPU mismatch after 4096 cycles model=vic20: native PC=$FD92 A=$00 X=$D5 Y=$00 S=$FD P=$A5; managed PC=$FD92 A=$00 X=$D5 Y=$00 S=$FD P=$A4
+[xUnit.net 00:00:03.06]       Stack Trace:
+[xUnit.net 00:00:03.06]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [FAIL]
+[xUnit.net 00:00:03.06]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(48,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles)
+[xUnit.net 00:00:03.06]            at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+[xUnit.net 00:00:03.07]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:03.07]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [FAIL]
+[xUnit.net 00:00:03.07]       CPU mismatch after 256 cycles model=vic20: native PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$25; managed PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$24
+[xUnit.net 00:00:03.07]       Stack Trace:
+[xUnit.net 00:00:03.07]         F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs(48,0): at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles)
+[xUnit.net 00:00:03.07]            at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+[xUnit.net 00:00:03.07]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:03.09]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [8 ms]
+  Error Message:
+   CPU mismatch after 256 cycles model=vic20ntsc: native PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$25; managed PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$24
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [25 ms]
+  Error Message:
+   CPU mismatch after 4096 cycles model=vic20: native PC=$FD92 A=$00 X=$D5 Y=$00 S=$FD P=$A5; managed PC=$FD92 A=$00 X=$D5 Y=$00 S=$FD P=$A4
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [5 ms]
+  Error Message:
+   CPU mismatch after 256 cycles model=vic20: native PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$25; managed PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$24
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 48
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances [3 ms]
+
+Total tests: 14
+Test Run Failed.
+     Passed: 8
+     Failed: 6
+ Total time: 3.7004 Seconds
+TEST_EXIT=1

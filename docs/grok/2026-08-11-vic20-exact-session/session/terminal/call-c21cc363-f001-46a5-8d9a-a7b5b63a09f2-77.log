@@ -1,0 +1,9 @@
+Test-MarkerSignature: 
+Line |
+   4 |  $ok = Test-MarkerSignature -MarkerPath $markerPath
+     |                             ~~~~~~~~~~~
+     | A parameter cannot be found that matches parameter name 'MarkerPath'.
+From https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp
+ * branch            main       -> FETCH_HEAD
+azure/main after fetch: e5203f94c69511ce3dbbf69eee7a4f038cd53d7a
+commits azure behind: 1

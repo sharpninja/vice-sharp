@@ -1,0 +1,60 @@
+{
+  "AssemblySemFileVer": "1.2.0.0",
+  "AssemblySemVer": "1.2.0.0",
+  "BranchName": "feat/xbox-uwp-app",
+  "BuildMetaData": 167,
+  "CommitDate": "2026-08-05",
+  "CommitsSinceVersionSource": 167,
+  "EscapedBranchName": "feat-xbox-uwp-app",
+  "FullBuildMetaData": "167.Branch.feat-xbox-uwp-app.Sha.cbb72bef2ef7f27c99f024729e877d7dbe1fc845",
+  "FullSemVer": "1.2.0-feat-xbox-uwp-app.1+167",
+  "InformationalVersion": "1.2.0-feat-xbox-uwp-app.1+167.Branch.feat-xbox-uwp-app.Sha.cbb72bef2ef7f27c99f024729e877d7dbe1fc845",
+  "Major": 1,
+  "MajorMinorPatch": "1.2.0",
+  "Minor": 2,
+  "Patch": 0,
+  "PreReleaseLabel": "feat-xbox-uwp-app",
+  "PreReleaseLabelWithDash": "-feat-xbox-uwp-app",
+  "PreReleaseNumber": 1,
+  "PreReleaseTag": "feat-xbox-uwp-app.1",
+  "PreReleaseTagWithDash": "-feat-xbox-uwp-app.1",
+  "SemVer": "1.2.0-feat-xbox-uwp-app.1",
+  "Sha": "cbb72bef2ef7f27c99f024729e877d7dbe1fc845",
+  "ShortSha": "cbb72be",
+  "UncommittedChanges": 60,
+  "VersionSourceDistance": 167,
+  "VersionSourceIncrement": "None",
+  "VersionSourceSemVer": "1.1.0",
+  "VersionSourceSha": "74b7fce2a9feaeea8cd478fdbf2613ac8698db2b",
+  "WeightedPreReleaseNumber": 1
+}
+feat(xbox): Game-Pass style RomM Library page [PLAN-ROMM-001 AC-XUI-02]
+Replace the old list + manual-connect shell with the wireframe library:
+auto-connect on open (LAN scan + bridge), search, cover GridView, A-Z jump,
+slot picker + download bar, A/Y attach and B back. Add XboxCoverImageLoader
+for tile covers. Source: feat/romm-integration worktree WIP.
+
+model-effort@agent confidence=90
+Co-Authored-By: Grok Code <noreply@x.ai>
+---
+fix(xbox): restore RomM Library/Lists/CSDb on home menu [PLAN-ROMM-001]
+Merge conflict resolution had dropped the home-rail entries. Wire OnLibrary,
+OnLists, OnCsdb again; structural test pins order after Load. Gate:
+XboxMenuFocusAndKeycapStyleTests 7/7.
+
+model-effort@agent confidence=95
+Co-Authored-By: Grok Code <noreply@x.ai>
+---
+feat(xbox): ESC closes virtual keyboard when open [FEAT-XKBD-ESC-001]
+HandleEscapeShellKey prioritizes IsVirtualKeyboardOpen (close dock + release
+keys via ToggleKeyboardOverlay) before ToggleMenu. Wired on both routed
+KeyDown and CoreWindow focus-nowhere paths. Gate: XboxKeyboardInputTests 46/46.
+
+model-effort@agent confidence=94
+Co-Authored-By: Grok Code <noreply@x.ai>
+---
+ .../HostShells/AvaloniaVideoAspectTests.cs         |  61 ++-
+ .../IEC/D64FileSystemTests.cs                      |  42 +-
+ tests/ViceSharp.TestHarness/ShellViewModelTests.cs |  28 ++
+ tools/generate-icons.py                            |  27 ++
+ 46 files changed, 3276 insertions(+), 707 deletions(-)

@@ -1,0 +1,43 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.29]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:01.88]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.10]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=0000022b4f6c09a0
+xvic vice_machine_step_cycle call=1 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=0000022b4f6c09a0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_create call=2 model=vic20
+xvic vice_machine_reset call=2 machine=0000022b4f6c0800
+  Passed ViceSharp.TestHarness.Vic20.Vic20PixelLockstepDiag.Dump_ReadyPal_IndexHistogram [4 s]

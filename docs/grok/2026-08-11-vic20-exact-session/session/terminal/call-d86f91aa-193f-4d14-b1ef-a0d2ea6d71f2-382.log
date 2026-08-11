@@ -1,0 +1,21 @@
+No test matches the given testcase filter `FullyQualifiedName~MediaServiceHostVic20Expansion.AttachMedia_Ultimem` in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+
+No test matches the given testcase filter `FullyQualifiedName~MediaServiceHostVic20Expansion.AttachMedia_MegaCart` in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+
+
+Passed!  - Failed:     0, Passed:    64, Skipped:     0, Total:    64, Duration: 109 ms - ViceSharp.TestHarness.dll (net10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   104, Skipped:     0, Total:   104, Duration: 262 ms - ViceSharp.TestHarness.dll (net10.0)
+
+Name                     Length
+----                     ------
+build-fix.log               574
+build.log                    82
+cart-attach-fe3.log         322
+cart-attach-megacart.log    409
+cart-attach-ultimem.log     408
+focused-gates.log           322
+uiec-fsdevice.log           322
+vic20-memory-restart.log    322
+

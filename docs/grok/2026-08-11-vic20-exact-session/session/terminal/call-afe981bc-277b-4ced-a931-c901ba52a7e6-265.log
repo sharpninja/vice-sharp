@@ -1,0 +1,25 @@
+Name                                                          Id                                                        Version                  Match                                        Source
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VICE                                                          VICE-Team.VICE.GTK3                                       3.10                                                                  winget
+ViceSharp                                                     sharpninja.ViceSharp                                      1.2.1                    Tag: vice                                    winget
+ADInstruments Blood FlowMeter                                 ADInstruments.LabChart.DeviceEnabler.BloodFlowMeter       1.0.0400                                                              winget
+ADInstruments CODA                                            ADInstruments.LabChart.DeviceEnabler.CODA                 1.0.6400                                                              winget
+ADInstruments Equivital                                       ADInstruments.LabChart.DeviceEnabler.Equivital            1.2.2400                                                              winget
+ADInstruments Human NIBP                                      ADInstruments.LabChart.DeviceEnabler.HumanNIBP            2.0.8400                                                              winget
+ADInstruments Kent                                            ADInstruments.LabChart.DeviceEnabler.Kent                 1.2.5400                                                              winget
+Oxford Optronix Device                                        ADInstruments.LabChart.DeviceEnabler.OxfordOptronix       1.0.0400                                                              winget
+ADInstruments PhysioTel Connect                               ADInstruments.LabChart.DeviceEnabler.PhysioTelConnect     1.1.0400                                                              winget
+ADInstruments Playback File                                   ADInstruments.LabChart.DeviceEnabler.PlaybackFile         1.2.2400                                                              winget
+ADInstruments Trigno Wireless                                 ADInstruments.LabChart.DeviceEnabler.TrignoWireless       1.3.6400                                                              winget
+ADInstruments Wii Balance Board                               ADInstruments.LabChart.DeviceEnabler.WiiBalanceBoard      1.1.0400                                                              winget
+AXIS Device Manager                                           AXIS.AXISDeviceManager                                    5.34.172                                                              winget
+AXIS Camera Station Device Compatibility Tool                 AXIS.AxisDeviceCompatibilityTool                          5.57.33556                                                            winget
+LibreView Device Drivers                                      Abbott.LibreViewDeviceDrivers                             3.3.7                                                                 winget
+AdMobilizeVisionService                                       Admobilize.AdMobilize.VisionService                       1.5.5.0                                                               winget
+myADVICE.Auftragsverwaltung                                   Advice.myADVICE.Auftragsverwaltung                        5.0.17                                                                winget
+LTspice                                                       AnalogDevices.LTspice                                     26.0.2.1                                                              winget
+
+Name       Length
+----       ------
+xvic.exe 10488833
+

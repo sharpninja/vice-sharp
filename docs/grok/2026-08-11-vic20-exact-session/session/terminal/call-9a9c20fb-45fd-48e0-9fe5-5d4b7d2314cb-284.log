@@ -1,0 +1,20 @@
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:15.38
+
+[xUnit.net 00:00:04.29]       post-resume c=2 CPU mismatch nPC=$FEA8 mPC=$FEAA nA=$06 mA=$06 nX=$06 mX=$06 nY=$00 
+mY=$00 nS=$FB mS=$FB nP=$24 mP=$24
+[xUnit.net 00:00:04.29]         
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20SnapshotRoundTripTests.cs(169,0): at 
+ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.AssertEqualCpu(IViceNative native, IMachine managed, String 
+phase)
+  Failed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Unexpanded_ManagedBlob_ResumeLockstep_Short [1 s]
+  Error Message:
+   post-resume c=2 CPU mismatch nPC=$FEA8 mPC=$FEAA nA=$06 mA=$06 nX=$06 mX=$06 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 
+mP=$24
+     at ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.AssertEqualCpu(IViceNative native, IMachine managed, 
+String phase) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20SnapshotRoundTripTests.cs:line 169
+Test Run Failed.
+     Failed: 1
+

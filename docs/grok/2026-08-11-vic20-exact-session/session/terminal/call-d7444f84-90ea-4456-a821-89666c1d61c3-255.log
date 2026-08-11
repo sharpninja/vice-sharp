@@ -1,0 +1,12 @@
+# GitVersion configuration. The MSI/winget ProductVersion is derived in
+# build/Build.cs as {Major}.{Minor}.{CommitsSinceVersionSource}, e.g. 0.1.356.
+# next-version pins the major.minor base so the build field auto-increments with
+# history. Windows Installer compares major.minor.build for upgrades; the WiX
+# MajorUpgrade (AllowSameVersionUpgrades) makes every redeploy reinstall.
+next-version: 1.2.1
+[main 3b20c4f] release: bump patch to 1.2.1 on main
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[33m3b20c4f[m release: bump patch to 1.2.1 on main
+[33m521987b[m merge: feat/xbox-uwp-app into main for 1.2 line
+v1.2.0          ViceSharp 1.2.0
+v1.2.1          ViceSharp 1.2.1

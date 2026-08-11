@@ -1,0 +1,30 @@
+=== Vic20 lockstep ===
+   CPU mismatch after 256 cycles model=vic20: native PC=$FD90 A=$00 X=$0B Y=$00 S=$FD P=$25; managed PC=$FD95 A=$00 X=$0A Y=$00 S=$FD P=$25
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(String modelSelector, Int32 cycles) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 60
+   at InvokeStub_Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:02.82]     ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [3 ms]
+  Error Message:
+   mismatch at cycle 27: native PC=$FD49 P=$A5 A=$CD X=$05; managed PC=$FD47 P=$A5 A=$CD X=$05
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs:line 86
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:    10, Passed:    14, Skipped:     0, Total:    24, Duration: 993 ms - ViceSharp.TestHarness.dll (net10.0)
+EXIT_VIC=1
+=== diverge probe 100k ===
+
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.91]       DIV c=27 nPC=$FD49 mPC=$FD47 nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD 
+nP=$A5 mP=$A5
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge [83 ms]
+   DIV c=27 nPC=$FD49 mPC=$FD47 nA=$CD mA=$CD nX=$05 mX=$05 nY=$00 mY=$00 nS=$FD mS=$FD nP=$A5 mP=$A5
+Test Run Failed.
+Total tests: 1
+     Failed: 1
+ Total time: 2.4967 Seconds
+EXIT_PROBE=1
+

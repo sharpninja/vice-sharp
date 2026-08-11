@@ -1,0 +1,21 @@
+MSBuild=C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe
+
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+DEBUG_UWP_RESTORE_EXIT=0
+MSI: F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi size=40263680 time=08/06/2026 21:15:22
+
+
+
+Name            : sharpninja.ViceSharp.Xbox
+Version         : 1.0.0.0
+InstallLocation : C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+
+
+
+
+FullName
+--------
+C:\Program Files\ViceSharp
+
+

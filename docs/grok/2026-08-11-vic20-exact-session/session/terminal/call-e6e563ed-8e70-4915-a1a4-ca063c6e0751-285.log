@@ -1,0 +1,38 @@
+=== F:\GitHub\vice-sharp\native\vice\vice\data ===
+
+=== C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState ===
+=== C:\Users\kingd\AppData\Local\ViceSharp ===
+Name
+----
+C128
+C64
+C64DTV
+CBM-II
+common
+DRIVES
+GLSL
+hotkeys
+joymaps
+PET
+PLUS4
+PRINTER
+SCPU64
+VIC20
+Makefile
+
+
+
+
+C64
+romm-cache
+romm-connection.json
+romm-recents.json
+settings.json
+vice-sharp.ini
+vice.ini
+vicesharp.log
+romm-cache
+debug-attach.json
+romm-connection.json
+romm-recents.json
+

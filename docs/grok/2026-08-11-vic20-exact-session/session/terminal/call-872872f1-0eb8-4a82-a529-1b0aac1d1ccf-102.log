@@ -1,0 +1,26 @@
+
+docs\2s-vbus-vert-2026-08-06.log:29:   DIV first=2055609 matchedCycles=2055608 budget=2216810
+docs\2s-vbus-vert-2026-08-06.log:32:c=2055600 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$EB 
+mS=$EB nP=$A4 mP=$A4 dbgCyc=4 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:33:c=2055601 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$EB 
+mS=$EB nP=$A4 mP=$A4 dbgCyc=3 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:34:c=2055602 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$EC 
+mS=$EC nP=$A4 mP=$A4 dbgCyc=2 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:35:c=2055603 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED 
+mS=$ED nP=$A4 mP=$A4 dbgCyc=1 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:36:c=2055604 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED 
+mS=$ED nP=$A4 mP=$A4 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=True stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:37:c=2055605 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED 
+mS=$ED nP=$A4 mP=$A4 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:38:c=2055606 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED 
+mS=$ED nP=$A4 mP=$A4 dbgCyc=4 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:39:c=2055607 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED 
+mS=$ED nP=$A4 mP=$A4 dbgCyc=3 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:40:c=2055608 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED 
+mS=$ED nP=$A4 mP=$A4 dbgCyc=2 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-vert-2026-08-06.log:41:c=2055609 nPC=$EAE0 mPC=$EAE0 nA=$21 mA=$91 nX=$01 mX=$01 nY=$00 mY=$00 nS=$ED 
+mS=$ED nP=$A4 mP=$A4 dbgCyc=1 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=True
+docs\2s-vbus-vert-2026-08-06.log:44:indy: zp=$F3 mPtr=$966E nPtr=$966E mEff=$966E=$B1 nEff=$966E=$01 mVBus=$BD 
+mRast=248 mCycLine=17 mFetch=2 mBuf=1 n$9000=$0C m$9000=$0C n$9001=$26 m$9001=$26 n$9002=$96 m$9002=$96 n$9003=$2E 
+n$9004=$7C m$9003=$2E m$9004=$7C
+

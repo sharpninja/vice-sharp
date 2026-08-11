@@ -1,0 +1,107 @@
+
+Name                                                    CommandType
+----                                                    -----------
+Add-AdlStoreTrustedIdProvider                                 Alias
+Add-AdlStoreTrustedIdProvider                                 Alias
+Add-AdlStoreTrustedIdProvider                                 Alias
+Add-AdlStoreTrustedIdProvider                                 Alias
+Add-TrustedProvisioningCertificate                            Alias
+Get-AdlStoreTrustedIdProvider                                 Alias
+Get-AdlStoreTrustedIdProvider                                 Alias
+Get-AdlStoreTrustedIdProvider                                 Alias
+Get-AdlStoreTrustedIdProvider                                 Alias
+Remove-AdlStoreTrustedIdProvider                              Alias
+Remove-AdlStoreTrustedIdProvider                              Alias
+Remove-AdlStoreTrustedIdProvider                              Alias
+Remove-AdlStoreTrustedIdProvider                              Alias
+Remove-TrustedProvisioningCertificate                         Alias
+Set-AdlStoreTrustedIdProvider                                 Alias
+Set-AdlStoreTrustedIdProvider                                 Alias
+Set-AdlStoreTrustedIdProvider                                 Alias
+Set-AdlStoreTrustedIdProvider                                 Alias
+Set-AzSqlServerTrustGroup                                     Alias
+Set-AzSqlServerTrustGroup                                     Alias
+Set-AzSqlServerTrustGroup                                     Alias
+Set-AzSqlServerTrustGroup                                     Alias
+Add-VpnConnectionTriggerTrustedNetwork                     Function
+Find-MarkerFile                                            Function
+Get-AzAksTrustedAccessRole                                 Function
+Get-AzAksTrustedAccessRoleBinding                          Function
+Get-MarkerAgentPluginField                                 Function
+Get-MarkerEndpoint                                         Function
+Get-MarkerField                                            Function
+Get-MarkerFileSnapshot                                     Function
+Get-SSHTrustedHost                                         Function
+New-AzAksTrustedAccessRoleBinding                          Function
+New-SSHTrustedHost                                         Function
+Remove-AzAksTrustedAccessRoleBinding                       Function
+Remove-SSHTrustedHost                                      Function
+Remove-VpnConnectionTriggerTrustedNetwork                  Function
+Set-VpnConnectionTriggerTrustedNetwork                     Function
+Test-MarkerSignature                                       Function
+Test-MarkerSignature                                       Function
+Update-AzAksTrustedAccessRoleBinding                       Function
+Update-MpSignature                                         Function
+Update-MpSignature                                         Function
+Add-AzApplicationGatewayTrustedClientCertificate             Cmdlet
+Add-AzApplicationGatewayTrustedRootCertificate               Cmdlet
+Add-AzDataLakeStoreTrustedIdProvider                         Cmdlet
+Get-AuthenticodeSignature                                    Cmdlet
+Get-AzApplicationGatewayTrustedClientCertificate             Cmdlet
+Get-AzApplicationGatewayTrustedRootCertificate               Cmdlet
+Get-AzDataLakeStoreTrustedIdProvider                         Cmdlet
+Get-AzSqlInstanceServerTrustCertificate                      Cmdlet
+Get-AzSqlServerTrustGroup                                    Cmdlet
+Get-TrustedProvisioningCertificate                           Cmdlet
+Install-TrustedProvisioningCertificate                       Cmdlet
+New-AzApplicationGatewayTrustedClientCertificate             Cmdlet
+New-AzApplicationGatewayTrustedRootCertificate               Cmdlet
+New-AzFirewallPolicyIntrusionDetectionSignatureOverride      Cmdlet
+New-AzSqlInstanceServerTrustCertificate                      Cmdlet
+New-AzSqlServerTrustGroup                                    Cmdlet
+Remove-AzApplicationGatewayTrustedClientCertificate          Cmdlet
+Remove-AzApplicationGatewayTrustedRootCertificate            Cmdlet
+Remove-AzDataLakeStoreTrustedIdProvider                      Cmdlet
+Remove-AzSqlInstanceServerTrustCertificate                   Cmdlet
+Remove-AzSqlServerTrustGroup                                 Cmdlet
+Set-AuthenticodeSignature                                    Cmdlet
+Set-AzApplicationGatewayTrustedClientCertificate             Cmdlet
+Set-AzApplicationGatewayTrustedRootCertificate               Cmdlet
+Set-AzDataLakeStoreTrustedIdProvider                         Cmdlet
+Uninstall-TrustedProvisioningCertificate                     Cmdlet
+ApplyTrustOffline.exe                                   Application
+
+
+function Find-MarkerFile {
+function Get-MarkerField {
+function Get-MarkerFileSnapshot {
+function Get-MarkerEndpoint {
+function Get-MarkerAgentPluginField {
+function Test-MarkerSignature {
+function Invoke-FullBootstrap {
+=== AZURE REMOTE ===
+0cd61f86fa99ee1e109c69ff2c494a6879c35def
+0cd61f86fa99ee1e109c69ff2c494a6879c35def
+e5203f94c69511ce3dbbf69eee7a4f038cd53d7a
+[33m0cd61f8[m feat(vic20): present-path borders, expansion UX, flash cart builder
+=== CAPTURE VISIBLE FRAME STUB ===
+
+> native\vice-shim-vic20.c:1161:VICE_SHIM_API int vice_machine_capture_visible_frame(void *machine, uint8_t *buffer, 
+int length, int *width, int *height)
+  native\vice-shim-vic20.c:1162:{
+  native\vice-shim-vic20.c:1163:    (void)machine;
+  native\vice-shim-vic20.c:1164:    (void)buffer;
+  native\vice-shim-vic20.c:1165:    (void)length;
+  native\vice-shim-vic20.c:1166:    (void)width;
+  native\vice-shim-vic20.c:1167:    (void)height;
+  native\vice-shim-vic20.c:1168:    return 0;
+  native\vice-shim-vic20.c:1169:}
+  native\vice-shim-vic20.c:1170:
+  native\vice-shim-vic20.c:1171:VICE_SHIM_API int vice_vic_capture_frame_indices(void *machine, uint8_t *buffer, int 
+length, int *width, int *height)
+  native\vice-shim-vic20.c:1172:{
+  native\vice-shim-vic20.c:1173:    (void)machine;
+  native\vice-shim-vic20.c:1174:    (void)buffer;
+  native\vice-shim-vic20.c:1175:    (void)length;
+  native\vice-shim-vic20.c:1176:    (void)width;
+

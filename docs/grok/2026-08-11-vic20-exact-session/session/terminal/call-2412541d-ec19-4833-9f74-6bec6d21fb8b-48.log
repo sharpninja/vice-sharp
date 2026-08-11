@@ -1,0 +1,55 @@
+[33ma199063[m feat(xbox): B steps back on menu subpages; subpages expand to the full window [PLAN-XBOXUWP FEAT-XMENUSUBPAGE-001]
+[33m8ec2137[m feat(xbox): F9/F11 shell toggles, keyboard-panel receipts, BindingFailed logging [PLAN-XBOXUWP FIX-XKBDPANEL-001]
+[33m1335582[m fix(build): DeployXboxLocal robocopy drops the timestamp filter [PLAN-XBOXUWP FIX-XKBDPANEL-001]
+[33m3626e2f[m fix(xbox): PublishAot is an explicit opt-in; build-time AOT killed every {Binding} [PLAN-XBOXUWP FIX-XKBDPANEL-001]
+[33m9ceef6b[m feat(xbox): menu DOCKS in a right column and shrinks the emulator [PLAN-XBOXUWP FEAT-XMENUSLIDE-001]
+[33med0b67f[m feat(xbox): menu slides in from the right; single-navigator dpad throttle [PLAN-XBOXUWP FEAT-XMENUSLIDE-001 FIX-XDPADSKIP-002]
+[33m6050107[m feat(xbox): authentic two-line RUN/STOP and SHIFT LOCK keycaps; chords show RUN [PLAN-XBOXUWP FEAT-XKBDSTICKY-001]
+[33ma00f9b0[m fix(host): v2 machine snapshot: true chip state via lockstep injectors [PLAN-XBOXUWP FIX-XSNAPWARP-001]
+[33m95153d0[m feat(xbox): sticky C=/SHIFT modifiers, real-time-scanned virtual keyboard [PLAN-XBOXUWP FEAT-XKBDSTICKY-001]
+[33m4f7d974[m feat(xbox): Close Menu first + focused on open; breadbin keycap style on virtual keyboard [PLAN-XBOXUWP FEAT-XMENUFOCUS-001 FEAT-XKEYCAPSTYLE-001]
+[33m0480237[m fix(host): paused sessions accrue no pacing debt: no warp sprint on resume [PLAN-XBOXUWP FIX-XMENUWARP-001]
+[33mb68fde6[m feat(xbox): true PETSCII graphics on virtual keycaps for SHIFT and C= chords [PLAN-XBOXUWP FEAT-XKEYCAPPETSCII-001]
+[33mb99e306[m fix(build): DeployXboxLocal restores via /restore switch, not a Restore entry target [PLAN-XBOXUWP]
+[33m26b7a4b[m fix(xbox): settings pickers blank: marshal PropertyChanged to the UI thread [PLAN-XBOXUWP FIX-XSETBLANK-001]
+[33mfb06543[m fix(build): DeployXboxLocal regenerates resources.pri: XAML changes shipped stale UI [FEAT-XLOCALDEPLOY-001]
+---
+## [32mfeat/xbox-uwp-app[m
+ [31mM[m HANDOFF.md
+ [31mM[m azure-pipelines.ci.yml
+ [31mM[m azure-pipelines.release.yml
+ [31mM[m src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml
+ [31mM[m src/ViceSharp.Xbox/Controls/VirtualKeyboardOverlay.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/AboutPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/AboutPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/InputMappingPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/SettingsPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/SettingsPage.xaml.cs
+ [31mM[m tests/ViceSharp.AiReview.Tests/appsettings.aiunit.json
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+---
+ HANDOFF.md                                         | 19 [32m+++++++++++[m[31m-----[m
+ azure-pipelines.ci.yml                             | 26 [32m++++++++++++++++++++++[m
+ azure-pipelines.release.yml                        | 26 [32m++++++++++++++++++++++[m
+ .../Controls/VirtualKeyboardOverlay.xaml           | 15 [32m+++++++[m[31m------[m
+ .../Controls/VirtualKeyboardOverlay.xaml.cs        | 15 [32m+++++++++++++[m
+ src/ViceSharp.Xbox/Views/AboutPage.xaml            | 12 [32m+++++[m[31m-----[m
+ src/ViceSharp.Xbox/Views/AboutPage.xaml.cs         |  7 [32m+++++[m[31m-[m
+ src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml      | 13 [32m++++++[m[31m-----[m
+ src/ViceSharp.Xbox/Views/DeviceSetupPage.xaml.cs   |  6 [32m+++[m[31m--[m
+ src/ViceSharp.Xbox/Views/InputMappingPage.xaml     |  9 [32m++++[m[31m----[m
+ src/ViceSharp.Xbox/Views/InputMappingPage.xaml.cs  |  7 [32m+++++[m[31m-[m
+ src/ViceSharp.Xbox/Views/RomProvisioningPage.xaml  |  4 [32m++[m[31m--[m
+ .../Views/RomProvisioningPage.xaml.cs              |  9 [32m++++[m[31m----[m
+ src/ViceSharp.Xbox/Views/SettingsPage.xaml         | 20 [32m++++++++[m[31m---------[m
+ src/ViceSharp.Xbox/Views/SettingsPage.xaml.cs      |  6 [32m+++[m[31m--[m
+ .../appsettings.aiunit.json                        |  6 [32m++[m[31m---[m
+ 16 files changed, 145 insertions(+), 55 deletions(-)

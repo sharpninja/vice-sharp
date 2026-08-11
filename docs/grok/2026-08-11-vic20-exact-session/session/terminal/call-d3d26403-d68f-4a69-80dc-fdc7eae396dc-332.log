@@ -1,0 +1,108 @@
+
+docs\plans\PLAN-ROMM-BDPv4.md:287:**Phase A - package wiring + live confirmation**
+docs\plans\PLAN-ROMM-BDPv4.md:293:**Phase B - shared core (packable libraries)**
+docs\plans\PLAN-ROMM-BDPv4.md:316:**Phase C - Xbox head**
+docs\plans\PLAN-ROMM-BDPv4.md:325:**Phase D - Avalonia head**
+docs\plans\PLAN-ROMM-BDPv4.md:333:**Phase E - integration + human validation** (BDP validation tier): the Verification 
+E2E flows exercise
+# PLAN-ROMM-001: Integrate RomM game library into the Xbox and Avalonia clients
+
+Byrd Development Process v4. Approved plan of record. The canonical planning copy lived at
+`C:\Users\kingd\.claude\plans\majestic-dazzling-sparrow.md`; this is the repo-committed mirror.
+
+## Context
+
+ViceSharp today can only attach a single media file the user picks from disk; there is no game-library
+browsing. `f:\github\romm` is the operator's CBM-centric RomM server (a thin fork of upstream
+`rommapp/romm` v5.0.0) plus the pre-built `RomM.Client` 1.0.0 and `RomM.Client.Csdb` 1.0.0 NuGet
+packages (both live on nuget.org) and a `csdb-bridge` sidecar. The goal is to let both ViceSharp
+front-ends browse, search, list, and launch thousands of titles from RomM, plus discover/ingest scene
+content from CSDb:
+
+- **Xbox (UWP) head**: an Xbox-Game-Pass-style 10-foot tile grid; single RomM source, platform bound to
+  the active machine (Settings), with search, A-Z jump, server-backed lists, gamepad launch.
+- **Avalonia desktop head**: a Steam-style library grid with the same features, mouse/keyboard driven.
+
+Outcome: pick a game in either client, it downloads, attaches to the right slot, and boots. Lists persist
+server-side and sync across both clients. CSDb releases can be searched, ingested, and launched as normal
+RomM games.
+
+This plan follows Byrd Development Process v4 (`F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`):
+requirements first (FR/TR/TEST with acceptance criteria), TDD per increment (Fowler Red -> Green ->
+Refactor, Byrd mocks-first then real), and a 100% green full-suite regression gate before exiting any
+phase. Every acceptance criterion below is covered by at least one named test written red-first; UI-only
+ACs that cannot be unit-tested are covered by the integration/dev-PC validation tier and are marked `[V]`.
+
+## Locked decisions (from the operator)
+
+1. **Consume `RomM.Client` 1.0.0 and `RomM.Client.Csdb` 1.0.0 from nuget.org** (already published,
+   verified live). vice-sharp `NuGet.config` stays `<clear/>` + nuget.org-only. No upstream RomM.Client
+   source changes: reach not-yet-typed endpoints (Collections, Search, device-pairing, cover fields,
+   char_index) via RomM.Client's generic `Transport.SendAsync`, deserialized with source-gen DTOs in
+   `ViceSharp.RomM`.
+2. **CSDb in scope now**, via `RomM.Client.Csdb` (`CsdbClient` search + `CsdbRomMWorkflow` ingest) where
+   the RomM roms root is locally writable, with the `csdb-bridge` sidecar (`:8090`) as the
+   remote/sandboxed fallback (Xbox).
+3. **Lists = RomM server-side collections** (`/api/collections`).
+4. **Build shared core first, then both heads together** per feature.
+5. **All new vice-sharp RomM code ships as standalone NuGet packages** (`ViceSharp.Library.ViewModels`,
+   `ViceSharp.RomM`) to nuget.org with the existing ViceSharp package set.
+6. **No source or platform pickers in the library UI.** The only library source is RomM; CSDb is a
+   separate discovery/ingest surface that feeds RomM, not a browse source. The browse platform is always
+   the currently-selected machine from Settings, resolved to its RomM slug
+   (`c64/c128/c-plus-4/vic-20/cpet`) and applied automatically; changing the machine re-scopes the
+   library. No Local/RomM/CSDb tab, no platform chip row: a read-only machine indicator only.
+
+## Architecture (public interfaces documented before implementation, per BDP)
+
+Two new packable vice-sharp libraries mirror the proven seam split (`IRomAcquirer` in
+`src/ViceSharp.Xbox.ViewModels/IRomAcquirer.cs` implemented by
+`src/ViceSharp.Xbox/RomProvisioning/RomFetchRomAcquirer.cs`):
+
+- **`ViceSharp.Library.ViewModels`** (portable, packable): source-agnostic browser VMs + seams + DTOs.
+  References ONLY `ViceSharp.Protocol`. No HTTP/RomM.Client/engine/Host/Avalonia/WinRT. `IsPackable`,
+  GPL-2.0-or-later.
+- **`ViceSharp.RomM`** (portable, packable): the RomM+CSDb adapter. References
+  `ViceSharp.Library.ViewModels`, `ViceSharp.Protocol`, `RomM.Client`, `RomM.Client.Csdb`. Holds the
+  HTTP/IO, the source-gen `RomMJsonContext` for untyped-endpoint DTOs, and the CSDb gateways. `IsPackable`;
+  nuspec deps = the two romm packages + the two vice-sharp packages.
+- **Heads** reference both libraries (project ref in-solution; packages for external reuse) and supply the
+  head impls.
+
+Public seam interfaces (in `ViceSharp.Library.ViewModels`):
+- `IRomMLibraryGateway`: `ResolvePlatformIdAsync(slug)` (internal `/api/platforms` slug->id lookup,
+  cached); `BrowseAsync(LibraryQuery{searchTerm,platformId,limit,offset,order,jumpLetter?})` ->
+  `LibraryPage{items[RomTile],total,offset,charIndex}` (`platformId` always the active machine's; no
+  `source` field); `GetRomAsync(romId)` -> `RomDetail`;
+  `DownloadAsync(romId,fileName,cacheDir,IProgress<double>?)` -> `AcquiredGame`; `TriggerScanAsync`;
+  collections `GetCollectionsAsync(includeSmartVirtual)`, `CreateCollectionAsync(name)`,
+  `RenameCollectionAsync`, `DeleteCollectionAsync`, `AddRomsAsync(id,romIds)`,
+  `RemoveRomsAsync(id,romIds)`.
+- `IGameLauncher`: `LaunchAsync(AcquiredGame, MediaSlot, autostart)` -> `LaunchOutcome`.
+- `ILibraryImageLoader`: `OpenCoverAsync(CoverRef)` -> `Stream`.
+- `ICsdbGateway`: `SearchAsync(q, kinds, limit)` -> `CsdbHit[]`; `IngestAndScanAsync(selections(<=20),
+  force)` -> `CsdbIngestResult`.
+- `IRomMConnectionStore`: `LoadAsync`/`SaveAsync(RomMConnection{baseUrl,authMode,token})`/`ClearAsync`.
+- `ICurrentMachineProvider`: `GetActivePlatformSlug()` -> the active machine's RomM slug
+  (`c64/c128/c-plus-4/vic-20/cpet`) + a `PlatformChanged` event; the browse VM scopes every query to it
+  and reloads when it changes. There is no in-library platform picker; the head binds this to the existing
+  Settings machine selection.
+- `AcquiredGame(LocalPath, FileName, MediaKind)` neutral launch handle; `MediaExtensionMap` (extension ->
+  `MediaSlot` + `IsLaunchable`); `LibraryObservableObject` (captured-`SynchronizationContext`
+  PropertyChanged dispatch, copied from `XboxRomProvisioningViewModel`).
+
+**Package consumption (nuget.org only)**: RomM.Client 1.0.0 + RomM.Client.Csdb 1.0.0 resolve from
+nuget.org; pin in `Directory.Packages.props`; no `NuGet.config` change. **Source-gen JSON**: RomM.Client's
+internal reflection JSON is runtime-safe (both heads JIT/R2R, not native AOT) and, as a prebuilt package,
+never trips vice-sharp's trim analyzer; all NEW vice-sharp JSON uses source-gen contexts (satisfies
+`IsAotCompatible`/`EnableTrimAnalyzer`/`TreatWarningsAsErrors`).
+
+Launch primitives (exist): Xbox `App.AttachBootCartridgeAsync` (`App.xaml.cs:725`) +
+`InProcessSessionFacade.AttachMediaAsync` payload overload (`:226`) + `MediaSelectionChanged` (`:573`) +
+Frame auto-expand (`:344`); Avalonia `ShellViewModel.DropAndStartFileAsync` (`ShellViewModel.cs:150`) +
+`AttachPanelViewModel.AttachAsync`. Per-head UI (net-new, no grid/cover-art exists): Xbox
+`Views/LibraryPage.xaml` `GridView` to `docs/wireframes/xbox.md`; Avalonia `Views/LibraryView.axaml`
+`ItemsRepeater` (pattern `Views/TickHistoryView.axaml` + `ViewModels/TickHistoryViewModel.cs`).
+
+## UI wireframes (SVG)
+

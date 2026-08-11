@@ -1,0 +1,50 @@
+2026-08-06 23:52:04.666 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-06 23:52:04.982 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-06 23:52:04.991 [Information] App: ROM assessment: State=Complete IsBootBlocked=False
+2026-08-06 23:52:04.991 [Information] App: Boot not blocked: building host and session at launch
+2026-08-06 23:52:05.125 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-06 23:52:05.455 [Information] App: BuildHostAndSession: session started id=emulator-12d6cd5fd2cd473a8afde9dc495dbe4d (persisted profile: vic20)
+2026-08-06 23:52:05.480 [Information] App: persisted settings re-applied: success=True profile=vic20
+2026-08-06 23:52:05.489 [Information] App: boot cartridge: none configured
+2026-08-06 23:52:05.532 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=False audio=True
+2026-08-06 23:52:05.642 [Information] App: Boot branch: emulator (VideoPull present) -> starting surface + gamepad
+2026-08-06 23:52:05.644 [Information] App: video aspect applied: standard=Pal pixelAspect=0.93650794 clockHz=1108405 contentRows=0 refreshHz=50.03633983387505 surface=True
+2026-08-06 23:52:05.645 [Information] App: video surface started
+2026-08-06 23:52:05.645 [Information] App: gamepad started (present=True)
+2026-08-06 23:52:05.672 [Information] Video: tick 1: bail: panel not sized (ActualW=0 ActualH=0 scaleX=2.5 scaleY=2.5)
+2026-08-06 23:52:05.691 [Information] Gamepad: poll thread=4
+2026-08-06 23:52:05.692 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-06 23:52:05.742 [Information] Video: tick 2: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x19307760780 context=0x19307786108
+2026-08-06 23:52:05.743 [Information] Video: tick 2: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x19307CFEC00
+2026-08-06 23:52:05.744 [Information] Video: tick 2: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x193075FC5B8
+2026-08-06 23:52:05.744 [Information] Video: tick 2: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-06 23:52:05.748 [Information] Video: tick 2: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-06 23:52:05.749 [Information] Video: tick 2: EnsureSwapChain: created + bound 3840x1980
+2026-08-06 23:52:05.751 [Information] Video: tick 2: paint geometry: target 3840x1980, src 40x40, draw 1854x1980+993+0, PAR 0.93650794
+2026-08-06 23:52:05.768 [Information] Video: tick 2: OK: first frame presented (target 3840x1980, src 40x40, 6400 bytes)
+2026-08-06 23:52:05.809 [Information] App: menu closed: emulation resumed
+2026-08-06 23:52:05.951 [Information] Video: tick 12: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-06 23:52:05.979 [Information] Video: tick 13: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-06 23:52:05.998 [Information] Video: tick 14: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-06 23:52:06.014 [Information] Video: tick 15: bail: pull.Tick()=false (no committed C64 frame yet)
+2026-08-06 23:52:10.739 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-06 23:52:55.779 [Information] App: menu open: emulation paused
+2026-08-06 23:52:55.800 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-06 23:52:55.936 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-06 23:52:58.037 [Information] App: menu closed: emulation resumed
+2026-08-06 23:52:58.047 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-06 23:53:01.018 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-06 23:53:01.927 [Information] App: menu open: emulation paused
+2026-08-06 23:53:01.946 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-06 23:53:04.990 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-06 23:53:05.045 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=2 renderers=2 selComputer='VIC-20' selModel='Commodore VIC-20 PAL' selRenderer='Host direct' volume=100
+2026-08-06 23:53:06.136 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+2026-08-06 23:53:11.207 [Information] Video: perf: FPS 0.0 EMU 0.0 PAL 1.11MHz PAR 0.94 (interval 10.0ms)
+
+FullName
+--------
+C:\Users\kingd\AppData\Local\ViceSharp
+C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+
+
+

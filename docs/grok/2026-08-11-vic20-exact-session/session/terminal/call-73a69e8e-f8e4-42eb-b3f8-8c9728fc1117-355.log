@@ -1,0 +1,97 @@
+## [32mfeat/romm-integration[m
+ [31mM[m src/ViceSharp.Avalonia/Views/LibraryView.cs
+ [31mM[m src/ViceSharp.Xbox/Views/LibraryPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/LibraryPage.xaml.cs
+[31m??[m src/ViceSharp.Xbox/RomM/XboxCoverImageLoader.cs
+7392
+<!--
+  PLAN-ROMM-001 X3 (AC-XUI-02): the RomM game library page (10-foot, Game-Pass style, per
+  docs/wireframes/romm-xbox-library.svg): a count header + search box + read-only machine
+  indicator, a virtualized cover-tile grid, an A-Z jump strip, a selected-game bar (slot +
+  download progress), and the A/Y/X/B action bar. Auto-connects on open (scan + csdb-bridge as
+  the Xbox user); the connection panel only surfaces when auto-connect could not sign in. Inert
+  on the net10.0 fallback (the code-behind is #if HAS_UWP-guarded).
+-->
+<Page
+    x:Class="ViceSharp.Xbox.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:lvm="using:ViceSharp.Library.ViewModels"
+    RequiresPointer="Never"
+    Background="#F00A0A0A">
+    <Grid Style="{StaticResource TvSafeAreaRootStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header: title, search, machine indicator + count. -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="RomM library" FontSize="40" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center" />
+            <TextBox x:Name="SearchBox" Grid.Column="1" Margin="28,0,28,0" MaxWidth="560" HorizontalAlignment="Stretch"
+                     VerticalAlignment="Center" PlaceholderText="Search C64 library..." TextChanged="OnSearchChanged" />
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                <Border Background="#22FFFFFF" CornerRadius="16" Padding="14,6">
+                    <TextBlock x:Name="MachineText" Text="Machine ú C64" Foreground="White" FontSize="18" />
+                </Border>
+                <TextBlock x:Name="CountText" Text="" Foreground="#FFB8B8B8" FontSize="18" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Browse area: the cover-tile grid + the A-Z jump strip. -->
+        <Grid x:Name="BrowseArea" Grid.Row="1" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <GridView x:Name="TilesView" Grid.Column="0" SelectionMode="Single" IsItemClickEnabled="True"
+                      ItemClick="OnTileClick" SelectionChanged="OnSelectionChanged"
+                      ContainerContentChanging="OnTileContainerChanging"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,8,8">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="lvm:RomTile">
+                        <Grid Width="164" Height="170" Margin="6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Background="#1AFFFFFF" CornerRadius="8" BorderBrush="#33FFFFFF" BorderThickness="1">
+                                <Grid>
+                                    <TextBlock Text="{x:Bind Name}" Foreground="#FF8A8A8A" FontSize="14" TextAlignment="Center"
+                                               TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" />
+                                    <Image x:Name="CoverImage" Stretch="UniformToFill" />
+                                </Grid>
+                            </Border>
+                            <StackPanel Grid.Row="1" Margin="2,6,2,0">
+                                <TextBlock Text="{x:Bind Name}" Foreground="White" FontSize="16" TextTrimming="CharacterEllipsis" MaxLines="1" />
+                                <TextBlock Text="{x:Bind FileName}" Foreground="#FF9A9A9A" FontSize="13" TextTrimming="CharacterEllipsis" MaxLines="1" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+
+            <Border Grid.Column="1" Background="#14FFFFFF" CornerRadius="8" Padding="3" Margin="8,0,0,8">
+                <StackPanel x:Name="AzStrip" Orientation="Vertical" />
+            </Border>
+        </Grid>
+
+
+Name
+----
+romm-avalonia-details.svg
+romm-avalonia-library.svg
+romm-avalonia-lists.svg
+romm-csdb-pairing.svg
+romm-xbox-details.svg
+romm-xbox-library.svg
+romm-xbox-lists.svg
+

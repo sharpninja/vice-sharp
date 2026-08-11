@@ -1,0 +1,20 @@
+xvic vice_machine_step_cycle call=11 machine=0000026863f80520
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=0000026863f80520
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=0000026863f80520
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=0000026863f80520
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=0000026863f80520
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=0000026863f80520
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+Sound:  Opened device `dx', speed 48000Hz, fragment size 2.67ms, buffer size 32.00ms
+Sound:  reSID: MOS6581, filter on, sampling rate 48000Hz - resampling, pass to 21600Hz
+VSync:  Sync reset
+Unit 8:  RESET.
+Warning -  Sync is 1008.182 ms behind
+VSync:  Sync reset
+indices True 400x234
+bgra True 400x234

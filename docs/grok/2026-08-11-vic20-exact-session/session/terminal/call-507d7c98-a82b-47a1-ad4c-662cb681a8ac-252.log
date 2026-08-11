@@ -1,0 +1,20 @@
+## [32mfeat/xbox-uwp-app[m...[31morigin/feat/xbox-uwp-app[m
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+  develop                         [m aaa53e3 test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+  feat/drive-family-and-device-art[m b6b7753 docs(requirements): regenerate wiki requirement exports (drive-family FR/TR/TEST + BUG-DRV1540-001)
++ [36mfeat/romm-integration           [m 978b5a6 ([36mF:/GitHub/vice-sharp-romm[m) fix(xbox): OnLaunched composed the shell twice, leaking an unarmed gamepad pump
+* [32mfeat/xbox-uwp-app               [m 7442c1d [[34morigin/feat/xbox-uwp-app[m] release: bump minor to 1.2.0 (RomM, T64, Avalonia UX)
++ [36mfix/romless-vic-content         [m 7f57f92 ([36mF:/GitHub/vice-sharp-romless[m) [[34mazure/fix/romless-vic-content[m] test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+  main                            [m aaa53e3 [[34morigin/main[m] test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+[33maaa53e3[m test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+[33m2d92adb[m chore(repo): make main the mainline; retire master from CI + scoop publishing
+[33medcea99[m merge: integrate github pipeline scoop-bucket commits into master
+[33maaa53e3[m test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+[33m2d92adb[m chore(repo): make main the mainline; retire master from CI + scoop publishing
+[33medcea99[m merge: integrate github pipeline scoop-bucket commits into master
+[33m7442c1d[m release: bump minor to 1.2.0 (RomM, T64, Avalonia UX)
+[33mcbb72be[m feat(xbox): Game-Pass style RomM Library page [PLAN-ROMM-001 AC-XUI-02]
+[33m0c83627[m fix(xbox): restore RomM Library/Lists/CSDb on home menu [PLAN-ROMM-001]

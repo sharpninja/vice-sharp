@@ -1,0 +1,14 @@
+[33m46b0857[m fix(xbox): RomM tile templates use {x:Bind}, not {Binding} - AOT-safe [PLAN-ROMM-001]
+[33mb07d29d[m fix(romm): use the discovered RomM URL, not the bridge's internal one [PLAN-ROMM-001 AC-CONN-07]
+[33m715045c[m feat(heads): Scan LAN = zero-touch per-user bridge login [PLAN-ROMM-001 AC-CONN-07]
+[33me784cff[m feat(heads): Scan LAN buttons wire RomM discovery into both heads [PLAN-ROMM-001 AC-CONN-07]
+[33mb6b45b0[m feat(xbox): RomM GameDetails page - metadata, files, add-to-list [PLAN-ROMM-001 X3 AC-XUI-05]
+=== HEAD LibraryPage.xaml size ===
+2805
+=== romm LibraryPage.xaml size ===
+
+Lines Words Characters Property
+----- ----- ---------- --------
+   45             2757 
+=== diff stat ===
+

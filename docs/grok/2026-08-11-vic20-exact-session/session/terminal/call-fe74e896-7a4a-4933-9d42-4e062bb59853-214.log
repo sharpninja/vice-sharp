@@ -1,0 +1,29 @@
+
+native\vice\vice\src\mainviccpu.c:165:#define LOAD(addr) \
+native\vice\vice\src\mainviccpu.c:170:#define LOAD_DUMMY(addr) \
+native\vice\vice\src\mainviccpu.c:176:#define LOAD_CHECK_BA_LOW(addr) \
+native\vice\vice\src\mainviccpu.c:182:#define LOAD_CHECK_BA_LOW_DUMMY(addr) \
+native\vice\vice\src\mainviccpu.c:197:#define LOAD_ZERO(addr) \
+native\vice\vice\src\mainviccpu.c:202:#define LOAD_ZERO_DUMMY(addr) \
+native\vice\vice\src\mainviccpu.c:225:#define LOAD(addr) \
+native\vice\vice\src\mainviccpu.c:230:#define LOAD_DUMMY(addr) \
+native\vice\vice\src\mainviccpu.c:236:#define LOAD_CHECK_BA_LOW(addr) \
+native\vice\vice\src\mainviccpu.c:242:#define LOAD_CHECK_BA_LOW_DUMMY(addr) \
+native\vice\vice\src\mainviccpu.c:257:#define LOAD_ZERO(addr) \
+native\vice\vice\src\mainviccpu.c:262:#define LOAD_ZERO_DUMMY(addr) \
+native\vice\vice\src\6510dtvcore.c:343:        addr = LOAD(handler_vector);                                            
+                                      \
+native\vice\vice\src\6510dtvcore.c:345:        addr |= (LOAD(handler_vector + 1) << 8);                                
+                                      \
+native\vice\vice\src\6510dtvcore.c:380:                addr = LOAD(0xfffa);                                           \
+native\vice\vice\src\6510dtvcore.c:382:                addr |= (LOAD(0xfffb) << 8);                                   \
+native\vice\vice\src\6510dtvcore.c:420:                addr = LOAD(0xfffc);                                           \
+native\vice\vice\src\6510dtvcore.c:421:                addr |= (LOAD(0xfffd) << 8);                                   \
+native\vice\vice\src\6510dtvcore.c:471:    dest = (uint8_t)(LOAD(p2)); \
+native\vice\vice\src\6510dtvcore.c:505:    dest = LOAD((p2) + reg_x); \
+native\vice\vice\src\6510dtvcore.c:515:    dest = LOAD((p2) + reg_y); \
+native\vice\vice\src\6510dtvcore.c:520:    dest = LOAD((p2) + reg_x); \
+native\vice\vice\src\6510dtvcore.c:525:    dest = LOAD((p2) + reg_y); \
+native\vice\vice\src\6510dtvcore.c:629:    dest = LOAD(addr);  \
+native\vice\vice\src\6510dtvcore.c:677:    dest = LOAD(addr);  \
+

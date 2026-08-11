@@ -1,0 +1,5 @@
+Get-ChildItem: 
+Line |
+  46 |  Get-ChildItem $SCRATCH -Filter "vic20-*.log","vic20-exact*" | Select- .
+     |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'Filter'. Specified method is not supported.

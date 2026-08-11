@@ -1,0 +1,25 @@
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\Cpu\Mos6502.cs(346,18): error CS0414: The field 'Mos6502._fetchAfterRtsDelay' is assigned but its value is never used [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+
+Build FAILED.
+
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\Cpu\Mos6502.cs(346,18): error CS0414: The field 'Mos6502._fetchAfterRtsDelay' is assigned but its value is never used [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:03.04
+=== EveryCycle_CpuRegs_Match_FocusedWindow ===
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=0
+=== EveryCycle_CpuRegs_Match_TwoSecondPal ===
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 12 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=0
+=== EveryCycle_CpuRegs_Match_TenSecondNtsc ===
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [4 s]
+   DIV first=521027 matchedCycles=521026 budget=10227270
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 4 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+

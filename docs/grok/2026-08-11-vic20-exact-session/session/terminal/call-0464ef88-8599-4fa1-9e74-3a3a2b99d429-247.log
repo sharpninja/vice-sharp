@@ -1,0 +1,78 @@
+M  README.md
+M  docs/FlashCart-Builder.md
+M  docs/Iteration-Roadmap.md
+M  docs/Project/wiki/azure/.mcp-requirements-manifest.json
+M  docs/Project/wiki/azure/.order
+R  docs/Project/wiki/azure/Store-and-Xbox/.order -> docs/Project/wiki/azure/Archival-Cancelled-Store-and-Xbox/.order
+M  docs/Project/wiki/azure/Flash-Cart-Builder.md
+M  docs/Project/wiki/azure/Home.md
+M  docs/Project/wiki/azure/Iteration-Roadmap.md
+M  docs/Project/wiki/azure/Project-Overview.md
+M  docs/Project/wiki/azure/Store-Next-Steps-Guide.md
+M  docs/Project/wiki/azure/User-Guide.md
+M  docs/Project/wiki/azure/VIC20-vs-VICE-Audit.md
+M  docs/Project/wiki/azure/Xbox-Store-Publishing.md
+M  docs/Project/wiki/github/.mcp-requirements-manifest.json
+M  docs/Project/wiki/github/Flash-Cart-Builder.md
+M  docs/Project/wiki/github/Home.md
+M  docs/Project/wiki/github/Iteration-Roadmap.md
+M  docs/Project/wiki/github/Project-Overview.md
+M  docs/Project/wiki/github/Store-Next-Steps-Guide.md
+M  docs/Project/wiki/github/User-Guide.md
+M  docs/Project/wiki/github/VIC20-vs-VICE-Audit.md
+M  docs/Project/wiki/github/Xbox-Store-Publishing.md
+M  docs/Project/wiki/github/_Sidebar.md
+M  docs/README.md
+M  docs/USER-GUIDE.md
+M  docs/requirements/requirements-wiki-documents.zip
+M  docs/wiki.yaml
+?? docs/_vs-ready-2026-08-08-crop.png
+?? docs/_vs-ready-2026-08-08-latest.png
+?? docs/_vs-ready-2026-08-08-prev-crop.png
+?? docs/_vs-ready-2026-08-08-prev.png
+?? docs/adc-focused-2026-08-06.log
+?? docs/adc2-focused-2026-08-06.log
+?? docs/asl-focused-2026-08-06.log
+?? docs/bccsta-focused-2026-08-06.log
+?? docs/beq-focused-2026-08-06.log
+?? docs/beqpla-focused-2026-08-06.log
+?? docs/bit-focused-2026-08-06.log
+?? docs/bit2-focused-2026-08-06.log
+ docs/Project/wiki/azure/Project-Overview.md        |  17 ++++++++++-------
+ docs/Project/wiki/azure/Store-Next-Steps-Guide.md  |   5 ++++-
+ docs/Project/wiki/azure/User-Guide.md              |   2 +-
+ docs/Project/wiki/azure/VIC20-vs-VICE-Audit.md     |   3 ++-
+ docs/Project/wiki/azure/Xbox-Store-Publishing.md   |   6 ++++++
+ .../wiki/github/.mcp-requirements-manifest.json    |   2 +-
+ docs/Project/wiki/github/Flash-Cart-Builder.md     |  16 ++++++----------
+ docs/Project/wiki/github/Home.md                   |  14 +++++++-------
+ docs/Project/wiki/github/Iteration-Roadmap.md      |  15 ++++++++-------
+ docs/Project/wiki/github/Project-Overview.md       |  17 ++++++++++-------
+ docs/Project/wiki/github/Store-Next-Steps-Guide.md |   5 ++++-
+ docs/Project/wiki/github/User-Guide.md             |   2 +-
+ docs/Project/wiki/github/VIC20-vs-VICE-Audit.md    |   3 ++-
+ docs/Project/wiki/github/Xbox-Store-Publishing.md  |   6 ++++++
+ docs/Project/wiki/github/_Sidebar.md               |  14 +++++++-------
+ docs/README.md                                     |  10 +++++++---
+ docs/USER-GUIDE.md                                 |   2 +-
+ docs/requirements/requirements-wiki-documents.zip  | Bin 505114 -> 506978 bytes
+ docs/wiki.yaml                                     |  16 ++++++++--------
+ 28 files changed, 136 insertions(+), 112 deletions(-)
+[main d20d340] docs: refresh for cancelled Xbox/Store and FE3/pixel status
+ 28 files changed, 136 insertions(+), 112 deletions(-)
+ rename docs/Project/wiki/azure/{Store-and-Xbox => Archival-Cancelled-Store-and-Xbox}/.order (100%)
+To https://github.com/sharpninja/vice-sharp.git
+   16bfbf1..d20d340  HEAD -> main
+SHA=d20d340ffaed6ae0c643538081cd6533c7114a76
+turnRequestId: req-20260811T150237Z-prompt-843d
+queryTitle: <user_query>
+openedAt: 2026-08-11T15:02:38Z
+status: completed
+sessionId: GrokCode-20260811T142814Z-plugin-session
+codeEdits: 5
+lastBuildStatus: unknown
+auditActions: 5
+auditDialog: 0
+auditDecisions: 1
+auditFiles: 5
+auditCommits: 1

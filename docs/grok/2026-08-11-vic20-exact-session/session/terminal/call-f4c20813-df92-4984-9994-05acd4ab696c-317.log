@@ -1,0 +1,11 @@
+## [32mmain[m...[31morigin/main[m
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+fatal: no tag exactly matches 'b2ba4da14828c6a90112ec3f6a5ebff98b5a7667'
+[33mb2ba4da[m ci: point ADO pipelines at GitHub; restore Octopus release steps
+NUGET_API_KEY set (len=46)
+GITHUB_TOKEN set (len=40)
+CHOCO_API_KEY set (len=36)
+GITHUB_TOKEN in process env

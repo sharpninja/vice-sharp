@@ -1,0 +1,54 @@
+Updating VICE-Sharp-CI id=15 rev=3
+{
+  "_links": {
+    "badge": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/status/15"
+    },
+    "editor": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_build/designer?id=15&_a=edit-build-definition"
+    },
+    "self": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/Definitions/15?revision=4"
+    },
+    "web": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_build/definition?definitionId=15"
+    }
+  },
+  "authoredBy": {
+    "_links": {
+      "avatar": {
+        "href": "https://dev.azure.com/McpServer/_apis/GraphProfile/MemberAvatars/aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl"
+      }
+{
+  "name": "VICE-Sharp-CI",
+  "name2": "sharpninja/vice-sharp",
+  "type": "GitHub",
+  "url": "https://github.com/sharpninja/vice-sharp.git"
+}
+Updating VICE-Sharp-Release id=16 rev=3
+{
+  "_links": {
+    "badge": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/status/16"
+    },
+    "editor": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_build/designer?id=16&_a=edit-build-definition"
+    },
+    "self": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_apis/build/Definitions/16?revision=4"
+    },
+    "web": {
+      "href": "https://dev.azure.com/McpServer/3ca5a0e9-1589-454e-b762-343056e0a17c/_build/definition?definitionId=16"
+    }
+  },
+  "authoredBy": {
+    "_links": {
+      "avatar": {
+        "href": "https://dev.azure.com/McpServer/_apis/GraphProfile/MemberAvatars/aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl"
+      }
+{
+  "name": "VICE-Sharp-Release",
+  "name2": "sharpninja/vice-sharp",
+  "type": "GitHub",
+  "url": "https://github.com/sharpninja/vice-sharp.git"
+}

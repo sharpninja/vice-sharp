@@ -1,0 +1,6 @@
+COPIEDCopy-Item: 
+
+Line |
+   8 |  Copy-Item (Join-Path $SCRATCH "vic20-umbrella-gate.log") "docs\receip .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log' because it does not exist.

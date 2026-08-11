@@ -1,0 +1,100 @@
+50:#include "resources.h"
+86: * Cartridge RAM
+88: * Mapping in RAM mode:
+89: *      RAM                    VIC20
+97: * Mapping in Super RAM mode:
+98: *      RAM                    VIC20
+107:#define CART_RAM_SIZE 0x80000
+130:static int finalexpansion_writeback;
+146:#define MODE_ROM_RAM     0x60  /* RAM/ROM Modus       (011zzzzz) [Mod_ROMRAM]*/
+147:#define MODE_RAM1        0x80  /* RAM 1 Modus         (100zzzzz) [Mod_RAM1]  */
+148:#define MODE_SUPER_RAM   0xa0  /* Super RAM Modus     (101zzzzz) [Mod_SRAM]  */
+149:#define MODE_RAM2        0xc0  /* RAM 2 Modus         (110zzzzz) [Mod_RAM2]  */
+151:/* in MODE_RAM1, MODE_RAM2, MODE_ROM_RAM */
+179:    IO_DETACH_NO_RESOURCE,                /* does not use a resource for detach */
+195:static const export_resource_t export_res = {
+197:    VIC_CART_RAM123 | VIC_CART_BLK1 | VIC_CART_BLK2 | VIC_CART_BLK3 | VIC_CART_BLK5,
+228:    uint8_t mode;
+233:    mode = register_a & REGA_MODE_MASK;
+242:    switch (mode) {
+243:        case MODE_ROM_RAM:
+244:        case MODE_RAM1:
+245:        case MODE_RAM2:
+247:        case MODE_SUPER_RAM:
+259:    uint8_t mode;
+263:    mode = register_a & REGA_MODE_MASK;
+272:    switch (mode) {
+273:        case MODE_ROM_RAM:
+274:        case MODE_RAM1:
+275:        case MODE_RAM2:
+281:        case MODE_SUPER_RAM:
+291:    uint8_t mode;
+296:    mode = register_a & REGA_MODE_MASK;
+299:    switch (mode) {
+302:        case MODE_SUPER_RAM:
+305:        case MODE_ROM_RAM:
+312:        case MODE_RAM1:
+315:        case MODE_RAM2:
+331:    switch (mode) {
+343:        case MODE_ROM_RAM:
+350:        case MODE_RAM1:
+351:        case MODE_RAM2:
+352:        case MODE_SUPER_RAM:
+364:    uint8_t mode;
+368:    mode = register_a & REGA_MODE_MASK;
+371:    switch (mode) {
+373:        case MODE_SUPER_RAM:
+384:        case MODE_ROM_RAM:
+385:        case MODE_RAM1:
+392:        case MODE_RAM2:
+404:    switch (mode) {
+408:        case MODE_ROM_RAM:
+410:        case MODE_RAM1:
+411:        case MODE_RAM2:
+413:        case MODE_SUPER_RAM:
+600:static RAMINITPARAM ramparam = {
+616:        ram_init_with_pattern(cart_ram, CART_RAM_SIZE, &ramparam);
+639:void finalexpansion_config_setup(uint8_t *rawcart)
+697:        cart_ram = lib_malloc(CART_RAM_SIZE);
+729:    mem_cart_blocks = VIC_CART_RAM123 |
+754:        cart_ram = lib_malloc(CART_RAM_SIZE);
+native/vice/vice/src/vic20\cart\finalexpansion.h:2: * finalexpansion.c -- VIC20 Final Expansion v3.1 emulation.
+native/vice/vice/src/vic20\cart\finalexpansion.h:34:uint8_t finalexpansion_ram123_read(uint16_t addr);
+native/vice/vice/src/vic20\cart\finalexpansion.h:35:void finalexpansion_ram123_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20\cart\finalexpansion.h:36:uint8_t finalexpansion_blk1_read(uint16_t addr);
+native/vice/vice/src/vic20\cart\finalexpansion.h:37:void finalexpansion_blk1_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20\cart\finalexpansion.h:38:uint8_t finalexpansion_blk2_read(uint16_t addr);
+native/vice/vice/src/vic20\cart\finalexpansion.h:39:void finalexpansion_blk2_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20\cart\finalexpansion.h:40:uint8_t finalexpansion_blk3_read(uint16_t addr);
+native/vice/vice/src/vic20\cart\finalexpansion.h:41:void finalexpansion_blk3_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20\cart\finalexpansion.h:42:uint8_t finalexpansion_blk5_read(uint16_t addr);
+native/vice/vice/src/vic20\cart\finalexpansion.h:43:void finalexpansion_blk5_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20\cart\finalexpansion.h:45:void finalexpansion_init(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:46:void finalexpansion_reset(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:47:void finalexpansion_powerup(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:49:void finalexpansion_config_setup(uint8_t *rawcart);
+native/vice/vice/src/vic20\cart\finalexpansion.h:50:int finalexpansion_bin_attach(const char *filename);
+native/vice/vice/src/vic20\cart\finalexpansion.h:51:/* int finalexpansion_bin_attach(const char *filename, uint8_t *rawcart); */
+native/vice/vice/src/vic20\cart\finalexpansion.h:52:int finalexpansion_crt_attach(FILE *fd, uint8_t *rawcart, const char *filename);
+native/vice/vice/src/vic20\cart\finalexpansion.h:53:void finalexpansion_detach(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:55:int finalexpansion_bin_save(const char *filename);
+native/vice/vice/src/vic20\cart\finalexpansion.h:56:int finalexpansion_crt_save(const char *filename);
+native/vice/vice/src/vic20\cart\finalexpansion.h:57:int finalexpansion_flush_image(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:59:int finalexpansion_resources_init(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:60:void finalexpansion_resources_shutdown(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:61:int finalexpansion_cmdline_options_init(void);
+native/vice/vice/src/vic20\cart\finalexpansion.h:65:int finalexpansion_snapshot_write_module(struct snapshot_s *s);
+native/vice/vice/src/vic20\cart\finalexpansion.h:66:int finalexpansion_snapshot_read_module(struct snapshot_s *s);
+native/vice/vice/src/vic20\cart\finalexpansion.c:2: * finalexpansion.c -- VIC20 Final Expansion v3.2 emulation.
+native/vice/vice/src/vic20\cart\finalexpansion.c:44:#include "finalexpansion.h"
+native/vice/vice/src/vic20\cart\finalexpansion.c:130:static int finalexpansion_writeback;
+native/vice/vice/src/vic20\cart\finalexpansion.c:133:static char *finalexpansion_filename = NULL;
+native/vice/vice/src/vic20\cart\finalexpansion.c:134:static int finalexpansion_filetype = 0;
+native/vice/vice/src/vic20\cart\finalexpansion.c:171:static uint8_t finalexpansion_io3_read(uint16_t addr);
+native/vice/vice/src/vic20\cart\finalexpansion.c:172:static uint8_t finalexpansion_io3_peek(uint16_t addr);
+native/vice/vice/src/vic20\cart\finalexpansion.c:173:static void finalexpansion_io3_store(uint16_t addr, uint8_t value);
+native/vice/vice/src/vic20\cart\finalexpansion.c:174:static int finalexpansion_mon_dump(void);
+native/vice/vice/src/vic20\cart\finalexpansion.c:176:static io_source_t finalexpansion_device = {
+native/vice/vice/src/vic20\cart\finalexpansion.c:182:    finalexpansion_io3_store,             /* store function */
+native/vice/vice/src/vic20\cart\finalexpansion.c:184:    finalexpansion_io3_read,              /* read function */
+native/vice/vice/src/vic20\cart\finalexpansion.c:185:    finalexpansion_io3_peek,              /* peek function */

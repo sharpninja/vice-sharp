@@ -1,0 +1,50 @@
+  Error Message:
+   DIV first=5005
+c=4990 nPC=$FDB8 mPC=$FDB8 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$60 bound=True delayFetch=False mis=False
+c=4991 nPC=$FDB8 mPC=$FDB8 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=2 op=$A5 bound=False delayFetch=False mis=False
+c=4992 nPC=$FDB8 mPC=$FDB8 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$A5 bound=False delayFetch=False mis=False
+c=4993 nPC=$FDBA mPC=$FDBA nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=0 op=$A5 bound=True delayFetch=False mis=False
+c=4994 nPC=$FDBA mPC=$FDBA nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=1 op=$F0 bound=False delayFetch=False mis=False
+c=4995 nPC=$FDBC mPC=$FDBC nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=0 op=$F0 bound=False delayFetch=False mis=False
+c=4996 nPC=$FDDE mPC=$FDDE nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=2 op=$90 bound=False delayFetch=False mis=False
+c=4997 nPC=$FDDE mPC=$FDDE nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=1 op=$90 bound=False delayFetch=False mis=False
+c=4998 nPC=$FDE0 mPC=$FDE0 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=0 op=$90 bound=False delayFetch=False mis=False
+c=4999 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=4 op=$E6 bound=False delayFetch=False mis=False
+c=5000 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=3 op=$E6 bound=False delayFetch=False mis=False
+c=5001 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=2 op=$E6 bound=False delayFetch=False mis=False
+c=5002 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$E6 bound=False delayFetch=False mis=False
+c=5003 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$E6 bound=True delayFetch=False mis=False
+c=5004 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$D0 bound=False delayFetch=False mis=False
+c=5005 nPC=$FDB1 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$D0 bound=False delayFetch=False mis=True
+c=5006 nPC=$FDB3 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=5 op=$20 bound=False delayFetch=False mis=True
+c=5007 nPC=$FDB5 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=4 op=$20 bound=False delayFetch=False mis=False
+c=5008 nPC=$FDB5 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=4 op=$20 bound=False delayFetch=False mis=False
+c=5009 nPC=$FDB5 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FC nP=$24 mP=$24 dbgCyc=3 op=$20 bound=False delayFetch=False mis=True
+c=5010 nPC=$FDB7 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FC mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$20 bound=False delayFetch=False mis=True
+c=5011 nPC=$FDB7 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$20 bound=False delayFetch=False mis=False
+c=5012 nPC=$FDB7 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$20 bound=False delayFetch=False mis=True
+c=5013 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=4 op=$B1 bound=False delayFetch=False mis=False
+c=5014 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=3 op=$B1 bound=False delayFetch=False mis=False
+c=5015 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$B1 bound=False delayFetch=False mis=False
+c=5016 nPC=$FE91 mPC=$FE91 nA=$00 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$B1 bound=False delayFetch=False mis=True
+c=5017 nPC=$FE91 mPC=$FE93 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$B1 bound=True delayFetch=False mis=True
+c=5018 nPC=$FE93 mPC=$FE93 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$AA bound=False delayFetch=False mis=False
+c=5019 nPC=$FE93 mPC=$FE94 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$AA bound=True delayFetch=False mis=True
+c=5020 nPC=$FE94 mPC=$FE94 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$A9 bound=False delayFetch=False mis=False
+c=5021 nPC=$FE94 mPC=$FE96 nA=$04 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$A9 bound=True delayFetch=False mis=True
+c=5022 nPC=$FE96 mPC=$FE96 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=5 op=$91 bound=False delayFetch=False mis=False
+c=5023 nPC=$FE96 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=4 op=$91 bound=False delayFetch=False mis=True
+c=5024 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=3 op=$91 bound=False delayFetch=False mis=False
+c=5025 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$91 bound=False delayFetch=False mis=False
+c=5026 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$91 bound=False delayFetch=False mis=False
+c=5027 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$91 bound=True delayFetch=False mis=False
+c=5028 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=4 op=$D1 bound=False delayFetch=False mis=False
+c=5029 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=3 op=$D1 bound=False delayFetch=False mis=False
+c=5030 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$D1 bound=False delayFetch=False mis=False
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge_WithWindowDump() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 63
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 892 ms - ViceSharp.TestHarness.dll (net10.0)

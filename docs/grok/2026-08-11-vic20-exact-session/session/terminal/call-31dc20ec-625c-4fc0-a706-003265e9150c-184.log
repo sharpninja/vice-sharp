@@ -1,0 +1,13 @@
+src\ViceSharp.Protocol\SettingsOptionCatalog.cs:22:public static class SettingsOptionCatalog
+src\ViceSharp.Avalonia\ViewModels\AttachPanelViewModel.cs:1435:internal sealed record SettingsSnapshot(
+src\ViceSharp.Protocol\ProtocolContracts.cs:358:public static class SettingsService
+src\ViceSharp.Protocol\ProtocolContracts.cs:386:public sealed record SettingsProfileDto(
+src\ViceSharp.Protocol\ProtocolContracts.cs:430:public sealed record SettingsResourceValidationDto(
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:12:/// EasyFlash (CRT type 32), Super Snapshot V5 (CRT type 4), RR-Net
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:84:    // ----------- EasyFlash -----------
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:88:    /// Use case: EasyFlash (64K..1024K image, 8..128 banks of 8K) selects
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:98:    public void EasyFlash_BankSwitching(byte writeValue, byte expectedSentinel)
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:103:        port.AttachCartridge(image, CartridgeMappingMode.EasyFlash);
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:111:    /// Use case: EasyFlash requires at least 64K (8 banks of 8K) up to a
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:121:    public void EasyFlash_InvalidSize_Throws(int size)
+tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs:124:        Action act = () => port.AttachCartridge(new byte[size], CartridgeMappingMode.EasyFlash);

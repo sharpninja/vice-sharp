@@ -1,0 +1,12 @@
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Nothing to be done for 'all'.
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c: In function 'vice_shim_set_current_thread_description':
+F:/GitHub/vice-sharp/native/vice-shim-vic20.c:260:30: warning: cast between incompatible function types from 'FARPROC' {aka 'long long int (*)(void)'} to 'HRESULT (*)(void *, const WCHAR *)' {aka 'long int (*)(void *, const short unsigned int *)'} [-Wcast-function-type]
+  260 |     set_thread_description = (vice_shim_set_thread_description_fn)GetProcAddress(kernel32, "SetThreadDescription");
+      |                              ^
+Built: /f/GitHub/vice-sharp/native/vice_xvic.dll
+-rwxr-xr-x 1 kingd kingd 10909818 Aug  5 14:23 /f/GitHub/vice-sharp/native/vice_xvic.dll
+EXIT=0

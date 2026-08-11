@@ -1,0 +1,51 @@
+
+> native\vice\vice\src\6510dtvcore.c:269:#define CHECK_PROFILE_RTS()      \
+  native\vice\vice\src\6510dtvcore.c:270:    do {                         \
+  native\vice\vice\src\6510dtvcore.c:271:            profile_rtx(reg_sp); \
+  native\vice\vice\src\6510dtvcore.c:272:    } while (0)
+> native\vice\vice\src\6510dtvcore.c:282:#define CHECK_PROFILE_RTS()
+  native\vice\vice\src\6510dtvcore.c:283:#define CHECK_PROFILE_RTI()
+  native\vice\vice\src\6510dtvcore.c:284:#endif
+  native\vice\vice\src\6510dtvcore.c:285:
+> native\vice\vice\src\6510dtvcore.c:793:line, ie somehow bit4 and bit0 are affected in the cycle when a DMA starts.
+  native\vice\vice\src\6510dtvcore.c:794:
+  native\vice\vice\src\6510dtvcore.c:795:The commonly used value for CONST in various documents is 0xee, which is 
+however
+  native\vice\vice\src\6510dtvcore.c:796:not to be taken for granted (as it is unstable). see here:
+> native\vice\vice\src\6510dtvcore.c:1206:            STACK_PEEK();                         \
+  native\vice\vice\src\6510dtvcore.c:1207:            CLK_INC();                            \
+  native\vice\vice\src\6510dtvcore.c:1208:        }                                         \
+  native\vice\vice\src\6510dtvcore.c:1209:        INC_PC(2);                                \
+> native\vice\vice\src\6510dtvcore.c:1268:line, ie somehow bit4 and bit0 are affected in the cycle when a DMA starts.
+  native\vice\vice\src\6510dtvcore.c:1269:
+  native\vice\vice\src\6510dtvcore.c:1270:The commonly used value for CONST in various documents is 0xee, which is 
+however
+  native\vice\vice\src\6510dtvcore.c:1271:not to be taken for granted (as it is unstable).
+> native\vice\vice\src\6510dtvcore.c:1371:            STACK_PEEK();         \
+  native\vice\vice\src\6510dtvcore.c:1372:            CLK_INC();            \
+  native\vice\vice\src\6510dtvcore.c:1373:        }                         \
+  native\vice\vice\src\6510dtvcore.c:1374:        reg_a_write = PULL();     \
+> native\vice\vice\src\6510dtvcore.c:1384:            STACK_PEEK();                                     \
+  native\vice\vice\src\6510dtvcore.c:1385:            CLK_INC();                                        \
+  native\vice\vice\src\6510dtvcore.c:1386:        }                                                     \
+  native\vice\vice\src\6510dtvcore.c:1387:        s = PULL();                                           \
+> native\vice\vice\src\6510dtvcore.c:1482:            STACK_PEEK();               \
+  native\vice\vice\src\6510dtvcore.c:1483:            CLK_INC();                  \
+  native\vice\vice\src\6510dtvcore.c:1484:        }                               \
+  native\vice\vice\src\6510dtvcore.c:1485:        tmp = (uint16_t)PULL();         \
+> native\vice\vice\src\6510dtvcore.c:1495:#define RTS()                 \
+  native\vice\vice\src\6510dtvcore.c:1496:    do {                      \
+  native\vice\vice\src\6510dtvcore.c:1497:        uint16_t tmp;         \
+  native\vice\vice\src\6510dtvcore.c:1498:                              \
+> native\vice\vice\src\6510dtvcore.c:1499:        CHECK_PROFILE_RTS();  \
+  native\vice\vice\src\6510dtvcore.c:1500:        if (!SKIP_CYCLE) {    \
+> native\vice\vice\src\6510dtvcore.c:1501:            STACK_PEEK();     \
+  native\vice\vice\src\6510dtvcore.c:1502:            CLK_INC();        \
+  native\vice\vice\src\6510dtvcore.c:1503:        }                     \
+  native\vice\vice\src\6510dtvcore.c:1504:        tmp = PULL();         \
+> native\vice\vice\src\6510dtvcore.c:2230:            case 0x60:          /* RTS */
+> native\vice\vice\src\6510dtvcore.c:2231:                RTS();
+  native\vice\vice\src\6510dtvcore.c:2232:                break;
+  native\vice\vice\src\6510dtvcore.c:2233:
+  native\vice\vice\src\6510dtvcore.c:2234:            case 0x61:          /* ADC ($nn,X) */
+

@@ -1,0 +1,55 @@
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.90]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge_WithWindowDump [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge_WithWindowDump [78 ms]
+  Error Message:
+   DIV first=3
+c=1 nPC=$FD22 mPC=$FD22 nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$00 mS=$00 nP=$26 mP=$26 dbgCyc=0 op=$00 bound=False delayFetch=False mis=False
+c=2 nPC=$FD22 mPC=$FD22 nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$00 mS=$00 nP=$26 mP=$26 dbgCyc=1 op=$A2 bound=False delayFetch=False mis=False
+c=3 nPC=$FD24 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$00 mS=$00 nP=$A4 mP=$A4 dbgCyc=0 op=$A2 bound=True delayFetch=False mis=True
+c=4 nPC=$FD24 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$00 mS=$00 nP=$A4 mP=$A4 dbgCyc=6 op=$FF bound=False delayFetch=False mis=True
+c=5 nPC=$FD25 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$00 mS=$00 nP=$A4 mP=$A4 dbgCyc=5 op=$FF bound=False delayFetch=False mis=True
+c=6 nPC=$FD25 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$00 mS=$00 nP=$A4 mP=$A4 dbgCyc=4 op=$FF bound=False delayFetch=False mis=True
+c=7 nPC=$FD26 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FF mS=$00 nP=$A4 mP=$A4 dbgCyc=3 op=$FF bound=False delayFetch=False mis=True
+c=8 nPC=$FD26 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FF mS=$00 nP=$A4 mP=$A4 dbgCyc=2 op=$FF bound=False delayFetch=False mis=True
+c=9 nPC=$FD27 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FF mS=$00 nP=$A4 mP=$A4 dbgCyc=1 op=$FF bound=False delayFetch=False mis=True
+c=10 nPC=$FD27 mPC=$FD23 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FF mS=$00 nP=$A4 mP=$A4 dbgCyc=0 op=$FF bound=True delayFetch=False mis=True
+c=11 nPC=$FD27 mPC=$FD24 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FF mS=$00 nP=$A4 mP=$A4 dbgCyc=1 op=$78 bound=False delayFetch=False mis=True
+c=12 nPC=$FD29 mPC=$FD24 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FE mS=$00 nP=$A4 mP=$A4 dbgCyc=0 op=$78 bound=True delayFetch=False mis=True
+c=13 nPC=$FD29 mPC=$FD25 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FD mS=$00 nP=$A4 mP=$A4 dbgCyc=1 op=$9A bound=False delayFetch=False mis=True
+c=14 nPC=$FD29 mPC=$FD25 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A2 nP=$A4 mP=$A4 dbgCyc=0 op=$9A bound=True delayFetch=False mis=True
+c=15 nPC=$FD3F mPC=$FD26 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A2 nP=$A4 mP=$A4 dbgCyc=1 op=$D8 bound=False delayFetch=False mis=True
+c=16 nPC=$FD3F mPC=$FD26 nA=$00 mA=$00 nX=$FF mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A2 nP=$A4 mP=$A4 dbgCyc=0 op=$D8 bound=True delayFetch=False mis=True
+c=17 nPC=$FD41 mPC=$FD27 nA=$00 mA=$00 nX=$05 mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A2 nP=$24 mP=$A4 dbgCyc=5 op=$20 bound=False delayFetch=False mis=True
+c=18 nPC=$FD41 mPC=$FD27 nA=$00 mA=$00 nX=$05 mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A2 nP=$24 mP=$A4 dbgCyc=4 op=$20 bound=False delayFetch=False mis=True
+c=19 nPC=$FD41 mPC=$FD29 nA=$00 mA=$00 nX=$05 mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A1 nP=$24 mP=$A4 dbgCyc=3 op=$20 bound=False delayFetch=False mis=True
+c=20 nPC=$FD41 mPC=$FD29 nA=$CD mA=$00 nX=$05 mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A0 nP=$24 mP=$A4 dbgCyc=2 op=$20 bound=False delayFetch=False mis=True
+c=21 nPC=$FD44 mPC=$FD29 nA=$CD mA=$00 nX=$05 mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A0 nP=$A4 mP=$A4 dbgCyc=1 op=$20 bound=False delayFetch=False mis=True
+c=22 nPC=$FD44 mPC=$FD3F nA=$CD mA=$00 nX=$05 mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A0 nP=$A4 mP=$A4 dbgCyc=0 op=$20 bound=False delayFetch=False mis=True
+c=23 nPC=$FD44 mPC=$FD3F nA=$CD mA=$00 nX=$05 mX=$A2 nY=$00 mY=$00 nS=$FD mS=$A0 nP=$A4 mP=$A4 dbgCyc=1 op=$A2 bound=False delayFetch=False mis=True
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge_WithWindowDump() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 60
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 99 ms - ViceSharp.TestHarness.dll (net10.0)

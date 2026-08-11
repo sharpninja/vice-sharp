@@ -1,0 +1,53 @@
+
+FullName
+--------
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\LockstepTestRunner.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\LockstepValidationTests.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\LockstepValidator.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\LockstepValidatorKernalCloseTests.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\RasterBarLockstepTests.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\X64ScVariantLockstepTests.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\C1541\LockstepDriveValidationTests.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs
+tests/ViceSharp.TestHarness\LockstepTestRunner.cs:100:            for (var i = 0; i < actualArray.Length; i++)
+tests/ViceSharp.TestHarness\LockstepValidator.cs:178:            _native.Step();
+tests/ViceSharp.TestHarness\LockstepValidator.cs:246:            _native.Step();
+tests/ViceSharp.TestHarness\LockstepValidator.cs:297:        for (var address = 0; address < 0x10000; address++)
+tests/ViceSharp.TestHarness\LockstepValidator.cs:377:            for (var i = 0; i < cycles; i++)
+tests/ViceSharp.TestHarness\LockstepValidator.cs:381:                native.Step();
+tests/ViceSharp.TestHarness\LockstepValidator.cs:416:        for (var i = 0; i < cycles; i++)
+tests/ViceSharp.TestHarness\LockstepValidator.cs:619:            _native.Step();
+tests/ViceSharp.TestHarness\LockstepValidator.cs:722:                    _native.Step();
+tests/ViceSharp.TestHarness\LockstepValidator.cs:846:            _native.Step();
+tests/ViceSharp.TestHarness\LockstepValidator.cs:1080:        for (var i = 0; i < chars.Length; i++)
+tests/ViceSharp.TestHarness\LockstepValidator.cs:1089:        for (var i = 0; i < chars.Length; i++)
+tests/ViceSharp.TestHarness\LockstepValidator.cs:1279:            for (var i = 0; i < screenCodes.Length; i++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:79:        for (var a = 0; a < ram.Length; a++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:122:        for (var i = 0; i < compareCount; i++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:180:        for (var a = 0; a < ram.Length; a++) ram[a] = native.PeekRam((ushort)a);
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:199:        for (var step = 0; step < 4000; step++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:206:            for (var guard = 0; guard < 16; guard++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:208:                native.Step();
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:281:        for (var a = 0; a < ram.Length; a++) ram[a] = native.PeekRam((ushort)a);
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:304:        for (var c = 0; c < Cycles; c++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:325:            native.Step();
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:347:            native.Step();
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:393:        for (var i = 0; i < bars.Count; i++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:416:        for (var i = 0; i < n; i++)
+tests/ViceSharp.TestHarness\RasterBarLockstepTests.cs:432:            for (var i = 0; i < 12 && dir is not null; i++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:470:            for (var frame = 1; frame <= BasicReadyMaxFrames; frame++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:527:            for (var frame = 1; frame <= BasicReadyMaxFrames; frame++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:826:        for (var cycle = 0; cycle < profile.CyclesPerLine; cycle++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:829:            native.Step();
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:885:            for (var cycle = 0; cycle < profile.CyclesPerLine; cycle++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:923:            for (var cycle = 0; cycle < profile.CyclesPerLine; cycle++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1084:            for (var cycle = 0; cycle < profile.CyclesPerLine; cycle++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1262:        for (var offset = 0; offset < managed.Length; offset++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1306:        for (var offset = 0; offset < buffer.Length; offset++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1315:        for (var offset = 0; offset < buffer.Length; offset++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1330:        for (var i = 0; i < screenCodes.Length; i++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1453:        for (var offset = 0; offset < 256; offset++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1540:        for (var cycle = 0L; cycle < cycles; cycle++)
+tests/ViceSharp.TestHarness\X64ScVariantLockstepTests.cs:1543:            native.Step();
+

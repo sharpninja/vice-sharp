@@ -1,0 +1,112 @@
+native/vice/vice/src\cartridge.h:481:#define CARTRIDGE_VIC20_FINAL_EXPANSION 5   /* finalexpansion.c */
+native/vice/vice/src\arch\gtk3\uisettings.c:96:#include "settings_finalexpansion.h"
+native/vice/vice/src\arch\gtk3\uisettings.c:719:      "final-expansion",
+native/vice/vice/src\arch\gtk3\uisettings.c:720:      settings_finalexpansion_widget_create, NULL },
+native/vice/vice/src\arch\sdl\menu_vic20cart.c:57:    { CARTRIDGE_VIC20_FINAL_EXPANSION, "FinalExpansionWriteBack", NULL },
+native/vice/vice/src\arch\sdl\menu_vic20cart.c:436:UI_MENU_DEFINE_TOGGLE(FinalExpansionWriteBack)
+native/vice/vice/src\arch\sdl\menu_vic20cart.c:500:static ui_menu_entry_t finalexpansion_cart_menu[] = {
+native/vice/vice/src\arch\sdl\menu_vic20cart.c:504:        .callback = toggle_FinalExpansionWriteBack_callback
+native/vice/vice/src\arch\sdl\menu_vic20cart.c:878:    finalexpansion_cart_menu[OFFS_FLUSH_FE].status = cartridge_can_flush_image(CARTRIDGE_VIC20_FINAL_EXPANSION) ? MENU_STATUS_ACTIVE : MENU_STATUS_INACTIVE;
+native/vice/vice/src\arch\sdl\menu_vic20cart.c:891:    finalexpansion_cart_menu[OFFS_SAVE_FE].status = cartridge_can_save_image(CARTRIDGE_VIC20_FINAL_EXPANSION) ? MENU_STATUS_ACTIVE : MENU_STATUS_INACTIVE;
+native/vice/vice/src\arch\sdl\menu_vic20cart.c:987:        .data     = (ui_callback_data_t)finalexpansion_cart_menu
+native/vice/vice/src\arch\gtk3\widgets\settings_finalexpansion.c:1:/** \file   settings_finalexpansion.c
+native/vice/vice/src\arch\gtk3\widgets\settings_finalexpansion.c:8: * $VICERES FinalExpansionWriteBack     xvic
+native/vice/vice/src\arch\gtk3\widgets\settings_finalexpansion.c:38:#include "settings_finalexpansion.h"
+native/vice/vice/src\arch\gtk3\widgets\settings_finalexpansion.c:56:                                   "FinalExpansionWriteBack",
+native/vice/vice/src\arch\gtk3\widgets\settings_finalexpansion.c:67:GtkWidget *settings_finalexpansion_widget_create(GtkWidget *parent)
+native/vice/vice/src\arch\gtk3\widgets\settings_finalexpansion.h:1:/** \file   settings_finalexpansion.h
+native/vice/vice/src\arch\gtk3\widgets\settings_finalexpansion.h:33:GtkWidget *settings_finalexpansion_widget_create(GtkWidget *parent);
+native/vice/vice/src\pet\petmem.c:2165:        if (addr >= 0xefe0 && addr <= 0xefe3) {
+native/vice/vice/src\pet\petmem.c:2213:        mon_ioreg_add_list(&mem_ioreg_list, "6702", 0xefe0, 0xefe3, mem_dump_io, NULL, IO_MIRROR_NONE);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:58:#include "finalexpansion.h"
+native/vice/vice/src\vic20\cart\vic20cartmem.c:97:            vic20_cpu_last_data = finalexpansion_ram123_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:129:            return finalexpansion_ram123_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:157:            finalexpansion_ram123_store(addr, value);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:195:            vic20_cpu_last_data = finalexpansion_blk1_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:216:            return finalexpansion_blk1_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:239:            finalexpansion_blk1_store(addr, value);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:264:            vic20_cpu_last_data = finalexpansion_blk2_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:285:            return finalexpansion_blk2_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:308:            finalexpansion_blk2_store(addr, value);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:327:            vic20_cpu_last_data = finalexpansion_blk3_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:357:            return finalexpansion_blk3_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:380:            finalexpansion_blk3_store(addr, value);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:416:            vic20_cpu_last_data = finalexpansion_blk5_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:460:            return finalexpansion_blk5_read(addr);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:494:            finalexpansion_blk5_store(addr, value);
+native/vice/vice/src\vic20\cart\vic20cartmem.c:505:    finalexpansion_init();
+native/vice/vice/src\vic20\cart\vic20cartmem.c:560:            finalexpansion_reset();
+native/vice/vice/src\vic20\cart\vic20cartmem.c:594:            finalexpansion_powerup();
+native/vice/vice/src\vic20\cart\vic20cartmem.c:626:            finalexpansion_config_setup(rawcart);
+docs\requirements\backfill\Classic-VICE-Edge-Case-Inventory.md:2064:| `vic20/cart/finalexpansion.c:2` | Machine Model Constant | `* finalexpansion.c -- VIC20 Final Expansion v3.2 emulation.` |
+docs\requirements\backfill\Classic-VICE-Edge-Case-Inventory.md:2065:| `vic20/cart/finalexpansion.c:89` | Machine Model Constant | `*      RAM                    VIC20` |
+docs\requirements\backfill\Classic-VICE-Edge-Case-Inventory.md:2066:| `vic20/cart/finalexpansion.c:98` | Machine Model Constant | `*      RAM                    VIC20` |
+docs\requirements\backfill\Classic-VICE-Edge-Case-Inventory.md:2067:| `vic20/cart/finalexpansion.c:114` | Machine Model Constant | `*      ROM                    VIC20` |
+docs\requirements\backfill\Classic-VICE-Edge-Case-Inventory.md:2068:| `vic20/cart/finalexpansion.c:599` | Commented Compatibility Warning | `/* FIXME: this still needs to be tweaked to match the hardware */` |
+docs\requirements\backfill\Classic-VICE-Edge-Case-Inventory.md:2069:| `vic20/cart/finalexpansion.h:2` | Machine Model Constant | `* finalexpansion.c -- VIC20 Final Expansion v3.1 emulation.` |
+
+Name
+----
+.deps
+behrbonz.c
+behrbonz.h
+behrbonz.o
+debugcart.c
+debugcart.h
+debugcart.o
+finalexpansion.c
+finalexpansion.h
+finalexpansion.o
+ioramcart.c
+ioramcart.h
+ioramcart.o
+libmascuerade.a
+libvic20cart.a
+Makefile
+Makefile.am
+Makefile.in
+mascuerade-stubs.c
+mascuerade-stubs.h
+mascuerade-stubs.o
+megacart.c
+megacart.h
+megacart.o
+mikroassembler.c
+mikroassembler.h
+mikroassembler.o
+minimon.c
+minimon.h
+minimon.o
+rabbit.c
+rabbit.h
+rabbit.o
+superexpander.c
+superexpander.h
+superexpander.o
+ultimem.c
+ultimem.h
+ultimem.o
+vic-fp.c
+vic-fp.h
+vic-fp.o
+vic20-generic.c
+vic20-generic.h
+vic20-generic.o
+vic20-ieee488.c
+vic20-ieee488.h
+vic20-ieee488.o
+vic20-midi.c
+vic20-midi.h
+vic20-midi.o
+vic20-sidcart.c
+vic20-sidcart.o
+vic20cart.c
+vic20cart.h
+vic20cart.o
+vic20cartmem.c
+vic20cartmem.h
+vic20cartmem.o
+writenow.c
+writenow.h
+writenow.o
+

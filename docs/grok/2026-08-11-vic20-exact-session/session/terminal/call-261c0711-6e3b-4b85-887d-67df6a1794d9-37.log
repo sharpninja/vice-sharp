@@ -1,0 +1,126 @@
+status: verified
+sessionId: GrokCode-20260810T130431Z-plugin-session
+agent: GrokCode
+started: 2026-08-10T13:04:31Z
+lastUpdated: 2026-08-10T13:04:31Z
+markerFilePath: F:\GitHub\vice-sharp\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-09T02:03:48.7967449Z
+agentSessionId: 019fd0df-383d-7fc0-9f0a-69785afd78ed
+agentSessionTranscriptFile: ""
+agentExecutablePath: C:\Users\kingd\.grok\bin\grok.exe
+agentExecutableVersion: grok 1.0.0 (3cd0d0cbce) [stable]
+---TURN---
+turnRequestId: req-20260810T130257Z-prompt-72b6
+queryTitle: <user_query>
+openedAt: 2026-08-10T13:02:57Z
+status: in_progress
+sessionId: GrokCode-20260810T130242Z-plugin-session
+codeEdits: 0
+lastBuildStatus: unknown
+auditActions: 0
+auditDialog: 0
+auditDecisions: 0
+auditFiles: 0
+auditCommits: 0
+queryText: |-
+  <user_query>
+  /refresh-docs and /mcpserver:wrap-up with detailed handoff
+  </user_query>
+  <skill_information>
+  <skills_referenced>
+  <skill name="refresh-docs" path="C:\Users\kingd\.grok\skills\refresh-docs\SKILL.md"/>
+  <skill name="mcpserver:wrap-up" path="C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\./skills/wrap-up\SKILL.md"/>
+  </skills_referenced>
+  <skill name="refresh-docs" args="and">
+  # Refresh Docs
+
+  Reconcile `docs/` with the current codebase, remove documentation that no longer applies, make `docs/wiki.yaml` list every project doc that should be published to the wiki, and export the MCP-backed requirement documents.
+
+  ## Preconditions
+
+  - Work from the repository root.
+  - Read `AGENTS-README-FIRST.yaml` and follow its marker, plugin, session, and trust rules. Verify the marker signature and the `/health` nonce before any MCP mutation.
+  - Use the required MCP Server plugin for your agent (Claude/Codex/Grok) for requirements and export (`workflow.requirements.*`). Do not hand-author exported requirement docs or substitute raw REST.
+  - Use the operator's approved shell for all shell invocation (e.g. PowerShell.Mcp on Windows). Build YAML/JSON from native objects and serialize; never handwrite fragile payloads.
+  - Read facts from the code, not from memory. This skill refreshes and exports only; it does not commit or push (leave that to a wrap-up flow or an explicit request).
+
+  ## Step 1 - Refresh project documentation
+
+  1. Inventory the docs surface: `docs/user/*`, `docs/architecture/*`, `docs/requirements/*.md`, `docs/testing/*`, `docs/*.md`, and `README.md` (adapt to the repo's actual layout).
+  2. Establish what changed since the docs were last touched: `git log --oneline` for the changed code areas, the current project/solution structure, public commands, and settings. Prefer the shipped behavior over any doc's prior claims.
+  3. Update each doc that drifted: renamed or removed components, changed UI/behavior, new or removed features, install commands and version pins, and cross-references. Match the existing doc voice; no em-dashes.
+  4. Keep the project `README.md` current as a first-class refresh target, not an afterthought: the project description and overview, the feature list, install and quickstart/usage commands, current version references, badges, and links into `docs/` must all match the shipped state. Reconcile it against the code and the refreshed docs on every run.
+  5. If the repo ships a documentation screenshot/capture script (for example `scripts/Capture-ClientToolScreenshots.ps1`) and the UI changed, regenerate the embedded screenshots into the docs image folder from the current build, and verify a raw capture reflects the current UI before keeping it.
+
+  ## Step 2 - Prune out-of-date docs
+
+  1. Find docs describing removed or superseded features: grep the docs for names of deleted components, APIs, or flows and confirm against the code that they no longer exist.
+  2. Delete the obsolete `.md` files, and remove their references from index pages (for example `docs/user/index.md`) and from `docs/wiki.yaml`.
+  3. Do not delete a doc that still has accurate content. When a doc is partly stale, update it rather than delete. When unsure whether to remove a doc, flag it in the report instead of deleting.
+
+  ## Step 3 - Update docs/wiki.yaml
+
+  `docs/wiki.yaml` uses schema `mcp-wiki-export/v1` with `home.document`, a `documents` list, and a `navigation` tree. Each `documents` entry is `{ id, title, source, target, platforms }`.
+
+  1. Keep the server-generated requirement docs (their `source` is `generated:<key>`, for example `generated:home|functional|technical|testing|mapping|matrix`). Do not point these at files.
+  2. Add or refresh a `documents` entry for every CURRENT project doc that should appear in the wiki (the user guides under `docs/user/` and the architecture docs under `docs/architecture/`, plus `docs/Development-Process.md` / `README.md` if desired):
+     - `source`: the repo-relative path to the markdown file, for example `docs/user/client-tool.md`.
+     - `target`: the wiki page filename in PascalCase-with-hyphens, for example `Client-Tool.md`.
+     - `title`: the human page title.
+     - `platforms`: `[github, azure]` unless a doc is platform-specific.
+     Use stable `id` slugs (for example `user-client-tool`, `arch-overview`).
+  3. Remove `documents` and `navigation` entries for any doc pruned in Step 2 or no longer present on disk.
+  4. Add each new document to `navigation` (as a child of the appropriate parent, or top-level). Keep the generated requirement docs grouped as they are.
+  5. If the repo has a wiki sync script (for example `scripts/Sync-GitHubWikiDocs.ps1`) with its own project-doc list, cross-check it against `docs/wiki.yaml` so the manifest and the sync script agree on which project docs publish and their page names.
+  6. Confirm the file still parses as YAML after editing.
+
+  ## Step 4 - Export requirements
+
+  1. Export via the MCP requirements workflow: `workflow.requirements.generateDocument` with `format: wiki` and `docType: all`.
+  2. Write the returned `contentBase64` ZIP exactly to `docs/requirements/requirements-wiki-documents.zip`. The MCP database is the source of truth; do not hand-author the exported docs.
+  3. If the server also regenerates in-place markdown under `docs/Project/wiki/`, review the diff. Keep only the intended requirement changes. Do NOT accept destructive deletions of project-doc wiki pages that are listed in `docs/wiki.yaml`; that means the manifest and the export disagree, so fix `docs/wiki.yaml` in Step 3 rather than accept the deletions.
+  4. If the server rejects `format: wiki`, record it as a blocker and stop; do not fall back to another format unless the user asks.
+
+  ## Validation and report
+
+  - Run `git diff --check`; confirm `docs/wiki.yaml` parses; if code samples in docs changed, sanity-build the relevant snippet.
+  - Report only verified facts: `README.md` updated, docs updated, docs pruned (with reasons), `docs/wiki.yaml` entries added/removed, screenshots regenerated, the requirements export artifact path, and any docs you flagged instead of deleting or any blockers.
+  - Do not commit or push; summarize the changes and let the operator run a wrap-up or commit explicitly.
+
+
+  **ARGUMENTS:** and
+  </skill>
+  <skill name="mcpserver:wrap-up" args="with detailed handoff">
+  Finish and synchronize MCP-backed work: reconcile requirements, export wiki documents, run validation, commit/push, and close out the session-log turn.
+
+  ## Trust and transport
+
+  Trust marker details only after the plugin's local status/bootstrap check confirms marker trust and workspace health (including signature and nonce health). Use the plugin's supported wrapper surface for MCP mutations (for example `lib/repl-invoke.ps1`, or the plugin's session, todo, and requirements tools); do not use raw REST for normal MCP mutations.
+
+  ## Method-name disambiguation
+
+  `workflow.*` names in this skill (`workflow.sessionlog.*`, `workflow.todo.*`, `workflow.requirements.*`) are plugin workflow/REPL method names, not literal native MCP tool names. Native `/mcp-transport` tools use names such as `sessionlog_*`, `todo_*`, and `requirements_*` (for example `sessionlog_submit`, `todo_list`, `requirements_generate`); hosted-agent adapters may expose `mcp_*` aliases. Do not declare the plugin unavailable solely because generic MCP discovery does not list literal `workflow.*` names.
+
+  If your agent exposes only a `pwsh` (or shell) tool, invoke the plugin shim directly instead of declaring it unavailable:
+
+  ```
+  pwsh.exe -NoProfile -NonInteractive -File "<plugin-root>\lib\repl-invoke.ps1" -Method <workflow.method> -ParamsYaml <yaml>
+  ```
+
+  ## Wrap-up steps
+
+  1. Reconcile requirements with `workflow.requirements.*`, including requirement reconciliation for new FR/TR/TEST evidence.
+  2. Export wiki requirements with `workflow.requirements.generateDocument` using `format: wiki` and `docType: all`.
+  3. Run validation commands and keep zero-failure zero-skip evidence.
+  4. If commit/push is required, use the `commit-sync` pause and acknowledgement contract first.
+  5. Perform session-log reconciliation with `workflow.sessionlog.appendDialog` and `workflow.sessionlog.appendActions`.
+  6. Finish with `workflow.sessionlog.completeTurn`; use `workflow.sessionlog.failTurn` when validation, export, or commit/push cannot be completed (validation failure, export failure, or blocked commit/push).
+
+
+  **ARGUMENTS:** with detailed handoff
+  </skill>
+  </skill_information>
+markerFilePath: F:\GitHub\vice-sharp\AGENTS-README-FIRST.yaml
+markerLastWriteUtc: 2026-08-09T02:03:48.7967449Z
+---BOOTSTRAP---
+repl-invoke.ps1: A parameter cannot be found that matches parameter name 'WorkspacePath'.

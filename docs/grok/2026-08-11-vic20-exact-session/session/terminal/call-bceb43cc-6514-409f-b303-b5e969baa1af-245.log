@@ -1,0 +1,92 @@
+## [32mfeat/xbox-uwp-app[m...[31morigin/feat/xbox-uwp-app[m
+ [31mM[m azure-pipelines.ci.yml
+ [31mM[m azure-pipelines.release.yml
+ [31mM[m src/ViceSharp.Avalonia/MainWindow.axaml
+ [31mM[m src/ViceSharp.Avalonia/MainWindow.axaml.cs
+ [31mM[m src/ViceSharp.Avalonia/VideoSurface.cs
+ [31mM[m src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs
+ [31mM[m src/ViceSharp.Avalonia/ViewModels/AvaloniaGameLauncher.cs
+ [31mM[m src/ViceSharp.Avalonia/ViewModels/RomMLibraryViewModel.cs
+ [31mM[m src/ViceSharp.Avalonia/ViewModels/ShellViewModel.cs
+ [31mM[m src/ViceSharp.Avalonia/Views/AttachPanelView.cs
+ [31mM[m src/ViceSharp.Avalonia/Views/LibraryView.cs
+ [31mM[m src/ViceSharp.Avalonia/Views/ListsView.cs
+ [31mM[m src/ViceSharp.Chips/IEC/D64FileSystem.cs
+ [31mM[m src/ViceSharp.Chips/IEC/D64Image.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Services/MediaServiceHost.cs
+ [31mM[m src/ViceSharp.Library.ViewModels/LibraryBrowseViewModel.cs
+ [31mM[m src/ViceSharp.Library.ViewModels/MediaExtensionMap.cs
+ [31mM[m src/ViceSharp.Library.ViewModels/RomTile.cs
+ [31mM[m src/ViceSharp.RomM/RomMCollectionsGateway.cs
+ [31mM[m src/ViceSharp.RomM/RomMJsonContext.cs
+ [31mM[m src/ViceSharp.RomM/RomMLibraryGateway.cs
+ [31mM[m src/ViceSharp.Xbox/App.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Assets/SplashScreen.png
+ [31mM[m src/ViceSharp.Xbox/Assets/Square150x150Logo.png
+ [31mM[m src/ViceSharp.Xbox/Assets/Square44x44Logo.png
+ [31mM[m src/ViceSharp.Xbox/Assets/StoreLogo.png
+ [31mM[m src/ViceSharp.Xbox/Assets/Wide310x150Logo.png
+ [31mM[m src/ViceSharp.Xbox/RomM/GameDetailsRequest.cs
+ [31mM[m src/ViceSharp.Xbox/RomM/XboxGameLauncher.cs
+ [31mM[m src/ViceSharp.Xbox/Views/EmulatorView.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/GameDetailsPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/GameDetailsPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/LibraryPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/LibraryPage.xaml.cs
+ [31mM[m src/ViceSharp.Xbox/Views/ListsPage.xaml
+ [31mM[m src/ViceSharp.Xbox/Views/ListsPage.xaml.cs
+ [31mM[m tests/ViceSharp.Library.Tests/Adapter/FakeRomMHandler.cs
+ [31mM[m tests/ViceSharp.Library.Tests/Adapter/RomMGatewayBrowseTests.cs
+ [31mM[m tests/ViceSharp.Library.Tests/Adapter/RomMGatewayCollectionsTests.cs
+ [31mM[m tests/ViceSharp.Library.Tests/Browse/LibraryBrowseViewModelTests.cs
+ [31mM[m tests/ViceSharp.Library.Tests/Media/MediaExtensionMapTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/Branding/AppIconTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/HostShells/AvaloniaVideoAspectTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/IEC/D64FileSystemTests.cs
+ [31mM[m tests/ViceSharp.TestHarness/ShellViewModelTests.cs
+ [31mM[m tools/generate-icons.py
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+[31m??[m src/ViceSharp.Chips/IEC/D64SingleFileBuilder.cs
+[31m??[m src/ViceSharp.Chips/Tape/T64Image.cs
+[31m??[m src/ViceSharp.Library.ViewModels/GameGroup.cs
+[31m??[m src/ViceSharp.Library.ViewModels/GameGrouper.cs
+[31m??[m src/ViceSharp.Library.ViewModels/IRecentsStore.cs
+[31m??[m src/ViceSharp.Library.ViewModels/IRomMServerProbe.cs
+[31m??[m src/ViceSharp.Library.ViewModels/RecentGame.cs
+[31m??[m src/ViceSharp.Library.ViewModels/RomMLocateResult.cs
+[31m??[m src/ViceSharp.Library.ViewModels/RomMServerLocator.cs
+[31m??[m src/ViceSharp.RomM/FileRecentsStore.cs
+[31m??[m src/ViceSharp.RomM/RomMHeartbeatProbe.cs
+[31m??[m tests/ViceSharp.Library.Tests/Browse/GameGrouperTests.cs
+[31m??[m tests/ViceSharp.Library.Tests/Connection/FileRecentsStoreTests.cs
+[31m??[m tests/ViceSharp.Library.Tests/Connection/RomMServerLocatorTests.cs
+[31m??[m tests/ViceSharp.TestHarness/HostShells/AvaloniaFullscreenHotkeyTests.cs
+[31m??[m tests/ViceSharp.TestHarness/IEC/T64ImageTests.cs
+[33mcbb72be[m feat(xbox): Game-Pass style RomM Library page [PLAN-ROMM-001 AC-XUI-02]
+[33m0c83627[m fix(xbox): restore RomM Library/Lists/CSDb on home menu [PLAN-ROMM-001]
+[33m3ba3068[m feat(xbox): ESC closes virtual keyboard when open [FEAT-XKBD-ESC-001]
+[33mf67eeb9[m fix: restore Octopus CI steps; drop Avalonia Architectures/Chips refs
+[33m6b875b6[m fix(build): bump Cryptography.Xml 10.0.10; nullable RomProvisioning ViewModel
+v1.1.0
+v1.0.5
+v1.0.4
+v1.0.3
+v1.0.2
+v1.0.1
+v1.0.0
+v0.9.0
+native-win-x64-20260609
+
+FullName
+--------
+F:\GitHub\vice-sharp\GitVersion.yml
+# GitVersion configuration. The MSI/winget ProductVersion is derived in
+# build/Build.cs as {Major}.{Minor}.{CommitsSinceVersionSource}, e.g. 0.1.356.
+# next-version pins the major.minor base so the build field auto-increments with
+# history. Windows Installer compares major.minor.build for upgrades; the WiX
+# MajorUpgrade (AllowSameVersionUpgrades) makes every redeploy reinstall.
+next-version: 1.1.0
+

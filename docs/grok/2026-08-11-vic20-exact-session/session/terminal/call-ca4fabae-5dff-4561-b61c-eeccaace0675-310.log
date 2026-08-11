@@ -1,0 +1,8 @@
+
+[xUnit.net 00:00:03.73]       hit E5xx at c=503802 nPC=E518 mPC=EA99 n9005=00 m9005=F0 divergeAt=5005
+  Failed ViceSharp.TestHarness.Vic20.Vic20VicProbe.Probe [1 s]
+   hit E5xx at c=503802 nPC=E518 mPC=EA99 n9005=00 m9005=F0 divergeAt=5005
+Test Run Failed.
+     Failed: 1
+EXIT=1
+

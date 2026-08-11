@@ -1,0 +1,26 @@
+Found VICE [VICE-Team.VICE.GTK3] Version 3.10
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://github.com/VICE-Team/svn-mirror/releases/download/3.10.0/GTK3VICE-3.10-win64.zip
+Successfully verified installer hash
+Extracting archive...
+Successfully extracted archive
+Starting package install...
+Path environment variable modified; restart your shell to use the new value.
+Command line alias added: "c1541"
+Command line alias added: "cartconv"
+Command line alias added: "gspawn-win64-helper-console"
+Command line alias added: "gspawn-win64-helper"
+Command line alias added: "petcat"
+Command line alias added: "vsid"
+Command line alias added: "x128"
+Command line alias added: "x64dtv"
+Command line alias added: "x64sc"
+Command line alias added: "xcbm2"
+Command line alias added: "xcbm5x0"
+Command line alias added: "xpet"
+Command line alias added: "xplus4"
+Command line alias added: "xscpu64"
+Command line alias added: "xvic"
+Successfully installed
+EXIT=0

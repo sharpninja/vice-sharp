@@ -1,0 +1,8 @@
+ [31mM[m src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs
+ [31mM[m src/ViceSharp.Host.InProcess/Services/MediaServiceHost.cs
+ [31mM[m src/ViceSharp.Library.ViewModels/MediaExtensionMap.cs
+ [31mM[m src/ViceSharp.Xbox/RomM/XboxGameLauncher.cs
+ [31mM[m tests/ViceSharp.Library.Tests/Media/MediaExtensionMapTests.cs
+[31m??[m src/ViceSharp.Chips/IEC/D64SingleFileBuilder.cs
+[31m??[m src/ViceSharp.Chips/Tape/T64Image.cs
+[31m??[m tests/ViceSharp.TestHarness/IEC/T64ImageTests.cs

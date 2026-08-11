@@ -1,0 +1,93 @@
+
+> src\ViceSharp.Chips\Cpu\Mos6502.cs:370:            _deferImpliedRegisterCompletionAfterBranch = fetchingBranchTarget 
+&& IsImpliedRegisterOrFlagOpcode(_opcode);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:371:            _deferJsrPushAfterBranch = fetchingBranchTarget && _opcode == 
+0x20;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:372:            var fetchingIndexedLoadControlTarget = fetchingBranchTarget;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:373:            _deferAbsoluteXLoadCompletionAfterBranch = 
+fetchingIndexedLoadControlTarget && IsAbsoluteXLoadOpcode(_opcode);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:374:            _deferAbsoluteYLoadCompletionAfterBranch = 
+fetchingIndexedLoadControlTarget && IsAbsoluteYLoadOpcode(_opcode);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:375:            _deferIndirectYLoadCompletionAfterBranch = (fetchingBranchTarget 
+&& IsIndirectYLoadOpcode(_opcode))
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:376:                || deferIndirectYLoadAfterBranchRmw;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:377:            _deferZeroPageRmwPcAdvanceAfterBranch = fetchingBranchTarget && 
+IsZeroPageIncrementDecrementOpcode(_opcode);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:378:            _deferIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && 
+IsIndexedAbsoluteStoreOpcode(_opcode);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:379:            _deferZeroPageIndexedStorePcAdvanceAfterBranch = 
+fetchingBranchTarget && IsZeroPageIndexedStoreOpcode(_opcode);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:380:            // After a taken branch that now spends its full 3 (or 4 
+page-cross)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:381:            // native cycles above, the following instruction must NOT get the
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:382:            // old lag-compensation +1 (that was only needed when taken 
+branches
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:383:            // resolved in 2 ticks). Dedicated after-branch defer paths for
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:384:            // specific opcode classes remain; this generic budget bump is 
+retired.
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:385:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:386:            _pendingDeferredImmediateLoad = false;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:387:            _indexedLoadPageCrossDelayConsumed = false;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:388:            _stagedReturnAddress = 0;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:389:            _effectiveAddress = 0;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:390:            _fetched = 0;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:391:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:392:        }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:393:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:394:        _cycle--;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:395:
+> src\ViceSharp.Chips\Cpu\Mos6502.cs:962:    private static bool IsImpliedRegisterOrFlagOpcode(byte opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:963:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:964:        return opcode is
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:965:            0x18 or // CLC
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:966:            0x38 or // SEC
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:967:            0x58 or // CLI
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:968:            0x78 or // SEI
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:969:            0x88 or // DEY
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:970:            0x8A or // TXA
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:971:            0x98 or // TYA
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:972:            0x9A or // TXS
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:973:            0xA8 or // TAY
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:974:            0xAA or // TAX
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:975:            0xB8 or // CLV
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:976:            0xBA or // TSX
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:977:            0xC8 or // INY
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:978:            0xCA or // DEX
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:979:            0xD8 or // CLD
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:980:            0xE8 or // INX
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:981:            0xF8;   // SED
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:982:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:983:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:984:    private static bool IsAbsoluteXLoadOpcode(byte opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:985:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:986:        return opcode is 0xBD;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:987:    }
+> src\ViceSharp.Chips\Cpu\Mos6502.cs:1050:    private static bool IsAfterBranchBudgetExtendedOpcode(byte opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1051:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1052:        return IsStagedCompareOpcode(opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1053:            || IsStagedAbsoluteRmwOpcode(opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1054:            || IsBranchOpcode(opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1055:            || opcode is 0x4C or 0x6C or 0xBC or 0xBE or 0xD1
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1056:            || opcode is 0x29 or 0x09 or 0x49 or 0x69 or 0xE9 or 0xC9 or 
+0xE0 or 0xC0
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1057:            || opcode is 0x8D or 0x8C or 0x85 or 0x86 or 0x84
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1058:            || opcode is 0xA5 or 0xA6 or 0xA4 or 0xB5 or 0xB6 or 0xB4 or 
+0xAD or 0xAE or 0xAC
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1059:            || opcode is 0x48 or 0x08;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1060:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1061:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1062:    private void AdvanceVisiblePc(int instructionLength)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1063:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1064:        _pc = (ushort)(_instructionPC + instructionLength);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1065:        _visiblePC = _pc;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1066:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1067:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1068:    private void IncrementStagedMemory(ushort address, int instructionLength)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1069:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1070:        var value = (byte)(Read(address) + 1);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1071:        _bus.Write(address, value);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1072:        UpdateNZ(value);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1073:        FinishStagedMemoryWrite(instructionLength);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1074:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1075:
+

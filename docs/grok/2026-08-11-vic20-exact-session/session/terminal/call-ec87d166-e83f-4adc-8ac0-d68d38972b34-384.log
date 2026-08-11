@@ -1,0 +1,13 @@
+=== compose up -d at C:\deploy\RomM-clean ===
+Pwd=C:\deploy\RomM-clean Compose=True Env=True
+--- up ---
+ Container romm-db Running 
+ Container romm Running 
+ Container csdb-bridge Running 
+ Container romm-db Waiting 
+ Container romm-db Healthy 
+--- ps ---
+NAME          IMAGE                    COMMAND                  SERVICE       CREATED       STATUS                PORTS
+csdb-bridge   romm-csdb-bridge:local   "dotnet CsdbBridge.dƒ?Ý"   csdb-bridge   2 weeks ago   Up 6 days             0.0.0.0:8090->8090/tcp, [::]:8090->8090/tcp
+romm          romm-gb64:local          "/docker-entrypoint.ƒ?Ý"   romm          2 weeks ago   Up 6 days             0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+romm-db       mariadb:lts              "docker-entrypoint.sƒ?Ý"   romm-db       2 weeks ago   Up 6 days (healthy)   3306/tcp

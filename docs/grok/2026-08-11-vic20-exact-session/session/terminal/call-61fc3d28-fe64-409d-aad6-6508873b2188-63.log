@@ -1,0 +1,135 @@
+HANDOFF.md:11: trailing whitespace.
++1. **VIC-I READY present path (Exact-scoped geometry)**  
+HANDOFF.md:12: trailing whitespace.
++   - `Mos6561`: full-line paint + border blank outside paper; crop via VICE `ComputeViewportFirstX` (READY PAL first_x=48, L+R 48, paper origin 48). Rejected invent crop `src=0` and continuous paper strip.  
+HANDOFF.md:13: trailing whitespace.
++   - Tests: `Vic20VideoTests` geometry/latch/space; audit rebaselined `docs/audit-vic20-vs-vice-2026-08-07.md`.  
+HANDOFF.md:16: trailing whitespace.
++2. **VIC-20 expansion Settings UX**  
+HANDOFF.md:17: trailing whitespace.
++   - Avalonia: `WrapPanel` BLK0/1/2/3/5; expansion cart kind/preset/write-back; Build cart image dialog.  
+HANDOFF.md:18: trailing whitespace.
++   - Xbox UWP: `VariableSizedWrapGrid` for BLKs (no WrapPanel); attach/eject expansion image; navigate to FlashCartBuilder page.  
+HANDOFF.md:21: trailing whitespace.
++3. **Flash Cart Image Builder (Byrd slice)**  
+HANDOFF.md:22: trailing whitespace.
++   - Core: `src/ViceSharp.Core/FlashCarts/*` (profiles FE3 512K, Ultimem 1MB, MegaCart+NVRAM, EasyFlash layout).  
+HANDOFF.md:23: trailing whitespace.
++   - Portable `FlashCartImageBuilderViewModel`; FE3 presets on expansion cart surface.  
+HANDOFF.md:24: trailing whitespace.
++   - UI: Avalonia `FlashCartBuilderView`; Xbox `FlashCartBuilderPage`.  
+HANDOFF.md:25: trailing whitespace.
++   - Tests: `tests/ViceSharp.TestHarness/FlashCart/*`.  
+HANDOFF.md:26: trailing whitespace.
++   - Hostile AGREE: `docs/receipts/hostile-validator-20260808T103211Z.md`.  
+HANDOFF.md:29: trailing whitespace.
++4. **Deploy evidence (local lab)**  
+HANDOFF.md:30: trailing whitespace.
++   - Desktop: Nuke `InstallMsi` ProductVersion **1.2.7** succeeded (`docs/_deploy-desktop-2026-08-08_045501.log`).  
+HANDOFF.md:33: trailing whitespace.
++5. **Docs refresh this turn**  
+HANDOFF.md:38: trailing whitespace.
++- Exact only with VICE file+function + matching managed control + hostile AGREE when claiming Exact.  
+HANDOFF.md:39: trailing whitespace.
++- Do **not** claim whole-machine Exact or pixel framebuffer lockstep vs xvic (still Missing / Partial per audit).  
+HANDOFF.md:44: trailing whitespace.
++1. Optional: FE3 flash040 residual (TDD first).  
+HANDOFF.md:45: trailing whitespace.
++2. Optional: pixel framebuffer compare vs xvic (`capture_visible_frame` / present path).  
+HANDOFF.md:46: trailing whitespace.
++3. Optional: re-run desktop InstallMsi if Avalonia builder only was built after last MSI.  
+---DIFFCHECK-EXIT--- 
+---STAGED STAT---
+ .../Services/HostProtocolMapper.cs                 |   8 +-
+ .../Services/MediaServiceHost.cs                   |  87 +-
+ .../Services/SettingsServiceHost.cs                | 224 ++++-
+ src/ViceSharp.Protocol/ExpansionCartManageState.cs |  42 +
+ src/ViceSharp.Protocol/ProtocolContracts.cs        |  27 +-
+ src/ViceSharp.Protocol/SettingsOptionCatalog.cs    |  47 ++
+ src/ViceSharp.Protocol/Vic20MemoryUiState.cs       | 160 ++++
+ src/ViceSharp.Xbox.ViewModels/AboutInfo.cs         |   6 +-
+ src/ViceSharp.Xbox.ViewModels/AboutViewModel.cs    |  59 +-
+ .../NavigationDestination.cs                       |   5 +
+ .../VideoFramePullViewModel.cs                     |  53 +-
+ .../XboxSettingsViewModel.cs                       | 551 ++++++++++++-
+ src/ViceSharp.Xbox/App.xaml.cs                     |  20 +-
+ src/ViceSharp.Xbox/Views/FlashCartBuilderPage.xaml |  41 +
+ .../Views/FlashCartBuilderPage.xaml.cs             | 166 ++++
+ src/ViceSharp.Xbox/Views/SettingsPage.xaml         |  45 +
+ src/ViceSharp.Xbox/Views/SettingsPage.xaml.cs      | 108 ++-
+ .../FlashCart/Fe3PresetTests.cs                    |  24 +
+ .../FlashCartImageBuilderViewModelTests.cs         |  80 ++
+ .../FlashCart/FlashImageBuilderTests.cs            | 136 +++
+ .../IEC/FileSystemIecDeviceTests.cs                |  68 ++
+ .../IEC/FileSystemIecUnitSettingsTests.cs          |  87 ++
+ .../Ui/Vic20SettingsUiSurfaceTests.cs              |  71 ++
+ .../Vic20/MediaServiceHostVic20ExpansionTests.cs   | 106 +++
+ .../Vic20/Vic20BoardWiringTests.cs                 |  84 ++
+ .../Vic20/Vic20DivergeProbe.cs                     |  32 +-
+ .../Vic20/Vic20ExpansionCartTests.cs               | 110 +++
+ .../Vic20/Vic20MemoryMapTests.cs                   |   7 +-
+ .../Vic20/Vic20MemorySettingsRestartTests.cs       |  72 ++
+ .../Vic20/Vic20RamBlocksTests.cs                   | 128 +++
+ .../Vic20SettingsRestartPreservesExpansionTests.cs |  96 +++
+ .../Vic20/Vic20VideoLockstep.cs                    | 176 ++++
+ .../Vic20/Vic20VideoPumpSmokeTests.cs              |  88 ++
+ .../ViceSharp.TestHarness/Vic20/Vic20VideoTests.cs | 375 ++++++++-
+ .../Xbox/AboutViewModelTests.cs                    |  56 +-
+ .../Xbox/Fakes/FakeXboxSettingsGateway.cs          |  21 +-
+ .../Xbox/VideoFramePullViewModelTests.cs           |  32 +
+ .../Xbox/XboxComputerModelPickerTests.cs           | 107 +++
+ .../Xbox/XboxSettingsViewModelTests.cs             | 221 +++++
+ 92 files changed, 7787 insertions(+), 428 deletions(-)
+---STAGED COUNT---
+92
+---UNSTAGED SAMPLE---
+M  HANDOFF.md
+M  README.md
+M  build/Build.cs
+A  docs/FlashCart-Builder.md
+M  docs/Iteration-Roadmap.md
+ M docs/Project/wiki/azure/.mcp-requirements-manifest.json
+ M docs/Project/wiki/azure/Architecture/.order
+ M docs/Project/wiki/azure/Functional-Requirements-Overview.md
+ M docs/Project/wiki/azure/Functional-Requirements.md
+ M docs/Project/wiki/azure/Getting-Started/.order
+ M docs/Project/wiki/azure/Home.md
+ M docs/Project/wiki/azure/Iteration-Roadmap.md
+ M docs/Project/wiki/azure/Project-Overview.md
+ M docs/Project/wiki/azure/Requirements-Matrix.md
+ M docs/Project/wiki/azure/Requirements/.order
+ M docs/Project/wiki/azure/TR-per-FR-Mapping.md
+ M docs/Project/wiki/azure/Technical-Requirements.md
+ M docs/Project/wiki/azure/Testing-Requirements.md
+ M docs/Project/wiki/azure/User-Guide.md
+ M docs/Project/wiki/github/.mcp-requirements-manifest.json
+ M docs/Project/wiki/github/Functional-Requirements-Overview.md
+ M docs/Project/wiki/github/Functional-Requirements.md
+ M docs/Project/wiki/github/Home.md
+ M docs/Project/wiki/github/Iteration-Roadmap.md
+ M docs/Project/wiki/github/Project-Overview.md
+ M docs/Project/wiki/github/Requirements-Matrix.md
+ M docs/Project/wiki/github/TR-per-FR-Mapping.md
+ M docs/Project/wiki/github/Technical-Requirements.md
+ M docs/Project/wiki/github/Testing-Requirements.md
+ M docs/Project/wiki/github/User-Guide.md
+ M docs/Project/wiki/github/_Sidebar.md
+M  docs/README.md
+M  docs/USER-GUIDE.md
+A  docs/audit-vic20-vs-vice-2026-08-07.md
+A  docs/receipts-vic20-ntsc-apply-stackoverflow-2026-08-07.md
+A  docs/receipts-vic20-ram-all-stackoverflow-2026-08-06.md
+A  docs/receipts-vic20-video-40x40-2026-08-07.md
+A  docs/receipts/hostile-validator-20260808T094911Z.json
+A  docs/receipts/hostile-validator-20260808T094911Z.md
+A  docs/receipts/hostile-validator-20260808T103211Z.json
+A  docs/receipts/hostile-validator-20260808T103211Z.md
+A  docs/receipts/wrapup-flashcart-vic20video-20260810.txt
+M  docs/requirements/requirements-wiki-documents.zip
+M  docs/wiki.yaml
+M  native/vice-shim-vic20.c
+M  native/vice-shim.h
+M  src/ViceSharp.Abstractions/IViceNative.cs
+M  src/ViceSharp.Architectures/Vic20/Vic20Descriptor.cs
+M  src/ViceSharp.Architectures/Vic20/Vic20Expansion.cs
+M  src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs

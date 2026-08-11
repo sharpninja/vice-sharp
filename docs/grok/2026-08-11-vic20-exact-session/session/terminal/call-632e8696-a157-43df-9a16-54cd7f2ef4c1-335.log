@@ -1,0 +1,13 @@
+MajorMinorPatch=1.2.2
+SemVer=1.2.2-13
+FullSemVer=1.2.2-13
+Major=1 Minor=2 Patch=2
+CommitsSinceVersionSource=13
+InformationalVersion=1.2.2-13+Branch.main.Sha.85396c84fd5e5dffc2654080ca7676a56ae977a5
+Sha=85396c84fd5e5dffc2654080ca7676a56ae977a5
+[33mf46404d[m release: bump to 1.2.2 with Store art and C= logo attribution
+
+FullName
+--------
+F:\GitHub\vice-sharp\GitVersion.yml
+

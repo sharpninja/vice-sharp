@@ -1,0 +1,32 @@
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:18.86
+
+A total of 1 test files matched the specified pattern.
+
+   Id ProcessName              CPU
+   -- -----------              ---
+ 7660 dotnet                 24.08
+12672 dotnet                 31.44
+13792 dotnet                 23.73
+16012 dotnet                 16.08
+17492 dotnet                 15.91
+24732 dotnet                 15.78
+34196 dotnet                 15.83
+34896 dotnet                 15.56
+35788 dotnet                 16.38
+38568 dotnet                 14.91
+39304 dotnet                 15.41
+40680 dotnet                 17.25
+42496 dotnet                 15.44
+42992 dotnet                 15.61
+44176 dotnet                 15.00
+44408 dotnet                  1.27
+45060 dotnet                  7.25
+45824 dotnet                  1.72
+45304 testhost                2.70
+43036 ViceSharp.TestHarness 608.53
+

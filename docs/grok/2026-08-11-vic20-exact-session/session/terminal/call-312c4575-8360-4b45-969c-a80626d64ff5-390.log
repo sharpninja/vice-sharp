@@ -1,0 +1,28 @@
+80099
+
+LineNumber Line
+---------- ----
+       912 VICE_SHIM_API uint8_t vice_machine_peek_ram(void *machine, uint16_t address)
+      1135 VICE_SHIM_API void vice_machine_step_cycle(void *machine)
+      1138         fprintf(stderr, "vice_machine_step_cycle call=%u machine=%p\\n", ++g_debug_step_calls, machine);
+      1247 VICE_SHIM_API uint8_t vice_cpu_get_a(void *machine)
+      1262 VICE_SHIM_API uint8_t vice_cpu_get_x(void *machine)
+      1277 VICE_SHIM_API uint8_t vice_cpu_get_y(void *machine)
+      1292 VICE_SHIM_API uint8_t vice_cpu_get_p(void *machine)
+      1307 VICE_SHIM_API uint8_t vice_cpu_get_sp(void *machine)
+      1322 VICE_SHIM_API uint16_t vice_cpu_get_pc(void *machine)
+      1352 VICE_SHIM_API void vice_cpu_get_pipeline_state(void *machine, struct vice_cpu_pipeline_state *state)
+           
+           
+         2  * vic20model.h - VIC20 model detection and setting.
+        27 #ifndef VICE_VIC20MODEL_H
+        28 #define VICE_VIC20MODEL_H
+        32 #define VIC20MODEL_VIC20_PAL        0
+        33 #define VIC20MODEL_VIC20_NTSC       1
+        34 #define VIC20MODEL_VIC21            2 /* SuperVIC (+16K) */
+        35 #define VIC20MODEL_VIC1001          3 /* vic-1001 (japanese VIC20) */
+        37 #define VIC20MODEL_NUM 4
+        39 #define VIC20MODEL_UNKNOWN 99
+        43 int vic20model_get(void);
+        44 void vic20model_set(int model);
+

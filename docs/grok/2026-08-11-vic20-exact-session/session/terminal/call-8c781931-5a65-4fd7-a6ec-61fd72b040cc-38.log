@@ -1,0 +1,154 @@
+
+--- sound hooks in Mos6561 ---
+--- cart managed kinds ---
+--- VICE cart init list ---
+--- via1 pin functions ---
+FullName
+--------
+F:\GitHub\vice-sharp\native\vice\vice\data\C128\palette.vpl
+F:\GitHub\vice-sharp\native\vice\vice\data\C64\palette.vpl
+F:\GitHub\vice-sharp\native\vice\vice\data\CBM-II\palette.vpl
+#
+# VICE Palette file
+#
+# Syntax:
+# Red Green Blue
+#
+# VIC-II palette created by PAL/Offence
+#
+# TYPE:VICII
+# NAME:PALette (by PAL/Offence)
+
+# Black
+00 00 00
+# White
+d5 d5 d5
+# Red
+72 35 2c
+# Cyan
+65 9f a6
+# Purple
+73 3a 91
+# Green
+56 8d 35
+# Blue
+2e 23 7d
+# Yellow
+ae b7 5e
+# Orange
+77 4f 1e
+# Brown
+
+namespace ViceSharp.Core.Vic20;
+
+/// <summary>VIC-20 expansion cartridge families (VICE vic20/cart).</summary>
+public enum Vic20ExpansionCartKind
+{
+    None = 0,
+    FinalExpansion3 = 1,
+    Ultimem = 2,
+    MegaCart = 3,
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

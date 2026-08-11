@@ -1,0 +1,57 @@
+hasExited=True exit=-1073741515
+stdout=
+stderr=
+choco xvic exists: 327168
+
+PSPath              : Microsoft.PowerShell.Core\FileSystem::C:\Users\kingd\.choco\bin\xvic.exe
+PSParentPath        : Microsoft.PowerShell.Core\FileSystem::C:\Users\kingd\.choco\bin
+PSChildName         : xvic.exe
+PSDrive             : C
+PSProvider          : Microsoft.PowerShell.Core\FileSystem
+PSIsContainer       : False
+Mode                : -a---
+ModeWithoutHardLink : -a---
+VersionInfo         : File:             C:\Users\kingd\.choco\bin\xvic.exe
+                      InternalName:     xvic.exe
+                      OriginalFilename: xvic.exe
+                      FileVersion:      1.0.0.0
+                      FileDescription:  ShimGen generated shim - Chocolatey Shim
+                      Product:          ShimGen generated shim - Chocolatey Shim
+                      ProductVersion:   1.0.0
+                      Debug:            False
+                      Patched:          False
+                      PreRelease:       False
+                      PrivateBuild:     False
+                      SpecialBuild:     False
+                      Language:         Language Neutral
+                      
+BaseName            : xvic
+ResolvedTarget      : C:\Users\kingd\.choco\bin\xvic.exe
+Target              : 
+LinkType            : 
+Name                : xvic.exe
+Length              : 327168
+DirectoryName       : C:\Users\kingd\.choco\bin
+Directory           : C:\Users\kingd\.choco\bin
+IsReadOnly          : False
+Exists              : True
+FullName            : C:\Users\kingd\.choco\bin\xvic.exe
+Extension           : .exe
+CreationTime        : 4/20/2024 2:46:08 PM
+CreationTimeUtc     : 4/20/2024 7:46:08 PM
+LastAccessTime      : 7/8/2026 4:49:23 PM
+LastAccessTimeUtc   : 7/8/2026 9:49:23 PM
+LastWriteTime       : 4/20/2024 2:46:08 PM
+LastWriteTimeUtc    : 4/20/2024 7:46:08 PM
+LinkTarget          : 
+UnixFileMode        : -1
+Attributes          : Archive
+
+ Volume in drive C has no label.
+ Volume Serial Number is 5A92-5381
+
+ Directory of C:\Users\kingd\.choco\bin
+
+04/20/2024  02:46 PM           327,168 xvic.exe
+               1 File(s)        327,168 bytes
+               0 Dir(s)  580,553,035,776 bytes free

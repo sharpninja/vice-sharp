@@ -1,0 +1,34 @@
+Avalonia SettingsView BLK section:
+
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:42:            <!-- VIC-20 system RAM (xvic -memory): presets + 
+BLK0/1/2/3/5 -->
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:47:                <WrapPanel Orientation="Horizontal">
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:48:                    <CheckBox Content="BLK0 $0400" 
+IsChecked="{Binding Vic20Blk0, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:49:                    <CheckBox Content="BLK1 $2000" 
+IsChecked="{Binding Vic20Blk1, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:50:                    <CheckBox Content="BLK2 $4000" 
+IsChecked="{Binding Vic20Blk2, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:51:                    <CheckBox Content="BLK3 $6000" 
+IsChecked="{Binding Vic20Blk3, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:52:                    <CheckBox Content="BLK5 $A000" 
+IsChecked="{Binding Vic20Blk5, Mode=TwoWay}" Margin="0,0,12,6" />
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:53:                </WrapPanel>
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:163:            <WrapPanel Orientation="Horizontal">
+src\ViceSharp.Avalonia\Views\SettingsView.axaml:170:            </WrapPanel>
+Xbox Settings BLK section:
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:31:                <!-- UWP has no WrapPanel; VariableSizedWrapGrid is the 
+wrap layout (left-to-right, then next row). -->
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:32:                <VariableSizedWrapGrid Orientation="Horizontal"
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:37:                    <ToggleSwitch Header="BLK0 $0400" IsOn="{x:Bind 
+ViewModel.Vic20Blk0, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:38:                    <ToggleSwitch Header="BLK1 $2000" IsOn="{x:Bind 
+ViewModel.Vic20Blk1, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:39:                    <ToggleSwitch Header="BLK2 $4000" IsOn="{x:Bind 
+ViewModel.Vic20Blk2, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:40:                    <ToggleSwitch Header="BLK3 $6000" IsOn="{x:Bind 
+ViewModel.Vic20Blk3, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:41:                    <ToggleSwitch Header="BLK5 $A000" IsOn="{x:Bind 
+ViewModel.Vic20Blk5, Mode=TwoWay}" />
+src\ViceSharp.Xbox\Views\SettingsPage.xaml:42:                </VariableSizedWrapGrid>
+

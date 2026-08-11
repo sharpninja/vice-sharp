@@ -1,0 +1,127 @@
+
+=== cart files VICE ===
+=== managed cart line counts ===
+=== Via6522 lines ===
+=== viacore lines ===
+=== Mos6502 lines ===
+Name                  Length
+----                  ------
+basic-901486-01.bin     8192
+chargen-901460-02.bin   4096
+chargen-901460-03.bin   4096
+colodore_vic.vpl         281
+default.vrs              258
+gtk3_pos_de.vkm         9365
+gtk3_pos_it.vkm        10651
+gtk3_pos.vkm            8207
+gtk3_sym_de.vkm         9700
+gtk3_sym_fr.vkm         8295
+gtk3_sym_it.vkm        10645
+gtk3_sym.vkm            8343
+kernal.901486-02.bin    8192
+kernal.901486-06.bin    8192
+kernal.901486-07.bin    8192
+Makefile               19049
+Makefile.am             1095
+Makefile.in            18951
+mike-ntsc.vpl            276
+mike-pal.vpl             410
+PALette.vpl              515
+sdl_pos_de.vkm         11537
+sdl_pos_fi.vkm         10496
+sdl_pos_fr.vkm         10601
+sdl_pos_uk.vkm         10626
+sdl_pos.vkm            10624
+sdl_sym_de.vkm         13827
+sdl_sym_uk.vkm         11321
+sdl_sym.vkm            11259
+vice.vpl                 416
+#
+# VICE Palette file: PALette_6561-101_v1
+#
+# Syntax:
+# Red Green Blue Dither
+#
+# TYPE:VIC
+# NAME:PALette 6561-101_v1 (by Tobias)
+
+# Black
+00 00 00
+
+# White
+FF FF FF
+
+# Red
+97 2A 2E
+
+# Cyan
+64 E3 DE
+
+# Purple
+AD 3C BF
+
+# Green
+5C DC 54
+
+# Blue
+40 32 B9
+
+# Yellow
+D7 E7 45
+
+# Orange
+BA 6A 24
+
+# Light Orange
+E1 B9 96
+
+# Light Red
+DA A3 A5
+
+# Light Cyan
+B6 F6 F3
+
+# Light Purple
+DE A6 E8
+
+# Light Green
+B2 F3 AF
+
+# Light Blue
+A6 9E E2
+
+# Light Yellow
+F4 FC AB
+behrbonz.c                 1
+debugcart.c                1
+finalexpansion.c           1
+ioramcart.c                1
+mascuerade-stubs.c         1
+megacart.c                 1
+mikroassembler.c           1
+minimon.c                  1
+rabbit.c                   1
+superexpander.c            1
+ultimem.c                  1
+vic-fp.c                   1
+vic20-generic.c            1
+vic20-ieee488.c            1
+vic20-midi.c               1
+vic20-sidcart.c            1
+vic20cart.c                1
+vic20cartmem.c             1
+writenow.c                 1
+   273 FinalExpansion3Cartridge.cs
+    10 IVic20CartridgeHost.cs
+    31 IVic20ExpansionCartPort.cs
+   136 MegaCartCartridge.cs
+   125 UltimemCartridge.cs
+    59 Vic20Cartridge.cs
+     9 Vic20ExpansionCartKind.cs
+   137 Vic20ExpansionCartPort.cs
+771
+1966
+    41 Mos6502.Addressing.cs
+  2922 Mos6502.cs
+   640 Mos6502.Opcodes.cs
+

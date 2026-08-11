@@ -1,0 +1,63 @@
+
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.50]       reset: nP=$26 mP=$26 nPC=$FD22 mPC=$FD22
+[xUnit.net 00:00:02.50]       c1: nPC=$FD22 nP=$26 mPC=$FD22 mP=$26
+[xUnit.net 00:00:02.50]       c2: nPC=$FD22 nP=$26 mPC=$FD22 mP=$26
+[xUnit.net 00:00:02.50]       c3: nPC=$FD24 nP=$A4 mPC=$FD24 mP=$A4
+[xUnit.net 00:00:02.50]       c4: nPC=$FD24 nP=$A4 mPC=$FD24 mP=$A4
+[xUnit.net 00:00:02.50]       c5: nPC=$FD25 nP=$A4 mPC=$FD25 mP=$A4
+[xUnit.net 00:00:02.50]       c6: nPC=$FD25 nP=$A4 mPC=$FD25 mP=$A4
+[xUnit.net 00:00:02.50]       c7: nPC=$FD26 nP=$A4 mPC=$FD26 mP=$A4
+[xUnit.net 00:00:02.50]       c8: nPC=$FD26 nP=$A4 mPC=$FD26 mP=$A4
+[xUnit.net 00:00:02.50]       c9: nPC=$FD27 nP=$A4 mPC=$FD27 mP=$A4
+[xUnit.net 00:00:02.50]       c10: nPC=$FD27 nP=$A4 mPC=$FD27 mP=$A4
+[xUnit.net 00:00:02.50]       c11: nPC=$FD27 nP=$A4 mPC=$FD27 mP=$A4
+[xUnit.net 00:00:02.50]       c12: nPC=$FD29 nP=$A4 mPC=$FD29 mP=$A4
+[xUnit.net 00:00:02.50]       c13: nPC=$FD29 nP=$A4 mPC=$FD29 mP=$A4
+[xUnit.net 00:00:02.50]       c14: nPC=$FD29 nP=$A4 mPC=$FD29 mP=$A4
+[xUnit.net 00:00:02.50]       c15: nPC=$FD3F nP=$A4 mPC=$FD3F mP=$A4
+[xUnit.net 00:00:02.50]       c16: nPC=$FD3F nP=$A4 mPC=$FD3F mP=$A4
+[xUnit.net 00:00:02.50]       c17: nPC=$FD41 nP=$24 mPC=$FD41 mP=$24
+[xUnit.net 00:00:02.50]       c18: nPC=$FD41 nP=$24 mPC=$FD41 mP=$24
+[xUnit.net 00:00:02.50]       c19: nPC=$FD41 nP=$24 mPC=$FD41 mP=$24
+[xUnit.net 00:00:02.50]       c20: nPC=$FD41 nP=$24 mPC=$FD41 mP=$24
+[xUnit.net 00:00:02.50]       c21: nPC=$FD44 nP=$A4 mPC=$FD44 mP=$A4
+[xUnit.net 00:00:02.50]       c22: nPC=$FD44 nP=$A4 mPC=$FD44 mP=$A4
+[xUnit.net 00:00:02.50]       c23: nPC=$FD44 nP=$A4 mPC=$FD44 mP=$A4
+[xUnit.net 00:00:02.50]       c24: nPC=$FD44 nP=$A4 mPC=$FD44 mP=$A4
+[xUnit.net 00:00:02.50]       c25: nPC=$FD47 nP=$A5 mPC=$FD47 mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c26: nPC=$FD47 nP=$A5 mPC=$FD47 mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c27: nPC=$FD49 nP=$A5 mPC=$FD49 mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c28: nPC=$FD4C nP=$A5 mPC=$FD4C mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c29: nPC=$FD4C nP=$A5 mPC=$FD4C mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c30: nPC=$FD4C nP=$A5 mPC=$FD4C mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c31: nPC=$FD4C nP=$A5 mPC=$FD4C mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c32: nPC=$FD4C nP=$A5 mPC=$FD4C mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c33: nPC=$FD4C nP=$A5 mPC=$FD4C mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c34: nPC=$FD2A nP=$A5 mPC=$FD2A mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c35: nPC=$FD2A nP=$A5 mPC=$FD2A mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c36: nPC=$FD2C nP=$A5 mPC=$FD2C mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c37: nPC=$FD2F nP=$A5 mPC=$FD2F mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c38: nPC=$FD2F nP=$A5 mPC=$FD2F mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c39: nPC=$FD2F nP=$A5 mPC=$FD2F mP=$A4 <<<
+[xUnit.net 00:00:02.50]       c40: nPC=$FD31 nP=$A5 mPC=$FD31 mP=$A4 <<<
+  Failed ViceSharp.TestHarness.Vic20.Vic20PdivProbe.Probe_FirstPDivergence [136 ms]
+  Error Message:
+   reset: nP=$26 mP=$26 nPC=$FD22 mPC=$FD22
+c1: nPC=$FD22 nP=$26 mPC=$FD22 mP=$26
+c2: nPC=$FD22 nP=$26 mPC=$FD22 mP=$26
+c3: nPC=$FD24 nP=$A4 mPC=$FD24 mP=$A4
+c4: nPC=$FD24 nP=$A4 mPC=$FD24 mP=$A4
+c5: nPC=$FD25 nP=$A4 mPC=$FD25 mP=$A4
+c6: nPC=$FD25 nP=$A4 mPC=$FD25 mP=$A4
+c7: nPC=$FD26 nP=$A4 mPC=$FD26 mP=$A4
+c8: nPC=$FD26 nP=$A4 mPC=$FD26 mP=$A4
+c9: nPC=$FD27 nP=$A4 mPC=$FD27 mP=$A4
+c10: nPC=$FD27 nP=$A4 mPC=$FD27 mP=$A4
+c11: nPC=$FD27 nP=$A4 mPC=$FD27 mP=$A4
+c12: nPC=$FD29 nP=$A4 mPC=$FD29 mP=$A4
+c13: nPC=$FD29 nP=$A4 mPC=$FD29 mP=$A4
+c14: nPC=$FD29 nP=$A4 mPC=$FD29 mP=$A4
+c15: nPC=$FD3F nP=$A4 mPC=$FD3F mP=$A4
+EXIT=
+

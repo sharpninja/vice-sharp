@@ -1,0 +1,21 @@
+85396c84fd5e5dffc2654080ca7676a56ae977a5
+-encodedCommand
+YwBvAG0AbQBpAHQA
+fatal: ambiguous argument 'YwBvAG0AbQBpAHQA': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+ad6fc34e3171b0a188e0436c7bc554e6fca73b60
+[33mf45bbc2[m docs(grok): archive session transcript, plan, and goal plan
+tag
+
+ad6fc34e3171b0a188e0436c7bc554e6fca73b60 refs/tags/Grok
+docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-32799c5b1a25-2.md
+docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-607a2dad3956-2.md
+docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-7d45b1115e21-2.md
+docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-a8b508754f9e-2.md
+docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-c660a9d0ca87-2.md
+docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-f7270d7293dd-1.md
+docs/grok/2026-08-11-vic20-exact-session/goal/plan.baseline.md
+docs/grok/2026-08-11-vic20-exact-session/goal/plan.md
+docs/grok/2026-08-11-vic20-exact-session/goal/state.json
+

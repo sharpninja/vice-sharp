@@ -1,0 +1,45 @@
+
+docs\2s-bccsta-2026-08-06.log:10:c=540333 nPC=$D934 mPC=$D934 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=2 op=$85 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-bccsta-2026-08-06.log:11:c=540334 nPC=$D936 mPC=$D936 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=1 op=$85 trail=1 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=False
+docs\2s-bccsta-2026-08-06.log:12:c=540335 nPC=$D936 mPC=$D936 nA=$8C mA=$8C nX=$0D mX=$0D nY=$00 mY=$00 nS=$F9 mS=$F9 
+nP=$A0 mP=$A0 dbgCyc=0 op=$85 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-beq-2026-08-06.log:6:   DIV first=522467 matchedCycles=522466 budget=2216810
+docs\2s-bit-2026-08-06.log:6:   DIV first=522392 matchedCycles=522391 budget=2216810
+docs\2s-bit2-2026-08-06.log:6:   DIV first=522430 matchedCycles=522429 budget=2216810
+docs\2s-bit2-2026-08-06.log:7:c=522419 nPC=$EB2A mPC=$EB2A nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$E6 mS=$E6 
+nP=$25 mP=$25 dbgCyc=0 op=$8D trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bit3-2026-08-06.log:6:   DIV first=522392 matchedCycles=522391 budget=2216810
+docs\2s-bit4-2026-08-06.log:6:   DIV first=522392 matchedCycles=522391 budget=2216810
+docs\2s-bit5-2026-08-06.log:6:   DIV first=522469 matchedCycles=522468 budget=2216810
+docs\2s-bitf-2026-08-06.log:6:   DIV first=522392 matchedCycles=522391 budget=2216810
+docs\2s-bne-cmp-2026-08-06.log:17:c=559295 nPC=$F75D mPC=$F75D nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$27 mP=$27 dbgCyc=2 op=$85 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-bne-cmp-2026-08-06.log:18:c=559296 nPC=$F75F mPC=$F75D nA=$FF mA=$FF nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB 
+nP=$27 mP=$27 dbgCyc=1 op=$85 trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=True
+docs\2s-cmp-absx-2026-08-06.log:17:c=557338 nPC=$E5EA mPC=$E5EA nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$F3 
+mS=$F3 nP=$32 mP=$32 dbgCyc=2 op=$85 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-cmp-absx-2026-08-06.log:18:c=557339 nPC=$E5EC mPC=$E5EA nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$F3 
+mS=$F3 nP=$32 mP=$32 dbgCyc=1 op=$85 trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=True
+docs\2s-final-2026-08-06.log:6:   DIV first=522263 matchedCycles=522262 budget=2216810
+docs\2s-holdindy-2026-08-06.log:6:   DIV first=522263 matchedCycles=522262 budget=2216810
+docs\2s-incsticky-2026-08-06.log:6:   DIV first=522370 matchedCycles=522369 budget=2216810
+docs\2s-irqb-2026-08-06.log:6:   DIV first=522317 matchedCycles=522316 budget=2216810
+docs\2s-irqdiag-2026-08-06.log:29:   DIV first=522263 matchedCycles=522262 budget=2216810
+docs\2s-irqsuppress-2026-08-06.log:6:   DIV first=522269 matchedCycles=522268 budget=2216810
+docs\2s-jsr-irq-2026-08-06.log:9:c=540887 nPC=$EB27 mPC=$EB27 nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$EB mS=$EB 
+nP=$25 mP=$25 dbgCyc=3 op=$8D trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-jsr-irq-2026-08-06.log:10:c=540888 nPC=$EB27 mPC=$EB27 nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$EB mS=$EB 
+nP=$25 mP=$25 dbgCyc=2 op=$8D trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-jsr-irq-2026-08-06.log:11:c=540889 nPC=$EB27 mPC=$EB27 nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$EB mS=$EB 
+nP=$25 mP=$25 dbgCyc=1 op=$8D trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=False
+docs\2s-jsr-irq-2026-08-06.log:12:c=540890 nPC=$EB2A mPC=$EB2A nA=$00 mA=$00 nX=$00 mX=$00 nY=$40 mY=$40 nS=$EB mS=$EB 
+nP=$25 mP=$25 dbgCyc=0 op=$8D trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-memdiag-2026-08-06.log:29:   DIV first=522370 matchedCycles=522369 budget=2216810
+docs\2s-ora-2026-08-06.log:7:c=519316 nPC=$EABE mPC=$EABE nA=$97 mA=$97 nX=$16 mX=$16 nY=$15 mY=$15 nS=$EC mS=$EC 
+nP=$B1 mP=$B1 dbgCyc=0 op=$85 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False mis=False
+docs\2s-pla-2026-08-06.log:6:   DIV first=522470 matchedCycles=522469 budget=2216810
+docs\2s-pla-late-2026-08-06.log:6:   DIV first=522472 matchedCycles=522471 budget=2216810
+docs\2s-pla2-2026-08-06.log:6:   DIV first=522485 matchedCycles=522484 budget=2216810
+

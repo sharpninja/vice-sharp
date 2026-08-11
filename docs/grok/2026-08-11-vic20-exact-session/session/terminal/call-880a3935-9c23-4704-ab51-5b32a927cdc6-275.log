@@ -1,0 +1,28 @@
+
+===== PIXEL GATE SUMMARY =====
+Command: isolated per-test processes FullyQualifiedName~Vic20Pixel* (process isolation for NativeVice residue)
+Result: Passed=8 Failed=0 Skipped=0
+Exit criterion: Failed=0 Skipped=0
+Date: 2026-08-11T15:29:41.5157688-05:00
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:49:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:51:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:100:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:102:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:151:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:153:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:202:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:204:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:253:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:255:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:304:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:306:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:355:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:357:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:406:Test Run Successful.
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:408:     Passed: 1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:412:AGGREGATE Passed=8 
+Failed=0 Skipped=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-pixel-gate.log:414:===== PIXEL GATE SUMMARY 
+=====
+

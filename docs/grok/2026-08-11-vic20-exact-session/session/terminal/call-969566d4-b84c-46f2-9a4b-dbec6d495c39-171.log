@@ -1,0 +1,21 @@
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.Formatters.Xml.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.Formatters.Xml' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.Razor.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.Razor' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.RazorPages.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.RazorPages' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.TagHelpers.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.TagHelpers' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll : warning IL2104: Assembly 'Microsoft.AspNetCore.Mvc.ViewFeatures' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\microsoft.aspnetcore.app.runtime.win-x64\10.0.10\runtimes\win-x64\lib\net10.0\Microsoft.JSInterop.dll : warning IL2104: Assembly 'Microsoft.JSInterop' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\sharpninja.avalonia.remotecontrol.runtime\0.7.4\lib\net10.0\Avalonia.RemoteControl.Runtime.dll : warning IL2104: Assembly 'Avalonia.RemoteControl.Runtime' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+[WRN] PublishMsi: C:\Users\kingd\.nuget\packages\yamldotnet\18.1.0\lib\net10.0\YamlDotNet.dll : warning IL2104: Assembly 'YamlDotNet' produced trim warnings. For more information see https://aka.ms/il2104 [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            Succeeded       0:01
+PublishMsi         Succeeded       1:34
+InstallMsi         Succeeded       0:04
+───────────────────────────────────────
+Total                              1:40
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 6:29:39 AM. ＼（＾ᴗ＾）／
+EXIT: 0

@@ -1,0 +1,11 @@
+wrote docs/audit-vic20-vs-vice-2026-08-07.md lines=0Set-Content: 
+
+Line |
+ 122 |  Set-Content -Encoding utf8 "F:\GitHub\vice-sharp\docs\audit-vic20-vs- .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot process command because of one or more missing mandatory parameters: Value.
+Get-Content: 
+Line |
+ 123 |  . md lines=$((Get-Content 'F:\GitHub\vice-sharp\docs\audit-vic20-vs-vic .
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'F:\GitHub\vice-sharp\docs\audit-vic20-vs-vice-2026-08-07.md' because it does not exist.

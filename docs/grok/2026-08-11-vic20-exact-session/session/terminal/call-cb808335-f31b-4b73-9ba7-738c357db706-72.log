@@ -1,0 +1,5 @@
+rg: native/vice/vice/src/vic20/*.c: IO error for operation on native/vice/vice/src/vic20/*.c: The filename, directory name, or volume label syntax is incorrect. (os error 123)
+rg: regex parse error:
+    (?:horizontal|origin|\)
+    ^
+error: unclosed group

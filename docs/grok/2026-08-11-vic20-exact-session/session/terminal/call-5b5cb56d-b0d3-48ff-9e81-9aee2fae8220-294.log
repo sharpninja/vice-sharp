@@ -1,0 +1,14 @@
+
+FullName
+--------
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Startup\XboxDataPathBridge.cs
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Startup\XboxDataPathResult.cs
+F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\ViceDataPathResolver.cs
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Startup\ILocalDataFolder.cs
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Startup\LocalDataFolder.cs
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Startup\XboxDataPathResult.cs:4:/// Outcome of <see cref="XboxDataPathBridge.Configure"/>: the data root the VICE
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Startup\XboxDataPathBridge.cs:18:public static class XboxDataPathBridge
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Startup\LocalDataFolder.cs:9:public sealed class LocalDataFolder : ILocalDataFolder
+F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\Services\HostKeymapWritePath.cs:9:/// <c>XboxDataPathBridge</c> redirects writes to the app's writable LocalFolder
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\App.xaml.cs:537:            XboxDataPathBridge.Configure(folder, packagedC64);
+

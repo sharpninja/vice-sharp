@@ -1,0 +1,12 @@
+branch 'feat/xbox-uwp-app' set up to track 'origin/feat/xbox-uwp-app'.
+To https://github.com/sharpninja/vice-sharp.git
+   cbb72be..7442c1d  HEAD -> feat/xbox-uwp-app
+To https://github.com/sharpninja/vice-sharp.git
+## [32mfeat/xbox-uwp-app[m...[31morigin/feat/xbox-uwp-app[m
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+ * [new tag]         v1.2.0 -> v1.2.0
+7442c1d4c0cd6c7ab653328b4f99c89ba7bd05b1
+55d46d55666645b8afc032aaf5a424305c58602c	refs/tags/v1.2.0

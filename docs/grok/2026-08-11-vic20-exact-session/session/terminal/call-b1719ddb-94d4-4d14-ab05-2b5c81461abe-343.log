@@ -1,0 +1,25 @@
+
+native\vice\vice\src\6510dtvcore.c:722:#define INC_PC(value) (reg_pc += (value))
+native\vice\vice\src\6510dtvcore.c:1028:            REWIND_FETCH_OPCODE(CLK);                                          
+       \
+native\vice\vice\src\6510dtvcore.c:1032:                REWIND_FETCH_OPCODE(CLK);                                      
+       \
+native\vice\vice\src\6510dtvcore.c:1795:         * "jammed" - however, our code may rely on FETCH_OPCODE being called
+native\vice\vice\src\6510dtvcore.c:1804:            FETCH_OPCODE(opcode);
+native\vice\vice\src\6510dtvcore.c:1873:                REWIND_FETCH_OPCODE(CLK);
+native\vice\vice\src\mainviccpu.c:62: - NEED_REG_PC
+native\vice\vice\src\mainviccpu.c:73:#define NEED_REG_PC
+native\vice\vice\src\mainviccpu.c:77:/* Implement the hack to make opcode fetches faster.  */
+native\vice\vice\src\mainviccpu.c:80:        reg_pc = (unsigned int)(addr);                                            
+         \
+native\vice\vice\src\mainviccpu.c:81:        if (reg_pc >= (unsigned int)bank_limit || reg_pc < (unsigned 
+int)bank_start) {     \
+native\vice\vice\src\mainviccpu.c:545:#ifdef NEED_REG_PC
+native\vice\vice\src\mainviccpu.c:547:unsigned int reg_pc;
+native\vice\vice\src\mainviccpu.c:558:        mem_mmu_translate(reg_pc, &bank_base, &bank_start, &bank_limit);
+native\vice\vice\src\mainviccpu.c:574:#ifndef NEED_REG_PC
+native\vice\vice\src\mainviccpu.c:576:    unsigned int reg_pc;
+native\vice\vice\src\mainviccpu.c:606:        last_opcode_addr = reg_pc;
+native\vice\vice\src\mainviccpu.c:644:        tmp = machine_jam("   " CPU_STR ": JAM at $%04X   ", reg_pc); \
+native\vice\vice\src\mainviccpu.c:664:#define ROM_TRAP_ALLOWED() mem_rom_trap_allowed((uint16_t)reg_pc)
+

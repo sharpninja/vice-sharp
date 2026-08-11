@@ -1,0 +1,118 @@
+
+Filename               LineNumber Line
+--------               ---------- ----
+Vic20BootProofTests.cs         14     /// Use case: unexpanded VIC-20 with official ROMs boots through KERNAL/BASIC
+Vic20BootProofTests.cs         46         var lo = machine.Bus.Read(0xFFFC);
+Vic20BootProofTests.cs         47         var hi = machine.Bus.Read(0xFFFD);
+Vic20BootProofTests.cs         56         // Minimal PRG: load at $A000, 4 payload bytes
+Vic20BootProofTests.cs         62         Assert.Equal(0x11, machine.Bus.Read(0xA000));
+Vic20KeyboardTests.cs          25         Assert.Equal(0xFF, rows);
+Vic20KeyboardTests.cs          36         machine.Bus.Write(0x9122, 0xFF); // DDRB
+Vic20MemoryMapTests.cs         13     [InlineData(Vic20Expansion.Unexpanded, 0x0000, true)]
+Vic20MemoryMapTests.cs         14     [InlineData(Vic20Expansion.Unexpanded, 0x1000, true)]
+Vic20MemoryMapTests.cs         15     [InlineData(Vic20Expansion.Unexpanded, 0x0400, false)]
+Vic20MemoryMapTests.cs         16     [InlineData(Vic20Expansion.Unexpanded, 0x2000, false)]
+Vic20MemoryMapTests.cs         24     [InlineData(Vic20Expansion.Exp32K, 0xA000, true)]
+Vic20MemoryMapTests.cs         28         Assert.Equal(installed, Architectures.Vic20.Vic20MemoryLayout.IsInstalledRam.
+Vic20MemoryMapTests.cs         32     public void UnexpandedMachine_OpenBusExpansion_WriteDoesNotStick()
+Vic20MemoryMapTests.cs         36         Assert.Equal(CoreVic20.Vic20ExpansionKind.Unexpanded, ram.Expansion);
+Vic20MemoryMapTests.cs         42         // Unexpanded BLK1 is open bus: write must not stick (KERNAL expansion probe.
+Vic20MemoryMapTests.cs         44         Assert.Equal(0xFF, machine.Bus.Read(0x2000));
+Vic20MemoryMapTests.cs         45         Assert.Equal(0xFF, machine.Bus.Peek(0x2000));
+Vic20MemoryMapTests.cs         48         Assert.Equal(0xFF, machine.Bus.Read(0x0400));
+Vic20MemoryMapTests.cs         50         machine.Bus.Write(0xA000, 0x99);
+Vic20MemoryMapTests.cs         51         Assert.Equal(0xFF, machine.Bus.Read(0xA000));
+Vic20MemoryMapTests.cs         55     public void UnexpandedMachine_Reset_DoesNotApplyC64InitPattern()
+Vic20MemoryMapTests.cs         62         Assert.Equal(0xFF, machine.Bus.Read(0x0400)); // still open bus
+Vic20MemoryMapTests.cs         71     public void Exp8KMachine_Blk1IsWritable_Blk2OpenBusNonSticky()
+Vic20MemoryMapTests.cs         82         Assert.Equal(0xFF, machine.Bus.Read(0x4000));
+Vic20OpenBusProbe.cs            5 public sealed class Vic20OpenBusProbe
+Vic20OpenBusProbe.cs            8     public void Probe_CmpAbsX_OpenBus()
+Vic20SkeletonTests.cs         117         var lo = machine.Bus.Read(0xFFFC);
+Vic20SkeletonTests.cs         118         var hi = machine.Bus.Read(0xFFFD);
+Vic20VideoTests.cs             13     public void ResolveScreenBase_MatchesViceFormula_UnexpandedReadyLayout()
+Vic20VideoTests.cs            181         return fb[i] == 0xFF && fb[i + 1] == 0xFF && fb[i + 2] == 0xFF;
+FR-VIC20.md                    40 ## FR-VIC20-002: VIC-20 memory map and expansions
+FR-VIC20.md                    42 **ID:** FR-VIC20-002
+FR-VIC20.md                    57 5. Open-bus and I/O window rules match VICE for validated address ranges.
+# FR-VIC20: Commodore VIC-20 Functional Requirements
+
+## Document Information
+
+| Field          | Value                          |
+|----------------|--------------------------------|
+| Subsystem      | VIC-20 architecture            |
+| Version        | 0.1.0-draft                    |
+| Last Updated   | 2026-08-05 |
+| Iteration      | 2                              |
+
+---
+
+## FR-VIC20-001: VIC-I 6560/6561 display
+
+**ID:** FR-VIC20-001
+**Title:** VIC-I (MOS 6560 NTSC / 6561 PAL) video
+**Priority:** P0 -- Critical
+**Iteration:** 2
+
+### Description
+
+The VIC-20 display is driven by the MOS 6560 (NTSC) or MOS 6561 (PAL) VIC-I chip, not the C64 VIC-II. Slice A may ship a black-frame stub that implements `IVideoChip` so host frame pull does not crash; full raster and character rendering land in later slices.
+
+### Acceptance Criteria
+
+1. A VIC-20 machine exposes a device with role `VideoChip` implementing `IVideoChip`.
+2. PAL profile uses 6561 timing: 1_108_405 Hz, 71 cycles/line, 312 lines (VICE `vic20.h`).
+3. NTSC profile uses 6560 timing: 1_022_727 Hz, 65 cycles/line, 261 lines (VICE `vic20.h`).
+4. Framebuffer contract matches existing host path (BGRA, FrameCompleted).
+5. Full character/bitmap/color rendering and on-chip audio are delivered after the stub gate.
+
+### Traceability
+
+- **Interfaces:** `IVideoChip`, `IMachineProfile`
+- **Test Suite:** `Vic20SkeletonTests`, later `VicChipTests`
+
+---
+
+## FR-VIC20-002: VIC-20 memory map and expansions
+
+**ID:** FR-VIC20-002
+**Title:** VIC-20 base memory map and RAM expansions
+**Priority:** P0 -- Critical
+**Iteration:** 2
+
+### Description
+
+Unexpanded VIC-20 has 5KB base RAM (1KB system at $0000-$03FF, 4KB user at $1000-$1FFF), character ROM at $8000, I/O at $9000, color RAM at $9400, BASIC at $C000, KERNAL at $E000. Expansions (3K/8K/16K/24K/32K) map into BLK regions.
+
+### Acceptance Criteria
+
+1. After reset with official ROMs, BASIC is readable at $C000 and KERNAL at $E000.
+2. Character ROM is readable at $8000.
+3. Base RAM regions accept read/write at $0000-$03FF and $1000-$1FFF.
+4. Expansion configurations are selectable via profile/resources (later slice).
+5. Open-bus and I/O window rules match VICE for validated address ranges.
+
+### Traceability
+
+- **Interfaces:** `IBus`, `IArchitectureDescriptor`
+- **Test Suite:** `Vic20SkeletonTests`, later `Vic20MemoryExpansionTests`
+
+---
+
+## FR-VIC20-003: VIA1/VIA2 integration
+
+**ID:** FR-VIC20-003
+**Title:** VIC-20 dual VIA 6522 wiring
+**Priority:** P0 -- Critical
+**Iteration:** 2
+
+### Description
+
+The VIC-20 uses two shared `Via6522` instances (one chip implementation, board wiring only in Architectures): VIA1 at $9110 (typically NMI path) and VIA2 at $9120 (typically IRQ path). No C1541-specific assumptions may live in the shared VIA chip.
+
+### Acceptance Criteria
+
+1. Machine builds with two `Via6522` devices registered on the bus at $9110 and $9120 (16-byte windows).
+2. VIA1 and VIA2 are clocked and reset with the machine.
+

@@ -1,0 +1,46 @@
+=== log exists: True ===
+log size=4538 mtime=08/05/2026 03:40:33
+2026-08-05 03:40:15.625 [Information] App: App starting; log file: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+2026-08-05 03:40:15.973 [Information] App: OnLaunched entry; c64Directory=C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64
+2026-08-05 03:40:15.980 [Information] App: ROM assessment: State=NotProvisioned IsBootBlocked=True
+2026-08-05 03:40:15.980 [Information] App: BuildHostAndSession NOT run at launch (deferred to provisioning gate)
+2026-08-05 03:40:16.106 [Information] App: Boot branch: provisioning gate (no VideoPull) -> RomProvisioningPage
+2026-08-05 03:40:20.562 [Information] App: BuildHostAndSession: composing in-process host
+2026-08-05 03:40:21.072 [Information] App: BuildHostAndSession: session started id=emulator-21e61f5013d14b1893626e5ba68bb8f2 (persisted profile: (none))
+2026-08-05 03:40:21.112 [Information] App: BuildHostAndSession: built VideoPull=True gamepad=True keyboardVm=True audio=True
+2026-08-05 03:40:21.113 [Information] App: menu closed: emulation resumed
+2026-08-05 03:40:21.116 [Information] App: boot cartridge attached + cold reset: C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\C64\sblox.CRT (16464 bytes)
+2026-08-05 03:40:21.282 [Information] Video: tick 1: EnsureDevice: D3D11CreateDevice(HW) hr=0x00000000 device=0x26C31A7F910 context=0x26C31E23108
+2026-08-05 03:40:21.283 [Information] Video: tick 1: EnsureDevice: CreateDXGIFactory2 hr=0x00000000 factory=0x26C31A3DBF0
+2026-08-05 03:40:21.284 [Information] Video: tick 1: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x26C315F4278
+2026-08-05 03:40:21.284 [Information] Video: tick 1: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-05 03:40:21.296 [Information] Video: tick 1: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 03:40:21.296 [Information] Video: tick 1: EnsureSwapChain: created + bound 2560x1920
+2026-08-05 03:40:21.299 [Information] Video: tick 1: paint geometry: target 2560x1920, src 384x272, draw 2560x1813+0+53, PAR 1
+2026-08-05 03:40:21.311 [Information] Video: tick 1: OK: first frame presented (target 2560x1920, src 384x272, 417792 bytes)
+2026-08-05 03:40:21.330 [Information] Gamepad: poll thread=4
+2026-08-05 03:40:21.331 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 03:40:28.496 [Information] Gamepad: SetKeyboardActive(True) was=False thread=4
+2026-08-05 03:40:28.496 [Information] App: keyboard open: vm=True keys=66
+2026-08-05 03:40:28.596 [Information] App: keyboard layout: size=1024x315 buttons=66
+2026-08-05 03:40:28.599 [Information] App: keyboard tree: ItemsControl items=5 visualChildren=1 itemsSourceNull=False dataContextType=VirtualKeyboardViewModel
+2026-08-05 03:40:28.599 [Information] App: keyboard tree: ItemsControl items=16 visualChildren=1 itemsSourceNull=False dataContextType=VirtualKeyboardRow
+2026-08-05 03:40:28.600 [Information] App: keyboard tree: ItemsControl items=15 visualChildren=1 itemsSourceNull=False dataContextType=VirtualKeyboardRow
+2026-08-05 03:40:28.600 [Information] App: keyboard tree: ItemsControl items=15 visualChildren=1 itemsSourceNull=False dataContextType=VirtualKeyboardRow
+2026-08-05 03:40:28.601 [Information] App: keyboard tree: ItemsControl items=15 visualChildren=1 itemsSourceNull=False dataContextType=VirtualKeyboardRow
+2026-08-05 03:40:28.601 [Information] App: keyboard tree: ItemsControl items=1 visualChildren=1 itemsSourceNull=False dataContextType=VirtualKeyboardRow
+2026-08-05 03:40:28.601 [Information] App: keyboard tree: ItemsControl items=4 visualChildren=1 itemsSourceNull=False dataContextType=VirtualKeyboardViewModel
+2026-08-05 03:40:28.603 [Information] Gamepad: poll state: kbdActive=True liveKbdOpen=True ctx=VirtualKeyboard pushNonNeutral=False thread=4
+2026-08-05 03:40:28.605 [Information] Video: tick 220: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 03:40:28.605 [Information] Video: tick 220: paint geometry: target 2560x1132, src 384x272, draw 1598x1132+481+0, PAR 1
+2026-08-05 03:40:33.708 [Information] Video: tick 381: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 03:40:33.709 [Information] Video: tick 381: paint geometry: target 3840x1192, src 384x272, draw 1683x1192+1078+0, PAR 1
+=== process ===
+
+Id           : 25552
+CPU          : 12.015625
+WorkingSet64 : 206123008
+StartTime    : 8/5/2026 3:40:14 AM
+
+=== settings.json ===
+no settings.json

@@ -1,0 +1,84 @@
+
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.46]       c1: nPC=$FD22 nA=$00 nX=$00 nP=$26 mPC=$FD22 mA=$00 mX=$00 mP=$26 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c2: nPC=$FD22 nA=$00 nX=$00 nP=$26 mPC=$FD22 mA=$00 mX=$00 mP=$26 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c3: nPC=$FD24 nA=$00 nX=$FF nP=$A4 mPC=$FD24 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c4: nPC=$FD24 nA=$00 nX=$FF nP=$A4 mPC=$FD24 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c5: nPC=$FD25 nA=$00 nX=$FF nP=$A4 mPC=$FD25 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c6: nPC=$FD25 nA=$00 nX=$FF nP=$A4 mPC=$FD25 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c7: nPC=$FD26 nA=$00 nX=$FF nP=$A4 mPC=$FD26 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c8: nPC=$FD26 nA=$00 nX=$FF nP=$A4 mPC=$FD26 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c9: nPC=$FD27 nA=$00 nX=$FF nP=$A4 mPC=$FD27 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF 
+A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c10: nPC=$FD27 nA=$00 nX=$FF nP=$A4 mPC=$FD27 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c11: nPC=$FD27 nA=$00 nX=$FF nP=$A4 mPC=$FD27 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c12: nPC=$FD29 nA=$00 nX=$FF nP=$A4 mPC=$FD29 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c13: nPC=$FD29 nA=$00 nX=$FF nP=$A4 mPC=$FD29 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c14: nPC=$FD29 nA=$00 nX=$FF nP=$A4 mPC=$FD29 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c15: nPC=$FD3F nA=$00 nX=$FF nP=$A4 mPC=$FD3F mA=$00 mX=$FF mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c16: nPC=$FD3F nA=$00 nX=$FF nP=$A4 mPC=$FD3F mA=$00 mX=$FF mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c17: nPC=$FD41 nA=$00 nX=$05 nP=$24 mPC=$FD41 mA=$00 mX=$05 mP=$24 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c18: nPC=$FD41 nA=$00 nX=$05 nP=$24 mPC=$FD41 mA=$00 mX=$05 mP=$24 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c19: nPC=$FD41 nA=$00 nX=$05 nP=$24 mPC=$FD41 mA=$00 mX=$05 mP=$24 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c20: nPC=$FD41 nA=$CD nX=$05 nP=$24 mPC=$FD41 mA=$CD mX=$05 mP=$24 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c21: nPC=$FD44 nA=$CD nX=$05 nP=$A4 mPC=$FD44 mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c22: nPC=$FD44 nA=$CD nX=$05 nP=$A4 mPC=$FD44 mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c23: nPC=$FD44 nA=$CD nX=$05 nP=$A4 mPC=$FD44 mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c24: nPC=$FD44 nA=$CD nX=$05 nP=$A4 mPC=$FD44 mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c25: nPC=$FD47 nA=$CD nX=$05 nP=$A5 mPC=$FD47 mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c26: nPC=$FD47 nA=$CD nX=$05 nP=$A5 mPC=$FD47 mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c27: nPC=$FD49 nA=$CD nX=$05 nP=$A5 mPC=$FD49 mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c28: nPC=$FD4C nA=$CD nX=$05 nP=$A5 mPC=$FD4C mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c29: nPC=$FD4C nA=$CD nX=$05 nP=$A5 mPC=$FD4C mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+[xUnit.net 00:00:02.46]       c30: nPC=$FD4C nA=$CD nX=$05 nP=$A5 mPC=$FD4C mA=$CD mX=$05 mP=$A4 A008 nPeek=00 
+mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+  Failed ViceSharp.TestHarness.Vic20.Vic20OpenBusProbe.Probe_CmpAbsX_OpenBus [139 ms]
+  Error Message:
+   c1: nPC=$FD22 nA=$00 nX=$00 nP=$26 mPC=$FD22 mA=$00 mX=$00 mP=$26 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 
+m=CD
+c2: nPC=$FD22 nA=$00 nX=$00 nP=$26 mPC=$FD22 mA=$00 mX=$00 mP=$26 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c3: nPC=$FD24 nA=$00 nX=$FF nP=$A4 mPC=$FD24 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c4: nPC=$FD24 nA=$00 nX=$FF nP=$A4 mPC=$FD24 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c5: nPC=$FD25 nA=$00 nX=$FF nP=$A4 mPC=$FD25 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c6: nPC=$FD25 nA=$00 nX=$FF nP=$A4 mPC=$FD25 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c7: nPC=$FD26 nA=$00 nX=$FF nP=$A4 mPC=$FD26 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c8: nPC=$FD26 nA=$00 nX=$FF nP=$A4 mPC=$FD26 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c9: nPC=$FD27 nA=$00 nX=$FF nP=$A4 mPC=$FD27 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c10: nPC=$FD27 nA=$00 nX=$FF nP=$A4 mPC=$FD27 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c11: nPC=$FD27 nA=$00 nX=$FF nP=$A4 mPC=$FD27 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c12: nPC=$FD29 nA=$00 nX=$FF nP=$A4 mPC=$FD29 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c13: nPC=$FD29 nA=$00 nX=$FF nP=$A4 mPC=$FD29 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c14: nPC=$FD29 nA=$00 nX=$FF nP=$A4 mPC=$FD29 mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c15: nPC=$FD3F nA=$00 nX=$FF nP=$A4 mPC=$FD3F mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c16: nPC=$FD3F nA=$00 nX=$FF nP=$A4 mPC=$FD3F mA=$00 mX=$FF mP=$A4 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+c17: nPC=$FD41 nA=$00 nX=$05 nP=$24 mPC=$FD41 mA=$00 mX=$05 mP=$24 A008 nPeek=00 mPeek=FF A003 n=00 m=FF FD51 n=00 m=CD
+EXIT=
+

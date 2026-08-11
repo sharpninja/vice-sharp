@@ -1,0 +1,34 @@
+
+Name                  Length
+----                  ------
+basic-901486-01.bin     8192
+chargen-901460-02.bin   4096
+chargen-901460-03.bin   4096
+colodore_vic.vpl         281
+default.vrs              258
+gtk3_pos_de.vkm         9365
+gtk3_pos_it.vkm        10651
+gtk3_pos.vkm            8207
+gtk3_sym_de.vkm         9700
+gtk3_sym_fr.vkm         8295
+gtk3_sym_it.vkm        10645
+gtk3_sym.vkm            8343
+kernal.901486-02.bin    8192
+kernal.901486-06.bin    8192
+kernal.901486-07.bin    8192
+Makefile               19049
+Makefile.am             1095
+Makefile.in            18951
+mike-ntsc.vpl            276
+mike-pal.vpl             410
+PALette.vpl              515
+sdl_pos_de.vkm         11537
+sdl_pos_fi.vkm         10496
+sdl_pos_fr.vkm         10601
+sdl_pos_uk.vkm         10626
+sdl_pos.vkm            10624
+sdl_sym_de.vkm         13827
+sdl_sym_uk.vkm         11321
+sdl_sym.vkm            11259
+vice.vpl                 416
+

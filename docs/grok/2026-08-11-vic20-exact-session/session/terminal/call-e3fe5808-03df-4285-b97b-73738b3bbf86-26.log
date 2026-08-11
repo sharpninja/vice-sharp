@@ -1,0 +1,33 @@
+COMPOSE_PROJECT_NAME=romm
+# Copy to .env and fill in. Never commit .env.
+
+
+ROMM_PORT=8080
+
+# Optional metadata providers
+SCREENSCRAPER_USER=
+HASHEOUS_API_ENABLED=true
+
+# --- CSDb bridge (search engine for demos/cracks/SIDs) ---
+# CSDb webservice, RSS, HTML search, and file downloads work WITHOUT login.
+# Optional identity only if you need logged-in features later:
+CSDB_USER=
+CSDB_BASE_URL=https://csdb.dk
+CSDB_BRIDGE_PORT=8090
+# Live search caps only (not a full CSDb pull)
+CSDB_MAX_RESULTS_DEFAULT=25
+CSDB_MAX_RESULTS_CAP=50
+CSDB_RATE_LIMIT_MS=1200
+# Optional: token so bridge can trigger RomM APIs later
+ROMM_API_TOKEN=rmm_923ec3a809fe3dda5ff7bcddc987e0ffd52e94a36c0cd8df2cd9465477dbcdfe
+assets
+config
+library
+resources
+openapi len: 310839
+openapi HAS char_index
+"]},{"HTTPBasic":[]}],"parameters":[{"name":"with_char_index","in":"query","required":false,"schema":{"type":"boolean","description":"Whether to get the char index.","default":true,"title":"With Char 
+api openapi fail: 
+{
+  "detail": "Not Found"
+}

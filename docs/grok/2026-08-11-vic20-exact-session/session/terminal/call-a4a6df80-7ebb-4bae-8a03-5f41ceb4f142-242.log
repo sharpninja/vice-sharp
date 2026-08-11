@@ -1,0 +1,105 @@
+
+  Length LastWriteTime
+  ------ -------------
+10930779 8/11/2026 1:10:36 PM
+namespace ViceSharp.TestHarness.Vic20;
+
+using ViceSharp.Abstractions;
+using ViceSharp.Chips.Vic;
+using ViceSharp.Core;
+using Xunit;
+
+/// <summary>
+/// FR-VIC20-001 / TR-VIC20-PIXEL-001: palette-index then BGRA framebuffer
+/// SequenceEqual managed vs xvic. Sync: identical step count after reset.
+/// </summary>
+[Collection("NativeVice")]
+public sealed class Vic20PixelLockstep
+{
+    public const int PalNormalWidth = 448;
+    public const int PalNormalHeight = 284;
+    public const int BootCycles = 2_000_000;
+
+    /// <summary>TEST-VIC20-001 / AC-PX-02: READY PAL index SequenceEqual.</summary>
+    [Fact]
+    public void Index_ReadyPal_SequenceEqual()
+    {
+        if (!ViceNativeXvic.IsAvailable)
+            return;
+        AssertIndexEqual("vic20", PalNormalWidth, PalNormalHeight, BootCycles, busy: false);
+    }
+
+    /// <summary>AC-PX-03: READY NTSC index SequenceEqual.</summary>
+    [Fact]
+    public void Index_ReadyNtsc_SequenceEqual()
+    {
+        if (!ViceNativeXvic.IsAvailable)
+            return;
+        // NTSC normal canvas from vic-timing (display_width*PIXEL_WIDTH x lines).
+        using var native = ViceNative.CreateInstance("vic20ntsc");
+        native.Reset();
+        var managed = MachineTestFactory.CreateVic20Machine("vic20ntsc");
+        managed.Reset();
+        var vic = Assert.IsType<Mos6561>(managed.Devices.GetByRole(DeviceRole.VideoChip));
+        for (var i = 0; i < BootCycles; i++)
+        {
+            native.Step();
+            managed.Clock.Step();
+        }
+
+        var nIdx = new byte[vic.FrameWidth * vic.FrameHeight + 64];
+        Assert.True(native.TryCaptureFrameIndices(nIdx, out var nW, out var nH));
+        Assert.Equal(vic.FrameWidth, nW);
+        Assert.Equal(vic.FrameHeight, nH);
+        AssertEqualBuffers(nIdx, vic.IndexFrameBuffer, nW, nH, "NTSC READY index");
+    }
+
+    /// <summary>AC-PX-04: busy screen PAL - border color reg poke then index equal.</summary>
+    [Fact]
+    public void Index_BusyPal_SequenceEqual()
+    {
+        if (!ViceNativeXvic.IsAvailable)
+            return;
+        AssertIndexEqual("vic20", PalNormalWidth, PalNormalHeight, BootCycles, busy: true);
+    }
+
+    /// <summary>
+    /// AC-PX-05: BGRA READY PAL under shared palette alignment.
+    /// After index SequenceEqual, expand native indices through
+    /// <see cref="Mos6561"/> Tobias PALette.vpl table and SequenceEqual managed BGRA.
+    /// (xvic canvas RGB can differ from PALette.vpl; aligned Exact is index + shared table.)
+    /// </summary>
+    [Fact]
+    public void Bgra_ReadyPal_SequenceEqual()
+    {
+        if (!ViceNativeXvic.IsAvailable)
+            return;
+
+        using var native = ViceNative.CreateInstance("vic20");
+        native.Reset();
+        var managed = MachineTestFactory.CreateVic20Machine("vic20");
+        managed.Reset();
+        var vic = Assert.IsType<Mos6561>(managed.Devices.GetByRole(DeviceRole.VideoChip));
+        for (var i = 0; i < BootCycles; i++)
+        {
+            native.Step();
+            managed.Clock.Step();
+        }
+
+        var nIdx = new byte[PalNormalWidth * PalNormalHeight];
+        Assert.True(native.TryCaptureFrameIndices(nIdx, out var nW, out var nH));
+        Assert.Equal(PalNormalWidth, nW);
+        Assert.Equal(PalNormalHeight, nH);
+        AssertEqualBuffers(nIdx, vic.IndexFrameBuffer, nW, nH, "PAL READY index before BGRA");
+
+        var expected = ExpandIndicesToBgra(nIdx, nW * nH);
+        var mBgra = vic.FrameBuffer;
+        var len = nW * nH * 4;
+        Assert.True(
+            expected.AsSpan(0, len).SequenceEqual(mBgra.AsSpan(0, len)),
+            "Managed BGRA must match index buffer expanded through Mos6561 palette");
+    }
+
+    private static byte[] ExpandIndicesToBgra(byte[] indices, int pixelCount)
+    {
+

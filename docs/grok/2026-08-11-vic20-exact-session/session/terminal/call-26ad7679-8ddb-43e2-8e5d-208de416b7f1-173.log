@@ -1,0 +1,6 @@
+[feat/xbox-uwp-app 1678f4e] fix(core): wire RESTORE press to CPU NMI edge [FIX-XKBDNMI-001]
+ 4 files changed, 119 insertions(+), 4 deletions(-)
+[33m1678f4e[m fix(core): wire RESTORE press to CPU NMI edge [FIX-XKBDNMI-001]
+[33m1f19bb9[m feat(xbox): finish AOT-safe x:Bind migration [FEAT-XAOTBIND-001]
+[33m71e843b[m ci: finish optional Octopus LEGION2 release steps [FEAT-XOCTOPUS-001]
+[33ma199063[m feat(xbox): B steps back on menu subpages; subpages expand to the full window [PLAN-XBOXUWP FEAT-XMENUSUBPAGE-001]

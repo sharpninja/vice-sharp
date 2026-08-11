@@ -1,0 +1,9 @@
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [8 ms]
+  Error Message:
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_FocusedWindow [4 ms]
+  Error Message:
+Failed!  - Failed:     2, Passed:     8, Skipped:     0, Total:    10, Duration: 31 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+

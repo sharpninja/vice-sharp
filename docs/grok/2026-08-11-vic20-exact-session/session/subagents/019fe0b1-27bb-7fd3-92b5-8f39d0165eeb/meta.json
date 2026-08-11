@@ -1,0 +1,17 @@
+{
+  "subagent_id": "019fe0b1-27bb-7fd3-92b5-8f39d0165eeb",
+  "parent_session_id": "019fd0df-383d-7fc0-9f0a-69785afd78ed",
+  "child_session_id": "019fe0b1-27bb-7fd3-92b5-8f39d0165eeb",
+  "subagent_type": "explore",
+  "description": "Hostile validate VIC-20 borders",
+  "prompt": "You are a HOSTILE VALIDATOR (read-only) for ViceSharp VIC-20 vs VICE (xvic).\n\nWorkspace: F:\\GitHub\\vice-sharp\n\n## Contract (operator-mandated)\n- Assume overclaim until proven otherwise.\n- Any Exact / \"same as VICE\" / \"not a bug\" claim requires: VICE file+function + matching managed control flow with line anchors.\n- Screenshots and \"looks close\" are NOT acceptance.\n- Status labels only: Exact | Partial | Stub | Missing | Invented\n- Compare to C64 path where relevant (borders work there).\n\n## Focus (this run)\n1. Why composite/CRT borders exist is DOMAIN; how VICE implements them is SOURCE. Audit SOURCE.\n2. Hostile-validate any claim that missing right border on READY is \"normal VICE\" or \"same as xvic.\"\n3. Trace VICE VIC-20 end-to-end for one READY-style line:\n   - full line draw buffer size (screen_width, PIXEL_WIDTH)\n   - how border is painted (raster_line_draw_borders / blank left of xstart, right of xstop)\n   - how display_xstart/xstop are set (vic-cycle open_h/start_fetch, origin reg)\n   - how visible normal-border canvas is defined (display_width, first/last line in vic-timing.h, vic_set_geometry)\n   - how host presents the visible window (video_canvas_refresh, viewport first_x) — label this HOST not CHIP\n4. Trace managed Mos6561.DrawRasterLine / crop (src=0, display_width) and compare.\n5. Trace C64 Mos6569 LeftBorderPixel/RightBorderEndPixel + VideoRenderer — contrast pattern.\n6. Produce a divergence list: VICE behavior → managed behavior → status → fix direction (no invent).\n\n## Sources to read (do not invent)\n- native/vice/vice/src/vic20/vic-timing.h, vic-timing.c, vic-cycle.c, vic-draw.c, vic.c\n- native/vice/vice/src/raster/raster-line.c (raster_line_draw_borders)\n- native/vice/vice/src/video/video-viewport.c, video-canvas.c\n- src/ViceSharp.Chips/Vic/Mos6561.cs\n- src/ViceSharp.Chips/VicIi/Mos6569.cs, VideoRenderer.cs\n- docs/audit-vic20-vs-vice-2026-08-07.md (prior audit; re-verify claims, do not trust)\n\n## Output format\n1. VERDICT: PASS or FAIL on \"managed VIC-20 video present/border is Exact VICE\"\n2. False/overclaims shot down with anchors\n3. Chip-layer truth (bullet list with file:symbol)\n4. Host-layer truth (bullet list; do not confuse with chip)\n5. Mos6561 divergence table\n6. C64 contrast (one paragraph)\n7. Required red tests before any fix (Byrd)\n8. What would be required for Exact on present/border only\n\nDo NOT edit files. Read-only. Be hostile. End with VERDICT: PASS or VERDICT: FAIL.\n",
+  "status": "completed",
+  "started_at": "2026-08-08T09:25:34.302982500Z",
+  "completed_at": "2026-08-08T09:29:01.247379600Z",
+  "duration_ms": 206963,
+  "tool_calls": 51,
+  "turns": 1,
+  "effective_context_source": "new",
+  "child_cwd": "F:\\GitHub\\vice-sharp",
+  "effective_model_id": "grok-4.5"
+}

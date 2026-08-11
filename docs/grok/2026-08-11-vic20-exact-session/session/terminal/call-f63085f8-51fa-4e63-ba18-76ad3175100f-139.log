@@ -1,0 +1,141 @@
+
+Wednesday, August 5, 2026 6:24:10 AM
+Faulting application name: ViceSharp.Avalonia.exe, version: 1.2.167.0, time stamp: 0x6a3ed1eb
+Faulting module name: KERNELBASE.dll, version: 10.0.26100.8875, time stamp: 0xca32cd54
+Exception code: 0xe0434352
+Fault offset: 0x00000000000c1ada
+Faulting process id: 0x13920
+Faulting application start time: 0x1DD24CCCEEA71C5
+Faulting application path: C:\Program Files\ViceSharp\ViceSharp.Avalonia.exe
+Faulting module path: C:\WINDOWS\System32\KERNELBASE.dll
+Report Id: 665ee624-9c66-4655-acda-305408d10e2b
+Faulting package full name: 
+Faulting package-relative application ID: 
+---
+Wednesday, August 5, 2026 6:10:47 AM
+Faulting application name: ViceSharp.Avalonia.exe, version: 1.0.0.0, time stamp: 0x6a3e0000
+Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+Exception code: 0xc00000fd
+Fault offset: 0x00000000000716a5
+Faulting process id: 0xF040
+Faulting application start time: 0x1DD24CB10362F4A
+Faulting application path: F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.exe
+Faulting module path: C:\WINDOWS\SYSTEM32\ntdll.dll
+Report Id: 958e0af1-b2a9-4962-b890-fe8ee3f8ead3
+Faulting package full name: 
+Faulting package-relative application ID: 
+---
+Wednesday, August 5, 2026 6:09:09 AM
+Faulting application name: ViceSharp.Avalonia.exe, version: 1.0.0.0, time stamp: 0x6a3e0000
+Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+Exception code: 0xc00000fd
+Fault offset: 0x0000000000071704
+Faulting process id: 0x16B24
+Faulting application start time: 0x1DD24CAD1E9C0BA
+Faulting application path: F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.exe
+Faulting module path: C:\WINDOWS\SYSTEM32\ntdll.dll
+Report Id: 3f9121b5-3f21-4f37-8c5e-c85f558cbac5
+Faulting package full name: 
+Faulting package-relative application ID: 
+---
+Wednesday, August 5, 2026 6:07:47 AM
+Faulting application name: ViceSharp.Avalonia.exe, version: 1.2.167.0, time stamp: 0x6a3ed1eb
+Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+Exception code: 0xc00000fd
+Fault offset: 0x0000000000071630
+Faulting process id: 0x9E0
+Faulting application start time: 0x1DD24CAA54D422D
+Faulting application path: C:\Program Files\ViceSharp\ViceSharp.Avalonia.exe
+Faulting module path: C:\WINDOWS\SYSTEM32\ntdll.dll
+Report Id: a2a8d59c-db62-4214-a93d-de69dd87cd7d
+Faulting package full name: 
+Faulting package-relative application ID: 
+---
+Wednesday, August 5, 2026 6:07:24 AM
+Faulting application name: ViceSharp.Avalonia.exe, version: 1.2.167.0, time stamp: 0x6a3ed1eb
+Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+Exception code: 0xc00000fd
+Fault offset: 0x00000000000716a5
+Faulting process id: 0x19530
+Faulting application start time: 0x1DD24CA9683A224
+Faulting application path: C:\Program Files\ViceSharp\ViceSharp.Avalonia.exe
+Faulting module path: C:\WINDOWS\SYSTEM32\ntdll.dll
+Report Id: fb1217bb-01f4-4fa7-89a9-a8a5263b9360
+Faulting package full name: 
+Faulting package-relative application ID: 
+---
+Wednesday, August 5, 2026 6:05:51 AM
+Faulting application name: ViceSharp.Avalonia.exe, version: 1.2.167.0, time stamp: 0x6a3ed1eb
+Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+Exception code: 0xc00000fd
+Fault offset: 0x0000000000071630
+Faulting process id: 0xCD6C
+Faulting application start time: 0x1DD24CA606A95FF
+Faulting application path: C:\Program Files\ViceSharp\ViceSharp.Avalonia.exe
+Faulting module path: C:\WINDOWS\SYSTEM32\ntdll.dll
+Report Id: 82ad6dc9-5f57-4b93-9078-107e0058d206
+Faulting package full name: 
+Faulting package-relative application ID: 
+---
+Wednesday, August 5, 2026 6:05:18 AM
+Faulting application name: ViceSharp.Avalonia.exe, version: 1.2.167.0, time stamp: 0x6a3ed1eb
+Faulting module name: ntdll.dll, version: 10.0.26100.8875, time stamp: 0xba65e4a2
+Exception code: 0xc00000fd
+Fault offset: 0x000000000006f8cc
+Faulting process id: 0x344
+Faulting application start time: 0x1DD24CA4C4F13B0
+Faulting application path: C:\Program Files\ViceSharp\ViceSharp.Avalonia.exe
+Faulting module path: C:\WINDOWS\SYSTEM32\ntdll.dll
+Report Id: f6dedc4c-6856-4eee-b477-31e2fbcc49a3
+Faulting package full name: 
+Faulting package-relative application ID: 
+---
+Wednesday, August 5, 2026 4:57:35 AM
+Faulting application name: ViceSharp.Xbox.exe, version: 1.0.0.0, time stamp: 0x6a3e0000
+Faulting module name: KERNELBASE.dll, version: 10.0.26100.8875, time stamp: 0xca32cd54
+Exception code: 0xe0434352
+Fault offset: 0x00000000000c1ada
+Faulting process id: 0x18664
+Faulting application start time: 0x1DD24C0811E0AAC
+Faulting application path: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout\ViceSharp.Xbox.exe
+Faulting module path: C:\WINDOWS\System32\KERNELBASE.dll
+Report Id: 075a8c22-fef3-452b-852e-49745a187c74
+Faulting package full name: sharpninja.ViceSharp.Xbox_1.0.0.0_x64__wbxy578d68v3y
+Faulting package-relative application ID: App
+---
+====
+Wednesday, August 5, 2026 6:24:10 AM
+Application: ViceSharp.Avalonia.exe
+CoreCLR Version: 10.0.1026.32716
+.NET Version: 10.0.10
+Description: The process was terminated due to an unhandled exception.
+Exception Info: System.InvalidOperationException: The calling thread cannot access this object because a different thread owns it.
+   at Avalonia.Threading.Dispatcher.<VerifyAccess>g__ThrowVerifyAccess|17_0()
+   at Avalonia.AvaloniaObject.SetValue[T](StyledProperty`1 property, T value, BindingPriority priority)
+   at ViceSharp.Avalonia.Views.AttachPanelView.<>c__DisplayClass19_0.<BuildContent>b__0(Object _, PropertyChangedEventArgs args)
+   at ViceSharp.Avalonia.ViewModels.ObservableObject.OnPropertyChanged(String propertyName)
+   at ViceSharp.Avalonia.ViewModels.AttachPanelViewModel.AttachAsync(AttachSlotViewModel slot, Stri
+---
+Wednesday, August 5, 2026 4:57:35 AM
+Application: ViceSharp.Xbox.exe
+CoreCLR Version: 10.0.1026.32716
+.NET Version: 10.0.10
+Description: The process was terminated due to an unhandled exception.
+Exception Info: System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at ViceSharp.Chips.IEC.D64FileSystem.EnumerateDirectory() in F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64FileSystem.cs:line 53
+   at ViceSharp.Chips.IEC.D64FileSystem.TryFindFile(ReadOnlySpan`1 patternPetscii, D64DirectoryEntry& entry) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64FileSystem.cs:line 101
+   at ViceSharp.Chips.Serial.VirtualDriveServer.OpenFile(Int32 device, Int32 channel) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial\VirtualDriveServer.cs:line 198
+   at ViceSharp.Chips.Serial.VirtualDriveServer.SerialCommand
+---
+Wednesday, August 5, 2026 4:46:39 AM
+Application: ViceSharp.Xbox.exe
+CoreCLR Version: 10.0.1026.32716
+.NET Version: 10.0.10
+Description: The process was terminated due to an unhandled exception.
+Exception Info: System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at ViceSharp.Chips.IEC.D64FileSystem.EnumerateDirectory() in F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64FileSystem.cs:line 53
+   at ViceSharp.Chips.IEC.D64FileSystem.TryFindFile(ReadOnlySpan`1 patternPetscii, D64DirectoryEntry& entry) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64FileSystem.cs:line 101
+   at ViceSharp.Chips.Serial.VirtualDriveServer.OpenFile(Int32 device, Int32 channel) in F:\GitHub\vice-sharp\src\ViceSharp.Chips\Serial\VirtualDriveServer.cs:line 198
+   at ViceSharp.Chips.Serial.VirtualDriveServer.SerialCommand
+---
+

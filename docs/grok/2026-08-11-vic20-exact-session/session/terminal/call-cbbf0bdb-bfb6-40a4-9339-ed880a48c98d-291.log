@@ -1,0 +1,26 @@
+M  docs/audit-vic20-vs-vice-2026-08-07.md
+M  src/ViceSharp.Abstractions/IViceNative.cs
+M  src/ViceSharp.Chips/Vic/Mos6561.cs
+M  src/ViceSharp.Core/ViceNative.Xvic.cs
+M  src/ViceSharp.Core/ViceNative.cs
+A  tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs
+?? docs/10s-lockstep-2026-08-07.log
+?? docs/10s-lockstep-blankfix-2026-08-06.log
+?? docs/10s-lockstep-idle-2026-08-06.log
+?? docs/10s-lockstep-memptr2-2026-08-06.log
+?? docs/10s-lockstep-ntsc-2026-08-07.log
+?? docs/10s-lockstep-rst6-2026-08-06.log
+?? docs/2s-adc-2026-08-06.log
+?? docs/2s-adc2-2026-08-06.log
+?? docs/2s-and-imm-2026-08-06.log
+?? docs/2s-arm-bcc-2026-08-06.log
+?? docs/2s-asl-2026-08-06.log
+?? docs/2s-asl-bcs-2026-08-06.log
+?? docs/2s-b1-beq-2026-08-06.log
+?? docs/2s-b1stage-2026-08-06.log
+[main 85396c8] feat(vic20): Phase A pixel index lockstep scaffolding (AC-PX-02 red)
+ 6 files changed, 152 insertions(+), 7 deletions(-)
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20PixelLockstep.cs
+To https://github.com/sharpninja/vice-sharp.git
+   d20d340..85396c8  HEAD -> main
+85396c8

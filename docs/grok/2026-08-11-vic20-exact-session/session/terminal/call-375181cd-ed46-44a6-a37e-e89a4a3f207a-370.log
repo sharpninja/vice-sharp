@@ -1,0 +1,33 @@
+## [32mfeat/xbox-uwp-app[m...[31morigin/feat/xbox-uwp-app[m
+ [31mM[m azure-pipelines.ci.yml
+ [31mM[m azure-pipelines.release.yml
+[32mA[m  src/ViceSharp.Xbox/RomM/XboxCoverImageLoader.cs
+[32mM[m  src/ViceSharp.Xbox/Views/LibraryPage.xaml
+[32mM[m  src/ViceSharp.Xbox/Views/LibraryPage.xaml.cs
+[31m??[m docs/S-Blox/
+[31m??[m docs/reviews/code-review-20260714T001056552Z.md
+[31m??[m docs/reviews/code-review-20260714T004256563Z.md
+[31m??[m docs/romless-vic-badline-fix.md
+[feat/xbox-uwp-app cbb72be] feat(xbox): Game-Pass style RomM Library page [PLAN-ROMM-001 AC-XUI-02]
+ 3 files changed, 466 insertions(+), 89 deletions(-)
+ create mode 100644 src/ViceSharp.Xbox/RomM/XboxCoverImageLoader.cs
+To https://github.com/sharpninja/vice-sharp.git
+   0c83627..cbb72be  feat/xbox-uwp-app -> feat/xbox-uwp-app
+04:07:52 [DBG]   ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64\ViceSharp.Xbox.dll
+04:07:53 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').InstallLocation""
+04:07:54 [INF] > C:\Windows\System32\Robocopy.exe "F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\x64\Release-UWP\net10.0-windows10.0.26100.0\win-x64" "C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout" /S /XF AppxManifest.xml /XD AppX /NJH /NJS /NDL /NFL /NP
+04:07:54 [DBG] 
+04:07:54 [INF] Deployed Release-UWP build into the registered layout: C:\Users\kingd\AppData\Local\ViceSharp.Xbox.AppXLayout
+04:07:54 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""(Get-AppxPackage -Name 'sharpninja.ViceSharp.Xbox').PackageFamilyName""
+04:07:55 [INF] > C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -NonInteractive -Command ""Start-Process 'shell:AppsFolder\sharpninja.ViceSharp.Xbox_wbxy578d68v3y!App'""
+04:07:55 [INF] Launched sharpninja.ViceSharp.Xbox_wbxy578d68v3y. Log: %LOCALAPPDATA%\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+DeployXboxLocal    Succeeded       0:21
+───────────────────────────────────────
+Total                              0:21
+═══════════════════════════════════════
+​
+Build succeeded on 8/5/2026 4:07:55 AM. ＼（＾ᴗ＾）／

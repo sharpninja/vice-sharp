@@ -1,0 +1,80 @@
+Note: switching to 'v1.2.1'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+v1.2.1
+HEAD is now at 3b20c4f release: bump patch to 1.2.1 on main
+v1.2.1
+Publishing NuGet then GitHub release + winget for v1.2.1...
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+​
+​
+╬══════════════════
+║ PublishWinget
+╬═════════
+​
+11:33:11 [INF] > "C:\Program Files\Git\cmd\git.exe" tag --points-at HEAD
+11:33:11 [INF] Downloading released MSI: https://github.com/sharpninja/vice-sharp/releases/download/v1.2.1/ViceSharp.msi
+11:33:12 [WRN] MSI download attempt 1/5 failed: Response status code does not indicate success: 404 (Not Found).
+11:33:17 [WRN] MSI download attempt 2/5 failed: Response status code does not indicate success: 404 (Not Found).
+11:33:22 [WRN] MSI download attempt 3/5 failed: Response status code does not indicate success: 404 (Not Found).
+11:33:27 [WRN] MSI download attempt 4/5 failed: Response status code does not indicate success: 404 (Not Found).
+11:33:32 [WRN] MSI download attempt 5/5 failed: Response status code does not indicate success: 404 (Not Found).
+11:33:37 [ERR] Target PublishWinget has thrown an exception
+System.InvalidOperationException: Failed to download the released MSI from https://github.com/sharpninja/vice-sharp/releases/download/v1.2.1/ViceSharp.msi after 5 attempts.
+ ---> System.Net.Http.HttpRequestException: Response status code does not indicate success: 404 (Not Found).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at System.Net.Http.HttpClient.GetByteArrayAsyncCore(HttpRequestMessage request, CancellationToken cancellationToken)
+   at Build.DownloadReleasedMsi(String version) in F:\GitHub\vice-sharp\build\Build.cs:line 1678
+   --- End of inner exception stack trace ---
+   at Build.DownloadReleasedMsi(String version) in F:\GitHub\vice-sharp\build\Build.cs:line 1690
+   at Build.AcquireMsi(String version) in F:\GitHub\vice-sharp\build\Build.cs:line 1725
+   at Build.<get_PublishWinget>b__109_1() in F:\GitHub\vice-sharp\build\Build.cs:line 1419
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[WRN] PublishWinget: MSI download attempt 1/5 failed: Response status code does not indicate success: 404 (Not Found).
+[WRN] PublishWinget: MSI download attempt 2/5 failed: Response status code does not indicate success: 404 (Not Found).
+[WRN] PublishWinget: MSI download attempt 3/5 failed: Response status code does not indicate success: 404 (Not Found).
+[WRN] PublishWinget: MSI download attempt 4/5 failed: Response status code does not indicate success: 404 (Not Found).
+[WRN] PublishWinget: MSI download attempt 5/5 failed: Response status code does not indicate success: 404 (Not Found).
+[ERR] PublishWinget: Target PublishWinget has thrown an exception
+​
+════════════════════════════════════════════
+Target                  Status      Duration
+────────────────────────────────────────────
+PublishGitHubRelease    Skipped                // Skipped: via parameter
+PublishWinget           Failed          0:25   // InvalidOperationException: Failed to download the released MSI from https://github.com/sharpninja/vice-sharp/releases/download/v1.2.1/ViceSharp.msi after 5 attempts.
+PublishNuget            NotRun              
+────────────────────────────────────────────
+Total                                   0:25
+════════════════════════════════════════════
+​
+Build failed on 8/5/2026 11:33:37 AM. (╯°□°）╯︵ ┻━┻
+EXIT: -1

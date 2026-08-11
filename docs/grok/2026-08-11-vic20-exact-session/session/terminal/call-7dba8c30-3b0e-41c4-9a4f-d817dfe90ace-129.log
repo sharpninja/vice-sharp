@@ -1,0 +1,44 @@
+
+Filename                               LineNumber Line
+--------                               ---------- ----
+BranchCycleCountTests.cs                       24     [Fact(Explicit = true)]
+BranchCycleCountTests.cs                       55     [Fact(Explicit = true)]
+MediaServiceHostVic20ExpansionTests.cs         16     [Fact]
+MediaServiceHostVic20ExpansionTests.cs         40     [Fact]
+MediaServiceHostVic20ExpansionTests.cs         58     [Fact]
+MediaServiceHostVic20ExpansionTests.cs         76     [Fact]
+MediaServiceHostVic20ExpansionTests.cs        100         var machine = MachineTestFactory.CreateVic20Machine(new Vic2.
+Vic20BoardWiringTests.cs                       17     [Fact]
+Vic20BoardWiringTests.cs                       20         var machine = MachineTestFactory.CreateVic20Machine("vic20");
+Vic20BoardWiringTests.cs                       33     [Fact]
+Vic20BoardWiringTests.cs                       36         var machine = MachineTestFactory.CreateVic20Machine("vic20");
+Vic20BoardWiringTests.cs                       42     [Fact]
+Vic20BoardWiringTests.cs                       45         var machine = MachineTestFactory.CreateVic20Machine("vic20");
+Vic20BoardWiringTests.cs                       58     [Fact]
+Vic20BoardWiringTests.cs                       61         var machine = MachineTestFactory.CreateVic20Machine(
+Vic20BoardWiringTests.cs                       69     [Fact]
+Vic20BootProofTests.cs                         18     [Fact]
+Vic20BootProofTests.cs                         21         var machine = MachineTestFactory.CreateVic20Machine();
+Vic20BootProofTests.cs                         37     [Fact]
+Vic20BootProofTests.cs                         40         var machine = MachineTestFactory.CreateVic20Machine();
+Vic20BootProofTests.cs                         41         var basic = MachineTestFactory.LoadVic20Rom("basic-901486-01.
+Vic20BootProofTests.cs                         42         var kernal = MachineTestFactory.LoadVic20Rom("kernal.901486-.
+Vic20BootProofTests.cs                         53     [Fact]
+Vic20BootProofTests.cs                         60         var machine = MachineTestFactory.CreateVic20Machine(descript.
+Vic20DeterminismTests.cs                        7 /// Bounded multi-frame determinism substitute for native xvic locks.
+Vic20DeterminismTests.cs                       13     [Fact]
+Vic20DeterminismTests.cs                       16         var a = MachineTestFactory.CreateVic20Machine();
+Vic20DeterminismTests.cs                       17         var b = MachineTestFactory.CreateVic20Machine();
+Vic20DeterminismTests.cs                       43     [Fact]
+Vic20DeterminismTests.cs                       53         var m = MachineTestFactory.CreateVic20Machine();
+Vic20DivergeProbe.cs                           10 /// Every-cycle CPU lockstep vs xvic (A/X/Y/S/P/PC) on the productio.
+Vic20DivergeProbe.cs                           13 public sealed class Vic20DivergeProbe
+Vic20DivergeProbe.cs                           31     [Fact]
+Vic20DivergeProbe.cs                           43     /// Long every-cycle probe (~2s PAL). Skips unless VICESHARP_LOC.
+Vic20DivergeProbe.cs                           46     [Fact]
+Vic20DivergeProbe.cs                           51         if (!string.Equals(Environment.GetEnvironmentVariable("VICES.
+Vic20DivergeProbe.cs                           60     /// Long every-cycle probe (~10s PAL). Skips unless VICESHARP_LO.
+Vic20DivergeProbe.cs                           63     [Fact]
+Vic20DivergeProbe.cs                           68         if (!string.Equals(Environment.GetEnvironmentVariable("VICES.
+Vic20DivergeProbe.cs                           77     /// Long every-cycle probe (~10s NTSC). Skips unless VICESHARP_L.
+

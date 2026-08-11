@@ -1,0 +1,32 @@
+PAL2S EXIT=0 MS=24670
+NTSC2S EXIT=0 MS=16615
+LOCKSTEP EXIT_PAL=0 EXIT_NTSC=0 EXIT_FOCUSED=1
+
+==== TwoSecondPal EXIT=0 MS=24670 ====
+A total of 1 test files matched the specified pattern.
+  Passed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_TwoSecondPal [19 s]
+Total tests: 1
+     Passed: 1
+ Total time: 23.1745 Seconds
+==== TwoSecondNtsc EXIT=0 MS=16615 ====
+A total of 1 test files matched the specified pattern.
+  Passed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_TwoSecondNtsc [11 s]
+Total tests: 1
+     Passed: 1
+ Total time: 14.9544 Seconds
+==== FocusedVideoCpu EXIT=1 MS=37472 ====
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:16.33]     ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedNtsc 
+[FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedNtsc [12 s]
+   at ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedNtsc() in 
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20WorkloadLockstep.cs:line 40
+[xUnit.net 00:00:35.35]     ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedPal 
+[FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedPal [19 s]
+   at ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedPal() in 
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20WorkloadLockstep.cs:line 30
+Failed!  - Failed:     2, Passed:     2, Skipped:     0, Total:     4, Duration: 32 s - ViceSharp.TestHarness.dll 
+(net10.0)
+LOCKSTEP_GATE EXIT_PAL=0 EXIT_NTSC=0 EXIT_FOCUSED=1
+

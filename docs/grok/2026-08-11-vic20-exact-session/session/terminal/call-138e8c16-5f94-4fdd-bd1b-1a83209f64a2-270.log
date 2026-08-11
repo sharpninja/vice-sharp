@@ -1,0 +1,25 @@
+
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:154:  
+requestId: req-20260409T120002Z-createfr-001
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:155:  
+method: workflow.requirements.createFr
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:169:FR, 
+TR, and TEST create/update commands accept structured `acceptanceCriteria` entries with the same shape used by TODO 
+execution criteria:
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:172:method
+: workflow.requirements.createFr
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:179:  
+acceptanceCriteria:
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:186:      
+evidence: tests/Services/RequirementAcceptanceCriteriaTests.cs
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:189:To 
+copy criteria from an execution TODO onto a requirement, call `workflow.requirements.copyAcceptanceCriteriaFromTodo`:
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:192:method
+: workflow.requirements.copyAcceptanceCriteriaFromTodo
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:210:  
+requestId: req-20260409T120002Z-createfr-batch-001
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:211:  
+method: workflow.requirements.createFrBatch
+C:\Users\kingd\.grok\installed-plugins\f--github-mcpserver-grok-plugin-67f1f31f\skills\requirements\SKILL.md:542:1. 
+Create the FR record immediately using `workflow.requirements.createFr`
+

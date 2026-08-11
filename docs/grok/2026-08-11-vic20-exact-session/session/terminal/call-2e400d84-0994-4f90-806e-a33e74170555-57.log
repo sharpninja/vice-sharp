@@ -1,0 +1,18 @@
+len=298
+op=10 fetch_tab=0
+op=30 fetch_tab=0
+op=50 fetch_tab=1
+op=70 fetch_tab=1
+op=90 fetch_tab=0
+op=B0 fetch_tab=0
+op=D0 fetch_tab=0
+op=F0 fetch_tab=1
+op=E6 fetch_tab=0
+op=A5 fetch_tab=0
+op=20 fetch_tab=0
+op=B1 fetch_tab=0
+op=A9 fetch_tab=1
+op=AA fetch_tab=1
+op=91 fetch_tab=0
+op=D1 fetch_tab=0
+op=60 fetch_tab=1

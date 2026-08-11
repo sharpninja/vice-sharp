@@ -1,0 +1,25 @@
+
+native\vice\vice\src\Makefile:134:am__objects_1 = alarm.$(OBJEXT) attach.$(OBJEXT) autostart.$(OBJEXT) \
+native\vice\vice\src\Makefile:143:	main.$(OBJEXT) mainlock.$(OBJEXT) m3u.$(OBJEXT) \
+native\vice\vice\src\Makefile:152:am_vsid_OBJECTS = $(am__objects_1) $(am__objects_2)
+native\vice\vice\src\Makefile:166:am_x128_OBJECTS = $(am__objects_1) $(am__objects_2)
+native\vice\vice\src\Makefile:181:am_x64_OBJECTS = $(am__objects_1) $(am__objects_2)
+native\vice\vice\src\Makefile:195:am_x64dtv_OBJECTS = $(am__objects_1)
+native\vice\vice\src\Makefile:209:am_x64sc_OBJECTS = $(am__objects_1) $(am__objects_2)
+native\vice\vice\src\Makefile:223:am_xcbm2_OBJECTS = $(am__objects_1)
+native\vice\vice\src\Makefile:236:am_xcbm5x0_OBJECTS = $(am__objects_1)
+native\vice\vice\src\Makefile:249:am_xpet_OBJECTS = $(am__objects_1)
+native\vice\vice\src\Makefile:262:am_xplus4_OBJECTS = $(am__objects_1)
+native\vice\vice\src\Makefile:276:am_xscpu64_OBJECTS = $(am__objects_1) $(am__objects_2)
+native\vice\vice\src\Makefile:290:am_xvic_OBJECTS = $(am__objects_1) $(am__objects_2)
+native\vice\vice\src\Makefile:333:	./$(DEPDIR)/mainlock.Po ./$(DEPDIR)/midi.Po \
+native\vice\vice\src\Makefile:359:	$(xplus4_SOURCES) $(xscpu64_SOURCES) $(xvic_SOURCES)
+native\vice\vice\src\Makefile:363:	$(xplus4_SOURCES) $(xscpu64_SOURCES) $(xvic_SOURCES)
+native\vice\vice\src\Makefile:893:	mainlock.h \
+native\vice\vice\src\Makefile:992:	mainlock.c \
+native\vice\vice\src\Makefile:1507:xvic_SOURCES = $(base_sources) $(midi_sources)
+native\vice\vice\src\Makefile:1905:include ./$(DEPDIR)/mainlock.Po # am--include-marker
+native\vice\vice\src\Makefile:2186:	-rm -f ./$(DEPDIR)/mainlock.Po
+native\vice\vice\src\Makefile:2288:	-rm -f ./$(DEPDIR)/mainlock.Po
+am__objects_1 = alarm.$(OBJEXT) attach.$(OBJEXT) autostart.$(OBJEXT) \
+

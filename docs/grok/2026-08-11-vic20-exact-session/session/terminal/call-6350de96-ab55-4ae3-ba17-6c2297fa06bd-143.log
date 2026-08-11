@@ -1,0 +1,28 @@
+
+Name                        Length LastWriteTime
+----                        ------ -------------
+hostile-validator-final.txt   1151 8/8/2026 4:46:51 AM
+hostile-validator-vic20.txt   1151 8/8/2026 4:46:51 AM
+vic20-all-tests.txt           3314 8/8/2026 4:43:59 AM
+vic20-tests.txt               3135 8/8/2026 4:42:28 AM
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    22, Skipped:     0, Total:    22, Duration: 3 s - ViceSharp.TestHarness.dll (net10.0)
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+  Skipped ViceSharp.TestHarness.Vic20.BranchCycleCountTests.TakenBne_CycleTrace [1 ms]
+  Skipped ViceSharp.TestHarness.Vic20.BranchCycleCountTests.NotTakenBne_CycleTrace [1 ms]
+
+Passed!  - Failed:     0, Passed:   198, Skipped:     0, Total:   198, Duration: 8 s - ViceSharp.TestHarness.dll (net10.0)
+

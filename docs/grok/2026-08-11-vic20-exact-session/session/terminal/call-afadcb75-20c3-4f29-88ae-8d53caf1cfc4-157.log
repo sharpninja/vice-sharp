@@ -1,0 +1,40 @@
+
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:439:            .Count(cia => cia.BaseAddress == 0xDD00)
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:461:        memory.Span[0xDD00] = 0x5A;
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:464:        machine.Bus.Write(0xDD00, 0xA5);
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:467:        memory.Span[0xDD00].Should().Be(0x5A);
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:468:        machine.Bus.Read(0xDD00).Should().Be(0xA7);
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:486:        memory.Span[0xDD00] = 0x5A;
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:489:        machine.Bus.Write(0xDD00, 0xA5);
+tests\ViceSharp.TestHarness\C64MachineProfileTests.cs:491:        memory.Span[0xDD00].Should().Be(0x5A);
+tests\ViceSharp.TestHarness\C64MachineTests.cs:171:        machine.Bus.Write(0xDD00, 0x07);
+tests\ViceSharp.TestHarness\C64MachineTests.cs:172:        machine.Bus.Write(0xDD02, 0x3F);
+tests\ViceSharp.TestHarness\C64MachineTests.cs:174:        Assert.Equal(0x47, machine.Bus.Read(0xDD00));
+tests\ViceSharp.TestHarness\C64MachineTests.cs:190:        machine.Bus.Write(0xDD00, 0x07);
+tests\ViceSharp.TestHarness\C64MachineTests.cs:191:        machine.Bus.Write(0xDD02, 0x3F);
+tests\ViceSharp.TestHarness\C64MachineTests.cs:193:        Assert.Equal(0x07, machine.Bus.Read(0xDD00));
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:184:        var cia2 = new Mos6526(bus, nmi) { BaseAddress = 
+0xDD00 };
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:190:        cia2.Write(0xDD04, 0x01);
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:191:        cia2.Write(0xDD05, 0x00);
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:192:        cia2.Write(0xDD0D, 0x81);
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:193:        cia2.Write(0xDD0E, 0x11);
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:226:        var cia2 = new Mos6526(bus, nmi) { BaseAddress = 
+0xDD00 };
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:232:        cia2.Write(0xDD04, 0x01);
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:233:        cia2.Write(0xDD05, 0x00);
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:234:        cia2.Write(0xDD0D, 0x81);
+tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs:235:        cia2.Write(0xDD0E, 0x11);
+tests\ViceSharp.TestHarness\LockFreePubSubTests.cs:573:        var payload = new PubSubPayload(0xAA, 0xBB, 0xCC, 0xDD, 
+0x11, 0x22, 0x33, 0x44);
+tests\ViceSharp.TestHarness\MonitorServiceHostWriteMemoryTests.cs:145:        byte[] sentinel = [0xAA, 0xBB, 0xCC, 
+0xDD];
+tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs:280:                    var dd00 = 
+ViceNativeBridge.ReadMemory(machine, 0xDD00);
+tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs:316:        state[$"{label}.dd00"] = 
+ViceNativeBridge.ReadMemory(machine, 0xDD00).ToString("X2");
+tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs:317:        state[$"{label}.dd01"] = 
+ViceNativeBridge.ReadMemory(machine, 0xDD01).ToString("X2");
+tests\ViceSharp.TestHarness\RomlessBadLineTests.cs:111:            0xA9, 0x3F, 0x8D, 0x02, 0xDD, // LDA #$3F ; STA 
+$DD02  (CIA2 port A outputs)
+

@@ -1,0 +1,6 @@
+ParserError: 
+Line |
+  12 |      "port $port: $($r.StatusCode) $($r.Content.Substring(0, [Math]::M .
+     |            ~~~~~~
+     | Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to
+     | delimit the name.

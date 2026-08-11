@@ -1,0 +1,108 @@
+ M build/Build.cs
+ M native/vice-shim-vic20.c
+ M native/vice-shim.h
+ M src/ViceSharp.Abstractions/IViceNative.cs
+ M src/ViceSharp.Architectures/Vic20/Vic20Descriptor.cs
+ M src/ViceSharp.Architectures/Vic20/Vic20Expansion.cs
+ M src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs
+ M src/ViceSharp.Avalonia/Views/SettingsView.axaml
+ M src/ViceSharp.Avalonia/Views/SettingsView.axaml.cs
+ M src/ViceSharp.Chips/Vic/Mos6561.cs
+ M src/ViceSharp.Core/ArchitectureBuilder.cs
+ M src/ViceSharp.Core/Vic20/Vic20MemoryLayout.cs
+ M src/ViceSharp.Core/Vic20/Vic20SystemRam.cs
+ M src/ViceSharp.Core/ViceNative.Xvic.cs
+ M src/ViceSharp.Core/ViceNative.cs
+ M src/ViceSharp.Host.InProcess/Runtime/ConsoleEmulatorHost.cs
+ M src/ViceSharp.Host.InProcess/Runtime/DefaultEmulatorRuntimeFactory.cs
+ M src/ViceSharp.Host.InProcess/Runtime/EmulatorRuntimeSession.cs
+ M src/ViceSharp.Host.InProcess/Services/HostProtocolMapper.cs
+ M src/ViceSharp.Host.InProcess/Services/MediaServiceHost.cs
+ M src/ViceSharp.Host.InProcess/Services/SettingsServiceHost.cs
+ M src/ViceSharp.Protocol/ProtocolContracts.cs
+ M src/ViceSharp.Protocol/SettingsOptionCatalog.cs
+ M src/ViceSharp.Xbox.ViewModels/AboutInfo.cs
+ M src/ViceSharp.Xbox.ViewModels/AboutViewModel.cs
+ M src/ViceSharp.Xbox.ViewModels/NavigationDestination.cs
+ M src/ViceSharp.Xbox.ViewModels/VideoFramePullViewModel.cs
+ M src/ViceSharp.Xbox.ViewModels/XboxSettingsViewModel.cs
+ M src/ViceSharp.Xbox/App.xaml.cs
+ M src/ViceSharp.Xbox/Views/SettingsPage.xaml
+ M src/ViceSharp.Xbox/Views/SettingsPage.xaml.cs
+ M tests/ViceSharp.TestHarness/Vic20/Vic20DivergeProbe.cs
+ M tests/ViceSharp.TestHarness/Vic20/Vic20MemoryMapTests.cs
+ M tests/ViceSharp.TestHarness/Vic20/Vic20VideoTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/AboutViewModelTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/Fakes/FakeXboxSettingsGateway.cs
+ M tests/ViceSharp.TestHarness/Xbox/VideoFramePullViewModelTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/XboxComputerModelPickerTests.cs
+ M tests/ViceSharp.TestHarness/Xbox/XboxSettingsViewModelTests.cs
+?? docs/10s-lockstep-2026-08-07.log
+?? docs/10s-lockstep-blankfix-2026-08-06.log
+?? docs/10s-lockstep-idle-2026-08-06.log
+?? docs/10s-lockstep-memptr2-2026-08-06.log
+?? docs/10s-lockstep-ntsc-2026-08-07.log
+?? docs/10s-lockstep-rst6-2026-08-06.log
+?? docs/2s-adc-2026-08-06.log
+?? docs/2s-adc2-2026-08-06.log
+?? docs/2s-and-imm-2026-08-06.log
+?? docs/2s-arm-bcc-2026-08-06.log
+?? docs/2s-asl-2026-08-06.log
+?? docs/2s-asl-bcs-2026-08-06.log
+?? docs/2s-b1-beq-2026-08-06.log
+?? docs/2s-b1stage-2026-08-06.log
+?? docs/2s-bcc-hold-2026-08-06.log
+?? docs/2s-bccsta-2026-08-06.log
+?? docs/2s-bcs-stage-2026-08-06.log
+?? docs/2s-beq-2026-08-06.log
+?? docs/2s-beq-hold-2026-08-06.log
+?? docs/2s-beqpla-2026-08-06.log
+?? docs/2s-bit-2026-08-06.log
+?? docs/2s-bit2-2026-08-06.log
+?? docs/2s-bit3-2026-08-06.log
+?? docs/2s-bit4-2026-08-06.log
+?? docs/2s-bit5-2026-08-06.log
+?? docs/2s-bitf-2026-08-06.log
+?? docs/2s-bitf2-2026-08-06.log
+?? docs/2s-bmi-chain-2026-08-06.log
+?? docs/2s-bne-cmp-2026-08-06.log
+?? docs/2s-bne-stage-2026-08-06.log
+?? docs/2s-bnehold-2026-08-06.log
+?? docs/2s-bpl3-2026-08-06.log
+?? docs/2s-bpl4-2026-08-06.log
+?? docs/2s-bpl6-2026-08-06.log
+?? docs/2s-bpl7-2026-08-06.log
+?? docs/2s-br-irq-2026-08-06.log
+?? docs/2s-cmp-absx-2026-08-06.log
+?? docs/2s-cmpzp-2026-08-06.log
+?? docs/2s-cmpzp2-2026-08-06.log
+?? docs/2s-colorram-2026-08-06.log
+?? docs/2s-cpx-soft-2026-08-06.log
+---
+  develop                         [m aaa53e3 test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+  feat/drive-family-and-device-art[m b6b7753 docs(requirements): regenerate wiki requirement exports (drive-family FR/TR/TEST + BUG-DRV1540-001)
+  feat/iteration2-vic20           [m b793b23 feat: Vic20 iteration2 core + Microsoft Store submission docs
++ [36mfeat/romm-integration           [m 978b5a6 ([36mF:/GitHub/vice-sharp-romm[m) fix(xbox): OnLaunched composed the shell twice, leaking an unarmed gamepad pump
++ [36mfix/romless-vic-content         [m 7f57f92 ([36mF:/GitHub/vice-sharp-romless[m) [[34mazure/fix/romless-vic-content[m] test(vic): ROM-less bad-line repro asserts VICE-faithful observables; VIC unchanged [FIX-ROMLESSVIC-001]
+* [32mmain                            [m e5203f9 [[34morigin/main[m] docs(requirements): capture C= logo source/attribution as FR-XBOXGPL-007
+---
+[33me5203f9[m docs(requirements): capture C= logo source/attribution as FR-XBOXGPL-007
+[33me77ec58[m docs: refresh wiki export for store docs and v1.2.2 line
+[33mf46404d[m release: bump to 1.2.2 with Store art and C= logo attribution
+[33m3d3b6e4[m fix(vic20): 10s PAL+NTSC every-cycle lockstep vs xvic
+[33m8794a41[m merge: feat/iteration2-vic20 into main
+[33mb793b23[m feat: Vic20 iteration2 core + Microsoft Store submission docs
+[33mb2ba4da[m ci: point ADO pipelines at GitHub; restore Octopus release steps
+[33m3b20c4f[m release: bump patch to 1.2.1 on main
+[33m521987b[m merge: feat/xbox-uwp-app into main for 1.2 line
+[33m7442c1d[m release: bump minor to 1.2.0 (RomM, T64, Avalonia UX)
+[33mcbb72be[m feat(xbox): Game-Pass style RomM Library page [PLAN-ROMM-001 AC-XUI-02]
+[33m0c83627[m fix(xbox): restore RomM Library/Lists/CSDb on home menu [PLAN-ROMM-001]
+[33m3ba3068[m feat(xbox): ESC closes virtual keyboard when open [FEAT-XKBD-ESC-001]
+[33mf67eeb9[m fix: restore Octopus CI steps; drop Avalonia Architectures/Chips refs
+[33m6b875b6[m fix(build): bump Cryptography.Xml 10.0.10; nullable RomProvisioning ViewModel
+---
+azure	https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp (fetch)
+azure	https://dev.azure.com/McpServer/VICE-Sharp/_git/VICE-Sharp (push)
+origin	https://github.com/sharpninja/vice-sharp.git (fetch)
+origin	https://github.com/sharpninja/vice-sharp.git (push)

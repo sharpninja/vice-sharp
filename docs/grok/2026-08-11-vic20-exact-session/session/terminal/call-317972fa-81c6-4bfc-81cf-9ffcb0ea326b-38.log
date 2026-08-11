@@ -1,0 +1,32 @@
+  Determining projects to restore...
+  Restored F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\ViceSharp.Library.Tests.csproj (in 380 ms).
+  3 of 4 projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Library.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\bin\Release\net10.0\ViceSharp.Library.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.05]     ViceSharp.Library.Tests.Browse.LibraryBrowseViewModelTests.Jump_UsesLowercaseCharIndexKeys [FAIL]
+[xUnit.net 00:00:01.05]     ViceSharp.Library.Tests.Adapter.RomMGatewayBrowseTests.Page_Maps [FAIL]
+  Failed ViceSharp.Library.Tests.Browse.LibraryBrowseViewModelTests.Jump_UsesLowercaseCharIndexKeys [55 ms]
+  Error Message:
+   Expected vm.Items[0].Id to be 3, but found 1.
+  Stack Trace:
+     at FluentAssertions.Numeric.NumericAssertionsBase`3.Be(T expected, String because, Object[] becauseArgs)
+   at ViceSharp.Library.Tests.Browse.LibraryBrowseViewModelTests.Jump_UsesLowercaseCharIndexKeys() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\Browse\LibraryBrowseViewModelTests.cs:line 85
+--- End of stack trace from previous location ---
+  Failed ViceSharp.Library.Tests.Adapter.RomMGatewayBrowseTests.Page_Maps [115 ms]
+  Error Message:
+   Expected page.CharIndex {[
+    "b"] = 0, [
+    "h"] = 1
+} to contain key "B".
+  Stack Trace:
+     at FluentAssertions.Collections.GenericDictionaryAssertions`4.Contain(IEnumerable`1 expected, String because, Object[] becauseArgs)
+   at FluentAssertions.Collections.GenericDictionaryAssertions`4.Contain(KeyValuePair`2[] expected)
+   at ViceSharp.Library.Tests.Adapter.RomMGatewayBrowseTests.Page_Maps() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\Adapter\RomMGatewayBrowseTests.cs:line 42
+   at ViceSharp.Library.Tests.Adapter.RomMGatewayBrowseTests.Page_Maps() in F:\GitHub\vice-sharp\tests\ViceSharp.Library.Tests\Adapter\RomMGatewayBrowseTests.cs:line 44
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     2, Passed:     1, Skipped:     0, Total:     3, Duration: 125 ms - ViceSharp.Library.Tests.dll (net10.0)

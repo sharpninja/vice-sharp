@@ -1,0 +1,6 @@
+
+native\vice\vice\src\vic20\vic20mem.c:115:uint8_t zero_read(uint16_t addr)
+native\vice\vice\src\vic20\vic20mem.c:260:static uint8_t zero_read_watch(uint16_t addr)
+native\vice\vice\src\vic20\vic20mem.c:375:            zero_read, zero_store, ram_peek,
+native\vice\vice\src\vic20\vic20mem.c:516:    _mem_read_tab_watch[0] = zero_read_watch;
+

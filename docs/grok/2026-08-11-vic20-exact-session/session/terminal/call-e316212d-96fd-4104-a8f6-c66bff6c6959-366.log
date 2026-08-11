@@ -1,0 +1,19 @@
+F:\GitHub\vice-sharp\HANDOFF.md:36:- **PLAN-NATIVERESIDUE-001 closed** (`ba0f94f`): a `.vsf` whose DRIVE8 module carries `has_tde=0` disabled TrueDrive process-wide via `resources_set_int` (drive-snapshot.c:334-363); `vice_machine_create_model` now re-baselines `Drive{8..11}TrueEmulation` to the VICE default 1 through `resources_set_int` so iecbus statics and $DD00 callbacks recompute. SnapshotResume two-process partition removed; suite proven green in ONE process. Guards: TEST-NATIVE-RESIDUE-01/02 in `NativeResidueDiagTests`.
+F:\GitHub\vice-sharp\docs\receipts-nativeresidue-002-2026-07-09.md:34:- `vice-shim.c vice_machine_create_model`: after the TDE loop, re-baseline
+F:\GitHub\vice-sharp\native\vice-shim.h:18:VICE_SHIM_API void* vice_machine_create_model(const char* model);
+F:\GitHub\vice-sharp\native\vice-shim.c:372:    return vice_machine_create_model(NULL);
+F:\GitHub\vice-sharp\native\vice-shim.c:375:VICE_SHIM_API void *vice_machine_create_model(const char *model_selector)
+F:\GitHub\vice-sharp\native\patches\vice-shim-runtime.prompt.md:82:   `native/vice-shim.c` `vice_machine_create_model`, not here.
+F:\GitHub\vice-sharp\docs\Project\wiki\github\Testing-Requirements.md:162:NativeResidueDiagTests: probe 01 diffs a fresh machine's 200-cycle boot state before/after a demo .vsf resume on a scratch machine; probe 02 replicates the post-activity-reset divergence (boot + full PAL frame + reset + per-cycle walk 140-260 sampling DD00/DD01, CIA1+CIA2, VIC beam, CPU). Guards the PLAN-NATIVERESIDUE-001 mechanism fix: vice_machine_create_model re-baselines Drive{8..11}TrueEmulation to the VICE default 1 via resources_set_int so a has_tde=0 DRIVE8 snapshot module cannot disable True Drive Emulation process-wide.
+F:\GitHub\vice-sharp\docs\Project\wiki\azure\Testing-Requirements.md:162:NativeResidueDiagTests: probe 01 diffs a fresh machine's 200-cycle boot state before/after a demo .vsf resume on a scratch machine; probe 02 replicates the post-activity-reset divergence (boot + full PAL frame + reset + per-cycle walk 140-260 sampling DD00/DD01, CIA1+CIA2, VIC beam, CPU). Guards the PLAN-NATIVERESIDUE-001 mechanism fix: vice_machine_create_model re-baselines Drive{8..11}TrueEmulation to the VICE default 1 via resources_set_int so a has_tde=0 DRIVE8 snapshot module cannot disable True Drive Emulation process-wide.
+F:\GitHub\vice-sharp\src\ViceSharp.Core\ViceNative.cs:42:    [LibraryImport(LibraryName, EntryPoint = "vice_machine_create_model", StringMarshalling = StringMarshalling.Utf8)]
+
+Name
+----
+.ccwrap
+patches
+vice
+F:\GitHub\vice-sharp\native\vice-shim.h:18:VICE_SHIM_API void* vice_machine_create_model(const char* model);
+F:\GitHub\vice-sharp\native\vice-shim.c:372:    return vice_machine_create_model(NULL);
+F:\GitHub\vice-sharp\native\vice-shim.c:375:VICE_SHIM_API void *vice_machine_create_model(const char *model_selector)
+

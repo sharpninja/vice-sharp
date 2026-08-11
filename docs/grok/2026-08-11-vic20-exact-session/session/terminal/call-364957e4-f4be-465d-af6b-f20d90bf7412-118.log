@@ -1,0 +1,51 @@
+FinalExpansion3Cartridge.cs:6: /// VIC-20 Final Expansion 3 (VICE finalexpansion.c v3.2) MVP.
+FinalExpansion3Cartridge.cs:10: /// Where diverged: full flash040 program path deferred; START/FLASH menu boot
+FinalExpansion3Cartridge.cs:252: // VICE RAM map (simplified): BLK windows into 8K slices; SUPER_RAM banks N*64K.
+IVic20CartridgeHost.cs:4: /// Optional architecture descriptor contract for attaching a VIC-20 MVP cart
+MegaCartCartridge.cs:6: /// VIC-20 Mega-Cart (VICE megacart.c) MVP: banked ROM + 8K NVRAM window.
+UltimemCartridge.cs:6: /// VIC-20 Ultimem (VICE ultimem.c) MVP: register file at $9C00+, banked BLK windows.
+UltimemCartridge.cs:10: public const int MaxImageSize = 0x1000000; // up to 16MB in VICE; we accept up to 1MB for MVP
+UltimemCartridge.cs:104: // Bank select: registers 6+ pair per block (simplified from VICE CART_BLK_ADDR).
+Vic20Cartridge.cs:6: /// MVP VIC-20 cartridge image: raw payload mapped into a BLK region (default BLK5 $A000).
+Vic20Cartridge.cs:20: throw new ArgumentException("MVP cart image max is 16KB.", nameof(image));
+Mos6561.cs:216: // Sound $900A-$900E: stored only (vic20sound deferred; non-goal).
+Mos6561.cs:224: /// Display truth is per-line <see cref="DrawRasterLine"/> (vic-draw), not an EOF invent grid.
+VicIStub.cs:6: /// Slice A stub for the MOS 6560/6561 VIC-I chip. Implements
+VicIStub.cs:12: /// Machine-agnostic stub: timing parameters come from the architecture
+VicIStub.cs:16: public sealed class VicIStub : IVideoChip, IAddressSpace, IInterruptSource
+VicIStub.cs:29: public VicIStub(IInterruptLine? irqLine = null)
+VicIStub.cs:34: Name = "MOS 656x VIC-I (stub)";
+ArchitectureBuilder.cs:366: // Optional MVP cart: descriptor may expose a Vic20Cartridge via IDevice on Devices
+ArchitectureBuilder.cs:408: // CartridgePort role is shared with MVP Vic20Cartridge host; both register.
+====
+
+src\ViceSharp.Chips\Vic\Mos6561.cs:216:        // Sound $900A-$900E: stored only (vic20sound deferred; non-goal).
+====
+src\ViceSharp.Chips\Vic\Mos6561.cs:272:        // xstart = min(cycle*4, screen_width) * VIC_PIXEL_WIDTH
+src\ViceSharp.Chips\Vic\Mos6561.cs:273:        var screenW = IsNtsc ? 260 : 284; // victypes.h VIC_*_SCREEN_WIDTH
+==== cart MVP
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:1:using ViceSharp.Abstractions;
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:3:namespace ViceSharp.Core.Vic20;
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:6:/// VIC-20 Final Expansion 3 (VICE finalexpansion.c v3.2) MVP.
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:12:/// maps match VICE tables for host RAM Manager presets.
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:54:        Id = new DeviceId(0x0C10);
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:58:    public DeviceId Id { get; }
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:67:        // VICE powerup: START mode, bank 0, registers enabled.
+src\ViceSharp.Core\Vic20\FinalExpansion3Cartridge.cs:252:        // VICE RAM map (simplified): BLK windows into 8K 
+slices; SUPER_RAM banks N*64K.
+src\ViceSharp.Core\Vic20\IVic20CartridgeHost.cs:1:namespace ViceSharp.Core.Vic20;
+src\ViceSharp.Core\Vic20\IVic20CartridgeHost.cs:4:/// Optional architecture descriptor contract for attaching a VIC-20 
+MVP cart
+src\ViceSharp.Core\Vic20\IVic20ExpansionCartPort.cs:1:using ViceSharp.Abstractions;
+src\ViceSharp.Core\Vic20\IVic20ExpansionCartPort.cs:3:namespace ViceSharp.Core.Vic20;
+src\ViceSharp.Core\Vic20\IVic20ExpansionCartPort.cs:8:/// <remarks>FR-VIC20-005. Aligns with VICE cart attach for 
+xvic.</remarks>
+src\ViceSharp.Core\Vic20\IVic20ExpansionCartPort.cs:9:public interface IVic20ExpansionCartPort : IDevice
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs:1:using ViceSharp.Abstractions;
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs:3:namespace ViceSharp.Core.Vic20;
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs:6:/// VIC-20 Mega-Cart (VICE megacart.c) MVP: banked ROM + 8K NVRAM 
+window.
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs:29:        Id = new DeviceId(0x0C12);
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs:33:    public DeviceId Id { get; }
+src\ViceSharp.Core\Vic20\MegaCartCartridge.cs:130:        // bit7 of bank = RAM enable style (VICE ram_low_en)
+

@@ -1,0 +1,31 @@
+src\ViceSharp.Host.InProcess\Services\HostProtocolMapper.cs:120:    public static SessionSettingsDto ToSettingsDto(EmulatorRuntimeSession session)
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:122:            return ValueTask.FromResult(new GetSettingsResponse(RpcStatus.Ok(), HostProtocolMapper.ToSettingsDto(session)));
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:145:        if (!string.IsNullOrWhiteSpace(request.ProfileId) &&
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:146:            !TryResolveProfileId(request.ProfileId, out _))
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:149:                RpcStatus.InvalidArgument($"Unknown machine profile '{request.ProfileId}'."),
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:164:            var currentProfileId = HostProtocolMapper.ToSettingsDto(session).ProfileId;
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:165:            var requestedProfileId = string.IsNullOrWhiteSpace(request.ProfileId)
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:166:                ? currentProfileId
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:167:                : ResolveProfileId(request.ProfileId);
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:168:            var profileChanged = !string.Equals(requestedProfileId, currentProfileId, StringComparison.OrdinalIgnoreCase);
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:188:                    restarted = CreateRestartedSession(
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:190:                        requestedProfileId,
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:203:                        HostProtocolMapper.ToSettingsDto(session),
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:216:                        $"Profile '{requestedProfileId}' was applied by restarting the host session from active profile '{currentProfileId}'."));
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:263:                    HostProtocolMapper.ToSettingsDto(restarted),
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:273:            if (!string.IsNullOrWhiteSpace(request.ProfileId) && profileChanged)
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:280:                    $"Profile '{requestedProfileId}' is staged and requires session restart to replace active profile '{currentProfileId}'."));
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:326:                HostProtocolMapper.ToSettingsDto(session),
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:347:        var currentProfileId = HostProtocolMapper.ToSettingsDto(session).ProfileId;
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:355:                string.Equals(currentProfileId, MinimalHostArchitectureDescriptor.ArchitectureId, StringComparison.OrdinalIgnoreCase),
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:364:            string.Equals(currentProfileId, profile.Id, StringComparison.OrdinalIgnoreCase),
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:374:            string.Equals(currentProfileId, profile.Id, StringComparison.OrdinalIgnoreCase),
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:392:    private EmulatorRuntimeSession CreateRestartedSession(
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:497:    private static string ResolveProfileId(string profileId)
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:499:        return TryResolveProfileId(profileId, out var resolvedProfileId)
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:500:            ? resolvedProfileId
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:504:    private static bool TryResolveProfileId(string profileId, out string resolvedProfileId)
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:508:            resolvedProfileId = MinimalHostArchitectureDescriptor.ArchitectureId;
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:514:            resolvedProfileId = profile.Id;
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:520:            resolvedProfileId = vic20Profile.Id;
+src\ViceSharp.Host.InProcess\Services\SettingsServiceHost.cs:524:        resolvedProfileId = string.Empty;

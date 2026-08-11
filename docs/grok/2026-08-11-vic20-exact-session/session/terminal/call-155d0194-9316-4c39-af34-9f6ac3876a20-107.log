@@ -1,0 +1,4 @@
+
+native\vice-shim.c:2055:VICE_SHIM_API size_t vice_sid_render_samples(void *machine, int16_t *buffer, size_t n, int 
+delta_t_cycles)
+

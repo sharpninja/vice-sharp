@@ -1,0 +1,33 @@
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:20.02
+SNAPSHOT EXIT=1
+
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.96]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:03.96]         
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20SnapshotRoundTripTests.cs(165,0): at 
+ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.AssertEqualCpu(IViceNative native, IMachine managed)
+  Failed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Unexpanded_ManagedBlob_ResumeLockstep_Short [1 s]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+     at ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.AssertEqualCpu(IViceNative native, IMachine managed) 
+in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20SnapshotRoundTripTests.cs:line 165
+  Passed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Inventory_DocumentsXvicVsfModules [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Unexpanded_ManagedStateBlob_RoundTripEqual [25 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SnapshotRoundTripTests.Fe3_ConfigBlob_RoundTrip [1 ms]
+Total tests: 4
+Test Run Failed.
+     Passed: 3
+     Failed: 1
+ Total time: 4.6887 Seconds
+

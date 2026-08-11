@@ -1,0 +1,50 @@
+# Hostile Validator Receipt
+
+- **TimestampUtc**: 2026-08-11T20:38:52Z
+- **ValidatorIdentity**: GrokSubagentHostile
+- **Workspace**: F:\GitHub\vice-sharp
+- **Method**: Independent re-read of implementer temp logs under `C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\` and durable `docs/receipts/vic20-*-2026-08-11*`; SHA256 compare where applicable; source spot-check of test files. No product code changes. No trust of plan checkboxes.
+
+## Claims reviewed
+
+| Id | Claim (summary) | Verdict |
+|----|-----------------|---------|
+| A | Vic20Pixel gate green 8/0/0 | **PASS** |
+| B | Bgra_ReadyPal uses TryCaptureVisibleFrame (not pure tautology) | **PASS** |
+| C | Cart+sound gate 31/0/0 | **PASS** |
+| D | Lockstep 2s PAL+NTSC green with VICESHARP_LOCKSTEP_2S=1 | **PASS** |
+| E | Snapshot tests real (blob RT + resume after ZP), not inventory theater | **PASS** |
+| F | Scoped Exact language honest (index Exact; BGRA Partial OK; residuals listed) | **PASS** |
+
+## Per-claim evidence
+
+### A) Vic20Pixel gate 8/0/0 - PASS
+
+**Attack**: Aggregate could be hand-edited; docs vs temp diverge; skips counted as pass.
+
+**Re-verify**:
+- Temp `vic20-pixel-gate.log` and docs `docs/receipts/vic20-pixel-gate-2026-08-11.log` SHA256 match (`A828399B73D6...`), length 23615 both.
+- Eight process-isolated runs each report `Test Run Successful` / `Passed: 1` / EXIT=0:
+  - Vic20PixelLockstepDiag.Dump_ReadyPal_IndexHistogram
+  - Vic20PixelLockstep.Index_BusyPal_SequenceEqual
+  - Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual
+  - Vic20PixelLockstep.Bgra_ReadyPal_SequenceEqual
+  - Vic20PixelLockstep.Index_ReadyPal_SequenceEqual
+  - Vic20PixelFrameTests.CaptureVisibleFrame_AfterBoot_ReturnsPalNormalCanvas
+  - Vic20PixelFrameTests.ManagedAndNative_FrameGeometry_MatchAfterBoot
+  - Vic20PixelFrameTests.CaptureFrameIndices_DimensionsMatchBgra
+- Footer: `AGGREGATE Passed=8 Failed=0 Skipped=0` and `Exit criterion: Failed=0 Skipped=0`.
+- Wall times 5-6s per lockstep test (not bare early-return).
+
+### B) Bgra_ReadyPal uses TryCaptureVisibleFrame - PASS
+
+
+Name                      Length
+----                      ------
+vic20-cart-sound-gate.log   2787
+vic20-exact-receipts.txt     679
+vic20-lockstep-gate.log    11742
+vic20-pixel-gate.log       23615
+vic20-snapshot-gate.log     3189
+vic20-umbrella-gate.log      787
+

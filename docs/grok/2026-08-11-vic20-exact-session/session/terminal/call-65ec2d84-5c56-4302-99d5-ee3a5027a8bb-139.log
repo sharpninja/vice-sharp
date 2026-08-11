@@ -1,0 +1,18 @@
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\Vic\Mos6561.cs(44,18): error CS0414: The field 'Mos6561._frameDirty' is assigned but its value is never used [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+
+Build FAILED.
+
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\Vic\Mos6561.cs(44,18): error CS0414: The field 'Mos6561._frameDirty' is assigned but its value is never used [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.61
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\Vic\Mos6561.cs(44,18): error CS0414: The field 'Mos6561._frameDirty' is assigned but its value is never used [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+
+Build FAILED.
+
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\Vic\Mos6561.cs(44,18): error CS0414: The field 'Mos6561._frameDirty' is assigned but its value is never used [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.78

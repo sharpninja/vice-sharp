@@ -1,0 +1,15 @@
+C:\Users\kingd\.creds\setup-payton-desktop-cred.ps1:9:$credPath = 'C:\Users\kingd\.creds\paytondesktop.cred.xml'
+C:\Users\kingd\.creds\setup-payton-desktop-cred.ps1:17:$verify = Invoke-Command -ComputerName PAYTON-DESKTOP -Credential $cred -ScriptBlock {
+C:\Users\kingd\.creds\setup-payton-desktop-cred.ps1:28:Write-Host "Done. The Claude session can now Import-Clixml '$credPath' and Invoke-Command -ComputerName PAYTON-DESKTOP -Credential `$cred." -ForegroundColor Green
+
+FullName
+--------
+F:\GitHub\RomM\.dockerignore
+F:\GitHub\RomM\docker-compose.yml
+F:\GitHub\RomM\Dockerfile
+F:\GitHub\RomM\services\csdb-bridge\Dockerfile
+
+
+
+
+

@@ -1,0 +1,10 @@
+
+Hostname       : PAYTON-DESKTOP
+Whoami         : payton-desktop\kingd
+DockerPath     : C:\Program Files\Docker\Docker\resources\bin\docker.exe
+FoundRomM      : {C:\deploy\RomM}
+PSComputerName : PAYTON-DESKTOP
+RunspaceId     : 0d3f2a7d-9776-4d7c-be86-4a4e47854825
+
+FoundRomM:
+C:\deploy\RomM

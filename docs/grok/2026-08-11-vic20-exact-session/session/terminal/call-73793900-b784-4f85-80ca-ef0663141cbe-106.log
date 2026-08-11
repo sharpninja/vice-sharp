@@ -1,0 +1,7 @@
+native/vice/vice/src/6510dtvcore.c:68:#define LOCAL_SET_NZ(val)        (flag_z = flag_n = (val))
+native/vice/vice/src/6510dtvcore.c:116:#define LOCAL_SET_ZERO(val)      (flag_z = !(val))
+native/vice/vice/src/6510dtvcore.c:127:#define LOCAL_ZERO()             (!flag_z)
+native/vice/vice/src/6510dtvcore.c:178:        GLOBAL_REGS.z = flag_z;     \
+native/vice/vice/src/6510dtvcore.c:190:        flag_z = GLOBAL_REGS.z;                            \
+native/vice/vice/src/6510dtvcore.c:207:        GLOBAL_REGS.z = flag_z;                                      \
+native/vice/vice/src/6510dtvcore.c:234:        flag_z = GLOBAL_REGS.z;                            \

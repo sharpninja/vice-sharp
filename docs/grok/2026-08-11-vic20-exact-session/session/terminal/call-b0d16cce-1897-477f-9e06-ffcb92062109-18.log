@@ -1,0 +1,20 @@
+C:\Program Files\dotnet\sdk\10.0.302\Sdks\Microsoft.NET.Sdk\targets\Microsoft.PackageDependencyResolution.targets(266,5): error NETSDK1005: Assets file 'F:\GitHub\vice-sharp\src\ViceSharp.Xbox\obj\project.assets.json' doesn't have a target for 'net10.0'. Ensure that restore has run and that you have included 'net10.0' in the TargetFrameworks for your project. [F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj]
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+CSC : error CS2012: Cannot open 'F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\obj\Release\net10.0\ViceSharp.Library.ViewModels.dll' for writing -- The process cannot access the file 'F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\obj\Release\net10.0\ViceSharp.Library.ViewModels.dll' because it is being used by another process.; file may be locked by 'VBCSCompiler' (26236), '.NET Host' (109240) [F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\ViceSharp.Library.ViewModels.csproj]
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64SingleFileBuilder.cs(30,18): error CS0136: A local or parameter named 'track' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+  Determining projects to restore...
+  Restored F:\GitHub\vice-sharp\src\ViceSharp.Xbox\ViceSharp.Xbox.csproj (in 1.06 sec).
+  20 of 21 projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+F:\GitHub\vice-sharp\src\ViceSharp.Chips\IEC\D64SingleFileBuilder.cs(30,18): error CS0136: A local or parameter named 'track' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter [F:\GitHub\vice-sharp\src\ViceSharp.Chips\ViceSharp.Chips.csproj]
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+EXIT: 1

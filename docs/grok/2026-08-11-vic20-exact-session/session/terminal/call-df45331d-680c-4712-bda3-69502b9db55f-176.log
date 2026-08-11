@@ -1,0 +1,5 @@
+Select-String: 
+Line |
+   2 |  Select-String -Path 'F:\GitHub\vice-sharp\native\vice\vice\src\video\ .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'F:\GitHub\vice-sharp\native\vice\vice\src\video\video-render-1x1.c' because it does not exist.

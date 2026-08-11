@@ -1,0 +1,29 @@
+[33mcommit a19906370e7a1be507b3eadac0c3ebeda317c453[m
+Author: Sharp Ninja <ninja@thesharp.ninja>
+Commit: Sharp Ninja <ninja@thesharp.ninja>
+
+    feat(xbox): B steps back on menu subpages; subpages expand to the full window [PLAN-XBOXUWP FEAT-XMENUSUBPAGE-001]
+    
+    UiBack is page-type-driven (operator: B should go back, not close the menu panel): only the home rail dismisses; a subpage GoBacks, or navigates home when the reopened frame has an empty stack. Subpages span both root-grid columns over an opaque frame backdrop and contract to the docked rail on HomePage (operator: subpages from the menu need to expand fully). Show/hide now push the gamepad context machine explicitly, so mouse Close Menu / background click / B-dismiss no longer strand the controller in the MainMenu context with an inert joystick. NavigationFailed lands in the log and the Devices refresh is guarded (async-void). On-device receipts: Devices fills the window with live slot cards (Cartridge sblox.CRT, Connected) and Back contracts to the rail. Gate: Category=Xbox 501/501.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+
+[33mcommit 8ec21378d14a48c4921a1b99865a4bc8d8f089b1[m
+Author: Sharp Ninja <ninja@thesharp.ninja>
+Commit: Sharp Ninja <ninja@thesharp.ninja>
+
+    feat(xbox): F9/F11 shell toggles, keyboard-panel receipts, BindingFailed logging [PLAN-XBOXUWP FIX-XKBDPANEL-001]
+    
+    F9 toggles the virtual-keyboard dock and F11 the menu from a physical keyboard (both reserved-unmapped; F10 is a Windows system key and never reaches KeyDown; ESC gets consumed in some focus states), with a CoreWindow backstop for the no-focused-element case (clicking the SwapChainPanel or collapsing the focused tile leaves XAML focus nowhere and routed KeyDown stops firing). Keyboard-open logs the VM state and realized-tile counts, and XAML BindingFailed now lands in vicesharp.log; these receipts are what isolated the AOT binding death.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+
+[33mcommit 13355828f7f2906ebf66a27d1b1e723ae9bea3fa[m
+Author: Sharp Ninja <ninja@thesharp.ninja>
+Commit: Sharp Ninja <ninja@thesharp.ninja>
+
+    fix(build): DeployXboxLocal robocopy drops the timestamp filter [PLAN-XBOXUWP FIX-XKBDPANEL-001]
+    
+    The /S /XO shape skipped older-but-different files, so switching deploy configurations left a Frankenbuild layout (Release head over newer Debug core libs; EMU sank to 26%). The refresh now deterministically mirrors whatever was just built. Gate: Category=Xbox 498/498.
+    
+    Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>

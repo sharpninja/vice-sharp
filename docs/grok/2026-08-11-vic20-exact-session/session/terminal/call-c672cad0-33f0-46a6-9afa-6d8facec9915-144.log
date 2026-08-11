@@ -1,0 +1,73 @@
+--- staged ---
+ docs/xbox/store-listing-copy.md                    |  103 +-
+ docs/xbox/store-next-steps-guide.md                |   10 +-
+ docs/xbox/store-product-identity.md                |   63 +
+ docs/xbox/store-screenshots/app-tile-150x150.png   |  Bin 0 -> 7014 bytes
+ docs/xbox/store-screenshots/app-tile-300x300.png   |  Bin 0 -> 26440 bytes
+ docs/xbox/store-screenshots/app-tile-71x71.png     |  Bin 0 -> 3252 bytes
+ .../store-screenshots/branded-key-art-584x800.png  |  Bin 0 -> 42314 bytes
+ .../featured-promo-square-1080x1080.png            |  Bin 0 -> 59603 bytes
+ .../titled-hero-art-1920x1080.png                  |  Bin 0 -> 54883 bytes
+ .../store-screenshots/xbox-boxart-2160x2160.png    |  Bin 0 -> 141214 bytes
+ .../store-screenshots/xbox-poster-1440x2160.png    |  Bin 0 -> 83228 bytes
+ .../store-screenshots/xbox-poster-720x1080.png     |  Bin 0 -> 29814 bytes
+ docs/xbox/store-screenshots/xbox-poster-source.jpg |  Bin 0 -> 200878 bytes
+ .../store-screenshots/xbox-superhero-3840x2160.png |  Bin 0 -> 172037 bytes
+ native/vice-shim-vic20.c                           |   33 +
+ native/vice-shim.h                                 |    3 +
+ src/ViceSharp.Abstractions/IViceNative.cs          |    7 +
+ src/ViceSharp.Chips/Cpu/Mos6502.Opcodes.cs         |    3 +-
+ src/ViceSharp.Chips/Cpu/Mos6502.cs                 | 1807 +++++++++++++++++++-
+ src/ViceSharp.Chips/IEC/Via6522.cs                 |   81 +-
+ src/ViceSharp.Chips/Vic/Mos6561.cs                 |  227 ++-
+ src/ViceSharp.Core/ArchitectureBuilder.cs          |   28 +-
+ src/ViceSharp.Core/BasicBus.cs                     |   47 +
+ src/ViceSharp.Core/SystemClock.cs                  |   68 +-
+ src/ViceSharp.Core/Vic20/Vic20ColorRam.cs          |   63 +
+ src/ViceSharp.Core/Vic20/Vic20IecPort.cs           |   54 +
+ src/ViceSharp.Core/Vic20/Vic20KeyboardMatrix.cs    |    6 +-
+ src/ViceSharp.Core/Vic20/Vic20SystemRam.cs         |   10 +-
+ src/ViceSharp.Core/ViceNative.Xvic.cs              |    6 +
+ src/ViceSharp.Core/ViceNative.cs                   |    4 +
+ src/ViceSharp.Xbox/Package.appxmanifest            |   85 +-
+ .../C1541/Via6522BehaviorTests.cs                  |   18 +-
+ .../C1541/Via6522T2Pb6Tests.cs                     |    6 +-
+ .../C1541/Via6522Timer1Pb7Tests.cs                 |   20 +-
+ .../C1541/Via6522Timer2Tests.cs                    |   12 +-
+ .../Vic20/BranchCycleCountTests.cs                 |   82 +
+ .../Vic20/Vic20DivergeProbe.cs                     |  230 +++
+ .../Vic20/Vic20NativeLockstepTests.cs              |  141 +-
+ .../Vic20/Vic20Via1IecPortTests.cs                 |   32 +
+ 56 files changed, 3367 insertions(+), 273 deletions(-)
+--- unstaged remaining (sample) ---
+## main...origin/main
+M  HANDOFF.md
+M  README.md
+A  docs/10s-lockstep-2026-08-06.log
+A  docs/10s-lockstep-ntsc-2026-08-06.log
+M  docs/Iteration-Roadmap.md
+ M docs/Project/wiki/azure/.mcp-requirements-manifest.json
+ M docs/Project/wiki/azure/.order
+ M docs/Project/wiki/azure/Functional-Requirements.md
+ M docs/Project/wiki/azure/Getting-Started/.order
+ M docs/Project/wiki/azure/Home.md
+ M docs/Project/wiki/azure/Iteration-Roadmap.md
+ M docs/Project/wiki/azure/Project-Overview.md
+ M docs/Project/wiki/azure/Requirements-Matrix.md
+ M docs/Project/wiki/azure/TR-per-FR-Mapping.md
+ M docs/Project/wiki/azure/Technical-Requirements.md
+ M docs/Project/wiki/azure/Testing-Requirements.md
+ M docs/Project/wiki/github/.mcp-requirements-manifest.json
+ M docs/Project/wiki/github/Functional-Requirements.md
+ M docs/Project/wiki/github/Home.md
+ M docs/Project/wiki/github/Iteration-Roadmap.md
+ M docs/Project/wiki/github/Project-Overview.md
+ M docs/Project/wiki/github/Requirements-Matrix.md
+ M docs/Project/wiki/github/TR-per-FR-Mapping.md
+ M docs/Project/wiki/github/Technical-Requirements.md
+ M docs/Project/wiki/github/Testing-Requirements.md
+ M docs/Project/wiki/github/_Sidebar.md
+M  docs/README.md
+A  docs/ntsc-bit-dump.txt
+A  docs/receipts-lockstep-10s-2026-08-05.txt
+... total unstaged lines: 368

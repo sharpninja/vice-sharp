@@ -1,0 +1,8 @@
+pid=58120 started
+hwnd=0 title=
+rect L=0 T=0 W=0 H=0
+Exception: 
+Line |
+  59 |  if ($w -lt 10 -or $h -lt 10) { throw "window too small" }
+     |                                 ~~~~~~~~~~~~~~~~~~~~~~~~
+     | window too small

@@ -1,0 +1,33 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:04.22]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [2 s]
+  Error Message:
+   DIV first=559273 matchedCycles=559272 budget=2216810
+c=559262 nPC=$F738 mPC=$F738 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$24 mP=$24 dbgCyc=2 op=$D0 trail=3 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559263 nPC=$F73A mPC=$F73A nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$24 mP=$24 dbgCyc=1 op=$D0 trail=3 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559264 nPC=$F740 mPC=$F740 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$24 mP=$24 dbgCyc=0 op=$D0 trail=3 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559265 nPC=$F740 mPC=$F740 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$24 mP=$24 dbgCyc=1 op=$38 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559266 nPC=$F741 mPC=$F741 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=0 op=$38 trail=2 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559267 nPC=$F741 mPC=$F741 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=2 op=$A5 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559268 nPC=$F741 mPC=$F741 nA=$03 mA=$03 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=1 op=$A5 trail=0 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=False
+c=559269 nPC=$F743 mPC=$F743 nA=$03 mA=$03 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=0 op=$A5 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559270 nPC=$F743 mPC=$F743 nA=$03 mA=$03 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=1 op=$E9 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559271 nPC=$F745 mPC=$F745 nA=$02 mA=$02 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=0 op=$E9 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559272 nPC=$F745 mPC=$F745 nA=$02 mA=$02 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=2 op=$A5 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=559273 nPC=$F745 mPC=$F745 nA=$00 mA=$02 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EB mS=$EB nP=$25 mP=$25 dbgCyc=1 op=$A5 trail=1 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 123
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 47
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+2S_EXIT=1
+
+docs\2s-flag-only-2026-08-06.log:6:   DIV first=559273 matchedCycles=559272 budget=2216810
+docs\2s-flag-only-2026-08-06.log:27:Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 
+s - ViceSharp.TestHarness.dll (net10.0)
+

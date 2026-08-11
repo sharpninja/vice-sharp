@@ -1,0 +1,26 @@
+
+    Directory: F:\GitHub\vice-sharp\src\ViceSharp.Core\Vic20
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---            8/5/2026 12:28 PM           2427 Vic20Cartridge.cs
+-a---            8/5/2026 12:28 PM           6397 Vic20KeyboardMatrix.cs
+
+Name : Vic20Descriptor.cs
+
+
+Name : Vic20Expansion.cs
+
+
+Name : Vic20MachineProfile.cs
+
+
+Name : Vic20RomSet.cs
+
+
+Name : Vic20SystemCoreDefinition.cs
+
+
+Name : Vic20ViceRomNames.cs
+
+

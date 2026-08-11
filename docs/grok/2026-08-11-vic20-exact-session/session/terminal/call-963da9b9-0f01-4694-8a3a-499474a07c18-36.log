@@ -1,0 +1,42 @@
+
+docs\_deploy-desktop-2026-08-08_032741.log:27:03:27:54 [INF] > "C:\Program Files\dotnet\dotnet.exe" publish 
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj --configuration Release --runtime win-x64 
+--property:Version=1.2.7 --property:ILLinkTreatWarningsAsErrors=false --property:DebugType=none 
+--property:DebugSymbols=false --property:GenerateDocumentationFile=false 
+--property:CopyDocumentationFilesFromPackages=false --property:PublishAot=false --property:PublishTrimmed=true 
+--property:TrimMode=partial --property:PublishReadyToRun=true --property:PublishSingleFile=true 
+--property:IncludeNativeLibrariesForSelfExtract=true --self-contained true
+docs\_deploy-desktop-2026-08-08_032741.log:165:03:29:01 [INF] > "C:\Program Files\dotnet\dotnet.exe" build 
+F:\GitHub\vice-sharp\installer\ViceSharp.Installer.wixproj --configuration Release --property:ProductVersion=1.2.7 
+--property:PublishedRoot=F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish 
+--property:EnableDebugGrpc=false
+docs\_deploy-desktop-2026-08-08_032741.log:178:║ InstallMsi
+docs\_deploy-desktop-2026-08-08_032741.log:182:03:29:52 [INF] InstallMsi complete (exit 0)
+docs\_deploy-desktop-2026-08-08_032741.log:210:InstallMsi         Succeeded       0:03
+docs\_deploy-desktop-2026-08-08_045445.log:9:NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+docs\_deploy-desktop-2026-08-08_045445.log:55:InstallMsi         NotRun              
+docs\_deploy-desktop-2026-08-08_045501.log:9:NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+docs\_deploy-desktop-2026-08-08_045501.log:25:04:55:12 [INF] > C:\Users\kingd\.dotnet\tools\dotnet-gitversion.exe 
+/targetpath "F:\GitHub\vice-sharp" /output json
+docs\_deploy-desktop-2026-08-08_045501.log:26:04:55:13 [INF] MSI version from GitVersion: 1.2.7
+docs\_deploy-desktop-2026-08-08_045501.log:27:04:55:13 [INF] > "C:\Program Files\dotnet\dotnet.exe" publish 
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj --configuration Release --runtime win-x64 
+--property:Version=1.2.7 --property:ILLinkTreatWarningsAsErrors=false --property:DebugType=none 
+--property:DebugSymbols=false --property:GenerateDocumentationFile=false 
+--property:CopyDocumentationFilesFromPackages=false --property:PublishAot=false --property:PublishTrimmed=true 
+--property:TrimMode=partial --property:PublishReadyToRun=true --property:PublishSingleFile=true 
+--property:IncludeNativeLibrariesForSelfExtract=true --self-contained true
+docs\_deploy-desktop-2026-08-08_045501.log:165:04:56:42 [INF] > "C:\Program Files\dotnet\dotnet.exe" build 
+F:\GitHub\vice-sharp\installer\ViceSharp.Installer.wixproj --configuration Release --property:ProductVersion=1.2.7 
+--property:PublishedRoot=F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish 
+--property:EnableDebugGrpc=false
+docs\_deploy-desktop-2026-08-08_045501.log:178:║ InstallMsi
+docs\_deploy-desktop-2026-08-08_045501.log:182:04:58:36 [INF] InstallMsi complete (exit 0)
+docs\_deploy-desktop-2026-08-08_045501.log:210:InstallMsi         Succeeded       0:03
+# GitVersion configuration. The MSI/winget ProductVersion is derived in
+# build/Build.cs as {Major}.{Minor}.{CommitsSinceVersionSource}, e.g. 0.1.356.
+# next-version pins the major.minor base so the build field auto-increments with
+# history. Windows Installer compares major.minor.build for upgrades; the WiX
+# MajorUpgrade (AllowSameVersionUpgrades) makes every redeploy reinstall.
+next-version: 1.2.2
+

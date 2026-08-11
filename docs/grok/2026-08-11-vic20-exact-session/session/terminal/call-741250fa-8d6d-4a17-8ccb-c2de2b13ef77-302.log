@@ -1,0 +1,44 @@
+{
+  "authorization": {
+    "parameters": {
+      "apitoken": null
+    },
+    "scheme": "Token"
+  },
+  "createdBy": {
+    "_links": {
+      "avatar": {
+        "href": "https://dev.azure.com/McpServer/_apis/GraphProfile/MemberAvatars/aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl"
+      }
+    },
+    "descriptor": "aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "displayName": "Payton Byrd",
+    "id": "11ee288f-d7e0-6a37-89d6-327cbaf79bce",
+    "imageUrl": "https://dev.azure.com/McpServer/_apis/GraphProfile/MemberAvatars/aad.MTFlZTI4OGYtZDdlMC03YTM3LTg5ZDYtMzI3Y2JhZjc5YmNl",
+    "uniqueName": "ninja@thesharp.ninja",
+    "url": "https://spsprodcus6.vssps.visualstudio.com/A22204b28-9730-42da-a78e-d8485f84edba/_apis/Identities/11ee288f-d7e0-6a37-89d6-327cbaf79bce"
+  },
+  "creationDate": "2026-08-05T16:29:01.3580994Z",
+  "data": {
+    "repos": "sharpninja/vice-sharp"
+  },
+  "id": "b3a4bb9e-aedc-4e3b-a7a9-2766e333ab59",
+  "isDisabled": false,
+  "isOutdated": false,
+  "isReady": true,
+  "isShared": false,
+  "name": "github-sharpninja-vice-sharp",
+  "owner": "library",
+  "serviceEndpointProjectReferences": [
+    {
+      "name": "github-sharpninja-vice-sharp",
+      "projectReference": {
+        "id": "3ca5a0e9-1589-454e-b762-343056e0a17c",
+        "name": "VICE-Sharp"
+      }
+    }
+  ],
+  "serviceManagementReference": null,
+  "type": "github",
+  "url": "https://github.com"
+}

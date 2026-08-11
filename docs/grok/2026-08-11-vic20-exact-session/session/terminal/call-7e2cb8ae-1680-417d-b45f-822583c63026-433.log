@@ -1,0 +1,48 @@
+src/ViceSharp.Architectures/Vic20\Vic20ViceRomNames.cs:19:    /// <summary>PAL KERNAL (8192 bytes) at $E000-$FFFF. VICE default for PAL.</summary>
+src/ViceSharp.Architectures/Vic20\Vic20ViceRomNames.cs:20:    public const string KernalPal = "kernal.901486-07.bin";
+src/ViceSharp.Architectures/Vic20\Vic20ViceRomNames.cs:22:    /// <summary>NTSC KERNAL (8192 bytes) at $E000-$FFFF. VICE default for NTSC.</summary>
+src/ViceSharp.Architectures/Vic20\Vic20ViceRomNames.cs:23:    public const string KernalNtsc = "kernal.901486-06.bin";
+src/ViceSharp.Architectures/Vic20\Vic20ViceRomNames.cs:26:    public const string KernalRev2 = "kernal.901486-02.bin";
+src/ViceSharp.Architectures/Vic20\Vic20ViceRomNames.cs:38:    public const int KernalRomSize = 0x2000;
+src/ViceSharp.Architectures/Vic20\Vic20RomSet.cs:17:            Vic20ViceRomNames.KernalPal,
+src/ViceSharp.Architectures/Vic20\Vic20RomSet.cs:34:        KernalRomName = string.IsNullOrWhiteSpace(kernalRomName)
+src/ViceSharp.Architectures/Vic20\Vic20RomSet.cs:35:            ? Vic20ViceRomNames.KernalPal
+src/ViceSharp.Architectures/Vic20\Vic20RomSet.cs:47:    public string KernalRomName { get; }
+src/ViceSharp.Architectures/Vic20\Vic20RomSet.cs:55:            && provider.IsAvailable(KernalRomName, Architecture)
+src/ViceSharp.Architectures/Vic20\Vic20MachineProfile.cs:36:    string KernalRomName = Vic20ViceRomNames.KernalPal,
+src/ViceSharp.Architectures/Vic20\Vic20MachineProfile.cs:80:        KernalRomName: Vic20ViceRomNames.KernalPal);
+src/ViceSharp.Architectures/Vic20\Vic20MachineProfile.cs:92:        KernalRomName: Vic20ViceRomNames.KernalNtsc);
+src/ViceSharp.Core\BasicBus.cs:137:        if (device is not RomDevice)
+src/ViceSharp.Architectures/Vic20\Vic20Descriptor.cs:63:        Profile.KernalRomName,
+src/ViceSharp.Core\ArchitectureBuilder.cs:151:        var kernalRomName = profile?.KernalRomName ?? "kernal";
+src/ViceSharp.Core\ArchitectureBuilder.cs:154:        var kernal = IsKernalRomRequired(kernalRomName)
+src/ViceSharp.Core\ArchitectureBuilder.cs:214:        KernalSerialTrap? serialTrap = null;
+src/ViceSharp.Core\ArchitectureBuilder.cs:223:            serialTrap = new KernalSerialTrap(cpu, bus, virtualDrives);
+src/ViceSharp.Core\ArchitectureBuilder.cs:294:        var kernalName = profile?.KernalRomName ?? "kernal.901486-07.bin";
+src/ViceSharp.Core\ArchitectureBuilder.cs:301:        // ROM images also live under RomDevice overlays; mirror into RAM store only
+src/ViceSharp.Core\ArchitectureBuilder.cs:302:        // for any peek path that falls through (not used for C000/E000/8000 once ROMs register).
+src/ViceSharp.Core\ArchitectureBuilder.cs:304:        ram.LoadBytes(0xE000, kernal);
+src/ViceSharp.Core\ArchitectureBuilder.cs:307:        var basicRom = new RomDevice(0xC000, 0xDFFF, basic);
+src/ViceSharp.Core\ArchitectureBuilder.cs:308:        var kernalRom = new RomDevice(0xE000, 0xFFFF, kernal);
+src/ViceSharp.Core\ArchitectureBuilder.cs:309:        var chargenRom = new RomDevice(0x8000, 0x8FFF, character);
+src/ViceSharp.Core\ArchitectureBuilder.cs:314:        deviceRegistry.Add(kernalRom, DeviceRole.KernalRom);
+src/ViceSharp.Core\ArchitectureBuilder.cs:439:        var rom = new RomDevice(
+src/ViceSharp.Core\ArchitectureBuilder.cs:476:    private static bool IsKernalRomRequired(string kernalRomName)
+src/ViceSharp.Core\C64MemoryMap.cs:21:    private const ushort CartridgeUltimaxRomHighStart = 0xE000;
+src/ViceSharp.Core\C64MemoryMap.cs:26:    private const ushort KernalStart = 0xE000;
+src/ViceSharp.Core\C64MemoryMap.cs:43:        KernalRom = 3, // $E000-$FFFF when KernalRomVisible && no cart override
+src/ViceSharp.Core\C64MemoryMap.cs:298:    public void LoadKernalRom(ReadOnlySpan<byte> data)
+src/ViceSharp.Core\C64MemoryMap.cs:325:            PageKind.KernalRom => LatchCpuBusValue(_kernalRom[address - KernalStart]),
+src/ViceSharp.Core\C64MemoryMap.cs:343:        if (address >= KernalStart && _pla.KernalRomVisible)
+src/ViceSharp.Core\C64MemoryMap.cs:344:            return LatchCpuBusValue(_kernalRom[address - KernalStart]);
+src/ViceSharp.Core\C64MemoryMap.cs:374:            // Cartridge may intercept $8000-$9FFF, $A000-$BFFF, and/or $E000-$FFFF.
+src/ViceSharp.Core\C64MemoryMap.cs:393:            if (_pla.KernalRomVisible)
+src/ViceSharp.Core\C64MemoryMap.cs:395:                _readPageTable[0xE] = PageKind.KernalRom;
+src/ViceSharp.Core\C64MemoryMap.cs:396:                _readPageTable[0xF] = PageKind.KernalRom;
+src/ViceSharp.Core\C64MemoryMap.cs:419:        if (address is >= KernalStart && _pla.KernalRomVisible)
+src/ViceSharp.Core\C64MemoryMap.cs:420:            return _kernalRom[address - KernalStart];
+src/ViceSharp.Core\C64MemoryMap.cs:446:            if (address is >= KernalStart and <= 0xFFFF)
+src/ViceSharp.Core\C64MemoryMap.cs:448:                _kernalRom[address - KernalStart] = value;
+src/ViceSharp.Core\RomDevice.cs:8:public sealed class RomDevice : IAddressSpace
+src/ViceSharp.Core\RomDevice.cs:14:    public RomDevice(ushort startAddress, ushort endAddress, byte[] memory)
+src/ViceSharp.Core\SimpleRam.cs:62:        // $E000-$FFFB = KERNAL ROM (loaded separately)

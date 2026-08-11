@@ -1,0 +1,77 @@
+
+native\vice\vice\src\6510dtvcore.c:138:#define SET_LAST_OPCODE(x) OPINFO_SET(LAST_OPCODE_INFO, (x), 0, 0, 0)
+native\vice\vice\src\6510dtvcore.c:141:#define OPCODE_DELAYS_INTERRUPT() OPINFO_SET_DELAYS_INTERRUPT(LAST_OPCODE_INFO, 
+1)
+native\vice\vice\src\6510dtvcore.c:145:#define OPCODE_DISABLES_IRQ() OPINFO_SET_DISABLES_IRQ(LAST_OPCODE_INFO, 1)
+native\vice\vice\src\6510dtvcore.c:149:#define OPCODE_ENABLES_IRQ() OPINFO_SET_ENABLES_IRQ(LAST_OPCODE_INFO, 1)
+native\vice\vice\src\6510dtvcore.c:155:#define OPCODE_DELAYS_INTERRUPT()
+native\vice\vice\src\6510dtvcore.c:390:                         || OPINFO_DISABLES_IRQ(LAST_OPCODE_INFO))             \
+native\vice\vice\src\6510dtvcore.c:706:        if (OPINFO_ENABLES_IRQ(LAST_OPCODE_INFO)) {             \
+native\vice\vice\src\6510dtvcore.c:708:            LAST_OPCODE_INFO &= ~OPINFO_ENABLES_IRQ_MSK;        \
+native\vice\vice\src\6510dtvcore.c:867:        if (OPINFO_ENABLES_IRQ(LAST_OPCODE_INFO)) {                 \
+native\vice\vice\src\6510dtvcore.c:869:            LAST_OPCODE_INFO &= ~OPINFO_ENABLES_IRQ_MSK;            \
+native\vice\vice\src\6510dtvcore.c:960:#define BRANCH(cond)                                              \
+native\vice\vice\src\6510dtvcore.c:977:                    OPCODE_DELAYS_INTERRUPT();                    \
+native\vice\vice\src\6510dtvcore.c:986:#define BRANCH(cond)                                          \
+native\vice\vice\src\6510dtvcore.c:1001:                OPCODE_DELAYS_INTERRUPT();                    \
+native\vice\vice\src\6510dtvcore.c:1060:        if (!OPINFO_ENABLES_IRQ(LAST_OPCODE_INFO)) {      \
+native\vice\vice\src\6510dtvcore.c:1066:            LAST_OPCODE_INFO &= ~OPINFO_ENABLES_IRQ_MSK;  \
+native\vice\vice\src\6510dtvcore.c:1322:        if (OPINFO_ENABLES_IRQ(LAST_OPCODE_INFO)) {                 \
+native\vice\vice\src\6510dtvcore.c:1324:            LAST_OPCODE_INFO &= ~OPINFO_ENABLES_IRQ_MSK;            \
+native\vice\vice\src\6510dtvcore.c:1879:                BRANCH(1);
+native\vice\vice\src\6510dtvcore.c:1947:                BRANCH(!LOCAL_SIGN());
+native\vice\vice\src\6510dtvcore.c:2079:                BRANCH(LOCAL_SIGN());
+native\vice\vice\src\6510dtvcore.c:2183:                BRANCH(!LOCAL_OVERFLOW());
+native\vice\vice\src\6510dtvcore.c:2287:                BRANCH(LOCAL_OVERFLOW());
+native\vice\vice\src\6510dtvcore.c:2395:                BRANCH(!LOCAL_CARRY());
+native\vice\vice\src\6510dtvcore.c:2523:                BRANCH(LOCAL_CARRY());
+native\vice\vice\src\6510dtvcore.c:2643:                BRANCH(!LOCAL_ZERO());
+native\vice\vice\src\6510dtvcore.c:2744:                BRANCH(LOCAL_ZERO());
+  src\ViceSharp.Core\SystemClock.cs:24:
+  src\ViceSharp.Core\SystemClock.cs:25:    private readonly Mos6502? _cpu;
+> src\ViceSharp.Core\SystemClock.cs:26:    private readonly IInterruptLine? _irqLine;
+> src\ViceSharp.Core\SystemClock.cs:27:    private readonly IInterruptLine? _nmiLine;
+  src\ViceSharp.Core\SystemClock.cs:28:    private long _cycle;
+  src\ViceSharp.Core\SystemClock.cs:29:    private bool _nmiWasAsserted;
+  src\ViceSharp.Core\SystemClock.cs:30:    private bool _nmiPending;
+  src\ViceSharp.Core\SystemClock.cs:49:
+  src\ViceSharp.Core\SystemClock.cs:50:    /// <summary>
+> src\ViceSharp.Core\SystemClock.cs:51:    /// Creates a new SystemClock with CPU and IRQ line for interrupt handling.
+  src\ViceSharp.Core\SystemClock.cs:52:    /// </summary>
+> src\ViceSharp.Core\SystemClock.cs:53:    public SystemClock(long frequencyHz, Mos6502 cpu, IInterruptLine irqLine)
+  src\ViceSharp.Core\SystemClock.cs:54:        : this(frequencyHz, cpu, irqLine, null)
+  src\ViceSharp.Core\SystemClock.cs:55:    {
+  src\ViceSharp.Core\SystemClock.cs:56:    }
+  src\ViceSharp.Core\SystemClock.cs:57:
+  src\ViceSharp.Core\SystemClock.cs:58:    /// <summary>
+> src\ViceSharp.Core\SystemClock.cs:59:    /// Creates a new SystemClock with CPU, IRQ line, and NMI line for 
+interrupt handling.
+  src\ViceSharp.Core\SystemClock.cs:60:    /// </summary>
+> src\ViceSharp.Core\SystemClock.cs:61:    public SystemClock(long frequencyHz, Mos6502 cpu, IInterruptLine irqLine, 
+IInterruptLine? nmiLine)
+  src\ViceSharp.Core\SystemClock.cs:62:    {
+  src\ViceSharp.Core\SystemClock.cs:63:        FrequencyHz = frequencyHz;
+  src\ViceSharp.Core\SystemClock.cs:64:        _cpu = cpu;
+  src\ViceSharp.Core\SystemClock.cs:86:            return;
+  src\ViceSharp.Core\SystemClock.cs:87:
+> src\ViceSharp.Core\SystemClock.cs:88:        // Check for pending interrupts after all devices have ticked.
+> src\ViceSharp.Core\SystemClock.cs:89:        // This allows CIA/VIC to assert interrupt lines during their Tick().
+> src\ViceSharp.Core\SystemClock.cs:90:        if (_cpu != null && _nmiPending && _cpu.IsInstructionBoundary)
+  src\ViceSharp.Core\SystemClock.cs:91:        {
+  src\ViceSharp.Core\SystemClock.cs:92:            _nmiPending = false;
+  src\ViceSharp.Core\SystemClock.cs:93:            _cpu.Nmi();
+  src\ViceSharp.Core\SystemClock.cs:94:        }
+> src\ViceSharp.Core\SystemClock.cs:95:        else if (_cpu != null && _irqLine != null && _irqLine.IsAsserted && 
+_cpu.IsInstructionBoundary)
+  src\ViceSharp.Core\SystemClock.cs:96:        {
+  src\ViceSharp.Core\SystemClock.cs:97:            _cpu.Irq();
+  src\ViceSharp.Core\SystemClock.cs:98:        }
+  src\ViceSharp.Core\SystemClock.cs:207:            _phi2SlowDevices[i].Counter = 0;
+  src\ViceSharp.Core\SystemClock.cs:208:
+> src\ViceSharp.Core\SystemClock.cs:209:        if (_irqLine is InterruptLine irq)
+  src\ViceSharp.Core\SystemClock.cs:210:            irq.Clear();
+> src\ViceSharp.Core\SystemClock.cs:211:        if (_nmiLine is InterruptLine nmi)
+  src\ViceSharp.Core\SystemClock.cs:212:            nmi.Clear();
+  src\ViceSharp.Core\SystemClock.cs:213:        _nmiWasAsserted = false;
+  src\ViceSharp.Core\SystemClock.cs:214:        _nmiPending = false;
+

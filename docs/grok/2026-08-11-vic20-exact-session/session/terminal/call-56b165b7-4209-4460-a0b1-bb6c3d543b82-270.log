@@ -1,0 +1,7 @@
+
+docs\2s-br-irq-2026-08-06.log:6:   DIV first=1316731 matchedCycles=1316730 budget=2216810
+docs\2s-br-irq-2026-08-06.log:21:indy: zp=$F3 mPtr=$966E nPtr=$966E mEff=$966E=$91 nEff=$966E=$21
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:24:    [Fact(Explicit = true)]
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:55:    [Fact(Explicit = true)]
+matched=1316730 pal=1.188s past_1.1e6=True
+

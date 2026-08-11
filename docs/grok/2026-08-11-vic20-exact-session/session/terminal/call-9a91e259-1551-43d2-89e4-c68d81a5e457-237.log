@@ -1,0 +1,46 @@
+xvic vice_machine_step_cycle call=8 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000002159e590930
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:04.26]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Pal_FrameGeometry_MatchesViceNormalBorders [12 ms]
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph [13 ms]
+  Error Message:
+   expected black ink pixels from planted 'A' glyph
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoTests.cs:line 130
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland [13 ms]
+  Error Message:
+   paper mid-band should stay white (23 rows)
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20VideoTests.cs:line 353
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_MatchesViceFormula_UnexpandedReadyLayout [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Ntsc_FrameGeometry_MatchesViceNormalBorders [10 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.RenderNow_UsesCycleDrawPath_FrameCompletedOnce [14 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderPixels_MatchBorderColor_NotBackground [13 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [982 ms]
+
+Test Run Failed.
+Total tests: 17
+     Passed: 15
+     Failed: 2
+ Total time: 4.9456 Seconds
+EXIT=1

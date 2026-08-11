@@ -1,0 +1,12 @@
+
+C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log:7:2026-08-06 
+23:52:05.480 [Information] App: persisted settings re-applied: success=True profile=vic20
+C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log:20:2026-08-06 
+23:52:05.744 [Information] Video: tick 2: EnsureDevice: OK (device + context + factory + panel-native all ready)
+C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log:21:2026-08-06 
+23:52:05.748 [Information] Video: tick 2: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+C:\Users\kingd\AppData\Local\Packages\sharpninja.ViceSharp.Xbox_wbxy578d68v3y\LocalState\vicesharp.log:40:2026-08-06 
+23:53:05.045 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' 
+computers=5 models=2 renderers=2 selComputer='VIC-20' selModel='Commodore VIC-20 PAL' selRenderer='Host direct' 
+volume=100
+

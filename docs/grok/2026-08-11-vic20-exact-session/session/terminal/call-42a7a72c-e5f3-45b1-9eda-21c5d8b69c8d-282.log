@@ -1,0 +1,2 @@
+Spaces link: /api/spaces{/id}{?skip,ids,take,partialName,name}
+Spaces-1 Default

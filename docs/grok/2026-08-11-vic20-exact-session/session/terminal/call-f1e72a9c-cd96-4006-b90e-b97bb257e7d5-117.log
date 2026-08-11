@@ -1,0 +1,53 @@
+
+native\vice\vice\src\vic20\vic-cycle.c:90:    xstart *= VIC_PIXEL_WIDTH;
+native\vice\vice\src\vic20\vic-cycle.c:126:    vic.raster.geometry->gfx_size.width = vic.text_cols * 8 * 
+VIC_PIXEL_WIDTH;
+native\vice\vice\src\vic20\vic-cycle.c:129:    xstop = vic.raster.display_xstart / VIC_PIXEL_WIDTH + vic.text_cols * 8;
+native\vice\vice\src\vic20\vic-cycle.c:136:    xstop *= VIC_PIXEL_WIDTH;
+native\vice\vice\src\vic20\vic-draw.c:100:    *xs = *xs << VIC_PIXEL_WIDTH_SHIFT;
+native\vice\vice\src\vic20\vic-draw.c:101:    *xe = ((*xe + 1) << VIC_PIXEL_WIDTH_SHIFT) - 1;
+native\vice\vice\src\vic20\vic-draw.c:121:    p += xs * 8 * VIC_PIXEL_WIDTH;
+native\vice\vice\src\vic20\vic-draw.c:177:        p += 8 * VIC_PIXEL_WIDTH;
+native\vice\vice\src\vic20\vic-draw.c:183:    for (i = xs; (int)i <= (int)xe; i++, p += 8 * VIC_PIXEL_WIDTH) {
+native\vice\vice\src\vic20\vic-draw.c:198:    p = (vic.raster.draw_buffer_ptr + vic.raster.display_xstart);
+native\vice\vice\src\vic20\vic-draw.c:207:    p = (vic.raster.draw_buffer_ptr + vic.raster.display_xstart);
+native\vice\vice\src\vic20\vic-draw.c:210:    draw(p, xs >> VIC_PIXEL_WIDTH_SHIFT,
+native\vice\vice\src\vic20\vic-draw.c:211:         ((xe + 1) >> VIC_PIXEL_WIDTH_SHIFT) - 1, 0,
+native\vice\vice\src\vic20\vic-draw.c:217:    memset(vic.raster.draw_buffer_ptr + start_pixel,
+native\vice\vice\src\vic20\vic-draw.c:226:    p = (vic.raster.draw_buffer_ptr + vic.raster.display_xstart);
+native\vice\vice\src\vic20\vic-mem.c:157:                                                      
+VIC_RASTER_X(vic.raster_cycle + 1) + VIC_PIXEL_WIDTH,
+native\vice\vice\src\vic20\vic-mem.c:166:                                                  
+VIC_RASTER_X(vic.raster_cycle + 1) + VIC_PIXEL_WIDTH,
+native\vice\vice\src\vic20\vic-timing.c:48:                    vic.first_displayed_line = 
+VIC_NTSC_NORMAL_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:50:                    vic.display_width = VIC_NTSC_NORMAL_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic-timing.c:54:                    vic.first_displayed_line = 
+VIC_NTSC_FULL_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:56:                    vic.display_width = VIC_NTSC_FULL_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic-timing.c:60:                    vic.first_displayed_line = 
+VIC_NTSC_DEBUG_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:62:                    vic.display_width = VIC_NTSC_DEBUG_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic-timing.c:66:                    vic.first_displayed_line = 
+VIC_NTSC_NO_BORDER_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:68:                    vic.display_width = VIC_NTSC_NO_BORDER_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic-timing.c:83:                    vic.first_displayed_line = 
+VIC_PAL_NORMAL_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:85:                    vic.display_width = VIC_PAL_NORMAL_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic-timing.c:89:                    vic.first_displayed_line = 
+VIC_PAL_FULL_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:91:                    vic.display_width = VIC_PAL_FULL_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic-timing.c:95:                    vic.first_displayed_line = 
+VIC_PAL_DEBUG_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:97:                    vic.display_width = VIC_PAL_DEBUG_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic-timing.c:101:                    vic.first_displayed_line = 
+VIC_PAL_NO_BORDER_FIRST_DISPLAYED_LINE;
+native\vice\vice\src\vic20\vic-timing.c:103:                    vic.display_width = VIC_PAL_NO_BORDER_DISPLAY_WIDTH;
+native\vice\vice\src\vic20\vic.c:120:    width = vic.display_width * VIC_PIXEL_WIDTH;
+native\vice\vice\src\vic20\vic.c:121:    height = vic.last_displayed_line - vic.first_displayed_line + 1;
+native\vice\vice\src\vic20\vic.c:125:                        vic.screen_width * VIC_PIXEL_WIDTH,
+native\vice\vice\src\vic20\vic.c:127:                        22 * 8 * VIC_PIXEL_WIDTH,
+native\vice\vice\src\vic20\vic.c:131:                        vic.screen_leftborderwidth * 4 * VIC_PIXEL_WIDTH,
+native\vice\vice\src\vic20\vic.c:132:                        38 * 2 - vic.first_displayed_line,
+native\vice\vice\src\vic20\vic.c:134:                        vic.first_displayed_line,
+

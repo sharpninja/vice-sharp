@@ -1,0 +1,10 @@
+name=64 Breakout sibling_roms type=Object[]
+[{"id":260,"name":"64 Breakout","fs_name_no_tags":"64 Breakout","fs_name_no_ext":"64 Breakout (Fi) (W) (PAL) (NTSC) (rev-01) (gb64-29855)","is_main_sibling":false,"sort_comparator":"64 breakout"},{"id":262,"name":"64 Breakout","fs_name_no_tags":"64 Breakout","fs_name_no_ext":"64 Breakout (Sv) (W) (PAL) (NTSC) (rev-01) (gb64-26738)","is_main_sibling":false,"sort_comparator":"64 breakout"}]
+sibling idx=209703
+:{"$ref":"#/components/schemas/RomFileSchema"},"type":"array","title":"Files"},"sibling_roms":{"items":{"$ref":"#/components/schemas/SiblingRomSchema"},"type":"array","title":"Sibling Roms"},"user_saves":{"items":{"$ref":"#/components/schemas/SaveSchema"},"type":"array","title":"User Saves"},"user_states":{"items":{"$ref":"#/components/schemas/StateSchema"},"type":"array","title":"User States"},"a
+10
+found group/sibling terms
+group_by
+sibling
+Sibling
+is_main

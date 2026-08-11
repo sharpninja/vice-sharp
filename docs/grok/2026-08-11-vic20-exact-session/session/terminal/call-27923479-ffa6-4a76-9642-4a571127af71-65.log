@@ -1,0 +1,59 @@
+[main 0cd61f8] feat(vic20): present-path borders, expansion UX, flash cart builder
+ 124 files changed, 8531 insertions(+), 452 deletions(-)
+ create mode 100644 docs/FlashCart-Builder.md
+ create mode 100644 docs/Project/wiki/azure/FR-Xbox-Branding.md
+ create mode 100644 docs/Project/wiki/azure/Flash-Cart-Builder.md
+ create mode 100644 docs/Project/wiki/azure/VIC20-vs-VICE-Audit.md
+ create mode 100644 docs/Project/wiki/github/FR-Xbox-Branding.md
+ create mode 100644 docs/Project/wiki/github/Flash-Cart-Builder.md
+ create mode 100644 docs/Project/wiki/github/VIC20-vs-VICE-Audit.md
+ create mode 100644 docs/audit-vic20-vs-vice-2026-08-07.md
+ create mode 100644 docs/receipts-lockstep-everycycle-baseline-2026-08-06.txt
+ create mode 100644 docs/receipts-vic20-ntsc-apply-stackoverflow-2026-08-07.md
+ create mode 100644 docs/receipts-vic20-ram-all-stackoverflow-2026-08-06.md
+ create mode 100644 docs/receipts-vic20-video-40x40-2026-08-07.md
+ create mode 100644 docs/receipts/hostile-validator-20260808T094911Z.json
+ create mode 100644 docs/receipts/hostile-validator-20260808T094911Z.md
+ create mode 100644 docs/receipts/hostile-validator-20260808T103211Z.json
+ create mode 100644 docs/receipts/hostile-validator-20260808T103211Z.md
+ create mode 100644 docs/receipts/wrapup-flashcart-vic20video-20260810.txt
+ create mode 100644 src/ViceSharp.Avalonia/Views/FlashCartBuilderView.axaml
+ create mode 100644 src/ViceSharp.Avalonia/Views/FlashCartBuilderView.axaml.cs
+ create mode 100644 src/ViceSharp.Core/FlashCarts/FlashBankContentKind.cs
+ create mode 100644 src/ViceSharp.Core/FlashCarts/FlashBankSlot.cs
+ create mode 100644 src/ViceSharp.Core/FlashCarts/FlashCartImageBuilderViewModel.cs
+ create mode 100644 src/ViceSharp.Core/FlashCarts/FlashCartProfiles.cs
+ create mode 100644 src/ViceSharp.Core/FlashCarts/FlashImageBuilder.cs
+ create mode 100644 src/ViceSharp.Core/FlashCarts/IFlashBuilderFileIo.cs
+ create mode 100644 src/ViceSharp.Core/FlashCarts/IFlashCartProfile.cs
+ create mode 100644 src/ViceSharp.Core/Iec/FileSystemIecDevice.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/FinalExpansion3Cartridge.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/IVic20ExpansionCartPort.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/IVic20RamConfiguration.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/MegaCartCartridge.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/UltimemCartridge.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/Vic20ExpansionCartKind.cs
+ create mode 100644 src/ViceSharp.Core/Vic20/Vic20ExpansionCartPort.cs
+ create mode 100644 src/ViceSharp.Protocol/ExpansionCartManageState.cs
+ create mode 100644 src/ViceSharp.Protocol/Vic20MemoryUiState.cs
+ create mode 100644 src/ViceSharp.Xbox/Views/FlashCartBuilderPage.xaml
+ create mode 100644 src/ViceSharp.Xbox/Views/FlashCartBuilderPage.xaml.cs
+ create mode 100644 tests/ViceSharp.TestHarness/FlashCart/Fe3PresetTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/FlashCart/FlashCartImageBuilderViewModelTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/FlashCart/FlashImageBuilderTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/IEC/FileSystemIecDeviceTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/IEC/FileSystemIecUnitSettingsTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Ui/Vic20SettingsUiSurfaceTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/MediaServiceHostVic20ExpansionTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20BoardWiringTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20ExpansionCartTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20MemorySettingsRestartTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20RamBlocksTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20SettingsRestartPreservesExpansionTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20VideoLockstep.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20VideoPumpSmokeTests.cs
+COMMIT_EXIT 0
+0cd61f86fa99ee1e109c69ff2c494a6879c35def
+0cd61f86fa99ee1e109c69ff2c494a6879c35def
+feat(vic20): present-path borders, expansion UX, flash cart builder
+Sharp Ninja <ninja@thesharp.ninja>

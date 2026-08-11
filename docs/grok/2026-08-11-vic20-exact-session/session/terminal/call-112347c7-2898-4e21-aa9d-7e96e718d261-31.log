@@ -1,0 +1,31 @@
+=== limit=3&offset=0&platform_ids=4&order_by=name&order_dir=asc === total=6772 items=3
+ci={"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+  - .gb64-import-state
+  - '04 Lucky Poker Game, The
+  - 'Twas the Night Before Christmas
+=== limit=3&offset=0&platform_ids=4&order_by=name&order_dir=asc&with_char_index=true === total=6772 items=3
+ci={"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+  - .gb64-import-state
+  - '04 Lucky Poker Game, The
+  - 'Twas the Night Before Christmas
+=== limit=3&offset=0&platform_id=4&order_by=name&order_dir=asc === total=6772 items=3
+ci={"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+  - .gb64-import-state
+  - '04 Lucky Poker Game, The
+  - 'Twas the Night Before Christmas
+=== limit=3&offset=6527&platform_ids=4&order_by=name&order_dir=asc === total=6772 items=3
+ci={"#":3,"$":4,"'":1,".":0,"0":23,"a":299,"b":1822,"c":3927,"d":6060,"e":6386,"f":6390,"g":6413,"h":6450,"i":6484,"j":6501,"k":6507,"l":6515,"m":6527,"n":6555,"o":6571,"p":6582,"r":6646,"s":6661,"t":6717,"u":6754,"v":6755,"w":6761}
+  - Macbeth
+  - Macbeth
+  - Macbeth
+
+FullName
+--------
+C:\Users\kingd\.nuget\packages\romm.client\1.0.1\lib
+C:\Users\kingd\.nuget\packages\romm.client\1.0.1\.nupkg.metadata
+C:\Users\kingd\.nuget\packages\romm.client\1.0.1\romm.client.1.0.1.nupkg
+C:\Users\kingd\.nuget\packages\romm.client\1.0.1\romm.client.1.0.1.nupkg.sha512
+C:\Users\kingd\.nuget\packages\romm.client\1.0.1\romm.client.nuspec
+C:\Users\kingd\.nuget\packages\romm.client\1.0.1\lib\net10.0
+C:\Users\kingd\.nuget\packages\romm.client\1.0.1\lib\net10.0\RomM.Client.dll
+

@@ -1,0 +1,25 @@
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondPal [9 s]
+   DIV first=3533371 matchedCycles=3533370 budget=11084050
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [25 ms]
+   DIV first=5513 matchedCycles=5512 budget=2216810
+Failed!  - Failed:     2, Passed:     0, Skipped:     0, Total:     2, Duration: 9 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\10s-memptr2.log:29:   DIV first=3533371 
+matchedCycles=3533370 budget=11084050
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\10s-memptr2.log:41:c=3533371 nPC=$EAE0 mPC=$EAE0 
+nA=$91 mA=$01 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED nP=$A4 mP=$A4 dbgCyc=1 op=$B1 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=True irq=0 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\10s-memptr2.log:44:indy: zp=$F3 mPtr=$966E 
+nPtr=$966E mEff=$966E=$21 nEff=$966E=$91 mVBus=$20 mRast=157 mCycLine=56 mFetch=3 mBuf=20 n$9000=$0C m$9000=$0C 
+n$9001=$26 m$9001=$26 n$9002=$96 m$9002=$96 n$9003=$AE n$9004=$4E m$9003=$AE m$9004=$4E
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\10s-memptr2.log:54:   DIV first=5513 
+matchedCycles=5512 budget=2216810
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\10s-memptr2.log:66:c=5513 nPC=$FE91 mPC=$FE91 
+nA=$22 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$B1 trail=3 nonOvlR=True 
+nonOvlF=True dly=False stg=False irq=0 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\10s-memptr2.log:69:indy: zp=$C1 mPtr=$040A 
+nPtr=$040A mEff=$040A=$04 nEff=$040A=$FF mVBus=$04 mRast=77 mCycLine=46 mFetch=0 mBuf=0 n$9000=$0C m$9000=$00 
+n$9001=$26 m$9001=$00 n$9002=$96 m$9002=$00 n$9003=$AE n$9004=$26 m$9003=$80 m$9004=$26
+

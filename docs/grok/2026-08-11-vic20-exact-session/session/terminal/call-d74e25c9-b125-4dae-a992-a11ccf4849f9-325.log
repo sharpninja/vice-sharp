@@ -1,0 +1,50 @@
+=== oracle presence ===
+vice_xvic.dll len=10911412 mtimeUtc=2026-08-05T19:54:11.3168663Z
+=== CERT lockstep suite ===
+xvic vice_machine_create call=4 model=vic20
+xvic vice_machine_reset call=4 machine=000001ce1e4509b0
+xvic vice_machine_create call=5 model=vic20ntsc
+xvic vice_machine_reset call=5 machine=000001ce1e450970
+xvic vice_machine_create call=6 model=vic20ntsc
+xvic vice_machine_reset call=6 machine=000001ce1e4507d0
+xvic vice_machine_create call=7 model=vic20
+xvic vice_machine_reset call=7 machine=000001ce1e4506e0
+xvic vice_machine_create call=8 model=vic20ntsc
+xvic vice_machine_reset call=8 machine=000001ce1e450730
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 1024) [903 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 256) [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_DualVia_ControlRegs_Lockstep(cycles: 64) [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 64) [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 1024) [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 5000) [15 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 1024) [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20ntsc", cycles: 256) [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 5000) [31 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 4096) [11 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_CpuRegs_Lockstep(modelSelector: "vic20", cycles: 256) [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 256) [10 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 64) [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 1024) [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_VicI_Regs_Lockstep(cycles: 5000) [12 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.LockstepValidator_AcceptsVic20Model_WhenOraclePresent [8 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_VicRasterAdvances_AndMatchesManaged [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20NativeLockstepTests.NativeXvic_Managed_PMatches_ThroughCmpAbsX [4 ms]
+[xUnit.net 00:00:03.21]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.ManagedVic20_TwoMachines_AgreeAfterFrames_UntilNativeXvicExists [255 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "vic20") [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "vic20ntsc") [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "xvic") [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeXvic_StepAdvancesCycle_WhenOraclePresent [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent [4 ms]
+
+Test Run Successful.
+Total tests: 24
+     Passed: 24
+ Total time: 3.7471 Seconds
+LOCKSTEP_EXIT=0
+=== CERT Vic20 filter ===
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    87, Skipped:     0, Total:    87, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+VIC20_EXIT=0

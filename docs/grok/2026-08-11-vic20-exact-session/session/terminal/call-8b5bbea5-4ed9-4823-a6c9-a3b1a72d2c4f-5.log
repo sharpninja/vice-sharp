@@ -1,0 +1,130 @@
+
+>     private bool _deferImmediateLoadAfterBranch;
+      private bool _deferImpliedRegisterCompletionAfterBranch;
+      private bool _deferAbsoluteXLoadCompletionAfterBranch;
+      private bool _deferAbsoluteYLoadCompletionAfterBranch;
+      private bool _deferJsrPushAfterBranch;
+      private bool _deferIndirectYLoadCompletionAfterBranch;
+      private bool _deferZeroPageRmwPcAdvanceAfterBranch;
+      private bool _deferNextIndirectYLoadAfterBranchRmw;
+      private bool _deferIndexedStorePcAdvanceAfterBranch;
+>         var fetchingBranchTarget = false;
+          var fetchingCallTarget = false;
+          if (_suppressBootstrapBoundary)
+          {
+>             fetchingBranchTarget = _branchTargetFetchPending;
+              fetchingCallTarget = _callTargetFetchPending;
+              _branchTargetFetchPending = false;
+              _callTargetFetchPending = false;
+              _suppressBootstrapBoundary = false;
+          }
+  
+          if (_interruptSequenceRemaining > 0)
+          {
+>             _deferImmediateLoadAfterBranch = fetchingBranchTarget && IsImmediateLoadOpcode(_opcode);
+>             _deferImpliedRegisterCompletionAfterBranch = fetchingBranchTarget && 
+IsImpliedRegisterOrFlagOpcode(_opcode);
+>             _deferJsrPushAfterBranch = fetchingBranchTarget && _opcode == 0x20;
+>             var fetchingIndexedLoadControlTarget = fetchingBranchTarget;
+              _deferAbsoluteXLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && 
+IsAbsoluteXLoadOpcode(_opcode);
+              _deferAbsoluteYLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && 
+IsAbsoluteYLoadOpcode(_opcode);
+>             _deferIndirectYLoadCompletionAfterBranch = (fetchingBranchTarget && IsIndirectYLoadOpcode(_opcode))
+                  || deferIndirectYLoadAfterBranchRmw;
+>             _deferZeroPageRmwPcAdvanceAfterBranch = fetchingBranchTarget && 
+IsZeroPageIncrementDecrementOpcode(_opcode);
+>             _deferIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && IsIndexedAbsoluteStoreOpcode(_opcode);
+>             _deferZeroPageIndexedStorePcAdvanceAfterBranch = fetchingBranchTarget && 
+IsZeroPageIndexedStoreOpcode(_opcode);
+              // TR-LOCKSTEP-VSF-001: a taken branch costs 3 native cycles
+              // (6510dtvcore.c BRANCH: fetch, operand, dummy fetch + JUMP) but this
+              // core resolves it in 2 ticks and re-establishes the one-cycle lag by
+              // deferring the FOLLOWING instruction. For opcode classes without a
+              // dedicated defer path the extension is a plain +1 cycle budget: a
+              // staged compare's read at _cycle == 1 then lands on the native read
+              // cycle (CMP abs C4) and its staged apply on the native commit-export
+              // cycle (the next instruction's first CLK_INC in the hosted
+>             if (fetchingBranchTarget && IsAfterBranchBudgetExtendedOpcode(_opcode))
+              {
+>                 _cycle++;
+              }
+              _pendingDeferredImmediateLoad = false;
+              _indexedLoadPageCrossDelayConsumed = false;
+              _stagedReturnAddress = 0;
+              _effectiveAddress = 0;
+              _fetched = 0;
+  
+          }
+>         if (TryExecuteCycleStagedBranchOpcode())
+          {
+              return true;
+          }
+  
+          if (TryExecuteCycleStagedRtsOpcode())
+          {
+              return true;
+          }
+>         if (_cycle == 0 && _deferImmediateLoadAfterBranch)
+          {
+>             _deferImmediateLoadAfterBranch = false;
+              _pendingDeferredImmediateLoad = true;
+              _visiblePC = _instructionPC;
+              _suppressBootstrapBoundary = true;
+              return true;
+          }
+  
+          if (_cycle == 2 && IsZeroPageIncrementDecrementOpcode(_opcode))
+          {
+>     private bool TryExecuteCycleStagedBranchOpcode()
+      {
+>         if (_cycle != 0 || !IsBranchOpcode(_opcode))
+          {
+              return false;
+          }
+  
+          var fallThrough = (ushort)(_instructionPC + 2);
+          if (!IsBranchTaken(_opcode))
+          {
+              if (Peek(fallThrough) == 0x60)
+>     private static bool IsBranchOpcode(byte opcode)
+      {
+          return opcode is 0x10 or 0x30 or 0x50 or 0x70 or 0x90 or 0xB0 or 0xD0 or 0xF0;
+      }
+  
+      private bool IsBranchTaken(byte opcode)
+      {
+          return opcode switch
+          {
+>         _deferImmediateLoadAfterBranch = false;
+          _deferImpliedRegisterCompletionAfterBranch = false;
+          _deferAbsoluteXLoadCompletionAfterBranch = false;
+          _deferAbsoluteYLoadCompletionAfterBranch = false;
+          _deferJsrPushAfterBranch = false;
+          _deferIndirectYLoadCompletionAfterBranch = false;
+          _deferZeroPageRmwPcAdvanceAfterBranch = false;
+          _deferNextIndirectYLoadAfterBranchRmw = false;
+          _deferIndexedStorePcAdvanceAfterBranch = false;
+>     private static bool IsAfterBranchBudgetExtendedOpcode(byte opcode)
+      {
+          return IsStagedCompareOpcode(opcode)
+              || IsStagedAbsoluteRmwOpcode(opcode)
+>             || IsBranchOpcode(opcode)
+              || opcode is 0x4C or 0x6C or 0xBC or 0xBE or 0xD1
+              || opcode is 0x29 or 0x09 or 0x49 or 0x69 or 0xE9 or 0xC9 or 0xE0 or 0xC0
+              || opcode is 0x8D or 0x8C or 0x85 or 0x86 or 0x84
+              || opcode is 0xA5 or 0xA6 or 0xA4 or 0xB5 or 0xB6 or 0xB4 or 0xAD or 0xAE or 0xAC
+              || opcode is 0x48 or 0x08;
+      }
+  
+      private void AdvanceVisiblePc(int instructionLength)
+>         _deferImmediateLoadAfterBranch = false;
+          _deferImpliedRegisterCompletionAfterBranch = false;
+          _deferAbsoluteXLoadCompletionAfterBranch = false;
+          _deferAbsoluteYLoadCompletionAfterBranch = false;
+          _deferJsrPushAfterBranch = false;
+          _deferIndirectYLoadCompletionAfterBranch = false;
+          _deferZeroPageRmwPcAdvanceAfterBranch = false;
+          _deferNextIndirectYLoadAfterBranchRmw = false;
+          _deferIndexedStorePcAdvanceAfterBranch = false;
+

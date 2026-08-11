@@ -1,0 +1,8 @@
+FullyQualifiedName~Flash040 EXIT=0
+FullyQualifiedName~Fe3Flash EXIT=0
+FullyQualifiedName~UltimemParity EXIT=0
+FullyQualifiedName~MegaCartParity EXIT=0
+FullyQualifiedName~Vic20CartInventory EXIT=0
+FullyQualifiedName~Vic20Sound EXIT=0
+FullyQualifiedName~Vic20NativeAudio EXIT=0
+CART_SOUND_SUMMARY Passed=0 Failed=0 Skipped=0

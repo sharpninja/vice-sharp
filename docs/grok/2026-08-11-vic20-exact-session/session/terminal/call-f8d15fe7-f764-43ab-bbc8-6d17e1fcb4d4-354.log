@@ -1,0 +1,6 @@
+Select-String: A parameter cannot be found that matches parameter name 'Glob'.
+Select-String: 
+Line |
+   2 |  . tHarness -Pattern "branch.*3|cycle.*branch|TakenBranch" -Glob "*.cs"  .
+     |                                                            ~~~~~
+     | A parameter cannot be found that matches parameter name 'Glob'.

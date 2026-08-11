@@ -1,0 +1,14 @@
+=== STATUS ===
+{"status":"available","agent":"GrokCode","namespaces":["workflow.sessionlog","workflow.todo","workflow.requirements","workflow.triage","workflow.graphrag","workflow.memory","workflow.failsafe"],"requirementMethods":["workflow.requirements.listLayers","workflow.requirements.createLayer","workflow.requirements.updateLayer","workflow.requirements.effective"],"requirementClientMethods":["client.Requirements.ListRequirementLayersAsync","client.Requirements.CreateRequirementLayerAsync","client.Requirements.UpdateRequirementLayerAsync","client.Requirements.GetEffectiveRequirementsAsync"],"cacheDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\grok","hasSession":true,"hasCurrentTurn":true,"pendingCount":0,"pendingTurnCount":0,"failsafeDir":"F:\\GitHub\\vice-sharp\\.mcpServer\\grok\\failsafe","failsafeCount":0,"failsafeQuarantineCount":0}
+=== HEALTH NONCE ===
+nonce_sent=8a06eee27e3544cd9f1901273b0cfb30
+nonce_echo=8a06eee27e3544cd9f1901273b0cfb30
+nonce_match=True
+health_raw_type=System.Management.Automation.PSCustomObject
+{"status":"Healthy","version":"1.4.25+28f56515ca1a806f60a6617d3b742e8e3b58b854","checks":[{"name":"self","status":"Healthy","description":null,"duration":0.0027},{"name":"upstream","status":"Healthy","description":"Federation disabled.","duration":0.0026}],"nonce":"8a06eee27e3544cd9f1901273b0cfb30","storage":"reachable"}
+=== SIGNATURE ===
+WriteError: 
+Line |
+  15 |  $pid = Get-Field $yaml "pid"
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot overwrite variable PID because it is read-only or constant.

@@ -1,0 +1,8 @@
+GITHUB_TOKEN set
+ado pat present
+ERROR: The command failed with an unexpected error. Here is the traceback:
+ERROR: [Errno 2] No such file or directory: 'C:\\Users\\kingd\\AppData\\Local\\Temp\\ghep.json'
+Traceback (most recent call last):
+  File "D:\a\_work\1\s\build_scripts\windows\artifacts\cli\Lib\site-packages\knack/cli.py", line 233, in invoke
+  File "D:\a\_work\1\s\build_scripts\windows\artifacts\cli\Lib\site-packages\azure/cli/core/commands/__init__.py", line 677, in execute
+ERROR: Bad Request({"$id":"1","innerException":null,"message":"At least one project reference required to create an endpoint.","typeName":"System.ArgumentException, mscorlib","typeKey":"ArgumentException","errorCode":0,"eventId":0})

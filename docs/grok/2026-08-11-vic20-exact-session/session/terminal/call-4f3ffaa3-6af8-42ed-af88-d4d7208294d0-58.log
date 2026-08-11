@@ -1,0 +1,38 @@
+
+native\vice-shim-vic20.c:7: * create/destroy/reset/step, CPU regs, memory peek/read/write, disk attach,
+native\vice-shim-vic20.c:77:static vice_machine_t *g_active_machine;
+native\vice-shim-vic20.c:117:static int vice_shim_is_active_machine(const void *machine)
+native\vice-shim-vic20.c:122:        && instance == g_active_machine;
+native\vice-shim-vic20.c:282:    if (!vice_shim_is_active_machine(machine) || g_worker_thread == NULL) {
+native\vice-shim-vic20.c:380:    while (g_active_machine != NULL) {
+native\vice-shim-vic20.c:409:    g_active_machine = machine;
+native\vice-shim-vic20.c:461:VICE_SHIM_API void vice_machine_destroy(void *machine)
+native\vice-shim-vic20.c:474:    if (g_active_machine == instance) {
+native\vice-shim-vic20.c:476:        g_active_machine = NULL;
+native\vice-shim-vic20.c:498:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:539:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:570:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:607:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:627:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:649:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:669:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:692:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:705:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:718:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:735:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:769:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:879:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:892:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:905:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:918:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:933:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:946:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:963:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:1064:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:1086:    if (!vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:1112:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:1141:    if (vice_shim_is_active_machine(machine)) {
+native\vice-shim-vic20.c:1293:    if (vice_shim_is_active_machine(machine)
+native\vice-shim-vic20.c:1354:    if (vice_shim_is_active_machine(machine)
+native\vice-shim-vic20.c:1507:    if (vice_shim_is_active_machine(machine) && maincpu_int_status != NULL) {
+

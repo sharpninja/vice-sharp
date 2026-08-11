@@ -1,0 +1,86 @@
+
+docs\2s-sta-irq-2026-08-06.log:6:   DIV first=559234 matchedCycles=559233 budget=2216810
+docs\2s-sta-irq-2026-08-06.log:7:c=559223 nPC=$FF74 mPC=$FF74 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$26 mP=$26 dbgCyc=1 op=$48 trail=0 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:8:c=559224 nPC=$FF75 mPC=$FF75 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$26 mP=$26 dbgCyc=0 op=$48 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:9:c=559225 nPC=$FF75 mPC=$FF75 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$26 mP=$26 dbgCyc=1 op=$98 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:10:c=559226 nPC=$FF76 mPC=$FF76 nA=$0A mA=$0A nX=$00 mX=$00 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$24 mP=$24 dbgCyc=0 op=$98 trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:11:c=559227 nPC=$FF76 mPC=$FF76 nA=$0A mA=$0A nX=$00 mX=$00 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$24 mP=$24 dbgCyc=2 op=$48 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:12:c=559228 nPC=$FF76 mPC=$FF76 nA=$0A mA=$0A nX=$00 mX=$00 nY=$0A mY=$0A nS=$ED mS=$ED 
+nP=$24 mP=$24 dbgCyc=1 op=$48 trail=0 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:13:c=559229 nPC=$FF77 mPC=$FF77 nA=$0A mA=$0A nX=$00 mX=$00 nY=$0A mY=$0A nS=$ED mS=$ED 
+nP=$24 mP=$24 dbgCyc=0 op=$48 trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:14:c=559230 nPC=$FF77 mPC=$FF77 nA=$0A mA=$0A nX=$00 mX=$00 nY=$0A mY=$0A nS=$ED mS=$ED 
+nP=$24 mP=$24 dbgCyc=1 op=$BA trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:15:c=559231 nPC=$FF78 mPC=$FF78 nA=$0A mA=$0A nX=$ED mX=$ED nY=$0A mY=$0A nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=0 op=$BA trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:16:c=559232 nPC=$FF78 mPC=$FF78 nA=$0A mA=$0A nX=$ED mX=$ED nY=$0A mY=$0A nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=3 op=$BD trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:17:c=559233 nPC=$FF78 mPC=$FF78 nA=$0A mA=$0A nX=$ED mX=$ED nY=$0A mY=$0A nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=2 op=$BD trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+docs\2s-sta-irq-2026-08-06.log:18:c=559234 nPC=$FF78 mPC=$FF78 nA=$22 mA=$0A nX=$ED mX=$ED nY=$0A mY=$0A nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=1 op=$BD trail=0 nonOvlR=True nonOvlF=True dly=False stg=True irq=0 mis=True
+docs\2s-irqb-2026-08-06.log:6:   DIV first=522317 matchedCycles=522316 budget=2216810
+docs\2s-irqb-2026-08-06.log:7:c=522306 nPC=$EAC1 mPC=$EAC1 nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E7 mS=$E7 
+nP=$27 mP=$27 dbgCyc=3 op=$20 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:8:c=522307 nPC=$EAC1 mPC=$EAC1 nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=2 op=$20 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:9:c=522308 nPC=$EAC1 mPC=$EAC1 nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=1 op=$20 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:10:c=522309 nPC=$FFEA mPC=$FFEA nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=0 op=$20 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:11:c=522310 nPC=$FFEA mPC=$FFEA nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=2 op=$4C trail=4 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:12:c=522311 nPC=$FFEA mPC=$FFEA nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=1 op=$4C trail=4 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:13:c=522312 nPC=$F734 mPC=$F734 nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=0 op=$4C trail=4 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:14:c=522313 nPC=$F734 mPC=$F734 nA=$00 mA=$00 nX=$E8 mX=$E8 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=1 op=$A2 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:15:c=522314 nPC=$F736 mPC=$F736 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=0 op=$A2 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:16:c=522315 nPC=$F736 mPC=$F736 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=4 op=$E6 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:17:c=522316 nPC=$F736 mPC=$F736 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$27 mP=$27 dbgCyc=3 op=$E6 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqb-2026-08-06.log:18:c=522317 nPC=$F738 mPC=$F736 nA=$00 mA=$00 nX=$00 mX=$00 nY=$0A mY=$0A nS=$E6 mS=$E6 
+nP=$25 mP=$27 dbgCyc=2 op=$E6 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True
+docs\2s-irqdiag-2026-08-06.log:29:   DIV first=522263 matchedCycles=522262 budget=2216810
+docs\2s-irqdiag-2026-08-06.log:30:c=522252 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=2 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:31:c=522253 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=1 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:32:c=522254 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=0 op=$91 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:33:c=522255 nPC=$EA9D mPC=$EA9D nA=$01 mA=$01 nX=$11 mX=$11 nY=$0B mY=$0B nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=1 op=$88 trail=5 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:34:c=522256 nPC=$EA9E mPC=$EA9E nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=0 op=$88 trail=5 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:35:c=522257 nPC=$EA9E mPC=$EA9E nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=1 op=$10 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:36:c=522258 nPC=$EAA0 mPC=$EAA0 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=0 op=$10 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:37:c=522259 nPC=$EA95 mPC=$EA95 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=1 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:38:c=522260 nPC=$EA95 mPC=$EA95 nA=$01 mA=$01 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-irqdiag-2026-08-06.log:39:c=522261 nPC=$EA97 mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=6 mis=False
+docs\2s-irqdiag-2026-08-06.log:40:c=522262 nPC=$EA97 mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$EE 
+nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=5 mis=False
+docs\2s-irqdiag-2026-08-06.log:41:c=522263 nPC=$EA99 mPC=$EA97 nA=$20 mA=$20 nX=$11 mX=$11 nY=$0A mY=$0A nS=$EE mS=$ED 
+nP=$31 mP=$31 dbgCyc=0 op=$A9 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=4 mis=True
+docs\2s-irqfall-2026-08-06.log:6:   DIV first=4977 matchedCycles=4976 budget=2216810
+  tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:81:                $"nonOvlR={cpu.DebugNonOverlappedRegion} 
+nonOvlF={cpu.DebugNonOverlappedFetchPhase} " +
+  tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:82:                $"dly={cpu.DebugDelayNextFetch} 
+stg={cpu.DebugStagedMemoryReadCompleted} " +
+> tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:83:                
+$"irq={cpu.DebugInterruptSequenceRemaining} mis={mismatch}";
+  tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:84:
+  tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:85:            ring[ringAt] = line;
+

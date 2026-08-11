@@ -1,0 +1,69 @@
+
+native\vice\vice\src\6510dtvcore.c:97:#define LOCAL_SET_INTERRUPT(val)   \
+native\vice\vice\src\6510dtvcore.c:100:            reg_p |= P_INTERRUPT;  \
+native\vice\vice\src\6510dtvcore.c:102:            reg_p &= ~P_INTERRUPT; \
+native\vice\vice\src\6510dtvcore.c:124:#define LOCAL_INTERRUPT()        (reg_p & P_INTERRUPT)
+native\vice\vice\src\6510dtvcore.c:131:#ifdef LAST_OPCODE_INFO
+native\vice\vice\src\6510dtvcore.c:137:   delay interrupt and does not change the I flag.  */
+native\vice\vice\src\6510dtvcore.c:138:#define SET_LAST_OPCODE(x) OPINFO_SET(LAST_OPCODE_INFO, (x), 0, 0, 0)
+native\vice\vice\src\6510dtvcore.c:140:/* Remember that the last opcode delayed a pending IRQ or NMI by one cycle.  */
+native\vice\vice\src\6510dtvcore.c:141:#define OPCODE_DELAYS_INTERRUPT() OPINFO_SET_DELAYS_INTERRUPT(LAST_OPCODE_INFO, 
+1)
+native\vice\vice\src\6510dtvcore.c:144:   to dispatch an IRQ even if the I flag is 0 when we check it.  */
+native\vice\vice\src\6510dtvcore.c:145:#define OPCODE_DISABLES_IRQ() OPINFO_SET_DISABLES_IRQ(LAST_OPCODE_INFO, 1)
+native\vice\vice\src\6510dtvcore.c:148:   not dispatch an IRQ even if the I flag is 1 when we check it.  */
+native\vice\vice\src\6510dtvcore.c:149:#define OPCODE_ENABLES_IRQ() OPINFO_SET_ENABLES_IRQ(LAST_OPCODE_INFO, 1)
+native\vice\vice\src\6510dtvcore.c:154:#define SET_LAST_OPCODE(x)
+native\vice\vice\src\6510dtvcore.c:155:#define OPCODE_DELAYS_INTERRUPT()
+native\vice\vice\src\6510dtvcore.c:156:#define OPCODE_DISABLES_IRQ()
+native\vice\vice\src\6510dtvcore.c:157:#define OPCODE_ENABLES_IRQ()
+native\vice\vice\src\6510dtvcore.c:161:#ifdef LAST_OPCODE_ADDR
+native\vice\vice\src\6510dtvcore.c:162:#define SET_LAST_ADDR(x) LAST_OPCODE_ADDR = (x)
+native\vice\vice\src\6510dtvcore.c:164:#error "please define LAST_OPCODE_ADDR"
+native\vice\vice\src\6510dtvcore.c:259:#define CHECK_PROFILE_INTERRUPT(dest_addr, handler)                        \
+native\vice\vice\src\6510dtvcore.c:280:#define CHECK_PROFILE_INTERRUPT(dest_addr, handler)
+native\vice\vice\src\6510dtvcore.c:294:#define TRACE_IRQ()                         \
+native\vice\vice\src\6510dtvcore.c:297:            debug_irq(CPU_INT_STATUS, CLK); \
+native\vice\vice\src\6510dtvcore.c:309:#define TRACE_IRQ()
+native\vice\vice\src\6510dtvcore.c:313:/* Do the IRQ/BRK sequence, including NMI transformation. */
+native\vice\vice\src\6510dtvcore.c:314:#define DO_IRQBRK()                                                             
+                                      \
+native\vice\vice\src\6510dtvcore.c:316:        /* Interrupt vector to use. Assume regular IRQ/BRK. */                  
+                                      \
+native\vice\vice\src\6510dtvcore.c:332:        if ((CPU_INT_STATUS->global_pending_int & IK_NMI) && (CLK >= 
+(CPU_INT_STATUS->nmi_clk + INTERRUPT_DELAY))) {  \
+native\vice\vice\src\6510dtvcore.c:333:            /* Transform the IRQ/BRK into an NMI. */                            
+                                      \
+native\vice\vice\src\6510dtvcore.c:337:                monitor_check_icount_interrupt();                               
+                                      \
+native\vice\vice\src\6510dtvcore.c:339:            interrupt_ack_nmi(CPU_INT_STATUS);                                  
+                                      \
+native\vice\vice\src\6510dtvcore.c:342:        LOCAL_SET_INTERRUPT(1);                                                 
+                                      \
+native\vice\vice\src\6510dtvcore.c:347:        CHECK_PROFILE_INTERRUPT(addr, handler_vector);                          
+                                      \
+native\vice\vice\src\6510dtvcore.c:351:/* Perform the interrupts in `int_kind'.  If we have both NMI and IRQ,
+native\vice\vice\src\6510dtvcore.c:354:#define DO_INTERRUPT(int_kind)                                                 \
+native\vice\vice\src\6510dtvcore.c:359:        if (ik & (IK_IRQ | IK_IRQPEND | IK_NMI)) {                             \
+native\vice\vice\src\6510dtvcore.c:361:                && interrupt_check_nmi_delay(CPU_INT_STATUS, CLK)) {           \
+native\vice\vice\src\6510dtvcore.c:364:                    monitor_check_icount_interrupt();                          \
+native\vice\vice\src\6510dtvcore.c:366:                interrupt_ack_nmi(CPU_INT_STATUS);                             \
+native\vice\vice\src\6510dtvcore.c:384:                LOCAL_SET_INTERRUPT(1);                                        \
+native\vice\vice\src\6510dtvcore.c:385:                CHECK_PROFILE_INTERRUPT(addr, 0xfffb);                         \
+native\vice\vice\src\6510dtvcore.c:387:                SET_LAST_OPCODE(0);                                            \
+native\vice\vice\src\6510dtvcore.c:388:            } else if ((ik & (IK_IRQ | IK_IRQPEND))                            \
+native\vice\vice\src\6510dtvcore.c:389:                     && (!LOCAL_INTERRUPT()                                    \
+native\vice\vice\src\6510dtvcore.c:390:                         || OPINFO_DISABLES_IRQ(LAST_OPCODE_INFO))             \
+native\vice\vice\src\6510dtvcore.c:391:                     && interrupt_check_irq_delay(CPU_INT_STATUS, CLK)) {      \
+native\vice\vice\src\6510dtvcore.c:392:                TRACE_IRQ();                                                   \
+native\vice\vice\src\6510dtvcore.c:394:                    monitor_check_icount_interrupt();                          \
+native\vice\vice\src\6510dtvcore.c:396:                interrupt_ack_irq(CPU_INT_STATUS);                             \
+
+FullName : F:\GitHub\vice-sharp\src\ViceSharp.Core\SystemClock.cs
+
+
+Select-String: 
+Line |
+   4 |  . h src -Pattern "IsInstructionBoundary|ArmIrq|Interrupt" -Glob "*.cs"  .
+     |                                                            ~~~~~
+     | A parameter cannot be found that matches parameter name 'Glob'.

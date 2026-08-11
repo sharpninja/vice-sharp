@@ -1,0 +1,28 @@
+
+native\vice-shim-vic20.c:954:        if (maincpu_int_status != NULL) {
+native\vice-shim-vic20.c:955:            state->global_pending_int = (uint32_t)maincpu_int_status->global_pending_int;
+native\vice-shim-vic20.c:956:            state->irq_clk = (uint64_t)maincpu_int_status->irq_clk;
+native\vice-shim-vic20.c:957:            state->nmi_clk = (uint64_t)maincpu_int_status->nmi_clk;
+native\vice-shim-vic20.c:958:            state->irq_delay_cycles = (uint64_t)maincpu_int_status->irq_delay_cycles;
+native\vice-shim-vic20.c:959:            state->nmi_delay_cycles = (uint64_t)maincpu_int_status->nmi_delay_cycles;
+native\vice-shim-vic20.c:1260:    if (vice_shim_is_active_machine(machine) && maincpu_int_status != NULL) {
+native\vice-shim-vic20.c:1261:        state->global_pending = (uint8_t)maincpu_int_status->global_pending_int;
+native\vice-shim-vic20.c:1262:        state->irq_asserted = (uint8_t)((maincpu_int_status->global_pending_int & 
+IK_IRQ) != 0);
+native\vice-shim-vic20.c:1263:        state->nmi_asserted = (uint8_t)((maincpu_int_status->global_pending_int & 
+IK_NMI) != 0);
+native\vice-shim.c:1371:        if (maincpu_int_status != NULL) {
+native\vice-shim.c:1372:            state->global_pending_int = (uint32_t)maincpu_int_status->global_pending_int;
+native\vice-shim.c:1373:            state->irq_clk = (uint64_t)maincpu_int_status->irq_clk;
+native\vice-shim.c:1374:            state->nmi_clk = (uint64_t)maincpu_int_status->nmi_clk;
+native\vice-shim.c:1375:            state->irq_delay_cycles = (uint64_t)maincpu_int_status->irq_delay_cycles;
+native\vice-shim.c:1376:            state->nmi_delay_cycles = (uint64_t)maincpu_int_status->nmi_delay_cycles;
+native\vice-shim.c:1974:    if (vice_shim_is_active_machine(machine) && maincpu_int_status != NULL) {
+native\vice-shim.c:1975:        state->global_pending = (uint8_t)(maincpu_int_status->global_pending_int & 0xff);
+native\vice-shim.c:1976:        state->irq_source_count = (uint8_t)(maincpu_int_status->nirq & 0xff);
+native\vice-shim.c:1977:        state->nmi_source_count = (uint8_t)(maincpu_int_status->nnmi & 0xff);
+native\vice-shim.c:1978:        state->irq_asserted = (uint8_t)(maincpu_int_status->nirq > 0);
+native\vice-shim.c:1979:        state->nmi_asserted = (uint8_t)(maincpu_int_status->nnmi > 0);
+native\vice-shim.h:256:    uint8_t irq_asserted;
+src\ViceSharp.Core\ViceNative.cs:519:        public byte IrqAsserted;
+

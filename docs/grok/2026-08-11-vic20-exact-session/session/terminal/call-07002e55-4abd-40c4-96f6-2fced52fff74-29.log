@@ -1,0 +1,82 @@
+y meanR meanG meanB class
+  0   0   0   0 black
+  8   0 117 209 cyan-dom
+ 16   0 117 209 cyan-dom
+ 24   4 113 200 cyan-dom
+ 32  20 122 202 cyan-dom
+ 40  19 121 201 cyan-dom
+ 48   8 116 202 cyan-dom
+ 56   0 117 209 cyan-dom
+ 64   0 117 209 cyan-dom
+ 72 240 239 238 white-dom
+ 80 240 239 238 white-dom
+ 88 237 235 234 white-dom
+ 96 201 199 200 mixed
+104 193 191 190 mixed
+112 240 239 238 white-dom
+120 216 215 214 white-dom
+128  67 221 218 cyan-dom
+136  68 221 218 cyan-dom
+144  68 221 218 cyan-dom
+152  68 221 218 cyan-dom
+160  68 221 218 cyan-dom
+168  68 221 218 cyan-dom
+176  68 221 218 cyan-dom
+184  68 221 218 cyan-dom
+192  68 221 218 cyan-dom
+200  68 221 218 cyan-dom
+208  68 221 218 cyan-dom
+216  68 221 218 cyan-dom
+224  68 221 218 cyan-dom
+232  68 221 218 cyan-dom
+240  68 221 218 cyan-dom
+248  68 221 218 cyan-dom
+256  68 221 218 cyan-dom
+264  68 221 218 cyan-dom
+272  68 221 218 cyan-dom
+280  68 221 218 cyan-dom
+288  68 221 218 cyan-dom
+296  68 221 218 cyan-dom
+304  68 221 218 cyan-dom
+312  87 223 217 cyan-dom
+320 152 191 219 mixed
+328 139 179 221 mixed
+336 158 197 222 mixed
+344 191 230 233 mixed
+352 190 231 230 mixed
+360 190 231 230 mixed
+368 190 231 230 mixed
+376 169 208 216 mixed
+384 166 204 226 mixed
+392 158 199 224 mixed
+400 159 199 218 mixed
+408 191 230 234 mixed
+416 190 231 230 mixed
+424 190 231 230 mixed
+432 190 231 230 mixed
+440 177 216 221 mixed
+448 173 212 226 mixed
+456 157 198 223 mixed
+464 165 205 221 mixed
+472 185 224 230 mixed
+480 174 214 227 mixed
+488 174 214 227 mixed
+496 174 214 227 mixed
+504 179 220 231 mixed
+512 190 231 230 mixed
+520 190 231 230 mixed
+528 190 231 230 mixed
+536 190 231 230 mixed
+544 190 231 230 mixed
+552 190 231 230 mixed
+560 190 231 230 mixed
+568 190 231 230 mixed
+--- horizontal scan at y where paper likely ---
+bestY=112 meanR=239.547540983607
+O[0..15] W[16..609]
+copied VS imagesCopy-Item: 
+
+Line |
+  55 |  Copy-Item "$base\image-4638ac58-4e2b-4cf5-9b3b-227a14232843.png" "F:\ .
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'C:\Users\kingd\.grok\sessions\F%3A%5CGitHub%5Cvice-sharp\019fd0df-383d-7fc0-9f0a-69785afd78ed\images\image-4638ac58-4e2b-4cf5-9b3b-227a14232843.png' because it does not exist.

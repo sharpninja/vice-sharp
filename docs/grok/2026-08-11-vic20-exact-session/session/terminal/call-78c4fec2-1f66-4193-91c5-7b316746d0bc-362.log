@@ -1,0 +1,43 @@
+<TextBox x:Name="SearchBox" Grid.Column="1" Margin="28,0,28,0" MaxWidth="560" HorizontalAlignment="Stretch"
+<TextBlock x:Name="MachineText" Text="Machine ú C64" Foreground="White" FontSize="18" />
+<TextBlock x:Name="CountText" Text="" Foreground="#FFB8B8B8" FontSize="18" VerticalAlignment="Center" />
+<Grid x:Name="BrowseArea" Grid.Row="1" Visibility="Collapsed">
+<GridView x:Name="TilesView" Grid.Column="0" SelectionMode="Single" IsItemClickEnabled="True"
+<Image x:Name="CoverImage" Stretch="UniformToFill" />
+<StackPanel x:Name="AzStrip" Orientation="Vertical" />
+<Border x:Name="ConnectPanel" Grid.Row="1" Background="#CC141414" CornerRadius="12" Padding="28"
+<TextBox x:Name="UrlBox" PlaceholderText="http://host:8080/" Text="http://localhost:8080/" />
+<PasswordBox x:Name="TokenBox" PlaceholderText="Client API token (optional when a bridge is present)" />
+<TextBlock x:Name="ConnectStatus" Text="Scanning the local network for RomM..." Foreground="#FFDDDDDD" TextWrapping="Wrap" />
+<TextBlock x:Name="SelectedText" Text="No game selected" Foreground="White" FontSize="18" />
+<TextBlock x:Name="StatusText" Text="" Foreground="#FFCFCFCF" FontSize="14" Margin="0,2,0,0" TextWrapping="Wrap" />
+<ComboBox x:Name="SlotBox" Width="150" SelectionChanged="OnSlotChanged" />
+<ProgressBar x:Name="DownloadBar" Width="220" Minimum="0" Maximum="1" Value="0" VerticalAlignment="Center" />
+
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:25:/// docs/wireframes/romm-xbox-library.svg): auto-connects on open 
+(scan + csdb-bridge as the Xbox
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:35:    private bool _autoConnectTried;
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:46:        // autostart, X = add to list). handledEventsToo so the 
+focused tile does not swallow them.
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:53:    /// <summary>Auto-connects the first time the page is 
+shown.</summary>
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:54:    protected override void OnNavigatedTo(NavigationEventArgs e)
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:56:        base.OnNavigatedTo(e);
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:57:        if (_autoConnectTried)
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:62:        _autoConnectTried = true;
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:64:        _ = AutoConnectAsync();
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:70:    private async Task AutoConnectAsync()
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:99:            ConnectStatus.Text = $"Auto-connect failed: {ex.Message}. 
+Enter a URL + token and Connect.";
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:103:    private async void OnScan(object sender, RoutedEventArgs e) => 
+await AutoConnectAsync();
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:141:            TilesView.ItemsSource = browse.Items;
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:145:            TilesView.Focus(FocusState.Programmatic);
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:175:            _browse.SearchText = SearchBox.Text;
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:186:        _browse.SelectedTile = TilesView.SelectedItem as RomTile;
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:196:            TilesView.SelectedItem = tile;
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:198:            await AttachAsync(autostart: false);
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:208:                await AttachAsync(autostart: true);
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:287:    private async Task AttachAsync(bool autostart)
+src\ViceSharp.Xbox\Views\LibraryPage.xaml.cs:300:        await _browse.AttachAsync(autostart);
+

@@ -1,0 +1,82 @@
+
+c=4926 nPC=$FDA7 mPC=$FDA7 nA=$00 mA=$00 nX=$3C mX=$3C nY=$03 mY=$03 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$85 
+bound=True delayFetch=False mis=False
+c=4927 nPC=$FDA7 mPC=$FDA7 nA=$00 mA=$00 nX=$3C mX=$3C nY=$03 mY=$03 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=3 op=$8D 
+bound=False delayFetch=False mis=False
+c=4928 nPC=$FDA7 mPC=$FDA7 nA=$00 mA=$00 nX=$3C mX=$3C nY=$03 mY=$03 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=2 op=$8D 
+bound=False delayFetch=False mis=False
+c=4929 nPC=$FDAA mPC=$FDAA nA=$00 mA=$00 nX=$3C mX=$3C nY=$03 mY=$03 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$8D 
+bound=False delayFetch=False mis=False
+c=4930 nPC=$FDAA mPC=$FDAA nA=$00 mA=$00 nX=$3C mX=$3C nY=$03 mY=$03 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$8D 
+bound=True delayFetch=False mis=False
+c=4931 nPC=$FDAA mPC=$FDAA nA=$00 mA=$00 nX=$3C mX=$3C nY=$03 mY=$03 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$A8 
+bound=False delayFetch=False mis=False
+c=4932 nPC=$FDAB mPC=$FDAB nA=$00 mA=$00 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$27 mP=$27 dbgCyc=0 op=$A8 
+bound=True delayFetch=False mis=False
+c=4933 nPC=$FDAB mPC=$FDAB nA=$00 mA=$00 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$27 mP=$27 dbgCyc=1 op=$A9 
+bound=False delayFetch=False mis=False
+c=4934 nPC=$FDAD mPC=$FDAD nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$A9 
+bound=True delayFetch=False mis=False
+c=4935 nPC=$FDAD mPC=$FDAD nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=2 op=$85 
+bound=False delayFetch=False mis=False
+c=4936 nPC=$FDAF mPC=$FDAF nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$85 
+bound=False delayFetch=False mis=False
+c=4937 nPC=$FDAF mPC=$FDAF nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$85 
+bound=True delayFetch=False mis=False
+c=4938 nPC=$FDAF mPC=$FDAF nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=4 op=$E6 
+bound=False delayFetch=False mis=False
+c=4939 nPC=$FDAF mPC=$FDAF nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=3 op=$E6 
+bound=False delayFetch=False mis=False
+c=4940 nPC=$FDB1 mPC=$FDB1 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=2 op=$E6 
+bound=False delayFetch=False mis=False
+c=4941 nPC=$FDB1 mPC=$FDB1 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$E6 
+bound=False delayFetch=False mis=False
+c=4942 nPC=$FDB1 mPC=$FDB1 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$E6 
+bound=True delayFetch=False mis=False
+c=4943 nPC=$FDB1 mPC=$FDB1 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=2 op=$D0 
+bound=False delayFetch=False mis=False
+c=4944 nPC=$FDB3 mPC=$FDB1 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$D0 
+bound=False delayFetch=False mis=True
+c=4945 nPC=$FDB5 mPC=$FDB3 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$D0 
+bound=False delayFetch=False mis=True
+c=4946 nPC=$FDB5 mPC=$FDB5 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=5 op=$20 
+bound=False delayFetch=False mis=False
+c=4947 nPC=$FDB5 mPC=$FDB5 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=4 op=$20 
+bound=False delayFetch=False mis=False
+c=4948 nPC=$FDB7 mPC=$FDB7 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FC mS=$FC nP=$25 mP=$25 dbgCyc=3 op=$20 
+bound=False delayFetch=False mis=False
+c=4949 nPC=$FDB7 mPC=$FDB7 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=2 op=$20 
+bound=False delayFetch=False mis=False
+c=4950 nPC=$FDB7 mPC=$FDB7 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$20 
+bound=False delayFetch=False mis=False
+c=4951 nPC=$FE91 mPC=$FE91 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=0 op=$20 
+bound=False delayFetch=False mis=False
+c=4952 nPC=$FE91 mPC=$FE91 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=4 op=$B1 
+bound=False delayFetch=False mis=False
+c=4953 nPC=$FE91 mPC=$FE91 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=3 op=$B1 
+bound=False delayFetch=False mis=False
+c=4954 nPC=$FE91 mPC=$FE91 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=2 op=$B1 
+bound=False delayFetch=False mis=False
+c=4955 nPC=$FE91 mPC=$FE91 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$B1 
+bound=False delayFetch=False mis=False
+c=4956 nPC=$FE93 mPC=$FE93 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=0 op=$B1 
+bound=True delayFetch=False mis=False
+c=4957 nPC=$FE93 mPC=$FE93 nA=$04 mA=$04 nX=$3C mX=$3C nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$AA 
+bound=False delayFetch=False mis=False
+c=4958 nPC=$FE94 mPC=$FE94 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=0 op=$AA 
+bound=True delayFetch=False mis=False
+c=4959 nPC=$FE94 mPC=$FE94 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$A9 
+bound=False delayFetch=False mis=False
+c=4960 nPC=$FE96 mPC=$FE96 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=0 op=$A9 
+bound=True delayFetch=False mis=False
+c=4961 nPC=$FE96 mPC=$FE96 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=5 op=$91 
+bound=False delayFetch=False mis=False
+c=4962 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=4 op=$91 
+bound=False delayFetch=False mis=False
+c=4963 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=3 op=$91 
+bound=False delayFetch=False mis=False
+c=4964 nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=2 op=$91 
+bound=False delayFetch=False mis=False
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 1 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

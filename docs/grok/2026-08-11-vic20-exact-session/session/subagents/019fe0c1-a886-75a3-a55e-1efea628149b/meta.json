@@ -1,0 +1,17 @@
+{
+  "subagent_id": "019fe0c1-a886-75a3-a55e-1efea628149b",
+  "parent_session_id": "019fd0df-383d-7fc0-9f0a-69785afd78ed",
+  "child_session_id": "019fe0c1-a886-75a3-a55e-1efea628149b",
+  "subagent_type": "explore",
+  "description": "Hostile overall VIC-20 Exact claims",
+  "prompt": "You are a HOSTILE VALIDATOR (read-only) for ViceSharp VIC-20 vs VICE.\n\nWorkspace: F:\\GitHub\\vice-sharp\n\n## Contract (operator acceptance criterion 1)\nReturn VERDICT: PASS only if:\n1. Every subsystem/rule the tree STILL CLAIMS Exact is truly Exact: VICE file+function + matching managed control flow with line anchors.\n2. Zero Invented behaviors remain in those Exact-claimed paths.\n3. Modules that are incomplete are Explicit Missing/Partial/Stub in docs/audit-vic20-vs-vice-2026-08-07.md with NO Exact marketing for whole-machine or for sound/carts/live IEC/tape/snapshots.\n4. READY normal present geometry: full-line paint + first_x crop (not src=0); L+R borders; paper not flush-right; proven by tests driving Mos6561.FrameBuffer.\n5. LatchColumns is pending-only (not eager live text_cols).\n6. No invent continuous paper strip (draw slots paint background).\n\nIf the audit or code claims whole-machine Exact-same-as-VICE → FAIL.\nIf Exact labels exist without VICE anchors → FAIL.\nIf invent list closed items are still invent in code → FAIL.\n\n## Sources\n- docs/audit-vic20-vs-vice-2026-08-07.md\n- src/ViceSharp.Chips/Vic/Mos6561.cs (DrawRasterLine, ComputeViewportFirstX, LatchColumns, Write sound comment)\n- tests/ViceSharp.TestHarness/Vic20/Vic20VideoTests.cs\n- native/vice/vice/src/video/video-viewport.c, vic20/vic-cycle.c, vic20/vic-draw.c, raster/raster-line.c\n- ArchitectureBuilder uses Mos6561 not VicIStub for VIC-20\n\n## Output format\n1. VERDICT: PASS or FAIL\n2. Exact claims audited (list each, PASS/FAIL)\n3. Invent check (closed vs remaining)\n4. Missing modules honesty check\n5. If FAIL: exact residual fixes\n\nDo NOT edit files. Read-only. Hostile. End with VERDICT: PASS or VERDICT: FAIL.\nWrite your full report text so the parent can save it.\n",
+  "status": "completed",
+  "started_at": "2026-08-08T09:43:35.821128300Z",
+  "completed_at": "2026-08-08T09:46:27.227183Z",
+  "duration_ms": 171407,
+  "tool_calls": 61,
+  "turns": 1,
+  "effective_context_source": "new",
+  "child_cwd": "F:\\GitHub\\vice-sharp",
+  "effective_model_id": "grok-4.5"
+}

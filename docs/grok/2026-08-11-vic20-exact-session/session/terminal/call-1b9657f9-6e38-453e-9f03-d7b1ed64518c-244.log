@@ -1,0 +1,33 @@
+
+src\ViceSharp.Core\ArchitectureBuilder.cs:11:using ViceSharp.Core.Vic20;
+src\ViceSharp.Core\ArchitectureBuilder.cs:45:        // VIC-20 before C64: both expose VideoChip; Vic20 is identified 
+by Via1/Via2
+src\ViceSharp.Core\ArchitectureBuilder.cs:47:        if (IsVic20Machine(descriptor))
+src\ViceSharp.Core\ArchitectureBuilder.cs:48:            return BuildVic20Machine(descriptor);
+src\ViceSharp.Core\ArchitectureBuilder.cs:244:    private static bool IsVic20Machine(IArchitectureDescriptor 
+descriptor)
+src\ViceSharp.Core\ArchitectureBuilder.cs:266:    /// <remarks>FR-PRF-005, FR-VIC20-001..006.</remarks>
+src\ViceSharp.Core\ArchitectureBuilder.cs:267:    private IMachine BuildVic20Machine(IArchitectureDescriptor 
+descriptor)
+src\ViceSharp.Core\ArchitectureBuilder.cs:283:        var expansion = 
+Vic20MemoryLayout.ParseBoardModel(profile?.BoardModel);
+src\ViceSharp.Core\ArchitectureBuilder.cs:287:        // (VICE vic20_cpu_last_data). ROMs and I/O overlay via register 
+order.
+src\ViceSharp.Core\ArchitectureBuilder.cs:288:        var ram = new Vic20SystemRam(expansion);
+src\ViceSharp.Core\ArchitectureBuilder.cs:292:        var architectureKey = descriptor.RequiredRoms?.Architecture ?? 
+"VIC20";
+src\ViceSharp.Core\ArchitectureBuilder.cs:317:        // Color RAM at $9400-$97FF (1KB; only low nibble used on real 
+hardware).
+src\ViceSharp.Core\ArchitectureBuilder.cs:318:        var colorRam = new RamDevice(0x9400, 0x97FF, new byte[0x0400]);
+src\ViceSharp.Core\ArchitectureBuilder.cs:319:        bus.RegisterDevice(colorRam);
+src\ViceSharp.Core\ArchitectureBuilder.cs:345:        // VICE vic20iec.c / vic20via1.c: VIA1 PA0/PA1/PA7 are IEC CLK 
+in / DATA
+src\ViceSharp.Core\ArchitectureBuilder.cs:348:        Vic20IecPort.AttachIdleVia1PortA(via1);
+src\ViceSharp.Core\ArchitectureBuilder.cs:350:        var keyboard = new Vic20KeyboardMatrix();
+src\ViceSharp.Core\ArchitectureBuilder.cs:355:        // Optional MVP cart: descriptor may expose a Vic20Cartridge via 
+IDevice on Devices
+src\ViceSharp.Core\ArchitectureBuilder.cs:357:        // descriptors that implement IVic20CartridgeHost (checked by 
+reflection-free type).
+src\ViceSharp.Core\ArchitectureBuilder.cs:358:        if (descriptor is IVic20CartridgeHost cartHost && 
+cartHost.Cartridge is not null)
+

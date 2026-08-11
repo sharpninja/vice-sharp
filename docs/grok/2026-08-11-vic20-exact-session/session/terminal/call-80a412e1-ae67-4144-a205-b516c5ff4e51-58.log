@@ -1,0 +1,5 @@
+paper y via center col: top=100 bot=1279 h=1180
+cyan vertical span y=124..1258
+TOP border=-24 BOTTOM border=-21
+frac T=-0.021 B=-0.019
+H at y600 paper x=168..1332  L=168 R=167 Lfrac=0.112 Rfrac=0.111

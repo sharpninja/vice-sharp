@@ -1,0 +1,10 @@
+269:#define CHECK_PROFILE_RTS()      \
+282:#define CHECK_PROFILE_RTS()
+760:                tmp += 0x60;                                                                       \
+901:                tmp_2 = (tmp_2 & 0x0f) | ((tmp_2 + 0x60) & 0xf0);   \
+1495:#define RTS()                 \
+1499:        CHECK_PROFILE_RTS();  \
+1536:                tmp_a -= 0x60;                                                              \
+2230:            case 0x60:          /* RTS */
+2231:                RTS();
+658:                CLK_INC();                                            \

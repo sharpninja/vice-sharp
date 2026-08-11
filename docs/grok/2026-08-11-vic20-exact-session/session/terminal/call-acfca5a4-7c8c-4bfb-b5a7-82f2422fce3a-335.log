@@ -1,0 +1,9 @@
+
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemorySettingsRestartTests.cs(6,22): error CS0234: The 
+type or namespace name 'InProcess' does not exist in the namespace 'ViceSharp.Host' (are you missing an assembly 
+reference?) [F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+Build FAILED.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20MemorySettingsRestartTests.cs(6,22): error CS0234: The 
+type or namespace name 'InProcess' does not exist in the namespace 'ViceSharp.Host' (are you missing an assembly 
+reference?) [F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+

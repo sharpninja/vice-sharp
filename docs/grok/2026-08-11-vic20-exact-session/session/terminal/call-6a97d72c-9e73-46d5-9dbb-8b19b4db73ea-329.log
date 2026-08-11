@@ -1,0 +1,100 @@
+=== INSTALL LOG TAIL ===
+Property(S): GPTSupport = 1
+Property(S): OLEAdvtSupport = 1
+Property(S): ShellAdvtSupport = 1
+Property(S): MsiAMD64 = 25
+Property(S): Msix64 = 25
+Property(S): Intel = 25
+Property(S): PhysicalMemory = 23927
+Property(S): VirtualMemory = 16091
+Property(S): AdminUser = 1
+Property(S): MsiTrueAdminUser = 1
+Property(S): LogonUser = kingd
+Property(S): UserSID = S-1-5-21-3617676308-3098392272-2605596663-1001
+Property(S): UserLanguageID = 1033
+Property(S): ComputerName = PAYTON-LEGION2
+Property(S): SystemLanguageID = 1033
+Property(S): ScreenX = 1024
+Property(S): ScreenY = 768
+Property(S): CaptionHeight = 44
+Property(S): BorderTop = 1
+Property(S): BorderSide = 1
+Property(S): TextHeight = 16
+Property(S): TextInternalLeading = 3
+Property(S): ColorBits = 32
+Property(S): TTCSupport = 1
+Property(S): Time = 16:27:30
+Property(S): Date = 8/11/2026
+Property(S): MsiNetAssemblySupport = 4.8.9221.0
+Property(S): MsiWin32AssemblySupport = 6.3.26100.8972
+Property(S): RedirectedDllSupport = 2
+Property(S): MsiRunningElevated = 1
+Property(S): Privileged = 1
+Property(S): DATABASE = C:\WINDOWS\Installer\e7209a7.msi
+Property(S): OriginalDatabase = F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi
+Property(S): UILevel = 2
+Property(S): ACTION = INSTALL
+MSI (s) (3C:D0) [16:27:30:613]: Product: ViceSharp -- Installation failed.
+
+MSI (s) (3C:D0) [16:27:30:613]: Windows Installer installed the product. Product Name: ViceSharp. Product Version: 1.2.13. Product Language: 0. Manufacturer: sharpninja. Installation success or error status: 1603.
+
+=== Logging stopped: 8/11/2026  16:27:30 ===
+=== NUKE INSTALL LOG TAIL ===
+Property(S): GPTSupport = 1
+Property(S): OLEAdvtSupport = 1
+Property(S): ShellAdvtSupport = 1
+Property(S): MsiAMD64 = 25
+Property(S): Msix64 = 25
+Property(S): Intel = 25
+Property(S): PhysicalMemory = 23927
+Property(S): VirtualMemory = 15169
+Property(S): AdminUser = 1
+Property(S): MsiTrueAdminUser = 1
+Property(S): LogonUser = kingd
+Property(S): UserSID = S-1-5-21-3617676308-3098392272-2605596663-1001
+Property(S): UserLanguageID = 1033
+Property(S): ComputerName = PAYTON-LEGION2
+Property(S): SystemLanguageID = 1033
+Property(S): ScreenX = 1024
+Property(S): ScreenY = 768
+Property(S): CaptionHeight = 44
+Property(S): BorderTop = 1
+Property(S): BorderSide = 1
+Property(S): TextHeight = 16
+Property(S): TextInternalLeading = 3
+Property(S): ColorBits = 32
+Property(S): TTCSupport = 1
+Property(S): Time = 16:26:46
+Property(S): Date = 8/11/2026
+Property(S): MsiNetAssemblySupport = 4.8.9221.0
+Property(S): MsiWin32AssemblySupport = 6.3.26100.8972
+Property(S): RedirectedDllSupport = 2
+Property(S): MsiRunningElevated = 1
+Property(S): Privileged = 1
+Property(S): DATABASE = C:\WINDOWS\Installer\e7209a6.msi
+Property(S): OriginalDatabase = F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi
+Property(S): UILevel = 2
+Property(S): ACTION = INSTALL
+MSI (s) (3C:14) [16:26:46:750]: Product: ViceSharp -- Installation failed.
+
+MSI (s) (3C:14) [16:26:46:753]: Windows Installer installed the product. Product Name: ViceSharp. Product Version: 1.2.13. Product Language: 0. Manufacturer: sharpninja. Installation success or error status: 1603.
+
+=== Logging stopped: 8/11/2026  16:26:46 ===
+PUB exists=True INST exists=True
+PUB=A78AAAB5C037892CE306E00316F8F269E63EAA7234A1A4B84AEE821DAD27DE00
+INST=A50E6C53157EFDFE513A09C4E46BDF61466E1CA831F1FFFC281FB6B34B139B10
+MATCH=False
+
+FullName                                                                                                  Length LastWr
+                                                                                                                 iteTim
+                                                                                                                 e
+--------                                                                                                  ------ ------
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\win-x64\publish\ViceSharp.Avalonia.exe 121217861 8/11/.
+C:\Program Files\ViceSharp\ViceSharp.Avalonia.exe                                                      120836853 8/5/2.
+
+
+Name                      Length LastWriteTime
+----                      ------ -------------
+appsettings.json             844 7/7/2026 5:15:16 PM
+ViceSharp.Avalonia.exe 120836853 8/5/2026 1:04:28 PM
+

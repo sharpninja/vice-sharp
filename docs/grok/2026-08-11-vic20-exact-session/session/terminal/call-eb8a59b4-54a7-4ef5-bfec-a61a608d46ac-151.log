@@ -1,0 +1,84 @@
+type: result
+payload:
+  requestId: req-20260806T161128Z-b0ed
+  result:
+  - agent: GrokCode
+    sessionId: GrokCode-20260806T150301Z-plugin-session
+    title: <user_query>
+    model: codex
+    started:
+      dateTime: 2026-08-06T15:00:15.0000000
+      utcDateTime: 2026-08-06T15:00:15.0000000Z
+      localDateTime: 2026-08-06T10:00:15.0000000-05:00
+      date: 2026-08-06T00:00:00.0000000
+      day: 6
+      dayOfWeek: Thursday
+      dayOfYear: 218
+      hour: 15
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 0
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 15
+      ticks: 639216252150000000
+      utcTicks: 639216252150000000
+      timeOfDay: 15:00:15
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-08-06T16:11:17.0000000
+      utcDateTime: 2026-08-06T16:11:17.0000000Z
+      localDateTime: 2026-08-06T11:11:17.0000000-05:00
+      date: 2026-08-06T00:00:00.0000000
+      day: 6
+      dayOfWeek: Thursday
+      dayOfYear: 218
+      hour: 16
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 11
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 17
+      ticks: 639216294770000000
+      utcTicks: 639216294770000000
+      timeOfDay: 16:11:17
+      year: 2026
+    status: in_progress
+    turnCount: 5
+    tags: []
+    filesModifiedCount: 0
+  - agent: ClaudeCode
+    sessionId: ClaudeCode-20260806T150303Z-plugin-session
+    title: <user_query>
+    model: claude
+    started:
+      dateTime: 2026-08-06T15:00:22.0000000
+      utcDateTime: 2026-08-06T15:00:22.0000000Z
+      localDateTime: 2026-08-06T10:00:22.0000000-05:00
+      date: 2026-08-06T00:00:00.0000000
+      day: 6
+      dayOfWeek: Thursday
+      dayOfYear: 218
+      hour: 15
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 0
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 22
+      ticks: 639216252220000000
+      utcTicks: 639216252220000000
+      timeOfDay: 15:00:22
+      year: 2026
+    lastUpdated:
+3d3b6e47377ea0a033a5d4aa99d0060c8c046480
+3d3b6e47377ea0a033a5d4aa99d0060c8c046480	refs/heads/main
+3d3b6e47377ea0a033a5d4aa99d0060c8c046480	refs/heads/main
+untracked_count=279 (ephemeral probe logs / S-Blox / manifests left untracked by design)

@@ -1,0 +1,33 @@
+## [32mmain[m...[31morigin/main[m
+[31m??[m docs/grok/
+[33m85396c8[m feat(vic20): Phase A pixel index lockstep scaffolding (AC-PX-02 red)
+[33md20d340[m docs: refresh for cancelled Xbox/Store and FE3/pixel status
+[33m16bfbf1[m docs: cancel Xbox UWP Dev-Mode sideload platform track
+## [32mmain[m...[31morigin/main[m
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/TRANSCRIPT.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/chat_history.jsonl
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-32799c5b1a25-2.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-607a2dad3956-2.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-7d45b1115e21-2.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-a8b508754f9e-2.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-c660a9d0ca87-2.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/goal-classifier-f7270d7293dd-1.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/plan.baseline.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/plan.md
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/goal/state.json
+[32mA[m  docs/grok/2026-08-11-vic20-exact-session/plan.md
+[32mA[m  docs/grok/README.md
+ .../2026-08-11-vic20-exact-session/TRANSCRIPT.md   | 16828 [32m+++++++++++++++++++[m
+ .../chat_history.jsonl                             |   769 [32m+[m
+ .../goal/goal-classifier-32799c5b1a25-2.md         |   317 [32m+[m
+ .../goal/goal-classifier-607a2dad3956-2.md         |   310 [32m+[m
+ .../goal/goal-classifier-7d45b1115e21-2.md         |   248 [32m+[m
+ .../goal/goal-classifier-a8b508754f9e-2.md         |   450 [32m+[m
+ .../goal/goal-classifier-c660a9d0ca87-2.md         |   273 [32m+[m
+ .../goal/goal-classifier-f7270d7293dd-1.md         |   223 [32m+[m
+ .../goal/plan.baseline.md                          |    50 [32m+[m
+ .../2026-08-11-vic20-exact-session/goal/plan.md    |    50 [32m+[m
+ .../2026-08-11-vic20-exact-session/goal/state.json |    61 [32m+[m
+ docs/grok/2026-08-11-vic20-exact-session/plan.md   |   400 [32m+[m
+ docs/grok/README.md                                |    17 [32m+[m
+ 13 files changed, 19996 insertions(+)

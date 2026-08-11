@@ -1,0 +1,28 @@
+
+FullName
+--------
+F:\GitHub\vice-sharp\native\vice\vice\src\vice-shim-runtime.h
+#ifndef VICE_SHIM_RUNTIME_H
+#define VICE_SHIM_RUNTIME_H
+
+/*
+ * ViceSharp hosted-runtime hooks. Implemented in native/vice-shim.c and linked
+ * into vice_x64.dll. Only referenced when the CPU cores are compiled with
+ * -DVICE_SHIM_HOSTED (see native/build-vice-shim.sh). See
+ * native/patches/vice-shim-runtime.prompt.md for the canonical spec.
+ */
+
+/* Called once per CPU cycle from the hosted CLK_INC(). Returns nonzero when the
+   host has asked the CPU to stop at this cycle boundary. */
+int vice_shim_cycle_checkpoint(void);
+
+/* Returns nonzero when the host has queued a CPU bootstrap (adopt host-provided
+   registers instead of performing the normal power-on reset). Consumes the
+   pending flag. */
+int vice_shim_take_bootstrap_maincpu(void);
+
+#endif
+
+
+
+

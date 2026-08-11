@@ -1,0 +1,12 @@
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-raminit.log:29:   DIV 
+first=195422 matchedCycles=195421 budget=500000
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-raminit.log:39:c=195420 
+nPC=$FE98 mPC=$FE98 nA=$55 mA=$55 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$D1 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-raminit.log:40:c=195421 
+nPC=$FE9A mPC=$FE9A nA=$55 mA=$55 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FB mS=$FB nP=$27 mP=$27 dbgCyc=1 op=$D0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-raminit.log:41:c=195422 
+nPC=$FE9A mPC=$FE9C nA=$55 mA=$55 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FB mS=$FB nP=$27 mP=$27 dbgCyc=0 op=$D0 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-raminit.log:42:bus: m$00=$00 
+m$01=$00 m$C1=$00 m$C2=$10 n$C1=$00 n$C2=$10 m$FE91=$B1 n$FE91=$B1
+

@@ -1,0 +1,6 @@
+ViceSharp.Core versions ending with 1.2.x: 1.2.1
+OK: 1.2.1 on nuget.org
+{"assets":["ViceSharp.AdhocHelper.1.2.1.nupkg","ViceSharp.Avalonia.1.2.1.nupkg","ViceSharp.Console.1.2.1.nupkg","ViceSharp.Core.1.2.1.nupkg","ViceSharp.Host.1.2.1.nupkg","ViceSharp.Host.Android.1.2.1.nupkg","ViceSharp.Host.iOS.1.2.1.nupkg","ViceSharp.Host.MacOS.1.2.1.nupkg","ViceSharp.Host.Xbox.1.2.1.nupkg","ViceSharp.Launcher.1.2.1.nupkg","ViceSharp.Library.ViewModels.1.2.1.nupkg","ViceSharp.Monitor.1.2.1.nupkg","ViceSharp.msi","ViceSharp.Protocol.1.2.1.nupkg","ViceSharp.RomM.1.2.1.nupkg","ViceSharp.SourceGen.1.2.1.nupkg"],"url":"https://github.com/sharpninja/vice-sharp/releases/tag/v1.2.1"}
+Previous HEAD position was 3b20c4f release: bump patch to 1.2.1 on main
+Your branch is up to date with 'origin/main'.
+Switched to branch 'main'

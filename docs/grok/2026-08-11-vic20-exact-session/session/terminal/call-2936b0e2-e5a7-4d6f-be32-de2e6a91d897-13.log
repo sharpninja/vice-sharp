@@ -1,0 +1,112 @@
+
+Name
+----
+assets
+compaction
+compaction_checkpoints
+compaction_requests
+goal
+images
+recap_requests
+subagents
+terminal
+announcement_state.json
+chat_history.jsonl
+chat_history.jsonl.lock
+events.jsonl
+hunk_records.jsonl
+last_recap_main_turn
+plan_mode.json
+plan.json
+plan.md
+prompt_context.json
+resources_state.json
+rewind_points.jsonl
+rewind_points.jsonl.lock
+signals.json
+summary.json
+summary.json.lock
+system_prompt.txt
+updates.jsonl
+updates.jsonl.lock
+# Plan: Bit-exact whole VIC-20 / full pixel FB / full cart-and-sound parity vs xvic
+
+**Date:** 2026-08-11 (revised BDPv4)  
+**Process:** Byrd Development Process v4 (`F:\GitHub\McpServer\docs\Development-Process-draft-v4.md`)  
+**Oracle:** VICE **xvic** only. No invent. Screenshots are not acceptance.  
+**Hostile validator:** required on every Exact claim and every phase exit that asserts Exact/done/green.  
+**Umbrella MCP TODO (on approval):** `PLAN-VIC20-EXACT-001`  
+
+### BDPv4 compliance (this plan)
+
+| BDPv4 artifact | This plan |
+|----------------|-----------|
+| Functional Requirements + AC | 3 FR-* with numbered AC |
+| Technical Requirements + AC | 4 TR-* with numbered AC |
+| Testing Requirements | 5 TEST-* with 100% AC coverage |
+| FRTRTEST mapping | 6 matrix (every FR AC maps ò1 TEST; every FR maps ò1 TR) |
+| Iterative phases | 7 phases A-G |
+| TDD: red  green  refactor | 8 cycle rules; each AC has named test first |
+| Mocks-first then real (Byrd augmentation) | 8.2 unit tests with fakes before native/xvic integration where applicable |
+| Phase exit: full prior+current suite green | 8.3 0 fail / 0 skip in scoped gate |
+| Public interfaces before impl | 9 interface contracts |
+
+### Prior plan closeout
+
+| Prior plan | Disposition |
+|------------|-------------|
+| Flash cart image builder (2026-08-08) | **Closed / shipped** on `main`. Residual FE3 erase latency  Phase C under FR-VIC20-CART-001. |
+
+---
+
+## 1. Problem and Vý
+
+**Problem:** Managed VIC-20 is not claimable as bit-exact with xvic for whole machine, full pixel framebuffer, full cart suite, and sound.  
+**Users:** Emulator developers and operators who require VICE-faithful VIC-20 for lockstep validation and software compatibility.  
+**Viable:** xvic oracle + existing 10 s CPU lockstep + video state lockstep + partial carts provide a proven path.  
+**Valuable:** Completes Iteration 2 exit criteria and removes invent/Partial labels that block Exact claims.
+
+**Explicit exclude from whole-machine claim (document as Explicit Missing, non-blocking):** IEEE-488, rsuser, printer. Xbox/Store cancelled. Zip media is separate TODO.
+
+---
+
+## 2. Completion definition (proof)
+
+Plan is **complete** only when:
+
+1. All FR/TR AC below are **green** under named TEST IDs (0 fail, 0 skip in each phase gate and final umbrella gate).  
+2. Audit matrix (`docs/audit-vic20-vs-vice-*.md`) lists Exact for FR scopes; only IEEE/rsuser/printer remain Explicit Missing if still excluded.  
+3. Hostile validator **AGREE** receipts exist for whole-machine claim language and each FR Exact family.  
+4. MCP requirements FR/TR/TEST + mappings persisted; `PLAN-VIC20-EXACT-001` done with evidence.
+
+---
+
+## 3. Functional Requirements (FR) and Acceptance Criteria (AC)
+
+Each FR is work the product must do for the user/developer. Every AC is binary, testable, and owns ò1 TEST.
+
+### FR-VIC20-CPU-001 - CPU every-cycle lockstep vs xvic
+
+**Statement:** Managed main CPU registers match xvic every cycle for idle READY and non-idle workloads (PAL and NTSC).
+
+| AC ID | Acceptance criterion |
+|-------|----------------------|
+| AC-CPU-01 | After identical reset, every cycle for **10 s PAL** (~11_084_050 cycles) A/X/Y/S/P/PC match xvic (0 diverge). |
+| AC-CPU-02 | After identical reset, every cycle for **10 s NTSC** (~10_227_270 cycles) A/X/Y/S/P/PC match xvic (0 diverge). |
+| AC-CPU-03 | Non-idle workload PRG (fixed fixture) runs ò2 s PAL every-cycle A/X/Y/S/P/PC match (0 diverge). |
+| AC-CPU-04 | Same non-idle workload ò2 s NTSC every-cycle match (0 diverge). |
+| AC-CPU-05 | Failed NTSC and PAL runs never share one process without isolation (documented + harness enforces or tests run isolated). |
+
+**Baseline:** AC-CPU-01/02 green today (`Vic20DivergeProbe`). AC-CPU-03/04 red until workload fixtures land.
+
+### FR-VIC20-VIDSTATE-001 - VIC-I pipeline state lockstep vs xvic
+
+**Statement:** Managed VIC-I pipeline state matches xvic every cycle for fields exported in `Vic20VideoLockstepState`.
+
+| AC ID | Acceptance criterion |
+|-------|----------------------|
+| AC-VS-01 | Every-cycle match of RasterLine, RasterCycle, Area, FetchState, TextCols/Lines, YCounter, RowCounter, Blank flags, Memptr/Inc, Regs[16], Cbuf, Gbuf for **2000** cycles PAL after reset. |
+| AC-VS-02 | Same for **500_000** cycles PAL after reset. |
+| AC-VS-03 | When CPU multi-second lockstep runs with video compare enabled, video state match holds for full CPU budget (or first diverge is reported with ring context). |
+| AC-VS-04 | NTSC model: AC-VS-01 and AC-VS-02 budgets green (or documented equal-cycle NTSC budget). |
+

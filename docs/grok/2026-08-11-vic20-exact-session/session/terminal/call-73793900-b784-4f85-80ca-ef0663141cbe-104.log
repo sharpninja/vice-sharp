@@ -1,0 +1,5 @@
+
+src\ViceSharp.Chips\Cpu\Mos6502.cs:362:            if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode))
+src\ViceSharp.Chips\Cpu\Mos6502.cs:372:            // Retire lag-compensation that assumed 2-cycle taken branches.
+src\ViceSharp.Chips\Cpu\Mos6502.cs:1055:    private static bool IsAfterBranchBudgetExtendedOpcode(byte opcode)
+

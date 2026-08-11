@@ -1,0 +1,11 @@
+
+Name            : ViceSharp
+Version         : 1.3.1
+UninstallString : MsiExec.exe /I{E09486F5-A078-4EFB-9D6B-A937F07A9F51}
+Guid            : {E09486F5-A078-4EFB-9D6B-A937F07A9F51}
+
+Uninstalling {E09486F5-A078-4EFB-9D6B-A937F07A9F51}
+UNINSTALL_EXIT=0
+Installing F:\GitHub\vice-sharp\artifacts\installer\ViceSharp.msi
+INSTALL_EXIT=0
+INSTALLED FileVersion=1.3.1.0 ProductVersion=1.3.1+b2ba4da14828c6a90112ec3f6a5ebff98b5a7667 Len=120836853

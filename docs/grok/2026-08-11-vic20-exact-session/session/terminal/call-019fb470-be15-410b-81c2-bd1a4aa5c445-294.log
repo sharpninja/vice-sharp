@@ -1,0 +1,74 @@
+
+   DIV first=521027 matchedCycles=521026 budget=10227270
+c=521016 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=0 op=$8D 
+trail=0 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=521017 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=5 op=$60 
+trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=521018 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=4 op=$60 
+trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=521019 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=3 op=$60 
+trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=521020 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E7 mS=$E7 nP=$A5 mP=$A5 dbgCyc=2 op=$60 
+trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=521021 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=1 op=$60 
+trail=1 nonOvlR=True nonOvlF=True dly=False stg=False irq=0 mis=False
+c=521022 nPC=$EBDB mPC=$EBDB nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=0 op=$60 
+trail=1 nonOvlR=False nonOvlF=False dly=True stg=False irq=0 mis=False
+c=521023 nPC=$EB15 mPC=$EB15 nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=0 op=$60 
+trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=521024 nPC=$EB15 mPC=$EB15 nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=3 op=$2C 
+trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=521025 nPC=$EB15 mPC=$EB15 nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=2 op=$2C 
+trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=521026 nPC=$EB15 mPC=$EB15 nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=0 op=$2C 
+trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+c=521027 nPC=$EB18 mPC=$EB18 nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$E5 mP=$A5 dbgCyc=3 op=$68 
+trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+irqdiag: nLastOp=0x2C nDelays=False nPend=0x0 nIrqClk=520829 nClk=521033 mDelays=False mBound=False mIrqSeq=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:4:  Failed 
+ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [3 s]
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:6:   DIV first=521027 
+matchedCycles=521026 budget=10227270
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:7:c=521016 nPC=$EBDB mPC=$EBDB nA=$F7 
+mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=0 op=$8D trail=0 nonOvlR=True nonOvlF=True 
+dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:8:c=521017 nPC=$EBDB mPC=$EBDB nA=$F7 
+mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=5 op=$60 trail=1 nonOvlR=True nonOvlF=True 
+dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:9:c=521018 nPC=$EBDB mPC=$EBDB nA=$F7 
+mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=4 op=$60 trail=1 nonOvlR=True nonOvlF=True 
+dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:10:c=521019 nPC=$EBDB mPC=$EBDB 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E6 mS=$E6 nP=$A5 mP=$A5 dbgCyc=3 op=$60 trail=1 nonOvlR=True 
+nonOvlF=True dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:11:c=521020 nPC=$EBDB mPC=$EBDB 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E7 mS=$E7 nP=$A5 mP=$A5 dbgCyc=2 op=$60 trail=1 nonOvlR=True 
+nonOvlF=True dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:12:c=521021 nPC=$EBDB mPC=$EBDB 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=1 op=$60 trail=1 nonOvlR=True 
+nonOvlF=True dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:13:c=521022 nPC=$EBDB mPC=$EBDB 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=0 op=$60 trail=1 nonOvlR=False 
+nonOvlF=False dly=True stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:14:c=521023 nPC=$EB15 mPC=$EB15 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=0 op=$60 trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:15:c=521024 nPC=$EB15 mPC=$EB15 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=3 op=$2C trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:16:c=521025 nPC=$EB15 mPC=$EB15 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=2 op=$2C trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:17:c=521026 nPC=$EB15 mPC=$EB15 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$A5 mP=$A5 dbgCyc=0 op=$2C trail=1 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:18:c=521027 nPC=$EB18 mPC=$EB18 
+nA=$F7 mA=$F7 nX=$FF mX=$FF nY=$00 mY=$00 nS=$E8 mS=$E8 nP=$E5 mP=$A5 dbgCyc=3 op=$68 trail=0 nonOvlR=False 
+nonOvlF=False dly=False stg=False irq=0 mis=True
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:20:irqdiag: nLastOp=0x2C 
+nDelays=False nPend=0x0 nIrqClk=520829 nClk=521033 mDelays=False mBound=False mIrqSeq=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\ntsc-r2.log:28:Failed!  - Failed:     1, Passed:  
+   0, Skipped:     0, Total:     1, Duration: 4 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT=1
+

@@ -1,0 +1,28 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:04.18]     ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [2 s]
+  Error Message:
+   DIV first=518540 matchedCycles=518539 budget=2216810
+c=518529 nPC=$D6E5 mPC=$D6E5 nA=$19 mA=$19 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$23 mP=$23 dbgCyc=1 op=$85 mis=False
+c=518530 nPC=$D6E5 mPC=$D6E5 nA=$19 mA=$19 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$23 mP=$23 dbgCyc=0 op=$85 mis=False
+c=518531 nPC=$D6E5 mPC=$D6E5 nA=$19 mA=$19 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$23 mP=$23 dbgCyc=1 op=$E9 mis=False
+c=518532 nPC=$D6E7 mPC=$D6E7 nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$21 mP=$21 dbgCyc=0 op=$E9 mis=False
+c=518533 nPC=$D6E7 mPC=$D6E7 nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$21 mP=$21 dbgCyc=2 op=$85 mis=False
+c=518534 nPC=$D6E9 mPC=$D6E9 nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$21 mP=$21 dbgCyc=1 op=$85 mis=False
+c=518535 nPC=$D6E9 mPC=$D6E9 nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$21 mP=$21 dbgCyc=0 op=$85 mis=False
+c=518536 nPC=$D6E9 mPC=$D6E9 nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$21 mP=$21 dbgCyc=1 op=$A0 mis=False
+c=518537 nPC=$D6EB mPC=$D6EB nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$23 mP=$23 dbgCyc=0 op=$A0 mis=False
+c=518538 nPC=$D6EB mPC=$D6EB nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$23 mP=$23 dbgCyc=5 op=$60 mis=False
+c=518539 nPC=$D6EB mPC=$D6EB nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F7 mS=$F7 nP=$23 mP=$23 dbgCyc=4 op=$60 mis=False
+c=518540 nPC=$D6EB mPC=$D6EB nA=$16 mA=$16 nX=$1C mX=$1C nY=$00 mY=$00 nS=$F8 mS=$F7 nP=$23 mP=$23 dbgCyc=3 op=$60 mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$BF n$0314=$BF
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 102
+   at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 47
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+EXIT=1

@@ -1,0 +1,51 @@
+
+> src\ViceSharp.Chips\Cpu\Mos6502.cs:1194:    private void FinishStagedMemoryRead(int instructionLength, byte nzValue)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1195:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1196:        _pc = (ushort)(_instructionPC + instructionLength);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1197:        _visiblePC = _instructionPC;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1198:        _stagedMemoryReadCompleted = true;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1199:        _stagedNzUpdate = true;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1200:        _stagedNzValue = nzValue;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1201:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1202:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1203:    /// <summary>
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1204:    /// Absolute-addressed read-modify-write opcodes with a cycle-staged
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1205:    /// execution path (TR-LOCKSTEP-VSF-001). INC abs (0xEE), DEC abs (0xCE)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1206:    /// and DEC abs,X (0xDE) - the classic $D019 acknowledge idioms (the RMW
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1207:    /// dummy write of the unmodified value performs the acknowledge, exactly
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1208:    /// as in VICE).
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1209:    /// </summary>
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1210:    private static bool IsStagedAbsoluteRmwOpcode(byte opcode)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1211:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1212:        return opcode is 0xEE or 0xCE or 0xDE;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1213:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1214:
+> src\ViceSharp.Chips\Cpu\Mos6502.cs:1271:    private void FinishStagedStackPush()
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1272:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1273:        _pc = (ushort)(_instructionPC + 1);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1274:        _visiblePC = _instructionPC;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1275:        _stagedMemoryReadCompleted = true;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1276:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1277:
+> src\ViceSharp.Chips\Cpu\Mos6502.cs:1278:    private void FinishStagedMemoryWrite(int instructionLength)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1279:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1280:        _pc = (ushort)(_instructionPC + instructionLength);
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1281:        _visiblePC = _pc;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1282:        if (Peek(_pc) == 0x60)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1283:        {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1284:            _cycle = 0;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1285:            return;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1286:        }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1287:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1288:        _stagedMemoryReadCompleted = true;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1289:    }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1290:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1291:    private void DelayNextFetchAfterMappedIoWrite(ushort address)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1292:    {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1293:        if (ShouldDelayNextFetchAfterWrite?.Invoke(address) != true)
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1294:        {
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1295:            return;
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1296:        }
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1297:
+  src\ViceSharp.Chips\Cpu\Mos6502.cs:1298:        _delayNextFetch = true;
+

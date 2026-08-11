@@ -1,0 +1,20 @@
+# Invent vs Port map (VIC-20 / Mos6561)
+
+## Ported (VICE-cited rules on shipped chip)
+- VIC_PIXEL_WIDTH=2: victypes.h VIC_DUPLICATES_PIXELS
+- Normal border frame: vic-timing.h VIC_*_NORMAL_DISPLAY_WIDTH / FIRST/LAST lines
+- Color base: vic.c (regs[0x02]&0x80)?0x9600:0x9400
+- Std/MC draw: vic-draw.c drawing_table + reverse gate
+- Palette RGB: data/VIC20/PALette.vpl (Tobias 6561-101)
+- PAR: vic.c vic_get_pixel_aspect PAL 1.66574/2 NTSC 1.50411/2
+- Color RAM nybble+open bus: vic20mem colorram_read
+- RAM BLKs: vic20-cmdline-options / RAMBlock resources
+- VIA1 $9110 NMI, VIA2 $9120 IRQ: vic20via1/2
+- Idle IEC VIA1 PA 0x7E: vic20iec idle
+
+## Residual invent / deferred (Non-goals)
+- End-of-frame char grid presenter vs vic-draw per-line cycle draw
+- Full vic-cycle open_v/h/lightpen FSM
+- vic20sound.c
+- Full cart suite / tape / rsuser / IEEE
+- YUV CRT pipeline from vic-color.c

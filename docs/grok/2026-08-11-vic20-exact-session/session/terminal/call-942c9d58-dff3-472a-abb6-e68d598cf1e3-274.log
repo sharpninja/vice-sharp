@@ -1,0 +1,20 @@
+pid=131216
+window at iter 4
+hwnd=1049192 title='VICE (VIC20)' exited=False
+capture 610 x 569 at 480,68
+0F0F0F count=19965
+1C1914 count=1717
+1D1914 count=1148
+1C1813 count=652
+121212 count=591
+1E1A14 count=482
+6E6F4F count=439
+1C1812 count=424
+9DA175 count=422
+9FA171 count=420
+9EA276 count=419
+9D9F6E count=409
+181510 count=390
+9EA06F count=379
+1B1712 count=348
+saved 215338 bytes

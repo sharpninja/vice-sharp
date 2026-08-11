@@ -1,0 +1,49 @@
+
+native\vice\vice\src\core\viacore.c:63: * T1 affecting PB7 doesn't seem to work (properly), though.
+native\vice\vice\src\core\viacore.c:141:       WRITE T1C-H ----+   +-----------------#-------------------------
+native\vice\vice\src\core\viacore.c:148:         T1                | N |N-1|N-2|N-3|     | 0 | -1|N  |N-1|N-2|
+native\vice\vice\src\core\viacore.c:185:                                      t2_underflow_alarm ----+     |
+native\vice\vice\src\core\viacore.c:189:static void viacore_t1_zero_alarm(CLOCK offset, void *data);
+native\vice\vice\src\core\viacore.c:191:static void viacore_t2_underflow_alarm(CLOCK offset, void *data);
+native\vice\vice\src\core\viacore.c:224: * Only in continuous mode, T1 reloads from the latch after it shows underflow 
+(FFFF).
+native\vice\vice\src\core\viacore.c:225: * A full cycle of T1 therefore takes (tal + 2) cycles: N, N-1, ..., 1, , 0, 
+FFFF.
+native\vice\vice\src\core\viacore.c:230: * t1reload is used to indicate when T1 gets/was reloaded from the latch.
+native\vice\vice\src\core\viacore.c:232: * t1reload is used for several purposes:
+native\vice\vice\src\core\viacore.c:233: * - the next time T1 gets reloaded and will raise the T1 IRQ some time before;
+native\vice\vice\src\core\viacore.c:234: *   t1zero is set in this case (alarm time when IRQ is raised; because it is 
+an
+native\vice\vice\src\core\viacore.c:237: *   t1zero is 0 in this case).
+native\vice\vice\src\core\viacore.c:239: * If the current clock (rclk) has not yet reached t1reload, the difference -2
+native\vice\vice\src\core\viacore.c:242: * T1:  3     2     1     0    FFFF   42
+native\vice\vice\src\core\viacore.c:244: *     rclk               t1zero      t1reload
+native\vice\vice\src\core\viacore.c:250: * t1reload might as well be called t1_reload_time.
+native\vice\vice\src\core\viacore.c:252: * T1 can be in one-shot VIA_ACR_T1_ONE_SHOT or continuous mode 
+VIA_ACR_T1_FREE_RUN.
+native\vice\vice\src\core\viacore.c:255: * each timer load operation. After underflow, the timer is reloaded from
+native\vice\vice\src\core\viacore.c:258: * If used, PB7 is used in pulse mode: set low when T1 starts from the latch,
+native\vice\vice\src\core\viacore.c:265:inline static uint16_t viacore_t1(via_context_t *via_context, CLOCK rclk)
+native\vice\vice\src\core\viacore.c:267:    if (rclk < via_context->t1reload) {
+native\vice\vice\src\core\viacore.c:268:        CLOCK res = via_context->t1reload - rclk - (unsigned)FULL_CYCLE_2;
+native\vice\vice\src\core\viacore.c:269:        return (uint16_t)res;
+native\vice\vice\src\core\viacore.c:274: * T1:  3     2     1     0    FFFF   3
+native\vice\vice\src\core\viacore.c:276: *     t1reload           t1zero  rclk
+native\vice\vice\src\core\viacore.c:279:        CLOCK time_past_last_reload = rclk - (via_context->t1reload);   /* 4   
+  */
+native\vice\vice\src\core\viacore.c:311:inline static uint16_t viacore_t2(via_context_t *via_context, CLOCK rclk)
+native\vice\vice\src\core\viacore.c:313:    uint16_t t2;
+native\vice\vice\src\core\viacore.c:336: * It has to make sure that rclk < t1reload, so that reading T1 in viacore_t1()
+native\vice\vice\src\core\viacore.c:338: * That value will only be loaded into the timer after the next underflow.
+native\vice\vice\src\core\viacore.c:340:inline static void update_via_t1_latch(via_context_t *via_context, CLOCK rclk)
+native\vice\vice\src\core\viacore.c:342:    if (rclk >= via_context->t1reload) {
+native\vice\vice\src\core\viacore.c:344:        CLOCK time_past_last_reload = rclk - (via_context->t1reload);
+native\vice\vice\src\core\viacore.c:346:         * Calculate the number of full T1 cycles, rounded way up,
+native\vice\vice\src\core\viacore.c:347:         * to get t1reload ahead of rclk, but at most by 1 full_cycle.
+native\vice\vice\src\core\viacore.c:350:        via_context->t1reload += nuf * full_cycle;
+native\vice\vice\src\core\viacore.c:352:        if (!(rclk < via_context->t1reload) ||
+native\vice\vice\src\core\viacore.c:353:            !(rclk + full_cycle >= via_context->t1reload)) {
+native\vice\vice\src\core\viacore.c:354:            VIALOG("update_via_t1_latch: t1reload too far into the future: 
+rclk %lu, t1reload %lu, full_cycle %u, T1 %04x, nuf %lu\n", rclk, via_context->t1reload, full_cycle, 
+viacore_t1(via_context, rclk), nuf);
+

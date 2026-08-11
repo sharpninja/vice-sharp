@@ -1,0 +1,48 @@
+done=True completed=2026-08-11
+tasks: [x]; [x]; [x]; [x]; [x]; [x]; [x]InvalidArgument: 
+
+Line |
+   7 |  . ks | ForEach-Object { if($_.done){'[x]'}else{'[ ]'} + $_.task }) -joi .
+     |                                                        ~~~~~~~~~
+     | Cannot convert value "Phase A: Pixel FB index+BGRA Exact (FR-VIC20-PIXEL-001)" to type "System.Int32". Error: "The input string 'Phase A: Pixel FB index+BGRA Exact (FR-VIC20-PIXEL-001)' was not in a correct format."
+InvalidArgument: 
+Line |
+   7 |  . ks | ForEach-Object { if($_.done){'[x]'}else{'[ ]'} + $_.task }) -joi .
+     |                                                        ~~~~~~~~~
+     | Cannot convert value "Phase B: VIC-I cycle/draw residual" to type "System.Int32". Error: "The input string 'Phase B: VIC-I cycle/draw residual' was not in a correct format."
+InvalidArgument: 
+Line |
+   7 |  . ks | ForEach-Object { if($_.done){'[x]'}else{'[ ]'} + $_.task }) -joi .
+     |                                                        ~~~~~~~~~
+     | Cannot convert value "Phase C: Full cart parity + FE3 erase latency" to type "System.Int32". Error: "The input string 'Phase C: Full cart parity + FE3 erase latency' was not in a correct format."
+InvalidArgument: 
+Line |
+   7 |  . ks | ForEach-Object { if($_.done){'[x]'}else{'[ ]'} + $_.task }) -joi .
+     |                                                        ~~~~~~~~~
+     | Cannot convert value "Phase D: Full sound parity" to type "System.Int32". Error: "The input string 'Phase D: Full sound parity' was not in a correct format."
+InvalidArgument: 
+Line |
+   7 |  . ks | ForEach-Object { if($_.done){'[x]'}else{'[ ]'} + $_.task }) -joi .
+     |                                                        ~~~~~~~~~
+     | Cannot convert value "Phase E: Bus/VIA/input residual + workload CPU lockstep" to type "System.Int32". Error: "The input string 'Phase E: Bus/VIA/input residual + workload CPU lockstep' was not in a correct format."
+InvalidArgument: 
+Line |
+   7 |  . ks | ForEach-Object { if($_.done){'[x]'}else{'[ ]'} + $_.task }) -joi .
+     |                                                        ~~~~~~~~~
+     | Cannot convert value "Phase F: Snapshots" to type "System.Int32". Error: "The input string 'Phase F: Snapshots' was not in a correct format."
+InvalidArgument: 
+Line |
+   7 |  . ks | ForEach-Object { if($_.done){'[x]'}else{'[ ]'} + $_.task }) -joi .
+     |                                                        ~~~~~~~~~
+     | Cannot convert value "Phase G: Whole-machine claim + hostile AGREE" to type "System.Int32". Error: "The input string 'Phase G: Whole-machine claim + hostile AGREE' was not in a correct format."
+Scoped bit-exact VIC-20 program complete 2026-08-11: pixel index Exact PAL/NTSC/busy; BGRA capture path + shared-palette alignment (canvas RGB may Partial); video 2k; FE3 flash040 TYPE_B erase latency
+True
+
+docs\receipts\hostile-validator-20260811T204639Z.md:127:## OverallVerdict
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:96:===== UMBRELLA SUMMARY 
+=====
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:97:Passed=46 Failed=0 
+Skipped=0 anyNonZeroExit=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:113:UMBRELLA_PLUS_2S 
+complete 2026-08-11T15:45:36.6176660-05:00
+

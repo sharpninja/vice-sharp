@@ -1,0 +1,52 @@
+True
+True
+True
+True
+
+Name
+----
+agent-runtime-header.ps1
+cache-manager.ps1
+ensure-repl.ps1
+final-response.ps1
+Invoke-McpPlugin.ps1
+marker-resolver.ps1
+mcp-status.ps1
+McpPluginShim.psm1
+plugin-env.ps1
+plugin-hook.ps1
+PLUGIN-RESIDUAL.txt
+repl-invoke.ps1
+resolve-cache-dir.ps1
+yaml-object-mutation.ps1
+type: result
+payload:
+  requestId: req-20260806T160636Z-9d4b
+  result:
+  - agent: ClaudeCode
+    sessionId: ClaudeCode-20260806T150303Z-plugin-session
+    title: <user_query>
+    model: claude
+    started:
+      dateTime: 2026-08-06T15:00:22.0000000
+      utcDateTime: 2026-08-06T15:00:22.0000000Z
+      localDateTime: 2026-08-06T10:00:22.0000000-05:00
+      date: 2026-08-06T00:00:00.0000000
+      day: 6
+      dayOfWeek: Thursday
+      dayOfYear: 218
+      hour: 15
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 0
+      month: 8
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 22
+      ticks: 639216252220000000
+      utcTicks: 639216252220000000
+      timeOfDay: 15:00:22
+      year: 2026
+    lastUpdated:
+

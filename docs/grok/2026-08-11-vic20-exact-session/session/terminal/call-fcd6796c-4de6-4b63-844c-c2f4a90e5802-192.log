@@ -1,0 +1,30 @@
+ HANDOFF.md                                         |  24 +-
+ docs/FlashCart-Builder.md                          |   2 +-
+ docs/audit-vic20-vs-vice-2026-08-07.md             |   3 +-
+ .../wrapup-fe3-flash040-pixel-fb-20260811.txt      |  30 +++
+ native/vice-shim-vic20.c                           | 152 +++++++++++-
+ src/ViceSharp.Abstractions/IViceNative.cs          |   7 +
+ src/ViceSharp.Core/FlashCarts/Flash040Core.cs      | 267 +++++++++++++++++++++
+ .../Vic20/FinalExpansion3Cartridge.cs              |  73 ++++--
+ src/ViceSharp.Core/ViceNative.Xvic.cs              |  21 ++
+ src/ViceSharp.Core/ViceNative.cs                   |  10 +
+ .../FlashCart/Fe3Flash040Tests.cs                  |  81 +++++++
+ .../FlashCart/Flash040CoreTests.cs                 | 120 +++++++++
+ .../Vic20/Vic20ExpansionCartTests.cs               |  11 +-
+ .../Vic20/Vic20PixelFrameTests.cs                  | 115 +++++++++
+ 14 files changed, 874 insertions(+), 42 deletions(-)
+[main e1cf592] feat(vic20): FE3 flash040 FSM and xvic pixel frame capture
+ 14 files changed, 874 insertions(+), 42 deletions(-)
+ create mode 100644 docs/receipts/wrapup-fe3-flash040-pixel-fb-20260811.txt
+ create mode 100644 src/ViceSharp.Core/FlashCarts/Flash040Core.cs
+ create mode 100644 tests/ViceSharp.TestHarness/FlashCart/Fe3Flash040Tests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/FlashCart/Flash040CoreTests.cs
+ create mode 100644 tests/ViceSharp.TestHarness/Vic20/Vic20PixelFrameTests.cs
+To https://github.com/sharpninja/vice-sharp.git
+   0cd61f8..e1cf592  HEAD -> main
+SHA e1cf5927570d2cad1f4dfff3a1a5eb2c1e320fd3
+## main...origin/main
+?? docs/10s-lockstep-2026-08-07.log
+?? docs/10s-lockstep-blankfix-2026-08-06.log
+?? docs/10s-lockstep-idle-2026-08-06.log
+?? docs/10s-lockstep-memptr2-2026-08-06.log

@@ -1,0 +1,76 @@
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:5:======== 
+pixel_index_pal filter=FullyQualifiedName~Vic20PixelLockstep.Index_ReadyPal EXIT=0 MS=14854 P=1 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:9:Passed!  - Failed:     
+0, Passed:     1, Skipped:     0, Total:     1, Duration: 7 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:12:======== 
+pixel_index_ntsc filter=FullyQualifiedName~Vic20PixelLockstep.Index_ReadyNtsc EXIT=0 MS=15720 P=1 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:16:Passed!  - Failed:     
+0, Passed:     1, Skipped:     0, Total:     1, Duration: 8 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:19:======== pixel_busy 
+filter=FullyQualifiedName~Vic20PixelLockstep.Index_BusyPal EXIT=0 MS=16051 P=1 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:23:Passed!  - Failed:     
+0, Passed:     1, Skipped:     0, Total:     1, Duration: 7 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:26:======== pixel_bgra 
+filter=FullyQualifiedName~Vic20PixelLockstep.Bgra_ReadyPal EXIT=0 MS=14067 P=1 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:30:Passed!  - Failed:     
+0, Passed:     1, Skipped:     0, Total:     1, Duration: 6 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:33:======== pixel_frame 
+filter=FullyQualifiedName~Vic20PixelFrameTests.CaptureVisibleFrame_AfterBoot EXIT=0 MS=11683 P=1 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:37:Passed!  - Failed:     
+0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:40:======== video_2k 
+filter=FullyQualifiedName~Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k EXIT=0 MS=7936 P=2 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:44:Passed!  - Failed:     
+0, Passed:     2, Skipped:     0, Total:     2, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:47:======== sound 
+filter=FullyQualifiedName~Vic20Sound|FullyQualifiedName~Vic20NativeAudio EXIT=0 MS=7985 P=8 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:51:Passed!  - Failed:     
+0, Passed:     8, Skipped:     0, Total:     8, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:54:======== flash 
+filter=FullyQualifiedName~Flash040|FullyQualifiedName~Fe3Flash EXIT=0 MS=6532 P=12 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:58:Passed!  - Failed:     
+0, Passed:    12, Skipped:     0, Total:    12, Duration: 114 ms - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:61:======== cart 
+filter=FullyQualifiedName~UltimemParity|FullyQualifiedName~MegaCartParity|FullyQualifiedName~Vic20CartInventory EXIT=0 
+MS=6922 P=7 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:65:Passed!  - Failed:     
+0, Passed:     7, Skipped:     0, Total:     7, Duration: 102 ms - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:68:======== workload_pal 
+filter=FullyQualifiedName~EveryCycle_Workload_Match_FocusedPal EXIT=0 MS=10550 P=1 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:72:Passed!  - Failed:     
+0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:75:======== workload_ntsc 
+filter=FullyQualifiedName~EveryCycle_Workload_Match_FocusedNtsc EXIT=0 MS=9291 P=1 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:79:Passed!  - Failed:     
+0, Passed:     1, Skipped:     0, Total:     1, Duration: 2 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:82:======== snapshot 
+filter=FullyQualifiedName~Vic20Snapshot EXIT=0 MS=9199 P=4 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:86:Passed!  - Failed:     
+0, Passed:     4, Skipped:     0, Total:     4, Duration: 1 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:89:======== keyboard 
+filter=FullyQualifiedName~Vic20Keyboard|FullyQualifiedName~Vic20LockstepIsolation EXIT=0 MS=8385 P=6 F=0 S=0 ========
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:93:Passed!  - Failed:     
+0, Passed:     6, Skipped:     0, Total:     6, Duration: 239 ms - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:96:===== UMBRELLA SUMMARY 
+=====
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:97:Passed=46 Failed=0 
+Skipped=0 anyNonZeroExit=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:98:Criterion: Failed=0 
+Skipped=0 and all part EXIT=0
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:105:Passed!  - Failed:    
+ 0, Passed:     1, Skipped:     0, Total:     1, Duration: 27 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:111:Passed!  - Failed:    
+ 0, Passed:     1, Skipped:     0, Total:     1, Duration: 11 s - ViceSharp.TestHarness.dll (net10.0)
+C:\Users\kingd\AppData\Local\Temp\grok-goal-a8b508754f9e\implementer\vic20-umbrella-gate.log:113:UMBRELLA_PLUS_2S 
+complete 2026-08-11T15:45:36.6176660-05:00
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 27 s - ViceSharp.TestHarness.dll (net10.0)
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 11 s - ViceSharp.TestHarness.dll (net10.0)
+RECEIPTS_OK
+

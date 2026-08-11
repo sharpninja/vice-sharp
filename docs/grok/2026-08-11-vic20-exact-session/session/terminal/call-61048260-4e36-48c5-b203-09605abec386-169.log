@@ -1,0 +1,59 @@
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.FirstDiverge_WithWindowDump [27 ms]
+   DIV first=5009
+c=10 nPC=$FD27 mPC=$FD27 nA=$00 mA=$00 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FF mS=$FF nP=$A4 mP=$A4 dbgCyc=5 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=11 nPC=$FD27 mPC=$FD27 nA=$00 mA=$00 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FF mS=$FF nP=$A4 mP=$A4 dbgCyc=4 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=12 nPC=$FD29 mPC=$FD29 nA=$00 mA=$00 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FE mS=$FE nP=$A4 mP=$A4 dbgCyc=3 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=13 nPC=$FD29 mPC=$FD29 nA=$00 mA=$00 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FD mS=$FD nP=$A4 mP=$A4 dbgCyc=2 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=14 nPC=$FD29 mPC=$FD29 nA=$00 mA=$00 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FD mS=$FD nP=$A4 mP=$A4 dbgCyc=1 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=15 nPC=$FD3F mPC=$FD3F nA=$00 mA=$00 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FD mS=$FD nP=$A4 mP=$A4 dbgCyc=0 op=$20 
+bound=False trail=0 fullBr=False mis=False
+c=5000 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=3 op=$E6 
+bound=False trail=1 fullBr=False mis=False
+c=5001 nPC=$FDAF mPC=$FDAF nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=2 op=$E6 
+bound=False trail=1 fullBr=False mis=False
+c=5002 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$E6 
+bound=False trail=1 fullBr=False mis=False
+c=5003 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$E6 
+bound=True trail=1 fullBr=False mis=False
+c=5004 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=2 op=$D0 
+bound=False trail=2 fullBr=True mis=False
+c=5005 nPC=$FDB1 mPC=$FDB1 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=1 op=$D0 
+bound=False trail=2 fullBr=True mis=False
+c=5006 nPC=$FDB3 mPC=$FDB3 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=0 op=$D0 
+bound=False trail=2 fullBr=True mis=False
+c=5007 nPC=$FDB5 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=5 op=$20 
+bound=False trail=1 fullBr=False mis=False
+c=5008 nPC=$FDB5 mPC=$FDB5 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$24 mP=$24 dbgCyc=4 op=$20 
+bound=False trail=1 fullBr=False mis=False
+c=5009 nPC=$FDB5 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FC nP=$24 mP=$24 dbgCyc=3 op=$20 
+bound=False trail=1 fullBr=False mis=True
+c=5010 nPC=$FDB7 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FC mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$20 
+bound=False trail=1 fullBr=False mis=True
+c=5011 nPC=$FDB7 mPC=$FDB7 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$20 
+bound=False trail=1 fullBr=False mis=False
+c=5012 nPC=$FDB7 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$20 
+bound=False trail=1 fullBr=False mis=True
+c=5013 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=4 op=$B1 
+bound=False trail=4 fullBr=False mis=False
+c=5014 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=3 op=$B1 
+bound=False trail=4 fullBr=False mis=False
+c=5015 nPC=$FE91 mPC=$FE91 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=2 op=$B1 
+bound=False trail=4 fullBr=False mis=False
+c=5016 nPC=$FE91 mPC=$FE91 nA=$00 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$B1 
+bound=False trail=4 fullBr=False mis=True
+c=5017 nPC=$FE91 mPC=$FE93 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$B1 
+bound=True trail=4 fullBr=False mis=True
+c=5018 nPC=$FE93 mPC=$FE93 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=1 op=$AA 
+bound=False trail=1 fullBr=False mis=False
+c=5019 nPC=$FE93 mPC=$FE94 nA=$04 mA=$04 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FB mS=$FB nP=$24 mP=$24 dbgCyc=0 op=$AA 
+bound=True trail=1 fullBr=False mis=True
+Failed!  - Failed:     1, Passed:    18, Skipped:     0, Total:    19, Duration: 1 s - ViceSharp.TestHarness.dll 
+(net10.0)
+

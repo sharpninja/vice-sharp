@@ -1,0 +1,8 @@
+base=http://192.168.1.77:8080 auth=3 tokenLen=355
+payload={"sub":"xbox-45b69d4ae4090791","iss":"romm:oauth","scopes":"me.read roms.read platforms.read assets.read collections.read collections.write roms.user.read roms.user.write","type":"access","exp":1785926830}
+exp=08/05/2026 10:47:10 +00:00 now=08/05/2026 10:22:54 +00:00 expired=False
+OK /api/platforms 200 len=3041
+OK /api/collections 200 len=2
+OK /api/roms?limit=1 200 len=129064
+sub=xbox-45b69d4ae4090791
+bridge OK 200 {"url":"http://romm:8080","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ4Ym94LTYzMGQ0NTU3MzZmM2Q0ZDkiLCJpc3MiOiJyb21tOm9hdXRoIiwic2NvcGVzIjoibWUucmVhZCByb21zLnJlYWQgcGxh

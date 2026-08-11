@@ -1,0 +1,64 @@
+        text: Index SequenceEqual READY idle PAL one full frame managed vs xvic
+        isSatisfied: false
+      - id: AC-PX-03
+        text: Index SequenceEqual READY idle NTSC one full frame
+        isSatisfied: false
+      - id: AC-PX-04
+        text: Index SequenceEqual busy screen PAL
+        isSatisfied: false
+      - id: AC-PX-05
+        text: BGRA SequenceEqual READY and busy after palette align
+        isSatisfied: false
+      - id: AC-PX-06
+        text: Capture not sentinel/all-black after READY; BGRA alpha 0xFF
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-11T17:23:38.5326513+00:00
+      updatedAt: 2026-08-11T17:23:38.5327595+00:00
+  deprecated: true
+
+---
+      - id: AC-TP-01
+        text: Managed index and BGRA buffers match xvic canvas geometry
+        isSatisfied: false
+      - id: AC-TP-02
+        text: Compare sync point defined and used by all pixel tests
+        isSatisfied: false
+      - id: AC-TP-03
+        text: Index compare is primary Exact; BGRA after palette table match
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-11T17:23:41.5413349+00:00
+      updatedAt: 2026-08-11T17:23:41.5414630+00:00
+  deprecated: true
+
+---
+      description: After synchronized READY boot, palette-index framebuffers SequenceEqual between Mos6561 and xvic capture (TEST-VIC20-PX-02 / AC-PX-02).
+      status: pending
+      priority: high
+      area: VIC20
+      testType: unit
+      acceptanceCriteria:
+      - id: AC-TEST-PX-02
+        text: Vic20PixelLockstep.Index_ReadyPal_SequenceEqual passes 0 fail 0 skip
+        isSatisfied: false
+      scopeStartLayerKey: layer-1
+      createdAt: 2026-08-11T17:23:44.9256495+00:00
+      updatedAt: 2026-08-11T17:23:44.9257505+00:00
+  deprecated: true
+
+---
+type: result
+payload:
+  requestId: req-20260811T172346Z-251d
+  result:
+    success: true
+    item:
+      frId: FR-VIC20-001
+      trId: TR-VIC20-PIXEL-001
+      testId: TEST-VIC20-001
+      createdAt: 2026-08-11T17:23:48.9775480+00:00
+      notes: Phase A pixel FR maps to pixel TR and index READY PAL test
+  deprecated: true
+
+---

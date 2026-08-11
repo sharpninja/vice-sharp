@@ -1,0 +1,13 @@
+
+  requestId: req-20260811T150030Z-69f9
+    success: true
+      id: PLAN-XBOXUWP-END-001
+      title: CANCELLED - Xbox UWP and Dev-Mode sideload platform track
+      done: true
+        done: true
+      doneSummary: 'CANCELLED 2026-08-11 by operator. Xbox UWP, Dev-Mode sideload, DeployXboxLocal, and console 
+product track abandoned (after Store cancel: emulators not allowed). Do not resume. Code under src/ViceSharp.Xbox* is 
+frozen legacy. Supported shells: Avalonia desktop and Console.'
+  requestId: req-20260811T150034Z-26c5
+    totalCount: 0
+

@@ -1,0 +1,15 @@
+
+artifacts\installer\install.log:311:MSI (s) (3C:5C) [16:30:44:454]: Product: ViceSharp -- Installation completed 
+successfully.
+artifacts\installer\install.log:313:MSI (s) (3C:5C) [16:30:44:455]: Windows Installer installed the product. Product 
+Name: ViceSharp. Product Version: 1.3.2. Product Language: 0. Manufacturer: sharpninja. Installation success or error 
+status: 0.
+UNINST=0
+STILL_INSTALLED 1.3.2
+INST=0
+INSTALLED FileVersion=1.3.2.0 ProductVersion=1.3.2+85396c84fd5e5dffc2654080ca7676a56ae977a5 Len=121217781
+HASH_MATCH=True
+artifacts\installer\install-v.log:486:MSI (s) (3C:2C) [16:31:09:512]: Windows Installer reconfigured the product. 
+Product Name: ViceSharp. Product Version: 1.3.2. Product Language: 0. Manufacturer: sharpninja. Reconfiguration 
+success or error status: 0.
+

@@ -1,0 +1,53 @@
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:67:#define P_SIGN          0x80
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:68:#define P_OVERFLOW      0x40
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:69:#define P_UNUSED        0x20
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:70:#define P_BREAK         0x10
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:71:#define P_DECIMAL       0x08
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:72:#define P_INTERRUPT     0x04
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:73:#define P_ZERO          0x02
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:74:#define P_CARRY         0x01
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:129:            (regs)->p |= P_BREAK;            \
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:131:            (regs)->p &= ~P_BREAK;           \
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:193:#define MOS6510DTV_REGS_GET_BREAK(regs) ((regs)->p & P_BREAK)
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510dtv.h:200:    ((regs)->p | ((regs)->n & 0x80) | P_UNUSED \
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:52:#define P_SIGN          0x80
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:53:#define P_OVERFLOW      0x40
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:54:#define P_UNUSED        0x20
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:55:#define P_BREAK         0x10
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:56:#define P_DECIMAL       0x08
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:57:#define P_INTERRUPT     0x04
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:58:#define P_ZERO          0x02
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:59:#define P_CARRY         0x01
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:79:            (regs)->p |= P_BREAK;         \
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:81:            (regs)->p &= ~P_BREAK;        \
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:128:#define MOS6510_REGS_GET_BREAK(regs) ((regs)->p & P_BREAK)
+F:\GitHub\vice-sharp\native\vice\vice\src\mos6510.h:135:    ((regs)->p | ((regs)->n & 0x80) | P_UNUSED \
+F:\GitHub\vice-sharp\native\vice\vice\src\piacore.h:44:#define P_PORT_A        0
+F:\GitHub\vice-sharp\native\vice\vice\src\piacore.h:45:#define P_CTRL_A        1
+F:\GitHub\vice-sharp\native\vice\vice\src\piacore.h:46:#define P_PORT_B        2
+F:\GitHub\vice-sharp\native\vice\vice\src\piacore.h:47:#define P_CTRL_B        3
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:49:#define P_SIGN          0x80
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:50:#define P_OVERFLOW      0x40
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:51:#define P_UNUSED        0x20
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:52:#define P_BREAK         0x10
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:53:#define P_DECIMAL       0x08
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:54:#define P_INTERRUPT     0x04
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:55:#define P_ZERO          0x02
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:56:#define P_CARRY         0x01
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:76:            (regs)->p |= P_BREAK;        \
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:78:            (regs)->p &= ~P_BREAK;       \
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:125:#define R65C02_REGS_GET_BREAK(regs) ((regs)->p & P_BREAK)
+F:\GitHub\vice-sharp\native\vice\vice\src\r65c02.h:132:    ((regs)->p | ((regs)->n & 0x80) | P_UNUSED \
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:54:#define P_SIGN          0x80
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:55:#define P_OVERFLOW      0x40
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:56:#define P_UNUSED        0x20
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:57:#define P_65816_M       0x20
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:58:#define P_65816_X       0x10
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:59:#define P_BREAK         0x10
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:60:#define P_DECIMAL       0x08
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:61:#define P_INTERRUPT     0x04
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:62:#define P_ZERO          0x02
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:63:#define P_CARRY         0x01
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:98:            (regs)->p |= P_BREAK;          \
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:100:            (regs)->p &= ~P_BREAK;         \
+F:\GitHub\vice-sharp\native\vice\vice\src\wdc65816.h:185:    ((regs)->p & P_BREAK)

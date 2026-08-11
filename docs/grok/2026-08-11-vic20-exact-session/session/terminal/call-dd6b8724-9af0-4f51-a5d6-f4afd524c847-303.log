@@ -1,0 +1,6 @@
+
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:24:    [Fact(Explicit = true)]
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:25:    public void TakenBne_CycleTrace()
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:55:    [Fact(Explicit = true)]
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:56:    public void NotTakenBne_CycleTrace()
+

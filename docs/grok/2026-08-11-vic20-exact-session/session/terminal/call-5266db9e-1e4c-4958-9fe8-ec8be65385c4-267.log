@@ -1,0 +1,14 @@
+aaa53e3f45c2cbd5dbeae8dedc41a217269983a5	refs/heads/main
+---
+ERROR: argument --id: expected one argument
+Build       Result     SourceBranch      Finish                            Reason
+----------  ---------  ----------------  --------------------------------  ------------
+20260711.1  failed     refs/tags/v1.1.0  2026-07-11T00:38:46.907996+00:00  individualCI
+20260710.2  succeeded  refs/tags/v1.0.5  2026-07-10T23:54:02.972697+00:00  individualCI
+20260710.1  failed     refs/tags/v1.0.4  2026-07-10T23:09:57.434550+00:00  individualCI
+20260708.3  succeeded  refs/tags/v1.0.2  2026-07-08T16:55:07.663078+00:00  individualCI
+20260708.2  succeeded  refs/tags/v1.0.1  2026-07-08T02:41:16.866590+00:00  individualCI
+20260708.1  failed     refs/tags/v1.0.1  2026-07-08T02:28:13.884684+00:00  individualCI
+20260707.3  failed     refs/tags/v1.0.1  2026-07-07T22:07:37.791308+00:00  manual
+20260707.2  failed     refs/tags/v1.0.1  2026-07-07T21:37:50.230684+00:00  individualCI
+20260707.1  succeeded  refs/tags/v1.0.1  2026-07-07T21:29:42.498121+00:00  individualCI

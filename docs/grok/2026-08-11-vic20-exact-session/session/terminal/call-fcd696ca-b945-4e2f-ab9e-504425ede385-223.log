@@ -1,0 +1,44 @@
+
+LineNumber Line
+---------- ----
+        73     if (cache->background_data[0] != vic.raster.background_color
+        77         cache->background_data[0] = vic.raster.background_color;
+       113 /* transparent>0: don't overwrite background */
+       119     /* Last character may exceed border, so we have some extra work */
+       120     /* bordercheck asumes p pointing to display_xstart */
+       123     c[0] = VIC_PIXEL(vic.raster.background_color);
+       125     /* if any of mc_border_color, auxiliary_color or reverse have
+       127     if (vic.mc_border_color != vic.old_mc_border_color ||
+       136             /* put the first pixel to handle border or auxiliary color
+       138             c[1] = VIC_PIXEL(vic.old_mc_border_color);
+       144             c[1] = VIC_PIXEL(vic.mc_border_color);
+       155             /* put the first 5 pixels to handle border or auxiliary color
+       157             c[1] = VIC_PIXEL(vic.old_mc_border_color);
+       165             c[1] = VIC_PIXEL(vic.mc_border_color);
+       181     c[1] = VIC_PIXEL(vic.mc_border_color);
+       198     p = (vic.raster.draw_buffer_ptr + vic.raster.display_xstart);
+       207     p = (vic.raster.draw_buffer_ptr + vic.raster.display_xstart);
+       215 static void draw_std_background(unsigned int start_pixel, unsigned int end_pixel)
+       217     memset(vic.raster.draw_buffer_ptr + start_pixel,
+       218            vic.raster.background_color,
+       226     p = (vic.raster.draw_buffer_ptr + vic.raster.display_xstart);
+       237                      draw_std_background,
+        76     memset(raster->draw_buffer_ptr + start,
+        77            raster->border_color, end - start + 1);
+        85     uint8_t *fake_draw_buffer_ptr;
+        91     fake_draw_buffer_ptr = raster->fake_draw_buffer_line
+        92                            + raster->geometry->extra_offscreen_border_left;
+        94     raster->sprite_status->draw_function(fake_draw_buffer_ptr,
+        98 /* map the current line so that lines 0+ in the lower border on NTSC */
+       112         || raster->border_color
+       113         != raster->cache[raster->current_line].border_color
+       117         raster->cache[raster->current_line].border_color
+       118             = raster->border_color;
+       133         raster_changes_t *border_changes;
+       136         raster_changes_apply_all(raster->changes->background);
+       140         border_changes = raster->changes->border;
+       142         /* Only draw a blank line if there are border changes. If there
+       143            are no border changes just check for dirty cache.  */
+       144         if (border_changes->count > 0) {
+       145             for (xs = i = 0; i < border_changes->count; i++) {
+

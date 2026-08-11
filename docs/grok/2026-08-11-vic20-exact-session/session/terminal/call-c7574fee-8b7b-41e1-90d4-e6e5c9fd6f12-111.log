@@ -1,0 +1,10 @@
+
+Path                                                                       LineNumber Line
+----                                                                       ---------- ----
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Controls\VideoSurfaceHost.cs              111     // FIX-XNTSCFILL-001: the ac.
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Controls\VideoSurfaceHost.cs              191     /// (FIX-XNTSCFILL-001: the .
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Controls\VideoSurfaceHost.cs              196     /// <param name="contentHeig.
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Controls\VideoSurfaceHost.cs              421         // FIX-XNTSCFILL-001: cr.
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Controls\VideoSurfaceHost.cs              422         // maps its first visibl.
+F:\GitHub\vice-sharp\src\ViceSharp.Xbox\Platform\InProcessSessionFacade.cs        127     /// (FIX-XNTSCFILL-001), or .
+

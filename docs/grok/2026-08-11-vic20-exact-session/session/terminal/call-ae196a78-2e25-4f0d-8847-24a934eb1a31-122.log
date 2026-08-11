@@ -1,0 +1,40 @@
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+The following Tests are available:
+    ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasureGuiFramePumpThroughput
+    ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClock
+    ViceSharp.TestHarness.ClockThroughputBenchmarkTests.MeasurePumpLoopPacedClockUnderPullLoad
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.Constructor_NullRegistry_Throws
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.GetFrameAsync_MissingSession_ReturnsNotFoundStatus
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.GetFrameAsync_ValidSessionNoVideoChip_ReturnsUnavailable
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.GetFrameAsync_CancelledToken_Throws
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.GetFrameAsync_InvokedThroughInterface_PreservesContract
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.GetFrameAsync_StoppedSession_ReturnsFrameWithoutAdvancingMachine
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.Pump_AdvancesCpuClock_AndGetFrameAsyncPullsWithoutAdvancing
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.Pump_AccumulatesCompletedFrames_FromVideoChipEvent
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.Pump_PausedSession_DoesNotAdvanceCpuClock
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.Pump_AdvancesCycle_ReflectedInPulledFrame
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.Pump_PullReturnsLastCompletedFrame_NotMidFrame
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.TryCopyFrameInto_AfterFrameCompletes_CopiesPublishedFrame
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.TryCopyFrameInto_NoPublishedFrame_ReturnsFalse
+    ViceSharp.TestHarness.LocalVideoFrameSourceTests.GetFrameAsync_FramePayloadIsDefensiveCopy
+    ViceSharp.TestHarness.SettingsServiceHostTests.UpdateSettingsAsync_PacingStrategy_AppliesToPumpAndRoundTrips
+    ViceSharp.TestHarness.ThreadAffinityTests.Pump_Worker_Pins_From_Environment
+    ViceSharp.TestHarness.ThreadNamingTests.EmulationPumpService_NamesWorkerThread
+    ViceSharp.TestHarness.TickHistoryCaptureTests.Pump_CapturesInstructionHistory_BoundedByCapacity
+    ViceSharp.TestHarness.TickHistoryCaptureTests.Pump_DoesNotCaptureHistory_WhenRecordingDisabled
+    ViceSharp.TestHarness.TickHistoryCaptureTests.GetTickHistory_AfterPump_ReturnsIndexOrderedTicks
+    ViceSharp.TestHarness.WarpModeTests.PumpSession_WhenLimiterEnabled_AdvancesCpuClockBySubFrameSlice
+    ViceSharp.TestHarness.WarpModeTests.PumpSession_WhenLimiterDisabled_AdvancesLargerCycleBurst
+    ViceSharp.TestHarness.WarpModeTests.EmulationPump_GateName_ReflectsInjectedStrategy
+    ViceSharp.TestHarness.Xbox.ConsoleEmulatorHostTests.StartC64Session_ReturnsSuccess_AndNonEmptySessionId
+    ViceSharp.TestHarness.Xbox.ConsoleEmulatorHostTests.StepFramesDeterministic_IsBitExact_AndNeverStartsThePump
+    ViceSharp.TestHarness.Xbox.ConsoleEmulatorHostTests.StartC64Session_StartsExactlyOneUnpinnedWorker
+    ViceSharp.TestHarness.C1541.TrueDrivePumpPathLoadTests.Load_ViaCoordinatorStepInstruction_StreamsProgramAndDriveRunsOwnClock
+    ViceSharp.TestHarness.Audio.SidAudioPumpTests.Tick_WithBackendAndClock_EmitsRoughlyOneFrameOfSamples
+    ViceSharp.TestHarness.Audio.SidAudioPumpTests.Tick_WithBackendButNoClockConfigured_EmitsNothing
+    ViceSharp.TestHarness.Audio.SidAudioPumpTests.Tick_WithNoBackend_DoesNotThrow_AndEmitsNothing
+    ViceSharp.TestHarness.Audio.SidAudioPumpTests.Sid_WithGatedVoice_ProducesTimeVaryingSamples
+    ViceSharp.TestHarness.Audio.SidAudioPumpTests.ConvertToPcm16_ClampsAndEncodesLittleEndian

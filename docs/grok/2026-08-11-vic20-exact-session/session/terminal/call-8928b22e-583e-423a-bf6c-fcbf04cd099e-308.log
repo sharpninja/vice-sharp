@@ -1,0 +1,54 @@
+Created:  Invoke-RestMethod: 
+
+Process Id:  version  steps=0
+Line |
+  18 |  .  $created = Invoke-RestMethod -Uri "$base/api/Spaces-1/projects" -Hea .
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | 
+{
+  "ErrorMessage": "There was a problem with your request.",
+  "Errors": [
+    "You cannot create another project. This would exceed the limits of your current license. Please contact sales@octopus.com to upgrade your license."
+  ],
+  "ParsedHelpLinks": [],
+  "Details": {}
+}
+Invoke-RestMethod: 
+Line |
+  25 |  $proc = Invoke-RestMethod -Uri "$base/api/Spaces-1/projects/$projectI .
+     |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | 
+{
+  "ErrorMessage": "The resource you requested was not found."
+}
+InvalidOperation: 
+Line |
+ 102 |  $proc.Steps = @($step)
+     |  ~~~~~~~~~~~~~~~~~~~~~~
+     | The property 'Steps' cannot be found on this object. Verify that the property exists and can be set.
+Process update failed: 
+{
+  "ErrorMessage": "The resource you requested was not found."
+}
+
+{
+  "ErrorMessage": "The resource you requested was not found."
+}
+Triggers already: 
+Channel  
+Invoke-RestMethod: 
+Line |
+ 114 |  $triggers = Invoke-RestMethod -Uri "$base/api/Spaces-1/projects/$proj .
+     |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | 
+{
+  "ErrorMessage": "The resource you requested was not found."
+}
+Invoke-RestMethod: 
+Line |
+ 147 |  $channels = Invoke-RestMethod -Uri "$base/api/Spaces-1/projects/$proj .
+     |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | 
+{
+  "ErrorMessage": "The resource you requested was not found."
+}

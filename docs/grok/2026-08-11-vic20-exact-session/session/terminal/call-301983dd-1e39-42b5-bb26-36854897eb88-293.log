@@ -1,0 +1,13 @@
+
+Name                 Length LastWriteTime
+----                 ------ -------------
+romm-cache                  8/5/2026 4:57:28 AM
+romm-connection.json 436    8/5/2026 5:17:18 AM
+=== romm-connection.json ===
+{"base_url":"http://192.168.1.77:8080/","auth_mode":3,"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ4Ym94LTQ1YjY5ZDRhZTQwOTA3OTEiLCJpc3MiOiJyb21tOm9hdXRoIiwic2NvcGVzIjoibWUucmVhZCByb21zLnJlYWQgcGxhdGZvcm1zLnJlYWQgYXNzZXRzLnJlYWQgY29sbGVjdGlvbnMucmVhZCBjb2xsZWN0aW9ucy53cml0ZSByb21zLnVzZXIucmVhZCByb21zLnVzZXIud3JpdGUiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1OTI2ODMwfQ.PZOj5wL-JYfQhZfN5MvQLnamDvKi4xEqtlk7SWClQXw","username":null}
+heartbeat fail: Invalid URI: The hostname could not be parsed.
+bridge fail: Invalid URI: The hostname could not be parsed.
+fail /romm/v1/connection
+fail /api/romm/connection
+fail /connection
+

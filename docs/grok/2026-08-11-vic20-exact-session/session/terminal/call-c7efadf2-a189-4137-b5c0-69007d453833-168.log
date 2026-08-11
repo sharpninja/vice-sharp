@@ -1,0 +1,13 @@
+cc -DHAVE_CONFIG_H -I. -I../../src  -I../../src/arch/systemheaderoverride -DNDEBUG -I../../src/arch/headless -I../../src/arch/shared -I../../src/arch/mingw32-pcap/wpcap -I../../src -I../../src -I../../src/datasette -I../../src/drive -I../../src/printerdrv -I../../src/sid -I../../src/tape -I../../src/raster -I../../src/video -I../../src/userport -I../../src/vic20/cart -I../../src/lib/p64 -I../../src/joyport -I../../src/samplerdrv -I../../src/tapeport -I../../src/rs232drv -I../../src/core -I../../src/core/rtc  -g -O3 -W -Wall -Wextra -Wformat -Wformat-signedness -Wformat-security -Wshadow -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -Wuninitialized -Wmissing-field-initializers -Wunreachable-code -Werror=implicit-function-declaration -Wfatal-errors -Wdiscarded-qualifiers -Wno-unknown-pragmas -Wunused-but-set-variable -Wno-sign-compare -Wno-ignored-qualifiers -Wno-unused-parameter -Wall -Wno-unused-parameter -Wno-sign-compare  -MT vic20sound.o -MD -MP -MF .deps/vic20sound.Tpo -c -o vic20sound.o vic20sound.c
+mv -f .deps/vic20sound.Tpo .deps/vic20sound.Po
+make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Built: /f/GitHub/vice-sharp/native/vice_xvic.dll
+-rwxr-xr-x 1 kingd kingd 10930267 Aug 11 13:08 /f/GitHub/vice-sharp/native/vice_xvic.dll
+
+A total of 1 test files matched the specified pattern.
+  Failed ViceSharp.TestHarness.Vic20.Vic20SoundLockstep.Tone_MatchesXvic [407 ms]
+   tone PCM mismatch first=1 n=1705 m=1827 len=1989 nNonZero=1988 mNonZero=1988
+Failed!  - Failed:     1, Passed:     7, Skipped:     0, Total:     8, Duration: 660 ms - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+

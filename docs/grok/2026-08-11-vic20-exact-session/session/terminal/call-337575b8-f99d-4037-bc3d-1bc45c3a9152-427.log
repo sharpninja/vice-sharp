@@ -1,0 +1,12 @@
+
+   DIV first=502793 matchedCycles=502792 budget=2216810
+c=502790 nPC=$FD62 mPC=$FD62 nA=$00 mA=$00 nX=$6D mX=$6D nY=$1F mY=$1F nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=4 op=$B1 
+mis=False
+c=502791 nPC=$FD62 mPC=$FD62 nA=$00 mA=$00 nX=$6D mX=$6D nY=$1F mY=$1F nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=3 op=$B1 
+mis=False
+c=502792 nPC=$FD62 mPC=$FD62 nA=$00 mA=$00 nX=$6D mX=$6D nY=$1F mY=$1F nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=2 op=$B1 
+mis=False
+c=502793 nPC=$FD62 mPC=$FD62 nA=$F6 mA=$00 nX=$6D mX=$6D nY=$1F mY=$1F nS=$FD mS=$FD nP=$26 mP=$26 dbgCyc=1 op=$B1 
+mis=True
+bus: m$C1=$00 m$C2=$20 n$C1=$00 n$C2=$20 m$C3=$6D m$C4=$FD n$C3=$6D n$C4=$FD m$0314=$00 n$0314=$00
+

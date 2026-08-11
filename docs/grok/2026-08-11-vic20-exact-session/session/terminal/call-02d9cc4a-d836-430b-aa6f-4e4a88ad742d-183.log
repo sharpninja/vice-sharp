@@ -1,0 +1,7 @@
+
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TwoSecondPal [22 ms]
+   DIV first=5513 matchedCycles=5512 budget=2216810
+Failed!  - Failed:     1, Passed:     1, Skipped:     0, Total:     2, Duration: 35 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+

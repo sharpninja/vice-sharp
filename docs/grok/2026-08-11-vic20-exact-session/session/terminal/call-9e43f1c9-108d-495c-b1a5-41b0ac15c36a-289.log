@@ -1,0 +1,26 @@
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:10.57
+=== EveryCycle_CpuRegs_Match_FocusedWindow ===
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=0
+=== EveryCycle_CpuRegs_Match_TwoSecondPal ===
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 13 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=0
+=== EveryCycle_CpuRegs_Match_TenSecondPal ===
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 1 m 6 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=0
+=== EveryCycle_CpuRegs_Match_TenSecondNtsc ===
+  Failed ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.EveryCycle_CpuRegs_Match_TenSecondNtsc [3 s]
+   DIV first=520829 matchedCycles=520828 budget=10227270
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 3 s - ViceSharp.TestHarness.dll 
+(net10.0)
+EXIT=1
+

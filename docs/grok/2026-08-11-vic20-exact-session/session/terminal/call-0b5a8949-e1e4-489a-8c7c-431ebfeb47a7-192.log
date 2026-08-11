@@ -1,0 +1,59 @@
+
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Launcher_Xvic_BuildsTopologyYaml_WithVic20HostAnd1540DriveDefau
+ltComment [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_DevicesList_IncludesExpectedRoles [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.Vic20Descriptor_WithoutRomProvider_ThrowsClearError [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20SkeletonTests.DefaultDrive_Is1540_Not1541 [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DeterminismTests.SingleMachine_ReplayFromReset_MatchesPriorRun [478 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DeterminismTests.TwoMachines_SameFrames_ProduceIdenticalState [109 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.XvicTopology_Drive8_InjectsDos1540 [21 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.Vic20SystemCoreTraits_AdvertiseDefaultDrive [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.C64Profile_DefaultDrivePath_Remains1541 [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20DriveDefaultTests.Vic20Profile_DefaultDrive_IsC1540_FromProductionProfile [< 
+1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersNonBlackPixels_ForKnownScreenPattern [11 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PalAndNtsc_Profiles_ExposeDistinctTiming [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameCompleted_FiresAfterFullRaster [13 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20HeadsTests.Launcher_Xvic_HostKind_IsVic20 [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20HeadsTests.XboxComputerPicker_ListsVic20_Enabled [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20HeadsTests.SessionFactory_CanCreateVic20Session [13 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Joystick_Right_ClearsVia2PortBBit7 [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Machine_KeyboardInject_VisibleOnVia2PortA [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.Matrix_SetKey_AppearsInScanRowsForColumns [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20KeyboardTests.DualVia_Windows_RemainAt9110And9120 [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_CartPrg_MapsIntoBlkRegion [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_AfterReset_RomsAndResetVector_FromProductionBuilder [5 
+ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BootProofTests.Vic20_Boot_Reaches_Ready_Prompt [198 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Exp8KMachine_Blk1IsWritable [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp32K, address: 
+1024, installed: True) [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 
+4096, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp8K, address: 
+8192, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 
+8192, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp8K, address: 
+16383, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp3K, address: 
+8192, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp16K, address: 
+16384, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp32K, address: 
+40960, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp8K, address: 
+16384, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp3K, address: 
+1024, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 
+1024, installed: False) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Exp24K, address: 
+24576, installed: True) [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.Expansion_InstallsExpectedRam(expansion: Unexpanded, address: 
+0, installed: True) [< 1 ms]
+  Passed 
+ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.UnexpandedMachine_OpenBusExpansion_ReadsAsFf_AndBaseRamWritable [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20MemoryMapTests.IoWindow_ViaAndVicStillMapped [2 ms]
+     Passed: 52
+

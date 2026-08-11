@@ -1,0 +1,5 @@
+
+cannot get endpoint http://PAYTON-LEGION2:8066/api/ from server. failure from http client Get "http://PAYTON-LEGION2:8066/api/": dial tcp [fe80::8fec:c5d8:a7fd:14e4%Wi-Fi]:8066: connectex: No connection could be made because the target machine actively refused it.
+====
+
+cannot get endpoint http://PAYTON-LEGION2:8066/api/ from server. failure from http client Get "http://PAYTON-LEGION2:8066/api/": dial tcp [fe80::8fec:c5d8:a7fd:14e4%Wi-Fi]:8066: connectex: No connection could be made because the target machine actively refused it.

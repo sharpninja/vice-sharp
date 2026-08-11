@@ -1,0 +1,140 @@
+
+Name
+----
+C64
+romm-cache
+basic-901226-01.bin
+chargen-901225-01.bin
+gtk3_keyrah_de.vkm
+gtk3_keyrah.vkm
+gtk3_pos_bmc64.vkm
+gtk3_pos_de.vkm
+gtk3_pos_es.vkm
+gtk3_pos_it.vkm
+gtk3_pos_se.vkm
+gtk3_pos_tr.vkm
+gtk3_pos_uk.vkm
+gtk3_pos.vkm
+gtk3_sym_be.vkm
+gtk3_sym_da.vkm
+gtk3_sym_de.vkm
+gtk3_sym_fr.vkm
+gtk3_sym_it.vkm
+gtk3_sym_nl.vkm
+gtk3_sym_se.vkm
+gtk3_sym_tr.vkm
+gtk3_sym_uk.vkm
+gtk3_sym.vkm
+gtk3_the64_de.vkm
+kernal-901227-03.bin
+sblox.CRT
+sdl_c64p.vkm
+sdl_keyrah_combian.vkm
+sdl_keyrah_de.vkm
+sdl_keyrah_retropie_de.vkm
+sdl_keyrah_retropie.vkm
+sdl_keyrah.vkm
+sdl_pos_ch.vkm
+sdl_pos_da.vkm
+sdl_pos_de.vkm
+sdl_pos_fi.vkm
+sdl_pos_no.vkm
+sdl_pos_tr.vkm
+sdl_pos_uk.vkm
+sdl_pos.vkm
+sdl_sym_da.vkm
+sdl_sym_de.vkm
+sdl_sym_fr.vkm
+sdl_sym_it.vkm
+sdl_sym_nl.vkm
+sdl_sym_no_pi_4-500_bmc64.vkm
+sdl_sym_tr.vkm
+sdl_sym_uk_pi_4-500_bmc64.vkm
+sdl_sym_uk.vkm
+sdl_sym_us_pi_4-500_bmc64.vkm
+sdl_sym.vkm
+romm-cache
+debug-attach.json
+romm-connection.json
+romm-recents.json
+2026-08-05 13:05:47.198 [Information] Video: tick 2: EnsurePanelNative: TryAs(ISwapChainPanelNative) hr=0x00000000 ptr=0x19CE0625148
+2026-08-05 13:05:47.199 [Information] Video: tick 2: EnsureDevice: OK (device + context + factory + panel-native all ready)
+2026-08-05 13:05:47.201 [Information] Video: tick 2: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:05:47.202 [Information] Video: tick 2: EnsureSwapChain: created + bound 3840x1980
+2026-08-05 13:05:47.204 [Information] Video: tick 2: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 13:05:47.219 [Information] Video: tick 2: OK: first frame presented (target 3840x1980, src 384x272, 417792 bytes)
+2026-08-05 13:05:52.063 [Information] App: menu open: emulation paused
+2026-08-05 13:05:52.081 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 13:05:52.088 [Information] Video: tick 272: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:05:52.089 [Information] Video: tick 272: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 13:05:52.205 [Information] Video: perf: FPS 53.9 EMU 33.9 SPD 104.1% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:05:53.707 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 13:05:54.060 [Information] Video: tick 370: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:05:54.063 [Information] Video: tick 370: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 13:05:57.602 [Information] Video: perf: FPS 60.2 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:05:58.847 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 13:05:58.912 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 13:05:58.913 [Information] Video: tick 639: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:05:58.915 [Information] Video: tick 639: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 13:06:01.429 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 13:06:01.442 [Information] App: perf HUD visibility set: True
+2026-08-05 13:06:01.460 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=14 renderers=2 selComputer='Commodore 64' selModel='Commodore 64C PAL' selRenderer='Host direct' volume=100
+2026-08-05 13:06:01.504 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 13:06:01.505 [Information] Video: tick 790: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:06:01.505 [Information] Video: tick 790: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 13:06:02.652 [Information] Video: perf: FPS 60.6 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:07.725 [Information] Video: perf: FPS 60.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:09.537 [Information] App: video aspect applied: standard=Pal pixelAspect=0.93650794 clockHz=985248 contentRows=272 refreshHz=50.124542124542124 surface=True
+2026-08-05 13:06:12.810 [Information] Video: perf: FPS 59.6 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:17.893 [Information] Video: perf: FPS 60.2 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:19.585 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 13:06:19.602 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 13:06:19.603 [Information] Video: tick 1876: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:06:19.604 [Information] Video: tick 1876: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 13:06:22.537 [Information] App: menu closed: emulation resumed
+2026-08-05 13:06:22.545 [Information] Video: tick 2052: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:06:22.547 [Information] Video: tick 2052: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 13:06:22.981 [Information] Video: perf: FPS 59.6 EMU 39.8 SPD 103.2% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:28.094 [Information] Video: perf: FPS 58.0 EMU 48.4 SPD 99.9% PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:30.616 [Information] App: menu open: emulation paused
+2026-08-05 13:06:30.630 [Information] Video: tick 2531: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:06:30.631 [Information] Video: tick 2531: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 13:06:30.645 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 13:06:31.763 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 13:06:31.768 [Information] App: perf HUD visibility set: True
+2026-08-05 13:06:31.771 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=14 renderers=2 selComputer='Commodore 64' selModel='Commodore 64C PAL' selRenderer='Host direct' volume=100
+2026-08-05 13:06:31.808 [Information] Video: tick 2599: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:06:31.810 [Information] Video: tick 2599: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 13:06:33.194 [Information] Video: perf: FPS 60.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:37.360 [Information] App: video aspect applied: standard=Pal pixelAspect=0.93650794 clockHz=985248 contentRows=272 refreshHz=50.124542124542124 surface=True
+2026-08-05 13:06:38.278 [Information] Video: perf: FPS 60.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:43.344 [Information] Video: perf: FPS 60.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:44.694 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 13:06:44.712 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=Gameplay pushNonNeutral=False thread=4
+2026-08-05 13:06:44.713 [Information] Video: tick 3372: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:06:44.713 [Information] Video: tick 3372: paint geometry: target 2940x1980, src 384x272, draw 2618x1980+161+0, PAR 0.93650794
+2026-08-05 13:06:47.184 [Information] Gamepad: SetKeyboardActive(False) was=False thread=4
+2026-08-05 13:06:47.188 [Information] App: perf HUD visibility set: True
+2026-08-05 13:06:47.191 [Information] Settings: refresh: status='Settings loaded from host.' rom='ROMs: ready for this model.' computers=5 models=14 renderers=2 selComputer='Commodore 64' selModel='Commodore 64C PAL' selRenderer='Host direct' volume=100
+2026-08-05 13:06:47.226 [Information] Gamepad: poll state: kbdActive=False liveKbdOpen=False ctx=MainMenu pushNonNeutral=False thread=4
+2026-08-05 13:06:47.227 [Information] Video: tick 3520: ApplyInverseCompositionScale: SetMatrixTransform(1/2.5, 1/2.5) hr=0x00000000
+2026-08-05 13:06:47.229 [Information] Video: tick 3520: paint geometry: target 3840x1980, src 384x272, draw 2618x1980+611+0, PAR 0.93650794
+2026-08-05 13:06:48.411 [Information] Video: perf: FPS 60.0 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:53.486 [Information] Video: perf: FPS 59.7 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:06:58.601 [Information] Video: perf: FPS 59.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:03.661 [Information] Video: perf: FPS 60.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:08.748 [Information] Video: perf: FPS 59.3 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:13.881 [Information] Video: perf: FPS 60.6 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:19.003 [Information] Video: perf: FPS 59.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:24.103 [Information] Video: perf: FPS 59.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:29.187 [Information] Video: perf: FPS 58.8 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:34.289 [Information] Video: perf: FPS 58.6 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:39.388 [Information] Video: perf: FPS 59.6 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:44.473 [Information] Video: perf: FPS 58.9 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:49.563 [Information] Video: perf: FPS 60.5 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:54.643 [Information] Video: perf: FPS 60.6 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:07:59.729 [Information] Video: perf: FPS 61.1 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:08:04.816 [Information] Video: perf: FPS 59.3 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:08:09.902 [Information] Video: perf: FPS 59.4 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+2026-08-05 13:08:14.993 [Information] Video: perf: FPS 60.7 EMU 0.0 PAL 0.99MHz PAR 0.94 (interval 10.0ms)
+

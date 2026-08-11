@@ -1,0 +1,8 @@
+
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-v6.log:29:   DIV first=195441 
+matchedCycles=195440 budget=500000
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-v6.log:40:c=195440 nPC=$FEA5 
+mPC=$FEA5 nA=$18 mA=$18 nX=$FF mX=$FF nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$25 dbgCyc=1 op=$8A mis=False
+C:\Users\kingd\AppData\Local\Temp\grok-goal-7d45b1115e21\implementer\vic20-focused-500k-v6.log:41:c=195441 nPC=$FEA5 
+mPC=$FEA6 nA=$18 mA=$FF nX=$FF mX=$FF nY=$00 mY=$00 nS=$FB mS=$FB nP=$25 mP=$A5 dbgCyc=0 op=$8A mis=True
+

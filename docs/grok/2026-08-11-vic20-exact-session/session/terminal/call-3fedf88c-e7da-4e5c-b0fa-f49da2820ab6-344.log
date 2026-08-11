@@ -1,0 +1,36 @@
+
+Line
+----
+public sealed class Via6522 : IClockedDevice, IAddressSpace, IInterruptSource
+    public Via6522(IBus bus, IInterruptLine irqLine)
+    public DeviceId Id { get; init; }
+    public string Name { get; init; }
+    public DeviceId SourceId { get; init; }
+    public ushort BaseAddress { get; init; } = DefaultBaseAddress;
+    public ushort Size { get; init; } = DefaultMirrorSize;
+    public uint ClockDivisor => 1;
+    public ClockPhase Phase => ClockPhase.Phi2;
+    public IReadOnlyList<IInterruptLine> ConnectedLines => new[] { _irqLine };
+    public Func<byte>? PortAInput { get; set; }
+    public Func<byte>? PortBInput { get; set; }
+    public Action<byte>? PortAOutputChanged { get; set; }
+    public Action<byte>? PortBOutputChanged { get; set; }
+    public void Reset()
+    public bool HandlesAddress(ushort address)
+    public byte Read(ushort address)
+    public void Write(ushort address, byte value)
+    public byte Peek(ushort address)
+    public void Tick()
+    public void TriggerPb6(bool rising)
+    public void TriggerCa1(bool rising)
+    public void TriggerCb1(bool rising)
+    public void TriggerCb2(bool rising)
+    public bool Cb2State => _cb2State;
+partial class Mos6502
+public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleStealTarget
+partial class Mos6502
+
+
+
+
+

@@ -1,0 +1,23 @@
+Cred user: kingd
+port 80: fail
+port 8080: 200 {"SYSTEM":{"VERSION":"5.0.0","SHOW_SETUP_WIZARD":false},"METADATA_SOURCES":{"ANY
+port 3000: fail
+port 5000: fail
+port 8000: fail
+great_banach |  | Up 2 days (healthy)
+truckmate-gateway-load-planning | 0.0.0.0:7455->8443/tcp, [::]:7455->8443/tcp | Up 2 days (healthy)
+truckmate-gateway-vendor-proxy | 0.0.0.0:7444->8443/tcp, [::]:7444->8443/tcp | Up 2 days (healthy)
+truckmate-gateway-identity | 0.0.0.0:7443->8443/tcp, [::]:7443->8443/tcp | Up 2 days (healthy)
+truckmate-gateway-postgres | 5432/tcp | Up 2 days (healthy)
+angry_bell |  | Up 2 days (healthy)
+jovial_dewdney |  | Up 3 days (healthy)
+eager_roentgen |  | Up 3 days (healthy)
+heuristic_heyrovsky |  | Up 3 days (healthy)
+admiring_volhard |  | Up 4 days (healthy)
+csdb-bridge | 0.0.0.0:8090->8090/tcp, [::]:8090->8090/tcp | Up 6 days
+romm | 0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp | Up 6 days
+romm-db | 3306/tcp | Up 6 days (healthy)
+dockercfg
+repairs
+RomM
+RomM-clean

@@ -1,0 +1,7 @@
+
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+[feat/xbox-uwp-app 6b875b6] fix(build): bump Cryptography.Xml 10.0.10; nullable RomProvisioning ViewModel
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+To https://github.com/sharpninja/vice-sharp.git
+   d24eb49..6b875b6  feat/xbox-uwp-app -> feat/xbox-uwp-app

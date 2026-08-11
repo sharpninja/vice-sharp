@@ -1,0 +1,5 @@
+FILTER=FullyQualifiedName~Vic20PixelLockstepDiag EXIT=0 MS=8670
+FILTER=FullyQualifiedName~Vic20PixelLockstep.Index_BusyPal EXIT=0 MS=9050
+FILTER=FullyQualifiedName~Vic20PixelLockstep.Index_ReadyNtsc EXIT=0 MS=9277
+FILTER=FullyQualifiedName~Vic20PixelLockstep.Bgra_ReadyPal EXIT=0 MS=8787
+FILTER=FullyQualifiedName~Vic20PixelLockstep.Index_ReadyPal EXIT=0 MS=9164

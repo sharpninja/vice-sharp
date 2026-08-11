@@ -1,0 +1,54 @@
+
+docs\2s-br-irq-2026-08-06.log:6:   DIV first=1316731 matchedCycles=1316730 budget=2216810
+docs\2s-br-irq-2026-08-06.log:7:c=1316720 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=0 op=$85 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:8:c=1316721 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=5 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:9:c=1316722 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=4 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:10:c=1316723 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=3 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:11:c=1316724 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EC mS=$EC 
+nP=$A4 mP=$A4 dbgCyc=2 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:12:c=1316725 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=1 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:13:c=1316726 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=True stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:14:c=1316727 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:15:c=1316728 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=4 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:16:c=1316729 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=3 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:17:c=1316730 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=2 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-br-irq-2026-08-06.log:18:c=1316731 nPC=$EAE0 mPC=$EAE0 nA=$01 mA=$91 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=1 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=True
+docs\2s-br-irq-2026-08-06.log:21:indy: zp=$F3 mPtr=$966E nPtr=$966E mEff=$966E=$91 nEff=$966E=$21
+docs\2s-vbus-2026-08-06.log:6:   DIV first=1316731 matchedCycles=1316730 budget=2216810
+docs\2s-vbus-2026-08-06.log:7:c=1316720 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=0 op=$85 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:8:c=1316721 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=5 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:9:c=1316722 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=4 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:10:c=1316723 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EB mS=$EB 
+nP=$A4 mP=$A4 dbgCyc=3 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:11:c=1316724 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$EC mS=$EC 
+nP=$A4 mP=$A4 dbgCyc=2 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:12:c=1316725 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=1 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:13:c=1316726 nPC=$EABE mPC=$EABE nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=True stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:14:c=1316727 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=0 op=$60 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:15:c=1316728 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=4 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:16:c=1316729 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=3 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:17:c=1316730 nPC=$EAE0 mPC=$EAE0 nA=$96 mA=$96 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=2 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False
+docs\2s-vbus-2026-08-06.log:18:c=1316731 nPC=$EAE0 mPC=$EAE0 nA=$01 mA=$91 nX=$91 mX=$91 nY=$00 mY=$00 nS=$ED mS=$ED 
+nP=$A4 mP=$A4 dbgCyc=1 op=$B1 trail=1 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=True
+docs\2s-vbus-2026-08-06.log:21:indy: zp=$F3 mPtr=$966E nPtr=$966E mEff=$966E=$91 nEff=$966E=$21
+

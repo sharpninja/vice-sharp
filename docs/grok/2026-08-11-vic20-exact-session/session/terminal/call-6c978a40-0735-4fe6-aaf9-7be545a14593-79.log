@@ -1,0 +1,65 @@
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 99 ms - ViceSharp.TestHarness.dll (net10.0)
+PAL_EXIT=0
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 212 ms - ViceSharp.TestHarness.dll (net10.0)
+NTSC_EXIT=0
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 79 ms - ViceSharp.TestHarness.dll (net10.0)
+PALETTE_EXIT=0
+VICE data/VIC20/PALette.vpl index 3 cyan = 64 E3 DE
+Mos6561.Palette[3] PackRgb(0x64,0xE3,0xDE) BGRA frame border assert R=0x64 G=0xE3 B=0xDE
+Test: BorderCyan_UsesVicePalettesVplRgb PASSED
+Mos6561.cs:148:/// VICE <c>vic_get_pixel_aspect</c>: PAL 1.66574035/2, NTSC 1.50411479/2.
+Mos6561.cs:150:public static float GetPixelAspectRatio(bool ntsc)
+Mos6561.cs:151:=> ntsc ? 1.50411479f / 2.0f : 1.66574035f / 2.0f;
+Mos6561.cs:153:public float PixelAspectRatio => GetPixelAspectRatio(IsNtsc);
+ConsoleEmulatorHost.cs:365:public bool TryGetVicIPixelAspect(string sessionId, out float aspect)
+ConsoleEmulatorHost.cs:372:aspect = vic.PixelAspectRatio;
+App.xaml.cs:908:/// surface (VICE vicii.c vicii_get_pixel_aspect, mirrored by
+App.xaml.cs:909:/// <see cref="ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio"/>: PAL 0.93650794,
+App.xaml.cs:929:&& _host.TryGetVicIPixelAspect(_sessionId, out var vicIAspect))
+App.xaml.cs:931:aspect = vicIAspect;
+App.xaml.cs:936:? ViceSharp.Chips.VicIi.Mos6569.TvSystem.NTSC
+App.xaml.cs:937:: ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL;
+App.xaml.cs:938:aspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
+App.xaml.cs:941:_videoSurface?.SetPixelAspect(aspect);
+App.xaml.cs:968:"video aspect applied: standard={Standard} pixelAspect={PixelAspect} clockHz={ClockHz} contentRows={ContentRows} refreshHz={RefreshHz} surface={SurfacePresent}",
+=== Mos6561.GetPixelAspectRatio (VICE vic_get_pixel_aspect) ===
+Mos6561.cs:148:/// VICE <c>vic_get_pixel_aspect</c>: PAL 1.66574035/2, NTSC 1.50411479/2.
+Mos6561.cs:150:public static float GetPixelAspectRatio(bool ntsc)
+Mos6561.cs:151:=> ntsc ? 1.50411479f / 2.0f : 1.66574035f / 2.0f;
+Mos6561.cs:153:public float PixelAspectRatio => GetPixelAspectRatio(IsNtsc);
+=== ConsoleEmulatorHost.TryGetVicIPixelAspect ===
+ConsoleEmulatorHost.cs:365:public bool TryGetVicIPixelAspect(string sessionId, out float aspect)
+ConsoleEmulatorHost.cs:372:aspect = vic.PixelAspectRatio;
+=== Xbox App.xaml.cs VIC-I path ===
+App.xaml.cs:908:/// surface (VICE vicii.c vicii_get_pixel_aspect, mirrored by
+App.xaml.cs:909:/// <see cref="ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio"/>: PAL 0.93650794,
+App.xaml.cs:929:&& _host.TryGetVicIPixelAspect(_sessionId, out var vicIAspect))
+App.xaml.cs:931:aspect = vicIAspect;
+App.xaml.cs:936:? ViceSharp.Chips.VicIi.Mos6569.TvSystem.NTSC
+App.xaml.cs:937:: ViceSharp.Chips.VicIi.Mos6569.TvSystem.PAL;
+App.xaml.cs:938:aspect = ViceSharp.Chips.VicIi.VideoRenderer.GetPixelAspectRatio(system);
+App.xaml.cs:941:_videoSurface?.SetPixelAspect(aspect);
+App.xaml.cs:968:"video aspect applied: standard={Standard} pixelAspect={PixelAspect} clockHz={ClockHz} contentRows={ContentRows} refreshHz={RefreshHz} surface={SurfacePresent}",
+=== NOT C64 VIC-II only for VIC-20 ===
+BoardWiring test ConsoleHost_TryGetVicIPixelAspect_UsesViceVicIFormulas proves session PAR is Mos6561 formulas.
+--- SCRATCH files ---
+
+Name                             Length
+----                             ------
+vic20-gap-map.txt                   839
+vic20-ntsc-frame-geometry.log       335
+vic20-pal-frame-geometry.log        333
+vic20-palette-vice.log              526
+vic20-par-wiring.txt               1524
+vic20-vice-faithful-tests.log     16936
+vic20-video-cycle-draw-tests.log  16936
+

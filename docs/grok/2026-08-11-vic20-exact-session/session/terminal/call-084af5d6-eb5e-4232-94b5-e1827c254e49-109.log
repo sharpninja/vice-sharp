@@ -1,0 +1,63 @@
+ROM_PATH=F:\GitHub\vice-sharp\native\vice\vice\data
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.33]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:02.05]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.34]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=00000210cf5e0a00
+xvic vice_machine_create call=2 model=vic20ntsc
+xvic vice_machine_reset call=2 machine=00000210cf5e0680
+xvic vice_machine_create call=3 model=xvic
+xvic vice_machine_reset call=3 machine=00000210cf5e0920
+xvic vice_machine_create call=4 model=vic20
+xvic vice_machine_reset call=4 machine=00000210cf5e08c0
+xvic vice_machine_step_cycle call=1 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=00000210cf5e08c0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_create call=5 model=vic20
+xvic vice_machine_reset call=5 machine=00000210cf5e06c0
+[xUnit.net 00:00:03.51]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.ManagedVic20_TwoMachines_AgreeAfterFrames_UntilNativeXvicExists [424 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "vic20") [102 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "vic20ntsc") [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeShim_CreatesVic20Models_WhenXvicOraclePresent(modelSelector: "xvic") [1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeXvic_StepAdvancesCycle_WhenOraclePresent [3 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20LockstepScaffoldTests.NativeXvic_ManagedLockstep_CpuRegs_WhenOraclePresent [488 ms]
+
+Test Run Successful.
+Total tests: 6
+     Passed: 6
+ Total time: 4.1578 Seconds
+TEST_EXIT=0

@@ -1,0 +1,7 @@
+
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:24:    [Fact(Explicit = true)]
+tests\ViceSharp.TestHarness\Vic20\BranchCycleCountTests.cs:55:    [Fact(Explicit = true)]
+docs\2s-vbus-final-2026-08-06.log:29:   DIV first=1316731 matchedCycles=1316730 budget=2216810
+docs\2s-vbus-final-2026-08-06.log:44:indy: zp=$F3 mPtr=$966E nPtr=$966E mEff=$966E=$21 nEff=$966E=$21
+matched=1316730 past_1.1e6=True pal=1.188s
+

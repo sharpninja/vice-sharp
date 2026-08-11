@@ -1,0 +1,32 @@
+
+native\vice\vice\src\vic20\vic-color.c:111:static video_cbm_color_t vic_colors_pal[VIC_NUM_COLORS] =
+native\vice\vice\src\vic20\vic-color.c:133:    VIC_NUM_COLORS,
+native\vice\vice\src\vic20\vic-color.c:134:    vic_colors_pal,
+native\vice\vice\src\vic20\vic-color.c:149:static video_cbm_color_t vic_colors_ntsc[VIC_NUM_COLORS] =
+native\vice\vice\src\vic20\vic-color.c:173:    VIC_NUM_COLORS,
+native\vice\vice\src\vic20\vic-color.c:174:    vic_colors_ntsc,
+native\vice\vice\src\vic20\vic-color.c:183:static video_cbm_color_t vic_colors_6561_101[VIC_NUM_COLORS] =
+native\vice\vice\src\vic20\vic-color.c:203:static video_cbm_color_t vic_colors_6561_101_odd[VIC_NUM_COLORS] =
+native\vice\vice\src\vic20\vic-color.c:223:static video_cbm_color_t vic_colors_6561_101_even[VIC_NUM_COLORS] =
+native\vice\vice\src\vic20\vic-color.c:245:    VIC_NUM_COLORS,
+native\vice\vice\src\vic20\vic-color.c:246:    vic_colors_6561_101,
+native\vice\vice\src\vic20\vic-color.c:248:    vic_colors_6561_101_odd,
+native\vice\vice\src\vic20\vic-color.c:249:    vic_colors_6561_101_even,
+native\vice\vice\src\vic20\vic-color.c:260:int vic_color_update_palette(struct video_canvas_s *canvas)
+native\vice\vice\src\vic20\vic.c:82:    vic_color_update_palette(vic.raster.canvas);
+native\vice\vice\src\vic20\vic.c:181:    if (raster_init(raster, VIC_NUM_VMODES) < 0) {
+native\vice\vice\src\vic20\vic.c:192:    vic_color_update_palette(raster->canvas);
+native\vice\vice\src\vic20\vic-timing.h:33:#define VIC_PAL_NORMAL_DISPLAY_WIDTH                224
+native\vice\vice\src\vic20\vic-timing.h:55:#define VIC_NTSC_NORMAL_DISPLAY_WIDTH               200
+native\vice\vice\src\vic20\victypes.h:57:#define VIC_PIXEL_WIDTH 2
+native\vice\vice\src\vic20\victypes.h:58:#define VIC_PIXEL_WIDTH_SHIFT 1
+native\vice\vice\src\vic20\victypes.h:62:#define VIC_PIXEL_WIDTH 1
+native\vice\vice\src\vic20\victypes.h:63:#define VIC_PIXEL_WIDTH_SHIFT 0
+native\vice\vice\src\vic20\victypes.h:99:#define VIC_RASTER_X(cycle)      (((int)(cycle) - 7) * 4 * VIC_PIXEL_WIDTH)
+native\vice\vice\src\vic20\victypes.h:102:#define VIC_RASTER_CHAR(cycle)   ((int)((cycle) - vic.raster.display_xstart 
+/ (VIC_PIXEL_WIDTH * 4) - 6) / 2)
+native\vice\vice\src\vic20\victypes.h:105:#define VIC_RASTER_CHAR_INT(cycle)   ((int)((cycle) - 
+vic.raster.display_xstart / (VIC_PIXEL_WIDTH * 4) - 7) / 2)
+native\vice\vice\src\vic20\victypes.h:107:#define VIC_RASTER_CHAR_FRAC(cycle)   ((int)((cycle) - 
+vic.raster.display_xstart / (VIC_PIXEL_WIDTH * 4) - 7) % 2)
+

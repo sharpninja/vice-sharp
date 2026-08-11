@@ -1,0 +1,13 @@
+
+Build succeeded.
+    0 Error(s)
+src\ViceSharp.Chips\Vic\Mos6561.cs:42:    private int _cycleInLine;
+src\ViceSharp.Chips\Vic\Mos6561.cs:117:    public int CycleInLine => _cycleInLine;
+src\ViceSharp.Chips\Vic\Mos6561.cs:178:        _cycleInLine++;
+src\ViceSharp.Chips\Vic\Mos6561.cs:179:        if (_cycleInLine >= _cyclesPerLine)
+src\ViceSharp.Chips\Vic\Mos6561.cs:185:            _cycleInLine = 0;
+src\ViceSharp.Chips\Vic\Mos6561.cs:205:        if (_cycleInLine == 1)
+src\ViceSharp.Chips\Vic\Mos6561.cs:220:            && origin == _cycleInLine
+src\ViceSharp.Chips\Vic\Mos6561.cs:229:        if (_vBusDisplayArea && _cycleInLine == 0)
+src\ViceSharp.Chips\Vic\Mos6561.cs:325:        _cycleInLine = 0;
+

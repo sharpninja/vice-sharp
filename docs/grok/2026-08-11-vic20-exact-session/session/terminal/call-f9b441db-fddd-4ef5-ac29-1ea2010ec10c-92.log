@@ -1,0 +1,39 @@
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Debug\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Debug\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Debug\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Debug\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Debug\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Debug\net10.0\ViceSharp.Avalonia.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.70
+
+Name                   LastWriteTime       Length
+----                   -------------       ------
+ViceSharp.Avalonia.exe 8/5/2026 6:10:33 AM 197632
+ViceSharp.Avalonia.dll 8/5/2026 6:10:33 AM 615936
+
+t=0s WS=99MB Title=''
+t=1s WS=149MB Title=''
+t=2s WS=199MB Title='ViceSharp 1.0.0'
+t=3s WS=233MB Title='ViceSharp 1.0.0'
+t=4s WS=239MB Title='ViceSharp 1.0.0'
+t=5s WS=249MB Title='ViceSharp 1.0.0'
+t=6s WS=253MB Title='ViceSharp 1.0.0'
+t=7s WS=264MB Title='ViceSharp 1.0.0'
+t=8s WS=261MB Title='ViceSharp 1.0.0'
+t=9s WS=263MB Title='ViceSharp 1.0.0'
+t=10s WS=272MB Title='ViceSharp 1.0.0'
+t=11s WS=273MB Title='ViceSharp 1.0.0'
+t=12s WS=275MB Title='ViceSharp 1.0.0'
+t=13s WS=275MB Title='ViceSharp 1.0.0'
+t=14s WS=273MB Title='ViceSharp 1.0.0'
+t=15s WS=271MB Title='ViceSharp 1.0.0'
+t=16s WS=271MB Title='ViceSharp 1.0.0'
+t=17s WS=276MB Title='ViceSharp 1.0.0'
+t=18s WS=277MB Title='ViceSharp 1.0.0'
+t=19s WS=282MB Title='ViceSharp 1.0.0'
+STABLE after 20s

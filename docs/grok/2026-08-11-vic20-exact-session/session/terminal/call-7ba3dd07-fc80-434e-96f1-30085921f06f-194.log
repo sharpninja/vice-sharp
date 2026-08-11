@@ -1,0 +1,9 @@
+
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20WorkloadLockstep.cs(50,36): error CS1503: Argument 2: 
+cannot convert from 'ViceSharp.Abstractions.IMachine' to 'ViceSharp.Core.CoordinatorMachine' 
+[F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20WorkloadLockstep.cs(78,36): error CS1503: Argument 2: 
+cannot convert from 'ViceSharp.Abstractions.IMachine' to 'ViceSharp.Core.CoordinatorMachine' 
+[F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\ViceSharp.TestHarness.csproj]
+EXIT=1
+

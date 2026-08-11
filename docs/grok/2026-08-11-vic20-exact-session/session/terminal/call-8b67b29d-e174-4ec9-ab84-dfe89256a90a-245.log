@@ -1,0 +1,33 @@
+wiki.yaml: parse OK
+export OK size=506978
+M  docs/Project/wiki/azure/.mcp-requirements-manifest.json
+M  docs/Project/wiki/azure/.order
+R  docs/Project/wiki/azure/Store-and-Xbox/.order -> docs/Project/wiki/azure/Archival-Cancelled-Store-and-Xbox/.order
+M  docs/Project/wiki/azure/Flash-Cart-Builder.md
+M  docs/Project/wiki/azure/Home.md
+M  docs/Project/wiki/azure/Iteration-Roadmap.md
+M  docs/Project/wiki/azure/Project-Overview.md
+M  docs/Project/wiki/azure/Store-Next-Steps-Guide.md
+M  docs/Project/wiki/azure/User-Guide.md
+M  docs/Project/wiki/azure/VIC20-vs-VICE-Audit.md
+M  docs/Project/wiki/azure/Xbox-Store-Publishing.md
+M  docs/Project/wiki/github/.mcp-requirements-manifest.json
+M  docs/Project/wiki/github/Flash-Cart-Builder.md
+M  docs/Project/wiki/github/Home.md
+M  docs/Project/wiki/github/Iteration-Roadmap.md
+DIFFCHECK 0
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views/SettingsView.axaml(70,18,70,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:     9, Skipped:     0, Total:     9, Duration: 71 ms - ViceSharp.TestHarness.dll (net10.0)

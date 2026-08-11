@@ -1,0 +1,7 @@
+workflow.sessionlog.updateTurn re-binding current-turn cache 'F:\GitHub\vice-sharp\.mcpServer\grok\current-turn.yaml' from rotated sessionId 'GrokCode-20260810T130242Z-plugin-session' to active sessionId 'GrokCode-20260810T130431Z-plugin-session'.
+workflow.sessionlog.updateTurn failed for 'req-20260810T130257Z-prompt-72b6': The property 'Count' cannot be found on this object. Verify that the property exists.
+Exception: F:\GitHub\mcpserver-grok-plugin\lib\Invoke-McpPlugin.ps1:306
+Line |
+ 306 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1.

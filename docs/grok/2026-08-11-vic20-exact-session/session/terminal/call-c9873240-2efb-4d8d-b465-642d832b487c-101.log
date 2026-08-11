@@ -1,0 +1,11 @@
+
+native\vice\vice\src\maincpu.h:36:extern unsigned int last_opcode_info;
+native\vice\vice\src\maincpu.h:37:extern unsigned int last_opcode_addr;
+native\vice\vice\src\maincpu.h:58:extern int maincpu_rmw_flag;
+native\vice\vice\src\mainviccpu.c:71:CLOCK stolen_cycles;
+native\vice\vice\src\mainviccpu.c:308:int maincpu_rmw_flag = 0;
+native\vice\vice\src\mainviccpu.c:607:        stolen_cycles = 0;
+native\vice\vice\src\mainviccpu.c:608:        maincpu_rmw_flag = 0;
+native\vice\vice\src\mainviccpu.c:622:#define RMW_FLAG maincpu_rmw_flag
+native\vice\vice\src\mainviccpu.c:802:    maincpu_rmw_flag = 0;
+

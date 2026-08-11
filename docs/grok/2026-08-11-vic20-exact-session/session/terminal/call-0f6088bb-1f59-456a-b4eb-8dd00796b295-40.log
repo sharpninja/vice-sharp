@@ -1,0 +1,40 @@
+native/vice/vice/src\6510dtvcore.c:639:#define INT_IND_Y_R()                                          \
+native/vice/vice/src\6510dtvcore.c:651:#define INT_IND_Y_W()                                          \
+native/vice/vice/src\6510dtvcore.c:662:/* like above, for SHA_IND_Y */
+native/vice/vice/src\6510dtvcore.c:663:#define INT_IND_Y_W_NOADDR()                                          \
+native/vice/vice/src\6510dtvcore.c:675:#define GET_IND_Y(dest) \
+native/vice/vice/src\6510dtvcore.c:676:    INT_IND_Y_R()       \
+native/vice/vice/src\6510dtvcore.c:680:#define GET_IND_Y_RMW(dest) \
+native/vice/vice/src\6510dtvcore.c:681:    INT_IND_Y_W()           \
+native/vice/vice/src\6510dtvcore.c:685:#define SET_IND_Y(value)    \
+native/vice/vice/src\6510dtvcore.c:687:        INT_IND_Y_W()       \
+native/vice/vice/src\6510dtvcore.c:1583:#define SHA_IND_Y()                                    \
+native/vice/vice/src\6510dtvcore.c:1585:        INT_IND_Y_W_NOADDR();                          \
+native/vice/vice/src\6510dtvcore.c:1951:                ORA(GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:1955:                SLO(2, GET_IND_Y_RMW, SET_IND_RMW);
+native/vice/vice/src\6510dtvcore.c:2083:                AND(GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2087:                RLA(2, GET_IND_Y_RMW, SET_IND_RMW);
+native/vice/vice/src\6510dtvcore.c:2187:                EOR(GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2191:                SRE(2, GET_IND_Y_RMW, SET_IND_RMW);
+native/vice/vice/src\6510dtvcore.c:2291:                ADC(GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2295:                RRA(2, GET_IND_Y_RMW, SET_IND_RMW);
+native/vice/vice/src\6510dtvcore.c:2399:                ST(reg_a_read, SET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2403:                SHA_IND_Y();
+native/vice/vice/src\6510dtvcore.c:2527:                LD(reg_a_write, GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2531:                LAX(GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2647:                CP(reg_a_read, GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2651:                DCP(2, GET_IND_Y_RMW, SET_IND_RMW);
+native/vice/vice/src\6510dtvcore.c:2748:                SBC(GET_IND_Y, 2);
+native/vice/vice/src\6510dtvcore.c:2752:                ISB(2, GET_IND_Y_RMW, SET_IND_RMW);
+native/vice/vice/src\6510core.c:87:/* #define CLK_IND_Y_RMW1 1 */
+native/vice/vice/src\6510core.c:88:/* #define CLK_IND_Y_RMW2 3 */
+native/vice/vice/src\6510core.c:92:#define CLK_IND_Y_W 2
+native/vice/vice/src\6510core.c:593:#define LOAD_IND_Y(addr)                                                    \
+native/vice/vice/src\6510core.c:601:#define LOAD_IND_Y(addr)                                            \
+native/vice/vice/src\6510core.c:632:#define LOAD_IND_Y_BANK(addr)                                               \
+native/vice/vice/src\6510core.c:640:#define LOAD_IND_Y_BANK(addr)                                           \
+native/vice/vice/src\6510core.c:1117:#define DCP_IND_Y(addr)                                                     \
+native/vice/vice/src\6510core.c:1220:#define ISB_IND_Y(addr)                                                   \
+native/vice/vice/src\6510core.c:1528:#define RLA_IND_Y(addr)                                                     \
+native/vice/vice/src\6510core.c:1627:#define RRA_IND_Y(addr)                                                           \
+native/vice/vice/src\6510core.c:1778:#define SHA_IND_Y(addr)                                     \

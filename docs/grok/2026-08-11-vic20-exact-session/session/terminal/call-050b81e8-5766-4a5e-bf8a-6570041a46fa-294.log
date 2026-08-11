@@ -1,0 +1,8 @@
+Environments-1 Production
+Environments-2 Staging
+Environments-3 Development
+Environments-21 PreProduction
+Machines-2 PAYTON-DESKTOP roles=app-server,eternaldiscord,eternalreddit,truckmate-container-host,web-server
+Machines-3 PAYTON-PENGWIN roles=app-server,linux-server
+ProjectGroups-1 Default Project Group
+ProjectGroups-2 FunWasHad

@@ -1,0 +1,10 @@
+src/ViceSharp.Core/Vic20\Vic20SystemRam.cs:7:/// Only <see cref="Vic20MemoryLayout.IsInstalledRam"/> regions are claimed on the
+src/ViceSharp.Core/Vic20\Vic20SystemRam.cs:36:        => Vic20MemoryLayout.IsInstalledRam(_expansion, address);
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:25:    public const ushort MainRamStart = 0x1000;
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:27:    public const ushort Blk1Start = 0x2000;
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:28:    public const ushort Blk1End = 0x3FFF;
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:51:    public static bool IsInstalledRam(Vic20ExpansionKind expansion, ushort address)
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:71:            Vic20ExpansionKind.Exp8K => [(Blk1Start, Blk1End)],
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:72:            Vic20ExpansionKind.Exp16K => [(Blk1Start, Blk2End)],
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:73:            Vic20ExpansionKind.Exp24K => [(Blk1Start, Blk3End)],
+src/ViceSharp.Core/Vic20\Vic20MemoryLayout.cs:74:            Vic20ExpansionKind.Exp32K => [(Exp3KStart, Exp3KEnd), (Blk1Start, Blk3End), (Blk5Start, Blk5End)],
