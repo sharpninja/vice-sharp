@@ -136,7 +136,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | BenchmarkDotNet harness vs native VICE | 🟡 | 60% | `PERF-TUNING-001` Phase 1 close (slice 8; PerfProbe measured 11.5M+ cycles/sec = 47x the 25% target). `PERF-BENCHMARK-001` native baseline + sweep deferred post-Phase 1. |
 | Repository maintenance + github wiki | 🟢 | 35% | `REPO-MAINT-001` (audit + plan in [docs/maintenance/](docs/maintenance/), execution deferred) |
 | Ad-hoc machine YAML schema + Console loader + Avalonia 12 helper | 🟢 | 60% | `ARCH-ADHOCMACHINE-001` (schema + loader + `--machine-yaml` flag, helper app deferred) |
-| Cross-platform hosts (UWP Xbox + Avalonia 12 mobile + MacOS) | 🟢 | 15% | `PLATFORM-CROSS-001` (wireframes in [docs/wireframes/](docs/wireframes/README.md), host code pending) |
+| Cross-platform hosts (Avalonia 12 mobile + MacOS; Xbox UWP cancelled) | 🟢 | 10% | `PLATFORM-CROSS-001` wireframes; Xbox UWP / Store / sideload cancelled 2026-08-11 (`PLAN-XBOXUWP-END-001`) |
 | Completion Dashboard (this section) | ✅ | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
 
 Dashboard is regenerated as subagent slices land. VIC-20 every-cycle lockstep (2026-08-06): PAL 10 s and NTSC 10 s green (`Vic20DivergeProbe`); see durable receipts under `docs/receipts-lockstep-10s-*.txt`. Full-suite baseline totals still wobble with theory-row serialization; use 0 failed as the green criterion (see [HANDOFF.md](HANDOFF.md)).
