@@ -1,9 +1,12 @@
 # ViceSharp Microsoft Store: step-by-step next moves
 
+> **CANCELLED 2026-08-11.** Microsoft Store publication is abandoned (emulators are not
+> allowed). Do not follow this guide as an active plan. Archival only. See `HANDOFF.md`
+> and closed MCP TODO `IMPL-XBOXUWP-042`.
+
 **Audience:** operator (Payton)  
 **Goal:** first live Microsoft Store listing for the **Xbox UWP** head (`ViceSharp.Xbox`), Xbox + Desktop device families.  
 **Status baseline:** Phase 0 docs + listing/privacy done (2026-08-05). Partner Center identity, ADO wiring, screenshots, S42 console, and publish still open.
-
 **Avalonia desktop** stays on winget/GitHub MSI for now:  
 [winget-pkgs PR #412774](https://github.com/microsoft/winget-pkgs/pull/412774) · [GitHub release v1.2.1](https://github.com/sharpninja/vice-sharp/releases/tag/v1.2.1)
 

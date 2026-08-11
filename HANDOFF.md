@@ -58,7 +58,7 @@
 1. Optional: full-frame BGRA SequenceEqual managed vs xvic (palette align).
 2. Optional: FE3 erase_alarm cycle latency (match VICE multi-second erase).
 3. Optional: re-run desktop InstallMsi if Avalonia builder only was built after last MSI.
-4. Store/Partner Center listing work still open (see Store section below); no ADO git remote.
+4. Microsoft Store work is **CANCELLED** (emulators not allowed). Do not resume Partner Center / Store cert.
 5. Query MCP TODO store for live backlog; snapshot list at bottom is stale.
 
 ### Validation commands (focused)
@@ -99,15 +99,12 @@ Full baseline (long): filter `Category!=Determinism&Category!=AiReview&Category!
 - **Track 1 (Xbox Tier D residuals) largely SHIPPED this session:** FEAT-XAOTBIND-001 (x:Bind migration), FEAT-XOCTOPUS-001 (CI/release Octopus LEGION2 steps), FIX-ROMLESSVIC-001 (merged test), FIX-XKBDNMI-001 (RESTORE asserts NMI), FEAT-XCTRLBIND-001 (Controls remapping), FEAT-XROMPICK-001 (model ROM readiness).
 - **Track 2 (RomM):** merged `feat/romm-integration` into this branch (`3804a1d`). Portable `ViceSharp.Library.ViewModels` + `ViceSharp.RomM`, Xbox/Avalonia library UI, LAN bridge connection path present. Gate after merge: **Category=Xbox|RomM|Library 546/546** (0 fail, 0 skip).
 - **Deploy loop:** `./build.ps1 DeployXboxLocal` (VS MSBuild Release-UWP). End CLI batches with Debug-UWP restore for operator VS F5. PublishAot stays opt-in (`ViceSharpPublishAot=true`); Release-UWP JIT.
-- **Track 3 (Microsoft Store / S42) IN PROGRESS 2026-08-05:**
-  - Phase 0 **GO with mitigations**: `docs/xbox/gpl-store-section6-review.md`
-  - Privacy: `docs/PRIVACY.md` (listing URL source)
-  - Listing copy + screenshot runbook: `docs/xbox/store-listing-copy.md`
-  - GPL gate receipt: `XboxGplComplianceTests` **5 passed / 0 failed / 0 skipped** (Release)
-  - ADO gaps: variable group `xbox-store-publish` **missing**; pipeline `azure-pipelines-xbox-store.yml` **not registered** (project has VICE-Sharp-CI id 15, VICE-Sharp-Release id 16 only); environment `xbox-store` not confirmed
-  - **Operator guide (step-by-step + links):** `docs/xbox/store-next-steps-guide.md`
-  - **Next operator:** Partner Center reserve name + fill 8 vars; create ADO var group + environment approval; register Store pipeline; capture screenshots; S42 console matrix
-- **OPEN:** B-on-controller operator verification; S42 Tier-C console deploy + cert; Partner Center + ADO wiring; MCP TODO reconcile; device smoke for RomM Library after merge.
+- **Track 3 (Microsoft Store / S42) CANCELLED 2026-08-11:**
+  - Operator decision: **Microsoft Store publication abandoned**. Emulators are not allowed on the Microsoft Store.
+  - MCP TODO `IMPL-XBOXUWP-042` marked done with cancelled summary. Do not resume Partner Center, Store cert, store listing, or Store-gated submission.
+  - Historical docs under `docs/xbox/*store*` and `docs/xbox-store-publishing.md` are archival only (not an active plan).
+  - Local Xbox UWP sideload / Dev-Mode deploy (non-Store) remains a separate platform path if needed; it is not a Store submission track.
+- **OPEN (non-Store):** B-on-controller operator verification; RomM Library device smoke; MCP TODO reconcile for non-Store work.
 - **Parallel worktrees (reference):** `F:\GitHub\vice-sharp-romm` (`feat/romm-integration`, source of merge); romless repro merged via FIX-ROMLESSVIC-001.
 
 ## How to resume
