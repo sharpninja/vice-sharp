@@ -34,7 +34,21 @@ public sealed class RomMCoverImageSource : ILibraryImageLoader
 
         if (!string.IsNullOrEmpty(cover.Path))
         {
-            return await _authenticated.GetStreamAsync(cover.Path.TrimStart('/'), cancellationToken).ConfigureAwait(false);
+            string candidate = cover.Path.Trim();
+            if (candidate.StartsWith("//", StringComparison.Ordinal)
+                || candidate.Contains('\\')
+                || (Uri.TryCreate(candidate, UriKind.Absolute, out _) && !candidate.StartsWith("/", StringComparison.Ordinal)))
+            {
+                throw new ArgumentException("Authenticated cover paths must be server-relative.", nameof(cover));
+            }
+
+            string relativePath = candidate.TrimStart('/');
+            if (relativePath.Length == 0 || !Uri.TryCreate(relativePath, UriKind.Relative, out _))
+            {
+                throw new ArgumentException("Authenticated cover path is invalid.", nameof(cover));
+            }
+
+            return await _authenticated.GetStreamAsync(relativePath, cancellationToken).ConfigureAwait(false);
         }
 
         throw new ArgumentException("Cover has neither a URL nor a path.", nameof(cover));

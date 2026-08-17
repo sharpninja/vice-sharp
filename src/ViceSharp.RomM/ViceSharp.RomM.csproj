@@ -24,6 +24,7 @@
   <ItemGroup>
     <PackageReference Include="RomM.Client" />
     <PackageReference Include="RomM.Client.Csdb" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" />
   </ItemGroup>
 
   <ItemGroup>

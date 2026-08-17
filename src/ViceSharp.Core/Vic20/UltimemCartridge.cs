@@ -7,11 +7,15 @@ namespace ViceSharp.Core.Vic20;
 /// </summary>
 public sealed class UltimemCartridge : IAddressSpace
 {
-    public const int MaxImageSize = 0x1000000; // up to 16MB in VICE; we accept up to 1MB for MVP
+    public const int MaxImageSize = 0x1000000; // up to 16MB in VICE
     public const int DefaultImageSize = 0x100000; // 1MB
+
+    private static readonly byte[] ViceResetRegisters =
+        [6, 0, 64, 0x11, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 0, 0];
 
     private readonly byte[] _image;
     private readonly byte[] _registers = new byte[16];
+    private readonly int _sourceImageSize;
     private bool _imageDirty;
 
     public UltimemCartridge(ReadOnlySpan<byte> image)
@@ -20,6 +24,7 @@ public sealed class UltimemCartridge : IAddressSpace
         if (size > MaxImageSize)
             throw new ArgumentException("Ultimem image too large.", nameof(image));
         _image = new byte[size];
+        _sourceImageSize = image.Length;
         if (!image.IsEmpty)
             image[..Math.Min(image.Length, size)].CopyTo(_image);
         Id = new DeviceId(0x0C11);
@@ -33,11 +38,12 @@ public sealed class UltimemCartridge : IAddressSpace
 
     public void PowerUp()
     {
-        Array.Fill(_registers, (byte)0xFF);
-        // Enabled BLK5 ROM-ish default bank 0
-        _registers[0] = 0x00;
-        _registers[1] = 0x00;
-        _registers[2] = 0x00; // cfg
+        // VICE ultimem_reset: BLK5 is ROM at bank zero and the remaining
+        // bank registers use the hardware's documented reset values.
+        ViceResetRegisters.CopyTo(_registers, 0);
+        _registers[3] = _sourceImageSize == 512 * 1024
+            ? (byte)0x12
+            : (byte)0x11;
     }
 
     public void Reset() => PowerUp();

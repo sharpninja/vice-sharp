@@ -1,0 +1,155 @@
+
+==== TwoSecondPal EXIT=0 MS=24670 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.33]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:02.34]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.67]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=000002629e3f03e0
+xvic vice_machine_step_cycle call=1 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000002629e3f03e0
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:22.40]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_TwoSecondPal [19 s]
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 23.1745 Seconds
+
+==== TwoSecondNtsc EXIT=0 MS=16615 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.38]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:02.44]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:02.73]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20ntsc
+xvic vice_machine_reset call=1 machine=000001e91e430490
+xvic vice_machine_step_cycle call=1 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000001e91e430490
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+[xUnit.net 00:00:14.19]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_TwoSecondNtsc [11 s]
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 14.9544 Seconds
+
+==== FocusedVideoCpu EXIT=1 MS=37472 ====
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:16.33]     ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedNtsc [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedNtsc [12 s]
+  Error Message:
+   DIV first=125 matchedCycles=124 budget=250000
+c=114 nPC=$FD95 mPC=$FD95 nA=$00 mA=$00 nX=$03 mX=$03 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=4 op=$9D trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=115 nPC=$FD95 mPC=$FD95 nA=$00 mA=$00 nX=$03 mX=$03 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=3 op=$9D trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=116 nPC=$FD98 mPC=$FD98 nA=$00 mA=$00 nX=$03 mX=$03 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=2 op=$9D trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=117 nPC=$FD98 mPC=$FD98 nA=$00 mA=$00 nX=$03 mX=$03 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$9D trail=3 nonOvlR=False nonOvlF=False dly=False stg=True irq=0 mis=False vmis=False
+c=118 nPC=$FD98 mPC=$FD98 nA=$00 mA=$00 nX=$03 mX=$03 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$9D trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=119 nPC=$FD98 mPC=$FD98 nA=$00 mA=$00 nX=$03 mX=$03 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$E8 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=120 nPC=$FD99 mPC=$FD99 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$E8 trail=3 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=121 nPC=$FD99 mPC=$FD99 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$D0 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=122 nPC=$FD9B mPC=$FD9B nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=0 op=$D0 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=123 nPC=$FD90 mPC=$FD90 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=3 op=$95 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=124 nPC=$FD90 mPC=$FD90 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=2 op=$95 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=125 nPC=$FD90 mPC=$FD92 nA=$00 mA=$00 nX=$04 mX=$04 nY=$00 mY=$00 nS=$FD mS=$FD nP=$25 mP=$25 dbgCyc=1 op=$95 trail=1 nonOvlR=False nonOvlF=False dly=True stg=True irq=0 mis=True vmis=False
+bus: m$C1=$00 m$C2=$FF n$C1=$00 n$C2=$FF m$C3=$00 m$C4=$FF n$C3=$00 n$C4=$FF m$0314=$FF n$0314=$FF
+irqdiag: nLastOp=0x1D0 nDelays=True nPend=0x0 nIrqClk=0 nClk=130 mDelays=False mBound=False mIrqSeq=0
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget, String modelSelector) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 248
+   at ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedNtsc() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20WorkloadLockstep.cs:line 40
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:35.35]     ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedPal [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedPal [19 s]
+  Error Message:
+   DIV first=3 matchedCycles=2 budget=250000
+c=1 nPC=$FD22 mPC=$FD22 nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$00 mS=$00 nP=$26 mP=$26 dbgCyc=0 op=$00 trail=0 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=2 nPC=$FD22 mPC=$FD22 nA=$00 mA=$00 nX=$00 mX=$00 nY=$00 mY=$00 nS=$00 mS=$00 nP=$26 mP=$26 dbgCyc=1 op=$A2 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=False vmis=False
+c=3 nPC=$FD22 mPC=$FD24 nA=$00 mA=$00 nX=$00 mX=$FF nY=$00 mY=$00 nS=$00 mS=$00 nP=$26 mP=$A4 dbgCyc=0 op=$A2 trail=1 nonOvlR=False nonOvlF=False dly=False stg=False irq=0 mis=True vmis=False
+bus: m$C1=$00 m$C2=$FF n$C1=$00 n$C2=$FF m$C3=$00 m$C4=$FF n$C3=$00 n$C4=$FF m$0314=$FF n$0314=$FF
+irqdiag: nLastOp=0x0 nDelays=False nPend=0x0 nIrqClk=0 nClk=6 mDelays=False mBound=True mIrqSeq=0
+
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20DivergeProbe.RunEveryCycle(Int32 budget, String modelSelector) in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20DivergeProbe.cs:line 248
+   at ViceSharp.TestHarness.Vic20.Vic20WorkloadLockstep.EveryCycle_Workload_Match_FocusedPal() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20WorkloadLockstep.cs:line 30
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     2, Passed:     2, Skipped:     0, Total:     4, Duration: 32 s - ViceSharp.TestHarness.dll (net10.0)
+
+
+LOCKSTEP_GATE EXIT_PAL=0 EXIT_NTSC=0 EXIT_FOCUSED=1
+
+==== Re-verify isolated (process isolation) ====
+TwoSecondPal: Passed 1 (lockstep-2s-pal.log)
+TwoSecondNtsc: Passed 1 (lockstep-2s-ntsc.log)
+FocusedPal: Passed 1 (focused-pal.log)
+FocusedNtsc: Passed 1 (focused-ntsc.log)
+Video2k PAL+NTSC: Passed 2 (video-2k.log)
+LOCKSTEP_GATE_SUMMARY Passed=6 Failed=0 Skipped=0 (all process-isolated; multi-test NativeVice residue avoided)
+Date: 2026-08-11T15:36:00.0855619-05:00

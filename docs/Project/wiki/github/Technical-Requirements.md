@@ -380,6 +380,13 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-ROMM-SEC-001
+
+**RomM trusted-boundary protection** — Public covers use an anonymous client; bearer auth is restricted to server-relative RomM cover paths. ROM filenames and resolved cache destinations are contained, downloaded through a temporary file, expected-size validated, and atomically published. Windows file-backed tokens use current-user DPAPI with atomic legacy-plaintext migration; unsupported operating systems fail closed.
+**Covered by:** FR: FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001; TEST: TEST-ROMM-SEC-001
+**Status:** pending
+Scope: layer-1+
+
 ## TR-ROMM-THREAD-001
 
 **Captured-SynchronizationContext PropertyChanged dispatch** — PLAN-ROMM-001. LibraryObservableObject posts PropertyChanged off-context to the captured UI SynchronizationContext and raises inline when already on-context, preventing RPC_E_WRONG_THREAD in UWP XAML binding. Verified by LibraryObservableObjectTests.Dispatch (covers AC-BROWSE-08).
@@ -590,6 +597,31 @@ Scope: layer-1+
 - [ ] The shell has status bar and peripherals sidebar surfaces that display IEC activity.
 - [ ] ViewModels consume host client abstractions and DTOs rather than emulator internals.
 - [ ] ViewModel tests cover peripherals and status active-to-idle IEC transitions.
+
+## TR-VIC20-FLASH-001
+
+**Cycle-driven TYPE_B flash and atomic persistence** — Flash040Core exposes AdvanceCycles and the VIC-20 machine clock advances it. TYPE_B timeout/sector/chip budgets, busy reads, cancel, suspend, and resume are deterministic. Expansion-cart dirty payloads remain type-correct; host detach uses a same-directory temporary file and atomic replacement.
+**Covered by:** FR: FR-VIC20-005; TEST: TEST-VIC20-FLASH-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-VIC20-PIXEL-001
+
+**Pixel compare path index-primary then BGRA** — Managed and xvic expose normal-border index/BGRA buffers at a common sync point. READY PAL/NTSC/busy index SequenceEqual is the certified Exact path. BGRA uses the shared VICE palette and opaque alpha, but full-canvas BGRA parity remains Partial.
+**Covered by:** FR: FR-VIC20-001; TEST: TEST-VIC20-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Managed index and BGRA buffers match xvic canvas geometry
+- [ ] Compare sync point defined and used by all pixel tests
+- [ ] Index compare is primary Exact; BGRA after palette table match
+
+## TR-VIC20-SOUND-001
+
+**Deterministic clocked VIC-I PCM batching** — Mos6561 owns one machine-agnostic Vic20Sound engine. System-clock advancement produces deterministic PCM16 mono and dispatches 256-sample batches without per-store allocation. Native parity is scoped to the covered silence and tone inputs.
+**Covered by:** FR: FR-VIC20-SOUND-001; TEST: TEST-VIC20-SOUND-001
+**Status:** pending
+Scope: layer-1+
 
 ## TR-VIC-EDGE-001
 

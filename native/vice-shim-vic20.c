@@ -54,6 +54,7 @@
 #include "vic20/vic.h"
 #include "vic20/vic20via.h"
 #include "vic20/vic-mem.h"
+#include "vic20/vic20sound.h"
 #include "vice-shim-runtime.h"
 
 /* mem_bank_peek is the public side-effect-free peek used by the monitor. */
@@ -509,7 +510,11 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
     mem_powerup();
     vic_reset();
     /* vic_reset omits several vic_init fields (victypes / vic.c). Re-baseline
-     * for every-cycle video lockstep across repeated machine create/reset. */
+     * for every-cycle video lockstep across repeated machine create/reset.
+     * VICE vic_reset also leaves regs[] uncleared; after a long boot run the
+     * next machine's Reset must zero $9000-$900F so managed power-on zeros
+     * (Mos6561.ResetRegisters) stay bit-equal (NativeVice collection residue). */
+    memset(vic.regs, 0, sizeof(vic.regs));
     vic.line_was_blank = 0;
     vic.char_height = 8;
     vic.row_increase_line = 8;
@@ -519,6 +524,9 @@ VICE_SHIM_API void vice_machine_reset(void *machine)
     vic.row_counter = 0;
     vic.memptr = 0;
     vic.memptr_inc = 0;
+    vic.area = VIC_AREA_IDLE;
+    vic.fetch_state = VIC_FETCH_IDLE;
+    vic_sound_oracle_reset();
     maincpu_reset();
     vice_shim_reset_cpu_state_locked();
     LeaveCriticalSection(&g_state_lock);
@@ -704,6 +712,13 @@ VICE_SHIM_API void vice_machine_write(void *machine, uint16_t address, uint8_t v
     EnterCriticalSection(&g_state_lock);
     if (vice_shim_is_active_machine(machine)) {
         mem_store(address, value);
+        /* VIC-I sound oracle: headless sound_store may not update snd; dual-write. */
+        if ((address & 0xFFF0) == 0x9000) {
+            uint16_t reg = (uint16_t)(address & 0x0F);
+            if (reg >= 0x0A && reg <= 0x0E) {
+                vic_sound_oracle_store(reg, value);
+            }
+        }
     }
     LeaveCriticalSection(&g_state_lock);
 }
@@ -1166,54 +1181,115 @@ VICE_SHIM_API void vice_vic20_get_video_state(void *machine, struct vice_vic20_v
  * Canvas size: display_width * VIC_PIXEL_WIDTH x (last - first + 1)
  * (vic_set_geometry). PAL normal: 448 x 284.
  */
-static int vice_shim_vic20_visible_window_locked(
-    const uint8_t **out_base, int *out_stride, int *out_w, int *out_h)
+/*
+ * VICE video_viewport_resize first_x (video-viewport.c), matching managed
+ * Mos6561.ComputeViewportFirstX. Headless viewport->first_x can be stale/0;
+ * recompute from live geometry so capture matches READY first_x=48.
+ */
+static int vice_shim_vic20_compute_first_x(int gfx_x, int gfx_w, int canvas_w, int screen_w)
+{
+    int right_border;
+    int small_x_border;
+    int first_x;
+
+    if (canvas_w <= 0 || screen_w <= 0 || gfx_w < 0) {
+        return 0;
+    }
+
+    right_border = screen_w - gfx_x - gfx_w;
+    small_x_border = right_border;
+    if (small_x_border > gfx_x) {
+        small_x_border = gfx_x;
+    }
+    if (small_x_border < 0) {
+        small_x_border = 0;
+    }
+
+    /* VIC-I gfx_area_moves = 1 (vic_set_geometry). */
+    if (gfx_w + small_x_border * 2 > canvas_w) {
+        first_x = gfx_x - (canvas_w - gfx_w) / 2;
+    } else if (gfx_x > small_x_border) {
+        first_x = screen_w - canvas_w;
+    } else {
+        first_x = 0;
+    }
+
+    if (first_x < 0) {
+        first_x = 0;
+    }
+    if (first_x + canvas_w > screen_w) {
+        first_x = screen_w - canvas_w;
+        if (first_x < 0) {
+            first_x = 0;
+        }
+    }
+    return first_x;
+}
+
+/*
+ * Resolve visible window parameters. out_h uses timing last/first (PAL 284 /
+ * NTSC 234). Row reads clamp when NTSC last_line meets buffer height.
+ */
+static int vice_shim_vic20_window_params(
+    int *out_first_line, int *out_first_x, int *out_stride, int *out_w, int *out_h)
 {
     unsigned int fbw;
     unsigned int first_line;
     unsigned int last_line;
-    unsigned int first_x;
+    int first_x;
+    int canvas_w;
+    int screen_w;
 
     if (vic.raster.canvas == NULL
         || vic.raster.canvas->draw_buffer == NULL
         || vic.raster.canvas->draw_buffer->draw_buffer == NULL
-        || vic.raster.geometry == NULL) {
+        || vic.raster.geometry == NULL
+        || vic.raster.geometry->screen_size.height == 0) {
         return 0;
     }
 
     first_line = (unsigned int)vic.first_displayed_line;
     last_line = (unsigned int)vic.last_displayed_line;
-    if (last_line < first_line
-        || last_line >= vic.raster.geometry->screen_size.height) {
+    if (last_line < first_line) {
         return 0;
     }
 
-    /* Full draw-buffer row pitch (bytes = geometry width units; VIC_PIXEL is
-     * two identical index bytes when VIC_DUPLICATES_PIXELS is set). */
     fbw = vic.raster.geometry->screen_size.width
           + vic.raster.geometry->extra_offscreen_border_left
           + vic.raster.geometry->extra_offscreen_border_right;
 
-    /* Visible canvas origin: screenshot path uses extra_left + viewport->first_x
-     * (raster_screenshot / video_viewport first_x crop). */
-    first_x = 0;
-    if (vic.raster.canvas->viewport != NULL) {
-        first_x = (unsigned int)vic.raster.canvas->viewport->first_x;
-    }
+    canvas_w = (int)(vic.display_width * VIC_PIXEL_WIDTH);
+    screen_w = (int)vic.raster.geometry->screen_size.width;
+    first_x = vice_shim_vic20_compute_first_x(
+        (int)vic.raster.geometry->gfx_position.x,
+        (int)vic.raster.geometry->gfx_size.width,
+        canvas_w,
+        screen_w);
 
-    *out_base = vic.raster.canvas->draw_buffer->draw_buffer
-                + first_line * fbw
-                + vic.raster.geometry->extra_offscreen_border_left
-                + first_x;
+    *out_first_line = (int)first_line;
+    *out_first_x = first_x;
     *out_stride = (int)fbw;
-    *out_w = (int)(vic.display_width * VIC_PIXEL_WIDTH);
+    *out_w = canvas_w;
     *out_h = (int)(last_line - first_line + 1);
     return 1;
 }
 
+static const uint8_t *vice_shim_vic20_row_src(int line, int first_x, int stride)
+{
+    unsigned int max_line = vic.raster.geometry->screen_size.height;
+    if ((unsigned int)line >= max_line) {
+        return NULL;
+    }
+    return vic.raster.canvas->draw_buffer->draw_buffer
+           + (unsigned int)line * (unsigned int)stride
+           + vic.raster.geometry->extra_offscreen_border_left
+           + (unsigned int)first_x;
+}
+
 VICE_SHIM_API int vice_machine_capture_visible_frame(void *machine, uint8_t *buffer, int length, int *width, int *height)
 {
-    const uint8_t *base = NULL;
+    int first_line = 0;
+    int first_x = 0;
     int stride = 0;
     int w = 0;
     int h = 0;
@@ -1230,7 +1306,7 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void *machine, uint8_t *buf
     vice_shim_ensure_sync_primitives();
     EnterCriticalSection(&g_state_lock);
     if (vice_shim_is_active_machine(machine)
-        && vice_shim_vic20_visible_window_locked(&base, &stride, &w, &h)) {
+        && vice_shim_vic20_window_params(&first_line, &first_x, &stride, &w, &h)) {
         if (width) {
             *width = w;
         }
@@ -1242,11 +1318,16 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void *machine, uint8_t *buf
             int row;
             int x;
             for (row = 0; row < h; row++) {
-                const uint8_t *src = base + (size_t)row * stride;
+                const uint8_t *src = vice_shim_vic20_row_src(first_line + row, first_x, stride);
                 uint8_t *dst = buffer + (size_t)row * w * 4;
+                if (src == NULL) {
+                    memset(dst, 0, (size_t)w * 4);
+                    for (x = 0; x < w; x++) {
+                        dst[(x * 4) + 3] = 0xFF;
+                    }
+                    continue;
+                }
                 for (x = 0; x < w; x++) {
-                    /* VIC_DUPLICATES_PIXELS: each logical pixel is a color index
-                     * byte (doub table stores idx in both bytes of uint16). */
                     unsigned int idx = src[x];
                     if (idx >= pal->num_entries) {
                         idx = 0;
@@ -1259,7 +1340,6 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void *machine, uint8_t *buf
             }
             ok = 1;
         } else if (buffer == NULL && w > 0 && h > 0) {
-            /* size probe */
             ok = 1;
         }
     }
@@ -1269,7 +1349,8 @@ VICE_SHIM_API int vice_machine_capture_visible_frame(void *machine, uint8_t *buf
 
 VICE_SHIM_API int vice_vic_capture_frame_indices(void *machine, uint8_t *buffer, int length, int *width, int *height)
 {
-    const uint8_t *base = NULL;
+    int first_line = 0;
+    int first_x = 0;
     int stride = 0;
     int w = 0;
     int h = 0;
@@ -1286,7 +1367,7 @@ VICE_SHIM_API int vice_vic_capture_frame_indices(void *machine, uint8_t *buffer,
     vice_shim_ensure_sync_primitives();
     EnterCriticalSection(&g_state_lock);
     if (vice_shim_is_active_machine(machine)
-        && vice_shim_vic20_visible_window_locked(&base, &stride, &w, &h)) {
+        && vice_shim_vic20_window_params(&first_line, &first_x, &stride, &w, &h)) {
         if (width) {
             *width = w;
         }
@@ -1295,7 +1376,13 @@ VICE_SHIM_API int vice_vic_capture_frame_indices(void *machine, uint8_t *buffer,
         }
         if (buffer != NULL && length >= w * h) {
             for (row = 0; row < h; row++) {
-                memcpy(buffer + (size_t)row * w, base + (size_t)row * stride, (size_t)w);
+                const uint8_t *src = vice_shim_vic20_row_src(first_line + row, first_x, stride);
+                uint8_t *dst = buffer + (size_t)row * (size_t)w;
+                if (src == NULL) {
+                    memset(dst, 0, (size_t)w);
+                } else {
+                    memcpy(dst, src, (size_t)w);
+                }
             }
             ok = 1;
         } else if (buffer == NULL && w > 0 && h > 0) {
@@ -1339,6 +1426,24 @@ VICE_SHIM_API size_t vice_sid_render_samples(void *machine, int16_t *buffer, siz
     (void)n;
     (void)delta_t_cycles;
     return 0;
+}
+
+VICE_SHIM_API int vice_vic20_render_samples(
+    void *machine, int16_t *buffer, int length, int speed, int cycles_per_sec, int delta_t_cycles)
+{
+    int got = 0;
+
+    if (buffer == NULL || length <= 0) {
+        return 0;
+    }
+
+    vice_shim_ensure_sync_primitives();
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        got = vic_sound_oracle_render(buffer, length, speed, cycles_per_sec, (CLOCK)delta_t_cycles);
+    }
+    LeaveCriticalSection(&g_state_lock);
+    return got;
 }
 
 VICE_SHIM_API uint8_t vice_sid_engine_read(void *machine, uint16_t addr)

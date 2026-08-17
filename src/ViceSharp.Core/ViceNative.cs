@@ -808,6 +808,9 @@ public static unsafe partial class ViceNative
         /// <remarks>C64 path: physical RAM peek (I/O uses dedicated CIA/VIC APIs).</remarks>
         public byte PeekBus(ushort address) => PeekRamNative(_instance, address);
 
+        /// <inheritdoc />
+        public void WriteBus(ushort address, byte value) => WriteMemory(_instance, address, value);
+
         public MachineState GetState()
         {
             return new MachineState
@@ -858,6 +861,9 @@ public static unsafe partial class ViceNative
             height = 0;
             return false;
         }
+
+        public int RenderVic20Samples(short[] buffer, int sampleRate, int cyclesPerSec, int deltaTCycles)
+            => 0; // C64 SID path uses vice_sid_render_samples; VIC-I is xvic-only.
 
         public Vic20VideoLockstepState GetVic20VideoState()
             => throw new NotSupportedException("VIC-I video lockstep export is only available on the xvic (VIC-20) oracle.");

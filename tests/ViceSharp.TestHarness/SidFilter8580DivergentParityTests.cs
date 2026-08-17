@@ -356,8 +356,8 @@ public sealed class SidFilter8580DivergentParityTests
     /// selector, SidModel 1 = MOS8580) from reset through the same register
     /// program and asserts the per-cycle filter output matches every phi2 cycle.
     /// compareFilterOutput selects Filter::output() (oracle probe[8]) vs the
-    /// final SID::output() (oracle SidExactOutput). The oracle's filter dither is
-    /// zeroed in the shim so the deterministic model is comparable.
+    /// final SID::output() (oracle SidExactOutput). The oracle retains stock
+    /// reSID filter dither so the comparison cannot make native match managed.
     /// </summary>
     private static void AssertFilter8580LockstepVsOracle(
         (ushort reg, byte val)[] program, int cycles, bool compareFilterOutput)

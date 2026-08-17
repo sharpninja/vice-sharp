@@ -48,6 +48,12 @@ public interface IViceNative : IDisposable
     byte PeekBus(ushort address);
 
     /// <summary>
+    /// Side-effecting store into the native address space (mem_store).
+    /// Used for lockstep fixtures that poke VIC-I regs on both machines.
+    /// </summary>
+    void WriteBus(ushort address, byte value);
+
+    /// <summary>
     /// Load a VICE snapshot (.vsf) into the native machine, resuming it from the
     /// staged state. The cycle counter is re-baselined so <see cref="GetState"/>
     /// reports cycles elapsed since the load point. Returns 0 on success.
@@ -89,6 +95,12 @@ public interface IViceNative : IDisposable
     /// Returns false when unsupported or buffer too small.
     /// </summary>
     bool TryCaptureFrameIndices(byte[] indexBuffer, out int width, out int height);
+
+    /// <summary>
+    /// VIC-20 VIC-I audio: render mono int16 PCM samples for a CPU cycle budget
+    /// (FR-VIC20-SOUND-001 / AC-SD-01). Returns samples written, or 0 if unsupported.
+    /// </summary>
+    int RenderVic20Samples(short[] buffer, int sampleRate, int cyclesPerSec, int deltaTCycles);
 
     /// <summary>
     /// Get the main-CPU resume/pipeline state (TR-LOCKSTEP-VSF-001): the

@@ -1,6 +1,6 @@
 # Flash Cart Image Builder
 
-Portable builder for VIC-20 expansion flash images (and a C64 EasyFlash layout profile for reuse). UI-free Core types; Avalonia and Xbox host the same view model.
+Portable builder for VIC-20 expansion flash images (and a C64 EasyFlash layout profile for reuse). UI-free Core types; Avalonia hosts the portable view model.
 
 ## Profiles
 
@@ -29,20 +29,15 @@ Settings (VIC-20 machine selected) → **VIC-20 expansion cart** → **Build car
 
 BLK0/1/2/3/5 RAM toggles use a horizontal `WrapPanel` so they wrap on narrow Settings panes.
 
-### Xbox UWP (legacy, frozen)
-
-Xbox UWP / Dev-Mode sideload is **cancelled** (`PLAN-XBOXUWP-END-001`). The existing
-`FlashCartBuilderPage` and Settings expansion UI under `src/ViceSharp.Xbox*` remain in
-the tree as frozen legacy only. Do not treat them as a product deploy path.
-
 ## Attach path
 
-Built or external images attach through the media/cartridge slot with size-based detection for FE3 / Ultimem / Mega-Cart. Expansion cart state is exposed via protocol (`ExpansionCartManageState`) and Avalonia settings host surfaces (product path). Xbox settings APIs remain in tree as frozen legacy only.
+Built or external images attach through the media/cartridge slot with size-based detection for FE3 / Ultimem / Mega-Cart. Expansion cart state is exposed through `ExpansionCartManageState` and the Avalonia settings surface.
 
 ## Accuracy notes
 
 - Image sizes and bank geometry for the three VIC-20 profiles are Exact against the matching cartridge type constants (hostile validator receipt `docs/receipts/hostile-validator-20260808T103211Z.md`).
-- FE3 runtime: MODE_FLASH stores go through managed `Flash040Core` (AM29F040B unlock, byte program AND, chip/sector erase, autoselect IDs). Erase **latency** is instant (Partial vs VICE multi-second `erase_alarm`).
+- FE3 runtime: MODE_FLASH stores go through managed `Flash040Core` (AM29F040B unlock, byte-program AND, chip/sector erase, autoselect IDs). The VIC-20 machine clock advances the VICE TYPE_B erase budgets: 50-cycle sector timeout, 1,000,000-cycle sector erase, and 8,000,000-cycle chip erase. Busy reads toggle status bits, and sector erase suspend/resume preserves the remaining cycle budget.
+- Detach flushes dirty FE3 and Ultimem flash images and Mega-Cart NVRAM through a same-directory temporary file followed by atomic replacement.
 - Mega-Cart NVRAM secondary blob size is Exact; full Mega-Cart mapper runtime depth remains Partial / Stub per `docs/audit-vic20-vs-vice-2026-08-07.md`.
 
 ## Tests
@@ -51,4 +46,4 @@ Built or external images attach through the media/cartridge slot with size-based
 dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "FullyQualifiedName~FlashCart"
 ```
 
-Coverage: profile sizes, builder packing, portable VM bank load/build, FE3 preset enum surface.
+Coverage includes profile sizes, builder packing, portable VM bank load/build, FE3 command and erase timing, FE3/Ultimem write-back, and Mega-Cart NVRAM persistence.

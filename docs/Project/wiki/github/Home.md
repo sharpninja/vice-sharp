@@ -26,20 +26,15 @@
   - [Registry of Lore](Registry-of-Lore)
 - Requirements
   - [Functional Requirements Overview](Functional-Requirements-Overview)
-  - [FR Xbox Branding (C= logo attribution)](FR-Xbox-Branding)
   - [Technical Requirements Overview](Technical-Requirements-Overview)
   - [Test Requirements](Test-Requirements)
   - [x64sc Model Matrix](X64sc-Model-Matrix)
   - [x64sc Requirement Coverage](X64sc-Requirement-Coverage)
   - [Classic VICE Edge-Case TR Backfill](Classic-VICE-Edge-Case-TR-Backfill)
   - [VICE Source Manifest](VICE-Source-Manifest)
-- Archival Cancelled Store and Xbox
-  - [[Archival] Xbox Microsoft Store Publishing (cancelled)](Xbox-Store-Publishing)
-  - [[Archival] Store Listing Copy (cancelled)](Store-Listing-Copy)
-  - [[Archival] GPL vs Microsoft Store Review (cancelled)](GPL-Store-Section6-Review)
-  - [[Archival] Store Next Steps Guide (cancelled)](Store-Next-Steps-Guide)
-  - [[Archival] Store Product Identity (cancelled)](Store-Product-Identity)
-  - [[Archival] ADO Store Pipeline Setup (cancelled)](ADO-Store-Setup)
+  - [VIC-20 Functional Requirements](FR-VIC20)
+  - [VIC-20 Technical Requirements](TR-VIC20)
+  - [RomM Security Requirements](TR-RomM-Security)
 - Reference
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)

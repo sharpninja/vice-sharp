@@ -1,0 +1,7 @@
+# Receipt: Phase A VIC-20 pixel gate
+Date: 2026-08-11
+Command: dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --no-build --filter FullyQualifiedName~Vic20Pixel
+Result: Passed 8 / Failed 0 / Skipped 0
+Native: native/vice_xvic.dll rebuilt (first_x recompute + shared window_params for BGRA and indices; NTSC row clamp)
+DLL deploy: copied fresh vice_xvic.dll into TestHarness bin Release net10.0 (and native/ subdir) before gate
+Tests: Vic20PixelLockstep Index READY PAL/NTSC/busy + BGRA READY PAL; Vic20PixelFrameTests geometry; Diag histogram

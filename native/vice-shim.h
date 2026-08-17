@@ -209,6 +209,12 @@ VICE_SHIM_API void vice_sid_get_state(void* machine, struct vice_sid_state* stat
 // require sound_open() to have succeeded.
 VICE_SHIM_API size_t vice_sid_render_samples(void* machine, int16_t* buffer, size_t n, int delta_t_cycles);
 
+// VIC-20 VIC-I audio capture (FR-VIC20-SOUND-001 / AC-SD-01). Mono int16 PCM.
+// speed = sample rate (e.g. 44100), cycles_per_sec = CPU clock (PAL 1108405).
+// Returns samples written. Resets oracle filter state when machine is reset via
+// vice_machine_reset (see shim).
+VICE_SHIM_API int vice_vic20_render_samples(void* machine, int16_t* buffer, int length, int speed, int cycles_per_sec, int delta_t_cycles);
+
 // Read a register straight from the shim's private, clocked reSID instance.
 // Returns engine-computed values such as OSC3 ($1b) and ENV3 ($1c) that only
 // exist once reSID has been clocked via vice_sid_render_samples (the headless

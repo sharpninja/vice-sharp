@@ -66,6 +66,9 @@ public static unsafe partial class ViceNativeXvic
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_peek_bus")]
     private static partial byte PeekBusNative(IntPtr instance, ushort address);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_write")]
+    private static partial void WriteMemoryNative(IntPtr instance, ushort address, byte value);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_attach_disk", StringMarshalling = StringMarshalling.Utf8)]
     private static partial int AttachDiskNative(IntPtr instance, uint unit, uint drive, string path);
 
@@ -109,6 +112,11 @@ public static unsafe partial class ViceNativeXvic
     /// <summary>Capture palette-index frame (one byte per pixel).</summary>
     [LibraryImport(LibraryName, EntryPoint = "vice_vic_capture_frame_indices")]
     public static partial int CaptureFrameIndices(IntPtr instance, [Out] byte[] buffer, int length, out int width, out int height);
+
+    /// <summary>VIC-I mono PCM capture (vic_sound_oracle_render).</summary>
+    [LibraryImport(LibraryName, EntryPoint = "vice_vic20_render_samples")]
+    public static partial int RenderVic20SamplesNative(
+        IntPtr instance, [Out] short[] buffer, int length, int speed, int cyclesPerSec, int deltaTCycles);
 
     [LibraryImport(LibraryName, EntryPoint = "vice_cpu_get_pipeline_state")]
     public static partial void GetCpuPipelineState(IntPtr instance, ref ViceNative.ViceCpuPipelineState state);
@@ -350,6 +358,9 @@ public static unsafe partial class ViceNativeXvic
         /// <inheritdoc />
         public byte PeekBus(ushort address) => PeekBusNative(_instance, address);
 
+        /// <inheritdoc />
+        public void WriteBus(ushort address, byte value) => WriteMemoryNative(_instance, address, value);
+
         public MachineState GetState()
         {
             return new MachineState
@@ -427,6 +438,14 @@ public static unsafe partial class ViceNativeXvic
                 return false;
             var res = CaptureFrameIndices(_instance, indexBuffer, indexBuffer.Length, out width, out height);
             return res != 0 && width > 0 && height > 0;
+        }
+
+        public int RenderVic20Samples(short[] buffer, int sampleRate, int cyclesPerSec, int deltaTCycles)
+        {
+            if (buffer is null || buffer.Length < 1 || sampleRate <= 0 || cyclesPerSec <= 0)
+                return 0;
+            return RenderVic20SamplesNative(
+                _instance, buffer, buffer.Length, sampleRate, cyclesPerSec, deltaTCycles);
         }
 
         public NativeCiaState GetCiaState(int ciaIndex)

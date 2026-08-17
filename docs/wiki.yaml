@@ -2,326 +2,257 @@ schema: mcp-wiki-export/v1
 home:
   document: home
 documents:
-- id: home
-  title: Home
-  source: generated:home
-  target: Home.md
-  platforms:
-  - github
-  - azure
-- id: functional
-  title: Functional Requirements
-  source: generated:functional
-  target: Functional-Requirements.md
-  platforms:
-  - github
-  - azure
-- id: technical
-  title: Technical Requirements
-  source: generated:technical
-  target: Technical-Requirements.md
-  platforms:
-  - github
-  - azure
-- id: testing
-  title: Testing Requirements
-  source: generated:testing
-  target: Testing-Requirements.md
-  platforms:
-  - github
-  - azure
-- id: mapping
-  title: TR per FR Mapping
-  source: generated:mapping
-  target: TR-per-FR-Mapping.md
-  platforms:
-  - github
-  - azure
-- id: matrix
-  title: Requirements Matrix
-  source: generated:matrix
-  target: Requirements-Matrix.md
-  platforms:
-  - github
-  - azure
-- id: project-overview
-  title: Project Overview
-  source: README.md
-  target: Project-Overview.md
-  platforms:
-  - github
-  - azure
-- id: user-guide
-  title: User Guide
-  source: docs/USER-GUIDE.md
-  target: User-Guide.md
-  platforms:
-  - github
-  - azure
-- id: vice-migration
-  title: Migrating from Classic VICE
-  source: docs/VICE-MIGRATION.md
-  target: VICE-Migration.md
-  platforms:
-  - github
-  - azure
-- id: rom-setup
-  title: ROM Setup and Legal Sources
-  source: docs/ROMs.md
-  target: ROM-Setup.md
-  platforms:
-  - github
-  - azure
-- id: flash-cart-builder
-  title: Flash Cart Image Builder
-  source: docs/FlashCart-Builder.md
-  target: Flash-Cart-Builder.md
-  platforms:
-  - github
-  - azure
-- id: privacy
-  title: Privacy Policy
-  source: docs/PRIVACY.md
-  target: Privacy-Policy.md
-  platforms:
-  - github
-  - azure
-- id: xbox-store-publishing
-  title: "[Archival] Xbox Microsoft Store Publishing (cancelled)"
-  source: docs/xbox-store-publishing.md
-  target: Xbox-Store-Publishing.md
-  platforms:
-  - github
-  - azure
-- id: store-listing-copy
-  title: "[Archival] Store Listing Copy (cancelled)"
-  source: docs/xbox/store-listing-copy.md
-  target: Store-Listing-Copy.md
-  platforms:
-  - github
-  - azure
-- id: gpl-store-section6
-  title: "[Archival] GPL vs Microsoft Store Review (cancelled)"
-  source: docs/xbox/gpl-store-section6-review.md
-  target: GPL-Store-Section6-Review.md
-  platforms:
-  - github
-  - azure
-- id: store-next-steps
-  title: "[Archival] Store Next Steps Guide (cancelled)"
-  source: docs/xbox/store-next-steps-guide.md
-  target: Store-Next-Steps-Guide.md
-  platforms:
-  - github
-  - azure
-- id: store-product-identity
-  title: "[Archival] Store Product Identity (cancelled)"
-  source: docs/xbox/store-product-identity.md
-  target: Store-Product-Identity.md
-  platforms:
-  - github
-  - azure
-- id: ado-store-setup
-  title: "[Archival] ADO Store Pipeline Setup (cancelled)"
-  source: docs/xbox/ado-store-setup.md
-  target: ADO-Store-Setup.md
-  platforms:
-  - github
-  - azure
-- id: architecture
-  title: Architecture
-  source: docs/Architecture.md
-  target: Architecture.md
-  platforms:
-  - github
-  - azure
-- id: public-api
-  title: Public API Reference
-  source: docs/Public-API.md
-  target: Public-API.md
-  platforms:
-  - github
-  - azure
-- id: pubsub
-  title: Pub-Sub and Mutation Queue
-  source: docs/PubSub.md
-  target: PubSub.md
-  platforms:
-  - github
-  - azure
-- id: decoupling
-  title: Video and Audio Decoupling
-  source: docs/Decoupling.md
-  target: Video-Audio-Decoupling.md
-  platforms:
-  - github
-  - azure
-- id: state-window
-  title: State Window (Design Proposal)
-  source: docs/StateWindow.md
-  target: State-Window.md
-  platforms:
-  - github
-  - azure
-- id: iteration-roadmap
-  title: Iteration Roadmap
-  source: docs/Iteration-Roadmap.md
-  target: Iteration-Roadmap.md
-  platforms:
-  - github
-  - azure
-- id: audit-vic20-vs-vice
-  title: VIC-20 vs VICE Implementation Audit
-  source: docs/audit-vic20-vs-vice-2026-08-07.md
-  target: VIC20-vs-VICE-Audit.md
-  platforms:
-  - github
-  - azure
-- id: ai-review
-  title: AI Code and Project Review (aiUnit)
-  source: docs/AI-Review.md
-  target: AI-Review.md
-  platforms:
-  - github
-  - azure
-- id: registry-of-lore
-  title: Registry of Lore
-  source: docs/ROL.md
-  target: Registry-of-Lore.md
-  platforms:
-  - github
-  - azure
-- id: fr-overview
-  title: Functional Requirements Overview
-  source: docs/requirements/functional/FR-Overview.md
-  target: Functional-Requirements-Overview.md
-  platforms:
-  - github
-  - azure
-- id: fr-xbox-branding
-  title: FR Xbox Branding (C= logo attribution)
-  source: docs/requirements/functional/FR-Xbox-Branding.md
-  target: FR-Xbox-Branding.md
-  platforms:
-  - github
-  - azure
-- id: tr-overview
-  title: Technical Requirements Overview
-  source: docs/requirements/technical/TR-Overview.md
-  target: Technical-Requirements-Overview.md
-  platforms:
-  - github
-  - azure
-- id: test-requirements
-  title: Test Requirements
-  source: docs/requirements/test/TEST-Requirements.md
-  target: Test-Requirements.md
-  platforms:
-  - github
-  - azure
-- id: x64sc-model-matrix
-  title: x64sc Model Matrix
-  source: docs/requirements/backfill/X64SC-Model-Matrix.md
-  target: X64sc-Model-Matrix.md
-  platforms:
-  - github
-  - azure
-- id: x64sc-requirement-coverage
-  title: x64sc Requirement Coverage
-  source: docs/requirements/backfill/X64SC-Requirement-Coverage.md
-  target: X64sc-Requirement-Coverage.md
-  platforms:
-  - github
-  - azure
-- id: vice-edge-case-backfill
-  title: Classic VICE Edge-Case TR Backfill
-  source: docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md
-  target: Classic-VICE-Edge-Case-TR-Backfill.md
-  platforms:
-  - github
-  - azure
-- id: vice-source-manifest
-  title: VICE Source Manifest
-  source: docs/requirements/sources/VICE-Source-Manifest.md
-  target: VICE-Source-Manifest.md
-  platforms:
-  - github
-  - azure
-- id: machine-architecture-schema
-  title: Ad-Hoc Machine Architecture YAML Schema (v1)
-  source: docs/schemas/machine-architecture.schema.md
-  target: Machine-Architecture-Schema.md
-  platforms:
-  - github
-  - azure
-- id: cross-platform-wireframes
-  title: Cross-Platform UI Wireframes
-  source: docs/wireframes/README.md
-  target: Cross-Platform-Wireframes.md
-  platforms:
-  - github
-  - azure
-- id: desktop-windows-ui
-  title: Desktop UI Reference (Windows, Avalonia)
-  source: docs/wireframes/desktop-windows.md
-  target: Desktop-Windows-UI.md
-  platforms:
-  - github
-  - azure
+  - id: home
+    title: Home
+    source: generated:home
+    target: Home.md
+    platforms:
+      - github
+  - id: functional
+    title: Functional Requirements
+    source: generated:functional
+    target: Functional-Requirements.md
+    platforms:
+      - github
+  - id: technical
+    title: Technical Requirements
+    source: generated:technical
+    target: Technical-Requirements.md
+    platforms:
+      - github
+  - id: testing
+    title: Testing Requirements
+    source: generated:testing
+    target: Testing-Requirements.md
+    platforms:
+      - github
+  - id: mapping
+    title: TR per FR Mapping
+    source: generated:mapping
+    target: TR-per-FR-Mapping.md
+    platforms:
+      - github
+  - id: matrix
+    title: Requirements Matrix
+    source: generated:matrix
+    target: Requirements-Matrix.md
+    platforms:
+      - github
+  - id: project-overview
+    title: Project Overview
+    source: README.md
+    target: Project-Overview.md
+    platforms:
+      - github
+  - id: user-guide
+    title: User Guide
+    source: docs/USER-GUIDE.md
+    target: User-Guide.md
+    platforms:
+      - github
+  - id: vice-migration
+    title: Migrating from Classic VICE
+    source: docs/VICE-MIGRATION.md
+    target: VICE-Migration.md
+    platforms:
+      - github
+  - id: rom-setup
+    title: ROM Setup and Legal Sources
+    source: docs/ROMs.md
+    target: ROM-Setup.md
+    platforms:
+      - github
+  - id: flash-cart-builder
+    title: Flash Cart Image Builder
+    source: docs/FlashCart-Builder.md
+    target: Flash-Cart-Builder.md
+    platforms:
+      - github
+  - id: privacy
+    title: Privacy Policy
+    source: docs/PRIVACY.md
+    target: Privacy-Policy.md
+    platforms:
+      - github
+  - id: architecture
+    title: Architecture
+    source: docs/Architecture.md
+    target: Architecture.md
+    platforms:
+      - github
+  - id: public-api
+    title: Public API Reference
+    source: docs/Public-API.md
+    target: Public-API.md
+    platforms:
+      - github
+  - id: pubsub
+    title: Pub-Sub and Mutation Queue
+    source: docs/PubSub.md
+    target: PubSub.md
+    platforms:
+      - github
+  - id: decoupling
+    title: Video and Audio Decoupling
+    source: docs/Decoupling.md
+    target: Video-Audio-Decoupling.md
+    platforms:
+      - github
+  - id: state-window
+    title: State Window (Design Proposal)
+    source: docs/StateWindow.md
+    target: State-Window.md
+    platforms:
+      - github
+  - id: iteration-roadmap
+    title: Iteration Roadmap
+    source: docs/Iteration-Roadmap.md
+    target: Iteration-Roadmap.md
+    platforms:
+      - github
+  - id: audit-vic20-vs-vice
+    title: VIC-20 vs VICE Implementation Audit
+    source: docs/audit-vic20-vs-vice-2026-08-07.md
+    target: VIC20-vs-VICE-Audit.md
+    platforms:
+      - github
+  - id: ai-review
+    title: AI Code and Project Review (aiUnit)
+    source: docs/AI-Review.md
+    target: AI-Review.md
+    platforms:
+      - github
+  - id: registry-of-lore
+    title: Registry of Lore
+    source: docs/ROL.md
+    target: Registry-of-Lore.md
+    platforms:
+      - github
+  - id: fr-overview
+    title: Functional Requirements Overview
+    source: docs/requirements/functional/FR-Overview.md
+    target: Functional-Requirements-Overview.md
+    platforms:
+      - github
+  - id: tr-overview
+    title: Technical Requirements Overview
+    source: docs/requirements/technical/TR-Overview.md
+    target: Technical-Requirements-Overview.md
+    platforms:
+      - github
+  - id: test-requirements
+    title: Test Requirements
+    source: docs/requirements/test/TEST-Requirements.md
+    target: Test-Requirements.md
+    platforms:
+      - github
+  - id: x64sc-model-matrix
+    title: x64sc Model Matrix
+    source: docs/requirements/backfill/X64SC-Model-Matrix.md
+    target: X64sc-Model-Matrix.md
+    platforms:
+      - github
+  - id: x64sc-requirement-coverage
+    title: x64sc Requirement Coverage
+    source: docs/requirements/backfill/X64SC-Requirement-Coverage.md
+    target: X64sc-Requirement-Coverage.md
+    platforms:
+      - github
+  - id: vice-edge-case-backfill
+    title: Classic VICE Edge-Case TR Backfill
+    source: docs/requirements/backfill/Classic-VICE-Edge-Case-TR-Backfill.md
+    target: Classic-VICE-Edge-Case-TR-Backfill.md
+    platforms:
+      - github
+  - id: vice-source-manifest
+    title: VICE Source Manifest
+    source: docs/requirements/sources/VICE-Source-Manifest.md
+    target: VICE-Source-Manifest.md
+    platforms:
+      - github
+  - id: machine-architecture-schema
+    title: Ad-Hoc Machine Architecture YAML Schema (v1)
+    source: docs/schemas/machine-architecture.schema.md
+    target: Machine-Architecture-Schema.md
+    platforms:
+      - github
+  - id: cross-platform-wireframes
+    title: Cross-Platform UI Wireframes
+    source: docs/wireframes/README.md
+    target: Cross-Platform-Wireframes.md
+    platforms:
+      - github
+  - id: desktop-windows-ui
+    title: Desktop UI Reference (Windows, Avalonia)
+    source: docs/wireframes/desktop-windows.md
+    target: Desktop-Windows-UI.md
+    platforms:
+      - github
+  - id: fr-vic20
+    title: VIC-20 Functional Requirements
+    source: docs/requirements/functional/FR-VIC20.md
+    target: FR-VIC20.md
+    platforms:
+      - github
+  - id: tr-vic20
+    title: VIC-20 Technical Requirements
+    source: docs/requirements/technical/TR-VIC20.md
+    target: TR-VIC20.md
+    platforms:
+      - github
+  - id: tr-romm-security
+    title: RomM Security Requirements
+    source: docs/requirements/technical/TR-RomM-Security.md
+    target: TR-RomM-Security.md
+    platforms:
+      - github
 navigation:
-- title: Home
-  path: Home
-  children:
-  - document: home
-  - document: functional
-  - document: technical
-  - document: testing
-  - document: mapping
-  - document: matrix
-- title: Getting Started
-  path: Getting-Started
-  children:
-  - document: project-overview
-  - document: user-guide
-  - document: flash-cart-builder
-  - document: vice-migration
-  - document: rom-setup
-  - document: privacy
-- title: Architecture
-  path: Architecture
-  children:
-  - document: architecture
-  - document: public-api
-  - document: pubsub
-  - document: decoupling
-  - document: state-window
-  - document: iteration-roadmap
-  - document: audit-vic20-vs-vice
-  - document: ai-review
-  - document: registry-of-lore
-- title: Requirements
-  path: Requirements
-  children:
-  - document: fr-overview
-  - document: fr-xbox-branding
-  - document: tr-overview
-  - document: test-requirements
-  - document: x64sc-model-matrix
-  - document: x64sc-requirement-coverage
-  - document: vice-edge-case-backfill
-  - document: vice-source-manifest
-- title: Archival Cancelled Store and Xbox
-  path: Archival-Cancelled-Store-and-Xbox
-  children:
-  - document: xbox-store-publishing
-  - document: store-listing-copy
-  - document: gpl-store-section6
-  - document: store-next-steps
-  - document: store-product-identity
-  - document: ado-store-setup
-- title: Reference
-  path: Reference
-  children:
-  - document: machine-architecture-schema
-  - document: cross-platform-wireframes
-  - document: desktop-windows-ui
+  - title: Home
+    path: Home
+    children:
+      - document: home
+      - document: functional
+      - document: technical
+      - document: testing
+      - document: mapping
+      - document: matrix
+  - title: Getting Started
+    path: Getting-Started
+    children:
+      - document: project-overview
+      - document: user-guide
+      - document: flash-cart-builder
+      - document: vice-migration
+      - document: rom-setup
+      - document: privacy
+  - title: Architecture
+    path: Architecture
+    children:
+      - document: architecture
+      - document: public-api
+      - document: pubsub
+      - document: decoupling
+      - document: state-window
+      - document: iteration-roadmap
+      - document: audit-vic20-vs-vice
+      - document: ai-review
+      - document: registry-of-lore
+  - title: Requirements
+    path: Requirements
+    children:
+      - document: fr-overview
+      - document: tr-overview
+      - document: test-requirements
+      - document: x64sc-model-matrix
+      - document: x64sc-requirement-coverage
+      - document: vice-edge-case-backfill
+      - document: vice-source-manifest
+      - document: fr-vic20
+      - document: tr-vic20
+      - document: tr-romm-security
+  - title: Reference
+    path: Reference
+    children:
+      - document: machine-architecture-schema
+      - document: cross-platform-wireframes
+      - document: desktop-windows-ui

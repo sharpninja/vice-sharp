@@ -41,6 +41,29 @@ public sealed class Vic20VideoLockstep
         Assert.Equal(2000, matched);
     }
 
+    /// <summary>TEST-VIC20-VS-04 / AC-VS-04: NTSC every-cycle video state 2k.</summary>
+    [Fact]
+    public void EveryCycle_VicI_VideoState_Match_2k_Ntsc()
+    {
+        if (!ViceNativeXvic.IsAvailable)
+            return;
+
+        var matched = RunEveryCycleVideo(2000, "vic20ntsc");
+        Assert.Equal(2000, matched);
+    }
+
+    /// <summary>AC-VS-04: NTSC focused window (500k) every-cycle video state.</summary>
+    [Fact]
+    public void EveryCycle_VicI_VideoState_Match_FocusedWindow_Ntsc()
+    {
+        if (!ViceNativeXvic.IsAvailable)
+            return;
+
+        var matched = RunEveryCycleVideo(FocusedBudgetCycles, "vic20ntsc");
+        Assert.True(matched == FocusedBudgetCycles,
+            $"expected full NTSC video match for {FocusedBudgetCycles} cycles, matched={matched}");
+    }
+
     /// <summary>
     /// Steps managed + xvic; returns matched cycles. Throws on first video mismatch.
     /// </summary>

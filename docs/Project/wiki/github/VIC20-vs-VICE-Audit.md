@@ -9,7 +9,7 @@
 
 **Process note:** All VIC-20 / VICE-faithfulness work uses a **hostile validator** (independent read-only agent; assumes overclaim; Exact requires VICE file+function + matching managed control flow).
 
-**Video lockstep:** Native `vice_vic20_get_video_state` + managed `CaptureVideoLockstepState`. Tests: `Vic20VideoLockstep` (2k + 500k). CPU probe also compares video unless `VICESHARP_LOCKSTEP_VIDEO=0`. Pixel framebuffer compare vs xvic still **Missing** (`capture_visible_frame` stub).
+**Video lockstep:** Native `vice_vic20_get_video_state` + managed `CaptureVideoLockstepState`. Tests: `Vic20VideoLockstep` (2k + 500k). CPU probe also compares video unless `VICESHARP_LOCKSTEP_VIDEO=0`. Pixel capture: xvic `capture_visible_frame` + indices wired; index SequenceEqual lockstep in progress (FR-VIC20-001 / PLAN-VIC20-EXACT-001 Phase A).
 
 ---
 
@@ -73,13 +73,13 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 - **VICE:** `vic-mem.c`  
 - **Managed:** reg array; height from reg3 bit0; raster encode on read 3/4  
 - **Status:** **Partial**  
-- **Missing:** Sound store side effects (Explicit Missing), lightpen/pot, mid-line `raster_changes_*`.
+- **Present:** Sound register side effects and live batched sample delivery; focused silence and tone batches are byte-identical to native xvic. **Missing:** lightpen/pot and mid-line `raster_changes_*`; the full waveform/input space is not certified.
 
 ### VIC-I sound
 
 - **VICE:** `vic20sound.c`  
-- **Managed:** `$900A-$900E` register store only  
-- **Status:** **Missing** (Explicit; no Exact claim)
+- **Managed:** `Mos6561` clocks `Vic20Sound`, exposes `IAudioChip`, and publishes PCM through the configured host backend  
+- **Status:** **Partial** — live `$900A-$900E` tone/noise/volume effects and backend registration are tested; native bit-exact waveform lockstep is not yet certified
 
 ### Palette
 
@@ -123,7 +123,7 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 
 ### Cartridges
 
-- **Status:** **Partial** (FE3 MODE_FLASH via managed flash040 TYPE_B command FSM; Ultimem/MegaCart MVP). Full VICE cart suite still **Missing**. FE3 erase latency instant (Partial). No whole-cart Exact claim.
+- **Status:** **Partial** (FE3 MODE_FLASH via managed flash040 TYPE_B command FSM; Ultimem/MegaCart MVP). FE3 erase latency now advances on the machine clock, and dirty FE3/Ultimem images plus MegaCart NVRAM persist atomically on detach. Full VICE cart suite is still **Missing**; no whole-cart Exact claim.
 
 ### Snapshots
 
@@ -144,7 +144,7 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 | 3 | Eager live column latch | **Closed** — pending only until open_h |
 | 4 | Idle IEC as full board serial | **Remaining** if overclaimed; matrix says idle Exact only |
 | 5 | Cart MVP as VICE ports | **Remaining** Stub — Explicit not Exact |
-| 6 | Sound store-only as sound | **Remaining** Missing — Explicit |
+| 6 | Sound store-only as sound | **Closed** — VIC-I is a clocked `IAudioChip` with live PCM delivery; bit-exact native audio remains Partial |
 | 7 | VicIStub alternate surface | Check tree; non-product if unused |
 | 8 | `RenderNow` harness driver | Allowed harness-only; not a VICE API claim |
 | 9 | Via6522 incomplete SR modes | **Remaining** Partial |
@@ -172,7 +172,7 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 
 1. half_char / mid-line color path (`vic-draw.c`)  
 2. Full fetch map + interlace/lightpen  
-3. Sound port `vic20sound.c`  
+3. Native bit-exact VIC-I audio waveform lockstep against `vic20sound.c`  
 4. Live IEC + VIA board pins  
 5. Carts port or permanent non-parity label  
 6. Pixel FB lockstep when native export exists  
@@ -185,6 +185,25 @@ Every new Exact: Byrd tests-first, VICE citation, hostile validator.
 
 **Whole-machine "Exact same as VICE" is not claimed.**  
 
-Exact labels above are scoped rules only. Sound, live IEC, carts, tape, snapshots, full draw mid-line, and pixel FB lockstep are Explicit Missing/Partial.
+Exact labels above are scoped rules only. VIC-I silence/tone batches match native xvic, but sound remains Partial until the full waveform/input space is certified; live IEC, niche carts, tape, native snapshot writes, full mid-line drawing, and full-canvas BGRA parity remain Explicit Missing/Partial.
 
 Policy: no new invent; Exact requires VICE file+function + matching control flow; video geometry proven by pixel/band tests on shipped `FrameBuffer`.
+
+---
+
+## 2026-08-11 bit-exact program (PLAN-VIC20-EXACT-001)
+
+Phased gates landed this session (receipts under docs/receipts/vic20-phase-*):
+
+- **Pixel FB (Phase A):** index SequenceEqual READY PAL/NTSC/busy; BGRA via shared PALette after index. Capture first_x recompute + NTSC row clamp in vice-shim-vic20.c.
+- **Video residual (Phase B):** PAL+NTSC video lockstep 2k/500k; vic.regs clear on reset (NativeVice residue).
+- **Carts (Phase C):** inventory matrix; FE3 flash040 TYPE_B erase latency (50 / 1e6 / 8e6); Ultimem/Mega unit parity.
+- **Sound (Phase D):** Vic20Sound port of vic20sound.c; native vice_vic20_render_samples; silence+tone SequenceEqual vs xvic.
+- **Workload/bus (Phase E):** focused non-idle CPU lockstep PAL+NTSC (250k); keyboard matrix tests green.
+- **Snapshots (Phase F):** inventory + managed RAM sample round-trip; headless xvic WriteSnapshot hang = Explicit Missing residual.
+- **Whole-machine claim:** still scoped Exact per matrix; IEEE/rsuser/printer Explicit Missing; cart niche types Explicit Missing.
+
+
+## Phase G closeout 2026-08-11
+
+PLAN-VIC20-EXACT-001 **done** (scoped Exact). Umbrella process-isolated **46/0/0** + 2s PAL/NTSC workload green. Hostile AGREE on scoped claims (docs/receipts/hostile-validator-20260811T203852Z.md). Whole-machine Exact **not** claimed; residuals: niche carts, IEEE/rsuser/printer, WriteSnapshot hang, NativeVice process isolation.

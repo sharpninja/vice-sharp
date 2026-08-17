@@ -372,7 +372,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
             deviceRegistry.Add(cartHost.Cartridge, DeviceRole.CartridgePort);
         }
 
-        var vic = new Mos6561(irqLine)
+        var vic = new Mos6561(irqLine, _audioBackend)
         {
             Id = new DeviceId(0x0003),
             Name = "VIC-I",
@@ -391,6 +391,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var rasterLines = profile?.RasterLines ?? 312;
         var visibleLines = profile?.VideoStandard == VideoStandard.Ntsc ? 234 : 284;
         vic.ConfigureTiming(cyclesPerLine, rasterLines, visibleLines, columns: 22, rows: 23);
+        vic.ConfigureAudioClock(44_100, checked((int)descriptor.MasterClockHz));
         bus.RegisterDevice(vic);
         // VICE CLK_INC: CPU bus access first, then vic_cycle() (vic20cpu.c).
         // Register CPU before VIC so Phi2 tick order matches that interleave;
@@ -399,7 +400,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         clock.Register(cpu);
         deviceRegistry.Add(cpu, DeviceRole.Cpu);
         clock.Register(vic);
-        deviceRegistry.Add(vic, DeviceRole.VideoChip);
+        deviceRegistry.Add(vic, DeviceRole.VideoChip, DeviceRole.AudioChip);
 
         if (profile is not null)
             deviceRegistry.Add(new SystemCore(profile.SystemCore), DeviceRole.SystemCore);
@@ -407,6 +408,7 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         // FE3 / Ultimem / Mega-Cart attach port (empty until media attaches).
         // CartridgePort role is shared with MVP Vic20Cartridge host; both register.
         var expansionCartPort = new Vic20ExpansionCartPort(bus);
+        clock.Register(expansionCartPort);
         deviceRegistry.Add(expansionCartPort, DeviceRole.CartridgePort);
 
         // Host-backed IEC filesystem device (uIEC/fsdevice-style); default unit 9

@@ -40,4 +40,25 @@ public sealed class RomMCoverImageSourceTests
         authHandler.Requests.Should().ContainSingle();
         authHandler.Requests[0].Authorization.Should().Be("Bearer tok");
     }
+
+    [Fact]
+    public async Task AuthenticatedPath_RejectsAbsoluteUri()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var anonHandler = new FakeRomMHandler(_ => FakeRomMHandler.Bytes(new byte[] { 1 }));
+        var authHandler = new FakeRomMHandler(_ => FakeRomMHandler.Bytes(new byte[] { 2 }));
+        using var anon = new HttpClient(anonHandler);
+        using var auth = new HttpClient(new RomMAuthHandler(RomMAuth.ClientApiToken("tok")) { InnerHandler = authHandler })
+        {
+            BaseAddress = new Uri("https://romm.local/"),
+        };
+        var source = new RomMCoverImageSource(auth, anon);
+
+        Func<Task> act = async () =>
+            (await source.OpenCoverAsync(new CoverRef(null, "https://attacker.invalid/steal"), ct)).Dispose();
+
+        await act.Should().ThrowAsync<ArgumentException>();
+        authHandler.Requests.Should().BeEmpty();
+        anonHandler.Requests.Should().BeEmpty();
+    }
 }

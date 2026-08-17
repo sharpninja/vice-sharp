@@ -112,4 +112,32 @@ public sealed class Vic20ExpansionCartTests
         port.Eject();
         Assert.Equal(Vic20ExpansionCartKind.None, port.AttachedKind);
     }
+    [Fact]
+    public void ExpansionCartPort_Fe3EraseAdvancesWithMachineClock()
+    {
+        var machine = MachineTestFactory.CreateVic20Machine(
+            new Architectures.Vic20.Vic20Descriptor("vic20"));
+        var port = machine.Devices.GetAll<IVic20ExpansionCartPort>().Single();
+        var flash = new byte[FinalExpansion3Cartridge.FlashSize];
+        Array.Fill(flash, (byte)0x11);
+
+        port.WriteBack = true;
+        port.ConfigPresetId = "flash";
+        port.AttachFinalExpansion3(flash);
+
+        Assert.True(port.TryWriteMapped(0xA555, 0xAA));
+        Assert.True(port.TryWriteMapped(0xA2AA, 0x55));
+        Assert.True(port.TryWriteMapped(0xA555, 0x80));
+        Assert.True(port.TryWriteMapped(0xA555, 0xAA));
+        Assert.True(port.TryWriteMapped(0xA2AA, 0x55));
+        Assert.True(port.TryWriteMapped(0xA000, 0x30));
+
+        machine.Clock.Step(
+            ViceSharp.Core.FlashCarts.Flash040Core.EraseSectorTimeoutCycles
+            + ViceSharp.Core.FlashCarts.Flash040Core.EraseSectorCycles);
+
+        var persisted = Assert.IsType<byte[]>(port.FlushImage());
+        Assert.Equal(0xFF, persisted[0x6000]);
+    }
+
 }

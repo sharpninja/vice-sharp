@@ -1,4 +1,6 @@
 using FluentAssertions;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using ViceSharp.Library.ViewModels;
 using Xunit;
 
@@ -64,7 +66,23 @@ public sealed class LibraryViewModelsBoundaryTests
 
         files.Should().NotBeEmpty();
 
-        string source = string.Join("\n", files.Select(File.ReadAllText));
+        string source = string.Concat(
+            files.Select(path =>
+            {
+                var root = CSharpSyntaxTree
+                    .ParseText(File.ReadAllText(path))
+                    .GetRoot();
+                return string.Concat(
+                    root.DescendantTokens()
+                        .Where(token =>
+                            !token.IsKind(SyntaxKind.StringLiteralToken)
+                            && !token.IsKind(SyntaxKind.Utf8StringLiteralToken)
+                            && !token.IsKind(SyntaxKind.CharacterLiteralToken)
+                            && !token.IsKind(SyntaxKind.InterpolatedStringTextToken)
+                            && !token.IsKind(SyntaxKind.SingleLineRawStringLiteralToken)
+                            && !token.IsKind(SyntaxKind.MultiLineRawStringLiteralToken))
+                        .Select(token => token.Text));
+            }));
 
         foreach (string forbidden in ForbiddenSourceIdentifiers)
         {

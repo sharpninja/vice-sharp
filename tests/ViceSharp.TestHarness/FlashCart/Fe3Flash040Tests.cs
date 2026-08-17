@@ -59,6 +59,9 @@ public sealed class Fe3Flash040Tests
         cart.Write(0xA2AA, 0x55);
         cart.Write(0xA555, 0x10);
 
+        // TYPE_B chip erase: 8_000_000 maincpu cycles (Flash040Core.EraseChipCycles).
+        cart.AdvanceFlashCycles(ViceSharp.Core.FlashCarts.Flash040Core.EraseChipCycles);
+
         Assert.Equal(0xFF, cart.Read(0xA000));
         Assert.Equal(0xFF, cart.GetFlashImage()[0]);
         Assert.True(cart.FlashDirty);

@@ -48,6 +48,10 @@ public sealed class Flash040CoreTests
         flash.Store(0x2AA, 0x55);
         flash.Store(0x555, 0x10);
 
+        // TYPE_B chip erase completes after EraseChipCycles (not instant).
+        Assert.Equal(Flash040Core.State.ChipErase, flash.FlashState);
+        flash.AdvanceCycles(Flash040Core.EraseChipCycles);
+
         Assert.Equal(0xFF, flash.Peek(0));
         Assert.Equal(0xFF, flash.Peek(Flash040Core.Size - 1));
         Assert.Equal(Flash040Core.State.Read, flash.FlashState);
@@ -68,6 +72,9 @@ public sealed class Flash040CoreTests
         flash.Store(0x2AA, 0x55);
         // Sector 1 starts at 0x10000
         flash.Store(0x10000, 0x30);
+
+        // Timeout then one sector cycle budget (TYPE_B).
+        flash.AdvanceCycles(Flash040Core.EraseSectorTimeoutCycles + Flash040Core.EraseSectorCycles);
 
         Assert.Equal(0x11, flash.Peek(0));
         Assert.Equal(0xFF, flash.Peek(0x10000));

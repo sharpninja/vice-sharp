@@ -26,7 +26,7 @@ Coming from classic VICE? The `ViceSharp.Launcher` library provides VICE-compati
 
 ## Install
 
-The current line is **v1.2.2** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
+The current line is **v1.3.3** (GitVersion `next-version`; NuGet + MSI / winget packaging). Published nuget.org / winget packages may lag until the next release tag.
 
 ```pwsh
 # Desktop UI as a dotnet global tool (command: vicesharp)
@@ -39,7 +39,7 @@ dotnet tool install --global ViceSharp.Console
 dotnet add package ViceSharp.Core
 ```
 
-Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launcher`, `ViceSharp.AdhocHelper`, `ViceSharp.Host`, `ViceSharp.SourceGen`, and the `ViceSharp.Host.MacOS` / `Android` / `iOS` / `Xbox` shells) are published alongside the bundle. The Windows desktop app is also packaged as a self-contained MSI (Nuke `PublishMsi`) with winget metadata (`PublishWinget`, package id `sharpninja.ViceSharp`).
+Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launcher`, `ViceSharp.AdhocHelper`, `ViceSharp.Host`, `ViceSharp.SourceGen`, and the `ViceSharp.Host.MacOS` / `Android` / `iOS` shells) are published alongside the bundle. Xbox/UWP is outside the supported product scope; its source remains frozen legacy. The Windows desktop app is also packaged as a self-contained MSI (Nuke `PublishMsi`) with winget metadata (`PublishWinget`, package id `sharpninja.ViceSharp`).
 
 ## User documentation
 
@@ -58,18 +58,20 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
   - Desktop packaging is self-contained JIT + ReadyToRun through Nuke `PublishMsi`; native ahead-of-time publishing is no longer a project requirement
   - External debuggers can attach deterministically through `%LOCALAPPDATA%\ViceSharp\debug-attach.json` and `DiagnosticsService`
 
-✅ **Iteration 2 (VIC-20)**: **Core + lockstep + present-path + expansion + flash040 + xvic FB capture (2026-08-11)**:
+? **Iteration 2 (VIC-20)**: **Core + lockstep + present path + expansion persistence + flash040 timing + VIC-I audio (2026-08-17)**:
   - Managed VIC-20 (PAL/NTSC), dual VIA, VIC-I, color RAM open-bus, default drive 8 = 1540
   - Native oracle: `vice_xvic.dll` / `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
   - Every-cycle A/X/Y/S/P/PC vs xvic: **TenSecondPal** 11_084_050 and **TenSecondNtsc** 10_227_270 green
   - READY present geometry Exact-scoped: VICE `first_x` crop (PAL first_x=48), L+R border bands, paper origin 48
-  - Settings: wrap BLK toggles; FE3 / Ultimem / Mega-Cart attach; [Flash Cart Builder](docs/FlashCart-Builder.md) (Avalonia; Xbox UI frozen legacy)
-  - FE3 MODE_FLASH via managed `Flash040Core` (AM29F040B); erase latency still instant (Partial)
-  - xvic `capture_visible_frame` (PAL 448x284); geometry match tests green; full BGRA SequenceEqual open
+  - Settings: wrap BLK toggles; FE3 / Ultimem / Mega-Cart attach; [Flash Cart Builder](docs/FlashCart-Builder.md) in Avalonia
+  - FE3 MODE_FLASH via managed `Flash040Core` (AM29F040B); VICE TYPE_B timeout/sector/chip erase budgets (50 / 1,000,000 / 8,000,000 cycles) advance on the VIC-20 machine clock
+  - Dirty FE3 and Ultimem flash images plus Mega-Cart NVRAM are written back atomically on detach
+  - VIC-I sound registers feed deterministic batched PCM; focused silence and tone batches match native xvic byte-for-byte
+  - xvic `capture_visible_frame` (PAL 448x284); READY PAL/NTSC/busy palette-index SequenceEqual is green; full canvas BGRA parity remains Partial
   - Receipts: lockstep 10s PAL/NTSC; hostile AGREE borders + flash builder; FE3/pixel wrap receipt `docs/receipts/wrapup-fe3-flash040-pixel-fb-20260811.txt`
   - Gates (env): `VICESHARP_LOCKSTEP_10S=1`, `VICESHARP_LOCKSTEP_2S=1`; filter `FullyQualifiedName~Vic20DivergeProbe`
-  - Still open: FE3 erase_alarm latency, full pixel SequenceEqual, input E2E, snapshots; zip virtual media (`PLAN-ZIPMEDIA-001`)
-  - **Cancelled 2026-08-11:** Microsoft Store + Xbox UWP / Dev-Mode sideload (`PLAN-XBOXUWP-END-001`). Supported shells: Avalonia desktop + Console.
+  - Still open: full-canvas BGRA parity, input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`)
+  - **Out of scope:** Microsoft Store and Xbox/UWP (`PLAN-XBOXUWP-END-001`). Supported product shells: Avalonia desktop and Console.
 
 Working chip layer implementations:
   - `Mos6510` CPU (opcodes + core)
@@ -82,7 +84,7 @@ Bounded runtime validation slices are implemented for 1541/D64 attach+sector rea
 
 ## Completion Dashboard
 
-Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-11` on `main` (GitVersion base **v1.2.2**; local MSI line **1.2.7** commits-since; VIC-20 lockstep + first_x + FE3 flash040 + xvic frame capture; Xbox UWP/Store cancelled; CC BY-SA C= logo attribution; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki publish: automated via `tools/Publish-Wiki.ps1` + Nuke `PublishWiki`. Advanced cartridge mappers: all 7 mappers landed as minimum-viable scaffolds. PLATFORM-CROSS-001: mobile/MacOS wireframes; Xbox UWP cancelled.
+Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iteration roadmap. Last refreshed `2026-08-17` on `main` (GitVersion **1.3.3-15** for this working tree; VIC-20 lockstep + pixel-index parity + timed FE3 flash + cartridge persistence + VIC-I audio; Xbox/UWP outside product scope; see [HANDOFF.md](HANDOFF.md)). Perf probe: 11.5M+ cycles/sec (47x the Phase 1 PERF-TUNING-001 target of 246,312 cps). Wiki source export is automated through MCP requirements generation and `tools/Publish-Wiki.ps1`. Advanced cartridge mappers remain minimum-viable scaffolds outside the validated VIC-20 FE3 / Ultimem / Mega-Cart set.
 
 **Legend**: State: ✅ done · 🟢 active · 🟡 bounded gate done, deepening pending · ⚪ planned
 
@@ -142,7 +144,7 @@ Snapshot of VICE-to-ViceSharp parity sourced from MCP TODO state and the iterati
 | Cross-platform hosts (Avalonia 12 mobile + MacOS; Xbox UWP cancelled) | 🟢 | 10% | `PLATFORM-CROSS-001` wireframes; Xbox UWP / Store / sideload cancelled 2026-08-11 (`PLAN-XBOXUWP-END-001`) |
 | Completion Dashboard (this section) | ✅ | 100% | `DOC-DASHBOARD-001` Phase 1 close (slice 9) |
 
-Dashboard is regenerated as subagent slices land. VIC-20 every-cycle lockstep (2026-08-06): PAL 10 s and NTSC 10 s green (`Vic20DivergeProbe`); see durable receipts under `docs/receipts-lockstep-10s-*.txt`. Full-suite baseline totals still wobble with theory-row serialization; use 0 failed as the green criterion (see [HANDOFF.md](HANDOFF.md)).
+The dashboard is refreshed during repository wrap-up. VIC-20 every-cycle lockstep (2026-08-06): PAL 10 s and NTSC 10 s green (`Vic20DivergeProbe`); see durable receipts under `docs/receipts-lockstep-10s-*.txt`. Native-backed suites must run in process-isolated slices because a single process can hang after repeated native-machine use; see [HANDOFF.md](HANDOFF.md) for the current broad-suite diagnostics.
 
 ## Supported Machines (planned)
 
@@ -186,10 +188,10 @@ build.cmd Compile     # Windows
 | `PublishMsi` | Publish the self-contained desktop app and package `artifacts/installer/ViceSharp.msi` |
 | `InstallMsi` | Install the locally built MSI |
 | `PublishWinget` | Generate winget package metadata for the MSI |
-| `CiTest` | CI variant of `Test`: restores and builds in-job, stages hash-pinned ROMs via `EnsureCiRomRoot` when the agent has no VICE data root (used by the `VICE-Sharp-CI` Azure DevOps pipeline) |
+| `CiTest` | CI-ready variant of `Test`: restores and builds in-job, then stages hash-pinned ROMs via `EnsureCiRomRoot` when the agent has no VICE data root |
 | `ParityTest` | Run the whole VICE-parity suite (`Category=Parity`), including quarantined `ParityPending` tests (remediation burn-down) |
 | `PackNuget` | Pack the `ViceSharp.Core` bundle and the individual NuGet packages into `artifacts/packages`, verifying package contents |
-| `PublishNuget` | Tag-gated release publish: pack from the tagged checkout and push to nuget.org (used by the `VICE-Sharp-Release` Azure DevOps pipeline; requires `NUGET_API_KEY`) |
+| `PublishNuget` | Tag-gated release publish: pack from the tagged checkout and push to nuget.org; requires `NUGET_API_KEY` |
 
 ## Architecture
 
@@ -241,7 +243,7 @@ Local copies and ShareAlike notes live under `docs/xbox/store-screenshots/` (`Co
 
 ## Contributing
 
-1. Fork on Azure DevOps (`dev.azure.com/McpServer/VICE-Sharp`)
+1. Fork the GitHub repository (`github.com/sharpninja/vice-sharp`)
 2. Follow the Byrd Development Process: tests first, then implementation
 3. All tests must pass before submitting a PR
 4. Optional: run the aiUnit AI Code Review / Project Review before a PR (see [docs/AI-Review.md](docs/AI-Review.md))

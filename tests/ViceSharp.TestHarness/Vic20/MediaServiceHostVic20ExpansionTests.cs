@@ -94,6 +94,130 @@ public sealed class MediaServiceHostVic20ExpansionTests
         Assert.Equal("none", session.Vic20ExpansionCartKind);
     }
 
+    [Fact]
+    public async Task DetachMedia_Fe3_WriteBackPersistsDirtyFlashAtomically()
+    {
+        var directory = Path.Combine(
+            Path.GetTempPath(),
+            "ViceSharp.Tests",
+            Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        var imagePath = Path.Combine(directory, "fe3.bin");
+        var image = new byte[FinalExpansion3Cartridge.FlashSize];
+        Array.Fill(image, (byte)0xFF);
+        await File.WriteAllBytesAsync(
+            imagePath,
+            image,
+            TestContext.Current.CancellationToken);
+
+        try
+        {
+            var (registry, session, service) = CreateVic20MediaHost();
+            var attach = await service.AttachMediaAsync(
+                new AttachMediaRequest(
+                    session.SessionId,
+                    MediaSlot.Cartridge,
+                    imagePath,
+                    "fe3.bin"),
+                TestContext.Current.CancellationToken);
+            Assert.True(attach.Status.IsSuccess);
+
+            var port = session.Machine.Devices
+                .GetAll<IVic20ExpansionCartPort>()
+                .Single();
+            port.WriteBack = true;
+            port.ApplyConfigPreset("flash");
+            Assert.True(port.TryWriteMapped(0xA555, 0xAA));
+            Assert.True(port.TryWriteMapped(0xA2AA, 0x55));
+            Assert.True(port.TryWriteMapped(0xA555, 0xA0));
+            Assert.True(port.TryWriteMapped(0xA010, 0x42));
+
+            var detach = await service.DetachMediaAsync(
+                new DetachMediaRequest(session.SessionId, MediaSlot.Cartridge),
+                TestContext.Current.CancellationToken);
+
+            Assert.Equal(RpcStatusCode.Ok, detach.Status.Code);
+            Assert.Equal(
+                0x42,
+                (await File.ReadAllBytesAsync(
+                    imagePath,
+                    TestContext.Current.CancellationToken))[0x6010]);
+            Assert.Equal(Vic20ExpansionCartKind.None, port.AttachedKind);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task DetachMedia_MegaCart_WriteBackPersistsAndReloadsNvramSidecar()
+    {
+        var directory = Path.Combine(
+            Path.GetTempPath(),
+            "ViceSharp.Tests",
+            Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        var imagePath = Path.Combine(directory, "mega.bin");
+        await File.WriteAllBytesAsync(
+            imagePath,
+            new byte[0x10000],
+            TestContext.Current.CancellationToken);
+
+        try
+        {
+            var (registry, session, service) = CreateVic20MediaHost();
+            var attach = await service.AttachMediaAsync(
+                new AttachMediaRequest(
+                    session.SessionId,
+                    MediaSlot.Cartridge,
+                    imagePath,
+                    "mega.bin"),
+                TestContext.Current.CancellationToken);
+            Assert.True(attach.Status.IsSuccess);
+
+            var port = session.Machine.Devices
+                .GetAll<IVic20ExpansionCartPort>()
+                .Single();
+            port.WriteBack = true;
+            port.ApplyConfigPreset("nvram");
+            Assert.True(port.TryWriteMapped(0x0500, 0x77));
+
+            var detach = await service.DetachMediaAsync(
+                new DetachMediaRequest(session.SessionId, MediaSlot.Cartridge),
+                TestContext.Current.CancellationToken);
+            Assert.Equal(RpcStatusCode.Ok, detach.Status.Code);
+
+            var nvramPath = imagePath + ".nvram";
+            var persisted = await File.ReadAllBytesAsync(
+                nvramPath,
+                TestContext.Current.CancellationToken);
+            Assert.Equal(MegaCartCartridge.NvramSize, persisted.Length);
+            Assert.Equal(0x77, persisted[0x0500]);
+
+            var (_, reloadedSession, reloadedService) = CreateVic20MediaHost();
+            var reload = await reloadedService.AttachMediaAsync(
+                new AttachMediaRequest(
+                    reloadedSession.SessionId,
+                    MediaSlot.Cartridge,
+                    imagePath,
+                    "mega.bin"),
+                TestContext.Current.CancellationToken);
+            Assert.True(reload.Status.IsSuccess);
+
+            var reloadedPort = reloadedSession.Machine.Devices
+                .GetAll<IVic20ExpansionCartPort>()
+                .Single();
+            reloadedPort.ApplyConfigPreset("nvram");
+            Assert.True(reloadedPort.TryReadMapped(0x0500, out var value));
+            Assert.Equal(0x77, value);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     private static (EmulatorRuntimeRegistry Registry, EmulatorRuntimeSession Session, MediaServiceHost Service)
         CreateVic20MediaHost()
     {

@@ -1,0 +1,9 @@
+# Phase G closeout receipt
+Date: 2026-08-11
+Umbrella process-isolated: Passed=46 Failed=0 Skipped=0 (anyNonZeroExit=0)
+Plus 2s workload PAL+NTSC (VICESHARP_LOCKSTEP_2S=1): see umbrella log UMBRELLA_PLUS_2S
+MCP PLAN-VIC20-EXACT-001: done=true, 7/7 implementation tasks done
+Claim: SCOPED Exact only (not whole-machine Exact)
+Residuals: niche carts Explicit Missing; IEEE/rsuser/printer; WriteSnapshot hang; NativeVice process isolation
+Hostile: prior AGREE docs/receipts/hostile-validator-20260811T203852Z.md; Phase G re-validate requested
+Logs: implementer/vic20-umbrella-gate.log

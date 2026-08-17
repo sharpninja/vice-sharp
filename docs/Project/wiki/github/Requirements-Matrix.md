@@ -247,6 +247,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-UIMENUBAR-001 | Tracked | Functional-Requirements.md |
 | FR-UIPERIPHERAL-001 | Tracked | Functional-Requirements.md |
 | FR-UISETTINGS-001 | Tracked | Functional-Requirements.md |
+| FR-VIC20-001 | Tracked | Functional-Requirements.md |
+| FR-VIC20-005 | Tracked | Functional-Requirements.md |
+| FR-VIC20-SOUND-001 | Tracked | Functional-Requirements.md |
 | FR-VSFLOCKSTEP-001 | Tracked | Functional-Requirements.md |
 | FR-XAUDIO-001 | Tracked | Functional-Requirements.md |
 | FR-XAUDIO-002 | Tracked | Functional-Requirements.md |
@@ -320,6 +323,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-ROMM-BOUNDARY-001 | Tracked | Technical-Requirements.md |
 | TR-ROMM-JSON-001 | Tracked | Technical-Requirements.md |
 | TR-ROMM-NUGET-001 | Tracked | Technical-Requirements.md |
+| TR-ROMM-SEC-001 | Tracked | Technical-Requirements.md |
 | TR-ROMM-THREAD-001 | Tracked | Technical-Requirements.md |
 | TR-SID-AMPLIFY-001 | Tracked | Technical-Requirements.md |
 | TR-SIDAUDIO-CLOCK-001 | Tracked | Technical-Requirements.md |
@@ -344,6 +348,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-UIAXAML-001 | Tracked | Technical-Requirements.md |
 | TR-UIAXAML-VIEWS-001 | Tracked | Technical-Requirements.md |
 | TR-UI-DEVART-001 | Tracked | Technical-Requirements.md |
+| TR-VIC20-FLASH-001 | Tracked | Technical-Requirements.md |
+| TR-VIC20-PIXEL-001 | Tracked | Technical-Requirements.md |
+| TR-VIC20-SOUND-001 | Tracked | Technical-Requirements.md |
 | TR-VSFLOCKSTEP-RESUME-001 | Tracked | Technical-Requirements.md |
 | TR-XAUDIO-001 | Tracked | Technical-Requirements.md |
 | TR-XAUDIO-002 | Tracked | Technical-Requirements.md |
@@ -410,6 +417,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-QA-TESTSILENCE-001 | Tracked | Testing-Requirements.md |
 | TEST-REMOTECTRL-001 | Tracked | Testing-Requirements.md |
 | TEST-REVEXEC-001 | Tracked | Testing-Requirements.md |
+| TEST-ROMM-SEC-001 | Tracked | Testing-Requirements.md |
 | TEST-SID-002 | Tracked | Testing-Requirements.md |
 | TEST-SIDAUDIO-001 | Tracked | Testing-Requirements.md |
 | TEST-SIDEBARUI-001 | Tracked | Testing-Requirements.md |
@@ -435,6 +443,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-UIMENUBAR-001 | Tracked | Testing-Requirements.md |
 | TEST-UIPERIPHERAL-001 | Tracked | Testing-Requirements.md |
 | TEST-UISETTINGS-001 | Tracked | Testing-Requirements.md |
+| TEST-VIC20-001 | Tracked | Testing-Requirements.md |
+| TEST-VIC20-FLASH-001 | Tracked | Testing-Requirements.md |
+| TEST-VIC20-SOUND-001 | Tracked | Testing-Requirements.md |
 | TEST-VIC-CHECKPOINT-001 | Tracked | Testing-Requirements.md |
 | TEST-VIC-RC-001 | Tracked | Testing-Requirements.md |
 | TEST-VSFLOCKSTEP-001 | Tracked | Testing-Requirements.md |

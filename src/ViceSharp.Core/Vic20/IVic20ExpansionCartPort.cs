@@ -34,6 +34,11 @@ public interface IVic20ExpansionCartPort : IDevice
     /// <summary>Flush Mega-Cart NVRAM when dirty; null if none.</summary>
     byte[]? FlushNvram();
 
+    /// <summary>
+    /// Marks the current image and NVRAM flush payloads as durably persisted.
+    /// </summary>
+    void AcknowledgeFlush();
+
     /// <summary>IO3/IO2 peek for tests (address in $9C00-$9FFF or cart windows).</summary>
     byte PeekIo(ushort address);
 

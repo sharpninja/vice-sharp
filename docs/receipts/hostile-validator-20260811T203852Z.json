@@ -1,0 +1,81 @@
+{
+  "TimestampUtc": "2026-08-11T20:38:52Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\vice-sharp",
+  "OverallVerdict": "AGREE",
+  "ExplicitFailList": [],
+  "Claims": [
+    {
+      "Id": "A",
+      "Summary": "Vic20Pixel gate green 8/0/0 (index READY PAL/NTSC/busy + BGRA + frame tests)",
+      "Verdict": "PASS",
+      "Evidence": [
+        "docs/receipts/vic20-pixel-gate-2026-08-11.log and temp vic20-pixel-gate.log SHA256 match",
+        "AGGREGATE Passed=8 Failed=0 Skipped=0; eight isolated Test Run Successful blocks"
+      ]
+    },
+    {
+      "Id": "B",
+      "Summary": "Bgra_ReadyPal uses TryCaptureVisibleFrame native path (not pure tautology only)",
+      "Verdict": "PASS",
+      "Evidence": [
+        "Vic20PixelLockstep.cs Bgra_ReadyPal_SequenceEqual calls TryCaptureVisibleFrame + alpha scan before optional shared-palette fallthrough",
+        "pixel gate: Bgra_ReadyPal_SequenceEqual Passed [5 s]"
+      ]
+    },
+    {
+      "Id": "C",
+      "Summary": "Cart+sound gate 31/0/0",
+      "Verdict": "PASS",
+      "Evidence": [
+        "12+4+3+3+1+7+1=31 all Failed=0 Skipped=0 EXIT=0",
+        "CART_SOUND_SUMMARY_FIXED Passed=31 Failed=0 Skipped=0 EXIT_ALL=0 (unfixed SUMMARY line is broken)"
+      ]
+    },
+    {
+      "Id": "D",
+      "Summary": "Lockstep 2s non-idle PAL and NTSC green with VICESHARP_LOCKSTEP_2S=1",
+      "Verdict": "PASS",
+      "Evidence": [
+        "TwoSecondPal Passed [19 s] EXIT=0; TwoSecondNtsc Passed [11 s] EXIT=0",
+        "Duration disproves bare return without env; source requires VICESHARP_LOCKSTEP_2S=1 then RunEveryCycle full 2s budgets",
+        "Caveat: FocusedVideoCpu multi-test batch EXIT=1 (not in claim D scope)"
+      ]
+    },
+    {
+      "Id": "E",
+      "Summary": "Snapshot tests real (managed blob RT + resume after ZP), not inventory theater",
+      "Verdict": "PASS",
+      "Evidence": [
+        "snapshot gate 4/0/0",
+        "Unexpanded_ManagedStateBlob_RoundTripEqual and Unexpanded_ManagedBlob_ResumeLockstep_Short implement claimed behaviors",
+        "Inventory + Fe3 preset tests remain theater but claim parenthetical scopes real tests"
+      ]
+    },
+    {
+      "Id": "F",
+      "Summary": "Scoped Exact language honest",
+      "Verdict": "PASS",
+      "Evidence": [
+        "vic20-exact-receipts-2026-08-11.txt: index Exact; BGRA Partial allowed with shared-palette alignment",
+        "Residuals list niche carts, IEEE, WriteSnapshot hang, NativeVice isolation"
+      ]
+    }
+  ],
+  "LogPaths": {
+    "pixelTemp": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-a8b508754f9e\\implementer\\vic20-pixel-gate.log",
+    "pixelDocs": "F:\\GitHub\\vice-sharp\\docs\\receipts\\vic20-pixel-gate-2026-08-11.log",
+    "cartTemp": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-a8b508754f9e\\implementer\\vic20-cart-sound-gate.log",
+    "cartDocs": "F:\\GitHub\\vice-sharp\\docs\\receipts\\vic20-cart-sound-gate-2026-08-11.log",
+    "lockstepTemp": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-a8b508754f9e\\implementer\\vic20-lockstep-gate.log",
+    "lockstepDocs": "F:\\GitHub\\vice-sharp\\docs\\receipts\\vic20-lockstep-gate-2026-08-11.log",
+    "snapshotTemp": "C:\\Users\\kingd\\AppData\\Local\\Temp\\grok-goal-a8b508754f9e\\implementer\\vic20-snapshot-gate.log",
+    "snapshotDocs": "F:\\GitHub\\vice-sharp\\docs\\receipts\\vic20-snapshot-gate-2026-08-11.log",
+    "exactReceipts": "F:\\GitHub\\vice-sharp\\docs\\receipts\\vic20-exact-receipts-2026-08-11.txt"
+  },
+  "NonFailCaveats": [
+    "docs lockstep gate missing process-isolation re-verify footer present in temp (hash mismatch)",
+    "cart-sound first SUMMARY counter is 0; FIXED line is authoritative",
+    "TwoSecond tests set VICESHARP_LOCKSTEP_VIDEO=0"
+  ]
+}

@@ -29,6 +29,26 @@
 # whitespace check and pin LF so `git diff --check` does not flag the vendored data.
 *.vkm     text eol=lf -whitespace
 
+# Additional repository text formats.
+.gitattributes text eol=lf
+*.yaml       text eol=lf
+*.yml        text eol=lf
+*.txt        text eol=lf
+*.log        text eol=lf
+*.appxmanifest text eol=lf
+
+# Retained transcripts, receipts, and generated requirement exports preserve
+# source formatting as audit evidence; whitespace there is data, not style.
+docs/grok/**                              -whitespace
+docs/Project/**                           -whitespace
+docs/receipts/**                          -whitespace
+docs/*.log                                -whitespace
+docs/receipts-*.txt                       -whitespace
+docs/*-dump.txt                           -whitespace
+artifacts/vice-parity-requirements/**     -whitespace
+docs/PRIVACY.md                            -whitespace
+docs/audit-vic20-vs-vice-2026-08-07.md    -whitespace
+
 # Binary files - never modify
 *.png     binary
 *.jpg     binary

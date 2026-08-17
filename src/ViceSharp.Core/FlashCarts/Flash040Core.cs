@@ -7,9 +7,9 @@ namespace ViceSharp.Core.FlashCarts;
 /// </summary>
 /// <remarks>
 /// Command FSM, byte program (AND with existing), autoselect IDs, chip/sector erase
-/// data effects match VICE. Erase <em>latency</em> is instant (no maincpu alarm
-/// cycles): Partial vs multi-second VICE erase_alarm; status returns to READ
-/// immediately after erase command completes.
+/// data effects and erase alarm cycle counts match VICE TYPE_B
+/// (timeout=50, sector=1_000_000, chip=8_000_000). Call <see cref="AdvanceCycles"/>
+/// from the system clock (or tests) so erase completes after the VICE cycle budget.
 /// </remarks>
 public sealed class Flash040Core
 {
@@ -22,6 +22,15 @@ public sealed class Flash040Core
     public const int Size = 0x80000;
     public const int SectorSize = 0x10000;
     public const int SectorCount = Size / SectorSize;
+
+    /// <summary>VICE TYPE_B <c>erase_sector_timeout_cycles</c>.</summary>
+    public const long EraseSectorTimeoutCycles = 50;
+
+    /// <summary>VICE TYPE_B <c>erase_sector_cycles</c>.</summary>
+    public const long EraseSectorCycles = 1_000_000;
+
+    /// <summary>VICE TYPE_B <c>erase_chip_cycles</c>.</summary>
+    public const long EraseChipCycles = 8_000_000;
 
     // TYPE_B magic (flash040core.c flash_types[FLASH040_TYPE_B])
     private const int Magic1Addr = 0x555;
@@ -55,6 +64,7 @@ public sealed class Flash040Core
     private readonly byte[] _eraseMask = new byte[8];
     private byte _lastRead;
     private bool _dirty;
+    private long _eraseCyclesRemaining;
 
     public Flash040Core(byte[] data)
     {
@@ -66,6 +76,7 @@ public sealed class Flash040Core
 
     public State FlashState => _state;
     public bool Dirty => _dirty;
+    public long EraseCyclesRemaining => _eraseCyclesRemaining;
     public void ClearDirty() => _dirty = false;
 
     public void Reset()
@@ -73,7 +84,33 @@ public sealed class Flash040Core
         _state = State.Read;
         _baseState = State.Read;
         _programByte = 0;
+        _eraseCyclesRemaining = 0;
         Array.Clear(_eraseMask);
+    }
+
+    /// <summary>
+    /// Advance VICE-equivalent maincpu clocks for erase_alarm timing.
+    /// No-op when not in an erase-busy state.
+    /// </summary>
+    public void AdvanceCycles(long cycles)
+    {
+        if (cycles <= 0 || _eraseCyclesRemaining <= 0)
+            return;
+
+        if (cycles >= _eraseCyclesRemaining)
+        {
+            var spent = _eraseCyclesRemaining;
+            _eraseCyclesRemaining = 0;
+            OnEraseAlarm();
+            // If another erase segment was armed, consume remaining of this tick.
+            var leftover = cycles - spent;
+            if (leftover > 0 && _eraseCyclesRemaining > 0)
+                AdvanceCycles(leftover);
+        }
+        else
+        {
+            _eraseCyclesRemaining -= cycles;
+        }
     }
 
     public void Store(uint addr, byte value)
@@ -138,16 +175,16 @@ public sealed class Flash040Core
             case State.EraseSelect:
                 if (IsMagic1(addr) && value == 0x10)
                 {
-                    // Instant chip erase (Partial: no multi-second alarm).
-                    EraseChip();
-                    _state = _baseState;
+                    _state = State.ChipErase;
+                    _programByte = 0;
+                    _eraseCyclesRemaining = EraseChipCycles;
                 }
                 else if (value == 0x30)
                 {
                     AddSectorToEraseMask(addr);
-                    // Instant sector erase for all marked sectors.
-                    FlushSectorErase();
-                    _state = _baseState;
+                    _state = State.SectorEraseTimeout;
+                    _programByte = 0;
+                    _eraseCyclesRemaining = EraseSectorTimeoutCycles;
                 }
                 else
                 {
@@ -156,16 +193,34 @@ public sealed class Flash040Core
                 break;
 
             case State.SectorEraseTimeout:
+                // VICE: only another 0x30 extends the multi-sector mask.
+                // Any other write cancels the pending erase and unsets its alarm.
+                if (value == 0x30)
+                    AddSectorToEraseMask(addr);
+                else
+                    CancelEraseToRead();
+                break;
+
             case State.SectorErase:
-            case State.SectorEraseSuspend:
-            case State.ChipErase:
-                // Instant-path residual; treat further writes as reset to base.
-                if (value == 0xF0)
+                // VICE flash040core.c suspends the active sector alarm on 0xB0.
+                if (value == 0xB0)
                 {
-                    _state = State.Read;
-                    _baseState = State.Read;
-                    Array.Clear(_eraseMask);
+                    _state = State.SectorEraseSuspend;
+                    _eraseCyclesRemaining = 0;
                 }
+                break;
+
+            case State.SectorEraseSuspend:
+                // VICE resumes with a fresh full sector erase cycle budget.
+                if (value == 0x30)
+                {
+                    _state = State.SectorErase;
+                    _eraseCyclesRemaining = EraseSectorCycles;
+                }
+                break;
+
+            case State.ChipErase:
+                // VICE ignores writes while chip erase is active.
                 break;
 
             case State.ByteProgramError:
@@ -207,9 +262,11 @@ public sealed class Flash040Core
             case State.SectorErase:
             case State.SectorEraseTimeout:
             case State.SectorEraseSuspend:
+                // VICE flash_read_status: toggle bit + DQ3 sector timer when not in timeout.
                 value = _programByte;
                 _programByte ^= 0x40;
-                value = (byte)(value | 0x08);
+                if (_state != State.SectorEraseTimeout)
+                    value = (byte)(value | 0x08);
                 break;
 
             default:
@@ -222,6 +279,38 @@ public sealed class Flash040Core
     }
 
     public byte Peek(uint addr) => _data[addr & (Size - 1)];
+
+    private void OnEraseAlarm()
+    {
+        switch (_state)
+        {
+            case State.SectorEraseTimeout:
+                _state = State.SectorErase;
+                _eraseCyclesRemaining = EraseSectorCycles;
+                break;
+
+            case State.SectorErase:
+                EraseOneMarkedSector();
+                if (AnyEraseMask())
+                    _eraseCyclesRemaining = EraseSectorCycles;
+                else
+                    _state = _baseState;
+                break;
+
+            case State.ChipErase:
+                EraseChip();
+                _state = _baseState;
+                break;
+        }
+    }
+
+    private void CancelEraseToRead()
+    {
+        _state = State.Read;
+        _baseState = State.Read;
+        _eraseCyclesRemaining = 0;
+        Array.Clear(_eraseMask);
+    }
 
     private static bool IsMagic1(uint addr) => (addr & Magic1Mask) == Magic1Addr;
     private static bool IsMagic2(uint addr) => (addr & Magic2Mask) == Magic2Addr;
@@ -251,7 +340,18 @@ public sealed class Flash040Core
         _eraseMask[sector >> 3] |= (byte)(1 << (sector & 7));
     }
 
-    private void FlushSectorErase()
+    private bool AnyEraseMask()
+    {
+        for (var i = 0; i < _eraseMask.Length; i++)
+        {
+            if (_eraseMask[i] != 0)
+                return true;
+        }
+
+        return false;
+    }
+
+    private void EraseOneMarkedSector()
     {
         for (var i = 0; i < SectorCount; i++)
         {
@@ -261,7 +361,8 @@ public sealed class Flash040Core
             Array.Fill(_data, (byte)0xFF, i * SectorSize, SectorSize);
             _dirty = true;
             _eraseMask[i >> 3] &= (byte)~m;
+            _programByte = 0;
+            return;
         }
-        _programByte = 0;
     }
 }

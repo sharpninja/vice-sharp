@@ -67,4 +67,51 @@ public sealed class RomMGatewayDownloadTests
             }
         }
     }
+
+    [Theory]
+    [InlineData("../escape.d64")]
+    [InlineData("subdir/escape.d64")]
+    [InlineData(@"C:\escape.d64")]
+    public async Task RejectsFileNamesOutsideRomCache(string fileName)
+    {
+        var handler = new FakeRomMHandler(_ => FakeRomMHandler.Bytes(new byte[] { 1 }));
+        await using var client = RomMFixtures.Client(handler);
+        var gateway = new RomMLibraryGateway(client);
+        DirectoryInfo dir = Directory.CreateTempSubdirectory("vs-romm-path");
+
+        try
+        {
+            Func<Task> act = async () =>
+                await gateway.DownloadAsync(101, fileName, 1, dir.FullName, cancellationToken: TestContext.Current.CancellationToken);
+
+            await act.Should().ThrowAsync<ArgumentException>();
+            Directory.GetFiles(dir.FullName, "*", SearchOption.AllDirectories).Should().BeEmpty();
+        }
+        finally
+        {
+            dir.Delete(recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task TruncatedDownload_DoesNotPublishPartialCacheEntry()
+    {
+        var handler = new FakeRomMHandler(_ => FakeRomMHandler.Bytes(new byte[] { 1, 2, 3 }));
+        await using var client = RomMFixtures.Client(handler);
+        var gateway = new RomMLibraryGateway(client);
+        DirectoryInfo dir = Directory.CreateTempSubdirectory("vs-romm-truncated");
+
+        try
+        {
+            Func<Task> act = async () =>
+                await gateway.DownloadAsync(101, "short.d64", 10, dir.FullName, cancellationToken: TestContext.Current.CancellationToken);
+
+            await act.Should().ThrowAsync<InvalidDataException>();
+            File.Exists(Path.Combine(dir.FullName, "101", "short.d64")).Should().BeFalse();
+        }
+        finally
+        {
+            dir.Delete(recursive: true);
+        }
+    }
 }

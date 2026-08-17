@@ -323,6 +323,14 @@ RewindCycle/RewindFrame restore exact prior state; step-then-rewind round-trips;
 
 
 
+## TEST-ROMM-SEC
+
+### TEST-ROMM-SEC-001
+
+RomMCoverImageSourceTests validates auth-origin rules. RomMGatewayDownloadTests validates filename containment, exact-size completion, and no partial publication. FileRomMConnectionStoreTests validates current-user DPAPI round-trip and immediate legacy plaintext migration.
+
+
+
 ## TEST-SID
 
 ### TEST-SID-002
@@ -539,6 +547,32 @@ Managed PAL frame periodic raster/cycle-counter (2 Facts), native screen-RAM rou
 ### TEST-VIC-RC-001
 
 After writing DEN=1/YSCROLL=0/1 and advancing to specific rasterLine/rasterX, CurrentRowCounter and IsGraphicsIdle match VICE viciisc/vicii-cycle.c:541-563 expectations. All 11 pass.
+
+
+
+## TEST-VIC20
+
+### TEST-VIC20-001
+
+Vic20PixelLockstepTests and native capture probes verify normal-border geometry, READY PAL/NTSC/busy palette-index SequenceEqual, non-sentinel pixels, shared-palette BGRA conversion, and opaque alpha. Full-canvas BGRA SequenceEqual remains an explicit Partial residual.
+
+**Acceptance Criteria:**
+- [ ] Vic20PixelLockstep.Index_ReadyPal_SequenceEqual passes 0 fail 0 skip
+
+
+## TEST-VIC20-FLASH
+
+### TEST-VIC20-FLASH-001
+
+Flash040EraseLatencyTests verifies TYPE_B cycle budgets/status/cancel/suspend/resume. Vic20ExpansionCartTests, UltimemParityTests, MegaCartParityTests, and MediaServiceHostVic20ExpansionTests verify mapping, dirty-state separation, and atomic detach persistence.
+
+
+
+## TEST-VIC20-SOUND
+
+### TEST-VIC20-SOUND-001
+
+Vic20SoundLockstep verifies deterministic managed output, allocation-free silent stores after warmup, and byte-identical focused silence/tone batches versus native xvic. Vic20AudioWiringTests verifies machine-clock advancement and 256-sample backend delivery.
 
 
 

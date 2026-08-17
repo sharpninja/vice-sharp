@@ -10,8 +10,8 @@ namespace ViceSharp.Core.Vic20;
 /// </summary>
 /// <remarks>
 /// MODE_FLASH stores route through flash040 (not raw array pokes). Erase latency
-/// is instant (Partial vs VICE multi-second erase_alarm). START/FLASH menu boot
-/// still needs a user flash image with cart software.
+/// follows VICE TYPE_B erase_alarm cycle counts via <see cref="Flash040Core.AdvanceCycles"/>.
+/// START/FLASH menu boot still needs a user flash image with cart software.
 /// </remarks>
 public sealed class FinalExpansion3Cartridge : IAddressSpace
 {
@@ -71,6 +71,12 @@ public sealed class FinalExpansion3Cartridge : IAddressSpace
     public byte RegisterB => _registerB;
     public bool FlashDirty => _flash040.Dirty;
     public bool WriteBack { get; set; }
+
+    /// <summary>
+    /// Advance flash040 erase_alarm cycle budget (VICE maincpu clocks).
+    /// Call from the machine clock when FE3 is attached so chip/sector erase completes.
+    /// </summary>
+    public void AdvanceFlashCycles(long cycles) => _flash040.AdvanceCycles(cycles);
 
     public void PowerUp()
     {

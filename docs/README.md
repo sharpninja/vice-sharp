@@ -3,14 +3,14 @@
 ## User guides
 
 - [USER-GUIDE.md](USER-GUIDE.md) - install, first run, CLI launcher, machine YAML, disk images, capture, diagnostics attach, what works today
-- [FlashCart-Builder.md](FlashCart-Builder.md) - VIC-20 FE3 / Ultimem / Mega-Cart flash image builder (Avalonia product UI; Xbox UI legacy)
+- [FlashCart-Builder.md](FlashCart-Builder.md) - VIC-20 FE3 / Ultimem / Mega-Cart flash image builder for the Avalonia product UI
 - [VICE-MIGRATION.md](VICE-MIGRATION.md) - swap classic VICE for ViceSharp: binary + flag mapping, behaviour caveats, bug compatibility
 - [ROMs.md](ROMs.md) - legal ROM options, environment variable, expected directory layout
 - [PRIVACY.md](PRIVACY.md) - privacy policy (historical Store listing source; Microsoft Store track cancelled)
 
 ## Archival (cancelled tracks)
 
-Microsoft Store and Xbox UWP / Dev-Mode sideload were cancelled 2026-08-11 (`PLAN-XBOXUWP-END-001`, `IMPL-XBOXUWP-042`). Docs under `xbox/` and `xbox-store-publishing.md` are archival only. Do not treat them as active plans.
+Microsoft Store and Xbox/UWP were removed from product scope (`PLAN-XBOXUWP-END-001`, `IMPL-XBOXUWP-042`). Files under `xbox/` and `xbox-store-publishing.md` remain only as historical records; they are intentionally excluded from the current wiki manifest.
 
 ## Architecture and Design
 

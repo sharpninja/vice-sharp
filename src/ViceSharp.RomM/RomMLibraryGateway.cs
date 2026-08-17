@@ -118,28 +118,44 @@ public sealed class RomMLibraryGateway : IRomMLibraryGateway
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
         ArgumentException.ThrowIfNullOrWhiteSpace(cacheDir);
 
-        string dir = Path.Combine(cacheDir, romId.ToString(CultureInfo.InvariantCulture));
-        Directory.CreateDirectory(dir);
-        string dest = Path.Combine(dir, fileName);
-        MediaKind kind = MediaExtensionMap.Resolve(fileName)?.Kind ?? MediaKind.Program;
-
-        if (File.Exists(dest))
+        string safeFileName = fileName.Trim();
+        if (Path.IsPathRooted(safeFileName)
+            || safeFileName is "." or ".."
+            || safeFileName.IndexOfAny(['/', '\\']) >= 0
+            || !string.Equals(Path.GetFileName(safeFileName), safeFileName, StringComparison.Ordinal))
         {
-            long length = new FileInfo(dest).Length;
-            // Reuse when size matches the known size, or when size is unknown but a non-empty
-            // cache entry already exists (Recents relaunch without a second download).
-            if (length > 0 && (expectedSizeBytes <= 0 || length == expectedSizeBytes))
-            {
-                progress?.Report(1.0);
-                return new AcquiredGame(dest, fileName, kind);
-            }
+            throw new ArgumentException("ROM filename must be a single relative filename.", nameof(fileName));
         }
 
-        await using Stream source = await _client.Roms
-            .DownloadContentAsync(romId, fileName, cancellationToken).ConfigureAwait(false);
-
-        await using (FileStream target = File.Create(dest))
+        string dir = Path.GetFullPath(Path.Combine(cacheDir, romId.ToString(CultureInfo.InvariantCulture)));
+        Directory.CreateDirectory(dir);
+        string dest = Path.GetFullPath(Path.Combine(dir, safeFileName));
+        string dirPrefix = Path.EndsInDirectorySeparator(dir) ? dir : dir + Path.DirectorySeparatorChar;
+        if (!dest.StartsWith(dirPrefix, OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
         {
+            throw new ArgumentException("ROM filename escapes the cache directory.", nameof(fileName));
+        }
+
+        MediaKind kind = MediaExtensionMap.Resolve(safeFileName)?.Kind ?? MediaKind.Program;
+        if (expectedSizeBytes > 0 && File.Exists(dest) && new FileInfo(dest).Length == expectedSizeBytes)
+        {
+            progress?.Report(1.0);
+            return new AcquiredGame(dest, safeFileName, kind);
+        }
+
+        string temp = Path.Combine(dir, $".{safeFileName}.{Guid.NewGuid():N}.download");
+        try
+        {
+            await using Stream source = await _client.Roms
+                .DownloadContentAsync(romId, safeFileName, cancellationToken).ConfigureAwait(false);
+            await using var target = new FileStream(
+                temp,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 81920,
+                FileOptions.Asynchronous | FileOptions.SequentialScan);
+
             byte[] buffer = new byte[81920];
             long copied = 0;
             int read;
@@ -149,13 +165,34 @@ public sealed class RomMLibraryGateway : IRomMLibraryGateway
                 copied += read;
                 if (expectedSizeBytes > 0)
                 {
-                    progress?.Report(Math.Min(1.0, (double)copied / expectedSizeBytes));
+                    if (copied > expectedSizeBytes)
+                    {
+                        throw new InvalidDataException($"Downloaded ROM exceeded expected size {expectedSizeBytes}.");
+                    }
+
+                    progress?.Report((double)copied / expectedSizeBytes);
                 }
+            }
+
+            await target.FlushAsync(cancellationToken).ConfigureAwait(false);
+            if (expectedSizeBytes > 0 && copied != expectedSizeBytes)
+            {
+                throw new InvalidDataException($"Downloaded ROM size {copied} did not match expected size {expectedSizeBytes}.");
+            }
+
+            target.Close();
+            File.Move(temp, dest, overwrite: true);
+        }
+        finally
+        {
+            if (File.Exists(temp))
+            {
+                File.Delete(temp);
             }
         }
 
         progress?.Report(1.0);
-        return new AcquiredGame(dest, fileName, kind);
+        return new AcquiredGame(dest, safeFileName, kind);
     }
 
     private static RomTile MapTile(SimpleRomSchema rom)

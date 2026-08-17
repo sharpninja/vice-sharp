@@ -12,7 +12,7 @@ namespace ViceSharp.Chips.Vic;
 /// Machine-agnostic; the board supplies bus peeks for matrix/color/chargen.
 /// </summary>
 /// <remarks>FR-VIC20-001. $900F: bits 0-2 border, bit 3 reverse, bits 4-7 background.</remarks>
-public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
+public sealed class Mos6561 : IVideoChip, IAudioChip, IAddressSpace, IInterruptSource
 {
     /// <summary>
     /// VIC-I 16-color palette as 0xAARRGGBB (B at low byte for framebuffer writers).
@@ -150,6 +150,18 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     private readonly byte[] _cbuf = new byte[MaxTextCols];
     /// <summary>VICE <c>vic.gbuf</c> glyph bytes for the current line.</summary>
     private readonly byte[] _gbuf = new byte[MaxTextCols];
+    /// <summary>VICE <c>vic20sound.c</c> VIC-I audio engine.</summary>
+    private readonly Vic20Sound _sound = new();
+    private readonly IAudioBackend? _audioBackend;
+    private const int AudioClockBatchCycles = 64;
+    private readonly IReadOnlyList<IInterruptLine> _connectedLines;
+    private readonly float[] _audioSampleBuffer = new float[256];
+    private readonly short[] _audioPcmBuffer = new short[4096];
+    private int _audioSampleBufferLength;
+    private int _pendingAudioCycles;
+    private int _audioSampleRate = 44_100;
+    private int _audioCyclesPerSecond = 1_108_405;
+    private short _lastAudioSample;
 
     private int _cycleInLine;
     private int _cyclesPerLine = 71;
@@ -202,9 +214,15 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     /// <summary>Optional base of character ROM (default $8000).</summary>
     public ushort CharacterRomBase { get; set; } = 0x8000;
 
-    public Mos6561(IInterruptLine? irqLine = null)
+    public Mos6561(
+        IInterruptLine? irqLine = null,
+        IAudioBackend? audioBackend = null)
     {
         _irqLine = irqLine;
+        _audioBackend = audioBackend;
+        _connectedLines = irqLine is null
+            ? Array.Empty<IInterruptLine>()
+            : new IInterruptLine[] { irqLine };
         Id = new DeviceId(0x0003);
         SourceId = Id;
         Name = "MOS 6561 VIC-I";
@@ -213,6 +231,45 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         _frameBuffer = Array.Empty<byte>();
         EnsureFrameBufferSize();
         ResetRegisters();
+        // PAL default clock; the architecture supplies its exact master clock.
+        _sound.Init(_audioSampleRate, _audioCyclesPerSecond);
+    }
+
+    /// <summary>VICE VIC-I sound engine (FR-VIC20-SOUND-001).</summary>
+    public Vic20Sound Sound => _sound;
+
+    public byte MasterVolume
+    {
+        get => (byte)(_regs[0x0E] & 0x0F);
+        set => Write(
+            (ushort)(BaseAddress + 0x0E),
+            (byte)((_regs[0x0E] & 0xF0) | (value & 0x0F)));
+    }
+
+    public int ChannelCount => 4;
+    public int QueuedSampleCount => _audioBackend?.QueuedSampleCount ?? 0;
+    public int AvailableSampleCount => _audioBackend?.AvailableSampleCount ?? int.MaxValue;
+    public int AudioFragmentSampleCount => _audioSampleBuffer.Length;
+    public bool IsAudioTimingSource => _audioBackend is not null;
+
+    public float GenerateSample() => _lastAudioSample / 32768.0f;
+
+    public void SetRelativeSpeed(double speedPercent)
+    {
+        FlushPendingAudioClock();
+        _sound.SetRelativeSpeed(speedPercent);
+    }
+
+    /// <summary>Flushes any partial live VIC-I audio fragment.</summary>
+    public void FlushAudioBuffer()
+    {
+        FlushPendingAudioClock();
+        if (_audioBackend is null || _audioSampleBufferLength == 0)
+            return;
+
+        _audioBackend.SubmitSamples(
+            _audioSampleBuffer.AsSpan(0, _audioSampleBufferLength));
+        _audioSampleBufferLength = 0;
     }
 
     public bool IsNtsc => _cyclesPerLine <= 65;
@@ -232,8 +289,7 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     public ushort Size { get; init; }
     public uint ClockDivisor => 1;
     public ClockPhase Phase => ClockPhase.Phi2;
-    public IReadOnlyList<IInterruptLine> ConnectedLines =>
-        _irqLine is null ? Array.Empty<IInterruptLine>() : new[] { _irqLine };
+    public IReadOnlyList<IInterruptLine> ConnectedLines => _connectedLines;
 
     public ushort CurrentRasterLine => _rasterLine;
     public int CycleInLine => _cycleInLine;
@@ -312,6 +368,19 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         EnsureFrameBufferSize();
     }
 
+    /// <summary>Configures the live VIC-I PCM cadence from the machine clock.</summary>
+    public void ConfigureAudioClock(int sampleRate, int cyclesPerSecond)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(sampleRate, 1);
+        ArgumentOutOfRangeException.ThrowIfLessThan(cyclesPerSecond, 1);
+        _audioSampleRate = sampleRate;
+        _audioCyclesPerSecond = cyclesPerSecond;
+        _sound.Init(_audioSampleRate, _audioCyclesPerSecond);
+        _audioSampleBufferLength = 0;
+        _pendingAudioCycles = 0;
+        _lastAudioSample = 0;
+    }
+
     public bool HandlesAddress(ushort address)
         => address >= BaseAddress && address < (ushort)(BaseAddress + Size);
 
@@ -333,8 +402,13 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
         // VICE vic-mem.c case 3: character height from bit 0.
         if (reg == 0x03)
             _charHeight = (value & 0x01) != 0 ? 16 : 8;
-        // Sound $900A-$900E: register store only. VICE vic20sound.c is Explicit Missing
-        // (not Exact). Do not claim audio parity until ported.
+        // VICE vic-mem.c: $900A-$900E also call vic_sound_store. Advance
+        // every cycle that elapsed under the previous register value first.
+        if (reg is >= 0x0A and <= 0x0E)
+        {
+            FlushPendingAudioClock();
+            _sound.Store(reg, value);
+        }
     }
 
     public byte Peek(ushort address) => Read(address);
@@ -344,11 +418,47 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
     /// (open_v, cycle++, end_of_line/draw, open_h, memptr, latch, fetch).
     /// Display truth is per-line <see cref="DrawRasterLine"/> (vic-draw), not an EOF invent grid.
     /// </summary>
+    private void AdvanceAudioClock()
+    {
+        if (_audioBackend is null)
+            return;
+
+        _pendingAudioCycles++;
+        if (_pendingAudioCycles >= AudioClockBatchCycles)
+            FlushPendingAudioClock();
+    }
+
+    private void FlushPendingAudioClock()
+    {
+        if (_pendingAudioCycles == 0)
+            return;
+
+        var elapsedCycles = _pendingAudioCycles;
+        _pendingAudioCycles = 0;
+        var samplesRendered = _sound.RenderSamples(_audioPcmBuffer, elapsedCycles);
+        for (var i = 0; i < samplesRendered; i++)
+        {
+            _lastAudioSample = _audioPcmBuffer[i];
+            if (_audioBackend is null)
+                continue;
+
+            _audioSampleBuffer[_audioSampleBufferLength++] = GenerateSample();
+            if (_audioSampleBufferLength < _audioSampleBuffer.Length)
+                continue;
+
+            _audioBackend.SubmitSamples(_audioSampleBuffer);
+            _audioSampleBufferLength = 0;
+        }
+    }
+
     public void Tick()
     {
         // VICE: if area IDLE and regs[1] == (raster_line >> 1) -> open_v
         if (_area == VicArea.Idle && (_rasterLine >> 1) == _regs[0x01])
             OpenV();
+
+        // Batch contiguous clock intervals while preserving register-write boundaries.
+        AdvanceAudioClock();
 
         _cycleInLine++;
 
@@ -766,6 +876,11 @@ public sealed class Mos6561 : IVideoChip, IAddressSpace, IInterruptSource
             Array.Clear(_lineBuffer);
         if (_indexLineBuffer.Length > 0)
             Array.Clear(_indexLineBuffer);
+        _sound.Reset();
+        _sound.Init(_audioSampleRate, _audioCyclesPerSecond);
+        _audioSampleBufferLength = 0;
+        _pendingAudioCycles = 0;
+        _lastAudioSample = 0;
     }
 
     /// <summary>

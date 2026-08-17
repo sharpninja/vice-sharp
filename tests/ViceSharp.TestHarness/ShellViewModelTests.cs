@@ -277,7 +277,9 @@ public sealed class ShellViewModelTests
     }
 
     /// <summary>
-    /// Autoplay (Run 8) must request emulator focus so keyboard/gamepad target the machine.
+    /// FR: FR-UIDROP-001, TR: TR-MVVM-001, TEST-UIDROP-001.
+    /// Use case: Autoplay (Run 8) returns input focus to the emulated machine.
+    /// Acceptance: a successful Drive 8 autostart invokes the emulator focus callback once.
     /// </summary>
     [Fact]
     public async Task AutostartDrive8_RequestsFocusEmulator()

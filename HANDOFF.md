@@ -1,12 +1,63 @@
-# ViceSharp Handoff - 2026-08-10
+# ViceSharp Handoff - 2026-08-17
 
-**Active branch:** `main` (GitVersion base **v1.2.2**; local MSI/deploy line **1.2.7** from commits-since-version). Iteration 1 C64 complete; Iteration 2 VIC-20 core + lockstep + present-path + expansion UX on tree.
+**Active branch:** `main` (GitVersion **1.3.3-15** before this wrap-up commit). Iteration 1 C64 is complete; Iteration 2 VIC-20 has scoped lockstep, palette-index framebuffer parity, timed FE3 flash, expansion persistence, and live VIC-I audio.
 **Remotes:** `origin` = GitHub `sharpninja/vice-sharp` is the source of truth (operator 2026-08-10: Azure DevOps `azure` remote is **retired / not used**). Push only to `origin` unless the operator explicitly revives ADO.
 **Working tree noise (do not commit unless operator asks):** untracked `docs/S-Blox/`, `docs/reviews/*`, bulk `docs/2s-*`, `docs/10s-*`, `docs/*-focused-*.log`, `docs/_deploy-*`, `docs/xvic-*` probe captures, `manifests/` winget copies. Prefer durable receipts under `docs/receipts*` and `docs/receipts/`.
 
+## Review fixes and documentation wrap-up 2026-08-17
+
+**Scope:** Xbox/UWP and Microsoft Store are outside the product scope. `PLAN-XBOXUWP-END-001` remains done; legacy source and historical docs are retained for audit but excluded from the current wiki manifest. Supported product shells are Avalonia desktop and Console.
+
+**Corrections included:**
+
+- RomM: anonymous public-cover fetches, authenticated relative-cover enforcement, cache-path containment, expected-length atomic downloads, and Windows current-user DPAPI connection-token persistence with plaintext migration.
+- VIC-20: VICE TYPE_B FE3 erase-cycle timing, busy/cancel/suspend/resume behavior, machine-clock advancement, FE3/Ultimem/Mega-Cart dirty-state write-back, deterministic batched VIC-I audio, and allocation-free silent register stores.
+- Pixel/native: scoped READY PAL/NTSC/busy palette-index parity, shared-palette BGRA alignment, native xvic sound export, and restored native 8580 filter dither behavior.
+- Boundaries/docs: package metadata, library boundary coverage, XMLDocs convention cleanup, canonical FR/TR/TEST additions, GitHub-only wiki generation, and removal of archived Xbox/Store pages from published wiki content.
+
+**Validated this wrap-up:**
+
+- `dotnet build ViceSharp.slnx --no-restore -v minimal -maxcpucount:1 /p:UseSharedCompilation=false`: succeeded, 0 warnings, 0 errors.
+- Focused FE3/cart/VIC-I audio gate: 35 passed, 0 failed, 0 skipped.
+- Pixel lockstep: the combined run passed Busy PAL index, READY NTSC index, and READY PAL BGRA before hanging on the fourth native machine; READY PAL index then passed 1/1 in a fresh process. All four assertions are green when process-isolated; the same-process native hang remains.
+- Native xvic shim rebuilt successfully. The three native 8580 filter lockstep cases passed 1/1 each in fresh processes.
+- `ViceSharp.Library.Tests`: 95 passed, 0 failed, 0 skipped.
+- `tools/check_requirement_traceability.ps1`: exit 0.
+- MCP wiki export: 39 files; ZIP contains GitHub output and no Xbox Store page.
+- `git diff --check`: clean.
+
+**Broad-suite honesty:** the diagnostic full TestHarness run from the review-fix turn was not green: 1,155 passed, 10 skipped, 6 failed, then the native lockstep process hung. The XMLDocs failure was fixed afterward. Remaining unrelated baseline defects were three C64 performance assertions, the Avalonia/Core boundary assertion, snapshot divergence, and the native dual-VIA/multi-machine hang. Do not report the full harness as passing until those are resolved in their own slices.
+
+
+## Phase G closeout 2026-08-11 (PLAN-VIC20-EXACT-001 DONE scoped)
+
+MCP `PLAN-VIC20-EXACT-001` marked **done** with scoped Exact (not whole-machine Exact).
+
+**Umbrella evidence:** process-isolated Vic20 gate **46 passed / 0 failed / 0 skipped** plus 2s non-idle CPU lockstep PAL+NTSC (`VICESHARP_LOCKSTEP_2S=1`). Logs: `docs/receipts/vic20-umbrella-gate-2026-08-11.log`, scratch `implementer/vic20-umbrella-gate.log`.
+
+**Scoped Exact (hostile AGREE):** pixel index READY PAL/NTSC/busy; BGRA capture path + shared-palette alignment (canvas RGB may Partial); VIC-I video 2k; FE3 flash040 TYPE_B erase latency; sound silence/tone SequenceEqual; 2s non-idle CPU lockstep; managed snapshot blob RT + short resume.
+
+**Residuals (Explicit Missing / Partial):** niche carts beyond FE3/Ultimem/Mega/generic; IEEE-488/rsuser/printer; headless xvic WriteSnapshot hang; multi-test NativeVice suites require process isolation.
+
+**Rebuild note:** after native changes rebuild `vice_xvic.dll` and copy into TestHarness `bin/Release/net10.0` (+ `native/`).
+
+
+## Shipped 2026-08-11 (bit-exact VIC-20 program Phases A-G)
+
+BDPv4 plan PLAN-VIC20-EXACT-001 execution receipts under docs/receipts/vic20-phase-*.txt.
+
+- Pixel index SequenceEqual READY PAL/NTSC/busy; BGRA via shared PALette (first_x recompute in vice-shim-vic20.c).
+- Video lockstep PAL+NTSC 2k/500k; reset clears vic.regs residue.
+- Cart inventory; FE3 flash040 TYPE_B erase latency; Ultimem/Mega unit parity.
+- Vic20Sound + native vice_vic20_render_samples; silence/tone SequenceEqual vs xvic.
+- Workload CPU lockstep 250k PAL+NTSC; keyboard matrix green.
+- Snapshot inventory + managed RAM sample; native WriteSnapshot hang residual.
+
+Whole-machine Exact remains scoped (IEEE/rsuser/printer + niche carts Explicit Missing). Rebuild xvic after native edits; copy vice_xvic.dll into TestHarness bin.
+
 ## Session closeout 2026-08-10 (refresh-docs + wrap-up)
 
-### What landed on the working tree (pre-commit / commit this wrap-up)
+### Historical 2026-08-10 batch now included in the 2026-08-17 wrap-up
 
 1. **VIC-I READY present path (Exact-scoped geometry)**
    - `Mos6561`: full-line paint + border blank outside paper; crop via VICE `ComputeViewportFirstX` (READY PAL first_x=48, L+R 48, paper origin 48). Rejected invent crop `src=0` and continuous paper strip.
@@ -24,7 +75,7 @@
    - UI: Avalonia `FlashCartBuilderView`; Xbox `FlashCartBuilderPage`.
    - Tests: `tests/ViceSharp.TestHarness/FlashCart/*`.
    - Hostile AGREE: `docs/receipts/hostile-validator-20260808T103211Z.md`.
-   - FE3 MODE_FLASH now routes through managed `Flash040Core` (AM29F040B). Erase **latency** still instant (Partial vs VICE multi-second erase_alarm).
+   - FE3 MODE_FLASH routes through managed `Flash040Core` (AM29F040B). The VIC-20 clock now advances VICE TYPE_B erase timing: 50-cycle timeout, 1,000,000-cycle sector erase, and 8,000,000-cycle chip erase.
 
 4. **Deploy evidence (local lab)**
    - Desktop: Nuke `InstallMsi` ProductVersion **1.2.7** succeeded (`docs/_deploy-desktop-2026-08-08_045501.log`).
@@ -36,7 +87,7 @@
 ### Exact vs Partial discipline
 
 - Exact only with VICE file+function + matching managed control + hostile AGREE when claiming Exact.
-- Do **not** claim whole-machine Exact or pixel framebuffer lockstep vs xvic (still Missing / Partial per audit).
+- Do **not** claim whole-machine Exact. READY PAL/NTSC/busy palette-index framebuffer comparisons are Exact-scoped; full-canvas BGRA remains Partial per the audit.
 - CPU every-cycle 10s lockstep remains green (separate from video FB).
 
 ### Shipped 2026-08-11 (FE3 flash040 + pixel FB capture)
@@ -44,19 +95,19 @@
 1. **FE3 flash040 (command FSM)**
    - `Flash040Core` (TYPE_B): unlock AA/55, byte program AND, chip/sector erase, autoselect IDs.
    - `FinalExpansion3Cartridge` MODE_FLASH stores/reads via flash040; raw pokes no longer dirty flash.
-   - Tests: `Flash040CoreTests`, `Fe3Flash040Tests`. Residual: erase latency instant.
+   - Tests: `Flash040CoreTests`, `Fe3Flash040Tests`, and `Flash040EraseLatencyTests`; timing, busy status, cancel, and suspend/resume are covered.
 
 2. **Pixel FB vs xvic**
    - `vice_machine_capture_visible_frame` / indices on xvic: visible window = first_displayed_line + extra_left + viewport `first_x`, BGRA via palette.
    - `IViceNative.TryCaptureVisibleFrame`; Vic20PixelFrameTests: PAL 448x284 after boot, geometry match managed.
-   - Full pixel SequenceEqual ratchet still open (palette path differences).
+   - Palette-index SequenceEqual is green for READY PAL/NTSC/busy; native-canvas-versus-managed full BGRA remains Partial.
 
 3. **Azure remote retired** (operator): do not push `azure`; `origin` only.
 
 ### Resume next
 
 1. Optional: full-frame BGRA SequenceEqual managed vs xvic (palette align).
-2. Optional: FE3 erase_alarm cycle latency (match VICE multi-second erase).
+2. Optional: resolve the native xvic snapshot-write hang and broaden VIC-I waveform/input coverage beyond the focused silence/tone oracle cases.
 3. Optional: re-run desktop InstallMsi if Avalonia builder only was built after last MSI.
 4. Microsoft Store and Xbox UWP / Dev-Mode sideload are **CANCELLED**. Do not resume Partner Center, Store cert, or DeployXboxLocal product work.
 5. Query MCP TODO store for live backlog; snapshot list at bottom is stale.
@@ -166,7 +217,7 @@ Plugin reload + Agent Help (mcpserver core synced to 1.36.0, `mcpserver-repl` 1.
 
 ## Parked items
 
-- Azure DevOps wiki push needs `ADO_PAT` set, then `tools/Publish-Wiki.ps1 -Target azure` (github wiki already published).
+- ~~Azure DevOps wiki push~~ **DROPPED**: the Azure remote and wiki target are retired. Keep current wiki generation GitHub-only.
 - ~~Latent VICE bugs documented, not fixed~~ FIXED 2026-07-09 (PLAN-NATIVERESIDUE-002, branch `fix/nativeresidue-002-drive-clock-hardening`): drive `attach_clk`/`detach_clk`/`attach_detach_clk` uninitialized-stack read on `has_tde=0` restore (drive-snapshot.c zero-init) and `cycle_accum` omitted from `drivecpu_reset_clk` (drivecpu.c + drivecpu65c02.c) both fixed via the vendored runtime patch, plus a shim create-time drive-clock re-baseline. **BUG-LOCKSTEP-001 CLOSED**: full baseline gate 0 failed / 2596 passed / 21 skipped / 2617 total (was 136+2 lockstep failures). Receipts: docs/receipts-nativeresidue-002-2026-07-09.md. New residue candidates recorded there (live unit->type not re-baselined; drivecpu65c02 cycle_accum SMW/SMR width asymmetry). Build note: `make x64sc-program` does NOT rebuild changed VICE-core `.o`; delete the stale `.o`+`libdrive.a` and build under `MSYSTEM=MINGW64 bash -lc`.
 - ~~VICE parity program (PLAN-VICEPARITY-001) remaining slices~~ **COMPLETE 2026-07-10** (SID side fully bit-exact vs reSID; VIC per-cycle work landed through V7 + audit phases). Only manifest-wide pending AC left is TEST-VIC-FETCH-06 (VIC-II FAITHFUL-lock conflict, out of SID scope, needs the parity owner). Candidate follow-up: PLAN-NATIVERESIDUE-002 native-shim lifecycle hardening (a sustained-consecutive-native-load ACCESS_VIOLATION observed once, non-reproducing).
 

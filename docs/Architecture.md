@@ -30,7 +30,7 @@ ViceSharp.Abstractions     50 interface files: interfaces, value types, attribut
     |
     +-- ViceSharp.Host         Composition boundary: emulator sessions, service registration, gRPC host surface
     |       |
-    |       +-- ViceSharp.Host.Android / .iOS / .MacOS / .Xbox   Platform host shells
+    |       +-- ViceSharp.Host.Android / .iOS / .MacOS           Platform host shells
     |
     +-- ViceSharp.Protocol     gRPC/protobuf contracts and generated client/server types
     |

@@ -49,7 +49,7 @@ public sealed class MediaServiceHost : IMediaService
             if (!string.IsNullOrEmpty(validationError))
                 return ValueTask.FromResult(new AttachMediaResponse(RpcStatus.InvalidArgument(validationError), null));
 
-            var appliedToRuntime = TryApplyMediaToRuntime(session, effectiveSlot, runtimePayload, out var applyError);
+            var appliedToRuntime = TryApplyMediaToRuntime(session, effectiveSlot, runtimePayload, mediaPath, out var applyError);
             var displayName = string.IsNullOrWhiteSpace(request.DisplayName)
                 ? Path.GetFileName(mediaPath)
                 : request.DisplayName;
@@ -77,11 +77,24 @@ public sealed class MediaServiceHost : IMediaService
 
         lock (session.SyncRoot)
         {
-            if (!session.MediaAttachments.Remove(request.Slot, out var attachment))
+            if (!session.MediaAttachments.TryGetValue(request.Slot, out var attachment))
                 return ValueTask.FromResult(new DetachMediaResponse(RpcStatus.NotFound($"Media slot '{request.Slot}' is empty."), null));
 
-            var appliedToRuntime = TryDetachMediaFromRuntime(session, request.Slot);
-            var detached = attachment with { IsAttached = false, AppliedToRuntime = appliedToRuntime };
+            if (!TryDetachMediaFromRuntime(session, request.Slot, attachment, out var detachError))
+            {
+                var failed = attachment with { Error = detachError };
+                return ValueTask.FromResult(new DetachMediaResponse(
+                    RpcStatus.FailedPrecondition(detachError),
+                    failed));
+            }
+
+            session.MediaAttachments.Remove(request.Slot);
+            var detached = attachment with
+            {
+                IsAttached = false,
+                AppliedToRuntime = true,
+                Error = string.Empty,
+            };
             return ValueTask.FromResult(new DetachMediaResponse(RpcStatus.Ok(), detached));
         }
     }
@@ -238,6 +251,7 @@ public sealed class MediaServiceHost : IMediaService
         EmulatorRuntimeSession session,
         MediaSlot slot,
         byte[] payload,
+        string mediaPath,
         out string error)
     {
         error = string.Empty;
@@ -272,8 +286,8 @@ public sealed class MediaServiceHost : IMediaService
                     return true;
                 }
 
-                // Mega-Cart: ROM banks (at least 64K)
-                vic20Port.AttachMegaCart(payload);
+                // Mega-Cart: ROM banks (at least 64K) plus a durable NVRAM sidecar.
+                vic20Port.AttachMegaCart(payload, LoadMegaCartNvram(mediaPath));
                 session.Vic20ExpansionCartKind = "megacart";
                 return true;
             }
@@ -303,16 +317,98 @@ public sealed class MediaServiceHost : IMediaService
         }
     }
 
-    private static bool TryDetachMediaFromRuntime(EmulatorRuntimeSession session, MediaSlot slot)
+    private static byte[] LoadMegaCartNvram(string mediaPath)
     {
+        var nvramPath = GetMegaCartNvramPath(mediaPath);
+        if (!File.Exists(nvramPath))
+            return [];
+
+        var nvram = File.ReadAllBytes(nvramPath);
+        if (nvram.Length != ViceSharp.Core.Vic20.MegaCartCartridge.NvramSize)
+        {
+            throw new InvalidDataException(
+                $"Mega-Cart NVRAM sidecar '{nvramPath}' must be exactly " +
+                $"{ViceSharp.Core.Vic20.MegaCartCartridge.NvramSize} bytes.");
+        }
+
+        return nvram;
+    }
+
+    private static string GetMegaCartNvramPath(string mediaPath)
+        => Path.GetFullPath(mediaPath) + ".nvram";
+
+    private static void WriteAllBytesAtomically(string path, byte[] data)
+    {
+        var fullPath = Path.GetFullPath(path);
+        var directory = Path.GetDirectoryName(fullPath);
+        if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            throw new DirectoryNotFoundException($"Media directory for '{fullPath}' does not exist.");
+
+        var tempPath = Path.Combine(
+            directory,
+            $".{Path.GetFileName(fullPath)}.{Guid.NewGuid():N}.tmp");
+        try
+        {
+            using (var stream = new FileStream(
+                tempPath,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 4096,
+                FileOptions.WriteThrough))
+            {
+                stream.Write(data);
+                stream.Flush(flushToDisk: true);
+            }
+
+            File.Move(tempPath, fullPath, overwrite: true);
+        }
+        finally
+        {
+            try
+            {
+                if (File.Exists(tempPath))
+                    File.Delete(tempPath);
+            }
+            catch (IOException)
+            {
+                // The original persistence result is more actionable.
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // The original persistence result is more actionable.
+            }
+        }
+    }
+
+    private static bool TryDetachMediaFromRuntime(
+        EmulatorRuntimeSession session,
+        MediaSlot slot,
+        MediaAttachmentDto attachment,
+        out string error)
+    {
+        error = string.Empty;
         if (slot is MediaSlot.Drive8 or MediaSlot.Drive9)
-            return TryDetachDiskFromRuntime(session, slot);
+        {
+            if (TryDetachDiskFromRuntime(session, slot))
+                return true;
+            error = $"Runtime did not detach media slot '{slot}'.";
+            return false;
+        }
 
         if (slot == MediaSlot.Tape)
-            return TryDetachTapeFromRuntime(session);
+        {
+            if (TryDetachTapeFromRuntime(session))
+                return true;
+            error = "Runtime did not detach tape media.";
+            return false;
+        }
 
         if (slot != MediaSlot.Cartridge)
+        {
+            error = $"Media slot '{slot}' is not supported.";
             return false;
+        }
 
         // VIC-20 FE3 / Ultimem / Mega-Cart
         var vic20Port = session.Machine.Devices
@@ -321,8 +417,35 @@ public sealed class MediaServiceHost : IMediaService
         if (vic20Port is not null
             && vic20Port.AttachedKind != ViceSharp.Core.Vic20.Vic20ExpansionCartKind.None)
         {
-            if (vic20Port.WriteBack)
-                _ = vic20Port.FlushImage();
+            if (vic20Port.WriteBack && !attachment.IsReadOnly)
+            {
+                try
+                {
+                    var image = vic20Port.FlushImage();
+                    if (image is not null)
+                        WriteAllBytesAtomically(attachment.FilePath, image);
+
+                    var nvram = vic20Port.FlushNvram();
+                    if (nvram is not null)
+                    {
+                        WriteAllBytesAtomically(
+                            GetMegaCartNvramPath(attachment.FilePath),
+                            nvram);
+                    }
+
+                    vic20Port.AcknowledgeFlush();
+                }
+                catch (Exception ex) when (
+                    ex is IOException
+                    or UnauthorizedAccessException
+                    or ArgumentException
+                    or NotSupportedException)
+                {
+                    error = $"VIC-20 cartridge writeback failed: {ex.Message}";
+                    return false;
+                }
+            }
+
             vic20Port.Eject();
             session.Vic20ExpansionCartKind = "none";
             return true;
@@ -330,7 +453,10 @@ public sealed class MediaServiceHost : IMediaService
 
         var cartridgePort = session.Machine.Devices.GetAll<ICartridgePort>().SingleOrDefault();
         if (cartridgePort is null)
+        {
+            error = "Runtime has no attached cartridge port.";
             return false;
+        }
 
         cartridgePort.EjectCartridge();
         return true;

@@ -333,19 +333,19 @@ Scope: layer-1+
 
 ## FR-ROMM-CONN-001 RomM connection and authentication
 
-PLAN-ROMM-001. Connect both heads to a RomM 5.x server and authenticate. TR-ROMM-NUGET-001, TR-ROMM-JSON-001.
+PLAN-ROMM-001. Connect the supported desktop product path to a RomM 5.x server and authenticate. TR-ROMM-NUGET-001, TR-ROMM-JSON-001, TR-ROMM-SEC-001.
 AC-CONN-01: base URL + client token authenticates; Authorization: Bearer rmm_... on requests -> RomMGatewayAuthTests.ClientToken_SetsBearer.
 AC-CONN-02: device-pair exchange returns a token and persists it via the store -> RomMPairingTests.Exchange_ReturnsAndPersists.
 AC-CONN-03: OAuth password token auto-refreshes on near-expiry through RomMAuthHandler -> RomMAuthRefreshTests.NearExpiry_Refreshes.
 AC-CONN-04: a 401 sets the connection VM to a sign-in-expired reauth state and raises ConnectionInvalid -> LibraryConnectionViewModelTests.Unauthorized_SurfacesReauth.
-AC-CONN-05: FileRomMConnectionStore round-trips baseUrl/authMode/token via source-gen JSON -> FileRomMConnectionStoreTests.SaveLoad_RoundTrips.
+AC-CONN-05: on Windows, FileRomMConnectionStore persists protected_token with current-user DPAPI, writes atomically, and immediately migrates legacy plaintext records; unsupported operating systems fail closed -> FileRomMConnectionStoreTests.SaveLoad_RoundTrips + Load_LegacyPlaintext_MigratesImmediately.
 AC-CONN-06: token never appears in a URL/query string -> RomMGatewayAuthTests.Token_NeverInUri.
 Scope: layer-1+
 
 ## FR-ROMM-COVER-001 Cover art and cache
 
-PLAN-ROMM-001. Cover art loads efficiently for large virtualized grids.
-AC-COVER-01: url_cover fetched without auth; path_cover_* fetched with bearer under the confirmed prefix -> RomMCoverImageSourceTests.AuthRules.
+PLAN-ROMM-001. Cover art loads efficiently for large virtualized grids. TR-ROMM-SEC-001.
+AC-COVER-01: url_cover is fetched without auth; only server-relative path_cover_* is fetched with bearer under the configured RomM base address; an absolute authenticated-path input is rejected -> RomMCoverImageSourceTests.AuthRules + AuthenticatedPath_RejectsAbsoluteUri.
 AC-COVER-02: two-tier cache; second request for same cover hits cache (no second HTTP) -> CoverCacheTests.SecondRequest_Cached.
 AC-COVER-03: concurrency gate (<=4) + off-screen cancellation -> CoverCacheTests.Concurrency_Gated_Cancellable.
 AC-COVER-04: a fetch failure yields the placeholder and never throws -> CoverCacheTests.Failure_Placeholder.
@@ -360,14 +360,13 @@ Scope: layer-1+
 
 ## FR-ROMM-LAUNCH-001 Download, attach, boot
 
-PLAN-ROMM-001. Selecting a game downloads it, attaches to the right slot, and boots.
-AC-LAUNCH-01: DownloadAsync streams to cacheDir/{romId}/{fs_name}, reuses on size match, reports progress -> RomMGatewayDownloadTests.Streams_Reuses_Progress.
+PLAN-ROMM-001. Selecting a game downloads it, attaches to the right slot, and boots on the supported Avalonia product path. TR-ROMM-SEC-001. Xbox/UWP launch acceptance is archived and outside product scope.
+AC-LAUNCH-01: DownloadAsync accepts one relative filename, contains it under cacheDir/{romId}, reuses only on expected-size match, streams to a temporary file, rejects overflow/truncation, and atomically publishes complete content with progress -> RomMGatewayDownloadTests.Streams_Reuses_Progress + RejectsFileNamesOutsideRomCache + TruncatedDownload_DoesNotPublishPartialCacheEntry.
 AC-LAUNCH-02: slot = SelectedSlot or MediaExtensionMap default from fs_name -> MediaExtensionMapTests.Extension_MapsSlot.
 AC-LAUNCH-03: .prg is not launchable and Attach is disabled -> MediaExtensionMapTests.Prg_NotLaunchable + LibraryBrowseViewModelTests.Prg_AttachDisabled.
 AC-LAUNCH-04: attach/attach+start invoke IGameLauncher with resolved slot + autostart flag -> LibraryBrowseViewModelTests.AttachStart_InvokesLauncher.
-AC-LAUNCH-05: Xbox launcher reads bytes -> AttachMediaAsync payload -> AutostartDrive8Async(disk)/ColdResetAsync(cart) -> XboxGameLauncherTests.PayloadAttachAndBoot.
-AC-LAUNCH-06: Avalonia launcher delegates to DropAndStartFileAsync(autostart)/AttachAsync(attach-only) -> AvaloniaGameLauncherTests.DelegatesToShell.
-AC-LAUNCH-07: two-phase status (Downloading N% then Starting) -> LibraryBrowseViewModelTests.Launch_TwoPhaseStatus.
+AC-LAUNCH-05: Avalonia launcher delegates to DropAndStartFileAsync(autostart)/AttachAsync(attach-only) -> AvaloniaGameLauncherTests.DelegatesToShell.
+AC-LAUNCH-06: two-phase status (Downloading N% then Starting) -> LibraryBrowseViewModelTests.Launch_TwoPhaseStatus.
 Scope: layer-1+
 
 ## FR-ROMM-PKG-001 NuGet packaging of RomM libraries
@@ -589,6 +588,28 @@ Scope: layer-1+
 ## FR-VIC-010 FR-VIC-010
 
 Placeholder requirement backfilled for TODO link FR-VIC-010.
+Scope: layer-1+
+
+## FR-VIC20-001 Scoped VIC-20 framebuffer parity vs xvic
+
+PLAN-VIC20-EXACT-001 Phase A. READY PAL/NTSC/busy palette-index captures match native xvic at normal-border geometry, and the BGRA path uses the shared VICE palette with opaque alpha. Exact is scoped to the covered index captures; full-canvas BGRA parity remains Partial.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] READY boot identical canvas width/height (PAL 448x284; NTSC normal)
+- [ ] Index SequenceEqual READY idle PAL one full frame managed vs xvic
+- [ ] Index SequenceEqual READY idle NTSC one full frame
+- [ ] Index SequenceEqual busy screen PAL
+- [ ] BGRA SequenceEqual READY and busy after palette align
+- [ ] Capture not sentinel/all-black after READY; BGRA alpha 0xFF
+
+## FR-VIC20-005 VIC-20 FE3, Ultimem, and Mega-Cart runtime behavior
+
+The supported VIC-20 expansion set attaches through the architecture cartridge path. FE3 MODE_FLASH follows the AM29F040B TYPE_B command model and VICE erase budgets (50-cycle timeout, 1,000,000-cycle sector, 8,000,000-cycle chip), including busy status and suspend/resume. Dirty FE3/Ultimem flash and Mega-Cart NVRAM are surfaced separately and persisted atomically on detach.
+Scope: layer-1+
+
+## FR-VIC20-SOUND-001 Deterministic VIC-I sound and live PCM delivery
+
+VIC-I sound-register writes update a managed deterministic sound engine. Machine-clock advancement produces PCM16 mono, delivers fixed 256-sample batches to the configured backend, and keeps the silent Mos6561.Store hot path allocation-free after warmup. Focused silence and tone batches match native xvic byte-for-byte; the complete waveform/input space remains Partial.
 Scope: layer-1+
 
 ## FR-VSFLOCKSTEP-001 Resume externally-staged VICE .vsf snapshots in the native oracle

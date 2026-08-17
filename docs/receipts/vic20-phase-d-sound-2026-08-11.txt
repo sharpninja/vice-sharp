@@ -1,0 +1,6 @@
+# Receipt: Phase D VIC-I sound
+Date: 2026-08-11
+Result: Passed 8 / Failed 0 / Skipped 0 (Vic20Sound + Vic20NativeAudio)
+Managed: Vic20Sound + voltage table + Mos6561 - store
+Native: vice_vic20_render_samples + oracle store/reset/render
+AC-SD silence+tone SequenceEqual vs xvic green

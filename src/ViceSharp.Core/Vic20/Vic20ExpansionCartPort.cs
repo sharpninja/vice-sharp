@@ -6,12 +6,13 @@ namespace ViceSharp.Core.Vic20;
 /// <summary>
 /// Runtime attach port for FE3 / Ultimem / Mega-Cart on a VIC-20 machine bus.
 /// </summary>
-public sealed class Vic20ExpansionCartPort : IVic20ExpansionCartPort, IDevice
+public sealed class Vic20ExpansionCartPort : IVic20ExpansionCartPort, IClockedDevice
 {
     private readonly BasicBus _bus;
     private IAddressSpace? _attached;
     private Vic20ExpansionCartKind _kind;
     private string _configPresetId = "start";
+    private bool _writeBack;
 
     public Vic20ExpansionCartPort(BasicBus bus)
     {
@@ -21,8 +22,40 @@ public sealed class Vic20ExpansionCartPort : IVic20ExpansionCartPort, IDevice
 
     public DeviceId Id { get; }
     public string Name => "VIC-20 expansion cart port";
+    public uint ClockDivisor => 1;
+    public ClockPhase Phase => ClockPhase.Phi2;
     public Vic20ExpansionCartKind AttachedKind => _kind;
-    public bool WriteBack { get; set; }
+
+    /// <summary>
+    /// Advances the FE3 flash erase alarm by one VICE main CPU clock.
+    /// </summary>
+    public void Tick()
+    {
+        if (_attached is FinalExpansion3Cartridge fe3)
+            fe3.AdvanceFlashCycles(1);
+    }
+
+    public bool WriteBack
+    {
+        get => _writeBack;
+        set
+        {
+            _writeBack = value;
+            switch (_attached)
+            {
+                case FinalExpansion3Cartridge fe3:
+                    fe3.WriteBack = value;
+                    break;
+                case UltimemCartridge ultimem:
+                    ultimem.WriteBack = value;
+                    break;
+                case MegaCartCartridge megaCart:
+                    megaCart.WriteBack = value;
+                    break;
+            }
+        }
+    }
+
     public string ConfigPresetId
     {
         get => _configPresetId;
@@ -112,21 +145,29 @@ public sealed class Vic20ExpansionCartPort : IVic20ExpansionCartPort, IDevice
         {
             FinalExpansion3Cartridge { WriteBack: true, FlashDirty: true } fe3 => fe3.GetFlashImage(),
             UltimemCartridge { WriteBack: true, ImageDirty: true } um => um.GetImage(),
-            MegaCartCartridge { WriteBack: true } mc => mc.GetRomImage(),
             _ => null,
         };
     }
 
     public byte[]? FlushNvram()
-    {
-        if (_attached is MegaCartCartridge { NvramDirty: true } mc)
-        {
-            var data = mc.GetNvram();
-            mc.ClearNvramDirty();
-            return data;
-        }
+        => _attached is MegaCartCartridge { WriteBack: true, NvramDirty: true } mc
+            ? mc.GetNvram()
+            : null;
 
-        return null;
+    public void AcknowledgeFlush()
+    {
+        switch (_attached)
+        {
+            case FinalExpansion3Cartridge fe3:
+                fe3.ClearFlashDirty();
+                break;
+            case UltimemCartridge ultimem:
+                ultimem.ClearDirty();
+                break;
+            case MegaCartCartridge megaCart:
+                megaCart.ClearNvramDirty();
+                break;
+        }
     }
 
     public byte PeekIo(ushort address)

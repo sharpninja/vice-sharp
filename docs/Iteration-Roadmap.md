@@ -8,7 +8,7 @@
 - 33+ public interfaces in ViceSharp.Abstractions
 - Roslyn source generator for device registration
 - ROM fetch tool
-- CI/CD pipelines (Azure DevOps: `VICE-Sharp-CI` + `VICE-Sharp-Release`)
+- CI/CD target definitions (the historical Azure pipelines are retired; GitHub `origin` is the source of truth)
 - Comprehensive documentation and GraphRAG knowledge base
 - Determinism test harness (empty machine, bit-exact snapshots)
 
@@ -55,11 +55,11 @@ at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
 - VIA timer CPU `Read` uses pre-Tick bus-visible counters (VICE LOAD at `maincpu_clk` before `CLK_INC`); peeks stay post-Tick
 - Color RAM 4-bit + V-bus open-bus high nibble (`Vic20ColorRam` / `BasicBus`)
 - 5KB base RAM + expansion packs; Avalonia Settings wrap BLK0/1/2/3/5 toggles (product path)
-- Cartridge map: BLK PRG/raw + FE3 / Ultimem / Mega-Cart attach; Flash Cart Builder (`docs/FlashCart-Builder.md`); FE3 MODE_FLASH via `Flash040Core` (erase latency Partial)
+- Cartridge map: BLK PRG/raw + FE3 / Ultimem / Mega-Cart attach; Flash Cart Builder (`docs/FlashCart-Builder.md`); FE3 MODE_FLASH uses VICE TYPE_B erase-cycle budgets; dirty FE3/Ultimem flash and Mega-Cart NVRAM persist atomically on detach
 - READY present geometry Exact-scoped: VICE viewport `first_x` crop (PAL 48), L+R borders, paper origin
 - xvic pixel FB capture: PAL normal 448x284 BGRA; full SequenceEqual ratchet open
 - Default drive unit 8 = **1540** (`DriveModel.C1540`); C64 remains 1541
-- Launcher `xvic` topology; host session create; product shells Avalonia + Console (Xbox UWP cancelled)
+- Launcher `xvic` topology; host session create; supported product shells Avalonia + Console
 - Native oracle: `native/vice_xvic.dll` via `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
 - Every-cycle A/X/Y/S/P/PC lockstep vs xvic:
   - **PAL 10 s:** 11_084_050 cycles (`EveryCycle_CpuRegs_Match_TenSecondPal`)
@@ -68,7 +68,7 @@ at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
   - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`
 - Audit matrix: `docs/audit-vic20-vs-vice-2026-08-07.md` (Exact only for named rules)
 
-**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Remaining polish: FE3 erase latency, full pixel SequenceEqual, input E2E, snapshots, zip virtual media (`PLAN-ZIPMEDIA-001`); see `HANDOFF.md`.
+**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Timed FE3 erase, cartridge write-back, deterministic batched VIC-I sound, and scoped pixel-index parity are also covered. Remaining polish: full-canvas BGRA parity, input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`); see `HANDOFF.md`.
 
 ## Iteration 3: C128
 

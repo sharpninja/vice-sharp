@@ -436,3 +436,54 @@ VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`
 ### Traceability
 
 - **Related FR Area(s):** FR-CFG, FR-HOST
+
+---
+
+## TEST-VIC20-FLASH-001: VIC-20 flash timing and persistence tests
+
+**ID:** TEST-VIC20-FLASH-001
+**Title:** VIC-20 flash timing and expansion write-back regression suite
+**Priority:** P1 -- Important
+
+### Condition
+
+`Flash040EraseLatencyTests` verifies the VICE TYPE_B sector timeout, sector/chip cycle budgets, busy status, cancel, suspend, and resume behavior. `Vic20ExpansionCartTests`, `UltimemParityTests`, `MegaCartParityTests`, and `MediaServiceHostVic20ExpansionTests` verify mapping, dirty-state separation, and atomic detach persistence.
+
+### Traceability
+
+- **Related FR:** FR-VIC20-005
+- **Related TR:** TR-VIC20-FLASH-001
+
+---
+
+## TEST-VIC20-SOUND-001: VIC-I sound determinism and native comparison
+
+**ID:** TEST-VIC20-SOUND-001
+**Title:** Deterministic VIC-I PCM and live backend regression suite
+**Priority:** P1 -- Important
+
+### Condition
+
+`Vic20SoundLockstep` verifies deterministic managed silence/tone/multi-register output, no silent register-store allocation after warmup, and focused byte-identical silence/tone batches against native xvic. `Vic20AudioWiringTests` verifies machine-clock advancement and 256-sample delivery to the configured audio backend.
+
+### Traceability
+
+- **Related FR:** FR-VIC20-SOUND-001
+- **Related TR:** TR-VIC20-SOUND-001
+
+---
+
+## TEST-ROMM-SEC-001: RomM credential, origin, and download safety
+
+**ID:** TEST-ROMM-SEC-001
+**Title:** RomM trusted-boundary regression suite
+**Priority:** P0 -- Critical
+
+### Condition
+
+`RomMCoverImageSourceTests` verifies anonymous public covers and rejection of absolute authenticated-path inputs. `RomMGatewayDownloadTests` verifies filename containment and that truncated content never publishes a partial cache entry. `FileRomMConnectionStoreTests` verifies current-user DPAPI round-trip and immediate migration of legacy plaintext tokens.
+
+### Traceability
+
+- **Related FRs:** FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001
+- **Related TR:** TR-ROMM-SEC-001
