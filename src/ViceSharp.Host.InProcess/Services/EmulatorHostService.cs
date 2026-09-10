@@ -1,3 +1,4 @@
+using System.IO;
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.IEC;
 using ViceSharp.Core;
@@ -116,6 +117,88 @@ public sealed class EmulatorHostService : IEmulatorHost
         lock (session.SyncRoot)
         {
             return ValueTask.FromResult(ExecuteResetAndAutostartDrive8(session));
+        }
+    }
+
+    public ValueTask<LoadProgramResponse> LoadProgramAsync(
+        LoadProgramRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (!_registry.TryGet(request.SessionId, out var session))
+        {
+            return ValueTask.FromResult(new LoadProgramResponse(
+                HostProtocolMapper.MissingSessionStatus(request.SessionId),
+                0,
+                0,
+                false,
+                null));
+        }
+
+        byte[] prg;
+        try
+        {
+            if (request.Payload is { Length: > 0 })
+            {
+                prg = request.Payload;
+            }
+            else if (!string.IsNullOrWhiteSpace(request.FilePath))
+            {
+                if (!File.Exists(request.FilePath))
+                {
+                    return ValueTask.FromResult(new LoadProgramResponse(
+                        RpcStatus.NotFound($"PRG file not found: {Path.GetFileName(request.FilePath)}"),
+                        0,
+                        0,
+                        false,
+                        null));
+                }
+
+                prg = File.ReadAllBytes(request.FilePath);
+            }
+            else
+            {
+                return ValueTask.FromResult(new LoadProgramResponse(
+                    RpcStatus.InvalidArgument("PRG file path or payload is required."),
+                    0,
+                    0,
+                    false,
+                    null));
+            }
+        }
+        catch (IOException ex)
+        {
+            return ValueTask.FromResult(new LoadProgramResponse(
+                RpcStatus.FailedPrecondition(ex.Message),
+                0,
+                0,
+                false,
+                null));
+        }
+
+        lock (session.SyncRoot)
+        {
+            var result = PrgMemoryLoader.Load(session.Machine.Bus, prg);
+            if (!result.Success)
+            {
+                return ValueTask.FromResult(new LoadProgramResponse(
+                    RpcStatus.InvalidArgument(result.Error ?? "Invalid PRG."),
+                    result.LoadAddress,
+                    result.ByteCount,
+                    false,
+                    HostProtocolMapper.ToStatusDto(session)));
+            }
+
+            if (result.Ran)
+                session.StartHostKeyboardAutomation(HostKeyboardAutomation.CreateBasicRun());
+
+            return ValueTask.FromResult(new LoadProgramResponse(
+                RpcStatus.Ok(),
+                result.LoadAddress,
+                result.ByteCount,
+                result.Ran,
+                HostProtocolMapper.ToStatusDto(session)));
         }
     }
 

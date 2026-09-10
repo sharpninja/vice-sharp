@@ -47,6 +47,12 @@ public sealed class DisconnectedHostProtocolClient : IHostProtocolClient
 
     public ValueTask<EmulatorCommandResponse> ResetAndAutostartDrive8Async(CancellationToken cancellationToken = default) => CommandAsync(cancellationToken);
 
+    public ValueTask<LoadProgramResponse> LoadProgramAsync(string filePath, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return ValueTask.FromResult(new LoadProgramResponse(_disconnectedStatus, 0, 0, false, null));
+    }
+
     public ValueTask<EmulatorCommandResponse> SetLimiterRateAsync(double ratePercent, CancellationToken cancellationToken = default) => CommandAsync(cancellationToken);
 
     public ValueTask<ListSettingsProfilesResponse> ListSettingsProfilesAsync(CancellationToken cancellationToken = default)

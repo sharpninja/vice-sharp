@@ -372,3 +372,32 @@ The UI shall provide a reusable machine monitor control that can be docked in th
 - **Interfaces:** `IMonitor`, `HostMonitorService`, `UiHostClient`
 - **Technical Requirements:** TR-UI-SHELL-001, TR-GRPC-BOUNDARY-001
 - **Test Suite:** `MonitorControlViewModelTests`, `GrpcMonitorServiceTests`, `MonitorPopOutTests`
+
+---
+
+## FR-UIDROP-002: Drop PRG Into Current Session RAM
+
+**ID:** FR-UIDROP-002
+**Title:** Drop PRG into current session RAM and RUN at BASIC start
+**Priority:** P1 -- Important
+**Iteration:** 2
+
+### Description
+
+The Avalonia video surface shall accept a dropped `*.prg` file and load it into the current emulator session RAM at the PRG little-endian load address. The drop shall not attach the file as disk, tape, or cartridge media and shall not reset the machine. BASIC start is the live TXTTAB at `$2B/$2C` for the current machine and memory configuration (C64 `$0801`; VIC-20 unexpanded `$1001`, +3K `$0401`, +8K and above `$1201`). The host shall not assume C64 `$0801`. If the load address equals that live TXTTAB, the host shall update BASIC end pointers (VARTAB, ARYTAB, STREND) and inject RUN. If the load address is not the current BASIC start, the host shall load the bytes only and shall not RUN. Invalid or too-short PRG files return InvalidArgument without mutating emulator memory.
+
+### Acceptance Criteria
+
+1. Drag-over of a local `*.prg` path is accepted (Copy).
+2. `DropAndStartFileAsync` of a `*.prg` calls host `LoadProgram` and does not attach media or reset.
+3. PRG bytes are written at the 2-byte little-endian load address.
+4. When load address equals the live TXTTAB, VARTAB/ARYTAB/STREND are set to load plus payload length and RUN is queued. TXTTAB is read from the current session (C64 `$0801`; VIC-20 `$1001` / `$0401` / `$1201` by RAM config).
+5. When load address differs from the live TXTTAB (including a C64 `$0801` PRG on VIC-20 unexpanded `$1001`), memory is written and RUN is not queued.
+6. A PRG shorter than 3 bytes is rejected with InvalidArgument and memory is unchanged.
+7. Existing disk and cartridge drop-and-start paths remain unchanged.
+
+### Traceability
+
+- **Interfaces:** `IEmulatorHost`, `IHostProtocolClient`, `ShellViewModel`, `PrgMemoryLoader`, `HostKeyboardAutomation`
+- **Technical Requirements:** TR-HOST-PRG-001, TR-GRPC-BOUNDARY-001, TR-MVVM-001
+- **Test Requirements:** TEST-UIDROP-002

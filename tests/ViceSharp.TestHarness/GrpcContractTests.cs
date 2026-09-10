@@ -84,6 +84,7 @@ public sealed class GrpcContractTests
         Assert.Contains("rpc StepCycle", proto);
         Assert.Contains("rpc RewindCycle", proto);
         Assert.Contains("rpc ResetAndAutostartDrive8", proto);
+        Assert.Contains("rpc LoadProgram", proto);
         Assert.Contains("rpc SetLimiterRate", proto);
         Assert.Contains("power_state", proto);
         Assert.Contains("limiter_rate_percent", proto);

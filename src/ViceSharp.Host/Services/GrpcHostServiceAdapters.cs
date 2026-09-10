@@ -209,6 +209,28 @@ public sealed class GrpcEmulatorHostService : GrpcContracts.EmulatorHost.Emulato
         ServerCallContext context)
         => MapCommandAsync(_inner.ResetAndAutostartDrive8Async(new ResetAndAutostartDrive8Request(request.SessionId), context.CancellationToken));
 
+    public override async Task<GrpcContracts.LoadProgramResponse> LoadProgram(
+        GrpcContracts.LoadProgramRequest request,
+        ServerCallContext context)
+    {
+        var response = await _inner.LoadProgramAsync(
+            new LoadProgramRequest(
+                request.SessionId,
+                request.FilePath ?? string.Empty,
+                request.Payload.IsEmpty ? Array.Empty<byte>() : request.Payload.ToByteArray(),
+                request.DisplayName ?? string.Empty),
+            context.CancellationToken).ConfigureAwait(false);
+
+        return new GrpcContracts.LoadProgramResponse
+        {
+            Status = HostMap.Map(response.Status),
+            LoadAddress = (uint)Math.Max(0, response.LoadAddress),
+            ByteCount = (uint)Math.Max(0, response.ByteCount),
+            Ran = response.Ran,
+            EmulatorStatus = HostMap.Map(response.EmulatorStatus)
+        };
+    }
+
     public override Task<GrpcContracts.EmulatorCommandResponse> StepCycle(
         GrpcContracts.StepCycleRequest request,
         ServerCallContext context)

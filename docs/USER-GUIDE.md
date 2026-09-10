@@ -170,6 +170,20 @@ D64 mounts go through `D64DiskImageDevice`. Sector reads are deterministic and e
 - D64 stream load, sector writes, and commit-to-stream are covered; launcher-level
   save-as workflows and non-D64 formats are still future work.
 
+## 6b. Avalonia desktop: attach, drop, and PRG load
+
+Launch the desktop UI with Nuke `RunAvalonia`, or install the Release MSI (`./build.ps1 InstallMsi --configuration Release`) and start ViceSharp from the Start menu.
+
+The attach panel Browse buttons pick disk, tape, and cartridge images for the usual slots. You can also drop a local file onto the emulator video surface:
+
+- `.d64` / `.g64` / `.t64` attach to drive 8 and reset/autostart (`LOAD"*",8,1` then `RUN`).
+- `.crt` / `.bin` / `.rom` attach as a cartridge and cold-reset.
+- `.prg` does **not** attach as media. The host loads the file into the **current** session RAM at the PRG little-endian load address and does not reset. If that address equals the live BASIC start (zero-page TXTTAB at `$2B/$2C`), BASIC end pointers are updated and the host types `RUN`. Otherwise the bytes are loaded only.
+
+BASIC start is whatever the running machine wrote into TXTTAB after boot, so it follows the current machine and VIC-20 memory config (C64 `$0801`; VIC-20 unexpanded `$1001`, +3K `$0401`, +8K and above `$1201`). A C64 `$0801` BASIC PRG dropped on a VIC-20 unexpanded session is loaded and is not RUN.
+
+Unsupported extensions (for example `.txt`) are rejected on drag-over.
+
 ## 7. What works today / what doesn't
 
 This matches the [README dashboard](../README.md#completion-dashboard); the matrix below is the practical "what should I expect" view.
@@ -189,9 +203,9 @@ This matches the [README dashboard](../README.md#completion-dashboard); the matr
 | VIC-II pixel sequencer / sprite collisions | Partial | Visible sprite composition, sprite priority/collision coverage, display-mode pixel routing including invalid ECM priority/collision, managed continuous side-border behavior, VIC-II register readback masks/collision latch writes, and managed matrix idle/fill behavior are covered; native display-mode/register/matrix checkpoints, sprite fetch depth, and FLI/AFLI timing remain under `BACKFILL-VIDEO-001`. |
 | SID combined waveforms + ADSR-bug accuracy | Working | Combined waveform, ADSR, digi, filter, PCM-equivalence, and dual-SID coverage are in the focused suite; further analog 8580/filter deepening is post-MVP unless final lockstep exposes a concrete regression. |
 | Cartridge ports / user port as live CPU attachment | Substrate ready | `IInterSystemBus` supports `UserPort` and `CartPort` bus kinds; chip-level bindings are in for CIA2 / VIA1 / VIA2 / GAME / EXROM. Cartridge-as-running-CPU sample topology is future work. |
-| VIC-20 host (MOS 6502 + VIC-I + VIA x2 + 1540 default) | Working core | Managed core + 10 s every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` (PAL and NTSC). READY palette-index framebuffer parity is green for PAL/NTSC/busy captures; full-canvas BGRA remains Partial. Settings provide BLK wrap toggles, FE3/Ultimem/Mega-Cart attach, and the [Flash Cart Builder](FlashCart-Builder.md). FE3 erase timing, cartridge persistence, and focused native VIC-I silence/tone audio comparisons are covered. |
+| VIC-20 host (MOS 6502 + VIC-I + VIA x2 + 1540 default) | Working core | Managed core + 10 s every-cycle A/X/Y/S/P/PC lockstep vs native `xvic` (PAL and NTSC). READY palette-index and native BGRA SequenceEqual are green for PAL/NTSC/busy captures (scoped Exact, not whole-machine). Settings provide BLK wrap toggles, FE3/Ultimem/Mega-Cart attach, and the [Flash Cart Builder](FlashCart-Builder.md). FE3 erase timing, cartridge persistence, and focused native VIC-I silence/tone audio comparisons are covered. |
 | C128 / PET / Plus/4 / CBM-II | Not yet | Launcher binaries throw `NotSupportedException` for those machines. |
-| Host UI (Avalonia desktop + Console; gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Supported product shells: Avalonia desktop and Console. |
+| Host UI (Avalonia desktop + Console; gRPC control) | Working core | Host-owned gRPC services, monitor/control adapters, view models, registry, frame source, generated clients, and in-process host are covered. Supported product shells: Avalonia desktop and Console. Video-surface drop accepts disks/carts (attach + boot) and `*.prg` (load into current RAM; RUN when load address equals live TXTTAB). |
 
 ### Warp, speed limiter, and speed controls
 

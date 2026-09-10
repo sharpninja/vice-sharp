@@ -43,7 +43,7 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
 
 ## User documentation
 
-- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, capture, diagnostics attach, what works today
+- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, desktop drag-drop (including `*.prg` load/RUN), capture, diagnostics attach, what works today
 - [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) - binary + flag mapping, behaviour caveats, performance / accuracy, bug compatibility
 - [docs/ROMs.md](docs/ROMs.md) - legal ROM options, environment variable, directory layout
 - [docs/](docs/README.md) - full documentation index (architecture, public API, iteration plans, diagrams)

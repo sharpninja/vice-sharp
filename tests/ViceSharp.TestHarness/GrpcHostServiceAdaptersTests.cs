@@ -81,6 +81,54 @@ public sealed class GrpcHostServiceAdaptersTests
     }
 
     /// <summary>
+    /// FR: FR-UIDROP-002, TR: TR-HOST-PRG-001, TEST-UIDROP-002.
+    /// Use case: a gRPC LoadProgram call must marshal path, payload, load
+    /// address, byte count, and Ran back across the adapter.
+    /// Acceptance: the inner host sees the proto session, path, and payload,
+    /// and the proto response echoes load address 0x0801, byte count 12, and
+    /// Ran true.
+    /// </summary>
+    [Fact]
+    public async Task GrpcEmulatorHostService_LoadProgram_MarshalsPayloadAndRan()
+    {
+        var payload = new byte[] { 0x01, 0x08, 0x00 };
+        var fake = new FakeEmulatorHost
+        {
+            LoadProgramResponse = new LoadProgramResponse(
+                RpcStatus.Ok(),
+                0x0801,
+                12,
+                true,
+                new EmulatorStatusDto(
+                    "session-42",
+                    "minimal",
+                    EmulatorRunState.Running,
+                    0,
+                    new MachineStateDto(0, 0, 0, 0, 0, 0, 0)))
+        };
+        var adapter = new GrpcEmulatorHostService(fake);
+
+        var response = await adapter.LoadProgram(
+            new GrpcContracts.LoadProgramRequest
+            {
+                SessionId = "session-42",
+                FilePath = "hello.prg",
+                DisplayName = "hello.prg",
+                Payload = ByteString.CopyFrom(payload)
+            },
+            CreateContext());
+
+        Assert.NotNull(fake.LastLoadProgramRequest);
+        Assert.Equal("session-42", fake.LastLoadProgramRequest.SessionId);
+        Assert.Equal("hello.prg", fake.LastLoadProgramRequest.FilePath);
+        Assert.Equal(payload, fake.LastLoadProgramRequest.Payload);
+        Assert.Equal(GrpcContracts.RpcStatusCode.Ok, response.Status.Code);
+        Assert.Equal(0x0801u, response.LoadAddress);
+        Assert.Equal(12u, response.ByteCount);
+        Assert.True(response.Ran);
+    }
+
+    /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 GrpcAdapters).
     /// Use case: The inner emulator host returns NotFound (the
     /// standard missing-session response). The adapter must surface
@@ -652,6 +700,9 @@ public sealed class GrpcHostServiceAdaptersTests
             new(RpcStatus.Ok(), null);
         public EmulatorCommandResponse CommandResponse { get; set; } =
             new(RpcStatus.Ok(), null);
+        public LoadProgramResponse LoadProgramResponse { get; set; } =
+            new(RpcStatus.Ok(), 0, 0, false, null);
+        public LoadProgramRequest? LastLoadProgramRequest { get; private set; }
         public Exception? CommandException { get; set; }
 
         public CreateEmulatorSessionRequest? LastCreateRequest { get; private set; }
@@ -689,6 +740,15 @@ public sealed class GrpcHostServiceAdaptersTests
         public ValueTask<EmulatorCommandResponse> ColdResetAsync(SessionRequest request, CancellationToken cancellationToken = default) => Command(cancellationToken);
         public ValueTask<EmulatorCommandResponse> WarmResetAsync(SessionRequest request, CancellationToken cancellationToken = default) => Command(cancellationToken);
         public ValueTask<EmulatorCommandResponse> ResetAndAutostartDrive8Async(ResetAndAutostartDrive8Request request, CancellationToken cancellationToken = default) => Command(cancellationToken);
+
+        public ValueTask<LoadProgramResponse> LoadProgramAsync(LoadProgramRequest request, CancellationToken cancellationToken = default)
+        {
+            LastCommandToken = cancellationToken;
+            LastLoadProgramRequest = request;
+            if (CommandException is not null)
+                throw CommandException;
+            return ValueTask.FromResult(LoadProgramResponse);
+        }
         public ValueTask<EmulatorCommandResponse> StepCycleAsync(StepCycleRequest request, CancellationToken cancellationToken = default) => Command(cancellationToken);
         public ValueTask<EmulatorCommandResponse> StepFrameAsync(StepFrameRequest request, CancellationToken cancellationToken = default) => Command(cancellationToken);
         public ValueTask<EmulatorCommandResponse> RewindCycleAsync(RewindCycleRequest request, CancellationToken cancellationToken = default) => Command(cancellationToken);

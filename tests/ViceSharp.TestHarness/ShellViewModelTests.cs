@@ -27,6 +27,9 @@ public sealed class ShellViewModelTests
         host.ColdResetAsync(Arg.Any<CancellationToken>()).Returns(Command());
         host.WarmResetAsync(Arg.Any<CancellationToken>()).Returns(Command());
         host.ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>()).Returns(Command());
+        host.LoadProgramAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<LoadProgramResponse>(
+                new LoadProgramResponse(RpcStatus.Ok(), 0, 0, false, null)));
         host.UpdateSettingsAsync(Arg.Any<UpdateSettingsRequest>(), Arg.Any<CancellationToken>())
             .Returns(new ValueTask<UpdateSettingsResponse>(
                 new UpdateSettingsResponse(RpcStatus.Ok(), null, System.Array.Empty<SettingApplyDiagnosticDto>())));
@@ -317,6 +320,79 @@ public sealed class ShellViewModelTests
         await host.DidNotReceive().ColdResetAsync(Arg.Any<CancellationToken>());
         await host.DidNotReceive().ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
         Assert.Equal(0, focusCount);
+    }
+
+    /// <summary>
+    /// FR: FR-UIDROP-002, TR: TR-HOST-PRG-001, TEST-UIDROP-002.
+    /// Use case: dropping a PRG on the emulator display must be treated as a
+    /// supported drop, unlike unknown extensions.
+    /// Acceptance: IsDropStartSupported is true for .prg, .d64, and .crt, and
+    /// false for .txt and empty paths.
+    /// </summary>
+    [Fact]
+    public void IsDropStartSupported_AcceptsPrgAndExistingMedia()
+    {
+        var (shell, _, _) = CreateShell();
+
+        Assert.True(shell.IsDropStartSupported(@"C:\games\hello.prg"));
+        Assert.True(shell.IsDropStartSupported(@"C:\games\demo.D64"));
+        Assert.True(shell.IsDropStartSupported(@"C:\games\fastload.crt"));
+        Assert.False(shell.IsDropStartSupported(@"C:\notes\readme.txt"));
+        Assert.False(shell.IsDropStartSupported(null));
+        Assert.False(shell.IsDropStartSupported(""));
+    }
+
+    /// <summary>
+    /// FR: FR-UIDROP-002, TR: TR-HOST-PRG-001, TEST-UIDROP-002.
+    /// Use case: dropping a BASIC or ML PRG loads it into the current session
+    /// instead of attaching a media slot.
+    /// Acceptance: DropAndStartFileAsync(.prg) calls LoadProgramAsync once, does
+    /// not attach or reset, reports Loaded/Started from Ran, and focuses the
+    /// emulator.
+    /// </summary>
+    [Fact]
+    public async Task DropAndStartFile_Prg_LoadsIntoCurrentSessionWithoutAttach()
+    {
+        var (shell, host, panel) = CreateShell();
+        var path = @"C:\games\hello.prg";
+        host.LoadProgramAsync(path, Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<LoadProgramResponse>(
+                new LoadProgramResponse(RpcStatus.Ok(), 0x0801, 12, true, null)));
+
+        var focusCount = 0;
+        shell.FocusEmulator = () => focusCount++;
+
+        var status = await shell.DropAndStartFileAsync(path, TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, status.Code);
+        await host.Received(1).LoadProgramAsync(path, Arg.Any<CancellationToken>());
+        await host.DidNotReceive().AttachMediaAsync(
+            Arg.Any<MediaSlot>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
+        await host.DidNotReceive().ColdResetAsync(Arg.Any<CancellationToken>());
+        await host.DidNotReceive().ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
+        Assert.Equal("Started hello.prg", panel.StatusText);
+        Assert.Equal(1, focusCount);
+    }
+
+    /// <summary>
+    /// FR: FR-UIDROP-002, TR: TR-HOST-PRG-001, TEST-UIDROP-002.
+    /// Use case: a non-BASIC PRG is loaded without RUN.
+    /// Acceptance: status is Loaded filename when Ran is false.
+    /// </summary>
+    [Fact]
+    public async Task DropAndStartFile_Prg_ReportsLoadedWhenHostDoesNotRun()
+    {
+        var (shell, host, panel) = CreateShell();
+        var path = @"C:\games\ml.PRG";
+        host.LoadProgramAsync(path, Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<LoadProgramResponse>(
+                new LoadProgramResponse(RpcStatus.Ok(), 0xC000, 3, false, null)));
+
+        var status = await shell.DropAndStartFileAsync(path, TestContext.Current.CancellationToken);
+
+        Assert.Equal(RpcStatusCode.Ok, status.Code);
+        Assert.Equal("Loaded ml.PRG", panel.StatusText);
+        await host.Received(1).LoadProgramAsync(path, Arg.Any<CancellationToken>());
     }
 
     /// <summary>

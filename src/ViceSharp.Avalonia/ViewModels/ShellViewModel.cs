@@ -161,9 +161,32 @@ public sealed class ShellViewModel : IGameLaunchTarget
         return target is null ? Task.CompletedTask : Panel.AttachFromPickerAsync(target, ct);
     }
 
+    /// <summary>
+    /// Whether a local path can be drop-started on the video surface.
+    /// PRG files load into current session RAM; other extensions use media slots.
+    /// </summary>
+    public bool IsDropStartSupported(string? filePath)
+    {
+        if (string.IsNullOrWhiteSpace(filePath))
+            return false;
+
+        return IsPrgFile(filePath) || FindDropTarget(filePath) is not null;
+    }
+
     /// <summary>Attach and start supported media dropped on the emulator display.</summary>
     public async Task<RpcStatus> DropAndStartFileAsync(string filePath, CancellationToken ct = default)
     {
+        if (IsPrgFile(filePath))
+        {
+            var load = await _host.LoadProgramAsync(filePath, ct).ConfigureAwait(true);
+            RequestFocusEmulator();
+            var fileName = Path.GetFileName(filePath);
+            Panel.ReportStatus(load.Status.IsSuccess
+                ? (load.Ran ? $"Started {fileName}" : $"Loaded {fileName}")
+                : load.Status.Message);
+            return load.Status;
+        }
+
         var target = FindDropTarget(filePath);
         if (target is null)
         {
@@ -261,6 +284,9 @@ public sealed class ShellViewModel : IGameLaunchTarget
 
     private AttachSlotViewModel? FindSlot(MediaSlot slot)
         => Panel.Slots.FirstOrDefault(candidate => candidate.Slot == slot);
+
+    private static bool IsPrgFile(string filePath)
+        => string.Equals(Path.GetExtension(filePath), ".prg", StringComparison.OrdinalIgnoreCase);
 
     private AttachSlotViewModel? FindDropTarget(string filePath)
     {

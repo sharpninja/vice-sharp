@@ -75,6 +75,7 @@ The boundary keeps UI control shells thin, testable, replaceable, and safe to re
 - FR-DRV-001 / FR-TAP-002 / FR-CRT-001
 - FR-SNP-001 / FR-SNP-002
 - FR-MED-001
+- FR-UIDROP-002
 
 ### Related TRs
 

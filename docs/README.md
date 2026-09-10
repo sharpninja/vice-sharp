@@ -2,7 +2,7 @@
 
 ## User guides
 
-- [USER-GUIDE.md](USER-GUIDE.md) - install, first run, CLI launcher, machine YAML, disk images, capture, diagnostics attach, what works today
+- [USER-GUIDE.md](USER-GUIDE.md) - install, first run, CLI launcher, machine YAML, disk images, desktop drag-drop (including `*.prg` load/RUN), capture, diagnostics attach, what works today
 - [FlashCart-Builder.md](FlashCart-Builder.md) - VIC-20 FE3 / Ultimem / Mega-Cart flash image builder for the Avalonia product UI
 - [VICE-MIGRATION.md](VICE-MIGRATION.md) - swap classic VICE for ViceSharp: binary + flag mapping, behaviour caveats, bug compatibility
 - [ROMs.md](ROMs.md) - legal ROM options, environment variable, expected directory layout

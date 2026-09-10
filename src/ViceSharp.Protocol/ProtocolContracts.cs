@@ -152,6 +152,7 @@ public static class EmulatorHost
     public const string ColdReset = "ColdReset";
     public const string WarmReset = "WarmReset";
     public const string ResetAndAutostartDrive8 = "ResetAndAutostartDrive8";
+    public const string LoadProgram = "LoadProgram";
     public const string StepCycle = "StepCycle";
     public const string StepFrame = "StepFrame";
     public const string RewindCycle = "RewindCycle";
@@ -202,6 +203,10 @@ public interface IEmulatorHost
         ResetAndAutostartDrive8Request request,
         CancellationToken cancellationToken = default);
 
+    ValueTask<LoadProgramResponse> LoadProgramAsync(
+        LoadProgramRequest request,
+        CancellationToken cancellationToken = default);
+
     ValueTask<EmulatorCommandResponse> StepCycleAsync(
         StepCycleRequest request,
         CancellationToken cancellationToken = default);
@@ -241,6 +246,19 @@ public sealed record SessionRequest(string SessionId);
 public sealed record ResetRequest(string SessionId, ResetKind Kind = ResetKind.Warm);
 
 public sealed record ResetAndAutostartDrive8Request(string SessionId);
+
+public sealed record LoadProgramRequest(
+    string SessionId,
+    string FilePath = "",
+    byte[]? Payload = null,
+    string DisplayName = "");
+
+public sealed record LoadProgramResponse(
+    RpcStatus Status,
+    int LoadAddress,
+    int ByteCount,
+    bool Ran,
+    EmulatorStatusDto? EmulatorStatus) : IRpcResponse;
 
 public sealed record StepCycleRequest(string SessionId, long CycleCount = 1);
 

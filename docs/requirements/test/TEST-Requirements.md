@@ -487,3 +487,19 @@ VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`
 
 - **Related FRs:** FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001
 - **Related TR:** TR-ROMM-SEC-001
+
+## TEST-UIDROP-002: PRG drag-drop load and BASIC RUN tests
+
+**ID:** TEST-UIDROP-002
+**Title:** PRG drag-drop load and BASIC RUN tests
+**Priority:** P1 -- Important
+
+### Condition
+
+Verify PRG drop acceptance and host RAM load: `ShellViewModel` routes `*.prg` to `LoadProgramAsync` without attach/reset; `IsDropStartSupported` is true for `.prg` and existing media and false for unsupported types; `PrgMemoryLoader` writes at the load address, updates BASIC pointers only when load equals TXTTAB, and reports ran; `EmulatorHostService.LoadProgramAsync` loads payload into the session, sets Ran, and starts BASIC RUN automation only for BASIC-start PRGs; invalid PRGs return InvalidArgument; `GrpcEmulatorHostService` maps LoadProgram request/response fields.
+
+### Traceability
+
+- **Related FR Area(s):** FR-UIDROP-002, FR-CFG-005
+- **Canonical FR IDs:** FR-UIDROP-002
+- **Technical Requirements:** TR-HOST-PRG-001

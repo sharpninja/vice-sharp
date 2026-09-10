@@ -1,3 +1,4 @@
+using System.IO;
 using Google.Protobuf;
 using Grpc.Net.Client;
 using ViceSharp.Protocol;
@@ -141,6 +142,26 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
                 new GrpcContracts.ResetAndAutostartDrive8Request { SessionId = sessionId },
                 cancellationToken: cancellationToken),
             cancellationToken).ConfigureAwait(false);
+    }
+
+    public async ValueTask<LoadProgramResponse> LoadProgramAsync(string filePath, CancellationToken cancellationToken = default)
+    {
+        var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var response = await _hostClient.LoadProgramAsync(
+            new GrpcContracts.LoadProgramRequest
+            {
+                SessionId = sessionId,
+                FilePath = filePath ?? string.Empty,
+                DisplayName = string.IsNullOrWhiteSpace(filePath) ? string.Empty : Path.GetFileName(filePath)
+            },
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new LoadProgramResponse(
+            MapStatus(response.Status),
+            (int)response.LoadAddress,
+            (int)response.ByteCount,
+            response.Ran,
+            MapStatusDto(response.EmulatorStatus));
     }
 
     public async ValueTask<EmulatorCommandResponse> SetLimiterRateAsync(double ratePercent, CancellationToken cancellationToken = default)

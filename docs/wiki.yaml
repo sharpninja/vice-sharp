@@ -206,6 +206,12 @@ documents:
     target: TR-RomM-Security.md
     platforms:
       - github
+  - id: tr-host-prg
+    title: Host-owned PRG Memory Load
+    source: docs/requirements/technical/TR-Host-Prg.md
+    target: TR-Host-Prg.md
+    platforms:
+      - github
 navigation:
   - title: Home
     path: Home
@@ -250,6 +256,7 @@ navigation:
       - document: fr-vic20
       - document: tr-vic20
       - document: tr-romm-security
+      - document: tr-host-prg
   - title: Reference
     path: Reference
     children:

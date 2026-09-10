@@ -558,6 +558,10 @@ public sealed class XboxAppCommandDispatcherTests
         public ValueTask<EmulatorCommandResponse> CloseSessionAsync(
             SessionRequest request, CancellationToken cancellationToken = default)
             => throw new NotSupportedException(nameof(CloseSessionAsync));
+
+        public ValueTask<LoadProgramResponse> LoadProgramAsync(
+            LoadProgramRequest request, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException(nameof(LoadProgramAsync));
     }
 
     private sealed class RecordingSnapshotService : ISnapshotService

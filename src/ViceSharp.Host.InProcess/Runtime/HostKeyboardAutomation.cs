@@ -4,7 +4,8 @@ namespace ViceSharp.Host.Runtime;
 
 public sealed class HostKeyboardAutomation
 {
-    private const int ReadyPromptStart = 0x0400;
+    private const int DefaultReadyPromptStart = 0x0400;
+    private const int KernalScreenHibase = 0x0288;
     private const int ReadyPromptLength = 1000;
     private const int KernalKeyboardBufferStart = 0x0277;
     private const int KernalKeyboardBufferCount = 0x00C6;
@@ -58,6 +59,10 @@ public sealed class HostKeyboardAutomation
 
     public static HostKeyboardAutomation CreateC64Drive8Autostart(Func<IMachine, string?> readyAction)
         => new("C64 BASIC drive 8 autostart", RunSequence, waitForBasicReady: true, readyAction);
+
+    /// <summary>Type RUN after the BASIC READY prompt is idle.</summary>
+    public static HostKeyboardAutomation CreateBasicRun()
+        => new("BASIC RUN", RunSequence, waitForBasicReady: true);
 
     public void AdvanceFrame(IMachine machine)
     {
@@ -158,7 +163,7 @@ public sealed class HostKeyboardAutomation
     {
         try
         {
-            machine.Bus.Peek(ReadyPromptStart);
+            machine.Bus.Peek((ushort)GetReadyPromptStart(machine));
             error = string.Empty;
             return true;
         }
@@ -171,13 +176,24 @@ public sealed class HostKeyboardAutomation
 
     private static bool ContainsBasicReadyPrompt(IMachine machine)
     {
+        var start = GetReadyPromptStart(machine);
         Span<byte> screenCodes = stackalloc byte[ReadyPromptLength];
         for (var i = 0; i < screenCodes.Length; i++)
-            screenCodes[i] = machine.Bus.Peek((ushort)(ReadyPromptStart + i));
+            screenCodes[i] = machine.Bus.Peek((ushort)(start + i));
 
         ReadOnlySpan<byte> screenCodeReady = [18, 5, 1, 4, 25];
         ReadOnlySpan<byte> asciiReady = "READY"u8;
         return screenCodes.IndexOf(screenCodeReady) >= 0 || screenCodes.IndexOf(asciiReady) >= 0;
+    }
+
+    // KERNAL HIBASE ($0288) is the current screen page: $04 on C64, $1E on
+    // unexpanded VIC-20, $10 on VIC-20 with 8K+. Zero means the test/minimal
+    // bus never initialized it; keep the C64 $0400 default so existing
+    // autostart fixtures still see READY.
+    private static int GetReadyPromptStart(IMachine machine)
+    {
+        var page = machine.Bus.Peek(KernalScreenHibase);
+        return page == 0 ? DefaultReadyPromptStart : page << 8;
     }
 
     // True when the C64 screen editor is flashing the cursor in its BASIC input loop

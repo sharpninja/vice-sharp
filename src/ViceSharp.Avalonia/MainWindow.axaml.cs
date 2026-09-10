@@ -767,9 +767,9 @@ public partial class MainWindow : Window
 
     private void OnVideoHostDragOver(object? sender, DragEventArgs e)
     {
-        e.DragEffects = string.IsNullOrWhiteSpace(GetDroppedLocalFilePath(e))
-            ? DragDropEffects.None
-            : DragDropEffects.Copy;
+        e.DragEffects = _shell.IsDropStartSupported(GetDroppedLocalFilePath(e))
+            ? DragDropEffects.Copy
+            : DragDropEffects.None;
         e.Handled = true;
     }
 
