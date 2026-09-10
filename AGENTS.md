@@ -103,6 +103,10 @@ Use the repo-supported Nuke targets for packaging and deployment. Do not invent 
 - Preserve lockstep/checkpoint determinism when touching CPU, VIC-II, CIA, VIA, SID, IEC, storage, tape, input, snapshot, capture, or host pacing code.
 - Follow existing project conventions and public API XMLDocs. Public APIs and tests should document requirement/use-case/acceptance context where the local convention requires it.
 
+## Source control and workflow
+
+GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the source of truth. Azure DevOps is retired and is not used. Push and PR target `origin` only unless explicitly told otherwise. The default branch is `main`. Read `AGENTS-README-FIRST.yaml` and `HANDOFF.md` when resuming work; route TODO, session-log, and requirements operations through the MCP Server.
+
 ## MCP Interaction
 
 - Use the agent-appropriate MCP helper/plugin named or required by `AGENTS-README-FIRST.yaml`.

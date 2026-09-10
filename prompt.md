@@ -28,7 +28,7 @@ Your job is to deliver exactly that test artifact following the Byrd Development
 - One coherent gated slice only. Do not broaden to fix unrelated non-PAL DMA test failures, status bar text, or other hotspots.
 - Vice-sharp scope only. Do not mix errata about the plugin itself into this workspace context.
 - Writing style: Never use the em dash (U+2014) or en dash (U+2013 except numeric ranges) in any chat, code comments, commit messages, docs, or session logs. Use hyphen, colon, period, semicolon, or parentheses.
-- Azure DevOps (origin) is the primary source of truth. GitHub is a downstream mirror only.
+- GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the source of truth. Azure DevOps is retired and is not used.
 - Post a new session log turn before starting work. Update it with actions and results.
 - Identify exact canonical FR/TR/TEST IDs plus the VICE source files before any code change.
 
