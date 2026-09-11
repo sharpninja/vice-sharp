@@ -64,7 +64,7 @@ Each phase follows the Byrd Development Process:
 - Avalonia desktop app shell
 - ROM fetch tool
 - Determinism test (empty machine snapshot comparison)
-- Azure DevOps and GitHub Actions pipelines
+- Azure DevOps and GitHub Actions pipelines (historical AC; Azure is retired; no `.github/workflows` tree)
 
 ## Acceptance Criteria
 
@@ -76,6 +76,6 @@ Each phase follows the Byrd Development Process:
 - [ ] All 33+ interfaces are mockable (NSubstitute test validates each)
 - [ ] Source generator produces correct output for a test device
 - [ ] ROM fetch tool downloads and validates at least one ROM set
-- [ ] CI pipeline runs end-to-end on both Azure DevOps and GitHub Actions
+- [ ] CI pipeline runs end-to-end on both Azure DevOps and GitHub Actions (historical; Azure retired 2026-09-10)
 - [ ] All documentation files are substantive (not placeholders)
 - [ ] ROL contains 122+ entries in full format

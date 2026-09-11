@@ -788,8 +788,8 @@ sealed partial class Build : NukeBuild
     /// <summary>
     /// On a vX.Y.Z tag, create (or update) the GitHub release for that tag on
     /// the GitHub mirror and attach the MSI installer plus the NuGet packages.
-    /// GitHub is a downstream mirror, so the tagged commit + tag are pushed to
-    /// it first (authenticated through the release agent's gh CLI). The target
+    /// GitHub `origin` is the source of truth, so the tagged commit + tag are
+    /// pushed there first (authenticated through the release agent's gh CLI). The target
     /// is self-sufficient: the generated release job runs with --skip, so it
     /// packs its own .nupkg files and builds the MSI via a nested Nuke
     /// invocation rather than relying on DependsOn. Idempotent - a re-run of the

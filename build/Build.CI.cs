@@ -36,7 +36,7 @@ partial class Build
     readonly string? CommitMessage;
 
     Target SyncAzure => _ => _
-        .Description("Push current branch to azure remote (Azure DevOps mirror)")
+        .Description("Retired: Azure DevOps is not used. Do not push azure.")
         .Executes(() =>
         {
             Git($"push azure");

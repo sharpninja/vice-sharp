@@ -400,5 +400,5 @@ and TR-ROMM-BOUNDARY/JSON/THREAD/NUGET as MCP requirements with the exact AC IDs
 records naming each test class/method; create the PLAN-ROMM-001 slice TODOs (L1..L8, X1..X4, A1..A4) with
 FR/TR/TEST references; commit the plan to `docs/plans/PLAN-ROMM-BDPv4.md`. RomM.Client 1.0.0 +
 RomM.Client.Csdb 1.0.0 are already on nuget.org and consumed as-is; later typed-endpoint additions are a
-non-blocking optimization. Both repos are Azure DevOps `origin`; the two new ViceSharp packages publish to
-nuget.org with the existing set.
+non-blocking optimization. ViceSharp git origin is GitHub `sharpninja/vice-sharp`; Azure DevOps is retired
+and is not used. The two new ViceSharp packages publish to nuget.org with the existing set.

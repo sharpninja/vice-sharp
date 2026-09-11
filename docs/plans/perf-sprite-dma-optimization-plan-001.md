@@ -4,7 +4,7 @@
 **Session lineage**: GrokCode-20260527T224114Z-perf-sprite-dma-opt-001 (bootstrap via mcpserver-grok-plugin REPL; openSession succeeded; local turn persisted)  
 **Driving user directive (verbatim)**: "Don't sit there offering things. That is not useful. Formulate a plan. Write the unit test to prove it doesn't cause regressions, then implement it. The test is a useful artifact no matter what. Iterate until you get to the 25% threshold."  
 **BDP compliance**: This document + all work follows Byrd Development Process v3 exactly (tests first with full AC in XMLDOC citing FR/TR/TEST + VICE verbatim sources, mocks/stubs validate red-then-green, impl only after, full suite green before exit any slice, one coherent gated slice, requirements drive, no broadening).  
-**Scope**: Vice-sharp only. No plugin/MCP internals mixed in. Azure DevOps is primary source of truth for any push.
+**Scope**: Vice-sharp only. No plugin/MCP internals mixed in. GitHub `origin` is the source of truth for any push. Azure DevOps is retired and is not used.
 
 ## Performance Target Definition
 - Baseline: User's x64sc warp (on this hardware) stabilizes at ~900% (9x real-time C64 speed) when idling at BASIC READY prompt.

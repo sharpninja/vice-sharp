@@ -6,24 +6,24 @@
 |----------------|--------------------------------|
 | Quality Area   | CI/CD / Build Automation       |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-07-08                     |
+| Last Updated   | 2026-09-10                     |
 
 ---
 
-## TR-BUILD-001: Nuke Build with Azure DevOps CI/CD (CI + Release Pipelines)
+## TR-BUILD-001: Nuke Build with GitHub as the git source of truth
 
 **ID:** TR-BUILD-001
-**Title:** Nuke Build System with Azure DevOps CI and Release Pipelines
+**Title:** Nuke Build System with GitHub origin as Source of Truth
 **Priority:** P0 -- Critical
 **Category:** Build / CI/CD
 
 ### Description
 
-ViceSharp shall use the Nuke build system for all build, test, package, and publish operations. The build definition is a C# project (`build/_build.csproj`) that defines targets as code. Two Azure DevOps pipelines are maintained: `VICE-Sharp-CI` (Nuke-generated `azure-pipelines.ci.yml`) and `VICE-Sharp-Release` (Nuke-generated `azure-pipelines.release.yml`), both running on the self-hosted `Default` agent pool. GitHub is a downstream mirror synced on demand; it carries no CI.
+ViceSharp shall use the Nuke build system for all build, test, package, and publish operations. The build definition is a C# project (`build/_build.csproj`) that defines targets as code. GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the git source of truth. Azure DevOps is retired and is not used. Historical `azure-pipelines.ci.yml` and `azure-pipelines.release.yml` files may remain in the tree; they are not the live git or wiki authority.
 
 ### Rationale
 
-Nuke provides a strongly-typed, IDE-debuggable build system written in C#, matching the project language. Azure DevOps is the primary source of truth and the deployment authority; splitting CI validation from tag-triggered release publication keeps the release path auditable and repeatable.
+Nuke provides a strongly-typed, IDE-debuggable build system written in C#, matching the project language. GitHub is the deployment and collaboration remote. Local Nuke targets (`PublishNuget`, `PublishMsi`, `PublishGitHubRelease`, `PublishWiki`) are the supported publish path.
 
 ### Technical Specification
 
@@ -33,16 +33,14 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
    - Target dependencies form a DAG (directed acyclic graph) with correct ordering.
    - The build can be executed locally via `build.ps1` (Windows), `build.sh` (Linux/macOS), or the `nuke` CLI.
 
-2. **Azure DevOps Pipelines (Primary and Only CI):**
-   - `azure-pipelines.ci.yml` (pipeline `VICE-Sharp-CI`) is Nuke-generated and triggers on the `master`, `main`, and `feat/*` branches, with PR validation against `master`/`main`.
-   - CI runs the `CiTest` target; `CiTest` stages hash-pinned ROMs via `EnsureCiRomRoot` so agents without a VICE data root still exercise ROM-dependent tests.
-   - `azure-pipelines.release.yml` (pipeline `VICE-Sharp-Release`) triggers on `v*` tags and runs `PublishNuget`, which restores, builds, packs, and pushes all 13 NuGet packages to nuget.org in a single self-sufficient job.
-   - Both pipelines run on the self-hosted `Default` agent pool (Windows).
+2. **Git remote:**
+   - `origin` is GitHub `sharpninja/vice-sharp`. Push and PR target `origin` / `main`.
+   - Azure DevOps git, wiki, and pipelines are retired and are not used.
 
-3. **GitHub Mirror (No CI):**
-   - GitHub is a downstream mirror synced on demand; `.github/` contains only `FUNDING.yml` and `copilot-instructions.md`.
-   - No GitHub Actions workflows exist; a community-facing Actions mirror is not implemented and remains possible future work.
-   - Azure DevOps is the single source for artifact publication.
+3. **CI and publication:**
+   - Supported gates are local or operator-run Nuke targets (`Compile`, `Test`, `CiTest`, `DeterminismTest`, `PublishNuget`, `PublishMsi`, `PublishGitHubRelease`, `PublishWiki`).
+   - `.github/` currently holds `FUNDING.yml` and `copilot-instructions.md`. There is no `.github/workflows` tree. A GitHub Actions workflow is possible future work, not a live requirement.
+   - Historical Azure Pipelines YAML may remain in the repo. Do not treat those files as an active Azure service.
 
 4. **Build Targets:**
    - `Clean`: Removes all `bin`/`obj`/`artifacts` directories.
@@ -69,25 +67,25 @@ Nuke provides a strongly-typed, IDE-debuggable build system written in C#, match
 
 1. `./build.ps1 Compile` (or `nuke Compile`) succeeds locally.
 2. `nuke Test` and `nuke CiTest` run the test suite with the documented category filters and report results in a structured format (TRX).
-3. The `VICE-Sharp-CI` pipeline completes the `CiTest` gate on the self-hosted `Default` pool. Baseline at v1.0.2: Failed 0 / Passed 2594 / Skipped 21 / Total 2615, single process, filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy`.
-4. The `VICE-Sharp-Release` pipeline, triggered by a `v*` tag, packs and publishes all 13 NuGet packages versioned exactly to the tag.
+3. `nuke CiTest` (or `./build.ps1 CiTest`) runs the documented category filter locally. Historical Azure `VICE-Sharp-CI` numbers are not a live gate.
+4. A `v*` tag plus Nuke `PublishNuget` / `PublishGitHubRelease` packs and publishes packages versioned exactly to the tag. There is no live Azure release pipeline.
 5. NuGet packages are versioned correctly: the release tag version wins on tagged HEADs, GitVersion-derived versions apply otherwise.
 6. Build failures produce clear, actionable error messages with the failing target and step identified.
 
 ### Verification Method
 
 - Local build execution on developer machines.
-- Pipeline execution logs reviewed for completeness and timing.
+- Operator-run Nuke logs reviewed for completeness and timing. Historical Azure pipeline logs are not a live gate.
 - Version string inspection on built packages (PackNuget verifies package contents and nuspec dependencies before declaring success).
 
 ### Related TRs
 
-- TR-PLAT-001 (Platform support; CI currently runs on the self-hosted Windows pool)
+- TR-PLAT-001 (Platform support; operator-run Nuke on Windows)
 
 ### Design Decisions
 
 - Nuke is preferred over MSBuild-only or FAKE because it provides C# build logic that is debuggable in the IDE.
-- Azure DevOps is the primary CI/CD because it hosts the primary repository; packages publish to nuget.org.
-- The pipeline YAML files are Nuke-generated (`nuke --generate-configuration`), keeping pipeline definitions in C# build code.
+- GitHub `origin` is the git source of truth. Azure DevOps is retired and is not used.
+- Packages publish to nuget.org via Nuke `PublishNuget`. Historical Azure pipeline YAML may remain in the tree.
 - GitHub remains a mirror only; no GitHub Actions CI exists (potential future work for community PR validation).
 - The `_build` project uses the same .NET SDK version as the main solution (specified in `global.json`).

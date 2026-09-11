@@ -15,7 +15,7 @@ This memo is the Phase 0 legal gate from the Store finish plan. It is **not** a 
 | --- | --- |
 | License | `GPL-2.0-or-later` (`Directory.Build.props` PackageLicenseExpression, root COPYING / LICENSE) |
 | Upstream | VICE Team; clean-room C# port; attribution in `THIRD_PARTY_NOTICES.md` and About |
-| Corresponding source | Public GitHub mirror `https://github.com/sharpninja/vice-sharp` (`AboutInfo.SourceUrl`); Azure DevOps is primary of record |
+| Corresponding source | Public GitHub `https://github.com/sharpninja/vice-sharp` (`AboutInfo.SourceUrl`). Azure DevOps is retired and is not used. |
 | In-app source offer | About page binds `LicenseIdentifier`, `AttributionText`, `SourceOfferText`, `SourceUrl` |
 | Bundled license text | MSIX Content under `Licenses/` (COPYING + THIRD_PARTY_NOTICES) |
 | Bundled VICE data | GPL `*.vkm` keymaps only under `Assets/vice-data/C64/` |

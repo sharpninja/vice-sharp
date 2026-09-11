@@ -18,7 +18,7 @@ This plan documents the pipeline that will publish the ViceSharp requirements wi
 | GitHub Wiki | https://github.com/sharpninja/vice-sharp/wiki | `docs/Project/wiki/github/` |
 | Azure DevOps Wiki | https://dev.azure.com/McpServer/VICE-Sharp/_wiki/wikis/VICE-Sharp.wiki | `docs/Project/wiki/azure/` |
 
-GitHub is the **mirror** target (per the global rule that Azure DevOps is the primary). Both targets are published from the same MCP-generated source set, but each gets its own platform-formatted output (GitHub uses `_Sidebar.md`/`_Footer.md`; Azure uses `.order`).
+GitHub Wiki is the **live** target. Azure DevOps wiki is retired and is not used. Generated source still includes `docs/Project/wiki/azure/` for historical export shape (`.order`); do not push it.
 
 ## Source set (both targets)
 

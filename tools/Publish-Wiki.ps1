@@ -1,10 +1,11 @@
 <#
 .SYNOPSIS
-Publish ViceSharp requirements wiki to Azure DevOps and (optionally) GitHub.
+Publish ViceSharp requirements wiki to GitHub. Azure DevOps wiki is retired.
 
 .DESCRIPTION
-REPO-MAINT-001 wiki publishing automation. Both targets are git-backed wiki
-repos. This script:
+REPO-MAINT-001 wiki publishing automation. GitHub is the live wiki target.
+Azure DevOps is retired and is not used; the azure target remains only so an
+old PAT-driven push can be skipped. This script:
   1. Refreshes the MCP-generated wiki source set under docs/Project/wiki/{target}/.
   2. Clones each target wiki repo into a temp dir.
   3. Mirrors the source dir into the clone (preserving _Sidebar/_Footer/.order).
@@ -18,7 +19,7 @@ If a token is missing the corresponding target is skipped with a warning so the
 script is safe to run unattended in CI.
 
 .PARAMETER Target
-"azure", "github", or "both" (default).
+"azure", "github", or "both". Default github. Azure is retired.
 
 .PARAMETER DryRun
 Stage all changes in the clone but do not push or commit. Use to inspect diffs.
@@ -35,14 +36,14 @@ Optional explicit MCP API key (overrides $env:MCP_API_KEY).
 Optional explicit MCP base URL (default http://PAYTON-LEGION2:7147).
 
 .EXAMPLE
-pwsh -File tools/Publish-Wiki.ps1 -Target both -DryRun
+pwsh -File tools/Publish-Wiki.ps1 -Target github -DryRun
 
 .EXAMPLE
 $env:ADO_PAT='xyz'; pwsh -File tools/Publish-Wiki.ps1 -Target azure
 #>
 param(
     [ValidateSet("azure","github","both")]
-    [string]$Target = "both",
+    [string]$Target = "github",
     [switch]$DryRun,
     [switch]$RegenerateSource,
     [string]$ApiKey = $env:MCP_API_KEY,
