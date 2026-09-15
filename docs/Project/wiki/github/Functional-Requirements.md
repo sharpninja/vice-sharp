@@ -1,319 +1,224 @@
 # Functional Requirements (MCP Server)
 
-## ARCH-TRUEDRIVE-1541-002 True-Drive 1541 IEC timing and motor ramp
+## FR-CSDB-001 CSDb search
 
-IecBus.Tick() implements ATN-response state machine (CLK/DATA within 985 cycles of ATN assert). IecDrive.Tick() implements 300,000-cycle motor ramp before rotation. IecDrive.ReadSector(18,0) returns BAM bytes from D64. VICE iecbus.c:247-266, drive/drive.c.
+Users can search CSDb for SID, demo, and crack via the CSDb bridge (:8090) and/or RomM.Client.Csdb. Results include CSDb id, title, type, and kind.
 Scope: layer-1+
 
-## BACKFILL-MEDIA-001 Media devices (D64, tape) I/O functional parity
+## FR-CSDB-002 Selective CSDb ingest
 
-D64DiskImageDevice sector R/W, motor ramp, BAM read all implemented. Datasette motor ramp, sense line, and record mode complete. Closes IEC ATN timing gap for Phase 1.
+Ingest is explicit ids only, max 20 per request. Writes Structure A under roms/c64/ with (csdb-{id}) tags. Archives extract; the archive file is not kept.
 Scope: layer-1+
 
-## BACKFILL-VIDEO-001 VIC-II visible-frame parity (RC window, DMA checkpoints, screen-RAM)
+## FR-CSDB-003 CSDb SID via HVSC
 
-VIC-II RC/VC state machine matches VICE cycle-accurate behavior (RC window). Native checkpoints validate sprite DMA for all 5 non-PAL models. Screen RAM survives one PAL frame unchanged. VICE viciisc/vicii-cycle.c:541-563, vicii-fetch.c:135-166.
+When CSDb provides HVSCPath and the file exists under HVSC_ROOT, ingest hardlinks or copies into roms/c64/. HVSC is not a RomM platform folder.
 Scope: layer-1+
 
-## FR-CFG-001 FR-CFG-001
+## FR-GB64-001 GameBase64 source tree and Structure A landing
 
-Placeholder requirement backfilled for TODO link FR-CFG-001.
+GB64 remains host-sourced under ./gb64 (Games ZIPs, Screenshots, ROMs). C64 game media is imported only under runtime/library/roms/c64/. Letter buckets (a1, b2, 0) are never RomM platform or parent folders. gb64/ROMs firmware is not auto-imported into roms/ (optional library/bios is a separate root).
+
+Acceptance:
+1. Import output is under roms/c64/ only.
+2. No letter-bucket directory is created as a RomM parent.
+3. Missing gb64/Games causes prepare to SKIP game import with a log line.
 Scope: layer-1+
 
-## FR-CFG-005 FR-CFG-005
+## FR-GB64-002 Screenshot staging into library/screenshots
 
-Placeholder requirement backfilled for TODO link FR-CFG-005.
+NFO Screenshot: values are GB64-relative (A\Alfabug.png). Prepare shall robocopy gb64/Screenshots into runtime/library/screenshots when the library screenshot tree is empty (or ForceLibraryBuild), then write marker .screenshots-synced. Runtime resolution does not require mounting the whole gb64 tree.
+
+Acceptance:
+1. After sync, Screenshot: A\file.png resolves to library/screenshots/A/file.png.
+2. Existing screenshot library data skips sync unless Force.
+3. Missing gb64/Screenshots logs SKIP and does not throw.
 Scope: layer-1+
 
-## FR-CHIPSTATE-001 Per-tick full chip state capture
+## FR-GB64-003 VERSION.NFO tagging and extract
 
-Each captured tick snapshots the full internal state of every stateful chip (VIC, SID, CIA, PLA) for display in the debug screen.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] VIC, SID, CIA and PLA each implement IStatefulDevice
-- [x] Each chip's state is captured per tick with zero hot-path allocation
-- [x] Captured state decodes into named register/field values
-- [x] The debug screen shows each chip's decoded state at the selected tick
-
-## FR-CPUTICK-001 Per-CPU independent tick counter and per-CPU speed metric
-
-Each CPU in the emulator keeps its own independent executed-cycle counter and the displayed speed is that CPU's executed-cycle rate versus its own target clock.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Each CPU ExecutedCycles increments once per executed cycle and not on a stolen or skipped cycle.
-- [ ] Per-CPU speed percent equals delta-executed over delta-wall over targetHz; the C64 primary reads about 95-100 percent at real time and the drive about 100 percent when running.
-- [ ] The status surface lists per-CPU rate entries for the host and each peripheral CPU distinctly.
-- [ ] Machine reset zeroes every CPU's executed-cycle counter.
-
-## FR-DRV-005 IEC Serial Bus Protocol
-
-The emulator shall expose an active-low IEC serial bus with ATN, CLK, DATA, and SRQ line behavior that drives 1541/D64 operations and observable bus activity.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] IEC bus endpoints resolve ATN, CLK, DATA, and SRQ as active-low wired-OR lines.
-- [ ] Mounted D64 directory and file operations generate observable IEC line activity from the bus signal source.
-- [ ] Mounted D64 directory and file operations complete with correct data through the IEC path.
-
-## FR-DRVLED-001 Per-drive activity LED
-
-Each drive card shows an activity LED sourced from that drive's VIA2 (1C00) port B bit 3, set by the 1541 DOS ROM (VICE led_status model), independent of IEC bus traffic.
+tools/Gb64Import shall unzip each GB64 game ZIP, parse VERSION.NFO, and name output from NFO Name (sanitized) plus RomM tags per docs/gb64-romm-tag-mapping.md: language, PAL/NTSC, revision, (gb64-id), TrueDrive when NFO says Yes. Multi-file media becomes a folder; single media a file. VERSION.NFO is not left in the scannable ROM tree.
 Scope: layer-1+
 
-## FR-DRVTRUE-001 Per-drive True Drive toggle
+## FR-GB64-004 Conditional import, resume, force, and markers
 
-Each IEC drive's UI exposes a True Drive toggle. Enabled = cycle-accurate emulated 1541 (6502+VIA+DOS over IEC); disabled (default) = lightweight simulated/buffered drive. Mirrors VICE per-unit DriveTrueEmulation / Fidelity TrueDevice vs Buffered. The runtime honors it (gated true-drive coordinator path), default off so existing behavior is unchanged.
+Prepare runs Gb64Import only when C64 library media is missing (no media files and no .gb64-library-built). Importer persists .gb64-import-state.txt (Unique-ID keys) so a crash is resumable. ForceLibraryBuild rewrites state and re-imports. Success requires the game marker file.
+
+Acceptance:
+1. Second prepare with media present reports SKIP.
+2. Force re-imports.
+3. Mid-run crash resume skips IDs already in the state file.
+4. Importer nonzero exit fails prepare.
 Scope: layer-1+
 
-## FR-HOST-006 Host Runtime Status and Control Telemetry
+## FR-GB64-005 SID NFO fixer against HVSC
 
-The host runtime shall expose emulator status telemetry for runtime state, timing, media, automation, and IEC bus activity to clients.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Host status responses include existing runtime fields including session, run state, cycle, frame, model, limiter, and automation status.
-- [ ] Host status responses include IEC activity derived from emulator bus traffic and safe for UI polling.
-- [ ] Status polling does not mutate emulator, drive, or bus state.
+Gb64Import --fix-sids shall index HVSC basenames under runtime/library/hvsc and rewrite VERSION.NFO SID: fields: keep if resolvable; remap if the SID exists under a different HVSC-relative path; set SID: (None) if unresolvable. Optional dry-run and receipt log runtime/library/sid-nfo-fix-receipt.txt.
 
-## FR-IECHOTPLUG-001 Hot drive add and remove and live device renumber
-
-Drives can be turned on and off and have their device number changed at runtime without restarting the emulator.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] A drive attached to a running session answers on the bus with no restart.
-- [ ] A detached drive's pull contributions are removed and line states recompute.
-- [ ] A drive's device number (8 to 11) can be changed at runtime and it answers the new number.
-
-## FR-IECLOAD-001 True-drive 1541 LOAD over IEC
-
-A single-system C64 with a true-drive 1541 attached completes LOAD"*",8,1, LOAD"$",8 and SAVE over the IEC bus, talking to the drive's DOS ROM via the faithful serial electrical model.
+Acceptance:
+1. A miss-located but existing SID path is rewritten to the actual HVSC-relative path.
+2. A missing SID is cleared to (None).
+3. Dry-run does not modify ZIPs.
 Scope: layer-1+
 
-## FR-IECMON-001 IEC bus monitor (scope view)
+## FR-GB64-006 Asset path validation
 
-Dedicated logic-analyzer panel showing a timing diagram of the IEC lines over emulator time, colored by which device drives each segment, with decoded IEC protocol bands, cursor/zoom/scroll, synced to forward step and reverse step.
+Gb64Import --validate-assets shall check that each NFO Screenshot: and SID: relative path resolves under attached library/screenshots and library/hvsc (same rules as Resolve-ScreenshotPath.ps1 / Resolve-SidPath.ps1) and report counts of ok/missing.
+
+Acceptance:
+1. Declared screenshot that exists under letter folders counts ShotOk.
+2. Declared SID that exists under HVSC counts SidOk.
+3. Missing paths are sampled in the report.
 Scope: layer-1+
 
-## FR-IECSPY-001 IEC bus snapshot / spy
+## FR-HVSC-001 HVSC lives on attached library storage
 
-At any instant the IEC bus can be snapshotted to read each line's level (ATN/CLK/DATA/SRQ), which endpoints are pulling each line low, and which devices are talking. Read-only; never perturbs bus state. DONE.
+The High Voltage SID Collection (HVSC) shall live on the host under runtime/library/hvsc (container /romm/library/hvsc). Layout includes MUSICIANS/, GAMES/, DEMOS/. HVSC is gitignored, not a RomM platform under roms/, and not baked into Docker image layers.
+
+Acceptance:
+1. Compose bind makes HVSC visible at /romm/library/hvsc.
+2. Dockerfile does not COPY or RUN an HVSC fetch into the image.
+3. SID: MUSICIANS\W\Whittaker_David\180.sid resolves under that root.
 Scope: layer-1+
 
-## FR-MED-002 BMP frame-sequence video export (all / unique frames)
+## FR-HVSC-002 HVSC download and normalize
 
-Export video as a numbered 24-bit BMP sequence, writing every frame or only frames that differ from the previous one (frames=all|unique capture option).
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Unique mode skips consecutive byte-identical frames
-- [x] Frame files are written off the emulation worker thread
+Operators fetch HVSC with scripts/Download-Hvsc.ps1 which runs tools/HvscFetch (C#, no Python). Default dest is runtime/library/hvsc. The tool discovers the archive URL (or HVSC_URL), downloads, extracts, and normalizes so MUSICIANS/GAMES/DEMOS sit at the dest root. HVSC_SKIP_DOWNLOAD=1 reuses a cached archive in HVSC_WORK_DIR.
 
-## FR-MED-003 WAV sound recording tapped off the SID output
-
-Record the emulator's SID audio to a 16-bit PCM WAV file via a runtime-swappable tap installed in the SID -> output path.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Output parses as valid RIFF/WAVE with data-chunk size matching samples
-
-## FR-MED-004 Muxed video+audio export via external ffmpeg
-
-Export emulator video and audio into a single muxed container (mp4/mkv/avi) by streaming raw BGRA + s16le PCM to an external ffmpeg process over loopback TCP, mirroring VICE ffmpegexedrv.
+Acceptance:
+1. Default dest is runtime/library/hvsc.
+2. After a successful fetch, MUSICIANS exists at dest.
+3. Nonzero HvscFetch exit fails the script.
 Scope: layer-1+
 
-## FR-NATIVERESIDUE-001 Order-independent native oracle across .vsf resumes
+## FR-HVSC-003 Prepare does not download HVSC
 
-Every native (x64sc shim) machine created in a test process must present identical boot and post-activity-reset state regardless of whether a .vsf snapshot was resumed earlier in the same process. Snapshot side effects on process-wide VICE resources (e.g. DriveNTrueEmulation from a has_tde=0 DRIVE8 module) must be re-baselined to VICE defaults at machine create so lockstep suites are order-independent and can run in one process.
+Prepare-RomMLibrary.ps1 shall not download HVSC. If library/hvsc lacks MUSICIANS or any .sid, it logs WARN and the Download-Hvsc command line.
+
+Acceptance:
+1. Prepare with missing HVSC still creates platform dirs and does not throw solely for missing HVSC.
+2. Log contains WARN and points at Download-Hvsc.ps1.
 Scope: layer-1+
 
-## FR-PACESEL-001 Selectable emulation pacing strategy
+## FR-ROMM-001 Structure A and built-in Commodore platforms
 
-The pacing strategy (Semaphore vs VICE) is selectable in settings, applied live by swapping the gate on the worker thread, and persisted.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Strategy is selectable in the Settings UI (Semaphore or VICE)
-- [x] Change applies live - the pump swaps the gate with no session restart
-- [x] Selection round-trips through the settings DTO and persists
-- [x] Unknown or null strategy defaults to Semaphore
+The RomM stack shall treat upstream RomM as the library authority. Storage follows Structure A: library/roms/{platform}/. First-class Commodore roots use built-in slugs only: c64, c128, c-plus-4, vic-20. Optional: c16, cpet, commodore-cdtv. Do not invent aliases (plus4, vic20) as folder names.
 
-## FR-PERF-RUNFRAME-001 C64 PAL RunFrame Throughput
-
-Managed C64 PAL emulation must execute IMachine.RunFrame() fast enough for a host application to sustain 50.125 Hz PAL playback with remaining budget for blit and audio work.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Production C64 PAL machine is built through ArchitectureBuilder with real C64 ROMs; romless and minimal-host machines are not valid evidence. (evidence: tests/ViceSharp.Benchmarks/BenchmarkMachineFactory.cs; tests/ViceSharp.Benchmarks/C64PalRunFrameBenchmark.cs; BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed)
-- [x] Release/net10.0 managed-only 60 warmup plus 600 measured frame run reports median <= 18.0 ms. (evidence: RunFramePerfProbe 60 600: median=1.575ms)
-- [x] The same measured run reports p95 <= 22.0 ms. (evidence: RunFramePerfProbe 60 600: p95=2.753ms)
-- [x] The measured RunFrame loop reports 0 bytes allocated on the current thread. (evidence: RunFramePerfProbe 60 600: allocated=0 bytes; BenchmarkDotNet Allocated reported no managed allocation)
-- [x] Public signatures for IMachine, IVideoChip, IAudioChip, IBus, IKeyboardMatrix, ArchitectureBuilder, and C64MachineProfiles remain unchanged. (evidence: PR #3 diff only changes internal implementation plus benchmark/test/docs; no public interface signatures changed)
-
-## FR-PUBSUB-001 Internal Pub/Sub Event Bus
-
-ViceSharp shall provide an internal synchronous topic-based Pub/Sub event bus for transient intra-frame device-to-device communication, including interrupts, NMI, bus availability, address-enable control, DMA, clock, and state notifications. The bus exposes typed publish and subscribe APIs, raw payload compatibility, deterministic registration-order delivery, handle-based unsubscription, frame reset behavior, and message pool integration.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Public IPubSub exposes typed Publish/Subscribe, raw payload compatibility, Unsubscribe by SubscriptionHandle, Flush, FrameReset, and SubscriptionCount. (evidence: src/ViceSharp.Abstractions/IPubSub.cs)
-- [x] Publish delivers synchronously to subscribers in registration order for each topic. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
-- [x] Message pool exhaustion, return, and frame reset behavior are covered by focused tests. (evidence: tests/ViceSharp.TestHarness/LockFreePubSubTests.cs)
-
-## FR-REMOTECTRL-001 Live Avalonia visual-tree inspection over gRPC
-
-ViceSharp.Avalonia can expose its live Avalonia visual tree for remote inspection and (optionally) interaction over gRPC via the SharpNinja.Avalonia.RemoteControl embeddable server, to support UI development/validation. The server is disabled by default and only starts when explicitly enabled via environment switches, and then only with a bearer token on a loopback transport (interaction and live frames remain deny-by-default opt-ins).
+Acceptance:
+1. Host runtime/library/roms/ uses only RomM slugs.
+2. Empty platform folders persist across container recreate.
+3. Custom side folders remap via config.yml to a built-in slug or are retired.
 Scope: layer-1+
 
-## FR-REVEXEC-001 Reverse execution (backward step)
+## FR-ROMM-002 Distinct C64, C128, Plus/4, and VIC-20 libraries
 
-The emulator can step backward by cycle and by frame, restoring exact prior state, so protocols can be watched forward and backward. Backed by a frame-granular snapshot ring and deterministic re-run.
+The operator library shall include distinct Structure A trees roms/c64/, roms/c128/, roms/c-plus-4/, and roms/vic-20/. Content is placed in the matching platform. Host paths under runtime/library/roms/{slug}/ exist and are bind-mounted.
+
+Acceptance:
+1. Compose up lists those four directories on host and at /romm/library/roms/.
+2. A probe file under host roms/vic-20/ is visible in the container.
+3. VIC-20 or Plus/4 titles are not dumped into c64.
 Scope: layer-1+
 
-## FR-SID-013 SID audio backend wiring
+## FR-ROMM-003 Preserve config on redeploy
 
-The emulator shall wire SID sample production through the host audio backend without dropping or duplicating real-time audio buffers.
+Redeploy shall preserve .env, runtime/config/config.yml, runtime/assets, runtime/library, runtime/csdb, host HVSC, and gb64. Prepare-RomMLibrary.ps1 never overwrites a non-empty config.yml. GB64 game import and screenshot sync run only when the corresponding attached library data is missing, unless ForceLibraryBuild.
+
+Acceptance:
+1. Existing non-empty config.yml is byte-identical after redeploy.
+2. Populated roms/c64 or marker .gb64-library-built skips game import.
+3. Empty roms/c64 plus gb64/Games runs Gb64Import.
+4. Populated library/screenshots or marker .screenshots-synced skips screenshot robocopy.
 Scope: layer-1+
 
-## FR-SID-014 VICE-compatible signed SID voice output and demo pacing
+## FR-ROMM-004 HVSC and screenshots on the attached library
 
-SID voice output must be centered and scaled like VICE/reSID so live host audio back-pressure paces demos at the same rate as VICE across runtime segment transitions.
+NFO SID: and Screenshot: relative paths resolve against attached library roots library/hvsc and library/screenshots under runtime/library (container /romm/library). HVSC is not baked into the image and is not a RomM platform under roms/.
+
+Acceptance:
+1. Compose mounts ./runtime/library to /romm/library including both roots.
+2. Resolve-SidPath finds a fixture SID under library/hvsc.
+3. Resolve-ScreenshotPath finds Letter/file.png under library/screenshots.
 Scope: layer-1+
 
-## FR-SIDAUDIO-001 SID plays at correct pitch
+## FR-ROMM-005 REST heartbeat and authentication
 
-The SID must tick at the phi2 master-clock rate so pitch, envelopes, noise and sync are correct (BUG-SIDAUDIO-001). It was registered as a slow device (ClockDivisor 16) while its accumulator advanced once per Tick, making everything 16x too slow.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] With voice freq 0x8000, after stepping the SystemClock 8192 master cycles OSC3 reads 0x10 (was 0x01 at the 16x-slow rate)
-- [x] Audio sample rate remains 44.1 kHz (self-corrects via ConfigureAudioClock at either divisor)
-- [x] ADSR, noise-LFSR and hard-sync run at the phi2 rate
+The RomM HTTP API on port 8080 shall expose GET /api/heartbeat and accept authenticated calls with Authorization: Bearer (client token rmm_...) or the documented OAuth/password flow. Tokens must not appear in URL query strings. Unauthenticated protected routes return 401.
 
-## FR-SIDEBARUI-001 Responsive sidebar layout with collapse expander
-
-The attach sidebar has a collapse expander on its inner edge (facing the video) that flips side with the panel anchor, and its button groups wrap to new rows when the panel is narrow.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] The collapse expander sits on the inner edge - Right when the panel is anchored Left, Left when anchored Right
-- [x] The expander toggles the sidebar pane and its chevron points toward the collapse direction
-- [x] Tab and action button groups wrap to new rows (WrapPanel) when the panel is narrow
-
-## FR-SNDREG-001 VICE gate sound back-pressure regulator
-
-When the SID is the audio timing source, the VICE pacing gate paces the worker to the audio device draining its sample buffer (regulator 1), taking precedence over vsync.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] Buffer at or over the high-water mark => worker blocks (advances nothing)
-- [x] Buffer has room => worker advances a chunk
-- [x] Warp skips both sound and vsync (highest precedence)
-- [x] No active audio device => falls through to the vsync regulator
-
-## FR-SYSINDEP-001 Independent per-system scheduling coupled only by the async IEC bus
-
-Each system (C64, each drive) runs on its own clock and the systems couple only through the asynchronous wired-OR IEC bus, replacing cycle-lockstep.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] With a drive attached, the drive CPU advances on its own clock and is not stepped in cycle-lockstep per host instruction.
-- [ ] An IEC line transition is observed by every other endpoint's system before that system reads the line.
-- [ ] A real IEC transaction such as a directory or program load completes correctly under independent scheduling, at parity with the existing true-drive LOAD test.
-- [ ] Each system sustains about 100 percent of its own CPU clock under load including audio on, with no fixed-chunk under-throttle.
-
-## FR-TICKHIST-001 Last-100-ticks time-travel debugger
-
-A History panel lists the last 100 executed CPU instructions; when paused, selecting a tick opens a debug screen with that tick's registers, reconstructed memory, and chip state.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [x] History panel lists the last 100 completed instructions, newest first
-- [x] Selecting a tick while paused shows that tick's CPU registers
-- [x] Memory dump is reconstructed as-of-tick (later ticks' write-deltas reverse-applied to current RAM)
-- [x] Inspection is only available while the emulator is paused
-
-## FR-UI-002 Emulator Status and Machine Control Bar
-
-The UI shall provide a status and control bar for runtime state, controls, performance fields, and IEC activity.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] The status bar presents existing run state, cycle, frame, model, limiter, automation, and control commands.
-- [ ] The status bar presents IEC activity from host telemetry without replacing existing fields.
-- [ ] The status bar remains usable without stealing emulator focus for normal display interaction.
-
-## FR-UI-003 Collapsible Tabbed Emulator Sidebar
-
-The UI shall provide a dockable tabbed sidebar with peripherals and settings surfaces driven by host protocol state.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] The peripherals tab exposes drive attachment state and media commands for configured drives.
-- [ ] Drive entries expose IEC active/idle state from the same host telemetry source as the status bar.
-- [ ] Drive IEC activity returns idle in the peripherals tab after bus activity settles.
-
-## FR-UIFLYOUT-001 Flyout sidebar with single side-toggle
-
-The Attach/settings sidebar is a proper flyout (Avalonia SplitView/Flyout). A single icon button toggles the flyout's side (left/right), replacing the separate Left and Right buttons.
+Acceptance:
+1. Heartbeat returns JSON without requiring a ROM download.
+2. Bearer token is sent on protected /api/* calls.
+3. 401 when the token is missing or invalid.
 Scope: layer-1+
 
-## FR-UIMENUBAR-001 VICE-style menu bar
+## FR-ROMM-006 Platforms API
 
-A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about). Menu commands bind to the existing view-model actions/host services.
+GET /api/platforms shall list platforms with numeric id and slug. GET /api/platforms/{id} shall return one platform. Slugs include c64, c128, c-plus-4, vic-20 when those libraries exist.
+
+Acceptance:
+1. List returns JSON objects with id and slug.
+2. Required slugs resolve to numeric ids.
+3. Get-by-id matches list.
 Scope: layer-1+
 
-## FR-UIPERIPHERAL-001 Reusable per-peripheral UserControl
+## FR-ROMM-007 ROM list, search, page, and char index
 
-Each peripheral in the sidebar (Drive 8, Drive 9, Tape, Cartridge) is rendered by a single reusable AXAML UserControl bound to a per-slot view model (status, attach/eject, RO, activity LED, True Drive toggle for drives).
+GET /api/roms shall support search_term, platform_ids, limit, offset, order_by, order_dir. The page payload shall include items, total, offset, and a character index suitable for A-Z jump.
+
+Acceptance:
+1. platform_ids scopes results.
+2. search_term filters by name.
+3. limit/offset page the result.
+4. Response includes total and a char index for letters that have titles.
 Scope: layer-1+
 
-## FR-UISETTINGS-001 Settings panel as a UserControl
+## FR-ROMM-008 ROM detail
 
-The settings panel is a self-contained reusable AXAML UserControl bound to the settings view model (machine profile, video/renderer/palette, audio, input/joystick, limiter, resource mode).
+GET /api/roms/{id} shall return detailed ROM metadata including files (fs_name), cover fields, summary, and enough data to decide launchability.
+
+Acceptance:
+1. Detail includes at least one file with fs_name when the ROM has content.
+2. Cover URL or path fields are present when artwork exists.
+3. Unknown id returns 404.
 Scope: layer-1+
 
-## FR-VIC-001 VIC-II PAL raster cycle counter and frame-periodic behavior
+## FR-ROMM-009 ROM content download
 
-Managed PAL VIC-II advances rasterLine/rasterX cyclically by exactly 312*63=19,656 ticks per frame. CycleCounter increments monotonically. VICE vicii-cycle.c:576-598.
+Authenticated download of a ROM file by id and file name shall stream bytes.
+
+Acceptance:
+1. Download returns the file stream for a known id and fs_name.
+2. Missing file returns 404.
+3. Download requires auth on the content endpoint.
 Scope: layer-1+
 
-## FR-VIC-002 FR-VIC-002
+## FR-ROMM-010 Library scan task
 
-Placeholder requirement backfilled for TODO link FR-VIC-002.
+The server shall expose a tasks API so a client can trigger a library scan after ingest and poll status until complete.
+
+Acceptance:
+1. Scan can be started via the documented tasks endpoint.
+2. Status can be polled until finished.
+3. Newly ingested files appear in /api/roms after scan completes.
 Scope: layer-1+
 
-## FR-VIC-003 FR-VIC-003
+## FR-ROMM-011 Collections (lists)
 
-Placeholder requirement backfilled for TODO link FR-VIC-003.
+The server shall persist user collections (/api/collections): list, create, rename, delete, add roms, remove roms. Smart/virtual collections are read-only.
+
+Acceptance:
+1. Create returns a collection id.
+2. Add/remove accept rom_ids.
+3. Smart/virtual collections cannot be mutated.
 Scope: layer-1+
 
-## FR-VIC-004 FR-VIC-004
+## FR-ROMM-012 Cover art fetch
 
-Placeholder requirement backfilled for TODO link FR-VIC-004.
-Scope: layer-1+
+Cover images shall be fetchable. Public url_cover may be unauthenticated. Server path_cover_* resources under the RomM assets prefix require the same Bearer token as the API.
 
-## FR-VIC-005 FR-VIC-005
-
-Placeholder requirement backfilled for TODO link FR-VIC-005.
-Scope: layer-1+
-
-## FR-VIC-006 FR-VIC-006
-
-Placeholder requirement backfilled for TODO link FR-VIC-006.
-Scope: layer-1+
-
-## FR-VIC-007 FR-VIC-007
-
-Placeholder requirement backfilled for TODO link FR-VIC-007.
-Scope: layer-1+
-
-## FR-VIC-008 VIC-II FLI forced bad line RC window interrupt
-
-Changing YSCROLL mid-frame to match current raster line low 3 bits forces a bad line. VC update at cycle 13 resets rc=0 and clears idle_state, interrupting the idle window. VICE viciisc/vicii-cycle.c:51-60.
-Scope: layer-1+
-
-## FR-VIC-010 FR-VIC-010
-
-Placeholder requirement backfilled for TODO link FR-VIC-010.
-Scope: layer-1+
-
-## FR-VSFLOCKSTEP-001 Resume externally-staged VICE .vsf snapshots in the native oracle
-
-The native VICE oracle (vice_x64 shim) reads and resumes a .vsf snapshot staged by a standalone x64sc, including snapshots from an older VICE release whose module versions differ from the bundled submodule, so lockstep can start from a user-supplied known state (C64SC identity, reSID engine, true-drive set).
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] A supplied x64sc PAL/C64C .vsf (tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf) loads with rc=0 and snapshot_last_error=0; all 16 C64 modules (MAINCPU..USERPORT) are consumed.
-- [ ] The resumed MAINCPU registers (A/X/Y/SP/PC) equal those encoded in the snapshot's MAINCPU module.
-- [ ] No regression to the reSID lockstep timing gate or SID parity (X64ScVariantLockstep 306 pass / 0 fail / 1 skip; SID parity 8/8).
-
-## RUNTIME-TAPE-002 Datasette motor ramp + sense line + record mode
-
-Datasette.Tick() enforces MOTOR_DELAY=32,000-cycle ramp (datasette.c:62) before pulse delivery when Tick is timing mechanism. SenseLine=!PlayPressed||!RecordPressed (CIA1  bit 4). TryWritePulse stores pulses in record mode.
+Acceptance:
+1. url_cover (when set) fetches without a token.
+2. Authenticated cover paths require Bearer.
+3. Missing artwork does not 500 the ROM list.
 Scope: layer-1+
 
