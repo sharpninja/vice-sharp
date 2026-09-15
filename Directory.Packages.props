@@ -60,4 +60,7 @@
     <PackageVersion Include="RomM.Client" Version="1.0.1" />
     <PackageVersion Include="RomM.Client.Csdb" Version="1.0.1" />
   </ItemGroup>
+  <ItemGroup Label="GB64/HVSC importer tools">
+    <PackageVersion Include="SharpCompress" Version="0.50.0" />
+  </ItemGroup>
 </Project>

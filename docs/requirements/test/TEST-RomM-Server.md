@@ -26,7 +26,7 @@ List/create/add/remove/rename/delete collections; smart collections are read-onl
 
 ## TEST-GB64-001: GB64 organizer landing
 
-Packages land under `roms/c64` with `(gb64-{id})` tags, never letter-bucket parents. `tools/Gb64Import.Tests`.
+Packages land under `roms/c64` with `(gb64-{id})` tags, never letter-bucket parents. `tools/Gb64Import.Tests` in this repo (moved from RomM).
 
 ## TEST-GB64-002: Screenshot sync skip/run
 
