@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using Avalonia.Controls;
@@ -39,10 +40,12 @@ public partial class MainWindow : Window
     private Control? _menuBar;
     private Control? _statusBar;
     private Control? _iecMonitor;
+    private readonly string? _startupFile;
 
     public MainWindow()
     {
         InitializeComponent();
+        _startupFile = DesktopFileAssociations.TryGetOpenPath(Environment.GetCommandLineArgs());
 
         // Opt-in UI-thread pinning (TR-HOST-AFFINITY-001): VICESHARP_UI_CPU names the
         // logical CPU the Avalonia UI thread runs on, complementing VICESHARP_EMU_CPU
@@ -133,7 +136,7 @@ public partial class MainWindow : Window
         UpdateVideoAspect();
         ApplyContentLayout();
 
-        Opened += (_, _) => _video.Focus();
+        Opened += OnWindowOpened;
 
         _ = InitializeViewModelAsync();
 
@@ -201,9 +204,10 @@ public partial class MainWindow : Window
 
         _video.PixelAspect = pixelAspect;
         _video.AspectMode = _attachViewModel.SelectedAspectMode;
-        // C64 crops NTSC to written rows; Vic20 frames are already the full char+border buffer.
+        // C64 NTSC crops the unused black rows in the fixed 272-high buffer.
+        // VIC-20 publishes its own canvas (NTSC 400x234, PAL 448x284); 0 means use that height.
         _video.ContentHeight = isVic20
-            ? VideoSurface.SourceHeight
+            ? 0
             : (isNtsc ? VideoSurface.NtscContentHeight : VideoSurface.SourceHeight);
         _video.InvalidateMeasure();
         _video.InvalidateVisual();
@@ -368,6 +372,25 @@ public partial class MainWindow : Window
         catch
         {
             // Restoring persisted state must never break startup.
+        }
+
+        await TryOpenStartupFileAsync().ConfigureAwait(true);
+    }
+
+    private void OnWindowOpened(object? sender, EventArgs e) => _video.Focus();
+
+    private async Task TryOpenStartupFileAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_startupFile))
+            return;
+
+        try
+        {
+            await _shell.DropAndStartFileAsync(_startupFile).ConfigureAwait(true);
+        }
+        catch
+        {
+            // Explorer Open must not crash startup if the image fails to attach.
         }
     }
 
