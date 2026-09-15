@@ -223,8 +223,8 @@ runtime/library/                    →  /romm/library
 
 Screenshot staging:
 
-1. Operator keeps or copies GameBase under `./gb64` (source).  
-2. `Prepare-RomMLibrary.ps1` syncs `gb64/Screenshots` → `runtime/library/screenshots` when library screenshots are missing.  
+1. Operator keeps or copies GameBase under `./gb64` (source).
+2. `Prepare-RomMLibrary.ps1` syncs `gb64/Screenshots` → `runtime/library/screenshots` when library screenshots are missing.
 3. Resolvers use `SCREENSHOTS_ROOT` / `scripts/Resolve-ScreenshotPath.ps1`. Keep `(gb64-{id})` on ROM filenames as join key.
 
 ---
@@ -264,31 +264,31 @@ To keep filenames usable, emit this **minimum** set by default:
 
 **If true:**
 
-- `(TrueDrive)` when True Drive = Yes  
-- `(Trainers-N)` when Trainers > 0  
-- `(Cracked)` + group code when Cracked/Crunched ≠ `(None)`  
-- `(PD)` / `(prototype)` / `(demo)` from Published/Name heuristics  
-- `(HiscoreSaver)`, `(Docs)`, `(LoadingScreen)` only if an “extended tags” mode is enabled  
+- `(TrueDrive)` when True Drive = Yes
+- `(Trainers-N)` when Trainers > 0
+- `(Cracked)` + group code when Cracked/Crunched ≠ `(None)`
+- `(PD)` / `(prototype)` / `(demo)` from Published/Name heuristics
+- `(HiscoreSaver)`, `(Docs)`, `(LoadingScreen)` only if an “extended tags” mode is enabled
 
 **Usually omit from filename:** Genre, Players, Control, Game Length, developer credits (optional extended profile).
 
 ### Example conversions
 
-**Input ZIP:** `4ACESPIN_12134_01.zip`  
+**Input ZIP:** `4ACESPIN_12134_01.zip`
 **NFO:** Name `4 Aces Pinball`, Language `English`, Pal/NTSC `PAL(+NTSC?)`, Unique-ID `12134`, GB-Version `1`, Trainers `0`, Cracked `(None)`
 
 ```text
 4 Aces Pinball (En) (E) (PAL) (NTSC-maybe) (rev-01) (gb64-12134).t64
 ```
 
-**Input ZIP:** `BRUSHUP2_14766_02.zip`  
+**Input ZIP:** `BRUSHUP2_14766_02.zip`
 **NFO:** Name `Brush Up Your English II`, Language `German`, True Drive `Yes`, Unique-ID `14766`, GB-Version `2`
 
 ```text
 Brush Up Your English II (De) (E) (PAL) (NTSC-maybe) (rev-02) (gb64-14766) (TrueDrive).d64
 ```
 
-**Input ZIP:** multi-disk with trainers  
+**Input ZIP:** multi-disk with trainers
 **NFO:** Trainers `3`, Cracked `Fairlight (FLT)`, Language `English`
 
 ```text
@@ -314,13 +314,13 @@ Some Game (En) (E) (PAL) (rev-01) (gb64-99999) (Trainers-3) (Cracked) (FLT)/
 
 ## 8. Implementation checklist (extract pipeline)
 
-1. Open each `./gb64/Games/{bucket}/*.zip`.  
-2. Parse `VERSION.NFO` (key: value lines under GAME INFO / VERSION INFO / header).  
-3. List media entries (`.t64`, `.d64`, `.crt`, …); ignore `VERSION.NFO` in output tree.  
-4. Build RomM-tagged base name from the mapping tables (default profile).  
-5. If one media file → write `/romm/library/roms/c64/{tagged}{ext}`.  
-6. If multiple media files → write `/romm/library/roms/c64/{tagged}/{originalMediaNames}`.  
-7. Record `Screenshot:` → host path under `./gb64/Screenshots` for art import.  
+1. Open each `./gb64/Games/{bucket}/*.zip`.
+2. Parse `VERSION.NFO` (key: value lines under GAME INFO / VERSION INFO / header).
+3. List media entries (`.t64`, `.d64`, `.crt`, …); ignore `VERSION.NFO` in output tree.
+4. Build RomM-tagged base name from the mapping tables (default profile).
+5. If one media file → write `/romm/library/roms/c64/{tagged}{ext}`.
+6. If multiple media files → write `/romm/library/roms/c64/{tagged}/{originalMediaNames}`.
+7. Record `Screenshot:` → host path under `./gb64/Screenshots` for art import.
 8. Never create `roms/c64/a1/` style buckets.
 
 ---
@@ -329,10 +329,10 @@ Some Game (En) (E) (PAL) (rev-01) (gb64-99999) (Trainers-3) (Cracked) (FLT)/
 
 From a 2,000-NFO sample under `./gb64/Games`:
 
-- Languages dominated by English; multi-language strings use `/`.  
-- `Pal/NTSC` almost always `PAL(+NTSC?)` or `PAL+NTSC`.  
-- `Cracked/Crunched` is `(None)` ~half the time; otherwise scene group names (hundreds of distinct values).  
-- `Trainers` is `0` for most titles; non-zero should become `(Trainers-N)`.  
+- Languages dominated by English; multi-language strings use `/`.
+- `Pal/NTSC` almost always `PAL(+NTSC?)` or `PAL+NTSC`.
+- `Cracked/Crunched` is `(None)` ~half the time; otherwise scene group names (hundreds of distinct values).
+- `Trainers` is `0` for most titles; non-zero should become `(Trainers-N)`.
 - `Screenshot:` is present on essentially all packages and is the reliable art key.
 
 ---
