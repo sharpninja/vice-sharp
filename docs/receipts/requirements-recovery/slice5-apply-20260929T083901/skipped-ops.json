@@ -1,0 +1,140 @@
+[
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "ARCH-TRUEDRIVE-1541-002",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "BACKFILL-MEDIA-001",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "BACKFILL-VIDEO-001",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "RUNTIME-TAPE-002",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-ALLOC-001",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-AOT-001",
+    "operation": "create"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-BUILD-001",
+    "operation": "create"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-CYCLE-001",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-DET-001",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-LIB-001",
+    "operation": "create"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-MEDIA-001",
+    "operation": "create"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-MVVM-001",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-PLAT-001",
+    "operation": "create"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-PUBSUB-001",
+    "operation": "create"
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-ROMM-SEC-001",
+    "operation": "update"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-SIMD-001",
+    "operation": "create"
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-STATE-001",
+    "operation": "create"
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-VIC20-FLASH-001",
+    "operation": "update"
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-VIC20-PIXEL-001",
+    "operation": "update"
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-VIC20-SOUND-001",
+    "operation": "update"
+  },
+  {
+    "reason": "delete-unsupported",
+    "kind": "tr",
+    "id": "TEST-DRV-001",
+    "operation": "delete"
+  },
+  {
+    "reason": "delete-unsupported",
+    "kind": "tr",
+    "id": "TEST-UI-001",
+    "operation": "delete"
+  },
+  {
+    "reason": "delete-unsupported",
+    "kind": "tr",
+    "id": "TEST-VIC-001",
+    "operation": "delete"
+  }
+]

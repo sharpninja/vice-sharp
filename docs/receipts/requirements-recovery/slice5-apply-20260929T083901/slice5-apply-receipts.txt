@@ -1,0 +1,203 @@
+================================================================================
+SLICE 5 APPLY RECEIPT — vice-sharp requirements recovery
+Generated: 2026-09-29 08:43:04 CT
+Machine: PAYTON-LEGION2
+McpServer: 1.0.0+deda7d6a895ba64542348cd95e7646ee836e5ff5 (Healthy)
+Workspace: F:\GitHub\vice-sharp
+Preview source: docs/receipts/requirements-recovery/20260928T195211Z/staged-recovery-preview.json
+================================================================================
+
+AUTHORITATIVE APPLY
+  dryIdem:    slice5-dryrun-382a13f4c072   status=planned  GET=404 (expected)
+  cleanIdem:  slice5-apply-clean-18028995ae17
+  payloadHash: d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164
+  dryHashMatch: True
+  apply: status=applied applied=true replay=false  (HTTP 200, ~1694ms)
+  GET:   status=applied applied=true               (HTTP 200)
+  replay: applied=true replay=true                 (HTTP 200)
+  conflict different body same key: HTTP 409       (PASS)
+
+CONTAMINATED INTERMEDIATE (documented, superseded by cleanIdem)
+  first apply key slice5-apply-4db60f189336 -> HTTP 503 backend_unavailable (retryable)
+  conflict-probe then applied mutated payload under that same key (FR-AIREVIEW-ROUTING-001 + CONFLICT-PROBE)
+  clean re-apply fixed probe (PROBE_GONE=True) and stored clean hash matching dry-run
+
+COUNTS
+  preview ops: 442
+  applied items: 279 (FR/TR/TEST create+update with valid IDs)
+  skipped: 23
+    - id-pattern: 16 (legacy FR without FR- prefix; short TR-*-NNN failing TR regex)
+    - missing-title-or-body: 4
+    - delete-unsupported: 3 (wrong-type TEST ids stored as TR)
+  mapping ops NOT in recovery API: 140 (MAP unchanged)
+  before effective: FR=140 TR=127 TEST=116 MAP=115
+  after effective:  FR=232 TR=133 TEST=140 MAP=115
+  delta:            FR=+92 TR=+6  TEST=+24 MAP=+0
+  (creates landed via contaminated-then-clean path; clean apply was all updates=279)
+
+VERIFICATION
+  sample IDs present with AC appendix in body: PASS
+  FR-AIREVIEW-ROUTING-001 CONFLICT-PROBE removed: PASS
+  plugin workflow.requirements.getRecovery: FAIL (exit 1 / False) — HTTP GET recovery works; plugin session/cache gap
+
+GAPS / NOT DONE
+  1. Mapping upserts (140) not supported by live recovery API — MAP still 115
+  2. 3 wrong-type deletes not applied
+  3. 16 IDs rejected by recovery ID regex; 4 missing title/body
+  4. AcceptanceCriteria stored as "## Acceptance Criteria" appendix in body (API has no AC field)
+  5. Handoff pre-apply HV AGREE remediation of 9 preview FAILs / VICE hash manifests not re-run this slice (operator authorized apply of staged preview)
+  6. Plugin getRecovery path not green (HTTP path proven)
+  7. No generateDocument / wiki export proof
+
+GIT (PAUSED — no commit/push)
+  branch: main
+  HEAD: a65a1a8a6ddaa6abd0e346c3dc8e166c80a61563
+  dirty (new untracked only from this work):
+    ?? docs/receipts/requirements-recovery/slice5-apply-20260929T083901/
+    ?? docs/receipts/requirements-recovery/slice5-apply-receipts.txt
+  Waiting for operator ack before any commit/push.
+
+ARTIFACTS
+  F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\slice5-apply-20260929T083901
+  F:\GitHub\McpServer\.worktrees\pr67-reqrecovery\artifacts\slice5-apply-receipts.txt
+  F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\slice5-apply-receipts.txt
+
+================================================================================
+DETAILED LOG FOLLOWS
+================================================================================
+[2026-09-29 08:39:01] === SLICE5 START ===
+[2026-09-29 08:39:01] workspace=F:\GitHub\vice-sharp
+[2026-09-29 08:39:01] runDir=F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\slice5-apply-20260929T083901
+[2026-09-29 08:39:01] preview=F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20260928T195211Z
+[2026-09-29 08:39:01] apiKeyPresent=True from=F:\GitHub\vice-sharp\AGENTS-README-FIRST.yaml
+[2026-09-29 08:39:01] === HEALTH ===
+[2026-09-29 08:39:03] health status=200
+[2026-09-29 08:39:03] health body saved; match=True
+[2026-09-29 08:39:03] === BUILD PAYLOAD ===
+[2026-09-29 08:39:05] itemsBuilt=279 skipped=23 mappingOps=140 deleteOps=3 previewOps=442
+[2026-09-29 08:39:05] === BEFORE STATE ===
+[2026-09-29 08:39:11] before-effective status=200 bytes=282415
+[2026-09-29 08:39:11] before.key=currentLayer
+[2026-09-29 08:39:11] before.key=functional
+[2026-09-29 08:39:11] before.key=technical
+[2026-09-29 08:39:12] before.key=testing
+[2026-09-29 08:39:12] before.key=mappings
+[2026-09-29 08:39:12] before.key=productKeys
+[2026-09-29 08:39:12] dryIdem=slice5-dryrun-382a13f4c072
+[2026-09-29 08:39:12] applyIdem=slice5-apply-4db60f189336
+[2026-09-29 08:39:12] dryJsonBytes=261849 applyJsonBytes=261846
+[2026-09-29 08:39:12] === DRY-RUN POST /mcpserver/requirements/recovery/dry-run ===
+[2026-09-29 08:39:14] dry-run status=200 elapsedMs=1957
+[2026-09-29 08:39:14] dry status=planned applied=False replay=False payloadHash=d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164 itemResults=279
+[2026-09-29 08:39:14] dry planned create=122 update=157
+[2026-09-29 08:39:14] === GET dry idem (expect 404) ===
+[2026-09-29 08:39:15] GET dry: expected miss code=404 msg=Response status code does not indicate success: 404 (Not Found).
+[2026-09-29 08:39:15] DRY_RUN_PASS=True GET404=True
+[2026-09-29 08:39:52] BEFORE counts FR=140 TR=127 TEST=116 MAP=115
+[2026-09-29 08:39:52] === APPLY POST /mcpserver/requirements/recovery/apply idem=slice5-apply-4db60f189336 ===
+[2026-09-29 08:39:58] APPLY FAILED elapsedMs=6861: Response status code does not indicate success: 503 (Service Unavailable).
+[2026-09-29 08:39:58] apply details: 
+{
+  "type": "https://httpstatuses.io/503",
+  "title": "backend_unavailable",
+  "status": 503,
+  "detail": "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+  "code": "backend_unavailable",
+  "error": "backend_unavailable",
+  "message": "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+  "retryable": true,
+  "details": {
+    "reason": "backend_unavailable"
+  }
+}
+[2026-09-29 08:39:58] APPLY_PASS=False
+[2026-09-29 08:39:58] === GET apply idem (expect 200 applied) ===
+[2026-09-29 08:39:59] GET FAILED: Response status code does not indicate success: 404 (Not Found).
+[2026-09-29 08:39:59] GET details: 
+{
+  "type": "https://httpstatuses.io/404",
+  "title": "not_found",
+  "status": 404,
+  "detail": "Requirements recovery run \u0027slice5-apply-4db60f189336\u0027 was not found.",
+  "code": "not_found",
+  "error": "not_found",
+  "message": "Requirements recovery run \u0027slice5-apply-4db60f189336\u0027 was not found.",
+  "retryable": false,
+  "details": {
+    "reason": "not_found"
+  }
+}
+[2026-09-29 08:39:59] === REPLAY apply same body (expect replay=true) ===
+[2026-09-29 08:40:07] REPLAY FAILED: Response status code does not indicate success: 503 (Service Unavailable).
+[2026-09-29 08:40:07] replay details: 
+{
+  "type": "https://httpstatuses.io/503",
+  "title": "backend_unavailable",
+  "status": 503,
+  "detail": "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+  "code": "backend_unavailable",
+  "error": "backend_unavailable",
+  "message": "The storage backend is currently unreachable. Retry the operation once connectivity is restored.",
+  "retryable": true,
+  "details": {
+    "reason": "backend_unavailable"
+  }
+}
+[2026-09-29 08:40:07] === CONFLICT apply different body same key (expect 409) ===
+[2026-09-29 08:40:15] CONFLICT UNEXPECTED success status=200
+[2026-09-29 08:40:15] === AFTER STATE ===
+[2026-09-29 08:40:17] AFTER counts FR=232 TR=133 TEST=140 MAP=115
+[2026-09-29 08:40:17] DELTA FR=92 TR=6 TEST=24 MAP=0
+[2026-09-29 08:40:17] === SPOT CHECK sample IDs ===
+[2026-09-29 08:40:17] spotCheck found=0 missing=0
+[2026-09-29 08:40:17] === PLUGIN getRecovery via repl-invoke ===
+[2026-09-29 08:40:30] getRecovery exit=1 elapsedMs=13490
+[2026-09-29 08:40:30] getRecovery out head: False
+[2026-09-29 08:40:30] === FINAL FLAGS ===
+[2026-09-29 08:40:30] APPLY_PASS=False GET_PASS=False REPLAY_PASS=False CONFLICT_PASS=False PLUGIN_GET=False
+[2026-09-29 08:40:30] dryIdem=slice5-dryrun-382a13f4c072 applyIdem=slice5-apply-4db60f189336 payloadHash=
+[2026-09-29 08:40:30] === GIT DIRTY (no commit) ===
+[2026-09-29 08:40:31] branch=main HEAD=a65a1a8a6ddaa6abd0e346c3dc8e166c80a61563
+[2026-09-29 08:40:32] porcelainLines=2
+[2026-09-29 08:40:32] receipt-related dirty count=2
+[2026-09-29 08:40:32] DIRTY: ?? docs/receipts/requirements-recovery/slice5-apply-20260929T083901/
+[2026-09-29 08:40:32] DIRTY: ?? docs/receipts/requirements-recovery/slice5-apply-receipts.txt
+[2026-09-29 08:40:32] === ARTIFACTS ===
+[2026-09-29 08:40:32] ART 467709 after-effective.json
+[2026-09-29 08:40:32] ART 261861 apply-conflict-request.json
+[2026-09-29 08:40:32] ART 15194 apply-conflict-response.json
+[2026-09-29 08:40:32] ART 261846 apply-request.json
+[2026-09-29 08:40:32] ART 477 apply-response.json
+[2026-09-29 08:40:32] ART 282417 before-effective.json
+[2026-09-29 08:40:32] ART 261849 dry-run-request.json
+[2026-09-29 08:40:32] ART 15163 dry-run-response.json
+[2026-09-29 08:40:32] ART 135 git-status-porcelain.txt
+[2026-09-29 08:40:32] ART 285 health.json
+[2026-09-29 08:40:32] ART 9 plugin-getRecovery.out.txt
+[2026-09-29 08:40:32] ART 2711 skipped-ops.json
+[2026-09-29 08:40:32] ART 1832 slice5-apply-receipts.txt
+[2026-09-29 08:40:32] ART 597 summary-after-dryrun.json
+
+[2026-09-29 08:42:28] === CLEAN RE-APPLY (fix conflict-probe contamination) ===
+[2026-09-29 08:42:28] NOTE: prior key slice5-apply-4db60f189336 applied mutated payload (FR-AIREVIEW-ROUTING-001 body ended with CONFLICT-PROBE) after first 503.
+[2026-09-29 08:42:28] cleanIdem=slice5-apply-clean-18028995ae17
+[2026-09-29 08:42:28] cleanReqBytes=261852 items=279
+[2026-09-29 08:42:29] BEFORE clean: FR-AIREVIEW-ROUTING-001 probePresent=True bodyLen=821
+[2026-09-29 08:42:29] CLEAN APPLY attempt=1/4
+[2026-09-29 08:42:30] attempt=1 status=200 elapsedMs=1694 result.status=applied applied=True replay=False hash=d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164
+[2026-09-29 08:42:30] CLEAN_APPLY_PASS=True hash=d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164
+[2026-09-29 08:42:30] GET clean status=200 result.status=applied applied=True replay=False hash=d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164
+[2026-09-29 08:42:31] REPLAY status=200 applied=True replay=True hash=d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164
+[2026-09-29 08:42:31] CONFLICT code=409
+[2026-09-29 08:42:31] AFTER clean: FR-AIREVIEW-ROUTING-001 probePresent=False bodyLen=806
+[2026-09-29 08:42:31] AFTER counts FR=232 TR=133 TEST=140 MAP=115
+[2026-09-29 08:42:34] plugin getRecovery exit=1
+[2026-09-29 08:42:34] plugin out: False
+[2026-09-29 08:42:34] dryHash=d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164 cleanHash=d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164 hashMatch=True
+[2026-09-29 08:42:34] === FINAL CLEAN FLAGS ===
+[2026-09-29 08:42:34] CLEAN_APPLY=True GET=True REPLAY=True CONFLICT409=True SPOT=True PLUGIN=False PROBE_GONE=True
+[2026-09-29 08:42:34] git branch=main HEAD=a65a1a8a6ddaa6abd0e346c3dc8e166c80a61563 porcelain=2
+[2026-09-29 08:42:34] DIRTY: ?? docs/receipts/requirements-recovery/slice5-apply-20260929T083901/
+[2026-09-29 08:42:34] DIRTY: ?? docs/receipts/requirements-recovery/slice5-apply-receipts.txt
+
+

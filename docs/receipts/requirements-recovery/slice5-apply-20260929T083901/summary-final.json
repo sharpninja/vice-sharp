@@ -1,0 +1,19 @@
+{
+  "contaminatedKey": "slice5-apply-4db60f189336",
+  "cleanIdem": "slice5-apply-clean-18028995ae17",
+  "payloadHash": "d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164",
+  "dryHash": "d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164",
+  "applyOk": true,
+  "getOk": true,
+  "replayOk": true,
+  "conflictOk": true,
+  "sampleOk": true,
+  "pluginOk": false,
+  "probeGone": true,
+  "after": {
+    "test": 140,
+    "map": 115,
+    "fr": 232,
+    "tr": 133
+  }
+}
