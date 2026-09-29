@@ -1,0 +1,163 @@
+[
+  {
+    "id": "ARCH-TRUEDRIVE-1541-002",
+    "kind": "fr",
+    "action": "update",
+    "status": "fail",
+    "error": "Response status code does not indicate success: 400 (Bad Request). \r\n{\r\n  \"error\": \"Requirement ID \\u0027ARCH-TRUEDRIVE-1541-002\\u0027 must match the FR identifier shape. (Parameter \\u0027Id\\u0027)\"\r\n}"
+  },
+  {
+    "id": "BACKFILL-MEDIA-001",
+    "kind": "fr",
+    "action": "update",
+    "status": "fail",
+    "error": "Response status code does not indicate success: 400 (Bad Request). \r\n{\r\n  \"error\": \"Requirement ID \\u0027BACKFILL-MEDIA-001\\u0027 must match the FR identifier shape. (Parameter \\u0027Id\\u0027)\"\r\n}"
+  },
+  {
+    "id": "BACKFILL-VIDEO-001",
+    "kind": "fr",
+    "action": "update",
+    "status": "fail",
+    "error": "Response status code does not indicate success: 400 (Bad Request). \r\n{\r\n  \"error\": \"Requirement ID \\u0027BACKFILL-VIDEO-001\\u0027 must match the FR identifier shape. (Parameter \\u0027Id\\u0027)\"\r\n}"
+  },
+  {
+    "id": "RUNTIME-TAPE-002",
+    "kind": "fr",
+    "action": "update",
+    "status": "fail",
+    "error": "Response status code does not indicate success: 400 (Bad Request). \r\n{\r\n  \"error\": \"Requirement ID \\u0027RUNTIME-TAPE-002\\u0027 must match the FR identifier shape. (Parameter \\u0027Id\\u0027)\"\r\n}"
+  },
+  {
+    "id": "TR-ALLOC-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "via PUT /tr (short id accepted)"
+  },
+  {
+    "id": "TR-CYCLE-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "via PUT /tr (short id accepted)"
+  },
+  {
+    "id": "TR-DET-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "via PUT /tr (short id accepted)"
+  },
+  {
+    "id": "TR-MVVM-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "via PUT /tr (short id accepted)"
+  },
+  {
+    "id": "TR-ROMM-SEC-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "filled title/body from preview Before/After via PUT /tr"
+  },
+  {
+    "id": "TR-VIC20-FLASH-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "filled title/body from preview Before/After via PUT /tr"
+  },
+  {
+    "id": "TR-VIC20-PIXEL-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "filled title/body from preview Before/After via PUT /tr"
+  },
+  {
+    "id": "TR-VIC20-SOUND-001",
+    "kind": "tr",
+    "action": "update",
+    "status": "ok",
+    "note": "filled title/body from preview Before/After via PUT /tr"
+  },
+  {
+    "id": "TEST-DRV-001",
+    "kind": "tr",
+    "action": "delete",
+    "status": "ok",
+    "note": "deleted wrong-type TEST id from TR collection via DELETE /tr"
+  },
+  {
+    "id": "TEST-UI-001",
+    "kind": "tr",
+    "action": "delete",
+    "status": "ok",
+    "note": "deleted wrong-type TEST id from TR collection via DELETE /tr"
+  },
+  {
+    "id": "TEST-VIC-001",
+    "kind": "tr",
+    "action": "delete",
+    "status": "ok",
+    "note": "deleted wrong-type TEST id from TR collection via DELETE /tr"
+  },
+  {
+    "id": "TR-AOT-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  },
+  {
+    "id": "TR-BUILD-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  },
+  {
+    "id": "TR-LIB-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  },
+  {
+    "id": "TR-MEDIA-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  },
+  {
+    "id": "TR-PLAT-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  },
+  {
+    "id": "TR-PUBSUB-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  },
+  {
+    "id": "TR-SIMD-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  },
+  {
+    "id": "TR-STATE-001",
+    "kind": "tr",
+    "action": "create",
+    "status": "ok",
+    "note": "created via POST /tr (recovery regex rejected short TR)"
+  }
+]

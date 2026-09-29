@@ -1,0 +1,79 @@
+================================================================================
+SLICE 5B MAPPING + ID CHASE RECEIPT - vice-sharp requirements recovery
+Generated: 2026-09-29 08:48:09 CT
+Machine: PAYTON-LEGION2
+McpServer: 1.0.0+deda7d6a (Healthy) live — NO UpdateService / redeploy used
+Workspace: F:\GitHub\vice-sharp
+Parent Slice5 commit: 92e35d2c6b39ab6c8dc4420077be4a5c7badae04 (receipts only, no push)
+================================================================================
+
+APPROACH — MAPPINGS
+  Recovery API (live) only accepts kind fr|tr|test — mapping ops unsupported there.
+  Existing live surfaces used instead (no McpServer code change / redeploy):
+    GET  /mcpserver/requirements/mapping
+    PUT  /mcpserver/requirements/mapping/{frId}  body: { trIds[], testIds[] }
+  Plugin/workflow equivalents also exist: ListMappingsAsync / CreateMappingAsync /
+  UpsertMappingAsync on RequirementsClient + RequirementsWorkflow.
+  Decision: apply via live PUT mapping API; do NOT extend recovery for mappings unless
+  operator wants atomic recovery-bundled mapping later (would need worktree change + UpdateService).
+
+MAPPING PROGRESS
+  Preview mapping ops: 140 (116 create + 24 update)
+  Applied: 140/140 OK (fail=0)
+  MAP count: 115 -> 231 (delta +116; creates net-new, updates in-place)
+  Artifacts: docs/receipts/requirements-recovery/slice5b-mapping-chase-20260929T084706/mapping-apply-results.json
+
+PREREQUISITE SHORT TR CREATES (blocked 20 mapping refs)
+  Recovery TrIdPattern requires >=2 name segments (TR-FOO-BAR-001); live CRUD accepts
+  TR-FOO-001. Created via POST /mcpserver/requirements/tr from staged preview After
+  (no new FR product scope invented):
+    TR-AOT-001, TR-BUILD-001, TR-LIB-001, TR-MEDIA-001,
+    TR-PLAT-001, TR-PUBSUB-001, TR-SIMD-001, TR-STATE-001
+  All 8 CREATE_OK.
+
+SKIPPED ID CHASE (23 from Slice5)
+  Fixed via live CRUD (not recovery):
+    - 8 short TR creates (above)
+    - 4 short TR updates: TR-ALLOC-001, TR-CYCLE-001, TR-DET-001, TR-MVVM-001
+    - 4 missing-title-or-body: TR-ROMM-SEC-001, TR-VIC20-FLASH-001, TR-VIC20-PIXEL-001,
+      TR-VIC20-SOUND-001 (body recovered from preview Before; After body was empty)
+    - 3 wrong-type deletes: TEST-DRV-001, TEST-UI-001, TEST-VIC-001 removed from TR
+      collection via DELETE /tr/{id}
+  Remaining / permanent skips (4):
+    - ARCH-TRUEDRIVE-1541-002, BACKFILL-MEDIA-001, BACKFILL-VIDEO-001, RUNTIME-TAPE-002
+      Live under legacy FR ids (no FR- prefix). Recovery + PUT /fr reject id shape.
+      Still present and mapped. Documented in permanent-skips-legacy-fr.json.
+      Optional future: operator-approved rename to FR-* + mapping rewrite (not done).
+
+EFFECTIVE COUNTS AFTER CHASE
+  FR=232 TR=138 TEST=140 MAP=231
+  (Slice5 after was FR=232 TR=133 TEST=140 MAP=115)
+  Expected TR delta ~+8 creates -3 deletes = +5 => ~138; MAP +116 => 231.
+
+MCPSERVER WORKTREE NOTES (pr67-reqrecovery)
+  Uncommitted local diffs already present (workspace-scoped FindRunAsync, layer-1 default)
+  — NOT modified by this chase. Mapping recovery extension NOT implemented (not needed).
+  Optional follow-up (needs UpdateService if desired): relax recovery TrIdPattern to match
+  live CRUD short TR shape; optionally accept legacy FR ids or provide rename migration.
+  Ask operator before any UpdateService redeploy.
+
+GIT
+  Part A commit done earlier: 92e35d2 on main, ahead 1, NO push.
+  This chase wrote NEW untracked receipts under:
+    docs/receipts/requirements-recovery/slice5b-mapping-chase-20260929T084706/
+  PAUSED — no further commit. Waiting for parent/operator to authorize chase receipt commit.
+
+ARTIFACTS
+  docs/receipts/requirements-recovery/slice5b-mapping-chase-20260929T084706/
+    chase-log.txt
+    tr-create-results.json
+    mapping-apply-results.json
+    mapping-after.json
+    mapping-ready.json / mapping-blocked.json (pre-apply classification)
+    skipped-id-analysis.json
+    skipped-id-chase-results.json
+    permanent-skips-legacy-fr.json
+    effective-counts-after.json
+  Also: docs/receipts/requirements-recovery/slice5b-mapping-chase-receipts.txt (this file mirror)
+
+================================================================================

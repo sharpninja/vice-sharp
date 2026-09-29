@@ -1,0 +1,42 @@
+[
+  {
+    "id": "TR-AOT-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-AOT-001\",\"title\":\"Full NativeAOT Compatibility with Zero Reflection on Hot Path\",\"body\":\"All ViceSharp assemblies shall be fully compatible with .NET NativeAOT publication. This means no use of runtime reflection, `System.Reflection.Emit`, or dynamic code generation on the emulation hot path. All assemblies shall pass the NativeAOT trim analysis without warnings. Source generators shall be used where compile-time code generation is needed.\",\"workspaceId\":\"\",\"priority\":\"high\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TR-BUILD-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-BUILD-001\",\"title\":\"Nuke Build System with GitHub origin as Source of Truth\",\"body\":\"ViceSharp shall use the Nuke build system for all build, test, package, and publish operations. The build definition is a C# project (`build/_build.csproj`) that defines targets as code. GitHub `origin` (`https://github.com/sharpninja/vice-sharp.git`) is the git source of truth. Azure DevOps is retired and is not used. Historical `azure-pipelines.ci.yml` and `azure-pipelines.release.yml` files may remain in the tree; they are not the live git or wiki authority.\",\"workspaceId\":\"\",\"priority\":\"high\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TR-LIB-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-LIB-001\",\"title\":\"Emulator Core as a Reusable Library with UI Shells as Thin Consumers\",\"body\":\"The ViceSharp emulator core shall be packaged as a standalone .NET library (NuGet package) with no dependencies on any UI framework, windowing system, or platform-specific API. UI applications (desktop, web, headless test harness, embedded) consume the library and provide their own rendering, audio output, and input handling through well-defined abstractions.\",\"workspaceId\":\"\",\"priority\":\"high\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TR-MEDIA-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-MEDIA-001\",\"title\":\"External FFmpeg Process Integration with Multiple Format Support\",\"body\":\"Muxed video+audio encoding shall use an external `ffmpeg` executable driven as a child process, mirroring VICE's `ffmpegexedrv`. ViceSharp links no FFmpeg libraries and performs no P/Invoke into libav*; the emulator streams raw frames and PCM to the ffmpeg process, and ffmpeg performs all codec and container work. Audio-only (WAV) and image/frame-sequence capture are implemented with managed encoders and do not require ffmpeg.\",\"workspaceId\":\"\",\"priority\":\"medium\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TR-PLAT-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-PLAT-001\",\"title\":\"Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64\",\"body\":\"ViceSharp shall run on Windows, Linux, and macOS on both x64 and ARM64 architectures. The emulation core library shall be platform-agnostic. Platform-specific code (audio output, input handling, window management) shall be isolated behind abstractions with per-platform implementations.\",\"workspaceId\":\"\",\"priority\":\"high\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TR-PUBSUB-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-PUBSUB-001\",\"title\":\"<50ns Publish, <100ns Deliver, 0 Allocations Per Frame\",\"body\":\"The internal event/message bus used for inter-device communication (e.g., VIC-II asserting IRQ on the CPU, CIA timer underflow signaling the SID) shall achieve sub-100ns latency with zero managed heap allocations. This pub/sub system is the backbone of the emulation's device interconnect and fires hundreds of thousands of times per second.\",\"workspaceId\":\"\",\"priority\":\"high\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TR-SIMD-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-SIMD-001\",\"title\":\"SIMD-Accelerated Rendering and Audio with Generic Specialization for CPU Core\",\"body\":\"Performance-critical rendering and audio processing paths shall use SIMD (Single Instruction, Multiple Data) intrinsics to process multiple pixels or audio samples in parallel. The CPU core shall use generic specialization (constrained generics with `where T : struct`) to allow the JIT compiler to generate specialized machine code for different CPU variants (6502, 6510, 8502) without virtual dispatch overhead.\",\"workspaceId\":\"\",\"priority\":\"medium\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  },
+  {
+    "id": "TR-STATE-001",
+    "status": "created",
+    "response": "{\"id\":\"TR-STATE-001\",\"title\":\"Mutation Queue with ACID State Transactions and Configurable State Window\",\"body\":\"All mutations to emulated machine state shall be performed through a mutation queue that provides ACID-like transaction semantics. State changes within a single emulation step (one clock cycle or one instruction) are grouped into a transaction that is either fully applied or fully rolled back. A configurable state window maintains a ring buffer of recent states to support rewind, debugging, and snapshot operations.\",\"workspaceId\":\"\",\"priority\":\"high\",\"status\":\"pending\",\"notes\":null,\"acceptanceCriteria\":null,\"scopeStartLayerKey\":\"layer-1\",\"scopeEndLayerKey\":null}"
+  }
+]

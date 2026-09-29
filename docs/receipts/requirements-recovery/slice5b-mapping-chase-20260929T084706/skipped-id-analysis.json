@@ -1,0 +1,232 @@
+[
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "ARCH-TRUEDRIVE-1541-002",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "FR-ARCH-TRUEDRIVE-1541-002",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "BACKFILL-MEDIA-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "FR-BACKFILL-MEDIA-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "BACKFILL-VIDEO-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "FR-BACKFILL-VIDEO-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "fr",
+    "id": "RUNTIME-TAPE-002",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "FR-RUNTIME-TAPE-002",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-ALLOC-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "TR-ALLOC-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-AOT-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-AOT-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-BUILD-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-BUILD-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-CYCLE-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "TR-CYCLE-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-DET-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "TR-DET-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-LIB-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-LIB-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-MEDIA-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-MEDIA-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-MVVM-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": "TR-MVVM-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-PLAT-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-PLAT-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-PUBSUB-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-PUBSUB-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-ROMM-SEC-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": null,
+    "normValid": false,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-SIMD-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-SIMD-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "id-pattern",
+    "kind": "tr",
+    "id": "TR-STATE-001",
+    "op": "create",
+    "live": false,
+    "proposedNorm": "TR-STATE-CORE-001",
+    "normValid": true,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-VIC20-FLASH-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": null,
+    "normValid": false,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-VIC20-PIXEL-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": null,
+    "normValid": false,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "missing-title-or-body",
+    "kind": "tr",
+    "id": "TR-VIC20-SOUND-001",
+    "op": "update",
+    "live": true,
+    "proposedNorm": null,
+    "normValid": false,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "delete-unsupported",
+    "kind": "tr",
+    "id": "TEST-DRV-001",
+    "op": "delete",
+    "live": true,
+    "proposedNorm": null,
+    "normValid": false,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "delete-unsupported",
+    "kind": "tr",
+    "id": "TEST-UI-001",
+    "op": "delete",
+    "live": true,
+    "proposedNorm": null,
+    "normValid": false,
+    "normAlreadyLive": false
+  },
+  {
+    "reason": "delete-unsupported",
+    "kind": "tr",
+    "id": "TEST-VIC-001",
+    "op": "delete",
+    "live": true,
+    "proposedNorm": null,
+    "normValid": false,
+    "normAlreadyLive": false
+  }
+]
