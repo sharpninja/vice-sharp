@@ -3,6 +3,7 @@ namespace ViceSharp.TestHarness;
 using Xunit;
 using ViceSharp.Chips.Cpu;
 using ViceSharp.Abstractions;
+using ViceSharp.Core;
 
 /// <summary>
 /// Unit tests for CPU interrupt handling - no native VICE required
@@ -154,6 +155,296 @@ public sealed class CpuInterruptTests
         // Push(PCL=0x00) writes to 0x01FE, S becomes 0xFD
         Assert.Equal(0x00, bus.Read(0x01FE)); // PCL = 0x00
         Assert.Equal(0x04, bus.Read(0x01FF)); // PCH = 0x04
+    }
+
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 sample 2060428. VICE CLI sets OPINFO_ENABLES_IRQ when
+    ///   I was set, then <c>interrupt_check_irq_delay</c> refuses to dispatch
+    ///   (sets IK_IRQPEND) so the following instruction runs. Managed armed
+    ///   IRQ on the CLI last CLK and pushed (nS=$FF mS=$FE).
+    /// Acceptance: With IRQ asserted and I set, CLI last CLK leaves S unchanged;
+    ///   the next NOP completes with S still unchanged; the first stack push
+    ///   happens only after that NOP.
+    /// </summary>
+    [Fact]
+    public void Cli_WithIrqPending_DoesNotPushUntilAfterNextInstruction()
+    {
+        var bus = new MockBus();
+        bus.SetMemory(0x8000, 0xEA);
+        bus.SetMemory(0x8001, 0xEA);
+        bus.SetMemory(0x8002, 0xEA);
+        bus.SetMemory(0x8003, 0x58); // CLI after IRQ delay has elapsed
+        bus.SetMemory(0x8004, 0xEA); // NOP that must complete before IRQ
+        bus.SetMemory(0x8005, 0xEA);
+        bus.SetMemory(0xFFFE, 0x00);
+        bus.SetMemory(0xFFFF, 0x09);
+
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cpu = new Mos6502(bus)
+        {
+            PC = 0x8000,
+            S = 0xFF,
+            P = 0x24
+        };
+        var clock = new SystemClock(985_248, cpu, irq);
+        clock.Register(cpu);
+        irq.Assert(new StubIrqSource());
+
+        for (var i = 0; i < 32 && !(cpu.DebugOpcode == 0x58 && cpu.DebugCycle == 0); i++)
+            clock.Step();
+
+        Assert.Equal((byte)0x58, cpu.DebugOpcode);
+        Assert.Equal(0, cpu.DebugCycle);
+        Assert.Equal(0x00, cpu.P & 0x04);
+        Assert.Equal((byte)0xFF, cpu.S);
+
+        clock.Step();
+        Assert.Equal((byte)0xFF, cpu.S);
+
+        for (var i = 0; i < 8 && !(cpu.DebugOpcode == 0xEA && cpu.DebugCycle == 0); i++)
+            clock.Step();
+
+        Assert.Equal((byte)0xEA, cpu.DebugOpcode);
+        Assert.Equal(0, cpu.DebugCycle);
+        Assert.Equal((byte)0xFF, cpu.S);
+
+        clock.Step();
+        Assert.Equal((byte)0xFF, cpu.S);
+
+        clock.Step();
+        Assert.Equal((byte)0xFE, cpu.S);
+    }
+
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 sample 2093250. VICE RTS() LOADs then CLK_INC, then
+    ///   JUMP with no extra CLK; DO_INTERRUPT is paired with FETCH of the
+    ///   return insn. Managed <c>_delayNextFetch</c> after RTS is a host tick
+    ///   at the return PC with cycle 0, so IRQ dispatched and pushed (nPC=$EA0C
+    ///   nA=$20 nS=$EE mPC=$EA0A mA=$0E mS=$ED).
+    /// Acceptance: RTS returning to LDA #$20 with IRQ already pending does not
+    ///   decrement S on the jump-visible tick; LDA completes with A=$20 first.
+    /// </summary>
+    [Fact]
+    public void Rts_DelayNextFetchTick_DoesNotTakeIrqBeforeReturnFetch()
+    {
+        var bus = new MockBus();
+        bus.SetMemory(0x8000, 0x60); // RTS
+        bus.SetMemory(0x8003, 0xA9); // LDA #$20
+        bus.SetMemory(0x8004, 0x20);
+        bus.SetMemory(0x01FE, 0x02);
+        bus.SetMemory(0x01FF, 0x80);
+        bus.SetMemory(0xFFFE, 0x00);
+        bus.SetMemory(0xFFFF, 0x09);
+
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cpu = new Mos6502(bus)
+        {
+            PC = 0x8000,
+            S = 0xFD,
+            P = 0x20
+        };
+        var clock = new SystemClock(985_248, cpu, irq);
+        clock.Register(cpu);
+
+        for (var i = 0; i < 16 && cpu.PC != 0x8003; i++)
+            clock.Step();
+
+        Assert.Equal((ushort)0x8003, cpu.PC);
+        // Assert on the RTS JUMP tick (no CLK). VICE DO_INTERRUPT is the next
+        // FETCH; irq_clk+2 has not elapsed yet, so LDA #$20 still runs
+        // (Wolf64 2093250). IRQ already pending for a long time is 2109682.
+        irq.Assert(new StubIrqSource());
+
+        for (var i = 0; i < 24 && !(cpu.DebugOpcode == 0xA9 && cpu.DebugCycle == 0 && cpu.A == 0x20); i++)
+            clock.Step();
+
+        Assert.Equal((byte)0xA9, cpu.DebugOpcode);
+        Assert.Equal(0, cpu.DebugCycle);
+        Assert.Equal((byte)0x20, cpu.A);
+        Assert.True(cpu.S >= 0xFD, $"IRQ pushed before LDA #$20; S=${cpu.S:X2}");
+    }
+
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 sample 2093251. VICE LDA # GET_IMM CLK_INC then INC_PC
+    ///   with no extra CLK; the next host tick is DO_INTERRUPT plus FETCH of
+    ///   STA ($D1),Y at $EA0C. Managed stayed on opcode $A9 cycle 0 for one
+    ///   extra dwell, then took IRQ (nPC=$EA0E nS=$EE mS=$ED).
+    /// Acceptance: After RTS into LDA #$20 last CLK, the next Step fetches
+    ///   the following NOP; S is unchanged.
+    /// </summary>
+    [Fact]
+    public void RtsThenLdaImm_NextTick_FetchesFollowingOpcode()
+    {
+        var bus = new MockBus();
+        bus.SetMemory(0x8000, 0x60); // RTS
+        bus.SetMemory(0x8003, 0xA9); // LDA #$20
+        bus.SetMemory(0x8004, 0x20);
+        bus.SetMemory(0x8005, 0xEA); // NOP (stand-in for STA (zp),Y)
+        bus.SetMemory(0x01FE, 0x02);
+        bus.SetMemory(0x01FF, 0x80);
+
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cpu = new Mos6502(bus)
+        {
+            PC = 0x8000,
+            S = 0xFD,
+            P = 0x20
+        };
+        var clock = new SystemClock(985_248, cpu, irq);
+        clock.Register(cpu);
+
+        for (var i = 0; i < 24 && !(cpu.DebugOpcode == 0xA9 && cpu.DebugCycle == 0 && cpu.A == 0x20); i++)
+            clock.Step();
+
+        Assert.Equal((byte)0xA9, cpu.DebugOpcode);
+        Assert.Equal(0, cpu.DebugCycle);
+        Assert.Equal((byte)0x20, cpu.A);
+        var stack = cpu.S;
+
+        clock.Step();
+
+        Assert.Equal((byte)0xEA, cpu.DebugOpcode);
+        Assert.Equal(stack, cpu.S);
+    }
+
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 sample 2093252. VICE C64 <c>interrupt_check_irq_delay</c>
+    ///   needs <c>irq_delay_cycles &gt;= INTERRUPT_DELAY</c> (2). IRQ that
+    ///   arrives on LDA # last CLK increments delay once; DO_INTERRUPT of the
+    ///   next insn still sees delay=1 and FETCHes. Managed extra dwell let
+    ///   wall-clock irq_clk+2 elapse at a fake boundary and pushed.
+    /// Acceptance: IRQ asserted on LDA #$20 last CLK does not decrement S on
+    ///   the next Step; that Step fetches the following NOP.
+    /// </summary>
+    [Fact]
+    public void LdaImm_IrqOnLastClk_DoesNotDispatchBeforeNextFetch()
+    {
+        var bus = new MockBus();
+        bus.SetMemory(0x8000, 0xA9); // LDA #$20
+        bus.SetMemory(0x8001, 0x20);
+        bus.SetMemory(0x8002, 0xEA); // NOP
+        bus.SetMemory(0xFFFE, 0x00);
+        bus.SetMemory(0xFFFF, 0x09);
+
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cpu = new Mos6502(bus)
+        {
+            PC = 0x8000,
+            S = 0xFF,
+            P = 0x20
+        };
+        var clock = new SystemClock(985_248, cpu, irq);
+        clock.Register(cpu);
+
+        for (var i = 0; i < 8 && !(cpu.DebugOpcode == 0xA9 && cpu.DebugCycle == 0 && cpu.A == 0x20); i++)
+            clock.Step();
+
+        Assert.Equal((byte)0xA9, cpu.DebugOpcode);
+        Assert.Equal(0, cpu.DebugCycle);
+        Assert.Equal((byte)0x20, cpu.A);
+        Assert.Equal((byte)0xFF, cpu.S);
+
+        irq.Assert(new StubIrqSource());
+        clock.Step();
+
+        Assert.Equal((byte)0xEA, cpu.DebugOpcode);
+        Assert.Equal((byte)0xFF, cpu.S);
+    }
+
+    /// <summary>
+    /// FR: FR-CPU-003, TR: TR-CYCLE-001 / TR-LOCKSTEP-VSF-001.
+    /// Use case: Wolf64 sample 2208208. VICE <c>interrupt_set_irq</c> updates
+    ///   <c>irq_clk</c> only when <c>nirq</c> goes 0 to 1. A same-cycle Release
+    ///   then Assert (CIA ack then RAISE0) must relatch. Polling
+    ///   <see cref="IInterruptLine.IsAsserted"/> at end of the host tick misses
+    ///   that edge, so a stale assert cycle makes the pre-FETCH sample treat
+    ///   delay as elapsed (mS=$F2) while x64sc <c>nIrqClk=2208210</c> still
+    ///   runs STA zp.
+    /// Acceptance: IRQ asserted and delay elapsed, then the source Releases
+    ///   and Asserts in one Phi2 tick; the next instruction boundary does not
+    ///   push (fresh irq_clk). STA/NOP after that still executes with S
+    ///   unchanged for at least two steps.
+    /// </summary>
+    [Fact]
+    public void IrqLine_ReleaseThenAssertSameCycle_RelatchesIrqClk_DoesNotDispatchImmediately()
+    {
+        var bus = new MockBus();
+        bus.SetMemory(0xFFFC, 0x00);
+        bus.SetMemory(0xFFFD, 0x80);
+        bus.SetMemory(0xFFFE, 0x00);
+        bus.SetMemory(0xFFFF, 0x09);
+        bus.SetMemory(0x8000, 0xEA); // NOP
+        bus.SetMemory(0x8001, 0x4C); // JMP $8000
+        bus.SetMemory(0x8002, 0x00);
+        bus.SetMemory(0x8003, 0x80);
+
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cpu = new Mos6502(bus);
+        var reedge = new SameCycleReEdgeDevice(irq);
+        var clock = new SystemClock(985_248, cpu, irq);
+        clock.Register(reedge);
+        clock.Register(cpu);
+        cpu.Reset();
+        cpu.P = 0x20;
+        cpu.S = 0xF3;
+        cpu.PC = 0x8000;
+        irq.Assert(reedge);
+
+        for (var i = 0; i < 8; i++)
+            clock.Step();
+        Assert.True(cpu.S < 0xF3, "IRQ must first become delay-elapsed so a stale latch would dispatch.");
+
+        for (var i = 0; i < 16 && cpu.DebugInterruptSequenceRemaining > 0; i++)
+            clock.Step();
+        Assert.Equal(0, cpu.DebugInterruptSequenceRemaining);
+
+        cpu.S = 0xF3;
+        cpu.P = 0x20;
+        cpu.PC = 0x8000;
+        reedge.ReEdgeNextTick = true;
+        clock.Step();
+
+        var sAfterEdge = cpu.S;
+        clock.Step();
+        clock.Step();
+
+        Assert.Equal((byte)0xF3, sAfterEdge);
+        Assert.Equal((byte)0xF3, cpu.S);
+    }
+
+    private sealed class SameCycleReEdgeDevice : IClockedDevice, IInterruptSource
+    {
+        private readonly IInterruptLine _irq;
+        public SameCycleReEdgeDevice(IInterruptLine irq) => _irq = irq;
+        public bool ReEdgeNextTick { get; set; }
+        public DeviceId Id { get; } = new(0x00C1);
+        public DeviceId SourceId => Id;
+        public string Name => "re-edge-irq";
+        public uint ClockDivisor => 1;
+        public ClockPhase Phase => ClockPhase.Phi2;
+        public IReadOnlyList<IInterruptLine> ConnectedLines { get; } = [];
+        public void Reset() { }
+        public void Tick()
+        {
+            if (!ReEdgeNextTick)
+                return;
+            ReEdgeNextTick = false;
+            _irq.Release(this);
+            _irq.Assert(this);
+        }
+    }
+
+    private sealed class StubIrqSource : IInterruptSource
+    {
+        public DeviceId Id { get; } = new(0x00FE);
+        public DeviceId SourceId => Id;
+        public string Name => "stub-irq";
+        public IReadOnlyList<IInterruptLine> ConnectedLines { get; } = [];
+        public void Reset() { }
     }
 
     private sealed class MockBus : IBus

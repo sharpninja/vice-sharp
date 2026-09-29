@@ -45,6 +45,8 @@
 #include "c64/c64pla.h"
 #include "cartridge.h"
 #include "keyboard.h"
+#include "kbdbuf.h"
+#include "autostart.h"
 #include "vicii.h"
 #include "viciisc/vicii-mem.h"
 #include "vice-shim-runtime.h"
@@ -965,6 +967,42 @@ VICE_SHIM_API int vice_machine_get_model(void *machine)
     return model;
 }
 
+VICE_SHIM_API void vice_machine_kbdbuf_flush(void *machine)
+{
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        kbdbuf_flush();
+    }
+    LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API int vice_machine_kbdbuf_feed(void *machine, const uint8_t *petscii, int length)
+{
+    char buffer[256];
+
+    if (petscii == NULL || length < 0 || length >= (int)sizeof(buffer)) {
+        return -1;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    memcpy(buffer, petscii, (size_t)length);
+    buffer[length] = '\0';
+    {
+        int rc = kbdbuf_feed(buffer);
+        LeaveCriticalSection(&g_state_lock);
+        return rc;
+    }
+}
+
 VICE_SHIM_API int vice_machine_set_keyboard_matrix_key(void *machine, int row, int column, int pressed)
 {
     if (row < 0 || row >= 8 || column < 0 || column >= 8) {
@@ -1132,11 +1170,10 @@ static int vice_shim_write_temp_file(const uint8_t *data, int length, char *path
     return 1;
 }
 
-VICE_SHIM_API void vice_machine_step_cycle(void *machine)
+static void vice_shim_grant_cycles(void *machine, unsigned int cycles)
 {
-    if (g_debug_step_calls < 16) {
-        fprintf(stderr, "vice_machine_step_cycle call=%u machine=%p\\n", ++g_debug_step_calls, machine);
-        fflush(stderr);
+    if (cycles == 0) {
+        return;
     }
 
     vice_shim_ensure_sync_primitives();
@@ -1160,7 +1197,7 @@ VICE_SHIM_API void vice_machine_step_cycle(void *machine)
         uintptr_t worker_handle;
 
         g_stop_requested = 0;
-        g_granted_cycles = 1;
+        g_granted_cycles = cycles;
         g_cycle_paused = 0;
         g_worker_running = 1;
 
@@ -1174,7 +1211,7 @@ VICE_SHIM_API void vice_machine_step_cycle(void *machine)
 
         g_worker_thread = (HANDLE)worker_handle;
     } else {
-        g_granted_cycles++;
+        g_granted_cycles += cycles;
         g_cycle_paused = 0;
         WakeAllConditionVariable(&g_state_cv);
     }
@@ -1189,6 +1226,56 @@ VICE_SHIM_API void vice_machine_step_cycle(void *machine)
         }
     }
     LeaveCriticalSection(&g_state_lock);
+}
+
+VICE_SHIM_API void vice_machine_step_cycle(void *machine)
+{
+    if (g_debug_step_calls < 16) {
+        fprintf(stderr, "vice_machine_step_cycle call=%u machine=%p\\n", ++g_debug_step_calls, machine);
+        fflush(stderr);
+    }
+
+    vice_shim_grant_cycles(machine, 1);
+}
+
+VICE_SHIM_API void vice_machine_step_cycles(void *machine, unsigned int cycles)
+{
+    vice_shim_grant_cycles(machine, cycles);
+}
+
+VICE_SHIM_API int vice_machine_autostart(void *machine, const char *path)
+{
+    int rc;
+
+    if (path == NULL || path[0] == '\0') {
+        return -1;
+    }
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (!vice_shim_is_active_machine(machine)) {
+        LeaveCriticalSection(&g_state_lock);
+        return -2;
+    }
+
+    rc = autostart_autodetect(path, NULL, 0, AUTOSTART_MODE_RUN);
+    LeaveCriticalSection(&g_state_lock);
+    return rc;
+}
+
+VICE_SHIM_API int vice_machine_autostart_in_progress(void *machine)
+{
+    int in_progress = 0;
+
+    vice_shim_ensure_sync_primitives();
+
+    EnterCriticalSection(&g_state_lock);
+    if (vice_shim_is_active_machine(machine)) {
+        in_progress = autostart_in_progress();
+    }
+    LeaveCriticalSection(&g_state_lock);
+    return in_progress;
 }
 
 int vice_shim_cycle_checkpoint(void)
@@ -1921,11 +2008,11 @@ VICE_SHIM_API void vice_cia_get_state(void *machine, int cia_index, struct vice_
             state->cra = cia->c_cia[CIA_CRA];
             state->crb = cia->c_cia[CIA_CRB];
             state->interrupt_flag = (uint8_t)(cia->irqflags & 0xff);
-            /* TR-LOCKSTEP-VSF-001: latches + ICR enable mask for snapshot
-               staging (ciatimer.h ciat_read_latch; ciacore irq_enabled). */
+            /* TR-LOCKSTEP-VSF-001: latches plus the live IRQ output.
+               The ICR enable mask is already exported in state->icr. */
             state->timer_a_latch = ciat_read_latch(cia->ta, cclk);
             state->timer_b_latch = ciat_read_latch(cia->tb, cclk);
-            state->irq_mask = (uint8_t)(cia->irq_enabled & 0xff);
+            state->irq_line_active = (uint8_t)(cia->irq_enabled & 0xff);
         }
     }
     LeaveCriticalSection(&g_state_lock);

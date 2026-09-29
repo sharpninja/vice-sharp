@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -105,10 +106,19 @@ public sealed class AttachPanelView : UserControl
         // FR-SIDEBARUI-001: real TabControl for the sidebar sections. SelectedIndex tracks the
         // SidebarTab enum order (Peripherals=0, Settings=1, Monitor=2, History=3).
         var tabs = new TabControl { Padding = new Thickness(0) };
-        tabs.Items.Add(new TabItem { Header = "Peripherals", Content = CreatePeripheralsPanel() });
-        tabs.Items.Add(new TabItem { Header = "Settings", Content = new SettingsView { DataContext = ViewModel } });
-        tabs.Items.Add(new TabItem { Header = "Monitor", Content = CreateMonitorPanel(includePopOut: true) });
-        tabs.Items.Add(new TabItem { Header = "History", Content = new TickHistoryView { DataContext = ViewModel.TickHistory } });
+        AutomationProperties.SetAutomationId(tabs, "Sidebar.Tabs");
+        var peripheralsTab = new TabItem { Header = "Peripherals", Content = CreatePeripheralsPanel() };
+        AutomationProperties.SetAutomationId(peripheralsTab, "Sidebar.Peripherals");
+        var settingsTab = new TabItem { Header = "Settings", Content = new SettingsView { DataContext = ViewModel } };
+        AutomationProperties.SetAutomationId(settingsTab, "Sidebar.Settings");
+        var monitorTab = new TabItem { Header = "Monitor", Content = CreateMonitorPanel(includePopOut: true) };
+        AutomationProperties.SetAutomationId(monitorTab, "Sidebar.Monitor");
+        var historyTab = new TabItem { Header = "History", Content = new TickHistoryView { DataContext = ViewModel.TickHistory } };
+        AutomationProperties.SetAutomationId(historyTab, "Sidebar.History");
+        tabs.Items.Add(peripheralsTab);
+        tabs.Items.Add(settingsTab);
+        tabs.Items.Add(monitorTab);
+        tabs.Items.Add(historyTab);
 
         // PLAN-ROMM-001: the RomM tabs (SidebarTab.Library/Lists/CsdbDiscovery == indices 4/5/6),
         // present only when the head supplied a library host view-model.

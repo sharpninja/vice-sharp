@@ -1,0 +1,810 @@
+syntax = "proto3";
+
+package vice_sharp.v1;
+
+option csharp_namespace = "ViceSharp.Protocol.Grpc";
+
+service EmulatorHost {
+  rpc CreateSession(CreateEmulatorSessionRequest) returns (CreateEmulatorSessionResponse);
+  rpc GetStatus(SessionRequest) returns (GetEmulatorStatusResponse);
+  rpc Start(SessionRequest) returns (EmulatorCommandResponse);
+  rpc Pause(SessionRequest) returns (EmulatorCommandResponse);
+  rpc Resume(SessionRequest) returns (EmulatorCommandResponse);
+  rpc Reset(SessionRequest) returns (EmulatorCommandResponse);
+  rpc ColdReset(SessionRequest) returns (EmulatorCommandResponse);
+  rpc WarmReset(SessionRequest) returns (EmulatorCommandResponse);
+  rpc ResetAndAutostartDrive8(ResetAndAutostartDrive8Request) returns (EmulatorCommandResponse);
+  rpc StepCycle(StepCycleRequest) returns (EmulatorCommandResponse);
+  rpc StepFrame(StepFrameRequest) returns (EmulatorCommandResponse);
+  rpc RewindCycle(RewindCycleRequest) returns (EmulatorCommandResponse);
+  rpc RewindFrame(RewindFrameRequest) returns (EmulatorCommandResponse);
+  rpc SetLimiterRate(SetLimiterRateRequest) returns (EmulatorCommandResponse);
+  rpc Shutdown(SessionRequest) returns (EmulatorCommandResponse);
+}
+
+service SettingsService {
+  rpc ListProfiles(SessionRequest) returns (ListSettingsProfilesResponse);
+  rpc GetSettings(SessionRequest) returns (GetSettingsResponse);
+  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse);
+  rpc ValidateResources(ValidateSettingsResourcesRequest) returns (ValidateSettingsResourcesResponse);
+}
+
+service MediaService {
+  rpc ListMedia(SessionRequest) returns (ListMediaResponse);
+  rpc AttachMedia(AttachMediaRequest) returns (AttachMediaResponse);
+  rpc EjectMedia(DetachMediaRequest) returns (DetachMediaResponse);
+  rpc WatchMediaStatus(SessionRequest) returns (stream MediaStatusEvent);
+}
+
+service VideoService {
+  rpc GetVideoStatus(SessionRequest) returns (GetVideoStatusResponse);
+  rpc GetFrame(SessionRequest) returns (GetVideoFrameResponse);
+  rpc WatchFrames(SessionRequest) returns (stream GetVideoFrameResponse);
+}
+
+service InputService {
+  rpc SetKeyState(SetKeyStateRequest) returns (InputCommandResponse);
+  rpc SetJoystickState(SetJoystickStateRequest) returns (InputCommandResponse);
+  rpc GetInputState(SessionRequest) returns (GetInputStateResponse);
+  rpc ListKeyboardMaps(SessionRequest) returns (ListKeyboardMapsResponse);
+  rpc SetKeyboardMap(SetKeyboardMapRequest) returns (KeyboardMapResponse);
+}
+
+service MonitorService {
+  rpc ExecuteCommand(ExecuteMonitorCommandRequest) returns (MonitorCommandResponse);
+  rpc ReadRegisters(SessionRequest) returns (MonitorRegistersResponse);
+  rpc Disassemble(MonitorDisassemblyRequest) returns (MonitorDisassemblyResponse);
+  rpc ListBreakpoints(SessionRequest) returns (MonitorBreakpointsResponse);
+  rpc AddBreakpoint(MonitorBreakpointRequest) returns (MonitorBreakpointsResponse);
+  rpc RemoveBreakpoint(MonitorBreakpointRequest) returns (MonitorBreakpointsResponse);
+  rpc ReadMemory(MonitorReadMemoryRequest) returns (MonitorMemoryResponse);
+  rpc WriteMemory(MonitorWriteMemoryRequest) returns (MonitorMemoryWriteResponse);
+  rpc GetTickHistory(SessionRequest) returns (GetTickHistoryResponse);
+  rpc ReadMemoryAtTick(ReadMemoryAtTickRequest) returns (MonitorMemoryResponse);
+  rpc GetChipStateAtTick(GetChipStateAtTickRequest) returns (GetChipStateAtTickResponse);
+}
+
+service SnapshotService {
+  rpc CaptureSnapshot(SessionRequest) returns (CaptureSnapshotResponse);
+  rpc RestoreSnapshot(RestoreSnapshotRequest) returns (RestoreSnapshotResponse);
+}
+
+service CaptureService {
+  // Discover the screenshot / sound / video formats this host supports.
+  rpc GetCaptureCapabilities(SessionRequest) returns (GetCaptureCapabilitiesResponse);
+  // One-shot screenshot.
+  rpc CaptureFrame(CaptureFrameRequest) returns (CaptureFrameResponse);
+  // Continuous sound / video recording.
+  rpc StartCapture(StartCaptureRequest) returns (StartCaptureResponse);
+  rpc StopCapture(StopCaptureRequest) returns (StopCaptureResponse);
+  // List the captures active (or recently completed) for a session.
+  rpc ListCaptures(SessionRequest) returns (ListCapturesResponse);
+}
+
+service DiagnosticsService {
+  rpc GetHostInfo(EmptyRequest) returns (GetHostInfoResponse);
+  rpc ListSessions(EmptyRequest) returns (ListSessionsResponse);
+  rpc GetCurrentSession(EmptyRequest) returns (GetCurrentSessionResponse);
+  rpc GetPerformanceSnapshot(PerformanceSnapshotRequest) returns (PerformanceSnapshotResponse);
+  rpc WatchPerformance(WatchPerformanceRequest) returns (stream PerformanceSnapshotResponse);
+}
+
+message RpcStatus {
+  RpcStatusCode code = 1;
+  string message = 2;
+}
+
+enum RpcStatusCode {
+  RPC_STATUS_CODE_OK = 0;
+  RPC_STATUS_CODE_INVALID_ARGUMENT = 1;
+  RPC_STATUS_CODE_NOT_FOUND = 2;
+  RPC_STATUS_CODE_FAILED_PRECONDITION = 3;
+  RPC_STATUS_CODE_UNAVAILABLE = 4;
+  RPC_STATUS_CODE_INTERNAL = 5;
+  RPC_STATUS_CODE_NOT_IMPLEMENTED = 6;
+}
+
+enum EmulatorRunState {
+  EMULATOR_RUN_STATE_STOPPED = 0;
+  EMULATOR_RUN_STATE_RUNNING = 1;
+  EMULATOR_RUN_STATE_PAUSED = 2;
+}
+
+enum MediaSlot {
+  MEDIA_SLOT_DRIVE8 = 0;
+  MEDIA_SLOT_DRIVE9 = 1;
+  MEDIA_SLOT_TAPE = 2;
+  MEDIA_SLOT_CARTRIDGE = 3;
+}
+
+enum InputPort {
+  INPUT_PORT_JOYSTICK1 = 0;
+  INPUT_PORT_JOYSTICK2 = 1;
+  INPUT_PORT_KEYBOARD = 2;
+  INPUT_PORT_PRIMARY_JOYSTICK = 3;
+}
+
+enum CaptureKind {
+  CAPTURE_KIND_SCREENSHOT = 0;
+  CAPTURE_KIND_VIDEO = 1;
+  CAPTURE_KIND_AUDIO = 2;
+}
+
+enum SettingApplyScope {
+  SETTING_APPLY_SCOPE_LIVE = 0;
+  SETTING_APPLY_SCOPE_RESTART_REQUIRED = 1;
+}
+
+enum SettingsResourceKind {
+  SETTINGS_RESOURCE_KIND_DISPLAY = 0;
+  SETTINGS_RESOURCE_KIND_INPUT = 1;
+  SETTINGS_RESOURCE_KIND_FILE = 2;
+  SETTINGS_RESOURCE_KIND_AUDIO = 3;
+  SETTINGS_RESOURCE_KIND_RESOURCE = 4;
+}
+
+message MachineStateDto {
+  uint32 a = 1;
+  uint32 x = 2;
+  uint32 y = 3;
+  uint32 s = 4;
+  uint32 p = 5;
+  uint32 pc = 6;
+  int64 cycle = 7;
+}
+
+message EmulatorStatusDto {
+  string session_id = 1;
+  string architecture = 2;
+  EmulatorRunState run_state = 3;
+  int64 cycle = 4;
+  MachineStateDto machine_state = 5;
+  string power_state = 6;
+  double limiter_rate_percent = 7;
+  double measured_fps = 8;
+  int64 frame_count = 9;
+  int64 nominal_clock_hz = 10;
+  double effective_clock_hz = 11;
+  double effective_clock_percent = 12;
+  uint32 pc = 13;
+  string model_id = 14;
+  string host_automation_description = 15;
+  bool host_automation_active = 16;
+  string last_host_automation_error = 17;
+  bool iec_bus_active = 18;
+  int64 iec_bus_transition_count = 19;
+  string iec_bus_activity_state = 20;
+  repeated PerCpuRateDto per_cpu_rates = 21;
+  repeated IecBusLineDto iec_bus_lines = 22;
+}
+
+message PerCpuRateDto {
+  string label = 1;
+  double effective_clock_hz = 2;
+  double effective_clock_percent = 3;
+}
+
+message IecBusLineDto {
+  string signal = 1;
+  bool is_high = 2;
+  string pullers = 3;
+}
+
+message CreateEmulatorSessionRequest {
+  string architecture_id = 1;
+  string display_name = 2;
+  // FR-DRVTRUE-001: when true (and a C64 architecture is selected) the host
+  // builds a cycle-accurate true-drive rig (C64 + emulated 1541 over IEC) for
+  // true_drive_device. Default false keeps the simulated-drive path / parity.
+  bool true_drive = 3;
+  int32 true_drive_device = 4;
+  // Host-readable D64 path inserted into the true-drive 1541 at build time so a
+  // disk attached before enabling True Drive survives the session rebuild.
+  string true_drive_disk_image_path = 5;
+}
+
+message SessionRequest {
+  string session_id = 1;
+}
+
+message EmptyRequest {
+}
+
+message StepFrameRequest {
+  string session_id = 1;
+  int32 frame_count = 2;
+}
+
+message StepCycleRequest {
+  string session_id = 1;
+  int64 cycle_count = 2;
+}
+
+message RewindCycleRequest {
+  string session_id = 1;
+  int64 cycle_count = 2;
+}
+
+message RewindFrameRequest {
+  string session_id = 1;
+  int32 frame_count = 2;
+}
+
+message ResetAndAutostartDrive8Request {
+  string session_id = 1;
+}
+
+message SetLimiterRateRequest {
+  string session_id = 1;
+  // 0 disables the limiter (VICE warp mode); positive values set and enable the limiter.
+  double limiter_rate_percent = 2;
+}
+
+message CreateEmulatorSessionResponse {
+  RpcStatus status = 1;
+  string session_id = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message GetEmulatorStatusResponse {
+  RpcStatus status = 1;
+  EmulatorStatusDto emulator_status = 2;
+}
+
+message EmulatorCommandResponse {
+  RpcStatus status = 1;
+  EmulatorStatusDto emulator_status = 2;
+}
+
+message SettingsProfileDto {
+  string id = 1;
+  string display_name = 2;
+  string machine = 3;
+  bool is_current = 4;
+  bool is_available = 5;
+  string description = 6;
+}
+
+message LimiterSettingsDto {
+  double rate_percent = 1;
+  bool is_enabled = 2;
+  string pacing_strategy = 3;
+}
+
+message DisplaySettingsDto {
+  string renderer = 1;
+  string palette = 2;
+  bool show_border = 3;
+  bool maintain_aspect_ratio = 4;
+  string scale = 5;
+  string crop_mode = 6;
+  string aspect_mode = 7;
+}
+
+message InputSettingsDto {
+  string keyboard_map_id = 1;
+  InputPort primary_joystick_port = 2;
+  bool swap_joystick_ports = 3;
+  string mode = 4;
+}
+
+message AudioSettingsDto {
+  string mode = 1;
+}
+
+message ResourceSettingsDto {
+  string mode = 1;
+}
+
+message SessionSettingsDto {
+  string profile_id = 1;
+  LimiterSettingsDto limiter = 2;
+  DisplaySettingsDto display = 3;
+  InputSettingsDto input = 4;
+  AudioSettingsDto audio = 5;
+  ResourceSettingsDto resources = 6;
+}
+
+message SettingApplyDiagnosticDto {
+  string setting = 1;
+  SettingApplyScope scope = 2;
+  bool applied_live = 3;
+  bool restart_required = 4;
+  string message = 5;
+}
+
+message SettingsResourceValidationDto {
+  string resource_key = 1;
+  SettingsResourceKind kind = 2;
+  bool is_valid = 3;
+  bool restart_required = 4;
+  string message = 5;
+}
+
+message UpdateSettingsRequest {
+  string session_id = 1;
+  LimiterSettingsDto limiter = 2;
+  DisplaySettingsDto display = 3;
+  InputSettingsDto input = 4;
+  string profile_id = 5;
+  bool restart_session = 6;
+  AudioSettingsDto audio = 7;
+  ResourceSettingsDto resources = 8;
+}
+
+message ValidateSettingsResourcesRequest {
+  string session_id = 1;
+  DisplaySettingsDto display = 2;
+  InputSettingsDto input = 3;
+  LimiterSettingsDto limiter = 4;
+  AudioSettingsDto audio = 5;
+  ResourceSettingsDto resources = 6;
+}
+
+message ListSettingsProfilesResponse {
+  RpcStatus status = 1;
+  repeated SettingsProfileDto profiles = 2;
+}
+
+message GetSettingsResponse {
+  RpcStatus status = 1;
+  SessionSettingsDto settings = 2;
+}
+
+message UpdateSettingsResponse {
+  RpcStatus status = 1;
+  SessionSettingsDto settings = 2;
+  repeated SettingApplyDiagnosticDto diagnostics = 3;
+}
+
+message ValidateSettingsResourcesResponse {
+  RpcStatus status = 1;
+  repeated SettingsResourceValidationDto resources = 2;
+}
+
+message MediaAttachmentDto {
+  MediaSlot slot = 1;
+  string file_path = 2;
+  string display_name = 3;
+  bool is_attached = 4;
+  bool is_read_only = 5;
+  bool applied_to_runtime = 6;
+  string error = 7;
+}
+
+message AttachMediaRequest {
+  string session_id = 1;
+  MediaSlot slot = 2;
+  string file_path = 3;
+  string display_name = 4;
+  bool is_read_only = 5;
+  bytes payload = 6;
+}
+
+message DetachMediaRequest {
+  string session_id = 1;
+  MediaSlot slot = 2;
+}
+
+message AttachMediaResponse {
+  RpcStatus status = 1;
+  MediaAttachmentDto attachment = 2;
+}
+
+message DetachMediaResponse {
+  RpcStatus status = 1;
+  MediaAttachmentDto attachment = 2;
+}
+
+message ListMediaResponse {
+  RpcStatus status = 1;
+  repeated MediaAttachmentDto attachments = 2;
+}
+
+message MediaStatusEvent {
+  MediaAttachmentDto attachment = 1;
+}
+
+message VideoStatusDto {
+  bool is_available = 1;
+  int32 width = 2;
+  int32 height = 3;
+  int64 cycle = 4;
+}
+
+message VideoFrameDto {
+  int32 width = 1;
+  int32 height = 2;
+  int64 cycle = 3;
+  bytes bgra = 4;
+}
+
+message GetVideoStatusResponse {
+  RpcStatus status = 1;
+  VideoStatusDto video_status = 2;
+}
+
+message GetVideoFrameResponse {
+  RpcStatus status = 1;
+  VideoFrameDto frame = 2;
+}
+
+message KeyStateDto {
+  string key = 1;
+  bool is_pressed = 2;
+  bool applied_to_runtime = 3;
+  string physical_key = 4;
+  string text = 5;
+  int32 modifiers = 6;
+}
+
+message JoystickStateDto {
+  uint32 direction_mask = 1;
+  bool fire_button = 2;
+  bool applied_to_runtime = 3;
+}
+
+message JoystickPortStateDto {
+  InputPort port = 1;
+  JoystickStateDto state = 2;
+}
+
+message InputStateDto {
+  repeated KeyStateDto keys = 1;
+  repeated JoystickPortStateDto joysticks = 2;
+  KeyboardMapDto selected_keyboard_map = 3;
+}
+
+message SetKeyStateRequest {
+  string session_id = 1;
+  string key = 2;
+  bool is_pressed = 3;
+  string physical_key = 4;
+  string text = 5;
+  int32 modifiers = 6;
+}
+
+message SetJoystickStateRequest {
+  string session_id = 1;
+  InputPort port = 2;
+  uint32 direction_mask = 3;
+  bool fire_button = 4;
+}
+
+message KeyboardMapDto {
+  string id = 1;
+  string display_name = 2;
+  string machine = 3;
+  string kind = 4;
+  string source_path = 5;
+  bool is_selected = 6;
+  bool is_builtin = 7;
+  string error = 8;
+}
+
+message SetKeyboardMapRequest {
+  string session_id = 1;
+  string keyboard_map_id = 2;
+  bytes payload = 3;
+  string display_name = 4;
+  string source_path = 5;
+}
+
+message InputCommandResponse {
+  RpcStatus status = 1;
+  InputStateDto input_state = 2;
+}
+
+message GetInputStateResponse {
+  RpcStatus status = 1;
+  InputStateDto input_state = 2;
+}
+
+message ListKeyboardMapsResponse {
+  RpcStatus status = 1;
+  repeated KeyboardMapDto keyboard_maps = 2;
+}
+
+message KeyboardMapResponse {
+  RpcStatus status = 1;
+  KeyboardMapDto keyboard_map = 2;
+  InputStateDto input_state = 3;
+}
+
+message ExecuteMonitorCommandRequest {
+  string session_id = 1;
+  string command = 2;
+}
+
+message MonitorReadMemoryRequest {
+  string session_id = 1;
+  uint32 address = 2;
+  uint32 length = 3;
+}
+
+message MonitorWriteMemoryRequest {
+  string session_id = 1;
+  uint32 address = 2;
+  bytes data = 3;
+}
+
+message MonitorDisassemblyRequest {
+  string session_id = 1;
+  uint32 address = 2;
+  uint32 count = 3;
+}
+
+message MonitorBreakpointRequest {
+  string session_id = 1;
+  uint32 address = 2;
+}
+
+message MonitorCommandResponse {
+  RpcStatus status = 1;
+  string output = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorRegistersResponse {
+  RpcStatus status = 1;
+  MachineStateDto registers = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorDisassemblyLineDto {
+  uint32 address = 1;
+  bytes instruction_bytes = 2;
+  string text = 3;
+  uint32 length = 4;
+  uint32 next_address = 5;
+}
+
+message MonitorDisassemblyResponse {
+  RpcStatus status = 1;
+  repeated MonitorDisassemblyLineDto lines = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorBreakpointDto {
+  uint32 address = 1;
+  bool is_enabled = 2;
+}
+
+message MonitorBreakpointsResponse {
+  RpcStatus status = 1;
+  repeated MonitorBreakpointDto breakpoints = 2;
+  EmulatorStatusDto emulator_status = 3;
+}
+
+message MonitorMemoryResponse {
+  RpcStatus status = 1;
+  uint32 address = 2;
+  bytes data = 3;
+  EmulatorStatusDto emulator_status = 4;
+}
+
+message MonitorMemoryWriteResponse {
+  RpcStatus status = 1;
+  uint32 address = 2;
+  uint32 bytes_written = 3;
+  EmulatorStatusDto emulator_status = 4;
+}
+
+message TickHistoryEntryDto {
+  int32 index = 1;
+  uint32 instruction_address = 2;
+  uint32 opcode = 3;
+  uint32 a = 4;
+  uint32 x = 5;
+  uint32 y = 6;
+  uint32 s = 7;
+  uint32 p = 8;
+  uint32 pc = 9;
+  int32 write_count = 10;
+}
+
+message GetTickHistoryResponse {
+  RpcStatus status = 1;
+  repeated TickHistoryEntryDto ticks = 2;
+}
+
+message ReadMemoryAtTickRequest {
+  string session_id = 1;
+  int32 tick_index = 2;
+  int32 address = 3;
+  int32 length = 4;
+}
+
+message ChipStateFieldDto {
+  string name = 1;
+  int32 value = 2;
+  int32 width = 3;
+}
+
+message ChipStateDto {
+  string chip_name = 1;
+  repeated ChipStateFieldDto fields = 2;
+}
+
+message GetChipStateAtTickRequest {
+  string session_id = 1;
+  int32 tick_index = 2;
+}
+
+message GetChipStateAtTickResponse {
+  RpcStatus status = 1;
+  repeated ChipStateDto chips = 2;
+}
+
+message SnapshotDto {
+  string format = 1;
+  uint64 cycle = 2;
+  bytes payload = 3;
+}
+
+message RestoreSnapshotRequest {
+  string session_id = 1;
+  SnapshotDto snapshot = 2;
+}
+
+message CaptureSnapshotResponse {
+  RpcStatus status = 1;
+  SnapshotDto snapshot = 2;
+}
+
+message RestoreSnapshotResponse {
+  RpcStatus status = 1;
+  EmulatorStatusDto emulator_status = 2;
+}
+
+message CaptureSessionDto {
+  string capture_id = 1;
+  CaptureKind kind = 2;
+  string target_path = 3;
+  bool is_active = 4;
+}
+
+message CaptureArtifactDto {
+  string file_path = 1;
+  string format = 2;
+  int64 cycle = 3;
+}
+
+message StartCaptureRequest {
+  string session_id = 1;
+  CaptureKind kind = 2;
+  string target_path = 3;
+  string format = 4;                // sound/video format or video driver id (e.g. "wav", "ffmpeg", "bmpseq", "zmbv")
+  map<string, string> options = 5;  // driver options (e.g. container, video_codec, audio_codec, bitrate)
+  bool capture_microphone = 6;       // mux the host microphone into ffmpeg video captures for narration
+  string microphone_device = 7;      // optional ffmpeg audio input device; default OS microphone when empty
+  string microphone_input_format = 8;// optional ffmpeg input format override (e.g. wasapi, dshow, pulse, avfoundation)
+}
+
+message StopCaptureRequest {
+  string session_id = 1;
+  string capture_id = 2;
+}
+
+message CaptureFrameRequest {
+  string session_id = 1;
+  string file_path = 2;
+  string format = 3; // "png" (default), "bmp"
+}
+
+message StartCaptureResponse {
+  RpcStatus status = 1;
+  CaptureSessionDto capture = 2;
+}
+
+message StopCaptureResponse {
+  RpcStatus status = 1;
+  CaptureSessionDto capture = 2;
+}
+
+message CaptureFrameResponse {
+  RpcStatus status = 1;
+  CaptureArtifactDto artifact = 2;
+}
+
+message CaptureVideoFormatDto {
+  string id = 1;                    // driver id: "bmpseq", "ffmpeg", "zmbv"
+  string container = 2;             // "mp4", "mkv", "avi"; empty for a frame sequence
+  repeated string video_codecs = 3;
+  repeated string audio_codecs = 4;
+  bool requires_ffmpeg = 5;
+  bool supports_microphone = 6;
+}
+
+message GetCaptureCapabilitiesResponse {
+  RpcStatus status = 1;
+  repeated string screenshot_formats = 2;           // e.g. "png", "bmp"
+  repeated string audio_formats = 3;                // e.g. "wav"
+  repeated CaptureVideoFormatDto video_formats = 4;
+}
+
+message ListCapturesResponse {
+  RpcStatus status = 1;
+  repeated CaptureSessionDto captures = 2;
+}
+
+message HostInfoDto {
+  int32 process_id = 1;
+  string endpoint = 2;
+  string protocol_package = 3;
+  string protocol_version = 4;
+  string app_version = 5;
+  string build_sha = 6;
+  string started_at_utc = 7;
+}
+
+message SessionSummaryDto {
+  string session_id = 1;
+  string display_name = 2;
+  string architecture = 3;
+  EmulatorRunState run_state = 4;
+  int64 cycle = 5;
+  int64 frame_count = 6;
+  string current_media = 7;
+}
+
+message ProcessDiagnosticsDto {
+  int64 total_processor_time_ms = 1;
+  int64 working_set_bytes = 2;
+  int64 private_memory_bytes = 3;
+  int64 managed_memory_bytes = 4;
+  int32 gen0_collections = 5;
+  int32 gen1_collections = 6;
+  int32 gen2_collections = 7;
+  int32 thread_count = 8;
+}
+
+message PumpDiagnosticsDto {
+  bool worker_alive = 1;
+  int32 active_session_count = 2;
+  string last_tick_at_utc = 3;
+}
+
+message UiDiagnosticsDto {
+  string current_session_id = 1;
+  string last_status_update_utc = 2;
+  string last_frame_update_utc = 3;
+}
+
+message PerformanceSnapshotDto {
+  HostInfoDto host_info = 1;
+  EmulatorStatusDto emulator_status = 2;
+  ProcessDiagnosticsDto process = 3;
+  PumpDiagnosticsDto pump = 4;
+  UiDiagnosticsDto ui = 5;
+}
+
+message PerformanceSnapshotRequest {
+  string session_id = 1;
+  int32 interval_ms = 2;
+}
+
+message WatchPerformanceRequest {
+  string session_id = 1;
+  int32 interval_ms = 2;
+}
+
+message GetHostInfoResponse {
+  RpcStatus status = 1;
+  HostInfoDto host_info = 2;
+}
+
+message ListSessionsResponse {
+  RpcStatus status = 1;
+  repeated SessionSummaryDto sessions = 2;
+}
+
+message GetCurrentSessionResponse {
+  RpcStatus status = 1;
+  SessionSummaryDto session = 2;
+}
+
+message PerformanceSnapshotResponse {
+  RpcStatus status = 1;
+  PerformanceSnapshotDto snapshot = 2;
+}

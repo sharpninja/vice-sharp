@@ -34,6 +34,7 @@
             <StackPanel Spacing="7">
                 <TextBlock Classes="section" Text="Machine" />
                 <ComboBox Classes="row" ItemsSource="{Binding MachineProfiles}"
+                          AutomationProperties.AutomationId="Settings.MachineProfile"
                           SelectedItem="{Binding SelectedMachineProfile, Mode=TwoWay}"
                           DisplayMemberBinding="{Binding DisplayName}" />
                 <TextBlock Classes="hint" Text="{Binding SelectedMachineProfile.StatusText}" />
@@ -43,13 +44,14 @@
             <StackPanel Spacing="7" IsVisible="{Binding IsVic20Selected}">
                 <TextBlock Classes="section" Text="VIC-20 memory (xvic)" />
                 <ComboBox Classes="row" ItemsSource="{Binding Vic20MemoryPresets}"
+                          AutomationProperties.AutomationId="Settings.Vic20MemoryPreset"
                           SelectedItem="{Binding SelectedVic20MemoryPreset, Mode=TwoWay}" />
                 <WrapPanel Orientation="Horizontal">
-                    <CheckBox Content="BLK0 $0400" IsChecked="{Binding Vic20Blk0, Mode=TwoWay}" Margin="0,0,12,6" />
-                    <CheckBox Content="BLK1 $2000" IsChecked="{Binding Vic20Blk1, Mode=TwoWay}" Margin="0,0,12,6" />
-                    <CheckBox Content="BLK2 $4000" IsChecked="{Binding Vic20Blk2, Mode=TwoWay}" Margin="0,0,12,6" />
-                    <CheckBox Content="BLK3 $6000" IsChecked="{Binding Vic20Blk3, Mode=TwoWay}" Margin="0,0,12,6" />
-                    <CheckBox Content="BLK5 $A000" IsChecked="{Binding Vic20Blk5, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK0 $0400" AutomationProperties.AutomationId="Settings.Vic20Blk0" IsChecked="{Binding Vic20Blk0, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK1 $2000" AutomationProperties.AutomationId="Settings.Vic20Blk1" IsChecked="{Binding Vic20Blk1, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK2 $4000" AutomationProperties.AutomationId="Settings.Vic20Blk2" IsChecked="{Binding Vic20Blk2, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK3 $6000" AutomationProperties.AutomationId="Settings.Vic20Blk3" IsChecked="{Binding Vic20Blk3, Mode=TwoWay}" Margin="0,0,12,6" />
+                    <CheckBox Content="BLK5 $A000" AutomationProperties.AutomationId="Settings.Vic20Blk5" IsChecked="{Binding Vic20Blk5, Mode=TwoWay}" Margin="0,0,12,6" />
                 </WrapPanel>
                 <TextBlock Classes="hint" Text="Matches xvic -memory none/3k/8k/16k/24k/all or 0,1,2,3,5. Apply + Restart rebuilds the map." />
             </StackPanel>
@@ -57,10 +59,14 @@
             <StackPanel Spacing="7" IsVisible="{Binding IsVic20Selected}">
                 <TextBlock Classes="section" Text="VIC-20 expansion cart" />
                 <ComboBox Classes="row" ItemsSource="{Binding ExpansionCartKinds}"
+                          AutomationProperties.AutomationId="Settings.ExpansionCartKind"
                           SelectedItem="{Binding SelectedExpansionCartKind, Mode=TwoWay}" />
                 <ComboBox Classes="row" ItemsSource="{Binding ExpansionCartPresets}"
+                          AutomationProperties.AutomationId="Settings.ExpansionCartPreset"
                           SelectedItem="{Binding SelectedExpansionCartPreset, Mode=TwoWay}" />
-                <CheckBox Content="Write image on detach/exit" IsChecked="{Binding ExpansionCartWriteBack, Mode=TwoWay}" />
+                <CheckBox Content="Write image on detach/exit"
+                          AutomationProperties.AutomationId="Settings.ExpansionCartWriteBack"
+                          IsChecked="{Binding ExpansionCartWriteBack, Mode=TwoWay}" />
                 <Button Content="Build cart image…" Click="OnOpenFlashCartBuilder" HorizontalAlignment="Left" />
                 <TextBlock Classes="hint" Text="FE3 / Ultimem / Mega-Cart: build multi-bank flash/ROM images, or attach a .bin via Cartridge slot. Presets set control registers." />
             </StackPanel>
@@ -68,10 +74,13 @@
             <StackPanel Spacing="7">
                 <TextBlock Classes="section" Text="uIEC / filesystem IEC" />
                 <TextBox Watermark="Host folder or SD mount path"
+                         AutomationProperties.AutomationId="Settings.FileSystemIecRootPath"
                          Text="{Binding FileSystemIecRootPath, Mode=TwoWay}" />
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Unit" DockPanel.Dock="Left" />
-                    <NumericUpDown Minimum="8" Maximum="11" Value="{Binding FileSystemIecUnit, Mode=TwoWay}" />
+                    <NumericUpDown Minimum="8" Maximum="11"
+                                   AutomationProperties.AutomationId="Settings.FileSystemIecUnit"
+                                   Value="{Binding FileSystemIecUnit, Mode=TwoWay}" />
                 </DockPanel>
                 <TextBlock Classes="hint" Text="Maps a PC path (including SD card) as a filesystem IEC unit (default 9 so unit 8 stays free for true-drive)." />
             </StackPanel>
@@ -81,6 +90,7 @@
                 <TextBlock FontSize="13" FontWeight="SemiBold"
                            Text="{Binding LimiterRatePercent, StringFormat='Target {0:0}%'}" />
                 <Slider Minimum="1" Maximum="1000" TickFrequency="10" IsSnapToTickEnabled="True"
+                        AutomationProperties.AutomationId="Settings.LimiterRate"
                         Value="{Binding LimiterRatePercent, Mode=TwoWay}" />
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <ToggleButton Content="Warp (Alt+W)"
@@ -96,6 +106,7 @@
                            Text="Warp = uncapped speed (same as VICE -warp). The speed button jumps between 100% (sound on) and 200%; past 200% live sound is suspended while the emulator paces to the slider target." />
                 <TextBlock FontSize="13" FontWeight="SemiBold" Text="Pacing strategy" />
                 <ComboBox Classes="row" ItemsSource="{Binding PacingStrategies}"
+                          AutomationProperties.AutomationId="Settings.PacingStrategy"
                           SelectedItem="{Binding SelectedPacingStrategy, Mode=TwoWay}" />
                 <TextBlock FontSize="11" Foreground="#9AA0A6" TextWrapping="Wrap"
                            Text="Semaphore: high-res timer releases the worker. VICE: faithful sound back-pressure + vsync." />
@@ -106,26 +117,31 @@
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Renderer" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding RendererModes}"
+                              AutomationProperties.AutomationId="Settings.Renderer"
                               SelectedItem="{Binding SelectedRenderer, Mode=TwoWay}" />
                 </DockPanel>
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Scale" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding DisplayScales}"
+                              AutomationProperties.AutomationId="Settings.DisplayScale"
                               SelectedItem="{Binding SelectedDisplayScale, Mode=TwoWay}" />
                 </DockPanel>
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Crop" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding CropModes}"
+                              AutomationProperties.AutomationId="Settings.CropMode"
                               SelectedItem="{Binding SelectedCropMode, Mode=TwoWay}" />
                 </DockPanel>
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Aspect" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding AspectModes}"
+                              AutomationProperties.AutomationId="Settings.AspectMode"
                               SelectedItem="{Binding SelectedAspectMode, Mode=TwoWay}" />
                 </DockPanel>
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Palette" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding PaletteModes}"
+                              AutomationProperties.AutomationId="Settings.Palette"
                               SelectedItem="{Binding SelectedPalette, Mode=TwoWay}" />
                 </DockPanel>
             </StackPanel>
@@ -135,39 +151,51 @@
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Audio" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding AudioModes}"
+                              AutomationProperties.AutomationId="Settings.AudioMode"
                               SelectedItem="{Binding SelectedAudioMode, Mode=TwoWay}" />
                 </DockPanel>
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Input" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding InputModes}"
+                              AutomationProperties.AutomationId="Settings.InputMode"
                               SelectedItem="{Binding SelectedInputMode, Mode=TwoWay}" />
                 </DockPanel>
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Primary" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding PrimaryJoystickPorts}"
+                              AutomationProperties.AutomationId="Settings.PrimaryJoystickPort"
                               SelectedItem="{Binding SelectedPrimaryJoystickPort, Mode=TwoWay}" />
                 </DockPanel>
-                <CheckBox Content="Swap joystick ports" IsChecked="{Binding SwapJoystickPorts, Mode=TwoWay}" />
+                <CheckBox Content="Swap joystick ports"
+                          AutomationProperties.AutomationId="Settings.SwapJoystickPorts"
+                          IsChecked="{Binding SwapJoystickPorts, Mode=TwoWay}" />
                 <DockPanel LastChildFill="True">
                     <TextBlock Classes="rowlabel" Text="Resources" DockPanel.Dock="Left" />
                     <ComboBox Classes="row" ItemsSource="{Binding ResourceModes}"
+                              AutomationProperties.AutomationId="Settings.ResourceMode"
                               SelectedItem="{Binding SelectedResourceMode, Mode=TwoWay}" />
                 </DockPanel>
                 <TextBlock Classes="section" Text="Persistence" Margin="0,6,0,0" />
                 <CheckBox Content="Save settings on exit"
+                          AutomationProperties.AutomationId="Settings.SaveSettingsOnExit"
                           IsChecked="{Binding SaveSettingsOnExit, Mode=TwoWay}" />
                 <CheckBox Content="Save transient values on exit (attached disks, keyboard map)"
+                          AutomationProperties.AutomationId="Settings.SaveTransientValuesOnExit"
                           IsChecked="{Binding SaveTransientValuesOnExit, Mode=TwoWay}" />
             </StackPanel>
 
             <!-- FR-SIDEBARUI-001: action buttons wrap to new rows when the panel is narrow. -->
             <WrapPanel Orientation="Horizontal">
-                <Button Content="Validate" Padding="9,5" Margin="0,0,6,6" Click="OnValidate" />
+                <Button Content="Validate" Padding="9,5" Margin="0,0,6,6" Click="OnValidate"
+                        AutomationProperties.AutomationId="Settings.Validate" />
                 <Button Content="Apply" Padding="9,5" Margin="0,0,6,6" Click="OnApply"
+                        AutomationProperties.AutomationId="Settings.Apply"
                         IsEnabled="{Binding HasPendingSettingsChanges}" />
                 <Button Content="Revert" Padding="9,5" Margin="0,0,6,6" Click="OnRevert"
+                        AutomationProperties.AutomationId="Settings.Revert"
                         IsEnabled="{Binding HasPendingSettingsChanges}" />
-                <Button Content="Apply + Restart" Padding="9,5" Margin="0,0,6,6" Click="OnApplyRestart" />
+                <Button Content="Apply + Restart" Padding="9,5" Margin="0,0,6,6" Click="OnApplyRestart"
+                        AutomationProperties.AutomationId="Settings.ApplyRestart" />
             </WrapPanel>
 
             <StackPanel Spacing="5" IsVisible="{Binding HasSettingsValidationResults}">

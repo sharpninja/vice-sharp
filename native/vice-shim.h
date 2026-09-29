@@ -19,6 +19,9 @@ VICE_SHIM_API void* vice_machine_create_model(const char* model);
 VICE_SHIM_API void vice_machine_destroy(void* machine);
 VICE_SHIM_API void vice_machine_reset(void* machine);
 VICE_SHIM_API void vice_machine_step_cycle(void* machine);
+VICE_SHIM_API void vice_machine_step_cycles(void* machine, unsigned int cycles);
+VICE_SHIM_API int vice_machine_autostart(void* machine, const char* path);
+VICE_SHIM_API int vice_machine_autostart_in_progress(void* machine);
 VICE_SHIM_API int vice_machine_attach_cartridge(void* machine, const uint8_t* image, int length, int mapping_mode);
 VICE_SHIM_API int vice_machine_attach_disk(void* machine, unsigned int unit, unsigned int drive, const char* path);
 VICE_SHIM_API int vice_machine_detach_disk(void* machine, unsigned int unit, unsigned int drive);
@@ -30,6 +33,10 @@ VICE_SHIM_API uint8_t vice_machine_read(void* machine, uint16_t address);
 VICE_SHIM_API void vice_machine_write(void* machine, uint16_t address, uint8_t value);
 VICE_SHIM_API int vice_machine_get_model(void* machine);
 VICE_SHIM_API int vice_machine_set_keyboard_matrix_key(void* machine, int row, int column, int pressed);
+// Queue PETSCII into VICE's kernal keyboard buffer (kbdbuf_feed). length bytes,
+// no need for a trailing NUL in the caller; the shim copies and terminates.
+VICE_SHIM_API int vice_machine_kbdbuf_feed(void* machine, const uint8_t* petscii, int length);
+VICE_SHIM_API void vice_machine_kbdbuf_flush(void* machine);
 VICE_SHIM_API void vice_machine_cia1_store(void* machine, uint8_t register_index, uint8_t value);
 VICE_SHIM_API uint8_t vice_machine_cia1_read(void* machine, uint8_t register_index);
 
@@ -179,13 +186,13 @@ struct vice_cia_state {
     uint8_t cra;
     uint8_t crb;
     uint8_t interrupt_flag;
-    /* TR-LOCKSTEP-VSF-001: .vsf CIA resume context beyond the live counters -
-       the timer latches (ciat_read_latch; reload values on underflow) and the
-       ICR interrupt-enable mask (cia_context->irq_enabled, saved by the CIA
-       snapshot module). Required to stage a managed CIA from a snapshot. */
+    /* TR-LOCKSTEP-VSF-001: .vsf CIA resume context beyond the live counters.
+       The actual ICR interrupt-enable mask is the low seven bits of icr above.
+       irq_line_active mirrors cia_context->irq_enabled, which upstream uses
+       for the live IRQ-output state. */
     uint16_t timer_a_latch;
     uint16_t timer_b_latch;
-    uint8_t irq_mask;
+    uint8_t irq_line_active;
     uint8_t reserved;
 };
 

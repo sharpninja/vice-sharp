@@ -967,6 +967,19 @@ public sealed class AttachPanelViewModel : ObservableObject
         if (response.Settings is not null)
             ApplySettingsFromHost(response.Settings);
 
+        // Xbox/host warp entry is SetLimiterRate(0). A positive rate on that
+        // RPC re-enables the limiter, so warp Apply must send 0 after the DTO.
+        if (IsWarpMode)
+        {
+            var warp = await _hostClient.SetLimiterRateAsync(0, cancellationToken).ConfigureAwait(true);
+            if (!warp.Status.IsSuccess)
+            {
+                StatusText = warp.Status.Message;
+                SettingsStatusText = warp.Status.Message;
+                return;
+            }
+        }
+
         _appliedSettings = CaptureSettings();
         HasPendingSettingsChanges = false;
         RequiresRestart = response.Diagnostics.Any(diagnostic => diagnostic.RestartRequired);
@@ -1199,7 +1212,10 @@ public sealed class AttachPanelViewModel : ObservableObject
     {
         return new UpdateSettingsRequest(
             _hostClient.SessionId,
-            new LimiterSettingsDto(LimiterRatePercent, LimiterEnabled, ToPacingStrategyId(SelectedPacingStrategy)),
+            new LimiterSettingsDto(
+                IsWarpMode ? 0 : LimiterRatePercent,
+                LimiterEnabled,
+                ToPacingStrategyId(SelectedPacingStrategy)),
             new DisplaySettingsDto(
                 ToRendererId(SelectedRenderer),
                 ToPaletteId(SelectedPalette),

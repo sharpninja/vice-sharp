@@ -1,0 +1,41 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:07.54]     ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Bgra_ReadyNtsc_SequenceEqual [FAIL]
+  Failed ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Bgra_ReadyNtsc_SequenceEqual [5 s]
+  Error Message:
+   NTSC native BGRA mismatch first=372803 n=0xFF m=0x00. idx3: nRGB=(80,FF,FF) mRGB=(80,FF,FF) idx1: nRGB=(FF,FF,FF) mRGB=(FF,FF,FF) idx6: nRGB=(65,32,F3) mRGB=(65,32,F3) idx0: nRGB=(00,00,00) mRGB=(00,00,00)
+  Stack Trace:
+     at ViceSharp.TestHarness.Vic20.Vic20PixelLockstep.Bgra_ReadyNtsc_SequenceEqual() in F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\Vic20\Vic20PixelLockstep.cs:line 262
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 5 s - ViceSharp.TestHarness.dll (net10.0)

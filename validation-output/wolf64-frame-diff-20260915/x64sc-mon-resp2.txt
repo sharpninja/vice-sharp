@@ -1,0 +1,2 @@
+(C:$f4f9) (C:$f4f9) (C:$ee5d) (C:$f507) (C:$f507) (C:$ee5d) (C:$1005) (C:$1005) (C:$1738) (C:$173b) Saving file 'F:/GitHub/vice-sharp/validation-output/wolf64-frame-diff-20260915/x64sc-ram.bin' from $0000 to $ffff
+(C:$173b) (C:$173b) 

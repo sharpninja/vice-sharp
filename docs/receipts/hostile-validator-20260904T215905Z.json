@@ -1,0 +1,80 @@
+{
+  "TimestampUtc": "2026-09-04T21:59:05Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\vice-sharp",
+  "WorkClass": "project-implementation",
+  "WorkClassNote": "Close prior C4/D5 FAILs on VIC-20 Settings RemoteControl remaining plan. Surface C scored. Not ops-only.",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260904T220000Z-hostile-warp-rc",
+    "requestId": "req-20260904T214731Z-001-hostile-warp-preset-fr",
+    "agent": "GrokCode",
+    "persistenceProof": "sessionlog_query text Hostile review FR-WARP store and ExpansionCartPreset SET totalCount=2; this turn status=completed lastUpdated=2026-09-04T22:02:23.5145738+00:00 actions=5 designDecisions=3 processingDialog=5 filesModified=2"
+  },
+  "ActivePlan": [
+    "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a06a23-81e8-7b41-8fa0-4773aa19757c\\goal\\plan.md"
+  ],
+  "AccuracyRating": 93,
+  "CompletenessRating": 94,
+  "OverallVerdict": "AGREE",
+  "FailList": [],
+  "Counts": {
+    "pass": 26,
+    "fail": 0,
+    "unknown": 0,
+    "na": 1
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "FR-WARP-001 and TR-WARP-STATUS-001 exist in MCP with structured AC, mapping, canonical docs" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "ExpansionCartPreset SET flash plus WriteBack/uIEC/SaveTransient/LimiterRate 200" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "PLAN-REMOTECTRL-001 not claimed done; scheduler not deleted" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "Prior warp CLOCK 198-200%, WarpModeTests 13/0/0, CLI 6/0/0, Revert Renderer, All-RAM 28159" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty vs artifacts; not Exact; not PLAN done" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts re-verified" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only TODO/requirements reads" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell / no Python" },
+    { "id": "B5", "surface": "B", "verdict": "N/A", "claim": "Look-before-delete (no deletions; scheduler preserved)" },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "claim": "Byrd tests exist and pass; FR/TR backfill is C4 fix not timestamp FAIL" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "FR-UISETTINGS-001 exists in MCP" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "FR-VIC20-002 AC4 All expansions + 28159 BYTES FREE" },
+    { "id": "C3", "surface": "C", "verdict": "PASS", "claim": "TEST-UISET-001 ACs; not marked completed" },
+    { "id": "C4", "surface": "C", "verdict": "PASS", "claim": "FR-WARP-001 / TR-WARP-STATUS-001 now in MCP with structured AC, mapping, canonical docs" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "No PLAN-REMOTECTRL-001 or Exact completion claim" },
+    { "id": "D2", "surface": "D", "verdict": "PASS", "claim": "PLAN-REMOTECTRL-001 remaining TEST-REMOTECTRL-001 and app-launch tasks false" },
+    { "id": "D3", "surface": "D", "verdict": "PASS", "claim": "CLI/Warp/inventory tests re-run green" },
+    { "id": "D4", "surface": "D", "verdict": "PASS", "claim": "All+Restart PNG 28159" },
+    { "id": "D5", "surface": "D", "verdict": "PASS", "claim": "ExpansionCartPreset SET and live dump flash; remaining inventory SETs present" },
+    { "id": "D6", "surface": "D", "verdict": "PASS", "claim": "Warp CLOCK well above 100 evidenced in dumps and WarpModeTests" }
+  ],
+  "Evidence": {
+    "planRemoteCtrl": "PLAN-REMOTECTRL-001 Done=false; TEST-REMOTECTRL-001 task false; app-launch task false",
+    "frWarp": "MCP FR-WARP-001 pending ac-status-warp ac-clock-above-100 isSatisfied false; effective layer-1",
+    "trWarp": "MCP TR-WARP-STATUS-001 pending ac-dto-zero ac-clock-sample isSatisfied false; effective layer-1",
+    "mapping": "FR-WARP-001 -> TR-WARP-STATUS-001 + TEST-UISET-002",
+    "canonicalDocs": "docs/requirements/functional/FR-WARP.md and docs/requirements/technical/TR-WARP.md exist untracked",
+    "cliTests": "ViceSharp.RemoteControlCli.Tests.exe Total 6 Failed 0 Skipped 0 exit 0",
+    "warpTests": "ViceSharp.TestHarness.exe -class ViceSharp.TestHarness.WarpModeTests -parallel none Total 13 Failed 0 Skipped 0 exit 0",
+    "inventoryTests": "ViceSharp.TestHarness.exe -class ViceSharp.TestHarness.Ui.Vic20SettingsRemoteControlInventoryTests Total 8 Failed 0 Skipped 0 exit 0",
+    "gitDiffCheck": "git diff --check exit 0",
+    "livePid": "57852 ViceSharp.Avalonia Listen 127.0.0.1:47100",
+    "liveDump": "hostile-dump-20260904T2148.txt ExpansionCartPreset flash SelectedIndex=1 WriteBack True FileSystemIecRootPath C:\\vic20-uiec-test SaveTransient false LimiterRate 200 Renderer Host direct Revert IsEnabled=False LIMITER 200% CLOCK 2.224 MHz (201%)",
+    "presetLog": "rc-inventory-preset.log SET ExpansionCartPreset SelectedIndex=1 Text=flash ok=True",
+    "inventory2Append": "rc-inventory2.log remaining-controls block 2026-09-04T21:44:36Z",
+    "warpFix1": "rc-warp-fix1.txt text=WARP CLOCK 2.195 MHz (198%) CYCLE 5280088 WarpToggle IsChecked=True",
+    "warpFix2": "rc-warp-fix2.txt text=WARP CLOCK 2.221 MHz (200%) CYCLE 14073699",
+    "allRam": "rc-all-ram.png 28159 BYTES FREE READY; All; BLK0-5 checked",
+    "caps": "independent CLI caps click=True mutate=True frames=True CAPS_EXIT=0",
+    "scheduler": "01a06e3d06ed7bb09b18ea2ba500c00e interval 1h prompt Continue to plan completion using background agents as appropriate.",
+    "health": "GET /health nonce 08f9b48fc161497fbe2d7a7a5f81779a echoed status Healthy version 1.4.30+ee89cd63f6d16aa43d8e8dfac2388246c6ba39f8"
+  },
+  "Residuals": [
+    "live GetSettings protobuf payload not on disk",
+    "TEST-Requirements.md TRACEABILITY for TEST-UISET-002 still Related FR FR-VIC20-002 only",
+    "TR-AUDIO-WARP-001 absent from MCP TR list",
+    "scheduler durable field not present on scheduler_list"
+  ]
+}

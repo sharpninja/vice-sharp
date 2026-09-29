@@ -78,6 +78,23 @@ public sealed class ProcessorPortTests
     }
 
     /// <summary>
+    /// FR: FR-CPU-001, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 sample 2060538. KERNAL <c>LDA $01</c> at $EA61
+    ///   then <c>AND #$10</c> samples cassette sense. VICE
+    ///   <c>c64pla_config_changed(..., pullup=0x17)</c> with tape_sense=0
+    ///   leaves bit 4 set on input (nA=$37). Managed InputPullUp=0 made
+    ///   bit 4 read 0 (mA=$27).
+    /// Acceptance: After C64 reset, Bus.Read($0001) equals $37.
+    /// </summary>
+    [Fact]
+    public void C64MachineReset_Read0001_MatchesVicePullupIncludingCassetteSense()
+    {
+        var machine = MachineTestFactory.CreateC64Machine();
+
+        Assert.Equal(0x37, machine.Bus.Read(0x0001));
+    }
+
+    /// <summary>
     /// FR/TR: FR-CPU (BACKFILL-CPU 6510 processor port).
     /// Use case: With the default DDR ($2F) all banking bits (0-2) are
     /// configured as outputs, so writing $07 sets LORAM+HIRAM+CHAREN and

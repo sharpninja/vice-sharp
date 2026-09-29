@@ -65,7 +65,7 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 - **Status:**  
   - **Exact** for normal READY present window (PAL first_x=48, L+R borders, paper origin 48): tests `ReadyPal_NormalBorderWindow_*`, `ViewportFirstX_ReadyPal_*`, `SpaceGlyph_PaintsBackgroundPaper_*`  
   - **Partial** overall draw (no half_char / old_mc mid-line path, no raster cache)  
-  - **Pixel FB capture:** xvic `capture_visible_frame` wired (first_x crop + palette BGRA); geometry match tests green; full bit-exact SequenceEqual still open  
+  - **Pixel FB capture:** xvic `capture_visible_frame` wired (first_x crop + canvas palette BGRA); READY PAL/NTSC/busy index and native BGRA SequenceEqual green at HEAD (NTSC unpainted clamp rows opaque black)  
 - **Not Invented:** crop is not `src=0`; paper is not a continuous invent strip.
 
 ### VIC-I mem / regs
@@ -83,9 +83,9 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 
 ### Palette
 
-- **VICE:** `data/VIC20/PALette.vpl` + `vic-color.c` YUV/CRT  
-- **Managed:** static RGB `Mos6561.Palette`  
-- **Status:** **Exact** for Tobias 6561-101 RGB bytes; **Partial** overall (no YUV/CRT)
+- **VICE:** `vic-color.c` Tobias 6561-101 YUV through `video_calc_palette` canvas export (default sat/bri/con/gamma/tint); `PALette.vpl` is not the screenshot path  
+- **Managed:** static RGB `Mos6561.Palette` sampled from xvic `capture_visible_frame`  
+- **Status:** **Exact** for READY PAL, READY NTSC, and busy PAL native BGRA SequenceEqual (unpainted NTSC clamp rows are opaque black). CRT odd/even line tables unused (screenshot palette is 16 entries).
 
 ### Geometry / timing
 
@@ -162,7 +162,7 @@ The tree does **not** claim whole-machine Exact-same-as-VICE. Exact is allowed o
 | Color nybble open-bus | `colorram_*` | `Vic20ColorRam` |
 | Idle IEC PA `$7E` | `vic20iec` idle | `Vic20IecPort` |
 | PAR formulas | `vic_get_pixel_aspect` | `GetPixelAspectRatio` |
-| PALette.vpl RGB | `data/VIC20/PALette.vpl` | static `Palette[]` |
+| xvic canvas RGB | `video_calc_palette` / `vic-color.c` Tobias YUV | static `Palette[]` |
 | Raster encode reg3/4 | `vic-mem` | `Read` |
 | Latch pending cols only | `vic_cycle_latch_columns` | `LatchColumns` |
 
@@ -185,7 +185,7 @@ Every new Exact: Byrd tests-first, VICE citation, hostile validator.
 
 **Whole-machine "Exact same as VICE" is not claimed.**  
 
-Exact labels above are scoped rules only. VIC-I silence/tone batches match native xvic, but sound remains Partial until the full waveform/input space is certified; live IEC, niche carts, tape, native snapshot writes, full mid-line drawing, and full-canvas BGRA parity remain Explicit Missing/Partial.
+Exact labels above are scoped rules only. VIC-I silence/tone batches match native xvic, but sound remains Partial until the full waveform/input space is certified; live IEC, niche carts, tape, native snapshot writes, and full mid-line drawing remain Explicit Missing/Partial. READY PAL/NTSC/busy native BGRA SequenceEqual is Exact-scoped; do not read that as whole-machine Exact.
 
 Policy: no new invent; Exact requires VICE file+function + matching control flow; video geometry proven by pixel/band tests on shipped `FrameBuffer`.
 

@@ -17,6 +17,21 @@ public interface ILocalVideoFrameSource
     /// render pull cannot stall the emulation thread (FR-1132, BUG-THROTTLE-001).
     /// </summary>
     bool TryCopyFrameInto(string sessionId, Span<byte> destination, out int width, out int height, out long cycle);
+
+    /// <summary>
+    /// Reports the session video-chip canvas size so an in-process UI can size its
+    /// pull buffer before (or after) a copy fails because the destination was too
+    /// small. Geometry is available as soon as the session has a video chip.
+    /// </summary>
+    /// <param name="sessionId">The session whose video geometry is requested.</param>
+    /// <param name="width">Canvas width in pixels on success; otherwise 0.</param>
+    /// <param name="height">Canvas height in pixels on success; otherwise 0.</param>
+    /// <param name="bufferLength">BGRA byte length on success; otherwise 0.</param>
+    /// <returns>
+    /// <c>true</c> when the session exists and has a video chip with a positive canvas;
+    /// otherwise <c>false</c>.
+    /// </returns>
+    bool TryGetFrameGeometry(string sessionId, out int width, out int height, out int bufferLength);
 }
 
 /// <summary>
@@ -91,5 +106,27 @@ public sealed class LocalVideoFrameSource : ILocalVideoFrameSource
         // Lock-free read of the emulation thread's published frame straight into the
         // caller's buffer (e.g. the WriteableBitmap). No allocation, no lock.
         return session.TryCopyLatestFrameInto(destination, out width, out height, out cycle);
+    }
+
+    public bool TryGetFrameGeometry(string sessionId, out int width, out int height, out int bufferLength)
+    {
+        width = 0;
+        height = 0;
+        bufferLength = 0;
+
+        if (!_registry.TryGet(sessionId, out var session))
+            return false;
+
+        if (session.Machine.Devices.GetByRole(DeviceRole.VideoChip) is not IVideoChip video)
+            return false;
+
+        lock (session.SyncRoot)
+        {
+            width = video.FrameWidth;
+            height = video.FrameHeight;
+            bufferLength = video.FrameBuffer.Length;
+        }
+
+        return width > 0 && height > 0 && bufferLength > 0;
     }
 }

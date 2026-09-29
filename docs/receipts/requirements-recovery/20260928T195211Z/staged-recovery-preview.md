@@ -1,0 +1,484 @@
+# Requirements Recovery Staged Preview
+
+Generated UTC: 2026-09-28T20:30:19.2639005Z
+
+No MCP requirement mutation has been performed. Owner approval is required after all blockers are resolved.
+
+## Guardrails
+
+- Every FR remains a requirement, including legacy UWP/Xbox FRs.
+- No legacy requirement is retired, deleted, or scoped inactive.
+- Every FR must have validation-appropriate acceptance criteria and at least one mapped TEST requirement.
+- Restored but unproved behavior remains pending.
+- Mutation is blocked until atomic rollback is proven and the owner approves this exact preview.
+
+## Counts
+
+- LiveFunctional: 140
+- LiveTechnical: 127
+- LiveTesting: 116
+- LiveMappings: 115
+- CurrentCanonical: 206
+- Ledger: 513
+- ProposedRequirementCreates: 130
+- ProposedRequirementUpdates: 169
+- ProposedExpectedWrongTypeDeletes: 3
+- ProposedMappingCreates: 116
+- ProposedMappingUpdates: 24
+- Preserved: 214
+- Functional: 232
+- FunctionalWithZeroProposedAc: 0
+- FunctionalWithInferredAc: 24
+- ActiveFunctionalWithIncompleteMapping: 0
+- Blockers: 1
+- Historical d28493a: 144
+- Historical d1f7175: 101
+
+## Blocking invariants
+
+- [blocker] MCP-REQUIREMENTS-ATOMICITY: Active helpers provide atomic createBatch and updateBatch only for FR/TR/TEST records. Mapping upserts, mapping deletes, and typed requirement deletes each commit independently; no supported helper wraps the full create/update/delete/mapping set in one transaction. Evidence: F:/GitHub/McpServer/src/McpServer.Support.Mcp/Controllers/RequirementsController.cs:590, F:/GitHub/McpServer/src/McpServer.Support.Mcp/Controllers/RequirementsController.cs:748, F:/GitHub/McpServer/src/McpServer.Services/Requirements/RequirementsDatabaseDocumentService.cs:752, F:/GitHub/McpServer/src/McpServer.Services/Requirements/RequirementsDatabaseDocumentService.cs:920.
+
+## Operation index
+
+- 1. UPDATE FR ARCH-TRUEDRIVE-1541-002: AC INFERRED - OWNER REVIEW REQUIRED
+- 2. UPDATE FR BACKFILL-MEDIA-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 3. UPDATE FR BACKFILL-VIDEO-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 4. UPDATE FR FR-AIREVIEW-ROUTING-001: current-canonical
+- 5. UPDATE FR FR-CFG-001: current-canonical
+- 6. CREATE FR FR-CFG-002: current-canonical
+- 7. CREATE FR FR-CFG-003: current-canonical
+- 8. CREATE FR FR-CFG-004: current-canonical
+- 9. UPDATE FR FR-CFG-005: current-canonical
+- 10. CREATE FR FR-CFG-006: current-canonical
+- 11. CREATE FR FR-CFG-007: current-canonical
+- 12. CREATE FR FR-CFG-008: current-canonical
+- 13. CREATE FR FR-CIA-001: current-canonical
+- 14. CREATE FR FR-CIA-002: current-canonical
+- 15. CREATE FR FR-CIA-003: current-canonical
+- 16. CREATE FR FR-CIA-004: current-canonical
+- 17. CREATE FR FR-CIA-005: current-canonical
+- 18. CREATE FR FR-CIA-006: current-canonical
+- 19. CREATE FR FR-CIA-007: current-canonical
+- 20. UPDATE FR FR-COMPLETION-001: current-canonical
+- 21. CREATE FR FR-CPU-001: current-canonical
+- 22. CREATE FR FR-CPU-002: current-canonical
+- 23. CREATE FR FR-CPU-003: current-canonical
+- 24. CREATE FR FR-CPU-004: current-canonical
+- 25. CREATE FR FR-CPU-005: current-canonical
+- 26. CREATE FR FR-CRT-001: current-canonical
+- 27. CREATE FR FR-CRT-002: current-canonical
+- 28. CREATE FR FR-CRT-003: current-canonical
+- 29. CREATE FR FR-CRT-004: current-canonical
+- 30. CREATE FR FR-CRT-005: current-canonical
+- 31. UPDATE FR FR-CSDB-001: plan-or-audit-structured-acceptance
+- 32. UPDATE FR FR-CTX-001: plan-or-audit-inline-acceptance
+- 33. UPDATE FR FR-CTX-002: plan-or-audit-inline-acceptance
+- 34. UPDATE FR FR-CTX-003: plan-or-audit-inline-acceptance
+- 35. UPDATE FR FR-CTX-004: plan-or-audit-inline-acceptance
+- 36. UPDATE FR FR-D71-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 37. UPDATE FR FR-D81-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 38. UPDATE FR FR-DEVCARDART-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 39. CREATE FR FR-DRV-001: current-canonical
+- 40. UPDATE FR FR-DRV-002: current-canonical
+- 41. UPDATE FR FR-DRV-003: current-canonical
+- 42. CREATE FR FR-DRV-004: current-canonical
+- 43. UPDATE FR FR-DRV-005: current-canonical
+- 44. CREATE FR FR-DRV-006: current-canonical
+- 45. UPDATE FR FR-DRV1540-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 46. UPDATE FR FR-DRV1541II-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 47. UPDATE FR FR-DRVLED-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 48. UPDATE FR FR-DRVMODEL-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 49. UPDATE FR FR-DRVMODEL-002: AC INFERRED - OWNER REVIEW REQUIRED
+- 50. UPDATE FR FR-DRVTRUE-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 51. UPDATE FR FR-GAMEPAD-001: plan-or-audit-inline-acceptance
+- 52. UPDATE FR FR-GAMEPAD-002: plan-or-audit-inline-acceptance
+- 53. UPDATE FR FR-GAMEPAD-003: plan-or-audit-inline-acceptance
+- 54. UPDATE FR FR-GAMEPAD-004: plan-or-audit-inline-acceptance
+- 55. UPDATE FR FR-GAMEPAD-005: plan-or-audit-inline-acceptance
+- 56. UPDATE FR FR-GAMEPAD-006: plan-or-audit-inline-acceptance
+- 57. UPDATE FR FR-GAMEPAD-007: plan-or-audit-inline-acceptance
+- 58. UPDATE FR FR-GAMEPAD-008: plan-or-audit-inline-acceptance
+- 59. UPDATE FR FR-GAMEPAD-009: plan-or-audit-inline-acceptance
+- 60. CREATE FR FR-HOST-001: current-canonical
+- 61. CREATE FR FR-HOST-002: current-canonical
+- 62. CREATE FR FR-HOST-003: current-canonical
+- 63. CREATE FR FR-HOST-004: current-canonical
+- 64. CREATE FR FR-HOST-005: current-canonical
+- 65. UPDATE FR FR-HOST-006: current-canonical
+- 66. CREATE FR FR-HOST-DIAG-001: current-canonical
+- 67. UPDATE FR FR-IECLOAD-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 68. UPDATE FR FR-IECMON-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 69. UPDATE FR FR-IECSPY-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 70. CREATE FR FR-INP-001: current-canonical
+- 71. CREATE FR FR-INP-002: current-canonical
+- 72. CREATE FR FR-INP-003: current-canonical
+- 73. CREATE FR FR-INP-004: current-canonical
+- 74. CREATE FR FR-INP-005: current-canonical
+- 75. CREATE FR FR-INP-006: current-canonical
+- 76. UPDATE FR FR-INPROC-001: plan-or-audit-inline-acceptance
+- 77. UPDATE FR FR-INPROC-002: plan-or-audit-inline-acceptance
+- 78. UPDATE FR FR-INPROC-003: plan-or-audit-inline-acceptance
+- 79. UPDATE FR FR-INSTALL-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 80. UPDATE FR FR-MACHINEPICKER-001: current-canonical
+- 81. CREATE FR FR-MED-001: current-canonical
+- 82. UPDATE FR FR-MED-002: current-canonical
+- 83. UPDATE FR FR-MED-003: current-canonical
+- 84. UPDATE FR FR-MED-004: current-canonical
+- 85. CREATE FR FR-MED-005: current-canonical
+- 86. CREATE FR FR-MEM-001: current-canonical
+- 87. CREATE FR FR-MEM-002: current-canonical
+- 88. CREATE FR FR-MEM-003: current-canonical
+- 89. CREATE FR FR-MEM-004: current-canonical
+- 90. CREATE FR FR-MEM-005: current-canonical
+- 91. CREATE FR FR-MEM-006: current-canonical
+- 92. CREATE FR FR-MON-001: current-canonical
+- 93. CREATE FR FR-MON-002: current-canonical
+- 94. CREATE FR FR-MON-003: current-canonical
+- 95. CREATE FR FR-MON-004: current-canonical
+- 96. CREATE FR FR-MON-005: current-canonical
+- 97. CREATE FR FR-MON-006: current-canonical
+- 98. UPDATE FR FR-NATIVE-LIFECYCLE-001: current-canonical
+- 99. UPDATE FR FR-NATIVERESIDUE-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 100. UPDATE FR FR-PERF-RUNFRAME-001: current-canonical
+- 101. CREATE FR FR-PRF-001: current-canonical
+- 102. CREATE FR FR-PRF-002: current-canonical
+- 103. CREATE FR FR-PRF-003: current-canonical
+- 104. CREATE FR FR-PRF-004: current-canonical
+- 105. CREATE FR FR-PRF-005: current-canonical
+- 106. CREATE FR FR-PRF-006: current-canonical
+- 107. CREATE FR FR-PRF-007: current-canonical
+- 108. CREATE FR FR-PRF-008: current-canonical
+- 109. UPDATE FR FR-REMOTECTRL-001: current-canonical
+- 110. UPDATE FR FR-REMOTECTRL-CLI-001: current-canonical
+- 111. UPDATE FR FR-REVEXEC-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 112. UPDATE FR FR-ROMM-AVUI-001: plan-or-audit-structured-acceptance
+- 113. UPDATE FR FR-ROMM-BROWSE-001: plan-or-audit-structured-acceptance
+- 114. UPDATE FR FR-ROMM-COLLECT-001: plan-or-audit-structured-acceptance
+- 115. UPDATE FR FR-ROMM-CONN-001: plan-or-audit-structured-acceptance
+- 116. UPDATE FR FR-ROMM-COVER-001: plan-or-audit-structured-acceptance
+- 117. UPDATE FR FR-ROMM-DETAIL-001: plan-or-audit-structured-acceptance
+- 118. UPDATE FR FR-ROMM-LAUNCH-001: plan-or-audit-structured-acceptance
+- 119. UPDATE FR FR-ROMM-PKG-001: plan-or-audit-structured-acceptance
+- 120. UPDATE FR FR-ROMM-XBOXUI-001: plan-or-audit-structured-acceptance
+- 121. UPDATE FR FR-SETTINGS-TXN-001: current-canonical
+- 122. CREATE FR FR-SID-001: current-canonical
+- 123. CREATE FR FR-SID-002: current-canonical
+- 124. CREATE FR FR-SID-003: current-canonical
+- 125. CREATE FR FR-SID-004: current-canonical
+- 126. CREATE FR FR-SID-005: current-canonical
+- 127. CREATE FR FR-SID-006: current-canonical
+- 128. CREATE FR FR-SID-007: current-canonical
+- 129. CREATE FR FR-SID-008: current-canonical
+- 130. CREATE FR FR-SID-009: current-canonical
+- 131. CREATE FR FR-SID-010: current-canonical
+- 132. CREATE FR FR-SID-011: current-canonical
+- 133. CREATE FR FR-SID-012: current-canonical
+- 134. UPDATE FR FR-SID-013: current-canonical
+- 135. UPDATE FR FR-SID-014: current-canonical
+- 136. CREATE FR FR-SNP-001: current-canonical
+- 137. CREATE FR FR-SNP-002: current-canonical
+- 138. CREATE FR FR-SNP-003: current-canonical
+- 139. CREATE FR FR-SNP-004: current-canonical
+- 140. UPDATE FR FR-SYSBTN-001: plan-or-audit-inline-acceptance
+- 141. UPDATE FR FR-SYSBTN-002: plan-or-audit-inline-acceptance
+- 142. UPDATE FR FR-SYSBTN-003: plan-or-audit-inline-acceptance
+- 143. UPDATE FR FR-SYSBTN-004: plan-or-audit-inline-acceptance
+- 144. UPDATE FR FR-SYSBTN-005: plan-or-audit-inline-acceptance
+- 145. UPDATE FR FR-SYSBTN-006: plan-or-audit-inline-acceptance
+- 146. UPDATE FR FR-SYSBTN-007: plan-or-audit-inline-acceptance
+- 147. UPDATE FR FR-SYSBTN-008: plan-or-audit-inline-acceptance
+- 148. CREATE FR FR-TAP-001: current-canonical
+- 149. CREATE FR FR-TAP-002: current-canonical
+- 150. CREATE FR FR-TAP-003: current-canonical
+- 151. CREATE FR FR-TAP-004: current-canonical
+- 152. CREATE FR FR-TAP-005: current-canonical
+- 153. UPDATE FR FR-TESTGATE-001: plan-or-audit-inline-acceptance
+- 154. UPDATE FR FR-TESTGATE-002: plan-or-audit-inline-acceptance
+- 155. UPDATE FR FR-TESTGATE-003: plan-or-audit-inline-acceptance
+- 156. UPDATE FR FR-TESTGATE-004: plan-or-audit-inline-acceptance
+- 157. CREATE FR FR-UI-001: current-canonical
+- 158. UPDATE FR FR-UI-002: current-canonical
+- 159. UPDATE FR FR-UI-003: current-canonical
+- 160. CREATE FR FR-UI-004: current-canonical
+- 161. UPDATE FR FR-UIDROP-002: current-canonical
+- 162. UPDATE FR FR-UIFLYOUT-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 163. UPDATE FR FR-UIMENUBAR-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 164. UPDATE FR FR-UIPERIPHERAL-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 165. UPDATE FR FR-UISETTINGS-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 166. UPDATE FR FR-UISETVIS-001: current-canonical
+- 167. CREATE FR FR-VIA-001: current-canonical
+- 168. CREATE FR FR-VIA-002: current-canonical
+- 169. CREATE FR FR-VIA-003: current-canonical
+- 170. CREATE FR FR-VIA-004: current-canonical
+- 171. CREATE FR FR-VIA-005: current-canonical
+- 172. UPDATE FR FR-VIC-001: current-canonical
+- 173. UPDATE FR FR-VIC-002: current-canonical
+- 174. UPDATE FR FR-VIC-003: current-canonical
+- 175. UPDATE FR FR-VIC-004: current-canonical
+- 176. UPDATE FR FR-VIC-005: current-canonical
+- 177. UPDATE FR FR-VIC-006: current-canonical
+- 178. UPDATE FR FR-VIC-007: current-canonical
+- 179. UPDATE FR FR-VIC-008: current-canonical
+- 180. CREATE FR FR-VIC-009: current-canonical
+- 181. UPDATE FR FR-VIC-010: current-canonical
+- 182. UPDATE FR FR-VIC20-001: current-canonical
+- 183. UPDATE FR FR-VIC20-002: current-canonical
+- 184. CREATE FR FR-VIC20-003: current-canonical
+- 185. CREATE FR FR-VIC20-004: current-canonical
+- 186. UPDATE FR FR-VIC20-005: current-canonical
+- 187. CREATE FR FR-VIC20-006: current-canonical
+- 188. UPDATE FR FR-VIC20-SOUND-001: current-canonical
+- 189. UPDATE FR FR-XAUDIO-001: AC INFERRED - OWNER REVIEW REQUIRED
+- 190. UPDATE FR FR-XAUDIO-002: plan-or-audit-inline-acceptance
+- 191. UPDATE FR FR-XAUDIO-003: plan-or-audit-inline-acceptance
+- 192. UPDATE FR FR-XAV-001: plan-or-audit-inline-acceptance
+- 193. UPDATE FR FR-XBOXGPL-006: plan-or-audit-inline-acceptance
+- 194. UPDATE FR FR-XBOXPKG-001: plan-or-audit-inline-acceptance
+- 195. UPDATE FR FR-XBOXPKG-003: plan-or-audit-inline-acceptance
+- 196. UPDATE FR FR-XBOXTOPO-001: plan-or-audit-inline-acceptance
+- 197. UPDATE FR FR-XBOXUI-001: plan-or-audit-inline-acceptance
+- 198. UPDATE FR FR-XBOXUI-002: plan-or-audit-inline-acceptance
+- 199. UPDATE FR FR-XBOXUI-003: plan-or-audit-inline-acceptance
+- 200. UPDATE FR FR-XBOXUI-004: plan-or-audit-inline-acceptance
+- 201. UPDATE FR FR-XBOXUI-005: plan-or-audit-inline-acceptance
+- 202. UPDATE FR FR-XBOXUI-006: plan-or-audit-inline-acceptance
+- 203. UPDATE FR FR-XBOXUI-007: plan-or-audit-inline-acceptance
+- 204. UPDATE FR FR-XBOXUI-008: plan-or-audit-inline-acceptance
+- 205. UPDATE FR FR-XDEV-001: plan-or-audit-inline-acceptance
+- 206. UPDATE FR FR-XDEV-002: plan-or-audit-inline-acceptance
+- 207. UPDATE FR FR-XDEV-003: plan-or-audit-inline-acceptance
+- 208. UPDATE FR FR-XKBD-001: plan-or-audit-inline-acceptance
+- 209. UPDATE FR FR-XROM-001: plan-or-audit-inline-acceptance
+- 210. UPDATE FR FR-XROM-002: plan-or-audit-inline-acceptance
+- 211. UPDATE FR FR-XROM-003: plan-or-audit-inline-acceptance
+- 212. UPDATE FR FR-XSET-001: plan-or-audit-inline-acceptance
+- 213. UPDATE FR FR-XSET-002: plan-or-audit-inline-acceptance
+- 214. UPDATE FR FR-XSET-003: plan-or-audit-inline-acceptance
+- 215. UPDATE FR FR-XSET-004: plan-or-audit-inline-acceptance
+- 216. UPDATE FR FR-XSET-005: plan-or-audit-inline-acceptance
+- 217. UPDATE FR FR-XVIDEO-001: plan-or-audit-inline-acceptance
+- 218. UPDATE FR FR-XVIDEO-002: plan-or-audit-inline-acceptance
+- 219. UPDATE FR RUNTIME-TAPE-002: AC INFERRED - OWNER REVIEW REQUIRED
+- 220. UPDATE TEST TEST-AIREVIEW-ROUTING-001: current-canonical
+- 221. CREATE TEST TEST-ARCH-CHIPGLUE-001: current-canonical
+- 222. UPDATE TEST TEST-BASELINE-CORRECTNESS-001: current-canonical
+- 223. CREATE TEST TEST-CFG-001: none
+- 224. CREATE TEST TEST-CIA-001: none
+- 225. CREATE TEST TEST-CLI-LAUNCHER-001: none
+- 226. UPDATE TEST TEST-COMPLETION-001: current-canonical
+- 227. CREATE TEST TEST-CPU-001: none
+- 228. CREATE TEST TEST-CRT-001: none
+- 229. UPDATE TEST TEST-DRV-001: none
+- 230. CREATE TEST TEST-GRPC-001: none
+- 231. CREATE TEST TEST-HOST-001: none
+- 232. CREATE TEST TEST-HOST-DIAG-001: none
+- 233. CREATE TEST TEST-INPUT-001: none
+- 234. CREATE TEST TEST-MED-001: none
+- 235. CREATE TEST TEST-MEM-001: none
+- 236. CREATE TEST TEST-MON-001: none
+- 237. UPDATE TEST TEST-NATIVE-LIFECYCLE-001: current-canonical
+- 238. UPDATE TEST TEST-PERF-RUNFRAME-001: current-canonical
+- 239. CREATE TEST TEST-PRF-001: none
+- 240. UPDATE TEST TEST-REMOTE-INTEGRATION-001: current-canonical
+- 241. UPDATE TEST TEST-REMOTECTRL-001: current-canonical
+- 242. UPDATE TEST TEST-REMOTECTRL-CLI-001: current-canonical
+- 243. CREATE TEST TEST-ROMM-AVUI-001: none
+- 244. CREATE TEST TEST-ROMM-DETAIL-001: none
+- 245. CREATE TEST TEST-ROMM-PKG-001: none
+- 246. UPDATE TEST TEST-ROMM-SEC-001: none
+- 247. UPDATE TEST TEST-SETTINGS-TXN-001: current-canonical
+- 248. CREATE TEST TEST-SID-001: none
+- 249. UPDATE TEST TEST-SID-002: none
+- 250. CREATE TEST TEST-SNP-001: none
+- 251. CREATE TEST TEST-TAP-001: none
+- 252. UPDATE TEST TEST-UI-001: none
+- 253. UPDATE TEST TEST-UI-COREBOUNDARY-001: current-canonical
+- 254. CREATE TEST TEST-UI-DIAG-001: none
+- 255. UPDATE TEST TEST-UIDROP-002: none
+- 256. UPDATE TEST TEST-UISET-001: current-canonical
+- 257. UPDATE TEST TEST-UISET-002: current-canonical
+- 258. UPDATE TEST TEST-UISET-003: current-canonical
+- 259. CREATE TEST TEST-VIA-001: none
+- 260. CREATE TEST TEST-VIC-001: none
+- 261. UPDATE TEST TEST-VIC20-FLASH-001: none
+- 262. UPDATE TEST TEST-VIC20-SOUND-001: none
+- 263. CREATE TEST TEST-X64SC-LOCKSTEP-001: none
+- 264. UPDATE TR TR-AIREVIEW-ROUTING-001: current-canonical
+- 265. UPDATE TR TR-ALLOC-001: current-canonical
+- 266. CREATE TR TR-AOT-001: git-d28493a
+- 267. UPDATE TR TR-BASELINE-CORRECTNESS-001: current-canonical
+- 268. CREATE TR TR-BUILD-001: current-canonical
+- 269. UPDATE TR TR-COMPLETION-MANIFEST-001: current-canonical
+- 270. UPDATE TR TR-CYCLE-001: current-canonical
+- 271. UPDATE TR TR-DET-001: current-canonical
+- 272. UPDATE TR TR-GRPC-BOUNDARY-001: current-canonical
+- 273. CREATE TR TR-HOST-DIAG-001: none
+- 274. CREATE TR TR-HOST-DIAG-002: none
+- 275. CREATE TR TR-HOST-DIAG-003: none
+- 276. CREATE TR TR-HOST-DIAG-004: none
+- 277. UPDATE TR TR-HOST-PRG-001: current-canonical
+- 278. UPDATE TR TR-HOST-STATUS-001: current-canonical
+- 279. CREATE TR TR-INPUT-VKM-001: current-canonical
+- 280. CREATE TR TR-LIB-001: current-canonical
+- 281. CREATE TR TR-MEDIA-001: current-canonical
+- 282. UPDATE TR TR-MVVM-001: current-canonical
+- 283. UPDATE TR TR-NATIVE-LIFECYCLE-001: current-canonical
+- 284. CREATE TR TR-PLAT-001: current-canonical
+- 285. CREATE TR TR-PUBSUB-001: current-canonical
+- 286. UPDATE TR TR-REMOTE-INTEGRATION-001: current-canonical
+- 287. UPDATE TR TR-REMOTECTRL-CLI-001: current-canonical
+- 288. UPDATE TR TR-REMOTECTRL-SERVER-001: current-canonical
+- 289. UPDATE TR TR-ROMM-SEC-001: none
+- 290. UPDATE TR TR-SETTINGS-TXN-001: current-canonical
+- 291. CREATE TR TR-SIMD-001: current-canonical
+- 292. CREATE TR TR-STATE-001: current-canonical
+- 293. CREATE TR TR-SYSTEM-CORE-001: current-canonical
+- 294. UPDATE TR TR-UI-COREBOUNDARY-001: current-canonical
+- 295. UPDATE TR TR-UI-SHELL-001: current-canonical
+- 296. UPDATE TR TR-UIAXAML-PICKER-001: current-canonical
+- 297. UPDATE TR TR-VIC20-FLASH-001: none
+- 298. UPDATE TR TR-VIC20-PIXEL-001: none
+- 299. UPDATE TR TR-VIC20-SOUND-001: none
+- 300. CREATE MAPPING FR-SID-003: mapping evidence entries 3
+- 301. CREATE MAPPING FR-CRT-001: mapping evidence entries 3
+- 302. CREATE MAPPING FR-DRV-006: mapping evidence entries 3
+- 303. CREATE MAPPING FR-CFG-001: mapping evidence entries 5
+- 304. UPDATE MAPPING FR-DRV-005: mapping evidence entries 4
+- 305. CREATE MAPPING FR-CRT-003: mapping evidence entries 3
+- 306. CREATE MAPPING FR-DRV-004: mapping evidence entries 3
+- 307. UPDATE MAPPING FR-XSET-001: mapping evidence entries 4
+- 308. CREATE MAPPING FR-INP-004: mapping evidence entries 3
+- 309. CREATE MAPPING FR-CFG-003: mapping evidence entries 5
+- 310. CREATE MAPPING FR-HOST-DIAG-001: mapping evidence entries 7
+- 311. CREATE MAPPING FR-SID-008: mapping evidence entries 3
+- 312. UPDATE MAPPING FR-MED-002: mapping evidence entries 3
+- 313. CREATE MAPPING FR-VIA-005: mapping evidence entries 2
+- 314. CREATE MAPPING FR-CRT-002: mapping evidence entries 3
+- 315. CREATE MAPPING FR-CIA-005: mapping evidence entries 3
+- 316. UPDATE MAPPING FR-MED-004: mapping evidence entries 3
+- 317. UPDATE MAPPING FR-CTX-002: mapping evidence entries 4
+- 318. CREATE MAPPING FR-VIA-003: mapping evidence entries 2
+- 319. CREATE MAPPING FR-HOST-003: mapping evidence entries 5
+- 320. CREATE MAPPING FR-DRVMODEL-001: mapping evidence entries 2
+- 321. CREATE MAPPING FR-CFG-005: mapping evidence entries 6
+- 322. CREATE MAPPING FR-MEM-004: mapping evidence entries 3
+- 323. UPDATE MAPPING FR-SID-014: mapping evidence entries 4
+- 324. CREATE MAPPING FR-HOST-004: mapping evidence entries 5
+- 325. CREATE MAPPING FR-PRF-005: mapping evidence entries 3
+- 326. CREATE MAPPING FR-INP-001: mapping evidence entries 3
+- 327. CREATE MAPPING FR-INP-002: mapping evidence entries 3
+- 328. UPDATE MAPPING FR-GAMEPAD-009: mapping evidence entries 3
+- 329. CREATE MAPPING FR-VIC20-004: mapping evidence entries 1
+- 330. CREATE MAPPING FR-CFG-007: mapping evidence entries 5
+- 331. CREATE MAPPING FR-TAP-004: mapping evidence entries 3
+- 332. CREATE MAPPING FR-SNP-001: mapping evidence entries 2
+- 333. CREATE MAPPING FR-CPU-004: mapping evidence entries 3
+- 334. UPDATE MAPPING FR-VIC-001: mapping evidence entries 3
+- 335. CREATE MAPPING FR-DRV-003: mapping evidence entries 3
+- 336. CREATE MAPPING FR-SNP-002: mapping evidence entries 2
+- 337. CREATE MAPPING FR-PRF-008: mapping evidence entries 3
+- 338. CREATE MAPPING FR-SID-006: mapping evidence entries 3
+- 339. CREATE MAPPING FR-HOST-005: mapping evidence entries 5
+- 340. UPDATE MAPPING FR-XAUDIO-002: mapping evidence entries 3
+- 341. CREATE MAPPING FR-MON-005: mapping evidence entries 2
+- 342. UPDATE MAPPING FR-HOST-006: mapping evidence entries 6
+- 343. CREATE MAPPING FR-MON-002: mapping evidence entries 2
+- 344. CREATE MAPPING FR-UIPERIPHERAL-001: mapping evidence entries 2
+- 345. CREATE MAPPING FR-VIA-001: mapping evidence entries 2
+- 346. CREATE MAPPING FR-DRV-001: mapping evidence entries 3
+- 347. CREATE MAPPING FR-ROMM-DETAIL-001: mapping evidence entries 2
+- 348. CREATE MAPPING FR-INP-003: mapping evidence entries 3
+- 349. CREATE MAPPING FR-VIC-010: mapping evidence entries 3
+- 350. UPDATE MAPPING FR-MED-003: mapping evidence entries 3
+- 351. CREATE MAPPING FR-VIA-004: mapping evidence entries 2
+- 352. CREATE MAPPING FR-MED-001: mapping evidence entries 2
+- 353. UPDATE MAPPING FR-UI-002: mapping evidence entries 5
+- 354. CREATE MAPPING FR-CRT-005: mapping evidence entries 3
+- 355. CREATE MAPPING FR-UI-004: mapping evidence entries 4
+- 356. CREATE MAPPING FR-VIC-002: mapping evidence entries 3
+- 357. CREATE MAPPING FR-MON-001: mapping evidence entries 2
+- 358. CREATE MAPPING FR-SID-002: mapping evidence entries 3
+- 359. CREATE MAPPING FR-SID-011: mapping evidence entries 3
+- 360. CREATE MAPPING FR-CFG-008: mapping evidence entries 5
+- 361. CREATE MAPPING FR-MEM-001: mapping evidence entries 3
+- 362. CREATE MAPPING FR-MON-006: mapping evidence entries 2
+- 363. CREATE MAPPING FR-HOST-001: mapping evidence entries 5
+- 364. CREATE MAPPING FR-SID-001: mapping evidence entries 3
+- 365. CREATE MAPPING FR-CRT-004: mapping evidence entries 3
+- 366. CREATE MAPPING FR-VIC20-006: mapping evidence entries 1
+- 367. CREATE MAPPING FR-SID-012: mapping evidence entries 3
+- 368. CREATE MAPPING FR-CIA-007: mapping evidence entries 3
+- 369. UPDATE MAPPING FR-VIC-008: mapping evidence entries 4
+- 370. CREATE MAPPING FR-PRF-003: mapping evidence entries 3
+- 371. CREATE MAPPING FR-MED-005: mapping evidence entries 2
+- 372. CREATE MAPPING FR-CIA-006: mapping evidence entries 3
+- 373. CREATE MAPPING FR-MEM-006: mapping evidence entries 3
+- 374. CREATE MAPPING FR-CFG-002: mapping evidence entries 5
+- 375. CREATE MAPPING FR-TAP-001: mapping evidence entries 3
+- 376. CREATE MAPPING FR-DRV1541II-001: mapping evidence entries 2
+- 377. CREATE MAPPING FR-VIC-005: mapping evidence entries 3
+- 378. CREATE MAPPING FR-SID-004: mapping evidence entries 3
+- 379. CREATE MAPPING FR-SID-005: mapping evidence entries 3
+- 380. CREATE MAPPING FR-MEM-002: mapping evidence entries 3
+- 381. CREATE MAPPING FR-MEM-005: mapping evidence entries 3
+- 382. CREATE MAPPING FR-ROMM-PKG-001: mapping evidence entries 2
+- 383. CREATE MAPPING FR-TAP-003: mapping evidence entries 3
+- 384. CREATE MAPPING FR-CPU-005: mapping evidence entries 3
+- 385. CREATE MAPPING FR-ROMM-AVUI-001: mapping evidence entries 2
+- 386. CREATE MAPPING FR-MON-004: mapping evidence entries 2
+- 387. CREATE MAPPING FR-VIC20-003: mapping evidence entries 1
+- 388. UPDATE MAPPING FR-XAV-001: mapping evidence entries 3
+- 389. CREATE MAPPING FR-CPU-001: mapping evidence entries 3
+- 390. CREATE MAPPING FR-PRF-007: mapping evidence entries 3
+- 391. CREATE MAPPING FR-VIC-007: mapping evidence entries 4
+- 392. UPDATE MAPPING FR-VIC20-002: mapping evidence entries 2
+- 393. CREATE MAPPING FR-TAP-002: mapping evidence entries 3
+- 394. CREATE MAPPING FR-CIA-001: mapping evidence entries 3
+- 395. UPDATE MAPPING FR-XBOXUI-001: mapping evidence entries 3
+- 396. CREATE MAPPING FR-DRVMODEL-002: mapping evidence entries 2
+- 397. CREATE MAPPING FR-DEVCARDART-001: mapping evidence entries 1
+- 398. CREATE MAPPING FR-PRF-006: mapping evidence entries 3
+- 399. CREATE MAPPING FR-D71-001: mapping evidence entries 2
+- 400. CREATE MAPPING FR-D81-001: mapping evidence entries 2
+- 401. UPDATE MAPPING FR-XVIDEO-002: mapping evidence entries 3
+- 402. CREATE MAPPING FR-SID-007: mapping evidence entries 3
+- 403. CREATE MAPPING FR-SNP-004: mapping evidence entries 2
+- 404. CREATE MAPPING FR-DRV1540-001: mapping evidence entries 2
+- 405. CREATE MAPPING FR-UIMENUBAR-001: mapping evidence entries 2
+- 406. CREATE MAPPING FR-CFG-004: mapping evidence entries 5
+- 407. CREATE MAPPING FR-HOST-002: mapping evidence entries 5
+- 408. UPDATE MAPPING FR-SID-013: mapping evidence entries 4
+- 409. CREATE MAPPING FR-PRF-002: mapping evidence entries 3
+- 410. CREATE MAPPING FR-INP-006: mapping evidence entries 4
+- 411. CREATE MAPPING FR-VIC-003: mapping evidence entries 3
+- 412. CREATE MAPPING FR-PRF-001: mapping evidence entries 3
+- 413. CREATE MAPPING FR-CFG-006: mapping evidence entries 5
+- 414. CREATE MAPPING FR-SNP-003: mapping evidence entries 2
+- 415. CREATE MAPPING FR-DRV-002: mapping evidence entries 3
+- 416. CREATE MAPPING FR-MON-003: mapping evidence entries 2
+- 417. CREATE MAPPING FR-CIA-002: mapping evidence entries 3
+- 418. CREATE MAPPING FR-CIA-004: mapping evidence entries 3
+- 419. CREATE MAPPING FR-VIA-002: mapping evidence entries 2
+- 420. CREATE MAPPING FR-SID-010: mapping evidence entries 3
+- 421. CREATE MAPPING FR-TAP-005: mapping evidence entries 3
+- 422. UPDATE MAPPING FR-XKBD-001: mapping evidence entries 5
+- 423. CREATE MAPPING FR-INP-005: mapping evidence entries 3
+- 424. CREATE MAPPING FR-UI-001: mapping evidence entries 4
+- 425. UPDATE MAPPING FR-XBOXUI-005: mapping evidence entries 3
+- 426. CREATE MAPPING FR-PRF-004: mapping evidence entries 3
+- 427. CREATE MAPPING FR-CPU-002: mapping evidence entries 3
+- 428. CREATE MAPPING FR-VIC-004: mapping evidence entries 3
+- 429. UPDATE MAPPING FR-UISETTINGS-001: mapping evidence entries 3
+- 430. UPDATE MAPPING FR-UIDROP-002: mapping evidence entries 3
+- 431. CREATE MAPPING FR-SID-009: mapping evidence entries 3
+- 432. CREATE MAPPING FR-CIA-003: mapping evidence entries 3
+- 433. CREATE MAPPING FR-CPU-003: mapping evidence entries 3
+- 434. CREATE MAPPING FR-VIC-006: mapping evidence entries 3
+- 435. CREATE MAPPING FR-MEM-003: mapping evidence entries 3
+- 436. UPDATE MAPPING FR-SYSBTN-001: mapping evidence entries 3
+- 437. CREATE MAPPING FR-UIFLYOUT-001: mapping evidence entries 2
+- 438. CREATE MAPPING FR-VIC-009: mapping evidence entries 3
+- 439. UPDATE MAPPING FR-UI-003: mapping evidence entries 5
+- 440. DELETE TR TEST-DRV-001: EXPECTED WRONG-TYPE PLACEHOLDER REMOVAL - OWNER APPROVAL REQUIRED
+- 441. DELETE TR TEST-UI-001: EXPECTED WRONG-TYPE PLACEHOLDER REMOVAL - OWNER APPROVAL REQUIRED
+- 442. DELETE TR TEST-VIC-001: EXPECTED WRONG-TYPE PLACEHOLDER REMOVAL - OWNER APPROVAL REQUIRED

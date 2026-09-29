@@ -1079,6 +1079,56 @@ public sealed class AttachPanelViewModelTests
     }
 
     /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001, TEST-UISET-002.
+    /// Use case: Settings Warp then Apply (including RemoteControl SetProperty
+    /// plus Apply) must use the host warp entry SetLimiterRate(0), not a
+    /// limited rate with IsEnabled false. Rate 0 is what SetLimiterRateAsync
+    /// treats as warp; a positive rate re-enables the limiter.
+    /// Acceptance: After IsWarpMode=true and ApplySettingsAsync, UpdateSettings
+    /// limiter RatePercent is 0 and IsEnabled is false, and SetLimiterRateAsync
+    /// is invoked with 0.
+    /// </summary>
+    [Fact]
+    public async Task ApplySettingsAsync_WhenWarpOn_SendsLimiterRateZero()
+    {
+        UpdateSettingsRequest? update = null;
+        double? liveRate = null;
+        var host = Substitute.For<IHostProtocolClient>();
+        host.SessionId.Returns("warp-session");
+        host.SetLimiterRateAsync(Arg.Any<double>(), Arg.Any<CancellationToken>())
+            .Returns(ci =>
+            {
+                liveRate = ci.Arg<double>();
+                return new EmulatorCommandResponse(RpcStatus.Ok(), null);
+            });
+        host.UpdateSettingsAsync(Arg.Any<UpdateSettingsRequest>(), Arg.Any<CancellationToken>())
+            .Returns(ci =>
+            {
+                update = ci.Arg<UpdateSettingsRequest>();
+                var req = update;
+                return new UpdateSettingsResponse(
+                    RpcStatus.Ok(),
+                    new SessionSettingsDto(
+                        "c64",
+                        req.Limiter ?? new LimiterSettingsDto(),
+                        req.Display ?? new DisplaySettingsDto(),
+                        req.Input ?? new InputSettingsDto(),
+                        req.Audio ?? new AudioSettingsDto(),
+                        req.Resources ?? new ResourceSettingsDto()),
+                    []);
+            });
+
+        var viewModel = new AttachPanelViewModel(host);
+        viewModel.IsWarpMode = true;
+        await viewModel.ApplySettingsAsync(restartRequired: false, TestContext.Current.CancellationToken);
+
+        Assert.NotNull(update?.Limiter);
+        Assert.Equal(0, update!.Limiter!.RatePercent);
+        Assert.False(update.Limiter.IsEnabled);
+        Assert.Equal(0, liveRate);
+    }
+
+    /// <summary>
     /// FR: FR-DRVTRUE-001, TR: TR-MVVM-001, TEST-DRVTRUE-001.
     /// Use case: Toggling a drive's True Drive (from the card checkbox or the
     /// menu) must drive the host to rebuild the session as a true-drive rig for

@@ -91,7 +91,8 @@ public static class ViceNativeBridge
         state.InterruptFlag = nativeState.InterruptFlag;
         state.TimerALatch = nativeState.TimerALatch;
         state.TimerBLatch = nativeState.TimerBLatch;
-        state.IrqMask = nativeState.IrqMask;
+        state.IrqMask = (byte)(nativeState.Icr & 0x7F);
+        state.IrqLineActive = nativeState.IrqLineActive;
     }
 
     public static void GetSidState(IntPtr machine, ref ViceSidState state)
@@ -417,6 +418,9 @@ public static class ViceNativeBridge
 
         /// <summary>TR-LOCKSTEP-VSF-001: ICR interrupt-enable mask.</summary>
         public byte IrqMask;
+
+        /// <summary>TR-LOCKSTEP-VSF-001: live CIA IRQ-output state (ciacore irq_enabled).</summary>
+        public byte IrqLineActive;
     }
 
     public struct ViceSidState

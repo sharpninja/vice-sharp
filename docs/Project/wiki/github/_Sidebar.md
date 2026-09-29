@@ -33,6 +33,7 @@
   - [VIC-20 Functional Requirements](FR-VIC20)
   - [VIC-20 Technical Requirements](TR-VIC20)
   - [RomM Security Requirements](TR-RomM-Security)
+  - [Host-owned PRG Memory Load](TR-Host-Prg)
 - Reference
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)

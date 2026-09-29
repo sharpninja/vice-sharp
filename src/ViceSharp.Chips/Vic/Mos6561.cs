@@ -16,26 +16,29 @@ public sealed class Mos6561 : IVideoChip, IAudioChip, IAddressSpace, IInterruptS
 {
     /// <summary>
     /// VIC-I 16-color palette as 0xAARRGGBB (B at low byte for framebuffer writers).
-    /// Source: VICE <c>data/VIC20/PALette.vpl</c> (PALette_6561-101_v1 by Tobias).
+    /// RGB matches xvic <c>video_calc_palette</c> canvas export at default
+    /// sat/bri/con/gamma/tint (Tobias 6561-101 YUV in <c>vic-color.c</c>), not
+    /// raw <c>PALette.vpl</c> bytes. Sampled from
+    /// <c>vice_machine_capture_visible_frame</c> paper pixels.
     /// </summary>
     private static readonly uint[] Palette =
     [
         PackRgb(0x00, 0x00, 0x00), // 0 black
         PackRgb(0xFF, 0xFF, 0xFF), // 1 white
-        PackRgb(0x97, 0x2A, 0x2E), // 2 red
-        PackRgb(0x64, 0xE3, 0xDE), // 3 cyan
-        PackRgb(0xAD, 0x3C, 0xBF), // 4 purple
-        PackRgb(0x5C, 0xDC, 0x54), // 5 green
-        PackRgb(0x40, 0x32, 0xB9), // 6 blue
-        PackRgb(0xD7, 0xE7, 0x45), // 7 yellow
-        PackRgb(0xBA, 0x6A, 0x24), // 8 orange
-        PackRgb(0xE1, 0xB9, 0x96), // 9 light orange
-        PackRgb(0xDA, 0xA3, 0xA5), // 10 light red
-        PackRgb(0xB6, 0xF6, 0xF3), // 11 light cyan
-        PackRgb(0xDE, 0xA6, 0xE8), // 12 light purple
-        PackRgb(0xB2, 0xF3, 0xAF), // 13 light green
-        PackRgb(0xA6, 0x9E, 0xE2), // 14 light blue
-        PackRgb(0xF4, 0xFC, 0xAB), // 15 light yellow
+        PackRgb(0xC1, 0x3C, 0x0E), // 2 red
+        PackRgb(0x80, 0xFF, 0xFF), // 3 cyan
+        PackRgb(0xE7, 0x47, 0xE6), // 4 purple
+        PackRgb(0x68, 0xFF, 0x90), // 5 green
+        PackRgb(0x65, 0x32, 0xF3), // 6 blue
+        PackRgb(0xFF, 0xFF, 0x4E), // 7 yellow
+        PackRgb(0xE4, 0x92, 0x00), // 8 orange
+        PackRgb(0xFF, 0xDF, 0xD8), // 9 light orange
+        PackRgb(0xFF, 0xC3, 0xF6), // 10 light red
+        PackRgb(0xE0, 0xFF, 0xFF), // 11 light cyan
+        PackRgb(0xFF, 0xCE, 0xFF), // 12 light purple
+        PackRgb(0xE9, 0xFF, 0xB8), // 13 light green
+        PackRgb(0xC8, 0xCB, 0xFF), // 14 light blue
+        PackRgb(0xFF, 0xFF, 0xDF), // 15 light yellow
     ];
 
     private static uint PackRgb(byte r, byte g, byte b)
@@ -870,7 +873,7 @@ public sealed class Mos6561 : IVideoChip, IAudioChip, IAddressSpace, IInterruptS
         _displayXStop = 0;
         Array.Clear(_cbuf);
         Array.Clear(_gbuf);
-        Array.Clear(_frameBuffer);
+        ClearFrameBufferOpaqueBlack();
         Array.Clear(_indexFrameBuffer);
         if (_lineBuffer.Length > 0)
             Array.Clear(_lineBuffer);
@@ -962,6 +965,7 @@ public sealed class Mos6561 : IVideoChip, IAudioChip, IAddressSpace, IInterruptS
         _frameWidth = displayWidth;
         _frameHeight = h;
         _frameBuffer = new byte[_frameWidth * _frameHeight * 4];
+        ClearFrameBufferOpaqueBlack();
         _indexFrameBuffer = new byte[_frameWidth * _frameHeight];
     }
 
@@ -982,6 +986,17 @@ public sealed class Mos6561 : IVideoChip, IAudioChip, IAddressSpace, IInterruptS
     /// </summary>
     public ushort ResolveColorBase()
         => (ushort)((_regs[0x02] & 0x80) != 0 ? 0x9600 : 0x9400);
+
+    /// <summary>
+    /// RGB 0 with alpha 0xFF. Matches xvic clamp rows when
+    /// <c>last_displayed_line</c> meets the draw-buffer height.
+    /// </summary>
+    private void ClearFrameBufferOpaqueBlack()
+    {
+        Array.Clear(_frameBuffer);
+        for (var i = 3; i < _frameBuffer.Length; i += 4)
+            _frameBuffer[i] = 0xFF;
+    }
 
     private static void WritePixel(byte[] fb, int i, uint color)
     {

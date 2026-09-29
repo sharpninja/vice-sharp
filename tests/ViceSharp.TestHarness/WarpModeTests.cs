@@ -93,6 +93,79 @@ public sealed class WarpModeTests
     }
 
     /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001, TEST-UISET-002.
+    /// Use case: Live Settings Warp must show CLOCK percent well above 100, not
+    /// only LIMITER WARP. Status uses EffectiveClockPercent from GetStatus.
+    /// Acceptance: After SetLimiter(100, enabled: false) and 750ms of the real
+    /// pump loop, GetStatus EffectiveClockPercent is greater than 150.
+    /// </summary>
+    [Fact]
+    public async Task GetStatus_WhenWarping_ReportsClockPercentWellAbove100()
+    {
+        var (registry, sessionId) = await CreateRunningSessionAsync();
+        Assert.True(registry.TryGet(sessionId, out var session));
+        using var pump = new EmulationPumpService(registry);
+        await pump.StartAsync(TestContext.Current.CancellationToken);
+        session!.RunState = EmulatorRunState.Running;
+        session.SetLimiter(100, enabled: false);
+
+        await Task.Delay(750, TestContext.Current.CancellationToken);
+
+        var host = new EmulatorHostService(registry, new DefaultEmulatorRuntimeFactory());
+        var response = await host.GetStatusAsync(
+            new SessionRequest(sessionId),
+            TestContext.Current.CancellationToken);
+        await pump.StopAsync(TestContext.Current.CancellationToken);
+
+        Assert.True(response.Status.IsSuccess);
+        Assert.NotNull(response.EmulatorStatus);
+        Assert.Equal(0, response.EmulatorStatus!.LimiterRatePercent);
+        Assert.True(
+            response.EmulatorStatus.EffectiveClockPercent > 150,
+            $"Expected warp CLOCK percent well above 100, got {response.EmulatorStatus.EffectiveClockPercent:0.0}% at {response.EmulatorStatus.EffectiveClockHz:0} Hz.");
+    }
+
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-WARP-STATUS-001, TEST-UISET-002.
+    /// Use case: Status-bar GetStatus polls must not zero CLOCK when two
+    /// samples land close together (live dump after warp showed 0% / huge FPS).
+    /// Acceptance: After a warp sample above 150%, an immediate second
+    /// GetStatus still reports EffectiveClockPercent greater than 150.
+    /// </summary>
+    [Fact]
+    public async Task GetStatus_WhenWarping_ImmediateSecondPollKeepsClockAbove150()
+    {
+        var (registry, sessionId) = await CreateRunningSessionAsync();
+        Assert.True(registry.TryGet(sessionId, out var session));
+        using var pump = new EmulationPumpService(registry);
+        await pump.StartAsync(TestContext.Current.CancellationToken);
+        session!.RunState = EmulatorRunState.Running;
+        session.SetLimiter(100, enabled: false);
+
+        await Task.Delay(750, TestContext.Current.CancellationToken);
+
+        var host = new EmulatorHostService(registry, new DefaultEmulatorRuntimeFactory());
+        var first = await host.GetStatusAsync(
+            new SessionRequest(sessionId),
+            TestContext.Current.CancellationToken);
+        var second = await host.GetStatusAsync(
+            new SessionRequest(sessionId),
+            TestContext.Current.CancellationToken);
+        await pump.StopAsync(TestContext.Current.CancellationToken);
+
+        Assert.True(first.Status.IsSuccess);
+        Assert.True(second.Status.IsSuccess);
+        Assert.NotNull(first.EmulatorStatus);
+        Assert.NotNull(second.EmulatorStatus);
+        Assert.True(
+            first.EmulatorStatus!.EffectiveClockPercent > 150,
+            $"First poll expected warp CLOCK well above 100, got {first.EmulatorStatus.EffectiveClockPercent:0.0}%.");
+        Assert.True(
+            second.EmulatorStatus!.EffectiveClockPercent > 150,
+            $"Second immediate poll must not collapse CLOCK, got {second.EmulatorStatus.EffectiveClockPercent:0.0}%.");
+    }
+
+    /// <summary>
     /// FR: FR-WARP-001 / BUG-THROTTLE-001, TR: TR-CYCLE-PACE-001.
     /// Use case: Warp (limiter off) runs the CPU clock flat out, advancing a larger
     ///   cycle burst per tick than the paced slice so effective speed exceeds 100%.
@@ -298,6 +371,29 @@ public sealed class WarpModeTests
         Assert.True(requestedCycles > 0);
     }
 
+    /// <summary>
+    /// FR: FR-WARP-001, TR: TR-AUDIO-WARP-001, TEST-UISET-002.
+    /// Use case: Live VIC-20 Warp stayed at CLOCK 100% while 200% limiter
+    /// reached 201%, because warp skipped SetRelativeSpeed and VIC-I sound
+    /// kept rendering 1x samples per emulated cycle.
+    /// Acceptance: SetLimiter(..., enabled: false) pushes relative speed
+    /// LiveAudioMaxRatePercent so warp audio CPU matches 200% fast-forward.
+    /// </summary>
+    [Fact]
+    public void SetLimiter_WhenWarp_PushesLiveAudioCeilingRelativeSpeed()
+    {
+        var audio = new TestAudioChip();
+        var session = new EmulatorRuntimeSession(
+            "warp-audio-speed",
+            MinimalHostArchitectureDescriptor.Instance,
+            new AudioTimingTestMachine(audio));
+
+        session.SetLimiter(100, enabled: false);
+
+        Assert.False(session.LimiterEnabled);
+        Assert.Equal(EmulatorRuntimeSession.LiveAudioMaxRatePercent, audio.LastRelativeSpeed);
+    }
+
     private static EmulatorRuntimeSession CreateMinimalSession()
     {
         var factory = new DefaultEmulatorRuntimeFactory(
@@ -418,6 +514,10 @@ public sealed class WarpModeTests
         public int QueuedSamples { get; set; }
 
         public bool IsTimingSource { get; set; }
+
+        public double LastRelativeSpeed { get; private set; } = 100;
+
+        public void SetRelativeSpeed(double speedPercent) => LastRelativeSpeed = speedPercent;
 
         public int QueuedSampleCount => QueuedSamples;
 

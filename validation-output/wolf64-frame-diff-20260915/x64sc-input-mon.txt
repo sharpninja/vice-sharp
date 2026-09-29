@@ -1,0 +1,49 @@
+﻿hwnd=8851010 pid=30744 main=8851010
+tap RETURN 1
+tap RETURN 2
+tap RETURN 3
+tap RETURN 4
+tap RETURN 5
+(C:$eeac) >C:d015  00 c8 00 09  71 f0 00 00  00 00 00 f0  f0 f1 f2 f3   @H@iQ?@@@@@?????
+>C:d025  f4 f0 f2 f2  f2 f2 f2 f2  f2 fc ff ff  ff ff ff ff   ????????????????
+>C:d035  ff ff ff ff  ff ff ff ff  ff ff ff 68  42 80 42 98   ???????????Hb.b.
+>C:d045  42 b0 42 c8  42 e0 42 f8  42 00 00 00  2b 00 00 00   b?bHb b?b@@@+@@@
+>C:d055  00 c8 00 09  71 f0 00 00  00 00 00 f0  f0 f1 f2 f3   @H@iQ?@@@@@?????
+>C:d065  f4 f0 f2 f2  f2 f2 f2 f2  f2 fc ff ff  ff ff ff ff   ????????????????
+>C:d075  ff ff ff ff  ff ff ff ff  ff ff ff 68  42 80 42 98   ???????????Hb.b.
+>C:d085  42 b0 42 c8  42 e0 42 f8  42 00 00 00  2b 00 00 00   b?bHb b?b@@@+@@@
+>C:d095  00 c8 00 09  71 f0 00 00  00 00 00 f0  f0 f1 f2 f3   @H@iQ?@@@@@?????
+(C:$d0a5) 
+(C:$ee5d) >C:d011  ab 37 00 00  00 c8 00 09  71 f0 00 00  00 00 00 f0   ?7@@@H@iQ?@@@@@?
+>C:d021  f0 f1 f2 f3  f4 f0 f2 f2  f2 f2 f2 f2  f2 fc ff ff   ????????????????
+>C:d031  ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff 68   ???????????????H
+>C:d041  42 80 42 98  42 b0 42 c8  42 e0 42 f8  42 00 00 00   b.b.b?bHb b?b@@@
+>C:d051  ab 37 00 00  00 c8 00 09  71 f0 00 00  00 00 00 f0   ?7@@@H@iQ?@@@@@?
+>C:d061  f0 f1 f2 f3  f4 f0 f2 f2  f2 f2 f2 f2  f2 fc ff ff   ????????????????
+>C:d071  ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff 68   ???????????????H
+>C:d081  42 80 42 98  42 b0 42 c8  42 e0 42 f8  42 00 00 00   b.b.b?bHb b?b@@@
+>C:d091  ab 37 00 00  00 c8 00 09  71 f0 00 00  00 00 00 f0   ?7@@@H@iQ?@@@@@?
+(C:$d0a1) 
+(C:$ee6d) >C:d018  09 71 f0 00  00 00 00 00  f0 f0 f1 f2  f3 f4 f0 f2   iQ?@@@@@????????
+>C:d028  f2 f2 f2 f2  f2 f2 fc ff  ff ff ff ff  ff ff ff ff   ????????????????
+>C:d038  ff ff ff ff  ff ff ff ff  68 42 80 42  98 42 b0 42   ????????Hb.b.b?b
+>C:d048  c8 42 e0 42  f8 42 00 00  00 2b 00 00  00 00 c8 00   Hb b?b@@@+@@@@H@
+>C:d058  09 71 f0 00  00 00 00 00  f0 f0 f1 f2  f3 f4 f0 f2   iQ?@@@@@????????
+>C:d068  f2 f2 f2 f2  f2 f2 fc ff  ff ff ff ff  ff ff ff ff   ????????????????
+>C:d078  ff ff ff ff  ff ff ff ff  68 42 80 42  98 42 b0 42   ????????Hb.b.b?b
+>C:d088  c8 42 e0 42  f8 42 00 00  00 2b 00 00  00 00 c8 00   Hb b?b@@@+@@@@H@
+>C:d098  09 71 f0 00  00 00 00 00  f0 f0 f1 f2  f3 f4 f0 f2   iQ?@@@@@????????
+(C:$d0a8) 
+(C:$ee33) >C:dd00  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd10  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd20  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd30  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd40  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd50  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd60  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd70  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+>C:dd80  c6 ff 3f 00  ff ff ff ff  00 00 00 01  00 00 08 08   F??@????@@@a@@hh
+(C:$dd90) 
+(C:$ee5a) Saving file 'F:/GitHub/vice-sharp/validation-output/wolf64-frame-diff-20260915/x64sc-ram.bin' from $0000 to $ffff
+(C:$ee5a) 
+(C:$eea9) 

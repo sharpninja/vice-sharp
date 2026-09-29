@@ -1,0 +1,3 @@
+until 30000000
+screenshot "x64sc-wolf64.ppm"
+quit

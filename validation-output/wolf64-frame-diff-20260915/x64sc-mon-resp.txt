@@ -1,0 +1,2 @@
+(C:$ee62) Saving file 'F:/GitHub/vice-sharp/validation-output/wolf64-frame-diff-20260915/x64sc-ram.bin' from $0000 to $ffff
+(C:$ee62) 

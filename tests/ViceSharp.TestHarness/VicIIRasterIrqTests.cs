@@ -62,6 +62,23 @@ public sealed class VicIIRasterIrqTests
     }
 
     /// <summary>
+    /// FR: FR-VIC-001, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 sample 2052030. VICE GET_ABS LOAD of $D012 runs before
+    ///   CLK_INC increments raster_line at PAL cycle 0, so the CPU still sees
+    ///   the previous line.
+    /// Acceptance: At RasterX 0 of line $7C, Read $D012 returns $7B.
+    /// </summary>
+    [Fact]
+    public void ReadD012_AtRasterX0_ReturnsPreviousLine()
+    {
+        var vic = BuildVic(out _);
+        AdvanceTo(vic, 0x007C, 0);
+        Assert.Equal(0x007C, vic.CurrentRasterLine);
+        Assert.Equal(0x00, vic.RasterX);
+        Assert.Equal(0x7B, vic.Read(RasterCompareLow));
+    }
+
+    /// <summary>
     /// FR/TR: FR-VIC-001 / TEST-VIC-001 raster IRQ + raster compare (BACKFILL-VIDEO-001).
     /// Use case: $D011 bit 7 forms the high bit of the 9-bit raster-compare
     /// register on write. Writing $D011 bit 7 set with $D012 = $42 produces

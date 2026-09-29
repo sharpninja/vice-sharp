@@ -282,8 +282,13 @@ partial class Mos6502
             // SEC - Set Carry Flag
             case 0x38: P |= 0x01; break;
 
-            // CLI - Clear Interrupt Disable
-            case 0x58: P &= 0xFB; break;
+            // CLI - Clear Interrupt Disable. VICE OPCODE_ENABLES_IRQ when I
+            // was set, then LOCAL_SET_INTERRUPT(0).
+            case 0x58:
+                if ((P & 0x04) != 0)
+                    _lastOpcodeEnablesIrq = true;
+                P &= 0xFB;
+                break;
 
             // SEI - Set Interrupt Disable
             case 0x78: P |= 0x04; break;
@@ -629,9 +634,15 @@ partial class Mos6502
 
     private void BranchRelative(bool shouldBranch)
     {
-        sbyte offset = (sbyte)Fetch();
-        if (shouldBranch)
-            PC = (ushort)(PC + offset);
+        // VICE BRANCH: INC_PC(2) then dest = reg_pc + (signed char)p1.
+        // Do not use Fetch()/PC++: the PC setter also overwrites
+        // _instructionPC, and a second operand read from an already
+        // incremented _pc yields opcode+3 (Wolf64 2044617 $FF64 vs $FF63).
+        sbyte offset = (sbyte)_bus.Read((ushort)(_instructionPC + 1));
+        _pc = shouldBranch
+            ? (ushort)((_instructionPC + 2) + offset)
+            : (ushort)(_instructionPC + 2);
+        _visiblePC = _pc;
     }
 
     private byte ASL(byte value)

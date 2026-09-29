@@ -57,7 +57,7 @@ at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
 - 5KB base RAM + expansion packs; Avalonia Settings wrap BLK0/1/2/3/5 toggles (product path)
 - Cartridge map: BLK PRG/raw + FE3 / Ultimem / Mega-Cart attach; Flash Cart Builder (`docs/FlashCart-Builder.md`); FE3 MODE_FLASH uses VICE TYPE_B erase-cycle budgets; dirty FE3/Ultimem flash and Mega-Cart NVRAM persist atomically on detach
 - READY present geometry Exact-scoped: VICE viewport `first_x` crop (PAL 48), L+R borders, paper origin
-- xvic pixel FB capture: PAL normal 448x284 BGRA; full SequenceEqual ratchet open
+- xvic pixel FB capture: PAL 448x284 and NTSC native BGRA SequenceEqual green (unpainted rows opaque black to match xvic clamp)
 - Default drive unit 8 = **1540** (`DriveModel.C1540`); C64 remains 1541
 - Launcher `xvic` topology; host session create; supported product shells Avalonia + Console
 - Native oracle: `native/vice_xvic.dll` via `ViceNative.CreateInstance("vic20"|"vic20ntsc")`
@@ -68,7 +68,7 @@ at multi-frame depth, on top of the 335-case lockstep/checkpoint gate and
   - Receipts: `docs/receipts-lockstep-10s-2026-08-06.txt`, `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`
 - Audit matrix: `docs/audit-vic20-vs-vice-2026-08-07.md` (Exact only for named rules)
 
-**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Timed FE3 erase, cartridge write-back, deterministic batched VIC-I sound, and scoped pixel-index parity are also covered. Remaining polish: full-canvas BGRA parity, input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`); see `HANDOFF.md`.
+**Exit criteria:** Runs VIC-20 software, architecture switching works at runtime, and multi-second every-cycle register lockstep vs native xvic. Met for READY fingerprint, character frames, session factory, focused `FullyQualifiedName~Vic20` gates, and the 10 s PAL + NTSC diverge probes. Timed FE3 erase, cartridge write-back, deterministic batched VIC-I sound, scoped pixel-index parity, and READY PAL/NTSC/busy native BGRA SequenceEqual are also covered. Remaining polish: input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`); see `HANDOFF.md`.
 
 ## Iteration 3: C128
 

@@ -25,6 +25,7 @@ public sealed class LockstepValidator : IDisposable
 
     private readonly IMachine _machine;
     private readonly IViceNative _native;
+    private readonly string? _nativeDiskPath;
     private readonly SystemCoordinator? _coordinator;
     private readonly Queue<string> _recentTrace = new();
     private readonly LockFreePubSub _pubSub = new();
@@ -33,6 +34,19 @@ public sealed class LockstepValidator : IDisposable
     private readonly SubscriptionHandle _cpuControlTransferSubscription;
     private long _cycleCount;
     private long _lastNativeDelta;
+    /// <summary>
+    /// When non-negative, each lockstep sample at or after this cycle also
+    /// compares CIA1 Timer A (managed Peek $DC04/$DC05 vs native GetCiaState).
+    /// Used to pin Wolf64 2093252, where Timer A was 3 counts ahead.
+    /// </summary>
+    public long CompareCia1TimerAFromCycle { get; set; } = -1;
+    public string? LastCia1TimerAMismatch { get; private set; }
+    /// <summary>
+    /// When non-negative, snapshot lockstep compares CIA1 interrupt flags and
+    /// mask on every sample at or after this cycle.
+    /// </summary>
+    public long CompareCia1InterruptStateFromCycle { get; set; } = -1;
+    public string? LastCia1InterruptStateMismatch { get; private set; }
     private bool _hasPendingKernalCloseCall;
     private CpuControlTransferEvent _pendingKernalCloseCall;
     private BasicCommandAutomation? _basicCommandAutomation;
@@ -71,6 +85,7 @@ public sealed class LockstepValidator : IDisposable
         }
 
         _native = ViceNative.CreateInstance(modelSelector);
+        _nativeDiskPath = diskPath;
         _recordRecentTrace = recordRecentTrace;
         _kernalCloseTarget = KernalCloseVector;
 
@@ -105,6 +120,29 @@ public sealed class LockstepValidator : IDisposable
         }
     }
 
+    public IMachine HostMachine => _machine;
+
+    public IViceNative NativeMachine => _native;
+
+    private readonly List<ScheduledKey> _scheduledKeys = [];
+
+    public void QueueKeyAtFrame(int frame, string key, int holdFrames = 20, int cyclesPerFrame = 19656)
+    {
+        if (frame < 0)
+            throw new ArgumentOutOfRangeException(nameof(frame));
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentException("Key is required.", nameof(key));
+        if (holdFrames <= 0)
+            throw new ArgumentOutOfRangeException(nameof(holdFrames));
+        if (cyclesPerFrame <= 0)
+            throw new ArgumentOutOfRangeException(nameof(cyclesPerFrame));
+
+        _scheduledKeys.Add(new ScheduledKey(
+            PressCycle: (long)frame * cyclesPerFrame,
+            ReleaseCycle: (long)(frame + holdFrames) * cyclesPerFrame,
+            Key: key));
+    }
+
     public void QueueC64Drive8LoadCommand(int cyclesPerFrame = 19656)
     {
         QueueC64BasicCommand(C64Drive8LoadSequence, C64HostKeyboardMapper.DefaultFallbackMap, cyclesPerFrame);
@@ -134,6 +172,128 @@ public sealed class LockstepValidator : IDisposable
         QueueC64BasicCommand(keySequence, parseResult.KeyboardMap, cyclesPerFrame);
     }
 
+    /// <summary>
+    /// Runs native x64sc alone through BASIC LOAD of the attached d64 until the
+    /// Wolf64 first menu ($D018=$09), then writes a VICE .vsf. Lockstep of both
+    /// machines starts from that snapshot.
+    /// </summary>
+    public void CaptureNativeWolf64MenuSnapshot(string snapshotPath, long maxNativeCycles, int cyclesPerFrame = 19656)
+    {
+        if (string.IsNullOrWhiteSpace(snapshotPath))
+            throw new ArgumentException("Snapshot path is required.", nameof(snapshotPath));
+        if (string.IsNullOrWhiteSpace(_nativeDiskPath))
+            throw new InvalidOperationException("Native disk path is required for Wolf64 menu capture.");
+        if (maxNativeCycles <= 0)
+            throw new ArgumentOutOfRangeException(nameof(maxNativeCycles));
+        if (cyclesPerFrame <= 0)
+            throw new ArgumentOutOfRangeException(nameof(cyclesPerFrame));
+
+        var directory = Path.GetDirectoryName(snapshotPath);
+        if (!string.IsNullOrEmpty(directory))
+            Directory.CreateDirectory(directory);
+
+        var autostartRc = _native.Autostart(_nativeDiskPath);
+        if (autostartRc != 0)
+        {
+            throw new InvalidOperationException(
+                $"VICE autostart_autodetect failed for '{_nativeDiskPath}': rc={autostartRc}.");
+        }
+
+        var maxFrames = Math.Max(1, maxNativeCycles / cyclesPerFrame);
+        for (var frame = 0; frame < maxFrames; frame++)
+        {
+            _native.StepCycles((uint)cyclesPerFrame);
+            var registers = _native.GetVicState().Registers;
+            var d018 = registers is { Length: > 0x18 } ? registers[0x18] : (byte)0;
+            var d015 = registers is { Length: > 0x15 } ? registers[0x15] : (byte)0;
+            if (d015 is 0x7F or 0x20 || d018 is 0x09 or 0x08 or 0xA5)
+            {
+                var rc = _native.WriteSnapshot(snapshotPath);
+                if (rc != 0)
+                {
+                    throw new InvalidOperationException(
+                        $"Native VICE could not write snapshot '{snapshotPath}': rc={rc}, " +
+                        $"snapshot_last_error={ViceNative.SnapshotLastError()}.");
+                }
+
+                return;
+            }
+        }
+
+        var vic = _native.GetVicState();
+        var failD018 = vic.Registers is { Length: > 0x18 } failRegs ? failRegs[0x18] : (byte)0;
+        var failD015 = vic.Registers is { Length: > 0x15 } failRegs2 ? failRegs2[0x15] : (byte)0;
+        throw new InvalidOperationException(
+            $"Native x64sc autostart did not reach Wolf64 menu ($D018=$09) within {maxFrames} frames. " +
+            $"d015=${failD015:X2} d018=${failD018:X2} pc=${_native.GetState().PC:X4} " +
+            $"autostart={_native.AutostartInProgress()} screen='{FormatNativeScreenLine(_native)}'");
+    }
+
+
+    private static string FormatNativeBuffer(IViceNative native)
+    {
+        Span<char> text = stackalloc char[30];
+        var n = 0;
+        for (var i = 0; i < 10; i++)
+        {
+            var b = native.PeekRam((ushort)(0x0277 + i));
+            text[n++] = "0123456789ABCDEF"[(b >> 4) & 0xF];
+            text[n++] = "0123456789ABCDEF"[b & 0xF];
+            text[n++] = ' ';
+        }
+
+        return new string(text);
+    }
+
+    private static string FormatNativeRowHex(IViceNative native, int row)
+    {
+        Span<char> text = stackalloc char[40 * 3];
+        var n = 0;
+        for (var col = 0; col < 16; col++)
+        {
+            var b = native.PeekRam((ushort)(0x0400 + row * 40 + col));
+            text[n++] = "0123456789ABCDEF"[(b >> 4) & 0xF];
+            text[n++] = "0123456789ABCDEF"[b & 0xF];
+            text[n++] = ' ';
+        }
+
+        return new string(text);
+    }
+
+    private static void SetNativeMatrixKey(IViceNative native, byte keyCode, bool pressed)
+    {
+        native.SetKeyboardMatrixKey(keyCode >> 3, keyCode & 0x07, pressed);
+    }
+
+    private static bool NativeScreenContains(IViceNative native, ReadOnlySpan<byte> needle)
+    {
+        Span<byte> screenCodes = stackalloc byte[1000];
+        for (var i = 0; i < screenCodes.Length; i++)
+            screenCodes[i] = native.PeekRam((ushort)(0x0400 + i));
+
+        return screenCodes.IndexOf(needle) >= 0;
+    }
+
+    private static string FormatNativeScreenLine(IViceNative native)
+    {
+        Span<char> text = stackalloc char[8 * 41];
+        var n = 0;
+        for (var row = 0; row < 8; row++)
+        {
+            for (var col = 0; col < 40; col++)
+            {
+                var code = native.PeekRam((ushort)(0x0400 + row * 40 + col));
+                text[n++] = code is >= 1 and <= 26
+                    ? (char)('A' + code - 1)
+                    : (code == 32 || code == 96 ? ' ' : '.');
+            }
+
+            text[n++] = '|';
+        }
+
+        return new string(text);
+    }
+
     public void QueueC64BasicCommand(IReadOnlyList<string> keySequence, IKeyboardInputMap keyboardMap, int cyclesPerFrame)
     {
         if (keySequence.Count == 0)
@@ -156,15 +316,19 @@ public sealed class LockstepValidator : IDisposable
     }
 
     /// <summary>
-    /// Run lockstep comparison for specified number of cycles
+    /// Run lockstep comparison for specified number of cycles.
+    /// When <paramref name="stopWhen"/> returns true, the run stops as a pass
+    /// at the current cycle (used to halt at an in-game VIC state).
     /// </summary>
-    public ValidationReport Run(long maxCycles)
+    public ValidationReport Run(long maxCycles, Func<IMachine, bool>? stopWhen = null)
     {
         ResetManaged();
         _native.Reset();
+        LastCia1TimerAMismatch = null;
         _recentTrace.Clear();
         _hasPendingKernalCloseCall = false;
         _basicCommandAutomation?.Reset();
+        _scheduledPressed.Clear();
         _kernalCloseTarget = ResolveKernalJumpTarget(_machine.Bus, KernalCloseVector);
         if (_recordRecentTrace)
             RecordTrace(0);
@@ -184,6 +348,10 @@ public sealed class LockstepValidator : IDisposable
             for (long j = 0; j < nativeDelta; j++)
                 StepManaged();
 
+            var managedCycle = _machine.GetState().Cycle;
+            _basicCommandAutomation?.AdvanceTo(managedCycle, _machine);
+            ApplyScheduledKeys(managedCycle);
+
             if (_recordRecentTrace)
                 RecordTrace(_cycleCount + 1);
 
@@ -192,6 +360,18 @@ public sealed class LockstepValidator : IDisposable
                 var mismatchCycle = _cycleCount + 1;
                 return ValidationReport.Fail(mismatchCycle, mismatchCycle, GetStateDiff());
             }
+
+            if (CompareCia1TimerAFromCycle >= 0
+                && _cycleCount + 1 >= CompareCia1TimerAFromCycle
+                && TryDescribeCia1TimerAMismatch(out var taMismatch))
+            {
+                LastCia1TimerAMismatch = taMismatch;
+                var mismatchCycle = _cycleCount + 1;
+                return ValidationReport.Fail(mismatchCycle, mismatchCycle, GetStateDiff());
+            }
+
+            if (stopWhen?.Invoke(_machine) == true)
+                return ValidationReport.Pass(_cycleCount + 1);
         }
 
         return ValidationReport.Pass(maxCycles);
@@ -211,7 +391,11 @@ public sealed class LockstepValidator : IDisposable
     /// first divergence so the capture covers the whole run, while the report still carries
     /// the FIRST divergence. Throws with a clear message when ffmpeg is unavailable.
     /// </summary>
-    public ValidationReport RunFromSnapshot(string snapshotPath, long maxCycles, string? videoOutPath = null)
+    public ValidationReport RunFromSnapshot(
+        string snapshotPath,
+        long maxCycles,
+        string? videoOutPath = null,
+        Func<IMachine, bool>? stopWhen = null)
     {
         _native.Reset();
         var rc = _native.ReadSnapshot(snapshotPath);
@@ -226,9 +410,18 @@ public sealed class LockstepValidator : IDisposable
         StageManagedFromNative(_machine, _native);
         _recentTrace.Clear();
         _hasPendingKernalCloseCall = false;
+        _scheduledPressed.Clear();
         _cycleCount = 0;
+        LastCia1InterruptStateMismatch = null;
         if (_recordRecentTrace)
             RecordTrace(0);
+
+        if (CompareCia1InterruptStateFromCycle == 0
+            && TryDescribeCia1InterruptStateMismatch(out var initialCiaMismatch))
+        {
+            LastCia1InterruptStateMismatch = initialCiaMismatch;
+            return ValidationReport.Fail(0, 0, GetStateDiff());
+        }
 
         using var capture = videoOutPath is null ? null : ManagedAvCapture.Start(_machine, videoOutPath);
 
@@ -255,8 +448,23 @@ public sealed class LockstepValidator : IDisposable
                 capture?.OnManagedCycle();
             }
 
+            var managedCycle = _machine.GetState().Cycle;
+            ApplyScheduledKeys(managedCycle);
+
             if (_recordRecentTrace)
                 RecordTrace(_cycleCount + 1);
+
+            if (firstMismatch is null
+                && CompareCia1InterruptStateFromCycle >= 0
+                && _cycleCount + 1 >= CompareCia1InterruptStateFromCycle
+                && TryDescribeCia1InterruptStateMismatch(out var ciaMismatch))
+            {
+                LastCia1InterruptStateMismatch = ciaMismatch;
+                var mismatchCycle = _cycleCount + 1;
+                firstMismatch = ValidationReport.Fail(mismatchCycle, mismatchCycle, GetStateDiff());
+                if (capture is null)
+                    return firstMismatch;
+            }
 
             if (firstMismatch is null && !ValidateState())
             {
@@ -265,6 +473,9 @@ public sealed class LockstepValidator : IDisposable
                 if (capture is null)
                     return firstMismatch;
             }
+
+            if (firstMismatch is null && stopWhen?.Invoke(_machine) == true)
+                return ValidationReport.Pass(_cycleCount + 1);
         }
 
         return firstMismatch ?? ValidationReport.Pass(maxCycles);
@@ -761,17 +972,101 @@ public sealed class LockstepValidator : IDisposable
             : string.Join(Environment.NewLine, _recentTrace);
     }
 
-    private string FormatRunDiagnostics()
+    public string FormatLockstepContext()
     {
+        var managedCycle = _machine.GetState().Cycle;
+        var nativeCycle = _native.GetState().Cycle;
         var input = _basicCommandAutomation is null
             ? "input automation: not configured"
             : $"input automation: {_basicCommandAutomation.Status}";
 
         return
-            $"{FormatRecentTrace()}{Environment.NewLine}" +
+            $"sampleIndex={_cycleCount} managedCycle={managedCycle} nativeCycle={nativeCycle}{Environment.NewLine}" +
             $"{input}{Environment.NewLine}" +
+            $"{FormatIrqCiaContext()}{Environment.NewLine}" +
+            $"{FormatRecentTrace()}{Environment.NewLine}" +
             $"managed screen: [{ReadManagedScreenText()}]{Environment.NewLine}" +
             $"native screen: [{ReadNativeScreenText()}]";
+    }
+
+    private string FormatIrqCiaContext()
+    {
+        var pipe = _native.GetCpuPipelineState();
+        var nativeCia = _native.GetCiaState(0);
+        var mTa = _machine.Bus.Peek(0xDC04) | (_machine.Bus.Peek(0xDC05) << 8);
+        var mCra = _machine.Bus.Peek(0xDC0E);
+        var mIcr = _machine.Bus.Peek(0xDC0D);
+        var mTod = _machine.Bus.Peek(0xDC08);
+        var mIrqClk = _machine.Clock is SystemClock sysClock
+            ? sysClock.DebugIrqAssertCycle
+            : -1;
+        var mIrqDelay = _machine.Clock is SystemClock sysClockDelay
+            ? sysClockDelay.DebugIrqDelayCycles
+            : -1;
+        var managedCia = _machine.Devices.GetByRole(DeviceRole.Cia1) as Mos6526;
+        var mIrqLine = managedCia is not null
+            && managedCia.ConnectedLines.Count > 0
+            && managedCia.ConnectedLines[0].IsAsserted;
+        var mMask = managedCia?.DebugInterruptMask ?? 0;
+        var mDelays = _machine.Devices.GetByRole(DeviceRole.Cpu) is Mos6502 cpu
+            && cpu.LastOpcodeDelaysInterrupt;
+        return
+            $"nClk={pipe.Clk} nIrqClk={pipe.IrqClk} nIrqDelay={pipe.IrqDelayCycles} nPend=0x{pipe.GlobalPendingInt:X} nLastOp=0x{pipe.LastOpcodeInfo:X} " +
+            $"mIrqClk={mIrqClk} mIrqDelay={mIrqDelay} mIrqLine={mIrqLine} mDelays={mDelays} " +
+            $"cia1 ta=${mTa:X4} cra=${mCra:X2} icr=${mIcr:X2} mask=${mMask:X2} dc08=${mTod:X2}; " +
+            $"native ta=${nativeCia.TimerA:X4} cra=${nativeCia.Cra:X2} icr=${nativeCia.InterruptFlags:X2} mask=${nativeCia.IrqMask:X2}";
+    }
+
+    private string FormatRunDiagnostics() => FormatLockstepContext();
+
+    private bool TryDescribeCia1InterruptStateMismatch(out string message)
+    {
+        if (_machine.Devices.GetByRole(DeviceRole.Cia1) is not Mos6526 managedCia)
+        {
+            message = "Managed CIA1 is unavailable.";
+            return true;
+        }
+
+        var nativeCia = _native.GetCiaState(0);
+        var managedTimerA = (ushort)(_machine.Bus.Peek(0xDC04) | (_machine.Bus.Peek(0xDC05) << 8));
+        var managedTimerB = (ushort)(_machine.Bus.Peek(0xDC06) | (_machine.Bus.Peek(0xDC07) << 8));
+        var managedCra = _machine.Bus.Peek(0xDC0E);
+        var managedCrb = _machine.Bus.Peek(0xDC0F);
+        if (managedCia.DebugInterruptFlags == nativeCia.InterruptFlags
+            && managedCia.DebugInterruptMask == nativeCia.IrqMask
+            && managedTimerA == nativeCia.TimerA
+            && managedTimerB == nativeCia.TimerB
+            && managedCra == nativeCia.Cra
+            && managedCrb == nativeCia.Crb)
+        {
+            message = string.Empty;
+            return false;
+        }
+
+        message =
+            $"CIA1 managed ta=${managedTimerA:X4} tb=${managedTimerB:X4} cra=${managedCra:X2} crb=${managedCrb:X2} "
+            + $"flags=${managedCia.DebugInterruptFlags:X2} mask=${managedCia.DebugInterruptMask:X2}; "
+            + $"native ta=${nativeCia.TimerA:X4} tb=${nativeCia.TimerB:X4} cra=${nativeCia.Cra:X2} crb=${nativeCia.Crb:X2} "
+            + $"flags=${nativeCia.InterruptFlags:X2} mask=${nativeCia.IrqMask:X2}";
+        return true;
+    }
+
+    private bool TryDescribeCia1TimerAMismatch(out string message)
+    {
+        var mTa = (ushort)(_machine.Bus.Peek(0xDC04) | (_machine.Bus.Peek(0xDC05) << 8));
+        var nativeCia = _native.GetCiaState(0);
+        if (mTa == nativeCia.TimerA)
+        {
+            message = string.Empty;
+            return false;
+        }
+
+        var mCra = _machine.Bus.Peek(0xDC0E);
+        message =
+            $"CIA1 TA managed=${mTa:X4} native=${nativeCia.TimerA:X4} " +
+            $"delta={(int)mTa - nativeCia.TimerA} cra m=${mCra:X2} n=${nativeCia.Cra:X2} " +
+            $"nLatch=${nativeCia.TimerALatch:X4} nicr=${nativeCia.InterruptFlags:X2}";
+        return true;
     }
 
     private bool ValidateState()
@@ -915,6 +1210,43 @@ public sealed class LockstepValidator : IDisposable
             _coordinator.Step();
     }
 
+    private readonly record struct ScheduledKey(long PressCycle, long ReleaseCycle, string Key);
+
+    private readonly HashSet<int> _scheduledPressed = [];
+
+    private void ApplyScheduledKeys(long managedCycle)
+    {
+        var keyboard = _machine.Devices.GetAll<IMachineKeyboardInput>().FirstOrDefault();
+        if (keyboard is null)
+            return;
+
+        var map = C64HostKeyboardMapper.DefaultFallbackMap;
+        for (var i = 0; i < _scheduledKeys.Count; i++)
+        {
+            var item = _scheduledKeys[i];
+            var pressed = managedCycle >= item.PressCycle && managedCycle < item.ReleaseCycle;
+            var wasPressed = _scheduledPressed.Contains(i);
+            if (pressed == wasPressed)
+                continue;
+
+            if (!map.TryResolve(item.Key, out var codes))
+                continue;
+
+            foreach (var keyCode in codes)
+            {
+                var row = keyCode >> 3;
+                var column = keyCode & 0x07;
+                _native.SetKeyboardMatrixKey(row, column, pressed);
+            }
+
+            keyboard.SetKeyState(item.Key, pressed);
+            if (pressed)
+                _scheduledPressed.Add(i);
+            else
+                _scheduledPressed.Remove(i);
+        }
+    }
+
     private static (IMachine Host, SystemCoordinator Coordinator) CreateC64WithTrueDrive(
         string modelSelector,
         string diskPath,
@@ -1044,7 +1376,7 @@ public sealed class LockstepValidator : IDisposable
         var nativeState = _native.GetState();
         var vicTrace = FormatVicTrace();
         var cpuTrace = FormatCpuTrace();
-        if (_recentTrace.Count == 16)
+        if (_recentTrace.Count == 64)
             _recentTrace.Dequeue();
 
         _recentTrace.Enqueue(
@@ -1059,16 +1391,24 @@ public sealed class LockstepValidator : IDisposable
             return "managed VIC unavailable";
 
         var nativeVic = _native.GetVicState();
+        var d019 = _machine.Bus.Peek(0xD019);
+        var d01a = _machine.Bus.Peek(0xD01A);
+        var nD019 = nativeVic.Registers is { Length: > 0x1A } ? nativeVic.Registers[0x19] : (byte)0;
+        var nD01a = nativeVic.Registers is { Length: > 0x1A } ? nativeVic.Registers[0x1A] : (byte)0;
         return
-            $"managed VIC line=${vic.CurrentRasterLine:X3} x={vic.RasterX} bad={vic.IsBadLine} hold={vic.IsCpuCycleStolen}; " +
-            $"native VIC line=${nativeVic.RasterLine:X3} x={nativeVic.RasterCycle} bad={nativeVic.BadLine != 0} spriteDma=${nativeVic.SpriteDma:X2}";
+            $"managed VIC line=${vic.CurrentRasterLine:X3} x={vic.RasterX} bad={vic.IsBadLine} hold={vic.IsCpuCycleStolen} mand={vic.IsCpuCycleStealMandatory} d019=${d019:X2} d01a=${d01a:X2}; " +
+            $"native VIC line=${nativeVic.RasterLine:X3} x={nativeVic.RasterCycle} bad={nativeVic.BadLine != 0} spriteDma=${nativeVic.SpriteDma:X2} d019=${nD019:X2} d01a=${nD01a:X2}";
     }
 
     private string FormatCpuTrace()
     {
-        return _machine.Devices.GetByRole(DeviceRole.Cpu) is Mos6502 cpu
-            ? $"cpuStealEligible={cpu.CanStealCurrentCycle} cpuCycle={cpu.DebugCycle} opcode=${cpu.DebugOpcode:X2} delay={cpu.DebugDelayNextFetch}"
-            : "cpuStealEligible=unavailable";
+        if (_machine.Devices.GetByRole(DeviceRole.Cpu) is not Mos6502 cpu)
+            return "cpuStealEligible=unavailable";
+
+        var irqDelay = _machine.Clock is SystemClock sysClock ? sysClock.DebugIrqDelayCycles : -1;
+        var fetchIrq = _machine.Clock is SystemClock sysClock2 ? sysClock2.DebugFetchIrqNote : "";
+        return
+            $"cpuStealEligible={cpu.CanStealCurrentCycle} cpuCycle={cpu.DebugCycle} opcode=${cpu.DebugOpcode:X2} prev=${cpu.DebugPreviousOpcode:X2} opAddr=${cpu.DebugOpcodeAddress:X4} delay={cpu.DebugDelayNextFetch} trail={cpu.DebugPriorTrailingAtNextPc} nonOvlF={cpu.DebugNonOverlappedFetchPhase} nonOvlR={cpu.DebugNonOverlappedRegion} softImm={cpu.DebugSoftDeferredImmediateLoad} softImpl={cpu.DebugSoftDeferredImplied} softNop={cpu.DebugSoftDeferAfterNopChain} pendNz={cpu.DebugPendingDeferredNzUpdate} pendImpl={cpu.DebugPendingDeferredImplied} supp={cpu.DebugSuppressBootstrapBoundary} boot={cpu.DebugBootstrapCycles} irqSeq={cpu.DebugInterruptSequenceRemaining} shortLag={cpu.DebugAfterShortTakenBranchLag} fullBr={cpu.DebugAfterFullLengthTakenBranch} stagedFt={cpu.DebugTakenBranchStagedFallthrough} stolenAbsY={cpu.DebugStolenTakenBranchAfterAbsY} notifySteal={cpu.DebugNotifyOnStolenCycle} forceSteal={cpu.DebugCanForceSteal} skipAbs={cpu.DebugSkipAbsLoadLastClkHold} loadEarly={cpu.DebugLoadAEarlyAfterStagedBranch} tgtPend={cpu.DebugBranchTargetFetchPending} bound={cpu.IsInstructionBoundary} irqDelay={irqDelay} delays={cpu.LastOpcodeDelaysInterrupt} enIrq={cpu.LastOpcodeEnablesIrq} fetchIrq={fetchIrq}";
     }
 
     private static ushort ReadPointer(byte lo, byte hi, byte y)
@@ -1136,6 +1476,151 @@ public sealed class LockstepValidator : IDisposable
     }
 
     private readonly record struct AnchorSample(long NativeCycle, ResyncAnchor Anchor);
+
+    private sealed class NativeOnlyBasicAutomation
+    {
+        public const int ReadyPromptStart = 0x0400;
+        public const int ReadyPromptLength = 1000;
+        private const int KernalKeyboardBufferStart = 0x0277;
+        private const int KernalKeyboardBufferCount = 0x00C6;
+        private const int KernalKeyboardBufferSize = 10;
+        private const int CursorBlinkEnableFlag = 0x00CC;
+        private const int MaxReadyWaitFrames = 600;
+        private const int InitialReadyDelayFrames = 12;
+        private static readonly byte[] LoadCommandPetscii =
+        [
+            (byte)'L', (byte)'O', (byte)'A', (byte)'D', (byte)'"', (byte)'*', (byte)'"', (byte)',', (byte)'8', (byte)',', (byte)'1'
+        ];
+
+        private readonly IViceNative _native;
+        private readonly int _cyclesPerFrame;
+        private AutomationPhase _phase;
+        private int _keyIndex;
+        private int _frameDelay;
+        private int _readyWaitFrames;
+        private long _nextFrameCycle;
+
+        public NativeOnlyBasicAutomation(IViceNative native, int cyclesPerFrame)
+        {
+            _native = native;
+            _cyclesPerFrame = cyclesPerFrame;
+            Reset();
+        }
+
+        public string? LastError { get; private set; }
+
+        public bool IsComplete => _phase == AutomationPhase.Complete;
+
+        public string Status =>
+            $"phase={_phase}, keyIndex={_keyIndex}/11+CR, readyWaitFrames={_readyWaitFrames}, " +
+            $"frameDelay={_frameDelay}, lastError='{LastError ?? ""}'";
+
+        private bool IsActive =>
+            _phase is AutomationPhase.WaitingForReady
+                or AutomationPhase.FeedingKeyboardBuffer
+                or AutomationPhase.WaitingToSendReturn;
+
+        public void Reset()
+        {
+            LastError = null;
+            _phase = AutomationPhase.WaitingForReady;
+            _keyIndex = 0;
+            _frameDelay = 0;
+            _readyWaitFrames = 0;
+            _nextFrameCycle = _cyclesPerFrame;
+        }
+
+        public void AdvanceTo(long nativeCycle)
+        {
+            while (IsActive && _nextFrameCycle <= nativeCycle)
+            {
+                AdvanceFrame();
+                _native.FlushKeyboardBuffer();
+                _nextFrameCycle += _cyclesPerFrame;
+            }
+        }
+
+        private void AdvanceFrame()
+        {
+            if (_phase == AutomationPhase.WaitingForReady)
+            {
+                if (!ContainsNativeBasicReadyPrompt() || _native.PeekRam(CursorBlinkEnableFlag) != 0)
+                {
+                    _readyWaitFrames++;
+                    if (_readyWaitFrames > MaxReadyWaitFrames)
+                        Fail("BASIC READY prompt was not idle on native x64sc before the command-entry timeout.");
+
+                    return;
+                }
+
+                _phase = AutomationPhase.FeedingKeyboardBuffer;
+                _frameDelay = InitialReadyDelayFrames;
+                return;
+            }
+
+            if (_frameDelay > 0)
+            {
+                _frameDelay--;
+                return;
+            }
+
+            if (_phase == AutomationPhase.FeedingKeyboardBuffer)
+            {
+                var rc = _native.FeedKeyboardBuffer(LoadCommandPetscii);
+                if (rc != 0)
+                {
+                    Fail($"vice_machine_kbdbuf_feed LOAD returned {rc}.");
+                    return;
+                }
+
+                _keyIndex = LoadCommandPetscii.Length;
+                _phase = AutomationPhase.WaitingToSendReturn;
+                _frameDelay = 30;
+                return;
+            }
+
+            if (_phase == AutomationPhase.WaitingToSendReturn)
+            {
+                ReadOnlySpan<byte> cr = [13];
+                var rc = _native.FeedKeyboardBuffer(cr);
+                if (rc != 0)
+                {
+                    Fail($"vice_machine_kbdbuf_feed CR returned {rc}.");
+                    return;
+                }
+
+                _phase = AutomationPhase.Complete;
+            }
+        }
+
+        private bool ContainsNativeBasicReadyPrompt()
+        {
+            Span<byte> screenCodes = stackalloc byte[ReadyPromptLength];
+            for (var i = 0; i < screenCodes.Length; i++)
+                screenCodes[i] = _native.PeekRam((ushort)(ReadyPromptStart + i));
+
+            ReadOnlySpan<byte> screenCodeReady = [18, 5, 1, 4, 25];
+            ReadOnlySpan<byte> asciiReady = "READY"u8;
+            return screenCodes.IndexOf(screenCodeReady) >= 0 || screenCodes.IndexOf(asciiReady) >= 0;
+        }
+
+        private void Fail(string message)
+        {
+            LastError = string.IsNullOrWhiteSpace(message)
+                ? "Native BASIC command automation failed."
+                : message;
+            _phase = AutomationPhase.Faulted;
+        }
+
+        private enum AutomationPhase
+        {
+            WaitingForReady,
+            FeedingKeyboardBuffer,
+            WaitingToSendReturn,
+            Complete,
+            Faulted
+        }
+    }
 
     private sealed class BasicCommandAutomation
     {

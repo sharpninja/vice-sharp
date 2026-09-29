@@ -1,0 +1,1302 @@
+{
+  "capturedAt": "2026-09-06T22:12:21.6672486-05:00",
+  "workspacePath": "F:\\GitHub\\vice-sharp",
+  "layer": "layer-1",
+  "newIds": [
+    "FR-NATIVE-LIFECYCLE-001",
+    "TR-NATIVE-LIFECYCLE-001",
+    "TEST-NATIVE-LIFECYCLE-001",
+    "FR-SETTINGS-TXN-001",
+    "TR-SETTINGS-TXN-001",
+    "TEST-SETTINGS-TXN-001",
+    "FR-REMOTECTRL-CLI-001",
+    "TR-REMOTECTRL-CLI-001",
+    "TEST-REMOTECTRL-CLI-001",
+    "FR-AIREVIEW-ROUTING-001",
+    "TR-AIREVIEW-ROUTING-001",
+    "TEST-AIREVIEW-ROUTING-001",
+    "FR-COMPLETION-001",
+    "TR-COMPLETION-MANIFEST-001",
+    "TEST-COMPLETION-001",
+    "TR-UI-COREBOUNDARY-001",
+    "TEST-UI-COREBOUNDARY-001",
+    "TR-BASELINE-CORRECTNESS-001",
+    "TEST-BASELINE-CORRECTNESS-001",
+    "TR-REMOTE-INTEGRATION-001",
+    "TEST-REMOTE-INTEGRATION-001"
+  ],
+  "records": [
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-AIREVIEW-ROUTING-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "An xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Critical and high findings are resolved and affected reviews rerun before completion."
+        }
+      ],
+      "priority": "high",
+      "body": "Both required ViceSharp AI review theories run GPT-6 Astra with xhigh reasoning effort and retain independently verifiable completed review artifacts.\nAn xUnit NeverFails pass is not review success; malformed, error, incomplete, misrouted or missing artifacts fail the completion gate.\nCritical and high findings are resolved and affected reviews rerun before completion.",
+      "title": "Auditable Astra xhigh AI review routing"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-COMPLETION-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Complete every approved slice, including baseline repairs, Settings/Warp/video, portable CLI, native lifecycle, external integration and both Astra AI reviews."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "All required tests finish with zero failures, skips, aborts or silent prerequisite returns before completion."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Run two fresh live application validation passes against final binaries and prove runtime effects independently of UI values."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Preserve unrelated dirty files and probes. Finalize tracked requirements, plan, handoff and receipts before explicit-manifest commit and non-force push; verify local and remote SHAs match."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Independent Astra xhigh agreement is required after requirements, red tests, green implementation and final combined evidence."
+        }
+      ],
+      "priority": "high",
+      "body": "Complete every approved slice, including baseline repairs, Settings/Warp/video, portable CLI, native lifecycle, external integration and both Astra AI reviews.\nAll required tests finish with zero failures, skips, aborts or silent prerequisite returns before completion.\nRun two fresh live application validation passes against final binaries and prove runtime effects independently of UI values.\nPreserve unrelated dirty files and probes. Finalize tracked requirements, plan, handoff and receipts before explicit-manifest commit and non-force push; verify local and remote SHAs match.\nIndependent Astra xhigh agreement is required after requirements, red tests, green implementation and final combined evidence.",
+      "title": "Exhaustive approved-work completion evidence"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-MACHINEPICKER-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-two-combos",
+          "text": "Settings exposes Computer and Model ComboBoxes with AutomationIds Settings.Computer and Settings.MachineVariant."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-models-filter",
+          "text": "Selecting Commodore 64 lists only x64sc models; selecting VIC-20 lists only xvic models. Minimal host is excluded."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-restart",
+          "text": "Changing Computer or Model flags restart and Apply+Restart switches the live machine family/variant."
+        }
+      ],
+      "priority": "high",
+      "body": "Avalonia Settings splits machine selection into two ComboBoxes matching Xbox SettingsPage. Computer is the family (Commodore 64 / VIC-20). Model is the variant list for that family from the host profile catalog (C64 PAL/NTSC/C64C/... or VIC-20 PAL/NTSC). Changing Computer publishes that family's Models and selects the family default profile. Changing Model sets the host profile id and flags Apply+Restart.",
+      "title": "Settings Computer and Model dropdowns"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-NATIVE-LIFECYCLE-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Native VIC-20 sound-oracle reset preserves the live mixer timing and clocks."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Create and step finish or fail within 5000 ms; stop finishes or fails within 2000 ms."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Dispose is idempotent; a live worker never observes freed state. Failed stop poisons shared native-library state and all later operations fail immediately."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Reset, destroy, snapshot read and snapshot write apply the same shutdown-failure policy."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Normal audio, dual-VIA, reset, snapshot and dispose work repeatedly in one process for PAL and NTSC."
+        }
+      ],
+      "priority": "high",
+      "body": "Native VIC-20 sound-oracle reset preserves the live mixer timing and clocks.\nCreate and step finish or fail within 5000 ms; stop finishes or fails within 2000 ms.\nDispose is idempotent; a live worker never observes freed state. Failed stop poisons shared native-library state and all later operations fail immediately.\nReset, destroy, snapshot read and snapshot write apply the same shutdown-failure policy.\nNormal audio, dual-VIA, reset, snapshot and dispose work repeatedly in one process for PAL and NTSC.",
+      "title": "Bounded and isolated native oracle lifecycle"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-REMOTECTRL-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "RemoteControl is disabled when VICESHARP_REMOTECONTROL_ENABLE is unset; enabled startup without a bearer token fails closed."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Explicitly enabled, authenticated loopback gRPC exposes the current live MainWindow visual tree."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Interaction and live-frame access remain denied unless their separate opt-ins permit them; authentication and action failures are explicit."
+        }
+      ],
+      "priority": "medium",
+      "body": "ViceSharp.Avalonia can expose its live Avalonia visual tree for remote inspection and (optionally) interaction over gRPC via the SharpNinja.Avalonia.RemoteControl embeddable server, to support UI development/validation. The server is disabled by default and only starts when explicitly enabled via environment switches, and then only with a bearer token on a loopback transport (interaction and live frames remain deny-by-default opt-ins).",
+      "title": "Live Avalonia visual-tree inspection over gRPC"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-REMOTECTRL-CLI-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "CLI restores and builds from a standalone ViceSharp checkout without a sibling repository."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Support grpc transport and its environment default; reject unsupported transports explicitly."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Provide machine-readable capabilities and tree results suitable for retained validation evidence."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Resolve exact automation IDs first; reject ambiguous matches, malformed trees and ancestor-hidden controls."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Authentication, disabled control, denied actions, failed mutations, cancellation, timeout and invalid frames produce accurate failures and exit codes."
+        }
+      ],
+      "priority": "high",
+      "body": "CLI restores and builds from a standalone ViceSharp checkout without a sibling repository.\nSupport grpc transport and its environment default; reject unsupported transports explicitly.\nProvide machine-readable capabilities and tree results suitable for retained validation evidence.\nResolve exact automation IDs first; reject ambiguous matches, malformed trees and ancestor-hidden controls.\nAuthentication, disabled control, denied actions, failed mutations, cancellation, timeout and invalid frames produce accurate failures and exit codes.",
+      "title": "Portable RemoteControl gRPC command line"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-SETTINGS-TXN-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Expose Active runtime settings, Accepted last accepted target including staged restart fields, and local unsaved Draft independently."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Dirty compares normalized Draft to Accepted. Restart-required compares restart-relevant Draft to Active."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Plain Apply applies live fields, accepts the complete target, clears dirty and retains a pending restart. Revert restores Accepted and does not cancel an earlier accepted restart."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Apply + Restart publishes a prepared replacement and then makes Active and Accepted equal. Any failure preserves prior runtime, accepted state and unsaved draft."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Validate profile/family, RAM, limiter, resources, cartridge image/preset and IEC root/unit/reserved-device conflicts before any externally visible mutation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-06",
+          "text": "Derive active cartridge kind from the actual device. A non-none kind needs a compatible image; none detaches. Preserve image, banks, preset, writeback and uIEC across applicable restart."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-07",
+          "text": "Apply Warp through the existing limiter in the same settings transaction. Existing standalone Warp control remains compatible."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-08",
+          "text": "Serialize refresh and Apply, reject stale responses, preserve edited draft fields and refresh untouched fields. Same-field conflicts keep local draft until Apply or Revert."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-09",
+          "text": "Older hosts lacking State remain readable and clearly disable state-aware Apply/Restart with an upgrade explanation."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-10",
+          "text": "Snapshots and INI persistence include RAM, cartridge and uIEC fields. Defaults are no RAM expansion, no cartridge, preset start, writeback false, uIEC disabled with empty root and unit 9. Save-on-exit preferences remain outside host Apply/Revert."
+        }
+      ],
+      "priority": "high",
+      "body": "Expose Active runtime settings, Accepted last accepted target including staged restart fields, and local unsaved Draft independently.\nDirty compares normalized Draft to Accepted. Restart-required compares restart-relevant Draft to Active.\nPlain Apply applies live fields, accepts the complete target, clears dirty and retains a pending restart. Revert restores Accepted and does not cancel an earlier accepted restart.\nApply + Restart publishes a prepared replacement and then makes Active and Accepted equal. Any failure preserves prior runtime, accepted state and unsaved draft.\nValidate profile/family, RAM, limiter, resources, cartridge image/preset and IEC root/unit/reserved-device conflicts before any externally visible mutation.\nDerive active cartridge kind from the actual device. A non-none kind needs a compatible image; none detaches. Preserve image, banks, preset, writeback and uIEC across applicable restart.\nApply Warp through the existing limiter in the same settings transaction. Existing standalone Warp control remains compatible.\nSerialize refresh and Apply, reject stale responses, preserve edited draft fields and refresh untouched fields. Same-field conflicts keep local draft until Apply or Revert.\nOlder hosts lacking State remain readable and clearly disable state-aware Apply/Restart with an upgrade explanation.\nSnapshots and INI persistence include RAM, cartridge and uIEC fields. Defaults are no RAM expansion, no cartridge, preset start, writeback false, uIEC disabled with empty root and unit 9. Save-on-exit preferences remain outside host Apply/Revert.",
+      "title": "Truthful transactional Settings state"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-UISETVIS-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-c64-hides-vic20",
+          "text": "On C64 Computer, Settings.Vic20MemoryPreset, Vic20Blk0-5, ExpansionCartKind/Preset/WriteBack have IsEffectivelyVisible false."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-vic20-shows-vic20",
+          "text": "On VIC-20 Computer, those same controls have IsEffectivelyVisible true."
+        }
+      ],
+      "priority": "high",
+      "body": "VIC-20-only Settings (memory preset, BLK0/1/2/3/5, expansion kind/preset/write-back, flash builder) are not effectively visible when a C64 family model is selected. When a VIC-20 family model is selected, those controls are visible and any C64-only Settings (none in the current Avalonia surface besides family-filtered Models) stay hidden. Shared limiter/display/audio/input/uIEC/persistence remain visible for both families.",
+      "title": "Family-specific Settings visibility"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-WARP-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-status-warp",
+          "text": "Warp via Settings or RemoteControl sets status LIMITER to WARP."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-clock-above-100",
+          "text": "After warp is applied, status CLOCK percent is well above 100."
+        }
+      ],
+      "priority": "high",
+      "body": "Settings Warp (VICE -warp) disables the speed limiter so the emulator runs as fast as the host allows. The status bar must show LIMITER WARP and CLOCK percent well above 100 when warp is applied through the UI or RemoteControl.",
+      "title": "Warp mode runs uncapped relative to 100 percent limiter"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-AIREVIEW-ROUTING-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories."
+        }
+      ],
+      "priority": "high",
+      "body": "Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.\nSupport AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.\nRemove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.\nTest deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.\nConsume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.",
+      "title": "Auditable Astra xhigh AI review routing"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-BASELINE-CORRECTNESS-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "BasicBus unregister and unmapped-write tests preserve the intentional open-bus latch values 0x55 and 0xBB. Native-shim users follow the NativeVice collection convention."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Repair cycle-2078 snapshot branch-timing divergence using a minimal pinned-VICE-referenced instruction sequence for taken, untaken and page-crossing branches on C64 and VIC-20."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Keep the 5000-cycle snapshot fixture unchanged and require standalone and post-native-lifecycle success. Preserve passing performance/prefetch behavior."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Trace acceptance coverage before removing obsolete prefetch quarantine. Replace obsolete renderer assertions with equivalent cycle-aware tests before retirement. Move intentionally failing manual diagnostics to an explicit diagnostic tool, never hide actual product failures."
+        }
+      ],
+      "priority": "high",
+      "body": "BasicBus unregister and unmapped-write tests preserve the intentional open-bus latch values 0x55 and 0xBB. Native-shim users follow the NativeVice collection convention.\nRepair cycle-2078 snapshot branch-timing divergence using a minimal pinned-VICE-referenced instruction sequence for taken, untaken and page-crossing branches on C64 and VIC-20.\nKeep the 5000-cycle snapshot fixture unchanged and require standalone and post-native-lifecycle success. Preserve passing performance/prefetch behavior.\nTrace acceptance coverage before removing obsolete prefetch quarantine. Replace obsolete renderer assertions with equivalent cycle-aware tests before retirement. Move intentionally failing manual diagnostics to an explicit diagnostic tool, never hide actual product failures.",
+      "title": "Approved baseline regression repairs"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-COMPLETION-MANIFEST-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Implement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Final validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Fresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Live representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-06",
+          "text": "Prove actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only validation processes started by this work."
+        }
+      ],
+      "priority": "high",
+      "body": "Add an exhaustive manifest covering every solution and relevant out-of-solution test project, every category excluded by ordinary Nuke Test and every required native/remote/AI workload.\nImplement Nuke CompletionTest as the supported entry point; gates retain exact commands, configuration, filters, counts, TRX, stdout/stderr, diagnostic logs and relevant hang dumps.\nFinal validation includes Release solution build, managed/native/determinism/parity/CLI/integration/AI scopes, changed-AC traceability and git diff --check.\nFresh live passes first prove RemoteControl default-off failure, then enabled capabilities/actions and every applicable Settings control. Match debug-attach metadata to the owned PID and refresh session/tree IDs after restart.\nLive representative profiles are c64, c64c, ntsc and VIC-20 PAL/NTSC; automate all 14 C64 profiles, retain READY/geometry/clock/pacing/Warp evidence and verify exactly 28159 BASIC bytes free for pinned-ROM VIC-20 all-RAM.\nProve actual cartridge image/bank/preset/writeback and uIEC I/O. Stop only validation processes started by this work.",
+      "title": "Exhaustive approved-work completion evidence"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-NATIVE-LIFECYCLE-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Oracle sound state is separate from live mixer state; no reset memset clears playback timing."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Use absolute monotonic deadlines for create/step 5000 ms and stop 2000 ms; remove infinite waits and propagate native failure to managed callers."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Poison belongs to the shared loaded native library, not only one wrapper instance; retain memory if its worker is still alive."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Capture all required modified native source in the supported patch against the pinned clean native gitlink; retain patch/build and loaded-DLL SHA256 receipts."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Audio comparisons require identical sample counts and complete PCM sequences; truncated Math.Min comparisons cannot establish parity."
+        }
+      ],
+      "priority": "high",
+      "body": "Oracle sound state is separate from live mixer state; no reset memset clears playback timing.\nUse absolute monotonic deadlines for create/step 5000 ms and stop 2000 ms; remove infinite waits and propagate native failure to managed callers.\nPoison belongs to the shared loaded native library, not only one wrapper instance; retain memory if its worker is still alive.\nCapture all required modified native source in the supported patch against the pinned clean native gitlink; retain patch/build and loaded-DLL SHA256 receipts.\nAudio comparisons require identical sample counts and complete PCM sequences; truncated Math.Min comparisons cannot establish parity.",
+      "title": "Bounded and isolated native oracle lifecycle"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-REMOTECTRL-CLI-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Use published SharpNinja Avalonia RemoteControl Protocol 0.7.4 matching the embedded Server 0.7.4, its generated gRPC client and the existing Grpc.Net.Client dependency."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Own and dispose the channel; propagate bearer metadata and cancellation with bounded calls."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Add CLI and test projects to ViceSharp.slnx and the exhaustive CompletionTest manifest."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Calculate effective visibility through ancestors and validate malformed references/cycles rather than assuming a matching node is actionable."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Validate frame data before writing PNG output and retain machine-readable response/error contracts."
+        }
+      ],
+      "priority": "high",
+      "body": "Use published SharpNinja Avalonia RemoteControl Protocol 0.7.4 matching the embedded Server 0.7.4, its generated gRPC client and the existing Grpc.Net.Client dependency.\nOwn and dispose the channel; propagate bearer metadata and cancellation with bounded calls.\nAdd CLI and test projects to ViceSharp.slnx and the exhaustive CompletionTest manifest.\nCalculate effective visibility through ancestors and validate malformed references/cycles rather than assuming a matching node is actionable.\nValidate frame data before writing PNG output and retain machine-readable response/error contracts.",
+      "title": "Portable RemoteControl gRPC command line"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-REMOTECTRL-SERVER-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints."
+        }
+      ],
+      "priority": "medium",
+      "body": "Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.\nUse AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.\nPreserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.",
+      "title": "Embeddable RemoteControl 0.7.4 integration"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-REMOTE-INTEGRATION-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Use existing RomM http://192.168.0.148:8080/ and CSDb bridge http://192.168.0.148:8090/; do not substitute or start the stopped local stack."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Provision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Fixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Authenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests."
+        }
+      ],
+      "priority": "high",
+      "body": "Use existing RomM http://192.168.0.148:8080/ and CSDb bridge http://192.168.0.148:8090/; do not substitute or start the stopped local stack.\nProvision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.\nFixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.\nAuthenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.",
+      "title": "Existing RomM and CSDb integration gate"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-SETTINGS-TXN-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Add SettingsStateDto(Active, Accepted) and optional State on settings responses; preserve existing DTO fields and protobuf tags, using GetSettingsResponse.state=3 and UpdateSettingsResponse.state=4."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Prepare a fully configured replacement with media restored before publication; candidate cleanup produces no writeback or success notifications."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Commit under existing synchronization, defer publication until success, and roll back runtime/session/pump state on failure. Do not swallow attachment exceptions."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "UpdateSettings honors Limiter.IsEnabled=false atomically and the view model makes no second Warp RPC for Apply."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "A single synchronization path handles initial state, refresh, Apply response, Revert and persistence; perform field-wise three-way merge against Accepted."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-06",
+          "text": "Preserve existing field and standalone-control compatibility. Detect absent State explicitly rather than fabricating Active/Accepted truth."
+        }
+      ],
+      "priority": "high",
+      "body": "Add SettingsStateDto(Active, Accepted) and optional State on settings responses; preserve existing DTO fields and protobuf tags, using GetSettingsResponse.state=3 and UpdateSettingsResponse.state=4.\nPrepare a fully configured replacement with media restored before publication; candidate cleanup produces no writeback or success notifications.\nCommit under existing synchronization, defer publication until success, and roll back runtime/session/pump state on failure. Do not swallow attachment exceptions.\nUpdateSettings honors Limiter.IsEnabled=false atomically and the view model makes no second Warp RPC for Apply.\nA single synchronization path handles initial state, refresh, Apply response, Revert and persistence; perform field-wise three-way merge against Accepted.\nPreserve existing field and standalone-control compatibility. Detect absent State explicitly rather than fabricating Active/Accepted truth.",
+      "title": "Truthful transactional Settings state"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-UIAXAML-PICKER-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-vm",
+          "text": "ViewModel tests cover Computers list, Models filter, family switch default profile, PAL/NTSC keeps Models instance."
+        }
+      ],
+      "priority": "high",
+      "body": "AttachPanelViewModel mirrors XboxSettingsViewModel Computers/Models/SelectedComputer/SelectedModel using host SettingsProfileDto.Machine as family key (x64sc, xvic). SettingsView.axaml replaces the single Settings.MachineProfile ComboBox with Settings.Computer and Settings.MachineVariant. IsVic20Selected remains family xvic.",
+      "title": "Avalonia Computer/Model picker binds like Xbox"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-UI-COREBOUNDARY-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Own flash-cart builder interfaces in Abstractions and supply a Host composition factory/private adapter; Avalonia C# and AXAML do not depend on Core flash-cart types."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Preserve existing Core/Xbox public APIs and observable collection/property-change behavior."
+        }
+      ],
+      "priority": "high",
+      "body": "Own flash-cart builder interfaces in Abstractions and supply a Host composition factory/private adapter; Avalonia C# and AXAML do not depend on Core flash-cart types.\nPreserve existing Core/Xbox public APIs and observable collection/property-change behavior.",
+      "title": "Avalonia flash-cart builder abstraction boundary"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-WARP-STATUS-001",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-dto-zero",
+          "text": "ToStatusDto emits LimiterRatePercent 0 when LimiterEnabled is false."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-clock-sample",
+          "text": "GetStatus after warp reports EffectiveClockPercent greater than 150 in WarpModeTests and live RC dumps."
+        }
+      ],
+      "priority": "high",
+      "body": "ToStatusDto emits LimiterRatePercent 0 when LimiterEnabled is false so the status bar can show WARP. EffectiveClockPercent is computed from sampled EffectiveClockHz over MasterClockHz. Warp must push audio relative speed to the live-audio ceiling so VIC-I sound render does not pin CLOCK at 100 percent.",
+      "title": "Host status DTO emits warp as rate 0 and live CLOCK percent"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-AIREVIEW-ROUTING-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence."
+        }
+      ],
+      "condition": "Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.\nVerify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.\nValidate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.\nRun both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.",
+      "title": "Auditable Astra xhigh AI review routing"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-BASELINE-CORRECTNESS-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest."
+        }
+      ],
+      "condition": "Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.\nAdd minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.\nRun unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.\nRetain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.",
+      "title": "Approved baseline regression repairs"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-COMPLETION-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-06",
+          "text": "Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence."
+        }
+      ],
+      "condition": "Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.\nFinal Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.\nBoth fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.\nAudit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.\nRequire final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.",
+      "title": "Exhaustive approved-work completion evidence"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-NATIVE-LIFECYCLE-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests."
+        }
+      ],
+      "condition": "Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.\nRun AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.\nRun create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.\nRequire native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.\nBuild the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.",
+      "title": "Bounded and isolated native oracle lifecycle"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-REMOTECTRL-001",
+      "priority": "medium",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Test unset enable switch and enabled-without-token startup; both expose no usable control host."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Launch the owned app with explicit valid enable/token settings; read capabilities and the live MainWindow tree over gRPC."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Verify missing/wrong bearer token rejection, loopback policy and separate denied/enabled action/frame permissions."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Retain the two fresh final-binary live passes and real gRPC CLI contract evidence required by TEST-REMOTECTRL-CLI-001 and TEST-COMPLETION-001."
+        }
+      ],
+      "condition": "Tests prove the RemoteControl integration is off by default (no host started when VICESHARP_REMOTECONTROL_ENABLE is unset) and fails closed when enabled without a token; and that, when enabled with a token, the configured IRemoteControlRootProvider returns the live MainWindow. App-launch gate: connect the RemoteControl client tool and confirm the visual tree is readable.",
+      "title": "RemoteControl server gating + root provider"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-REMOTECTRL-CLI-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Restore/build/test an isolated checkout with no sibling paths and verify published package resolution."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts."
+        }
+      ],
+      "condition": "Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.\nUse a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.\nExercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.\nExercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.\nVerify capability/tree JSON and successful enabled control actions against generated gRPC contracts.",
+      "title": "Portable RemoteControl gRPC command line"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-REMOTE-INTEGRATION-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion."
+        }
+      ],
+      "condition": "Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.\nVerify optional bridge authentication is sent consistently by the caller-owned client for connection and search.\nVerify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.",
+      "title": "Existing RomM and CSDb integration gate"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. All criteria pending until named tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-SETTINGS-TXN-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-03",
+          "text": "Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-04",
+          "text": "Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-05",
+          "text": "Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-06",
+          "text": "Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-07",
+          "text": "Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-08",
+          "text": "Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart."
+        }
+      ],
+      "condition": "Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.\nInject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.\nInject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.\nVerify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.\nRace refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.\nRound-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.\nTest old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.\nVerify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.",
+      "title": "Truthful transactional Settings state"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "notes": "Approved PLAN-GROK-COMPLETION-20260906. Pending tests and independent hostile agreement.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-UI-COREBOUNDARY-001",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-01",
+          "text": "Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-02",
+          "text": "Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications."
+        }
+      ],
+      "condition": "Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.\nExercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.",
+      "title": "Avalonia flash-cart builder abstraction boundary"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-UISET-001",
+      "priority": "medium",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-all-spec",
+          "text": "All+Apply+Restart keeps BLK checks and Vic20MemorySpec all."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-bytes-free",
+          "text": "After pinned-ROM VIC-20 All RAM plus Apply+Restart, the READY BASIC boot reports exactly 28159 BYTES FREE; verify actual runtime memory as well as checked BLK controls."
+        }
+      ],
+      "condition": "VIC-20 RAM settings acceptance verifies all selected BLK regions in fresh host/runtime state after Apply+Restart and exactly 28159 BASIC bytes free with the pinned ROM.",
+      "title": "VIC-20 RAM settings acceptance"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-UISET-002",
+      "priority": "medium",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-inventory",
+          "text": "In each of two fresh final-binary live passes, drive every applicable VIC-20 Settings control and verify effective visibility, fresh host Active/Accepted state and actual runtime effects, including image/bank/preset/writeback and uIEC I/O."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-warp",
+          "text": "Warp via the single Settings transaction sets LIMITER WARP, LimiterRatePercent 0 and measured EffectiveClockPercent greater than 150 in WarpModeTests and live RemoteControl receipts."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-palntsc",
+          "text": "PAL vs NTSC Apply+Restart yields CLOCK ~1.108 vs ~1.023 MHz and ContentHeight 284 vs 234 with READY."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-revert",
+          "text": "Revert is exercised while dirty and restores Accepted values without cancelling an earlier accepted pending restart; save-on-exit preferences remain independent."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-state-and-runtime",
+          "text": "Apply, Apply+Restart, validation failure, speed cycling, every RAM BLK, persistence preferences and builder open/close follow TEST-SETTINGS-TXN-001 and TEST-COMPLETION-001, with host/runtime oracles after refreshing owned-process debug attach and session IDs."
+        }
+      ],
+      "condition": "Two fresh final-binary RemoteControl passes exercise every applicable VIC-20 Settings control. Verify effective visibility, Active/Accepted/Draft semantics, single-transaction Warp above150 percent, PAL/NTSC runtime geometry/clocks, Revert, cartridge persistence and actual uIEC I/O.",
+      "title": "VIC-20 Settings RemoteControl matrix"
+    },
+    {
+      "scopeStartLayerKey": "layer-1",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-UISET-003",
+      "priority": "high",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "isSatisfied": false,
+          "id": "ac-c64-inventory",
+          "text": "Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-c64-palntsc-warp",
+          "text": "C64 PAL versus NTSC boots READY with clocks approximately 0.985 versus 1.023 MHz; Warp status and live runtime satisfy TR-WARP-STATUS-001, including EffectiveClockPercent greater than 150."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-visibility",
+          "text": "VIC-20-only AutomationIds are not effectively visible on C64 Computer and are visible on VIC-20 Computer."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-catalog-14",
+          "text": "Automatically cover all 14 available C64 host catalog profiles and live c64/c64c/ntsc representatives. Cover case-insensitive IDs, unavailable/out-of-family/null/reentry rejection, stable Models within family and disabled Apply with a visible explanation for unusable catalog."
+        },
+        {
+          "isSatisfied": false,
+          "id": "ac-draft-preservation",
+          "text": "Exercise shared synchronization for initial load, refresh, Apply, Revert and persisted state, preserving VIC-20 draft RAM/cart fields across family switches without attaching VIC-20 hardware to a C64 runtime."
+        }
+      ],
+      "condition": "Headless and live RemoteControl tests for C64 variants (at least c64, c64c, ntsc from host catalog) mutate shared Settings controls, Apply+Restart PAL vs NTSC CLOCK ~0.985 vs ~1.023 MHz with READY, Warp LIMITER WARP and CLOCK percent well above 100, and assert VIC-20-only AutomationIds are not effectively visible on C64 and are visible on VIC-20.",
+      "title": "C64 Settings RC plus family visibility"
+    }
+  ],
+  "mappings": [
+    {
+      "trIds": [
+        "TR-AIREVIEW-ROUTING-001"
+      ],
+      "testIds": [
+        "TEST-AIREVIEW-ROUTING-001"
+      ],
+      "frId": "FR-AIREVIEW-ROUTING-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-BASELINE-CORRECTNESS-001",
+        "TR-COMPLETION-MANIFEST-001",
+        "TR-REMOTE-INTEGRATION-001",
+        "TR-UI-COREBOUNDARY-001"
+      ],
+      "testIds": [
+        "TEST-BASELINE-CORRECTNESS-001",
+        "TEST-COMPLETION-001",
+        "TEST-REMOTE-INTEGRATION-001",
+        "TEST-UI-COREBOUNDARY-001"
+      ],
+      "frId": "FR-COMPLETION-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001"
+      ],
+      "frId": "FR-CSDB-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-SETTINGS-TXN-001",
+        "TR-UIAXAML-PICKER-001"
+      ],
+      "testIds": [
+        "TEST-SETTINGS-TXN-001",
+        "TEST-UISET-003"
+      ],
+      "frId": "FR-MACHINEPICKER-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-NATIVE-LIFECYCLE-001"
+      ],
+      "testIds": [
+        "TEST-NATIVE-LIFECYCLE-001"
+      ],
+      "frId": "FR-NATIVE-LIFECYCLE-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-BASELINE-CORRECTNESS-001",
+        "TR-DEPS-202607-001",
+        "TR-VSFLOCKSTEP-RESUME-001"
+      ],
+      "testIds": [
+        "TEST-BASELINE-CORRECTNESS-001",
+        "TEST-DEPS-202607-001",
+        "TEST-NATIVERESIDUE-001"
+      ],
+      "frId": "FR-NATIVERESIDUE-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-REMOTECTRL-CLI-001",
+        "TR-REMOTECTRL-SERVER-001"
+      ],
+      "testIds": [
+        "TEST-COMPLETION-001",
+        "TEST-REMOTECTRL-001",
+        "TEST-REMOTECTRL-CLI-001"
+      ],
+      "frId": "FR-REMOTECTRL-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-REMOTECTRL-CLI-001"
+      ],
+      "testIds": [
+        "TEST-REMOTECTRL-CLI-001"
+      ],
+      "frId": "FR-REMOTECTRL-CLI-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001"
+      ],
+      "frId": "FR-ROMM-BROWSE-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001"
+      ],
+      "frId": "FR-ROMM-COLLECT-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001",
+        "TR-ROMM-SEC-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001",
+        "TEST-ROMM-SEC-001"
+      ],
+      "frId": "FR-ROMM-CONN-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001",
+        "TR-ROMM-SEC-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001",
+        "TEST-ROMM-SEC-001"
+      ],
+      "frId": "FR-ROMM-LAUNCH-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-SETTINGS-TXN-001"
+      ],
+      "testIds": [
+        "TEST-SETTINGS-TXN-001"
+      ],
+      "frId": "FR-SETTINGS-TXN-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-UIAXAML-VIEWS-001",
+        "TR-UI-COREBOUNDARY-001"
+      ],
+      "testIds": [
+        "TEST-UI-COREBOUNDARY-001",
+        "TEST-UISET-002"
+      ],
+      "frId": "FR-UISETTINGS-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-SETTINGS-TXN-001",
+        "TR-UIAXAML-PICKER-001"
+      ],
+      "testIds": [
+        "TEST-SETTINGS-TXN-001",
+        "TEST-UISET-003"
+      ],
+      "frId": "FR-UISETVIS-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-BASELINE-CORRECTNESS-001",
+        "TR-SETTINGS-TXN-001",
+        "TR-VIC20-PIXEL-001"
+      ],
+      "testIds": [
+        "TEST-BASELINE-CORRECTNESS-001",
+        "TEST-UISET-001",
+        "TEST-UISET-002"
+      ],
+      "frId": "FR-VIC20-002",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-SETTINGS-TXN-001",
+        "TR-VIC20-FLASH-001"
+      ],
+      "testIds": [
+        "TEST-SETTINGS-TXN-001",
+        "TEST-VIC20-FLASH-001"
+      ],
+      "frId": "FR-VIC20-005",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-NATIVE-LIFECYCLE-001",
+        "TR-VIC20-SOUND-001"
+      ],
+      "testIds": [
+        "TEST-NATIVE-LIFECYCLE-001",
+        "TEST-VIC20-SOUND-001"
+      ],
+      "frId": "FR-VIC20-SOUND-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    },
+    {
+      "trIds": [
+        "TR-SETTINGS-TXN-001",
+        "TR-WARP-STATUS-001"
+      ],
+      "testIds": [
+        "TEST-COMPLETION-001",
+        "TEST-SETTINGS-TXN-001",
+        "TEST-UISET-002"
+      ],
+      "frId": "FR-WARP-001",
+      "workspaceId": "F:\\GitHub\\vice-sharp"
+    }
+  ],
+  "source": "workflow.requirements.effective via mcpserver-codex-plugin"
+}

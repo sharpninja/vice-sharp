@@ -146,4 +146,31 @@ public sealed class C64MemoryMapPageDispatchTests
         machine.Bus.Write(0x0002, 0x55);
         Assert.Equal(0x55, machine.Bus.Read(0x0002));
     }
+
+    /// <summary>
+    /// FR: FR-MEM-005, TR: TR-MEM-PAGE-005.
+    /// Use case: VICE c64meminit.c config 4 (CHAREN, !HIRAM, !LORAM) does not
+    ///   install colorram_store; $D800 is ram_store. Wolf64 runs $01=$24/$34.
+    /// Acceptance: Under I/O, $D800 write $AB reads $0B. Under RAM-only PLA,
+    ///   $D800 write $C5 reads $C5. Restoring I/O still reads the original $0B.
+    /// </summary>
+    [Fact]
+    public void Write_ColorRamRange_UsesRamWhenIoBankedOut()
+    {
+        var machine = CreateC64();
+
+        machine.Bus.Write(ProcessorPort, PlaLoramHiramCharen);
+        machine.Bus.Write(0xD800, 0xAB);
+        Assert.Equal(0x0B, machine.Bus.Read(0xD800));
+        Assert.Equal(0x0B, machine.Bus.Peek(0xD800));
+
+        machine.Bus.Write(ProcessorPort, PlaRamOnly);
+        machine.Bus.Write(0xD800, 0xC5);
+        Assert.Equal(0xC5, machine.Bus.Read(0xD800));
+        Assert.Equal(0xC5, machine.Bus.Peek(0xD800));
+
+        machine.Bus.Write(ProcessorPort, PlaLoramHiramCharen);
+        Assert.Equal(0x0B, machine.Bus.Read(0xD800));
+        Assert.Equal(0x0B, machine.Bus.Peek(0xD800));
+    }
 }

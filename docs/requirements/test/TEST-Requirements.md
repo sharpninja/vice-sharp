@@ -439,6 +439,55 @@ VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`
 
 ---
 
+## TEST-UISET-001: VIC-20 RAM settings acceptance
+
+**ID:** TEST-UISET-001
+**Priority:** medium
+**Status:** pending; no completion claim.
+
+### Description
+
+VIC-20 RAM settings acceptance verifies all selected BLK regions in fresh host/runtime state after Apply+Restart and exactly 28159 BASIC bytes free with the pinned ROM.
+
+### Acceptance Criteria
+
+- **ac-all-spec**: All+Apply+Restart keeps BLK checks and Vic20MemorySpec all.
+- **ac-bytes-free**: After pinned-ROM VIC-20 All RAM plus Apply+Restart, the READY BASIC boot reports exactly 28159 BYTES FREE; verify actual runtime memory as well as checked BLK controls.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-UISET-002: VIC-20 Settings RemoteControl matrix
+
+**ID:** TEST-UISET-002
+**Priority:** medium
+**Status:** pending; no completion claim.
+
+### Description
+
+Two fresh final-binary RemoteControl passes exercise every applicable VIC-20 Settings control. Verify effective visibility, Active/Accepted/Draft semantics, single-transaction Warp above150 percent, PAL/NTSC runtime geometry/clocks, Revert, cartridge persistence and actual uIEC I/O.
+
+### Acceptance Criteria
+
+- **ac-inventory**: In each of two fresh final-binary live passes, drive every applicable VIC-20 Settings control and verify effective visibility, fresh host Active/Accepted state and actual runtime effects, including image/bank/preset/writeback and uIEC I/O.
+- **ac-warp**: Warp via the single Settings transaction sets LIMITER WARP, LimiterRatePercent 0 and measured EffectiveClockPercent greater than 150 in WarpModeTests and live RemoteControl receipts.
+- **ac-palntsc**: PAL vs NTSC Apply+Restart yields CLOCK ~1.108 vs ~1.023 MHz and ContentHeight 284 vs 234 with READY.
+- **ac-revert**: Revert is exercised while dirty and restores Accepted values without cancelling an earlier accepted pending restart; save-on-exit preferences remain independent.
+- **ac-state-and-runtime**: Apply, Apply+Restart, validation failure, speed cycling, every RAM BLK, persistence preferences and builder open/close follow TEST-SETTINGS-TXN-001 and TEST-COMPLETION-001, with host/runtime oracles after refreshing owned-process debug attach and session IDs.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
 ## TEST-VIC20-FLASH-001: VIC-20 flash timing and persistence tests
 
 **ID:** TEST-VIC20-FLASH-001
@@ -487,6 +536,291 @@ VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`
 
 - **Related FRs:** FR-ROMM-CONN-001, FR-ROMM-COVER-001, FR-ROMM-LAUNCH-001
 - **Related TR:** TR-ROMM-SEC-001
+
+
+## TEST-AIREVIEW-ROUTING-001: Auditable Astra xhigh AI review routing
+
+**ID:** TEST-AIREVIEW-ROUTING-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
+Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
+Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
+Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
+
+### Acceptance Criteria
+
+- **ac-01**: Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.
+- **ac-02**: Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.
+- **ac-03**: Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.
+- **ac-04**: Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-BASELINE-CORRECTNESS-001: Approved baseline regression repairs
+
+**ID:** TEST-BASELINE-CORRECTNESS-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.
+Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.
+Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
+Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
+
+### Acceptance Criteria
+
+- **ac-01**: Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.
+- **ac-02**: Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.
+- **ac-03**: Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.
+- **ac-04**: Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-COMPLETION-001: Exhaustive approved-work completion evidence
+
+**ID:** TEST-COMPLETION-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
+Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
+Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
+Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
+
+### Acceptance Criteria
+
+- **ac-01**: Completion manifest coverage verification detects an omitted project, category, required workload or prerequisite instead of accepting a narrower run.
+- **ac-02**: Final Release build and every required manifest gate completes with zero failed/skipped/aborted tests and retained evidence.
+- **ac-03**: Both fresh live passes cover Apply/Revert/Restart, validation, speed, individual RAM blocks, persistence preferences, builder open/close, effective visibility and independent host/runtime state.
+- **ac-04**: Audit every changed AC against named implementation and executable evidence; the informational traceability script exit code alone cannot prove completion.
+- **ac-05**: Require final Astra agreement over combined diff, requirement evidence, owned-file manifest and receipts before commit/push and local/origin SHA proof.
+- **ac-06**: Both fresh live passes and WarpModeTests satisfy existing TR-WARP-STATUS-001: LimiterRatePercent 0 and EffectiveClockPercent greater than 150, with actual runtime pacing evidence.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-NATIVE-LIFECYCLE-001: Bounded and isolated native oracle lifecycle
+
+**ID:** TEST-NATIVE-LIFECYCLE-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.
+Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.
+Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.
+Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.
+Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.
+
+### Acceptance Criteria
+
+- **ac-01**: Add red regressions proving oracle reset does not zero live playback timing, then exact-length PCM equality for PAL and NTSC.
+- **ac-02**: Run AudioThenDualViaResetSnapshotDispose repeatedly in one process for PAL and NTSC, including independent and post-sequence snapshot tests.
+- **ac-03**: Run create/step timeout, stop timeout, poison-after-failure and repeat-dispose fault cases in owned child processes; assert bounded wall time and immediate later failure.
+- **ac-04**: Require native prerequisites, selected workload flags and actual cycle budgets; missing DLLs/ROMs or disabled required workloads fail instead of returning early. Restore environment variables.
+- **ac-05**: Build the supported patch from the pinned clean native source and verify the hash of the DLL loaded by the passing native tests.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-REMOTECTRL-001: RemoteControl server gating + root provider
+
+**ID:** TEST-REMOTECTRL-001
+**Priority:** medium
+**Status:** pending; no completion claim.
+
+### Description
+
+Tests prove the RemoteControl integration is off by default (no host started when VICESHARP_REMOTECONTROL_ENABLE is unset) and fails closed when enabled without a token; and that, when enabled with a token, the configured IRemoteControlRootProvider returns the live MainWindow. App-launch gate: connect the RemoteControl client tool and confirm the visual tree is readable.
+
+### Acceptance Criteria
+
+- **ac-01**: Test unset enable switch and enabled-without-token startup; both expose no usable control host.
+- **ac-02**: Launch the owned app with explicit valid enable/token settings; read capabilities and the live MainWindow tree over gRPC.
+- **ac-03**: Verify missing/wrong bearer token rejection, loopback policy and separate denied/enabled action/frame permissions.
+- **ac-04**: Retain the two fresh final-binary live passes and real gRPC CLI contract evidence required by TEST-REMOTECTRL-CLI-001 and TEST-COMPLETION-001.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-REMOTECTRL-CLI-001: Portable RemoteControl gRPC command line
+
+**ID:** TEST-REMOTECTRL-CLI-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.
+Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.
+Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.
+Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.
+Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.
+
+### Acceptance Criteria
+
+- **ac-01**: Restore/build/test an isolated checkout with no sibling paths and verify published package resolution.
+- **ac-02**: Use a real in-process gRPC server to verify bearer authentication, default-disabled and action permissions.
+- **ac-03**: Exercise exact-ID precedence, ambiguous matches, ancestor-hidden nodes and malformed trees.
+- **ac-04**: Exercise failed mutations, cancellation/deadlines, unsupported transport, malformed frame/PNG handling and CLI exit codes.
+- **ac-05**: Verify capability/tree JSON and successful enabled control actions against generated gRPC contracts.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-REMOTE-INTEGRATION-001: Existing RomM and CSDb integration gate
+
+**ID:** TEST-REMOTE-INTEGRATION-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.
+Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
+Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.
+
+### Acceptance Criteria
+
+- **ac-01**: Run all seven integration tests with zero failures and zero skips, including server-side collection create and cleanup.
+- **ac-02**: Verify optional bridge authentication is sent consistently by the caller-owned client for connection and search.
+- **ac-03**: Verify authenticated discovery/download/launch of the required C64 seed against the existing remote endpoints. Missing access, disabled provisioning or absent seed blocks completion.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-SETTINGS-TXN-001: Truthful transactional Settings state
+
+**ID:** TEST-SETTINGS-TXN-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.
+Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.
+Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.
+Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.
+Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.
+Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.
+Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.
+Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.
+
+### Acceptance Criteria
+
+- **ac-01**: Add host regression cases for stage-restart Apply, retained restart after Revert, successful Apply+Restart and failed Apply/Restart with unchanged runtime/Accepted/Draft.
+- **ac-02**: Inject invalid family/profile, RAM, pacing/resource, image/preset and IEC root/unit/conflict inputs; assert no partial mutation or transient success notification.
+- **ac-03**: Inject replacement preparation and attachment failures; assert rollback and candidate cleanup without writeback.
+- **ac-04**: Verify Warp changes in the single UpdateSettings call, status rate 0, runtime uncapped behavior and preserved standalone Warp RPC compatibility.
+- **ac-05**: Race refresh against Apply, deliver out-of-order responses, edit one or multiple fields, and verify stale rejection and three-way field merge.
+- **ac-06**: Round-trip every RAM/cart/uIEC snapshot and INI field, legacy defaults and independent save-on-exit preferences.
+- **ac-07**: Test old responses with absent State: readable display, explicit upgrade message and disabled state-aware Apply/Restart.
+- **ac-08**: Verify actual cartridge type, detach, image/bank/preset/writeback and uIEC behavior after relevant family and profile restart.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-UI-COREBOUNDARY-001: Avalonia flash-cart builder abstraction boundary
+
+**ID:** TEST-UI-COREBOUNDARY-001
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
+Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.
+
+### Acceptance Criteria
+
+- **ac-01**: Extend boundary scanner coverage to relevant real C# and AXAML sources and demonstrate the existing direct dependency as a red case.
+- **ac-02**: Exercise profile selection, bank updates, import, build, save and failure reporting through the abstraction with controlled file I/O and collection notifications.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
+
+## TEST-UISET-003: C64 Settings RC plus family visibility
+
+**ID:** TEST-UISET-003
+**Priority:** high
+**Status:** pending; no completion claim.
+
+### Description
+
+Headless and live RemoteControl tests for C64 variants (at least c64, c64c, ntsc from host catalog) mutate shared Settings controls, Apply+Restart PAL vs NTSC CLOCK ~0.985 vs ~1.023 MHz with READY, Warp LIMITER WARP and CLOCK percent well above 100, and assert VIC-20-only AutomationIds are not effectively visible on C64 and are visible on VIC-20.
+
+### Acceptance Criteria
+
+- **ac-c64-inventory**: Shared Settings inventory mutates and sticks for C64 models c64, c64c, and ntsc.
+- **ac-c64-palntsc-warp**: C64 PAL versus NTSC boots READY with clocks approximately 0.985 versus 1.023 MHz; Warp status and live runtime satisfy TR-WARP-STATUS-001, including EffectiveClockPercent greater than 150.
+- **ac-visibility**: VIC-20-only AutomationIds are not effectively visible on C64 Computer and are visible on VIC-20 Computer.
+- **ac-catalog-14**: Automatically cover all 14 available C64 host catalog profiles and live c64/c64c/ntsc representatives. Cover case-insensitive IDs, unavailable/out-of-family/null/reentry rejection, stable Models within family and disabled Apply with a visible explanation for unusable catalog.
+- **ac-draft-preservation**: Exercise shared synchronization for initial load, refresh, Apply, Revert and persisted state, preserving VIC-20 draft RAM/cart fields across family switches without attaching VIC-20 hardware to a C64 runtime.
+
+### Traceability
+
+- Approved plan: [PLAN-GROK-COMPLETION-20260906](../../plans/PLAN-GROK-COMPLETION-20260906.md).
+- Gate and test mapping: [Grok completion AC matrix](../traceability/Grok-Completion-AC-Matrix-2026-09-06.md).
+- Criteria remain pending until executable evidence and independent Astra agreement are recorded.
+
+---
 
 ## TEST-UIDROP-002: PRG drag-drop load and BASIC RUN tests
 

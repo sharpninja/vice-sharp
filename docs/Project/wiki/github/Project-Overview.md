@@ -43,7 +43,7 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
 
 ## User documentation
 
-- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, capture, diagnostics attach, what works today
+- [docs/USER-GUIDE.md](docs/USER-GUIDE.md) - install, first run, CLI launcher, YAML topology, disk images, desktop drag-drop (including `*.prg` load/RUN), capture, diagnostics attach, what works today
 - [docs/VICE-MIGRATION.md](docs/VICE-MIGRATION.md) - binary + flag mapping, behaviour caveats, performance / accuracy, bug compatibility
 - [docs/ROMs.md](docs/ROMs.md) - legal ROM options, environment variable, directory layout
 - [docs/](docs/README.md) - full documentation index (architecture, public API, iteration plans, diagrams)
@@ -67,10 +67,10 @@ Individual packages (`ViceSharp.Protocol`, `ViceSharp.Monitor`, `ViceSharp.Launc
   - FE3 MODE_FLASH via managed `Flash040Core` (AM29F040B); VICE TYPE_B timeout/sector/chip erase budgets (50 / 1,000,000 / 8,000,000 cycles) advance on the VIC-20 machine clock
   - Dirty FE3 and Ultimem flash images plus Mega-Cart NVRAM are written back atomically on detach
   - VIC-I sound registers feed deterministic batched PCM; focused silence and tone batches match native xvic byte-for-byte
-  - xvic `capture_visible_frame` (PAL 448x284); READY PAL/NTSC/busy palette-index SequenceEqual is green; full canvas BGRA parity remains Partial
+  - xvic `capture_visible_frame` (PAL 448x284); READY PAL/NTSC/busy palette-index SequenceEqual is green; READY PAL/NTSC and busy PAL native BGRA SequenceEqual is green (xvic canvas RGB)
   - Receipts: lockstep 10s PAL/NTSC; hostile AGREE borders + flash builder; FE3/pixel wrap receipt `docs/receipts/wrapup-fe3-flash040-pixel-fb-20260811.txt`
   - Gates (env): `VICESHARP_LOCKSTEP_10S=1`, `VICESHARP_LOCKSTEP_2S=1`; filter `FullyQualifiedName~Vic20DivergeProbe`
-  - Still open: full-canvas BGRA parity, input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`)
+  - Still open: input E2E, the native snapshot write hang, niche carts/peripherals, and zip virtual media (`PLAN-ZIPMEDIA-001`)
   - **Out of scope:** Microsoft Store and Xbox/UWP (`PLAN-XBOXUWP-END-001`). Supported product shells: Avalonia desktop and Console.
 
 Working chip layer implementations:

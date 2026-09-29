@@ -1,0 +1,5 @@
+Detecting DLL based HardSID boards.
+Cannot open hardsid.dll.
+LoadLibrary WPCAP.DLL failed!
+Detecting PCI CatWeasel boards.
+No PCI CatWeasel found.

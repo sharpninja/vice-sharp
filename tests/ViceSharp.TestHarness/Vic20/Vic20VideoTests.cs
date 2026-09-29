@@ -154,10 +154,12 @@ public sealed class Vic20VideoTests
     }
 
     /// <summary>
-    /// VICE data/VIC20/PALette.vpl index 3 cyan is RGB(0x64,0xE3,0xDE).
+    /// FR-VIC20-001: cyan (index 3) uses xvic canvas RGB (80,FF,FF), not raw PALette.vpl.
+    /// Use case: border color after $900F poke.
+    /// Acceptance: corner pixel RGB equals native video_calc_palette cyan.
     /// </summary>
     [Fact]
-    public void BorderCyan_UsesVicePalettesVplRgb()
+    public void BorderCyan_UsesXvicCanvasRgb()
     {
         var machine = MachineTestFactory.CreateVic20Machine();
         var vic = Assert.IsType<Mos6561>(machine.Devices.GetByRole(DeviceRole.VideoChip));
@@ -172,9 +174,9 @@ public sealed class Vic20VideoTests
         var b = fb[0];
         var g = fb[1];
         var r = fb[2];
-        Assert.Equal(0x64, r);
-        Assert.Equal(0xE3, g);
-        Assert.Equal(0xDE, b);
+        Assert.Equal(0x80, r);
+        Assert.Equal(0xFF, g);
+        Assert.Equal(0xFF, b);
         Assert.True(b > r && g > r, "cyan must not look like tan (R-dominant)");
     }
 

@@ -52,6 +52,29 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     /// cycle (<c>mainviccpu.c</c> <c>interrupt_check_irq_delay</c> irq_clk++).
     /// </summary>
     public bool LastOpcodeDelaysInterrupt => _lastOpcodeDelaysInterrupt;
+
+    /// <summary>
+    /// VICE <c>OPINFO_ENABLES_IRQ</c> / <c>OPCODE_ENABLES_IRQ</c>: CLI that
+    /// cleared I. <c>interrupt_check_irq_delay</c> must not dispatch; it
+    /// latches IK_IRQPEND so the following instruction runs first
+    /// (Wolf64 2060428 nS=$FF mS=$FE).
+    /// </summary>
+    public bool LastOpcodeEnablesIrq => _lastOpcodeEnablesIrq;
+
+    /// <summary>
+    /// False on host ticks that have no VICE <c>CLK_INC</c> (taken same-page
+    /// BRANCH JUMP, RTS JUMP <c>delayNextFetch</c>). <c>SystemClock</c> must
+    /// not increment <c>irq_delay_cycles</c> on those ticks.
+    /// </summary>
+    public bool ConsumedViceClockThisTick { get; private set; } = true;
+
+    /// <summary>
+    /// VICE <c>FETCH_OPCODE</c> is two <c>CLK_INC</c> (plus <c>fetch_tab</c>
+    /// on later ticks). A 3+ cycle opcode's first host FETCH tick is those
+    /// two clocks; <c>SystemClock</c> adds this many to irq_delay.
+    /// </summary>
+    public int ViceClocksThisTick { get; private set; } = 1;
+
     public int DebugCycle => _cycle;
     public byte DebugOpcode => _opcode;
     public bool DebugDelayNextFetch => _delayNextFetch;
@@ -60,22 +83,45 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     public bool DebugFullLengthTakenBranch { get; private set; }
     public bool DebugNonOverlappedRegion => _nonOverlappedRegion;
     public bool DebugNonOverlappedFetchPhase => _nonOverlappedFetchPhase;
+    public bool DebugAfterLdaAbsHold => _afterLdaAbsHold;
+    public bool DebugHoldAbsLoadOpcodeLastClk => _holdAbsLoadOpcodeLastClk;
     public bool DebugStagedMemoryReadCompleted => _stagedMemoryReadCompleted;
+    public bool DebugZpRmwPcDeferredFromSteal => _zpRmwPcDeferredFromSteal;
     public int DebugInterruptSequenceRemaining => _interruptSequenceRemaining;
     public ushort DebugOpcodeAddress => _opcodeAddress;
+    public bool DebugSoftDeferredImmediateLoad => _softDeferredImmediateLoad;
+    public bool DebugImmediateLoadFollowsSoftDeferredBody => _immediateLoadFollowsSoftDeferredBody;
+    public bool DebugSoftDeferredImplied => _softDeferredImpliedOp;
+    public bool DebugSoftDeferAfterNopChain => _softDeferAfterNopChain;
+    public bool DebugPendingDeferredNzUpdate => _pendingDeferredNzUpdateAfterBranch;
+    public bool DebugPendingDeferredImplied => _pendingDeferredImpliedRegisterCompletion;
+    public bool DebugFuseImpliedAfterIndyLoad => _fuseImpliedAfterIndyLoad;
+    public bool DebugInySoftAfterHeldInc => _inySoftAfterHeldInc;
+    public bool DebugSuppressBootstrapBoundary => _suppressBootstrapBoundary;
+    public int DebugBootstrapCycles => _bootstrapCycles;
+    public bool DebugAfterShortTakenBranchLag => _afterShortTakenBranchLag;
+    public bool DebugAfterFullLengthTakenBranch => _afterFullLengthTakenBranch;
+    public bool DebugSkipAbsLoadLastClkHold => _skipAbsLoadLastClkHold;
+    public bool DebugLoadAEarlyAfterStagedBranch => _loadAEarlyAfterStagedBranch;
+    public bool DebugBranchTargetFetchPending => _branchTargetFetchPending;
+    public byte DebugPreviousOpcode => _previousOpcode;
+    public bool DebugTakenBranchStagedFallthrough => _takenBranchStagedFallthrough;
+    public bool DebugStolenTakenBranchAfterAbsY => _stolenTakenBranchAfterAbsY;
+    public bool DebugNotifyOnStolenCycle => NotifyOnStolenCycle;
+    public bool DebugCanForceSteal => CanForceStealCurrentCycle;
     public bool CanStealCurrentCycle
     {
         get
         {
-            if (_pendingDeferredNzUpdateAfterBranch ||
-                _bootstrapCycles > 0 ||
-                _pendingDeferredImmediateLoad ||
-                _pendingDeferredImpliedRegisterCompletion ||
-                _branchPageCrossExtraPending)
+            if (_bootstrapCycles > 0)
             {
                 return false;
             }
 
+            // Page-cross extra CLK is VICE BRANCH dummy CLK_INC (check_ba).
+            // Blocking steal ran that CLK during BA so RasterX 55 FETCHed
+            // the target (Wolf64 4136566 nPC=$A604 mPC=$A5B8). Same-page
+            // JUMP has no extra CLK (2127622 nPC=$BEB2).
             // TR-LOCKSTEP-VSF-001: interrupt-sequence cycles follow VICE's BA
             // semantics (6510dtvcore.c DO_INTERRUPT/DO_IRQBRK): the dummy
             // fetch and the two vector reads go through check_ba (stealable),
@@ -90,11 +136,152 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             if (_opcode == 0x20)
                 return nextCycle is not 2 and not 3;
 
-            if (nextCycle == 1 && IsStoreOpcode(_opcode))
+            // Branch DebugCycle 2 transitions into the dummy INC_PC clock.
+            // VICE does not check BA on that transition, so it must proceed
+            // even while a bad-line steal is asserted (Wolf64 sample 15005).
+            if (IsBranchOpcode(_opcode) && nextCycle == 1)
                 return false;
 
-            return IsReadSensitiveOpcode(_opcode);
+            // Store write and PHA/PHP PUSH have no VICE check_ba (STORE /
+            // PHA CLK_INC). DebugCycle 2 is the tick that decrements to 1
+            // and performs that write (Wolf64 2799411 nS=$EF mS=$F0 when
+            // PHA cycle 2 was stolen on a badline).
+            if (nextCycle == 1 && (IsStoreOpcode(_opcode) || IsStackPushOpcode(_opcode)))
+                return false;
+
+            // VICE FETCH always calls check_ba, including implied DEY/INY
+            // (mainc64cpu.c FETCH_OPCODE). Treating only "read-sensitive"
+            // opcodes as stealable let DEY complete at RasterX 12 while native
+            // froze (Wolf64 sample 2031315 nPC=$EA0E mPC=$EA0F).
+            return true;
         }
+    }
+
+    /// <summary>
+    /// When true, the next <see cref="Tick"/> emits the VICE FETCH <c>CLK_INC</c>
+    /// delayed by BA steal (opcode PC) without decrementing <c>_cycle</c>.
+    /// </summary>
+    private bool _baDelayedFetchClk;
+
+    /// <summary>
+    /// VICE LD+GET_ABS: INC_PC runs after the GET_ABS CLK_INC with no extra
+    /// clock, so the last LDA abs CLK still exports the opcode PC (Wolf64
+    /// sample 2044614 nPC=$FF5E mPC=$FF61).
+    /// </summary>
+    private bool _holdAbsLoadOpcodeLastClk;
+    private bool _afterLdaAbsHold;
+    private bool _holdTakenBranchOpcodePc;
+    private bool _stolenTakenBranchAfterAbsY;
+    private bool _fetchAfterStolenB9Jump;
+    private bool _skipAbsLoadLastClkHold;
+    private bool _loadAEarlyAfterStagedBranch;
+    private bool _ldaSkippedLastClkHold;
+
+    /// <inheritdoc />
+    public void OnStolenCycle()
+    {
+        // VICE INC/DEC zp: INC_PC has no CLK. BA skip must not lose that;
+        // keep opcode PC until FETCH of the next insn (Wolf64 2093351 nPC=$F69F).
+        // Check this before branch-dummy returns so a sticky fallthrough flag
+        // cannot swallow the zp RMW notify.
+        if (IsZeroPageIncrementDecrementOpcode(_opcode) && _cycle > 0)
+        {
+            _zpRmwPcDeferredFromSteal = true;
+            _dummyTakenBneAfterStolenInc = true;
+            return;
+        }
+
+        // Extra FETCH CLK of a 3-CLK taken BNE is still VICE FETCH_OPCODE
+        // (opcode PC). check_ba delays that CLK; first unstall must not
+        // INC_PC yet (Wolf64 2050510 nPC=$FF61 mPC=$FF63). Dummy INC_PC is
+        // the following host cycle (6510dtvcore BRANCH after FETCH).
+        // Do not arm staged fallthrough for every stolen taken-BNE FETCH:
+        // baDelayed dummy at x=55 breaks the KERNAL wait loop (2053534
+        // nPC=$FF63) and skipping baDelayed dummy at x=55 is early vs
+        // Wolf64 4139087 (nPC=$A602 at x=55, nPC=$A604 at x=56).
+        if (_holdTakenBranchOpcodePc && _cycle >= 2)
+        {
+            _baDelayedFetchClk = true;
+            _holdTakenBranchOpcodePc = false;
+            _takenBranchStagedFallthrough = true;
+            _skipAbsLoadLastClkHold = true;
+            _loadAEarlyAfterStagedBranch = true;
+            return;
+        }
+
+        if (_holdTakenBranchOpcodePc)
+            return;
+
+        // LDA abs,Y then taken BNE: stolen FETCH is still VICE FETCH_OPCODE.
+        // First unstall keeps opcode PC (4139087 nPC=$A602 at x=55); next CLK
+        // is BRANCH dummy INC_PC (nPC=$A604 at x=56). Do not use this for
+        // LDA abs $AD (KERNAL $FF61 already dummies at x=55, 2053534).
+        if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && _cycle >= 2
+            && _previousOpcode == 0xB9)
+        {
+            _baDelayedFetchClk = true;
+            _takenBranchStagedFallthrough = true;
+            _stolenTakenBranchAfterAbsY = true;
+            return;
+        }
+
+        // Stolen taken BPL/BNE after INY/DEY: dummy INC_PC after unstall,
+        // then VICE JUMP has no CLK so that host tick already shows the
+        // target (Wolf64 4150680 nPC=$A5F9 after dummy $A5FF). Do not use
+        // baDelayed here: that dummies KERNAL $AD wait-loop at x=56
+        // (2053534 nPC=$FF63 at x=55). Unstalled INY/BNE still exports
+        // fall-through (no steal, this arm does not run).
+        if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && _cycle >= 2
+            && _previousOpcode is 0xC8 or 0x88)
+        {
+            _takenBranchStagedFallthrough = true;
+            _stolenTakenBranchAfterAbsY = true;
+            return;
+        }
+
+        // Further BA clocks on the same dummy must not latch delayed FETCH:
+        // that froze DebugCycle=2 at x=56 (Wolf64 2050511 nPC=$FF63).
+        if (_takenBranchStagedFallthrough)
+            return;
+
+        // STA abs write cycle stolen on a badline: after unstall, FETCH the
+        // following BEQ dummy (Wolf64 2520240 nPC=$E5D6 nS=$F3). Unstolen
+        // STA still samples IRQ before the next FETCH (2142523 nS=$F2).
+        if (_opcode == 0x8D && _cycle == 1)
+        {
+            _staAbsWriteCycleStolen = true;
+            return;
+        }
+
+        // LDA zp data-read stolen on a badline: GET_ZERO is not DO_INTERRUPT.
+        // After unstall, FETCH the following STA (Wolf64 3505560 nPC=$E5D1
+        // nS=$F3 vs mS=$F2 irqSeq).
+        if (_opcode == 0xA5 && _cycle == 1)
+        {
+            _ldaZpDataReadStolen = true;
+            return;
+        }
+
+        // STA zp apply remaining stolen on a badline: STORE CLK is not
+        // DO_INTERRUPT. After unstall, FETCH the following STA abs
+        // (Wolf64 3899688 nLastOp=$8D nS=$F3 vs mS=$F2 irqSeq).
+        // Cycle 0 last-CLK dwell is the same STORE (Wolf64 2717304).
+        if (_opcode == 0x85 && _cycle <= 1)
+        {
+            _staZpApplyStolen = true;
+            _skipIrqSampleAtNextFetch = true;
+            return;
+        }
+
+        // STA abs p2 FETCH frozen by mandatory BA: VICE check_ba loops CLK
+        // without an extra dummy. First unstall must run the FETCH.
+        if (_opcode == 0x8D)
+            return;
+
+        // Delay the next FETCH CLK without `--` so the first unstall still
+        // runs this micro-op (JSR STACK_PEEK at Wolf64 2018254; LDA/BPL tests).
+        if (_cycle > 0 && _interruptSequenceRemaining == 0)
+            _baDelayedFetchClk = true;
     }
 
     public bool CanForceStealCurrentCycle
@@ -103,8 +290,6 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         {
             if (_pendingDeferredNzUpdateAfterBranch ||
                 _bootstrapCycles > 0 ||
-                _pendingDeferredImmediateLoad ||
-                _pendingDeferredImpliedRegisterCompletion ||
                 _branchPageCrossExtraPending)
             {
                 return false;
@@ -116,12 +301,59 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 return _interruptSequenceRemaining is 6 or 2 or 1;
 
             if (_cycle == 0)
-                return _branchTargetFetchPending || _callTargetFetchPending;
+            {
+                // FETCH after taken-branch JUMP is check_ba / conditional BA
+                // (CanStealCurrentCycle). Must not be mandatory: RasterX 55 is
+                // IsCpuCycleStealMandatory while IsCpuCycleStolen is already
+                // false, and a sticky _branchTargetFetchPending would skip the
+                // target FETCH (Wolf64 2049502 nPC=$FF5E mPC=$FF63). Stealing
+                // the 2-CLK JUMP at RasterX 55 matches 4136566 and fails
+                // 2127622 (native already at the target).
+                return false;
+            }
 
             var nextCycle = _cycle - 1;
-            return _opcode == 0x20 && nextCycle == 3;
+            if (_opcode == 0x20)
+            {
+                return nextCycle == 3
+                    && !(IsBranchOpcode(_previousOpcode)
+                        && !IsBranchTaken(_previousOpcode));
+            }
+
+            // Extra after-LDA FETCH CLK (DebugCycle>=2) is force-stolen on BA
+            // including RasterX 55 lag (Wolf64 2050510 native still frozen).
+            // Dummy CLK (DebugCycle 1) is conditional only (Wolf64 2050006).
+            // STA abs p2 FETCH (DebugCycle 2/3) is VICE FETCH_OPCODE check_ba.
+            // CanSteal is false here (store nextCycle==1) so RasterX 12 still
+            // runs (2145723). Mandatory BA (x=13-54) must freeze via this
+            // force-steal (Wolf64 2520240). Cycle 1 is the write: no check_ba.
+            return (IsBranchOpcode(_opcode) && _cycle > 2)
+                || (_opcode == 0x8D && _cycle > 1);
         }
     }
+
+    /// <inheritdoc />
+    public bool NotifyOnStolenCycle =>
+        _holdTakenBranchOpcodePc
+        || _takenBranchStagedFallthrough
+        || (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && _cycle > 1
+            && _previousOpcode == 0xB9)
+        || (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && _cycle > 1
+            && _previousOpcode is 0xC8 or 0x88)
+        || (IsZeroPageIncrementDecrementOpcode(_opcode) && _cycle > 0)
+        || (_opcode == 0x8D && _cycle == 1)
+        || (_opcode == 0xA5 && _cycle == 1)
+        || (_opcode == 0x85 && _cycle <= 1);
+
+    private bool _staAbsWriteCycleStolen;
+    private bool _ldaZpDataReadStolen;
+    private bool _staZpApplyStolen;
+    /// <summary>
+    /// VICE STORE/GET_ZERO on a stolen write/data-read is not DO_INTERRUPT.
+    /// The following FETCH must run (wait-loop BEQ dummy, STA zp, STA abs)
+    /// instead of sampling IRQ (Wolf64 2520240 / 3505560 / 3899688).
+    /// </summary>
+    private bool _skipIrqSampleAtNextFetch;
 
     /// <summary>
     /// Arms the IRQ dispatch sequence (TR-LOCKSTEP-VSF-001). Mirrors VICE's
@@ -142,12 +374,19 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         if ((P & 0x04) != 0 || _interruptSequenceRemaining > 0)
             return;
 
+        var visiblePcAtBoundary = _visiblePC;
         _interruptSequenceRemaining = 6;
         _interruptReturnPc = _pc;
         // The interrupted PC stays visible through the whole sequence (VICE
         // keeps exporting reg_pc until the JUMP after the vector fetch).
+        // A taken branch can arm IRQ on its final dummy-clock checkpoint. VICE
+        // has not executed the no-clock JUMP at that exported checkpoint yet,
+        // so preserve whichever PC the branch path made bus-visible. The return
+        // PC is still the already-computed branch target (Wolf64 sample 14954).
         _instructionPC = _interruptReturnPc;
-        _visiblePC = _interruptReturnPc;
+        _visiblePC = _branchIrqArmingDummy
+            ? visiblePcAtBoundary
+            : _interruptReturnPc;
     }
 
     public void Nmi()
@@ -261,7 +500,25 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     /// </summary>
     private bool _interruptSampleDespiteSuppress;
     private bool _stagedMemoryReadCompleted;
+    /// <summary>
+    /// True when the staged load destination was written before the VICE
+    /// data-read CLK checkpoint. LD applies N/Z and INC_PC immediately after
+    /// that checkpoint, before the next exported clock.
+    /// </summary>
+    private bool _stagedLoadRegisterVisibleAtReadCheckpoint;
     private bool _delayNextFetch;
+    /// <summary>
+    /// After RTS JUMP (no CLK), VICE DO_INTERRUPT runs before FETCH of the
+    /// return insn. Sample IRQ on the next host tick, not on the JUMP tick
+    /// (Wolf64 2093250) and not after the return insn completes (2109682).
+    /// </summary>
+    private bool _sampleIrqBeforeNextFetch;
+    /// <summary>
+    /// Taken-branch JUMP has no VICE CLK. The next host tick is DO_INTERRUPT
+    /// before target FETCH; Irq() on that tick is the first dummy (seq=6) and
+    /// must not also ExecuteInterruptSequenceCycle (Wolf64 2175365).
+    /// </summary>
+    private bool _branchIrqArmingDummy;
     private bool _stagedNzUpdate;
     private byte _stagedNzValue;
     private bool _stagedCarryUpdate;
@@ -285,11 +542,40 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     /// </summary>
     private bool _afterShortTakenBranchLag;
     /// <summary>
+    /// After BA-skip zp INC, VICE GET_ZERO of the following LDA zp is visible
+    /// on that LDA's first host tick (Wolf64 2129136 nA=$27 mA=$77).
+    /// </summary>
+    private bool _fuseLdaZpAfterStolenInc;
+    /// <summary>
+    /// CMP zp after that LDA: VICE CP GET_ZERO+INC_PC is visible on DebugCycle 1
+    /// (Wolf64 2129140 nPC=$E6BF nP=$31).
+    /// </summary>
+    private bool _fuseCmpZpAfterStolenIncLda;
+    /// <summary>
+    /// After that fused CMP, VICE BRANCH dummy INC_PC is the first host tick
+    /// (Wolf64 2129142 nPC=$E6C1). Sticky non-overlapped from the INC steal
+    /// must not add a full-length extra FETCH CLK.
+    /// </summary>
+    private bool _overlapNextTakenBranchDummy;
+    /// <summary>
+    /// Overlapped FETCH already consumed the first BRANCH CLK, so a page-cross
+    /// must not add another un-fixed-PC tick after JUMP (Wolf64 2129144
+    /// nPC=$E700 mPC=$E6C1).
+    /// </summary>
+    private bool _skipBranchPageCrossExtra;
+    /// <summary>
+    /// BA-skip zp INC already INC_PC'd; FETCH of the following taken BNE is
+    /// VICE dummy INC_PC (Wolf64 2093352 nPC=$F6A1). Unstalled INC that
+    /// already showed next-PC does not dummy-export (Wolf64 2142574 nPC=$F69F).
+    /// </summary>
+    private bool _dummyTakenBneAfterStolenInc;
+    /// <summary>
     /// VICE last_opcode_info DELAYS_INTERRUPT: set when a taken branch did not
     /// cross a page (6510dtvcore.c BRANCH else of PBC). Cleared at the next
     /// opcode fetch (SET_LAST_OPCODE of the following instruction).
     /// </summary>
     private bool _lastOpcodeDelaysInterrupt;
+    private bool _lastOpcodeEnablesIrq;
     /// <summary>
     /// After a full-length taken branch (and its non-overlapped JSR), the next
     /// instruction also lacks first-FETCH overlap until phase re-couples.
@@ -309,15 +595,42 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     private bool _deferZpRmwPcAdvanceOne;
     /// <summary>JSR following that deferred zp RMW has a clean first FETCH.</summary>
     private bool _nextJsrNonOverlapped;
+    /// <summary>
+    /// INC zp cycle 2 still opcode PC (trail 0). Following INY last FETCH CLK
+    /// keeps pre-op Y (Wolf64 4147669). INC cycle 2 already at next-PC fuses
+    /// INY (4134618).
+    /// </summary>
+    private bool _inySoftAfterHeldInc;
     private bool _callTargetFetchPending;
-    private bool _deferImmediateLoadAfterBranch;
+    private bool _callTargetFetchNonOverlapped;
+
     private bool _deferImpliedRegisterCompletionAfterBranch;
     private bool _deferAbsoluteXLoadCompletionAfterBranch;
     private bool _deferAbsoluteYLoadCompletionAfterBranch;
+    /// <summary>
+    /// Stolen same-page taken BPL JUMP has no CLK. The following INY then
+    /// LDA abs,Y GET_ABS_Y commits A on the data-read CLK (Wolf64 4150686
+    /// nA=$4E mA=$4F). Do not use trail>=1/implied-previous (4138196).
+    /// </summary>
+    private bool _fuseAbsYAfterStolenSamePageBranch;
+    /// <summary>
+    /// STA abs,Y after a full-length taken branch already exported next-PC.
+    /// VICE DEC/INC zp GET_ZERO still holds opcode PC (Wolf64 4154106).
+    /// Do not hold every $99 trail>=1 (2125150 nPC already opcode+2).
+    /// </summary>
+    private bool _holdZpIncDecAfterStaAbsY;
     private bool _deferJsrPushAfterBranch;
     private bool _deferIndirectYLoadCompletionAfterBranch;
+    /// <summary>
+    /// VICE INT_IND_Y_R extra CLK when pointer-low+Y page-crosses.
+    /// </summary>
+    private bool _indyPageCrossedThisInsn;
     private bool _deferZeroPageRmwPcAdvanceAfterBranch;
     private bool _deferNextIndirectYLoadAfterBranchRmw;
+    /// <summary>
+    /// BA skipped the zp INC/DEC cycle-2 INC_PC. Apply before FETCH of the next opcode.
+    /// </summary>
+    private bool _zpRmwPcDeferredFromSteal;
     private bool _deferIndexedStorePcAdvanceAfterBranch;
     private bool _deferZeroPageIndexedStorePcAdvanceAfterBranch;
     /// <summary>
@@ -327,14 +640,20 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     /// </summary>
     private bool _zpRmwModifyCommitted;
     /// <summary>
-    /// RTS first FETCH was overlapped with the previous instruction's last
-    /// host-visible sample (VICE fuses post-body work with the next FETCH's
-    /// first CLK_INC). Host-visible PULL schedule shifts one remaining-cycle
-    /// earlier so S matches xvic mid-RTS (c=518540 after LDY #).
+    /// Last CLK of an implied flag op (CLC/CLI/SEC/SEI/...) already exported
+    /// next-PC through the host PC getter. Wolf64 2407215: CLC at $E5C8 last
+    /// CLK shows $E5C9 so RTS FETCH is overlapped. Visible-PC trail can stay 0
+    /// because _visiblePC lagged at the CLC opcode. Not a blanket previous-flag
+    /// key (that pulled RTS early at 2103097).
     /// </summary>
-    private bool _rtsOverlappedFirstFetch;
+    private bool _impliedFlagLastClkExportedNextPc;
     /// <summary>Opcode of the instruction that just finished (for RTS phase).</summary>
     private byte _previousOpcode;
+    /// <summary>
+    /// PLA pulled A pending NZ/PC application after the PULL CLK and before the
+    /// next opcode's first FETCH CLK.
+    /// </summary>
+    private bool _pendingPlaCompletion;
     /// <summary>
     /// PLP pulled status byte pending apply after the PULL CLK (VICE PLP:
     /// LOCAL_SET_STATUS after CLK_INC on the pull).
@@ -351,19 +670,6 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     private byte _softDeferredBitValue;
     /// <summary>Next instruction fetch follows RTS delayNextFetch (phase for BIT).</summary>
     private bool _fetchAfterRtsDelay;
-    /// <summary>PLA after soft BIT: delay PULL one host CLK to match VICE STACK_PEEK.</summary>
-    private bool _plaDeferPullOne;
-    /// <summary>
-    /// Soft-BIT phase: after the extra STACK_PEEK hold, perform PULL on the next
-    /// host CLK with PC still at the opcode (VICE PLA: PULL + CLK_INC, then
-    /// LOCAL_SET_NZ + INC_PC after that sample; c=522470 nPC=$EB18 mPC=$EB19).
-    /// </summary>
-    private bool _plaLatePullPending;
-    /// <summary>
-    /// RTI after soft-deferred body: one extra STACK_PEEK CLK before first PULL
-    /// (c=522485 nS=$EB mS=$EC when managed pulled status early).
-    /// </summary>
-    private bool _rtiDeferFirstPullOne;
     /// <summary>
     /// CMP zp/zx (and CPX/CPY zp) after clean taken-branch fetch: soft-defer body
     /// so final CLK keeps pre-op P/PC (c=532264 nPC=$E8FE mPC=$E900 nP=$20 mP=$21).
@@ -377,6 +683,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     private bool _softDeferJmpAbs;
     private ushort _pendingJmpTarget;
     /// <summary>
+    /// The current instruction is the target reached when a soft-deferred JMP
+    /// applied its unclocked JUMP immediately before this instruction's FETCH.
+    /// Preserve that distinct VICE source phase through the target body only.
+    /// </summary>
+    private bool _targetInstructionFollowsSoftDeferredJmp;
+    /// <summary>
     /// Taken branch with multi-cycle host budget (full-length and/or after-branch
     /// lag): export fall-through PC at cycle 1 to match VICE INC_PC+dummy before
     /// JUMP (c=540201 nPC=$D92B mPC=$D929 on BPL).
@@ -389,18 +701,50 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     /// arm sticky across unrelated later CMP# (c=518756).
     /// </summary>
     private bool _skipSoftImmAfterStagedTakenBranch;
+    /// <summary>
+    /// VICE ST(SET_ABS) followed by a full staged taken branch has already
+    /// exported the dummy clock before its target JUMP. A target immediate LD
+    /// therefore completes on its second FETCH checkpoint (Wolf64 119344).
+    /// </summary>
+    private bool _skipImmediateLoadAfterAbsoluteStoreBranch;
     private bool _applySkipSoftImmThisInsn;
+    /// <summary>
+    /// A branch whose immediate predecessor owns the JUMP checkpoint reaches
+    /// its target on the following FETCH. Latch that source phase onto
+    /// exactly the target instruction so zero-page ST keeps GET_ZERO PC timing.
+    /// </summary>
+    private bool _deferredBranchJumpTargetFetch;
+    private bool _targetInstructionFollowsDeferredBranchJump;
     /// <summary>
     /// After fused LDA (zp),Y then fused INY/TAX chain in nonOvl, keep fusing
     /// implied ops until a non-implied is fetched (c=541175 INY, c=541177 TAX).
     /// </summary>
     private bool _fuseImpliedAfterIndyLoad;
     /// <summary>
+    /// STA/STX/STY after fused implied (ROL A / INY): VICE ST INC_PC is already
+    /// visible on the write sample (Wolf64 2405849 nPC=$EADA). Latched at FETCH
+    /// before the implied-fuse chain is cleared.
+    /// </summary>
+    private bool _advanceStorePcAfterFusedImplied;
+    /// <summary>
+    /// LDA (zp),Y last CLK already INC_PC when previous exported next-PC
+    /// (Wolf64 2406426 nPC=$EAB9). Latched at FETCH.
+    /// </summary>
+    private bool _fuseIndyLoadLastClkPc;
+    /// <summary>
     /// After fused LDA zp following a taken branch, the next not-taken branch's
     /// non-load imm fuses (c=541202 EOR#). Must not fire on plain BCC then CMP#
     /// (c=518756 nPC=opcode mPC advanced when over-fused).
     /// </summary>
     private bool _fuseNonLoadImmAfterLoadBranch;
+    /// <summary>
+    /// VICE can execute a two-byte non-load immediate body in the FETCH phase
+    /// already exposed by a fused implied predecessor. Preserve that source-order
+    /// phase through exactly one following branch so its fall-through instruction
+    /// does not manufacture another FETCH checkpoint.
+    /// </summary>
+    private bool _fusedNonLoadImmediateConsumedFetch;
+    private bool _branchFollowsFusedNonLoadImmediate;
 
     /// <summary>
     /// After a short taken branch, NOP's final host sample must still export the
@@ -418,18 +762,33 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     private bool _indexedStorePcAdvanceWasDeferred;
     private bool _indexedLoadPageCrossDelayConsumed;
     private bool _pendingDeferredNzUpdateAfterBranch;
-    private bool _pendingDeferredImmediateLoad;
     /// <summary>
     /// Soft deferred immediate: apply A/X/Y at the start of the next instruction
     /// fetch without consuming an extra host-visible cycle (non-overlapped phase).
     /// </summary>
     private bool _softDeferredImmediateLoad;
     /// <summary>
-    /// After non-overlapped LDA #, the following STA (zp),Y must keep the opcode
-    /// PC for one extra host CLK before AdvanceVisiblePc (VICE: 2 FETCH at start,
-    /// then INC_PC before INT_IND_Y_W body CLKs).
+    /// True only for a JSR fetched on the same host tick that an immediate load
+    /// completes its unclocked LD body.
     /// </summary>
-    private bool _holdIndYStorePcOneCycle;
+    private bool _jsrFollowsSoftDeferredImmediateLoad;
+    /// <summary>
+    /// The current immediate load was fetched on the tick that a soft-deferred
+    /// implied body completed, so its second FETCH clock remains distinct.
+    /// </summary>
+    private bool _immediateLoadFollowsSoftDeferredBody;
+    /// <summary>
+    /// The preceding immediate load completed on its current FETCH checkpoint
+    /// instead of creating a distinct second-fetch phase. Consecutive immediate
+    /// loads inherit that VICE source ordering.
+    /// </summary>
+    private bool _immediateLoadCompletedWithoutDistinctFetch;
+    /// <summary>
+    /// After the held STA (zp),Y path, a following INY/DEY must keep its
+    /// opcode PC and pre-operation register value on the final host sample.
+    /// The implied operation commits during the following fetch.
+    /// </summary>
+    private bool _softDeferImpliedAfterHeldIndYStore;
     /// <summary>
     /// After that STA path, following CMP (zp),Y must export old flags + opcode PC
     /// on its final CLK (VICE CP applies flags/INC_PC after the last CLK sample).
@@ -440,6 +799,11 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     private byte _softDeferredImpliedOpcode;
     private ushort _softDeferredImpliedInstructionPc;
     private bool _pendingDeferredImpliedRegisterCompletion;
+    /// <summary>
+    /// A not-taken branch may fetch a fall-through RTS inside the branch body.
+    /// That prefetch does not make the branch's prior opcode an RTS overlap.
+    /// </summary>
+    private bool _rtsPrefetchedByNotTakenBranch;
     private ushort _stagedReturnAddress;
     private ushort _effectiveAddress;
     private byte _fetched;
@@ -454,6 +818,8 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         // simple increment here counts executed cycles only, independently of the shared
         // system clock and of any other CPU in the rig.
         _executedCycles++;
+        ConsumedViceClockThisTick = true;
+        ViceClocksThisTick = 1;
 
         // Track host-visible PC dwell after every path (staged handlers return early).
         try
@@ -467,24 +833,103 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 _currentInsnTrailingAtNextPc++;
                 _trailingCyclesAtNextPc = _currentInsnTrailingAtNextPc;
             }
+
+            if (_cycle == 0 && IsImpliedFlagOpcode(_opcode))
+            {
+                var exported = !_suppressBootstrapBoundary ? _pc : _visiblePC;
+                _impliedFlagLastClkExportedNextPc = exported != _opcodeAddress;
+            }
+            else if (_cycle == 0)
+            {
+                _impliedFlagLastClkExportedNextPc = false;
+            }
         }
     }
 
     private void TickCore()
     {
+        var completedImmediateLoadBeforeFetch = false;
         var fetchingBranchTarget = false;
-        var fetchingCallTarget = false;
+        var fetchingNonOverlappedCallTarget = false;
         if (_suppressBootstrapBoundary)
         {
             fetchingBranchTarget = _branchTargetFetchPending;
-            fetchingCallTarget = _callTargetFetchPending;
-            _branchTargetFetchPending = false;
-            _callTargetFetchPending = false;
+            fetchingNonOverlappedCallTarget =
+                _callTargetFetchPending && _callTargetFetchNonOverlapped;
             _suppressBootstrapBoundary = false;
+            // RTS/taken-branch JUMP delayNextFetch tick must not drop the
+            // pending target FETCH (Wolf64 2122119 BPL after BNE).
+            if (!_delayNextFetch)
+            {
+                _branchTargetFetchPending = false;
+                _callTargetFetchPending = false;
+                _callTargetFetchNonOverlapped = false;
+            }
+        }
+
+        if (_fetchAfterStolenB9Jump)
+        {
+            // JUMP tick already exported fall-through. This host tick is
+            // FETCH of the target (Wolf64 4139089 nPC=$A5B8). Do not consume
+            // a leftover page-cross extra CLK: that set tgtPend and returned
+            // without FETCHing.
+            _fetchAfterStolenB9Jump = false;
+            _baDelayedFetchClk = false;
+            _delayNextFetch = false;
+            _branchPageCrossExtraPending = false;
+            _cycle = 0;
         }
 
         // One-tick post-JSR IRQ sample window ends before this tick's FETCH.
         _interruptSampleDespiteSuppress = false;
+
+        if (_baDelayedFetchClk && _cycle > 0)
+        {
+            // Consume the delayed FETCH CLK_INC only while the branch is still
+            // in its operand-fetch phase. If it were consumed on the first
+            // unstalled raster X of a steal burst, dummy/fall-through ran one
+            // CLK too soon vs VICE (c=2029945).
+            _baDelayedFetchClk = false;
+            _visiblePC = _instructionPC;
+            _suppressBootstrapBoundary = true;
+            return;
+        }
+
+        if (_sampleIrqBeforeNextFetch)
+        {
+            _sampleIrqBeforeNextFetch = false;
+            var interruptWasInactive = _interruptSequenceRemaining == 0;
+            TrySampleInterruptBeforeFetch?.Invoke();
+            if (interruptWasInactive && _interruptSequenceRemaining > 0 && !_branchIrqArmingDummy)
+            {
+                // Ordinary pre-FETCH entry reaches this checkpoint after VICE's
+                // second LOAD_DUMMY CLK_INC. The following host clock therefore
+                // starts with PUSH PCH (sequence state 5). A taken-branch JUMP
+                // uses the separate path below because its JUMP has no CLK and
+                // has not yet exported the first dummy checkpoint.
+                if (!(_afterFullLengthTakenBranch || _afterShortTakenBranchLag))
+                    _interruptSequenceRemaining = 5;
+                return;
+            }
+            if (_branchIrqArmingDummy)
+            {
+                _branchIrqArmingDummy = false;
+                if (_interruptSequenceRemaining > 0)
+                {
+                    // JUMP tick already armed IRQ (seq=6) without executing the
+                    // first dummy. The no-clock branch JUMP becomes visible on
+                    // this first IRQ dummy checkpoint, then the push lands on
+                    // the same host tick native drops S (Wolf64 14955/2224633).
+                    _instructionPC = _interruptReturnPc;
+                    _visiblePC = _interruptReturnPc;
+                    // This checkpoint is the first of VICE's two IRQ dummy
+                    // reads. Keep sequence state at 6 so the normal case-6
+                    // cycle performs the second dummy before PCH is pushed.
+                    Read(_interruptReturnPc);
+                    return;
+                }
+            }
+        }
 
         if (_interruptSequenceRemaining > 0)
         {
@@ -522,6 +967,13 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             // Following fetch is phase-coupled like a clean first FETCH for BIT
             // host-sample count (c=522467 held late after RTS return).
             _fetchAfterRtsDelay = true;
+            // VICE RTS/IRQ JUMP has no CLK; DO_INTERRUPT is paired with the
+            // next FETCH. This host tick only exports the jump PC.
+            // Sampling IRQ here stole LDA #$20 (Wolf64 2093250). The following
+            // tick samples before FETCH (Wolf64 2109682 TYA).
+            _sampleIrqBeforeNextFetch = true;
+            _suppressBootstrapBoundary = true;
+            ConsumedViceClockThisTick = false;
             return;
         }
 
@@ -532,26 +984,66 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             return;
         }
 
-        if (_pendingDeferredImmediateLoad)
-        {
-            CompleteDeferredImmediateLoad();
-            // Pending-deferred imm ends on its own host tick (no fused FETCH).
-            // VICE DO_INTERRUPT runs before the next insn FETCH — open the
-            // post-tick SystemClock sample (NTSC c=520829 after branch+LDA#).
-            // Soft-fused path still suppresses (c=522261).
-            _suppressBootstrapBoundary = false;
-            _interruptSampleDespiteSuppress = true;
-            return;
-        }
-
         if (_pendingDeferredImpliedRegisterCompletion)
         {
             CompleteDeferredImpliedRegisterCompletion();
             return;
         }
 
+        // VICE completes PLA/PLP post-pull work without a CLK, then continues
+        // directly into DO_INTERRUPT and the next FETCH_OPCODE. Apply that work
+        // before the instruction-boundary block and do not create a host sample.
+        if (_pendingPlaCompletion)
+        {
+            _pendingPlaCompletion = false;
+            UpdateNZ(A);
+            _pc = (ushort)(_instructionPC + 1);
+            _visiblePC = _pc;
+            _nonOverlappedFetchPhase = true;
+        }
+
+        if (_pendingPlpStatus)
+        {
+            _pendingPlpStatus = false;
+            P = (byte)(_fetched | 0x20);
+            _pc = (ushort)(_instructionPC + 1);
+            _visiblePC = _pc;
+            _nonOverlappedFetchPhase = true;
+        }
+
         if (_cycle == 0)
         {
+            if (_zpRmwPcDeferredFromSteal
+                || (IsZeroPageIncrementDecrementOpcode(_opcode)
+                    && _instructionExecuted
+                    && _visiblePC == _opcodeAddress))
+            {
+                // VICE INC_PC(2) once. If visible PC is still the INC opcode,
+                // step to opcode+2. If dummy/store already exported next-PC
+                // (KERNAL INC $A2 at $F69D shows $F69F), do not add 2 again
+                // (that skipped BNE $F69F and landed on INC $A1; Wolf64
+                // 2093353 nPC=$F6A7 SEC vs mPC=$F6A1 E6).
+                var afterBaSkip = _zpRmwPcDeferredFromSteal;
+                if (_visiblePC == _opcodeAddress)
+                    _pc = (ushort)(_opcodeAddress + 2);
+                else
+                    _pc = _visiblePC;
+                _visiblePC = _pc;
+                _zpRmwPcDeferredFromSteal = false;
+                if (afterBaSkip)
+                {
+                    // Following FETCH is VICE FETCH_OPCODE (not overlapped
+                    // with INC's last CLK). Taken BNE then gets the dummy
+                    // CLK (Wolf64 2093352 nPC=$F6A1 vs mPC=$F69F).
+                    _nonOverlappedFetchPhase = true;
+                    _nonOverlappedRegion = true;
+                    // LDA zp after that INC: GET_ZERO is already visible on
+                    // the first host tick (Wolf64 2129136 nA=$27).
+                    _fuseLdaZpAfterStolenInc = true;
+                    _dummyTakenBneAfterStolenInc = true;
+                }
+            }
+
             // Instruction boundary: the previous instruction has fully executed.
             // Publish it (opcode + post-execution registers) for diagnostic / pacing
             // subscribers. Gated on a live subscriber so an unobserved run pays only
@@ -566,11 +1058,15 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
             // Soft-deferred JMP abs: apply JUMP before fetching the target insn.
             // Target's first FETCH is clean (c=539733 INX nX/nPC lag without this).
+            // Clear the one-instruction provenance at every boundary, then set it
+            // only when this FETCH is reached by the deferred unclocked JUMP.
+            _targetInstructionFollowsSoftDeferredJmp = false;
             if (_pendingJmpTarget != 0 && !_softDeferJmpAbs)
             {
                 _pc = _pendingJmpTarget;
                 _pendingJmpTarget = 0;
                 _nonOverlappedFetchPhase = true;
+                _targetInstructionFollowsSoftDeferredJmp = true;
             }
 
             // Soft-deferred immediate from previous insn: commit A/X/Y while
@@ -579,7 +1075,9 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             {
                 CompleteDeferredImmediateLoad();
                 _softDeferredImmediateLoad = false;
-                // Keep _holdIndYStorePcOneCycle for the following STA (zp),Y.
+                // LD performs its register/flag updates and INC_PC after GET_IMM's
+                // final CLK. Preserve that source phase for the opcode fetched below.
+                completedImmediateLoadBeforeFetch = true;
                 // VICE DO_INTERRUPT before next FETCH. Soft-deferred imm commits
                 // on the same host tick as that FETCH — sample IRQ first
                 // (NTSC c=520829). If IRQ arms, skip FETCH this tick.
@@ -625,11 +1123,6 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 _softDeferredImpliedOp = false;
                 // Following insn has a clean first FETCH (same as afterSoftCompare).
                 afterSoftBody = true;
-                // Stack-pull ops after soft-deferred body (PLA after BIT/TAY,
-                // RTI after PLA chain): VICE still on STACK_PEEK when managed
-                // would pull early. Flags only consumed by PLA/RTI.
-                _plaDeferPullOne = true;
-                _rtiDeferFirstPullOne = true;
             }
 
             // Soft-deferred CMP: apply C/NZ after VICE's last-CLK sample.
@@ -680,23 +1173,81 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             _trailingCyclesAtNextPc = 0;
             _currentInsnTrailingAtNextPc = 0;
 
-            // Preserve prior opcode before overwrite (RTS overlap phase uses it).
+            // VICE DO_INTERRUPT before every FETCH (6510dtvcore mainloop).
+            // DELAYS only raises the irq_delay threshold (+1), it does not
+            // skip the check. Sampling only when DELAYS is set let BPL after
+            // LDA abs,Y run and JUMP before IRQ (Wolf64 4146007 nS=$F8
+            // nPC=$A5FD nLastOp=$B9 vs mPC=$A5F9 irqSeq=6). Stolen STA/LDA
+            // zp STORE/GET_ZERO is not that boundary (2520240 / 3505560 /
+            // 3899688): FETCH the following insn instead.
+            if (!_skipIrqSampleAtNextFetch)
+            {
+                TrySampleInterruptBeforeFetch?.Invoke();
+                if (_interruptSequenceRemaining > 0)
+                    return;
+            }
+            _skipIrqSampleAtNextFetch = false;
+
+            // Preserve the prior opcode for instruction-entry phase classification.
             _previousOpcode = _opcode;
             _opcode = Read(_pc++);
+            _immediateLoadFollowsSoftDeferredBody =
+                afterSoftBody && IsImmediateLoadOpcode(_opcode);
+            _jsrFollowsSoftDeferredImmediateLoad =
+                completedImmediateLoadBeforeFetch && _opcode == 0x20;
+            if (_softDeferImpliedAfterHeldIndYStore
+                && _opcode != 0xC8
+                && _opcode != 0x88)
+            {
+                _softDeferImpliedAfterHeldIndYStore = false;
+            }
+            _advanceStorePcAfterFusedImplied = IsStoreOpcode(_opcode)
+                && IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+                && (_fuseImpliedAfterIndyLoad || priorTrailingAtNextPc >= 1);
+            // Staged stores return before the generic cycle-0 chain cleanup.
+            // Preserve their entry phase above, then end the prior implied chain.
+            if (IsStoreOpcode(_opcode))
+                _fuseImpliedAfterIndyLoad = false;
+            if (_fuseLdaZpAfterStolenInc)
+            {
+                if (_opcode == 0xA5)
+                {
+                    A = Read(ReadZeroPageOperand());
+                    _fuseCmpZpAfterStolenIncLda = true;
+                }
+                else
+                    _fuseLdaZpAfterStolenInc = false;
+            }
+
+            if (_dummyTakenBneAfterStolenInc
+                && !(IsBranchOpcode(_opcode) && IsBranchTaken(_opcode)))
+                _dummyTakenBneAfterStolenInc = false;
             // VICE SET_LAST_OPCODE of this insn replaces prior DELAYS_INTERRUPT
-            // (only taken same-page BRANCH sets it again on JUMP).
+            // and ENABLES_IRQ (only taken same-page BRANCH sets delay again on JUMP).
             _lastOpcodeDelaysInterrupt = false;
-            // One-instruction skip-soft-imm window: latch at fetch, always clear
-            // the arm so staged cycle-0 paths (branch JUMP) cannot leave it sticky
-            // for a later CMP# far from the staged JUMP (c=518756 over-fuse).
-            _applySkipSoftImmThisInsn = _skipSoftImmAfterStagedTakenBranch
-                && IsTwoByteImmediateOpcode(_opcode)
-                && !IsImmediateLoadOpcode(_opcode);
+            _lastOpcodeEnablesIrq = false;
+            // One-instruction skip-soft-imm windows latch at the target fetch
+            // after a staged branch JUMP, then always clear so cycle-0 handlers
+            // cannot leave either arm sticky across unrelated immediate bodies.
+            var skipImmediateLoadAfterFusedImmediateBranch =
+                _branchFollowsFusedNonLoadImmediate
+                && IsBranchOpcode(_previousOpcode)
+                && !IsBranchTaken(_previousOpcode)
+                && IsImmediateLoadOpcode(_opcode);
+            _applySkipSoftImmThisInsn =
+                (_skipSoftImmAfterStagedTakenBranch
+                    && IsTwoByteImmediateOpcode(_opcode)
+                    && !IsImmediateLoadOpcode(_opcode))
+                || ((_skipImmediateLoadAfterAbsoluteStoreBranch
+                        || skipImmediateLoadAfterFusedImmediateBranch)
+                    && IsImmediateLoadOpcode(_opcode));
+            _branchFollowsFusedNonLoadImmediate =
+                IsBranchOpcode(_opcode) && _fusedNonLoadImmediateConsumedFetch;
+            _fusedNonLoadImmediateConsumedFetch = false;
             _skipSoftImmAfterStagedTakenBranch = false;
-            // holdIndY is only for the instruction immediately after a soft-deferred
-            // load/implied; clear if this fetch is not STA (zp),Y (c=519327 false hold).
-            if (_opcode != 0x91)
-                _holdIndYStorePcOneCycle = false;
+            _skipImmediateLoadAfterAbsoluteStoreBranch = false;
+            _targetInstructionFollowsDeferredBranchJump = _deferredBranchJumpTargetFetch;
+            _deferredBranchJumpTargetFetch = false;
             // deferZpRmwPcAdvanceOne is only for the zp INC/DEC immediately after a
             // not-taken branch clean FETCH; sticky flag delayed INC NZ/PC by one
             // cycle far from any branch (c=522317 nP=$25 mP=$27 nPC advanced).
@@ -722,57 +1273,115 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             // Skip hold when priorTrailing>=3: VICE already exports fall-through
             // on that final CLK (c=540321 nPC=$D92B mPC=opcode with hold).
             // Skip hold after fused INY/TAX chain (c=541179) or fused LDA zp
-            // after taken branch with trail 1-2 (c=541200 BCC). Keep hold when
-            // trail==0 after load (c=518764 nPC=opcode mPC=fall-through).
+            // after taken branch with trail 1-2 (c=541200 BCC). After fused
+            // STX zp trail 1-2, not-taken BCC last CLK already INC_PC
+            // (Wolf64 4134474 nPC=$A496). Keep hold when trail==0 after load
+            // (c=518764 nPC=opcode mPC=fall-through).
             // Arm one-shot non-load-imm fuse only for the IMMEDIATELY following
             // insn after that BCC (c=541202 EOR#). Clear otherwise so a later
             // CMP# after a different BCC does not over-fuse (c=518756).
             // Also after CMP abs (c=559294 BNE nPC=fall-through mPC=opcode).
             var skipHoldAfterFusedLoad = (IsLoadOpcode(_previousOpcode)
                     || IsStagedCompareOpcode(_previousOpcode)
-                    || IsUnstagedAbsoluteCompareOpcode(_previousOpcode))
+                    || IsUnstagedAbsoluteCompareOpcode(_previousOpcode)
+                    || IsZeroPageCompareOpcode(_previousOpcode)
+                    || IsStoreOpcode(_previousOpcode)
+                    || _previousOpcode is 0x2C or 0x24
+                    || (IsTwoByteImmediateOpcode(_previousOpcode)
+                        && !IsImmediateLoadOpcode(_previousOpcode)))
                 && priorTrailingAtNextPc is 1 or 2;
             if (_fuseNonLoadImmAfterLoadBranch
-                && !(IsTwoByteImmediateOpcode(_opcode) && !IsImmediateLoadOpcode(_opcode)))
+                && !(IsTwoByteImmediateOpcode(_opcode) && !IsImmediateLoadOpcode(_opcode))
+                && !IsBranchOpcode(_opcode))
                 _fuseNonLoadImmAfterLoadBranch = false;
             if (IsBranchOpcode(_opcode) && skipHoldAfterFusedLoad)
                 _fuseNonLoadImmAfterLoadBranch = true;
+            // After taken BNE, VICE not-taken BPL last CLK already INC_PC
+            // (Wolf64 2122119 nPC=$B92B mPC=$B929). The RTS/JMP delay tick
+            // can consume _branchTargetFetchPending before this FETCH, so
+            // previous-branch is the reliable skip.
+            var skipHoldAfterTakenBranch = IsBranchOpcode(_previousOpcode);
+            // After SBC abs,Y page-cross last-CLK hold, VICE not-taken BEQ
+            // still exports opcode PC (Wolf64 4147654 nPC=$A5BF). Sticky
+            // fuseImplied from an earlier INY must not skip that hold.
             _notTakenBranchHoldFinalPc = IsBranchOpcode(_opcode) && cleanBranchFetch
                 && priorTrailingAtNextPc < 3
-                && !_fuseImpliedAfterIndyLoad
-                && !skipHoldAfterFusedLoad;
+                && !(_fuseImpliedAfterIndyLoad && !IsAbsoluteAluOpcode(_previousOpcode))
+                && !skipHoldAfterFusedLoad
+                && !skipHoldAfterTakenBranch;
             // Full-length taken branch when previous left 2 trailing dwells at next
             // PC (zp INC deferred), or when soft-deferred CMP just committed so
             // the first FETCH of this branch is not overlapped (cycle 5034).
-            if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && cleanBranchFetch)
+            // Fused CMP after stolen INC already overlapped FETCH1: this host
+            // tick is VICE dummy INC_PC (Wolf64 2129142 nPC=$E6C1). Do not add
+            // a full-length extra FETCH from sticky non-overlapped.
+            var overlapTakenBranchDummy = _overlapNextTakenBranchDummy;
+            _overlapNextTakenBranchDummy = false;
+            if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && overlapTakenBranchDummy)
+            {
+                var fallThrough = (ushort)(_opcodeAddress + 2);
+                _pc = fallThrough;
+                _visiblePC = fallThrough;
+                _skipBranchPageCrossExtra = true;
+            }
+            else if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode)
+                && _dummyTakenBneAfterStolenInc)
+            {
+                // BA-skip INC: FETCH of BNE is VICE dummy INC_PC (2093352).
+                // Steal trail at next-PC is large so do not require
+                // cleanBranchFetch. Unstalled INC (2142574) never sets this.
+                var fallThrough = (ushort)(_opcodeAddress + 2);
+                _pc = fallThrough;
+                _visiblePC = fallThrough;
+                _dummyTakenBneAfterStolenInc = false;
+                _cycle++;
+                fullLengthTakenBranch = true;
+            }
+            else if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && cleanBranchFetch)
             {
                 _cycle++;
                 fullLengthTakenBranch = true;
             }
 
+            if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode) && _afterLdaAbsHold
+                && !fullLengthTakenBranch)
+            {
+                _cycle++;
+                fullLengthTakenBranch = true;
+            }
+            else if (!IsBranchOpcode(_opcode))
+            {
+                _afterLdaAbsHold = false;
+            }
+
+            // Wolf64 2044616: native dummy CLK of BNE after LDA $D012 still
+            // exports opcode PC $FF61, not fall-through $FF63. Keep opcode PC
+            // on extra dummy CLKs; JUMP at cycle 0.
+            _holdTakenBranchOpcodePc = IsBranchOpcode(_opcode)
+                && IsBranchTaken(_opcode)
+                && _afterLdaAbsHold
+                && !_skipAbsLoadLastClkHold
+                && !_ldaSkippedLastClkHold;
+
             DebugFullLengthTakenBranch = fullLengthTakenBranch;
 
             _stagedMemoryReadCompleted = false;
+            _stagedLoadRegisterVisibleAtReadCheckpoint = false;
             _delayNextFetch = false;
             _stagedNzUpdate = false;
             _stagedNzValue = 0;
             _stagedCarryUpdate = false;
             _stagedCarryValue = false;
             _zpRmwModifyCommitted = false;
+            if (_holdZpIncDecAfterStaAbsY && !IsZeroPageIncrementDecrementOpcode(_opcode))
+                _holdZpIncDecAfterStaAbsY = false;
+            _pendingPlaCompletion = false;
             _pendingPlpStatus = false;
             // BIT after RTS delayNextFetch: soft-apply one cycle earlier so the
             // host sample count matches VICE (c=522467 held late with cycle-0
             // soft). After branch / other trail, soft at cycle 0 (c=522392).
             _bitSoftDeferEarly = (_opcode is 0x2C or 0x24) && _fetchAfterRtsDelay;
             _fetchAfterRtsDelay = false;
-            if (_opcode != 0x68)
-            {
-                _plaDeferPullOne = false;
-                _plaLatePullPending = false;
-            }
-
-            if (_opcode != 0x40)
-                _rtiDeferFirstPullOne = false;
             var deferIndirectYLoadAfterBranchRmw = _deferNextIndirectYLoadAfterBranchRmw && IsIndirectYLoadOpcode(_opcode);
             _deferNextIndirectYLoadAfterBranchRmw = false;
             // Consume full-length-branch credit for THIS instruction (e.g. JSR after BNE).
@@ -788,44 +1397,14 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 _nonOverlappedRegion = true;
             }
 
-            // VICE LD #imm (6510dtvcore LD after FETCH): INC_PC with no trailing
-            // CLK_INC, so next opcode's first FETCH fuses into the first host
-            // sample that already shows post-commit PC/Y. Managed LDY last tick
-            // exports that PC without consuming RTS F1 (c=518540 nS ahead).
-            // Absolute stores (STY abs at c=502759) and taken branches (c=30)
-            // do not need early pull: their last CLK / JUMP coupling differs.
-            // VICE RTS after a 2-byte immediate (LD#/AND#/CMP#/...): first PULL is
-            // visible at dbgCyc=3 when prior trailing dwell is 1 (c=532024 nS ahead
-            // of mS after AND # $29). Was limited to LDA/LDX/LDY # only.
-            // trail==2 after taken branch or plain store: first FETCH overlaps so
-            // VICE first PULL is visible at dbgCyc=3 (c=540341 after taken BCC;
-            // c=559300 after STA following not-taken BNE). trail==2 after zp RMW
-            // keeps STACK_PEEK (c=541125 after ROR zp: nS still pre-pull). Higher
-            // trail after store keeps STACK_PEEK (c=5048 STA ind,Y trail=4).
-            // trail==1 after taken BCC also keeps clean STACK_PEEK (c=541559).
-            _rtsOverlappedFirstFetch = _opcode == 0x60
-                && (((priorTrailingAtNextPc == 2)
-                        && (_afterFullLengthTakenBranch
-                            || IsStoreOpcode(_previousOpcode)))
-                    || (priorTrailingAtNextPc == 1
-                        && (IsTwoByteImmediateOpcode(_previousOpcode)
-                            || IsLoadOpcode(_previousOpcode))
-                        && !fetchingBranchTarget
-                        && !afterSoftCompare
-                        && !_nonOverlappedRegion
-                        && !_nonOverlappedFetchPhase));
+            if (_opcode == 0x99 && _afterFullLengthTakenBranch)
+                _holdZpIncDecAfterStaAbsY = true;
 
             var armAfterBranchLag = fetchingBranchTarget && !_afterFullLengthTakenBranch;
             _afterShortTakenBranchLag = armAfterBranchLag;
             _fullLengthTakenBranchCompleted = fullLengthTakenBranch;
-            _deferImmediateLoadAfterBranch = armAfterBranchLag && IsImmediateLoadOpcode(_opcode);
+
             _deferImpliedRegisterCompletionAfterBranch = armAfterBranchLag && IsImpliedRegisterOrFlagOpcode(_opcode);
-            // PLA after short taken branch: VICE still on STACK_PEEK when managed
-            // would pull at cycle 1 (c=531993 nA=$00 mA=$18 after BEQ).
-            if (armAfterBranchLag && _opcode == 0x68)
-                _plaDeferPullOne = true;
-            if (armAfterBranchLag && _opcode == 0x40)
-                _rtiDeferFirstPullOne = true;
             // CMP zp family after taken-branch lag only (not after JSR trail>=2;
             // that regressed CPY at c=517861 where VICE already commits).
             // Short/full taken-branch targets soft-defer flags/PC (c=532264).
@@ -834,6 +1413,15 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             _softDeferZpCompare = (IsZeroPageCompareOpcode(_opcode)
                     || IsUnstagedAbsoluteCompareOpcode(_opcode))
                 && (armAfterBranchLag || _afterFullLengthTakenBranch);
+            // VICE CP(GET_ABS): GET_ABS CLK_INC still has opcode PC / pre-op P
+            // when CMP FETCH was not overlapped (Wolf64 2060513 nPC=$F6BF nP=$A4).
+            // After LDA abs whose last CLK already exported next-PC (trail>=1),
+            // flags+INC_PC are visible on the last CMP CLK (Wolf64 2142604
+            // nPC=$F6C2 nP=$27).
+            if (_opcode == 0xCD
+                && (_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                && priorTrailingAtNextPc == 0)
+                _softDeferCompareCommit = true;
             // JMP abs soft JUMP when first FETCH is clean non-overlapped (after
             // zp shift RMW c=539731, or soft-implied CLC c=539753). Not when
             // trail alone after STY (c=502749 nPC=target already).
@@ -841,13 +1429,29 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             // (c=541205 nPC=$DC31 mPC=$DC98 when soft-held opcode).
             // After JSR trail>=2 VICE also shows JUMP (c=559254 nPC=$F734
             // mPC=$FFEA when soft-held after overlapped JSR).
+            // STA zp whose write CLK already exported next-PC (trail>=2): VICE
+            // JMP last CLK is the target (Wolf64 2044582 $EA24, 2122101 $B8D2).
+            // STA zp that held opcode until its last CLK (trail<=1): VICE JMP
+            // last FETCH CLK still opcode (Wolf64 2122664 nPC=$B91A).
+            var staZpHeldWrite = _previousOpcode == 0x85 && priorTrailingAtNextPc <= 1;
             _softDeferJmpAbs = _opcode == 0x4C
                 && (IsZeroPageShiftRmwOpcode(_previousOpcode)
-                    || _nonOverlappedFetchPhase || _nonOverlappedRegion)
+                    || _nonOverlappedFetchPhase || _nonOverlappedRegion
+                    || staZpHeldWrite
+                    // RTS LOAD is the last clock; its increment/JUMP are
+                    // unclocked. The target JMP therefore begins a distinct
+                    // FETCH sequence whose final operand clock still shows the
+                    // JMP opcode before JMP's own unclocked target update.
+                    || _previousOpcode == 0x60)
                 && !(IsTwoByteImmediateOpcode(_previousOpcode)
                     && !IsImmediateLoadOpcode(_previousOpcode)
                     && priorTrailingAtNextPc == 1)
-                && !(_previousOpcode == 0x20 && priorTrailingAtNextPc >= 2);
+                && !(_previousOpcode == 0x20 && priorTrailingAtNextPc >= 2)
+                // VICE JMP() is JUMP with no extra CLK; after STA abs or LDA#
+                // the last JMP CLK already exports the target
+                // (Wolf64 2060363 nPC=$FDDD; 2060380 nPC=$FDF3).
+                && !(IsStoreOpcode(_previousOpcode) && !staZpHeldWrite)
+                && !IsImmediateLoadOpcode(_previousOpcode);
             // Short taken branch -> NOP chain: hold opcode PC on each NOP's final
             // CLK (VICE INC_PC after last FETCH). Sticks across consecutive NOPs
             // so the second padding NOP after the branch also matches (c=518741).
@@ -867,7 +1471,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             }
             _deferJsrPushAfterBranch = armAfterBranchLag && _opcode == 0x20;
             var fetchingIndexedLoadControlTarget = armAfterBranchLag;
-            _deferAbsoluteXLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteXLoadOpcode(_opcode);
+            // Full-length taken BNE then LDA abs,X: VICE GET_ABS_X data-read
+            // still has pre-op A (Wolf64 4138251 nA=$43 mA=$2C). Same defer
+            // as (zp),Y after full-length. Short lag already used armAfterBranchLag.
+            _deferAbsoluteXLoadCompletionAfterBranch =
+                (fetchingIndexedLoadControlTarget || _afterFullLengthTakenBranch)
+                && IsAbsoluteXLoadOpcode(_opcode);
             _deferAbsoluteYLoadCompletionAfterBranch = fetchingIndexedLoadControlTarget && IsAbsoluteYLoadOpcode(_opcode);
             // Delay A commit for (zp),Y after a full-length taken branch as well:
             // VICE still exports the pre-load A on the data-read CLK when the
@@ -876,14 +1485,43 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             _deferIndirectYLoadCompletionAfterBranch =
                 ((armAfterBranchLag || _afterFullLengthTakenBranch) && IsIndirectYLoadOpcode(_opcode))
                 || deferIndirectYLoadAfterBranchRmw;
+            // Latch before the implied-fuse flag is cleared on this FETCH.
+            // VICE GET_IND_Y INC_PC has no extra CLK (Wolf64 2406426 nPC=$EAB9).
+            _fuseIndyLoadLastClkPc = IsIndirectYLoadOpcode(_opcode)
+                && !_deferIndirectYLoadCompletionAfterBranch
+                && !IsStoreOpcode(_previousOpcode)
+                && (priorTrailingAtNextPc >= 1
+                    || _fuseImpliedAfterIndyLoad
+                    || IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+                    || _previousOpcode is 0x48 or 0x08);
             _deferZeroPageRmwPcAdvanceAfterBranch = armAfterBranchLag && IsZeroPageIncrementDecrementOpcode(_opcode);
+            // Taken branch then zp INC/DEC then JSR: VICE still STACK_PEEKs
+            // at JSR DebugCycle 3 (Wolf64 4132742). Sticky through TYA/CLC
+            // to a later JSR over-peeked (2003258 nS=$FC). INC after ORA#
+            // then JSR PUSHes (4132037 nS=$F2).
+            if (_opcode != 0x20 && !IsZeroPageIncrementDecrementOpcode(_opcode))
+                _nextJsrNonOverlapped = false;
+            if (IsZeroPageIncrementDecrementOpcode(_opcode)
+                && (armAfterBranchLag || fetchingBranchTarget || _afterFullLengthTakenBranch))
+                _nextJsrNonOverlapped = true;
             _deferIndexedStorePcAdvanceAfterBranch = armAfterBranchLag && IsIndexedAbsoluteStoreOpcode(_opcode);
             _deferZeroPageIndexedStorePcAdvanceAfterBranch = armAfterBranchLag && IsZeroPageIndexedStoreOpcode(_opcode);
-            // Short taken branch: lag the following instruction by one CLK.
-            if (armAfterBranchLag && IsAfterBranchBudgetExtendedOpcode(_opcode))
+            // A short taken-branch target or JSR callee begins with a distinct
+            // first FETCH checkpoint. Preserve that clock for opcodes whose
+            // staged body otherwise assumes it overlapped the predecessor.
+            if ((armAfterBranchLag || fetchingNonOverlappedCallTarget)
+                && IsAfterBranchBudgetExtendedOpcode(_opcode))
             {
                 _cycle++;
             }
+
+            // VICE FETCH_OPCODE is two CLK_INC. LDA zp / STA zp first host
+            // FETCH tick is those two clocks. Do not double BEQ FETCH
+            // (2175366 elapsed too early) or STA abs FETCH (2224630).
+            // Wolf64 2865090 wait-loop irq_delay 9 vs 13: these two extras
+            // are the missing CLK_INC.
+            if (_opcode is 0xA5 or 0x85)
+                ViceClocksThisTick = 2;
 
             // Stage fall-through at cycle 1 when:
             //  - budget 4+ (full-length + after-branch lag): c=540201
@@ -891,11 +1529,18 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             //  - full-length trail=2 after store (c=540337 BCC after STA zp)
             //  - full-length trail=1 after zp/ALU compare (c=541194 BNE after
             //    CPX zp nPC=fall-through mPC=opcode at dbgCyc=1)
+            //  - previous implied was fused (Wolf64 2142610 BMI after TAX:
+            //    host last CLK already next-PC via _pc, but _visiblePC stayed
+            //    at the TAX opcode so trail==0). VICE BRANCH dummy CLK_INC
+            //    exports INC_PC(2). Soft implied does not set this flag
+            //    (Wolf64 2060519 nPC still opcode). Do not use _cycle>=3:
+            //    that dummy-exports every full-length taken branch.
             // Not: full-length trail=2 after INC (c=5005 keeps opcode at cyc 1)
             // Not: trail=0+nonOvl (c=5034) or lag alone (c=4997)
             _takenBranchStagedFallthrough = IsBranchOpcode(_opcode)
                 && IsBranchTaken(_opcode)
                 && fullLengthTakenBranch
+                && !_holdTakenBranchOpcodePc
                 && (_cycle >= 4
                     || priorTrailingAtNextPc >= 3
                     || (priorTrailingAtNextPc == 2 && IsStoreOpcode(_previousOpcode))
@@ -903,17 +1548,90 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                         && (IsZeroPageCompareOpcode(_previousOpcode)
                             || IsAbsoluteAluOpcode(_previousOpcode)
                             || IsImmediateLoadOpcode(_previousOpcode)
-                            || IsTwoByteImmediateOpcode(_previousOpcode))));
+                            || _previousOpcode == 0xA5
+                            || IsTwoByteImmediateOpcode(_previousOpcode)
+                            || IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+                            || _previousOpcode == 0xB9))
+                    || (_fuseImpliedAfterIndyLoad
+                        && IsImpliedRegisterOrFlagOpcode(_previousOpcode)));
+            if (IsBranchOpcode(_opcode) && IsBranchTaken(_opcode)
+                && (_skipAbsLoadLastClkHold || _ldaSkippedLastClkHold))
+                _takenBranchStagedFallthrough = true;
+            if (IsBranchOpcode(_opcode))
+            {
+                _afterLdaAbsHold = false;
+                _skipAbsLoadLastClkHold = false;
+                _ldaSkippedLastClkHold = false;
+            }
 
-            _pendingDeferredImmediateLoad = false;
+    
             _indexedLoadPageCrossDelayConsumed = false;
+            _rtsPrefetchedByNotTakenBranch = false;
             _stagedReturnAddress = 0;
             _effectiveAddress = 0;
+            _indyPageCrossedThisInsn = false;
             _fetched = 0;
 
         }
 
         _cycle--;
+
+        if (_cycle == 0
+            && IsZeroPageIncrementDecrementOpcode(_opcode)
+            && _visiblePC == _opcodeAddress)
+        {
+            // Last INC/DEC CLK: VICE still exports opcode PC (Wolf64 2093351
+            // nPC=$F69F). Do not ExecuteOpcode (Fetch/PC++ -> opcode+1).
+            _pc = _visiblePC;
+            _suppressBootstrapBoundary = true;
+            return;
+        }
+
+        if (_cycle == 0 && _opcode == 0xEC)
+        {
+            // VICE CP(GET_ABS): last CLK is LOAD+CLK_INC with opcode PC /
+            // pre-op P; flags+INC_PC run after that sample (Wolf64 2407022
+            // nPC=$EB37 nP=$26 mPC=$EB3A mP=$A4). Unstaged ExecuteOpcode
+            // bundled GET_ABS with INC_PC. CMP abs 0xCD is staged so trail 0
+            // vs trail>=1 selects apply vs fuse; 0xEC last CLK is always GET_ABS.
+            var cpxValue = Read(ReadAbsoluteOperand());
+            _stagedCarryUpdate = true;
+            _stagedCarryValue = X >= cpxValue;
+            _stagedNzUpdate = true;
+            _stagedNzValue = (byte)(X - cpxValue);
+            _pendingSoftCompareCommit = true;
+            _pc = (ushort)(_instructionPC + 3);
+            _visiblePC = _opcodeAddress;
+            _suppressBootstrapBoundary = true;
+            _nonOverlappedFetchPhase = true;
+            return;
+        }
+
+        if (_cycle == 0
+            && _opcode == 0xC5
+            && _visiblePC == (ushort)(_instructionPC + 2))
+        {
+            // Fused CMP zp already committed on DebugCycle 1 (Wolf64 2129140).
+            // Do not ExecuteOpcode on last CLK: that added one more PC++
+            // (Wolf64 2129141 nPC=$E6BF mPC=$E6C0).
+            _pc = _visiblePC;
+            _suppressBootstrapBoundary = true;
+            return;
+        }
+
+        if (_holdAbsLoadOpcodeLastClk && _cycle == 0 && _opcode == 0xAD)
+        {
+            _holdAbsLoadOpcodeLastClk = false;
+            _visiblePC = _opcodeAddress;
+            _pc = (ushort)(_opcodeAddress + 3);
+            _nonOverlappedFetchPhase = true;
+            _afterLdaAbsHold = true;
+            _suppressBootstrapBoundary = true;
+            return;
+        }
+
+        if (_holdAbsLoadOpcodeLastClk && _opcode != 0xAD)
+            _holdAbsLoadOpcodeLastClk = false;
 
         if (TryExecuteCycleStagedOpcode())
         {
@@ -927,81 +1645,97 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
         if (_cycle == 0)
         {
-            // VICE 2-byte immediates (LD#/CMP#/AND#/...): GET_IMM + body + INC_PC
-            // run after the second FETCH CLK is exported. Soft-defer the body so
-            // host still samples pre-op regs/PC on that CLK when first-FETCH is
-            // not overlapped (c=518756 CMP# in non-overlapped region after
-            // not-taken BCC hold).
-            // After staged multi-cycle taken branch JUMP, ALU imm is fused on
-            // VICE (c=540204 ADC#). That skip is a ONE-instruction window only:
-            // sticky skip fused CPX# much later (c=540896 nPC=$EB2D mPC=$EB2F).
-            // Immediate loads with priorTrailing>=2 after plain (non-indexed)
-            // store fuse (c=541168 LDY# after STY zp). After indexed store
-            // trail=2 still softs (c=519253 LDX# after STA zp,X nX pre-load).
-            // Non-load imm after not-taken branch trail==1 fuses only when the
-            // branch followed a fused LDA-zp-after-taken-branch (c=541202 EOR#).
-            // Plain BCC then CMP# still softs (c=518756).
+            // VICE always orders FETCH_OPCODE's two CLK_INC operations before
+            // LD(GET_IMM), but the first fetch clock can share the host checkpoint
+            // already exported by the preceding instruction. Classify that overlap
+            // from the immediately preceding opcode, not sticky branch-region state:
+            // control transfers JUMP after their final clock, stores and RMW end
+            // on a write clock, while PHA -> LDA # advances through the body here.
             var skipSoftImmThisInsn = _applySkipSoftImmThisInsn;
             _applySkipSoftImmThisInsn = false;
-            if ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
-                && IsTwoByteImmediateOpcode(_opcode))
+            var previousImmediateLoadCompletedWithoutDistinctFetch =
+                _immediateLoadCompletedWithoutDistinctFetch;
+            _immediateLoadCompletedWithoutDistinctFetch = false;
+            var previousControlTransferHasDistinctSecondFetch =
+                EndsWithUnclockedControlTransfer(_previousOpcode)
+                && (!IsBranchOpcode(_previousOpcode)
+                    || _afterFullLengthTakenBranch
+                    || _afterShortTakenBranchLag
+                    // A fused implied chain has already consumed the branch's
+                    // fall-through FETCH. VICE therefore executes immediate LD
+                    // after that checkpoint instead of exposing a distinct one.
+                    || !_fuseImpliedAfterIndyLoad);
+            var immediateLoadHasDistinctSecondFetch =
+                _immediateLoadFollowsSoftDeferredBody
+                || previousControlTransferHasDistinctSecondFetch
+                || (IsImmediateLoadOpcode(_previousOpcode)
+                    && !previousImmediateLoadCompletedWithoutDistinctFetch)
+                || (IsStoreOpcode(_previousOpcode)
+                    && DebugPriorTrailingAtNextPc == 1)
+                || IsZeroPageIncrementDecrementOpcode(_previousOpcode);
+            if (IsImmediateLoadOpcode(_opcode)
+                && immediateLoadHasDistinctSecondFetch
+                && !skipSoftImmThisInsn)
             {
-                var fuseImmLoadAfterPlainStore =
-                    IsImmediateLoadOpcode(_opcode)
-                    && DebugPriorTrailingAtNextPc >= 2
-                    && IsStoreOpcode(_previousOpcode)
-                    && !IsZeroPageIndexedStoreOpcode(_previousOpcode)
-                    && !IsIndexedAbsoluteStoreOpcode(_previousOpcode);
+                _fuseNonLoadImmAfterLoadBranch = false;
+                _softDeferredImmediateLoad = true;
+                _visiblePC = _opcodeAddress;
+                _suppressBootstrapBoundary = true;
+                return;
+            }
+
+            if (IsImmediateLoadOpcode(_opcode))
+                _immediateLoadCompletedWithoutDistinctFetch = true;
+
+            // Non-load immediates retain their existing overlap classification.
+            // Their ALU/compare bodies also have no clock after GET_IMM. Record
+            // when a fused implied predecessor already supplied that FETCH phase,
+            // even in the ordinary overlapped region where no soft defer is needed.
+            if (IsTwoByteImmediateOpcode(_opcode)
+                && !IsImmediateLoadOpcode(_opcode)
+                && IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+                && _fuseImpliedAfterIndyLoad)
+            {
+                _fusedNonLoadImmediateConsumedFetch = true;
+            }
+
+            // The managed host checkpoint can already be aligned past
+            // FETCH_OPCODE when the preceding instruction exported an overlapping clock.
+            if ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                && IsTwoByteImmediateOpcode(_opcode)
+                && !IsImmediateLoadOpcode(_opcode))
+            {
                 var fuseNonLoadImmAfterBranch =
-                    !IsImmediateLoadOpcode(_opcode)
-                    && _fuseNonLoadImmAfterLoadBranch
+                    _fuseNonLoadImmAfterLoadBranch
                     && IsBranchOpcode(_previousOpcode)
                     && DebugPriorTrailingAtNextPc == 1;
-                // After fused ROL A / implied chain, LDA# fuses (c=541209
-                // nA=$FF mA=$BF when soft-deferred with trail==0).
-                var fuseImmLoadAfterImpliedChain =
-                    IsImmediateLoadOpcode(_opcode) && _fuseImpliedAfterIndyLoad;
-                // After LDA abs,X trail==1 in nonOvl, AND# fuses (c=559237
-                // nA=$00 mA=$22 when soft-deferred).
                 var fuseNonLoadImmAfterLoad =
-                    !IsImmediateLoadOpcode(_opcode)
-                    && IsLoadOpcode(_previousOpcode)
+                    IsLoadOpcode(_previousOpcode)
                     && DebugPriorTrailingAtNextPc == 1
                     && (_nonOverlappedFetchPhase || _nonOverlappedRegion);
-                // After JMP abs trail==1, LDX# fuses (c=559256 nX=$00 mX=$ED).
-                var fuseImmLoadAfterJmp =
-                    IsImmediateLoadOpcode(_opcode)
-                    && _previousOpcode == 0x4C
-                    && DebugPriorTrailingAtNextPc == 1;
+                var fuseNonLoadImmAfterAluImm =
+                    IsTwoByteImmediateOpcode(_previousOpcode)
+                    && !IsImmediateLoadOpcode(_previousOpcode);
+                var fuseNonLoadImmAfterFusedImplied =
+                    IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+                    && (_fuseImpliedAfterIndyLoad
+                        || DebugPriorTrailingAtNextPc >= 1);
                 if (skipSoftImmThisInsn
-                    || fuseImmLoadAfterPlainStore
                     || fuseNonLoadImmAfterBranch
-                    || fuseImmLoadAfterImpliedChain
                     || fuseNonLoadImmAfterLoad
-                    || fuseImmLoadAfterJmp)
+                    || fuseNonLoadImmAfterAluImm
+                    || fuseNonLoadImmAfterFusedImplied)
                 {
                     if (fuseNonLoadImmAfterBranch)
                         _fuseNonLoadImmAfterLoadBranch = false;
-                    // fall through to ExecuteOpcode (fused commit)
+                    // Fall through to ExecuteOpcode for an already-aligned body.
                 }
                 else
                 {
-                    // Soft path ends the load-branch fuse window.
                     _fuseNonLoadImmAfterLoadBranch = false;
-                    if (IsImmediateLoadOpcode(_opcode))
-                    {
-                        _softDeferredImmediateLoad = true;
-                        // _pc already past opcode; CompleteDeferredImmediateLoad will
-                        // set it to instructionPC+2 when soft-applied at next fetch.
-                    }
-                    else
-                    {
-                        _softDeferredImpliedOp = true;
-                        _softDeferredImpliedOpcode = _opcode;
-                        _softDeferredImpliedInstructionPc = _opcodeAddress;
-                    }
-
-                    _holdIndYStorePcOneCycle = true;
+                    _softDeferredImpliedOp = true;
+                    _softDeferredImpliedOpcode = _opcode;
+                    _softDeferredImpliedInstructionPc = _opcodeAddress;
                     _visiblePC = _opcodeAddress;
                     _suppressBootstrapBoundary = true;
                     _nonOverlappedFetchPhase = true;
@@ -1016,10 +1750,34 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             // final CLK (c=541187 EOR zp nA=$1E mA=$3E when soft-deferred).
             // Keep the post-indy fuse chain so following not-taken BMI does not
             // hold opcode PC (c=541189 nPC=$DC6D mPC=$DC6B).
-            if ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
-                && IsAbsoluteAluOpcode(_opcode))
+            var sbcAbsYPageCross = false;
+            if (_opcode == 0xF9)
             {
-                if (_previousOpcode == 0xB1 && DebugPriorTrailingAtNextPc == 1)
+                var sbcAbsYBase = ReadAbsoluteOperand();
+                var sbcAbsYEff = (ushort)(sbcAbsYBase + Y);
+                sbcAbsYPageCross = (sbcAbsYBase & 0xFF00) != (sbcAbsYEff & 0xFF00);
+            }
+
+            if (((_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                    && IsAbsoluteAluOpcode(_opcode))
+                || sbcAbsYPageCross)
+            {
+                // After fused LDA (zp),Y trail==1, or after a not-taken
+                // branch whose last CLK already exported next-PC, VICE
+                // ORA/AND/... (GET_ABS)+INC_PC has no extra CLK
+                // (Wolf64 3029797 nPC=$EAC4 nP=$24). SBC abs,Y GET_ABS_Y
+                // last CLK still opcode PC when Y page-crosses (Wolf64
+                // 4138175 Y=$66). Y=0 / Y=$03 no-cross still fuses
+                // (4134601 / 4134660).
+                if (!sbcAbsYPageCross
+                    && ((_previousOpcode == 0xB1 && DebugPriorTrailingAtNextPc == 1)
+                        || (IsBranchOpcode(_previousOpcode)
+                            && DebugPriorTrailingAtNextPc >= 1
+                            && !IsBranchTaken(_previousOpcode))
+                        || PriorInstructionConsumesFollowingFetchPhase(
+                            _previousOpcode,
+                            DebugPriorTrailingAtNextPc)
+                        || _fuseImpliedAfterIndyLoad))
                 {
                     _fuseImpliedAfterIndyLoad = true;
                     // fall through to ExecuteOpcode (fused)
@@ -1047,30 +1805,81 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             // nP=$25 mP=$24 when soft-deferred after BNE).
             // After PHA/PHP trail==1 (IRQ handler TXA at c=577692 nPC=next
             // mPC=opcode when soft in nonOvl): VICE INC_PC is on the final CLK.
+            // After overlapped JSR JUMP (trail>=1) TAY fuses Y+INC_PC
+            // (Wolf64 2571298 nY=$20 nPC=$EA14). Sticky one instruction so
+            // following LDA # fuses (2571300). Do not treat STA as a fuse
+            // entry (that over-fused INX after STA abs,X at 2407031).
+            var fuseTayAfterJsr = _opcode == 0xA8
+                && _previousOpcode == 0x20
+                && DebugPriorTrailingAtNextPc >= 1;
+            // VICE INY last FETCH CLK still has pre-op Y when INC zp cycle 2
+            // held opcode PC (Wolf64 4147669 nY=$CD nPC=$A5F9). Sticky
+            // fuseImplied from an earlier CLC/INY must not ExecuteOpcode on
+            // that CLK. Soft-defer via the else-if below; next FETCH commits
+            // with no extra host tick (4138197 extra tick lagged LDA abs,Y).
+            var holdInyAfterHeldInc = _inySoftAfterHeldInc
+                && _opcode is 0xC8 or 0x88
+                && IsZeroPageIncrementDecrementOpcode(_previousOpcode);
             if (IsImpliedRegisterOrFlagOpcode(_opcode)
+                && !holdInyAfterHeldInc
                 && ((_previousOpcode == 0xB1 && DebugPriorTrailingAtNextPc == 1)
                     || (_previousOpcode == 0x4C && DebugPriorTrailingAtNextPc == 1)
-                    || ((_previousOpcode is 0x48 or 0x08)
-                        && DebugPriorTrailingAtNextPc == 1)
+                    || ((_previousOpcode is 0x48 or 0x08 or 0x68 or 0x28)
+                        && DebugPriorTrailingAtNextPc >= 1)
                     || (_afterFullLengthTakenBranch
                         && DebugPriorTrailingAtNextPc >= 2)
-                    || _fuseImpliedAfterIndyLoad))
+                    || (IsBranchOpcode(_previousOpcode)
+                        && !_afterFullLengthTakenBranch
+                        && !_afterShortTakenBranchLag
+                        && DebugPriorTrailingAtNextPc >= 1)
+                    || (IsTwoByteImmediateOpcode(_previousOpcode)
+                        && !IsImmediateLoadOpcode(_previousOpcode)
+                        && DebugPriorTrailingAtNextPc >= 1)
+                    // VICE ST with SET_ZERO/SET_ABS has only the final write
+                    // CLK after INC_PC. Two exported next-PC checkpoints mean
+                    // the following implied body shares its second FETCH clock.
+                    // Indexed stores use an additional dummy CLK and retain the
+                    // soft path (Wolf64 2407031).
+                    || PriorInstructionConsumesFollowingFetchPhase(
+                        _previousOpcode,
+                        DebugPriorTrailingAtNextPc)
+                    || _fuseImpliedAfterIndyLoad
+                    || fuseTayAfterJsr))
             {
                 _fuseImpliedAfterIndyLoad = true;
                 // fall through to ExecuteOpcode (fused)
             }
             else if (IsImpliedRegisterOrFlagOpcode(_opcode)
                 && ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                    // ST's INC_PC is unclocked and its write CLK is the last
+                    // exported checkpoint. Until the store has enough trailing
+                    // checkpoints to consume the following FETCH phase, the
+                    // next implied body remains after that FETCH CLK.
+                    || (IsStoreOpcode(_previousOpcode)
+                        && !PriorInstructionConsumesFollowingFetchPhase(
+                            _previousOpcode,
+                            DebugPriorTrailingAtNextPc))
                     || (IsZeroPageShiftRmwOpcode(_previousOpcode)
-                        && DebugPriorTrailingAtNextPc == 2)))
+                        && DebugPriorTrailingAtNextPc == 2)
+                    // After full-length taken branch then zp INC, VICE INY last
+                    // FETCH CLK still has pre-op Y (Wolf64 4147669 nY=$CD
+                    // nPC=$A5F9). Short-lag INC then INY already fuses
+                    // (4134618 nY=$01). Soft-defer: next FETCH commits INY
+                    // with no extra host tick (4138197 extra tick lagged LDA).
+                    || (_opcode is 0xC8 or 0x88
+                        && IsZeroPageIncrementDecrementOpcode(_previousOpcode)
+                        && _inySoftAfterHeldInc)
+                    || (_opcode is 0xC8 or 0x88
+                        && _softDeferImpliedAfterHeldIndYStore)))
             {
                 // Soft after nonOvl or after zp shift trail==2 (c=543316 ROR A
                 // nPC=opcode). trail==3 fuses (c=540980 nPC advanced mPC=opcode).
                 _fuseImpliedAfterIndyLoad = false;
+                _inySoftAfterHeldInc = false;
+                _softDeferImpliedAfterHeldIndYStore = false;
                 _softDeferredImpliedOp = true;
                 _softDeferredImpliedOpcode = _opcode;
                 _softDeferredImpliedInstructionPc = _opcodeAddress;
-                _holdIndYStorePcOneCycle = true;
                 _visiblePC = _opcodeAddress;
                 _suppressBootstrapBoundary = true;
                 _nonOverlappedFetchPhase = true;
@@ -1080,6 +1889,8 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             {
                 // End post-indy fuse chain. Keep flag through fused ALU and the
                 // following branch so not-taken hold skips (c=541189 BMI after EOR).
+                // Do not keep it through CPY#/CMP#: that over-fused BNE at
+                // Wolf64 2093382.
                 _fuseImpliedAfterIndyLoad = false;
             }
 
@@ -1110,9 +1921,26 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
             // BIT abs/zp soft-defer when clean first FETCH, after branch, or
             // priorTrailing>=2. After LDA# trail=1 VICE fuses BIT (c=540355);
-            // after taken BNE trail=1 still softs (c=522392 nPC=opcode).
+            // after AND#/ALU imm trail>=1 VICE also fuses (Wolf64 2423374
+            // nPC=$EAF5 nP=$27 mPC=$EAF2 mP=$25). After taken BNE trail=1
+            // still softs (c=522392 nPC=opcode).
             // _bitSoftDeferEarly handles RTS-delay cycle-1 soft.
-            if ((_opcode is 0x2C or 0x24) && !_bitSoftDeferEarly
+            var fuseBitAfterImm = IsTwoByteImmediateOpcode(_previousOpcode)
+                && DebugPriorTrailingAtNextPc >= 1;
+            // After zp ASL/ROL/LSR/ROR whose last CLK already exported
+            // next-PC, VICE BIT(GET_ZERO)+INC_PC has no extra CLK
+            // (Wolf64 4131976 nPC=$E646).
+            var fuseBitAfterZpShiftRmw = IsZeroPageShiftRmwOpcode(_previousOpcode)
+                && DebugPriorTrailingAtNextPc >= 1;
+            // After not-taken BEQ whose last CLK already exported
+            // fall-through, VICE BIT last CLK INC_PCs (Wolf64 4134557
+            // nPC=$A59A). Taken BNE trail=1 still softs (c=522392).
+            var fuseBitAfterNotTakenBranch = IsBranchOpcode(_previousOpcode)
+                && DebugPriorTrailingAtNextPc >= 1
+                && !(_afterFullLengthTakenBranch || _afterShortTakenBranchLag);
+            if ((_opcode is 0x2C or 0x24) && !_bitSoftDeferEarly && !fuseBitAfterImm
+                && !fuseBitAfterZpShiftRmw
+                && !fuseBitAfterNotTakenBranch
                 && (_nonOverlappedFetchPhase || _nonOverlappedRegion
                     || DebugPriorTrailingAtNextPc >= 2
                     || IsBranchOpcode(_previousOpcode)))
@@ -1154,29 +1982,17 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 return;
             }
 
-            // PLA after soft BIT: late PULL on this CLK (A/S update, PC still
-            // opcode). VICE then LOCAL_SET_NZ + INC_PC after the sample.
-            if (_plaLatePullPending)
+            _softDeferAfterNopChain = false;
+            if (IsZeroPageIncrementDecrementOpcode(_opcode))
             {
-                _plaLatePullPending = false;
-                A = Pop();
-                _pc = (ushort)(_instructionPC + 1);
-                _visiblePC = _instructionPC;
+                // VICE last INC CLK still exports opcode PC; INC_PC is visible
+                // on the next FETCH_OPCODE. ExecuteOpcode uses Fetch()/PC++
+                // which would clobber PC to opcode+1 and RMW a second time.
+                _pc = _visiblePC;
                 _suppressBootstrapBoundary = true;
-                // NZ after this host sample (VICE LOCAL_SET_NZ post CLK_INC).
-                _stagedNzUpdate = true;
-                _stagedNzValue = A;
-                _pendingSoftCompareCommit = true;
-                // Following insn (TAY at c=522472) has a clean first FETCH: soft-defer
-                // implied body so final CLK keeps pre-op Y/PC (VICE TAY + INC_PC).
-                _nonOverlappedFetchPhase = true;
-                // RTI after this PLA chain needs the same extra STACK_PEEK
-                // (c=522485; flag is cleared if the next fetch is not RTI).
-                _rtiDeferFirstPullOne = true;
                 return;
             }
 
-            _softDeferAfterNopChain = false;
             ExecuteOpcode(_opcode);
         }
     }
@@ -1203,6 +2019,33 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         _suppressBootstrapBoundary = true;
     }
 
+    private bool IsNonOverlappedJsr()
+    {
+        return (_jsrFollowsSoftDeferredImmediateLoad
+                || _afterFullLengthTakenBranch
+                || _nonOverlappedRegion
+                || _nonOverlappedFetchPhase
+                // RTS resumes with an unclocked JUMP before the return-target
+                // FETCH, so a following JSR retains its explicit STACK_PEEK.
+                || _previousOpcode == 0x60)
+            && !(DebugPriorTrailingAtNextPc == 1
+                && (IsTwoByteImmediateOpcode(_previousOpcode)
+                    || _previousOpcode == 0x6C))
+            // VICE absolute unindexed stores consumed both operand FETCH
+            // clocks before SET_ABS, so a following JSR in a retained
+            // non-overlapped region still exposes its explicit STACK_PEEK.
+            // SET_ZERO and the indexed store forms retain the observed
+            // next-PC overlap represented by the trailing-clock exception.
+            && !(IsStoreOpcode(_previousOpcode)
+                && !IsAbsoluteUnindexedStoreOpcode(_previousOpcode)
+                && DebugPriorTrailingAtNextPc is 1 or 2)
+            // A not-taken branch already exported its fall-through PC. Its
+            // following JSR is on INC_PC plus PUSH high at DebugCycle 3, so
+            // mandatory BA cannot suppress that write (Wolf64 sample 14997).
+            && !(IsBranchOpcode(_previousOpcode)
+                && !IsBranchTaken(_previousOpcode));
+    }
+
     private bool TryExecuteCycleStagedOpcode()
     {
         if (_opcode != 0x20)
@@ -1217,12 +2060,10 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         // JMP ind trail==1, VICE is already on INC_PC+PUSH at dbgCyc=3 even
         // inside a non-overlapped region (c=541157; c=559248 nPC=$EAC1 nS=$EC
         // mPC=$EABF mS=$ED after JMP ind).
-        var nonOverlappedJsr = (_afterFullLengthTakenBranch
-            || _nonOverlappedRegion
-            || _nonOverlappedFetchPhase)
-            && !(DebugPriorTrailingAtNextPc == 1
-                && (IsTwoByteImmediateOpcode(_previousOpcode)
-                    || _previousOpcode == 0x6C));
+        // After STY/STA zp whose last CLK already exported next-PC (trail 1-2),
+        // VICE is also on INC_PC+PUSH at dbgCyc=3 (Wolf64 2571293 nPC=$E5E6
+        // nS=$F2). Keep trail>=4 STA (zp),Y STACK_PEEK (c=5048).
+        var nonOverlappedJsr = IsNonOverlappedJsr();
         switch (_cycle)
         {
             case 5:
@@ -1294,12 +2135,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         var returnPc = (ushort)(source + 3);
         // Same non-overlapped predicate as the push-phase switch (trail==1 after
         // 2-byte imm or JMP ind is overlapped end-to-end: c=541160; c=559248).
-        var nonOverlappedJsr = (_afterFullLengthTakenBranch
-            || _nonOverlappedRegion
-            || _nonOverlappedFetchPhase)
-            && !(DebugPriorTrailingAtNextPc == 1
-                && (IsTwoByteImmediateOpcode(_previousOpcode)
-                    || _previousOpcode == 0x6C));
+        var nonOverlappedJsr = IsNonOverlappedJsr();
         if (nonOverlappedJsr)
         {
             // VICE JUMP runs after the final CLK_INC export, so this cycle still
@@ -1321,6 +2157,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         PublishControlTransfer(source, target, returnPc, 0x20);
         _cycle = 0;
         _callTargetFetchPending = true;
+        _callTargetFetchNonOverlapped = nonOverlappedJsr;
         // Keep suppress so host PC export stays on exportPc for non-overlapped
         // JSR last CLK (c=5012 nPC=$FDB7 mPC would jump to target without it).
         // Overlapped path sets PC=target on all views; suppress is harmless.
@@ -1354,23 +2191,16 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             return true;
         }
 
+        if (TryExecuteCycleStagedStackPullOpcode())
+        {
+            return true;
+        }
+
         if (_stagedMemoryReadCompleted)
         {
-            // PLP: S already advanced on the pull CLK; apply P + PC one sample later
-            // (VICE 6510dtvcore.c PLP: PULL, CLK_INC, then LOCAL_SET_STATUS + INC_PC).
-            if (_pendingPlpStatus)
-            {
-                // VICE LOCAL_SET_STATUS keeps P_BREAK from the pulled byte in
-                // reg_p; LOCAL_STATUS ORs P_UNUSED. Host export therefore shows
-                // B from the stack (c=518582 nP=$33 mP=$23 when B was cleared).
-                P = (byte)(_fetched | 0x20);
-                _pendingPlpStatus = false;
-                _instructionPC = _pc;
-                _visiblePC = _pc;
-                _stagedMemoryReadCompleted = false;
-                return true;
-            }
-
+            var absoluteLoadAfterRts =
+                _previousOpcode == 0x60
+                && _opcode is 0xAD or 0xAE or 0xAC;
             if (_deferAbsoluteXLoadCompletionAfterBranch)
             {
                 A = _stagedNzValue;
@@ -1397,6 +2227,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 _deferIndirectYLoadCompletionAfterBranch = false;
                 _pendingDeferredNzUpdateAfterBranch = true;
                 _stagedMemoryReadCompleted = false;
+                _visiblePC = _opcodeAddress;
                 _suppressBootstrapBoundary = true;
                 return true;
             }
@@ -1433,16 +2264,24 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 // the data-read sample).
                 if (_opcode is 0xB1)
                     A = _stagedNzValue;
+                else if (_opcode is 0xAD)
+                {
+                    var holdLastClk = !_skipAbsLoadLastClkHold && !_loadAEarlyAfterStagedBranch
+                        && (_afterFullLengthTakenBranch
+                            || _afterShortTakenBranchLag);
+                    A = holdLastClk ? Read(ReadAbsoluteOperand()) : _stagedNzValue;
+                }
 
                 // Non-overlapped zp/abs/indexed loads: commit register on apply
                 // tick (data-read CLK still showed the pre-load register).
-                if (_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                if (_nonOverlappedFetchPhase
+                    || _nonOverlappedRegion
+                    || absoluteLoadAfterRts)
                 {
                     switch (_opcode)
                     {
                         case 0xA5:
                         case 0xB5:
-                        case 0xAD:
                         case 0xBD:
                         case 0xB9:
                             A = _stagedNzValue;
@@ -1469,27 +2308,28 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 // after BEQ; c=541197 LDA zp after BNE).
                 var loadFusedAfterPred = (
                         (_opcode is 0xB1
-                            && (IsImmediateLoadOpcode(_previousOpcode)
-                                || IsBranchOpcode(_previousOpcode))
-                            && DebugPriorTrailingAtNextPc == 1)
-                        || (_opcode is 0xA5
-                            && ((IsBranchOpcode(_previousOpcode)
-                                    && DebugPriorTrailingAtNextPc >= 1)
-                                || (IsImpliedFlagOpcode(_previousOpcode)
-                                    && DebugPriorTrailingAtNextPc == 0)
-                                || (IsTwoByteImmediateOpcode(_previousOpcode)
-                                    && !IsImmediateLoadOpcode(_previousOpcode)
+                            && (_fuseIndyLoadLastClkPc
+                                || ((IsImmediateLoadOpcode(_previousOpcode)
+                                        || IsBranchOpcode(_previousOpcode))
                                     && DebugPriorTrailingAtNextPc == 1)))
+                        || (_opcode == 0xA5
+                            && _stagedLoadRegisterVisibleAtReadCheckpoint)
                         || (_opcode is 0xBD
                             && IsImpliedRegisterOrFlagOpcode(_previousOpcode)
                             && DebugPriorTrailingAtNextPc == 0)
-                        || (_opcode is 0xAD
-                            && (_afterFullLengthTakenBranch
-                                || _afterShortTakenBranchLag
-                                || (IsBranchOpcode(_previousOpcode)
-                                    && DebugPriorTrailingAtNextPc >= 1))));
-                if ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
-                    && !loadFusedAfterPred
+                        || (_opcode is 0xA4 or 0xA6 or 0xAE
+                            && DebugPriorTrailingAtNextPc >= 1
+                            && !(_afterFullLengthTakenBranch || _afterShortTakenBranchLag))
+                        || (_opcode is 0xAD && !absoluteLoadAfterRts)
+                        || (_opcode is 0xB9 && _fuseAbsYAfterStolenSamePageBranch)
+                        || (_opcode is 0xB9
+                            && _previousOpcode == 0x10
+                            && DebugPriorTrailingAtNextPc >= 1));
+                var softDeferLoadCompletion =
+                    ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                        && !loadFusedAfterPred)
+                    || absoluteLoadAfterRts;
+                if (softDeferLoadCompletion
                     && _opcode is 0xB1 or 0xA5 or 0xA6 or 0xA4 or 0xB5 or 0xB6 or 0xB4
                         or 0xAD or 0xAE or 0xAC or 0xBD or 0xB9 or 0xBC or 0xBE)
                 {
@@ -1509,58 +2349,170 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 UpdateNZ(A);
             }
 
+            var predecessorConsumedLoadFetch =
+                PriorInstructionConsumesFollowingFetchPhase(
+                    _previousOpcode,
+                    DebugPriorTrailingAtNextPc)
+                || (IsStackPushOpcode(_previousOpcode)
+                    && DebugPriorTrailingAtNextPc >= 1)
+                || _previousOpcode is 0x4C or 0x6C;
             var loadFusedPc = (
-                (_opcode is 0xB1
-                    && (IsImmediateLoadOpcode(_previousOpcode)
-                        || IsBranchOpcode(_previousOpcode))
-                    && DebugPriorTrailingAtNextPc == 1)
-                || (_opcode is 0xA5
-                    && ((IsBranchOpcode(_previousOpcode)
-                            && DebugPriorTrailingAtNextPc >= 1)
-                        || (IsImpliedFlagOpcode(_previousOpcode)
-                            && DebugPriorTrailingAtNextPc == 0)
-                        || (IsTwoByteImmediateOpcode(_previousOpcode)
-                            && !IsImmediateLoadOpcode(_previousOpcode)
-                            && DebugPriorTrailingAtNextPc == 1)))
+                (_opcode is 0xB1 && _fuseIndyLoadLastClkPc)
+                || (_opcode == 0xA5
+                    && _stagedLoadRegisterVisibleAtReadCheckpoint)
                 || (_opcode is 0xBD
-                    && IsImpliedRegisterOrFlagOpcode(_previousOpcode)
-                    && DebugPriorTrailingAtNextPc == 0)
-                || (_opcode is 0xAD
-                    && (_afterFullLengthTakenBranch
-                        || _afterShortTakenBranchLag
+                    && !_deferAbsoluteXLoadCompletionAfterBranch
+                    && (DebugPriorTrailingAtNextPc >= 1
+                        || (IsImpliedRegisterOrFlagOpcode(_previousOpcode)
+                            && DebugPriorTrailingAtNextPc == 0)))
+                || (_opcode is 0xB9 && _fuseAbsYAfterStolenSamePageBranch)
+                || (_opcode is 0xB9
+                    && _previousOpcode == 0x10
+                    && DebugPriorTrailingAtNextPc >= 1)
+                || (_opcode is 0xA4 or 0xA6 or 0xAE
+                    && (predecessorConsumedLoadFetch
                         || (IsBranchOpcode(_previousOpcode)
-                            && DebugPriorTrailingAtNextPc >= 1))));
-            if ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
-                && !loadFusedPc
-                && _opcode is 0xB1 or 0xA5 or 0xA6 or 0xA4 or 0xB5 or 0xB6 or 0xB4
-                    or 0xAD or 0xAE or 0xAC or 0xBD or 0xB9 or 0xBC or 0xBE)
+                            && DebugPriorTrailingAtNextPc >= 1))
+                    && !(_afterFullLengthTakenBranch || _afterShortTakenBranchLag))
+                // LDA abs inherits the predecessor's source phase. A not-taken
+                // branch or a predecessor that already consumed the following FETCH
+                // exports next PC on GET_ABS. Otherwise non-overlapped GET_ABS keeps
+                // opcode PC through its final clock.
+                || (_opcode is 0xAD
+                    && !(_afterFullLengthTakenBranch || _afterShortTakenBranchLag)
+                    && ((IsBranchOpcode(_previousOpcode)
+                            && !IsBranchTaken(_previousOpcode))
+                        || predecessorConsumedLoadFetch)));
+            var holdLoadOpcodePc = ((_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                    && !loadFusedPc
+                    && _opcode is 0xB1 or 0xA5 or 0xA6 or 0xA4 or 0xB5 or 0xB6 or 0xB4
+                        or 0xAD or 0xAE or 0xAC or 0xBD or 0xB9 or 0xBC or 0xBE)
+                || (_opcode == 0xB1 && IsStoreOpcode(_previousOpcode) && !loadFusedPc)
+                || absoluteLoadAfterRts;
+            if (holdLoadOpcodePc
+                && !(_opcode == 0xAD && (_skipAbsLoadLastClkHold
+                    || (_loadAEarlyAfterStagedBranch && _afterFullLengthTakenBranch))))
             {
                 // Keep opcode PC this tick; soft NZ/PC commit on next FETCH.
+                // LDA (zp),Y after STY zp: VICE GET_IND_Y last CLK still
+                // opcode PC (Wolf64 4131417 nPC=$E606). Next FETCH is not
+                // overlapped (Wolf64 4131419 CMP# nPC=$E608 nP=$21).
                 _visiblePC = _opcodeAddress;
                 _suppressBootstrapBoundary = true;
+                _nonOverlappedFetchPhase = true;
             }
             else
             {
                 _instructionPC = _pc;
                 _visiblePC = _pc;
+                if (_opcode is 0xB9)
+                    _fuseAbsYAfterStolenSamePageBranch = false;
                 // NonOvl store apply must leave IsInstructionBoundary true so
                 // SystemClock can arm IRQ on the same inter-instruction sample
                 // VICE DO_INTERRUPT uses after ST (c=577682: native entered IRQ
                 // with return PC at post-STA-zp $E5EC while managed suppress
                 // skipped the sample and ran STA abs). PC export is already
                 // next-PC above; do not suppress boundary here.
+                // LDA zp after taken same-page branch: VICE GET_ZERO CLK_INC
+                // then INC_PC with no extra CLK. Opening this fused last CLK
+                // started IRQ before STA FETCH (Wolf64 2208208 nPC=$E5D1
+                // nLastOp=$85 mS=$F2). Same shape as deferred-imm suppress
+                // (c=522261).
+                if (_opcode == 0xA5
+                    && (_afterFullLengthTakenBranch || _afterShortTakenBranchLag
+                        || IsBranchOpcode(_previousOpcode)))
+                {
+                    // This fused last CLK is VICE GET_ZERO, not DO_INTERRUPT.
+                    // Sample IRQ on the next tick before STA FETCH (2175368
+                    // nS=$F2 nPC=$E5CF). If irq_clk has not elapsed, STA runs
+                    // (2208208 nPC=$E5D1). GET_ZERO INC_PC has no extra CLK;
+                    // counting this host tick as CLK_INC made delay>=2 at STA
+                    // FETCH (Wolf64 2208208 irqSeq=5 vs nLastOp=$85).
+                    _suppressBootstrapBoundary = true;
+                    if (_ldaZpDataReadStolen)
+                        _skipIrqSampleAtNextFetch = true;
+                    else
+                        _sampleIrqBeforeNextFetch = true;
+                    _ldaZpDataReadStolen = false;
+                    ConsumedViceClockThisTick = false;
+                }
+                else if (IsStoreOpcode(_opcode))
+                {
+                    // VICE ST: INC_PC (no CLK) then the addressing-mode
+                    // STORE CLK_INC. Plain store writes are exported on cycle 1,
+                    // so their cycle-0 apply consumes no additional VICE clock.
+                    // STA (zp),Y maps its final SET_IND_Y store checkpoint to
+                    // cycle 0, so keep that clock counted for IRQ delay before
+                    // the following fetch.
+                    if (!IsIndirectYStoreOpcode(_opcode))
+                    {
+                        ConsumedViceClockThisTick = false;
+                    }
+                    else
+                    {
+                        // The STORE checkpoint is not yet the main-loop
+                        // DO_INTERRUPT boundary. Sample on the next Tick before
+                        // fetching the following opcode, without adding a clock.
+                        _suppressBootstrapBoundary = true;
+                        _sampleIrqBeforeNextFetch = true;
+                    }
+                    if (_opcode == 0x85 && _staZpApplyStolen)
+                    {
+                        _suppressBootstrapBoundary = true;
+                        _skipIrqSampleAtNextFetch = true;
+                        _staZpApplyStolen = false;
+                    }
+                    if (_opcode == 0x8D)
+                    {
+                        // STORE CLK is not DO_INTERRUPT (suppress). Unstolen
+                        // path samples IRQ before the following FETCH
+                        // (2142523 nS=$F2). Stolen write cycle: FETCH the
+                        // wait-loop BEQ dummy instead (2520240 nPC=$E5D6).
+                        _suppressBootstrapBoundary = true;
+                        if (_staAbsWriteCycleStolen)
+                            _skipIrqSampleAtNextFetch = true;
+                        else
+                            _sampleIrqBeforeNextFetch = true;
+                        _staAbsWriteCycleStolen = false;
+                    }
+                }
             }
 
             _stagedMemoryReadCompleted = false;
-            return true;
-        }
+            _stagedLoadRegisterVisibleAtReadCheckpoint = false;
+            if (_opcode == 0xA5)
+                _fuseLdaZpAfterStolenInc = false;
+            if (_opcode == 0xAD
+                && (_afterFullLengthTakenBranch
+                    || _afterShortTakenBranchLag))
+            {
+                // Taken BNE after LDA abs still needs the extra dummy CLK
+                // even when BA already consumed one FETCH CLK (Wolf64 2050518).
+                _afterLdaAbsHold = true;
+                if (!_skipAbsLoadLastClkHold
+                    && !(_loadAEarlyAfterStagedBranch && _afterFullLengthTakenBranch))
+                {
+                    // VICE GET_ABS last CLK still has opcode PC; INC_PC is after
+                    // CLK_INC with no extra clock (Wolf64 2126189 nPC=$F6BC).
+                    // Sticky _loadAEarlyAfterStagedBranch from an earlier JUMP
+                    // must not skip this hold on a short taken BCC.
+                    // Do not arm this on every $AD: that adds a 5th LDA cycle
+                    // and breaks First10000 at c=130.
+                    _holdAbsLoadOpcodeLastClk = true;
+                    _nonOverlappedFetchPhase = true;
+                    _visiblePC = _opcodeAddress;
+                    _suppressBootstrapBoundary = true;
+                }
+                else
+                    _ldaSkippedLastClkHold = true;
+            }
 
-        if (_cycle == 0 && _deferImmediateLoadAfterBranch)
-        {
-            _deferImmediateLoadAfterBranch = false;
-            _pendingDeferredImmediateLoad = true;
-            _visiblePC = _instructionPC;
-            _suppressBootstrapBoundary = true;
+            // _skipAbsLoadLastClkHold is consumed at the following BNE FETCH.
+            if (_opcode == 0xAD)
+            {
+                _loadAEarlyAfterStagedBranch = false;
+            }
+
             return true;
         }
 
@@ -1582,11 +2534,36 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 return true;
             }
 
+            // After a load whose last CLK still held opcode PC (trail==0),
+            // VICE GET_ZERO has not INC_PCd yet at INC cycle 2
+            // (Wolf64 4138188 nPC=$A5F7 mPC=$A5F9 after LDX zp). Trail>=1
+            // still advances here (c=517829). STA abs,Y after a full-length
+            // taken branch is the 4154106 hold; other $99 still advance
+            // (2125150 nPC=$BEAA).
+            if (DebugPriorTrailingAtNextPc == 0)
+            {
+                _visiblePC = _opcodeAddress;
+                _inySoftAfterHeldInc = true;
+                return true;
+            }
+
+            if (_holdZpIncDecAfterStaAbsY)
+            {
+                _holdZpIncDecAfterStaAbsY = false;
+                _visiblePC = _opcodeAddress;
+                return true;
+            }
+
             // VICE INC/DEC zp (6510core.c): after load + dummy RMW write,
             // LOCAL_SET_NZ and INC_PC become visible before the final STORE CLK.
             // Absolute RMW already matches this; zp was advancing PC only and
             // lagging NZ until cycle 1 (diverge at c=517829: nP=$21 mP=$23).
             CommitZeroPageRmwModifyAndFlags();
+            if (_zpRmwPcDeferredFromSteal)
+            {
+                return true;
+            }
+
             AdvanceVisiblePc(2);
             return true;
         }
@@ -1594,10 +2571,13 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         if (_cycle == 1 && IsZeroPageIncrementDecrementOpcode(_opcode) && _visiblePC == _opcodeAddress
             && !_stagedMemoryReadCompleted)
         {
-            // Complete deferred Advance after the hold tick. VICE still pairs
-            // LOCAL_SET_NZ with INC_PC on this same host sample.
+            // VICE LOCAL_SET_NZ then INC_PC with no CLK, then dummy/store
+            // CLK_INC. Hosted lockstep still exports opcode PC on those CLKs
+            // (Wolf64 2093350-51 nPC=$F69F). After BA skip, commit NZ/STORE
+            // here but keep opcode PC until the next FETCH.
             CommitZeroPageRmwModifyAndFlags();
-            AdvanceVisiblePc(2);
+            if (!_zpRmwPcDeferredFromSteal)
+                AdvanceVisiblePc(2);
             // do not return - allow cycle==1 final-store switch to run
         }
 
@@ -1626,17 +2606,33 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
         if (_cycle == 4 && IsIndirectYStoreOpcode(_opcode))
         {
-            // Non-overlapped path after soft LDA #: hold opcode PC one more CLK
-            // so host-visible matches VICE (2 FETCH at start before INC_PC).
-            if (_holdIndYStorePcOneCycle)
+            // VICE FETCH_OPCODE performs two CLK_INC calls before ST executes
+            // its unclocked INC_PC(2). A completed memory-addressed LD body has
+            // already performed its own unclocked register/flag/INC_PC work after
+            // the addressing read. When overlap remains enabled, the following
+            // store consumes its first FETCH even if a taken-branch load defer
+            // reports zero trailing checkpoints. An explicit non-overlapped phase
+            // and immediate LD retain their distinct two-FETCH ordering. Other
+            // predecessors use exported source-clock thresholds.
+            var predecessorCompletedLoadBody =
+                IsLoadOpcode(_previousOpcode)
+                && !IsImmediateLoadOpcode(_previousOpcode)
+                && !(_nonOverlappedFetchPhase || _nonOverlappedRegion);
+            if (_advanceStorePcAfterFusedImplied
+                || predecessorCompletedLoadBody
+                || PriorInstructionConsumesFollowingFetchPhase(
+                    _previousOpcode,
+                    DebugPriorTrailingAtNextPc))
             {
-                _holdIndYStorePcOneCycle = false;
+                AdvanceVisiblePc(2);
+            }
+            else
+            {
                 _softDeferCompareCommit = true;
+                _softDeferImpliedAfterHeldIndYStore = true;
                 _visiblePC = _opcodeAddress;
-                return true;
             }
 
-            AdvanceVisiblePc(2);
             return true;
         }
 
@@ -1666,6 +2662,11 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             var lo = _fetched;
             var hi = Read((byte)(zp + 1));
             _effectiveAddress = (ushort)((lo | (hi << 8)) + Y);
+            // VICE INT_IND_Y_R extra CLK when lo+Y page-crosses. After a
+            // full-length taken branch that extra CLK is the GET_IND_Y last
+            // CLK (opcode PC). No-cross: last CLK already INC_PC so the
+            // deferred-NZ tick is the next FETCH (Wolf64 4131820 nPC=$E608).
+            _indyPageCrossedThisInsn = (lo + Y) > 0xFF;
             return true;
         }
 
@@ -1673,9 +2674,10 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         // may refresh v_bus on the intervening phi2 (phi order VIA→VIC→CPU).
         // No CPU work here; VIC.Tick already ran before this CPU cycle.
 
-        if (_cycle == 3 && IsIndirectYStoreOpcode(_opcode) && _visiblePC == _opcodeAddress)
+        if (_cycle == 3 && IsIndirectYStoreOpcode(_opcode))
         {
-            // Complete the deferred advance after the hold tick.
+            // VICE ST executes INC_PC(2) after the second fetch checkpoint and
+            // before the first INT_IND_Y_W pointer-read checkpoint.
             AdvanceVisiblePc(2);
             return true;
         }
@@ -1736,6 +2738,21 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
         switch (_opcode)
         {
+            case 0xC5 when _fuseCmpZpAfterStolenIncLda:
+            {
+                var cmpVal = Read(ReadZeroPageOperand());
+                if (A >= cmpVal)
+                    P |= 0x01;
+                else
+                    P &= 0xFE;
+                UpdateNZ((byte)(A - cmpVal));
+                _pc = (ushort)(_instructionPC + 2);
+                _visiblePC = _pc;
+                _fuseCmpZpAfterStolenIncLda = false;
+                _overlapNextTakenBranchDummy = true;
+                _suppressBootstrapBoundary = true;
+                return true;
+            }
             case 0xA5:
             {
                 var aZp = Read(ReadZeroPageOperand());
@@ -1753,18 +2770,57 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                         && DebugPriorTrailingAtNextPc == 0)
                     || (IsTwoByteImmediateOpcode(_previousOpcode)
                         && !IsImmediateLoadOpcode(_previousOpcode)
-                        && DebugPriorTrailingAtNextPc == 1);
-                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion)
-                    || fuseA5Early)
+                        && DebugPriorTrailingAtNextPc == 1)
+                    || (_previousOpcode == 0x20 && DebugPriorTrailingAtNextPc >= 1)
+                    // PHA completes its push before the following FETCH. VICE
+                    // GET_ZERO therefore exposes LDA zp's loaded A on the
+                    // data-read checkpoint (Wolf64 sample 14977).
+                    || _previousOpcode == 0x48
+                    || PriorInstructionConsumesFollowingFetchPhase(
+                        _previousOpcode,
+                        DebugPriorTrailingAtNextPc)
+                    || _fuseLdaZpAfterStolenInc;
+                var registerVisibleAtReadCheckpoint =
+                    !(_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                    || fuseA5Early;
+                if (registerVisibleAtReadCheckpoint)
                     A = aZp;
-                FinishStagedMemoryRead(2, aZp);
+                FinishStagedMemoryRead(2, aZp, registerVisibleAtReadCheckpoint);
+                if (_fuseLdaZpAfterStolenInc)
+                {
+                    // VICE GET_ZERO CLK_INC then INC_PC with no extra CLK
+                    // (Wolf64 2129137 nPC=$E6BD mPC=$E6BB). Keep the flag
+                    // through last CLK so apply does not re-hold opcode PC
+                    // (Wolf64 2129138 nPC=$E6BD mPC=$E6BB).
+                    _visiblePC = _pc;
+                }
                 return true;
             }
             case 0xA6:
             {
                 var xZp = Read(ReadZeroPageOperand());
-                // c=518761: non-overlapped LDX zp had mX early vs nX.
-                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion))
+                // LDX and LDY zero-page share VICE's LD(GET_ZERO) ordering.
+                // Expose the loaded register on GET_ZERO's data clock only when
+                // the predecessor's source clocks consumed the overlapping
+                // fetch phase. Taken-branch target entry remains distinct.
+                var predecessorConsumedFetch =
+                    PriorInstructionConsumesFollowingFetchPhase(
+                        _previousOpcode,
+                        DebugPriorTrailingAtNextPc)
+                    || (IsStackPushOpcode(_previousOpcode)
+                        && DebugPriorTrailingAtNextPc >= 1)
+                    || _previousOpcode is 0x4C or 0x6C;
+                // A not-taken branch has no JUMP phase. When its offset FETCH
+                // exported at least one next-PC checkpoint, fall-through
+                // LD(GET_ZERO) shares that consumed phase and exposes X on the
+                // data clock. A zero-checkpoint branch keeps pre-load X.
+                var notTakenBranchConsumedFetch = IsBranchOpcode(_previousOpcode)
+                    && DebugPriorTrailingAtNextPc >= 1;
+                var fuseA6Early = (predecessorConsumedFetch
+                        || notTakenBranchConsumedFetch)
+                    && !(_afterFullLengthTakenBranch || _afterShortTakenBranchLag);
+                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                    || fuseA6Early)
                     X = xZp;
                 FinishStagedMemoryRead(2, xZp);
                 return true;
@@ -1772,7 +2828,30 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             case 0xA4:
             {
                 var yZp = Read(ReadZeroPageOperand());
-                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion))
+                // Non-overlapped: keep pre-load Y on the data-read checkpoint
+                // unless the predecessor has already consumed LDY's following
+                // FETCH phase. VICE LD assigns Y before GET_ZERO CLK_INC; the
+                // host sees the assignment at that checkpoint only when the
+                // predecessor's source-ordered trailing clocks overlap it.
+                // Control-transfer JUMP enters directly at the target FETCH.
+                var predecessorConsumedFetch =
+                    PriorInstructionConsumesFollowingFetchPhase(
+                        _previousOpcode,
+                        DebugPriorTrailingAtNextPc)
+                    || (IsStackPushOpcode(_previousOpcode)
+                        && DebugPriorTrailingAtNextPc >= 1)
+                    || _previousOpcode is 0x4C or 0x6C;
+                // A not-taken branch has no JUMP phase. When its offset FETCH
+                // exported at least one next-PC checkpoint, fall-through
+                // LD(GET_ZERO) shares that consumed phase and exposes Y on the
+                // data clock. A zero-checkpoint branch keeps pre-load Y.
+                var notTakenBranchConsumedFetch = IsBranchOpcode(_previousOpcode)
+                    && DebugPriorTrailingAtNextPc >= 1;
+                var fuseA4Early = (predecessorConsumedFetch
+                        || notTakenBranchConsumedFetch)
+                    && !(_afterFullLengthTakenBranch || _afterShortTakenBranchLag);
+                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                    || fuseA4Early)
                     Y = yZp;
                 FinishStagedMemoryRead(2, yZp);
                 return true;
@@ -1835,22 +2914,57 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             case 0xAD:
             {
                 var aAbs = Read(ReadAbsoluteOperand());
-                // Non-overlapped LDA abs: pre-load A on data-read CLK (c=518803).
-                // After taken branch trail>=1 VICE shows loaded A on data-read
-                // (c=559287 nA=$FF mA=$B0 after BCC trail=2).
-                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion)
-                    || _afterFullLengthTakenBranch
+                // VICE FETCH_OPCODE($AD) is 3 CLK (fetch_tab=1) then GET_ABS
+                // LOAD+CLK_INC. JUMP has no CLK.
+                // Short taken BCC: cycle 1 is FETCH of p2 (Wolf64 2126188 nA=$B0).
+                // Full-length without BA dummy-steal: cycle 1 still pre-load
+                // (Wolf64 2044662 nA=$06). Stolen dummy consumes a FETCH CLK
+                // (_loadAEarlyAfterStagedBranch) so cycle 1 is GET_ABS
+                // (Wolf64 2050522 nA=$D012). Not-taken overlaps FETCH (2060353).
+                var afterTakenBranch = _afterFullLengthTakenBranch
                     || _afterShortTakenBranchLag
-                    || (IsBranchOpcode(_previousOpcode)
-                        && DebugPriorTrailingAtNextPc >= 1))
+                    || (IsBranchOpcode(_previousOpcode) && IsBranchTaken(_previousOpcode));
+                var afterNotTakenBranch =
+                    IsBranchOpcode(_previousOpcode) && !IsBranchTaken(_previousOpcode);
+                var nonOverlappedAbsoluteLoad =
+                    _nonOverlappedFetchPhase || _nonOverlappedRegion;
+                var predecessorConsumedFetch =
+                    PriorInstructionConsumesFollowingFetchPhase(
+                        _previousOpcode,
+                        DebugPriorTrailingAtNextPc);
+                // RTS performs LOAD+CLK_INC, then increments and JUMPs without
+                // another clock. Its target's LD(GET_ABS) therefore reaches the
+                // data-read checkpoint before the destination register is
+                // host-visible. RTI's final PULL phase maps differently.
+                var afterRts = _previousOpcode == 0x60;
+                if (afterNotTakenBranch
+                    || (!afterTakenBranch
+                        && !afterRts
+                        && (!nonOverlappedAbsoluteLoad || predecessorConsumedFetch))
+                    || (_afterFullLengthTakenBranch && _loadAEarlyAfterStagedBranch))
+                {
                     A = aAbs;
+                }
                 FinishStagedMemoryRead(3, aAbs);
                 return true;
             }
             case 0xAE:
             {
                 var xAbs = Read(ReadAbsoluteOperand());
-                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion))
+                // VICE GET_ABS writes X then CLK_INC. When previous already
+                // exported next-PC (trail>=1), data-read shows loaded X
+                // (Wolf64 2571284 nX=$0E). After a taken branch or RTS target
+                // entry it still exposes pre-load X. Other overlapped paths
+                // already commit.
+                var afterRts = _previousOpcode == 0x60;
+                var ldxAbsCommitXOnDataRead = !afterRts
+                    && !_afterFullLengthTakenBranch
+                    && !_afterShortTakenBranchLag
+                    && !IsBranchOpcode(_previousOpcode)
+                    && (DebugPriorTrailingAtNextPc >= 1 || _fuseImpliedAfterIndyLoad);
+                if (!afterRts
+                    && (ldxAbsCommitXOnDataRead
+                        || !(_nonOverlappedFetchPhase || _nonOverlappedRegion)))
                     X = xAbs;
                 FinishStagedMemoryRead(3, xAbs);
                 return true;
@@ -1858,7 +2972,9 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             case 0xAC:
             {
                 var yAbs = Read(ReadAbsoluteOperand());
-                if (!(_nonOverlappedFetchPhase || _nonOverlappedRegion))
+                var afterRts = _previousOpcode == 0x60;
+                if (!afterRts
+                    && !(_nonOverlappedFetchPhase || _nonOverlappedRegion))
                     Y = yAbs;
                 FinishStagedMemoryRead(3, yAbs);
                 return true;
@@ -1898,12 +3014,31 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 {
                     _bus.Write(_effectiveAddress, _fetched);
                     _zpRmwModifyCommitted = false;
+                    if (_zpRmwPcDeferredFromSteal)
+                    {
+                        // Dummy+store CLK_INC still export opcode PC; INC_PC
+                        // becomes visible on the following FETCH_OPCODE.
+                        // Do not assign _opcodeAddress: it can lag the visible
+                        // opcode PC (Wolf64 2093350 mPC=$F69D nPC=$F69F).
+                        _stagedMemoryReadCompleted = true;
+                        return true;
+                    }
+
                     FinishStagedMemoryWrite(2);
                     return true;
                 }
 
                 // Fallback (e.g. after-branch defer returned false at cycle 2):
                 // full RMW + NZ on this CLK so host still pairs flags with PC.
+                if (_zpRmwPcDeferredFromSteal)
+                {
+                    CommitZeroPageRmwModifyAndFlags();
+                    _bus.Write(_effectiveAddress, _fetched);
+                    _zpRmwModifyCommitted = false;
+                    _stagedMemoryReadCompleted = true;
+                    return true;
+                }
+
                 if (_opcode == 0xE6)
                     IncrementStagedMemory(ReadZeroPageOperand(), 2);
                 else
@@ -1936,9 +3071,13 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 var absoluteXValue = Read((ushort)(absoluteXBase + X));
                 // Non-overlapped: pre-load A on data-read CLK (c=519271 nA=$FF mA=$E4).
                 // After TSX/implied trail==0 VICE already shows loaded A on
-                // data-read (c=559234 nA=$22 mA=$0A).
+                // data-read (c=559234 nA=$22 mA=$0A). After previous last CLK
+                // already at next-PC (trail>=1), GET_ABS_X is this CLK
+                // (Wolf64 2406964 nA=$EB mA=$81). Directly after full-length
+                // taken branch still pre-loads (_deferAbsoluteXLoadCompletionAfterBranch).
                 if (!_deferAbsoluteXLoadCompletionAfterBranch
                     && (!(_nonOverlappedFetchPhase || _nonOverlappedRegion)
+                        || DebugPriorTrailingAtNextPc >= 1
                         || (IsImpliedRegisterOrFlagOpcode(_previousOpcode)
                             && DebugPriorTrailingAtNextPc == 0)))
                 {
@@ -1955,7 +3094,14 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 }
 
                 var absoluteYValue = Read((ushort)(absoluteYBase + Y));
-                if (!_deferAbsoluteYLoadCompletionAfterBranch
+                var fuseAbsYAfterNotTakenBpl = _previousOpcode == 0x10
+                    && DebugPriorTrailingAtNextPc >= 1;
+                if ((_fuseAbsYAfterStolenSamePageBranch || fuseAbsYAfterNotTakenBpl)
+                    && !_deferAbsoluteYLoadCompletionAfterBranch)
+                {
+                    A = absoluteYValue;
+                }
+                else if (!_deferAbsoluteYLoadCompletionAfterBranch
                     && !(_nonOverlappedFetchPhase || _nonOverlappedRegion))
                 {
                     A = absoluteYValue;
@@ -1996,14 +3142,14 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 // callees defer A to the apply tick so pre-load A matches xvic.
                 // After fused LDY# trail==1 or not-taken BEQ trail==1, VICE already
                 // shows loaded A on data-read (c=541172 after LDY#; c=541183 after
-                // BEQ nA=$3E mA=$9B when deferred).
-                // Lag-shaped path: A lands on the data-read tick. Non-overlapped
-                // callees defer A to the apply tick so pre-load A matches xvic.
-                // After fused LDY# trail==1 or not-taken BEQ trail==1, VICE already
-                // shows loaded A on data-read (c=541172 after LDY#; c=541183 after
-                // BEQ nA=$3E mA=$9B when deferred).
+                // BEQ nA=$3E mA=$9B when deferred). After any previous insn
+                // that already exported next-PC (trail>=1), GET_IND_Y is the
+                // data-read CLK (Wolf64 2406425 nA=$4C mA=$1F).
                 var indyCommitAOnDataRead = !_deferIndirectYLoadCompletionAfterBranch
+                    && !IsStoreOpcode(_previousOpcode)
                     && (!_nonOverlappedFetchPhase && !_nonOverlappedRegion
+                        || DebugPriorTrailingAtNextPc >= 1
+                        || _fuseImpliedAfterIndyLoad
                         || ((IsImmediateLoadOpcode(_previousOpcode)
                                 || IsBranchOpcode(_previousOpcode))
                             && DebugPriorTrailingAtNextPc == 1));
@@ -2026,34 +3172,6 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
                 Push((byte)(P | 0x10));
                 FinishStagedStackPush();
                 return true;
-            case 0x68:
-                // PLA (6510dtvcore.c:1368-1378): the PULL cycle exports the
-                // incremented S and the pulled A; NZ and the PC advance become
-                // visible on the next cycle via the staged apply.
-                if (_plaDeferPullOne)
-                {
-                    // Hold one extra STACK_PEEK-shaped CLK after soft BIT.
-                    // Real PULL runs on the following cycle-0 path (late pull)
-                    // so host still samples opcode PC with new A/S (c=522470).
-                    _plaDeferPullOne = false;
-                    _plaLatePullPending = true;
-                    _visiblePC = _opcodeAddress;
-                    return true;
-                }
-
-                A = Pop();
-                FinishStagedMemoryRead(1, A);
-                return true;
-            case 0x28:
-                // PLP (6510dtvcore.c:1380-1396): PULL CLK exports S; status and
-                // INC_PC apply after that sample. Was unstaged (Pop only at
-                // cycle 0) so S lagged xvic at c=518581 (nS=$F9 mS=$F8).
-                _fetched = Pop();
-                _pc = (ushort)(_instructionPC + 1);
-                _visiblePC = _instructionPC;
-                _stagedMemoryReadCompleted = true;
-                _pendingPlpStatus = true;
-                return true;
             case 0x91:
                 _bus.Write(ReadIndirectYOperand(), A);
                 FinishStagedMemoryWrite(2);
@@ -2063,6 +3181,42 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         }
     }
 
+    private bool TryExecuteCycleStagedStackPullOpcode()
+    {
+        if (_opcode is not (0x68 or 0x28))
+        {
+            return false;
+        }
+
+        // VICE PLA/PLP: FETCH, FETCH, STACK_PEEK, PULL. The status/NZ and
+        // INC_PC work follows the pull checkpoint without another CLK.
+        if (_cycle == 1)
+        {
+            _ = Read((ushort)(0x0100 | S));
+            return true;
+        }
+
+        if (_cycle != 0)
+        {
+            return false;
+        }
+
+        _fetched = Pop();
+        _visiblePC = _instructionPC;
+        _suppressBootstrapBoundary = true;
+        if (_opcode == 0x68)
+        {
+            A = _fetched;
+            _pendingPlaCompletion = true;
+        }
+        else
+        {
+            _pendingPlpStatus = true;
+        }
+
+        return true;
+    }
+
     private bool TryExecuteCycleStagedRtsOpcode()
     {
         if (_opcode != 0x60)
@@ -2070,78 +3224,72 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             return false;
         }
 
-        // VICE 6510dtvcore.c RTS: STACK_PEEK, PULL, PULL, LOAD, JUMP after the
-        // FETCH_OPCODE CLKs. Default pulls at cycle 2/1 match clean-fetch paths
-        // (early-boot c=30, non-overlapped c=5048: first PULL not visible at
-        // dbgCyc=3). Overlapped first FETCH (priorTrailing==1 after LDY # etc.)
-        // means VICE already consumed one FETCH on the previous host sample, so
-        // first PULL is visible at our dbgCyc=3 (c=518540 nS ahead of mS).
+        // VICE 6510dtvcore.c RTS is invariant for x64sc/xvic because both hosts
+        // define SKIP_CYCLE as zero:
+        //   FETCH_OPCODE CLK, FETCH_OPCODE CLK, STACK_PEEK CLK,
+        //   PULL low CLK, PULL high CLK, LOAD(return-address) CLK,
+        //   then increment and JUMP with no CLK.
+        // A predecessor that already exported enough next-PC checkpoints
+        // overlaps the first FETCH with its final source clock. The source
+        // sequence stays unchanged, but each remaining host checkpoint is one
+        // micro-operation farther along.
+        var priorConsumesFetchPhase =
+            !_rtsPrefetchedByNotTakenBranch
+            && PriorInstructionConsumesFollowingFetchPhase(
+                _previousOpcode,
+                DebugPriorTrailingAtNextPc);
         switch (_cycle)
         {
-            case 3 when _rtsOverlappedFirstFetch:
-                _stagedReturnAddress = Pop();
+            case 3:
+                if (priorConsumesFetchPhase)
+                    _stagedReturnAddress = Pop();
+                else
+                    _ = Read((ushort)(0x0100 | S));
                 return true;
             case 2:
-                if (_rtsOverlappedFirstFetch)
-                {
+                if (priorConsumesFetchPhase)
                     _stagedReturnAddress |= (ushort)(Pop() << 8);
-                    return true;
-                }
-
-                _stagedReturnAddress = Pop();
+                else
+                    _stagedReturnAddress = Pop();
                 return true;
             case 1:
-                if (_rtsOverlappedFirstFetch)
+                if (priorConsumesFetchPhase)
                 {
-                    _ = Read(_stagedReturnAddress);
-                    return true;
+                    CompleteRtsReturn();
+                    _cycle = 0;
                 }
-
-                _stagedReturnAddress |= (ushort)(Pop() << 8);
+                else
+                {
+                    _stagedReturnAddress |= (ushort)(Pop() << 8);
+                }
                 return true;
             case 0:
-                _pc = (ushort)(_stagedReturnAddress + 1);
-                // Leaving the non-overlapped callee region on RTS.
-                _nonOverlappedRegion = false;
-                _nonOverlappedFetchPhase = false;
-                if (_rtsOverlappedFirstFetch)
-                {
-                    // Overlapped first-FETCH path is one host sample ahead of the
-                    // clean RTS schedule: VICE JUMP is already visible on this
-                    // CLK (c=518543 nPC=return mPC=RTS with delayNextFetch).
-                    // Export return PC now and fetch the caller next tick.
-                    _rtsOverlappedFirstFetch = false;
-                    _visiblePC = _pc;
-                    _instructionPC = _pc;
-                    _suppressBootstrapBoundary = true;
-                    return true;
-                }
-
-                _rtsOverlappedFirstFetch = false;
-                _visiblePC = _instructionPC;
-                _suppressBootstrapBoundary = true;
-                if (Peek(_pc) == 0x60)
-                {
-                    // Same RTS prefetch convention as FinishStagedMemoryWrite:
-                    // a following RTS expects an un-lagged entry, so skip the
-                    // delayed-fetch tick and fetch it on the next cycle.
-                    return true;
-                }
-
-                _delayNextFetch = true;
+                CompleteRtsReturn();
                 return true;
             default:
                 return false;
         }
     }
 
+    private void CompleteRtsReturn()
+    {
+        _ = Read(_stagedReturnAddress);
+        _pc = (ushort)(_stagedReturnAddress + 1);
+        // LOAD's CLK exports the RTS PC. On the next Tick, VICE resumes with
+        // the no-clock JUMP, samples interrupts, and reaches the return
+        // instruction's first FETCH CLK.
+        _visiblePC = _instructionPC;
+        _suppressBootstrapBoundary = true;
+        _rtsPrefetchedByNotTakenBranch = false;
+        _nonOverlappedRegion = false;
+        _nonOverlappedFetchPhase = false;
+    }
+
     /// <summary>
-    /// Cycle-staged RTI (0x40; TR-LOCKSTEP-VSF-001), mirroring VICE's 6-cycle
-    /// sequence (6510dtvcore.c RTI: fetch, dummy, stack peek, pull P, pull PCL,
-    /// pull PCH): each pull cycle exports the incremented S; the pulled status
-    /// becomes visible one cycle after its pull (assignment happens after that
-    /// cycle's CLK_INC), and the return-address JUMP becomes visible on the
-    /// final tick, exactly like the hosted per-cycle register export.
+    /// Cycle-staged RTI (0x40; TR-CYCLE-001), mirroring VICE's invariant
+    /// six-clock sequence: two FETCH clocks, STACK_PEEK, pull P, pull PCL, and
+    /// pull PCH. Status application and JUMP occur after their preceding clock
+    /// checkpoints and therefore do not create extra host samples.
     /// </summary>
     private bool TryExecuteCycleStagedRtiOpcode()
     {
@@ -2153,31 +3301,22 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         switch (_cycle)
         {
             case 3:
-                if (_rtiDeferFirstPullOne)
-                {
-                    // Extra STACK_PEEK after soft body (c=522485).
-                    _rtiDeferFirstPullOne = false;
-                    _cycle = 4;
-                    return true;
-                }
-
-                _fetched = Pop();
+                _ = Read((ushort)(0x0100 | S));
                 return true;
             case 2:
-                P = (byte)((_fetched & ~0x10) | (P & 0x10));
-                _stagedReturnAddress = Pop();
+                _fetched = Pop();
                 return true;
             case 1:
-                _stagedReturnAddress |= (ushort)(Pop() << 8);
+                P = (byte)(_fetched | 0x20);
+                _stagedReturnAddress = Pop();
                 return true;
             case 0:
+                _stagedReturnAddress |= (ushort)(Pop() << 8);
                 _pc = _stagedReturnAddress;
-                _instructionPC = _pc;
-                _visiblePC = _pc;
-                // Leave non-overlapped region on RTI (same as RTS). Soft-deferred
-                // LDA # after RTI was lagging VICE (c=522491 nA=$01 mA=$20).
+                _visiblePC = _instructionPC;
+                _suppressBootstrapBoundary = true;
                 _nonOverlappedRegion = false;
-                _nonOverlappedFetchPhase = false;
+                _nonOverlappedFetchPhase = true;
                 return true;
             default:
                 return false;
@@ -2193,6 +3332,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
         var fallThrough = (ushort)(_instructionPC + 2);
 
+        if (IsBranchTaken(_opcode) && _holdTakenBranchOpcodePc && _cycle >= 1)
+        {
+            _visiblePC = _instructionPC;
+            return true;
+        }
+
         // Taken multi-cycle: VICE BRANCH does INC_PC then dummy LOAD+CLK_INC
         // (exports fall-through) before JUMP. Short taken (2 host steps) keeps
         // opcode PC on cycle 1 and only shows fall-through at cycle 0.
@@ -2200,12 +3345,53 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         {
             if (_cycle >= 2)
             {
+                var afterIncDummy = (ushort)(_opcodeAddress + 2);
+                if (IsZeroPageIncrementDecrementOpcode(_previousOpcode)
+                    && (_dummyTakenBneAfterStolenInc
+                        || _visiblePC == afterIncDummy))
+                {
+                    // After stolen zp INC, this host tick is VICE BRANCH dummy
+                    // (Wolf64 2093352 nPC=$F6A1). Do not reset PC back to the
+                    // BNE opcode after FETCH already exported fall-through.
+                    _pc = afterIncDummy;
+                    _visiblePC = afterIncDummy;
+                    _dummyTakenBneAfterStolenInc = false;
+                    return true;
+                }
+
                 // Early host samples still at opcode (extra FETCH-shaped CLKs).
                 _visiblePC = _instructionPC;
                 return true;
             }
 
             // _cycle == 1: fall-through export (c=540201 nPC=$D92B).
+            // After stolen zp INC, VICE already dummy-exported fall-through
+            // on the previous host CLK; this CLK is JUMP (2093353 nPC=$F6A7).
+            // Unstalled INC: FETCH was still the BNE opcode (2142574 nPC=$F69F);
+            // this CLK is the dummy INC_PC (2142575 nPC=$F6A1).
+            if (IsZeroPageIncrementDecrementOpcode(_previousOpcode))
+            {
+                var afterIncDummy = (ushort)(_opcodeAddress + 2);
+                if (_visiblePC == afterIncDummy)
+                {
+                    var offset = (sbyte)Read((ushort)(_opcodeAddress + 1));
+                    var jumpTarget = (ushort)(fallThrough + offset);
+                    _pc = jumpTarget;
+                    _visiblePC = jumpTarget;
+                    _instructionPC = jumpTarget;
+                    _cycle = 0;
+                    _nonOverlappedRegion = false;
+                    _nonOverlappedFetchPhase = false;
+                    _suppressBootstrapBoundary = true;
+                    return true;
+                }
+
+                _pc = afterIncDummy;
+                _visiblePC = afterIncDummy;
+                _suppressBootstrapBoundary = true;
+                return true;
+            }
+
             _pc = fallThrough;
             _visiblePC = fallThrough;
             _suppressBootstrapBoundary = true;
@@ -2240,6 +3426,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             if (Peek(fallThrough) == 0x60)
             {
                 PrefetchOpcodeAt(fallThrough);
+                _rtsPrefetchedByNotTakenBranch = true;
                 return true;
             }
 
@@ -2257,51 +3444,163 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
 
         var target = (ushort)(fallThrough + (sbyte)Read((ushort)(_instructionPC + 1)));
         _pc = target;
+        var skipJumpExtraTick = _stolenTakenBranchAfterAbsY;
         // Multi-cycle staged path already exported fall-through at cycle 1;
         // this CLK is VICE JUMP (c=540202 nPC=$D91D mPC=$D92B when still
         // fall-through). Short taken keeps fall-through visible here.
-        if (_takenBranchStagedFallthrough)
+        // After STY abs whose STORE CLK already exported next-PC, VICE dummy
+        // CLK_INC is this last CLK (fall-through); JUMP has no CLK
+        // (Wolf64 2406995 nPC=$EAF0 mPC=$EB26). STA abs ($8D) still JUMPs
+        // (KERNAL wait-loop BEQ at 2141796 nPC=$E5CD).
+        // After LDA abs,Y stolen FETCH, cycle 0 is that JUMP with no CLK
+        // (Wolf64 4139088 nPC=$A604 mPC=$A5B8).
+        // Stolen BPL after INY: dummy already exported fall-through; VICE
+        // JUMP has no CLK so this sample is the target (Wolf64 4150680
+        // nPC=$A5F9 mPC=$A5FF).
+        var samePageTaken = (fallThrough & 0xFF00) == (target & 0xFF00);
+        // VICE immediate bodies execute their ALU/compare work after GET_IMM's
+        // final clock. When that source phase leaves one exported next-PC
+        // checkpoint, the staged branch dummy owns the current host sample and
+        // the unclocked JUMP cannot expose target until the following FETCH.
+        var predecessorOwnsJumpCheckpoint =
+            _branchFetchPriorTrailing == 1
+            && IsTwoByteImmediateOpcode(_previousOpcode);
+        _deferredBranchJumpTargetFetch = predecessorOwnsJumpCheckpoint;
+        if ((skipJumpExtraTick || _takenBranchStagedFallthrough)
+            && samePageTaken
+            && !predecessorOwnsJumpCheckpoint
+            && _previousOpcode != 0x8C
+            && _previousOpcode != 0xA5)
+        {
+            // Same-page taken BPL after LDA abs,Y: dummy already exported
+            // fall-through; VICE JUMP has no CLK so this sample is the target
+            // (Wolf64 4150680 stolen nPC=$A5F9; 4150690 unstolen nPC=$A5F9
+            // mPC=$A5FF). Page-cross stolen B9 still FETCHes on the following
+            // tick (4139089 $A604 to $A5B8). STY abs keeps fall-through.
+            _visiblePC = target;
+            _skipSoftImmAfterStagedTakenBranch = true;
+            _skipImmediateLoadAfterAbsoluteStoreBranch =
+                _branchFetchPriorTrailing == 2
+                && IsAbsoluteUnindexedStoreOpcode(_previousOpcode);
+            _loadAEarlyAfterStagedBranch = true;
+            if (_previousOpcode == 0xB9)
+                _fuseAbsYAfterStolenSamePageBranch = true;
+        }
+        else if (_takenBranchStagedFallthrough
+            && !predecessorOwnsJumpCheckpoint
+            && _previousOpcode != 0x8C
+            && _previousOpcode != 0xA5
+            && _previousOpcode != 0xB9)
         {
             _visiblePC = target;
             _skipSoftImmAfterStagedTakenBranch = true;
+            _skipImmediateLoadAfterAbsoluteStoreBranch =
+                _branchFetchPriorTrailing == 2
+                && IsAbsoluteUnindexedStoreOpcode(_previousOpcode);
+            _loadAEarlyAfterStagedBranch = true;
         }
         else
         {
             _visiblePC = fallThrough;
         }
-
+        _stolenTakenBranchAfterAbsY = false;
+        _fetchAfterStolenB9Jump = false;
+        _holdTakenBranchOpcodePc = false;
         _suppressBootstrapBoundary = true;
-        // VICE DO_INTERRUPT runs after BRANCH before the target FETCH. Keep
-        // opcode-PC export via suppress, but open the IRQ sample (c=614627:
-        // native entered IRQ with last_opcode=BEQ+DELAYS while managed ran LDA
-        // at the target because suppress blocked the post-branch boundary).
+        _baDelayedFetchClk = false;
+        _delayNextFetch = false;
+        if (skipJumpExtraTick)
+            _fetchAfterStolenB9Jump = true;
+        // VICE BRANCH JUMP has no CLK. DO_INTERRUPT is the next loop iteration
+        // before FETCH of the target. Opening the IRQ *execute* on this extra
+        // JUMP tick pushed PCH one CLK early (Wolf64 2175365 mS=$F2 nS=$F3).
+        // Sample here despite suppress so an already-elapsed delay can arm
+        // IRQ (Wolf64 2224633 nS=$F2 on the push cycle). Do not Execute the
+        // first dummy on this tick; the next host tick is the arming dummy.
         _interruptSampleDespiteSuppress = true;
+        if (!skipJumpExtraTick)
+        {
+            _sampleIrqBeforeNextFetch = true;
+            _branchIrqArmingDummy = true;
+        }
+        var dummyAlreadyExportedFallthrough = _takenBranchStagedFallthrough;
         _takenBranchStagedFallthrough = false;
-        if ((fallThrough & 0xFF00) != (target & 0xFF00))
+        if (skipJumpExtraTick)
+        {
+            // Stolen B9 dummy already exported fall-through. VICE JUMP has no
+            // CLK and this BNE is same-page ($A604 to $A5B8). Do not arm the
+            // page-cross extra tick: that left opcode $D0 while native FETCHed
+            // $A5B8 (Wolf64 4139089). Next host tick FETCHes the target.
+            _lastOpcodeDelaysInterrupt = true;
+            _branchTargetFetchPending = true;
+            _branchPageCrossExtraPending = false;
+            ConsumedViceClockThisTick = false;
+        }
+        else if ((fallThrough & 0xFF00) != (target & 0xFF00))
         {
             // TR-LOCKSTEP-VSF-001: a taken branch across a page boundary costs
             // 4 native cycles (6510dtvcore.c BRANCH: the PBC fix-up cycle does
             // another dummy fetch and keeps exporting the un-fixed PC); consume
             // one extra tick before the target fetch.
-            _branchPageCrossExtraPending = true;
-            // PBC path does not set OPCODE_DELAYS_INTERRUPT (only the same-page
-            // else branch of 6510dtvcore.c BRANCH does).
-            _lastOpcodeDelaysInterrupt = false;
+            // Overlapped FETCH already spent that first CLK (Wolf64 2129144).
+            // After STY abs the dummy CLK is this last CLK; JUMP has no extra
+            // tick (Wolf64 2406996 nPC=$EB26 vs extra $EAF0).
+            if (_previousOpcode == 0x8C)
+            {
+                _lastOpcodeDelaysInterrupt = false;
+            }
+            else if (_skipBranchPageCrossExtra || dummyAlreadyExportedFallthrough)
+            {
+                // Dummy CLK already exported fall-through on a prior host tick.
+                // VICE extra CLK_INC is this JUMP tick (un-fixed PC); JUMP has
+                // no further CLK, so the next sample FETCHes the target
+                // (Wolf64 4150708 nPC=$A5B8). Collapsed dummy+JUMP still needs
+                // the following extra CLK (4134649 nPC=$A604; 4136566 LDA #).
+                _branchTargetFetchPending = true;
+                _lastOpcodeDelaysInterrupt = false;
+            }
+            else
+            {
+                _branchPageCrossExtraPending = true;
+                _lastOpcodeDelaysInterrupt = false;
+            }
         }
         else
         {
-            _branchTargetFetchPending = true;
             // VICE BRANCH same-page: OPCODE_DELAYS_INTERRUPT() so IRQ/NMI need
             // one extra cycle (mainviccpu.c interrupt_check_irq_delay).
             _lastOpcodeDelaysInterrupt = true;
+            if (_previousOpcode == 0x8C)
+            {
+                // Dummy CLK already exported fall-through; JUMP has no extra
+                // host tick (Wolf64 2406996 nPC=$EB26 vs tgtPend still $EAF0).
+            }
+            else
+            {
+                _branchTargetFetchPending = true;
+                // The cycle-0 host checkpoint still contains BRANCH's
+                // LOAD_DUMMY + CLK_INC before the unclocked JUMP. It therefore
+                // counts for interrupt delay. Staged paths that exported the
+                // dummy earlier are handled above and leave only JUMP here.
+            }
         }
 
+        _skipBranchPageCrossExtra = false;
         return true;
     }
 
     private static bool IsBranchOpcode(byte opcode)
     {
         return opcode is 0x10 or 0x30 or 0x50 or 0x70 or 0x90 or 0xB0 or 0xD0 or 0xF0;
+    }
+
+    /// <summary>
+    /// Control-flow opcodes whose VICE bodies update PC with JUMP after their
+    /// final CLK_INC. The following FETCH therefore starts a distinct phase.
+    /// </summary>
+    private static bool EndsWithUnclockedControlTransfer(byte opcode)
+    {
+        return IsBranchOpcode(opcode) || opcode is 0x00 or 0x20 or 0x40 or 0x4C or 0x60 or 0x6C;
     }
 
     private bool IsBranchTaken(byte opcode)
@@ -2328,48 +3627,63 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         _opcode = Read(_pc++);
         _cycle = Math.Max(0, GetCycleCount(_opcode) - 1);
         _stagedMemoryReadCompleted = false;
+        _stagedLoadRegisterVisibleAtReadCheckpoint = false;
         _delayNextFetch = false;
+        _sampleIrqBeforeNextFetch = false;
         _stagedNzUpdate = false;
         _stagedNzValue = 0;
         _stagedCarryUpdate = false;
         _stagedCarryValue = false;
         _callTargetFetchPending = false;
-        _deferImmediateLoadAfterBranch = false;
+        _callTargetFetchNonOverlapped = false;
+
         _deferImpliedRegisterCompletionAfterBranch = false;
         _deferAbsoluteXLoadCompletionAfterBranch = false;
         _deferAbsoluteYLoadCompletionAfterBranch = false;
+        _fuseAbsYAfterStolenSamePageBranch = false;
+        _holdZpIncDecAfterStaAbsY = false;
         _deferJsrPushAfterBranch = false;
         _deferIndirectYLoadCompletionAfterBranch = false;
         _deferZeroPageRmwPcAdvanceAfterBranch = false;
         _deferNextIndirectYLoadAfterBranchRmw = false;
+        _zpRmwPcDeferredFromSteal = false;
         _deferIndexedStorePcAdvanceAfterBranch = false;
         _deferZeroPageIndexedStorePcAdvanceAfterBranch = false;
         _zpRmwModifyCommitted = false;
-        _rtsOverlappedFirstFetch = false;
+        _impliedFlagLastClkExportedNextPc = false;
+        _pendingPlaCompletion = false;
         _pendingPlpStatus = false;
         _bitSoftDeferEarly = false;
         _softDeferredBitLatched = false;
         _softDeferredBitValue = 0;
-        _plaDeferPullOne = false;
-        _plaLatePullPending = false;
-        _rtiDeferFirstPullOne = false;
         _softDeferZpCompare = false;
         _softDeferJmpAbs = false;
         _pendingJmpTarget = 0;
+        _targetInstructionFollowsSoftDeferredJmp = false;
         _takenBranchStagedFallthrough = false;
+        _stolenTakenBranchAfterAbsY = false;
+        _fetchAfterStolenB9Jump = false;
+        _holdTakenBranchOpcodePc = false;
         _skipSoftImmAfterStagedTakenBranch = false;
+        _skipImmediateLoadAfterAbsoluteStoreBranch = false;
+        _deferredBranchJumpTargetFetch = false;
+        _targetInstructionFollowsDeferredBranchJump = false;
         _nopHoldOpcodePcOnFinal = false;
         _nopChainHoldAfterBranch = false;
         _softDeferAfterNopChain = false;
         _indexedStorePcAdvanceWasDeferred = false;
         _indexedLoadPageCrossDelayConsumed = false;
-        _pendingDeferredImmediateLoad = false;
+
         _softDeferredImmediateLoad = false;
-        _holdIndYStorePcOneCycle = false;
+        _jsrFollowsSoftDeferredImmediateLoad = false;
+        _immediateLoadFollowsSoftDeferredBody = false;
+        _immediateLoadCompletedWithoutDistinctFetch = false;
+        _softDeferImpliedAfterHeldIndYStore = false;
         _softDeferCompareCommit = false;
         _pendingSoftCompareCommit = false;
         _softDeferredImpliedOp = false;
         _pendingDeferredImpliedRegisterCompletion = false;
+        _rtsPrefetchedByNotTakenBranch = false;
         _stagedReturnAddress = 0;
         _effectiveAddress = 0;
         _fetched = 0;
@@ -2538,7 +3852,7 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             || opcode is 0x4C or 0x6C or 0xBC or 0xBE or 0xD1
             || opcode is 0x29 or 0x09 or 0x49 or 0x69 or 0xE9 or 0xC9 or 0xE0 or 0xC0
             || opcode is 0x8D or 0x8C or 0x85 or 0x86 or 0x84
-            || opcode is 0xA5 or 0xA6 or 0xA4 or 0xB5 or 0xB6 or 0xB4 or 0xAD or 0xAE or 0xAC
+            || opcode is 0xA5 or 0xA6 or 0xA4 or 0xB5 or 0xB6 or 0xB4 or 0xAE or 0xAC
             || opcode is 0x48 or 0x08;
     }
 
@@ -2704,15 +4018,11 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         UpdateNZ(value);
         _pc = (ushort)(_instructionPC + 2);
         _visiblePC = _pc;
-        _pendingDeferredImmediateLoad = false;
+
         _softDeferredImmediateLoad = false;
-        // After-branch deferred imm completes on the same host sample VICE uses
-        // as the following opcode's first FETCH. Suppress IsInstructionBoundary
-        // for the rest of this host step so SystemClock does not arm IRQ here
-        // (c=522261 managed irq=6 while nPC continues into the next insn).
-        // Cleared at the start of the next Tick before fetch; IRQ then waits
-        // until that insn ends, matching VICE. Do not fall through to fetch
-        // (that regressed focused 500k at c=4977).
+        // LD(GET_IMM) has no clock after FETCH_OPCODE's second CLK_INC.
+        // The caller applies this body, performs VICE's DO_INTERRUPT check, and
+        // continues into the following FETCH without inventing a body-only clock.
         _suppressBootstrapBoundary = true;
     }
 
@@ -2755,6 +4065,24 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             _stagedNzUpdate = false;
         }
 
+        // Full-length taken branch plus (zp),Y page-cross: VICE extra CLK is
+        // GET_IND_Y (opcode PC). Wolf64 4131432 nPC=$E606. No page-cross:
+        // this tick is the next FETCH (4131820 nPC=$E608). Short lag still
+        // INC_PCs (KERNAL RAM fill c=5386 nPC=$FD70).
+        if (_afterFullLengthTakenBranch && _indyPageCrossedThisInsn)
+        {
+            _visiblePC = _opcodeAddress;
+            _suppressBootstrapBoundary = true;
+        }
+        else
+        {
+            // Extra tick is the next FETCH (no page-cross / short lag).
+            // Leave the following CMP# overlapped so it fuses (Wolf64
+            // 4131822 nPC=$E60A nP=$23).
+            _nonOverlappedFetchPhase = false;
+            _nonOverlappedRegion = false;
+        }
+
         _pendingDeferredNzUpdateAfterBranch = false;
     }
 
@@ -2792,11 +4120,15 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         return (ushort)((lo | (hi << 8)) + Y);
     }
 
-    private void FinishStagedMemoryRead(int instructionLength, byte nzValue)
+    private void FinishStagedMemoryRead(
+        int instructionLength,
+        byte nzValue,
+        bool registerVisibleAtReadCheckpoint = false)
     {
         _pc = (ushort)(_instructionPC + instructionLength);
         _visiblePC = _instructionPC;
         _stagedMemoryReadCompleted = true;
+        _stagedLoadRegisterVisibleAtReadCheckpoint = registerVisibleAtReadCheckpoint;
         _stagedNzUpdate = true;
         _stagedNzValue = nzValue;
     }
@@ -2892,7 +4224,12 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         //  - trail==1 after load: advance (c=557339 STA after LDA zp)
         //  - trail==1 after not-taken branch: advance (c=559296 STA after BNE)
         //  - trail>=2: advance (c=541162/541165)
-        if ((_nonOverlappedRegion || _nonOverlappedFetchPhase)
+        var storeFollowsUnconsumedImmediateFetch =
+            IsImmediateLoadOpcode(_previousOpcode)
+            && DebugPriorTrailingAtNextPc == 0;
+        if ((_nonOverlappedRegion
+                || _nonOverlappedFetchPhase
+                || storeFollowsUnconsumedImmediateFetch)
             && IsStoreOpcode(_opcode)
             && _visiblePC == _opcodeAddress
             && !IsZeroPageIndexedStoreOpcode(_opcode)
@@ -2900,11 +4237,45 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         {
             var trail = DebugPriorTrailingAtNextPc;
             var afterTakenBranch = _afterFullLengthTakenBranch || _afterShortTakenBranchLag;
-            // Advance only when VICE has already INC_PC by the write sample:
-            // load-then-store or not-taken-branch-then-store with trail==1.
+            var aluImmPrevious = IsTwoByteImmediateOpcode(_previousOpcode)
+                && !IsImmediateLoadOpcode(_previousOpcode);
+            var afterJmp = _previousOpcode == 0x4C;
+            // A normally completed JMP has already exposed its target fetch, so
+            // the following ST can advance on its write checkpoint. A soft-held
+            // JMP applies JUMP immediately before the target's distinct FETCH.
+            // SET_ZERO has only one operand-fetch clock and therefore still
+            // exposes opcode PC here; SET_ABS has crossed its second FETCH.
+            var softDeferredJmpZeroPageTarget =
+                _targetInstructionFollowsSoftDeferredJmp
+                && instructionLength == 2;
+            var advanceAfterJmp =
+                afterJmp && !softDeferredJmpZeroPageTarget;
+            // Advance when VICE ST INC_PC has already run before SET_ABS CLK:
+            // load/not-taken-branch trail==1, ALU #imm, or an already-exposed
+            // JMP target fetch (Wolf64 2060359 and 2060383).
             var advanceOnTrail1 = IsLoadOpcode(_previousOpcode)
-                || (IsBranchOpcode(_previousOpcode) && !afterTakenBranch);
-            var holdOpcodePc = trail == 0 || (trail == 1 && !advanceOnTrail1);
+                || (IsBranchOpcode(_previousOpcode) && !afterTakenBranch)
+                || aluImmPrevious
+                || advanceAfterJmp
+                || _advanceStorePcAfterFusedImplied
+                || IsAbsoluteAluOpcode(_previousOpcode);
+            // STA zp STORE CLK after EOR # whose last CLK still showed the
+            // EOR opcode (trail==0): VICE SET_ZERO CLK still exports STA
+            // opcode PC (Wolf64 4132756 nPC=$E68C mPC=$E68E). ALU #imm still
+            // advances STA abs at trail==0 (2060359).
+            var aluImmAdvancesAbsStore = aluImmPrevious && _opcode != 0x85;
+            // When a predecessor owns the control-transfer checkpoint, the
+            // target FETCH begins on the next host clock. VICE GET_ZERO then
+            // exports the target opcode address before INC_PC. Keep each source
+            // phase scoped to the single latched target instruction.
+            var deferredJumpTargetZeroPageStoreHolds =
+                (_targetInstructionFollowsDeferredBranchJump
+                    && instructionLength == 2)
+                || softDeferredJmpZeroPageTarget;
+            var holdOpcodePc = (trail == 0 && !aluImmAdvancesAbsStore && !advanceAfterJmp
+                    && !_advanceStorePcAfterFusedImplied)
+                || (trail == 1 && !advanceOnTrail1)
+                || deferredJumpTargetZeroPageStoreHolds;
             if (holdOpcodePc)
             {
                 _visiblePC = _opcodeAddress;
@@ -2998,11 +4369,25 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
     {
         _opcode = 0;
         _cycle = 0;
+        _baDelayedFetchClk = false;
+        _holdAbsLoadOpcodeLastClk = false;
+        _afterLdaAbsHold = false;
+        _holdTakenBranchOpcodePc = false;
+        _skipAbsLoadLastClkHold = false;
+        _loadAEarlyAfterStagedBranch = false;
+        _ldaSkippedLastClkHold = false;
         _suppressBootstrapBoundary = true;
         _interruptSampleDespiteSuppress = false;
         _bootstrapCycles = ResetCycleDelay;
         _stagedMemoryReadCompleted = false;
+        _stagedLoadRegisterVisibleAtReadCheckpoint = false;
         _delayNextFetch = false;
+        _sampleIrqBeforeNextFetch = false;
+        _staAbsWriteCycleStolen = false;
+        _ldaZpDataReadStolen = false;
+        _staZpApplyStolen = false;
+        _skipIrqSampleAtNextFetch = false;
+        _branchIrqArmingDummy = false;
         _stagedNzUpdate = false;
         _stagedNzValue = 0;
         _stagedCarryUpdate = false;
@@ -3014,54 +4399,80 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
         _fullLengthTakenBranchCompleted = false;
         _afterFullLengthTakenBranch = false;
         _afterShortTakenBranchLag = false;
+        _fuseLdaZpAfterStolenInc = false;
+        _fuseCmpZpAfterStolenIncLda = false;
+        _overlapNextTakenBranchDummy = false;
+        _skipBranchPageCrossExtra = false;
+        _dummyTakenBneAfterStolenInc = false;
         _lastOpcodeDelaysInterrupt = false;
+        _lastOpcodeEnablesIrq = false;
         _nonOverlappedFetchPhase = false;
         _nonOverlappedRegion = false;
         _deferZpRmwPcAdvanceOne = false;
         _nextJsrNonOverlapped = false;
+        _inySoftAfterHeldInc = false;
         _notTakenBranchHoldFinalPc = false;
         _callTargetFetchPending = false;
+        _callTargetFetchNonOverlapped = false;
         _fuseImpliedAfterIndyLoad = false;
+        _advanceStorePcAfterFusedImplied = false;
+        _fuseIndyLoadLastClkPc = false;
+        _indyPageCrossedThisInsn = false;
         _fuseNonLoadImmAfterLoadBranch = false;
+        _fusedNonLoadImmediateConsumedFetch = false;
+        _branchFollowsFusedNonLoadImmediate = false;
         _skipSoftImmAfterStagedTakenBranch = false;
+        _skipImmediateLoadAfterAbsoluteStoreBranch = false;
         _applySkipSoftImmThisInsn = false;
-        _deferImmediateLoadAfterBranch = false;
+
         _deferImpliedRegisterCompletionAfterBranch = false;
         _deferAbsoluteXLoadCompletionAfterBranch = false;
         _deferAbsoluteYLoadCompletionAfterBranch = false;
+        _fuseAbsYAfterStolenSamePageBranch = false;
+        _holdZpIncDecAfterStaAbsY = false;
         _deferJsrPushAfterBranch = false;
         _deferIndirectYLoadCompletionAfterBranch = false;
         _deferZeroPageRmwPcAdvanceAfterBranch = false;
         _deferNextIndirectYLoadAfterBranchRmw = false;
+        _zpRmwPcDeferredFromSteal = false;
         _deferIndexedStorePcAdvanceAfterBranch = false;
         _deferZeroPageIndexedStorePcAdvanceAfterBranch = false;
         _zpRmwModifyCommitted = false;
-        _rtsOverlappedFirstFetch = false;
+        _impliedFlagLastClkExportedNextPc = false;
+        _pendingPlaCompletion = false;
         _pendingPlpStatus = false;
         _bitSoftDeferEarly = false;
         _softDeferredBitLatched = false;
         _softDeferredBitValue = 0;
-        _plaDeferPullOne = false;
-        _plaLatePullPending = false;
-        _rtiDeferFirstPullOne = false;
         _softDeferZpCompare = false;
         _softDeferJmpAbs = false;
         _pendingJmpTarget = 0;
+        _targetInstructionFollowsSoftDeferredJmp = false;
         _takenBranchStagedFallthrough = false;
+        _stolenTakenBranchAfterAbsY = false;
+        _fetchAfterStolenB9Jump = false;
+        _holdTakenBranchOpcodePc = false;
         _skipSoftImmAfterStagedTakenBranch = false;
+        _skipImmediateLoadAfterAbsoluteStoreBranch = false;
+        _deferredBranchJumpTargetFetch = false;
+        _targetInstructionFollowsDeferredBranchJump = false;
         _nopHoldOpcodePcOnFinal = false;
         _nopChainHoldAfterBranch = false;
         _softDeferAfterNopChain = false;
         _indexedStorePcAdvanceWasDeferred = false;
         _indexedLoadPageCrossDelayConsumed = false;
         _pendingDeferredNzUpdateAfterBranch = false;
-        _pendingDeferredImmediateLoad = false;
+
         _softDeferredImmediateLoad = false;
-        _holdIndYStorePcOneCycle = false;
+        _jsrFollowsSoftDeferredImmediateLoad = false;
+        _immediateLoadFollowsSoftDeferredBody = false;
+        _immediateLoadCompletedWithoutDistinctFetch = false;
+        _softDeferImpliedAfterHeldIndYStore = false;
         _softDeferCompareCommit = false;
         _pendingSoftCompareCommit = false;
         _softDeferredImpliedOp = false;
         _pendingDeferredImpliedRegisterCompletion = false;
+        _rtsPrefetchedByNotTakenBranch = false;
         _stagedReturnAddress = 0;
         _effectiveAddress = 0;
         _fetched = 0;
@@ -3117,6 +4528,55 @@ public partial class Mos6502 : IClockedDevice, IAddressSpace, ICpu, ICpuCycleSte
             0x87 or 0x97 or 0x8F or 0x83 => true,
             _ => false
         };
+    }
+
+    private static bool IsUnindexedStoreOpcode(byte opcode)
+    {
+        return opcode is
+            0x84 or 0x85 or 0x86 or 0x87 or
+            0x8C or 0x8D or 0x8E or 0x8F;
+    }
+
+    private static bool IsAbsoluteUnindexedStoreOpcode(byte opcode)
+    {
+        return opcode is 0x8C or 0x8D or 0x8E or 0x8F;
+    }
+
+    private static bool PriorInstructionConsumesFollowingFetchPhase(
+        byte opcode,
+        int trailingNextPcCheckpoints)
+    {
+        // VICE LD performs its register/flag updates and INC_PC after the
+        // addressing-mode read CLK. Immediate ALU/compare bodies apply after
+        // GET_IMM with no further CLK, so one exported next-PC checkpoint also
+        // consumes the following fetch phase. ST with SET_ZERO/SET_ABS has only
+        // its final write CLK after INC_PC. SET_ZERO_RMW adds dummy and final
+        // write clocks. SET_IND_Y exposes pointer-low, pointer-high, dummy, and
+        // store clocks after INC_PC; a fifth next-PC checkpoint means its fetch
+        // phase was already consumed. Once those source clocks export enough
+        // next-PC checkpoints, the following instruction body shares its last
+        // FETCH.
+        return (IsLoadOpcode(opcode)
+                && trailingNextPcCheckpoints >= 1)
+            || (IsTwoByteImmediateOpcode(opcode)
+                && !IsImmediateLoadOpcode(opcode)
+                && trailingNextPcCheckpoints >= 1)
+            || (IsUnindexedStoreOpcode(opcode)
+                && trailingNextPcCheckpoints >= 2)
+            // SET_ABS_X/Y adds its indexed dummy and STORE clocks after the
+            // operand fetches. Three exported next-PC checkpoints consume the
+            // following FETCH phase before the next instruction body.
+            || (IsIndexedAbsoluteStoreOpcode(opcode)
+                && trailingNextPcCheckpoints >= 3)
+            || (IsZeroPageShiftRmwOpcode(opcode)
+                && trailingNextPcCheckpoints >= 3)
+            || (IsIndirectYStoreOpcode(opcode)
+                && trailingNextPcCheckpoints >= 5);
+    }
+
+    private static bool IsStackPushOpcode(byte opcode)
+    {
+        return opcode is 0x48 or 0x08;
     }
 
     private enum AddressingMode

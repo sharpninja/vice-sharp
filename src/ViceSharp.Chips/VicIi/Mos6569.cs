@@ -423,12 +423,12 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
     /// <summary>
     /// BACKFILL-VIDEO-001 / FR-VIC-006 / FR-VIC-010 / TR-CYCLE-001:
-    /// Mandatory cycle steal mirrors IsCpuCycleStolen but lags by one
-    /// cycle, matching the existing bad-line semantics (latch-driven,
-    /// PLAN-VICEPARITY-001 FR-VIC-CYCLE AC-17).
+    /// Mandatory steal lags the START of BA (RDY 3-cycle delay) but must
+    /// release with BA: VICE <c>check_ba</c> runs the CPU on the first
+    /// cycle <c>vicii_cycle</c> returns BA high (Wolf64 2053534).
     /// </summary>
     public bool IsCpuCycleStealMandatory =>
-        (_badLine && RasterX >= 13 && RasterX < 56)
+        (_badLine && RasterX >= 13 && RasterX < 55)
         || _inSpriteDmaStallWindow1;
 
     /// <summary>
@@ -2755,6 +2755,17 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
         return value;
     }
 
+    /// <summary>
+    /// Raster line visible to a CPU $D011/$D012 read. VICE increments
+    /// <c>raster_line</c> in Phi2 of PAL cycle 0 after GET_ABS LOAD.
+    /// </summary>
+    private int CpuVisibleRasterLine()
+    {
+        if (RasterX == 0 && CurrentRasterLine > 0)
+            return CurrentRasterLine - 1;
+        return CurrentRasterLine;
+    }
+
     private byte ReadRegister(ushort offset)
     {
         int register = (offset - BaseAddress) & 0x3F;
@@ -2769,7 +2780,15 @@ public partial class Mos6569 : IVideoChip, IAddressSpace, IInterruptSource, ICpu
 
         if (register == 0x11)
         {
-            return (byte)((_registers[0x11] & 0x7F) | ((CurrentRasterLine & 0x100) >> 1));
+            var line11 = CpuVisibleRasterLine();
+            return (byte)((_registers[0x11] & 0x7F) | ((line11 & 0x100) >> 1));
+        }
+
+        if (register == 0x12)
+        {
+            // VICE GET_ABS LOAD is before CLK_INC raster_line++ at PAL cycle 0
+            // (Wolf64 2052030 nA=$7B mA=$7C at line $7C x=0).
+            return (byte)(CpuVisibleRasterLine() & 0xFF);
         }
 
         // BACKFILL-VIDEO-001 / FR-VIC-001 / TEST-VIC-001: $D013 returns the latched RasterX >> 1

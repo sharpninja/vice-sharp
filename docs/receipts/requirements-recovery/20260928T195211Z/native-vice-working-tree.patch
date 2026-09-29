@@ -1,0 +1,599 @@
+diff --git a/vice/src/c64/c64cpusc.c b/vice/src/c64/c64cpusc.c
+index 5971a3c9d3..3ee311afbf 100644
+--- a/vice/src/c64/c64cpusc.c
++++ b/vice/src/c64/c64cpusc.c
+@@ -32,6 +32,10 @@
+ #include "monitor.h"
+ #include "vicii-cycle.h"
+ 
++#ifdef VICE_SHIM_HOSTED
++#include "../vice-shim-runtime.h"
++#endif
++
+ /* ------------------------------------------------------------------------- */
+ 
+ /* Global clock counter.  */
+@@ -44,11 +48,32 @@ CLOCK maincpu_clk_limit = 0L;
+ /* Mask: BA low */
+ int maincpu_ba_low_flags = 0;
+ 
++#ifdef VICE_SHIM_HOSTED
++/* Hosted build (ViceSharp): after the normal per-cycle accounting, publish the
++   CPU register file to the shim, let the host pause/stop at this cycle
++   boundary, then re-import in case the host adjusted state. A stop request
++   unwinds maincpu_mainloop() (return) so the hosting thread regains control.
++   EXPORT_REGISTERS()/IMPORT_REGISTERS() are in scope here because CLK_INC()
++   only expands inside the 6510dtvcore.c body, after those macros are defined. */
++#define CLK_INC()                                      \
++    do {                                               \
++        interrupt_delay();                             \
++        maincpu_clk++;                                 \
++        maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII; \
++        maincpu_ba_low_flags |= vicii_cycle();         \
++        EXPORT_REGISTERS();                            \
++        if (vice_shim_cycle_checkpoint()) {            \
++            return;                                    \
++        }                                              \
++        IMPORT_REGISTERS();                            \
++    } while (0)
++#else
+ #define CLK_INC()                                  \
+     interrupt_delay();                             \
+     maincpu_clk++;                                 \
+     maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII; \
+     maincpu_ba_low_flags |= vicii_cycle()
++#endif
+ 
+ 
+ /* Skip cycle implementation */
+diff --git a/vice/src/drive/drive-snapshot.c b/vice/src/drive/drive-snapshot.c
+index 7417f7e60b..caf808abae 100644
+--- a/vice/src/drive/drive-snapshot.c
++++ b/vice/src/drive/drive-snapshot.c
+@@ -314,9 +314,13 @@ int drive_snapshot_read_module(snapshot_t *s)
+     char snap_module_name[8];
+     uint32_t rotation_table_ptr[NUM_DISK_UNITS];
+     int has_tde[NUM_DISK_UNITS];
+-    CLOCK attach_clk[NUM_DISK_UNITS];
+-    CLOCK detach_clk[NUM_DISK_UNITS];
+-    CLOCK attach_detach_clk[NUM_DISK_UNITS];
++    /* Zero-init: these are written only inside the per-unit if (has_tde[unr])
++       block below, but copied unconditionally into drive_t for every unit whose
++       type != DRIVE_TYPE_NONE. A has_tde=0 restore would otherwise copy in
++       uninitialized stack; 0 is the fresh-boot baseline (drive_init, drive.c). */
++    CLOCK attach_clk[NUM_DISK_UNITS] = {0};
++    CLOCK detach_clk[NUM_DISK_UNITS] = {0};
++    CLOCK attach_detach_clk[NUM_DISK_UNITS] = {0};
+     int sync_factor;
+     drive_t *drive;
+     diskunit_context_t *unit;
+diff --git a/vice/src/drive/drivecpu.c b/vice/src/drive/drivecpu.c
+index 493b92ab5c..fda4103248 100644
+--- a/vice/src/drive/drivecpu.c
++++ b/vice/src/drive/drivecpu.c
+@@ -188,6 +188,10 @@ void drivecpu_reset_clk(diskunit_context_t *drv)
+     drv->cpu->last_clk = maincpu_clk;
+     drv->cpu->last_exc_cycles = 0;
+     drv->cpu->stop_clk = 0;
++    /* cycle_accum is part of the derived clock state re-anchored here; leaving
++       it stale phase-shifts the drive CPU on any reset not followed by a
++       snapshot restore (the snapshot path re-writes it immediately after). */
++    drv->cpu->cycle_accum = 0;
+ }
+ 
+ /* called by drive_reset() (via machine_specific_reset()) */
+diff --git a/vice/src/drive/drivecpu65c02.c b/vice/src/drive/drivecpu65c02.c
+index 7da8730650..b2dc44a130 100644
+--- a/vice/src/drive/drivecpu65c02.c
++++ b/vice/src/drive/drivecpu65c02.c
+@@ -170,6 +170,10 @@ void drivecpu65c02_reset_clk(diskunit_context_t *drv)
+     drv->cpu->last_clk = maincpu_clk;
+     drv->cpu->last_exc_cycles = 0;
+     drv->cpu->stop_clk = 0;
++    /* Mirror drivecpu_reset_clk: re-anchor the fractional cycle accumulator so
++       a reset without a following snapshot restore does not leave it stale
++       (1581/2000/4000/CMDHD drives). */
++    drv->cpu->cycle_accum = 0;
+ }
+ 
+ void drivecpu65c02_reset(diskunit_context_t *drv)
+diff --git a/vice/src/mainc64cpu.c b/vice/src/mainc64cpu.c
+index 357b27452b..ce0cc5052a 100644
+--- a/vice/src/mainc64cpu.c
++++ b/vice/src/mainc64cpu.c
+@@ -56,6 +56,10 @@
+ #include "traps.h"
+ #include "types.h"
+ 
++#ifdef VICE_SHIM_HOSTED
++#include "vice-shim-runtime.h"
++#endif
++
+ #ifndef EXIT_FAILURE
+ #define EXIT_FAILURE 1
+ #endif
+@@ -196,7 +200,24 @@ inline static void check_ba(void)
+     if (maincpu_ba_low_flags) {
+         CLOCK old_maincpu_clk = maincpu_clk;
+ 
++#ifdef VICE_SHIM_HOSTED
++        /* steal_cycles() advances clk without a hosted checkpoint, so one
++           host Step() can jump tens of clocks (Wolf64 BPL nativeDelta=44).
++           Tick VIC + checkpoint per stolen cycle; do not FETCH. Cannot use
++           CLK_INC() here: EXPORT_REGISTERS is not in scope. */
++        extern int vicii_cycle(void);
++        do {
++            interrupt_delay();
++            maincpu_clk++;
++            maincpu_ba_low_flags &= ~MAINCPU_BA_LOW_VICII;
++            maincpu_ba_low_flags |= vicii_cycle();
++            if (vice_shim_cycle_checkpoint()) {
++                break;
++            }
++        } while (maincpu_ba_low_flags);
++#else
+         maincpu_steal_cycles();
++#endif
+ #if defined (DEBUG) || defined (FEATURE_CPUMEMHISTORY)
+         if (debug_clk == old_maincpu_clk) {
+             debug_clk = maincpu_clk;
+@@ -752,7 +773,37 @@ void maincpu_mainloop(void)
+      */
+     bank_base_ready = true;
+ 
++#ifdef VICE_SHIM_HOSTED
++    /* Hosted build (ViceSharp): the host bootstraps the CPU explicitly. When a
++       bootstrap is pending, adopt the host-provided register file and clear the
++       per-run CPU bookkeeping instead of triggering the normal power-on reset.
++       IMPORT_REGISTERS() is not yet defined at this point in the translation
++       unit (6510dtvcore.c defines it below, inside the loop), so the import is
++       inlined here. reg_a_write/reg_a_read are #defined to reg_a in the
++       non-DTV core, so the locals below are the CPU's real register storage. */
++    if (vice_shim_take_bootstrap_maincpu()) {
++        reg_a = maincpu_regs.a;
++        reg_x = maincpu_regs.x;
++        reg_y = maincpu_regs.y;
++        reg_sp = maincpu_regs.sp;
++        reg_p = maincpu_regs.p;
++        flag_n = maincpu_regs.n;
++        flag_z = maincpu_regs.z;
++        bank_start = bank_limit = 0; /* prevent caching */
++        JUMP(maincpu_regs.pc);
++        maincpu_jammed = 0;
++        last_opcode_info = 0;
++        last_opcode_addr = reg_pc;
++        stolen_cycles = 0;
++        check_ba_low = 0;
++        reu_dma_triggered = 0;
++        maincpu_rmw_flag = 0;
++    } else {
++        machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++    }
++#else
+     machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++#endif
+ 
+     while (1) {
+ #define CPU_LOG_ID maincpu_log
+@@ -951,11 +1002,31 @@ int maincpu_snapshot_read_module(snapshot_t *s)
+         || SMR_B(m, &sp) < 0
+         || SMR_W(m, &pc) < 0
+         || SMR_B(m, &status) < 0
+-        || SMR_DW_UINT(m, &last_opcode_info) < 0
+-        || SMR_DW_INT(m, &ane_log_level) < 0
+-        || SMR_DW_INT(m, &lxa_log_level) < 0
+-        || SMR_DW_INT(m, &maincpu_jammed) < 0
+-        || SMR_DW_INT(m, &maincpu_ba_low_flags) < 0) {
++        || SMR_DW_UINT(m, &last_opcode_info) < 0) {
++        goto fail;
++    }
++
++    /* ane/lxa logging levels (snapshot module v1.3) and maincpu_jammed (v1.4,
++       VICE commit 573f0f38a2 "save 'jammed' status into snapshot") were
++       inserted between last_opcode_info and maincpu_ba_low_flags. A snapshot
++       written by an older x64sc (module v1.2, e.g. a release build) lacks
++       them; reading them unconditionally misaligns ba_low_flags and the
++       interrupt sub-modules, raising SNAPSHOT_READ_OUT_OF_BOUNDS_ERROR. Guard
++       each addition by version so externally-staged/older .vsf files resume
++       cleanly while current snapshots are unaffected. ba_low_flags has existed
++       since v1.2 and is always the last field before the interrupt modules. */
++    if (!snapshot_version_is_smaller(major, minor, 1, 3)) {
++        if (SMR_DW_INT(m, &ane_log_level) < 0
++                || SMR_DW_INT(m, &lxa_log_level) < 0) {
++            goto fail;
++        }
++    }
++    if (!snapshot_version_is_smaller(major, minor, 1, 4)) {
++        if (SMR_DW_INT(m, &maincpu_jammed) < 0) {
++            goto fail;
++        }
++    }
++    if (SMR_DW_INT(m, &maincpu_ba_low_flags) < 0) {
+         goto fail;
+     }
+ 
+diff --git a/vice/src/mainviccpu.c b/vice/src/mainviccpu.c
+index 84131004da..cadd645c03 100644
+--- a/vice/src/mainviccpu.c
++++ b/vice/src/mainviccpu.c
+@@ -47,6 +47,10 @@
+ #include "traps.h"
+ #include "types.h"
+ 
++#ifdef VICE_SHIM_HOSTED
++#include "vice-shim-runtime.h"
++#endif
++
+ #ifndef EXIT_FAILURE
+ #define EXIT_FAILURE 1
+ #endif
+@@ -579,7 +583,35 @@ void maincpu_mainloop(void)
+      */
+     bank_base_ready = true;
+ 
++#ifdef VICE_SHIM_HOSTED
++    /* Hosted build (ViceSharp): the host bootstraps the CPU explicitly. When a
++       bootstrap is pending, adopt the host-provided register file and clear the
++       per-run CPU bookkeeping instead of triggering the normal power-on reset.
++       IMPORT_REGISTERS() is not yet defined at this point in the translation
++       unit (6510dtvcore.c defines it below, inside the loop), so the import is
++       inlined here. reg_a_write/reg_a_read are #defined to reg_a in the
++       non-DTV core, so the locals below are the CPU's real register storage. */
++    if (vice_shim_take_bootstrap_maincpu()) {
++        reg_a = maincpu_regs.a;
++        reg_x = maincpu_regs.x;
++        reg_y = maincpu_regs.y;
++        reg_sp = maincpu_regs.sp;
++        reg_p = maincpu_regs.p;
++        flag_n = maincpu_regs.n;
++        flag_z = maincpu_regs.z;
++        bank_start = bank_limit = 0; /* prevent caching */
++        JUMP(maincpu_regs.pc);
++        maincpu_jammed = 0;
++        last_opcode_info = 0;
++        last_opcode_addr = reg_pc;
++        stolen_cycles = 0;
++        maincpu_rmw_flag = 0;
++    } else {
++        machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++    }
++#else
+     machine_trigger_reset(MACHINE_RESET_MODE_RESET_CPU);
++#endif
+ 
+     while (1) {
+ #define CPU_LOG_ID maincpu_log
+diff --git a/vice/src/resid/filter8580new.h b/vice/src/resid/filter8580new.h
+index 9cde045a4e..5f8e7fb8cb 100644
+--- a/vice/src/resid/filter8580new.h
++++ b/vice/src/resid/filter8580new.h
+@@ -551,6 +551,16 @@ public:
+   // SID audio output (16 bits).
+   short output();
+ 
++  // VICE-Sharp S9 parity probe: export internal filter state for managed
++  // lockstep against the reSID oracle. Test-only accessor.
++  //   [0]=Vlp [1]=Vbp [2]=Vhp [3]=v1 [4]=v2 [5]=v3 [6]=sum [7]=mix [8]=output()
++  void vsharp_probe(int* out) {
++    out[0] = Vlp; out[1] = Vbp; out[2] = Vhp;
++    out[3] = v1;  out[4] = v2;  out[5] = v3;
++    out[6] = (int)sum; out[7] = (int)mix;
++    out[8] = (int)output();
++  }
++
+ protected:
+   void set_sum_mix();
+   void set_w0();
+diff --git a/vice/src/resid/sid.h b/vice/src/resid/sid.h
+index 5d2c7309b1..1e9d2f2451 100644
+--- a/vice/src/resid/sid.h
++++ b/vice/src/resid/sid.h
+@@ -61,6 +61,10 @@ public:
+   reg8 read(reg8 offset);
+   void write(reg8 offset, reg8 value);
+ 
++  // VICE-Sharp S9 parity probe: passthrough to Filter::vsharp_probe (filter is
++  // a protected member; SID exposes it for managed lockstep). Diagnostic only.
++  void vsharp_filter_probe(int* out) { filter.vsharp_probe(out); }
++
+   // Read/write state.
+   class State
+   {
+diff --git a/vice/src/sid/resid.cc b/vice/src/sid/resid.cc
+index b68421226c..0fa5efd16b 100644
+--- a/vice/src/sid/resid.cc
++++ b/vice/src/sid/resid.cc
+@@ -449,4 +449,113 @@ sid_engine_t resid_hooks =
+     resid_state_write
+ };
+ 
++/* ------------------------------------------------------------------------- */
++/* VICE-Sharp hosted shim: single-cycle oracle entry points.
++ *
++ * The shim's managed parity harness needs reSID clocked one cycle at a time
++ * (reSID::SID::clock() with the single-cycle envelope/waveform pipelines).
++ * The sound-machine layer only exposes the batched clock(delta_t) path, which
++ * by reSID's own comment drops pipelined envelope decrements. These helpers
++ * are internal to the shim DLL (not dllexported); vice-shim.c wraps them with
++ * machine-handle plumbing and locking. */
++
++int resid_shim_clock_exact(sound_t *psid, int cycles)
++{
++    int i;
++
++    if (psid == NULL || psid->sid == NULL || cycles < 0) {
++        return 0;
++    }
++    for (i = 0; i < cycles; i++) {
++        psid->sid->clock();
++    }
++    return cycles;
++}
++
++uint8_t resid_shim_read(sound_t *psid, uint16_t addr)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return 0;
++    }
++    return psid->sid->read((reSID::reg8)(addr & 0x1f));
++}
++
++void resid_shim_write(sound_t *psid, uint16_t addr, uint8_t value)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return;
++    }
++    psid->sid->write((reSID::reg8)(addr & 0x1f), value);
++}
++
++int resid_shim_output(sound_t *psid)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return 0;
++    }
++    return psid->sid->output();
++}
++
++void resid_shim_reset(sound_t *psid)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return;
++    }
++    psid->sid->reset();
++}
++
++void resid_shim_state_read(sound_t *psid, sid_snapshot_state_t *sid_state)
++{
++    if (psid == NULL || psid->sid == NULL || sid_state == NULL) {
++        return;
++    }
++    resid_state_read(psid, sid_state);
++}
++
++/* VICE-Sharp S9 parity probe: export reSID internal filter state
++ * (Vlp/Vbp/Vhp, prescaled v1/v2/v3, sum/mix, filter.output(), integrator
++ * x/vc) for managed lockstep. out must have room for 13 ints. */
++void resid_shim_filter_probe(sound_t *psid, int *out)
++{
++    if (psid == NULL || psid->sid == NULL || out == NULL) {
++        return;
++    }
++    psid->sid->vsharp_filter_probe(out);
++}
++
++/* VICE-Sharp S11: reconfigure the exact oracle's sampling method. Needed to
++ * observe the 8580 SAMPLE_FAST write pipeline (sid.cc:205-220) and to drive the
++ * buffered clock/FIR path for S13 resampler parity. clock_freq is passed
++ * through from the shim (985248.0 PAL); method is reSID's sampling_method enum
++ * order (0=FAST 1=INTERPOLATE 2=RESAMPLE 3=RESAMPLE_FASTMEM). Returns 1 on
++ * success, 0 on failure or null SID. */
++int resid_shim_set_sampling(sound_t *psid, int method, double clock_freq,
++                            double sample_freq, double pass_freq, double filter_scale)
++{
++    if (psid == NULL || psid->sid == NULL) {
++        return 0;
++    }
++    return psid->sid->set_sampling_parameters(
++               clock_freq, (reSID::sampling_method)method, sample_freq,
++               pass_freq, filter_scale)
++               ? 1 : 0;
++}
++
++/* VICE-Sharp S13: buffered clock path (reSID SID::clock(delta_t, buf, n)). On
++ * entry *delta_t is the cycle budget; on return it holds the unconsumed
++ * remainder. Returns the number of samples written to buf (at most n). */
++int resid_shim_clock_buffered(sound_t *psid, int *delta_t, int16_t *buf, int n)
++{
++    reSID::cycle_count dt;
++    int got;
++
++    if (psid == NULL || psid->sid == NULL || delta_t == NULL || buf == NULL || n < 0) {
++        return 0;
++    }
++    dt = (reSID::cycle_count)(*delta_t);
++    got = psid->sid->clock(dt, (short *)buf, n, 1);
++    *delta_t = (int)dt;
++    return got;
++}
++
+ } // extern "C"
+diff --git a/vice/src/vic20/vic20cpu.c b/vice/src/vic20/vic20cpu.c
+index 55102facec..fd656a03d6 100644
+--- a/vice/src/vic20/vic20cpu.c
++++ b/vice/src/vic20/vic20cpu.c
+@@ -31,6 +31,10 @@
+ #include "monitor.h"
+ #include "vic-cycle.h"
+ 
++#ifdef VICE_SHIM_HOSTED
++#include "../vice-shim-runtime.h"
++#endif
++
+ /* ------------------------------------------------------------------------- */
+ 
+ /* Global clock counter.  */
+@@ -40,7 +44,26 @@ CLOCK maincpu_clk_limit = 0L;
+ 
+ #define REWIND_FETCH_OPCODE(clock) /*clock-=2*/
+ 
++#ifdef VICE_SHIM_HOSTED
++/* Hosted build (ViceSharp): after the normal per-cycle VIC-I advance, publish
++   the CPU register file to the shim, let the host pause/stop at this cycle
++   boundary, then re-import in case the host adjusted state. A stop request
++   unwinds maincpu_mainloop() (return) so the hosting thread regains control.
++   EXPORT_REGISTERS()/IMPORT_REGISTERS() are in scope here because CLK_INC()
++   only expands inside the 6510dtvcore.c body, after those macros are defined. */
++#define CLK_INC()                                      \
++    do {                                               \
++        maincpu_clk++;                                 \
++        vic_cycle();                                   \
++        EXPORT_REGISTERS();                            \
++        if (vice_shim_cycle_checkpoint()) {            \
++            return;                                    \
++        }                                              \
++        IMPORT_REGISTERS();                            \
++    } while (0)
++#else
+ #define CLK_INC() maincpu_clk++; vic_cycle()
++#endif
+ 
+ #define CLK_ADD(clock, amount) nosuchfunction(&clock, amount)
+ 
+diff --git a/vice/src/vic20/vic20sound.c b/vice/src/vic20/vic20sound.c
+index 5af23ad681..78e0b9b15b 100644
+--- a/vice/src/vic20/vic20sound.c
++++ b/vice/src/vic20/vic20sound.c
+@@ -306,7 +306,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, float *pbuf, int
+ 
+         o = (snd.lowpassbuf - snd.highpassbuf) / 32767.0;
+         snd.highpassbuf += snd.highpassbeta * (snd.lowpassbuf - snd.highpassbuf);
+-        snd.lowpassbuf += snd.lowpassbeta * (voltagefunction[(((snd.accum * 7) / snd.accum_cycles) + 1) * snd.volume] - snd.lowpassbuf);
++        {
++            int vidx = 0;
++            if (snd.accum_cycles > 0) {
++                vidx = (((snd.accum * 7) / snd.accum_cycles) + 1) * snd.volume;
++            }
++            if (vidx < 0) {
++                vidx = 0;
++            }
++            if (vidx >= (int)(sizeof(voltagefunction) / sizeof(voltagefunction[0]))) {
++                vidx = (int)(sizeof(voltagefunction) / sizeof(voltagefunction[0])) - 1;
++            }
++            snd.lowpassbuf += snd.lowpassbeta * (voltagefunction[vidx] - snd.lowpassbuf);
++        }
+ 
+         pbuf[s] = o;
+ 
+@@ -338,7 +350,19 @@ static int vic_sound_machine_calculate_samples(sound_t **psid, int16_t *pbuf, in
+ 
+         o = snd.lowpassbuf - snd.highpassbuf;
+         snd.highpassbuf += snd.highpassbeta * (snd.lowpassbuf - snd.highpassbuf);
+-        snd.lowpassbuf += snd.lowpassbeta * (voltagefunction[(((snd.accum * 7) / snd.accum_cycles) + 1) * snd.volume] - snd.lowpassbuf);
++        {
++            int vidx = 0;
++            if (snd.accum_cycles > 0) {
++                vidx = (((snd.accum * 7) / snd.accum_cycles) + 1) * snd.volume;
++            }
++            if (vidx < 0) {
++                vidx = 0;
++            }
++            if (vidx >= (int)(sizeof(voltagefunction) / sizeof(voltagefunction[0]))) {
++                vidx = (int)(sizeof(voltagefunction) / sizeof(voltagefunction[0])) - 1;
++            }
++            snd.lowpassbuf += snd.lowpassbeta * (voltagefunction[vidx] - snd.lowpassbuf);
++        }
+ 
+         if (o < -32768) {
+             vicbuf = -32768;
+@@ -578,3 +602,77 @@ void sound_machine_enable(int enable)
+ {
+     sid_sound_machine_enable(enable);
+ }
++
++/* -------------------------------------------------------------------------- */
++/* ViceSharp lockstep oracle exports (headless sample capture).               */
++/* -------------------------------------------------------------------------- */
++
++static int vic_sound_oracle_inited = 0;
++
++void vic_sound_oracle_reset(void)
++{
++    /* Drop inited flag so the next store/render cold-starts like a first call
++     * (matches Tone_MatchesXvic alone; avoids residual after Silence render). */
++    memset(vic20_sound_data, 0, sizeof(vic20_sound_data));
++    memset(&snd, 0, sizeof(snd));
++    noise_LFSR = 0;
++    noise_LFSR0_old = 0;
++    vic_sound_oracle_inited = 0;
++}
++
++void vic_sound_oracle_store(uint16_t addr, uint8_t value)
++{
++    /* Headless: sound_store may not reach machine_store; poke oracle snd directly. */
++    if (!vic_sound_oracle_inited) {
++        if (!vic_sound_machine_init(NULL, 44100, 1108405)) {
++            return;
++        }
++        vic_sound_oracle_inited = 1;
++    }
++    addr &= 0x0f;
++    vic20_sound_data[addr] = value;
++    vic_sound_machine_store(NULL, addr, value);
++}
++
++int vic_sound_oracle_render(int16_t *buffer, int nr, int speed, int cycles_per_sec, CLOCK delta_t)
++{
++    CLOCK dt = delta_t;
++
++    if (buffer == NULL || nr <= 0 || speed <= 0 || cycles_per_sec <= 0) {
++        return 0;
++    }
++
++    if (!vic_sound_oracle_inited) {
++        if (!vic_sound_machine_init(NULL, speed, cycles_per_sec)) {
++            return 0;
++        }
++        vic_sound_oracle_inited = 1;
++    }
++
++#ifdef SOUND_SYSTEM_FLOAT
++    {
++        float *tmp;
++        int i;
++        int got;
++        tmp = lib_malloc((size_t)nr * sizeof(float));
++        if (tmp == NULL) {
++            return 0;
++        }
++        got = vic_sound_machine_calculate_samples(NULL, tmp, nr, 1, &dt);
++        for (i = 0; i < got; i++) {
++            float o = tmp[i] * 32767.0f;
++            if (o < -32768.0f) {
++                buffer[i] = -32768;
++            } else if (o > 32767.0f) {
++                buffer[i] = 32767;
++            } else {
++                buffer[i] = (int16_t)o;
++            }
++        }
++        lib_free(tmp);
++        return got;
++    }
++#else
++    return vic_sound_machine_calculate_samples(NULL, buffer, nr, 1, 1, &dt);
++#endif
++}
+diff --git a/vice/src/vic20/vic20sound.h b/vice/src/vic20/vic20sound.h
+index 0d929b7637..c9e9f601a5 100644
+--- a/vice/src/vic20/vic20sound.h
++++ b/vice/src/vic20/vic20sound.h
+@@ -36,4 +36,9 @@ void vic_sound_reset(sound_t *psid, CLOCK cpu_clk);
+ 
+ void vic_sound_chip_init(void);
+ 
++/* ViceSharp lockstep oracle: ensure inited, render mono int16 samples for delta_t CPU cycles. */
++int vic_sound_oracle_render(int16_t *buffer, int nr, int speed, int cycles_per_sec, CLOCK delta_t);
++void vic_sound_oracle_reset(void);
++void vic_sound_oracle_store(uint16_t addr, uint8_t value);
++
+ #endif

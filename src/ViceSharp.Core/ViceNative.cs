@@ -131,6 +131,21 @@ public static unsafe partial class ViceNative
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_set_keyboard_matrix_key")]
     private static partial int SetKeyboardMatrixKeyNative(IntPtr instance, int row, int column, int pressed);
 
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_kbdbuf_feed")]
+    private static partial int KbdbufFeedNative(IntPtr instance, ReadOnlySpan<byte> petscii, int length);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_kbdbuf_flush")]
+    private static partial void KbdbufFlushNative(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_autostart", StringMarshalling = StringMarshalling.Utf8)]
+    private static partial int AutostartNative(IntPtr instance, string path);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_autostart_in_progress")]
+    private static partial int AutostartInProgressNative(IntPtr instance);
+
+    [LibraryImport(LibraryName, EntryPoint = "vice_machine_step_cycles")]
+    private static partial void StepCyclesNative(IntPtr instance, uint cycles);
+
     [LibraryImport(LibraryName, EntryPoint = "vice_machine_cia1_store")]
     public static partial void StoreCia1Register(IntPtr instance, byte registerIndex, byte value);
 
@@ -443,8 +458,8 @@ public static unsafe partial class ViceNative
         /// <summary>TR-LOCKSTEP-VSF-001: Timer B reload latch (ciat_read_latch).</summary>
         public ushort TimerBLatch;
 
-        /// <summary>TR-LOCKSTEP-VSF-001: ICR interrupt-enable mask (ciacore irq_enabled).</summary>
-        public byte IrqMask;
+        /// <summary>TR-LOCKSTEP-VSF-001: live CIA IRQ-output state (ciacore irq_enabled).</summary>
+        public byte IrqLineActive;
 
         /// <summary>Padding; keeps the native struct mirror byte-exact.</summary>
         public byte Reserved;
@@ -802,6 +817,17 @@ public static unsafe partial class ViceNative
             ViceNative.SetKeyboardMatrixKey(_instance, row, column, pressed);
         }
 
+        public int FeedKeyboardBuffer(ReadOnlySpan<byte> petscii)
+            => KbdbufFeedNative(_instance, petscii, petscii.Length);
+
+        public void FlushKeyboardBuffer() => KbdbufFlushNative(_instance);
+
+        public int Autostart(string path) => AutostartNative(_instance, path);
+
+        public bool AutostartInProgress() => AutostartInProgressNative(_instance) != 0;
+
+        public void StepCycles(uint cycles) => StepCyclesNative(_instance, cycles);
+
         public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
 
         /// <inheritdoc />
@@ -886,7 +912,7 @@ public static unsafe partial class ViceNative
                 Cra = state.Cra,
                 Crb = state.Crb,
                 InterruptFlags = state.InterruptFlag,
-                IrqMask = state.IrqMask
+                IrqMask = (byte)(state.Icr & 0x7F)
             };
         }
 

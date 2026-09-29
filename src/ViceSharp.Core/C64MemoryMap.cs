@@ -470,12 +470,11 @@ internal sealed class C64MemoryMap : IMemory, IKeyboardMatrix, IMachineKeyboardI
             return;
         }
 
-        if (address is >= ColorRamStart and <= ColorRamEnd)
-        {
-            _colorRam[address - ColorRamStart] = (byte)(value & 0x0F);
-            return;
-        }
-
+        // VICE c64meminit.c: colorram_store is hooked only when
+        // c64meminit_io_config[config]==1 (configs 5,6,7 and cart mirrors).
+        // Config 4 (CHAREN, !HIRAM, !LORAM; $01=$24/$34) leaves $D000-$DFFF
+        // as ram_store (mem_ram[addr]=value). Do not divert $D800 to color RAM
+        // when I/O is banked out.
         _ram[address] = value;
     }
 

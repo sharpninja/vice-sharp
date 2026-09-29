@@ -9,7 +9,7 @@ internal static class HostProtocolMapper
 {
     public static EmulatorStatusDto ToStatusDto(EmulatorRuntimeSession session)
     {
-        session.UpdatePerformanceCounters();
+        session.UpdatePerformanceCounters(DateTimeOffset.UtcNow, force: true);
         var state = session.Machine.GetState();
         var nominalClockHz = session.Architecture.MasterClockHz;
         var effectiveClockPercent = nominalClockHz <= 0

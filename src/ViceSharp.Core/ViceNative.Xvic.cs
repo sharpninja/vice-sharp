@@ -353,6 +353,20 @@ public static unsafe partial class ViceNativeXvic
                 throw new InvalidOperationException($"Native VICE xvic failed to set keyboard matrix key ({row},{column}). Error code: {result}.");
         }
 
+        public int FeedKeyboardBuffer(ReadOnlySpan<byte> petscii) => -1;
+
+        public void FlushKeyboardBuffer() { }
+
+        public int Autostart(string path) => -1;
+
+        public bool AutostartInProgress() => false;
+
+        public void StepCycles(uint cycles)
+        {
+            for (uint i = 0; i < cycles; i++)
+                Step();
+        }
+
         public byte PeekRam(ushort address) => PeekRamNative(_instance, address);
 
         /// <inheritdoc />
@@ -466,7 +480,7 @@ public static unsafe partial class ViceNativeXvic
                 Cra = state.Cra,
                 Crb = state.Crb,
                 InterruptFlags = state.InterruptFlag,
-                IrqMask = state.IrqMask
+                IrqMask = (byte)(state.Icr & 0x7F)
             };
         }
 

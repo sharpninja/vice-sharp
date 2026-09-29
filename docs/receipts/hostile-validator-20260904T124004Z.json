@@ -1,0 +1,72 @@
+{
+  "TimestampUtc": "2026-09-04T12:40:04Z",
+  "ValidatorIdentity": "GrokSubagentHostile",
+  "Workspace": "F:\\GitHub\\vice-sharp",
+  "WorkClass": "mixed",
+  "WorkClassNote": "Class-2 screenshot then class-1 VideoSurface product fix. Surface C scored on the display-fix slice only.",
+  "AddProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "ReviewSession": {
+    "sessionId": "GrokCode-20260904T123000Z-hostile-display-fix",
+    "requestId": "req-20260904T122823Z-001-hostile-validate-display-fix",
+    "agent": "GrokCode",
+    "persistenceProof": "sessionlog_query text Hostile validate VideoSurface VIC-20 NTSC display fix totalCount=1 turn status=completed lastUpdated=2026-09-04T12:43:38.5240143+00:00 actions=5 designDecisions=2 processingDialog=2 filesModified=2"
+  },
+  "ImplementerSession": {
+    "sessionId": "GrokCode-20260904T020555Z-continue-plan",
+    "requestId": "req-20260904T121500Z-006-fix-emulated-display"
+  },
+  "ActivePlan": "None for this display-fix request. PLAN-REMOTECTRL-001 remains Done=false.",
+  "AccuracyRating": 92,
+  "CompletenessRating": 90,
+  "OverallVerdict": "DISAGREE",
+  "FailList": [
+    {
+      "id": "B7",
+      "rule": "AGENTS.md persist session-log updates immediately after each meaningful change; log-decisions-as-conclusions requires designDecisions plus action type design_decision",
+      "evidence": "sessionlog_query 2026-09-04T12:40:04Z: turn req-20260904T121500Z-006-fix-emulated-display status=in_progress lastUpdated=2026-09-04T12:11:19.8509788+00:00 actions=null designDecisions=null filesModified=null. Product writes began 12:20:58Z (MainWindow) / 12:23:58Z (VideoSurface)."
+    }
+  ],
+  "Counts": {
+    "pass": 16,
+    "fail": 1,
+    "unknown": 0,
+    "na": 2
+  },
+  "Claims": [
+    { "id": "A1", "surface": "A", "verdict": "PASS", "claim": "Root cause vic20ntsc INI + Mos6561 400x234 + HEAD 384x272 blit shear" },
+    { "id": "A2", "surface": "A", "verdict": "PASS", "claim": "After-fix RemoteControl READY screen; before-fix sheared PNG" },
+    { "id": "A3", "surface": "A", "verdict": "PASS", "claim": "Live tree ContentHeight=234 POWER On RUN Running LIMITER 100% FPS ~59 CLOCK ~1.02 MHz" },
+    { "id": "A4", "surface": "A", "verdict": "PASS", "claim": "GeometryTests 6/0/0; VideoSurfaceTests+AvaloniaVideoAspectTests 16/0/0; CS0117 red before impl" },
+    { "id": "A5", "surface": "A", "verdict": "PASS", "claim": "UpdateFrom/SetFrame published size; BlitPackedBgra; IsValidFrame; TryGetFrameGeometry; VIC-20 ContentHeight=0" },
+    { "id": "A6", "surface": "A", "verdict": "PASS", "claim": "Does not claim PLAN-REMOTECTRL-001, Exact, or full suite" },
+    { "id": "B1", "surface": "B", "verdict": "PASS", "claim": "Honesty of product claims vs artifacts" },
+    { "id": "B2", "surface": "B", "verdict": "PASS", "claim": "Receipts re-verified" },
+    { "id": "B3", "surface": "B", "verdict": "PASS", "claim": "MCP-only storage; no todo.yaml edits this slice" },
+    { "id": "B4", "surface": "B", "verdict": "PASS", "claim": "PowerShell / no Python" },
+    { "id": "B5", "surface": "B", "verdict": "N/A", "claim": "Look-before-delete (no deletions)" },
+    { "id": "B6", "surface": "B", "verdict": "PASS", "claim": "Byrd tests-first compile-red before implementation; no phase-complete overclaim" },
+    { "id": "B7", "surface": "B", "verdict": "FAIL", "claim": "Session-log persistence after implementation" },
+    { "id": "C1", "surface": "C", "verdict": "PASS", "claim": "Existing FR-VIC20-001 / FR-HOST-003 / FR-UI-001 cover the host display bug" },
+    { "id": "C2", "surface": "C", "verdict": "PASS", "claim": "Geometry tests cover blit/validation ACs; live frame covers UpdateFrom path" },
+    { "id": "C3", "surface": "C", "verdict": "N/A", "claim": "Screenshot ops slice is not a requirements FAIL" },
+    { "id": "D1", "surface": "D", "verdict": "PASS", "claim": "No plan-step completion claimed" }
+  ],
+  "Evidence": {
+    "ini": "C:\\Users\\kingd\\AppData\\Roaming\\vice\\vice-sharp-ui.ini SettingsMachineProfileId=vic20ntsc",
+    "mos6561": "NtscNormalDisplayWidth 200 * PixelWidth 2 = 400; lines 28..261 inclusive = 234",
+    "headUpdateFrom": "git show HEAD:src/ViceSharp.Avalonia/VideoSurface.cs locks SourceWidth*SourceHeight 384x272 and discards TryCopyFrameInto width/height",
+    "beforePngSha256": "B82E5A02E665F5168EEEF2DAB4160381179DC548F12092AD0C0679CDE3FE0A5E",
+    "afterPngSha256": "EBF465479DF3B7185E9581E335C5280900219D26BBB0389F635202618697F683",
+    "validatorLiveFrame": "C:\\Users\\kingd\\AppData\\Local\\Temp\\vicesharp-rc-20260904\\hostile-live-frame.png 1140x565 READY not sheared",
+    "validatorLiveDump": "node-148 VideoSurface ContentHeight=234; CLOCK 1.019 MHz; FPS ~60; POWER On; LIMITER 100%",
+    "geometryTests": "Passed 6 Failed 0 Skipped 0 exit 0",
+    "combinedTests": "Passed 16 Failed 0 Skipped 0 exit 0",
+    "cs0117Log": "C:\\Users\\kingd\\.grok\\sessions\\F%3A%5CGitHub%5Cvice-sharp\\01a06a23-81e8-7b41-8fa0-4773aa19757c\\terminal\\call-a87539cd-2f92-475c-acd6-ff5c993b844b-171.log 2026-09-04T12:16:58Z",
+    "planRemoteCtrl": "PLAN-REMOTECTRL-001 Done=false",
+    "gitDiffCheck": "exit 0 on tracked slice files"
+  }
+}

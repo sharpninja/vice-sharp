@@ -105,7 +105,13 @@ public sealed class ArchitectureBuilder : IArchitectureBuilder
         var cia1 = CreateC64Cia(bus, irqLine, 0xDC00, descriptor.MasterClockHz);
         var cia2Connected = profile?.SystemCore.Cia2Connected ?? true;
         var cia2 = cia2Connected ? CreateC64Cia(bus, nmiLine, 0xDD00, descriptor.MasterClockHz) : null;
-        var pla = new Mos906114(bus);
+        var pla = new Mos906114(bus)
+        {
+            // VICE c64memsc.c mem_pla_config_changed: c64pla_config_changed(..., pullup=0x17)
+            // on a standard C64 (not SX64). Bit 4 is cassette sense; idle (tape_sense=0)
+            // leaves it pulled up so KERNAL LDA $01 / AND #$10 sees $10.
+            InputPullUp = 0x17
+        };
         var sid = CreateSid(bus, profile, _audioBackend, descriptor.MasterClockHz);
         var defaultCartridgeMappingMode = ResolveDefaultCartridgeMappingMode(profile);
         var cia2PortAInputMask = ResolveCia2PortAInputMask(profile);

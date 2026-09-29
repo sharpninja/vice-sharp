@@ -211,11 +211,14 @@ public sealed class EmulatorRuntimeSession
     // suspended and vsync is bypassed anyway; re-enabling pushes the rate.
     private void PushRelativeSpeedToAudioChip()
     {
-        if (!_limiterEnabled)
+        if (Machine.Devices.GetByRole(DeviceRole.AudioChip) is not IAudioChip chip)
             return;
 
-        if (Machine.Devices.GetByRole(DeviceRole.AudioChip) is IAudioChip chip)
-            chip.SetRelativeSpeed(_limiterRatePercent);
+        // Warp still emulates sound (VICE SoundEmulateOnWarp) but must not
+        // render 1x samples per emulated cycle: that caps live VIC-20 Warp
+        // at CLOCK 100% while 200% limiter reaches 200%. Use the live-audio
+        // ceiling so warp is at least as cheap as 200% fast-forward.
+        chip.SetRelativeSpeed(_limiterEnabled ? _limiterRatePercent : LiveAudioMaxRatePercent);
     }
 
     public bool IsWarpMode => !LimiterEnabled;
@@ -677,12 +680,20 @@ public sealed class EmulatorRuntimeSession
         _lastPerCpuExecuted = SnapshotCpuExecuted();
     }
 
-    public void UpdatePerformanceCounters() => UpdatePerformanceCounters(DateTimeOffset.UtcNow);
+    public void UpdatePerformanceCounters() => UpdatePerformanceCounters(DateTimeOffset.UtcNow, force: false);
 
-    internal void UpdatePerformanceCounters(DateTimeOffset now)
+    /// <param name="force">
+    /// When true (GetStatus), refresh even if the last sample is under 250ms so
+    /// warp CLOCK percent is not frozen at 100% while Cycle runs uncapped.
+    /// </param>
+    internal void UpdatePerformanceCounters(DateTimeOffset now, bool force = false)
     {
         var elapsed = (now - _lastPerformanceSampleTime).TotalSeconds;
-        if (elapsed < 0.25)
+        if (elapsed <= 0)
+            return;
+        // GetStatus forces a refresh so warp CLOCK is not stuck at 100%, but
+        // windows under 50ms are noise (0% / 100000% FPS). Pump ticks keep 250ms.
+        if (elapsed < (force ? 0.05 : 0.25))
             return;
 
         var executed = MachineCycle;

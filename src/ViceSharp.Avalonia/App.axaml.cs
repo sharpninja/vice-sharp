@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using System;
 using System.Net;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.RemoteControl.Server;
 using Avalonia.RemoteControl.Server.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,10 +76,11 @@ public partial class App : Application
                 options.Port = port;
 
             // Interaction + live frames stay deny-by-default; opt in explicitly.
-            options.AllowRemoteActions = IsTruthy(Environment.GetEnvironmentVariable("VICESHARP_REMOTECONTROL_ALLOW_ACTIONS"));
+            var allowActions = IsTruthy(Environment.GetEnvironmentVariable("VICESHARP_REMOTECONTROL_ALLOW_ACTIONS"));
             options.AllowRemoteFrames = IsTruthy(Environment.GetEnvironmentVariable("VICESHARP_REMOTECONTROL_ALLOW_FRAMES"));
-            options.AllowRemoteInput = options.AllowRemoteActions
+            options.AllowRemoteInput = allowActions
                 && IsTruthy(Environment.GetEnvironmentVariable("VICESHARP_REMOTECONTROL_ALLOW_INPUT"));
+            ApplyRemoteControlActionGates(options, allowActions);
         });
 
         // Override the default no-op root provider so snapshots see the live window.
@@ -86,6 +88,25 @@ public partial class App : Application
 
         _remoteControlServices = services.BuildServiceProvider();
         _remoteControlLifetime = desktop.AttachAvaloniaRemoteControl(_remoteControlServices);
+    }
+
+    /// <summary>
+    /// TEST-UISET-002: fail-closed property mutation unless remote actions are
+    /// enabled. When actions are on, allow-list the Settings inventory writes
+    /// (IsChecked, SelectedIndex, SelectedItem, Value, Text).
+    /// </summary>
+    public static void ApplyRemoteControlActionGates(AvaloniaRemoteControlOptions options, bool allowActions)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        options.AllowRemoteActions = allowActions;
+        if (!allowActions)
+            return;
+
+        options.AllowedMutableProperties.Add(nameof(CheckBox.IsChecked));
+        options.AllowedMutableProperties.Add(nameof(ComboBox.SelectedIndex));
+        options.AllowedMutableProperties.Add(nameof(ComboBox.SelectedItem));
+        options.AllowedMutableProperties.Add(nameof(RangeBase.Value));
+        options.AllowedMutableProperties.Add(nameof(TextBox.Text));
     }
 
     private static bool IsTruthy(string? value)

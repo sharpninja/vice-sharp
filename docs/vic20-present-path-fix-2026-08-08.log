@@ -1,0 +1,103 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+  ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+  ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+  ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+  ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+  ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+  ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+  ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+  ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+  ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+  ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+  ViceSharp.Launcher -> F:\GitHub\vice-sharp\src\ViceSharp.Launcher\bin\Release\net10.0\ViceSharp.Launcher.dll
+  ViceSharp.Benchmarks -> F:\GitHub\vice-sharp\tests\ViceSharp.Benchmarks\bin\Release\net10.0\ViceSharp.Benchmarks.dll
+  ViceSharp.AdhocHelper -> F:\GitHub\vice-sharp\src\ViceSharp.AdhocHelper\bin\Release\net10.0\ViceSharp.AdhocHelper.dll
+  ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+  ViceSharp.Console -> F:\GitHub\vice-sharp\src\ViceSharp.Console\bin\Release\net10.0\ViceSharp.Console.dll
+  ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+  ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+  ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+  ViceSharp.Host.MacOS -> F:\GitHub\vice-sharp\src\ViceSharp.Host.MacOS\bin\Release\net10.0\ViceSharp.Host.MacOS.dll
+  ViceSharp.TestHarness -> F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll
+  Building VICE native library
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Nothing to be done for 'all'.
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src/lib/linenoise-ng'
+  make: Entering directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+  make: Leaving directory '/f/GitHub/vice-sharp/native/vice/vice/src'
+Test run for F:\GitHub\vice-sharp\tests\ViceSharp.TestHarness\bin\Release\net10.0\ViceSharp.TestHarness.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.10)
+[xUnit.net 00:00:00.25]   Discovering: ViceSharp.TestHarness
+[xUnit.net 00:00:01.70]   Discovered:  ViceSharp.TestHarness
+[xUnit.net 00:00:01.96]   Starting:    ViceSharp.TestHarness
+xvic vice_machine_create call=1 model=vic20
+xvic vice_machine_reset call=1 machine=000001bc9e390070
+xvic vice_machine_step_cycle call=1 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=2 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=3 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=4 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=5 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=6 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=7 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=8 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=9 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=10 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=11 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=12 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=13 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=14 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=15 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_step_cycle call=16 machine=000001bc9e390070
+xvic cycle_checkpoint: granted=1 running=1 paused=0 stop=0
+xvic vice_machine_create call=2 model=vic20
+xvic vice_machine_reset call=2 machine=000001bc9e390020
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.Mos6561_RenderWithZeroRegs_KeepsDefaultGeometry [24 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20NtscSession_Pump_CommitsViceNormalNtscGeometry [137 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoPumpSmokeTests.StartVic20Session_Pump_CommitsFullGeometryFrame_Within3Seconds [103 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_2k [546 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoLockstep.EveryCycle_VicI_VideoState_Match_FocusedWindow [1 s]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterBits_AreDoubleWidth_LikeXvic [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameIncludesBorderStrips_AroundCharacterArea [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderCyan_UsesVicePalettesVplRgb [6 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ColorBase_Uses9600_WhenScreenBankBitSet [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PixelAspect_MatchesViceVicGetPixelAspect [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_BankBitClear_Selects8000Bank [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.PalAndNtsc_Profiles_ExposeDistinctTiming [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.Reg900F_BorderIsLowNibble_BackgroundIsHighNibble [< 1 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.FrameCompleted_FiresAfterFullRaster [12 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Pal_FrameGeometry_MatchesViceNormalBorders [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CharacterMode_RendersInkPixels_AtDecodedScreenBase_ForPlantedGlyph [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ReadyStyle_PaperRegion_IsWhiteBand_NotShortCyanIsland [13 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.ResolveScreenBase_MatchesViceFormula_UnexpandedReadyLayout [2 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.CreateVic20Ntsc_FrameGeometry_MatchesViceNormalBorders [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.RenderNow_UsesCycleDrawPath_FrameCompletedOnce [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20VideoTests.BorderPixels_MatchBorderColor_NotBackground [7 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.Via1_IdlePortA_IsViceIec7E [3 ms]
+[xUnit.net 00:00:04.57]   Finished:    ViceSharp.TestHarness (ID = 'ab71db7394e73a1adc1130e42fc74f059e0e20545bf7641bf1047ee89aadf982')
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.SystemRam_UninstalledBlk_DoesNotClaimBus [4 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.DualVia_BasesAndInterruptRoles_MatchViceBoard [5 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.ConsoleHost_TryGetVicIPixelAspect_UsesViceVicIFormulas [163 ms]
+  Passed ViceSharp.TestHarness.Vic20.Vic20BoardWiringTests.ColorRam_ReadCombinesNibbleWithVBusHigh_AsViceColorramRead [2 ms]
+
+Test Run Successful.
+Total tests: 26
+     Passed: 26
+ Total time: 5.0956 Seconds

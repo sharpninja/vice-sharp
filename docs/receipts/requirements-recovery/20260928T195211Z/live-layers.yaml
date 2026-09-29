@@ -1,0 +1,37 @@
+✓ Pipeline executed successfully | Window: #24172 Palace | Status: Ready | Pipeline: & 'C:\Users\kingd\.codex\pl... | Duration: 2.51s | Location [FileSystem]: F:\GitHub\vice-sharp
+
+type: result
+payload:
+  requestId: req-20260928T195305Z-b239
+  result:
+    items:
+    - key: layer-1
+      order: 1
+      name: Layer 1
+      workspaceId: F:\GitHub\vice-sharp
+      createdAtUtc: &o0
+        dateTime: 2026-06-30T03:25:50.2331983
+        utcDateTime: 2026-06-30T03:25:50.2331983Z
+        localDateTime: 2026-06-29T22:25:50.2331983-05:00
+        date: 2026-06-30T00:00:00.0000000
+        day: 30
+        dayOfWeek: Tuesday
+        dayOfYear: 181
+        hour: 3
+        millisecond: 233
+        microsecond: 198
+        nanosecond: 300
+        minute: 25
+        month: 6
+        offset: 00:00:00
+        totalOffsetMinutes: 0
+        second: 50
+        ticks: 639183867502331983
+        utcTicks: 639183867502331983
+        timeOfDay: 03:25:50.2331983
+        year: 2026
+      updatedAtUtc: *o0
+    totalCount: 1
+  deprecated: true
+
+---

@@ -1,0 +1,83 @@
+Detecting DLL based HardSID boards.
+Cannot open hardsid.dll.
+LoadLibrary WPCAP.DLL failed!
+EthernetARCH:  LoadLibrary WPCAP.DLL failed!
+Detecting PCI CatWeasel boards.
+No PCI CatWeasel found.
+Opening monitor command playback file: F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\x64sc.mon
+archdep_register_cbmfont(): Registering CBM fonts using Pango 1.56.4
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\C64_Pro_Mono-STYLE.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe1282Y.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe128.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe2X.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe2Y.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe642Y.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe64.ttf.
+succesfully registered 1 font(s) from C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\common\PetMe.ttf.
+registered 8 font(s) total.
+ 
+*** VICE Version 3.10 ***
+ 
+This is the condensed log, for the full log use --verbose or --debug.
+ 
+Main:  random seed was: 0x6aa9de16
+Main:  command line was: C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\x64sc.exe -default +sound +autostart-delay-random -autostart-warp -windowxpos 80 -windowypos 80 -windowwidth 768 -windowheight 544 -autostart F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\wolf64.d64 -moncommands F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\x64sc.mon
+Main:  VICE system file directory: 'C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..'.
+Main:  VICE system file search path: 'C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin;C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..'.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\C64\kernal-901227-03.bin'.
+C64MEM:  Kernal rev #3 ($03) Sum: 50954 ($C70A) SHA1: 1d503e56df85a62fee696e7618dc5b4e781df1bb.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\C64\basic-901226-01.bin'.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\C64\chargen-901225-01.bin'.
+DriveROM: Error -  2000 ROM image not found. Hardware-level 2000 emulation is not available.
+DriveROM: Error -  4000 ROM image not found. Hardware-level 4000 emulation is not available.
+DriveROM: Error -  CMDHD ROM image not found. Hardware-level CMDHD emulation is not available.
+Sysfile:  Loading `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\DRIVES\dos1541ii-251968-03.bin'.
+VIC-II:  Initializing chip model "MOS8565" (63 cycles per line, 312 raster lines).
+Window:  Chip 'VICII' using GTK3 backend 'DirectX'.
+Sound:  Available sound devices: dx wmm dummy dump fs wav voc iff aiff mp3 flac ogg soundmovie
+Joystick:  Initializing DirectInput8:
+Joystick:  OK.
+Joystick:  Obtaining devices list:
+Joystick: Warning -  using minimal default mapping.
+MIDIdrv:  init driver
+MIDIdrv:  found 0 sources
+MIDIdrv:  found 1 destinations
+MIDIdrv:  destination #0: Microsoft GS Wavetable Synth
+Keymap:  Loading keymap `C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\C64\gtk3_sym.vkm'.
+Hotkeys:  parsing default file 'C:\Users\kingd\AppData\Local\Microsoft\WinGet\Packages\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\GTK3VICE-3.10-win64\bin\..\hotkeys\hotkeys.vhk' for machine C64
+
+Main CPU:  starting at ($FFFC).
+Main CPU:  RESET.
+VIC-II:  VSP Bug: safe channels are: 017. Emulation of memory corruption is disabled.
+AUTOSTART:  Autodetecting image type of `F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\wolf64.d64'.
+AUTOSTART:  Attached file `F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\wolf64.d64' as a disk image.
+AUTOSTART:  mounted image is type: 1541, not changing drive.
+AUTOSTART:  Resetting drive 8
+AUTOSTART:  Resetting the machine to autostart '*'
+VIC-II:  VSP Bug: safe channels are: 02456. Emulation of memory corruption is disabled.
+AUTOSTART:  Turning Warp mode on.
+AUTOSTART:  `F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\wolf64.d64' recognized as disk image.
+Monitor playback command: until 30000000
+Main CPU:  RESET.
+Monitor playback command: screenshot "x64sc-wolf64.ppm"
+Monitor playback command: quit
+Monitor UI:  'C64 Pro*' font found, enabling PETSCII output.
+Monitor UI:  using font 'C64 Pro Mono 9' (Family:C64 Pro Mono, Size:9, Variations:-) PETSCII:yes Terminal Scale:1.000000
+
+Configure Flags:
+--enable-option-checking=fatal --enable-gtk3ui --disable-arch --disable-pdf-docs --enable-catweasel --enable-cpuhistory --enable-ethernet --enable-midi --enable-parsid --with-flac --with-gif --with-lame --with-libcurl --with-libieee1284 --with-mpg123 --with-png --with-portaudio --with-unzip-bin --with-vorbis
+
+Resources with non default values:
+MonitorFont="C64 Pro Mono 9"
+Window0Height=607
+Window0Width=768
+Window0Xpos=80
+Window0Ypos=36
+Sound=0
+AutostartDelayRandom=0
+
+reconstructed commandline options (might be incomplete):
+-default -monitorfont "C64 Pro Mono 9" -windowxpos "80" -windowypos "36" -windowwidth "768" -windowheight "607" +sound +autostart-delay-random
+
+VIC-II:  VSP Bug: safe channels are: 013456. Emulation of memory corruption is disabled.
+Closed monitor command playback file: F:\GitHub\vice-sharp\validation-output\wolf64-frame-diff-20260915\x64sc.mon

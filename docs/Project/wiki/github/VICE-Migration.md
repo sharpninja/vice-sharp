@@ -47,7 +47,7 @@ The launcher's flag parser is [ViceArgsParser.cs](../src/ViceSharp.Launcher/Vice
 | Classic VICE flag | ViceSharp behaviour |
 |-------------------|---------------------|
 | `-cart <path>` | Standard raw/CRT images load, normalise to 8K / 16K ROML+ROMH banks, and drive the C64 memory map through `GAME` / `EXROM`. Broader mapper families and cart-converter workflows are post-MVP. |
-| `-autostart <path>` | PRG autostart is parsed and dispatched by the console entry point; disk-image autostart (`LOAD"*",8,1: RUN` injection from a D64) is not wired, so for disks use `-8 <disk.d64>` plus a topology where the drive image is mounted at boot. |
+| `-autostart <path>` | Console: PRG autostart is parsed and dispatched by the console entry point; disk-image autostart (`LOAD"*",8,1: RUN` injection from a D64) is not wired, so for disks use `-8 <disk.d64>` plus a topology where the drive image is mounted at boot. Avalonia desktop: drop a `*.prg` on the video surface to load it into the current session (RUN when the load address equals live TXTTAB); drop a disk image to attach drive 8 and autostart. |
 
 ### Not yet (collected as unknown)
 

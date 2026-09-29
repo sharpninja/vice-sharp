@@ -1,233 +1,365 @@
-# ViceSharp Handoff - 2026-08-17
+# ViceSharp Handoff
 
-**Active branch:** `main` (GitVersion **1.3.3-15** before this wrap-up commit). Iteration 1 C64 is complete; Iteration 2 VIC-20 has scoped lockstep, palette-index framebuffer parity, timed FE3 flash, expansion persistence, and live VIC-I audio.
-**Remotes:** `origin` = GitHub `sharpninja/vice-sharp` is the source of truth (operator 2026-08-10: Azure DevOps `azure` remote is **retired / not used**). Push only to `origin` unless the operator explicitly revives ADO.
-**Working tree noise (do not commit unless operator asks):** untracked `docs/S-Blox/`, `docs/reviews/*`, bulk `docs/2s-*`, `docs/10s-*`, `docs/*-focused-*.log`, `docs/_deploy-*`, `docs/xvic-*` probe captures, `manifests/` winget copies. Prefer durable receipts under `docs/receipts*` and `docs/receipts/`.
+Generated local: 2026-09-28 19:27:44
 
-## Review fixes and documentation wrap-up 2026-08-17
+This file completely replaces the previous handoff at the operator's explicit request.
 
-**Scope:** Xbox/UWP and Microsoft Store are outside the product scope. `PLAN-XBOXUWP-END-001` remains done; legacy source and historical docs are retained for audit but excluded from the current wiki manifest. Supported product shells are Avalonia desktop and Console.
+## Current State
 
-**Corrections included:**
+- Work is stopped at the plan-before-implementation boundary.
+- No ViceSharp product code was changed during the requirements recovery work described here.
+- No recovery plan has been approved for implementation.
+- No commit, push, pull request, or deployment was performed.
+- Do not resume product implementation until the decision-complete BDPv4 plan is written, independently accepted, presented to the operator, and explicitly approved.
+- Do not clean, reset, revert, or overwrite unrelated dirty files. The dirty tree contains operator and prior-agent work.
 
-- RomM: anonymous public-cover fetches, authenticated relative-cover enforcement, cache-path containment, expected-length atomic downloads, and Windows current-user DPAPI connection-token persistence with plaintext migration.
-- VIC-20: VICE TYPE_B FE3 erase-cycle timing, busy/cancel/suspend/resume behavior, machine-clock advancement, FE3/Ultimem/Mega-Cart dirty-state write-back, deterministic batched VIC-I audio, and allocation-free silent register stores.
-- Pixel/native: scoped READY PAL/NTSC/busy palette-index parity, shared-palette BGRA alignment, native xvic sound export, and restored native 8580 filter dither behavior.
-- Boundaries/docs: package metadata, library boundary coverage, XMLDocs convention cleanup, canonical FR/TR/TEST additions, GitHub-only wiki generation, and removal of archived Xbox/Store pages from published wiki content.
+Repository state at handoff creation:
 
-**Validated this wrap-up:**
+- Workspace: `F:\GitHub\vice-sharp`
+- Branch: `main`
+- HEAD: `687b03a75c1971bdb4bcbe07f2b5ea2d94f47b0d`
+- Origin: `https://github.com/sharpninja/vice-sharp.git`
+- Tracked dirty entries before replacing this file: 72
+- Untracked entries before replacing this file: 402
+- `HANDOFF.md` was already modified and was explicitly deleted before this replacement was created.
 
-- `dotnet build ViceSharp.slnx --no-restore -v minimal -maxcpucount:1 /p:UseSharedCompilation=false`: succeeded, 0 warnings, 0 errors.
-- Focused FE3/cart/VIC-I audio gate: 35 passed, 0 failed, 0 skipped.
-- Pixel lockstep: the combined run passed Busy PAL index, READY NTSC index, and READY PAL BGRA before hanging on the fourth native machine; READY PAL index then passed 1/1 in a fresh process. All four assertions are green when process-isolated; the same-process native hang remains.
-- Native xvic shim rebuilt successfully. The three native 8580 filter lockstep cases passed 1/1 each in fresh processes.
-- `ViceSharp.Library.Tests`: 95 passed, 0 failed, 0 skipped.
-- `tools/check_requirement_traceability.ps1`: exit 0.
-- MCP wiki export: 39 files; ZIP contains GitHub output and no Xbox Store page.
-- `git diff --check`: clean.
+## Mandatory Startup and Trust Rules
 
-**Broad-suite honesty:** the diagnostic full TestHarness run from the review-fix turn was not green: 1,155 passed, 10 skipped, 6 failed, then the native lockstep process hung. The XMLDocs failure was fixed afterward. Remaining unrelated baseline defects were three C64 performance assertions, the Avalonia/Core boundary assertion, snapshot divergence, and the native dual-VIA/multi-machine hang. Do not report the full harness as passing until those are resolved in their own slices.
+1. Read `AGENTS-README-FIRST.yaml` before any other repository action.
+2. Read `AGENTS.md` and this handoff.
+3. If context has compacted, execute the complete `add-profile` skill and read every eligible global profile file before resuming.
+4. Use the supported Codex MCP plugin or native MCP tools for session log, TODO, requirements, triage, and traceability operations.
+5. Use PowerShell.MCP for commands. Do not use Python.
+6. Use sortable local response timestamps in exact `yyyy-MM-dd HH:mm:ss` format, without UTC or timezone suffixes.
+7. Use UTC only inside structured audit fields and IDs where the schema requires it.
+8. Preserve request and response JSONL for every hostile review and store the complete hostile result in the reviewer's MCP session turn.
+9. Accuracy and completeness must both be at least 98 for hostile acceptance.
+10. Never mark a requirement, TODO, goal, or plan step done while a required failure, skip, unknown, or incomplete hostile receipt remains.
 
+## Operator Contract for ViceSharp and VICE
 
-## Phase G closeout 2026-08-11 (PLAN-VIC20-EXACT-001 DONE scoped)
+The recovered foundational relationship is:
 
-MCP `PLAN-VIC20-EXACT-001` marked **done** with scoped Exact (not whole-machine Exact).
+- Observable emulator behavior is a functional requirement.
+- VICE behavior is the accepted behavioral oracle, including VICE-compatible quirks and bugs unless an operator-approved requirement explicitly says otherwise.
+- Internal architecture and implementation mechanism are technical requirements.
+- Executable differential proof is a test requirement.
+- Every FR, including legacy FRs, must have acceptance criteria appropriate to validating that FR.
+- A passing narrow checkpoint cannot replace a broad behavioral contract.
+- Legacy UWP and Xbox requirements are retained. They are not retired. UWP and Xbox implementation is outside the current implementation scope.
+- ViceSharp may use an idiomatic managed architecture, but observable timing, state transitions, bus effects, device behavior, and supported media behavior must match the relevant VICE machine.
 
-**Umbrella evidence:** process-isolated Vic20 gate **46 passed / 0 failed / 0 skipped** plus 2s non-idle CPU lockstep PAL+NTSC (`VICESHARP_LOCKSTEP_2S=1`). Logs: `docs/receipts/vic20-umbrella-gate-2026-08-11.log`, scratch `implementer/vic20-umbrella-gate.log`.
+The immediate product goals remain:
 
-**Scoped Exact (hostile AGREE):** pixel index READY PAL/NTSC/busy; BGRA capture path + shared-palette alignment (canvas RGB may Partial); VIC-I video 2k; FE3 flash040 TYPE_B erase latency; sound silence/tone SequenceEqual; 2s non-idle CPU lockstep; managed snapshot blob RT + short resume.
+1. Recover the authoritative requirements without narrowing or losing legacy behavior.
+2. Complete and prove fail-closed lockstep parity with `xvic` for VIC-20.
+3. Hide and show VIC-20 settings according to the selected machine without losing draft values.
 
-**Residuals (Explicit Missing / Partial):** niche carts beyond FE3/Ultimem/Mega/generic; IEEE-488/rsuser/printer; headless xvic WriteSnapshot hang; multi-test NativeVice suites require process isolation.
+## How the Requirements Diverged
 
-**Rebuild note:** after native changes rebuild `vice_xvic.dll` and copy into TestHarness `bin/Release/net10.0` (+ `native/`).
+Historical evidence established the following:
 
+- The original April 2026 requirements treated VICE x64sc and hardware-backed evidence as the correctness reference.
+- Commit `e73a820` on 2026-05-27 regenerated the MCP/wiki export and collapsed 219 FR headings, 40 TR headings, and 259 TEST lines to 12 FR headings, 9 TR headings, and 1 TEST line.
+- Broad `FR-VIC-001` and `TR-CYCLE-001` content was replaced by placeholders.
+- Commit `f608d02` on 2026-05-30 added narrow PAL 19,656-cycle checkpoint tests under `BACKFILL-VIDEO-001`.
+- Commit `d1cbf30` on 2026-05-31 populated the reused legacy IDs from that narrow wording.
+- No persisted rationale was found for reusing and narrowing the foundational IDs.
+- This proves requirements and traceability loss. It does not alone prove which individual runtime defects were caused by that loss.
 
-## Shipped 2026-08-11 (bit-exact VIC-20 program Phases A-G)
+## Requirements Recovery State
 
-BDPv4 plan PLAN-VIC20-EXACT-001 execution receipts under docs/receipts/vic20-phase-*.txt.
+The recovery preview under `docs/receipts/requirements-recovery/20260928T195211Z` contains:
 
-- Pixel index SequenceEqual READY PAL/NTSC/busy; BGRA via shared PALette (first_x recompute in vice-shim-vic20.c).
-- Video lockstep PAL+NTSC 2k/500k; reset clears vic.regs residue.
-- Cart inventory; FE3 flash040 TYPE_B erase latency; Ultimem/Mega unit parity.
-- Vic20Sound + native vice_vic20_render_samples; silence/tone SequenceEqual vs xvic.
-- Workload CPU lockstep 250k PAL+NTSC; keyboard matrix green.
-- Snapshot inventory + managed RAM sample; native WriteSnapshot hang residual.
+- 513 typed records
+- 232 FRs
+- 53 legacy FRs
+- 1,026 FR acceptance criteria
+- 442 proposed forward operations with 442 reverse-order inverses
 
-Whole-machine Exact remains scoped (IEEE/rsuser/printer + niche carts Explicit Missing). Rebuild xvic after native edits; copy vice_xvic.dll into TestHarness bin.
+No live ViceSharp requirement mutation was applied from that preview.
 
-## Session closeout 2026-08-10 (refresh-docs + wrap-up)
+The preview hostile gate was `DISAGREE`, accuracy 99, completeness 99, with 15 PASS, 9 FAIL, and 0 UNKNOWN. The nine unresolved preview defects were:
 
-### Historical 2026-08-10 batch now included in the 2026-08-17 wrap-up
+1. Atomicity is not the only blocker. Four TR bodies were erased, two placeholders survived, and four records lost acceptance criteria.
+2. Several inferred FR criteria contain implementation mechanisms and require owner approval.
+3. Thirteen records use noncanonical IDs or the wrong type prefix.
+4. Four TR bodies are empty and two placeholder TRs remain.
+5. Non-allowlisted narrowing and acceptance-criteria loss remain.
+6. Mapping presence exists, but semantic appropriateness and per-AC executable VICE coverage are not proved. Thirteen active FR mappings remain provisional.
+7. Immutable ROM hashes, trace-equivalence proof, and named machine, media, and workload manifests are absent.
+8. The ledger uses whole-record precedence instead of per-field provenance, decisions, reasons, and merges.
+9. Guardrails do not yet block empty bodies, placeholders, malformed IDs, misclassification, AC loss, or narrowing.
 
-1. **VIC-I READY present path (Exact-scoped geometry)**
-   - `Mos6561`: full-line paint + border blank outside paper; crop via VICE `ComputeViewportFirstX` (READY PAL first_x=48, L+R 48, paper origin 48). Rejected invent crop `src=0` and continuous paper strip.
-   - Tests: `Vic20VideoTests` geometry/latch/space; audit rebaselined `docs/audit-vic20-vs-vice-2026-08-07.md`.
-   - Hostile AGREE: `docs/receipts/hostile-validator-20260808T094911Z.md`.
+Live McpServer requirements created or updated for the recovery enabler:
 
-2. **VIC-20 expansion Settings UX**
-   - Avalonia: `WrapPanel` BLK0/1/2/3/5; expansion cart kind/preset/write-back; Build cart image dialog.
-   - Xbox UWP: `VariableSizedWrapGrid` for BLKs (no WrapPanel); attach/eject expansion image; navigate to FlashCartBuilder page.
-   - Protocol/host: expansion cart manage state, media size detect, settings option catalog.
+- `FR-MCP-REQRECOVERY-001`: 8 pending acceptance criteria
+- `TR-MCP-REQRECOVERY-001`: 7 pending acceptance criteria
+- `TEST-MCP-REQRECOVERY-001`: 8 pending acceptance criteria
+- `FR-MCP-SESSIONLIFE-003`: updated
+- `TR-MCP-SESSIONLIFE-003`: updated
+- `TEST-MCP-SESSIONLIFE-004`: 6 pending acceptance criteria
+- `FR-MCP-PLUGININT-001`: updated
+- `TR-MCP-PLUGININT-001`: updated
+- `TEST-MCP-PLUGININT-001`: updated
 
-3. **Flash Cart Image Builder (Byrd slice)**
-   - Core: `src/ViceSharp.Core/FlashCarts/*` (profiles FE3 512K, Ultimem 1MB, MegaCart+NVRAM, EasyFlash layout).
-   - Portable `FlashCartImageBuilderViewModel`; FE3 presets on expansion cart surface.
-   - UI: Avalonia `FlashCartBuilderView`; Xbox `FlashCartBuilderPage`.
-   - Tests: `tests/ViceSharp.TestHarness/FlashCart/*`.
-   - Hostile AGREE: `docs/receipts/hostile-validator-20260808T103211Z.md`.
-   - FE3 MODE_FLASH routes through managed `Flash040Core` (AM29F040B). The VIC-20 clock now advances VICE TYPE_B erase timing: 50-cycle timeout, 1,000,000-cycle sector erase, and 8,000,000-cycle chip erase.
+Verified session-lifecycle mapping:
 
-4. **Deploy evidence (local lab)**
-   - Desktop: Nuke `InstallMsi` ProductVersion **1.2.7** succeeded (`docs/_deploy-desktop-2026-08-08_045501.log`).
-   - Xbox: `DeployXboxLocal` used in-session (see deploy logs under `docs/_deploy-xbox-*`).
+- FR: `FR-MCP-SESSIONLIFE-003`
+- TR: `TR-MCP-SESSIONLIFE-003`
+- TEST: `TEST-MCP-SESSIONLIFE-002`
+- TEST: `TEST-MCP-SESSIONLIFE-004`
 
-5. **Docs refresh this turn**
-   - README Iteration 2 + dashboard date; USER-GUIDE VIC-20 row; Iteration-Roadmap; new `docs/FlashCart-Builder.md`; wiki.yaml + docs/README index; this handoff.
+All criteria remain pending and unsatisfied. Do not mark them satisfied without executable proof.
 
-### Exact vs Partial discipline
+Generated McpServer requirement projections were refreshed under:
 
-- Exact only with VICE file+function + matching managed control + hostile AGREE when claiming Exact.
-- Do **not** claim whole-machine Exact. READY PAL/NTSC/busy palette-index framebuffer comparisons are Exact-scoped; full-canvas BGRA remains Partial per the audit.
-- CPU every-cycle 10s lockstep remains green (separate from video FB).
+- `F:\GitHub\McpServer\docs\Project`
+- `F:\GitHub\McpServer\docs\Project\wiki`
 
-### Shipped 2026-08-11 (FE3 flash040 + pixel FB capture)
+## Current MCP Server Failure
 
-1. **FE3 flash040 (command FSM)**
-   - `Flash040Core` (TYPE_B): unlock AA/55, byte program AND, chip/sector erase, autoselect IDs.
-   - `FinalExpansion3Cartridge` MODE_FLASH stores/reads via flash040; raw pokes no longer dirty flash.
-   - Tests: `Flash040CoreTests`, `Fe3Flash040Tests`, and `Flash040EraseLatencyTests`; timing, busy status, cancel, and suspend/resume are covered.
+The current marker was rewritten at local `2026-09-28 18:38:54` and reports:
 
-2. **Pixel FB vs xvic**
-   - `vice_machine_capture_visible_frame` / indices on xvic: visible window = first_displayed_line + extra_left + viewport `first_x`, BGRA via palette.
-   - `IViceNative.TryCaptureVisibleFrame`; Vic20PixelFrameTests: PAL 448x284 after boot, geometry match managed.
-   - Palette-index SequenceEqual is green for READY PAL/NTSC/busy; native-canvas-versus-managed full BGRA remains Partial.
+- Service PID: `62896`
+- Server version: `1.4.39+7e5162319a5474e57124b51d8d0d9d6e8b7d5470`
+- Codex plugin version: `1.107.0`
+- Plugin status: available
+- Required namespaces include session log, TODO, requirements, triage, GraphRAG, memory, and failsafe.
 
-3. **Azure remote retired** (operator): do not push `azure`; `origin` only.
+The active failure is density-sensitive session-log mutation latency, not a marker, plugin-status, or triage outage.
 
-### Resume next
+Live post-restart timings from `C:\ProgramData\McpServer\logs\mcp-20260928.log`:
 
-1. Optional: full-frame BGRA SequenceEqual managed vs xvic (palette align).
-2. Optional: resolve the native xvic snapshot-write hang and broaden VIC-I waveform/input coverage beyond the focused silence/tone oracle cases.
-3. Optional: re-run desktop InstallMsi if Avalonia builder only was built after last MSI.
-4. Microsoft Store and Xbox UWP / Dev-Mode sideload are **CANCELLED**. Do not resume Partner Center, Store cert, or DeployXboxLocal product work.
-5. Query MCP TODO store for live backlog; snapshot list at bottom is stale.
+- `sessionlog_begin_turn`: 40.715 seconds
+- `sessionlog_complete_turn`: 43.485 seconds
+- `sessionlog_begin_turn`: 45.082 seconds
+- A sparse hostile-review append took 3.813 seconds.
 
-### Validation commands (focused)
+All three dense-session mutations succeeded. This is severe degradation, not a universal outage.
 
-```pwsh
-dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "FullyQualifiedName~FlashCart"
-dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "FullyQualifiedName~Vic20Video"
-git diff --check
-```
+Deployed source is the clean worktree:
 
-Full baseline (long): filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy` (expect 0 failed; skips allowed only if pre-existing category policy).
+- Path: `F:\GitHub\McpServer\.worktrees\session-lifecycle`
+- Branch: `grok/session-lifecycle`
+- HEAD: `7e5162319a5474e57124b51d8d0d9d6e8b7d5470`
 
----
+`SessionLogService.FindExistingSessionAsync` at lines 250 through 266 loads the tracked session plus every turn child collection through one multi-collection Include query. It has neither `AsSplitQuery()` nor `StorageCommandBudget` around materialization.
 
-## VIC-20 every-cycle lockstep - PAL + NTSC 10s GREEN (2026-08-06)
+Causal conclusion:
 
-- **PAL TenSecondPal:** matchedCycles = 11_084_050 / budget 11_084_050 (~35 s). Log: `docs/10s-lockstep-2026-08-06.log`. Receipt: `docs/receipts-lockstep-10s-2026-08-06.txt`.
-- **NTSC TenSecondNtsc:** matchedCycles = 10_227_270 / budget 10_227_270 (~37 s). Log: `docs/10s-lockstep-ntsc-2026-08-06.log`. Receipt: `docs/receipts-lockstep-10s-ntsc-2026-08-06.txt`.
-- **PAL TwoSecondPal** (VICESHARP_LOCKSTEP_2S=1): Passed ~8 s. FocusedWindow: Passed.
-- **Via6522 unit:** 48/0/0 after bus-visible T1/T2 change.
-- **Where diverged (NTSC residual c=521027):** soft-BIT $9124 (VIA2 T1) V flag only (nP=$E5 mP=$A5).
-- **How diverged:** (1) soft-apply re-LOADed T1; VICE BIT(GET_ABS) loads once. (2) VIA Tick before CPU made CPU Read see post-Tick T1; VICE LOAD is at maincpu_clk before CLK_INC (saw $C0 V=1 vs managed $BF V=0).
-- **How realigned:** SoftDeferBitBody latches one GET; soft-apply N/V/Z from latch. Via6522 captures pre-Tick `_t1BusVisible`/`_t2BusVisible` for Read; Peek stays post-Tick (export match). Rejected CPU-before-VIA Phi2 reorder (broke free-run phase).
-- Env: `VICESHARP_LOCKSTEP_10S=1` for 10s gates; `VICESHARP_LOCKSTEP_2S=1` for 2s. Run NTSC and PAL in **isolated processes** (failed NTSC can poison later PAL short runs at c=5513).
+- The unsplit tracked graph query is the strongest work-amplification explanation, at 92 percent confidence.
+- Missing `StorageCommandBudget` is a containment and diagnostic defect. It allows the expensive read to run unbounded but does not create the work.
+- Prior SQL Server error 1205 deadlocks corroborate persistence-path risk but do not prove they caused the three slow successful calls.
+- Definitive causal proof requires an instrumented dense-session before/after test with `AsSplitQuery()` and budget enforcement.
 
-## Iteration 2 VIC-20 - native lockstep gate GREEN (2026-08-05)
+The requirements-export and triage incident was successfully reported after service recovery:
 
-- **Branch:** `feat/iteration2-vic20` (off main / v1.2.1). Locked: **default drive 8 = 1540**.
-- **Native xvic oracle:** `native/vice_xvic.dll` via `native/build-vice-shim-xvic.sh` + `vice-shim-vic20.c`; hosted `vic20cpu.c` / `mainviccpu.c` (`VICE_SHIM_HOSTED`). Managed: `ViceNative.CreateInstance("vic20"|"vic20ntsc"|"xvic")` -> `ViceNativeXvic`.
-- **Open-bus (FR-VIC20-002):** `BasicBus` last-data latch; BASIC/KERNAL ROM reads do **not** refresh last-data (VICE `vic20memrom_*`); chargen does; uninstalled BLK falls through (not sticky 0xFF). Fixes kernal `CMP $A003,X` Carry/N vs xvic.
-- **Lockstep receipts (criterion 3):** full **A/X/Y/S/P/PC** through **5000** cycles; **dual VIA** control peeks ($9110/$9120 DDRA/DDRB/ACR/PCR/IER) at 64/256/1024; **VIC-I** static peeks + VICE raster encoding ($9003/$9004) through 5000. Vic20 filter **87/0/0**. API: `IViceNative.PeekBus` / `vice_machine_peek_bus`. Mos6561 power-on zeros + raster encoding match VICE. Receipts: `docs/receipts-vic20-phase2-verify-2026-08-05.txt`. CI: VIC20 + dos1540 in `EnsureCiRomRoot`.
-- **Residual:** intermittent mid-instruction PC lag after cycle ~5005 (control-flow diverge later; deeper CPU staging for multi-frame bit-exact).
-- **Still open (Tier A polish):** J expansion UX, K input E2E, L cart/disk, M snapshots.
-- **Do not** commit untracked `docs/S-Blox/`, reviews, manifests. Rebuild oracle: `MSYSTEM=MINGW64 bash -lc 'cd /f/GitHub/vice-sharp/native && bash ./build-vice-shim-xvic.sh'`.
+- Report: `triage-report-5e6f748cba60455694dd02964c7e5072`
+- Group: `triage-group-64e08b7f73b463eb`
+- Routed workspace: `F:\GitHub\McpServer`
+- Status when submitted: `collecting`
+- Preserved failsafe: `.mcpServer\failsafe\Codex\workspaces\RjpcR2l0SHViXHZpY2Utc2hhcnA\pending\20260928T235515Z-triage_report-ebdc.yaml`
 
-## PLAN-XBOXUWP + PLAN-ROMM resume snapshot (2026-08-05)
+The current installed skill and schema both accept `markdown`. Do not claim the earlier export mismatch is repaired until an end-to-end plugin export proves it.
 
-- **Track 1 (Xbox Tier D residuals) largely SHIPPED this session:** FEAT-XAOTBIND-001 (x:Bind migration), FEAT-XOCTOPUS-001 (CI/release Octopus LEGION2 steps), FIX-ROMLESSVIC-001 (merged test), FIX-XKBDNMI-001 (RESTORE asserts NMI), FEAT-XCTRLBIND-001 (Controls remapping), FEAT-XROMPICK-001 (model ROM readiness).
-- **Track 2 (RomM):** merged `feat/romm-integration` into this branch (`3804a1d`). Portable `ViceSharp.Library.ViewModels` + `ViceSharp.RomM`, Xbox/Avalonia library UI, LAN bridge connection path present. Gate after merge: **Category=Xbox|RomM|Library 546/546** (0 fail, 0 skip).
-- **Deploy loop (historical, cancelled 2026-08-11):** was `./build.ps1 DeployXboxLocal`. Do not treat as active product work.
-- **Track 3 (Microsoft Store / S42) CANCELLED 2026-08-11:**
-  - Operator decision: **Microsoft Store publication abandoned**. Emulators are not allowed on the Microsoft Store.
-  - MCP TODO `IMPL-XBOXUWP-042` marked done with cancelled summary. Do not resume Partner Center, Store cert, store listing, or Store-gated submission.
-  - Historical docs under `docs/xbox/*store*` and `docs/xbox-store-publishing.md` are archival only (not an active plan).
-- **Xbox UWP / Dev-Mode sideload CANCELLED 2026-08-11:**
-  - Operator decision: cancel remaining local Xbox UWP platform work (sideload, Dev-Mode console deploy, `DeployXboxLocal` product track, on-console smoke as open work).
-  - MCP TODO `PLAN-XBOXUWP-END-001` records the cancel. Historical IMPL-XBOXUWP slices stay done for audit; do not reopen.
-  - `src/ViceSharp.Xbox*` is frozen legacy. Supported UI shells: **Avalonia desktop + Console**.
-- **OPEN (non-Xbox):** MCP TODO reconcile for desktop/core work (e.g. PLAN-ZIPMEDIA-001); no Xbox deploy loop.
-- **Parallel worktrees (reference):** `F:\GitHub\vice-sharp-romm` (`feat/romm-integration`, source of merge); romless repro merged via FIX-ROMLESSVIC-001.
+## McpServer Implementation Plan That Must Be Written and Approved
 
-## How to resume
+The plan file does not yet exist. The proposed path is:
 
-1. Read `AGENTS-README-FIRST.yaml` (marker rotates on server restart; verify signature + /health nonce before MCP work).
-2. Route TODO / session-log / requirements / triage through the mcpserver plugin (repl-invoke or wrappers), never raw REST, never storage files.
-3. Baseline gate (one process, ~20 min, run detached):
-   `dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter "Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy"`
-   Green criterion: 0 failed, 21 skipped, total 2612-2615 (totals wobble in that band from cosmetic xunit trx name serialization of dynamic theory rows; per-class row sets are identical - never chase a fixed total).
+`docs/plans/PLAN-REQRECOVERY-ENABLER-20260928.md`
 
-## Shipped 2026-07-08 (all CI-confirmed)
+The plan must be decision-complete and include the following gated slices.
 
-- **v1.0.2 released**: tag on `534cded`, release run 1074, all 13 package ids verified in the nuget.org flat container (Core bundle, SourceGen, Protocol, Monitor, Launcher, AdhocHelper, Host, Avalonia, Console, Host.MacOS/Android/iOS/Xbox; Console + Avalonia are dotnet tools).
-- **PLAN-NATIVERESIDUE-001 closed** (`ba0f94f`): a `.vsf` whose DRIVE8 module carries `has_tde=0` disabled TrueDrive process-wide via `resources_set_int` (drive-snapshot.c:334-363); `vice_machine_create_model` now re-baselines `Drive{8..11}TrueEmulation` to the VICE default 1 through `resources_set_int` so iecbus statics and $DD00 callbacks recompute. SnapshotResume two-process partition removed; suite proven green in ONE process. Guards: TEST-NATIVE-RESIDUE-01/02 in `NativeResidueDiagTests`.
-- **CI made self-sufficient** (`a229801`, `d8f61cf`, `4e3db9b`): agents have no ROMs and no shim, so `EnsureCiRomRoot` in `build/Build.cs` stages 13 hash-pinned VICE data files (C64 ROMs incl. all variant kernals, DRIVES dos1541/dos1541ii, gtk3_pos.vkm) from the VICE-Team svn-mirror into `artifacts/vice-data` and sets `VICESHARP_ROM_PATH` for the test process only. Shim-dependent tests MUST use `[ViceFact]`/`[ViceTheory]` (plain `[Fact]` throws DllNotFoundException on shimless agents). First-ever green CI run: 1072.
-- **Docs reconciled to shipped reality** (`aee29ea`, 88 files): README, USER-GUIDE, VICE-MIGRATION, ROMs, Architecture, Public-API (regenerated from the 50 real Abstractions interfaces), requirements docs; 22 stale files pruned; `docs/wiki.yaml` manifest lists all 28 wiki documents; winget license fixed MIT -> GPL-2.0-or-later.
-- **github divergence resolved** (`20b330c`): github-only commit `42f2f26` (VicModeChangeEvent seam) merged with strategy `ours` (tree unchanged; content preserved on `rescue/vic-modechange-event`); github main fast-forwarded, tags identical on both remotes; github wiki published per manifest (`b455b88`, 28 pages + sidebar).
-- **Dependency wave S0-S8 complete** (TR-DEPS-202607-001 + TEST-DEPS-202607-001, both completed with evidence; commits `72696d9`, `055b9d5`, `26e5ca8`, `87eb80a`, `9214cdb`, `1cad822`+`1adf386`, `23d030a`, `0f5192f`): all 30 central entries at newest mutually compatible stables (Avalonia 12.0.5, Extensions/TestHost 10.0.9, Protobuf 3.35.1, Grpc.Tools 2.82.0, Test.Sdk 18.7.0, Roslyn pair 5.6.0, YamlDotNet 18.1.0, FluentAssertions 8.10.0, coverlet 10.0.1, aiUnit 2.1.3, RemoteControl 0.7.4); 5 dead pins removed; AiReview under CPM with inherited TreatWarningsAsErrors; vendored `nuget-local` feed DELETED (NuGet.config is nuget.org-only); `global.json` floor 10.0.301 (Roslyn 5.6 generator gate). Excluded as prerelease: xunit.v3 4.x, NSubstitute 6.x, Protobuf 4.x, Extensions 11.x.
-- **Test fixtures in repo** (`93cdc7e`): `vice-snapshot-20260630171307.vsf` (read by the residue probes and lockstep re-baseline suites at repo root; do not delete), `native/.build-nopatch.sh`, `native/.ccwrap/*`. Operator rule: if it is needed to run a test, it goes in the repo.
+### Slice 1: Prove and repair dense session logging
 
-## Iteration-1 completion (branch `fix/nativeresidue-002-drive-clock-hardening`, off `master`; NOT pushed)
+Write red tests first for:
 
-Working through the "complete outstanding iteration 1 work" plan. Done, all committed locally, gates green:
-- **Slice A - PLAN-NATIVERESIDUE-002** (710c1e9/8894f1a/9fb06dd/0691344): the two latent drive-clock bugs fixed; **BUG-LOCKSTEP-001 CLOSED** (full gate 0 failed / 2596 passed / 21 skipped). See docs/receipts-nativeresidue-002-2026-07-09.md.
-- **Slice F - BUG-TESTDEBT-001**: verified already fixed at HEAD (6a32e7c/77e7190), closed with receipt.
-- **Slice B - PLAN-VICEPARITY-001 S10** (67959e6/0fdaa6a/35d9e05): SID reSID data-bus read semantics ($19/$1A POT 0xFF, $1B/$1C OSC3/ENV3 latch, other reads = fading shared bus), per-model DataBusTtl virtual, Peek/Read split, dead-code retirement. Parity ratchet 405->419. Baseline gate 0 failed / 2603 passed / 21 skipped.
+- A dense tracked existing session containing every child collection.
+- Query-shape proof that the graph is split and does not create a Cartesian collection join.
+- Completion inside the five-second storage budget or a correctly classified retryable failure.
+- Exact readback without duplicate children.
+- Concurrent writes to the same session.
+- SQL Server error 1205 classification.
+- All eight supported plugin rows performing dense update and retry or recovery behavior.
 
-**SID parity program COMPLETE (2026-07-10)** - all remaining slices landed:
-- **S11 / S11b**: 8580 reSID filter port (filter8580new m==1) + write pipeline + per-model ttl(0xA2000)/scaleFactor(5); shim exports vice_sid_exact_set_sampling + vice_sid_exact_clock_buffered; DATABUS-07 flipped; oracle via "c64c". Ratchet ->444.
-- **S12**: amplify(scaleFactor)/clip PCM16 seam + extfilt enable branch; OUTPUT-01..07. Ratchet ->451.
-- **S13**: fixed-point Kaiser FIR resampler (fast/interpolate/resample); OUTPUT-08..13. Ratchet ->457.
-- **CH**: retired the dead Chamberlin SVF stack (10 members + 7 guards + SidFilter6581Tests.cs). PLAN-SIDCHAMBERLIN-001 closed.
-- **BC**: ported reSID batched SID::clock(delta_t) (Sid6581.BatchedClock.cs); SAMPLE_FAST now value-bit-exact; un-pended the last 4 SID quarantines + authored the last 9 (EXTFILT-01..07, CLOCK-05/08). Ratchet ->466 with a strict completion pin (Assert.Equal(466, covered)).
-- **LW** (4924b94, pushed): live audio wired through the reSID SAMPLE_RESAMPLE engine (Resample always, VICE x64sc parity); push tail bit-exact vs the buffered pull; warp = cadence-only; zero-alloc; benchmark in SidSamplingBenchmarks.
-- **CL** (a38964b/e100433, local): NativeCollectionConventionTests + [Collection("NativeVice")] on the 6 native-bridge test classes.
-- **G**: DROPPED per operator (ADO wiki push).
+Then independently review the red gate.
 
-Closure gates: parity 466/0/0 (completion pin holds), determinism 5/0, XmlDocs green, full baseline 0 NEW failures (7 pre-existing VideoRendererTests only) on the clean re-run. One run-1 full-suite native ACCESS_VIOLATION did NOT reproduce (flaky native-shim instability; candidate PLAN-NATIVERESIDUE-002 follow-up, not a SID blocker) - see the closure receipts.
+Implementation target:
 
-**Native build recipe (learned this session, load-bearing):** `make x64sc-program` does NOT rebuild changed VICE-core `.o` (they stay stale). Before rebuilding, delete the changed `.o` (and `libdrive.a` for drive files), then run under the MSYS2 MINGW64 login shell so the compiler gets a writable `/tmp`:
-`MSYSTEM=MINGW64 /c/msys64/usr/bin/bash.exe -lc 'rm -f <changed>.o; bash /f/GitHub/vice-sharp/native/.build-nopatch.sh'`. The dll is gitignored (built locally). Vendored edits go in native/patches/vice-shim-runtime.patch (regenerate via `git -C native/vice diff`; keep the 5 pre-existing hunks byte-identical).
+- Add `AsSplitQuery()` to `FindExistingSessionAsync` while preserving tracking.
+- Wrap graph materialization in `StorageCommandBudget.ExecuteAsync`.
+- Preserve exact reconciliation and idempotent readback.
+- Classify deadlock and budget exhaustion as retryable degraded or failed outcomes, never false success.
 
-**Oracle note:** SidExactRead (read path) is the reliable bus observable; SidExactGetState().BusValue export is NOT a dependable live-latch snapshot (returned stale/garbage) - compare via the read path + managed spec constants.
+Run focused green tests, provider tests, plugin tests, and an independent hostile gate before proceeding.
 
-## In flight (interrupted mid-task)
+### Slice 2: Add atomic requirements recovery
 
-Plugin reload + Agent Help (mcpserver core synced to 1.36.0, `mcpserver-repl` 1.4.5 confirmed on PATH):
-1. Validate cache: `%USERPROFILE%\.claude\plugins\cache` has `mcpserver-local` (active family; confirm 1.36.0 from the plugin's own `.claude-plugin/plugin.json`), `mcpserver-cowork` (stale candidate - verify before deleting), `caveman` (unrelated, keep). The version inspection was interrupted by a transient permission-classifier outage; re-run it.
-2. Run the claude-hook-validation skill; refresh MCP hooks if missing; restart Claude Code if hooks were installed.
-3. Open a `workflow.agenthelp.createSession` (new in repl 1.4.5) and submit the outstanding MCP issues:
-   - repl-invoke `Invoke-WorkflowAppendActions` audit counters never increment: regex `(?m)^\s*type:` misses `- type:` list items (repl-invoke.ps1:891-897; filed as triage-report-8a6539340a174c00a57dee53ec8f42ea).
-   - No per-action readback: `workflow.sessionlog.queryHistory` returns only session headers, so appends cannot be content-verified; session header `lastUpdated`/`filesModifiedCount` never advance (anchored to `started`).
-   - `Invoke-McpPlugin.ps1` defaults `-Command Status`: calling it with only `-Method` silently prints the status blob instead of invoking (footgun; cost one silent append failure).
-   - `workflow.requirements.createTr` requires `subarea` (schema) but the skill docs do not mention it; the server also derived `subarea: 202607` from the id rather than honoring the supplied value.
-4. Log the reload + help-session outcomes; triage any confirmed server defects.
+Required REST surface:
 
-## Parked items
+- `POST /mcpserver/requirements/recovery/dry-run`
+- `POST /mcpserver/requirements/recovery/apply`
+- `GET /mcpserver/requirements/recovery/{idempotencyKey}`
 
-- ~~Azure DevOps wiki push~~ **DROPPED**: the Azure remote and wiki target are retired. Keep current wiki generation GitHub-only.
-- ~~Latent VICE bugs documented, not fixed~~ FIXED 2026-07-09 (PLAN-NATIVERESIDUE-002, branch `fix/nativeresidue-002-drive-clock-hardening`): drive `attach_clk`/`detach_clk`/`attach_detach_clk` uninitialized-stack read on `has_tde=0` restore (drive-snapshot.c zero-init) and `cycle_accum` omitted from `drivecpu_reset_clk` (drivecpu.c + drivecpu65c02.c) both fixed via the vendored runtime patch, plus a shim create-time drive-clock re-baseline. **BUG-LOCKSTEP-001 CLOSED**: full baseline gate 0 failed / 2596 passed / 21 skipped / 2617 total (was 136+2 lockstep failures). Receipts: docs/receipts-nativeresidue-002-2026-07-09.md. New residue candidates recorded there (live unit->type not re-baselined; drivecpu65c02 cycle_accum SMW/SMR width asymmetry). Build note: `make x64sc-program` does NOT rebuild changed VICE-core `.o`; delete the stale `.o`+`libdrive.a` and build under `MSYSTEM=MINGW64 bash -lc`.
-- ~~VICE parity program (PLAN-VICEPARITY-001) remaining slices~~ **COMPLETE 2026-07-10** (SID side fully bit-exact vs reSID; VIC per-cycle work landed through V7 + audit phases). Only manifest-wide pending AC left is TEST-VIC-FETCH-06 (VIC-II FAITHFUL-lock conflict, out of SID scope, needs the parity owner). Candidate follow-up: PLAN-NATIVERESIDUE-002 native-shim lifecycle hardening (a sustained-consecutive-native-load ACCESS_VIOLATION observed once, non-reproducing).
+Required REPL surface:
 
-## Open TODO backlog (MCP store)
+- `workflow.requirements.planRecovery`
+- `workflow.requirements.applyRecovery`
+- `workflow.requirements.getRecovery`
 
-PLAN-UIDOCK-001 (Dock.Avalonia UI), PLAN-AUDIOEQ-001, PLAN-PLAYLIST-001, PLAN-FULLSCREEN-001, PLAN-DEVCARDART-001, PLAN-MONFRAME-001, PLAN-DRIVE1581-001, PLAN-DRIVE1541II-001, PLAN-DRIVE1540-001, PLAN-DRIVE1571-001, PLAN-DRIVECMDHD-001, PLAN-CARTRAMLINK-001, PLAN-ARCHVIC20-001 (query the store for the live list; this snapshot is 2026-07-09).
+The canonical request and receipt must bind:
 
-## Operational gotchas (hard-won this session)
+- workspace ID
+- target layer key
+- product scope
+- layer catalog version and hash
+- scope start and end layer keys
+- ordered requirement, AC, and mapping operations
+- raw target-layer state including shadowed rows
+- effective projection
+- raw-state hash
+- effective-state hash
+- plan hash
+- idempotency key
+- result counts and IDs
+- post-apply raw and effective hashes
+- audit ID and receipt
 
-- Long test runs: OS-detach with `Start-Process dotnet ... -RedirectStandardOutput` and tail the log with a Monitor; never run two test/build invocations concurrently (native lock + obj/bin contention); verify the log grows before trusting a launch.
-- `git add a b c bad-path` aborts the WHOLE add on one bad pathspec and a following commit ships whatever was staged earlier; always check the commit stat against intent.
-- Diagnostic probes: `LiveLimiterBandProbeTests` reports via a by-design `Assert.Fail`; `Demo_SilentWarp` headroom is host-load sensitive (re-run in isolation before believing a failure). Live-app probes attach via `%LOCALAPPDATA%\ViceSharp\debug-attach.json`; NEVER dispose the probe client (it kills the session).
-- github force-push is classifier-blocked regardless of instruction phrasing; the sanctioned divergence pattern is merge `-s ours` + fast-forward.
+Hash canonical UTF-8 JSON with SHA-256 after deterministic sorting by operation kind, requirement kind, requirement ID, AC ID, and mapping target.
+
+Apply in one serializable provider transaction. Revalidate every precondition inside the transaction, reserve idempotency inside the same transaction, validate the final graph before the first mutation, and allow at most one concurrent plan to commit.
+
+Persist a `RequirementsRecoveryRunEntity` with a unique `(WorkspaceId, IdempotencyKey)` key and migrations for SQLite, SQL Server, and PostgreSQL.
+
+Required error contract:
+
+- Invalid plan: 400, nonretryable
+- Stale precondition: 409, retryable after a new dry run
+- Idempotency conflict: 409, nonretryable
+- Missing receipt: 404
+- Backend unavailable, deadlock, or budget exhaustion: 503, retryable
+- No partial mutation
+
+### Slice 3: Synchronize every supported plugin
+
+Canonical plugin content must remain under `plugins/core`. Do not hand-edit generated plugin copies.
+
+Use the repository Nuke target:
+
+`./build.ps1 SyncAgentPlugins --AgentPluginParent F:\GitHub`
+
+The supported matrix is exactly:
+
+- Codex
+- Claude Code
+- Claude Cowork
+- Copilot
+- Grok
+- Cline
+- Cline v2
+- OpenCode
+
+Run `./build.ps1 PluginSessionLogIntegration` plus every plugin's native Pester or Node build and test suite with zero failures and zero skips. Record source SHA, version parity, package hashes, and artifact hashes for every plugin.
+
+### Slice 4: Validate and deploy McpServer
+
+Required gates include:
+
+- Focused tests with retained TRX
+- Zero-skip SQLite, SQL Server, and PostgreSQL provider matrix
+- `./build.ps1 Test`
+- `./build.ps1 ValidateTraceability`
+- `./build.ps1 PluginSessionLogIntegration`
+- Independent hostile AGREE with accuracy and completeness at least 98
+
+Deploy McpServer only through the Nuke `UpdateService` target. Never copy binaries manually. After deployment, wait for the marker rewrite, re-read it, verify plugin status, and rerun the dense live smoke test.
+
+### Slice 5: Recover ViceSharp requirements
+
+Only after the McpServer enabler is deployed and independently accepted:
+
+- Rebuild the recovery ledger with per-field provenance, decision, reason, and merge behavior.
+- Repair every one of the nine preview failures.
+- Add immutable VICE commit and build hashes, ROM hashes, and named machine, media, and workload manifests.
+- Rerun hostile preview review until it returns AGREE with both scores at least 98.
+- Dry-run the atomic recovery.
+- Present the exact plan hash and operations for operator comparison.
+- Apply only after approval.
+- Read back raw and effective state and rerun traceability.
+- Preserve legacy UWP and Xbox requirements without implementing those platforms.
+
+## xvic Lockstep Parity Plan
+
+After requirements recovery is accepted, implement VIC-20 parity in gated order:
+
+1. Prove the native xvic oracle and fail closed when native prerequisites are absent.
+2. Version and hash the VICE build, ROMs, machine configuration, media, and workload manifests.
+3. Compare every half-cycle rather than only periodic architectural snapshots.
+4. Cover CPU registers, opcode and micro-op phase, bus address, data, read/write state, dummy cycles, IRQ/NMI pipeline, and stolen-cycle state.
+5. Cover VIC-I, VIA, memory, IEC, input, storage, tape, audio, device side effects, reset, snapshot, determinism, and host pacing.
+6. Repair clock, bus, and memory foundations before CPU instruction semantics.
+7. Repair CPU before machine glue, VIC-I, VIA/IEC/input, audio/media, and UI.
+8. Map every behavioral acceptance criterion to an executable differential test.
+9. Do not silently return, skip, or pass when xvic, ROMs, media, hashes, or trace prerequisites are missing.
+
+## VIC-20 Settings Visibility
+
+Current source evidence:
+
+- `src/ViceSharp.Avalonia/ViewModels/AttachPanelViewModel.cs`: `SelectedMachineProfile` updates settings but does not notify `IsVic20Selected`.
+- `IsVic20Selected` derives from the selected profile ID.
+- The refresh path explicitly notifies `IsVic20Selected`, but direct profile changes do not.
+- `src/ViceSharp.Avalonia/Views/SettingsView.axaml` already binds VIC-20 memory and expansion-cart panels to `IsVisible="{Binding IsVic20Selected}"`.
+
+Red tests must cover:
+
+- C64 to VIC-20 to C64 immediate property notification and visibility.
+- Hidden controls are not focusable or reachable.
+- Direct set, host refresh, and persisted restore paths.
+- Draft VIC-20 values survive hide and show transitions.
+- Machine-family selection is centralized and tested.
+
+Expected implementation is for the selected-profile setter to raise `OnPropertyChanged(nameof(IsVic20Selected))` when the machine family changes. Keep the existing view binding if behavioral tests prove it correct.
+
+## Open TODOs Added During Recovery
+
+- `PLAN-GRAPHRAG-001`, high priority: import `https://github.com/bdgscotland/c64-kb` into workspace GraphRAG. Ingestion has not run.
+- `PLAN-RASPBIAN-001`, medium priority: add an ARM Linux desktop target with Nuke build and install targets for Raspbian. Do not duplicate this TODO.
+
+## Receipts
+
+- Historical requirement review: `docs/receipts/hv/20260928T180517Z-oldest-vice-requirements.response.jsonl`
+- Recovery preview hostile gate: `docs/receipts/hv/20260928T203110Z-requirements-recovery-preview-gate.response.jsonl`
+  - SHA-256: `78357CA7748838127F8919D951D54695C539FAD41F24A889AF461204D417229B`
+- McpServer recovery requirements gate: `docs/receipts/hv/20260928T212001Z-mcp-recovery-requirements-gate.response.jsonl`
+  - SHA-256: `4F10A7DC8E5F4F0D56B55555EE8B6246254CF365B28585B342190994DB602B81`
+- Triage failure stop review: `docs/receipts/hv/20260928T220124Z-triage-failure-stop.response.jsonl`
+  - SHA-256: `472B79DC8DBE632CA5DF88E48497610045251FE95B74829AB2E54F9BA31DE85C`
+- Current failure diagnosis: `docs/receipts/hv/20260929T000145Z-actual-current-failure-diagnosis.response.jsonl`
+  - SHA-256: `EFD512857D5172B145562833047D516885012673F282384DDDF416E7231B6A1A`
+  - Verdict: AGREE
+  - Counts: 11 PASS, 0 FAIL, 0 UNKNOWN
+  - Accuracy: 99
+  - Completeness: 99
+
+## Resume Sequence
+
+1. Re-read the current marker and verify its signature, health nonce, server version, and plugin status.
+2. Query the live Codex session state. Reconcile any stale in-progress retry turn without deleting history.
+3. Verify the preserved triage report and failsafe record.
+4. Reproduce the dense-session latency with retained timing evidence.
+5. Write `docs/plans/PLAN-REQRECOVERY-ENABLER-20260928.md` from the gated design above.
+6. Run a full independent hostile review of that plan against workspace rules, all live requirements, all acceptance criteria, and the complete recovery scope.
+7. Remediate every FAIL and UNKNOWN until the plan receives AGREE with accuracy and completeness at least 98.
+8. Present the plan to the operator and stop for explicit approval.
+9. After approval, execute BDPv4 strictly: requirements gate, red tests, hostile red gate, implementation, green tests, hostile green gate, full validation, Nuke deployment, post-deploy proof.
+10. Do not begin ViceSharp product implementation until the requirements recovery enabler and recovered requirement set are deployed, applied, read back, traced, and independently accepted.
+
+## Source-Control Boundary
+
+- Before any commit or push, report branch, HEAD, origin, tracked dirty scope, untracked scope, and the exact files proposed for staging.
+- Wait for explicit approval before committing or pushing this dirty workspace.
+- Push only to GitHub `origin` unless the operator explicitly changes that instruction.
+- Never use `git reset --hard`, destructive checkout, or broad cleanup against this workspace.
+- Never use the dirty McpServer root or the dirty acceptance worktree for implementation when the clean deployed `session-lifecycle` worktree is available.

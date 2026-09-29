@@ -31,16 +31,116 @@ public sealed class CiaTimerInterruptTests
         cia.Write(0xDC0D, 0x81);
         cia.Write(0xDC0E, 0x11);
 
-        for (var cycle = 0; cycle < 4; cycle++)
+        for (var cycle = 0; cycle < 32 && (cia.DebugInterruptFlags & 0x01) == 0; cycle++)
+            cia.Tick();
+
+        Assert.Equal(0x01, cia.DebugInterruptFlags & 0x01);
+        Assert.False(irq.IsAsserted,
+            "VICE 6526A ifr_delay RAISE0 asserts the IRQ line the cycle after underflow (ciacore.c cia_run_ifr_cycle / rclk+1 shortcut).");
+        Assert.Equal(0x81, cia.Read(0xDC0D));
+        Assert.False(irq.IsAsserted);
+    }
+
+    /// <summary>
+    /// FR: FR-CIA-001, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 2093250. VICE new CIA (C64 default 6526A) delays
+    ///   Timer A IRQ to the CPU by one phi2 via ifr_delay RAISE0
+    ///   (ciacore.c: my_set_int(rclk+1)). Managed asserted on the underflow
+    ///   tick, so irq_clk was 2-3 cycles early and DO_INTERRUPT stole LDA #$20.
+    /// Acceptance: After the underflow tick the IRQ line is still low; the
+    ///   next Tick asserts it. ICR still shows $81 on read after that.
+    /// </summary>
+    [Fact]
+    public void TimerA_Underflow_DelaysIrqLineOneCycle_MatchesVice6526A()
+    {
+        var bus = new BasicBus();
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cia = CreateCia1(bus, irq);
+
+        cia.Write(0xDC04, 0x02);
+        cia.Write(0xDC05, 0x00);
+        cia.Write(0xDC0D, 0x81);
+        cia.Write(0xDC0E, 0x11);
+
+        for (var cycle = 0; cycle < 32 && (cia.DebugInterruptFlags & 0x01) == 0; cycle++)
             cia.Tick();
 
         Assert.False(irq.IsAsserted);
-
         cia.Tick();
-
         Assert.True(irq.IsAsserted);
         Assert.Equal(0x81, cia.Read(0xDC0D));
         Assert.False(irq.IsAsserted);
+    }
+
+    /// <summary>
+    /// FR: FR-CIA-007, TR: TR-CYCLE-001.
+    /// Use case: IAddressSpace.Peek must not ack ICR. Lockstep dumps and
+    ///   the monitor Peek $DC0D; VICE peek leaves irqflags and the IRQ line
+    ///   unchanged (ciacore.c read_icr is the CPU read path only).
+    /// Acceptance: After Timer A IRQ is raised, Peek $DC0D returns $81, the
+    ///   TA flag stays latched, and the IRQ line stays asserted.
+    /// </summary>
+    [Fact]
+    public void PeekIcr_DoesNotAckOrDropIrqLine()
+    {
+        var bus = new BasicBus();
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cia = CreateCia1(bus, irq);
+
+        cia.Write(0xDC04, 0x02);
+        cia.Write(0xDC05, 0x00);
+        cia.Write(0xDC0D, 0x81);
+        cia.Write(0xDC0E, 0x11);
+
+        for (var cycle = 0; cycle < 32 && !irq.IsAsserted; cycle++)
+            cia.Tick();
+
+        Assert.True(irq.IsAsserted);
+        irq.ConsumeRisingEdge();
+
+        Assert.Equal(0x81, cia.Peek(0xDC0D));
+        Assert.Equal(0x01, cia.DebugInterruptFlags & 0x01);
+        Assert.True(irq.IsAsserted);
+        Assert.False(irq.ConsumeRisingEdge());
+    }
+
+    /// <summary>
+    /// FR: FR-CIA-007, TR: TR-CYCLE-001 / TR-LOCKSTEP-VSF-001.
+    /// Use case: Wolf64 2208208. VICE ICR read calls my_set_int(false) so the
+    ///   CPU IRQ line drops even while flags drain on ACK1. The next Timer A
+    ///   RAISE0 is nirq 0 to 1 (interrupt_set_irq updates irq_clk). Managed
+    ///   Peek=Read acked dumps, or ICR read left the line high, so irq_clk
+    ///   stayed stale (nIrqClk=2208210 vs IRQ at STA FETCH).
+    /// Acceptance: Continuous Timer A, ICR read drops the line; the next
+    ///   underflow RAISE0 asserts again and ConsumeRisingEdge is true.
+    /// </summary>
+    [Fact]
+    public void IcrAck_DropsIrqLine_NextRaise0_IsNirqRisingEdge()
+    {
+        var bus = new BasicBus();
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cia = CreateCia1(bus, irq);
+
+        cia.Write(0xDC04, 0x04);
+        cia.Write(0xDC05, 0x00);
+        cia.Write(0xDC0D, 0x81);
+        cia.Write(0xDC0E, 0x01); // continuous
+
+        for (var cycle = 0; cycle < 32 && !irq.IsAsserted; cycle++)
+            cia.Tick();
+
+        Assert.True(irq.IsAsserted);
+        irq.ConsumeRisingEdge();
+
+        Assert.Equal(0x81, cia.Read(0xDC0D));
+        Assert.False(irq.IsAsserted);
+        Assert.Equal(0x00, cia.DebugInterruptFlags);
+
+        for (var cycle = 0; cycle < 16 && !irq.IsAsserted; cycle++)
+            cia.Tick();
+
+        Assert.True(irq.IsAsserted);
+        Assert.True(irq.ConsumeRisingEdge());
     }
 
     /// <summary>
@@ -63,17 +163,53 @@ public sealed class CiaTimerInterruptTests
         cia.Write(0xDC05, 0x00);
         cia.Write(0xDC0E, 0x11);
 
-        for (var cycle = 0; cycle < 3; cycle++)
+        for (var cycle = 0; cycle < 32 && (cia.DebugInterruptFlags & 0x01) == 0; cycle++)
             cia.Tick();
-
-        Assert.False(irq.IsAsserted);
-        Assert.Equal(0x00, cia.Read(0xDC0D));
-
-        cia.Tick();
 
         Assert.False(irq.IsAsserted);
         Assert.Equal(0x01, cia.Read(0xDC0D));
         Assert.False(irq.IsAsserted);
+    }
+
+    /// <summary>
+    /// FR: FR-CIA-001, TR: TR-CYCLE-001, TEST: TEST-X64SC-LOCKSTEP-001.
+    /// Use case: Wolf64 menu VSF resumes CIA1 with Timer A continuous and
+    ///   Timer B configured one-shot (CRB=$09) at its reload-latch value.
+    ///   Native leaves Timer B stopped after its prior underflow even though
+    ///   the readable CRB start bit remains set.
+    /// Acceptance: after snapshot injection, Timer A decrements while Timer B
+    ///   remains at its latch across subsequent phi2 ticks.
+    /// </summary>
+    [Fact]
+    public void InjectSnapshotState_CompletedOneShotTimerB_RemainsStoppedAtLatch()
+    {
+        var bus = new BasicBus();
+        var irq = new InterruptLine(InterruptType.Irq);
+        var cia = CreateCia1(bus, irq);
+        cia.InjectSnapshotState(
+            portA: 0,
+            portB: 0,
+            ddrA: 0,
+            ddrB: 0,
+            timerACounter: 0x3A65,
+            timerALatch: 0x4FFF,
+            timerBCounter: 0x04FF,
+            timerBLatch: 0x04FF,
+            cra: 0x01,
+            crb: 0x09,
+            interruptFlags: 0,
+            irqMask: 0);
+
+        cia.Tick();
+
+        Assert.Equal(0x3A64, cia.Peek(0xDC04) | (cia.Peek(0xDC05) << 8));
+        Assert.Equal(0x04FF, cia.Peek(0xDC06) | (cia.Peek(0xDC07) << 8));
+
+        for (var cycle = 0; cycle < 128; cycle++)
+            cia.Tick();
+
+        Assert.Equal(0x04FF, cia.Peek(0xDC06) | (cia.Peek(0xDC07) << 8));
+        Assert.Equal(0x00, cia.DebugInterruptFlags & 0x02);
     }
 
     /// <summary>
@@ -108,12 +244,8 @@ public sealed class CiaTimerInterruptTests
 
         cia.Write(0xDC0E, 0x11);
 
-        for (var cycle = 0; cycle < 9; cycle++)
+        for (var cycle = 0; cycle < 64 && !irq.IsAsserted; cycle++)
             cia.Tick();
-
-        Assert.False(irq.IsAsserted);
-
-        cia.Tick();
 
         Assert.True(irq.IsAsserted);
         Assert.Equal(0x83, cia.Read(0xDC0D));
@@ -153,6 +285,7 @@ public sealed class CiaTimerInterruptTests
         cia.Write(0xDC0D, 0x84);
 
         cia.ClockTod();
+        cia.Tick();
 
         Assert.Equal(0x00, cia.Read(0xDC08));
         Assert.Equal(0x00, cia.Read(0xDC09));
@@ -192,10 +325,8 @@ public sealed class CiaTimerInterruptTests
         cia2.Write(0xDD0D, 0x81);
         cia2.Write(0xDD0E, 0x11);
 
-        clock.Step(3);
-        Assert.Equal(0x0400, cpu.PC);
-
-        clock.Step();
+        for (var i = 0; i < 16 && cpu.PC == 0x0400; i++)
+            clock.Step();
 
         Assert.Equal(0x0800, cpu.PC);
         Assert.Equal(0x04, cpu.P & 0x04);
@@ -234,7 +365,9 @@ public sealed class CiaTimerInterruptTests
         cia2.Write(0xDD0D, 0x81);
         cia2.Write(0xDD0E, 0x11);
 
-        clock.Step(4);
+        for (var i = 0; i < 16 && cpu.PC == 0x0400; i++)
+            clock.Step();
+
         var stackAfterFirstNmi = cpu.S;
 
         clock.Step(4);

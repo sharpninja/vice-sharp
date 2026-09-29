@@ -72,6 +72,27 @@ public sealed class LockstepValidationTests : IDisposable
     }
 
     /// <summary>
+    /// FR: FR-CIA-TIMER, TR: TR-LOCKSTEP-10K.
+    /// Use case: Wolf64 2060433. Managed CIA1 Timer A was 3 counts ahead of
+    ///   x64sc ($4007 vs $400A), so Timer A underflow IRQ asserted on
+    ///   managed while native irqflags were still 0.
+    /// Acceptance: After 10,000 lockstep cycles, CIA1 Timer A live counters
+    ///   match native GetCiaState.
+    /// </summary>
+    [ViceFact]
+    public void First10000_Cia1TimerA_MatchesNative()
+    {
+        var report = _validator.Run(10000);
+        report.Success.Should().BeTrue(FormatReport(report));
+
+        var mTa = (ushort)(_validator.HostMachine.Bus.Peek(0xDC04)
+            | (_validator.HostMachine.Bus.Peek(0xDC05) << 8));
+        var nCia = _validator.NativeMachine.GetCiaState(0);
+        mTa.Should().Be(nCia.TimerA,
+            $"CIA1 TA managed=${mTa:X4} native=${nCia.TimerA:X4} cra m=${_validator.HostMachine.Bus.Peek(0xDC0E):X2} n=${nCia.Cra:X2}");
+    }
+
+    /// <summary>
     /// FR: FR-Validation-Lockstep, TR: TR-LOCKSTEP-100K.
     /// Use case: Long-window lockstep regression gate that runs the full
     /// BASIC reset+IDLE loop against native VICE; the deepest CI parity
@@ -88,6 +109,25 @@ public sealed class LockstepValidationTests : IDisposable
         // Assert
         report.Success.Should().BeTrue(FormatReport(report));
         report.TotalCyclesExecuted.Should().Be(100000);
+    }
+
+    /// <summary>
+    /// FR: FR-CIA-TIMER, TR: TR-LOCKSTEP-100K.
+    /// Use case: Same Timer A phase check as the 10k gate, after the BASIC
+    ///   idle loop and CIA Timer A IRQ have been running.
+    /// Acceptance: After 100,000 lockstep cycles, CIA1 Timer A matches native.
+    /// </summary>
+    [ViceFact]
+    public void First100000_Cia1TimerA_MatchesNative()
+    {
+        var report = _validator.Run(100000);
+        report.Success.Should().BeTrue(FormatReport(report));
+
+        var mTa = (ushort)(_validator.HostMachine.Bus.Peek(0xDC04)
+            | (_validator.HostMachine.Bus.Peek(0xDC05) << 8));
+        var nCia = _validator.NativeMachine.GetCiaState(0);
+        mTa.Should().Be(nCia.TimerA,
+            $"CIA1 TA managed=${mTa:X4} native=${nCia.TimerA:X4} cra m=${_validator.HostMachine.Bus.Peek(0xDC0E):X2} n=${nCia.Cra:X2} nicr=${nCia.InterruptFlags:X2}");
     }
 
     public void Dispose()

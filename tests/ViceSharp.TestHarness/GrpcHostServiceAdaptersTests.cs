@@ -601,12 +601,13 @@ public sealed class GrpcHostServiceAdaptersTests
     public async Task GrpcSettingsServiceHost_GetSettings_MapsSubRecords()
     {
         var settings = new SessionSettingsDto(
-            "minimal",
+            "vic20ntsc",
             new LimiterSettingsDto(75, true),
             new DisplaySettingsDto(Scale: "3x", Palette: "vice"),
             new InputSettingsDto(KeyboardMapId: "c64:gtk3_pos", PrimaryJoystickPort: InputPort.Joystick1),
             new AudioSettingsDto("muted"),
-            new ResourceSettingsDto("manual"));
+            new ResourceSettingsDto("manual"),
+            Vic20MemorySpec: "all");
         var fake = new FakeSettingsService
         {
             SettingsResponse = new GetSettingsResponse(RpcStatus.Ok(), settings)
@@ -619,7 +620,7 @@ public sealed class GrpcHostServiceAdaptersTests
 
         Assert.Equal(GrpcContracts.RpcStatusCode.Ok, response.Status.Code);
         Assert.NotNull(response.Settings);
-        Assert.Equal("minimal", response.Settings.ProfileId);
+        Assert.Equal("vic20ntsc", response.Settings.ProfileId);
         Assert.Equal(75, response.Settings.Limiter.RatePercent);
         Assert.True(response.Settings.Limiter.IsEnabled);
         Assert.Equal("3x", response.Settings.Display.Scale);
@@ -627,6 +628,47 @@ public sealed class GrpcHostServiceAdaptersTests
         Assert.Equal(GrpcContracts.InputPort.Joystick1, response.Settings.Input.PrimaryJoystickPort);
         Assert.Equal("muted", response.Settings.Audio.Mode);
         Assert.Equal("manual", response.Settings.Resources.Mode);
+        Assert.Equal("vic20ntsc", response.Settings.ProfileId);
+        Assert.Equal("all", response.Settings.Vic20MemorySpec);
+    }
+
+    /// <summary>
+    /// FR: FR-VIC20-002, TEST-UISET-001.
+    /// Use case: Avalonia Apply+Restart sends Vic20MemorySpec over gRPC. The
+    /// adapter must forward it or the host restarts with the previous none map
+    /// and the BLK checkboxes unselect.
+    /// Acceptance: Inner UpdateSettingsAsync receives Vic20MemorySpec=all.
+    /// </summary>
+    [Fact]
+    public async Task GrpcSettingsServiceHost_UpdateSettings_ForwardsVic20MemorySpec()
+    {
+        var fake = new FakeSettingsService
+        {
+            UpdateResponse = new UpdateSettingsResponse(
+                RpcStatus.Ok(),
+                new SessionSettingsDto(
+                    "vic20ntsc",
+                    new LimiterSettingsDto(100, true),
+                    new DisplaySettingsDto(),
+                    new InputSettingsDto(),
+                    Vic20MemorySpec: "all"),
+                [])
+        };
+        var adapter = new GrpcSettingsServiceHost(fake);
+        var request = new GrpcContracts.UpdateSettingsRequest
+        {
+            SessionId = "s",
+            ProfileId = "vic20ntsc",
+            RestartSession = true,
+            Vic20MemorySpec = "all"
+        };
+
+        var response = await adapter.UpdateSettings(request, CreateContext());
+
+        Assert.NotNull(fake.LastUpdateRequest);
+        Assert.Equal("all", fake.LastUpdateRequest!.Vic20MemorySpec);
+        Assert.True(fake.LastUpdateRequest.RestartSession);
+        Assert.Equal("all", response.Settings.Vic20MemorySpec);
     }
 
     /// <summary>
@@ -853,8 +895,13 @@ public sealed class GrpcHostServiceAdaptersTests
         public ValueTask<GetSettingsResponse> GetSettingsAsync(SessionRequest request, CancellationToken cancellationToken = default)
             => ValueTask.FromResult(SettingsResponse);
 
+        public UpdateSettingsRequest? LastUpdateRequest { get; private set; }
+
         public ValueTask<UpdateSettingsResponse> UpdateSettingsAsync(UpdateSettingsRequest request, CancellationToken cancellationToken = default)
-            => ValueTask.FromResult(UpdateResponse);
+        {
+            LastUpdateRequest = request;
+            return ValueTask.FromResult(UpdateResponse);
+        }
 
         public ValueTask<ValidateSettingsResourcesResponse> ValidateResourcesAsync(ValidateSettingsResourcesRequest request, CancellationToken cancellationToken = default)
             => ValueTask.FromResult(ValidateResponse);

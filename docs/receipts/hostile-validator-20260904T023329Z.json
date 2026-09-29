@@ -1,0 +1,71 @@
+{
+  "timestampUtc": "2026-09-04T02:33:29Z",
+  "validatorIdentity": "GrokSubagentHostile",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "workClass": "project-implementation",
+  "scope": "VIC-20 pixel BGRA residual PLAN-VIC20-EXACT / AC-PX-05",
+  "addProfile": {
+    "executed": true,
+    "profileFileCount": 18,
+    "excludedSkillPorts": ["add-profile.grok.md"]
+  },
+  "mcp": {
+    "agent": "GrokCode",
+    "sessionId": "GrokCode-20260904T022624Z-hostile-bgra",
+    "requestId": "req-20260904T022624Z-001-hostile-validate-vic20-bgra",
+    "beginTurnId": 43329,
+    "completeTurnStatus": "completed",
+    "persistenceProof": {
+      "method": "mcpserver__sessionlog_query",
+      "queryText": "Hostile validate VIC-20 BGRA residual",
+      "totalCount": 1,
+      "turnStatus": "completed",
+      "dialogItemCount": 4,
+      "actionCount": 6,
+      "designDecisionCount": 3,
+      "lastUpdated": "2026-09-04T02:35:52.6409726+00:00"
+    }
+  },
+  "overallVerdict": "AGREE",
+  "accuracyRating": 95,
+  "completenessRating": 92,
+  "failList": [],
+  "unevaluatedMandatorySurfaces": [],
+  "independentTestLog": "C:\\Users\\kingd\\AppData\\Local\\Temp\\PowerShell.MCP.Output\\pwsh_output_20260903_213054_129_bvzikp1l.m11.txt",
+  "independentResults": {
+    "Bgra_ReadyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "5 s" },
+    "Bgra_BusyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "5 s" },
+    "BorderCyan_UsesXvicCanvasRgb": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "92 ms" },
+    "Vic20VideoTests": { "passed": 20, "failed": 0, "skipped": 0, "exit": 0 },
+    "Index_ReadyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "5 s" },
+    "Index_ReadyNtsc_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "5 s" },
+    "Index_BusyPal_SequenceEqual": { "passed": 1, "failed": 0, "skipped": 0, "exit": 0, "durationHint": "5 s" },
+    "gitDiffCheck": { "exit": 0 }
+  },
+  "claims": [
+    { "id": "A1", "surface": "A", "summary": "Bgra_ReadyPal native TryCaptureVisibleFrame SequenceEqual vs FrameBuffer, not tautology, 1/0/0", "verdict": "PASS" },
+    { "id": "A2", "surface": "A", "summary": "Bgra_BusyPal_SequenceEqual 1/0/0", "verdict": "PASS" },
+    { "id": "A3", "surface": "A", "summary": "BorderCyan_UsesXvicCanvasRgb 1/0/0", "verdict": "PASS" },
+    { "id": "A4", "surface": "A", "summary": "Vic20VideoTests 20/0/0", "verdict": "PASS" },
+    { "id": "A5", "surface": "A", "summary": "Index READY PAL/NTSC/busy still green", "verdict": "PASS" },
+    { "id": "A6", "surface": "A", "summary": "Palette matches xvic canvas video_calc_palette not PALette.vpl", "verdict": "PASS" },
+    { "id": "A7", "surface": "A", "summary": "git diff --check exit 0", "verdict": "PASS" },
+    { "id": "A8", "surface": "A", "summary": "No whole-plan Exact claim; NTSC BGRA open", "verdict": "PASS" },
+    { "id": "B1", "surface": "B", "summary": "Byrd v4 residual: red then green AC tests; no mtime archaeology FAIL", "verdict": "PASS" },
+    { "id": "B2", "surface": "B", "summary": "Receipts re-verified by isolated named tests", "verdict": "PASS" },
+    { "id": "B3", "surface": "B", "summary": "MCP-only TODO/session storage; todo.yaml not in git status", "verdict": "PASS" },
+    { "id": "B4", "surface": "B", "summary": "PowerShell only; no Python", "verdict": "PASS" },
+    { "id": "B5", "surface": "B", "summary": "Honesty: scoped residual, NTSC disclosed", "verdict": "PASS" },
+    { "id": "B6", "surface": "B", "summary": "Look-before-delete", "verdict": "N/A" },
+    { "id": "C1", "surface": "C", "summary": "FR-VIC20-001 / TR-VIC20-PIXEL-001 / TEST-VIC20-001 / AC-PX-05 exist", "verdict": "PASS" },
+    { "id": "C2", "surface": "C", "summary": "AC-PX-05 covered by named BGRA tests not suite-green", "verdict": "PASS" },
+    { "id": "D1", "surface": "D", "summary": "PLAN-VIC20-EXACT-001 not reopened as whole-machine Exact", "verdict": "PASS" },
+    { "id": "D2", "surface": "D", "summary": "AC-PX-05 PAL ready+busy BGRA residual evidenced", "verdict": "PASS" },
+    { "id": "D3", "surface": "D", "summary": "NTSC BGRA correctly still open", "verdict": "PASS" }
+  ],
+  "followUpsNotFails": [
+    "Update TEST-VIC20-001 and TR-VIC20-PIXEL-001 Partial wording for PAL ready/busy BGRA; keep NTSC BGRA Partial",
+    "Reconcile audit L68 still-open vs L88 Exact for PAL BGRA",
+    "Do not promote PLAN-VIC20-EXACT-001 to whole-machine Exact"
+  ]
+}

@@ -519,7 +519,13 @@ public sealed class GrpcSettingsServiceHost : GrpcContracts.SettingsService.Sett
                 request.ProfileId,
                 request.RestartSession,
                 request.Audio is null ? null : HostMap.Map(request.Audio),
-                request.Resources is null ? null : HostMap.Map(request.Resources)),
+                request.Resources is null ? null : HostMap.Map(request.Resources),
+                request.HasVic20MemorySpec ? request.Vic20MemorySpec : null,
+                request.HasFileSystemIecRootPath ? request.FileSystemIecRootPath : null,
+                request.HasFileSystemIecUnit ? request.FileSystemIecUnit : null,
+                request.HasVic20ExpansionCartKind ? request.Vic20ExpansionCartKind : null,
+                request.HasVic20ExpansionWriteBack ? request.Vic20ExpansionWriteBack : null,
+                request.HasVic20ExpansionConfigPreset ? request.Vic20ExpansionConfigPreset : null),
             context.CancellationToken).ConfigureAwait(false);
 
         var result = new GrpcContracts.UpdateSettingsResponse
@@ -1157,7 +1163,13 @@ internal static class GrpcHostMapping
             Display = Map(value.Display),
             Input = Map(value.Input),
             Audio = Map(value.Audio ?? new AudioSettingsDto()),
-            Resources = Map(value.Resources ?? new ResourceSettingsDto())
+            Resources = Map(value.Resources ?? new ResourceSettingsDto()),
+            Vic20MemorySpec = value.Vic20MemorySpec ?? "",
+            FileSystemIecRootPath = value.FileSystemIecRootPath ?? "",
+            FileSystemIecUnit = value.FileSystemIecUnit,
+            Vic20ExpansionCartKind = value.Vic20ExpansionCartKind ?? "none",
+            Vic20ExpansionWriteBack = value.Vic20ExpansionWriteBack,
+            Vic20ExpansionConfigPreset = value.Vic20ExpansionConfigPreset ?? "start"
         };
     }
 

@@ -1,0 +1,33 @@
+2026-09-16 04:59:45.748 -05:00 attach procId=106532 title=VICE (C64SC)
+2026-09-16 04:59:46.817 -05:00 waiting 18s for autostart after unpause
+2026-09-16 05:00:05.429 -05:00 inject 1 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:13.215 -05:00 peek 1 01= d011= d015= d018= dd00=
+2026-09-16 05:00:13.759 -05:00 inject 2 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:15.813 -05:00 keybuf-fail 2 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:19.875 -05:00 peek-fail 2 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:20.383 -05:00 inject 3 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:22.423 -05:00 keybuf-fail 3 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:26.486 -05:00 peek-fail 3 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:27.012 -05:00 inject 4 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:29.059 -05:00 keybuf-fail 4 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:33.097 -05:00 peek-fail 4 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:33.575 -05:00 inject 5 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:35.623 -05:00 keybuf-fail 5 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:39.671 -05:00 peek-fail 5 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:40.196 -05:00 inject 6 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:42.239 -05:00 keybuf-fail 6 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:46.300 -05:00 peek-fail 6 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:46.828 -05:00 inject 7 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:48.867 -05:00 keybuf-fail 7 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:52.899 -05:00 peek-fail 7 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:53.437 -05:00 inject 8 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:00:55.479 -05:00 keybuf-fail 8 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:00:59.541 -05:00 peek-fail 8 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:01:00.098 -05:00 inject 9 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:01:02.147 -05:00 keybuf-fail 9 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:01:06.193 -05:00 peek-fail 9 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:01:06.721 -05:00 inject 10 hwnd=5509032 kids=2 click=372,275
+2026-09-16 05:01:08.770 -05:00 keybuf-fail 10 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:01:12.811 -05:00 peek-fail 10 Exception calling "Connect" with "2" argument(s): "No connection could be made because the target machine actively refused it. [::ffff:127.0.0.1]:6510"
+2026-09-16 05:01:12.814 -05:00 x64sc exited
+2026-09-16 05:01:12.816 -05:00 DONE hit=False lastD015= ram=True

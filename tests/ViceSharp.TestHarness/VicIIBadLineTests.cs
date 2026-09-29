@@ -77,6 +77,42 @@ public sealed class VicIIBadLineTests
     }
 
     /// <summary>
+    /// FR: FR-VIC-006, TR: TR-CYCLE-001.
+    /// Use case: Wolf64 samples 2050006/2053534. VICE <c>check_ba</c> steals
+    ///   while <c>vicii_cycle</c> returns BA low, then the CPU runs on the
+    ///   first cycle BA is high (PAL cycle 55). Lagging mandatory steal through
+    ///   RasterX 55 skipped BNE dummy/JUMP (nPC=$FF63 mPC=$FF61). Stealing the
+    ///   2-CLK JUMP at RasterX 55 matches 4136566 and fails 2127622 (native
+    ///   already at the target).
+    /// Acceptance: On a bad line, IsCpuCycleStolen is true at RasterX 12..54,
+    ///   IsCpuCycleStealMandatory is true at 13..54, and both are false at 55.
+    /// </summary>
+    [Fact]
+    public void BadLine_RasterX55_MandatoryStealReleasedWithBa()
+    {
+        var vic = BuildVic();
+        vic.Write(ScreenControl1, 0x1B);
+        AdvanceTo(vic, 0x33, 12);
+        Assert.True(vic.IsBadLine);
+        Assert.True(vic.IsCpuCycleStolen);
+        Assert.False(vic.IsCpuCycleStealMandatory);
+
+        AdvanceTo(vic, 0x33, 13);
+        Assert.True(vic.IsCpuCycleStolen);
+        Assert.True(vic.IsCpuCycleStealMandatory);
+
+        AdvanceTo(vic, 0x33, 54);
+        Assert.True(vic.IsCpuCycleStolen);
+        Assert.True(vic.IsCpuCycleStealMandatory);
+
+        AdvanceTo(vic, 0x33, 55);
+        Assert.False(vic.IsCpuCycleStolen, "BA is high at RasterX 55");
+        Assert.False(
+            vic.IsCpuCycleStealMandatory,
+            "CPU must run on the first BA-high cycle (VICE steal loop exits)");
+    }
+
+    /// <summary>
     /// FR/TR: FR-VIC-006 / TR-CYCLE-001 / TEST-VIC-001
     /// (BACKFILL-VIDEO-001 bad line cycle stealing).
     /// Use case: DEN ($D011 bit 4) gates the entire bad-line latch. With

@@ -200,18 +200,32 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
         CancellationToken cancellationToken = default)
     {
         var sessionId = await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+        var grpcRequest = new GrpcContracts.UpdateSettingsRequest
+        {
+            SessionId = sessionId,
+            Limiter = request.Limiter is null ? null : MapLimiter(request.Limiter),
+            Display = request.Display is null ? null : MapDisplay(request.Display),
+            Input = request.Input is null ? null : MapInput(request.Input),
+            Audio = request.Audio is null ? null : MapAudio(request.Audio),
+            Resources = request.Resources is null ? null : MapResources(request.Resources),
+            ProfileId = request.ProfileId,
+            RestartSession = request.RestartSession
+        };
+        if (request.Vic20MemorySpec is not null)
+            grpcRequest.Vic20MemorySpec = request.Vic20MemorySpec;
+        if (request.FileSystemIecRootPath is not null)
+            grpcRequest.FileSystemIecRootPath = request.FileSystemIecRootPath;
+        if (request.FileSystemIecUnit is not null)
+            grpcRequest.FileSystemIecUnit = request.FileSystemIecUnit.Value;
+        if (request.Vic20ExpansionCartKind is not null)
+            grpcRequest.Vic20ExpansionCartKind = request.Vic20ExpansionCartKind;
+        if (request.Vic20ExpansionWriteBack is not null)
+            grpcRequest.Vic20ExpansionWriteBack = request.Vic20ExpansionWriteBack.Value;
+        if (request.Vic20ExpansionConfigPreset is not null)
+            grpcRequest.Vic20ExpansionConfigPreset = request.Vic20ExpansionConfigPreset;
+
         var response = await _settingsClient.UpdateSettingsAsync(
-            new GrpcContracts.UpdateSettingsRequest
-            {
-                SessionId = sessionId,
-                Limiter = request.Limiter is null ? null : MapLimiter(request.Limiter),
-                Display = request.Display is null ? null : MapDisplay(request.Display),
-                Input = request.Input is null ? null : MapInput(request.Input),
-                Audio = request.Audio is null ? null : MapAudio(request.Audio),
-                Resources = request.Resources is null ? null : MapResources(request.Resources),
-                ProfileId = request.ProfileId,
-                RestartSession = request.RestartSession
-            },
+            grpcRequest,
             cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return new UpdateSettingsResponse(
@@ -853,7 +867,13 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             settings.Display is null ? new DisplaySettingsDto() : MapDisplay(settings.Display),
             settings.Input is null ? new InputSettingsDto() : MapInput(settings.Input),
             settings.Audio is null ? new AudioSettingsDto() : MapAudio(settings.Audio),
-            settings.Resources is null ? new ResourceSettingsDto() : MapResources(settings.Resources));
+            settings.Resources is null ? new ResourceSettingsDto() : MapResources(settings.Resources),
+            settings.Vic20MemorySpec,
+            settings.FileSystemIecRootPath,
+            settings.FileSystemIecUnit,
+            settings.Vic20ExpansionCartKind,
+            settings.Vic20ExpansionWriteBack,
+            settings.Vic20ExpansionConfigPreset);
     }
 
     private static LimiterSettingsDto MapLimiter(GrpcContracts.LimiterSettingsDto limiter)

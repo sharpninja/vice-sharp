@@ -175,45 +175,40 @@ public sealed class VideoSurfaceTests
 
     /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 VideoSurface).
-    /// Use case: SetFrame must reject DTOs whose Width does not match
-    /// SourceWidth (e.g. NTSC frames sent to a PAL-configured surface);
-    /// the early-exit guard prevents a memcpy of mismatched stride.
-    /// Acceptance: A DTO with Width != SourceWidth is recognised as
-    /// invalid via the same shape check used by SetFrame; we exercise
-    /// the predicate here without instantiating the control.
+    /// Use case: SetFrame must reject a non-positive width so a zero-sized
+    /// canvas cannot reach the blit.
+    /// Acceptance: A DTO with Width &lt;= 0 is rejected by
+    /// <see cref="VideoSurface.IsValidFrame"/>.
     /// </summary>
     [Fact]
-    public void SetFrame_ValidationPredicate_RejectsWidthMismatch()
+    public void SetFrame_ValidationPredicate_RejectsNonPositiveWidth()
     {
-        var payload = new byte[VideoSurface.SourceWidth * VideoSurface.SourceHeight * 4];
         var frame = new VideoFrameDto(
-            Width: VideoSurface.SourceWidth - 1,
+            Width: 0,
             Height: VideoSurface.SourceHeight,
             Cycle: 0,
-            Bgra: payload);
+            Bgra: new byte[4]);
 
-        Assert.False(IsValidForSetFrame(frame));
+        Assert.False(VideoSurface.IsValidFrame(frame));
     }
 
     /// <summary>
     /// FR/TR: FR-Host-UI-Boundary (BACKFILL-HOSTUI-001 VideoSurface).
-    /// Use case: SetFrame must reject DTOs whose Height does not match
-    /// SourceHeight; otherwise the inner MemoryCopy would read past the
-    /// 4-byte-per-pixel destination buffer.
-    /// Acceptance: A DTO with Height != SourceHeight is rejected by the
-    /// same validation predicate used by SetFrame.
+    /// Use case: SetFrame must reject a non-positive height so a zero-sized
+    /// canvas cannot reach the blit.
+    /// Acceptance: A DTO with Height &lt;= 0 is rejected by
+    /// <see cref="VideoSurface.IsValidFrame"/>.
     /// </summary>
     [Fact]
-    public void SetFrame_ValidationPredicate_RejectsHeightMismatch()
+    public void SetFrame_ValidationPredicate_RejectsNonPositiveHeight()
     {
-        var payload = new byte[VideoSurface.SourceWidth * VideoSurface.SourceHeight * 4];
         var frame = new VideoFrameDto(
             Width: VideoSurface.SourceWidth,
-            Height: VideoSurface.SourceHeight + 1,
+            Height: 0,
             Cycle: 0,
-            Bgra: payload);
+            Bgra: new byte[4]);
 
-        Assert.False(IsValidForSetFrame(frame));
+        Assert.False(VideoSurface.IsValidFrame(frame));
     }
 
     /// <summary>
@@ -234,7 +229,7 @@ public sealed class VideoSurfaceTests
             Cycle: 0,
             Bgra: payload);
 
-        Assert.False(IsValidForSetFrame(frame));
+        Assert.False(VideoSurface.IsValidFrame(frame));
     }
 
     /// <summary>
@@ -248,7 +243,7 @@ public sealed class VideoSurfaceTests
     [Fact]
     public void SetFrame_ValidationPredicate_RejectsNullFrame()
     {
-        Assert.False(IsValidForSetFrame(null));
+        Assert.False(VideoSurface.IsValidFrame(null));
     }
 
     /// <summary>
@@ -276,29 +271,7 @@ public sealed class VideoSurfaceTests
             0,
             new byte[(VideoSurface.SourceWidth * VideoSurface.SourceHeight * 4) + 16]);
 
-        Assert.True(IsValidForSetFrame(exact));
-        Assert.True(IsValidForSetFrame(oversized));
-    }
-
-    /// <summary>
-    /// Mirrors the early-exit predicate in
-    /// <see cref="VideoSurface.SetFrame"/>:
-    /// frame is non-null, dimensions match the published SourceWidth /
-    /// SourceHeight, and the BGRA payload is at least SourceWidth *
-    /// SourceHeight * 4 bytes long. This lets us verify the contract
-    /// without instantiating the control (which would require an
-    /// Avalonia rendering platform).
-    /// </summary>
-    private static bool IsValidForSetFrame(VideoFrameDto? frame)
-    {
-        if (frame is null ||
-            frame.Width != VideoSurface.SourceWidth ||
-            frame.Height != VideoSurface.SourceHeight ||
-            frame.Bgra.Length < VideoSurface.SourceWidth * VideoSurface.SourceHeight * 4)
-        {
-            return false;
-        }
-
-        return true;
+        Assert.True(VideoSurface.IsValidFrame(exact));
+        Assert.True(VideoSurface.IsValidFrame(oversized));
     }
 }

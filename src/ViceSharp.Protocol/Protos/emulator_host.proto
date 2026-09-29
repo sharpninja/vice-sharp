@@ -319,6 +319,12 @@ message SessionSettingsDto {
   InputSettingsDto input = 4;
   AudioSettingsDto audio = 5;
   ResourceSettingsDto resources = 6;
+  string vic20_memory_spec = 7;
+  string file_system_iec_root_path = 8;
+  int32 file_system_iec_unit = 9;
+  string vic20_expansion_cart_kind = 10;
+  bool vic20_expansion_write_back = 11;
+  string vic20_expansion_config_preset = 12;
 }
 
 message SettingApplyDiagnosticDto {
@@ -346,6 +352,12 @@ message UpdateSettingsRequest {
   bool restart_session = 6;
   AudioSettingsDto audio = 7;
   ResourceSettingsDto resources = 8;
+  optional string vic20_memory_spec = 9;
+  optional string file_system_iec_root_path = 10;
+  optional int32 file_system_iec_unit = 11;
+  optional string vic20_expansion_cart_kind = 12;
+  optional bool vic20_expansion_write_back = 13;
+  optional string vic20_expansion_config_preset = 14;
 }
 
 message ValidateSettingsResourcesRequest {

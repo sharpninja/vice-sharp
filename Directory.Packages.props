@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup Label="UI - Remote Control (debug-only Avalonia visual-tree inspection over gRPC)">
     <PackageVersion Include="SharpNinja.Avalonia.RemoteControl.Server" Version="0.7.4" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.11" />
   </ItemGroup>
   <ItemGroup Label="RomM library integration (PLAN-ROMM-001; consumed from nuget.org)">
     <PackageVersion Include="RomM.Client" Version="1.0.1" />

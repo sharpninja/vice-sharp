@@ -1,0 +1,14 @@
+Wolf64 in-game RAM compare 2026-09-16
+Both dumps taken with $D015=$20 $D018=$A5 $DD00=$80 (play, VIC bank $8000).
+
+ViceSharp: vicesharp-ram.bin 65536
+x64sc:     x64sc-play-ram-64k.bin 65536 (header stripped from x64sc-play-ram.bin 65538)
+
+vs   01=24 d011=60 d015=20 d016=FF d018=A5 dd00=80 d021=A5 d025=70 d026=ED
+vice 01=34 d011=60 d015=20 d016=FF d018=A5 dd00=80 d021=A5 d025=70 d026=ED
+
+BITMAP A000-BF3F mismatch 19/8000
+COLOR  D800-DBE7 mismatch 919/1000
+ALL    0000-FFFF mismatch 1241/65536
+
+VIC play registers match. Bitmap is nearly identical. Color RAM is not.

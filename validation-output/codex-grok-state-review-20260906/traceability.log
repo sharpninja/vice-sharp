@@ -1,0 +1,1094 @@
+Requirement traceability audit
+Repository: F:\GitHub\vice-sharp
+Canonical IDs: 195
+Referenced canonical IDs in src/tests: 125
+Canonical IDs not referenced in src/tests: 70
+Noncanonical IDs in src/tests: 1011
+FR canonical/referenced/missing: 120/84/36
+TR canonical/referenced/missing: 45/29/16
+TEST canonical/referenced/missing: 30/12/18
+
+Canonical IDs not referenced in src/tests:
+  FR-CFG-003
+  FR-CFG-004
+  FR-CIA-005
+  FR-CPU-004
+  FR-CPU-005
+  FR-CRT-002
+  FR-CRT-003
+  FR-CRT-004
+  FR-CRT-005
+  FR-DRV-002
+  FR-DRV-003
+  FR-DRV-006
+  FR-INP-003
+  FR-INP-004
+  FR-INP-005
+  FR-MED-005
+  FR-MEM-004
+  FR-MEM-006
+  FR-MON-005
+  FR-MON-006
+  FR-PRF-004
+  FR-PRF-006
+  FR-PRF-007
+  FR-PRF-008
+  FR-SID-005
+  FR-SID-011
+  FR-SNP-003
+  FR-SNP-004
+  FR-TAP-004
+  FR-TAP-005
+  FR-UI-004
+  FR-VIA-001
+  FR-VIA-002
+  FR-VIA-003
+  FR-VIA-004
+  FR-VIA-005
+  TEST-CFG-001
+  TEST-CIA-001
+  TEST-CPU-001
+  TEST-CRT-001
+  TEST-GRPC-001
+  TEST-HOST-001
+  TEST-INPUT-001
+  TEST-MEM-001
+  TEST-MON-001
+  TEST-PRF-001
+  TEST-ROMM-SEC-001
+  TEST-SID-001
+  TEST-SNP-001
+  TEST-TAP-001
+  TEST-VIA-001
+  TEST-VIC20-FLASH-001
+  TEST-VIC20-SOUND-001
+  TEST-X64SC-LOCKSTEP-001
+  TR-ALLOC-001
+  TR-BUILD-001
+  TR-CPU-EDGE-001
+  TR-CPU-EDGE-002
+  TR-LIB-001
+  TR-MEDIA-EDGE-001
+  TR-PLAT-001
+  TR-RAM-EDGE-001
+  TR-ROMM-SEC-001
+  TR-SID-EDGE-001
+  TR-SID-EDGE-002
+  TR-SID-EDGE-003
+  TR-SIMD-001
+  TR-VDC-EDGE-001
+  TR-VIC-EDGE-007
+  TR-VIC20-FLASH-001
+
+Noncanonical IDs in src/tests:
+  FR-1132: src\ViceSharp.Avalonia\MainWindow.axaml.cs, src\ViceSharp.Avalonia\VideoSurface.cs, src\ViceSharp.Host.InProcess\Services\LocalVideoFrameSource.cs, src\ViceSharp.Xbox.ViewModels\ILocalVideoFramePull.cs, tests\ViceSharp.TestHarness\ClockThroughputBenchmarkTests.cs, tests\ViceSharp.TestHarness\LocalVideoFrameSourceTests.cs, tests\ViceSharp.TestHarness\Ui\VideoSurfaceGeometryTests.cs
+  FR-1541: src\ViceSharp.Chips\IEC\D64Image.cs, src\ViceSharp.Core\D64DiskImageDevice.cs, tests\ViceSharp.TestHarness\C1541\D64CommitToStreamTests.cs, tests\ViceSharp.TestHarness\C1541\D64LoadFromStreamTests.cs, tests\ViceSharp.TestHarness\C1541\D64SectorWriteTests.cs, tests\ViceSharp.TestHarness\C1541\IecDriveMotorRampTests.cs, tests\ViceSharp.TestHarness\C1541\IecTimingTests.cs
+  FR-ARCH-ADHOC: tests\ViceSharp.TestHarness\AdhocHelper\AdhocHelperViewModelTests.cs, tests\ViceSharp.TestHarness\AdhocMachine\AdhocMachineYamlLoaderTests.cs, tests\ViceSharp.TestHarness\AdhocMachine\ConsoleAdhocCliTests.cs
+  FR-AUDIOOUT-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Audio\MasterAudioControlTests.cs
+  FR-Architectures-C64-x64sc: tests\ViceSharp.TestHarness\X64ScVariantLockstepTests.cs
+  FR-Audio-SID: tests\ViceSharp.TestHarness\LiveLimiterBandProbeTests.cs, tests\ViceSharp.TestHarness\SidRegisterReadbackTests.cs, tests\ViceSharp.TestHarness\SidRelativeSpeedTests.cs, tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs, tests\ViceSharp.TestHarness\WinMmAudioThroughputDiagTests.cs
+  FR-C64-Boot: tests\ViceSharp.TestHarness\BasicBootProofTests.cs, tests\ViceSharp.TestHarness\DemoWorkloadSpeedDiagTests.cs, tests\ViceSharp.TestHarness\EmulationPipelineSpeedDiagTests.cs, tests\ViceSharp.TestHarness\LiveDeployedAppSettingsBisectTests.cs, tests\ViceSharp.TestHarness\LiveDeployedAppSpeedProbeTests.cs, tests\ViceSharp.TestHarness\ThreadAffinityTests.cs
+  FR-CAPVID-001: tests\ViceSharp.TestHarness\MainWindowMenuTests.cs
+  FR-CART-AR: tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs
+  FR-CART-CRT-16K: tests\ViceSharp.TestHarness\StandardCartridgeTests.cs
+  FR-CART-CRT-8K: tests\ViceSharp.TestHarness\StandardCartridgeTests.cs
+  FR-CART-EASYFLASH: tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs
+  FR-CART-FC3: tests\ViceSharp.TestHarness\FinalCartridgeIIITests.cs
+  FR-CART-MAGICDESK: tests\ViceSharp.TestHarness\MagicDeskCartridgeTests.cs
+  FR-CART-OCEAN: tests\ViceSharp.TestHarness\OceanCartridgeTests.cs
+  FR-CART-READONLY: tests\ViceSharp.TestHarness\StandardCartridgeTests.cs
+  FR-CART-RRNET: tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs
+  FR-CART-SS5: tests\ViceSharp.TestHarness\AdvancedCartridgeScaffoldTests.cs
+  FR-CART-STD-SIZE: tests\ViceSharp.TestHarness\StandardCartridgeTests.cs
+  FR-CART-STD16K: tests\ViceSharp.TestHarness\StandardCartridgeTests.cs
+  FR-CART-STD8K: tests\ViceSharp.TestHarness\StandardCartridgeTests.cs
+  FR-CFG: tests\ViceSharp.TestHarness\Xbox\XboxDataPathBridgeTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxUiStateStoreTests.cs
+  FR-CHIPSTATE-001: tests\ViceSharp.TestHarness\TickHistoryRecorderTests.cs
+  FR-CIA: src\ViceSharp.Chips\Cia\Mos6526.cs, tests\ViceSharp.TestHarness\CiaFlagPinTests.cs, tests\ViceSharp.TestHarness\Tape\DatasetteBuilderIntegrationTests.cs, tests\ViceSharp.TestHarness\Tape\DatasetteCia1FlagTests.cs
+  FR-CIA-SDR: src\ViceSharp.Chips\Cia\Mos6526.cs, tests\ViceSharp.TestHarness\CiaSerialPortTests.cs
+  FR-CIA-TIMER: src\ViceSharp.Chips\Cia\Mos6526.cs, tests\ViceSharp.TestHarness\CiaForceLoadTests.cs, tests\ViceSharp.TestHarness\CiaTimerBChainTests.cs
+  FR-CIA-TOD: src\ViceSharp.Chips\Cia\Mos6526.cs, tests\ViceSharp.TestHarness\CiaTimerInterruptTests.cs, tests\ViceSharp.TestHarness\CiaTodTests.cs
+  FR-CPU: tests\ViceSharp.TestHarness\Mos6510BrkTests.cs, tests\ViceSharp.TestHarness\Mos6510NmiTests.cs, tests\ViceSharp.TestHarness\ProcessorPortTests.cs
+  FR-CPU-TRACE-001: tests\ViceSharp.TestHarness\CpuInstructionCompletedEventTests.cs
+  FR-CPUTICK-001: src\ViceSharp.Chips\Cpu\Mos6502.cs, src\ViceSharp.Host.InProcess\Runtime\EmulatorRuntimeSession.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\CpuRateMetricTests.cs, tests\ViceSharp.TestHarness\CpuRosterTests.cs, tests\ViceSharp.TestHarness\CpuTickCounterTests.cs, tests\ViceSharp.TestHarness\PerCpuRateMappingTests.cs, tests\ViceSharp.TestHarness\PerCpuRateTests.cs
+  FR-CSDB-001: src\ViceSharp.Avalonia\Views\CsdbView.cs, src\ViceSharp.Library.ViewModels\CsdbDiscoveryViewModel.cs, src\ViceSharp.Library.ViewModels\CsdbHit.cs, src\ViceSharp.Library.ViewModels\CsdbIngestResult.cs, src\ViceSharp.Library.ViewModels\CsdbKind.cs, src\ViceSharp.Library.ViewModels\CsdbSelection.cs, src\ViceSharp.Library.ViewModels\ICsdbGateway.cs, src\ViceSharp.RomM\BridgeCsdbGateway.cs, src\ViceSharp.RomM\CsdbGatewaySelection.cs, src\ViceSharp.RomM\LocalCsdbGateway.cs, src\ViceSharp.Xbox.ViewModels\NavigationDestination.cs, src\ViceSharp.Xbox\Views\CsdbPage.xaml.cs, src\ViceSharp.Xbox\Views\HomePage.xaml.cs, tests\ViceSharp.Library.Tests\Csdb\BridgeCsdbGatewayTests.cs, tests\ViceSharp.Library.Tests\Csdb\CsdbDiscoveryViewModelTests.cs, tests\ViceSharp.Library.Tests\Csdb\CsdbGatewaySelectionTests.cs, tests\ViceSharp.Library.Tests\Csdb\LocalCsdbGatewayTests.cs
+  FR-CTX-001: src\ViceSharp.Xbox.Input\InputContext.cs, src\ViceSharp.Xbox.Input\InputResolution.cs, src\ViceSharp.Xbox.Input\XboxInputContext.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-CTX-002: src\ViceSharp.Xbox.Input\InputResolution.cs, src\ViceSharp.Xbox.Input\XboxInputContext.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMenuSubpageTests.cs
+  FR-CTX-003: src\ViceSharp.Xbox.Input\DirectionalRepeater.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-CTX-004: src\ViceSharp.Xbox.Input\InputResolution.cs, src\ViceSharp.Xbox.Input\XboxInputContext.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-DRVLED-001: src\ViceSharp.Avalonia\Converters\LedBrushConverter.cs, src\ViceSharp.Avalonia\ViewModels\AttachSlotViewModel.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Wiring\C1541DriveLedTests.cs
+  FR-DRVTRUE-001: src\ViceSharp.Avalonia\Host\IHostProtocolClient.cs, src\ViceSharp.Avalonia\ViewModels\AttachPanelViewModel.cs, src\ViceSharp.Host.InProcess\Runtime\C64TrueDriveRigBuilder.cs, src\ViceSharp.Host.InProcess\Runtime\DefaultEmulatorRuntimeFactory.cs, src\ViceSharp.Protocol\obj\Debug-UWP\net10.0\Protos\EmulatorHost.cs, src\ViceSharp.Protocol\obj\Debug\net10.0\Protos\EmulatorHost.cs, src\ViceSharp.Protocol\obj\Release\net10.0\Protos\EmulatorHost.cs, src\ViceSharp.Protocol\obj\x64\Debug-UWP\net10.0\Protos\EmulatorHost.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\C1541\TrueDriveFactoryTests.cs, tests\ViceSharp.TestHarness\GrpcHostProtocolClientTests.cs, tests\ViceSharp.TestHarness\ShellViewModelTests.cs, tests\ViceSharp.TestHarness\Ui\RemoteControlUiInspectionTests.cs
+  FR-FLASHCART-001: src\ViceSharp.Avalonia\Views\FlashCartBuilderView.axaml.cs, src\ViceSharp.Xbox.ViewModels\NavigationDestination.cs, src\ViceSharp.Xbox\Views\FlashCartBuilderPage.xaml.cs, tests\ViceSharp.TestHarness\FlashCart\FlashCartImageBuilderViewModelTests.cs, tests\ViceSharp.TestHarness\FlashCart\FlashImageBuilderTests.cs
+  FR-GAMEPAD-001: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  FR-GAMEPAD-003: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  FR-GAMEPAD-004: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  FR-GAMEPAD-005: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  FR-GAMEPAD-006: src\ViceSharp.Xbox.Input\StickConverter.cs, src\ViceSharp.Xbox.Input\XboxJoystickMapper.cs, tests\ViceSharp.TestHarness\Xbox\GamepadConverterTests.cs, tests\ViceSharp.TestHarness\Xbox\GamepadMergeSocdTests.cs, tests\ViceSharp.TestHarness\Xbox\GamepadProfileTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-GAMEPAD-007: src\ViceSharp.Xbox.Input\XboxJoystickMapper.cs, tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs, tests\ViceSharp.TestHarness\Xbox\GamepadProfileTests.cs
+  FR-GAMEPAD-008: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  FR-GAMEPAD-009: src\ViceSharp.Xbox.Input\XboxInputContext.cs, tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-HOST-SESSION: tests\ViceSharp.TestHarness\GrpcSessionLossRecoveryTests.cs
+  FR-Host-Diagnostics: tests\ViceSharp.TestHarness\ThreadNamingTests.cs
+  FR-Host-UI-Boundary: src\ViceSharp.Host.Xbox\Program.cs, src\ViceSharp.Host.Xbox\README.md, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\DisconnectedHostProtocolClientTests.cs, tests\ViceSharp.TestHarness\EmulatorHostServiceTests.cs, tests\ViceSharp.TestHarness\EmulatorRuntimeRegistryTests.cs, tests\ViceSharp.TestHarness\GrpcHostProtocolClientTests.cs, tests\ViceSharp.TestHarness\GrpcHostServiceAdaptersTests.cs, tests\ViceSharp.TestHarness\HostKeyboardAutomationTests.cs, tests\ViceSharp.TestHarness\HostProtocolMapperTests.cs, tests\ViceSharp.TestHarness\HostShells\XboxHostShellTests.cs, tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadShellTests.cs, tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadTests.cs, tests\ViceSharp.TestHarness\InProcessGrpcHostTests.cs, tests\ViceSharp.TestHarness\InputServiceHostTests.cs, tests\ViceSharp.TestHarness\LocalVideoFrameSourceTests.cs, tests\ViceSharp.TestHarness\SettingsServiceHostTests.cs, tests\ViceSharp.TestHarness\SpeedCycleButtonTests.cs, tests\ViceSharp.TestHarness\VideoServiceHostTests.cs, tests\ViceSharp.TestHarness\VideoSurfaceTests.cs
+  FR-IECHOTPLUG-001: tests\ViceSharp.TestHarness\IecHotPlugTests.cs
+  FR-IECLOAD-001: src\ViceSharp.Host.InProcess\Runtime\C64TrueDriveRigBuilder.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\C1541\CoordinatorMachineTests.cs, tests\ViceSharp.TestHarness\C1541\HostMediaSimulatedLoadTests.cs, tests\ViceSharp.TestHarness\C1541\TrueDriveFactoryTests.cs, tests\ViceSharp.TestHarness\C1541\TrueDriveLoadTests.cs, tests\ViceSharp.TestHarness\Wiring\ArchitectureBuilderIecBusTests.cs
+  FR-IECMON-001: src\ViceSharp.Avalonia\ViewModels\IecMonitorViewModel.cs, src\ViceSharp.Avalonia\Views\IecMonitorView.axaml.cs, tests\ViceSharp.TestHarness\IecBusActivityMonitorTests.cs, tests\ViceSharp.TestHarness\IecBusLinesGateTests.cs, tests\ViceSharp.TestHarness\IecBusTraceRecorderTests.cs, tests\ViceSharp.TestHarness\IecMonitorViewModelTests.cs, tests\ViceSharp.TestHarness\PerCpuRateMappingTests.cs
+  FR-IECSPY-001: src\ViceSharp.Avalonia\ViewModels\IecMonitorViewModel.cs, src\ViceSharp.Avalonia\Views\IecMonitorView.axaml.cs, tests\ViceSharp.TestHarness\IecBusActivityMonitorTests.cs, tests\ViceSharp.TestHarness\IecMonitorViewModelTests.cs
+  FR-IECVDRIVE-001: tests\ViceSharp.TestHarness\C1541\HostMediaSimulatedLoadTests.cs, tests\ViceSharp.TestHarness\C1541\SimulatedDriveLoadTests.cs, tests\ViceSharp.TestHarness\IEC\D64FileSystemTests.cs, tests\ViceSharp.TestHarness\IEC\KernalSerialTrapTests.cs, tests\ViceSharp.TestHarness\IEC\VirtualDriveServerTests.cs
+  FR-INPROC: tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxDataPathBridgeTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxManagedFrameGateTests.cs
+  FR-INPROC-001: src\ViceSharp.Host.InProcess\Runtime\ConsoleEmulatorHost.cs, tests\ViceSharp.TestHarness\HostShells\HostInProcessExtractionTests.cs, tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs
+  FR-INPROC-002: tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs
+  FR-INPROC-003: tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs
+  FR-INPROC-004: tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs
+  FR-INPUT-CONTROLPORT: tests\ViceSharp.TestHarness\Cia1JoystickScanTests.cs
+  FR-INPUT-JOYSTICK-001: tests\ViceSharp.TestHarness\HostInputServiceTests.cs
+  FR-INPUT-JOYSTICK-002: tests\ViceSharp.TestHarness\HostInputServiceTests.cs
+  FR-INPUT-JOYSTICK-003: tests\ViceSharp.TestHarness\HostInputServiceTests.cs
+  FR-INPUT-KEYBOARD: tests\ViceSharp.TestHarness\Cia1KeyboardScanTests.cs
+  FR-MED: src\ViceSharp.Core\Media\FrameSequenceCapture.cs, tests\ViceSharp.TestHarness\CaptureServiceHostTests.cs, tests\ViceSharp.TestHarness\Media\BackgroundByteWriterTests.cs, tests\ViceSharp.TestHarness\Media\FrameSequenceCaptureTests.cs, tests\ViceSharp.TestHarness\MediaServiceHostTests.cs
+  FR-MEDOVL-001: src\ViceSharp.Core\Media\StatsOverlayRenderer.cs, src\ViceSharp.Host.InProcess\Runtime\EmulatorRuntimeSession.cs, tests\ViceSharp.TestHarness\StatsOverlayRendererTests.cs
+  FR-MONITOR: tests\ViceSharp.TestHarness\MonitorServiceHostDisassembleTests.cs, tests\ViceSharp.TestHarness\MonitorServiceHostExecuteCommandTests.cs, tests\ViceSharp.TestHarness\MonitorServiceHostReadMemoryTests.cs, tests\ViceSharp.TestHarness\MonitorServiceHostTests.cs, tests\ViceSharp.TestHarness\MonitorServiceHostWriteMemoryTests.cs
+  FR-MONITOR-DISASM-001: src\ViceSharp.Monitor\Mos6502Disassembler.cs, tests\ViceSharp.TestHarness\LiveHandlerTraceTests.cs, tests\ViceSharp.TestHarness\Mos6502DisassemblerTests.cs
+  FR-Monitor-Trace: tests\ViceSharp.TestHarness\DeterministicTraceLoggerTests.cs
+  FR-NATIVERESIDUE-001: tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs
+  FR-PACESEL-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\PacingStrategySelectionTests.cs, tests\ViceSharp.TestHarness\SemaphoreEmulationGatePacingTests.cs, tests\ViceSharp.TestHarness\SettingsServiceHostTests.cs, tests\ViceSharp.TestHarness\WarpModeTests.cs
+  FR-PERF-BENCHMARK: tests\ViceSharp.TestHarness\BenchmarksSmokeTests.cs
+  FR-PICKER-PAUSE-001: tests\ViceSharp.TestHarness\MainWindowMenuTests.cs
+  FR-PLATFORM-CROSS-001: tests\ViceSharp.TestHarness\HostShells\MacOSHostShellTests.cs
+  FR-QA-NATIVE-COLLECTION: tests\ViceSharp.TestHarness\NativeCollectionConventionTests.cs
+  FR-QA-XMLDOCS: tests\ViceSharp.TestHarness\XmlDocsConventionTests.cs
+  FR-ROMM-AVUI-001: src\ViceSharp.Avalonia\ViewModels\RomMLibraryViewModel.cs
+  FR-ROMM-BROWSE: src\ViceSharp.Library.ViewModels\IRomMLibraryGateway.cs, src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs, src\ViceSharp.RomM\RomMLibraryGateway.cs, tests\ViceSharp.Library.Tests\Browse\LibraryBrowseViewModelTests.cs
+  FR-ROMM-BROWSE-001: src\ViceSharp.Library.ViewModels\GameGroup.cs, src\ViceSharp.Library.ViewModels\GameGrouper.cs, src\ViceSharp.Library.ViewModels\ICurrentMachineProvider.cs, src\ViceSharp.Library.ViewModels\LibraryMachine.cs, src\ViceSharp.Library.ViewModels\LibraryOrder.cs, src\ViceSharp.Library.ViewModels\LibraryPage.cs, src\ViceSharp.Library.ViewModels\LibraryQuery.cs, src\ViceSharp.Library.ViewModels\MachinePlatformSlug.cs, src\ViceSharp.Library.ViewModels\RomTile.cs, tests\ViceSharp.Library.Tests\Adapter\RomMGatewayBrowseTests.cs, tests\ViceSharp.Library.Tests\Browse\GameGrouperTests.cs, tests\ViceSharp.Library.Tests\Machine\CurrentMachineSlugTests.cs
+  FR-ROMM-COLLECT-001: src\ViceSharp.Library.ViewModels\CollectionsViewModel.cs, src\ViceSharp.Library.ViewModels\IRomMCollectionsGateway.cs, src\ViceSharp.Library.ViewModels\LibraryCollection.cs, src\ViceSharp.RomM\RomMCollectionsGateway.cs, tests\ViceSharp.Library.Tests\Adapter\RomMGatewayCollectionsTests.cs, tests\ViceSharp.Library.Tests\Collections\CollectionsViewModelTests.cs
+  FR-ROMM-CONN-001: src\ViceSharp.Library.ViewModels\DiscoveredRomM.cs, src\ViceSharp.Library.ViewModels\IRomMConnectionStore.cs, src\ViceSharp.Library.ViewModels\IRomMDiscovery.cs, src\ViceSharp.Library.ViewModels\IRomMServerProbe.cs, src\ViceSharp.Library.ViewModels\LibraryConnectionViewModel.cs, src\ViceSharp.Library.ViewModels\RomMConnection.cs, src\ViceSharp.Library.ViewModels\RomMLocateResult.cs, src\ViceSharp.Library.ViewModels\RomMPairingCoordinator.cs, src\ViceSharp.Library.ViewModels\RomMServerLocator.cs, src\ViceSharp.RomM\FileRomMConnectionStore.cs, src\ViceSharp.RomM\RomMBridgeConnectionSource.cs, src\ViceSharp.RomM\RomMHeartbeatProbe.cs, src\ViceSharp.RomM\RomMSubnetDiscovery.cs, tests\ViceSharp.Library.Tests\Adapter\RomMGatewayAuthTests.cs, tests\ViceSharp.Library.Tests\Connection\FileRomMConnectionStoreTests.cs, tests\ViceSharp.Library.Tests\Connection\LibraryConnectionViewModelTests.cs, tests\ViceSharp.Library.Tests\Connection\RomMAuthRefreshTests.cs, tests\ViceSharp.Library.Tests\Connection\RomMPairingTests.cs, tests\ViceSharp.Library.Tests\Connection\RomMServerLocatorTests.cs, tests\ViceSharp.Library.Tests\Discovery\RomMBridgeConnectionSourceTests.cs, tests\ViceSharp.Library.Tests\Discovery\RomMDiscoveryTests.cs
+  FR-ROMM-COVER-001: src\ViceSharp.Library.ViewModels\CoverRef.cs, src\ViceSharp.Library.ViewModels\ILibraryImageLoader.cs, src\ViceSharp.RomM\CoverCache.cs, src\ViceSharp.RomM\RomMCoverImageSource.cs, tests\ViceSharp.Library.Tests\Covers\CoverCacheTests.cs, tests\ViceSharp.Library.Tests\Covers\RomMCoverImageSourceTests.cs
+  FR-ROMM-DETAIL-001: src\ViceSharp.Library.ViewModels\RomDetail.cs, src\ViceSharp.Library.ViewModels\RomDetailViewModel.cs, src\ViceSharp.Library.ViewModels\RomFile.cs, tests\ViceSharp.Library.Tests\Adapter\RomMGatewayDetailTests.cs, tests\ViceSharp.Library.Tests\Collections\RomDetailViewModelTests.cs
+  FR-ROMM-LAUNCH-001: src\ViceSharp.Library.ViewModels\AcquiredGame.cs, src\ViceSharp.Library.ViewModels\IGameLauncher.cs, src\ViceSharp.Library.ViewModels\LaunchOutcome.cs, src\ViceSharp.Library.ViewModels\MediaExtensionMap.cs, src\ViceSharp.Library.ViewModels\MediaKind.cs, src\ViceSharp.Library.ViewModels\MediaMapping.cs, tests\ViceSharp.Heads.Tests\AvaloniaGameLauncherTests.cs, tests\ViceSharp.Heads.Tests\XboxGameLauncherTests.cs, tests\ViceSharp.Library.Tests\Adapter\RomMGatewayDownloadTests.cs, tests\ViceSharp.Library.Tests\Media\MediaExtensionMapTests.cs
+  FR-ROMM-PKG-001: tests\ViceSharp.Library.Tests\Boundary\LibraryViewModelsBoundaryTests.cs, tests\ViceSharp.Library.Tests\Packaging\DirectoryPackagesTests.cs, tests\ViceSharp.Library.Tests\Packaging\NuGetConfigTests.cs, tests\ViceSharp.Library.Tests\Packaging\PackageMetadataTests.cs
+  FR-ROMM-RECENTS-001: src\ViceSharp.Library.ViewModels\IRecentsStore.cs, src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs, src\ViceSharp.Library.ViewModels\RecentGame.cs, src\ViceSharp.RomM\FileRecentsStore.cs, tests\ViceSharp.Library.Tests\Browse\LibraryBrowseViewModelTests.cs, tests\ViceSharp.Library.Tests\Connection\FileRecentsStoreTests.cs
+  FR-ROMM-XBOXUI-001: tests\ViceSharp.Heads.Tests\XboxNavigationTests.cs
+  FR-SID-8580: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid8580.cs, src\ViceSharp.Chips\Audio\SidSamplingMethod.cs, tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs, tests\ViceSharp.TestHarness\SidFactoryTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-CLOCK: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidExactOracleTests.cs, tests\ViceSharp.TestHarness\SidFactoryTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  FR-SID-CUTOFFDAC: src\ViceSharp.Chips\Audio\Sid6581.Filter.cs, tests\ViceSharp.TestHarness\SidChamberlinRetirementTests.cs, tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-DATABUS: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-ENV: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ChipsInternalsAccessTests.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidDeterminismTests.cs, tests\ViceSharp.TestHarness\SidEngineClockingProbeTests.cs, tests\ViceSharp.TestHarness\SidEngineParityTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidExactOracleTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SID-EXTFILT: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-FILTER-6581: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid6581.Filter.cs, tests\ViceSharp.TestHarness\SidChamberlinRetirementTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-FILTER-8580: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid6581.Filter.cs, src\ViceSharp.Chips\Audio\Sid8580.cs, tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-FILTER-CLOCK: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid6581.Filter.cs, tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-MIXVOL: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid6581.Filter.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  FR-SID-OSC3ENV3: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid8580.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidClockRateTests.cs, tests\ViceSharp.TestHarness\SidDualSidTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidRegisterReadbackTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  FR-SID-OUTPUT: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid6581.Filter.cs, src\ViceSharp.Chips\Audio\SidSamplingMethod.cs, tests\ViceSharp.TestHarness\SidChamberlinRetirementTests.cs, tests\ViceSharp.TestHarness\SidLiveSamplingTests.cs, tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs, tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-POT: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  FR-SID-VOICE: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid8580.cs, tests\ViceSharp.TestHarness\SidDigiPlaybackTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  FR-SID-WAVE-ACC: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidClockRateTests.cs, tests\ViceSharp.TestHarness\SidDualSidTests.cs, tests\ViceSharp.TestHarness\SidEngineParityTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidExactOracleTests.cs, tests\ViceSharp.TestHarness\SidRegisterReadbackTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  FR-SID-WAVE-COMBINED: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid8580.cs, src\ViceSharp.Chips\Audio\SidWaveTables.cs, tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SID-WAVE-DACRES: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Chips\Audio\Sid8580.cs, tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SID-WAVE-NOISE: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ChipsInternalsAccessTests.cs, tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  FR-SID-WAVE-PULSE: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SID-WAVE-RING: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SID-WAVE-SAWTRI: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SID-WAVE-SYNC: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SID-WAVE-TESTBIT: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-SIDAUDIO-001: tests\ViceSharp.TestHarness\Audio\SidAudioPumpTests.cs, tests\ViceSharp.TestHarness\Audio\SidAudioWiringTests.cs, tests\ViceSharp.TestHarness\SidClockRateTests.cs
+  FR-SIDEBARUI-001: src\ViceSharp.Avalonia\Views\AttachPanelView.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs
+  FR-SNAP-001: tests\ViceSharp.TestHarness\Xbox\XboxMachineSnapshotTests.cs
+  FR-SNAPSHOT: tests\ViceSharp.TestHarness\SnapshotRoundTripTests.cs, tests\ViceSharp.TestHarness\SnapshotServiceHostTests.cs
+  FR-SNDREG-001: tests\ViceSharp.TestHarness\ViceGateSoundRegulatorTests.cs
+  FR-SYSBTN: src\ViceSharp.Xbox.Input\AppCommandDispatchResult.cs
+  FR-SYSBTN-001: src\ViceSharp.Xbox.Input\XboxSystemButtons.cs, tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxSystemButtonsBindingTests.cs
+  FR-SYSBTN-002: src\ViceSharp.Xbox.Input\XboxInputContext.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-SYSBTN-003: tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-SYSBTN-005: src\ViceSharp.Xbox.Input\XboxSystemButtons.cs, tests\ViceSharp.TestHarness\Xbox\XboxSystemButtonsBindingTests.cs
+  FR-SYSBTN-006: src\ViceSharp.Xbox.Input\XboxSystemButtons.cs, tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxSystemButtonsBindingTests.cs
+  FR-SYSBTN-007: tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  FR-SYSINDEP-001: tests\ViceSharp.TestHarness\C1541\TrueDrivePumpPathLoadTests.cs, tests\ViceSharp.TestHarness\InterSystemBusEdgeOrderingTests.cs, tests\ViceSharp.TestHarness\ViceEmulationGatePacingTests.cs
+  FR-TAPE: tests\ViceSharp.TestHarness\Tape\DatasetteBuilderIntegrationTests.cs, tests\ViceSharp.TestHarness\Tape\DatasetteCia1FlagTests.cs, tests\ViceSharp.TestHarness\Tape\DatasetteSeekTests.cs, tests\ViceSharp.TestHarness\Tape\TapImageTests.cs
+  FR-TESTGATE: tests\ViceSharp.TestHarness\Xbox\XboxCiConfigTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxNukeConfigTests.cs
+  FR-TESTGATE-002: tests\ViceSharp.TestHarness\Xbox\XboxTestConventionTests.cs
+  FR-TESTGATE-003: tests\ViceSharp.TestHarness\Xbox\XboxTestConventionTests.cs
+  FR-TICKHIST-001: src\ViceSharp.Avalonia\ViewModels\TickHistoryViewModel.cs, src\ViceSharp.Avalonia\Views\TickHistoryView.axaml.cs, tests\ViceSharp.TestHarness\TickHistoryCaptureTests.cs, tests\ViceSharp.TestHarness\TickHistoryRecorderTests.cs, tests\ViceSharp.TestHarness\TickHistoryViewModelTests.cs
+  FR-TICKHIST-CHIP-CIA: src\ViceSharp.Chips\Cia\Mos6526.State.cs
+  FR-TICKHIST-CHIP-PLA: src\ViceSharp.Chips\PLA\Mos906114.State.cs
+  FR-TICKHIST-CHIP-SID: src\ViceSharp.Chips\Audio\Sid6581.State.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  FR-TICKHIST-CHIP-VIC: src\ViceSharp.Chips\VicIi\Mos6569.State.cs
+  FR-UIDROP-001: tests\ViceSharp.TestHarness\ShellViewModelTests.cs
+  FR-UIFLYOUT-001: src\ViceSharp.Avalonia\ViewModels\AttachPanelViewModel.cs, src\ViceSharp.Avalonia\Views\AttachPanelView.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\ShellViewModelTests.cs
+  FR-UIMENUBAR-001: src\ViceSharp.Avalonia\ViewModels\ShellViewModel.cs, tests\ViceSharp.TestHarness\ShellViewModelTests.cs
+  FR-UIPERIPHERAL-001: src\ViceSharp.Avalonia\ViewModels\AttachPanelViewModel.cs, src\ViceSharp.Avalonia\Views\AttachPanelView.cs, src\ViceSharp.Avalonia\Views\PeripheralCardView.axaml.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Ui\RemoteControlUiInspectionTests.cs
+  FR-UIPERSIST-001: tests\ViceSharp.TestHarness\Persistence\AttachPanelPersistenceTests.cs, tests\ViceSharp.TestHarness\Persistence\SessionPersistenceTests.cs
+  FR-UISETTINGS-001: src\ViceSharp.Avalonia\Views\SettingsView.axaml.cs, tests\ViceSharp.RemoteControlCli.Tests\RemoteControlCommandFactoryTests.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Ui\Vic20SettingsRemoteControlInventoryTests.cs
+  FR-VIA: tests\ViceSharp.TestHarness\C1541\Via6522Ca2ModesTests.cs, tests\ViceSharp.TestHarness\C1541\Via6522Cb2ModesTests.cs, tests\ViceSharp.TestHarness\C1541\Via6522EdgeIrqTests.cs, tests\ViceSharp.TestHarness\C1541\Via6522PulseOutputTests.cs, tests\ViceSharp.TestHarness\C1541\Via6522ShiftRegisterTests.cs, tests\ViceSharp.TestHarness\C1541\Via6522T2Pb6Tests.cs, tests\ViceSharp.TestHarness\C1541\Via6522Timer1Pb7Tests.cs, tests\ViceSharp.TestHarness\C1541\Via6522Timer2Tests.cs
+  FR-VIC: tests\ViceSharp.TestHarness\ChipsInternalsAccessTests.cs
+  FR-VIC-BORDER: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\PixelSequencer.cs, src\ViceSharp.Chips\VicIi\VideoRenderer.cs, tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  FR-VIC-CYCLE: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\Mos6569.State.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\RomlessBadLineTests.cs, tests\ViceSharp.TestHarness\SnapshotResumeCpuStateTests.cs, tests\ViceSharp.TestHarness\SnapshotRunLogParityTests.cs, tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiSnapshotResumeCounterTests.cs
+  FR-VIC-DISPLAYMODE: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  FR-VIC-DRAW-COLOR: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\Mos6569.State.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicExactFrameOracleTests.cs, tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs, tests\ViceSharp.TestHarness\VicIiPaletteParityTests.cs
+  FR-VIC-DRAW-GFX: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\PixelSequencer.cs, src\ViceSharp.Chips\VicIi\VideoRenderer.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\RomlessBadLineTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicExactFrameOracleTests.cs, tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicIiBootFrameOracleParityTests.cs, tests\ViceSharp.TestHarness\VicIiDisplayStartParityTests.cs
+  FR-VIC-FETCH: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\Mos6569.State.cs, src\ViceSharp.Core\C64MemoryMap.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiDisplayStartParityTests.cs, tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs, tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  FR-VIC-LIGHTPEN: src\ViceSharp.Chips\VicIi\Mos6567R56A.cs, src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\Mos6569.State.cs, src\ViceSharp.Chips\VicIi\Mos6569R1.cs, src\ViceSharp.Chips\VicIi\Mos8562.cs, src\ViceSharp.Chips\VicIi\Mos8565.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiCollisionIrqOrderingParityTests.cs, tests\ViceSharp.TestHarness\VicIiLightPenWiringTests.cs, tests\ViceSharp.TestHarness\VicIiModelFetchVariantTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  FR-VIC-MATRIX-ADDR: src\ViceSharp.Chips\VicIi\Mos6569.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiInvalidEcmMaskTests.cs, tests\ViceSharp.TestHarness\VicIiModelFetchVariantTests.cs
+  FR-VIC-RASTER-IRQ: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\Mos6569.State.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  FR-VIC-REGISTERS: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\Mos6569.State.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiValidationTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs, tests\ViceSharp.TestHarness\X64ScVariantLockstepTests.cs
+  FR-VIC-SPRITE-COLLISION: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\PixelSequencer.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiCollisionIrqOrderingParityTests.cs, tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  FR-VIC-SPRITE-DMA: src\ViceSharp.Chips\VicIi\Mos6569.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs, tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs, tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  FR-VIC-SPRITE-PRIORITY: src\ViceSharp.Chips\VicIi\VideoRenderer.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  FR-VIC-SPRITE-RENDER: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\PixelSequencer.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs, tests\ViceSharp.TestHarness\VicIiSpriteXposParityTests.cs, tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  FR-VIC-XSCROLL: src\ViceSharp.Chips\VicIi\Mos6569.cs, src\ViceSharp.Chips\VicIi\PixelSequencer.cs, src\ViceSharp.Chips\VicIi\VideoRenderer.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  FR-VIC20: tests\ViceSharp.TestHarness\Vic20\Vic20HeadsTests.cs
+  FR-VIC20-CART-001: tests\ViceSharp.TestHarness\FlashCart\Flash040EraseLatencyTests.cs, tests\ViceSharp.TestHarness\Vic20\MegaCartParityTests.cs, tests\ViceSharp.TestHarness\Vic20\UltimemParityTests.cs, tests\ViceSharp.TestHarness\Vic20\Vic20CartInventoryTests.cs
+  FR-VIC20-CPU-001: tests\ViceSharp.TestHarness\Vic20\Vic20LockstepIsolationTests.cs, tests\ViceSharp.TestHarness\Vic20\Vic20WorkloadLockstep.cs
+  FR-VIC20-SNAP-001: tests\ViceSharp.TestHarness\Vic20\Vic20SnapshotRoundTripTests.cs
+  FR-VICII-RASTER-001: tests\ViceSharp.TestHarness\RasterBarGroundTruthTests.cs, tests\ViceSharp.TestHarness\RasterBarLockstepTests.cs
+  FR-Validation-Lockstep: tests\ViceSharp.TestHarness\LockstepValidationTests.cs
+  FR-XAUDIO-002: tests\ViceSharp.TestHarness\Xbox\PortableAudioTypesLocationTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxAudioBackendFactoryTests.cs
+  FR-XAUDIO-003: src\ViceSharp.Host.InProcess\Audio\ISourceVoiceDevice.cs, src\ViceSharp.Host.InProcess\Audio\XAudio2AudioMath.cs, src\ViceSharp.Host.InProcess\Audio\XAudio2SourceVoiceBackend.cs, src\ViceSharp.Host.InProcess\Audio\XAudio2SourceVoiceDevice.cs, tests\ViceSharp.TestHarness\Xbox\XAudio2AudioMathTests.cs, tests\ViceSharp.TestHarness\Xbox\XAudio2SourceVoiceBackendTests.cs
+  FR-XAV-001: tests\ViceSharp.TestHarness\Xbox\XboxAudioBackendFactoryTests.cs
+  FR-XBOXGPL-006: tests\ViceSharp.TestHarness\Xbox\XboxGplComplianceTests.cs
+  FR-XBOXGPL-007: src\ViceSharp.Xbox\bin\x64\Debug-UWP\net10.0-windows10.0.26100.0\win-x64\Licenses\THIRD_PARTY_NOTICES.md
+  FR-XBOXPKG-003: tests\ViceSharp.TestHarness\HostShells\XboxManifestTests.cs
+  FR-XBOXSET: tests\ViceSharp.TestHarness\Xbox\XboxSettingsPersistenceTests.cs
+  FR-XBOXTOPO-001: tests\ViceSharp.TestHarness\Xbox\XboxAotLinkTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxViewModelsBoundaryTests.cs
+  FR-XBOXUI: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadShellTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxAotBindingConventionTests.cs
+  FR-XBOXUI-001: src\ViceSharp.Xbox.ViewModels\NavigationDestination.cs, src\ViceSharp.Xbox.ViewModels\NavigationViewModel.cs, tests\ViceSharp.TestHarness\Xbox\HostingSeamTests.cs, tests\ViceSharp.TestHarness\Xbox\NavigationViewModelTests.cs
+  FR-XBOXUI-002: src\ViceSharp.Xbox.ViewModels\FocusMap.cs, src\ViceSharp.Xbox.ViewModels\FocusMapBuilder.cs, src\ViceSharp.Xbox.ViewModels\FocusNode.cs, tests\ViceSharp.TestHarness\Xbox\FocusMapBuilderTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMenuSubpageTests.cs
+  FR-XBOXUI-003: src\ViceSharp.Xbox.Input\XboxInputContext.cs, src\ViceSharp.Xbox.ViewModels\InputContextObserver.cs, tests\ViceSharp.TestHarness\Xbox\InputContextObserverTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMenuFocusAndKeycapStyleTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMenuPauseTests.cs
+  FR-XBOXUI-004: tests\ViceSharp.TestHarness\Xbox\XboxSettingsDispatchTests.cs
+  FR-XBOXUI-006: src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs, tests\ViceSharp.TestHarness\Xbox\VirtualKeyboardViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxAuthenticKeyboardTests.cs
+  FR-XBOXUI-008: tests\ViceSharp.TestHarness\Xbox\XboxMachineSnapshotTests.cs
+  FR-XDEV-001: src\ViceSharp.Xbox.ViewModels\XboxDeviceSetupViewModel.cs, src\ViceSharp.Xbox.ViewModels\XboxMediaSlotViewModel.cs, tests\ViceSharp.TestHarness\Xbox\XboxDeviceSetupViewModelTests.cs
+  FR-XDEV-002: tests\ViceSharp.TestHarness\Xbox\XboxDeviceSetupViewModelTests.cs
+  FR-XDEV-003: tests\ViceSharp.TestHarness\Xbox\XboxDeviceSetupViewModelTests.cs
+  FR-XINPUT-005: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMenuFocusAndKeycapStyleTests.cs
+  FR-XINPUT-006: tests\ViceSharp.TestHarness\Xbox\XboxKeycapPetsciiGlyphTests.cs
+  FR-XKBD-001: src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs, tests\ViceSharp.TestHarness\Xbox\VirtualKeyboardViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxAuthenticKeyboardTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxRestoreSeamTests.cs
+  FR-XROM-001: src\ViceSharp.Xbox.ViewModels\RomPresence.cs, src\ViceSharp.Xbox.ViewModels\RomProfile.cs, src\ViceSharp.Xbox.ViewModels\RomProvisionAssessment.cs, src\ViceSharp.Xbox.ViewModels\RomProvisionEvaluator.cs, src\ViceSharp.Xbox.ViewModels\RomProvisionState.cs, src\ViceSharp.Xbox.ViewModels\RomRole.cs, src\ViceSharp.Xbox.ViewModels\RomRoleStatus.cs, src\ViceSharp.Xbox.ViewModels\XboxRomProvisioningViewModel.cs, tests\ViceSharp.TestHarness\Xbox\RomProvisionEvaluatorTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxRomProvisioningViewModelTests.cs
+  FR-XROM-002: src\ViceSharp.Xbox.ViewModels\IRomAcquirer.cs, src\ViceSharp.Xbox.ViewModels\IStoragePicker.cs, src\ViceSharp.Xbox.ViewModels\PickedFile.cs, src\ViceSharp.Xbox.ViewModels\RomCatalog.cs, src\ViceSharp.Xbox.ViewModels\RomDownloadResult.cs, src\ViceSharp.Xbox.ViewModels\RomSpec.cs, src\ViceSharp.Xbox\RomProvisioning\RomFetchRomAcquirer.cs, src\ViceSharp.Xbox\RomProvisioning\UwpStoragePicker.cs, tests\ViceSharp.TestHarness\HostShells\XboxManifestTests.cs, tests\ViceSharp.TestHarness\Xbox\RomFetchRomAcquirerTests.cs, tests\ViceSharp.TestHarness\Xbox\RomProvisionEvaluatorTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxRomProvisioningViewModelTests.cs
+  FR-XROM-003: tests\ViceSharp.TestHarness\Xbox\XboxGplComplianceTests.cs
+  FR-XSET-001: src\ViceSharp.Protocol\SettingsOptionCatalog.cs, src\ViceSharp.Xbox.ViewModels\XboxSettingsViewModel.cs, tests\ViceSharp.TestHarness\Xbox\HostingSeamTests.cs, tests\ViceSharp.TestHarness\Xbox\SettingsOptionCatalogTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs
+  FR-XSET-002: src\ViceSharp.Xbox.ViewModels\XboxSettingsViewModel.cs, tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs
+  FR-XSET-003: tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs
+  FR-XSET-004: tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs
+  FR-XSET-005: src\ViceSharp.Xbox.ViewModels\XboxSettingsViewModel.cs, tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs
+  FR-XVIDEO-002: src\ViceSharp.Xbox.ViewModels\VideoFramePullViewModel.cs, tests\ViceSharp.TestHarness\HostShells\AvaloniaVideoAspectTests.cs, tests\ViceSharp.TestHarness\Xbox\HostingSeamTests.cs, tests\ViceSharp.TestHarness\Xbox\VideoFramePullViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\VideoSurfacePureSinkBoundaryTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxPerfStatsTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxVideoAspectTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxVideoSurfaceInteropTests.cs
+  FR-Xbox-Branding: src\ViceSharp.Xbox\bin\x64\Debug-UWP\net10.0-windows10.0.26100.0\win-x64\Licenses\THIRD_PARTY_NOTICES.md
+  FR-to-TR-to-TEST: tests\ViceSharp.AiReview.Tests\AiReviewTests.cs
+  TEST-AUDIO-PACE-01: tests\ViceSharp.TestHarness\WinMmAudioThroughputDiagTests.cs
+  TEST-AUDIO-PACE-02: tests\ViceSharp.TestHarness\EmulationPipelineSpeedDiagTests.cs
+  TEST-AUDIO-PACE-03: tests\ViceSharp.TestHarness\EmulationPipelineSpeedDiagTests.cs
+  TEST-AUDIO-PACE-04: tests\ViceSharp.TestHarness\EmulationPipelineSpeedDiagTests.cs
+  TEST-AUDIO-PACE-05: tests\ViceSharp.TestHarness\DemoWorkloadSpeedDiagTests.cs
+  TEST-AUDIO-PACE-06: tests\ViceSharp.TestHarness\DemoWorkloadSpeedDiagTests.cs
+  TEST-AUDIO-PACE-07: tests\ViceSharp.TestHarness\LiveDeployedAppSpeedProbeTests.cs
+  TEST-AUDIO-PACE-08: tests\ViceSharp.TestHarness\LiveDeployedAppSettingsBisectTests.cs
+  TEST-AUDIO-PACE-09: tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs
+  TEST-AUDIO-PACE-10: tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs
+  TEST-AUDIO-PACE-11: tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs
+  TEST-AUDIO-SPEED-01: tests\ViceSharp.TestHarness\SidRelativeSpeedTests.cs
+  TEST-AUDIO-SPEED-02: tests\ViceSharp.TestHarness\SidRelativeSpeedTests.cs
+  TEST-AUDIO-SPEED-03: tests\ViceSharp.TestHarness\LiveLimiterBandProbeTests.cs
+  TEST-AUDIO-WARP-01: tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs
+  TEST-AUDIO-WARP-02: tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs
+  TEST-AUDIO-WARP-03: tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs
+  TEST-AUDIOOUT-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs
+  TEST-AVASPECT-001a: tests\ViceSharp.TestHarness\HostShells\AvaloniaVideoAspectTests.cs
+  TEST-AVASPECT-001b: tests\ViceSharp.TestHarness\HostShells\AvaloniaVideoAspectTests.cs
+  TEST-AVASPECT-001c: tests\ViceSharp.TestHarness\HostShells\AvaloniaVideoAspectTests.cs
+  TEST-CFG: tests\ViceSharp.TestHarness\Xbox\XboxUiStateStoreTests.cs
+  TEST-CHIPS-IVT-P0-01: tests\ViceSharp.TestHarness\ChipsInternalsAccessTests.cs
+  TEST-CPUTICK-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\CpuRateMetricTests.cs, tests\ViceSharp.TestHarness\CpuRosterTests.cs, tests\ViceSharp.TestHarness\CpuTickCounterTests.cs, tests\ViceSharp.TestHarness\PerCpuRateMappingTests.cs, tests\ViceSharp.TestHarness\PerCpuRateTests.cs
+  TEST-CTX-001: tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  TEST-DRVLED-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Wiring\C1541DriveLedTests.cs
+  TEST-DRVTRUE-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\C1541\TrueDriveFactoryTests.cs, tests\ViceSharp.TestHarness\GrpcHostProtocolClientTests.cs, tests\ViceSharp.TestHarness\Ui\RemoteControlUiInspectionTests.cs
+  TEST-GAMEPAD-001: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  TEST-GAMEPAD-002: tests\ViceSharp.TestHarness\Xbox\GamepadConverterTests.cs
+  TEST-GAMEPAD-003: tests\ViceSharp.TestHarness\Xbox\GamepadMergeSocdTests.cs
+  TEST-GAMEPAD-004: tests\ViceSharp.TestHarness\Xbox\GamepadProfileTests.cs
+  TEST-HOST-AFFINITY-01: tests\ViceSharp.TestHarness\ThreadAffinityTests.cs
+  TEST-HOST-AFFINITY-02: tests\ViceSharp.TestHarness\ThreadAffinityTests.cs
+  TEST-HOST-AFFINITY-03: tests\ViceSharp.TestHarness\ThreadAffinityTests.cs
+  TEST-HOST-SESSIONHEAL-01: tests\ViceSharp.TestHarness\GrpcSessionLossRecoveryTests.cs
+  TEST-HOSTUI-001: tests\ViceSharp.TestHarness\HostKeyboardAutomationTests.cs
+  TEST-IECHOTPLUG-001: tests\ViceSharp.TestHarness\IecHotPlugTests.cs
+  TEST-IECLOAD-001: tests\ViceSharp.TestHarness\C1541\CoordinatorMachineTests.cs, tests\ViceSharp.TestHarness\C1541\TrueDriveLoadTests.cs
+  TEST-IECMON-001: tests\ViceSharp.TestHarness\IecBusActivityMonitorTests.cs, tests\ViceSharp.TestHarness\IecBusLinesGateTests.cs, tests\ViceSharp.TestHarness\IecMonitorViewModelTests.cs, tests\ViceSharp.TestHarness\PerCpuRateMappingTests.cs
+  TEST-IECTRACE-001: tests\ViceSharp.TestHarness\IecBusTraceRecorderTests.cs
+  TEST-IECVDRIVE-001: tests\ViceSharp.TestHarness\IEC\D64FileSystemTests.cs
+  TEST-IECVDRIVE-002: tests\ViceSharp.TestHarness\IEC\VirtualDriveServerTests.cs
+  TEST-IECVDRIVE-003: tests\ViceSharp.TestHarness\IEC\KernalSerialTrapTests.cs
+  TEST-IECVDRIVE-004: tests\ViceSharp.TestHarness\C1541\SimulatedDriveLoadTests.cs
+  TEST-IECVDRIVE-005: tests\ViceSharp.TestHarness\C1541\HostMediaSimulatedLoadTests.cs
+  TEST-INPROC: tests\ViceSharp.TestHarness\Xbox\XboxDataPathBridgeTests.cs
+  TEST-INPROC-002: tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs
+  TEST-INPROC-003: tests\ViceSharp.TestHarness\Xbox\XboxManagedFrameGateTests.cs
+  TEST-MEDIA-VIDEO-001: tests\ViceSharp.TestHarness\Media\FfmpegVideoRecorderTests.cs
+  TEST-MEDOVL-001: tests\ViceSharp.TestHarness\StatsOverlayRendererTests.cs
+  TEST-MONITOR-DISASM-001: tests\ViceSharp.TestHarness\Mos6502DisassemblerTests.cs
+  TEST-MONITOR-DISASM-002: tests\ViceSharp.TestHarness\LiveHandlerTraceTests.cs
+  TEST-NATIVE-RESIDUE-01: tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs
+  TEST-NATIVE-RESIDUE-02: tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs
+  TEST-NATIVE-RESIDUE-03: tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs, tests\ViceSharp.TestHarness\ViceNativeBridge.cs
+  TEST-NATIVE-RESIDUE-04: tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs
+  TEST-PACESEL-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\PacingStrategySelectionTests.cs, tests\ViceSharp.TestHarness\SettingsServiceHostTests.cs
+  TEST-PARITY-MANIFEST-01: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs
+  TEST-PARITY-MANIFEST-02: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs
+  TEST-PARITY-MANIFEST-03: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs
+  TEST-PARITY-MANIFEST-04: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs
+  TEST-PICKER-PAUSE-001: tests\ViceSharp.TestHarness\MainWindowMenuTests.cs
+  TEST-RASTERBAR-GT-001: tests\ViceSharp.TestHarness\RasterBarGroundTruthTests.cs
+  TEST-RASTERBAR-GT-002: tests\ViceSharp.TestHarness\RasterBarGroundTruthTests.cs
+  TEST-RASTERBAR-LOCKSTEP-001: tests\ViceSharp.TestHarness\RasterBarLockstepTests.cs
+  TEST-RUNLOG-PARITY-001: tests\ViceSharp.TestHarness\SnapshotResumeCpuStateTests.cs, tests\ViceSharp.TestHarness\SnapshotRunLogParityTests.cs
+  TEST-SID-8580-01: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-02: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-03: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-04: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-05: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-06: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-07: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-08: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-09: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-10: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-8580-11: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs
+  TEST-SID-CLOCK-01: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-CLOCK-02: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-CLOCK-03: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-CLOCK-04: tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  TEST-SID-CLOCK-05: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-CLOCK-06: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-CLOCK-07: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-CLOCK-08: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-CLOCK-09: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-CLOCK-10: tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  TEST-SID-CLOCK-11: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-01: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-02: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-03: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-04: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-05: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-06: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-07: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-CUTOFFDAC-08: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-DATABUS-01: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-02: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-03: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-04: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-05: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-06: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-07: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-08: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-09: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-DATABUS-10: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-ENV-01: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-02: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-03: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-04: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-05: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-06: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-07: tests\ViceSharp.TestHarness\ParityAcAttribute.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-ENV-08: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-ENV-09: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-10: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-11: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-12: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-13: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-14: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-15: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-16: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-17: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-18: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-19: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-20: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-21: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-22: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-23: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-24: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-25: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-26: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-27: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-28: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-29: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-30: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-31: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-32: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-33: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-34: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-35: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-36: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-37: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-38: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-39: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-40: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-41: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-42: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-43: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-44: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-45: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-46: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-47: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-48: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-49: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-50: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs
+  TEST-SID-ENV-51: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-52: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-53: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-ENV-54: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs
+  TEST-SID-EXTFILT-01: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-EXTFILT-02: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-EXTFILT-03: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-EXTFILT-04: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-EXTFILT-05: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-EXTFILT-06: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-EXTFILT-07: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs
+  TEST-SID-FILTER-6581-01: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-02: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-03: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-04: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-05: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-06: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-07: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-08: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-09: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-10: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-11: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-12: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-13: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-14: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-15: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-16: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-17: tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  TEST-SID-FILTER-6581-18: tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  TEST-SID-FILTER-6581-19: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  TEST-SID-FILTER-6581-20: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-21: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-22: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-23: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-24: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-25: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-26: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-27: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-28: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-29: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-6581-30: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-8580-01: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-02: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-03: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-04: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-05: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-06: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-07: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-08: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-09: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-10: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-11: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-12: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-13: tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-8580-14: tests\ViceSharp.TestHarness\SidChamberlinRetirementTests.cs, tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs
+  TEST-SID-FILTER-CLOCK-01: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-CLOCK-02: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-CLOCK-03: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-CLOCK-04: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-FILTER-CLOCK-05: tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs
+  TEST-SID-MIXVOL-01: tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-02: tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  TEST-SID-MIXVOL-03: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-04: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-05: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-06: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-07: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-08: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-09: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-10: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-11: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-12: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-MIXVOL-13: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-ORACLE-P0-01: tests\ViceSharp.TestHarness\SidExactOracleTests.cs
+  TEST-SID-ORACLE-P0-02: tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidExactOracleTests.cs
+  TEST-SID-ORACLE-P0-03: tests\ViceSharp.TestHarness\SidExactOracleTests.cs
+  TEST-SID-ORACLE-P0-04: tests\ViceSharp.TestHarness\SidExactOracleTests.cs
+  TEST-SID-OSC3ENV3-01: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-OSC3ENV3-02: tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-OSC3ENV3-03: tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-OSC3ENV3-04: tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-OSC3ENV3-05: tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-OSC3ENV3-06: tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-OSC3ENV3-07: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-OSC3ENV3-08: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-OSC3ENV3-09: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-OSC3ENV3-10: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-OSC3ENV3-11: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-OUTPUT-01: tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TEST-SID-OUTPUT-02: tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TEST-SID-OUTPUT-03: tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TEST-SID-OUTPUT-04: tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TEST-SID-OUTPUT-05: tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TEST-SID-OUTPUT-06: tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TEST-SID-OUTPUT-07: tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TEST-SID-OUTPUT-08: tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TEST-SID-OUTPUT-09: tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TEST-SID-OUTPUT-10: tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TEST-SID-OUTPUT-11: tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TEST-SID-OUTPUT-12: tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TEST-SID-OUTPUT-13: tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TEST-SID-POT-01: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-POT-02: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-POT-03: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-POT-04: tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs
+  TEST-SID-VOICE-01: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-VOICE-02: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-VOICE-03: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-VOICE-04: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-VOICE-05: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-VOICE-06: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-VOICE-07: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-VOICE-08: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-VOICE-09: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-VOICE-10: tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs
+  TEST-SID-VOICE-11: tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TEST-SID-WAVE-ACC-01: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-ACC-02: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-ACC-03: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-ACC-04: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-ACC-05: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-ACC-06: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-01: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-02: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-03: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-04: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-05: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-06: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-07: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-08: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-09: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-10: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-11: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-12: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-13: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-14: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-15: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-16: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-COMBINED-17: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-01: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-02: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-03: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-04: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-05: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-06: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-07: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-08: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-09: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-10: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-DACRES-11: tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-01: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-NOISE-02: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-NOISE-03: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-NOISE-04: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-NOISE-05: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-06: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-07: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-08: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-09: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-10: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-11: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-NOISE-12: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-13: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-14: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-15: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-16: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-17: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-18: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-NOISE-19: tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs
+  TEST-SID-WAVE-PULSE-01: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-PULSE-02: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-PULSE-03: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-PULSE-04: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-PULSE-05: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-PULSE-06: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-PULSE-07: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-RING-01: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-RING-02: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-RING-03: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-RING-04: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-SAWTRI-01: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-SAWTRI-02: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-SAWTRI-03: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-SAWTRI-04: tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs
+  TEST-SID-WAVE-SYNC: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-SYNC-01: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-SYNC-02: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-SYNC-03: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-SYNC-04: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-SYNC-05: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-SYNC-06: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-TESTBIT-01: tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidTopFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs
+  TEST-SID-WAVE-TESTBIT-02: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-TESTBIT-03: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-TESTBIT-04: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-TESTBIT-05: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-TESTBIT-06: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WAVE-TESTBIT-07: tests\ViceSharp.TestHarness\SidWaveformFaithfulParityTests.cs
+  TEST-SID-WAVE-TESTBIT-08: tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs
+  TEST-SID-WIRING-P0-01: tests\ViceSharp.TestHarness\SidFactoryTests.cs
+  TEST-SID-WIRING-P0-02: tests\ViceSharp.TestHarness\SidFactoryTests.cs
+  TEST-SIDAUDIO-001: src\ViceSharp.Chips\Audio\Sid6581.cs, tests\ViceSharp.TestHarness\Audio\SidAudioPumpTests.cs, tests\ViceSharp.TestHarness\SidClockRateTests.cs
+  TEST-SIDAUDIO-002: tests\ViceSharp.TestHarness\Audio\SidAudioWiringTests.cs
+  TEST-SIDEBARUI-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs
+  TEST-SNDREG-001: tests\ViceSharp.TestHarness\ViceGateSoundRegulatorTests.cs
+  TEST-SYSBTN-001: tests\ViceSharp.TestHarness\Xbox\XboxSystemButtonsBindingTests.cs
+  TEST-SYSBTN-002: src\ViceSharp.Xbox.Input\AppCommandDispatcher.cs, tests\ViceSharp.TestHarness\Xbox\XboxAppCommandDispatcherTests.cs
+  TEST-SYSBTN-003: tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs
+  TEST-SYSINDEP-001: src\ViceSharp.Host.InProcess\Services\ViceEmulationGate.cs, tests\ViceSharp.TestHarness\C1541\TrueDrivePumpPathLoadTests.cs, tests\ViceSharp.TestHarness\InterSystemBusEdgeOrderingTests.cs, tests\ViceSharp.TestHarness\SemaphoreEmulationGatePacingTests.cs, tests\ViceSharp.TestHarness\ViceEmulationGatePacingTests.cs
+  TEST-TESTGATE-009: tests\ViceSharp.TestHarness\Xbox\XboxTestConventionTests.cs
+  TEST-TICKHIST-001: tests\ViceSharp.TestHarness\TickHistoryCaptureTests.cs, tests\ViceSharp.TestHarness\TickHistoryRecorderTests.cs, tests\ViceSharp.TestHarness\TickHistoryViewModelTests.cs
+  TEST-TICKHIST-002: tests\ViceSharp.TestHarness\TickHistoryCaptureTests.cs
+  TEST-UI-SPEEDCYCLE-01: tests\ViceSharp.TestHarness\SpeedCycleButtonTests.cs
+  TEST-UI-SPEEDCYCLE-02: tests\ViceSharp.TestHarness\SpeedCycleButtonTests.cs
+  TEST-UI-SPEEDCYCLE-03: tests\ViceSharp.TestHarness\SpeedCycleButtonTests.cs
+  TEST-UI-SPEEDCYCLE-04: tests\ViceSharp.TestHarness\SpeedCycleButtonTests.cs
+  TEST-UIDROP-001: tests\ViceSharp.TestHarness\ShellViewModelTests.cs
+  TEST-UIFLYOUT-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs
+  TEST-UIHOTKEY-001: tests\ViceSharp.TestHarness\MainWindowMenuTests.cs
+  TEST-UIMENUBAR-001: tests\ViceSharp.TestHarness\ShellViewModelTests.cs
+  TEST-UIPERIPHERAL-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Ui\RemoteControlUiInspectionTests.cs
+  TEST-UIPERSIST-001: tests\ViceSharp.TestHarness\Persistence\SessionPersistenceTests.cs
+  TEST-UIPERSIST-002: tests\ViceSharp.TestHarness\Persistence\AttachPanelPersistenceTests.cs
+  TEST-UISETTINGS-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs
+  TEST-VIC-BOOTSTART-01: tests\ViceSharp.TestHarness\VicIiDisplayStartParityTests.cs
+  TEST-VIC-BOOTSTART-02: tests\ViceSharp.TestHarness\VicIiDisplayStartParityTests.cs
+  TEST-VIC-BOOTSTART-03: tests\ViceSharp.TestHarness\VicIiDisplayStartParityTests.cs
+  TEST-VIC-BOOTSTART-04: tests\ViceSharp.TestHarness\VicIiBootFrameOracleParityTests.cs
+  TEST-VIC-BORDER-01: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-02: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-03: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-04: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-05: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-06: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-07: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-08: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-BORDER-09: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-BORDER-10: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-BORDER-11: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-BORDER-12: tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs
+  TEST-VIC-BORDER-13: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-BORDER-14: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-CYCLE-01: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-02: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-03: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-04: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-CYCLE-05: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-06: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-07: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-CYCLE-08: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-CYCLE-09: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-10: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-11: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-12: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIIBadLineTests.cs, tests\ViceSharp.TestHarness\VicIILightPenTests.cs, tests\ViceSharp.TestHarness\VicIISpriteDmaTests.cs
+  TEST-VIC-CYCLE-13: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-14: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-CYCLE-15: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-CYCLE-16: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-CYCLE-17: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-CYCLE-18: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-CYCLE-19: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-DISPLAYMODE-01: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DISPLAYMODE-02: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DISPLAYMODE-03: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DISPLAYMODE-04: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DISPLAYMODE-05: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DISPLAYMODE-06: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DISPLAYMODE-07: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DISPLAYMODE-08: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DISPLAYMODE-09: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-01: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-02: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-03: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-04: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-05: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-06: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-07: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-08: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-09: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-COLOR-10: tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs
+  TEST-VIC-DRAW-GFX-01: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-DRAW-GFX-02: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-DRAW-GFX-03: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-DRAW-GFX-04: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-DRAW-GFX-05: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-06: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-DRAW-GFX-07: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-08: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-09: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-10: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-11: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-12: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-13: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-DRAW-GFX-14: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-DRAW-GFX-15: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-ECMMASK-01: tests\ViceSharp.TestHarness\VicIiInvalidEcmMaskTests.cs
+  TEST-VIC-FETCH-01: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-02: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-03: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-FETCH-04: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-05: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-06: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-FETCH-07: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-08: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-FETCH-09: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-FETCH-10: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-11: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-12: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-13: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-FETCH-14: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-FETCH-15: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-IRQORDER-01: tests\ViceSharp.TestHarness\VicIiCollisionIrqOrderingParityTests.cs
+  TEST-VIC-IRQORDER-02: tests\ViceSharp.TestHarness\VicIiCollisionIrqOrderingParityTests.cs
+  TEST-VIC-IRQORDER-03: tests\ViceSharp.TestHarness\VicIiCollisionIrqOrderingParityTests.cs
+  TEST-VIC-LIGHTPEN-01: src\ViceSharp.Chips\VicIi\Mos6569.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-02: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-LIGHTPEN-03: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-04: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-LIGHTPEN-05: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-06: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-07: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-08: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-09: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-10: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-11: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-LIGHTPEN-12: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-LIGHTPEN-13: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LIGHTPEN-14: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-LPWIRE-01: tests\ViceSharp.TestHarness\VicIiLightPenWiringTests.cs
+  TEST-VIC-LPWIRE-02: tests\ViceSharp.TestHarness\VicIiLightPenWiringTests.cs
+  TEST-VIC-MATRIX-ADDR-01: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-MATRIX-ADDR-02: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-MATRIX-ADDR-03: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-MATRIX-ADDR-04: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-MATRIX-ADDR-05: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-MATRIX-ADDR-06: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-MATRIX-ADDR-07: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-MATRIX-ADDR-08: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-MATRIX-ADDR-09: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs
+  TEST-VIC-MATRIX-ADDR-10: tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs
+  TEST-VIC-MODELFETCH-01: tests\ViceSharp.TestHarness\VicIiModelFetchVariantTests.cs
+  TEST-VIC-MODELFETCH-02: tests\ViceSharp.TestHarness\VicIiModelFetchVariantTests.cs
+  TEST-VIC-MODELFETCH-03: tests\ViceSharp.TestHarness\VicIiModelFetchVariantTests.cs
+  TEST-VIC-NTSC-01: tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs
+  TEST-VIC-NTSC-02: tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs
+  TEST-VIC-NTSC-03: tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs
+  TEST-VIC-NTSC-04: tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs
+  TEST-VIC-ORACLE-P0-01: tests\ViceSharp.TestHarness\VicExactFrameOracleTests.cs
+  TEST-VIC-ORACLE-P0-02: tests\ViceSharp.TestHarness\VicExactFrameOracleTests.cs
+  TEST-VIC-ORACLE-P0-03: tests\ViceSharp.TestHarness\VicExactFrameOracleTests.cs
+  TEST-VIC-PALETTE-01: tests\ViceSharp.TestHarness\VicIiPaletteParityTests.cs
+  TEST-VIC-PALETTE-02: tests\ViceSharp.TestHarness\VicIiPaletteParityTests.cs
+  TEST-VIC-PALETTE-03: tests\ViceSharp.TestHarness\VicIiPaletteParityTests.cs
+  TEST-VIC-RASTER-IRQ-01: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-02: tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicIiCoreTimingTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-RASTER-IRQ-03: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-04: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-05: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-06: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-07: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-08: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-09: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-RASTER-IRQ-10: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-11: tests\ViceSharp.TestHarness\VicIiCoreTimingTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-RASTER-IRQ-12: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-RASTER-IRQ-13: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-01: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-02: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-03: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-04: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-05: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-06: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-07: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-08: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-09: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs
+  TEST-VIC-REGISTERS-10: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-REGISTERS-11: tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-REGISTERS-12: tests\ViceSharp.TestHarness\SpriteCollisionTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-REGISTERS-13: tests\ViceSharp.TestHarness\SpriteCollisionTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-REGISTERS-14: tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-REGISTERS-15: tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs
+  TEST-VIC-SNAPRESUME-01: tests\ViceSharp.TestHarness\VicIiSnapshotResumeCounterTests.cs
+  TEST-VIC-SPRITE-COLLISION-01: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-02: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-03: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-04: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-05: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-06: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-07: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-08: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-09: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-10: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-COLLISION-11: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-DMA-01: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-02: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-03: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-04: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-05: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-06: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-07: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-08: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-09: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-10: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-11: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-12: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-13: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-DMA-14: tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs
+  TEST-VIC-SPRITE-PRIORITY-01: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-PRIORITY-02: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-PRIORITY-03: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-PRIORITY-04: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-PRIORITY-05: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-PRIORITY-06: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-RENDER-01: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-02: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-03: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-04: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-05: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-RENDER-06: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-RENDER-07: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-RENDER-08: tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs
+  TEST-VIC-SPRITE-RENDER-09: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-10: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-11: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-12: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRITE-RENDER-13: tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TEST-VIC-SPRSTATE-01: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TEST-VIC-SPRSTATE-02: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TEST-VIC-SPRSTATE-03: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TEST-VIC-SPRSTATE-04: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TEST-VIC-SPRSTATE-05: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TEST-VIC-SPRXPOS-01: tests\ViceSharp.TestHarness\VicIiSpriteXposParityTests.cs
+  TEST-VIC-XSCROLL-01: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-XSCROLL-02: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-XSCROLL-03: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC-XSCROLL-04: tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs
+  TEST-VIC20-001: tests\ViceSharp.TestHarness\Vic20\Vic20PixelLockstep.cs
+  TEST-VIC20-CPU-05: tests\ViceSharp.TestHarness\Vic20\Vic20LockstepIsolationTests.cs
+  TEST-VIC20-CT-01: tests\ViceSharp.TestHarness\Vic20\Vic20CartInventoryTests.cs
+  TEST-VIC20-CT-05: tests\ViceSharp.TestHarness\FlashCart\Flash040EraseLatencyTests.cs
+  TEST-VIC20-CT-06: tests\ViceSharp.TestHarness\Vic20\UltimemParityTests.cs
+  TEST-VIC20-CT-07: tests\ViceSharp.TestHarness\Vic20\MegaCartParityTests.cs
+  TEST-VIC20-SD: tests\ViceSharp.TestHarness\Vic20\Vic20SoundLockstep.cs
+  TEST-VIC20-SD-01: tests\ViceSharp.TestHarness\Vic20\Vic20NativeAudioExportTests.cs
+  TEST-VIC20-VS-04: tests\ViceSharp.TestHarness\Vic20\Vic20VideoLockstep.cs
+  TEST-VICRENDER-001: tests\ViceSharp.TestHarness\RasterBarRendererTests.cs
+  TEST-XAUDIO-001: tests\ViceSharp.TestHarness\Xbox\XboxAudioBackendFactoryTests.cs
+  TEST-XAUDIO-001a: tests\ViceSharp.TestHarness\Xbox\XboxAudioWiringTests.cs
+  TEST-XAUDIO-001b: tests\ViceSharp.TestHarness\Xbox\XboxAudioWiringTests.cs
+  TEST-XAUDIO-002: tests\ViceSharp.TestHarness\Xbox\XAudio2AudioMathTests.cs
+  TEST-XAUDIO-003: tests\ViceSharp.TestHarness\Xbox\XboxAudioBackendFactoryTests.cs
+  TEST-XAUDIO-004: tests\ViceSharp.TestHarness\Xbox\XAudio2SourceVoiceBackendTests.cs
+  TEST-XBOXAOT-001: tests\ViceSharp.TestHarness\Xbox\XboxAotLinkTests.cs
+  TEST-XBOXCI-001: tests\ViceSharp.TestHarness\Xbox\XboxCiConfigTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxNukeConfigTests.cs
+  TEST-XBOXGPL-001: tests\ViceSharp.TestHarness\Xbox\XboxGplComplianceTests.cs
+  TEST-XBOXHEAD-034a: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadShellTests.cs
+  TEST-XBOXHEAD-034b: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadShellTests.cs
+  TEST-XBOXHEAD-034c: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadShellTests.cs
+  TEST-XBOXHEAD-034d: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadShellTests.cs
+  TEST-XBOXPKG-003: tests\ViceSharp.TestHarness\HostShells\XboxManifestTests.cs
+  TEST-XBOXTOPO-001a: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadTests.cs
+  TEST-XBOXTOPO-001b: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadTests.cs
+  TEST-XBOXTOPO-002: tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadTests.cs
+  TEST-XBOXUI-001: tests\ViceSharp.TestHarness\Xbox\NavigationViewModelTests.cs
+  TEST-XBOXUI-002a: tests\ViceSharp.TestHarness\Xbox\FocusMapBuilderTests.cs
+  TEST-XBOXUI-003: tests\ViceSharp.TestHarness\Xbox\InputContextObserverTests.cs
+  TEST-XBOXUI-004: tests\ViceSharp.TestHarness\Xbox\HostingSeamTests.cs
+  TEST-XBOXUI-005a: tests\ViceSharp.TestHarness\Xbox\VideoFramePullViewModelTests.cs
+  TEST-XBOXUI-005b: tests\ViceSharp.TestHarness\Xbox\VideoSurfacePureSinkBoundaryTests.cs
+  TEST-XBOXUI-006: src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs, tests\ViceSharp.TestHarness\Xbox\VirtualKeyboardViewModelTests.cs
+  TEST-XBOXUI-008: src\ViceSharp.Xbox.ViewModels\AboutViewModel.cs, tests\ViceSharp.TestHarness\Xbox\AboutViewModelTests.cs
+  TEST-XCART-001a: tests\ViceSharp.TestHarness\Xbox\XboxDefaultCartridgeTests.cs
+  TEST-XCART-001b: tests\ViceSharp.TestHarness\Xbox\XboxDefaultCartridgeTests.cs
+  TEST-XCART-001c: tests\ViceSharp.TestHarness\Xbox\XboxDefaultCartridgeTests.cs
+  TEST-XCART-001d: tests\ViceSharp.TestHarness\Xbox\XboxDefaultCartridgeTests.cs
+  TEST-XCART-001e: tests\ViceSharp.TestHarness\Xbox\XboxDefaultCartridgeTests.cs
+  TEST-XDEPLOY-001a: tests\ViceSharp.TestHarness\Xbox\XboxLocalDeployTargetTests.cs
+  TEST-XDEPLOY-001b: tests\ViceSharp.TestHarness\Xbox\XboxLocalDeployTargetTests.cs
+  TEST-XFONT-001a: tests\ViceSharp.TestHarness\Xbox\XboxC64FontTests.cs
+  TEST-XFONT-001b: tests\ViceSharp.TestHarness\Xbox\XboxC64FontTests.cs
+  TEST-XFONT-001c: tests\ViceSharp.TestHarness\Xbox\XboxC64FontTests.cs
+  TEST-XFONT-001d: tests\ViceSharp.TestHarness\Xbox\XboxC64FontTests.cs
+  TEST-XFPS-001a: tests\ViceSharp.TestHarness\Xbox\XboxVideoCadenceTests.cs
+  TEST-XFPS-001b: tests\ViceSharp.TestHarness\Xbox\XboxVideoCadenceTests.cs
+  TEST-XFPS-001c: tests\ViceSharp.TestHarness\Xbox\XboxVideoCadenceTests.cs
+  TEST-XKBD-001: src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs, tests\ViceSharp.TestHarness\Xbox\VirtualKeyboardViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxRestoreSeamTests.cs
+  TEST-XKBD-K1a: tests\ViceSharp.TestHarness\Xbox\XboxAuthenticKeyboardTests.cs
+  TEST-XKBD-K1b: tests\ViceSharp.TestHarness\Xbox\XboxAuthenticKeyboardTests.cs
+  TEST-XKBD-K1c: tests\ViceSharp.TestHarness\Xbox\XboxAuthenticKeyboardTests.cs
+  TEST-XKBD-K1d: tests\ViceSharp.TestHarness\Xbox\XboxAuthenticKeyboardTests.cs
+  TEST-XKBDIN-001a: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardInputTests.cs
+  TEST-XKBDIN-001b: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardInputTests.cs
+  TEST-XKBDIN-001c: tests\ViceSharp.TestHarness\Xbox\XboxAppCommandDispatcherTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxKeyboardInputTests.cs
+  TEST-XKBDIN-001d: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardInputTests.cs
+  TEST-XKBDIN-001e: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardInputTests.cs
+  TEST-XKBDSTICKY-001a: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs
+  TEST-XKBDSTICKY-001b: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs
+  TEST-XKBDSTICKY-001c: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs
+  TEST-XKBDSTICKY-001d: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs
+  TEST-XKBDSTICKY-001e: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs
+  TEST-XKBDSTICKY-001f: tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs
+  TEST-XKEYCAP-001a: tests\ViceSharp.TestHarness\Xbox\XboxKeycapShiftTests.cs
+  TEST-XKEYCAP-001b: tests\ViceSharp.TestHarness\Xbox\XboxKeycapShiftTests.cs
+  TEST-XKEYCAP-001c: tests\ViceSharp.TestHarness\Xbox\XboxKeycapShiftTests.cs
+  TEST-XKEYCAPSTYLE-001a: tests\ViceSharp.TestHarness\Xbox\XboxMenuFocusAndKeycapStyleTests.cs
+  TEST-XKEYCAPSTYLE-001b: tests\ViceSharp.TestHarness\Xbox\XboxMenuFocusAndKeycapStyleTests.cs
+  TEST-XKEYGLYPH-001a: tests\ViceSharp.TestHarness\Xbox\XboxKeycapPetsciiGlyphTests.cs
+  TEST-XKEYGLYPH-001b: tests\ViceSharp.TestHarness\Xbox\XboxKeycapPetsciiGlyphTests.cs
+  TEST-XKEYGLYPH-001c: tests\ViceSharp.TestHarness\Xbox\XboxKeycapPetsciiGlyphTests.cs
+  TEST-XKEYGLYPH-001d: tests\ViceSharp.TestHarness\Xbox\XboxKeycapPetsciiGlyphTests.cs
+  TEST-XKEYGLYPH-001e: tests\ViceSharp.TestHarness\Xbox\XboxKeycapPetsciiGlyphTests.cs
+  TEST-XMENUFOCUS-001a: tests\ViceSharp.TestHarness\Xbox\XboxMenuFocusAndKeycapStyleTests.cs
+  TEST-XMENUFOCUS-001b: tests\ViceSharp.TestHarness\Xbox\XboxMenuFocusAndKeycapStyleTests.cs
+  TEST-XMENUPAUSE-001a: tests\ViceSharp.TestHarness\Xbox\XboxMenuPauseTests.cs
+  TEST-XMENUSUB-001a: tests\ViceSharp.TestHarness\Xbox\XboxMenuSubpageTests.cs
+  TEST-XMENUSUB-001b: tests\ViceSharp.TestHarness\Xbox\XboxMenuSubpageTests.cs
+  TEST-XMENUSUB-001c: tests\ViceSharp.TestHarness\Xbox\XboxMenuSubpageTests.cs
+  TEST-XPERFHUD-001a: tests\ViceSharp.TestHarness\Xbox\XboxPerfStatsTests.cs
+  TEST-XPERFHUD-001b: tests\ViceSharp.TestHarness\Xbox\XboxPerfStatsTests.cs
+  TEST-XPERFHUD-001c: tests\ViceSharp.TestHarness\Xbox\XboxPerfStatsTests.cs
+  TEST-XPERFHUD-001d: tests\ViceSharp.TestHarness\Xbox\XboxPerfStatsTests.cs
+  TEST-XSET-001: tests\ViceSharp.TestHarness\Xbox\RomProvisionEvaluatorTests.cs, tests\ViceSharp.TestHarness\Xbox\SettingsOptionCatalogTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxComputerModelPickerTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxDeviceSetupViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxRomProvisioningViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs
+  TEST-XSETPERSIST-001a: tests\ViceSharp.TestHarness\Xbox\XboxSettingsPersistenceTests.cs
+  TEST-XSETPERSIST-001b: tests\ViceSharp.TestHarness\Xbox\XboxSettingsPersistenceTests.cs
+  TEST-XSETPERSIST-001c: tests\ViceSharp.TestHarness\Xbox\XboxSettingsPersistenceTests.cs
+  TEST-XSNAP-001a: tests\ViceSharp.TestHarness\Xbox\XboxMachineSnapshotTests.cs
+  TEST-XSNAP-001b: tests\ViceSharp.TestHarness\Xbox\XboxMachineSnapshotTests.cs
+  TEST-XSNAP-001c: tests\ViceSharp.TestHarness\Xbox\XboxMachineSnapshotTests.cs
+  TEST-XSNAP-001d: tests\ViceSharp.TestHarness\Xbox\XboxMachineSnapshotTests.cs
+  TEST-XSTORE-001a: tests\ViceSharp.TestHarness\Xbox\XboxStorePipelineTests.cs
+  TEST-XSTORE-001b: tests\ViceSharp.TestHarness\Xbox\XboxStorePipelineTests.cs
+  TEST-XSTORE-001c: tests\ViceSharp.TestHarness\Xbox\XboxStorePipelineTests.cs
+  TEST-XSTORE-001d: tests\ViceSharp.TestHarness\Xbox\XboxStorePipelineTests.cs
+  TEST-XVIDEO-001: tests\ViceSharp.TestHarness\Xbox\VideoFramePullViewModelTests.cs
+  TEST-XVIDEO-002: tests\ViceSharp.TestHarness\Xbox\VideoFramePullViewModelTests.cs
+  TEST-XVIDEO-ASPECT-001a: tests\ViceSharp.TestHarness\Xbox\XboxVideoAspectTests.cs
+  TEST-XVIDEO-ASPECT-001b: tests\ViceSharp.TestHarness\Xbox\XboxVideoAspectTests.cs
+  TEST-XVIDEO-ASPECT-001c: tests\ViceSharp.TestHarness\Xbox\XboxVideoAspectTests.cs
+  TEST-XVIDEO-ASPECT-001d: tests\ViceSharp.TestHarness\Xbox\XboxVideoAspectTests.cs
+  TEST-XVIDEO-IID-001a: tests\ViceSharp.TestHarness\Xbox\XboxVideoSurfaceInteropTests.cs
+  TEST-XVIDEO-IID-001b: src\ViceSharp.Xbox\Controls\VideoSurfaceHost.cs, tests\ViceSharp.TestHarness\Xbox\XboxVideoSurfaceInteropTests.cs
+  TEST-XVIDEO-SCALE-001: tests\ViceSharp.TestHarness\Xbox\XboxVideoSurfaceInteropTests.cs
+  TEST-bit: tests\ViceSharp.TestHarness\SidEngineParityTests.cs, tests\ViceSharp.TestHarness\SidVoiceMixDivergentParityTests.cs
+  TR-ARCH-ADHOC-CONSOLE: tests\ViceSharp.TestHarness\AdhocMachine\ConsoleAdhocCliTests.cs
+  TR-ARCH-ADHOC-HELPER-VM: tests\ViceSharp.TestHarness\AdhocHelper\AdhocHelperViewModelTests.cs
+  TR-ARCH-ADHOC-VALIDATION: tests\ViceSharp.TestHarness\AdhocMachine\AdhocMachineYamlLoaderTests.cs
+  TR-ARCH-ADHOC-YAML: tests\ViceSharp.TestHarness\AdhocMachine\AdhocMachineYamlLoaderTests.cs
+  TR-AUDIO-PACE-001: tests\ViceSharp.TestHarness\DemoWorkloadSpeedDiagTests.cs, tests\ViceSharp.TestHarness\EmulationPipelineSpeedDiagTests.cs, tests\ViceSharp.TestHarness\LiveDeployedAppSettingsBisectTests.cs, tests\ViceSharp.TestHarness\LiveDeployedAppSpeedProbeTests.cs, tests\ViceSharp.TestHarness\WinMmAudioThroughputDiagTests.cs
+  TR-AUDIO-SPEED-001: src\ViceSharp.Avalonia\ViewModels\AttachPanelViewModel.cs, tests\ViceSharp.TestHarness\LiveLimiterBandProbeTests.cs, tests\ViceSharp.TestHarness\SidRelativeSpeedTests.cs, tests\ViceSharp.TestHarness\SpeedCycleButtonTests.cs, tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs
+  TR-AUDIO-WARP-001: src\ViceSharp.Chips\Audio\Sid6581.cs, src\ViceSharp.Host.InProcess\Runtime\EmulatorRuntimeSession.cs, tests\ViceSharp.TestHarness\SidLiveSamplingTests.cs, tests\ViceSharp.TestHarness\WarpAudioDiscardTests.cs, tests\ViceSharp.TestHarness\WarpModeTests.cs
+  TR-AUDIOOUT-MASTER-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Audio\MasterAudioControlTests.cs
+  TR-C64-BASIC-READY: tests\ViceSharp.TestHarness\BasicBootProofTests.cs
+  TR-C64-RESET-VECTOR: tests\ViceSharp.TestHarness\BasicBootProofTests.cs
+  TR-CFG: tests\ViceSharp.TestHarness\Xbox\XboxUiStateStoreTests.cs
+  TR-CHIPSTATE-CAPTURE-001: tests\ViceSharp.TestHarness\TickHistoryRecorderTests.cs
+  TR-CORE-CYCLE-001: tests\ViceSharp.TestHarness\BasicBusAndSimpleRamTests.cs, tests\ViceSharp.TestHarness\BenchmarksSmokeTests.cs, tests\ViceSharp.TestHarness\VideoRendererTests.cs
+  TR-CORE-DET-001: tests\ViceSharp.TestHarness\BasicBusAndSimpleRamTests.cs
+  TR-CPU-TICK-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\CpuRateMetricTests.cs, tests\ViceSharp.TestHarness\CpuRosterTests.cs, tests\ViceSharp.TestHarness\CpuTickCounterTests.cs, tests\ViceSharp.TestHarness\PerCpuRateMappingTests.cs, tests\ViceSharp.TestHarness\PerCpuRateTests.cs
+  TR-CTX-001: src\ViceSharp.Xbox.Input\XboxInputContext.cs, tests\ViceSharp.TestHarness\Xbox\XboxInputContextMachineTests.cs
+  TR-CYCLE-PACE-001: tests\ViceSharp.TestHarness\ClockThroughputBenchmarkTests.cs, tests\ViceSharp.TestHarness\LocalVideoFrameSourceTests.cs, tests\ViceSharp.TestHarness\WarpModeTests.cs
+  TR-Cycle-Accuracy: tests\ViceSharp.TestHarness\SystemClockTests.cs
+  TR-DRVLIFE-001: tests\ViceSharp.TestHarness\C1541\CoordinatorMachineTests.cs, tests\ViceSharp.TestHarness\IecHotPlugTests.cs, tests\ViceSharp.TestHarness\Wiring\ArchitectureBuilderIecBusTests.cs, tests\ViceSharp.TestHarness\Wiring\C1541DriveLedTests.cs
+  TR-Determinism: tests\ViceSharp.TestHarness\SidDeterminismTests.cs
+  TR-GAMEPAD-001: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  TR-GAMEPAD-002: tests\ViceSharp.TestHarness\Xbox\GamepadDataShapeTests.cs
+  TR-GAMEPAD-003: src\ViceSharp.Xbox.Input\StickConverter.cs, src\ViceSharp.Xbox.Input\XboxJoystickMapper.cs, tests\ViceSharp.TestHarness\Xbox\GamepadConverterTests.cs, tests\ViceSharp.TestHarness\Xbox\GamepadMergeSocdTests.cs, tests\ViceSharp.TestHarness\Xbox\GamepadProfileTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs
+  TR-HOST-AFFINITY-001: src\ViceSharp.Avalonia\MainWindow.axaml.cs, src\ViceSharp.Host.InProcess\Services\EmulationPumpService.cs, src\ViceSharp.Host.InProcess\Services\ThreadAffinity.cs, tests\ViceSharp.TestHarness\ThreadAffinityTests.cs
+  TR-HOST-SESSIONHEAL-001: src\ViceSharp.Avalonia\Host\GrpcHostProtocolClient.cs, tests\ViceSharp.TestHarness\GrpcSessionLossRecoveryTests.cs
+  TR-Host-Status: tests\ViceSharp.TestHarness\HostShells\XboxHostShellTests.cs, tests\ViceSharp.TestHarness\HostShells\XboxUwpHeadTests.cs
+  TR-IECBUS-OBSERV-001: tests\ViceSharp.TestHarness\InterSystemBusSnapshotTests.cs
+  TR-IECTRACE-001: tests\ViceSharp.TestHarness\IecBusTraceRecorderTests.cs
+  TR-INPROC: tests\ViceSharp.TestHarness\Xbox\XboxDataPathBridgeTests.cs
+  TR-INPROC-001: tests\ViceSharp.TestHarness\HostShells\HostInProcessExtractionTests.cs
+  TR-INPROC-002: src\ViceSharp.Host.InProcess\Runtime\ConsoleEmulatorHost.cs, tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxManagedFrameGateTests.cs
+  TR-INPROC-003: src\ViceSharp.Host.InProcess\Runtime\ConsoleEmulatorHost.cs, tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs
+  TR-INPROC-005: src\ViceSharp.Host.InProcess\Runtime\ConsoleEmulatorHost.cs, tests\ViceSharp.TestHarness\Xbox\ConsoleEmulatorHostTests.cs
+  TR-INPUT-JOY-001: tests\ViceSharp.TestHarness\C64JoystickPortTests.cs
+  TR-LOCKSTEP-100: tests\ViceSharp.TestHarness\LockstepValidationTests.cs
+  TR-LOCKSTEP-100K: tests\ViceSharp.TestHarness\LockstepValidationTests.cs
+  TR-LOCKSTEP-10K: tests\ViceSharp.TestHarness\LockstepValidationTests.cs
+  TR-LOCKSTEP-RESET: tests\ViceSharp.TestHarness\LockstepValidationTests.cs
+  TR-LOCKSTEP-VSF-001: src\ViceSharp.Abstractions\IViceNative.cs, src\ViceSharp.Chips\Cia\CiaSnapshotState.cs, src\ViceSharp.Chips\Cia\Mos6526.cs, src\ViceSharp.Chips\Cpu\Mos6502.cs, src\ViceSharp.Chips\Cpu\Mos6502.Opcodes.cs, src\ViceSharp.Chips\VicIi\Mos6569.State.cs, src\ViceSharp.Chips\VicIi\VicSnapshotState.cs, src\ViceSharp.Core\ViceNative.cs, src\ViceSharp.Host.InProcess\Runtime\MachineSnapshotStager.cs, tests\ViceSharp.TestHarness\CaptureRunLogUtilityTests.cs, tests\ViceSharp.TestHarness\CpuInterruptTests.cs, tests\ViceSharp.TestHarness\CpuRunLog.cs, tests\ViceSharp.TestHarness\LockstepValidator.cs, tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs, tests\ViceSharp.TestHarness\RasterBarGroundTruthTests.cs, tests\ViceSharp.TestHarness\RasterBarLockstepTests.cs, tests\ViceSharp.TestHarness\SnapshotResumeCpuStateTests.cs, tests\ViceSharp.TestHarness\SnapshotResumeSpikeTests.cs, tests\ViceSharp.TestHarness\SnapshotRunLogParityTests.cs, tests\ViceSharp.TestHarness\ViceNativeBridge.cs, tests\ViceSharp.TestHarness\VicIiCoreTimingTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMachineSnapshotTests.cs
+  TR-MED-OVL-001: tests\ViceSharp.TestHarness\StatsOverlayRendererTests.cs
+  TR-MEDIA-SOUND-001: tests\ViceSharp.TestHarness\CaptureServiceHostTests.cs, tests\ViceSharp.TestHarness\Media\CaptureAudioTapTests.cs
+  TR-MEDIA-VIDEO-001: tests\ViceSharp.TestHarness\CaptureServiceHostTests.cs
+  TR-MEDIA-VIDEO-FFMPEG-001: tests\ViceSharp.TestHarness\CaptureServiceHostTests.cs, tests\ViceSharp.TestHarness\Media\FfmpegEncodingTests.cs, tests\ViceSharp.TestHarness\Media\FfmpegVideoRecorderTests.cs, tests\ViceSharp.TestHarness\SnapshotRunLogParityTests.cs
+  TR-MEM-PAGE-001: tests\ViceSharp.TestHarness\C64MemoryMapPageDispatchTests.cs
+  TR-MEM-PAGE-002: tests\ViceSharp.TestHarness\C64MemoryMapPageDispatchTests.cs
+  TR-MEM-PAGE-003: tests\ViceSharp.TestHarness\C64MemoryMapPageDispatchTests.cs
+  TR-MEM-PAGE-004: tests\ViceSharp.TestHarness\C64MemoryMapPageDispatchTests.cs
+  TR-MONITOR-DISASM-001: src\ViceSharp.Monitor\Mos6502Disassembler.cs, tests\ViceSharp.TestHarness\LiveHandlerTraceTests.cs, tests\ViceSharp.TestHarness\Mos6502DisassemblerTests.cs
+  TR-MONITOR-DISASM-COLUMN: tests\ViceSharp.TestHarness\DeterministicTraceLoggerTests.cs
+  TR-PACESEL-STRAT-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\PacingStrategySelectionTests.cs, tests\ViceSharp.TestHarness\SemaphoreEmulationGatePacingTests.cs, tests\ViceSharp.TestHarness\SettingsServiceHostTests.cs
+  TR-PARITY-GATE-001: tests\ViceSharp.TestHarness\ParityAcAttribute.cs, tests\ViceSharp.TestHarness\ParityCoverageManifestTests.cs, tests\ViceSharp.TestHarness\VicBorderDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicBorderIrqFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicColorDisplayModeDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicCycleFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicDrawSpriteFaithfulParityTests.cs, tests\ViceSharp.TestHarness\VicGraphicsPipelineDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicIrqRegsLightpenDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicSpriteDmaDivergentParityTests.cs, tests\ViceSharp.TestHarness\VicSpriteRenderDivergentParityTests.cs
+  TR-PERF-ALLOC-001: tests\ViceSharp.TestHarness\BenchmarksSmokeTests.cs
+  TR-PERF-HARNESS: tests\ViceSharp.TestHarness\BenchmarksSmokeTests.cs, tests\ViceSharp.TestHarness\ClockThroughputBenchmarkTests.cs
+  TR-PICKER-PAUSE-001: tests\ViceSharp.TestHarness\MainWindowMenuTests.cs
+  TR-PUBSUB-CPU-001: tests\ViceSharp.TestHarness\CpuInstructionCompletedEventTests.cs
+  TR-PUBSUB-PERFORMANCE: tests\ViceSharp.TestHarness\DoubleBufferedMutationQueueTests.cs, tests\ViceSharp.TestHarness\LockFreePubSubTests.cs
+  TR-QA-NATIVE-COLLECTION-CONVENTION: tests\ViceSharp.TestHarness\NativeCollectionConventionTests.cs
+  TR-QA-TESTSILENCE-001: tests\ViceSharp.TestHarness\Audio\AssemblyAudioSilence.cs, tests\ViceSharp.TestHarness\Audio\TestSilenceRatchetTests.cs, tests\ViceSharp.TestHarness\Audio\WindowsAudioSessionMute.cs, tests\ViceSharp.TestHarness\Audio\WindowsAudioSessionMuteTests.cs
+  TR-QA-XMLDOCS-CONVENTION: tests\ViceSharp.TestHarness\XmlDocsConventionTests.cs
+  TR-ROMM-BOUNDARY-001: src\ViceSharp.Library.ViewModels\IRomMDiscovery.cs, src\ViceSharp.Library.ViewModels\IRomMLibraryGateway.cs, tests\ViceSharp.Library.Tests\Boundary\LibraryViewModelsBoundaryTests.cs
+  TR-ROMM-JSON-001: src\ViceSharp.RomM\RomMBridgeDtos.cs, src\ViceSharp.RomM\RomMCollectionDtos.cs, src\ViceSharp.RomM\RomMCollectionsGateway.cs, src\ViceSharp.RomM\RomMJsonContext.cs, src\ViceSharp.RomM\RomMLibraryGateway.cs, tests\ViceSharp.Library.Tests\Adapter\RomMJsonContextTests.cs
+  TR-ROMM-NUGET-001: tests\ViceSharp.Library.Tests\Packaging\DirectoryPackagesTests.cs, tests\ViceSharp.Library.Tests\Packaging\NuGetConfigTests.cs
+  TR-ROMM-THREAD-001: src\ViceSharp.Library.ViewModels\LibraryBrowseViewModel.cs, src\ViceSharp.Library.ViewModels\LibraryObservableObject.cs, tests\ViceSharp.Library.Tests\Threading\LibraryObservableObjectTests.cs
+  TR-SID-AMPLIFY-001: tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs, tests\ViceSharp.TestHarness\SidOutputAmplifyParityTests.cs
+  TR-SID-ORACLE-001: tests\ViceSharp.TestHarness\ChipsInternalsAccessTests.cs, tests\ViceSharp.TestHarness\SidCombinedDacresDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidEngineClockingProbeTests.cs, tests\ViceSharp.TestHarness\SidEngineParityTests.cs, tests\ViceSharp.TestHarness\SidEnvDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidEnvFaithfulParityTests.cs, tests\ViceSharp.TestHarness\SidExactOracleTests.cs, tests\ViceSharp.TestHarness\SidFactoryTests.cs, tests\ViceSharp.TestHarness\SidNoiseDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidSyncRingTestbitDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveCoreDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidWaveOsc3DivergentParityTests.cs, tests\ViceSharp.TestHarness\ViceNativeBridge.cs
+  TR-SID-ORACLE-002: tests\ViceSharp.TestHarness\Sid8580VariantParityTests.cs, tests\ViceSharp.TestHarness\SidBatchedClockParityTests.cs, tests\ViceSharp.TestHarness\SidDatabusPotDivergentParityTests.cs, tests\ViceSharp.TestHarness\SidFilter6581DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidFilter8580DivergentParityTests.cs, tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TR-SID-RESAMPLE-001: tests\ViceSharp.Benchmarks\SidSamplingBenchmarks.cs, tests\ViceSharp.TestHarness\SidLiveSamplingTests.cs, tests\ViceSharp.TestHarness\SidResampleDivergentParityTests.cs
+  TR-SID-VOICE3-READBACK: tests\ViceSharp.TestHarness\SidRegisterReadbackTests.cs
+  TR-SIDAUDIO-CLOCK-001: tests\ViceSharp.TestHarness\Audio\SidAudioPumpTests.cs, tests\ViceSharp.TestHarness\SidClockRateTests.cs
+  TR-SIDEBARUI-LAYOUT-001: tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs
+  TR-SNDREG-GATE-001: tests\ViceSharp.TestHarness\ViceGateSoundRegulatorTests.cs
+  TR-SYS-SCHED-001: tests\ViceSharp.TestHarness\C1541\TrueDrivePumpPathLoadTests.cs, tests\ViceSharp.TestHarness\IecBusActivityMonitorTests.cs, tests\ViceSharp.TestHarness\IecBusLinesGateTests.cs, tests\ViceSharp.TestHarness\IecMonitorViewModelTests.cs, tests\ViceSharp.TestHarness\InterSystemBusEdgeOrderingTests.cs, tests\ViceSharp.TestHarness\PerCpuRateMappingTests.cs, tests\ViceSharp.TestHarness\ViceEmulationGatePacingTests.cs
+  TR-SYSBTN-001: src\ViceSharp.Xbox.Input\XboxSystemButtons.cs, tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxSystemButtonsBindingTests.cs
+  TR-SYSBTN-002: src\ViceSharp.Xbox.Input\XboxSystemButtons.cs, tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxSystemButtonsBindingTests.cs
+  TR-System-Core: tests\ViceSharp.TestHarness\BasicBusAndSimpleRamTests.cs
+  TR-THREAD-NAME-001: tests\ViceSharp.TestHarness\ThreadNamingTests.cs
+  TR-TICKHIST-CAPTURE-001: tests\ViceSharp.TestHarness\TickHistoryCaptureTests.cs, tests\ViceSharp.TestHarness\TickHistoryRecorderTests.cs
+  TR-TICKHIST-PERF-001: tests\ViceSharp.TestHarness\TickHistoryCaptureTests.cs
+  TR-TICKHIST-RPC-001: tests\ViceSharp.TestHarness\TickHistoryCaptureTests.cs
+  TR-TICKHIST-UI-001: tests\ViceSharp.TestHarness\TickHistoryViewModelTests.cs
+  TR-UIAXAML-VIEWS-001: tests\ViceSharp.RemoteControlCli.Tests\RemoteControlCommandFactoryTests.cs, tests\ViceSharp.TestHarness\AttachPanelViewModelTests.cs, tests\ViceSharp.TestHarness\Ui\RemoteControlUiInspectionTests.cs
+  TR-UIHOTKEY-001: tests\ViceSharp.TestHarness\MainWindowMenuTests.cs
+  TR-VIC-BOOTSTART-001: tests\ViceSharp.TestHarness\VicIiBootFrameOracleParityTests.cs, tests\ViceSharp.TestHarness\VicIiDisplayStartParityTests.cs
+  TR-VIC-BOOTSTART-002: tests\ViceSharp.TestHarness\VicIiDisplayStartParityTests.cs
+  TR-VIC-ECMMASK-001: tests\ViceSharp.TestHarness\VicIiInvalidEcmMaskTests.cs
+  TR-VIC-EDGE-00X: tests\ViceSharp.TestHarness\VicIiCoreTimingTests.cs
+  TR-VIC-IRQORDER-001: tests\ViceSharp.TestHarness\VicIiCollisionIrqOrderingParityTests.cs
+  TR-VIC-LPWIRE-001: tests\ViceSharp.TestHarness\VicIiLightPenWiringTests.cs
+  TR-VIC-MODELFETCH-001: tests\ViceSharp.TestHarness\VicIiModelFetchVariantTests.cs
+  TR-VIC-MODELFETCH-002: tests\ViceSharp.TestHarness\VicIiModelFetchVariantTests.cs
+  TR-VIC-NTSC-001: tests\ViceSharp.TestHarness\VicIiNtscModelTimingTests.cs
+  TR-VIC-ORACLE-001: src\ViceSharp.Core\ViceNative.cs, tests\ViceSharp.TestHarness\ViceNativeBridge.cs, tests\ViceSharp.TestHarness\VicExactFrameOracleTests.cs, tests\ViceSharp.TestHarness\VicIIRegisterReadbackNativeTests.cs
+  TR-VIC-PALETTE-001: tests\ViceSharp.TestHarness\VicIiPaletteParityTests.cs
+  TR-VIC-SNAPRESUME-001: tests\ViceSharp.TestHarness\VicIiSnapshotResumeCounterTests.cs
+  TR-VIC-SPRSTATE-001: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TR-VIC-SPRSTATE-002: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TR-VIC-SPRSTATE-003: tests\ViceSharp.TestHarness\VicIiSpriteStateSideEffectTests.cs
+  TR-VIC-SPRXPOS-001: tests\ViceSharp.TestHarness\VicIiSpriteXposParityTests.cs
+  TR-VIC20-LOCKSTEP-001: tests\ViceSharp.TestHarness\Vic20\Vic20LockstepScaffoldTests.cs, tests\ViceSharp.TestHarness\Vic20\Vic20NativeLockstepTests.cs
+  TR-VSFLOCKSTEP-RESUME-001: tests\ViceSharp.TestHarness\NativeResidueDiagTests.cs
+  TR-X64SC-NOCART-BOOT: tests\ViceSharp.TestHarness\X64ScVariantLockstepTests.cs
+  TR-X64SC-PROFILE-COVERAGE: tests\ViceSharp.TestHarness\X64ScVariantLockstepTests.cs
+  TR-XAUDIO-001: src\ViceSharp.Host.InProcess\Audio\XAudio2AudioMath.cs, tests\ViceSharp.TestHarness\Xbox\XAudio2AudioMathTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxAudioBackendFactoryTests.cs
+  TR-XAUDIO-002: src\ViceSharp.Host.InProcess\Audio\ISourceVoiceDevice.cs, src\ViceSharp.Host.InProcess\Audio\XAudio2SourceVoiceBackend.cs, src\ViceSharp.Host.InProcess\Audio\XAudio2SourceVoiceDevice.cs, tests\ViceSharp.TestHarness\Xbox\XAudio2AudioMathTests.cs, tests\ViceSharp.TestHarness\Xbox\XAudio2SourceVoiceBackendTests.cs
+  TR-XAUDIO-003: tests\ViceSharp.TestHarness\Xbox\PortableAudioTypesLocationTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxAudioBackendFactoryTests.cs
+  TR-XBOXAOT-001: tests\ViceSharp.TestHarness\Xbox\XboxAotLinkTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxBindingPersistenceTests.cs
+  TR-XBOXAOT-003: tests\ViceSharp.TestHarness\Xbox\XboxAotLinkTests.cs
+  TR-XBOXCI-005: tests\ViceSharp.TestHarness\Xbox\XboxCiConfigTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxGplComplianceTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxNukeConfigTests.cs
+  TR-XBOXPKG-002: tests\ViceSharp.TestHarness\HostShells\XboxManifestTests.cs
+  TR-XBOXTOPO-003: tests\ViceSharp.TestHarness\Xbox\XboxTestConventionTests.cs
+  TR-XBOXUI-001: src\ViceSharp.Xbox.ViewModels\NavigationDestination.cs, src\ViceSharp.Xbox.ViewModels\NavigationViewModel.cs, tests\ViceSharp.TestHarness\Xbox\NavigationViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxAotBindingConventionTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMenuFocusAndKeycapStyleTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxMenuSubpageTests.cs
+  TR-XBOXUI-002: src\ViceSharp.Xbox.ViewModels\FocusMap.cs, src\ViceSharp.Xbox.ViewModels\FocusMapBuilder.cs, src\ViceSharp.Xbox.ViewModels\FocusNode.cs, tests\ViceSharp.TestHarness\Xbox\FocusMapBuilderTests.cs
+  TR-XBOXUI-003: src\ViceSharp.Xbox.Input\XboxInputContext.cs, src\ViceSharp.Xbox.ViewModels\InputContextObserver.cs, tests\ViceSharp.TestHarness\Xbox\InputContextObserverTests.cs
+  TR-XBOXUI-006: src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs, tests\ViceSharp.TestHarness\Xbox\VirtualKeyboardViewModelTests.cs
+  TR-XKBD-001: src\ViceSharp.Xbox.ViewModels\VirtualKeyboardViewModel.cs, tests\ViceSharp.TestHarness\Xbox\VirtualKeyboardViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxKeyboardStickyModifierTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxRestoreSeamTests.cs
+  TR-XMVVM-001: src\ViceSharp.Xbox.ViewModels\XboxDeviceSetupViewModel.cs, src\ViceSharp.Xbox.ViewModels\XboxMediaSlotViewModel.cs, src\ViceSharp.Xbox.ViewModels\XboxSettingsViewModel.cs, tests\ViceSharp.TestHarness\Xbox\XboxDeviceSetupViewModelTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxSettingsViewModelTests.cs
+  TR-XPATH-001: src\ViceSharp.Xbox.ViewModels\IRomAcquirer.cs, src\ViceSharp.Xbox.ViewModels\IStoragePicker.cs, src\ViceSharp.Xbox.ViewModels\PickedFile.cs, src\ViceSharp.Xbox.ViewModels\RomCatalog.cs, src\ViceSharp.Xbox.ViewModels\RomDownloadResult.cs, src\ViceSharp.Xbox.ViewModels\RomPresence.cs, src\ViceSharp.Xbox.ViewModels\RomProfile.cs, src\ViceSharp.Xbox.ViewModels\RomProvisionAssessment.cs, src\ViceSharp.Xbox.ViewModels\RomProvisionEvaluator.cs, src\ViceSharp.Xbox.ViewModels\RomProvisionState.cs, src\ViceSharp.Xbox.ViewModels\RomRole.cs, src\ViceSharp.Xbox.ViewModels\RomRoleStatus.cs, src\ViceSharp.Xbox.ViewModels\RomSpec.cs, src\ViceSharp.Xbox.ViewModels\XboxRomProvisioningViewModel.cs, src\ViceSharp.Xbox\RomProvisioning\RomFetchRomAcquirer.cs, tests\ViceSharp.TestHarness\Xbox\RomFetchRomAcquirerTests.cs, tests\ViceSharp.TestHarness\Xbox\RomProvisionEvaluatorTests.cs, tests\ViceSharp.TestHarness\Xbox\XboxRomProvisioningViewModelTests.cs
+  TR-XSET-002: src\ViceSharp.Protocol\SettingsOptionCatalog.cs, tests\ViceSharp.TestHarness\Xbox\SettingsOptionCatalogTests.cs
+  TR-per-FR-Mapping: tests\ViceSharp.AiReview.Tests\AiReviewTests.cs

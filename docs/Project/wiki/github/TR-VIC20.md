@@ -21,6 +21,18 @@
 
 ---
 
+## TR-VIC20-PIXEL-001: Pixel compare path index-primary then BGRA
+
+**ID:** TR-VIC20-PIXEL-001
+**Title:** Pixel compare path index-primary then BGRA
+
+Managed and xvic expose normal-border index/BGRA buffers at a common sync point. READY PAL/NTSC/busy index SequenceEqual is Exact-scoped. READY PAL, READY NTSC, and busy PAL native BGRA SequenceEqual vs xvic `capture_visible_frame` is also Exact-scoped (canvas RGB, opaque alpha; NTSC unpainted clamp rows opaque black). Other border modes remain Partial. Not whole-machine Exact.
+
+**Related FR:** FR-VIC20-001
+**Verification:** TEST-VIC20-001
+
+---
+
 ## TR-VIC20-SOUND-001: Deterministic clocked PCM batching
 
 **ID:** TR-VIC20-SOUND-001

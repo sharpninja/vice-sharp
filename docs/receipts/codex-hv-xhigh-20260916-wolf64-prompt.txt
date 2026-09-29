@@ -1,0 +1,50 @@
+You are Codex acting as an independent HOSTILE VALIDATOR (not the implementer).
+
+Model: gpt-6-astra. Reasoning effort: xhigh.
+Workspace: F:\GitHub\vice-sharp
+Scope: Implementer diagnosis and solution for (1) Wolf64 in-game color vs x64sc and (2) C64 lockstep mismatch while loading Wolf64.
+
+Default every claim to FAIL until YOU re-verify from the tree, VICE source, and tests. Do not trust chat.
+
+READ these files before scoring:
+- src/ViceSharp.Core/C64MemoryMap.cs (Write path around I/O vs $D800)
+- native/vice/vice/src/c64/c64meminit.c (c64meminit_io_config, config 4)
+- native/vice/vice/src/c64/c64memsc.c colorram_store / ram_store
+- src/ViceSharp.Chips/Cpu/Mos6502.cs TryExecuteCycleStagedBranchOpcode (taken BPL visible PC)
+- native/vice/vice/src/6510dtvcore.c BRANCH macro
+- native/vice/vice/src/c64/c64cpusc.c CLK_INC hosted EXPORT_REGISTERS
+- tests/ViceSharp.TestHarness/C64MemoryMapPageDispatchTests.cs Write_ColorRamRange_UsesRamWhenIoBankedOut
+- tests/ViceSharp.TestHarness/C64ColorRamPlaNativeTests.cs
+- tests/ViceSharp.TestHarness/LockstepValidator.cs Run() AdvanceTo / nativeDelta
+- git diff of those files vs HEAD
+
+CLAIMS TO ATTACK:
+
+C1. DIAGNOSIS color RAM: Wolf64 in-game $01=$24/$34 is PLA config 4. VICE c64meminit_io_config[4]=0 so CPU stores to $D800 use ram_store, not colorram_store. ViceSharp C64MemoryMap.Write previously always stored $D800-$DBFF into 4-bit _colorRam even when I/O was banked out, so RAM-under-IO never updated and VIC color RAM was clobbered. That explains ViceSharp dump $D800 only $00/$FF vs x64sc 8-bit RAM, with bitmap $A000 nearly matching.
+
+C2. SOLUTION color RAM: Removing the extra ColorRam write block so only WriteIo (when IsIoVisible) hits _colorRam is VICE-faithful ram_store. Tests Write_ColorRamRange_UsesRamWhenIoBankedOut and RamOnlyPla_D800Store_MatchesNativeRamPeek prove it. Implementer claims this slice is the correct fix for that store-path bug. Implementer does NOT claim Wolf64 playfield colors are visually verified after the fix.
+
+C3. DIAGNOSIS lockstep: Wolf64Disk lockstep with LOAD typed diverged at cycle 2029945. Both still BASIC ($D015=00 $D018=15). Instruction is KERNAL $EA0F BPL $EA07 after DEY in the space-fill loop (901227-03: A9 20 91 D1 88 10 F6 60). A/X/Y/S/P matched. Managed PC=$EA11 (fall-through) native PC=$EA0F (opcode). Previous sample nativeDelta=44 on a bad line (VIC x 11 to 55). This is taken-BPL visible-PC phase vs VICE BRANCH FETCH CLK still exporting opcode PC, not a wrong N flag and not Wolf64 game code.
+
+C4. SOLUTION lockstep attempted: else if (IsImpliedRegisterOrFlagOpcode(_previousOpcode)) { _visiblePC = _instructionPC; } on unstaged taken-branch cycle 0. Implementer claims this was a BAD solution: it immediately broke LockstepValidationTests.First10000CyclesMatch and First100000CyclesMatch at cycle 209 (managed PC=$FD5D expected $FD5F, KERNAL INY/BNE RAM fill). Narrowing to DEY-only (0x88) still failed Wolf64 lockstep at cycle 2003339 managed $FD2D native $FD2F (KERNAL DEY/BPL at $FD2D, native already at fall-through). Opposite PC export vs the $EA0F sample. Therefore a previous-opcode special case is not VICE-faithful.
+
+C5. CURRENT TREE: Mos6502.cs taken-branch visible PC path is REVERTED to fall-through for unstaged short taken BPL (no IsImpliedRegisterOrFlagOpcode / no DEY special case). git diff Mos6502.cs vs HEAD is empty. The implied-opcode patch is NOT shipped.
+
+C6. Implementer does NOT claim lockstep reached Wolf64 first in-game scene ($D015=$20). Implementer does NOT claim the BPL mismatch is fixed.
+
+C7. The implied-opcode special case would re-open previously solved 6510 visible-PC lockstep (First10000/First100000). Do not recommend restoring that exact condition.
+
+Do not modify product source. You MAY run tests. You MAY write the report file named below.
+
+OUTPUT:
+## Hostile validation
+Per-claim PASS|FAIL|UNKNOWN with evidence.
+OverallVerdict AGREE only if ALL applicable PASS else DISAGREE.
+Explicit FAIL list (none if empty).
+State whether the color-RAM diagnosis/solution is VICE-faithful.
+State whether the BPL diagnosis is correct, incomplete, or wrong.
+State a VICE-faithful next fix if you DISAGREE on C3/C4, without implementing it.
+Then === VERDICT JSON ===
+{"verdict":"AGREE|DISAGREE","fail_list":[],"color_ram":"AGREE|DISAGREE","bpl_diagnosis":"AGREE|DISAGREE|INCOMPLETE","implied_opcode_patch":"REJECT|ACCEPT"}
+
+Write the same report to docs/receipts/codex-hv-xhigh-20260916-wolf64-report.md

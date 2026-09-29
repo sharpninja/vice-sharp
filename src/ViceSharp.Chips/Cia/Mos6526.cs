@@ -56,6 +56,10 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
     public byte PortAExternalInputMask { get; set; }
     public byte PortAOutputLatch => _portA;
     public byte PortBOutputLatch => _portB;
+    /// <summary>ICR latch without the read-side ack (lockstep / unit tests).</summary>
+    public byte DebugInterruptFlags => _interruptFlags;
+    /// <summary>ICR enable mask without read-side effects (lockstep diagnostics).</summary>
+    public byte DebugInterruptMask => _interruptMask;
     public byte PortADataDirection => _portADir;
     public byte PortBDataDirection => _portBDir;
     public Action<byte>? PortAOutputChanged { get; set; }
@@ -88,6 +92,14 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
     private byte _interruptMask;
     private byte _interruptFlags;
     private bool _irqAsserted;
+    /// <summary>
+    /// VICE 6526A ifr_delay RAISE0: IRQ line rises the cycle after the flag
+    /// latches (ciacore.c cia_run_ifr_cycle / my_set_int(rclk+1)).
+    /// When ICR was read on the previous phi2 (rdi+1==rclk), VICE uses
+    /// RAISE1 (two-cycle delay). Wolf64 2076833 JSR $EA07.
+    /// </summary>
+    private int _irqLineRaiseDelay;
+    private int _cyclesSinceIcrRead = 100;
 
     // Serial Data Register ($DC0C / $DD0C) + SP shift state.
     // CRA bit 6 selects SP direction: 0 = input (CNT-driven, deferred
@@ -142,14 +154,22 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
             _todMinutes == _todAlarmMinutes && 
             _todHours == _todAlarmHours)
         {
-            _interruptFlags |= 0x04;
-            if ((_interruptMask & 0x04) != 0)
-                _irqLine.Assert(this);
+            SetInterruptFlag(0x04);
         }
     }
 
     public void Tick()
     {
+        if (_cyclesSinceIcrRead < 100)
+            _cyclesSinceIcrRead++;
+
+        if (_irqLineRaiseDelay > 0)
+        {
+            _irqLineRaiseDelay--;
+            if (_irqLineRaiseDelay == 0)
+                RefreshIrqLine();
+        }
+
         var timerAUnderflowed = TickTimer(ref _timerA);
         if (timerAUnderflowed)
             UnderflowTimerA();
@@ -209,6 +229,8 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         _interruptMask = 0;
         _interruptFlags = 0;
         _irqAsserted = false;
+        _irqLineRaiseDelay = 0;
+        _cyclesSinceIcrRead = 100;
         _sdr = 0;
         _sdrShiftRegister = 0;
         _sdrShiftCount = 0;
@@ -277,7 +299,13 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         _timerB.Counter = timerBCounter;
         _timerB.Latch = timerBLatch;
         _timerB.Control = (byte)(crb & 0xEF);
-        _timerB.Running = (crb & 0x01) != 0;
+        // VICE leaves the readable CRB start bit set after a one-shot timer
+        // stops. When a snapshot carries the counter at its reload latch, that
+        // combination represents the completed/stopped state, not a running
+        // timer (Wolf64 menu VSF: TB remains $04FF).
+        var timerBOneShotStoppedAtLatch =
+            (crb & 0x09) == 0x09 && timerBCounter == timerBLatch;
+        _timerB.Running = (crb & 0x01) != 0 && !timerBOneShotStoppedAtLatch;
         _timerB.LoadDelay = 0;
         _timerB.CountDelay = 0;
         _registers[0x0F] = _timerB.Control;
@@ -287,7 +315,30 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         RefreshIrqLine();
     }
 
-    public byte Peek(ushort address) => Read(address);
+    public byte Peek(ushort address)
+    {
+        // VICE peek does not ack ICR or latch TOD (ciacore.c read_icr is the
+        // CPU read path only). Lockstep dumps Peek $DC0D.
+        int register = (address - BaseAddress) & 0x0F;
+        return register switch
+        {
+            0x00 => ReadPortValue(_portA, _portADir, PortAInput, PortAExternalInputMask),
+            0x01 => ReadPortValue(_portB, _portBDir, PortBInput),
+            0x02 => _portADir,
+            0x03 => _portBDir,
+            0x04 => (byte)_timerA.Counter,
+            0x05 => (byte)(_timerA.Counter >> 8),
+            0x06 => (byte)_timerB.Counter,
+            0x07 => (byte)(_timerB.Counter >> 8),
+            0x08 => _todLatched ? _todLatchedTenths : _todTenths,
+            0x09 => _todLatched ? _todLatchedSeconds : _todSeconds,
+            0x0A => _todLatched ? _todLatchedMinutes : _todMinutes,
+            0x0B => _todLatched ? _todLatchedHours : _todHours,
+            0x0C => _sdr,
+            0x0D => (byte)(_interruptFlags | (((_interruptFlags & _interruptMask) != 0) ? 0x80 : 0x00)),
+            _ => _registers[register]
+        };
+    }
 
     public byte Read(ushort address)
     {
@@ -415,7 +466,7 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
                     _interruptMask |= (byte)(value & 0x7F);
                 else
                     _interruptMask &= (byte)(~value & 0x7F);
-                RefreshIrqLine();
+                ScheduleIrqLineFromFlags();
                 break;
         }
     }
@@ -451,27 +502,25 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         var forceLoad = (control & 0x10) != 0;
         if (forceLoad)
         {
-            timer.Counter = timer.Latch;
-            timer.LoadDelay = 0;
+            // VICE ciatimer: FLOAD sets LOAD1, the next clock sets LOAD,
+            // which copies latch into cnt (ciatimer.h ciat_init_table /
+            // ciat_update). Do not reload on the CRA/CRB write cycle
+            // (Wolf64 2060404 nTA=$0913 mTA=$4024 after KERNAL CRA=$11).
+            timer.LoadDelay = 2;
         }
 
         // Pipeline delay rules:
         //   * Fresh start (was stopped, now running): 2 cycles of count
         //     delay before the first decrement; +1 extra when force-load
-        //     is combined with the start because the reload itself burns
-        //     a cycle on real hardware.
-        //   * Already running + force-load only: counter continues
-        //     decrementing on the next phi2 with no extra delay (the
-        //     reload happened on the write cycle, and the running
-        //     pipeline is already primed).
-        //   * Stopped (bit 0 = 0): no count delay matters; the timer is
-        //     idle until the next start.
+        //     is combined with the start because VICE LOAD clears COUNT3.
+        //   * Already running + force-load: keep counting the old value
+        //     until LOAD; CountDelay stays 0 so the pre-load ticks still
+        //     decrement.
+        //   * Stopped (bit 0 = 0): no count delay; LOAD still fires.
         if (timer.Running)
         {
             if (!wasRunning)
-                timer.CountDelay = forceLoad ? 3 : 2;
-            else
-                timer.CountDelay = 0;
+                timer.CountDelay = 2;
         }
         else
         {
@@ -485,7 +534,13 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
         {
             timer.LoadDelay--;
             if (timer.LoadDelay == 0)
+            {
                 timer.Counter = timer.Latch;
+                // VICE LOAD clears COUNT3; COUNT2/COUNT3 must re-prime
+                // before the next decrement (Wolf64 2060406 nTA=$4025 mTA=$4024).
+                timer.CountDelay = 1;
+                return false;
+            }
         }
 
         if (!timer.Running)
@@ -656,15 +711,38 @@ public sealed partial class Mos6526 : IClockedDevice, IAddressSpace, IInterruptS
     private void SetInterruptFlag(byte flag)
     {
         _interruptFlags |= flag;
-        RefreshIrqLine();
+        ScheduleIrqLineFromFlags();
     }
 
     private byte ReadInterruptControlRegister()
     {
         var result = (byte)(_interruptFlags | (((_interruptFlags & _interruptMask) != 0) ? 0x80 : 0x00));
         _interruptFlags = 0;
-        RefreshIrqLine();
+        _irqLineRaiseDelay = 0;
+        _cyclesSinceIcrRead = 0;
+        // VICE read_icr: my_set_int(false) even if flags drain on ACK1.
+        // Always Release so a desynced _irqAsserted cannot leave the CPU
+        // IRQ line high (Wolf64 2208208 nirq never returned to 0).
+        _irqAsserted = false;
+        _irqLine.Release(this);
         return result;
+    }
+
+    private void ScheduleIrqLineFromFlags()
+    {
+        var shouldAssert = (_interruptFlags & _interruptMask) != 0;
+        if (shouldAssert)
+        {
+            if (!_irqAsserted && _irqLineRaiseDelay == 0)
+            {
+                // VICE new CIA: rdi+1==rclk uses RAISE1 (2 clocks), else RAISE0 (1).
+                _irqLineRaiseDelay = _cyclesSinceIcrRead <= 1 ? 2 : 1;
+            }
+            return;
+        }
+
+        _irqLineRaiseDelay = 0;
+        RefreshIrqLine();
     }
 
     private void RefreshIrqLine()

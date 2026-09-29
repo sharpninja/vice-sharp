@@ -36,6 +36,23 @@ public interface IViceNative : IDisposable
     void SetKeyboardMatrixKey(int row, int column, bool pressed);
 
     /// <summary>
+    /// Queue PETSCII into VICE's kernal keyboard buffer (kbdbuf_feed). Return 0 on success.
+    /// </summary>
+    int FeedKeyboardBuffer(ReadOnlySpan<byte> petscii);
+
+    /// <summary>Flush queued kbdbuf characters into the kernal buffer (vsync equivalent).</summary>
+    void FlushKeyboardBuffer();
+
+    /// <summary>VICE autostart_autodetect(path, RUN). Returns 0 on success.</summary>
+    int Autostart(string path);
+
+    /// <summary>True while VICE autostart is still loading or typing.</summary>
+    bool AutostartInProgress();
+
+    /// <summary>Run the native CPU for <paramref name="cycles"/> master cycles without per-cycle host waits.</summary>
+    void StepCycles(uint cycles);
+
+    /// <summary>
     /// Read a byte from native physical C64 RAM without bus side effects.
     /// </summary>
     byte PeekRam(ushort address);
@@ -127,8 +144,8 @@ public interface IViceNative : IDisposable
 /// everything a managed MOS 6526 needs to resume a .vsf mid-run - the port
 /// output latches and data directions, the LIVE timer counters (ciat_read_timer)
 /// with their reload latches (ciat_read_latch), the control registers, the
-/// latched interrupt flags and the ICR interrupt-enable mask (ciacore
-/// irq_enabled).
+/// latched interrupt flags, and the ICR interrupt-enable mask from the low
+/// seven bits of the CIA ICR register.
 /// </summary>
 public readonly struct NativeCiaState
 {
