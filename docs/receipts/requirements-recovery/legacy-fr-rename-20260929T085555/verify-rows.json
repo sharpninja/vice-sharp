@@ -1,0 +1,38 @@
+﻿[
+    {
+        "legacy":  "ARCH-TRUEDRIVE-1541-002",
+        "neu":  "FR-ARCH-TRUEDRIVE-1541-002",
+        "legacyFrGone":  true,
+        "neuFrPresent":  true,
+        "legacyMapGone":  true,
+        "neuMapPresent":  true,
+        "mapContentOk":  true
+    },
+    {
+        "legacy":  "BACKFILL-MEDIA-001",
+        "neu":  "FR-BACKFILL-MEDIA-001",
+        "legacyFrGone":  true,
+        "neuFrPresent":  true,
+        "legacyMapGone":  true,
+        "neuMapPresent":  true,
+        "mapContentOk":  true
+    },
+    {
+        "legacy":  "BACKFILL-VIDEO-001",
+        "neu":  "FR-BACKFILL-VIDEO-001",
+        "legacyFrGone":  true,
+        "neuFrPresent":  true,
+        "legacyMapGone":  true,
+        "neuMapPresent":  true,
+        "mapContentOk":  true
+    },
+    {
+        "legacy":  "RUNTIME-TAPE-002",
+        "neu":  "FR-RUNTIME-TAPE-002",
+        "legacyFrGone":  true,
+        "neuFrPresent":  true,
+        "legacyMapGone":  true,
+        "neuMapPresent":  true,
+        "mapContentOk":  true
+    }
+]

@@ -1,0 +1,61 @@
+﻿{
+    "timestamp":  "20260929T085555",
+    "machine":  "PAYTON-LEGION2",
+    "workspace":  "F:\\GitHub\\vice-sharp",
+    "mcpVersion":  "1.0.0+deda7d6a",
+    "planCommit":  "6785f33c8d7fedb020cad9d67b77cfec1bc77f24",
+    "preCounts":  {
+                      "fr":  232,
+                      "tr":  138,
+                      "test":  140,
+                      "map":  231,
+                      "frStatus":  200,
+                      "trStatus":  200,
+                      "testStatus":  200,
+                      "mapStatus":  200
+                  },
+    "existence":  [
+                      {
+                          "legacy":  "ARCH-TRUEDRIVE-1541-002",
+                          "legacyStatus":  200,
+                          "legacyOk":  true,
+                          "neu":  "FR-ARCH-TRUEDRIVE-1541-002",
+                          "neuStatus":  404,
+                          "neuOk":  false,
+                          "neuExists":  false
+                      },
+                      {
+                          "legacy":  "BACKFILL-MEDIA-001",
+                          "legacyStatus":  200,
+                          "legacyOk":  true,
+                          "neu":  "FR-BACKFILL-MEDIA-001",
+                          "neuStatus":  404,
+                          "neuOk":  false,
+                          "neuExists":  false
+                      },
+                      {
+                          "legacy":  "BACKFILL-VIDEO-001",
+                          "legacyStatus":  200,
+                          "legacyOk":  true,
+                          "neu":  "FR-BACKFILL-VIDEO-001",
+                          "neuStatus":  404,
+                          "neuOk":  false,
+                          "neuExists":  false
+                      },
+                      {
+                          "legacy":  "RUNTIME-TAPE-002",
+                          "legacyStatus":  200,
+                          "legacyOk":  true,
+                          "neu":  "FR-RUNTIME-TAPE-002",
+                          "neuStatus":  404,
+                          "neuOk":  false,
+                          "neuExists":  false
+                      }
+                  ],
+    "mappingLegacyCount":  4,
+    "gate":  {
+                 "anyNewAlreadyLive":  false,
+                 "anyLegacyMissing":  false,
+                 "anyLegacyUnmapped":  false
+             }
+}

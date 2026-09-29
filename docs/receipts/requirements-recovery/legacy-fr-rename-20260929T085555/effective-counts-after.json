@@ -1,0 +1,71 @@
+﻿{
+    "timestamp":  "2026-09-29 08:56:40",
+    "timezone":  "CT",
+    "before":  {
+                   "fr":  232,
+                   "tr":  138,
+                   "test":  140,
+                   "map":  231
+               },
+    "after":  {
+                  "fr":  232,
+                  "tr":  138,
+                  "test":  140,
+                  "map":  231
+              },
+    "expected":  {
+                     "map":  231,
+                     "fr":  232,
+                     "tr":  138,
+                     "test":  140
+                 },
+    "matchExpected":  true,
+    "perFrSuccess":  4,
+    "perFrTotal":  4,
+    "perFr":  [
+                  {
+                      "legacy":  "ARCH-TRUEDRIVE-1541-002",
+                      "neu":  "FR-ARCH-TRUEDRIVE-1541-002",
+                      "create":  "CREATE_OK",
+                      "mapping":  "MAP_OK",
+                      "delete":  "DELETE_OK",
+                      "success":  true,
+                      "notes":  [
+
+                                ]
+                  },
+                  {
+                      "legacy":  "BACKFILL-MEDIA-001",
+                      "neu":  "FR-BACKFILL-MEDIA-001",
+                      "create":  "CREATE_OK",
+                      "mapping":  "MAP_OK",
+                      "delete":  "DELETE_OK",
+                      "success":  true,
+                      "notes":  [
+
+                                ]
+                  },
+                  {
+                      "legacy":  "BACKFILL-VIDEO-001",
+                      "neu":  "FR-BACKFILL-VIDEO-001",
+                      "create":  "CREATE_OK",
+                      "mapping":  "MAP_OK",
+                      "delete":  "DELETE_OK",
+                      "success":  true,
+                      "notes":  [
+
+                                ]
+                  },
+                  {
+                      "legacy":  "RUNTIME-TAPE-002",
+                      "neu":  "FR-RUNTIME-TAPE-002",
+                      "create":  "CREATE_OK",
+                      "mapping":  "MAP_OK",
+                      "delete":  "DELETE_OK",
+                      "success":  true,
+                      "notes":  [
+
+                                ]
+                  }
+              ]
+}
