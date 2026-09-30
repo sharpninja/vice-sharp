@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRVMODEL-001",
+  "title": "Drive model selection plumbing end-to-end",
+  "status": "pending",
+  "priority": "high",
+  "body": "A DriveModel enum (Abstractions; VICE-canonical values 1540, 1541, 1542=1541-II, 1571, 1581) flows from the protocol (CreateEmulatorSessionRequest.true_drive_model, MediaAttachmentDto.drive_model) through DefaultEmulatorRuntimeFactory and C64TrueDriveRigBuilder to a DriveDescriptorFactory selecting the per-model drive descriptor. Persisted as the VICE-canonical Drive8Type integer in vice.ini via ViceSettings. Every default is 1541; an absent or zero value normalizes to 1541 so behavior is unchanged until a model is selected.\n\n## Acceptance Criteria\n- A DriveModel enum (Abstractions; VICE-canonical values 1540, 1541, 1542=1541-II, 1571, 1581) flows from the protocol (CreateEmulatorSessionRequest.true_drive_model, MediaAttachmentDto.drive_model) through DefaultEmulatorRuntimeFactory and C64TrueDriveRigBuilder to a DriveDescriptorFactory selecting the per-model drive descriptor.\n- Persisted as the VICE-canonical Drive8Type integer in vice.ini via ViceSettings.\n- Every default is 1541; an absent or zero value normalizes to 1541 so behavior is unchanged until a model is selected.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

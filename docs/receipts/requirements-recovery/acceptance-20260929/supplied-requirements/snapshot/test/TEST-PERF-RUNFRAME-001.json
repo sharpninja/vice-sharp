@@ -1,0 +1,35 @@
+{
+  "kind": "test",
+  "id": "TEST-PERF-RUNFRAME-001",
+  "title": "C64 PAL RunFrame Performance Tests",
+  "status": "completed",
+  "priority": "high",
+  "body": null,
+  "condition": "The benchmark harness builds a real-ROM C64 PAL machine through `ArchitectureBuilder`, measures `IMachine.RunFrame()` after warmup over the required 600-frame window, reports median and p95 frame time, and proves the measured hot path allocates zero bytes on the current thread.\n\n## Acceptance Criteria\n- `C64PalRunFrameBenchmark` builds Commodore 64 PAL through `ArchitectureBuilder` with the real ROM provider.\n- `RunFramePerfProbe` reports median `<= 18 ms`, p95 `<= 22 ms`, and `0` allocated bytes for the 60 warmup / 600 measured frame workflow.\n- Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID tests pass with `0` failed and `0` skipped.\n- Lockstep and checkpoint gates pass with `0` failed and `0` skipped.\n- BenchmarkDotNet completes `C64PalRunFrameBenchmark` and reports no managed allocation.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-benchmark-real-pal",
+      "text": "Benchmark/probe builds Commodore 64 PAL through ArchitectureBuilder with the real ROM provider.",
+      "isSatisfied": true,
+      "evidence": "BenchmarksSmokeTests.C64PalRunFrameBenchmark_UsesRealC64Pal passed"
+    },
+    {
+      "id": "ac-probe-thresholds",
+      "text": "RunFramePerfProbe 60/600 reports median <= 18 ms, p95 <= 22 ms, and 0 allocated bytes.",
+      "isSatisfied": true,
+      "evidence": "median=1.575ms; p95=2.753ms; allocated=0 bytes"
+    },
+    {
+      "id": "ac-correctness-gates",
+      "text": "Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID and Lockstep/Checkpoint gates pass with 0 failed and 0 skipped tests.",
+      "isSatisfied": true,
+      "evidence": "focused=182 passed; lockstep/checkpoint=333 passed"
+    },
+    {
+      "id": "ac-bdn",
+      "text": "BenchmarkDotNet C64PalRunFrameBenchmark completes and reports no managed allocation.",
+      "isSatisfied": true,
+      "evidence": "BenchmarkDotNet mean=2.262ms median=2.255ms; Allocated reported none"
+    }
+  ]
+}

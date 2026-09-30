@@ -1,0 +1,26 @@
+{
+  "kind": "tr",
+  "id": "TR-UI-SHELL-001",
+  "title": "Avalonia Emulator Control Shell",
+  "status": "in_progress",
+  "priority": "medium",
+  "body": "The Avalonia shell shall present emulator controls through ViewModels and host-client abstractions while preserving the host-owned boundary for emulator state and local rendering.\n\n## Acceptance Criteria\n- Boundary tests fail if Avalonia ViewModels reference `ViceSharp.Core`, `ViceSharp.Chips`, or concrete architecture/device types.\n- ViewModel tests cover sidebar collapse, tab switching, attach state, settings state, VKM selection, status bar state, and monitor pop-out state.\n- UI startup succeeds while disconnected or while the in-process host is starting.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "tr-ui-shell-ac-1",
+      "text": "The shell has status bar and peripherals sidebar surfaces that display IEC activity.",
+      "isSatisfied": false
+    },
+    {
+      "id": "tr-ui-shell-ac-2",
+      "text": "ViewModels consume host client abstractions and DTOs rather than emulator internals.",
+      "isSatisfied": false
+    },
+    {
+      "id": "tr-ui-shell-ac-3",
+      "text": "ViewModel tests cover peripherals and status active-to-idle IEC transitions.",
+      "isSatisfied": false
+    }
+  ]
+}

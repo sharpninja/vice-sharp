@@ -1,0 +1,86 @@
+{
+  "generatedUtc": "2026-09-30T16:54:05.1315046Z",
+  "phase": 1,
+  "requirementWrites": 0,
+  "repoHead": "4dfdde53ae9f5daaef84d8dea1cea329bbd336d1",
+  "items": [
+    {
+      "id": 1,
+      "previewFailId": "C3",
+      "title": "Empty TR bodies, placeholder TRs, and lost acceptance criteria.",
+      "status": "open",
+      "evidence": "Placeholder rows were deleted and TR totalCount is 136 in supplied-20260930T151509Z. Structured criteria were copied only where a heading already existed. 215 records had no heading and were not given criteria. Lost acceptance criteria are not fully restored. Item stays open."
+    },
+    {
+      "id": 2,
+      "previewFailId": "C1",
+      "title": "Inferred acceptance criteria that state implementation mechanism.",
+      "status": "needs-operator",
+      "evidence": "Plan line 132 requires needs-operator until the operator accepts mechanism wording. The 2026-09-30 sentence Finish this is recorded and was not treated as that acceptance after the 16:06:19Z DISAGREE. No body was rewritten."
+    },
+    {
+      "id": 3,
+      "previewFailId": "C2",
+      "title": "Noncanonical ids and wrong type prefixes.",
+      "status": "open",
+      "evidence": "The two noncanonical placeholder ids were deleted. Legacy Xbox and UWP rows stay under plan decision 13. Semantic behavior/architecture/test classification is not done. Item stays open."
+    },
+    {
+      "id": 4,
+      "previewFailId": "C3-named-trs",
+      "title": "The four empty TR bodies and two placeholder TRs named by the preview gate.",
+      "status": "closed",
+      "evidence": "TR-ROMM-SEC-001, TR-VIC20-FLASH-001, TR-VIC20-PIXEL-001, and TR-VIC20-SOUND-001 had non-empty bodies in the 2026-09-30T15:15:09Z reads. Placeholder ids [TR-REMOTECTRL-SERVER-001] and PERF-SPRITE-DMA-OPT-001 are not_found. This closure does not close item 1."
+    },
+    {
+      "id": 5,
+      "previewFailId": "C4",
+      "title": "Narrowing and acceptance-criteria loss against the April 2026 oracle.",
+      "status": "needs-operator",
+      "evidence": "april-ac-loss-20260930.json. The d1f7175 tar has 101 heading ids and every one is present in the 15:15:09Z store. 84 ids still contain every numbered April acceptance bullet. 12 have no numbered April list. 14 bullets are absent across five ids: FR-MED-005 1, FR-PRF-005 5, FR-VIC-002 1, FR-VIC-003 2, FR-VIC-010 5. Restoring those bullets is a requirement text change and was not done."
+    },
+    {
+      "id": 6,
+      "previewFailId": "C5",
+      "title": "Mapping existence versus semantic appropriateness and per-AC executable VICE coverage.",
+      "status": "open",
+      "evidence": "Mapping presence is not per-AC executable VICE coverage. QA-TESTAC-001 is open. Item stays open."
+    },
+    {
+      "id": 7,
+      "previewFailId": "D1",
+      "title": "Missing immutable VICE commit, VICE build hash, ROM hashes, and named machine, media, and workload manifests.",
+      "status": "open",
+      "evidence": "vic20-xvic-manifest.json is untracked. Program labels are kernal ROM filenames. Cycle counts are existing test constants. No new cycle numbers were invented. Item stays open."
+    },
+    {
+      "id": 8,
+      "previewFailId": "D2",
+      "title": "Whole-record ledger versus per-field provenance, decision, reason, and merge.",
+      "status": "needs-operator",
+      "evidence": "provenance-accepted-20260930.json has 1120 rows. After correcting TEST-VIC-001 from before-effective technical, 645 rows still have a null oldHash. Those ids are absent from the before snapshot. 110 acceptanceCriteria rows have a null sourceCommit because that store copy was not committed. No absent-marker hash was invented. The operator has not accepted null preimages as closure."
+    },
+    {
+      "id": 9,
+      "previewFailId": "plan-guardrail",
+      "title": "Guardrails that still allow empty bodies, placeholders, malformed ids, misclassification, AC loss, or narrowing through the live recovery API.",
+      "status": "closed",
+      "evidence": "POST /mcpserver/requirements/recovery/dry-run at guardrail-probes-http-20260930T161259Z returned HTTP 400 validation_error, retryable false, for empty body, placeholder body, malformed id, type-prefix mismatch, and acceptance-criteria removal. FR-VIC-001-after-get.json in that directory is a later GET. Its body field is 1105 characters, SHA-256 f2c678e7e25411e612c37686ff65fe489553ec13300297a68163eb54faf97b7e, heading present, 8 criteria. That SHA matches the 15:15:09Z supplied description. This row is not preview A9 and does not close item 10 or item 11."
+    },
+    {
+      "id": 10,
+      "previewFailId": "D3",
+      "title": "The staged preview invariant engine is not sufficient to authorize owner approval.",
+      "status": "open",
+      "evidence": "The HTTP 400 probe does not authorize owner approval. The 16:06:19Z review is DISAGREE. Item stays open."
+    },
+    {
+      "id": 11,
+      "previewFailId": "A9",
+      "title": "Atomicity is not the only blocker.",
+      "status": "open",
+      "evidence": "Five running-API rejections do not close the original preview finding that atomicity is not the only blocker. Item stays open."
+    }
+  ],
+  "operatorDecision": "The sentence Finish this is recorded and does not close item 2. Items 2, 5, and 8 are needs-operator. The set is not HV-accepted. No requirement status was set to completed. No TODO was marked done."
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXAOT-003",
+  "title": "No shipped Xbox path invokes ViceNative/WinMm P/Invoke",
+  "status": "pending",
+  "priority": "medium",
+  "body": "No shipped Xbox path invokes ViceNative/WinMm/winmm-kernel32 P/Invoke. Acceptance: verified by TEST-XBOXAOT-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

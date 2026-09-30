@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-TESTGATE-002",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "XboxTestConventionTests: Category=Xbox uses plain [Fact]/[Theory] + [Trait], never [ViceFact]/Assert.Skip, so 0-skipped is genuine per slice scope. Acceptance: each slice trx within its --filter reports Failed=0 and Skipped=0. (Shaped TEST id created to carry the plan's named XboxTestConventionTests, which the store rejects as a raw testId.)",
+  "acceptanceCriteria": []
+}

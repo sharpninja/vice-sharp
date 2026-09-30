@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXTOPO-003",
+  "title": "Desktop-intact regression guard",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Regression / desktop-intact guard: existing desktop + Host.Xbox scaffold + tests stay green. Acceptance: verified by TEST-TESTGATE-009.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

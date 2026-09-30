@@ -1,0 +1,21 @@
+{
+  "kind": "fr",
+  "id": "FR-UISETVIS-001",
+  "title": "Family-specific Settings visibility",
+  "status": "pending",
+  "priority": "high",
+  "body": "VIC-20-only Settings (memory preset, BLK0/1/2/3/5, expansion kind/preset/write-back, flash builder) are not effectively visible when a C64 family model is selected. When a VIC-20 family model is selected, those controls are visible and any C64-only Settings (none in the current Avalonia surface besides family-filtered Models) stay hidden. Shared limiter/display/audio/input/uIEC/persistence remain visible for both families.\n\n## Acceptance Criteria\n- **ac-c64-hides-vic20**: On C64 Computer, Settings.Vic20MemoryPreset, Vic20Blk0-5, ExpansionCartKind/Preset/WriteBack have IsEffectivelyVisible false.\n- **ac-vic20-shows-vic20**: On VIC-20 Computer, those same controls have IsEffectivelyVisible true.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-c64-hides-vic20",
+      "text": "On C64 Computer, Settings.Vic20MemoryPreset, Vic20Blk0-5, ExpansionCartKind/Preset/WriteBack have IsEffectivelyVisible false.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-vic20-shows-vic20",
+      "text": "On VIC-20 Computer, those same controls have IsEffectivelyVisible true.",
+      "isSatisfied": false
+    }
+  ]
+}

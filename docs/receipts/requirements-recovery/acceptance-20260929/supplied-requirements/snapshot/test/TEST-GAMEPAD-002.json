@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-GAMEPAD-002",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console live-controller smoke. Acceptance: live pad drives JOY2/JOY1 with fire per mapping.",
+  "acceptanceCriteria": []
+}

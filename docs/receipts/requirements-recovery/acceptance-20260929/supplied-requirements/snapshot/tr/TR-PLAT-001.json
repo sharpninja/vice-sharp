@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-PLAT-001",
+  "title": "Cross-Platform Support for Windows, Linux, macOS on x64 and ARM64",
+  "status": "pending",
+  "priority": "high",
+  "body": "ViceSharp shall run on Windows, Linux, and macOS on both x64 and ARM64 architectures. The emulation core library shall be platform-agnostic. Platform-specific code (audio output, input handling, window management) shall be isolated behind abstractions with per-platform implementations.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CIA-003",
+  "title": "Keyboard Matrix Scanning via CIA1",
+  "status": "pending",
+  "priority": "high",
+  "body": "CIA1 Port A and Port B are connected to the C64 keyboard matrix (8x8 matrix yielding 64 key positions). Port A selects the column (active-low output) and Port B reads the row (active-low input). Multiple keys can be detected simultaneously, including handling of ghosting and the RESTORE key (directly connected to NMI).\n\n## Acceptance Criteria\n- Writing to CIA1 Port A ($DC00) selects which keyboard columns are driven low.\n- Reading CIA1 Port B ($DC01) returns the row state for the selected columns (0 = key pressed).\n- Multiple columns can be selected simultaneously for matrix scanning.\n- Key ghosting behavior matches hardware (pressing 3 keys in an L-shape can ghost a 4th).\n- The RESTORE key is not part of the matrix; it directly triggers NMI via CIA2.\n- The `IKeyboardMatrix` interface allows host-side key press/release events to set matrix state.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

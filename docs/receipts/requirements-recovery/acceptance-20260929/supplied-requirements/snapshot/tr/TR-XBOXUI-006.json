@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-006",
+  "title": "VirtualKeyboardLayout names from C64KeyboardMap",
+  "status": "pending",
+  "priority": "medium",
+  "body": "VirtualKeyboardLayout names from the C64KeyboardMap alias set. Acceptance: verified by TEST-XBOXUI-006.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

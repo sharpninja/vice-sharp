@@ -1,0 +1,31 @@
+{
+  "kind": "fr",
+  "id": "FR-CHIPSTATE-001",
+  "title": "Per-tick full chip state capture",
+  "status": "completed",
+  "priority": "medium",
+  "body": "Each captured tick snapshots the full internal state of every stateful chip (VIC, SID, CIA, PLA) for display in the debug screen.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "VIC, SID, CIA and PLA each implement IStatefulDevice",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Each chip's state is captured per tick with zero hot-path allocation",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-3",
+      "text": "Captured state decodes into named register/field values",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-4",
+      "text": "The debug screen shows each chip's decoded state at the selected tick",
+      "isSatisfied": true
+    }
+  ]
+}

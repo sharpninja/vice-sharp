@@ -1,0 +1,41 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXGPL-007",
+  "title": "Official Commodore C= logo source and CC BY-SA 4.0 attribution",
+  "status": "completed",
+  "priority": "high",
+  "body": "When ViceSharp product branding uses the Commodore C= logo mark, the logo asset\nmust be the officially published Wikimedia Commons file \"Commodore C= logo.svg\"\n(CC BY-SA 4.0, author Alien426; https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg).\nThe project must retain a local copy of the source SVG (and any rasterization used\nfor packaging) plus a written attribution. Attribution text must be disclosed in\nTHIRD_PARTY_NOTICES.md, shipped with every NuGet package payload, surfaced in\nproduct/package README files, and shown on About dialogs for Xbox UWP and Avalonia\ndesktop heads. ShareAlike obligations apply to derivative branding that includes\nthe mark. This requirement is separate from FR-XBOXGPL-006 (GPL/VICE license payload).\n",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-logo-source",
+      "text": "Branding assets use the Wikimedia Commons Commodore C= logo.svg (or a direct rasterization thereof), not an unattributed third-party redraw.",
+      "isSatisfied": true,
+      "evidence": "docs/xbox/store-screenshots/Commodore_C_logo.svg; docs/xbox/store-screenshots/LOGO-ATTRIBUTION-CC-BY-SA-4.0.txt"
+    },
+    {
+      "id": "ac-logo-notices",
+      "text": "THIRD_PARTY_NOTICES.md names the file, author Alien426, CC BY-SA 4.0, and the commons URL.",
+      "isSatisfied": true,
+      "evidence": "THIRD_PARTY_NOTICES.md; tests/ViceSharp.TestHarness/Xbox/XboxGplComplianceTests.cs"
+    },
+    {
+      "id": "ac-logo-nuget",
+      "text": "Every NuGet package packs THIRD_PARTY_NOTICES.md at package root via Directory.Build.props.",
+      "isSatisfied": true,
+      "evidence": "Directory.Build.props"
+    },
+    {
+      "id": "ac-logo-readme",
+      "text": "Root README and per-package README files include CC BY-SA 4.0 C= logo attribution.",
+      "isSatisfied": true,
+      "evidence": "README.md; src/**/README.md"
+    },
+    {
+      "id": "ac-logo-about",
+      "text": "About surfaces expose LogoAttributionText (or equivalent) with CC BY-SA 4.0, Alien426, and commons URL for Xbox and Avalonia.",
+      "isSatisfied": true,
+      "evidence": "src/ViceSharp.Xbox.ViewModels/AboutInfo.cs; AboutPage.xaml; MainWindow.axaml.cs OnMenuAbout; AboutViewModelTests"
+    }
+  ]
+}

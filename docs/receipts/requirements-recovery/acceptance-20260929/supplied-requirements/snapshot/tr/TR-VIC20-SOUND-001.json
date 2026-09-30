@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC20-SOUND-001",
+  "title": "VIC-I sound advances on the machine clock and batches PCM without hot-path allocation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Mos6561 owns one machine-agnostic Vic20Sound engine. System-clock advancement produces deterministic PCM16 mono and dispatches 256-sample batches without per-store allocation. Native parity is scoped to the covered silence and tone inputs.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-DEPS-202607-001",
+  "title": "Dependency currency policy (2026-07 upgrade wave)",
+  "status": "completed",
+  "priority": "medium",
+  "body": "Every NuGet dependency tracks the highest STABLE version mutually compatible with net10.0 and all other dependencies; Directory.Packages.props (CPM) is the single version source for all projects including tests/ViceSharp.AiReview.Tests; all packages resolve from nuget.org when published there (vendored nuget-local feed retires once SharpNinja.aiUnit and SharpNinja.Avalonia.RemoteControl.* map to nuget.org). Prereleases excluded. Locked targets and ceiling evidence recorded in the approved 2026-07-08 upgrade plan.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

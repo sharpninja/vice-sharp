@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-DRV-WD1770-001",
+  "title": "WD1770 FDC statement-for-statement port",
+  "status": "pending",
+  "priority": "high",
+  "body": "New chip directory src/ViceSharp.Chips/Fdc/. Wd1770.cs ports native wd1770.c exactly: commands/status (:68-140), state (:142-167), lazy catch-up Execute() microcode (:204-817) that runs only at register access (no per-cycle tick), store/read/peek (:821-922), reset (:931-941), SetSide/SetMotor/DiskChange (:983-996), register decode & 3. Constants: clock_frequency=2 always, is1772=0, dden=0 (no runtime setter in native). Timing: PREPARE=48, BYTE_RATE=64 drive-cycles/byte, SETTLING=60000, STEP_RATE table per :54-63. The IRQ output stays internal state (native never wires it to the drive CPU). POCO state mirroring the native snapshot list; IStatefulDevice; zero-allocation hot ops.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

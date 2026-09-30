@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC20-FLASH-001",
+  "title": "VICE-compatible AM29F040B timing and safe expansion write-back",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Flash040Core exposes AdvanceCycles and the VIC-20 machine clock advances it. TYPE_B timeout/sector/chip budgets, busy reads, cancel, suspend, and resume are deterministic. Expansion-cart dirty payloads remain type-correct; host detach uses a same-directory temporary file and atomic replacement.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

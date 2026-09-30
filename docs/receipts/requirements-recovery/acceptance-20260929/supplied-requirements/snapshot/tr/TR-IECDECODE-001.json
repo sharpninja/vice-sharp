@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-IECDECODE-001",
+  "title": "IEC protocol decoder",
+  "status": "pending",
+  "priority": "high",
+  "body": "Pure state machine over trace samples emitting decoded IEC events: ATN command frame, LISTEN/TALK + device, OPEN/secondary/channel, data bytes with EOI, turnaround, timeout/error.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

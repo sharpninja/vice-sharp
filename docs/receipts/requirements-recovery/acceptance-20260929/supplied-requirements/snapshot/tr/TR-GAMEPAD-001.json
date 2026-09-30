@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-GAMEPAD-001",
+  "title": "Portable input lib, zero Windows.*",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Portable net10.0 lib, zero Windows.* reference, IsAotCompatible/TreatWarningsAsErrors clean. Acceptance: verified by TEST-GAMEPAD-001 / harness build.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

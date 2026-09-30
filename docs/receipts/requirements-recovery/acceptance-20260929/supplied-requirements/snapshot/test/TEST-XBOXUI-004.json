@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXUI-004",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Simulated navigation/overlay toggles never stop/dispose the pull adapter.",
+  "acceptanceCriteria": []
+}

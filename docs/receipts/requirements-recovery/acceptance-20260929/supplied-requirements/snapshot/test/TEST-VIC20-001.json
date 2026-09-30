@@ -1,0 +1,41 @@
+{
+  "kind": "test",
+  "id": "TEST-VIC20-001",
+  "title": "Index and BGRA SequenceEqual READY PAL/NTSC/busy vs xvic",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Vic20PixelLockstep verifies normal-border geometry and named SequenceEqual facts vs xvic capture_visible_frame: Index_ReadyPal_SequenceEqual, Index_ReadyNtsc_SequenceEqual, Index_BusyPal_SequenceEqual, Bgra_ReadyPal_SequenceEqual, Bgra_ReadyNtsc_SequenceEqual, Bgra_BusyPal_SequenceEqual. Capture is non-sentinel with opaque alpha (NTSC unpainted clamp rows opaque black). Other border modes remain Partial; not whole-machine Exact.",
+  "acceptanceCriteria": [
+    {
+      "id": "AC-TEST-PX-02",
+      "text": "Vic20PixelLockstep.Index_ReadyPal_SequenceEqual passes 0 fail 0 skip",
+      "isSatisfied": true,
+      "evidence": "isolated pixel gate 2026-09-04"
+    },
+    {
+      "id": "AC-TEST-PX-03",
+      "text": "Vic20PixelLockstep.Index_ReadyNtsc_SequenceEqual passes 0 fail 0 skip",
+      "isSatisfied": true,
+      "evidence": "isolated pixel gate 2026-09-04"
+    },
+    {
+      "id": "AC-TEST-PX-04",
+      "text": "Vic20PixelLockstep.Index_BusyPal_SequenceEqual passes 0 fail 0 skip",
+      "isSatisfied": true,
+      "evidence": "isolated pixel gate 2026-09-04"
+    },
+    {
+      "id": "AC-TEST-PX-05",
+      "text": "Vic20PixelLockstep.Bgra_ReadyPal_SequenceEqual and Bgra_BusyPal_SequenceEqual pass 0 fail 0 skip",
+      "isSatisfied": true,
+      "evidence": "isolated pixel gate 2026-09-04"
+    },
+    {
+      "id": "AC-TEST-PX-06",
+      "text": "Vic20PixelLockstep.Bgra_ReadyNtsc_SequenceEqual passes 0 fail 0 skip (opaque clamp-row alpha)",
+      "isSatisfied": true,
+      "evidence": "isolated pixel gate 2026-09-04"
+    }
+  ]
+}

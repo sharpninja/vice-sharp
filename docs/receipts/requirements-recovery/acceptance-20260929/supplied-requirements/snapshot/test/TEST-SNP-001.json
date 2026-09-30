@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SNP-001",
+  "title": "Snapshot and Replay Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Save/load, deterministic replay, and state diff behavior are verified through round-trip and byte/trace comparison tests.",
+  "acceptanceCriteria": []
+}

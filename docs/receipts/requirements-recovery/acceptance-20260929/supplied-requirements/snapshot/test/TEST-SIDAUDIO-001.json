@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-SIDAUDIO-001",
+  "title": "SID phi2-rate pitch tests",
+  "status": "completed",
+  "priority": "high",
+  "body": null,
+  "condition": "SidClockRateTests drives the SID via the SystemClock and asserts OSC3 = 0x10 after 8192 master cycles at voice freq 0x8000 (was 0x01). SidAudioPumpTests recalibrated to ClockDivisor 1 (PalTicksPerFrame 19656) with sample counts unchanged.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "SidPhase_AdvancesAtPhi2Rate_WhenClockedBySystemClock passes (OSC3 == 0x10)",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "SidAudioPumpTests sample-count assertions still pass after recalibration",
+      "isSatisfied": true
+    }
+  ]
+}

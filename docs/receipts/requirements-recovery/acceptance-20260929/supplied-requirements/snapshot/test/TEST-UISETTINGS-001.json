@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UISETTINGS-001",
+  "title": "Settings UserControl",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "VM: settings VM exposes machine/video/audio/input/limiter/resource selections + apply. App-launch: SettingsView renders + applies settings.",
+  "acceptanceCriteria": []
+}

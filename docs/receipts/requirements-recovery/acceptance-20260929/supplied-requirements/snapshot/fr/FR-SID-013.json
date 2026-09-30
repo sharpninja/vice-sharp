@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-013",
+  "title": "SID Audio Backend Wiring",
+  "status": "completed",
+  "priority": "medium",
+  "body": "The emulator shall wire SID sample production through the host audio backend without dropping, duplicating, or bypassing real-time audio buffers.\n\n## Acceptance Criteria\n- SID sample production is delivered to the selected `IAudioBackend` implementation.\n- Host audio backend writes preserve stream order and do not duplicate samples.\n- Backend tests prove pause, resume, mute, and disposal paths do not leave stale SID audio buffers active.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

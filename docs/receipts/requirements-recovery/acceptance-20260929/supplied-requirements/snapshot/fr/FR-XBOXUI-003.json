@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-003",
+  "title": "One authoritative input context",
+  "status": "pending",
+  "priority": "medium",
+  "body": "UI-nav and gameplay input never simultaneous; exactly one context authoritative. Acceptance: quick menu -> non-Gameplay; closing with empty stack -> Gameplay.\n\n## Acceptance Criteria\n- quick menu -> non-Gameplay; closing with empty stack -> Gameplay.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

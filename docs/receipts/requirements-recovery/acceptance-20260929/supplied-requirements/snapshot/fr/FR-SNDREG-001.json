@@ -1,0 +1,31 @@
+{
+  "kind": "fr",
+  "id": "FR-SNDREG-001",
+  "title": "VICE gate sound back-pressure regulator",
+  "status": "completed",
+  "priority": "high",
+  "body": "When the SID is the audio timing source, the VICE pacing gate paces the worker to the audio device draining its sample buffer (regulator 1), taking precedence over vsync.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Buffer at or over the high-water mark => worker blocks (advances nothing)",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Buffer has room => worker advances a chunk",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-3",
+      "text": "Warp skips both sound and vsync (highest precedence)",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-4",
+      "text": "No active audio device => falls through to the vsync regulator",
+      "isSatisfied": true
+    }
+  ]
+}

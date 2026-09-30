@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-UI-004",
+  "title": "Docked and Pop-Out Monitor Control",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The UI shall provide a reusable machine monitor control that can be docked in the sidebar or popped into a separate window while sharing the same host monitor session.\n\n## Acceptance Criteria\n- The monitor control can execute commands, display output, and request register, memory, disassembly, breakpoint, and stepping operations through the host boundary.\n- The monitor can dock inside the sidebar or pop out to a separate window without creating a second emulator session.\n- Docked and popped monitor state stays synchronized.\n- The monitor intentionally takes keyboard focus only while the user interacts with its command input.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

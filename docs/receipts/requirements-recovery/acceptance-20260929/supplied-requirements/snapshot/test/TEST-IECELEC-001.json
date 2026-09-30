@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IECELEC-001",
+  "title": "Faithful IEC electrical idle parity",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "With the live electrical model + true-drive, normal C64 idle CIA2 PA reads $47 and C64GS reads $07; native CIA2-IO lockstep stays green.",
+  "acceptanceCriteria": []
+}

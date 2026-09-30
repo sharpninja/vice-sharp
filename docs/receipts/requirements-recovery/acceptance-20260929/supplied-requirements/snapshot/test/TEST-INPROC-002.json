@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-INPROC-002",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Facade + determinism gate (bit-exact TotalCycles across two runs) + explicit-port + geometry + single-worker. Acceptance: bit-exact repro; BufferLength==FrameBuffer.Length; AppliedWorkerAffinityMask==null.",
+  "acceptanceCriteria": []
+}

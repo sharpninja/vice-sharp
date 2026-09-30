@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-CRT-001",
+  "title": "Cartridge Mapping Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Standard, Ocean, EasyFlash, Action Replay, Retro Replay, and Final Cartridge mapping behavior is verified with cartridge image and banking tests.",
+  "acceptanceCriteria": []
+}

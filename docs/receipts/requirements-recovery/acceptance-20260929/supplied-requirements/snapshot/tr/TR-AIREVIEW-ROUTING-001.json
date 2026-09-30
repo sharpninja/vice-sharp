@@ -1,0 +1,36 @@
+{
+  "kind": "tr",
+  "id": "TR-AIREVIEW-ROUTING-001",
+  "title": "Auditable Astra xhigh AI review routing",
+  "status": "pending",
+  "priority": "high",
+  "body": "Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.\nSupport AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.\nRemove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.\nTest deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.\nConsume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.\n\n## Acceptance Criteria\n- **ac-01**: Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.\n- **ac-02**: Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.\n- **ac-03**: Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.\n- **ac-04**: Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.\n- **ac-05**: Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Add ReasoningEffort through aiUnit strategy configuration, resolver, inline specifications, CLI invocation and result metadata.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Support AIUNIT_REASONING_EFFORT as the process override and emit Codex -c model_reasoning_effort with the resolved value.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Remove forced Grok attributes and prompt instructions. Use one selected agent per theory so no extra paid aggregator call is implied.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Test deterministic routing without paid calls, then publish through aiUnit supported Nuke packaging and its Azure pipeline using pool Default and existing stable-version release rules.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Consume the verified published aiUnit version in ViceSharp; retain package provenance and exact model/effort receipts for both paid theories.",
+      "isSatisfied": false
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XSET-004",
+  "title": "RevertSettings restores last-applied",
+  "status": "pending",
+  "priority": "medium",
+  "body": "RevertSettings restores the last-applied local state. Acceptance: after dirtying, Revert restores each field, clears dirty + validation.\n\n## Acceptance Criteria\n- after dirtying, Revert restores each field, clears dirty + validation.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SNP-003",
+  "title": "Deterministic Input Replay",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall support recording input events (keyboard, joystick, timing) from a starting snapshot and replaying them to reproduce the exact same execution. This enables tool-assisted speedruns (TAS), automated testing, and bug reproduction.\n\n## Acceptance Criteria\n- Recording mode captures all external input events with their precise frame and cycle timestamps.\n- Playback mode loads a base snapshot and replays the recorded input events.\n- Playback produces bit-exact results: the same memory contents, same VIC-II output, same audio output as the original recording at every point.\n- The replay format stores: base snapshot reference, input event stream (event type, frame number, cycle within frame, value).\n- Replay can be paused, single-stepped, and fast-forwarded.\n- The `IReplayEngine` interface provides record/playback/seek operations.\n- Replay files are compact (only input events are stored, not full state per frame).\n- Seeking to an arbitrary frame is supported via periodic auto-snapshots during recording.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

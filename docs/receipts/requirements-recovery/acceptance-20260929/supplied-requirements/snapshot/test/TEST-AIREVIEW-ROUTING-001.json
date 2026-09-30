@@ -1,0 +1,31 @@
+{
+  "kind": "test",
+  "id": "TEST-AIREVIEW-ROUTING-001",
+  "title": "Auditable Astra xhigh AI review routing",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.\nVerify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.\nValidate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.\nRun both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.\n\n## Acceptance Criteria\n- **ac-01**: Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.\n- **ac-02**: Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.\n- **ac-03**: Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.\n- **ac-04**: Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Add aiUnit deterministic tests for strategy/default/inline/process precedence and exact Codex model/effort argument routing.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Verify both ViceSharp theory definitions select Astra/xhigh and no Grok override remains in their execution configuration or prompts.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Validate artifact schema, non-error completed status, requested and actual model/effort metadata and durable logs independently of xUnit status.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Run both paid theories with Astra/xhigh after publication/consumption verification; retain artifact paths and resolve all critical/high findings with rerun evidence.",
+      "isSatisfied": false
+    }
+  ]
+}

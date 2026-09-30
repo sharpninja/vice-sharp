@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SID-002",
+  "title": "VICE-Compatible SID Pacing Runtime Validation",
+  "status": "completed",
+  "priority": "high",
+  "body": null,
+  "condition": "SID waveform centering, PCM equivalency, and Pieces of Light runtime capture validation prove that live audio back-pressure paces the emulator like VICE before and after runtime segment transitions.",
+  "acceptanceCriteria": []
+}

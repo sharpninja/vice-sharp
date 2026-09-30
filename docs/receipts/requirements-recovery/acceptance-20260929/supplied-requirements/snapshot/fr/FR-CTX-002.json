@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CTX-002",
+  "title": "Non-Gameplay forces ports neutral",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Every non-Gameplay context forces both ports neutral; A does not fire in a menu. Acceptance: Resolve in any non-Gameplay context with A held + sticks deflected -> Joy1=Joy2=Neutral, no fire.\n\n## Acceptance Criteria\n- 8 directions per port; A->JOY2 fire, B->JOY1 fire; menu neutralization; Guide inert.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

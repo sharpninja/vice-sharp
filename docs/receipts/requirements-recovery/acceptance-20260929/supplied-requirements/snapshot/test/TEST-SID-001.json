@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SID-001",
+  "title": "SID Audio Behavior Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external input, and multi-SID behavior are verified with deterministic audio/register tests.",
+  "acceptanceCriteria": []
+}

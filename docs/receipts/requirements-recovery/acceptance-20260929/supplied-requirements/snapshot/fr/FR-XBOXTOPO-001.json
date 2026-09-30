@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXTOPO-001",
+  "title": "New ViceSharp.Xbox UWP-on-console head project",
+  "status": "pending",
+  "priority": "medium",
+  "body": "A new project src/ViceSharp.Xbox exists and is registered in ViceSharp.slnx as the true UWP-on-Xbox-console head (net10.0-windows10.0.26100.0 + UseUwp; Native AOT for Release/Store, JIT for Debug/Dev-Mode sideload), distinct from and additive to the existing src/ViceSharp.Host.Xbox Avalonia scaffold, which stays byte-for-byte intact.\n\n## Acceptance Criteria\n- csproj exists, appears in slnx, builds under default props; Host.Xbox and its test unchanged.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

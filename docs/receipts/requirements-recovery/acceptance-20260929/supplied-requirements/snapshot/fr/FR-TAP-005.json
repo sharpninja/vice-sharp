@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TAP-005",
+  "title": "Turbo Tape Loader Compatibility",
+  "status": "pending",
+  "priority": "low",
+  "body": "Many commercial C64 programs used turbo tape loaders that employ faster pulse encoding than the standard Commodore format. The emulator shall support turbo loaders by providing accurate tape read timing down to individual clock cycles.\n\n## Acceptance Criteria\n- Turbo loaders using shorter pulse widths than standard (down to approximately 160 cycles per pulse) function correctly.\n- Common turbo formats (Novaload, Biturbo, Turbotape, Cyberload, Pavloda) load successfully.\n- Custom pulse encoding schemes are supported through accurate pulse-level emulation.\n- The CIA FLAG input timing is accurate to 1 system clock cycle.\n- Half-wave and full-wave detection methods both work correctly.\n- Multi-speed loaders (that change pulse rates mid-load) are supported.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

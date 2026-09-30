@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-COLLECT-001",
+  "title": "Lists via RomM server-side collections",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Game lists are RomM collections (/api/collections), synced across both heads. TR-ROMM-JSON-001.\nAC-COLLECT-01: GetCollectionsAsync lists user collections; smart/virtual flagged read-only -> RomMGatewayCollectionsTests.List_FlagsReadOnly.\nAC-COLLECT-02: CreateCollectionAsync POSTs and returns the collection -> RomMGatewayCollectionsTests.Create_Posts.\nAC-COLLECT-03: add/remove send CollectionRomsPayload{rom_ids[]} on the right verb -> RomMGatewayCollectionsTests.AddRemove_SendPayload.\nAC-COLLECT-04: rename (PUT) and delete (DELETE) -> RomMGatewayCollectionsTests.RenameDelete.\nAC-COLLECT-05: CollectionsViewModel add/remove selected roms then refresh -> CollectionsViewModelTests.AddRemove_Refreshes.\nAC-COLLECT-06: every collections DTO deserializes reflection-free via RomMJsonContext -> RomMJsonContextTests.Collections_SourceGenOnly.\n\n## Acceptance Criteria\n- `GetCollectionsAsync` lists user collections; smart/virtual flagged read-only ->\n- `CreateCollectionAsync` POSTs and returns the collection ->\n- add/remove send `CollectionRomsPayload{rom_ids[]}` on the right verb ->\n- rename (PUT) and delete (DELETE) -> `RomMGatewayCollectionsTests.RenameDelete`.\n- `CollectionsViewModel` add/remove selected roms then refresh ->\n- every collections DTO deserializes reflection-free via `RomMJsonContext` ->",
+  "condition": null,
+  "acceptanceCriteria": []
+}

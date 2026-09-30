@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-ROMM-JSON-001",
+  "title": "Source-gen JSON for all new adapter DTOs",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. 100% of new adapter DTOs (Collections/Search/cover/char_index/pairing) serialize and deserialize reflection-free via RomMJsonContext (satisfies IsAotCompatible/EnableTrimAnalyzer/TreatWarningsAsErrors). Verified by RomMJsonContextTests.AllTypes_SourceGen.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

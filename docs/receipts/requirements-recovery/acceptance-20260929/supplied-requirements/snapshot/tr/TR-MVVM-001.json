@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-MVVM-001",
+  "title": "Strict MVVM Separation -- ViewModels Reference Abstractions Only, Views Contain Zero Logic",
+  "status": "pending",
+  "priority": "medium",
+  "body": "All UI shells shall follow a strict Model-View-ViewModel (MVVM) pattern. ViewModels shall depend only on `ViceSharp.Abstractions` (never on `ViceSharp.Core` directly or any UI framework). Views shall contain zero business logic -- they bind to ViewModel properties and commands exclusively. This ensures that ViewModels are testable without a UI framework and that the UI layer is trivially replaceable.\n\n## Acceptance Criteria\n- The `ViceSharp.Avalonia` project references `ViceSharp.Protocol` and `ViceSharp.Host` but no runtime projects (Core, Chips, Architectures, RomFetch), verified by `AvaloniaBoundaryTests.AvaloniaProject_ReferencesProtocolAndHostCompositionButNotRuntimeProjects`.\n- Avalonia source (including all ViewModels) contains no references to runtime internals (`ViceSharp.Core`, `ViceSharp.Chips`, `ViceSharp.Architectures`, `ViceSharp.RomFetch`, `IMachine`, `IVideoChip`, `ArchitectureBuilder`), verified by `AvaloniaBoundaryTests.AvaloniaSources_DoNotReferenceRuntimeInternals`.\n- All ViewModel public properties and commands are exercised by unit tests that do not require a UI framework.\n- View code-behind files contain fewer than 20 lines of code each (excluding auto-generated code).\n- Source-level boundary tests (`AvaloniaBoundaryTests`) enforce the dependency rules and fail the test gate on violations.\n- Swapping the UI framework (e.g., replacing Avalonia views with MAUI views) requires changes only in the View layer.\n- A remote host UI can be tested with mocked host client facades and without starting `ViceSharp.Core`.\n- The local Avalonia render surface can be tested as a host/composition concern without adding core, chip, or architecture references to ViewModels.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-REVEXEC-001",
+  "title": "Reverse execution (backward step)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The emulator can step backward by cycle and by frame, restoring exact prior state, so protocols can be watched forward and backward. Backed by a frame-granular snapshot ring and deterministic re-run.\n\n## Acceptance Criteria\n- The emulator can step backward by cycle and by frame, restoring exact prior state, so protocols can be watched forward and backward.\n- Backed by a frame-granular snapshot ring and deterministic re-run.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,31 @@
+{
+  "kind": "fr",
+  "id": "FR-TICKHIST-001",
+  "title": "Last-100-ticks time-travel debugger",
+  "status": "completed",
+  "priority": "medium",
+  "body": "A History panel lists the last 100 executed CPU instructions; when paused, selecting a tick opens a debug screen with that tick's registers, reconstructed memory, and chip state.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "History panel lists the last 100 completed instructions, newest first",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Selecting a tick while paused shows that tick's CPU registers",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-3",
+      "text": "Memory dump is reconstructed as-of-tick (later ticks' write-deltas reverse-applied to current RAM)",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-4",
+      "text": "Inspection is only available while the emulator is paused",
+      "isSatisfied": true
+    }
+  ]
+}

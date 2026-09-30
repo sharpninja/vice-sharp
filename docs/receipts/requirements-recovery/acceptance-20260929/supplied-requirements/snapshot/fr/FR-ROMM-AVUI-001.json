@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-AVUI-001",
+  "title": "Avalonia Steam desktop UI",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Steam-style desktop library, details, and lists views on the Avalonia head.\nAC-AUI-01 [V]: LibraryView builds and binds LibraryBrowseViewModel (build + headless VM tests AC-BROWSE-*).\nAC-AUI-02 [V]: connection dialog + browse/search/list/launch end to end (E2E).\nAC-AUI-03 [V]: GameDetailsView builds and binds RomDetailViewModel (cover, metadata, files table, Attach+play/Attach only/Add-to-list, membership) (build + RomDetailViewModelTests).\nAC-AUI-04 [V]: ListsView builds and binds CollectionsViewModel (rail, toolbar Rename/Delete/Add games, per-row remove) (build + CollectionsViewModelTests).\n\n## Acceptance Criteria\n- `LibraryView` builds and binds `LibraryBrowseViewModel` `[V]` (build + headless VM tests\n- connection dialog + browse/search/list/launch end to end `[V]` (E2E).\n- `GameDetailsView` builds and binds `RomDetailViewModel` (cover, metadata, files table,\n- `ListsView` builds and binds `CollectionsViewModel` (rail, toolbar Rename/Delete/Add games,",
+  "condition": null,
+  "acceptanceCriteria": []
+}

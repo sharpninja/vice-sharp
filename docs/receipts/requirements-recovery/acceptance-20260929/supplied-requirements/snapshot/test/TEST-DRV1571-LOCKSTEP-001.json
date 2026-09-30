@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-DRV1571-LOCKSTEP-001",
+  "title": "1571 full lockstep gates",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Boot witness (no disk; WD1770 idle-state parity implied) + anchored LOAD gates from BOTH frostpoint.d64 and a committed canonical frostpoint.d71 (349,696 bytes, size-pinned) vs native x64sc with Drive8Type=1571.",
+  "acceptanceCriteria": []
+}

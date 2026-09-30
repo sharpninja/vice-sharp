@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-IECHOTPLUG-001",
+  "title": "Hot drive add and remove and live device renumber",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Drives can be turned on and off and have their device number changed at runtime without restarting the emulator.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "A drive attached to a running session answers on the bus with no restart.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-2",
+      "text": "A detached drive's pull contributions are removed and line states recompute.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-3",
+      "text": "A drive's device number (8 to 11) can be changed at runtime and it answers the new number.",
+      "isSatisfied": false
+    }
+  ]
+}

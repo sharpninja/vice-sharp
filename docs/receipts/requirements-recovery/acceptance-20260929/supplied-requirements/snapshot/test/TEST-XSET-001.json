@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XSET-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Umbrella off-console suite (XboxDataPathBridgeTests, SettingsOptionCatalogTests, XboxSettingsViewModelTests, XboxDeviceSetupViewModelTests, RomProvisionEvaluatorTests, XboxRomProvisioningViewModelTests, XboxUiStateStoreTests, XboxViewModelBindabilityTests). Acceptance: 0 failed/0 skipped per slice filter.",
+  "acceptanceCriteria": []
+}

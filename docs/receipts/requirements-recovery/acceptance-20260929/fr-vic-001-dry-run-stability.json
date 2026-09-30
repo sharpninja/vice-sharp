@@ -1,0 +1,31 @@
+{
+  "generatedUtc": "2026-09-29T23:19:43.5243659Z",
+  "before": {
+    "kind": "fr",
+    "id": "FR-VIC-001",
+    "statusCode": 200,
+    "title": "Raster Engine with PAL/NTSC Timing",
+    "bodyLength": 1105,
+    "conditionLength": 0,
+    "structuredAcceptanceCriteria": 0,
+    "hasAcceptanceCriteriaHeading": true,
+    "bodySha256": "f2c678e7e25411e612c37686ff65fe489553ec13300297a68163eb54faf97b7e",
+    "startsWithPlaceholder": false,
+    "status": "closed"
+  },
+  "after": {
+    "kind": "fr",
+    "id": "FR-VIC-001",
+    "statusCode": 200,
+    "title": "Raster Engine with PAL/NTSC Timing",
+    "bodyLength": 1105,
+    "conditionLength": 0,
+    "structuredAcceptanceCriteria": 0,
+    "hasAcceptanceCriteriaHeading": true,
+    "bodySha256": "f2c678e7e25411e612c37686ff65fe489553ec13300297a68163eb54faf97b7e",
+    "startsWithPlaceholder": false,
+    "status": "closed"
+  },
+  "unchanged": true,
+  "serverVersion": "1.4.41+c195837ac888b6f02724221de6a040e63b3e6b47"
+}

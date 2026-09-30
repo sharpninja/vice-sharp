@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXUI-002a",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "FocusMapBuilder BuildGrid(3,2) edges correct, top-edge Up null, no wrap.",
+  "acceptanceCriteria": []
+}

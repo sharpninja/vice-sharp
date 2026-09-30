@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XKBD-001",
+  "title": "RESTORE trigger is a distinct seam path",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The RESTORE trigger is a distinct seam path; determinism preserved (pushed through the same input seam), no change to per-cycle advance. Acceptance: verified by TEST-XKBD-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,151 @@
+{
+  "generatedUtc": "2026-09-29T23:19:43.5255594Z",
+  "server": "http://PAYTON-LEGION2:7147",
+  "reads": [
+    {
+      "kind": "fr",
+      "id": "FR-VIC-001",
+      "statusCode": 200,
+      "title": "Raster Engine with PAL/NTSC Timing",
+      "bodyLength": 1105,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": true,
+      "bodySha256": "f2c678e7e25411e612c37686ff65fe489553ec13300297a68163eb54faf97b7e",
+      "startsWithPlaceholder": false,
+      "status": "closed"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-CYCLE-001",
+      "statusCode": 200,
+      "title": "Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior",
+      "bodyLength": 995,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": true,
+      "bodySha256": "4865d01717288109f09014af77bb22fa32065e8e13644862fb99e4dca7abe7f9",
+      "startsWithPlaceholder": false,
+      "status": "closed"
+    },
+    {
+      "kind": "fr",
+      "id": "FR-CPU-002",
+      "statusCode": 200,
+      "title": "Cycle-Accurate Execution Timing",
+      "bodyLength": 1110,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": true,
+      "bodySha256": "13ae61d6d8392e189cedead42d502f990943f04193d253809d32b4c34db51ddf",
+      "startsWithPlaceholder": false,
+      "status": "pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-REMOTECTRL-SERVER-001",
+      "statusCode": 200,
+      "title": "Embeddable RemoteControl 0.7.4 integration",
+      "bodyLength": 1094,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 3,
+      "hasAcceptanceCriteriaHeading": true,
+      "bodySha256": "75f36f12fcf9461ae67d948b0a41a380179969538da19d19a9b9c251f6ff18f9",
+      "startsWithPlaceholder": false,
+      "status": "pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-ROMM-SEC-001",
+      "statusCode": 200,
+      "title": "Keep RomM bearer tokens and downloaded content inside trusted boundaries",
+      "bodyLength": 383,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": false,
+      "bodySha256": "2f687fced7f8d825348efc33453b919cb88b82ae9f6d6be612c33b722ce7e1b8",
+      "startsWithPlaceholder": false,
+      "status": "pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC20-FLASH-001",
+      "statusCode": 200,
+      "title": "VICE-compatible AM29F040B timing and safe expansion write-back",
+      "bodyLength": 295,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": false,
+      "bodySha256": "4a27b670941751f4cf0117e673bd5dc7f640aa106338d227472a0de0f0ae27e7",
+      "startsWithPlaceholder": false,
+      "status": "pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC20-PIXEL-001",
+      "statusCode": 200,
+      "title": "Pixel compare path index-primary then BGRA",
+      "bodyLength": 378,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 3,
+      "hasAcceptanceCriteriaHeading": false,
+      "bodySha256": "2638ed4ce823825195e3d15db50bab162d909800eddf111a1a9ce7d488ac3def",
+      "startsWithPlaceholder": false,
+      "status": "pending"
+    },
+    {
+      "kind": "tr",
+      "id": "TR-VIC20-SOUND-001",
+      "statusCode": 200,
+      "title": "VIC-I sound advances on the machine clock and batches PCM without hot-path allocation",
+      "bodyLength": 239,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": false,
+      "bodySha256": "fa65415c0342166d4a7f3d992de322ca104d7229f59499ed390e6083964f09d3",
+      "startsWithPlaceholder": false,
+      "status": "pending"
+    }
+  ],
+  "perfSpriteCandidates": [
+    {
+      "kind": "fr",
+      "id": "PERF-SPRITE-DMA-OPT-001",
+      "statusCode": 404,
+      "title": null,
+      "bodyLength": 0,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": false,
+      "bodySha256": null,
+      "startsWithPlaceholder": false,
+      "status": null
+    },
+    {
+      "kind": "tr",
+      "id": "PERF-SPRITE-DMA-OPT-001",
+      "statusCode": 200,
+      "title": "PERF-SPRITE-DMA-OPT-001",
+      "bodyLength": 73,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": false,
+      "bodySha256": "2984e069f1545e49c74fccce13d181548e923ebc7114e8ce60bd1b8d27ae02b5",
+      "startsWithPlaceholder": true,
+      "status": "pending"
+    },
+    {
+      "kind": "test",
+      "id": "PERF-SPRITE-DMA-OPT-001",
+      "statusCode": 404,
+      "title": null,
+      "bodyLength": 0,
+      "conditionLength": 0,
+      "structuredAcceptanceCriteria": 0,
+      "hasAcceptanceCriteriaHeading": false,
+      "bodySha256": null,
+      "startsWithPlaceholder": false,
+      "status": null
+    }
+  ]
+}

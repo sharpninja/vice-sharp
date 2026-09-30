@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-UISET-001",
+  "title": "VIC-20 RAM settings acceptance",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "VIC-20 RAM settings acceptance verifies all selected BLK regions in fresh host/runtime state after Apply+Restart and exactly 28159 BASIC bytes free with the pinned ROM.\n\n## Acceptance Criteria\n- **ac-all-spec**: All+Apply+Restart keeps BLK checks and Vic20MemorySpec all.\n- **ac-bytes-free**: After pinned-ROM VIC-20 All RAM plus Apply+Restart, the READY BASIC boot reports exactly 28159 BYTES FREE; verify actual runtime memory as well as checked BLK controls.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-all-spec",
+      "text": "All+Apply+Restart keeps BLK checks and Vic20MemorySpec all.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-bytes-free",
+      "text": "After pinned-ROM VIC-20 All RAM plus Apply+Restart, the READY BASIC boot reports exactly 28159 BYTES FREE; verify actual runtime memory as well as checked BLK controls.",
+      "isSatisfied": false
+    }
+  ]
+}

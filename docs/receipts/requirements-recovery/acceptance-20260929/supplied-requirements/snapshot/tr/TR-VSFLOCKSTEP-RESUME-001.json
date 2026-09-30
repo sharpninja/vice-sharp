@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-VSFLOCKSTEP-RESUME-001",
+  "title": "Backward-compatible snapshot module read and VIC-II model alignment",
+  "status": "pending",
+  "priority": "high",
+  "body": "maincpu_snapshot_read_module (mainc64cpu.c, the single-cycle reader used by x64sc) version-guards ane_log_level/lxa_log_level (module >= v1.3) and maincpu_jammed (>= v1.4) so v1.2 MAINCPU modules from an older x64sc resume without overrunning; ba_low_flags stays the last field before the interrupt sub-modules. The shim (vice-shim.c) pre-scans the snapshot's VIC-II model byte and sets the VICIIModel resource before machine_read_snapshot (6569 vs 8565 are both PAL, so SID type is unchanged) and normalises snapshot_last_error to 0 on a successful read. The mainc64cpu.c change is carried in native/patches/vice-shim-runtime.patch so it survives a fresh submodule checkout.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "tr-vsflockstep-resume-001-ac-1",
+      "text": "A v1.2 MAINCPU module resumes (ane/lxa/jammed skipped by version) and a current v1.4 module is unaffected; verified by full external-.vsf load and the unchanged round-trip test.",
+      "isSatisfied": false
+    },
+    {
+      "id": "tr-vsflockstep-resume-001-ac-2",
+      "text": "The fix is reproduced by build-vice-shim.sh applying vice-shim-runtime.patch (reverse-apply check passes against the working tree).",
+      "isSatisfied": false
+    }
+  ]
+}

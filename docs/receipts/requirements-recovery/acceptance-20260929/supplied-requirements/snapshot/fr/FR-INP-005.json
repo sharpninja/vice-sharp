@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INP-005",
+  "title": "Paddle Controller Input",
+  "status": "pending",
+  "priority": "low",
+  "body": "Paddle controllers connect to the joystick port and use the SID's potentiometer inputs for analog position reading. Each joystick port supports two paddles (sharing the POTX and POTY lines). The fire buttons use the joystick digital lines.\n\n## Acceptance Criteria\n- Paddle X (first paddle) is read via POTX; Paddle Y (second paddle) via POTY.\n- The pot value ranges from 0 to 255 based on the paddle position.\n- Paddle button 1 maps to the fire button (joystick bit 4).\n- Paddle button 2 maps to an additional digital line (typically bit 2, LEFT).\n- The SID pot scanning timing (512 cycles per measurement) is accurately modeled.\n- Two paddles per port (four paddles total) can be active simultaneously.\n- The `IPaddlePort` interface accepts analog position values (0.0-1.0) for each paddle.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

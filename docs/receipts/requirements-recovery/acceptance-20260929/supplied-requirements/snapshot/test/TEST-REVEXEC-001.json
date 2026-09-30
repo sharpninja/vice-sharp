@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-REVEXEC-001",
+  "title": "Reverse step restores exact state",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "RewindCycle/RewindFrame restore exact prior state; step-then-rewind round-trips; ring eviction bound honored.",
+  "acceptanceCriteria": []
+}

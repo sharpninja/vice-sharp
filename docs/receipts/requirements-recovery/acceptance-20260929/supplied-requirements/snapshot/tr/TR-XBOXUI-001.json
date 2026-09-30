@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-001",
+  "title": "Explicit navigation stack independent of Frame journal",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Explicit navigation stack independent of the Frame journal; overlays tracked separately. Acceptance: verified by TEST-XBOXUI-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

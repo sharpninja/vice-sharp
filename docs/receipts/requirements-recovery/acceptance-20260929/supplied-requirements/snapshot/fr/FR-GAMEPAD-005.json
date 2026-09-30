@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-005",
+  "title": "Axis sign mapping to direction bits",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Axis sign +Y=Up/-Y=Down/+X=Right/-X=Left. Acceptance: the four signed extremes map to the four bits.\n\n## Acceptance Criteria\n- the four signed extremes map to the four bits.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

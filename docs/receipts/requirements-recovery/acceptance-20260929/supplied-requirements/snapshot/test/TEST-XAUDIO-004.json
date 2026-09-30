@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XAUDIO-004",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Non-blocking submit + Pause unparks worker (off-console). Acceptance: SubmitSamples non-blocking; Pause releases waiter/unparks worker.",
+  "acceptanceCriteria": []
+}

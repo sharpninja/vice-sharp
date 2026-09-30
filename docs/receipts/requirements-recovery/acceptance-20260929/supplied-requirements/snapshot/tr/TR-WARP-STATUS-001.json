@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-WARP-STATUS-001",
+  "title": "Host status DTO emits warp as rate 0 and live CLOCK percent",
+  "status": "pending",
+  "priority": "high",
+  "body": "ToStatusDto emits LimiterRatePercent 0 when LimiterEnabled is false so the status bar can show WARP. EffectiveClockPercent is computed from sampled EffectiveClockHz over MasterClockHz. Warp must push audio relative speed to the live-audio ceiling so VIC-I sound render does not pin CLOCK at 100 percent.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-dto-zero",
+      "text": "ToStatusDto emits LimiterRatePercent 0 when LimiterEnabled is false.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-clock-sample",
+      "text": "GetStatus after warp reports EffectiveClockPercent greater than 150 in WarpModeTests and live RC dumps.",
+      "isSatisfied": false
+    }
+  ]
+}

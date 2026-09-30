@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XMVVM-001",
+  "title": "Xbox ViewModels reference only Abstractions + Protocol",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Xbox ViewModels reference only Abstractions + Protocol; UWP APIs isolated behind the head. Acceptance: verified by TEST-XBOXUI-007, boundary tests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

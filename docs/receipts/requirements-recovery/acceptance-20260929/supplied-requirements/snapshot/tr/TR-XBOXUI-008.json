@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-008",
+  "title": "Fixed disclosure strings from one constants file",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Fixed disclosure strings from one constants file. Acceptance: verified by TEST-XBOXUI-008.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

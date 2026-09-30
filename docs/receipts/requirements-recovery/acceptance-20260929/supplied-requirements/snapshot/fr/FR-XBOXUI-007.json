@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-007",
+  "title": "ViewModels depend only on Abstractions+Protocol",
+  "status": "pending",
+  "priority": "medium",
+  "body": "ViceSharp.Xbox.ViewModels depends only on Abstractions + Protocol (portable, Kestrel-free). Acceptance: csproj-reference assertion + forbidden-identifier scan (no Core/Chips/Architectures/Host/Avalonia/Grpc/XAML).\n\n## Acceptance Criteria\n- csproj-reference assertion + forbidden-identifier scan (no Core/Chips/Architectures/Host/Avalonia/Grpc/XAML).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

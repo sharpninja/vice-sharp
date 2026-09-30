@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MEM-003",
+  "title": "Ultimax Cartridge Mode",
+  "status": "pending",
+  "priority": "medium",
+  "body": "When the GAME line is asserted (active) and EXROM is deasserted (active), the system enters Ultimax mode. In this mode, only 4KB of RAM at $0000-$0FFF is visible to the CPU, the cartridge ROML is at $8000-$9FFF, and ROMH is at $E000-$FFFF. I/O area at $D000-$DFFF remains accessible. All other address ranges read open bus (the last value on the data bus).\n\n## Acceptance Criteria\n- With GAME=1, EXROM=0 the address space is configured for Ultimax mode.\n- RAM is only accessible at $0000-$0FFF.\n- ROML from the cartridge is mapped at $8000-$9FFF.\n- ROMH from the cartridge is mapped at $E000-$FFFF.\n- I/O space is mapped at $D000-$DFFF.\n- Reads from unmapped regions ($1000-$7FFF, $A000-$CFFF) return open-bus values.\n- The VIC-II can access cartridge ROM in Ultimax mode.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

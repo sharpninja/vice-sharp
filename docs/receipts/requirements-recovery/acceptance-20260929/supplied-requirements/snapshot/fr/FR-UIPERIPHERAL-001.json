@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-UIPERIPHERAL-001",
+  "title": "Reusable per-peripheral UserControl",
+  "status": "pending",
+  "priority": "high",
+  "body": "Each peripheral in the sidebar (Drive 8, Drive 9, Tape, Cartridge) is rendered by a single reusable AXAML UserControl bound to a per-slot view model (status, attach/eject, RO, activity LED, True Drive toggle for drives).\n\n## Acceptance Criteria\n- Each peripheral in the sidebar (Drive 8, Drive 9, Tape, Cartridge) is rendered by a single reusable AXAML UserControl bound to a per-slot view model (status, attach/eject, RO, activity LED, True Drive toggle for drives).\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

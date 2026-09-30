@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TAP-001",
+  "title": "Datasette Motor Control",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The Commodore Datasette tape drive motor is controlled by bit 3 of the 6510 I/O port ($0001). The motor is active-low (writing 0 turns the motor on). The motor has a spin-up delay before tape movement begins and a mechanical inertia effect.\n\n## Acceptance Criteria\n- Bit 3 of $0001 controls the motor: 0 = motor on, 1 = motor off.\n- The motor spin-up delay (approximately 0.5 seconds on real hardware) is modeled.\n- The tape position advances only when the motor is running and spin-up is complete.\n- The PLAY button state (bit 4 of $0001, cassette sense) must be active (low) for the motor to engage.\n- Motor state changes are reflected in the `ITapeUnit.MotorState` property.\n- Audio output from the tape (when connected to SID EXT IN) is modeled.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

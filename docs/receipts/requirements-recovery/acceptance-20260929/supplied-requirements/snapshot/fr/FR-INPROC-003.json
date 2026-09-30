@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INPROC-003",
+  "title": "Explicit swap-immune joystick injection",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Joystick injection uses explicit Joystick1/Joystick2 (swap-immune). Acceptance: SetJoystick(Joystick2, Up|fire) -> SetJoystickState(2,0x01,true); toggling SwapJoystickPorts does not change the control port.\n\n## Acceptance Criteria\n- SetJoystick(Joystick2, Up|fire) -> SetJoystickState(2,0x01,true); toggling SwapJoystickPorts does not change the control port.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CFG-006",
+  "title": "Host-Backed Peripheral Resource Configuration",
+  "status": "pending",
+  "priority": "low",
+  "body": "The emulator shall expose configuration for host-backed peripheral devices such as filesystem devices, printers, RS232, Ethernet, tape-port devices, and user-port devices through host-owned services.\n\n## Acceptance Criteria\n- Peripheral devices can be enabled, disabled, and configured through host/session settings.\n- Host-backed paths or endpoints are validated before the emulator commits the configuration.\n- Peripheral status and errors are visible through host diagnostics.\n- UI clients do not access host files, serial devices, sockets, or printers except through host service requests.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

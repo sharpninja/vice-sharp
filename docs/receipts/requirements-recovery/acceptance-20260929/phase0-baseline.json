@@ -1,0 +1,78 @@
+{
+  "generatedUtc": "2026-09-29T22:48:20.7205017Z",
+  "workspace": "F:\\GitHub\\vice-sharp",
+  "health": {
+    "nonce": "fd76e5f1260f42b482c8b8d1c235cdcf",
+    "nonceMatch": true,
+    "status": "Healthy",
+    "version": "1.4.41+c195837ac888b6f02724221de6a040e63b3e6b47",
+    "storage": "reachable"
+  },
+  "git": {
+    "head": "4dfdde53ae9f5daaef84d8dea1cea329bbd336d1",
+    "porcelainCount": 1
+  },
+  "counts": {
+    "fr": 232,
+    "tr": 138,
+    "test": 140,
+    "map": 231,
+    "expectedMatch": true
+  },
+  "recovery": {
+    "idempotencyKey": "slice5-apply-clean-18028995ae17",
+    "httpStatus": 200,
+    "status": "applied",
+    "applied": true,
+    "payloadHash": "d858d4e30feeab57a4f652ee9e8dc6e3ef70a34e8674e52e7ba5488cfb727164",
+    "hashMatch": true,
+    "pluginMethod": "workflow.requirements.getRecovery",
+    "pluginExit": 0,
+    "pluginApplied": true
+  },
+  "handoffIngest": {
+    "runId": "handoff-run-a5c3979b109244f18dc540c7d3fce9a9",
+    "mode": "DraftOnly",
+    "reviewState": "Failed",
+    "approved": false,
+    "errorCode": "draft_invalid_id",
+    "diagnostics": [
+      "No eligible pooled agent configured.",
+      "The extractor returned no JSON."
+    ]
+  },
+  "legacyFrGet404": [
+    "ARCH-TRUEDRIVE-1541-002",
+    "BACKFILL-MEDIA-001",
+    "BACKFILL-VIDEO-001",
+    "RUNTIME-TAPE-002"
+  ],
+  "renamedFrGet200": [
+    "FR-ARCH-TRUEDRIVE-1541-002",
+    "FR-BACKFILL-MEDIA-001",
+    "FR-BACKFILL-VIDEO-001",
+    "FR-RUNTIME-TAPE-002"
+  ],
+  "structuredAcceptanceCriteriaCount": {
+    "FR-VIC-001": 0,
+    "TR-CYCLE-001": 0,
+    "FR-CPU-002": 0,
+    "FR-VIC-006": 0,
+    "FR-VIC-010": 0,
+    "FR-UISETVIS-001": 2
+  },
+  "bodyContainsAcceptanceCriteriaHeading": {
+    "FR-VIC-001": true,
+    "TR-CYCLE-001": true,
+    "FR-CPU-002": true,
+    "FR-UISETVIS-001": true
+  },
+  "mcpRecoveryIdsOnViceSharp": {
+    "FR-MCP-REQRECOVERY-001": 404,
+    "TR-MCP-REQRECOVERY-001": 404,
+    "TEST-MCP-REQRECOVERY-001": 404
+  },
+  "mcpRecoveryIdsWithMcpServerWorkspaceHeader": 401,
+  "phase0Stop": false,
+  "note": "Counts match the 2026-09-29 08:56 CT rename receipt. Structured acceptanceCriteria arrays on the foundational ids are empty. Markdown headings exist in the bodies. No requirement row was written."
+}

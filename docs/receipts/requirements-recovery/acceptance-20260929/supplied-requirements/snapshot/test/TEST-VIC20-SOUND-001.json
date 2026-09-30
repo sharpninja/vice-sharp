@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-VIC20-SOUND-001",
+  "title": "Deterministic VIC-I PCM and live backend regression suite",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "`Vic20SoundLockstep` verifies deterministic managed silence/tone/multi-register output, no silent register-store allocation after warmup, and focused byte-identical silence/tone batches against native xvic. `Vic20AudioWiringTests` verifies machine-clock advancement and 256-sample delivery to the configured audio backend.",
+  "acceptanceCriteria": []
+}

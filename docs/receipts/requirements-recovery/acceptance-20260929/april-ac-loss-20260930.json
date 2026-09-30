@@ -1,0 +1,56 @@
+{
+  "generatedUtc": "2026-09-30T16:37:21.1996147Z",
+  "aprilTar": "docs/receipts/requirements-recovery/20260928T195211Z/d1f7175-docs-requirements.tar",
+  "comparedTo": "docs/receipts/requirements-recovery/acceptance-20260929/supplied-20260930T151509Z",
+  "aprilHeadingIds": 101,
+  "idsWithAllAprilAcTextPresent": 84,
+  "idsWithNoNumberedAprilAc": 12,
+  "idsWithAtLeastOneMissingAprilAc": 5,
+  "losses": [
+    {
+      "id": "FR-MED-005",
+      "aprilCount": 7,
+      "missing": [
+        "Unavailable formats (e.g., if FFmpeg libraries are not present) are gracefully reported as unsupported without crashing."
+      ]
+    },
+    {
+      "id": "FR-PRF-005",
+      "aprilCount": 9,
+      "missing": [
+        "VIC chip: MOS 6560/6561 with 22-column text display and 4-voice sound.",
+        "VIA: Two MOS 6522 VIAs (per FR-VIA-004) instead of CIAs.",
+        "ROM: BASIC V2, VIC-20 KERNAL, Character Generator.",
+        "Sound uses the VIC chip's 4 voices (3 square wave + 1 noise) instead of SID.",
+        "Selectable via `IMachineProfile.LoadProfile(\"vic20\")`."
+      ]
+    },
+    {
+      "id": "FR-VIC-002",
+      "aprilCount": 6,
+      "missing": [
+        "ECM + MCM combination is invalid and produces a black screen (all outputs zero)."
+      ]
+    },
+    {
+      "id": "FR-VIC-003",
+      "aprilCount": 6,
+      "missing": [
+        "BMM + ECM combination is invalid and produces a black screen.",
+        "BMM + MCM + ECM combination is invalid and produces a black screen."
+      ]
+    },
+    {
+      "id": "FR-VIC-010",
+      "aprilCount": 6,
+      "missing": [
+        "Each sprite's p-access (pointer fetch) occurs at a specific cycle position on the raster line, with sprite 0 earliest and sprite 7 latest.",
+        "Each sprite's three s-accesses (data fetch, 3 bytes) occur at consecutive cycles following the p-access.",
+        "The CPU is halted during sprite DMA cycles (2 cycles per sprite for setup, 3 for data).",
+        "Disabling a sprite (clearing its bit in $D015) at the correct cycle prevents its DMA from occurring.",
+        "Re-enabling a sprite and setting its Y-position to match the current raster line triggers DMA on the next line."
+      ]
+    }
+  ],
+  "note": "A missing bullet is April acceptance text that is not contained in the current description or structured criteria after whitespace normalization. No requirement text was restored."
+}

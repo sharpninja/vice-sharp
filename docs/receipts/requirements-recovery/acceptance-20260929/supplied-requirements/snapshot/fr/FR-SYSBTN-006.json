@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-006",
+  "title": "SwapJoystickPorts flips config, no host change",
+  "status": "pending",
+  "priority": "medium",
+  "body": "SwapJoystickPorts flips XboxInputConfig.SwapPorts; no host InputSettings change. Acceptance: dispatch flips the flag, issues no ISettingsService call; second dispatch flips back.\n\n## Acceptance Criteria\n- dispatch flips the flag, issues no ISettingsService call; second dispatch flips back.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

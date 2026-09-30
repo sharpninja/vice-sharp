@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-SIDAUDIO-001",
+  "title": "SID plays at correct pitch",
+  "status": "completed",
+  "priority": "high",
+  "body": "The SID must tick at the phi2 master-clock rate so pitch, envelopes, noise and sync are correct (BUG-SIDAUDIO-001). It was registered as a slow device (ClockDivisor 16) while its accumulator advanced once per Tick, making everything 16x too slow.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "With voice freq 0x8000, after stepping the SystemClock 8192 master cycles OSC3 reads 0x10 (was 0x01 at the 16x-slow rate)",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Audio sample rate remains 44.1 kHz (self-corrects via ConfigureAudioClock at either divisor)",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-3",
+      "text": "ADSR, noise-LFSR and hard-sync run at the phi2 rate",
+      "isSatisfied": true
+    }
+  ]
+}

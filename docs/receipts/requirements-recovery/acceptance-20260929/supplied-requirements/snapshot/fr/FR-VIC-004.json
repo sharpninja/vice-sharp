@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-004",
+  "title": "Sprite Engine (8 Hardware Sprites)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-II shall emulate all 8 hardware sprites with correct positioning, priority, expansion, and multicolor capabilities. Each sprite is 24x21 pixels (standard) or 12x21 double-wide pixels (multicolor) and can be independently expanded 2x horizontally and/or vertically.\n\n## Acceptance Criteria\n- Eight sprites (0-7) are independently positionable via $D000-$D010.\n- Sprite enable register ($D015) controls which sprites are displayed.\n- Sprite X-expansion ($D01D) doubles horizontal size; Y-expansion ($D017) doubles vertical size.\n- Multicolor mode ($D01C) per sprite uses 3 shared colors + 1 individual color.\n- Sprite data pointers are read from screen matrix + $03F8-$03FF (relative to VIC bank).\n- Sprite-to-background priority is controlled by $D01B per sprite.\n- Sprite display priority follows the rule: lower-numbered sprites appear in front of higher-numbered sprites.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

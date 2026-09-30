@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-SIDEBARUI-001",
+  "title": "Responsive sidebar layout with collapse expander",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The attach sidebar has a collapse expander on its inner edge (facing the video) that flips side with the panel anchor, and its button groups wrap to new rows when the panel is narrow.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "The collapse expander sits on the inner edge - Right when the panel is anchored Left, Left when anchored Right",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "The expander toggles the sidebar pane and its chevron points toward the collapse direction",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-3",
+      "text": "Tab and action button groups wrap to new rows (WrapPanel) when the panel is narrow",
+      "isSatisfied": true
+    }
+  ]
+}

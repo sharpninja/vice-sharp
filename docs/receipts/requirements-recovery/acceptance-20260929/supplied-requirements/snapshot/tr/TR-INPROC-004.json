@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-INPROC-004",
+  "title": "Single unpinned pump worker",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Single unpinned pump worker, VICESHARP_EMU_CPU unset -> AppliedWorkerAffinityMask==null. Acceptance: verified by TEST-INPROC-002.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

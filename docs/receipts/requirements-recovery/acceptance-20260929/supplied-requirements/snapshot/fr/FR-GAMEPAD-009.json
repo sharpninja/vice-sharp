@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-009",
+  "title": "Single XboxInputContext consumes whole snapshot",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The whole snapshot is consumed only by the single XboxInputContext (no separate app-button path). Acceptance: no AppButtonChanged event exists; system buttons reach the context, never a joystick port directly.\n\n## Acceptance Criteria\n- no `AppButtonChanged` event exists; system buttons reach the context, never a joystick port directly.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

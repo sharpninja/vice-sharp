@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-DRVLIFE-001",
+  "title": "Drive attach/detach lifecycle",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Enabling a drive creates/starts the drive instance, registers it on the clock and connects it to the always-on IEC bus; disabling stops it, unregisters from the clock and disconnects from the bus.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

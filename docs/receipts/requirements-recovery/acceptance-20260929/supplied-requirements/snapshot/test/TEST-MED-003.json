@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-MED-003",
+  "title": "WAV recorder + tap tests",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "WAV header/data correctness, after-stop ignore, concurrent-stop lock safety; CaptureAudioTap clamp/forward.",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-HOST-DIAG-001",
+  "title": "Read-Only Diagnostics gRPC Contract",
+  "status": "pending",
+  "priority": "high",
+  "body": "ViceSharp shall expose a generated gRPC `DiagnosticsService` for local diagnostics tools. The service is read-only and must not create, remove, start, stop, reset, or otherwise mutate emulator sessions.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

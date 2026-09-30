@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-MEDIA-001",
+  "title": "External FFmpeg Process Integration with Multiple Format Support",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Muxed video+audio encoding shall use an external `ffmpeg` executable driven as a child process, mirroring VICE's `ffmpegexedrv`. ViceSharp links no FFmpeg libraries and performs no P/Invoke into libav*; the emulator streams raw frames and PCM to the ffmpeg process, and ffmpeg performs all codec and container work. Audio-only (WAV) and image/frame-sequence capture are implemented with managed encoders and do not require ffmpeg.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

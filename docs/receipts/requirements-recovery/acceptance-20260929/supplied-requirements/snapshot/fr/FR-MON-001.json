@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MON-001",
+  "title": "Real-Time Disassembly View",
+  "status": "pending",
+  "priority": "high",
+  "body": "The monitor shall provide a disassembly view that decodes 6502/6510 machine code into human-readable assembly mnemonics. The disassembler shall support all official and undocumented opcodes, display correct addressing mode syntax, and handle code that overlaps data regions.\n\n## Acceptance Criteria\n- All 256 opcodes (including undocumented) are disassembled with correct mnemonics and operands.\n- All addressing modes display with standard syntax (e.g., `LDA #$FF`, `STA $D020`, `JMP ($FFFE)`, `LDA ($FB),Y`).\n- The disassembly view can be positioned at any address and scrolls forward/backward.\n- Backward disassembly uses heuristic alignment (scanning back N bytes and disassembling forward to find the correct instruction boundary at the target address).\n- Undocumented opcodes display with their commonly used mnemonics (LAX, SAX, DCP, ISC, etc.) and are visually distinguished from official opcodes.\n- The `IDisassembler` interface accepts an address and returns structured disassembly data (address, bytes, mnemonic, operand, size).\n- Labels and symbols can be optionally applied to addresses.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

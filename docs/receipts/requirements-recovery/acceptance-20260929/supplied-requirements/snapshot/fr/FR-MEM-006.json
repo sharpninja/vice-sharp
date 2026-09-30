@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MEM-006",
+  "title": "Zero Page and Stack Page Behavior",
+  "status": "pending",
+  "priority": "high",
+  "body": "The zero page ($0000-$00FF) and stack page ($0100-$01FF) shall behave as fast-access RAM with the 6510 I/O port overlay at $0000-$0001. Stack operations (PHA, PLA, JSR, RTS, BRK, RTI) shall correctly wrap the stack pointer within the $0100-$01FF page.\n\n## Acceptance Criteria\n- Addresses $0002-$00FF behave as standard RAM (zero page).\n- Addresses $0000-$0001 are intercepted by the 6510 I/O port (per FR-CPU-004).\n- Stack operations always access $0100 + SP; the SP wraps within 8 bits (no access outside $0100-$01FF).\n- JSR pushes PC+2 (high byte first, then low byte).\n- RTS pulls low byte first, then high byte, and adds 1 to the result.\n- Stack underflow/overflow wraps without generating an exception.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

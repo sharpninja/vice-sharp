@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-HOST-001",
+  "title": "Host-Owned Emulator Session Lifecycle",
+  "status": "pending",
+  "priority": "high",
+  "body": "The emulator host shall own machine session creation, lifecycle transitions, and process-level fault reporting. UI clients request state changes through the host boundary instead of instantiating emulator core objects directly.\n\n## Acceptance Criteria\n- A host process can create and destroy a C64 machine session without referencing any UI framework.\n- The host exposes start, pause, resume, reset, and stop commands for an active session.\n- Lifecycle state is reported as idle, running, paused, faulted, or stopped.\n- Lifecycle commands are serialized per session so transitions cannot race.\n- Each command response includes the session id, command sequence, resulting state, and structured error details when applicable.\n- Runtime counters for frame number, cycle count, speed percentage, and elapsed host time are queryable by the UI.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

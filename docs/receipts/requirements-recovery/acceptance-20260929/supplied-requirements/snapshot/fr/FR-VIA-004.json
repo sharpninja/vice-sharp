@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIA-004",
+  "title": "VIC-20 VIA Integration (VIA1 and VIA2)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The VIC-20 uses two VIA 6522 chips. VIA1 ($9110-$911F) handles the keyboard matrix, joystick, and cassette interface. VIA2 ($9120-$912F) handles the IEC serial bus, user port, and provides the NMI source. Both VIAs must be fully functional for VIC-20 machine profile support.\n\n## Acceptance Criteria\n- VIA1 is mapped at $9110-$911F with mirroring within its address range.\n- VIA2 is mapped at $9120-$912F with mirroring within its address range.\n- VIA1 Port A reads the keyboard column and joystick state.\n- VIA1 Port B drives the keyboard row selection.\n- VIA2 Port B handles IEC serial bus signals (ATN OUT, CLK OUT/IN, DATA OUT/IN).\n- VIA2 CA1 is connected to the cassette READ line.\n- VIA1 generates IRQ; VIA2 generates NMI via its interrupt output.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXAOT-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Off-console AOT/trim link gate 0 IL warnings + reflection-free audit. Acceptance: publish exit 0, 0 IL2xxx/IL3xxx; ViceNative uncalled.",
+  "acceptanceCriteria": []
+}

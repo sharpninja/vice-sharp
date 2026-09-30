@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-003",
+  "title": "A -> JOY2 fire, B -> JOY1 fire",
+  "status": "pending",
+  "priority": "medium",
+  "body": "A -> JOY2 fire, B -> JOY1 fire, emitted as the separate bool. Acceptance: Buttons=A -> Joy2.Fire only; Buttons=B -> Joy1.Fire only; no mask change.\n\n## Acceptance Criteria\n- Buttons=A -> Joy2.Fire only; Buttons=B -> Joy1.Fire only; no mask change.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

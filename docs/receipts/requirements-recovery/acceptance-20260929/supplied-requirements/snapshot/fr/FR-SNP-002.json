@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SNP-002",
+  "title": "Load Machine State from Snapshot",
+  "status": "pending",
+  "priority": "high",
+  "body": "The emulator shall restore a complete machine state from a previously saved snapshot file. After loading, execution continues from exactly the point at which the snapshot was taken, with all devices in their saved state.\n\n## Acceptance Criteria\n- Loading a snapshot restores the exact CPU state (registers, flags, pipeline phase).\n- All 64KB of RAM plus Color RAM are restored byte-for-byte.\n- VIC-II state is restored including mid-raster position -- the first frame after load completes the line from the saved raster position.\n- SID state is restored including oscillator phase -- audio output continues seamlessly.\n- CIA state is restored including running timer values -- interrupt timing is preserved.\n- Peripheral state (drives, tape, cartridges) is restored.\n- Snapshot format version mismatches are detected and reported.\n- Invalid or corrupt snapshots are rejected with a descriptive error.\n- Loading a snapshot does not leak memory (previous state is fully released).\n- The `ISnapshotManager.Load()` method accepts a snapshot handle or file path.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

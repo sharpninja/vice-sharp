@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XAUDIO-002",
+  "title": "Master volume/mute, gain applied once",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Master volume and mute are honored; EffectiveGain applied exactly once. Acceptance: Volume scales output; Muted silences without stopping the ring; gain applied in AudioSampleConverter before samples reach the ring.\n\n## Acceptance Criteria\n- Volume scales output; Muted silences without stopping the ring; gain applied in AudioSampleConverter before samples reach the ring.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

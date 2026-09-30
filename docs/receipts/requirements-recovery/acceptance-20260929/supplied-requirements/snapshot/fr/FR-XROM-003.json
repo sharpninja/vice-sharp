@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XROM-003",
+  "title": "Provision shipped vkm keymaps",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Shipped GPL *.vkm keymaps are provisioned into the writable C64 folder so the picker lists them. Acceptance: after XboxDataPathBridge.Configure the packaged vkm exist under C64Path and ListKeyboardMapsAsync returns them; else the embedded gtk3_pos fallback.\n\n## Acceptance Criteria\n- after XboxDataPathBridge.Configure the packaged vkm exist under C64Path and ListKeyboardMapsAsync returns them; else the embedded gtk3_pos fallback.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

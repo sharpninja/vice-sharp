@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XKBD-001",
+  "title": "RESTORE/NMI seam distinct from SetKeyState",
+  "status": "pending",
+  "priority": "medium",
+  "body": "A dedicated RESTORE/NMI trigger exists on the Abstractions keyboard seam and the in-process facade; the virtual-keyboard RESTORE tile drives it, not SetKeyState. Acceptance: IMachineKeyboardInput.SetRestoreState(bool) routes to the C64 NMI path (keycode 0x31) distinct from SetKeyState; VirtualKeyboardViewModel RESTORE tile calls the facade's SetRestoreState, and a spy keyboard input records the NMI trigger, not a SetKeyState(\"*\").\n\n## Acceptance Criteria\n- IMachineKeyboardInput.SetRestoreState(bool) routes to the C64 NMI path (keycode 0x31) distinct from SetKeyState; VirtualKeyboardViewModel RESTORE tile calls the facade's SetRestoreState, and a spy keyboard input records the NMI trigger, not a SetKeyState(\"*\").",
+  "condition": null,
+  "acceptanceCriteria": []
+}

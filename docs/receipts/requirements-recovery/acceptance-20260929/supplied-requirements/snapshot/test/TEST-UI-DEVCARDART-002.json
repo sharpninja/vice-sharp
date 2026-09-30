@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UI-DEVCARDART-002",
+  "title": "Device art asset and sync contract",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "DeviceArtAssetTests: every SVG source exists with a viewBox; DeviceArt.axaml exists, XML-parses, DrawingImage key set is a superset of the catalog keys, all 6 brushes present; per-SVG sha256 (CRLF-normalized) matches the generated source comments and the comment set equals the SVG file set; PeripheralCardView/App.axaml wiring text-asserts.",
+  "acceptanceCriteria": []
+}

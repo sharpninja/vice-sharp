@@ -1,0 +1,23 @@
+{
+  "kind": "tr",
+  "id": "TR-CORE-DET-001",
+  "title": "Bit-Exact Reproducibility Given Same Initial State and Inputs",
+  "status": "completed",
+  "priority": "critical",
+  "body": "Given the same initial emulator state, ROM set, mounted media, inputs, and timing model, managed C64 PAL execution must produce deterministic CPU, bus, video, audio, interrupt, and memory-observable results.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-lockstep",
+      "text": "Lockstep and checkpoint suites continue to pass after performance optimizations.",
+      "isSatisfied": true,
+      "evidence": "lockstep/checkpoint gate => 333 passed, 0 failed, 0 skipped"
+    },
+    {
+      "id": "ac-no-public-state-regression",
+      "text": "Optimizations do not change public observable machine state signatures or behavior contracts.",
+      "isSatisfied": true,
+      "evidence": "PR #3 keeps public API signatures stable and correctness gates green"
+    }
+  ]
+}

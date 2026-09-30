@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-005",
+  "title": "Sprite Collision Detection",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-II shall detect sprite-to-sprite and sprite-to-background collisions and report them through the collision registers and optional interrupt generation.\n\n## Acceptance Criteria\n- Sprite-sprite collision register ($D01E) sets a bit for each sprite involved in a collision with another sprite.\n- Sprite-background collision register ($D01F) sets a bit for each sprite that overlaps non-background pixels.\n- Collision registers are latched -- they retain set bits until read, at which point they are cleared.\n- Reading the collision register clears it atomically.\n- Collision interrupt (if enabled in $D01A) fires when a new collision is detected.\n- In multicolor mode, the \"transparent\" color (bit pattern %00) does not trigger collisions.\n- Expanded sprites use the expanded pixel area for collision detection.\n- Invalid ECM display-mode pixels that render as color 0 still participate in sprite priority and sprite-background collision when the x64sc hidden foreground/priority bit is set.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

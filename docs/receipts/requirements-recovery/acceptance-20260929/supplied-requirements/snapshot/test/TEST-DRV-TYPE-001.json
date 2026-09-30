@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-DRV-TYPE-001",
+  "title": "Native shim drive-type control",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "DriveTypeShimTests (Collection NativeVice): vice_drive_set_type sets Drive8Type and vice_drive_get_type reads it back; out-of-range units rejected; after set+reset the native drive PC lands in $8000-$FFFF for 32KB-ROM models (proves memiec re-init); vice_drivecpu_get_clk is monotonic under stepping; vice_drivecpu_execute_all callable; Drive8Type re-baselines to 1541 on the next machine create (no cross-test residue).",
+  "acceptanceCriteria": []
+}

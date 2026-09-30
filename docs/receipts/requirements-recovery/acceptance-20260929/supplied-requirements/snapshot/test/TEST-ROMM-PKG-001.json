@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-ROMM-PKG-001",
+  "title": "RomM NuGet package validation",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Package metadata and pack-output tests prove both RomM libraries are packable with the approved package ids, GPL-2.0-or-later metadata, and exact dependency graph.",
+  "acceptanceCriteria": []
+}

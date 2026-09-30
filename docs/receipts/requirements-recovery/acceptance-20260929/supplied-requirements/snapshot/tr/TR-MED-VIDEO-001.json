@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-MED-VIDEO-001",
+  "title": "BMP-sequence sink with all/unique dedup, off-worker writes",
+  "status": "pending",
+  "priority": "high",
+  "body": "FrameSequenceCapture writes numbered 24-bit BMPs via a background queue; unique mode skips byte-identical consecutive frames.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

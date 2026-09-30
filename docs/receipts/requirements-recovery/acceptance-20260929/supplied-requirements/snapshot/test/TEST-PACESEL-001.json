@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-PACESEL-001",
+  "title": "Pacing strategy selection tests",
+  "status": "completed",
+  "priority": "medium",
+  "body": null,
+  "condition": "PacingStrategySelectionTests (factory + live SetStrategy), SettingsServiceHostTests (UpdateSettings applies PacingStrategy to the pump and round-trips it), and AttachPanelViewModelTests (pacing change flags pending, not restart).",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "SetStrategy on a not-started pump switches GateName immediately; unknown defaults to Semaphore",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "UpdateSettings with a VICE pacing strategy sets the pump gate to VICE and round-trips vice",
+      "isSatisfied": true
+    }
+  ]
+}

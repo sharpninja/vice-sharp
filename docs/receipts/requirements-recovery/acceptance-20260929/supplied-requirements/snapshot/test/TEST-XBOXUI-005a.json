@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXUI-005a",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Cadence: 10 fires/200ms -> 10 pulls +/-1.",
+  "acceptanceCriteria": []
+}

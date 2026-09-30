@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TESTGATE-003",
+  "title": "Determinism + desktop never regress",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Determinism and the desktop suite never regress across any gate. Acceptance: Category=Determinism 0 failed with pass count == pre-S1 baseline at every gate; Avalonia boundary + desktop build stay green.\n\n## Acceptance Criteria\n- Category=Determinism 0 failed with pass count == pre-S1 baseline at every gate; Avalonia boundary + desktop build stay green.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

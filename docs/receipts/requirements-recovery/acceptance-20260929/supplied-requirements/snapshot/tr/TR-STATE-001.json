@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-STATE-001",
+  "title": "Mutation Queue with ACID State Transactions and Configurable State Window",
+  "status": "pending",
+  "priority": "high",
+  "body": "All mutations to emulated machine state shall be performed through a mutation queue that provides ACID-like transaction semantics. State changes within a single emulation step (one clock cycle or one instruction) are grouped into a transaction that is either fully applied or fully rolled back. A configurable state window maintains a ring buffer of recent states to support rewind, debugging, and snapshot operations.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

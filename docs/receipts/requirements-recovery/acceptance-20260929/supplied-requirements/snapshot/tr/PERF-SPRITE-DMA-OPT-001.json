@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "PERF-SPRITE-DMA-OPT-001",
+  "title": "PERF-SPRITE-DMA-OPT-001",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Placeholder requirement backfilled for TODO link PERF-SPRITE-DMA-OPT-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

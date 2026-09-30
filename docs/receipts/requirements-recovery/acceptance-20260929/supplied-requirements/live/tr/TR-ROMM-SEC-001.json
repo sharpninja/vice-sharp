@@ -1,0 +1,18 @@
+{
+  "fetchedUtc": "2026-09-30T00:35:23.6000798Z",
+  "httpStatus": 200,
+  "source": "parent HTTP GET because the reviewer has no MCP access",
+  "route": "/mcpserver/requirements/tr/TR-ROMM-SEC-001",
+  "record": {
+    "id": "TR-ROMM-SEC-001",
+    "title": "Keep RomM bearer tokens and downloaded content inside trusted boundaries",
+    "body": "Public covers use an anonymous client; bearer auth is restricted to server-relative RomM cover paths. ROM filenames and resolved cache destinations are contained, downloaded through a temporary file, expected-size validated, and atomically published. Windows file-backed tokens use current-user DPAPI with atomic legacy-plaintext migration; unsupported operating systems fail closed.",
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "priority": "medium",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  }
+}

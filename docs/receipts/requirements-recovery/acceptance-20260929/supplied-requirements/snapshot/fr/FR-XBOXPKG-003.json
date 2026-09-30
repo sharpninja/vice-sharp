@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXPKG-003",
+  "title": "Manifest declares Windows.Xbox + capability rule",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Package.appxmanifest declares Windows.Xbox (Min 10.0.19041.0, MaxTested 10.0.26100.0), x64 identity, and declares internetClient iff the HTTPS ROM download path is kept (else no restricted capability). Acceptance: XML-parse asserts the TargetDeviceFamily, x64, and the internetClient-present-iff-download-kept rule.\n\n## Acceptance Criteria\n- XML-parse asserts the TargetDeviceFamily, x64, and the internetClient-present-iff-download-kept rule.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

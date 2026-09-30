@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-011",
+  "title": "External Audio Input",
+  "status": "pending",
+  "priority": "low",
+  "body": "The SID chip has an external audio input (EXT IN) that can be mixed into the output and optionally routed through the filter. This is used by some cartridges and peripherals.\n\n## Acceptance Criteria\n- The external audio input channel can be enabled via $D417 bit 3 (route through filter) or mixed directly.\n- External audio input is accessible via `IAudioChip.SetExternalInput()`.\n- When routed through the filter, the external input is processed identically to the voice outputs.\n- The external input level is correctly scaled relative to the SID voice outputs.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

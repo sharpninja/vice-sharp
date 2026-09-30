@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXGPL-BRAND-001",
+  "title": "C= logo provenance and multi-surface attribution plumbing",
+  "status": "completed",
+  "priority": "high",
+  "body": "Branding assets under docs/xbox/store-screenshots must derive from the Wikimedia\nCommons Commodore C= logo.svg (local SVG + rasterization). Attribution must be\ncentralized in THIRD_PARTY_NOTICES.md and AboutInfo.LogoAttributionText /\nLogoSourceUrl / LogoLicenseUrl, packed into NuGet via Directory.Build.props,\nmirrored in package README files, and bound on Xbox AboutPage and Avalonia About.\n",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TESTGATE-001",
+  "title": "S0 feasibility gate before production",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The head is delivered as an ordered BDP v4 slice sequence where S0 is a feasibility go/no-go that must pass before any production slice. Acceptance: S0 GO recorded before S1; the ordered slice list is the single source of execution order.\n\n## Acceptance Criteria\n- S0 GO recorded before S1; the ordered slice list is the single source of execution order.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

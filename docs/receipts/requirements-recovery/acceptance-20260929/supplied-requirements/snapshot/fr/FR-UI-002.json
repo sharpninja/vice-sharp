@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-UI-002",
+  "title": "Emulator Status and Machine Control Bar",
+  "status": "in_progress",
+  "priority": "high",
+  "body": "The desktop UI shall provide a bottom status and control bar that surfaces host telemetry and machine controls while keeping keyboard/rendering focus stable.\n\n## Acceptance Criteria\n- The status bar displays power state, run state, limiter target, measured FPS, cycle, PC, and effective clock speed.\n- The status bar exposes pause, resume, step cycle, step frame, rewind cycle, rewind frame, cold reset, warm reset, and reset-plus-drive-8 autorun controls.\n- Unsupported controls remain visible but report disabled/unsupported state from the host.\n- Using status controls does not stop emulator rendering or steal keyboard focus unless a text field explicitly takes focus.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "fr-ui-002-ac-1",
+      "text": "The status bar presents existing run state, cycle, frame, model, limiter, automation, and control commands.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-ui-002-ac-2",
+      "text": "The status bar presents IEC activity from host telemetry without replacing existing fields.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-ui-002-ac-3",
+      "text": "The status bar remains usable without stealing emulator focus for normal display interaction.",
+      "isSatisfied": false
+    }
+  ]
+}

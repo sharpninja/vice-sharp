@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-SYSINDEP-001",
+  "title": "Independent scheduling and bus-event ordering tests",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Tests that the drive CPU advances on its own clock (not host lockstep), IEC bus edges are observed by other systems before a read, per-system pacing sustains clock under load, and the true-drive LOAD parity test still passes.",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-MACHINEPICKER-001",
+  "title": "Settings Computer and Model dropdowns",
+  "status": "pending",
+  "priority": "high",
+  "body": "Avalonia Settings splits machine selection into two ComboBoxes matching Xbox SettingsPage. Computer is the family (Commodore 64 / VIC-20). Model is the variant list for that family from the host profile catalog (C64 PAL/NTSC/C64C/... or VIC-20 PAL/NTSC). Changing Computer publishes that family's Models and selects the family default profile. Changing Model sets the host profile id and flags Apply+Restart.\n\n## Acceptance Criteria\n- **ac-two-combos**: Settings exposes Computer and Model ComboBoxes with AutomationIds Settings.Computer and Settings.MachineVariant.\n- **ac-models-filter**: Selecting Commodore 64 lists only x64sc models; selecting VIC-20 lists only xvic models. Minimal host is excluded.\n- **ac-restart**: Changing Computer or Model flags restart and Apply+Restart switches the live machine family/variant.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-two-combos",
+      "text": "Settings exposes Computer and Model ComboBoxes with AutomationIds Settings.Computer and Settings.MachineVariant.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-models-filter",
+      "text": "Selecting Commodore 64 lists only x64sc models; selecting VIC-20 lists only xvic models. Minimal host is excluded.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-restart",
+      "text": "Changing Computer or Model flags restart and Apply+Restart switches the live machine family/variant.",
+      "isSatisfied": false
+    }
+  ]
+}

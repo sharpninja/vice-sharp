@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-MEM-001",
+  "title": "Memory and Banking Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Address decoding, RAM-under-ROM, Ultimax, VIC bank selection, color RAM, and stack/zero-page behavior are verified with unit and integration tests.",
+  "acceptanceCriteria": []
+}

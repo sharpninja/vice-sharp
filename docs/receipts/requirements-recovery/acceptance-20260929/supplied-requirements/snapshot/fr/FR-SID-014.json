@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-014",
+  "title": "VICE-Compatible Signed SID Voice Output and Demo Pacing",
+  "status": "completed",
+  "priority": "high",
+  "body": "SID voice output shall be centered and scaled like VICE/reSID so live host audio back-pressure paces demos at the same rate as VICE across runtime segment transitions.\n\n## Acceptance Criteria\n- Selected SID waveforms are centered around the model-specific DAC zero level before envelope multiplication.\n- 6581 and 8580 models use distinct zero levels matching reSID behavior.\n- The mixed PCM output remains normalized without flattening active voices.\n- Runtime validation of the Pieces of Light demo remains near 100% before and after leaving the first segment with Space.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

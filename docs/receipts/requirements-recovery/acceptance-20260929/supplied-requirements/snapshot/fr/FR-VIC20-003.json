@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC20-003",
+  "title": "VIC-20 dual VIA 6522 wiring",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-20 uses two shared `Via6522` instances (one chip implementation, board wiring only in Architectures): VIA1 at $9110 (typically NMI path) and VIA2 at $9120 (typically IRQ path). No C1541-specific assumptions may live in the shared VIA chip.\n\n## Acceptance Criteria\n- Machine builds with two `Via6522` devices registered on the bus at $9110 and $9120 (16-byte windows).\n- VIA1 and VIA2 are clocked and reset with the machine.\n- Shared `Via6522` source contains no VIC-20 or 1541 board glue (ARCH-CHIPGLUE-001).\n- Keyboard, joystick, and RESTORE wiring land in later slices without forking the chip.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

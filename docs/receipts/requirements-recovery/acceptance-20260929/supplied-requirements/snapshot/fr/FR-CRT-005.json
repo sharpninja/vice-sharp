@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CRT-005",
+  "title": "Final Cartridge III (FC3)",
+  "status": "pending",
+  "priority": "low",
+  "body": "The Final Cartridge III is a utility cartridge with 64KB of ROM in 4 banks, providing a desktop environment, fast loader, freezer, and machine monitor. It uses a complex banking scheme controlled by writes to $DFFF.\n\n## Acceptance Criteria\n- Four 16KB ROM banks are selectable via writes to $DFFF.\n- Bits 0-1 of $DFFF select the bank; bit 4 controls NMI generation; bits 5-6 control GAME/EXROM.\n- The FREEZE button triggers NMI and banks in the FC3 ROM.\n- The cartridge's fast loader functionality works correctly.\n- The desktop environment (GUI) launches on cold start when configured.\n- The FC3 can be disabled by writing the appropriate value to $DFFF (setting GAME=1, EXROM=1).\n- The CRT file format for FC3 is correctly parsed with all 4 bank chips.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

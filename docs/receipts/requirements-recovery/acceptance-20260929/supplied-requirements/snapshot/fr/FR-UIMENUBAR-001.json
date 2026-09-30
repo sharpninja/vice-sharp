@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-UIMENUBAR-001",
+  "title": "VICE-style menu bar",
+  "status": "pending",
+  "priority": "medium",
+  "body": "A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about). Menu commands bind to the existing view-model actions/host services.\n\n## Acceptance Criteria\n- A top menu bar with structure modeled on VICE's x64sc GTK UI: File (smart attach, attach/detach disk 8-11, tape + datasette controls, cartridge, reset soft/hard, exit), Snapshot (load/save, quick, media recording), Settings (full settings, machine/drive/audio/video/input categories, toggle warp, toggle true drive per drive, swap joysticks), Debug (monitor, step), Help (about).\n- Menu commands bind to the existing view-model actions/host services.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

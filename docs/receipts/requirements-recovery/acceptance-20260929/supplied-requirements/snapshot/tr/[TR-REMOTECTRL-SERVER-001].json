@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "[TR-REMOTECTRL-SERVER-001]",
+  "title": "[TR-REMOTECTRL-SERVER-001]",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Placeholder requirement backfilled for TODO link [TR-REMOTECTRL-SERVER-001].",
+  "condition": null,
+  "acceptanceCriteria": []
+}

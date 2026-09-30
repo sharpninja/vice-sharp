@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CFG-003",
+  "title": "Palette Selection and Color Resource Handling",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall support selecting palette resources for video output so rendered frames can match documented machine and display color profiles.\n\n## Acceptance Criteria\n- Palette files can be discovered and selected for compatible machine/video profiles.\n- Invalid palette files report diagnostics and do not replace the active palette.\n- Palette changes apply at a frame boundary.\n- Captured frames include enough palette metadata to reproduce displayed colors.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

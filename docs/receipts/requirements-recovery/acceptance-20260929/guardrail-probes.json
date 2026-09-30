@@ -1,0 +1,59 @@
+{
+  "generatedUtc": "2026-09-29T23:19:43.5256245Z",
+  "route": "/mcpserver/requirements/recovery/dry-run",
+  "mode": "dry-run",
+  "deployedValidation": "c195837 RequirementsRecoveryService.NormalizeItems rejects an empty body and an id that fails FrIdPattern, TrIdPattern, or TestIdPattern. It does not reject a placeholder sentence or removal of an Acceptance Criteria heading.",
+  "probes": [
+    {
+      "name": "empty-body",
+      "idempotencyKey": "phase1-guardrail-20260929-empty-body",
+      "httpStatus": 400,
+      "responseStatus": "400",
+      "applied": null,
+      "responseSha256": "a4f071edacf482e5426d5e43f65310e421e4236578af16f511f96cb92388d465",
+      "responseBody": "{\"type\":\"https://httpstatuses.io/400\",\"title\":\"validation_error\",\"status\":400,\"detail\":\"Requirement 'FR-GUARD-EMPTY-001' requires body.\",\"code\":\"validation_error\",\"error\":\"validation_error\",\"message\":\"Requirement 'FR-GUARD-EMPTY-001' requires body.\",\"retryable\":false,\"details\":{\"reason\":\"validation\"}}",
+      "responseTruncated": false
+    },
+    {
+      "name": "placeholder-body",
+      "idempotencyKey": "phase1-guardrail-20260929-placeholder-body",
+      "httpStatus": 200,
+      "responseStatus": "planned",
+      "applied": false,
+      "responseSha256": "de0b52aac9a10c5a9f7f40f64ba4a1477611be3418554047a0589246e3e5fb54",
+      "responseBody": "{\"idempotencyKey\":\"phase1-guardrail-20260929-placeholder-body\",\"payloadHash\":\"8d3f298183cc86af267894b56ba701a66932eeecc036b8c441dfe4b4db5e698e\",\"status\":\"planned\",\"applied\":false,\"replay\":false,\"createdAtUtc\":\"\",\"items\":[{\"kind\":\"fr\",\"id\":\"FR-GUARD-PLACEHOLDER-001\",\"action\":\"create\"}]}",
+      "responseTruncated": false
+    },
+    {
+      "name": "malformed-id",
+      "idempotencyKey": "phase1-guardrail-20260929-malformed-id",
+      "httpStatus": 400,
+      "responseStatus": "400",
+      "applied": null,
+      "responseSha256": "dcaaffb50b6154d2bf2b659af4d27eab534a87f0635c2993d984345625bd8170",
+      "responseBody": "{\"type\":\"https://httpstatuses.io/400\",\"title\":\"validation_error\",\"status\":400,\"detail\":\"Requirement id 'NOT-AN-ID' is not valid for kind 'fr'.\",\"code\":\"validation_error\",\"error\":\"validation_error\",\"message\":\"Requirement id 'NOT-AN-ID' is not valid for kind 'fr'.\",\"retryable\":false,\"details\":{\"reason\":\"validation\"}}",
+      "responseTruncated": false
+    },
+    {
+      "name": "type-prefix",
+      "idempotencyKey": "phase1-guardrail-20260929-type-prefix",
+      "httpStatus": 400,
+      "responseStatus": "400",
+      "applied": null,
+      "responseSha256": "a06c73af234d8cfa62199864d9adf81af4f891f6eb4cc76ab23ee91297438ff5",
+      "responseBody": "{\"type\":\"https://httpstatuses.io/400\",\"title\":\"validation_error\",\"status\":400,\"detail\":\"Requirement id 'TEST-GUARD-TYPE-001' is not valid for kind 'tr'.\",\"code\":\"validation_error\",\"error\":\"validation_error\",\"message\":\"Requirement id 'TEST-GUARD-TYPE-001' is not valid for kind 'tr'.\",\"retryable\":false,\"details\":{\"reason\":\"validation\"}}",
+      "responseTruncated": false
+    },
+    {
+      "name": "ac-removal",
+      "idempotencyKey": "phase1-guardrail-20260929-ac-removal",
+      "httpStatus": 200,
+      "responseStatus": "planned",
+      "applied": false,
+      "responseSha256": "b9947201eb49d78f0b1e3f6698208fd872ef3630d05c8adb97624227a92f7edb",
+      "responseBody": "{\"idempotencyKey\":\"phase1-guardrail-20260929-ac-removal\",\"payloadHash\":\"bce2b54053c3eb633f512acc87f05a52b6e702e4911d9b554b7ccfda91bb97ba\",\"status\":\"planned\",\"applied\":false,\"replay\":false,\"createdAtUtc\":\"\",\"items\":[{\"kind\":\"fr\",\"id\":\"FR-VIC-001\",\"action\":\"update\"}]}",
+      "responseTruncated": false
+    }
+  ],
+  "frVic001UnchangedAfterAcRemovalDryRun": true
+}

@@ -1,0 +1,29 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC20-PIXEL-001",
+  "title": "Pixel compare path index-primary then BGRA",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Managed and xvic expose normal-border index/BGRA buffers at a common sync point. READY PAL/NTSC/busy index SequenceEqual is Exact-scoped. READY PAL, READY NTSC, and busy PAL native BGRA SequenceEqual vs xvic capture_visible_frame is also Exact-scoped (canvas RGB, opaque alpha; NTSC unpainted clamp rows opaque black). Other border modes remain Partial. Not whole-machine Exact.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "AC-TP-01",
+      "text": "Managed index and BGRA buffers match xvic canvas geometry",
+      "isSatisfied": true,
+      "evidence": "Vic20PixelLockstep geometry"
+    },
+    {
+      "id": "AC-TP-02",
+      "text": "Compare sync point defined and used by all pixel tests",
+      "isSatisfied": true,
+      "evidence": "TryCaptureVisibleFrame + FrameBuffer SequenceEqual"
+    },
+    {
+      "id": "AC-TP-03",
+      "text": "Index compare is Exact-scoped for READY PAL/NTSC/busy; BGRA SequenceEqual is Exact-scoped for the same named captures after canvas palette match",
+      "isSatisfied": true,
+      "evidence": "six isolated Vic20PixelLockstep facts"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-DRV1540-LOCKSTEP-001",
+  "title": "1540 full lockstep gates",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Boot witness: drive {PC,A,X,Y,P,SP} equals native x64sc (Drive8Type=1540, TDE=1) at equal drive clocks sampled every 19,656 host cycles over 2M host cycles, plus host CPU state. Media gate: KERNAL-CLOSE anchored LOAD convergence from frostpoint.d64 over 30 emulated seconds.",
+  "acceptanceCriteria": []
+}

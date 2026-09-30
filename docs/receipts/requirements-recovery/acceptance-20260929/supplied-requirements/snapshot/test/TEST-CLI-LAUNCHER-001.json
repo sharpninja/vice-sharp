@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-CLI-LAUNCHER-001",
+  "title": "CLI Launcher and Testbench Smoke Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "VICE-style launcher parser, topology, debugcart polarity, bounded `-limitcycles`, PRG autostart dispatch, help text, and process smoke behavior are verified with parser, stub entrypoint, and real console process tests.",
+  "acceptanceCriteria": []
+}

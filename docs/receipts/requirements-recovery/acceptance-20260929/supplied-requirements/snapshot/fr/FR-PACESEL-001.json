@@ -1,0 +1,31 @@
+{
+  "kind": "fr",
+  "id": "FR-PACESEL-001",
+  "title": "Selectable emulation pacing strategy",
+  "status": "completed",
+  "priority": "medium",
+  "body": "The pacing strategy (Semaphore vs VICE) is selectable in settings, applied live by swapping the gate on the worker thread, and persisted.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Strategy is selectable in the Settings UI (Semaphore or VICE)",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Change applies live - the pump swaps the gate with no session restart",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-3",
+      "text": "Selection round-trips through the settings DTO and persists",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-4",
+      "text": "Unknown or null strategy defaults to Semaphore",
+      "isSatisfied": true
+    }
+  ]
+}

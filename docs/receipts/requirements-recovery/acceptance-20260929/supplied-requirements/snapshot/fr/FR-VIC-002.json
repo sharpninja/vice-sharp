@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-002",
+  "title": "Character Display Modes (Standard, Multicolor, ECM)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-II shall support all three character display modes: Standard Character Mode, Multicolor Character Mode, and Extended Color Mode (ECM). Character data is fetched from the screen matrix and character generator according to the configured VIC bank and pointers.\n\n## Acceptance Criteria\n- Standard mode displays 40x25 characters using 8x8 pixel character cells with 2 colors (background + foreground from Color RAM).\n- Multicolor character mode (MCM bit set) displays 4x8 double-wide pixel characters with up to 4 colors per cell when color nybble bit 3 is set.\n- Extended Color Mode (ECM bit set) allows 4 background colors selected by the upper 2 bits of the screen code, limiting the character set to 64 characters.\n- ECM + MCM combination is invalid for visible graphics output and renders as color 0, but x64sc still derives the hidden foreground/priority bit from the underlying character pixel: hires character one-bits when Color RAM bit 3 is clear, and multicolor character pairs %10/%11 when Color RAM bit 3 is set.\n- Screen matrix base and character generator base are controlled by $D018.\n- Character data fetch timing (c-access and g-access) occurs at the correct cycles per line.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

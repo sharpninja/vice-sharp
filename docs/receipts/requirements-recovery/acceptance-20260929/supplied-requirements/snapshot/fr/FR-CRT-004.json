@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CRT-004",
+  "title": "Action Replay and Retro Replay Cartridge",
+  "status": "pending",
+  "priority": "low",
+  "body": "The Action Replay (and its modern successor Retro Replay) is a utility cartridge providing a machine monitor, fast loader, freezer function, and other tools. It uses bank switching, RAM expansion, and the FREEZE button feature.\n\n## Acceptance Criteria\n- The Action Replay ROM is mapped according to the cartridge's banking logic ($DE00/$DE01 control registers).\n- The FREEZE button (directly asserting NMI + GAME/EXROM change) triggers the freezer entry point.\n- The cartridge's 8KB RAM is accessible when banked in.\n- Bank switching between ROM pages is controlled via writes to $DE00.\n- The cartridge can be disabled (effectively removed from the bus) by the control register.\n- REU (RAM Expansion Unit) passthrough is supported on Retro Replay.\n- The cartridge CRT format for Action Replay and Retro Replay is correctly parsed.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

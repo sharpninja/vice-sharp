@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-AOT-001",
+  "title": "Full NativeAOT Compatibility with Zero Reflection on Hot Path",
+  "status": "pending",
+  "priority": "high",
+  "body": "All ViceSharp assemblies shall be fully compatible with .NET NativeAOT publication. This means no use of runtime reflection, `System.Reflection.Emit`, or dynamic code generation on the emulation hot path. All assemblies shall pass the NativeAOT trim analysis without warnings. Source generators shall be used where compile-time code generation is needed.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

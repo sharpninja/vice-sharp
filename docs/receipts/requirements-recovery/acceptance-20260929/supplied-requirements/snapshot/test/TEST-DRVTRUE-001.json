@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-DRVTRUE-001",
+  "title": "Per-drive True Drive toggle + runtime gating",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "VM: TrueDrive toggles per drive (default off). Runtime: with TrueDrive on, the session uses the coordinator true-drive 1541 path (LOAD works); with it off, the simulated drive is used and existing tests stay green.",
+  "acceptanceCriteria": []
+}

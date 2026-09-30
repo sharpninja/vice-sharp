@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-006",
+  "title": "ADSR Envelope Generator",
+  "status": "pending",
+  "priority": "high",
+  "body": "Each SID voice has an ADSR (Attack, Decay, Sustain, Release) envelope generator that shapes the amplitude of the waveform output. The envelope is triggered by the gate bit in the control register. The ADSR bug (where certain attack/decay transitions can cause the envelope to skip to incorrect values) shall be accurately emulated.\n\n## Acceptance Criteria\n- Attack rate is set by the upper 4 bits of $D405/$D40C/$D413 with 16 rate values from 2ms to 8s.\n- Decay rate is set by the lower 4 bits of $D405/$D40C/$D413 with 16 rate values from 6ms to 24s.\n- Sustain level is set by the upper 4 bits of $D406/$D40D/$D414 (0-15 mapped to 0-$FF).\n- Release rate is set by the lower 4 bits of $D406/$D40D/$D414 with the same 16 rates as decay.\n- Setting the gate bit (bit 0 of control register) starts the attack phase.\n- Clearing the gate bit starts the release phase from the current envelope level.\n- The ADSR bug is reproduced: if the envelope counter reaches zero during decay/release and the rate period comparator triggers at the same cycle, the envelope can jump to $FF.\n- The envelope output is an 8-bit value (0-$FF) that multiplies the waveform output.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

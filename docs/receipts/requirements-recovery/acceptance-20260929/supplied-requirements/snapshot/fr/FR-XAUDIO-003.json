@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XAUDIO-003",
+  "title": "Suspend/resume audio without deadlock",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Audio pauses on suspend/background and resumes without breaking determinism or deadlocking the worker. Acceptance: Suspending stops the source voice; the worker is not parked in SubmitSamples (non-blocking ring); Resuming continues; core state unchanged.\n\n## Acceptance Criteria\n- Suspending stops the source voice; the worker is not parked in SubmitSamples (non-blocking ring); Resuming continues; core state unchanged.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

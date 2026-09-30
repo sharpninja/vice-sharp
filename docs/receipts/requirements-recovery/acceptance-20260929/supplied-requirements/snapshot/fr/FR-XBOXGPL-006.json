@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXGPL-006",
+  "title": "MSIX GPL compliance payload",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The MSIX bundles COPYING + THIRD_PARTY_NOTICES.md (incl. vkm GPL attribution) + the *.vkm Content, bundles zero ROM *.bin, and exposes the source URL; the release attaches MSIX + source archive. Acceptance: staging test asserts Licenses/ contents + vkm Assets present + no kernal/basic/chargen *.bin + compiled SourceUrl.\n\n## Acceptance Criteria\n- staging test asserts Licenses/ contents + vkm Assets present + no kernal/basic/chargen *.bin + compiled SourceUrl.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

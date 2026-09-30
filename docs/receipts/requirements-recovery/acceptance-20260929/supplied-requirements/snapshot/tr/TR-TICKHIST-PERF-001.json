@@ -1,0 +1,26 @@
+{
+  "kind": "tr",
+  "id": "TR-TICKHIST-PERF-001",
+  "title": "Tick-history capture is opt-in (zero default overhead)",
+  "status": "completed",
+  "priority": "high",
+  "body": "The time-travel recorder must stay unsubscribed by default so per-instruction chip-state capture and per-write delta recording impose zero overhead; it is armed only when the History panel reads the trace.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "With recording disabled (default) advancing the emulation pump does not subscribe the recorder and tick history stays empty.",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Reading the tick history via GetTickHistory arms recording so subsequent emulation captures.",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-3",
+      "text": "BasicBus publishes MemoryWriteEvent only when SubscriptionCount is greater than zero so the default path has zero per-write cost.",
+      "isSatisfied": true
+    }
+  ]
+}

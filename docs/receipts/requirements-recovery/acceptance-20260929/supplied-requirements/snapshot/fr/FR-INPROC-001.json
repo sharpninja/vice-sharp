@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INPROC-001",
+  "title": "Kestrel-free in-process host path",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The console host runs the core in-process with no Kestrel/ASP.NET on the emulation/render/input path. Acceptance: ConsoleHostComposition.Build works with no WebApplication/Kestrel; ViceSharp.Host.InProcess has no Microsoft.AspNetCore.* reference.\n\n## Acceptance Criteria\n- ConsoleHostComposition.Build works with no WebApplication/Kestrel; ViceSharp.Host.InProcess has no Microsoft.AspNetCore.* reference.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

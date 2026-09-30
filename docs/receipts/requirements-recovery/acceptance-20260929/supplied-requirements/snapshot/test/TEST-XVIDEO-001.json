@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XVIDEO-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Pure byte-exact copy + no-advance spy. Acceptance: 384x272 BGRA copy sized from FrameGeometry.BufferLength; core never advanced.",
+  "acceptanceCriteria": []
+}

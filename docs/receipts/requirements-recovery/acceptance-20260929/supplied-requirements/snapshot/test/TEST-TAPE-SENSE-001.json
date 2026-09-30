@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-TAPE-SENSE-001",
+  "title": "DatasetteSenseLineTests: sense line + record mode (7 tests)",
+  "status": "closed",
+  "priority": "medium",
+  "body": null,
+  "condition": "SenseLine==false when PlayPressed or RecordPressed, true otherwise. TryWritePulse returns true only when MotorEnabled && RecordPressed, incrementing RecordedPulseCount. 7 pass.",
+  "acceptanceCriteria": []
+}

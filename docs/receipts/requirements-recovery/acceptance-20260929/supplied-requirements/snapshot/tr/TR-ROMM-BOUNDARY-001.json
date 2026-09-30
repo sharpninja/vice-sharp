@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-ROMM-BOUNDARY-001",
+  "title": "Adapter isolates HTTP from the VM library",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. All HTTP/RomM.Client access lives in ViceSharp.RomM; ViceSharp.Library.ViewModels has no System.Net.Http reference and references only ViceSharp.Protocol. Verified by LibraryViewModelsBoundaryTests.NoHttp (covers AC-PKG-03).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-DRV-PACE-001",
+  "title": "Drive pacing via native 16.16 accumulator",
+  "status": "pending",
+  "priority": "high",
+  "body": "SystemCoordinator.SynchronizePeripheralSystemsToHost replaces the linear hostCycles*driveHz/hostRate target with native drivecpu.c:381-394 semantics: per peripheral (lastHostCycles, ulong cycleAccum); cycleAccum += syncFactor*delta; target += cycleAccum>>16; cycleAccum &= 0xFFFF; syncFactor = multiplier * floor(65536*driveHz/hostHz) per drivesync.c:41-57. The 1571 exposes a runtime clock multiplier (IDriveClockMultiplier, VIA1 PA bit 5) applied at the next sync; the 1581 runs at its fixed 2 MHz descriptor frequency. Reset re-anchors the accumulator to 0. Witness: managed pacer target equals native vice_drivecpu_get_clk at every 19,656-cycle sample.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

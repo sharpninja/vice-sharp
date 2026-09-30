@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-TICKHIST-UI-001",
+  "title": "History tab and debug screen",
+  "status": "completed",
+  "priority": "medium",
+  "body": "SidebarTab.History hosts TickHistoryView bound to TickHistoryViewModel; IsPaused is fed via AttachPanelViewModel.ApplyStatus. Selecting a tick while paused shows registers, each chip's decoded state, and a reconstructed scrolling hex dump.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Refresh lists ticks newest-first; inspect while paused opens the debug screen",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Inspect while running does not open the debug screen",
+      "isSatisfied": true
+    }
+  ]
+}

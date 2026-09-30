@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-005",
+  "title": "Video renders committed frames ~50Hz as pure sink",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Video renders committed frames ~50Hz as a pure sink. Acceptance: 10 fires/200ms -> 10 pulls +/-1; pure-sink forbidden-identifier scan passes.\n\n## Acceptance Criteria\n- 10 fires/200ms -> 10 pulls +/-1; pure-sink forbidden-identifier scan passes.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

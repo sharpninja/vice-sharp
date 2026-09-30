@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-INPROC-002",
+  "title": "XboxManagedFrameGate zero P/Invoke, idempotent",
+  "status": "pending",
+  "priority": "medium",
+  "body": "XboxManagedFrameGate zero P/Invoke, no aux timer thread, idempotent Start/Stop. Acceptance: verified by TEST-INPROC-003.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

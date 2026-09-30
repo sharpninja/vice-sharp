@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CFG-004",
+  "title": "Hotkey Configuration and Action Dispatch",
+  "status": "pending",
+  "priority": "low",
+  "body": "The host UI shall allow configurable hotkeys to trigger emulator actions such as reset, media operations, monitor commands, snapshots, and settings actions.\n\n## Acceptance Criteria\n- Hotkey configuration files can define action mappings.\n- Hotkeys dispatch to host commands rather than UI-local emulator operations.\n- Invalid hotkey directives are reported without disabling unrelated mappings.\n- Hotkeys can be scoped by UI mode so monitor text entry is not intercepted unexpectedly.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

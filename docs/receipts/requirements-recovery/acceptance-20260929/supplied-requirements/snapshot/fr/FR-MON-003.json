@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MON-003",
+  "title": "Breakpoint Management",
+  "status": "pending",
+  "priority": "high",
+  "body": "The monitor shall support execution breakpoints, read/write watchpoints, and conditional breakpoints. When a breakpoint is hit, the emulation pauses and the monitor displays the current CPU state.\n\n## Acceptance Criteria\n- Execution breakpoints: pause emulation when the PC reaches the specified address.\n- Read watchpoints: pause emulation when a specified address is read.\n- Write watchpoints: pause emulation when a specified address is written (optionally filtering by value).\n- Conditional breakpoints: expression-based conditions (e.g., `A == $FF`, `X > $10`, `MEM[$D020] == $01`).\n- Breakpoints can be enabled, disabled, and removed individually.\n- A maximum of at least 64 simultaneous breakpoints is supported without performance degradation.\n- Temporary breakpoints (auto-removed after first hit) are supported for step-over and run-to-cursor.\n- The `IBreakpointManager` interface provides CRUD operations and hit-count tracking for each breakpoint.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CPU-001",
+  "title": "Full 6502/6510 Instruction Set Including Undocumented Opcodes",
+  "status": "pending",
+  "priority": "high",
+  "body": "The CPU emulation shall implement the complete MOS 6502/6510 instruction set, including all 256 opcode entries. This encompasses the 151 official opcodes as well as all undocumented/illegal opcodes (LAX, SAX, DCP, ISC, SLO, RLA, SRE, RRA, ANC, ALR, ARR, SBX, LAS, SHA, SHX, SHY, TAS, NOP variants, JAM/KIL). Behavior of undocumented opcodes shall match the known behavior documented by the VICE team and confirmed by hardware testing.\n\n## Acceptance Criteria\n- All 151 official 6502 opcodes execute with correct results for all addressing modes.\n- All undocumented opcodes produce results matching the Lorenz test suite (C64 Tester) pass criteria.\n- The BCD flag affects ADC/SBC results correctly when the decimal flag is set (6502 mode) and is a no-op on the 6510 in CMOS variants.\n- All addressing modes are implemented: Immediate, Zero Page, Zero Page X/Y, Absolute, Absolute X/Y, Indirect, (Indirect,X), (Indirect),Y, Relative, Implied, Accumulator.\n- JAM/KIL opcodes halt the CPU and raise a diagnostic event on `ICpu.Jammed`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

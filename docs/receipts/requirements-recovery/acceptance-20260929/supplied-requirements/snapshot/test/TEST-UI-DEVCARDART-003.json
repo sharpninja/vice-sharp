@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UI-DEVCARDART-003",
+  "title": "Device art headless resource resolution",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "DeviceArtHeadlessTests (AvaloniaFact): AvaloniaXamlLoader loads DeviceArt.axaml; every catalog key resolves to a DrawingImage with non-null Drawing; DeviceArtKeyConverter returns null without throwing for unknown keys.",
+  "acceptanceCriteria": []
+}

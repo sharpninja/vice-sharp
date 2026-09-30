@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CSDB-001",
+  "title": "CSDb discovery, ingest, scan, refresh",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Search CSDb scene releases, ingest into RomM, scan, and refresh the library.\nAC-CSDB-01: SearchAsync returns classified hits (demo/crack/sid) -> CsdbDiscoveryViewModelTests.Search_ReturnsHits.\nAC-CSDB-02: ingest selection capped at 20 -> CsdbDiscoveryViewModelTests.Ingest_CapsAt20.\nAC-CSDB-03: LocalCsdbGateway ingests via CsdbRomMWorkflow then triggers scan -> LocalCsdbGatewayTests.Ingest_WritesThenScans.\nAC-CSDB-04: BridgeCsdbGateway POSTs /csdb/v1/ingest then calls RomMClient.Tasks.ScanLibraryAsync (bridge does not scan) -> BridgeCsdbGatewayTests.Posts_ThenScans.\nAC-CSDB-05: completion raises LibraryRefreshRequested -> CsdbDiscoveryViewModelTests.Ingest_RaisesRefresh.\nAC-CSDB-06: gateway selection by config (roms root writable -> Local, else Bridge) -> CsdbGatewaySelectionTests.PicksByConfig.\n\n## Acceptance Criteria\n- `SearchAsync` returns classified hits (demo/crack/sid) ->\n- ingest selection capped at 20 -> `CsdbDiscoveryViewModelTests.Ingest_CapsAt20`.\n- `LocalCsdbGateway` ingests via `CsdbRomMWorkflow` then triggers scan ->\n- `BridgeCsdbGateway` POSTs `/csdb/v1/ingest` then calls `RomMClient.Tasks.ScanLibraryAsync`\n- completion raises `LibraryRefreshRequested` ->\n- gateway selection by config (roms root writable -> Local, else Bridge) ->",
+  "condition": null,
+  "acceptanceCriteria": []
+}

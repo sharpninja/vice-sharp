@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-UI-003",
+  "title": "Collapsible Tabbed Emulator Sidebar",
+  "status": "in_progress",
+  "priority": "medium",
+  "body": "The desktop UI shall provide a collapsible sidebar with Peripherals, Settings, and Monitor tabs so routine emulator controls remain available without crowding the display surface.\n\n## Acceptance Criteria\n- A hamburger control collapses and expands the sidebar without stopping emulator input or rendering.\n- The Peripherals tab contains disk, tape, cartridge, recent media, readonly, and keyboard map controls.\n- The Settings tab contains limiter target, display scale/crop, and host/session settings controls.\n- The Monitor tab embeds the reusable monitor control.\n- Tab state remains synchronized with host status and survives sidebar collapse/expand.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "fr-ui-003-ac-1",
+      "text": "The peripherals tab exposes drive attachment state and media commands for configured drives.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-ui-003-ac-2",
+      "text": "Drive entries expose IEC active/idle state from the same host telemetry source as the status bar.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-ui-003-ac-3",
+      "text": "Drive IEC activity returns idle in the peripherals tab after bus activity settles.",
+      "isSatisfied": false
+    }
+  ]
+}

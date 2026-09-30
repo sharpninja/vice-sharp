@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-MED-SOUND-001",
+  "title": "CaptureAudioTap + WavAudioRecorder",
+  "status": "pending",
+  "priority": "high",
+  "body": "Runtime-swappable tap in the SID->output path feeds a 16-bit PCM WAV recorder whose file writes run off the worker.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

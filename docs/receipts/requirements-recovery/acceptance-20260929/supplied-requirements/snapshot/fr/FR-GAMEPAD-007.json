@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-007",
+  "title": "Default locked mapping, remappable, port swap",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Default profile is the locked mapping; remappable at runtime; swap via XboxInputConfig.SwapPorts. Acceptance: defaults LeftStick->Joystick2, RightStick->Joystick1, Dpad->Joystick2, Joy2Fire=A, Joy1Fire=B; a swapped config routes to the other port.\n\n## Acceptance Criteria\n- defaults LeftStick->Joystick2, RightStick->Joystick1, Dpad->Joystick2, Joy2Fire=A, Joy1Fire=B; a swapped config routes to the other port.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

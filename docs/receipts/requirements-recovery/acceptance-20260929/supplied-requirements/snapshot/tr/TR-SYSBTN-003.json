@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-SYSBTN-003",
+  "title": "Source-gen JsonSerializerContext persistence",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Source-gen JsonSerializerContext persistence, no reflection. Acceptance: verified by TEST-SYSBTN-003.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

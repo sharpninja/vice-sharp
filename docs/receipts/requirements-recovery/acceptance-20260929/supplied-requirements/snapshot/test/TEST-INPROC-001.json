@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-INPROC-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Assembly-reference (no ASP.NET in the portable lib) + moved-type re-run. Acceptance: EmulationPumpService.Assembly == Host.InProcess with no Microsoft.AspNetCore.* referenced.",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-UISETTINGS-001",
+  "title": "Settings panel as a UserControl",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The settings panel is a self-contained reusable AXAML UserControl bound to the settings view model (machine profile, video/renderer/palette, audio, input/joystick, limiter, resource mode).\n\n## Acceptance Criteria\n- The settings panel is a self-contained reusable AXAML UserControl bound to the settings view model (machine profile, video/renderer/palette, audio, input/joystick, limiter, resource mode).\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

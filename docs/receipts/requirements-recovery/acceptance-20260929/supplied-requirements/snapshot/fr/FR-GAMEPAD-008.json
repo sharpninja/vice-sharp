@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-008",
+  "title": "Fail-safe center on disconnect/no-pad/exception",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Fail-safe center both ports on disconnect/no-pad/reader-exception; promote next pad. Acceptance: primary disconnect while held -> next Tick emits (Joystick1,0,false)+(Joystick2,0,false), second pad becomes primary.\n\n## Acceptance Criteria\n- primary disconnect while held -> next Tick emits (Joystick1,0,false)+(Joystick2,0,false), second pad becomes primary.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

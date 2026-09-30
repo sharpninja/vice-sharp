@@ -1,0 +1,18 @@
+type: result
+payload:
+  requestId: req-20260930T154729Z-0a33
+  result:
+    idempotencyKey: guardrail-iterate-ac-removal-20260930T154506Z
+    payloadHash: 9744ebb435bf25da0796555a796969b7909fb48a1ec27859d33a368072b19d38
+    status: planned
+    applied: false
+    replay: false
+    createdAtUtc: ''
+    items:
+    - kind: fr
+      id: FR-VIC-001
+      action: create
+  deprecated: true
+
+---
+

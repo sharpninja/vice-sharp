@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MON-002",
+  "title": "Memory Hex and ASCII Display",
+  "status": "pending",
+  "priority": "high",
+  "body": "The monitor shall display memory contents in a combined hex/ASCII view, showing 16 bytes per row with the address, hexadecimal byte values, and the printable ASCII representation of each byte.\n\n## Acceptance Criteria\n- Each row displays: a 4-digit hex address, 16 hex byte values (space-separated, with a wider gap at the 8-byte midpoint), and the 16-character ASCII representation.\n- Non-printable characters ($00-$1F, $80-$FF) display as a dot (`.`) in the ASCII column.\n- The PETSCII character set is optionally available for the text column.\n- The display can be scrolled to any address ($0000-$FFFF).\n- Memory contents reflect the current banking configuration (the same address can show different values depending on which bank is selected).\n- Modified bytes (since last refresh) can be visually highlighted.\n- The display updates in real-time when the emulation is paused and memory is edited.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

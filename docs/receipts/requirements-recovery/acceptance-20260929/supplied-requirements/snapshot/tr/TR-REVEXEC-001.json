@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-REVEXEC-001",
+  "title": "Frame-snapshot ring reverse execution",
+  "status": "pending",
+  "priority": "high",
+  "body": "A frame-granular snapshot ring keyed by cycle backs RewindCycle/RewindFrame: restore nearest snapshot <= target, re-run deterministically to target. Replaces the NotImplemented host stubs. Bounded memory.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-MED-001",
+  "title": "Media Capture Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Screenshot, video, audio, synchronized capture, and format selection behavior are verified through capture metadata and round-trip output tests.",
+  "acceptanceCriteria": []
+}

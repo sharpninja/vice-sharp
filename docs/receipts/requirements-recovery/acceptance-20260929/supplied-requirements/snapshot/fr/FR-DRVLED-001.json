@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRVLED-001",
+  "title": "Per-drive activity LED",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Each drive card shows an activity LED sourced from that drive's VIA2 (1C00) port B bit 3, set by the 1541 DOS ROM (VICE led_status model), independent of IEC bus traffic.\n\n## Acceptance Criteria\n- Each drive card shows an activity LED sourced from that drive's VIA2 (1C00) port B bit 3, set by the 1541 DOS ROM (VICE led_status model), independent of IEC bus traffic.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

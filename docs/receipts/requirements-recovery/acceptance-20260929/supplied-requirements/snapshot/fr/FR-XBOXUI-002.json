@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXUI-002",
+  "title": "Controller-only high-visibility focus",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Every control operable by D-pad/left-stick + A/B, no pointer, high-visibility focus in the TV-safe rect. Acceptance: BuildGrid(3,2) edges correct, top Up null, no wrap; on-console focus-visual smoke.\n\n## Acceptance Criteria\n- BuildGrid(3,2) edges correct, top Up null, no wrap; on-console focus-visual smoke.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

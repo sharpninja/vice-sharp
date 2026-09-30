@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XDEV-001",
+  "title": "Device Setup attach/eject via host media",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Device Setup presents Drive8/Drive9/Tape/Cartridge cards with typed attach + eject through the host media boundary. Acceptance: patterns per slot; Attach reads bytes via IStoragePicker and calls AttachMediaAsync; Eject calls DetachMediaAsync; no runtime-internal calls.\n\n## Acceptance Criteria\n- AvailableDriveModels==DriveModelCatalog.Implemented; 1542 flows to SetTrueDriveAsync; single-rig invariant.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

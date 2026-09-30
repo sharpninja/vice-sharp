@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IECDECODE-001",
+  "title": "IEC protocol decoder",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Canonical captured sequences (LOAD command frame, directory read) decode to the expected IEC event list.",
+  "acceptanceCriteria": []
+}

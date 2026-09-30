@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-TESTGATE-004",
+  "title": "Majority off-console; device slices isolated",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The majority of gates run off-console; on-console work is isolated to marked device slices. Acceptance: production off-console slices need no hardware; only S0 + device slices are onConsole=true.\n\n## Acceptance Criteria\n- production off-console slices need no hardware; only S0 + device slices are onConsole=true.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

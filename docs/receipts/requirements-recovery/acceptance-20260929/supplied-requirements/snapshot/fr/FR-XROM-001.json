@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XROM-001",
+  "title": "First-run ROM provisioning gate",
+  "status": "pending",
+  "priority": "medium",
+  "body": "First run evaluates ROM provisioning and blocks normal boot until Complete (offering the wizard). Acceptance: Evaluate returns Complete only when every required role is present+hash-valid; NotProvisioned/Partial otherwise; IsBootBlocked unless Complete (or kernal not required).\n\n## Acceptance Criteria\n- Evaluate returns Complete only when every required role is present+hash-valid; NotProvisioned/Partial otherwise; IsBootBlocked unless Complete (or kernal not required).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

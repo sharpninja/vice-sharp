@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INP-004",
+  "title": "Lightpen Input",
+  "status": "pending",
+  "priority": "low",
+  "body": "The VIC-II supports a lightpen input on the LP pin (directly on the joystick port). When triggered, the VIC-II latches the current raster position into the lightpen X ($D013) and Y ($D014) registers.\n\n## Acceptance Criteria\n- A falling edge on the lightpen input latches the current X and Y raster positions.\n- The X position ($D013) reports the horizontal position in double-pixel units (0-163).\n- The Y position ($D014) reports the raster line number (0-255).\n- The lightpen latch triggers once per frame (subsequent triggers within the same frame are ignored).\n- A lightpen interrupt can be generated (if enabled in $D01A).\n- Host mouse position can be translated to lightpen position relative to the visible display area.\n- The `ILightpenPort` interface accepts screen coordinates and triggers the latch.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

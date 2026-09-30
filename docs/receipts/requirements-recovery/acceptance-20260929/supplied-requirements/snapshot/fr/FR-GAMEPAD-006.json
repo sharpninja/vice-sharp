@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-006",
+  "title": "SOCD Neutral clears opposing pairs post-merge",
+  "status": "pending",
+  "priority": "medium",
+  "body": "SocdMode.Neutral clears opposing pairs post-merge. Acceptance: stick Left + D-pad Right -> both Left and Right cleared.\n\n## Acceptance Criteria\n- stick Left + D-pad Right -> both Left and Right cleared.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

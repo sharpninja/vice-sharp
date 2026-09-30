@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CTX-001",
+  "title": "Context machine states + transitions",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The context machine has states Gameplay/MainMenu/VirtualKeyboard/ConfirmDialog with defined transitions. Acceptance: a transition-table test drives every (state,input) edge; no undefined transition changes context.\n\n## Acceptance Criteria\n- a transition-table test drives every (state,input) edge; no undefined transition changes context.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

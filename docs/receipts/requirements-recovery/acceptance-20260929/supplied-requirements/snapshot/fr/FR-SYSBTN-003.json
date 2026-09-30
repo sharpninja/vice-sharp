@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SYSBTN-003",
+  "title": "View toggles the virtual keyboard overlay",
+  "status": "pending",
+  "priority": "medium",
+  "body": "View toggles the virtual keyboard overlay. Acceptance: View edge toggles Gameplay<->VirtualKeyboard.\n\n## Acceptance Criteria\n- View edge toggles Gameplay<->VirtualKeyboard.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

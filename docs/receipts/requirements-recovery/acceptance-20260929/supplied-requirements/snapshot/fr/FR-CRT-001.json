@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CRT-001",
+  "title": "Standard 8K and 16K Cartridge Support",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall support standard 8KB and 16KB cartridge images. An 8K cartridge maps to ROML ($8000-$9FFF) with EXROM asserted. A 16K cartridge maps to both ROML ($8000-$9FFF) and ROMH ($A000-$BFFF or $E000-$FFFF depending on Ultimax mode) with both GAME and EXROM asserted.\n\n## Acceptance Criteria\n- CRT file format (VICE cartridge image format) headers are correctly parsed.\n- 8K cartridges map to ROML at $8000-$9FFF; EXROM=0, GAME=1 (active-low).\n- 16K cartridges map to ROML at $8000-$9FFF and ROMH at $A000-$BFFF; EXROM=0, GAME=0.\n- The cartridge autostart vector at $8000 (magic bytes $C3, $C2, $CD, $38, $30) is detected and the cold-start routine is called.\n- Cartridge ROM is read-only; writes to the cartridge address range go to underlying RAM.\n- Cartridges can be inserted and removed at runtime via `ICartridgePort.Insert()`/`ICartridgePort.Remove()`.\n- Removing a cartridge restores the default banking configuration.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

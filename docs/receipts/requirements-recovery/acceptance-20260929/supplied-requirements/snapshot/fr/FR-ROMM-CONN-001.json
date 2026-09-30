@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-ROMM-CONN-001",
+  "title": "RomM connection and authentication",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. Connect the supported desktop product path to a RomM 5.x server and authenticate. TR-ROMM-NUGET-001, TR-ROMM-JSON-001, TR-ROMM-SEC-001.\nAC-CONN-01: base URL + client token authenticates; Authorization: Bearer rmm_... on requests -> RomMGatewayAuthTests.ClientToken_SetsBearer.\nAC-CONN-02: device-pair exchange returns a token and persists it via the store -> RomMPairingTests.Exchange_ReturnsAndPersists.\nAC-CONN-03: OAuth password token auto-refreshes on near-expiry through RomMAuthHandler -> RomMAuthRefreshTests.NearExpiry_Refreshes.\nAC-CONN-04: a 401 sets the connection VM to a sign-in-expired reauth state and raises ConnectionInvalid -> LibraryConnectionViewModelTests.Unauthorized_SurfacesReauth.\nAC-CONN-05: on Windows, FileRomMConnectionStore persists protected_token with current-user DPAPI, writes atomically, and immediately migrates legacy plaintext records; unsupported operating systems fail closed -> FileRomMConnectionStoreTests.SaveLoad_RoundTrips + Load_LegacyPlaintext_MigratesImmediately.\nAC-CONN-06: token never appears in a URL/query string -> RomMGatewayAuthTests.Token_NeverInUri.\n\n## Acceptance Criteria\n- base URL + client token authenticates; `Authorization: Bearer rmm_...` on requests ->\n- device-pair exchange returns a token and persists it via the store ->\n- OAuth password token auto-refreshes on near-expiry through `RomMAuthHandler` ->\n- a 401 sets the connection VM to a \"sign-in expired\" reauth state and raises\n- `FileRomMConnectionStore` round-trips baseUrl/authMode/token via source-gen JSON ->\n- token never appears in a URL/query string -> `RomMGatewayAuthTests.Token_NeverInUri`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

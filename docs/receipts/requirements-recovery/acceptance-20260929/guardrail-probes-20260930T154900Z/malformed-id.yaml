@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20260930T154854Z-ee18
+  code: schema_validation_failed
+  message: YAML request failed schema validation.
+  retryable: false
+  details:
+    methodName: workflow.requirements.planRecovery
+    errors:
+    - items[0].id 'NOT-AN-ID' is not valid for kind 'fr'.
+
+---
+

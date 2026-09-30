@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MEM-005",
+  "title": "Color RAM ($D800-$DBFF)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The 1K nybble-wide Color RAM at $D800-$DBFF shall be emulated. Color RAM is a separate 4-bit-wide SRAM that is always visible in the I/O region and is not affected by banking configuration. Only the lower 4 bits of each byte are significant; the upper 4 bits read as open bus.\n\n## Acceptance Criteria\n- Color RAM is accessible at $D800-$DBFF regardless of banking configuration.\n- Only the low nybble (bits 0-3) is stored and returned on reads.\n- The upper nybble reads from the open bus (typically the value last placed on the data bus).\n- Color RAM is preserved across banking changes.\n- Both the CPU and VIC-II can access Color RAM (VIC-II reads it during character fetch).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

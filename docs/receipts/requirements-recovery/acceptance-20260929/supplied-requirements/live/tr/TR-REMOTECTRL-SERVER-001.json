@@ -1,0 +1,37 @@
+{
+  "fetchedUtc": "2026-09-30T00:35:23.6000798Z",
+  "httpStatus": 200,
+  "source": "parent HTTP GET because the reviewer has no MCP access",
+  "route": "/mcpserver/requirements/tr/TR-REMOTECTRL-SERVER-001",
+  "record": {
+    "id": "TR-REMOTECTRL-SERVER-001",
+    "title": "Embeddable RemoteControl 0.7.4 integration",
+    "body": "Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.\nUse AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.\nPreserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.\n\n## Acceptance Criteria\n- **ac-01**: Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.\n- **ac-02**: Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.\n- **ac-03**: Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.",
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "priority": "medium",
+    "status": "pending",
+    "notes": "",
+    "acceptanceCriteria": [
+      {
+        "id": "ac-01",
+        "text": "Reference SharpNinja.Avalonia.RemoteControl.Server 0.7.4, with the CLI using matching published Protocol 0.7.4; restore/build is reproducible without sibling source paths through the supported package feeds.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "ac-02",
+        "text": "Use AddAvaloniaRemoteControl plus a DI IRemoteControlRootProvider for the live desktop MainWindow, and bind the host lifecycle to the classic-desktop lifetime.",
+        "isSatisfied": false,
+        "evidence": null
+      },
+      {
+        "id": "ac-03",
+        "text": "Preserve loopback/bearer/default-disabled behavior, deny-by-default action/frame gates and compatible central Avalonia/Grpc dependency constraints.",
+        "isSatisfied": false,
+        "evidence": null
+      }
+    ],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  }
+}

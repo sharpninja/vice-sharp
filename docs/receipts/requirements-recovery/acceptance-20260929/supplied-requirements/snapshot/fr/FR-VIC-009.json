@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC-009",
+  "title": "VIC-II Bank Switching (See also FR-MEM-004)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-II address generation shall correctly translate 14-bit VIC addresses (0-$3FFF) into the 16-bit system address space by prepending the bank selection bits from CIA2 Port A. Character ROM overlay detection shall occur within the VIC address translation.\n\n## Acceptance Criteria\n- The VIC-II generates 14-bit addresses ($0000-$3FFF) that are offset by the bank base.\n- Character ROM overlay at VIC addresses $1000-$1FFF is active only in banks 0 and 2.\n- When the bank changes mid-frame, subsequent VIC-II fetches use the new bank immediately.\n- Sprite data fetches respect the active bank.\n- Bitmap data fetches respect the active bank.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

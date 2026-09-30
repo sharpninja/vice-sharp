@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XSET-001",
+  "title": "Four Settings pages bind desktop values via host",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Four 10-foot Settings pages bind to the same values/option ids as desktop and apply through the host UpdateSettings pipeline. Acceptance: Refresh loads GetSettings/ListSettingsProfiles; any resource change sets HasPendingSettingsChanges; Apply sends DTO ids equal to SettingsOptionCatalog.To*(...); host-canonical returned settings adopted.\n\n## Acceptance Criteria\n- canonical-id apply + host-canonical adoption + restart gating + non-applying validate + full revert.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

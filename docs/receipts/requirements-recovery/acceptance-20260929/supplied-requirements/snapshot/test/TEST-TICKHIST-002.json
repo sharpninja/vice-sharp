@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-TICKHIST-002",
+  "title": "Opt-in tick-history capture gating",
+  "status": "completed",
+  "priority": "high",
+  "body": null,
+  "condition": "Verify the emulation pump does not capture when recording is disabled (default) and that GetTickHistory arms recording.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Pump_DoesNotCaptureHistory_WhenRecordingDisabled - default off yields empty history after pumping.",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "GetTickHistory_ArmsHistoryRecording - calling the RPC sets HistoryRecordingEnabled true.",
+      "isSatisfied": true
+    }
+  ]
+}

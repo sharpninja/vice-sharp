@@ -1,0 +1,1 @@
+{"type":"https://httpstatuses.io/400","title":"validation_error","status":400,"detail":"Requirement 'FR-GUARD-EMPTY-001' requires body.","code":"validation_error","error":"validation_error","message":"Requirement 'FR-GUARD-EMPTY-001' requires body.","retryable":false,"details":{"reason":"validation"}}

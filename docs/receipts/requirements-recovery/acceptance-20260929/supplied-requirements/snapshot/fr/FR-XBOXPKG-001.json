@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XBOXPKG-001",
+  "title": "Head csproj references only core + Host.InProcess",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The head csproj references only the managed core (+ Host.InProcess) and none of Host/Grpc.AspNetCore/AspNetCore.App/Avalonia. Acceptance: csproj + slnx text test asserts presence of core refs + absence of forbidden refs; slnx builds.\n\n## Acceptance Criteria\n- csproj + slnx text test asserts presence of core refs + absence of forbidden refs; slnx builds.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

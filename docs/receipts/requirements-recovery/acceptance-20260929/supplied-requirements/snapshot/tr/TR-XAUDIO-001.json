@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XAUDIO-001",
+  "title": "XAudio2 backend Native-AOT + AppContainer safe",
+  "status": "pending",
+  "priority": "medium",
+  "body": "XAudio2 backend Native-AOT + AppContainer safe (no winmm/kernel32/reflection, DisableRuntimeMarshalling-compatible blittable interop). Acceptance: verified by TEST-XAUDIO-001/002.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

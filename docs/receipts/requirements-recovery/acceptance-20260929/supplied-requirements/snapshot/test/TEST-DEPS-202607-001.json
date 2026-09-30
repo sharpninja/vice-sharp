@@ -1,0 +1,17 @@
+{
+  "kind": "test",
+  "id": "TEST-DEPS-202607-001",
+  "title": "Dependency upgrade slice gates (2026-07 wave)",
+  "status": "completed",
+  "priority": "medium",
+  "body": null,
+  "condition": "Each upgrade slice S1-S8 exits on: dotnet restore + Release build with TreatWarningsAsErrors + slice-focused test filter + the full filtered TestHarness suite at 100 percent green (0 failed, 21 skipped baseline, >= 2594 passed; filter Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy). S3 adds an interactive Avalonia smoke; S6 proves nuget.org-only restore for aiUnit/RemoteControl; S7 proves PackNuget locally; S8 proves the source generator loads under the raised SDK floor (Roslyn 5.6).",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Every upgrade slice exits with the full filtered suite at 0 failed and stable skips, plus its slice-specific proof.",
+      "isSatisfied": true,
+      "evidence": "Local gates S1-S8 all 0 failed / 21 skipped; CI runs 1086, 1087, 1088, 1089, 1091, 1092, 1093, 1094, 1095 all succeeded."
+    }
+  ]
+}

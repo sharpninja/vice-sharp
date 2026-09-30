@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-CTX-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Full transition table + menu neutralization + neutral push + UI-nav mapping. Acceptance: every (state,input) edge deterministic; A does not fire in menu; one-shot neutral push emitted.",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-HOST-DIAG-001",
+  "title": "Self-Describing Host Diagnostics Attach",
+  "status": "pending",
+  "priority": "high",
+  "body": "The host shall expose a read-only diagnostics surface that allows humans and external tools to discover the running host, active UI session, session list, and current performance state without scanning ports, reading source code, using UI automation, or creating throwaway probe sessions.\n\n## Acceptance Criteria\n- A local diagnostics client can discover host process metadata, endpoint, protocol package, and version.\n- A local diagnostics client can list live emulator sessions without mutating the registry or creating a new session.\n- A local diagnostics client can identify the session currently bound to the UI.\n- A local diagnostics client can request a performance snapshot with an explicit session id or omit the session id to use the current UI session.\n- The desktop app publishes deterministic debug attach metadata under `%LOCALAPPDATA%\\ViceSharp\\debug-attach.json` and removes it best-effort on clean shutdown.\n- The desktop UI exposes a Copy Debug Attach Info command containing endpoint, active session, app version, and current status.\n- The diagnostics surface remains read-only and loopback/development scoped.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

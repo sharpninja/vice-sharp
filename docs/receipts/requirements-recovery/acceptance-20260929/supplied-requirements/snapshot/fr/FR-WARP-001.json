@@ -1,0 +1,21 @@
+{
+  "kind": "fr",
+  "id": "FR-WARP-001",
+  "title": "Warp mode runs uncapped relative to 100 percent limiter",
+  "status": "pending",
+  "priority": "high",
+  "body": "Settings Warp (VICE -warp) disables the speed limiter so the emulator runs as fast as the host allows. The status bar must show LIMITER WARP and CLOCK percent well above 100 when warp is applied through the UI or RemoteControl.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-status-warp",
+      "text": "Warp via Settings or RemoteControl sets status LIMITER to WARP.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-clock-above-100",
+      "text": "After warp is applied, status CLOCK percent is well above 100.",
+      "isSatisfied": false
+    }
+  ]
+}

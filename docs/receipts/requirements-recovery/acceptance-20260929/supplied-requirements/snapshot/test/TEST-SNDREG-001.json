@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-SNDREG-001",
+  "title": "Sound back-pressure regulator tests",
+  "status": "completed",
+  "priority": "high",
+  "body": null,
+  "condition": "ViceGateSoundRegulatorTests (13) cover EvaluateSound outcomes and boundary, gate regulator selection, back-pressure blocking advance, warp precedence, and the SID IsAudioTimingSource/QueuedSampleCount wiring.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Back-pressure when queue at/over high-water advances zero cycles; below advances a chunk",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Warp selects Warp regulator even when audio buffer is full",
+      "isSatisfied": true
+    }
+  ]
+}

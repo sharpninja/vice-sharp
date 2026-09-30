@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-TAPE-RAMP-001",
+  "title": "DatasetteMotorRampTests: 32,000-cycle motor ramp (4 tests)",
+  "status": "closed",
+  "priority": "medium",
+  "body": null,
+  "condition": "With tape inserted, MotorEnabled=true, PlayPressed=true: TryReadNextPulse returns false during first 12,808 Tick() calls; returns true after 32,000 Tick() calls. Motor off/on resets ramp. 4 pass.",
+  "acceptanceCriteria": []
+}

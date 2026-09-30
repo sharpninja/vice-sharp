@@ -1,0 +1,62 @@
+type: result
+payload:
+  requestId: req-20260930T151736Z-85da
+  result:
+    id: FR-VIC-001
+    title: Raster Engine with PAL/NTSC Timing
+    description: >-
+      The VIC-II raster engine shall generate video output with cycle-accurate timing for both PAL (6569, 312 lines, 63 cycles/line) and NTSC (6567, 263 lines, 65 cycles/line) variants. The raster counter, raster interrupt, and display/idle state transitions shall match real hardware timing.
+
+
+      ## Acceptance Criteria
+
+      - PAL variant generates 312 raster lines with 63 CPU cycles per line (504 pixels per line).
+
+      - NTSC variant generates 263 raster lines with 65 CPU cycles per line (520 pixels per line).
+
+      - The raster counter ($D011 bit 7 + $D012) increments once per raster line.
+
+      - A raster interrupt fires when the raster counter matches the value set in $D011/$D012.
+
+      - The raster interrupt triggers at cycle 0 of the matching line (PAL) with a 1-cycle acknowledge latency.
+
+      - The display window begins at line 51 (PAL) and ends at line 250.
+
+      - Display/idle state transitions occur at the correct cycles within each line.
+
+      - A light-pen high-to-low transition latches the current raster X position and low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch, and re-arms only at the frame boundary.
+    status: closed
+    priority: high
+    area: VIC
+    acceptanceCriteria:
+    - id: ac-01
+      text: PAL variant generates 312 raster lines with 63 CPU cycles per line (504 pixels per line).
+      isSatisfied: false
+    - id: ac-02
+      text: NTSC variant generates 263 raster lines with 65 CPU cycles per line (520 pixels per line).
+      isSatisfied: false
+    - id: ac-03
+      text: The raster counter ($D011 bit 7 + $D012) increments once per raster line.
+      isSatisfied: false
+    - id: ac-04
+      text: A raster interrupt fires when the raster counter matches the value set in $D011/$D012.
+      isSatisfied: false
+    - id: ac-05
+      text: The raster interrupt triggers at cycle 0 of the matching line (PAL) with a 1-cycle acknowledge latency.
+      isSatisfied: false
+    - id: ac-06
+      text: The display window begins at line 51 (PAL) and ends at line 250.
+      isSatisfied: false
+    - id: ac-07
+      text: Display/idle state transitions occur at the correct cycles within each line.
+      isSatisfied: false
+    - id: ac-08
+      text: A light-pen high-to-low transition latches the current raster X position and low raster line into `$D013`/`$D014`, sets the light-pen interrupt latch, and re-arms only at the frame boundary.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-09-30T15:17:37.4541040+00:00
+    updatedAt: 2026-09-30T15:17:37.4542175+00:00
+  deprecated: true
+
+---
+

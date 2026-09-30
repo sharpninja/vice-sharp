@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-VIC-EDGE-006",
+  "title": "VIC-II screen RAM immediate read-back",
+  "status": "closed",
+  "priority": "medium",
+  "body": "ViceNativeBridge ReadMemory/WriteMemory roundtrip for - returns written value in zero elapsed cycles. VICE c-access is read-only.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

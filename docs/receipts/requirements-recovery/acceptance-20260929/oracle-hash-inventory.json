@@ -1,0 +1,169 @@
+{
+  "generatedUtc": "2026-09-29T23:19:43.1505710Z",
+  "viceCommit": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+  "xvicPath": "C:\\Users\\kingd\\AppData\\Local\\Microsoft\\WinGet\\Packages\\VICE-Team.VICE.GTK3_Microsoft.Winget.Source_8wekyb3d8bbwe\\GTK3VICE-3.10-win64\\bin\\xvic.exe",
+  "xvicExists": true,
+  "viceBuildHash": "c570738982419d1d8e850485d9edcaa068e15777c132825d5228653aeca50e19",
+  "viceXvicDllPath": "F:\\GitHub\\vice-sharp\\native\\vice_xvic.dll",
+  "viceXvicDllExists": true,
+  "viceXvicDllSha256": "f03a7a3545c5964fbab863d3f3d1ab7a2eb99c2543ed94071f80f07648513886",
+  "romRoot": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data",
+  "romHashes": [
+    {
+      "name": "basic-901486-01.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\basic-901486-01.bin",
+      "sha256": "8be2d882e0eeb1c6923a43660236ea69d43ca8a3bd0613b1b6c910601584fbed"
+    },
+    {
+      "name": "chargen-901460-02.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\chargen-901460-02.bin",
+      "sha256": "66a81f03332f46a289d175933d50bba9cc4636d18bba439d324b2eb1bd1c43ab"
+    },
+    {
+      "name": "chargen-901460-03.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\chargen-901460-03.bin",
+      "sha256": "bda280726cfe069ca70ef5e2f2d95a29f69d3950c859a12e6979464963fcf502"
+    },
+    {
+      "name": "colodore_vic.vpl",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\colodore_vic.vpl",
+      "sha256": "27c691e9b9bac1de37f626e201ed346761e5be17a96d829dca0f93506ad5b868"
+    },
+    {
+      "name": "default.vrs",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\default.vrs",
+      "sha256": "6cb955ad03766b3c1891defdfb90b07457d014e76325c0bf4401defc79df5a16"
+    },
+    {
+      "name": "gtk3_pos_de.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\gtk3_pos_de.vkm",
+      "sha256": "d40b967081350ca67b18eddbab954aa9ee78c4be2403b37aa51d975f8a5f846b"
+    },
+    {
+      "name": "gtk3_pos_it.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\gtk3_pos_it.vkm",
+      "sha256": "bdec7812a2f13c976171eb53d7d3903fbdfbf58600e1f2f072a54bf88e3cad9b"
+    },
+    {
+      "name": "gtk3_pos.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\gtk3_pos.vkm",
+      "sha256": "61dfd1e717a3a6a3fcde84f368cc9b6428bc62fe329c1572d3c538b06daae1fa"
+    },
+    {
+      "name": "gtk3_sym_de.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\gtk3_sym_de.vkm",
+      "sha256": "7b50d35d562d99dfc31a5c6fd854bf3dff096df5066713ef6f01255248d8926a"
+    },
+    {
+      "name": "gtk3_sym_fr.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\gtk3_sym_fr.vkm",
+      "sha256": "8008d0123bb5c3d374a7627ec2295a57153ce51d18fc82c3dddfafbec537caeb"
+    },
+    {
+      "name": "gtk3_sym_it.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\gtk3_sym_it.vkm",
+      "sha256": "adc664b6e467efca6341dcee6fe0fc4a5e4221117c4e9cda12f3768e6563e66c"
+    },
+    {
+      "name": "gtk3_sym.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\gtk3_sym.vkm",
+      "sha256": "b9b74622065799e4b8a167217c3498ac325b7bc831036100c21b8a9d405d5354"
+    },
+    {
+      "name": "kernal.901486-02.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-02.bin",
+      "sha256": "7e2df5778dfdf787a6e09f0576442d32c8e9160b7e34d22e07547c22bf9030e1"
+    },
+    {
+      "name": "kernal.901486-06.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-06.bin",
+      "sha256": "8fc94bd895f488ac0ae1a52abdc32988cd63c777770b89a9d415513098535cc2"
+    },
+    {
+      "name": "kernal.901486-07.bin",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\kernal.901486-07.bin",
+      "sha256": "ff6d1416b91a71f5240a5bb8adc9fdc1b955374c48322ca47b3e436334f168fb"
+    },
+    {
+      "name": "Makefile",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\Makefile",
+      "sha256": "1340777c14e4bdbecc995ae96254650f13852e1a648a6d627064cf166a773563"
+    },
+    {
+      "name": "Makefile.am",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\Makefile.am",
+      "sha256": "fb122e0318f18b80f88322c94900e32c14f73ad93ad6c74b8872c184de9dc63c"
+    },
+    {
+      "name": "Makefile.in",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\Makefile.in",
+      "sha256": "66a04dc264d149ac25c70bb4d461868771282e5e9ac7301b3d63a39f010e2681"
+    },
+    {
+      "name": "mike-ntsc.vpl",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\mike-ntsc.vpl",
+      "sha256": "91697d1e61645ca9097722ab04db8d4a2df8cd70c1ab52b2340b89f39cc76cc5"
+    },
+    {
+      "name": "mike-pal.vpl",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\mike-pal.vpl",
+      "sha256": "2fd5c6fc9450be1902d7a4fd2b83be80001ed4004ad7b7ba1ebef83bab56e099"
+    },
+    {
+      "name": "PALette.vpl",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\PALette.vpl",
+      "sha256": "c59d7e88b4ed0c75cbe2c46b11afd302ffd2c05be71d176ee84c50ff4ad40e86"
+    },
+    {
+      "name": "sdl_pos_de.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_pos_de.vkm",
+      "sha256": "b35a66739ade107e46f66a31fdc624556a4f60659a6e76ee3c2b8628373b646d"
+    },
+    {
+      "name": "sdl_pos_fi.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_pos_fi.vkm",
+      "sha256": "f3c7de0932253dd20eea1fb8557657e2af8f655b40880d2dd7a278030d14ac66"
+    },
+    {
+      "name": "sdl_pos_fr.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_pos_fr.vkm",
+      "sha256": "843cc3bedbc79c7277a8ff75087e48131cbc1def76092d27c5874169ed94f72b"
+    },
+    {
+      "name": "sdl_pos_uk.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_pos_uk.vkm",
+      "sha256": "f0bfb0d14b7ef0927a5a84c1e8530ff7256cf538fb349838e2cb7c8394e05b0e"
+    },
+    {
+      "name": "sdl_pos.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_pos.vkm",
+      "sha256": "fcacaf1f4b6a308e484d7b2c3e96889800f7d6ea17ad3e96c2f80a32ac70b3f1"
+    },
+    {
+      "name": "sdl_sym_de.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_sym_de.vkm",
+      "sha256": "e52e5a916b499b25362dba6bdcb877f8f73750e5bfb2aaa535079967e1251d9d"
+    },
+    {
+      "name": "sdl_sym_uk.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_sym_uk.vkm",
+      "sha256": "3fd18913e2da2f18150175775d2f54b5d018916f5f51926aa608a7867163b2cb"
+    },
+    {
+      "name": "sdl_sym.vkm",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\sdl_sym.vkm",
+      "sha256": "3de57424772415c9ae47606be229b95424b9a8a8750082cc31a8623463067e97"
+    },
+    {
+      "name": "vice.vpl",
+      "path": "F:\\GitHub\\vice-sharp\\native\\vice\\vice\\data\\VIC20\\vice.vpl",
+      "sha256": "2177474e1913d101fff2ff83c30a1fcd83b7d812ff066cd01d62c1cdeb712b52"
+    }
+  ],
+  "media": [],
+  "workloads": [],
+  "manifestPath": "docs/requirements/oracles/vic20-xvic-manifest.json",
+  "manifestExists": false,
+  "item7Status": "open",
+  "item7Reason": "Hashes below were computed from files on this machine. Workloads are an explicit empty set. Item 7 stays open until named programs and cycle windows exist. No product manifest was written."
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-UI-DIAG-001",
+  "title": "UI Debug Attach Info Tests",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "The Avalonia shell exposes a Copy Debug Attach Info command and formats endpoint, current session id, app version, attach JSON, and latest status for clipboard use.",
+  "acceptanceCriteria": []
+}

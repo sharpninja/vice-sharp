@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MEM-004",
+  "title": "VIC-II Bank Switching via CIA2",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-II chip views a 16KB window of the 64KB address space, selectable by bits 0-1 of CIA2 Port A ($DD00). The four possible banks are: Bank 0 ($0000-$3FFF), Bank 1 ($4000-$7FFF), Bank 2 ($8000-$BFFF), Bank 3 ($C000-$FFFF). The VIC-II's view of Character ROM overlaps in banks 0 and 2.\n\n## Acceptance Criteria\n- CIA2 Port A bits 0-1 (active-low, inverted) select the VIC bank: %11 = Bank 0, %10 = Bank 1, %01 = Bank 2, %00 = Bank 3.\n- VIC-II addresses are relative to the selected bank start.\n- In Banks 0 and 2, addresses $1000-$1FFF within the bank read from Character ROM instead of RAM.\n- Bank switching takes effect immediately for subsequent VIC-II accesses.\n- The `IVicBankSelector` interface reports the currently active bank and base address.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

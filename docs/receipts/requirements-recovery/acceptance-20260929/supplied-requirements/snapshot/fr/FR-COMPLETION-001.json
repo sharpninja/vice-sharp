@@ -1,0 +1,36 @@
+{
+  "kind": "fr",
+  "id": "FR-COMPLETION-001",
+  "title": "Exhaustive approved-work completion evidence",
+  "status": "pending",
+  "priority": "high",
+  "body": "Complete every approved slice, including baseline repairs, Settings/Warp/video, portable CLI, native lifecycle, external integration and both Astra AI reviews.\nAll required tests finish with zero failures, skips, aborts or silent prerequisite returns before completion.\nRun two fresh live application validation passes against final binaries and prove runtime effects independently of UI values.\nPreserve unrelated dirty files and probes. Finalize tracked requirements, plan, handoff and receipts before explicit-manifest commit and non-force push; verify local and remote SHAs match.\nIndependent Astra xhigh agreement is required after requirements, red tests, green implementation and final combined evidence.\n\n## Acceptance Criteria\n- **ac-01**: Complete every approved slice, including baseline repairs, Settings/Warp/video, portable CLI, native lifecycle, external integration and both Astra AI reviews.\n- **ac-02**: All required tests finish with zero failures, skips, aborts or silent prerequisite returns before completion.\n- **ac-03**: Run two fresh live application validation passes against final binaries and prove runtime effects independently of UI values.\n- **ac-04**: Preserve unrelated dirty files and probes. Finalize tracked requirements, plan, handoff and receipts before explicit-manifest commit and non-force push; verify local and remote SHAs match.\n- **ac-05**: Independent Astra xhigh agreement is required after requirements, red tests, green implementation and final combined evidence.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Complete every approved slice, including baseline repairs, Settings/Warp/video, portable CLI, native lifecycle, external integration and both Astra AI reviews.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "All required tests finish with zero failures, skips, aborts or silent prerequisite returns before completion.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Run two fresh live application validation passes against final binaries and prove runtime effects independently of UI values.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Preserve unrelated dirty files and probes. Finalize tracked requirements, plan, handoff and receipts before explicit-manifest commit and non-force push; verify local and remote SHAs match.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Independent Astra xhigh agreement is required after requirements, red tests, green implementation and final combined evidence.",
+      "isSatisfied": false
+    }
+  ]
+}

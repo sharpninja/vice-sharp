@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-003",
+  "title": "Combined Waveform Output",
+  "status": "pending",
+  "priority": "medium",
+  "body": "When multiple waveform bits are set simultaneously, the SID outputs a combined waveform that is the logical AND of the individual waveform outputs (on the 6581) or a slightly different combination (on the 8580). Combined waveforms produce characteristic thin, metallic sounds used by many SID tunes.\n\n## Acceptance Criteria\n- On the 6581, combined waveforms are computed as the bitwise AND of the selected waveform outputs, with additional analog bleed-through modeled via lookup tables derived from chip analysis.\n- On the 8580, combined waveforms use a different lookup table reflecting the digital die revision behavior.\n- Triangle + Sawtooth, Triangle + Pulse, Sawtooth + Pulse, and Triangle + Sawtooth + Pulse combinations all produce distinct outputs.\n- Noise combined with any other waveform produces the AND of noise LFSR output bits and the other waveform(s), and additionally corrupts the noise LFSR state.\n- Combined waveform lookup tables are configurable (replaceable) via `IWaveformGenerator.SetCombinedWaveformTable()`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

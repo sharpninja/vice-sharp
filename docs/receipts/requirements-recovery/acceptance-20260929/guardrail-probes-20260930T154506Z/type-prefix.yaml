@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20260930T154729Z-03a3
+  code: schema_validation_failed
+  message: YAML request failed schema validation.
+  retryable: false
+  details:
+    methodName: workflow.requirements.planRecovery
+    errors:
+    - items[0].id 'TEST-GUARD-TYPE-001' is not valid for kind 'tr'.
+
+---
+

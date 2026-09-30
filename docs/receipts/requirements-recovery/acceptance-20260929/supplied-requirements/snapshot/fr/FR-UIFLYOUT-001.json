@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-UIFLYOUT-001",
+  "title": "Flyout sidebar with single side-toggle",
+  "status": "pending",
+  "priority": "high",
+  "body": "The Attach/settings sidebar is a proper flyout (Avalonia SplitView/Flyout). A single icon button toggles the flyout's side (left/right), replacing the separate Left and Right buttons.\n\n## Acceptance Criteria\n- The Attach/settings sidebar is a proper flyout (Avalonia SplitView/Flyout).\n- A single icon button toggles the flyout's side (left/right), replacing the separate Left and Right buttons.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

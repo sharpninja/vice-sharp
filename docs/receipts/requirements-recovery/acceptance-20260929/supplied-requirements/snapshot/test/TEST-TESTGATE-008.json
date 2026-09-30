@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-TESTGATE-008",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "AOT proxy + on-console feasibility (= S0). Acceptance: the three S0 go/no-go criteria GREEN.",
+  "acceptanceCriteria": []
+}

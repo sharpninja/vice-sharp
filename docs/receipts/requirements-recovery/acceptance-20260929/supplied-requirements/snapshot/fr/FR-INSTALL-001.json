@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-INSTALL-001",
+  "title": "MSI registers supported Commodore file types",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The ViceSharp MSI shall register per-machine Open verbs for supported Commodore media extensions so Explorer can open them with ViceSharp.Avalonia.exe \"%1\". Registered extensions: d64, g64, d71, d81, tap, t64, crt, prg. Generic .bin/.rom are not claimed as defaults. Double-clicking a registered file starts ViceSharp and drop-starts the path (attach+autostart or PRG load).\n\nAcceptance:\n1. installer/ViceSharp.wxs writes HKLM Software\\Classes for each registered extension and ProgId shell\\open\\command with [INSTALLFOLDER]ViceSharp.Avalonia.exe and %1.\n2. Capabilities FileAssociations and RegisteredApplications entries exist for Default Programs.\n3. Startup argument parsing picks the first existing supported path from args (skipping the exe and dash flags).\n4. MainWindow opens that path via DropAndStartFileAsync after the window is shown.\n\n## Acceptance Criteria\n- The ViceSharp MSI shall register per-machine Open verbs for supported Commodore media extensions so Explorer can open them with ViceSharp.Avalonia.exe \"%1\".\n- Registered extensions: d64, g64, d71, d81, tap, t64, crt, prg.\n- Generic .bin/.rom are not claimed as defaults.\n- Double-clicking a registered file starts ViceSharp and drop-starts the path (attach+autostart or PRG load).\n- installer/ViceSharp.wxs writes HKLM Software\\Classes for each registered extension and ProgId shell\\open\\command with [INSTALLFOLDER]ViceSharp.Avalonia.exe and %1.\n- Capabilities FileAssociations and RegisteredApplications entries exist for Default Programs.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

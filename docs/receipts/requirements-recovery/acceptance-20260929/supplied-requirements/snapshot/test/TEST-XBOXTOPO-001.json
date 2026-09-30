@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXTOPO-001",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Csproj shape + reference-ban. Acceptance: conditional TFM + core refs present; banned refs absent.",
+  "acceptanceCriteria": []
+}

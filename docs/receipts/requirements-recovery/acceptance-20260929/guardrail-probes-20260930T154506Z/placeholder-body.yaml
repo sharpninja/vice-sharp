@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20260930T154727Z-c580
+  code: validation_error
+  message: Requirement 'FR-GUARD-PLACEHOLDER-001' body is a placeholder.
+  retryable: false
+  details:
+    methodName: workflow.requirements.planRecovery
+    exceptionType: System.ArgumentException
+    reason: validation
+
+---
+

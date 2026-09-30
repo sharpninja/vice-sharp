@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-MED-002",
+  "title": "BMP all/unique frame export tests",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "FrameSequenceCapture unique-dedup, drop-on-mismatch, and host frames=unique routing.",
+  "acceptanceCriteria": []
+}

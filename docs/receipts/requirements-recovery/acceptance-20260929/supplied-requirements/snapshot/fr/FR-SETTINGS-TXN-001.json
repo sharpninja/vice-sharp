@@ -1,0 +1,61 @@
+{
+  "kind": "fr",
+  "id": "FR-SETTINGS-TXN-001",
+  "title": "Truthful transactional Settings state",
+  "status": "pending",
+  "priority": "high",
+  "body": "Expose Active runtime settings, Accepted last accepted target including staged restart fields, and local unsaved Draft independently.\nDirty compares normalized Draft to Accepted. Restart-required compares restart-relevant Draft to Active.\nPlain Apply applies live fields, accepts the complete target, clears dirty and retains a pending restart. Revert restores Accepted and does not cancel an earlier accepted restart.\nApply + Restart publishes a prepared replacement and then makes Active and Accepted equal. Any failure preserves prior runtime, accepted state and unsaved draft.\nValidate profile/family, RAM, limiter, resources, cartridge image/preset and IEC root/unit/reserved-device conflicts before any externally visible mutation.\nDerive active cartridge kind from the actual device. A non-none kind needs a compatible image; none detaches. Preserve image, banks, preset, writeback and uIEC across applicable restart.\nApply Warp through the existing limiter in the same settings transaction. Existing standalone Warp control remains compatible.\nSerialize refresh and Apply, reject stale responses, preserve edited draft fields and refresh untouched fields. Same-field conflicts keep local draft until Apply or Revert.\nOlder hosts lacking State remain readable and clearly disable state-aware Apply/Restart with an upgrade explanation.\nSnapshots and INI persistence include RAM, cartridge and uIEC fields. Defaults are no RAM expansion, no cartridge, preset start, writeback false, uIEC disabled with empty root and unit 9. Save-on-exit preferences remain outside host Apply/Revert.\n\n## Acceptance Criteria\n- **ac-01**: Expose Active runtime settings, Accepted last accepted target including staged restart fields, and local unsaved Draft independently.\n- **ac-02**: Dirty compares normalized Draft to Accepted. Restart-required compares restart-relevant Draft to Active.\n- **ac-03**: Plain Apply applies live fields, accepts the complete target, clears dirty and retains a pending restart. Revert restores Accepted and does not cancel an earlier accepted restart.\n- **ac-04**: Apply + Restart publishes a prepared replacement and then makes Active and Accepted equal. Any failure preserves prior runtime, accepted state and unsaved draft.\n- **ac-05**: Validate profile/family, RAM, limiter, resources, cartridge image/preset and IEC root/unit/reserved-device conflicts before any externally visible mutation.\n- **ac-06**: Derive active cartridge kind from the actual device. A non-none kind needs a compatible image; none detaches. Preserve image, banks, preset, writeback and uIEC across applicable restart.\n- **ac-07**: Apply Warp through the existing limiter in the same settings transaction. Existing standalone Warp control remains compatible.\n- **ac-08**: Serialize refresh and Apply, reject stale responses, preserve edited draft fields and refresh untouched fields. Same-field conflicts keep local draft until Apply or Revert.\n- **ac-09**: Older hosts lacking State remain readable and clearly disable state-aware Apply/Restart with an upgrade explanation.\n- **ac-10**: Snapshots and INI persistence include RAM, cartridge and uIEC fields. Defaults are no RAM expansion, no cartridge, preset start, writeback false, uIEC disabled with empty root and unit 9. Save-on-exit preferences remain outside host Apply/Revert.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Expose Active runtime settings, Accepted last accepted target including staged restart fields, and local unsaved Draft independently.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Dirty compares normalized Draft to Accepted. Restart-required compares restart-relevant Draft to Active.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Plain Apply applies live fields, accepts the complete target, clears dirty and retains a pending restart. Revert restores Accepted and does not cancel an earlier accepted restart.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Apply + Restart publishes a prepared replacement and then makes Active and Accepted equal. Any failure preserves prior runtime, accepted state and unsaved draft.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-05",
+      "text": "Validate profile/family, RAM, limiter, resources, cartridge image/preset and IEC root/unit/reserved-device conflicts before any externally visible mutation.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-06",
+      "text": "Derive active cartridge kind from the actual device. A non-none kind needs a compatible image; none detaches. Preserve image, banks, preset, writeback and uIEC across applicable restart.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-07",
+      "text": "Apply Warp through the existing limiter in the same settings transaction. Existing standalone Warp control remains compatible.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-08",
+      "text": "Serialize refresh and Apply, reject stale responses, preserve edited draft fields and refresh untouched fields. Same-field conflicts keep local draft until Apply or Revert.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-09",
+      "text": "Older hosts lacking State remain readable and clearly disable state-aware Apply/Restart with an upgrade explanation.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-10",
+      "text": "Snapshots and INI persistence include RAM, cartridge and uIEC fields. Defaults are no RAM expansion, no cartridge, preset start, writeback false, uIEC disabled with empty root and unit 9. Save-on-exit preferences remain outside host Apply/Revert.",
+      "isSatisfied": false
+    }
+  ]
+}

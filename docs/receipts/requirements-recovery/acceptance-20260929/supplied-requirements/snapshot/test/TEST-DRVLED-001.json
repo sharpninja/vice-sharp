@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-DRVLED-001",
+  "title": "Per-drive activity LED",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Drive DOS ROM setting VIA2 PB3 sets the drive LedOn; per-drive status DTO reflects it; the card LED view-model binds it.",
+  "acceptanceCriteria": []
+}

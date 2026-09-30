@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-INPROC-DEVICE",
+  "title": "",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "On-console boot throughput (>=100 frames/2s, unpinned, two emulation threads). Acceptance: sustained on-device throughput.",
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-ROMM-SEC-001",
+  "title": "Keep RomM bearer tokens and downloaded content inside trusted boundaries",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Public covers use an anonymous client; bearer auth is restricted to server-relative RomM cover paths. ROM filenames and resolved cache destinations are contained, downloaded through a temporary file, expected-size validated, and atomically published. Windows file-backed tokens use current-user DPAPI with atomic legacy-plaintext migration; unsupported operating systems fail closed.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

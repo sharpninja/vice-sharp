@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV-001",
+  "title": "Commodore 1541 Single Floppy Disk Drive Emulation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The 1541 floppy disk drive shall be emulated as a complete subsystem with its own 6502 CPU, 2KB RAM, two VIA 6522 chips, and drive ROM. The drive operates independently of the main computer, communicating via the IEC serial bus. True drive emulation (running the drive CPU in parallel with the main CPU) is required for compatibility with fast loaders and copy protection.\n\n## Acceptance Criteria\n- The 1541 is emulated with its own 6502 CPU running at 1MHz.\n- Drive RAM (2KB at $0000-$07FF) and ROM (16KB at $C000-$FFFF) are correctly mapped.\n- Two VIA 6522 chips are emulated (VIA1 at $1800, VIA2 at $1C00) per FR-VIA-005.\n- The drive firmware (ROM) executes the standard Commodore DOS 2.6 routines.\n- D64 disk images are supported (35 tracks, 683 sectors, 174,848 bytes).\n- G64 disk images are supported (raw GCR encoding for copy-protected disks).\n- The drive motor spin-up delay (approximately 300ms) is modeled.\n- Head stepping delay (approximately 8ms per half-track) is modeled.\n- The drive can be attached/detached at runtime via `IDiskDrive.Mount()`/`IDiskDrive.Eject()`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

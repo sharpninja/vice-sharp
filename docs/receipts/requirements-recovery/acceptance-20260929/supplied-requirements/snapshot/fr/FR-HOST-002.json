@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-HOST-002",
+  "title": "Host-Mediated Disk, Tape, and Cartridge Attachment",
+  "status": "pending",
+  "priority": "high",
+  "body": "The host shall expose runtime attachment and ejection of disk, tape, and cartridge media through boundary commands. UI clients provide user intent and file references or byte payloads; the host validates formats and applies the changes at emulator-safe boundaries.\n\n## Acceptance Criteria\n- Disk images can be mounted and ejected through the host boundary for the configured drive device.\n- TAP images can be mounted and ejected through the host boundary for the datasette device.\n- Standard cartridge images can be inserted and removed through the host boundary.\n- Media format validation failures are reported without mutating the current device state.\n- Attachment commands return stable media status including device id, media kind, display name, write-protection state, and current error state.\n- Attach and eject operations are applied at command boundaries that do not tear device state mid-cycle.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

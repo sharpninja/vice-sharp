@@ -1,0 +1,26 @@
+{
+  "kind": "fr",
+  "id": "FR-VSFLOCKSTEP-001",
+  "title": "Resume externally-staged VICE .vsf snapshots in the native oracle",
+  "status": "pending",
+  "priority": "high",
+  "body": "The native VICE oracle (vice_x64 shim) reads and resumes a .vsf snapshot staged by a standalone x64sc, including snapshots from an older VICE release whose module versions differ from the bundled submodule, so lockstep can start from a user-supplied known state (C64SC identity, reSID engine, true-drive set).",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "fr-vsflockstep-001-ac-1",
+      "text": "A supplied x64sc PAL/C64C .vsf (tests/ViceSharp.TestHarness/Fixtures/Vsf/ready-c64sc-truedrive.vsf) loads with rc=0 and snapshot_last_error=0; all 16 C64 modules (MAINCPU..USERPORT) are consumed.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-vsflockstep-001-ac-2",
+      "text": "The resumed MAINCPU registers (A/X/Y/SP/PC) equal those encoded in the snapshot's MAINCPU module.",
+      "isSatisfied": false
+    },
+    {
+      "id": "fr-vsflockstep-001-ac-3",
+      "text": "No regression to the reSID lockstep timing gate or SID parity (X64ScVariantLockstep 306 pass / 0 fail / 1 skip; SID parity 8/8).",
+      "isSatisfied": false
+    }
+  ]
+}

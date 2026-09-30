@@ -1,0 +1,21 @@
+{
+  "kind": "test",
+  "id": "TEST-TICKHIST-001",
+  "title": "Tick-history capture, RPC and view-model tests",
+  "status": "completed",
+  "priority": "medium",
+  "body": null,
+  "condition": "TickHistoryRecorderTests (ring order/capacity, write bundling, reconstruction), TickHistoryCaptureTests (bus event + pump capture + GetTickHistory/ReadMemoryAtTick), TickHistoryViewModelTests (refresh newest-first, paused inspect, close).",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "Reconstruct at the newest tick yields current memory; at an earlier tick yields the pre-write byte",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "InspectAsync opens the debug screen with a memory dump only when paused",
+      "isSatisfied": true
+    }
+  ]
+}

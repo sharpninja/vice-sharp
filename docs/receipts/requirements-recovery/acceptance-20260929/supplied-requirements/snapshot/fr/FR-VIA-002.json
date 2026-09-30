@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIA-002",
+  "title": "VIA Shift Register",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The 6522 VIA has an 8-bit bidirectional shift register that can be clocked by Timer 2, the system clock, or an external clock. It is used for serial data transfer in VIC-20 and disk drive contexts.\n\n## Acceptance Criteria\n- The shift register can operate in 8 modes controlled by ACR bits 2-4.\n- Mode 0: Shift register disabled.\n- Modes 1-3: Shift in under Timer 2 control, external clock, or free-running Timer 2 clock.\n- Modes 4-7: Shift out under Timer 2 control, external clock, free-running, or system clock.\n- An interrupt is generated after 8 bits have been shifted.\n- The CB1 pin provides the clock and CB2 provides the data for shift register operations.\n- Data is shifted MSB first.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

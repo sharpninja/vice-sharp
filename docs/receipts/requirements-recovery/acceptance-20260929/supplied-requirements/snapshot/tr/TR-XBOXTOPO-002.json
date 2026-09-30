@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXTOPO-002",
+  "title": "Head references only core + Host.InProcess",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Head references only Abstractions/Core/Chips/Architectures + Host.InProcess (R2 amendment); bans Host/Avalonia/Protocol-Grpc/Monitor and Grpc.*/AspNetCore.*/Avalonia.*. Acceptance: verified by TEST-XBOXTOPO-001.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

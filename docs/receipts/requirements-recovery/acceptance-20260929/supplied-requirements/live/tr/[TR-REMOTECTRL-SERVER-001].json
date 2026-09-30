@@ -1,0 +1,18 @@
+{
+  "fetchedUtc": "2026-09-30T00:35:23.6000798Z",
+  "httpStatus": 200,
+  "source": "parent HTTP GET because the reviewer has no MCP access",
+  "route": "/mcpserver/requirements/tr/%5BTR-REMOTECTRL-SERVER-001%5D",
+  "record": {
+    "id": "[TR-REMOTECTRL-SERVER-001]",
+    "title": "[TR-REMOTECTRL-SERVER-001]",
+    "body": "Placeholder requirement backfilled for TODO link [TR-REMOTECTRL-SERVER-001].",
+    "workspaceId": "F:\\GitHub\\vice-sharp",
+    "priority": "medium",
+    "status": "pending",
+    "notes": null,
+    "acceptanceCriteria": [],
+    "scopeStartLayerKey": "layer-1",
+    "scopeEndLayerKey": null
+  }
+}

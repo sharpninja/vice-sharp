@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-HOST-003",
+  "title": "Host-Streamed Video Frames for Remote UI Clients",
+  "status": "pending",
+  "priority": "high",
+  "body": "The host shall stream committed video frames to external or remote UI clients without allowing UI rendering to block the emulation thread. In-process Avalonia rendering may instead use a host-owned direct frame-source binding as described by FR-UI-001 and TR-GRPC-BOUNDARY-001.\n\n## Acceptance Criteria\n- Video frames are streamed with frame number, cycle stamp, video standard, dimensions, pixel format, and skipped-frame metadata.\n- Video backpressure uses a latest-complete-frame policy; stale frames may be dropped without changing emulation state.\n- A newly connected remote UI client can request the latest committed frame before subscribing to the live stream.\n- Disconnecting a remote UI client does not pause, reset, or mutate the emulator session.\n- Frame payloads use a documented pixel format so non-Avalonia clients can render them.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

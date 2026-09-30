@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CIA-002",
+  "title": "Time-of-Day Clock",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Each CIA has a Time-of-Day clock that counts in BCD format with tenths-of-seconds, seconds, minutes, and hours (12-hour format with AM/PM). The TOD is clocked by the 50Hz (PAL) or 60Hz (NTSC) power line frequency and can generate an interrupt on alarm match.\n\n## Acceptance Criteria\n- TOD registers at offsets $08-$0B provide tenths, seconds, minutes, hours in BCD format.\n- The TOD increments at 50Hz (PAL) or 60Hz (NTSC) derived from the video sync signal.\n- Writing to the hours register (offset $0B) latches the TOD display; it resumes when tenths ($08) is written.\n- Reading the hours register latches all TOD registers; they unfreeze when tenths is read.\n- A TOD alarm can be set by writing to the same registers with bit 7 of CRB set.\n- When the TOD matches the alarm value, the TOD interrupt bit is set in the ICR.\n- Hours register bit 7 indicates AM (0) or PM (1).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

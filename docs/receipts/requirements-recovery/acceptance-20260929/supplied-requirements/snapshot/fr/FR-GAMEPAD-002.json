@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-GAMEPAD-002",
+  "title": "Right stick drives JOY1 only",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Right stick drives JOY1 with no D-pad contribution. Acceptance: RightY past up threshold -> Joy1 Up(0x01); D-pad does not alter Joy1.\n\n## Acceptance Criteria\n- RightY past up threshold -> Joy1 Up(0x01); D-pad does not alter Joy1.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

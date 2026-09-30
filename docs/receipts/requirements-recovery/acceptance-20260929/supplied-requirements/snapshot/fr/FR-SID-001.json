@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-001",
+  "title": "Three Independent Voice Oscillators",
+  "status": "pending",
+  "priority": "high",
+  "body": "The SID chip shall emulate three independent voice channels, each with a 16-bit frequency register, a 16-bit pulse width register, and independent waveform/control selection. Each oscillator generates a 24-bit phase accumulator output that drives waveform generation.\n\n## Acceptance Criteria\n- Each voice (1-3) has an independent 16-bit frequency register (low/high byte pairs at $D400/$D401, $D407/$D408, $D40E/$D40F).\n- The phase accumulator increments by the frequency value each clock cycle.\n- Frequency values translate to output frequency via: F_out = (F_reg * clock_freq) / 16777216.\n- Each voice has a 12-bit pulse width register ($D402/$D403, $D409/$D40A, $D410/$D411).\n- The oscillator output (OSC3 readable at $D41B) reflects the upper 8 bits of voice 3's oscillator.\n- The envelope output (ENV3 readable at $D41C) reflects voice 3's current envelope value.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

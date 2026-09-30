@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-VIC-RC-001",
+  "title": "VicIIRcWindowTests: RC window state machine (11 tests)",
+  "status": "closed",
+  "priority": "medium",
+  "body": null,
+  "condition": "After writing DEN=1/YSCROLL=0/1 and advancing to specific rasterLine/rasterX, CurrentRowCounter and IsGraphicsIdle match VICE viciisc/vicii-cycle.c:541-563 expectations. All 11 pass.",
+  "acceptanceCriteria": []
+}

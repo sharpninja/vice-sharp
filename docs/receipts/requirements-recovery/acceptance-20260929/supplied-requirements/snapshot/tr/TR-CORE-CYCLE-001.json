@@ -1,0 +1,23 @@
+{
+  "kind": "tr",
+  "id": "TR-CORE-CYCLE-001",
+  "title": "Sub-Cycle Bus-Phase Accuracy Matching VICE x64sc Behavior",
+  "status": "completed",
+  "priority": "critical",
+  "body": "Managed C64 PAL execution must preserve C64 bus, CPU, and VIC-II ordering semantics while optimizing RunFrame so performance changes do not alter cycle-observable behavior.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-lockstep",
+      "text": "Lockstep and checkpoint suites continue to pass after RunFrame performance optimizations.",
+      "isSatisfied": true,
+      "evidence": "dotnet test tests/ViceSharp.TestHarness/ViceSharp.TestHarness.csproj -c Release --filter FullyQualifiedName~Lockstep|FullyQualifiedName~Checkpoint => 333 passed, 0 failed, 0 skipped"
+    },
+    {
+      "id": "ac-focused-bus-renderer",
+      "text": "Focused BasicBus/C64MemoryMap/VideoRenderer/VideoSurface/SID tests pass with no failed or skipped tests.",
+      "isSatisfied": true,
+      "evidence": "focused gate => 182 passed, 0 failed, 0 skipped"
+    }
+  ]
+}

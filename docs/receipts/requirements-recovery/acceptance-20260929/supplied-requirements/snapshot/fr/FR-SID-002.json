@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-002",
+  "title": "Waveform Generation (Triangle, Sawtooth, Pulse, Noise)",
+  "status": "pending",
+  "priority": "high",
+  "body": "Each SID voice shall generate four selectable waveforms: Triangle, Sawtooth, Pulse, and Noise. Waveforms are selected by bits 4-7 of the control register ($D404, $D40B, $D412).\n\n## Acceptance Criteria\n- Triangle waveform: 12-bit output derived from the upper bits of the phase accumulator, folded at the midpoint.\n- Sawtooth waveform: 12-bit output is the upper 12 bits of the phase accumulator directly.\n- Pulse waveform: 12-bit output is all-1s when the upper 12 bits of the accumulator are less than the pulse width, else all-0s.\n- Noise waveform: output from a 23-bit LFSR (see FR-SID-009), clocked when bit 19 of the oscillator transitions.\n- When no waveform bit is set, the output is 0.\n- Waveform selection takes effect immediately upon register write.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

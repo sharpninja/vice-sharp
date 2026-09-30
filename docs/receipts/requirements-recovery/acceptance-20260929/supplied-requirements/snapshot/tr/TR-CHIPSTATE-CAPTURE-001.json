@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-CHIPSTATE-CAPTURE-001",
+  "title": "IStatefulDevice per-tick chip capture",
+  "status": "completed",
+  "priority": "medium",
+  "body": "IStatefulDevice (StateName, StateSize, CaptureState(Span), DecodeState) is implemented by VIC/SID/CIA/PLA. The recorder preallocates per-slot buffers (zero-alloc capture) and deep-copies on Snapshot; the pump registers Machine.Devices.All.OfType<IStatefulDevice>() before subscribing and the host decodes in the same order.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "A captured tick carries each device's StateSize bytes; capture allocates nothing on the hot path",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Snapshot deep-copies chip state so ring reuse cannot corrupt an earlier snapshot",
+      "isSatisfied": true
+    }
+  ]
+}

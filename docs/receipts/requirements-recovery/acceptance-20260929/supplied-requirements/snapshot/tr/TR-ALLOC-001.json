@@ -1,0 +1,23 @@
+{
+  "kind": "tr",
+  "id": "TR-ALLOC-001",
+  "title": "Zero Managed Allocations Per Emulation Cycle on Hot Path",
+  "status": "completed",
+  "priority": "high",
+  "body": "The emulation hot path (the per-cycle execution of CPU, VIC-II, SID, and CIA ticks) shall produce zero managed heap allocations during steady-state operation. This eliminates GC pauses that would cause frame drops and audio glitches. All per-cycle data structures shall use value types (structs), stack allocation, or pre-allocated buffers.\n\n## Acceptance Criteria\n- A benchmark running 10 million emulation cycles reports zero `GC.GetAllocatedBytesForCurrentThread()` delta on the hot-path thread.\n- `dotnet-counters` monitoring during a 60-second emulation session shows zero Gen0 collections attributable to the emulation thread.\n- The `RunFramePerfProbe` benchmark (`tests/ViceSharp.Benchmarks/RunFramePerfProbe.cs`) asserts a zero `GC.GetAllocatedBytesForCurrentThread()` delta over the measured `RunFrame` window; the assertion is smoke-tested by `BenchmarksSmokeTests.RunFramePerfProbe_SmallRun_ReportsC64PalAndNoAllocations` (TEST-PERF-RUNFRAME-001).\n- The PayloadArena reset occurs exactly once per frame and completes in under 100ns.\n- All event/message payloads in the pub/sub system are value types (per TR-PUBSUB-001).\n- No `new` keyword appears in hot-path code paths except for stack-allocated `Span<T>` or `stackalloc`.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-runframe-zero-alloc",
+      "text": "The measured C64 PAL RunFrame loop reports zero current-thread allocations over the measured frame window.",
+      "isSatisfied": true,
+      "evidence": "RunFramePerfProbe 60 600: allocated=0 bytes"
+    },
+    {
+      "id": "ac-benchmark-no-alloc",
+      "text": "BenchmarkDotNet run reports no managed allocation for C64PalRunFrameBenchmark.",
+      "isSatisfied": true,
+      "evidence": "BenchmarkDotNet C64PalRunFrameBenchmark: Allocated column reported no managed allocation"
+    }
+  ]
+}

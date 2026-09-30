@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IECLOAD-001",
+  "title": "True-drive LOAD over IEC",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "LOAD\"*\",8,1 and LOAD\"$\",8 complete over IEC against a real D64 on a single-system C64.",
+  "acceptanceCriteria": []
+}

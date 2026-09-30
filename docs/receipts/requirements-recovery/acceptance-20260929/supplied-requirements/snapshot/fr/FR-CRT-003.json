@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CRT-003",
+  "title": "EasyFlash Cartridge with Flash Memory",
+  "status": "pending",
+  "priority": "low",
+  "body": "The EasyFlash is a modern cartridge with 1MB of flash memory (2 x 512KB banks for ROML and ROMH) and 256 bytes of RAM at $DF00. It supports runtime programming of flash memory and flexible banking.\n\n## Acceptance Criteria\n- Two 512KB flash chips provide 64 banks of 8KB each for ROML ($8000-$9FFF) and ROMH ($A000-$BFFF or $E000-$FFFF).\n- The bank register at $DE00 selects the active bank (bits 0-5).\n- The control register at $DE02 configures GAME/EXROM lines (bits 0-1) and LED state (bit 7).\n- 256 bytes of battery-backed RAM are accessible at $DF00-$DFFF.\n- Flash memory programming (byte-level writes using the standard flash command sequences) is emulated.\n- Flash erase (sector and chip erase) operations are supported.\n- EasyFlash CRT images are loaded with correct bank and chip assignments.\n- Modified flash contents can be saved back to the CRT file via `IFlashMemory.Save()`.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

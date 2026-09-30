@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-005",
+  "title": "8580 SID Filter Emulation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The 8580 SID filter has a more linear frequency response than the 6581, producing a \"cleaner\" sound. The filter topology is the same (state-variable) but the analog characteristics differ significantly.\n\n## Acceptance Criteria\n- The 8580 filter cutoff frequency mapping is approximately linear (compared to the 6581's non-linear curve).\n- Filter resonance behavior is less pronounced at extreme settings compared to 6581.\n- The 8580 does not exhibit the same distortion/clipping at high resonance as the 6581.\n- The filter implementation is selected based on the active `IMachineProfile` SID model.\n- Runtime switching between 6581 and 8580 filter models is supported via configuration.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

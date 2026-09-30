@@ -1,0 +1,31 @@
+{
+  "kind": "tr",
+  "id": "TR-REMOTE-INTEGRATION-001",
+  "title": "Existing RomM and CSDb integration gate",
+  "status": "pending",
+  "priority": "high",
+  "body": "Use existing RomM http://192.168.0.148:8080/ and CSDb bridge http://192.168.0.148:8090/; do not substitute or start the stopped local stack.\nProvision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.\nFixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.\nAuthenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.\n\n## Acceptance Criteria\n- **ac-01**: Use existing RomM http://192.168.0.148:8080/ and CSDb bridge http://192.168.0.148:8090/; do not substitute or start the stopped local stack.\n- **ac-02**: Provision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.\n- **ac-03**: Fixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.\n- **ac-04**: Authenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Use existing RomM http://192.168.0.148:8080/ and CSDb bridge http://192.168.0.148:8090/; do not substitute or start the stopped local stack.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Provision the existing per-user bridge connection flow with a dedicated vicesharp-e2e identity; keep service administrative credentials on the service.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Fixture-owned HttpClient supports optional VICESHARP_CSDB_BRIDGE_API_KEY via X-Api-Key for both connection and search requests.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Authenticated preflight requires access and at least one downloadable launchable C64 D64 or CRT seed before running seven integration tests.",
+      "isSatisfied": false
+    }
+  ]
+}

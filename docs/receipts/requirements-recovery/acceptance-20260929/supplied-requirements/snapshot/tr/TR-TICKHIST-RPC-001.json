@@ -1,0 +1,21 @@
+{
+  "kind": "tr",
+  "id": "TR-TICKHIST-RPC-001",
+  "title": "Tick-history monitor RPCs",
+  "status": "completed",
+  "priority": "medium",
+  "body": "IMonitorService gains GetTickHistory, ReadMemoryAtTick (reconstructed) and GetChipStateAtTick, with proto/gRPC messages and mappers. IHostProtocolClient surfaces ReadRegisters/ReadMemory/Disassemble plus the three new calls.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-1",
+      "text": "GetTickHistory returns index-ordered ticks; ReadMemoryAtTick at the newest tick equals current memory",
+      "isSatisfied": true
+    },
+    {
+      "id": "ac-2",
+      "text": "Out-of-range tick index returns InvalidArgument",
+      "isSatisfied": true
+    }
+  ]
+}

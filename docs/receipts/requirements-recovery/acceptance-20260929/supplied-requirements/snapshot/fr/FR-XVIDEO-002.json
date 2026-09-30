@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-XVIDEO-002",
+  "title": "Render is a pure read-only sink",
+  "status": "pending",
+  "priority": "medium",
+  "body": "Frame rendering is a pure read-only sink and does not perturb determinism. Acceptance: the pull adapter invokes only TryCopyFrameInto; render-enabled vs disabled replay is bit-identical; steady-state allocation delta == 0.\n\n## Acceptance Criteria\n- the pull adapter invokes only TryCopyFrameInto; render-enabled vs disabled replay is bit-identical; steady-state allocation delta == 0.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

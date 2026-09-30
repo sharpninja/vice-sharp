@@ -1,0 +1,38 @@
+{
+  "generatedUtc": "2026-09-30T01:17:58.5303504+00:00",
+  "scanned": 510,
+  "updated": 204,
+  "skippedAlreadyHadCriteria": 91,
+  "skippedNoHeading": 215,
+  "skippedNoBullets": 0,
+  "pilotFrVic001HashUnchanged": true,
+  "checks": [
+    {
+      "id": "FR-VIC-001",
+      "descriptionHash": "f2c678e7e25411e612c37686ff65fe489553ec13300297a68163eb54faf97b7e",
+      "descriptionLength": 1105,
+      "acceptanceCriteriaCount": 8,
+      "firstId": "ac-01",
+      "firstText": "PAL variant generates 312 raster lines with 63 CPU cycles per line (504 pixels per line).",
+      "isSatisfied": false
+    },
+    {
+      "id": "TR-CYCLE-001",
+      "descriptionHash": "4865d01717288109f09014af77bb22fa32065e8e13644862fb99e4dca7abe7f9",
+      "descriptionLength": 995,
+      "acceptanceCriteriaCount": 7,
+      "firstId": "ac-01",
+      "firstText": "All devices (CPU, VIC-II, CIA, SID) are ticked at half-cycle (bus phase) granularity.",
+      "isSatisfied": false
+    },
+    {
+      "id": "FR-CPU-002",
+      "descriptionHash": "13ae61d6d8392e189cedead42d502f990943f04193d253809d32b4c34db51ddf",
+      "descriptionLength": 1110,
+      "acceptanceCriteriaCount": 6,
+      "firstId": "ac-01",
+      "firstText": "Every opcode consumes exactly the documented cycle count (per the \"MOS 6510 Unintended Opcodes\" reference and 64doc.txt).",
+      "isSatisfied": false
+    }
+  ]
+}

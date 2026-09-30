@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-ROMM-DETAIL-001",
+  "title": "RomM ROM detail validation",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "RomMGateway detail mapping and RomDetailViewModel add-to-collection behavior are proven by deterministic automated tests for files, cover, summary, launchability, and collection mutation.",
+  "acceptanceCriteria": []
+}

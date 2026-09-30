@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-D81-001",
+  "title": "D81 disk image format",
+  "status": "pending",
+  "priority": "high",
+  "body": "D81 (3.5in MFM 800K) images: exactly 819,200 bytes, 80 tracks x 2 sides x 10 physical 512-byte MFM sectors (40 logical 256-byte sectors per track); attachable only to a 1581 drive; exposed to the WD1770/MFM floppy model via IMfmDiskImage.\n\n## Acceptance Criteria\n- D81 (3.5in MFM 800K) images: exactly 819,200 bytes, 80 tracks x 2 sides x 10 physical 512-byte MFM sectors (40 logical 256-byte sectors per track); attachable only to a 1581 drive; exposed to the WD1770/MFM floppy model via IMfmDiskImage.\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-XBOXGPL-002",
+  "title": "C= logo attribution regression suite",
+  "status": "completed",
+  "priority": "high",
+  "body": null,
+  "condition": "Automated tests must fail if C= logo attribution is missing from THIRD_PARTY_NOTICES.md\nor from AboutInfo/AboutViewModel. Cover Alien426, CC BY-SA 4.0, and commons.wikimedia.org.\n",
+  "acceptanceCriteria": []
+}

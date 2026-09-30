@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-DRV1540-001",
+  "title": "Commodore 1540 true drive",
+  "status": "pending",
+  "priority": "high",
+  "body": "The 1540 (VIC-1540) drive variant: identical 1541 board topology (6502 + 2KB RAM + two 6522 VIAs + 16KB DOS ROM at $C000) with the dos1540-325302+3-01.bin DOS ROM. Acceptance: full cycle-lockstep vs native VICE x64sc with Drive8Type=1540 (boot witness drive-CPU register lockstep at equal drive clocks over 2M host cycles, plus the KERNAL-CLOSE anchored D64 LOAD gate).\n\n## Acceptance Criteria\n- The 1540 (VIC-1540) drive variant: identical 1541 board topology (6502 + 2KB RAM + two 6522 VIAs + 16KB DOS ROM at $C000) with the dos1540-325302+3-01.bin DOS ROM.\n- Acceptance: full cycle-lockstep vs native VICE x64sc with Drive8Type=1540 (boot witness drive-CPU register lockstep at equal drive clocks over 2M host cycles, plus the KERNAL-CLOSE anchored D64 LOAD gate).\n- At least one mapped TEST requirement exercises each criterion and retains pass/fail evidence; an unrun, skipped, or failing check does not satisfy the FR.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

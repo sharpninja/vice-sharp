@@ -1,0 +1,47 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC20-001",
+  "title": "VIC-I (MOS 6560 NTSC / 6561 PAL) video",
+  "status": "pending",
+  "priority": "high",
+  "body": "The VIC-20 display is driven by the MOS 6560 (NTSC) or MOS 6561 (PAL) VIC-I chip, not the C64 VIC-II. Slice A may ship a black-frame stub that implements `IVideoChip` so host frame pull does not crash; full raster and character rendering land in later slices.\n\n## Acceptance Criteria\n- A VIC-20 machine exposes a device with role `VideoChip` implementing `IVideoChip`.\n- PAL profile uses 6561 timing: 1_108_405 Hz, 71 cycles/line, 312 lines (VICE `vic20.h`).\n- NTSC profile uses 6560 timing: 1_022_727 Hz, 65 cycles/line, 261 lines (VICE `vic20.h`).\n- Framebuffer contract matches existing host path (BGRA, FrameCompleted).\n- Full character/bitmap/color rendering and on-chip audio are delivered after the stub gate.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "AC-PX-01",
+      "text": "READY boot identical canvas width/height (PAL 448x284; NTSC normal)",
+      "isSatisfied": true,
+      "evidence": "Vic20PixelLockstep geometry asserts"
+    },
+    {
+      "id": "AC-PX-02",
+      "text": "Index SequenceEqual READY idle PAL one full frame managed vs xvic",
+      "isSatisfied": true,
+      "evidence": "Index_ReadyPal_SequenceEqual"
+    },
+    {
+      "id": "AC-PX-03",
+      "text": "Index SequenceEqual READY idle NTSC one full frame",
+      "isSatisfied": true,
+      "evidence": "Index_ReadyNtsc_SequenceEqual"
+    },
+    {
+      "id": "AC-PX-04",
+      "text": "Index SequenceEqual busy screen PAL",
+      "isSatisfied": true,
+      "evidence": "Index_BusyPal_SequenceEqual"
+    },
+    {
+      "id": "AC-PX-05",
+      "text": "BGRA SequenceEqual READY PAL, READY NTSC, and busy PAL vs xvic capture_visible_frame after canvas-palette align",
+      "isSatisfied": true,
+      "evidence": "Bgra_ReadyPal/Ntsc/BusyPal_SequenceEqual"
+    },
+    {
+      "id": "AC-PX-06",
+      "text": "Capture not sentinel/all-black after READY; BGRA alpha 0xFF (NTSC unpainted clamp rows opaque black)",
+      "isSatisfied": true,
+      "evidence": "Vic20PixelLockstep alpha asserts"
+    }
+  ]
+}

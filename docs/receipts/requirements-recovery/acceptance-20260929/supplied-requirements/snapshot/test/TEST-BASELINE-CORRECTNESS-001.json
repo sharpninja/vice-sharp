@@ -1,0 +1,31 @@
+{
+  "kind": "test",
+  "id": "TEST-BASELINE-CORRECTNESS-001",
+  "title": "Approved baseline regression repairs",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.\nAdd minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.\nRun unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.\nRetain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.\n\n## Acceptance Criteria\n- **ac-01**: Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.\n- **ac-02**: Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.\n- **ac-03**: Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.\n- **ac-04**: Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.",
+  "acceptanceCriteria": [
+    {
+      "id": "ac-01",
+      "text": "Retain existing BasicBus tests with correct latched-bus expectations and a passing native-collection convention test.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-02",
+      "text": "Add minimal branch-sequence red regressions for both machine families and compare cycle/register/PC results to pinned VICE.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-03",
+      "text": "Run unchanged 5000-cycle snapshot fixture alone and after audio/dual-VIA/reset/snapshot/dispose; require passing historical performance and both investigated prefetch tests.",
+      "isSatisfied": false
+    },
+    {
+      "id": "ac-04",
+      "text": "Retain traceability from every retired renderer/quarantine assertion to equivalent cycle-aware acceptance tests. Account for manual diagnostic relocation explicitly in the completion manifest.",
+      "isSatisfied": false
+    }
+  ]
+}

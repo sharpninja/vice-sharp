@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-IECMON-001",
+  "title": "IEC scope panel",
+  "status": "pending",
+  "priority": "medium",
+  "body": null,
+  "condition": "Scope view-model binds trace + decoded events; host trace-delta contract returns samples since cycle N; step/rewind move the cursor.",
+  "acceptanceCriteria": []
+}

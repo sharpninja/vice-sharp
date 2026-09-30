@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-TESTGATE-003",
+  "title": "Documented gate command set",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The gate command set is dotnet build slnx + scoped dotnet test + dotnet publish AOT + a documented on-console checklist. Acceptance: verified by TEST-TESTGATE-009.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

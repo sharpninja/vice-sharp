@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-XBOXUI-007",
+  "title": "TR-MVVM-001 applied (Abstractions + Protocol)",
+  "status": "pending",
+  "priority": "medium",
+  "body": "= TR-MVVM-001 applied (ViewModels reference Abstractions + Protocol). Acceptance: verified by TEST-XBOXUI-007.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

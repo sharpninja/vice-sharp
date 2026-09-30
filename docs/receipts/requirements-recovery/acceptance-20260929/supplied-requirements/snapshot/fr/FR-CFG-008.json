@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-CFG-008",
+  "title": "Performance Limiter Configuration",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The emulator shall expose performance limiter settings separately from measured runtime telemetry so users can request a throttle target and observe actual emulation speed.\n\n## Acceptance Criteria\n- A limiter target can be configured through host/session settings.\n- Host status reports requested limiter target separately from measured FPS and effective clock speed.\n- Limiter changes apply without resetting the active machine session.\n- Invalid limiter values are rejected with diagnostics.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIA-001",
+  "title": "VIA 6522 Timer A and Timer B Operation",
+  "status": "pending",
+  "priority": "medium",
+  "body": "The 6522 VIA has two 16-bit timers with different capabilities than the CIA timers. Timer 1 supports free-running and one-shot modes with optional PB7 output toggling. Timer 2 operates in one-shot mode and can optionally count pulses on PB6. Timer behavior has a known 1-cycle difference from CIA timers (the VIA timer counts N+1 cycles for a latch value of N).\n\n## Acceptance Criteria\n- Timer 1 counts down from its latch value and generates an interrupt on underflow.\n- Timer 1 free-running mode automatically reloads and continues counting after underflow.\n- Timer 1 one-shot mode stops after a single underflow.\n- Timer 1 can toggle PB7 on each underflow (when configured via ACR bit 7).\n- Timer 2 operates as a one-shot countdown or counts negative pulses on PB6.\n- A latch value of N results in an interrupt after N+1 clock cycles (unlike the CIA which is N+1 only when force-loaded).\n- Writing to the Timer 1 low-byte latch does not start the timer; writing the high byte starts it.\n- Writing Timer 2 high byte starts the timer and clears the T2 interrupt flag.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,29 @@
+{
+  "kind": "fr",
+  "id": "FR-PUBSUB-001",
+  "title": "Internal Pub/Sub Event Bus",
+  "status": "completed",
+  "priority": "high",
+  "body": "ViceSharp shall provide an internal synchronous topic-based Pub/Sub event bus for transient intra-frame device-to-device communication, including interrupts, NMI, bus availability, address-enable control, DMA, clock, and state notifications. The bus exposes typed publish and subscribe APIs, raw payload compatibility, deterministic registration-order delivery, handle-based unsubscription, frame reset behavior, and message pool integration.",
+  "condition": null,
+  "acceptanceCriteria": [
+    {
+      "id": "ac-fr-pubsub-001-contract",
+      "text": "Public IPubSub exposes typed Publish/Subscribe, raw payload compatibility, Unsubscribe by SubscriptionHandle, Flush, FrameReset, and SubscriptionCount.",
+      "isSatisfied": true,
+      "evidence": "src/ViceSharp.Abstractions/IPubSub.cs"
+    },
+    {
+      "id": "ac-fr-pubsub-001-delivery",
+      "text": "Publish delivers synchronously to subscribers in registration order for each topic.",
+      "isSatisfied": true,
+      "evidence": "tests/ViceSharp.TestHarness/LockFreePubSubTests.cs"
+    },
+    {
+      "id": "ac-fr-pubsub-001-lifecycle",
+      "text": "Message pool exhaustion, return, and frame reset behavior are covered by focused tests.",
+      "isSatisfied": true,
+      "evidence": "tests/ViceSharp.TestHarness/LockFreePubSubTests.cs"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-MED-001",
+  "title": "Screenshot Capture (PNG/BMP)",
+  "status": "pending",
+  "priority": "high",
+  "body": "The emulator shall capture the current video frame as a still image in PNG or BMP format. Screenshots capture the full VIC-II output including borders (optionally cropped to the display area only). The capture is triggered programmatically or by user action.\n\n## Acceptance Criteria\n- PNG format output with correct color representation (RGB, 8-bit per channel).\n- BMP format output as an uncompressed bitmap.\n- Full frame capture includes the border area (standard PAL: 403x284 visible pixels; standard NTSC: 411x234).\n- Cropped capture includes only the main display area (320x200 pixels, or 160x200 in multicolor mode upscaled to 320x200).\n- The screenshot captures the frame as it appears after all VIC-II rendering (sprites, priority, collision) is complete.\n- Screenshots are accessible via `IMediaCapture.CaptureScreenshot()` which returns the image data or writes to a file path.\n- Integer scaling options (1x, 2x, 3x, 4x) are available.\n- Palette selection (VICE default, Pepto, CCS64, Community Colors) is configurable.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

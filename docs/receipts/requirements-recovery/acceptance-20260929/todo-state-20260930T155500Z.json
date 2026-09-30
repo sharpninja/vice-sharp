@@ -1,0 +1,9 @@
+{
+  "generatedUtc": "2026-09-30T15:55:00Z",
+  "query": "mcpserver todo_list workspace F:\\GitHub\\vice-sharp",
+  "doneCount": 84,
+  "doneCompletedOn20260930": 0,
+  "openCount": 36,
+  "planC64Set001Done": false,
+  "note": "No TODO CompletedDate is 2026-09-30. This acceptance iteration did not call a TODO done update."
+}

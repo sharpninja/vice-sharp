@@ -1,0 +1,26 @@
+{
+  "kind": "test",
+  "id": "TEST-DRV-001",
+  "title": "Drive and IEC Tests",
+  "status": "in_progress",
+  "priority": "medium",
+  "body": null,
+  "condition": "Drive CPU/timing, image formats, GCR, IEC bus protocol, fast loader, and host media attachment behavior are verified with smoke, protocol, and reference tests.",
+  "acceptanceCriteria": [
+    {
+      "id": "test-drv-ac-1",
+      "text": "Tests prove mounted D64 directory and file operations execute through IEC bus line activity.",
+      "isSatisfied": false
+    },
+    {
+      "id": "test-drv-ac-2",
+      "text": "Tests prove the same D64 operations complete with correct directory and file data over the IEC path.",
+      "isSatisfied": false
+    },
+    {
+      "id": "test-drv-ac-3",
+      "text": "Focused IEC/D64 tests run with zero failed and zero skipped tests.",
+      "isSatisfied": false
+    }
+  ]
+}

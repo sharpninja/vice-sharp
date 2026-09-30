@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-SID-004",
+  "title": "6581 SID Filter Emulation",
+  "status": "pending",
+  "priority": "high",
+  "body": "The 6581 SID filter is a state-variable filter with low-pass, band-pass, and high-pass outputs. The 6581 filter has a non-linear frequency response due to its analog implementation, with a characteristic \"warm\" sound. The filter cutoff frequency is controlled by an 11-bit value.\n\n## Acceptance Criteria\n- The filter cutoff frequency is set by $D415 (low 3 bits) and $D416 (high 8 bits), forming an 11-bit value.\n- The filter resonance is set by the upper 4 bits of $D417.\n- Low-pass, band-pass, and high-pass modes are selectable via $D418 bits 4-6 and may be combined.\n- Each voice can be individually routed through the filter via $D417 bits 0-2.\n- The external audio input can be routed through the filter via $D417 bit 3.\n- The 6581 filter's non-linear cutoff frequency mapping (the \"kinked\" curve) is modeled.\n- Filter distortion at high resonance matches the 6581 analog behavior (soft clipping).",
+  "condition": null,
+  "acceptanceCriteria": []
+}

@@ -1,0 +1,10 @@
+{
+  "kind": "test",
+  "id": "TEST-MED-004",
+  "title": "ffmpeg muxed-recording integration tests",
+  "status": "pending",
+  "priority": "high",
+  "body": null,
+  "condition": "ffprobe-verified video+audio streams; Start failure cleanup; BackgroundByteWriter ordering/fault.",
+  "acceptanceCriteria": []
+}

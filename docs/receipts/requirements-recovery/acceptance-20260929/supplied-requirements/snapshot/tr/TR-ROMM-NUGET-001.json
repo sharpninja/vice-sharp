@@ -1,0 +1,10 @@
+{
+  "kind": "tr",
+  "id": "TR-ROMM-NUGET-001",
+  "title": "nuget.org-only package resolution",
+  "status": "pending",
+  "priority": "medium",
+  "body": "PLAN-ROMM-001. RomM.Client 1.0.0 and RomM.Client.Csdb 1.0.0 resolve from nuget.org only; NuGet.config stays clear + nuget.org; packages pinned in Directory.Packages.props (CPM). Verified by NuGetConfigTests + DirectoryPackagesTests.RommPinned.",
+  "condition": null,
+  "acceptanceCriteria": []
+}

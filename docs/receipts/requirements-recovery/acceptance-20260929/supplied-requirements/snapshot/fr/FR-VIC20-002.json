@@ -1,0 +1,10 @@
+{
+  "kind": "fr",
+  "id": "FR-VIC20-002",
+  "title": "VIC-20 base memory map and RAM expansions",
+  "status": "pending",
+  "priority": "high",
+  "body": "Unexpanded VIC-20 has 5KB base RAM (1KB system at $0000-$03FF, 4KB user at $1000-$1FFF), character ROM at $8000, I/O at $9000, color RAM at $9400, BASIC at $C000, KERNAL at $E000. Expansions (3K/8K/16K/24K/32K) map into BLK regions.\n\n## Acceptance Criteria\n- After reset with official ROMs, BASIC is readable at $C000 and KERNAL at $E000.\n- Character ROM is readable at $8000.\n- Base RAM regions accept read/write at $0000-$03FF and $1000-$1FFF.\n- Expansion configurations are selectable via profile/resources (later slice).\n- Open-bus and I/O window rules match VICE for validated address ranges.",
+  "condition": null,
+  "acceptanceCriteria": []
+}
