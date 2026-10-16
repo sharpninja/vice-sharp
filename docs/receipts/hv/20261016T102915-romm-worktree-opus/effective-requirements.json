@@ -1,0 +1,529 @@
+{
+  "currentLayer": "layer-1",
+  "functional": [
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Avalonia Steam desktop UI",
+      "acceptanceCriteria": [
+        {
+          "text": "`LibraryView` builds and binds `LibraryBrowseViewModel` `[V]` (build + headless VM tests",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "connection dialog + browse/search/list/launch end to end `[V]` (E2E).",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "`GameDetailsView` builds and binds `RomDetailViewModel` (cover, metadata, files table,",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "`ListsView` builds and binds `CollectionsViewModel` (rail, toolbar Rename/Delete/Add games,",
+          "id": "ac-04",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Steam-style desktop library, details, and lists views on the Avalonia head.\nAC-AUI-01 [V]: LibraryView builds and binds LibraryBrowseViewModel (build + headless VM tests AC-BROWSE-*).\nAC-AUI-02 [V]: connection dialog + browse/search/list/launch end to end (E2E).\nAC-AUI-03 [V]: GameDetailsView builds and binds RomDetailViewModel (cover, metadata, files table, Attach+play/Attach only/Add-to-list, membership) (build + RomDetailViewModelTests).\nAC-AUI-04 [V]: ListsView builds and binds CollectionsViewModel (rail, toolbar Rename/Delete/Add games, per-row remove) (build + CollectionsViewModelTests).\n\n## Acceptance Criteria\n- `LibraryView` builds and binds `LibraryBrowseViewModel` `[V]` (build + headless VM tests\n- connection dialog + browse/search/list/launch end to end `[V]` (E2E).\n- `GameDetailsView` builds and binds `RomDetailViewModel` (cover, metadata, files table,\n- `ListsView` builds and binds `CollectionsViewModel` (rail, toolbar Rename/Delete/Add games,",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-AVUI-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "RomM browse, search, filter, page, jump",
+      "acceptanceCriteria": [
+        {
+          "text": "`BrowseAsync` maps `CustomLimitOffsetPage` -> `LibraryPage` (items, total, offset,",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "the active machine's platform slug (`c64/c128/c-plus-4/vic-20/cpet`, from",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "`searchTerm` passes through to `search_term` -> `RomMGatewayBrowseTests.SearchTerm_Passed`.",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "`LoadMoreAsync` appends the next page; `HasMore` false at `offset>=total` ->",
+          "id": "ac-04",
+          "isSatisfied": false
+        },
+        {
+          "text": "A-Z jump maps letter -> offset via `charIndex`; `JumpToLetterAsync` loads that page ->",
+          "id": "ac-05",
+          "isSatisfied": false
+        },
+        {
+          "text": "rapid search input debounces (300 ms) to a single query ->",
+          "id": "ac-06",
+          "isSatisfied": false
+        },
+        {
+          "text": "changing the active machine (Settings) re-scopes browse to the new platform slug and",
+          "id": "ac-07",
+          "isSatisfied": false
+        },
+        {
+          "text": "background load raises PropertyChanged on the captured context (no cross-thread) ->",
+          "id": "ac-08",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Browse thousands of titles scoped to the active machine. TR-ROMM-THREAD-001.\nAC-BROWSE-01: BrowseAsync maps CustomLimitOffsetPage -> LibraryPage (items,total,offset,charIndex) -> RomMGatewayBrowseTests.Page_Maps.\nAC-BROWSE-02: active machine slug (c64/c128/c-plus-4/vic-20/cpet, from ICurrentMachineProvider) resolves to numeric id and always scopes the query; no user platform picker -> RomMGatewayBrowseTests.PlatformSlug_ResolvesAndFilters.\nAC-BROWSE-03: searchTerm passes through to search_term -> RomMGatewayBrowseTests.SearchTerm_Passed.\nAC-BROWSE-04: LoadMoreAsync appends next page; HasMore false at offset>=total -> LibraryBrowseViewModelTests.Paging_AppendsToEnd.\nAC-BROWSE-05: A-Z jump maps letter -> offset via charIndex; JumpToLetterAsync loads that page -> LibraryBrowseViewModelTests.Jump_UsesCharIndex.\nAC-BROWSE-06: rapid search input debounces (300 ms) to a single query -> LibraryBrowseViewModelTests.Search_Debounced.\nAC-BROWSE-07: changing the active machine (Settings) re-scopes browse to the new slug and reloads; no in-library source/platform selector -> LibraryBrowseViewModelTests.MachineChange_RescopesAndReloads.\nAC-BROWSE-08: background load raises PropertyChanged on the captured context (no cross-thread) -> LibraryBrowseViewModelTests.OffContext_Dispatches.\n\n## Acceptance Criteria\n- `BrowseAsync` maps `CustomLimitOffsetPage` -> `LibraryPage` (items, total, offset,\n- the active machine's platform slug (`c64/c128/c-plus-4/vic-20/cpet`, from\n- `searchTerm` passes through to `search_term` -> `RomMGatewayBrowseTests.SearchTerm_Passed`.\n- `LoadMoreAsync` appends the next page; `HasMore` false at `offset>=total` ->\n- A-Z jump maps letter -> offset via `charIndex`; `JumpToLetterAsync` loads that page ->\n- rapid search input debounces (300 ms) to a single query ->\n- changing the active machine (Settings) re-scopes browse to the new platform slug and\n- background load raises PropertyChanged on the captured context (no cross-thread) ->",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-BROWSE-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Lists via RomM server-side collections",
+      "acceptanceCriteria": [
+        {
+          "text": "`GetCollectionsAsync` lists user collections; smart/virtual flagged read-only ->",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "`CreateCollectionAsync` POSTs and returns the collection ->",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "add/remove send `CollectionRomsPayload{rom_ids[]}` on the right verb ->",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "rename (PUT) and delete (DELETE) -> `RomMGatewayCollectionsTests.RenameDelete`.",
+          "id": "ac-04",
+          "isSatisfied": false
+        },
+        {
+          "text": "`CollectionsViewModel` add/remove selected roms then refresh ->",
+          "id": "ac-05",
+          "isSatisfied": false
+        },
+        {
+          "text": "every collections DTO deserializes reflection-free via `RomMJsonContext` ->",
+          "id": "ac-06",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Game lists are RomM collections (/api/collections), synced across both heads. TR-ROMM-JSON-001.\nAC-COLLECT-01: GetCollectionsAsync lists user collections; smart/virtual flagged read-only -> RomMGatewayCollectionsTests.List_FlagsReadOnly.\nAC-COLLECT-02: CreateCollectionAsync POSTs and returns the collection -> RomMGatewayCollectionsTests.Create_Posts.\nAC-COLLECT-03: add/remove send CollectionRomsPayload{rom_ids[]} on the right verb -> RomMGatewayCollectionsTests.AddRemove_SendPayload.\nAC-COLLECT-04: rename (PUT) and delete (DELETE) -> RomMGatewayCollectionsTests.RenameDelete.\nAC-COLLECT-05: CollectionsViewModel add/remove selected roms then refresh -> CollectionsViewModelTests.AddRemove_Refreshes.\nAC-COLLECT-06: every collections DTO deserializes reflection-free via RomMJsonContext -> RomMJsonContextTests.Collections_SourceGenOnly.\n\n## Acceptance Criteria\n- `GetCollectionsAsync` lists user collections; smart/virtual flagged read-only ->\n- `CreateCollectionAsync` POSTs and returns the collection ->\n- add/remove send `CollectionRomsPayload{rom_ids[]}` on the right verb ->\n- rename (PUT) and delete (DELETE) -> `RomMGatewayCollectionsTests.RenameDelete`.\n- `CollectionsViewModel` add/remove selected roms then refresh ->\n- every collections DTO deserializes reflection-free via `RomMJsonContext` ->",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-COLLECT-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "RomM connection and authentication",
+      "acceptanceCriteria": [
+        {
+          "text": "base URL + client token authenticates; `Authorization: Bearer rmm_...` on requests ->",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "device-pair exchange returns a token and persists it via the store ->",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "OAuth password token auto-refreshes on near-expiry through `RomMAuthHandler` ->",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "a 401 sets the connection VM to a \"sign-in expired\" reauth state and raises",
+          "id": "ac-04",
+          "isSatisfied": false
+        },
+        {
+          "text": "`FileRomMConnectionStore` round-trips baseUrl/authMode/token via source-gen JSON ->",
+          "id": "ac-05",
+          "isSatisfied": false
+        },
+        {
+          "text": "token never appears in a URL/query string -> `RomMGatewayAuthTests.Token_NeverInUri`.",
+          "id": "ac-06",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Connect the supported desktop product path to a RomM 5.x server and authenticate. TR-ROMM-NUGET-001, TR-ROMM-JSON-001, TR-ROMM-SEC-001.\nAC-CONN-01: base URL + client token authenticates; Authorization: Bearer rmm_... on requests -> RomMGatewayAuthTests.ClientToken_SetsBearer.\nAC-CONN-02: device-pair exchange returns a token and persists it via the store -> RomMPairingTests.Exchange_ReturnsAndPersists.\nAC-CONN-03: OAuth password token auto-refreshes on near-expiry through RomMAuthHandler -> RomMAuthRefreshTests.NearExpiry_Refreshes.\nAC-CONN-04: a 401 sets the connection VM to a sign-in-expired reauth state and raises ConnectionInvalid -> LibraryConnectionViewModelTests.Unauthorized_SurfacesReauth.\nAC-CONN-05: on Windows, FileRomMConnectionStore persists protected_token with current-user DPAPI, writes atomically, and immediately migrates legacy plaintext records; unsupported operating systems fail closed -> FileRomMConnectionStoreTests.SaveLoad_RoundTrips + Load_LegacyPlaintext_MigratesImmediately.\nAC-CONN-06: token never appears in a URL/query string -> RomMGatewayAuthTests.Token_NeverInUri.\n\n## Acceptance Criteria\n- base URL + client token authenticates; `Authorization: Bearer rmm_...` on requests ->\n- device-pair exchange returns a token and persists it via the store ->\n- OAuth password token auto-refreshes on near-expiry through `RomMAuthHandler` ->\n- a 401 sets the connection VM to a \"sign-in expired\" reauth state and raises\n- `FileRomMConnectionStore` round-trips baseUrl/authMode/token via source-gen JSON ->\n- token never appears in a URL/query string -> `RomMGatewayAuthTests.Token_NeverInUri`.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-CONN-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Cover art and cache",
+      "acceptanceCriteria": [
+        {
+          "text": "`url_cover` fetched without auth; `path_cover_*` fetched with bearer under the confirmed",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "two-tier cache; the second request for the same cover hits cache (no second HTTP) ->",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "concurrency gate (<=4) + off-screen cancellation ->",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "a fetch failure yields the placeholder and never throws ->",
+          "id": "ac-04",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Cover art loads efficiently for large virtualized grids. TR-ROMM-SEC-001.\nAC-COVER-01: url_cover is fetched without auth; only server-relative path_cover_* is fetched with bearer under the configured RomM base address; an absolute authenticated-path input is rejected -> RomMCoverImageSourceTests.AuthRules + AuthenticatedPath_RejectsAbsoluteUri.\nAC-COVER-02: two-tier cache; second request for same cover hits cache (no second HTTP) -> CoverCacheTests.SecondRequest_Cached.\nAC-COVER-03: concurrency gate (<=4) + off-screen cancellation -> CoverCacheTests.Concurrency_Gated_Cancellable.\nAC-COVER-04: a fetch failure yields the placeholder and never throws -> CoverCacheTests.Failure_Placeholder.\n\n## Acceptance Criteria\n- `url_cover` fetched without auth; `path_cover_*` fetched with bearer under the confirmed\n- two-tier cache; the second request for the same cover hits cache (no second HTTP) ->\n- concurrency gate (<=4) + off-screen cancellation ->\n- a fetch failure yields the placeholder and never throws ->",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-COVER-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "RomM ROM detail",
+      "acceptanceCriteria": [
+        {
+          "text": "`GetRomAsync` maps `DetailedRomSchema` (files/cover/summary/launchable) ->",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "`RomDetailViewModel` invokes add-to-collection ->",
+          "id": "ac-02",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Show a game's detail (cover, metadata, files, launchable, collection membership).\nAC-DETAIL-01: GetRomAsync maps DetailedRomSchema (files/cover/summary/launchable) -> RomMGatewayDetailTests.Detail_Maps.\nAC-DETAIL-02: RomDetailViewModel invokes add-to-collection -> RomDetailViewModelTests.AddToCollection_Invokes.\n\n## Acceptance Criteria\n- `GetRomAsync` maps `DetailedRomSchema` (files/cover/summary/launchable) ->\n- `RomDetailViewModel` invokes add-to-collection ->",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-DETAIL-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Download, attach, boot",
+      "acceptanceCriteria": [
+        {
+          "text": "`DownloadAsync` streams to `<cacheDir>/{romId}/{fs_name}`, reuses on size match, reports",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "slot = `SelectedSlot` or `MediaExtensionMap` default from `fs_name` ->",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "`.prg` is not launchable and Attach is disabled -> `MediaExtensionMapTests.Prg_NotLaunchable`",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "attach/attach+start invoke `IGameLauncher` with the resolved slot + autostart flag ->",
+          "id": "ac-04",
+          "isSatisfied": false
+        },
+        {
+          "text": "Xbox launcher reads bytes -> `AttachMediaAsync` payload -> `AutostartDrive8Async`(disk)/",
+          "id": "ac-05",
+          "isSatisfied": false
+        },
+        {
+          "text": "Avalonia launcher delegates to `DropAndStartFileAsync`(autostart)/`AttachAsync`",
+          "id": "ac-06",
+          "isSatisfied": false
+        },
+        {
+          "text": "two-phase status (\"Downloading N%\" then \"Starting\") ->",
+          "id": "ac-07",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Selecting a game downloads it, attaches to the right slot, and boots on the supported Avalonia product path. TR-ROMM-SEC-001. Xbox/UWP launch acceptance is archived and outside product scope.\nAC-LAUNCH-01: DownloadAsync accepts one relative filename, contains it under cacheDir/{romId}, reuses only on expected-size match, streams to a temporary file, rejects overflow/truncation, and atomically publishes complete content with progress -> RomMGatewayDownloadTests.Streams_Reuses_Progress + RejectsFileNamesOutsideRomCache + TruncatedDownload_DoesNotPublishPartialCacheEntry.\nAC-LAUNCH-02: slot = SelectedSlot or MediaExtensionMap default from fs_name -> MediaExtensionMapTests.Extension_MapsSlot.\nAC-LAUNCH-03: .prg is not launchable and Attach is disabled -> MediaExtensionMapTests.Prg_NotLaunchable + LibraryBrowseViewModelTests.Prg_AttachDisabled.\nAC-LAUNCH-04: attach/attach+start invoke IGameLauncher with resolved slot + autostart flag -> LibraryBrowseViewModelTests.AttachStart_InvokesLauncher.\nAC-LAUNCH-05: Avalonia launcher delegates to DropAndStartFileAsync(autostart)/AttachAsync(attach-only) -> AvaloniaGameLauncherTests.DelegatesToShell.\nAC-LAUNCH-06: two-phase status (Downloading N% then Starting) -> LibraryBrowseViewModelTests.Launch_TwoPhaseStatus.\n\n## Acceptance Criteria\n- `DownloadAsync` streams to `<cacheDir>/{romId}/{fs_name}`, reuses on size match, reports\n- slot = `SelectedSlot` or `MediaExtensionMap` default from `fs_name` ->\n- `.prg` is not launchable and Attach is disabled -> `MediaExtensionMapTests.Prg_NotLaunchable`\n- attach/attach+start invoke `IGameLauncher` with the resolved slot + autostart flag ->\n- Xbox launcher reads bytes -> `AttachMediaAsync` payload -> `AutostartDrive8Async`(disk)/\n- Avalonia launcher delegates to `DropAndStartFileAsync`(autostart)/`AttachAsync`\n- two-phase status (\"Downloading N%\" then \"Starting\") ->",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-LAUNCH-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "NuGet packaging of RomM libraries",
+      "acceptanceCriteria": [
+        {
+          "text": "both libraries `IsPackable` with id + GPL-2.0-or-later metadata ->",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "`PublishNuget` packs both nupkgs with correct deps (RomM.Client, RomM.Client.Csdb,",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "`ViceSharp.Library.ViewModels` references only Protocol; assembly/source name no `RomM.`/",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "restore resolves RomM.Client/Csdb from nuget.org with the nuget.org-only config ->",
+          "id": "ac-04",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. Ship ViceSharp.Library.ViewModels + ViceSharp.RomM as nuget.org packages. TR-ROMM-BOUNDARY-001, TR-ROMM-NUGET-001.\nAC-PKG-01: both libraries IsPackable with id + GPL-2.0-or-later metadata -> PackageMetadataTests.Ids_License.\nAC-PKG-02: PublishNuget packs both nupkgs with correct deps (RomM.Client, RomM.Client.Csdb, ViceSharp.*) -> PackageMetadataTests.Dependencies + build.ps1 PublishNuget --skip [V].\nAC-PKG-03: ViceSharp.Library.ViewModels references only Protocol; no RomM./Http/Grpc./Avalonia./Windows./engine names -> LibraryViewModelsBoundaryTests.\nAC-PKG-04: restore resolves RomM.Client/Csdb from nuget.org with the nuget.org-only config -> NuGetConfigTests.NugetOrgOnly + restore [V].\n\n## Acceptance Criteria\n- both libraries `IsPackable` with id + GPL-2.0-or-later metadata ->\n- `PublishNuget` packs both nupkgs with correct deps (RomM.Client, RomM.Client.Csdb,\n- `ViceSharp.Library.ViewModels` references only Protocol; assembly/source name no `RomM.`/\n- restore resolves RomM.Client/Csdb from nuget.org with the nuget.org-only config ->",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-PKG-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Xbox Game Pass UI and navigation",
+      "acceptanceCriteria": [
+        {
+          "text": "`Library` in `NavigationDestination`, a HomePage button, and `Push` route ->",
+          "id": "ac-01",
+          "isSatisfied": false
+        },
+        {
+          "text": "`LibraryPage` builds `Debug-UWP`, binds `LibraryBrowseViewModel` (grid tiles, search,",
+          "id": "ac-02",
+          "isSatisfied": false
+        },
+        {
+          "text": "A = Attach, Y = Attach+Autostart via the input command path `[V]` (dev-PC E2E; command",
+          "id": "ac-03",
+          "isSatisfied": false
+        },
+        {
+          "text": "no `RPC_E_WRONG_THREAD` on async tile/cover load `[V]` (dev-PC E2E; guarded by AC-BROWSE-08).",
+          "id": "ac-04",
+          "isSatisfied": false
+        },
+        {
+          "text": "`GameDetailsPage` builds `Debug-UWP`, binds `RomDetailViewModel` (cover, screenshots,",
+          "id": "ac-05",
+          "isSatisfied": false
+        },
+        {
+          "text": "`ListsPage` builds `Debug-UWP`, binds `CollectionsViewModel` (collections rail, selected-list",
+          "id": "ac-06",
+          "isSatisfied": false
+        }
+      ],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. 10-foot gamepad-first library, details, and lists pages on the UWP head.\nAC-XUI-01: Library in NavigationDestination, a HomePage button, and Push route -> XboxNavigationTests.Library_Routable.\nAC-XUI-02 [V]: LibraryPage builds Debug-UWP, binds LibraryBrowseViewModel (grid tiles, search, read-only machine indicator, slot picker, A/Y actions, A-Z strip; no source/platform picker).\nAC-XUI-03 [V]: A=Attach, Y=Attach+Autostart via the input command path.\nAC-XUI-04 [V]: no RPC_E_WRONG_THREAD on async tile/cover load (guarded by AC-BROWSE-08).\nAC-XUI-05 [V]: GameDetailsPage builds Debug-UWP, binds RomDetailViewModel (cover, screenshots, metadata, files, slot picker, A/Y/X); VM logic in RomDetailViewModelTests.\nAC-XUI-06 [V]: ListsPage builds Debug-UWP, binds CollectionsViewModel (rail, selected-list games, X=remove/Y=rename/Menu=delete/+New list); VM logic in CollectionsViewModelTests.\n\n## Acceptance Criteria\n- `Library` in `NavigationDestination`, a HomePage button, and `Push` route ->\n- `LibraryPage` builds `Debug-UWP`, binds `LibraryBrowseViewModel` (grid tiles, search,\n- A = Attach, Y = Attach+Autostart via the input command path `[V]` (dev-PC E2E; command\n- no `RPC_E_WRONG_THREAD` on async tile/cover load `[V]` (dev-PC E2E; guarded by AC-BROWSE-08).\n- `GameDetailsPage` builds `Debug-UWP`, binds `RomDetailViewModel` (cover, screenshots,\n- `ListsPage` builds `Debug-UWP`, binds `CollectionsViewModel` (collections rail, selected-list",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "FR-ROMM-XBOXUI-001"
+    }
+  ],
+  "technical": [
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Emulator Core as a Reusable Library with UI Shells as Thin Consumers",
+      "acceptanceCriteria": [],
+      "priority": "high",
+      "body": "The ViceSharp emulator core shall be packaged as a standalone .NET library (NuGet package) with no dependencies on any UI framework, windowing system, or platform-specific API. UI applications (desktop, web, headless test harness, embedded) consume the library and provide their own rendering, audio output, and input handling through well-defined abstractions.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-LIB-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Adapter isolates HTTP from the VM library",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. All HTTP/RomM.Client access lives in ViceSharp.RomM; ViceSharp.Library.ViewModels has no System.Net.Http reference and references only ViceSharp.Protocol. Verified by LibraryViewModelsBoundaryTests.NoHttp (covers AC-PKG-03).",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-ROMM-BOUNDARY-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Source-gen JSON for all new adapter DTOs",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. 100% of new adapter DTOs (Collections/Search/cover/char_index/pairing) serialize and deserialize reflection-free via RomMJsonContext (satisfies IsAotCompatible/EnableTrimAnalyzer/TreatWarningsAsErrors). Verified by RomMJsonContextTests.AllTypes_SourceGen.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-ROMM-JSON-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "nuget.org-only package resolution",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. RomM.Client 1.0.0 and RomM.Client.Csdb 1.0.0 resolve from nuget.org only; NuGet.config stays clear + nuget.org; packages pinned in Directory.Packages.props (CPM). Verified by NuGetConfigTests + DirectoryPackagesTests.RommPinned.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-ROMM-NUGET-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Keep RomM bearer tokens and downloaded content inside trusted boundaries",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "body": "Public covers use an anonymous client; bearer auth is restricted to server-relative RomM cover paths. ROM filenames and resolved cache destinations are contained, downloaded through a temporary file, expected-size validated, and atomically published. Windows file-backed tokens use current-user DPAPI with atomic legacy-plaintext migration; unsupported operating systems fail closed.",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-ROMM-SEC-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "title": "Captured-SynchronizationContext PropertyChanged dispatch",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "body": "PLAN-ROMM-001. LibraryObservableObject posts PropertyChanged off-context to the captured UI SynchronizationContext and raises inline when already on-context, preventing RPC_E_WRONG_THREAD in UWP XAML binding. Verified by LibraryObservableObjectTests.Dispatch (covers AC-BROWSE-08).",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TR-ROMM-THREAD-001"
+    }
+  ],
+  "testing": [
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Build, headless view-model, and end-to-end validation prove LibraryView and ListsView binding, connection, browse, search, list, collection, and launch behavior.",
+      "title": "RomM Avalonia UI validation",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-ROMM-AVUI-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "RomMGateway detail mapping and RomDetailViewModel add-to-collection behavior are proven by deterministic automated tests for files, cover, summary, launchability, and collection mutation.",
+      "title": "RomM ROM detail validation",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-ROMM-DETAIL-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "Package metadata and pack-output tests prove both RomM libraries are packable with the approved package ids, GPL-2.0-or-later metadata, and exact dependency graph.",
+      "title": "RomM NuGet package validation",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-ROMM-PKG-001"
+    },
+    {
+      "status": "pending",
+      "scopeStartLayerKey": "layer-1",
+      "condition": "`RomMCoverImageSourceTests` verifies anonymous public covers and rejection of absolute authenticated-path inputs. `RomMGatewayDownloadTests` verifies filename containment and that truncated content never publishes a partial cache entry. `FileRomMConnectionStoreTests` verifies current-user DPAPI round-trip and immediate migration of legacy plaintext tokens.",
+      "title": "RomM trusted-boundary regression suite",
+      "acceptanceCriteria": [],
+      "priority": "high",
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "id": "TEST-ROMM-SEC-001"
+    }
+  ],
+  "mappings": [
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-AVUI-001",
+      "trIds": [
+        "TR-MVVM-001"
+      ],
+      "testIds": [
+        "TEST-ROMM-AVUI-001"
+      ]
+    },
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-BROWSE-001",
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001"
+      ]
+    },
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-COLLECT-001",
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001"
+      ]
+    },
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-CONN-001",
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001",
+        "TR-ROMM-SEC-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001",
+        "TEST-ROMM-SEC-001"
+      ]
+    },
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-COVER-001",
+      "trIds": [
+        "TR-ROMM-SEC-001"
+      ],
+      "testIds": [
+        "TEST-ROMM-SEC-001"
+      ]
+    },
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-DETAIL-001",
+      "trIds": [
+        "TR-ROMM-BOUNDARY-001"
+      ],
+      "testIds": [
+        "TEST-ROMM-DETAIL-001"
+      ]
+    },
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-LAUNCH-001",
+      "trIds": [
+        "TR-REMOTE-INTEGRATION-001",
+        "TR-ROMM-SEC-001"
+      ],
+      "testIds": [
+        "TEST-REMOTE-INTEGRATION-001",
+        "TEST-ROMM-SEC-001"
+      ]
+    },
+    {
+      "workspaceId": "F:\\GitHub\\vice-sharp",
+      "frId": "FR-ROMM-PKG-001",
+      "trIds": [
+        "TR-ROMM-NUGET-001"
+      ],
+      "testIds": [
+        "TEST-ROMM-PKG-001"
+      ]
+    }
+  ]
+}

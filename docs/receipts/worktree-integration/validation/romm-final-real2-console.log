@@ -1,0 +1,114 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+​
+12:05:55 [WRN] Exception was suppressed
+Microsoft.Build.Exceptions.InvalidProjectFileException: The expression "[MSBuild]::GetTargetFrameworkIdentifier(net10.0)" cannot be evaluated. Could not load file or assembly 'NuGet.Frameworks, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)  C:\Program Files\dotnet\sdk\10.0.402\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject(String errorSubCategoryResourceName, IElementLocation elementLocation, String resourceName, Object[] args)
+   at Microsoft.Build.Shared.ProjectErrorUtilities.ThrowInvalidProject[T1,T2](IElementLocation elementLocation, String resourceName, T1 arg0, T2 arg1)
+   at Microsoft.Build.Evaluation.Expander`2.Function.Execute(Object objectInstance, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertyBody(String propertyBody, Object propertyValue, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.PropertyExpander.ExpandPropertiesLeaveTypedAndEscaped(String expression, IPropertyProvider`1 properties, ExpanderOptions options, IElementLocation elementLocation, PropertiesUseTracker propertiesUseTracker, IFileSystem fileSystem)
+   at Microsoft.Build.Evaluation.Expander`2.ExpandIntoStringLeaveEscaped(String expression, ExpanderOptions options, IElementLocation elementLocation)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyElement(ProjectPropertyElement propertyElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluatePropertyGroupElement(ProjectPropertyGroupElement propertyGroupElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.EvaluateImportElement(String directoryOfImportingFile, ProjectImportElement importElement)
+   at Microsoft.Build.Evaluation.Evaluator`4.PerformDepthFirstPass(ProjectRootElement currentProjectOrImport)
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate()
+   at Microsoft.Build.Evaluation.Evaluator`4.Evaluate(IEvaluatorData`4 data, Project project, ProjectRootElement root, ProjectLoadSettings loadSettings, Int32 maxNodeCount, PropertyDictionary`1 environmentProperties, ICollection`1 propertiesFromCommandLine, ILoggingService loggingService, IItemFactory`2 itemFactory, IToolsetProvider toolsetProvider, IDirectoryCacheFactory directoryCacheFactory, ProjectRootElementCacheBase projectRootElementCache, BuildEventContext buildEventContext, ISdkResolverService sdkResolverService, Int32 submissionId, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Reevaluate(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.ReevaluateIfNecessary(ILoggingService loggingServiceForEvaluation, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext)
+   at Microsoft.Build.Evaluation.Project.ProjectImpl.Initialize(IDictionary`2 globalProperties, String toolsVersion, String subToolsetVersion, ProjectLoadSettings loadSettings, EvaluationContext evaluationContext, Boolean interactive)
+   at Microsoft.Build.Evaluation.Project.FromProjectRootElement(ProjectRootElement rootElement, ProjectOptions options)
+   at Nuke.Common.ProjectModel.ProjectModelTasks.ParseProject(String projectFile, String configuration, String targetFramework) in /_/source/Nuke.ProjectModel/ProjectModelTasks.cs:line 97
+   at Nuke.Common.Execution.Telemetry.CheckAwareness() in /_/source/Nuke.Build/Telemetry/Telemetry.cs:line 73
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+​
+╬════════════════════
+║ RommDesktopTest
+╬═══════════
+​
+12:05:55 [INF] > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\ViceSharp.Heads.Tests.csproj --configuration Release --results-directory F:\GitHub\vice-sharp\TestResults\romm-desktop\20261016T120555-real --logger trx;LogFileName=ViceSharp.Heads.Tests.trx
+12:05:55 [DBG]   Determining projects to restore...
+12:05:57 [DBG]   All projects are up-to-date for restore.
+12:05:59 [DBG]   ViceSharp.Protocol -> F:\GitHub\vice-sharp\src\ViceSharp.Protocol\bin\Release\net10.0\ViceSharp.Protocol.dll
+12:05:59 [DBG]   ViceSharp.Abstractions -> F:\GitHub\vice-sharp\src\ViceSharp.Abstractions\bin\Release\net10.0\ViceSharp.Abstractions.dll
+12:05:59 [DBG]   ViceSharp.Xbox.Input -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.Input\bin\Release\net10.0\ViceSharp.Xbox.Input.dll
+12:05:59 [DBG]   ViceSharp.Library.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Library.ViewModels\bin\Release\net10.0\ViceSharp.Library.ViewModels.dll
+12:05:59 [DBG]   ViceSharp.RomFetch -> F:\GitHub\vice-sharp\src\ViceSharp.RomFetch\bin\Release\net10.0\ViceSharp.RomFetch.dll
+12:05:59 [DBG]   ViceSharp.Chips -> F:\GitHub\vice-sharp\src\ViceSharp.Chips\bin\Release\net10.0\ViceSharp.Chips.dll
+12:05:59 [DBG]   ViceSharp.RomM -> F:\GitHub\vice-sharp\src\ViceSharp.RomM\bin\Release\net10.0\ViceSharp.RomM.dll
+12:05:59 [DBG]   ViceSharp.Xbox.ViewModels -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox.ViewModels\bin\Release\net10.0\ViceSharp.Xbox.ViewModels.dll
+12:05:59 [DBG]   ViceSharp.Core -> F:\GitHub\vice-sharp\src\ViceSharp.Core\bin\Release\net10.0\ViceSharp.Core.dll
+12:06:00 [DBG]   ViceSharp.Monitor -> F:\GitHub\vice-sharp\src\ViceSharp.Monitor\bin\Release\net10.0\ViceSharp.Monitor.dll
+12:06:00 [DBG]   ViceSharp.Architectures -> F:\GitHub\vice-sharp\src\ViceSharp.Architectures\bin\Release\net10.0\ViceSharp.Architectures.dll
+12:06:00 [DBG]   ViceSharp.Host.InProcess -> F:\GitHub\vice-sharp\src\ViceSharp.Host.InProcess\bin\Release\net10.0\ViceSharp.Host.InProcess.dll
+12:06:01 [DBG]   ViceSharp.Xbox -> F:\GitHub\vice-sharp\src\ViceSharp.Xbox\bin\Release\net10.0\ViceSharp.Xbox.dll
+12:06:01 [DBG]   ViceSharp.Host -> F:\GitHub\vice-sharp\src\ViceSharp.Host\bin\Release\net10.0\ViceSharp.Host.dll
+12:06:04 [DBG] F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\Views/SettingsView.axaml(76,18,76,18): Avalonia warning AVLN5001: 'TextBox.Watermark' is obsolete: Use PlaceholderText instead. [F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\ViceSharp.Avalonia.csproj]
+12:06:04 [DBG]   ViceSharp.Avalonia -> F:\GitHub\vice-sharp\src\ViceSharp.Avalonia\bin\Release\net10.0\ViceSharp.Avalonia.dll
+12:06:05 [DBG]   ViceSharp.Heads.Tests -> F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\bin\Release\net10.0\ViceSharp.Heads.Tests.dll
+12:06:05 [DBG] Test run for F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\bin\Release\net10.0\ViceSharp.Heads.Tests.dll (.NETCoreApp,Version=v10.0)
+12:06:05 [DBG] A total of 1 test files matched the specified pattern.
+12:06:08 [ERR] [xUnit.net 00:00:03.05]     ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: "grid-scroll-focus") [FAIL]
+12:06:09 [DBG]   Failed ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: "grid-scroll-focus") [141 ms]
+12:06:09 [DBG]   Error Message:
+12:06:09 [DBG]    Expected actual[key] to be "4" because grid-scroll-focus/right must match the contract, but "0" differs near "0" (index 0).
+12:06:09 [DBG]   Stack Trace:
+12:06:09 [DBG]      at FluentAssertions.Primitives.StringAssertions`1.Be(String expected, String because, Object[] becauseArgs)
+12:06:09 [DBG]    at ViceSharp.Heads.Tests.RommDesktopContractTests.AssertDesktopObservation(String scenario, Dictionary`2 actual) in F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\RommDesktopBehaviorContracts.cs:line 72
+12:06:09 [DBG]    at ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(String scenario) in F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\RommDesktopBehaviorContracts.cs:line 104
+12:06:09 [DBG] --- End of stack trace from previous location ---
+12:06:09 [DBG]   Standard Output Messages:
+12:06:09 [DBG]  {"scenario":"grid-scroll-focus","provider":"production","observations":{"unrealized":"True","focusRetained":"True","right":"0","visible":"True"}}
+12:06:09 [DBG] 
+12:06:09 [DBG] 
+12:06:10 [DBG] Results File: F:\GitHub\vice-sharp\TestResults\romm-desktop\20261016T120555-real\ViceSharp.Heads.Tests.trx
+12:06:10 [DBG] 
+12:06:10 [DBG] Failed!  - Failed:     1, Passed:    60, Skipped:     0, Total:    61, Duration: 3 s - ViceSharp.Heads.Tests.dll (net10.0)
+12:06:10 [ERR] Target RommDesktopTest has thrown an exception
+Nuke.Common.Tooling.ProcessException: Process 'dotnet.exe' exited with code 1.
+   > "C:\Program Files\dotnet\dotnet.exe" test F:\GitHub\vice-sharp\tests\ViceSharp.Heads.Tests\ViceSharp.Heads.Tests.csproj --configuration Release --results-directory F:\GitHub\vice-sharp\TestResults\romm-desktop\20261016T120555-real --logger trx;LogFileName=ViceSharp.Heads.Tests.trx
+   @ F:\GitHub\vice-sharp
+Error output:
+   [xUnit.net 00:00:03.05]     ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: "grid-scroll-focus") [FAIL]
+
+   at Nuke.Common.Tooling.ProcessExtensions.AssertZeroExitCode(IProcess process) in /_/source/Nuke.Tooling/ProcessExtensions.cs:line 38
+   at Nuke.Common.Tooling.ToolTasks.<>c.<GetExitHandler>b__4_0(ToolOptions _, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 27
+   at Nuke.Common.Tooling.ToolTasks.<>c__DisplayClass8_0.<GetExitHandlerInternal>b__3(ToolOptions o, IProcess p) in /_/source/Nuke.Tooling/ToolTasks.ExitHandler.cs:line 22
+   at Nuke.Common.Tooling.ToolTasks.Run[T](T options) in /_/source/Nuke.Tooling/ToolTasks.Run.cs:line 36
+   at Nuke.Common.Tools.DotNet.DotNetTasks.DotNetTest(Configure`1 configurator) in /_/source/Nuke.Common/Tools/DotNet/DotNet.Generated.cs:line 34
+   at Build.<get_RommDesktopTest>b__148_1() in F:\GitHub\vice-sharp\build\Build.Romm.cs:line 26
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[WRN] : Exception was suppressed
+[ERR] RommDesktopTest: [xUnit.net 00:00:03.05]     ViceSharp.Heads.Tests.RommDesktopContractTests.DesktopBehavior_MatchesContract(scenario: "grid-scroll-focus") [FAIL]
+[ERR] RommDesktopTest: Target RommDesktopTest has thrown an exception
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+RommDesktopTest    Failed          0:15   // ProcessException: Process 'dotnet.exe' exited with code 1.
+───────────────────────────────────────
+Total                              0:15
+═══════════════════════════════════════
+​
+Build failed on 10/16/2026 12:06:10 PM. (╯°□°）╯︵ ┻━┻

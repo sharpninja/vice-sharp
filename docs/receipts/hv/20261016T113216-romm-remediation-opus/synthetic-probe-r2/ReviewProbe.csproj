@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Independent reviewer probe (not product code). Compiles against copies of the built
+       ViceSharp.Heads.Tests output so no product project or native build is invoked. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);MSB3277;MSB3243;CS8600;CS8602;CS8604</NoWarn>
+    <DepsDir>$(MSBuildThisFileDirectory)..\deps\</DepsDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="$(DepsDir)Avalonia.dll" />
+    <Reference Include="$(DepsDir)Avalonia.Base.dll" />
+    <Reference Include="$(DepsDir)Avalonia.Controls.dll" />
+    <Reference Include="$(DepsDir)Avalonia.Headless.dll" />
+    <Reference Include="$(DepsDir)Avalonia.Themes.Fluent.dll" />
+    <Reference Include="$(DepsDir)Avalonia.Markup.Xaml.dll" />
+    <Reference Include="$(DepsDir)ViceSharp.Avalonia.dll" />
+    <Reference Include="$(DepsDir)ViceSharp.Library.ViewModels.dll" />
+    <Reference Include="$(DepsDir)ViceSharp.Protocol.dll" />
+  </ItemGroup>
+</Project>

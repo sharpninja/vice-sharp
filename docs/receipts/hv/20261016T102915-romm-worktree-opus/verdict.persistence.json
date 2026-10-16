@@ -1,0 +1,213 @@
+{
+  "schema": "hostile-review-persistence/v1",
+  "writtenAtLocal": "2026-10-16T11:15:01",
+  "reviewerSessionId": "ClaudeCode-20261016T153328Z-plugin-session",
+  "reviewerRequestId": "req-20261016T153331Z-prompt-bc1e",
+  "agent": "ClaudeCode",
+  "pluginRoot": "C:\\Users\\kingd\\.claude\\plugins\\cache\\mcpserver-local\\mcpserver\\1.119.0",
+  "pluginVersion": "1.119.0 (from plugin .version and plugin.json)",
+  "route": "Invoke-McpPlugin.ps1 -Command Invoke (workflow.sessionlog.*, client.SessionLog.QueryAsync) in PowerShell.MCP console sa-47738b43 with the request.jsonl environment applied (MCP_FAILSAFE_DRAIN_DISABLED=1)",
+  "verdictFiles": {
+    "verdictMd": {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T102915-romm-worktree-opus\\verdict.md",
+      "sha256": "3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652",
+      "lineEndings": "LF"
+    },
+    "verdictJson": {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T102915-romm-worktree-opus\\verdict.json",
+      "sha256": "5D954D7EC6D20E951E564D9115FCDF184675B7DA5B85D0FC7EBC379076C22360",
+      "sha256AfterCrlfToLf": "529B10D2C7FC42BDE531CB582C8CB196AA4DE6BB2E7039671B06EC21E0CE95FA",
+      "lineEndings": "CRLF (PowerShell ConvertTo-Json on Windows)"
+    }
+  },
+  "chunkPlan": {
+    "chunkSize": 9000,
+    "mdParts": 4,
+    "jsonParts": 5,
+    "mdSha": "3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652",
+    "jsonSha": "5D954D7EC6D20E951E564D9115FCDF184675B7DA5B85D0FC7EBC379076C22360"
+  },
+  "firstBatchAttempt": "One appendDialog call with all 10 verdict items (about 75 KB YAML) failed before process start: The filename or extension is too long (wrapper passes ParamsYaml on the command line). Nothing was written and no failsafe file was created. Retried through the same supported route one item per call. Triaged as triage-report-9668daa4f26d42a6b5bfc187e5eb9373.",
+  "dialogWrites": [
+    {
+      "index": 1,
+      "label": "VERDICT HEADER: OverallVerdict DISAGREE; accuracyPercent 79; completenessPercent 75; passCount 20; failCount 6; unknownCount 1; reviewerSessionId ClaudeCode-20261016T153328Z-plugin-session; reviewerRequestId req-20261016T153331Z-prompt-bc1e; parent Codex-20261007T135626Z-plugin-session / req-20261016T150502Z-turn-2379; requestPath F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T102915-romm-worktree-opus\\request.jsonl; responsePath F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T102915-romm-worktree-opus\\response.jsonl; verdict.md sha256 3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652 in 4 parts; verdict.json sha256 5D954D7EC6D20E951E564D9115FCDF184675B7DA5B85D0FC7EBC379076C22360 in 5 parts. Full texts follow as ordered parts.",
+      "chars": 750,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 2,
+      "label": "[verdict.md part 01/04]",
+      "chars": 9024,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 3,
+      "label": "[verdict.md part 02/04]",
+      "chars": 9024,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 4,
+      "label": "[verdict.md part 03/04]",
+      "chars": 9024,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 5,
+      "label": "[verdict.md part 04/04]",
+      "chars": 5982,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 6,
+      "label": "[verdict.json part 01/05]",
+      "chars": 9026,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 7,
+      "label": "[verdict.json part 02/05]",
+      "chars": 9026,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 8,
+      "label": "[verdict.json part 03/05]",
+      "chars": 9026,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 9,
+      "label": "[verdict.json part 04/05]",
+      "chars": 9026,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    },
+    {
+      "index": 10,
+      "label": "[verdict.json part 05/05]",
+      "chars": 2250,
+      "code": "persisted",
+      "persisted": "true",
+      "failsafePath": "\"\""
+    }
+  ],
+  "decisionDialogWrites": "Six decision items persisted (code persisted each)",
+  "actionWrites": "appendActions orders 1-5, 6-13 and 14-15 persisted (code persisted)",
+  "updateTurn": "persisted (response + tags)",
+  "completeTurn": "persisted (turn status completed at 2026-10-16T11:14:22)",
+  "readback1BeforeComplete": {
+    "readAtLocal": "2026-10-16T11:13:04",
+    "method": "client.SessionLog.QueryAsync (agent ClaudeCode, limit 5) via Invoke-McpPlugin.ps1",
+    "queryChars": 112581,
+    "sessionFound": true,
+    "turnFound": true,
+    "turnStatus": "in_progress",
+    "queryTitle": "Hostile review: non-Xbox RomM desktop integration (Opus 5.5 max)",
+    "dialogItemCount": 16,
+    "actionCount": 13,
+    "tags": [
+      "hostile-review",
+      "romm",
+      "worktree-integration",
+      "parent-session:Codex-20261007T135626Z-plugin-session",
+      "parent-request:req-20261016T150502Z-turn-2379",
+      "reviewer:claude-opus-5-5-max",
+      "verdict:DISAGREE",
+      "accuracy:79",
+      "completeness:75"
+    ],
+    "responseMatches": true,
+    "verdictMd": {
+      "partsRead": 4,
+      "partsExpected": 4,
+      "localSha256": "3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652",
+      "readbackSha256": "3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652",
+      "exactMatch": true
+    },
+    "verdictJson": {
+      "partsRead": 5,
+      "partsExpected": 5,
+      "localSha256": "5D954D7EC6D20E951E564D9115FCDF184675B7DA5B85D0FC7EBC379076C22360",
+      "readbackSha256": "529B10D2C7FC42BDE531CB582C8CB196AA4DE6BB2E7039671B06EC21E0CE95FA",
+      "exactMatch": false
+    },
+    "headerPresent": true,
+    "decisionItems": 7
+  },
+  "readback1JsonNormalization": {
+    "localCrlfCount": 446,
+    "localLoneCrCount": 0,
+    "readbackCrCount": 0,
+    "normalizedLocalSha256": "529B10D2C7FC42BDE531CB582C8CB196AA4DE6BB2E7039671B06EC21E0CE95FA",
+    "readbackSha256": "529B10D2C7FC42BDE531CB582C8CB196AA4DE6BB2E7039671B06EC21E0CE95FA",
+    "exactMatchAfterCrlfToLf": true,
+    "lengthLocal": 38224,
+    "lengthNormalized": 37778,
+    "lengthReadback": 37778
+  },
+  "readback2AfterComplete": {
+    "readAtLocal": "2026-10-16T11:14:35",
+    "method": "client.SessionLog.QueryAsync (agent ClaudeCode, limit 5) via Invoke-McpPlugin.ps1",
+    "sessionStatus": "in_progress",
+    "sessionTurnCount": 2,
+    "turnStatus": "completed",
+    "queryTitle": "Hostile review: non-Xbox RomM desktop integration (Opus 5.5 max)",
+    "dialogItemCount": 16,
+    "actionCount": 15,
+    "responseMatchesFinal": true,
+    "verdictMd": {
+      "partsRead": 4,
+      "partsExpected": 4,
+      "localSha256": "3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652",
+      "readbackSha256": "3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652",
+      "exactMatch": true
+    },
+    "verdictJson": {
+      "partsRead": 5,
+      "partsExpected": 5,
+      "localSha256Raw": "5D954D7EC6D20E951E564D9115FCDF184675B7DA5B85D0FC7EBC379076C22360",
+      "localSha256CrlfToLf": "529B10D2C7FC42BDE531CB582C8CB196AA4DE6BB2E7039671B06EC21E0CE95FA",
+      "readbackSha256": "529B10D2C7FC42BDE531CB582C8CB196AA4DE6BB2E7039671B06EC21E0CE95FA",
+      "exactMatchRaw": false,
+      "exactMatchAfterCrlfToLf": true
+    },
+    "decisionDialogItems": 7,
+    "designDecisionActions": 6
+  },
+  "comparisonConclusion": "verdict.md: byte-exact full-content match in 4/4 parts before and after completion. verdict.json: 5/5 parts; identical full content after CRLF to LF normalization (446 line endings, no lone CR); raw bytes differ only because the session-log store keeps LF. Header, response and tags verified.",
+  "failsafe": {
+    "drainDisabled": "1",
+    "pendingCount": 1,
+    "pending": [
+      "F:\\GitHub\\vice-sharp\\.mcpServer\\claude\\reviews\\20261016T102915-romm-worktree-opus\\failsafe\\pending\\20261016T153937Z-session_setTurnTitle-e599.yaml"
+    ],
+    "state": "queued, not persisted as that call, not drained; its effect (turn title) is persisted per QueryAsync read-back"
+  },
+  "triage": [
+    "triage-report-f6bf0bebab4a4f12bbd69b1693745116",
+    "triage-report-9ca8b6e2a31e4ed79fda9420f2fccdbf",
+    "triage-report-243bc62d02e64be4ac5119103daaa169",
+    "triage-report-9668daa4f26d42a6b5bfc187e5eb9373"
+  ],
+  "twinTurn": "req-20261016T153331Z-prompt-1636 (canceled by the duplicate hook open; not created or cancelled by the reviewer)",
+  "note": "This file was written after the turn completed, so it is not itself inside the session log; its key facts are in action order 15 and the completeTurn response."
+}

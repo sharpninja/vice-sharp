@@ -1,0 +1,259 @@
+# R2 hostile review verdict: non-Xbox RomM integration remediation
+
+Reviewed 2026-10-16T11:55:53 (America/Chicago local). Reviewer claude-opus-5-5 effort max (ClaudeCode CLI session 0811d877-c1c8-483f-95f3-89d066d5594b, resumed).
+Runtime receipt: Win32_Process: claude.exe PID 40824 (parent of PowerShell.MCP.Proxy 28276) command line --print --resume 0811d877-c1c8-483f-95f3-89d066d5594b --model claude-opus-5-5 --effort max; launch-result.json pid 40824.
+Profile: add-profile executed first in R2: SKILL.md and PROFILE-MERGED.md read in full (1 profile file); full marker re-read (397 lines, credentials redacted). Console: PowerShell.MCP isolated console agent_id sa-11832f25 (PID 34348); environment from R2 request.jsonl applied at process scope.
+MCP session ClaudeCode-20261016T163559Z-plugin-session, turn req-20261016T163602Z-prompt-669a; parent Codex-20261007T135626Z-plugin-session / req-20261016T150502Z-turn-2379; prior round ClaudeCode-20261016T153328Z-plugin-session / req-20261016T153331Z-prompt-bc1e (DISAGREE 79/75 (20 PASS, 6 FAIL, 1 UNKNOWN)).
+Baseline: HEAD = main = origin/main = d36c133daa73fdb758222bd68b3e6c26fa551608 (tree be3bf170 equal to fa259f2); no drift.
+Request: F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\request.jsonl
+Response: F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\response.jsonl
+
+## Verdict
+
+- OverallVerdict: DISAGREE
+- accuracyPercent: 92. Of 31 parent claims checked, 29 are accurate: all R1 findings resolved, gates, counts, chronology, Skia decoding, loader seam, stale guards, preservation, native and requirements. Two are inaccurate: keyboard support (it breaks after scrolling away, N-01) and test observations recorded in TRX (absent, N-02). The score is weighted for the capability claim.
+- completenessPercent: 93. Every R1 item (F-01 to F-06, U-01) is resolved with runtime and test evidence, and the operations scope is complete. Two gaps remain: a sibling keyboard-focus regression introduced by the custom panel is untested and unfixed, and the observation receipts were never captured.
+- passCount: 22; failCount: 2; unknownCount: 0
+- R1 disposition: F-01 RESOLVED (P-04); F-02 RESOLVED (P-05); F-03 RESOLVED (P-06); sibling defect N-01 introduced; F-04 RESOLVED (P-07, P-11, P-12); F-05 RESOLVED (P-02); F-06 RESOLVED (P-08); U-01 RESOLVED (P-09)
+- Code integration: Class 1 (project implementation): remediated LibraryView, new LibraryTilePanel, ListsView, RomMLibraryViewModel, AvaloniaCoverImageLoader, contract and behavior tests, and the record. Result: FAIL on N-01 and N-02; every R1 finding is resolved.
+- Operations: Class 2 (operations): preservation and recovery re-verified PASS (P-16, P-20). Commit, push and removal remain gated.
+
+## Proceeding to the authorized operations
+
+- Commit: Not justified yet. Fix N-01 tests-first (routed-key scroll-away contract, then focused-container retention), make N-02 observations land in TRX (or withdraw the claim), re-run both gates, then run R3.
+- Push: Not justified until an accepted review. origin/main = local main = d36c133, so the push would fast-forward.
+- Worktree removal: Preservation re-verified at 11:52 (0 differences); removal is data-safe but stays deferred until after an accepted review and a verified push, per the operator order and the record contract.
+
+## FAIL findings
+
+### N-01 FAIL (Medium): Keyboard focus is lost when the selected tile scrolls out of view; arrow keys then leave the grid instead of navigating
+
+- File/line: src/ViceSharp.Avalonia/Views/LibraryTilePanel.cs:43, 71-77, 102-118; tests/ViceSharp.Heads.Tests/RommDesktopBehaviorContracts.cs:184-192; docs/receipts/worktree-integration/20261016T102915-review.md:90-91
+- Evidence: Probe P6r (synthetic-probe-r2-result-20261016T115150.json), real headless key routing: without scrolling, Right moves selection 3 to 4. After scrolling the grid to offset 3063, the selected container (index 3) is no longer realized and focus is null. A routed Right then leaves the selection at 3 and the offset unchanged, and moves focus to a TextBox in the connection row (typing would edit it). Probe P6 (key raised directly on the ListBox): selection jumps to index 0. Baseline P6r (main fa259f2 LibraryView, VirtualizingStackPanel): focus stays on the ListBoxItem, and Down moves 3 to 4 and scrolls back (offset 2639 to 204). Code: MeasureOverride removes every realized index outside the viewport, including the focused container (LibraryTilePanel.cs:43); GetControl resolves the origin only from realized containers (102-118). Avalonia VirtualizingStackPanel keeps the focused element realized for this reason. The grid-keyboard contract never scrolls away (RommDesktopBehaviorContracts.cs:184-192).
+- Rationale: The correction slice promised normal ListBox keyboard semantics alongside off-screen detachment (record lines 90-91), and the parent claims keyboard support. A routine mouse-wheel scroll followed by an arrow key either sends focus to an unrelated input or (when the ListBox gets the key) resets selection to the first tile. This is a regression against main and a sibling of the container-lifecycle change, and no test detects it.
+- Correction: Write the test first: select a tile, scroll it out of view, press a routed arrow key, and assert focus stays in the grid with selection moving relative to the selected tile. Then retain the focused (KeyboardNavigation tab-once-active) container when it leaves the viewport (park it, as VirtualizingStackPanel does), or re-establish focus and origin from the selected index, without weakening the off-screen cover cancellation that P1b proves.
+
+### N-02 FAIL (Low): Claimed test observations are not recorded in TRX; actual observed values are unauditable
+
+- File/line: tests/ViceSharp.Heads.Tests/RommDesktopBehaviorContracts.cs:96; TestResults/romm-desktop/20261016T113140-real/ViceSharp.Heads.Tests.trx; docs/receipts/hv/20261016T113216-romm-remediation-opus/prompt.md:16
+- Evidence: DesktopBehavior_MatchesContract writes the observation JSON with Console.WriteLine. xUnit v3 does not capture console output without CaptureConsole, and no such attribute exists in the test project (0 matches). The parent final TRX and the reviewer TRX (20261016T114535-real) contain 0 occurrences of the observation provider field and no per-test StdOut; the only StdOut is the run-level adapter log. The console logs also have no observation lines. For grid and grid-resize the assertion is only a 1 to 30 range, so the actual realized counts were never recorded anywhere.
+- Rationale: The R2 brief asks the reviewer to inspect test observations recorded in TRX; that evidence does not exist. Pass/fail counts are verified, but the observation receipts the protocol relies on were silently dropped.
+- Correction: Emit observations through the xUnit v3 test output (TestContext.Current.TestOutputHelper or [assembly: CaptureConsole]), re-run both gates, and cite the TRX entries. Otherwise remove the claim that observations are recorded.
+
+## UNKNOWN findings
+
+None.
+
+## PASS findings
+
+### P-01 PASS (Info): Input integrity
+
+- File/line: docs/receipts/hv/20261016T113216-romm-remediation-opus/input-pins.json
+- Evidence: Rehash at 11:39: 47 of 47 pins match; CLI sha256 EB95BB65955F8B1702E800815F9A2C0388A5DE0F196C354C7EE1DD5CB9A2BA23 matches request.jsonl; prompt.md equals the request prompt (sha256 D34235FB7326E26A5C50C322370F3F4956F4E692C100089F19994A8158181F05).
+- Rationale: Every new pin was rehashed before review.
+- Correction: None required.
+
+### P-02 PASS (Info): Baseline HEAD reconfirmed; R1 F-05 resolved
+
+- File/line: docs/receipts/worktree-integration/20261016T102915-review.md:18-22
+- Evidence: HEAD = main = origin/main = d36c133daa73fdb758222bd68b3e6c26fa551608, so there is no drift since R1. The tree still equals fa259f2 (be3bf170). The record now names d36c133 as current HEAD and says to re-query before commit or push.
+- Rationale: Receipt precision corrected.
+- Correction: None required.
+
+### P-03 PASS (Info): R1 receipts unchanged
+
+- File/line: docs/receipts/hv/20261016T102915-romm-worktree-opus
+- Evidence: verdict.md 3C3DBF536E8E8DA8C3421D5DEAA716F7C08707E4476A221553EA54D07FB93652, verdict.json 5D954D7EC6D20E951E564D9115FCDF184675B7DA5B85D0FC7EBC379076C22360, verdict.persistence.json 888D1F1AC7FB2C02E0AA8753AEC729C3C38292B89F67FE30637F5FA08DE66619 and request.jsonl C12B0F00... all equal the R1 values. terminal-result.json was added by the parent at 11:17:56.
+- Rationale: Prior evidence preserved.
+- Correction: None required.
+
+### P-04 PASS (Info): R1 F-01 resolved: the visible Lists rail owns selection and Delete
+
+- File/line: src/ViceSharp.Avalonia/Views/LibraryView.cs:246-255; src/ViceSharp.Avalonia/Views/ListsView.cs:163-171, 229-255, 266-272
+- Evidence: Probe P3 (synthetic-probe-r2-result-20261016T115150.json): after Library-rail navigation to X, the Lists tab is active, the rail highlights id 1, the shared selection is id 1, members are [1,2], and the Library rail selection is cleared. Forcing the shared selection to Y while X is highlighted: Delete issues no request. A consistent delete issues exactly id 1 and leaves no stale selection. Production-bound contracts collections, repeat-navigation and delete-guard pass in the reviewer run.
+- Rationale: The actual regression (a destructive action on a non-highlighted list) is fixed. Retaining the existing confirmation-free Delete matches main behavior and is not a regression.
+- Correction: None required.
+
+### P-05 PASS (Info): R1 F-02 resolved: tab return keeps state; reconnect and window close dispose
+
+- File/line: src/ViceSharp.Avalonia/Views/LibraryView.cs:352-369, 438-446, 474-508
+- Evidence: Probe P2: after a tab switch and return, selection 3, Game 0004, CanAttach true, the same loader instance and detail name Game 0004 are retained; the loader stays alive while away and is disposed (and nulled) when the window closes. Probe P2c: a new Browse replaces the loader, disposes the old one, uses the new base address and rebinds the grid to the new items. Contracts tab and credentials pass.
+- Rationale: Matches the main baseline for selection retention and adds deterministic disposal.
+- Correction: None required.
+
+### P-06 PASS (Info): R1 F-03 resolved: a virtualized grid cancels scrolled-away covers through the real HTTP path
+
+- File/line: src/ViceSharp.Avalonia/Views/LibraryTilePanel.cs:14-119; src/ViceSharp.Avalonia/Views/LibraryView.cs:108-114
+- Evidence: P1: LibraryTilePanel (VirtualizingPanel) realizes 9 tiles for 60 items and still 9 for 180 items. P1b (real AvaloniaCoverImageLoader against a loopback endpoint that never answers): 4 concurrent cover requests (CoverCache gate); after scrolling to item 59 all 4 sockets are closed by the client, and new requests go only to covers 52-55. P9: the selection visual is restored on re-realization. P10: columns are 1, 3 and 7 at window widths 760, 1000 and 1500, with no overlapping containers. Contracts grid, grid-resize and tile-page-boundary pass.
+- Rationale: The off-screen claim is now true end to end, and the record retracts the old WrapPanel claim (line 38).
+- Correction: None required.
+
+### P-07 PASS (Info): R1 F-04 resolved: the missing behaviors are now test-evidenced and traceability is corrected
+
+- File/line: tests/ViceSharp.Heads.Tests/RommDesktopBehaviorContracts.cs:27-382; tests/ViceSharp.Heads.Tests/RommDesktopContractTests.cs:27-31
+- Evidence: Seventeen production-bound scenarios now cover: GameGroup tiles and primary, connected credentials versus edited form and reconnect disposal, auto-connect once on attach, collection navigation, create success and failure, the mismatched-detail guard with Add suppression, loader scheme, auth, anonymous, disposal, malformed and cancel, the stale list race, the delete guard, the page boundary, paging, resize and empty. The test header no longer cites TR-ROMM-THREAD-001. The record states 23 production-bound plus 19 assertion controls (structure verified: 17 + 6 and 17 + 2) and keeps the detach-chronology deficiency disclosed.
+- Rationale: The R1 evidence gaps are closed; the remaining keyboard gap is N-01.
+- Correction: None required.
+
+### P-08 PASS (Info): R1 F-06 resolved: historical artifacts explicitly excluded and preserved
+
+- File/line: docs/receipts/worktree-integration/20261016T102915-review.md:26-30
+- Evidence: The four 2026-09-15 review artifacts are named, excluded as review history, and stated to remain in the verified snapshot (romm manifest 1510 files, re-verified 0 differences).
+- Rationale: Disposition is complete.
+- Correction: None required.
+
+### P-09 PASS (Info): R1 U-01 resolved: unreceipted specifics withdrawn
+
+- File/line: docs/receipts/worktree-integration/20261016T102915-review.md:62
+- Evidence: The advisory-count and compile-failure specifics are withdrawn as evidence. Xml and Pkcs 10.0.13 remain in the build assets, and no NuGetAudit suppression exists.
+- Rationale: No unsupported claim remains on this item.
+- Correction: None required.
+
+### P-10 PASS (Info): Gates reproduced independently
+
+- File/line: TestResults/romm-desktop/20261016T114514-mocks; 20261016T114535-real; 20261016T114547-real
+- Evidence: Reviewer ./build.ps1 RommDesktopTest --configuration Release --romm-contract-mocks: 42/42 passed. Real run: Heads 57/57 and Library 201/201, 0 failed, 0 skipped. The Library passed-name set is identical to the unrestricted R1 run (201); only the 13 Linux-only deployment cases are excluded.
+- Rationale: The claimed counts are accurate.
+- Correction: None required.
+
+### P-11 PASS (Info): Remediation chronology supported by retained runs
+
+- File/line: TestResults/romm-r1-*.log; TestResults/romm-desktop/20261016T1122*..1131*
+- Evidence: romm-r1-mock: test build failed (missing using) at 11:21:46. 36/36 mock at 11:22:11 precedes LibraryTilePanel (11:23:43), the VM (11:23:44) and ListsView (11:24:23). real1 at 11:24:43 had 50/51 (loader on the headless fake decoder), retained and not claimed. Skia rebind, then mock3 36/36, then real2 51 + 201. mock4 40/40 at 11:27:16. mock5 42/42 at 11:30:52 precedes the 11:31:37 LibraryView edit. final2 57 + 201.
+- Rationale: The order matches the record; old deficiencies stay disclosed.
+- Correction: None required.
+
+### P-12 PASS (Info): Assertion negative controls are discriminating
+
+- File/line: tests/ViceSharp.Heads.Tests/RommDesktopBehaviorContracts.cs:56-90
+- Evidence: For every scenario, each expected key is rejected when corrupted and when omitted. The grid scenario rejects the non-virtualized 60/180 observation. The R1 layout and cover helper controls are retained. All pass in both mock and real runs.
+- Rationale: The value-level assertions reject wrong and missing data.
+- Correction: None required.
+
+### P-13 PASS (Info): Test decoding uses real Skia
+
+- File/line: tests/ViceSharp.Heads.Tests/RommDesktopContractTests.cs:19-25
+- Evidence: DesktopContractApp uses FluentTheme, UseSkia() and UseHeadless with UseHeadlessDrawing = false. The loader contract returns null for malformed bytes [1,2,3]. real1 failed on the stub decoder before this change.
+- Rationale: The malformed-art assertion is meaningful.
+- Correction: None required.
+
+### P-14 PASS (Info): Loader security and lifecycle
+
+- File/line: src/ViceSharp.Avalonia/Views/AvaloniaCoverImageLoader.cs:20-61
+- Evidence: The public constructor uses two separate HttpClientHandlers. The internal seam is test-only. Only absolute http and https server URLs are accepted, and the token is attached only to the server-base client. Dispose is idempotent, and a disposed loader returns null without I/O. Contracts loader and loader-invalid pass (0 requests for an absolute authenticated path).
+- Rationale: No token leakage path was found.
+- Correction: None required.
+
+### P-15 PASS (Info): Stale asynchronous publication guarded
+
+- File/line: src/ViceSharp.Avalonia/ViewModels/RomMLibraryViewModel.cs:376-397, 476-532
+- Evidence: Detail and list loads capture a generation and the gateway, and publish only while both still match, including the final ListMemberTiles assignment. The list-race contract shows members [3] and selectedTile null after the older request completes.
+- Rationale: Correct.
+- Correction: None required.
+
+### P-16 PASS (Info): Preservation re-verified
+
+- File/line: .local-preservation/worktrees-20261016T101333
+- Evidence: At 11:52: romm source 1510 = manifest 1510 and romless 1284 = 1284, with 0 differences. Bundle hashes match. Both worktrees and branch refs (local and origin) are present.
+- Rationale: Removal remains preservation-safe.
+- Correction: None required.
+
+### P-17 PASS (Info): Native VICE unchanged
+
+- File/line: native/vice
+- Evidence: Test-NativeHashes at 11:45:04 (before the reviewer gates) and 11:53:12 (after the gates and probes): union 6374, 0 new, 0 removed, 0 hash differences against native-before.json.
+- Rationale: Native immutability holds.
+- Correction: None required.
+
+### P-18 PASS (Info): Requirement scope unchanged and visible
+
+- File/line: workflow.requirements.effective layer-1
+- Evidence: All 11 scoped IDs are pending with 0 satisfied ACs (FR-ROMM-AVUI-001 0/4, FR-ROMM-COVER-001 0/4, FR-ROMM-BROWSE-001 0/8, FR-ROMM-DETAIL-001 0/2, FR-ROMM-COLLECT-001 0/6; the TR and TEST entries are pending). No done state is claimed.
+- Rationale: No AC silently passed.
+- Correction: None required.
+
+### P-19 PASS (Info): Hygiene and static TestHarness boundary for new and changed files
+
+- File/line: scoped files
+- Evidence: git diff --check HEAD exits 0. All scoped files use LF, with no trailing whitespace, no BOM and no en or em dashes. AvaloniaBoundaryTests forbidden strings are absent from all changed Avalonia files, including LibraryTilePanel and ListsView. ViceSharp.Avalonia.csproj and Directory.Packages.props are unchanged.
+- Rationale: Clean.
+- Correction: None required.
+
+### P-20 PASS (Info): Operations class (separate from product)
+
+- File/line: docs/receipts/worktree-integration/20261016T102915-review.md:64-78
+- Evidence: The recovery contract is unchanged and verified. Commit, push and removal are not yet claimed. AttachPanelView is built once per MainWindow (MainWindow.axaml.cs:73), so the owner Closed subscription does not leak.
+- Rationale: Operations remain correctly gated.
+- Correction: None required.
+
+### P-21 PASS (Info): Delete interaction retained without confirmation (judgment requested)
+
+- File/line: src/ViceSharp.Avalonia/Views/ListsView.cs:163-171
+- Evidence: Main ListsView Delete had no confirmation before the port. The remediation adds a visible-row-equals-shared-selection guard, which removes the R1 mismatch path (P3).
+- Rationale: Visible-target consistency fixes the actual regression; adding a confirmation dialog would be new scope.
+- Correction: None required.
+
+### P-22 PASS (Info): Workspace rules for the remediation diff
+
+- File/line: git status (scoped)
+- Evidence: No TODO, requirements or native files are changed. Tooling is PowerShell and Nuke only. Xbox paths are untouched. The reviewer wrote only receipts and its own MCP session.
+- Rationale: Compliant.
+- Correction: None required.
+
+## Runtime probe summary
+
+Result file: F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2-result-20261016T115150.json
+- P1: LibraryTilePanel (virtualizing): 9 realized tiles for 60 items and still 9 for 180 items.
+- P1b: Real loader over a loopback endpoint that never answers: 4 in-flight requests; scrolling to item 59 closes all 4 client sockets; new requests only for covers 52-55.
+- P2: Tab return keeps selection 3, Game 0004, CanAttach, the same loader and the detail; window close disposes the loader.
+- P2c: Reconnect replaces and disposes the loader, uses the new base address, rebinds items.
+- P3: Navigation highlights X with shared X; forced mismatch: no delete; consistent delete: id 1 only.
+- P6r: After scroll-away the focused container is gone; routed Right keeps selection 3 and moves focus to a TextBox (new). main baseline: Down 3 to 4 with focus retained.
+- P6: Key raised directly on the ListBox after scroll-away selects index 0 (new) versus 4 (main baseline).
+- P7: Tile content 146x177 versus a 136x174 slot (absorbed by padding).
+- P8: Down from 0 moves by the column count (3).
+- P9: The selection visual is restored after scrolling back.
+- P10: Columns 1/3/7 at window widths 760/1000/1500; no overlaps.
+
+## Observations (not scored)
+
+- O-01: Mock-gate scope: the 17 DesktopBehavior cases in mock mode compare the scripted observation with itself, so they validate only the assertion path. The UI observation procedures run only against production. Discrimination of the assertions is proven by the 17 corrupt/missing control cases. The reviewer independently reproduced the production behaviors those procedures check (P1, P1b, P2, P2c, P3, P9, P10).
+- O-02: AvaloniaCoverImageLoader.cs was last written at 11:28:43, after mock4 (11:27:16) and before the 11:28:47 real run. The record does not describe that edit; the 36-case gate covering loader behavior preceded it. Not failed on file times alone, per the operator rule.
+- O-03: Tile slot versus content: a realized ListBoxItem needs 146x177 against the fixed 136x174 slot (Fluent padding 12,9,12,12). The overflow is absorbed by item padding, with no container overlap (P10). Cosmetic; deriving the slot from the template would remove it.
+- O-04: ListsView now reloads the selected collection members on every rail refresh (selection cleared by ItemsSource replacement, then re-selected), adding GetRomAsync traffic per refresh. SelectCollectionAsync can miss navigation if a rail refresh is already in flight (_refreshingRail early return); not reproduced. Shared and visible selection stay equal either way, so Delete safety holds.
+- O-05: Pre-existing, not introduced: ListsView Create, Delete and Refresh handlers have no exception capture (as in main).
+- O-06: Process: on CLI resume the plugin minted session ClaudeCode-20261016T163559Z-plugin-session, and the duplicate hooks opened twin turns -4911 and -669a, whose submits were queued, not persisted. The reviewer persisted turn -669a through updateTurn; triage-report-8ee8aaaa36fd4039b175277146f4416f filed. The R1 turn remains in ClaudeCode-20261016T153328Z-plugin-session.
+- O-07: Not independently verified (parent-side, not integration-material): the record statement that the parent MCP stores the R1 verdict in eight ordered dialog parts with sha256 3C3DBF...
+- O-08: Reviewer probe artifacts in synthetic-probe-r2/ and synthetic-probe-r2-*.log/.json are evidence, not product code. The final result file is synthetic-probe-r2-result-20261016T115150.json; the earlier result files are subsets superseded by it.
+
+## Environment and process notes
+
+- R2 turn req-20261016T163602Z-prompt-669a in session ClaudeCode-20261016T163559Z-plugin-session (minted by the plugin on CLI resume). It was persisted through updateTurn after the hook submits were queued.
+- Triage this round: triage-report-8ee8aaaa36fd4039b175277146f4416f (resume hook submits queued, twin turns). R1 triage IDs remain filed.
+- Failsafe queue (not drained, MCP_FAILSAFE_DRAIN_DISABLED=1): 20261016T153937Z-session_setTurnTitle-e599.yaml (R1, effect persisted), 20261016T163602Z-session_submit-3fa6.yaml and -efb6.yaml (hook twin begins; -669a superseded by the persisted turn, -4911 not persisted).
+- No environment repair, queue replay, historical-turn cancellation or nested reviewer was used. The full marker was re-read with credentials redacted.
+
+## Receipts
+
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\request.jsonl (sha256 70082D28F458809204B79D6EC658BC77D7FCD82677B7FCCAA71E8F43057DD954)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\response.jsonl
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\verdict.md
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\verdict.json
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\verdict.persistence.json
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\reviewer-nuke-mock-20261016T114511.log (sha256 69DB9983DED37DE2967EA130E37D7B57D0BA3FFCA8FEA5B931CE82561DA2DCD7)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\reviewer-nuke-real-20261016T114532.log (sha256 E7F42A8C24A81D81EEE3B94FFDE6F3B704DE9D1154DA06EC4EE85E61ED3A26C6)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2-build-20261016T114843.log (sha256 A1F9C2FDECD435FC142C6B402A5E6B094E45A5659B6D305D07FF6BA976A62FAF)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2-build-20261016T115015.log (sha256 04EAA9B125F6C9CEBF750FC6DAE44A9033C0FB1ABC957ADB4A126777CE3F73C5)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2-build-20261016T115148.log (sha256 4C7B7BBEAB4A77C2111F886F3E9F96C173F5AAA06BA15CC2489FFF225A596451)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2-result-20261016T114855.json (sha256 5FEF1B0FACD037254588F0A8F66290C6024555CF1F583A8E9E90F388107077AC)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2-result-20261016T115017.json (sha256 8336C88D432110D60E1B1DE89E2982F87522CD3898FA3E50523B0B299F68FEBD)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2-result-20261016T115150.json (sha256 7B597412562F6B11990B11A65E9CA53173C5A8EA01CD8DA79BB9B921A2B31CC7)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2\BaselineLibraryView.cs (sha256 8131C5E3CBBF7BC1F891A8B527A65CA4CAFD407876392B3635989AF29D502585)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2\Directory.Build.props (sha256 469B0C0CBD688C03D5FD94A45E684CAA5553CC4C6B3206AC4150EF1733624ED1)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2\Directory.Build.targets (sha256 469B0C0CBD688C03D5FD94A45E684CAA5553CC4C6B3206AC4150EF1733624ED1)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2\Directory.Packages.props (sha256 469B0C0CBD688C03D5FD94A45E684CAA5553CC4C6B3206AC4150EF1733624ED1)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2\Program.cs (sha256 C8AF7F45FACD13F900EABB22AC7A89FC8879752FC94897FB559DEE2D35CB4FBC)
+- F:\GitHub\vice-sharp\docs\receipts\hv\20261016T113216-romm-remediation-opus\synthetic-probe-r2\ReviewProbe.csproj (sha256 B744DB2535AE5DD9CA30EB280BBA24D42389972E314CC457157480862FCB0E6D)
+- F:\GitHub\vice-sharp\TestResults\romm-desktop\20261016T114514-mocks\ViceSharp.Heads.Tests.trx (sha256 805090CB2718EA0D1518C7F58951F346982075809EBDE6DE1B7B1F8BE17316F0)
+- F:\GitHub\vice-sharp\TestResults\romm-desktop\20261016T114535-real\ViceSharp.Heads.Tests.trx (sha256 5BDCAE026A51867E2355553BBAD9B9BEAD5FAF25606DF2F00C41075297043E78)
+- F:\GitHub\vice-sharp\TestResults\romm-desktop\20261016T114547-real\ViceSharp.Library.Tests.trx (sha256 F2ABAB49BB603D5E26877983EEDFAB0EA242E076F45266EA5131F799D4AF9470)

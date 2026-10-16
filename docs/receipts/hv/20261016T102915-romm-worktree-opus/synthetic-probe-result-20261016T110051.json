@@ -1,0 +1,80 @@
+{
+  "P1_gridRealization": {
+    "itemsPanel": "Avalonia.Controls.WrapPanel",
+    "itemsPanelIsVirtualizing": false,
+    "itemCount": 60,
+    "realizedTileImages": 60,
+    "tileImagesIntersectingViewport": 6,
+    "itemCountAfterTwoLoadMorePages": 180,
+    "realizedTileImagesAfterLoadMore": 180
+  },
+  "P2_tabReturn": {
+    "before": {
+      "gridSelectedIndex": 3,
+      "browseSelectedGroup": "Game 0004",
+      "canAttach": true,
+      "loader": 31569495
+    },
+    "detachedOnOtherTab": true,
+    "loaderNullWhileAway": true,
+    "after": {
+      "gridSelectedIndex": -1,
+      "browseSelectedGroup": null,
+      "canAttach": false,
+      "newLoaderInstance": true
+    }
+  },
+  "P2b_tabReturnProductionOrder": {
+    "before": {
+      "gridSelectedIndex": 3,
+      "browseSelectedGroup": "Game 0004",
+      "canAttach": true
+    },
+    "detachedOnOtherTab": true,
+    "after": {
+      "gridSelectedIndex": -1,
+      "browseSelectedGroup": null,
+      "canAttach": false
+    }
+  },
+  "P3_listsDeleteTarget": {
+    "state": {
+      "selectedTab": 1,
+      "listsRailHighlightedId": 2,
+      "collectionsSelectedId": 1,
+      "listMemberIds": [
+        1,
+        2
+      ]
+    },
+    "deleteRequestsForIds": [
+      1
+    ]
+  },
+  "P4_railAllGamesAfterRecents": {
+    "queryAfterSearch": "zork",
+    "inRecentsBeforeRailClick": true,
+    "searchBoxTextAfter": "",
+    "browseSearchTextAfter": "",
+    "lastBrowseQuerySearchTermAfter": null,
+    "showingRecentsAfter": false,
+    "itemCountAfter": 30
+  },
+  "P5_baselineMainLibraryView": {
+    "itemsPanel": "Avalonia.Controls.VirtualizingStackPanel",
+    "itemsPanelIsVirtualizing": true,
+    "itemCount": 60,
+    "realizedContainers": 8,
+    "before": {
+      "gridSelectedIndex": 3,
+      "browseSelectedGroup": "Game 0004",
+      "canAttach": true
+    },
+    "detachedOnOtherTab": true,
+    "after": {
+      "gridSelectedIndex": 3,
+      "browseSelectedGroup": "Game 0004",
+      "canAttach": true
+    }
+  }
+}

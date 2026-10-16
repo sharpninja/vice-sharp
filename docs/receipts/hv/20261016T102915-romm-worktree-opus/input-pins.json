@@ -1,0 +1,114 @@
+[
+  {
+    "path": "F:\\GitHub\\vice-sharp\\.gitignore",
+    "sha256": "D3EA2592E6FAD3636DF0477CE8771B239CE1A3CCCFEA59D28269ABA03DCF13F3"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\build\\_build.csproj",
+    "sha256": "6485AB6C5A5F15FE5D9208A0DEC149F0A962E1DAC8B839B02498E11FB029917A"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\build\\Build.Romm.cs",
+    "sha256": "EE46E19D350543D6039A0DA6D9EAF9904309FC934CF19A7925A53F2F40E17A56"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tools\\Backup-LinkedWorktrees.ps1",
+    "sha256": "830E6F6185751977B8D136BB17E916744E0239FB00B7BAAECF7D45D5F42888C8"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Avalonia\\Views\\LibraryView.cs",
+    "sha256": "B03D035023A2ED60B2A4FE99EBA4A2593577CD3FA6B75A775DDFB8EF67194118"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Avalonia\\Views\\LibraryCoverImage.cs",
+    "sha256": "4FEB21153FC026E81441EC7A22A8C4EA940F537506336E80C8521ACE1E20C235"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Avalonia\\Views\\AvaloniaCoverImageLoader.cs",
+    "sha256": "4ADED03D75C59A65BDD6CE755CAAEC1098FFAB280E1040C29773C3F042E1C6D3"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.Avalonia\\ViewModels\\RomMLibraryViewModel.cs",
+    "sha256": "EF56FCEC592C43CFCA2435341693594C1EDFDC89577E6DB0A04F5E29B6DA1BCD"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Heads.Tests\\ViceSharp.Heads.Tests.csproj",
+    "sha256": "6D4C42A510BFAFEF192FBA8B42FE1BC322D8627437C14C0FFF24340611145A8E"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\tests\\ViceSharp.Heads.Tests\\RommDesktopContractTests.cs",
+    "sha256": "EAAC0529FB496DA37354CD84D970B717887E2EACB40914A4BB365E1014D8C053"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.RomM\\RomMCoverImageSource.cs",
+    "sha256": "10CF0C84E97C0BE6C50B8AF1ED892C781F9C6CA4EC563626BCF22F5CBF198087"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\src\\ViceSharp.RomM\\CoverCache.cs",
+    "sha256": "CB2E7075342A23E11524D402956F3FA11B56B47118442679DC67967914A65D26"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\worktree-integration\\20261016T102915-review.md",
+    "sha256": "ADD69665ACFB6B7FF298A30F5E92D32EB83F9E2A5592973BA7A392AFAD053BC1"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\TestResults\\romm-desktop-mock-console.log",
+    "sha256": "E429E9DC9F9B4F3DD64A62407D051A0F425E03B8802478F2CFFEF66A6C77676C"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\TestResults\\romm-desktop-mock-detail-console.log",
+    "sha256": "29B7AA85B7145B6A94B383DB7C36A7D4BC4E4DD9AFD34E1AB0486F28FBB62EF1"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\TestResults\\romm-desktop-mock-detach-console.log",
+    "sha256": "88609383C81D598E58C9DD5B6BFE447B3D1FF27EE0989FC431184579569A2EC5"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\TestResults\\romm-desktop-real-console.log",
+    "sha256": "C69A8F7021294C47514C5DFEE7CB308D78AB6563158F08B290E2A601893A724F"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\TestResults\\romm-desktop-final-console.log",
+    "sha256": "8B7ADE8388082E6F0009E947490422CF41D0E4BD30AED347F65F0EB3EEA7DC83"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\TestResults\\romm-desktop\\20261016T102858-real\\ViceSharp.Heads.Tests.trx",
+    "sha256": "8C3810DA89CF890751DA154A9DF7A60BD61C323DEE76EA44F38E6EB393069C24"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\TestResults\\romm-desktop\\20261016T102909-real\\ViceSharp.Library.Tests.trx",
+    "sha256": "4EA92C7F1B34066DC8173BCCFBB238F388AF96D400F54C94246EF55B4A594833"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T102915-romm-worktree-opus\\effective-requirements.json",
+    "sha256": "148128C713B20C4E0C7D59AFF59BC3D11CF2C8C12872A5F87BE380CE67743CD1"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T102915-romm-worktree-opus\\SELF-REVIEW.md",
+    "sha256": "0A64C0A44035F5449E940A73C7C030D10369E22C3DFEBA9FA4F6F5D991DA521A"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T102915-romm-worktree-opus\\prompt.md",
+    "sha256": "7894FB0FF55999AD63D6849F17617A7CD187E368CF7D9ED945DCBA79C1544CC0"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp-romm\\src\\ViceSharp.Avalonia\\Views\\LibraryView.cs",
+    "sha256": "CE8B80681553A8DD2CECF5CA834F2764FA5AA2B4EDE68C313E11D448EE33C99A"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp-romm\\src\\ViceSharp.Avalonia\\Views\\AvaloniaCoverImageLoader.cs",
+    "sha256": "6D92353D5BE1CA92EA1F9702A77AB6523BCBE762705989D2C7FD1E4EDA9BF8D9"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\.local-preservation\\worktrees-20261016T101333\\vice-sharp-romm.manifest.json",
+    "sha256": "2D82113EBA1665628D89B25616B52012913D8576C63E38C26E99B924FBBAF6AF"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\.local-preservation\\worktrees-20261016T101333\\vice-sharp-romless.manifest.json",
+    "sha256": "A2E0C7B10B4A706E414118A21E80D1CCD670DD794D2B6472238ACEA9C68EDDCA"
+  },
+  {
+    "path": "F:\\GitHub\\vice-sharp\\.local-preservation\\worktrees-20261016T101333\\native-before.json",
+    "sha256": "6629AC2AA7ECFD0E0877C5AC0FABA9E661A989A631E68047A75C95EE34528B2A"
+  }
+]

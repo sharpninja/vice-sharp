@@ -1,0 +1,22 @@
+{
+  "finishedAtLocal": "2026-10-16T11:17:55",
+  "exitCode": 0,
+  "streamsClosed": true,
+  "cliSessionId": "0811d877-c1c8-483f-95f3-89d066d5594b",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "finalEvents": [
+    {
+      "subtype": "success",
+      "is_error": false
+    }
+  ],
+  "responseSha256": "A816B8ECEBA84581DBBA720C81C6BC887EE060C5C09DA57C513FD340194F7F29",
+  "stderrBytes": 0,
+  "OverallVerdict": "DISAGREE",
+  "accuracyPercent": 79,
+  "completenessPercent": 75,
+  "failCount": 6,
+  "unknownCount": 1,
+  "parentReadbackExact": true
+}

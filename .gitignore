@@ -170,3 +170,6 @@ cache/
 
 # Private phone attachments are unrelated to the ViceSharp source checkpoint.
 /.codex-remote-attachments/
+
+# Verified local worktree snapshots may contain private configuration and raw logs.
+/.local-preservation/

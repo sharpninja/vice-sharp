@@ -2,9 +2,13 @@ using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using ViceSharp.Avalonia.ViewModels;
 using ViceSharp.Library.ViewModels;
 
@@ -33,6 +37,13 @@ public sealed class LibraryView : UserControl
     private readonly ComboBox _listPicker;
     private readonly Button _addToList;
     private readonly StackPanel _azStrip;
+    private readonly LibraryCoverImage _detailCover = new()
+        { Name = "RomMDetailCover", Height = 150, Stretch = Stretch.Uniform };
+    private readonly ListBox _collectionsList;
+    private AvaloniaCoverImageLoader? _coverLoader;
+    private LibraryBrowseViewModel? _boundBrowse;
+    private bool _subscribed;
+    private Window? _owner;
 
     public LibraryView(RomMLibraryViewModel viewModel)
     {
@@ -50,6 +61,7 @@ public sealed class LibraryView : UserControl
 
         _discoveredBox = new ComboBox
         {
+            Name = "RomMServers",
             PlaceholderText = "Discovered...",
             MinWidth = 160,
             ItemsSource = _viewModel.DiscoveredServers,
@@ -84,7 +96,7 @@ public sealed class LibraryView : UserControl
             },
         };
 
-        _search = new TextBox { PlaceholderText = "Search C64 library..." };
+        _search = new TextBox { Name = "RomMSearch", PlaceholderText = "Search library..." };
         _search.TextChanged += (_, _) => _viewModel.Search(_search.Text ?? string.Empty);
 
         _recents = new Button { Content = "Recents" };
@@ -97,37 +109,39 @@ public sealed class LibraryView : UserControl
 
         _list = new ListBox
         {
-            ItemTemplate = new FuncDataTemplate<GameGroup>((group, _) =>
-            {
-                if (group is null)
-                {
-                    return new TextBlock();
-                }
-
-                return new StackPanel
-                {
-                    Spacing = 2,
-                    Children =
-                    {
-                        new TextBlock { Text = group.Name, FontWeight = FontWeight.SemiBold },
-                        new TextBlock
-                        {
-                            Text = group.Subtitle,
-                            FontSize = 11,
-                            Foreground = new SolidColorBrush(Color.FromRgb(150, 156, 168)),
-                        },
-                    },
-                };
-            }),
+            Name = "RomMGameGrid",
+            Focusable = true,
+            Background = Brushes.Transparent,
+            ItemsPanel = new FuncTemplate<Panel?>(() => new LibraryTilePanel()),
+            ItemTemplate = new FuncDataTemplate<GameGroup>((group, _) => BuildTile(group)),
         };
+        // Fluent's default list-item padding is wider than a compact cover tile.
+        // Keep the natural content size within LibraryTilePanel's fixed slot.
+        _list.Styles.Add(new Style(s => s.OfType<ListBoxItem>())
+        {
+            Setters = { new Setter(PaddingProperty, new Thickness(4)) },
+        });
+        _list.AddHandler(KeyDownEvent, (_, e) =>
+        {
+            // Avalonia SelectingItemsControl treats an unrealized anchor as no selection
+            // (12.0.5 SelectingItemsControl.MoveSelection). Restore it before its normal
+            // navigation handler runs, without retaining off-screen cover requests.
+            if (_list.IsFocused && _list.SelectedIndex >= 0 &&
+                _list.ContainerFromIndex(_list.SelectedIndex) is null &&
+                e.Key is Key.Left or Key.Right or Key.Up or Key.Down or Key.Home or Key.End)
+                _list.ScrollIntoView(_list.SelectedIndex);
+        }, RoutingStrategies.Tunnel);
         _list.SelectionChanged += (_, _) =>
         {
-            if (_viewModel.Browse is not null && _list.SelectedItem is GameGroup group)
+            _detailCover.Clear();
+            if (_viewModel.Browse is { } browse)
             {
-                _viewModel.Browse.SelectedGroup = group;
-                _ = _viewModel.ShowDetailAsync(group.Primary.Id);
+                var group = _list.SelectedItem as GameGroup;
+                browse.SelectedGroup = group;
+                if (group is not null) _ = _viewModel.ShowDetailAsync(group.Primary.Id);
             }
 
+            UpdateDetail();
             UpdateButtons();
         };
 
@@ -174,6 +188,7 @@ public sealed class LibraryView : UserControl
 
         _status = new TextBlock
         {
+            Name = "RomMStatus",
             Text = _viewModel.Status,
             FontSize = 11,
             TextWrapping = TextWrapping.Wrap,
@@ -183,7 +198,7 @@ public sealed class LibraryView : UserControl
         var top = new StackPanel
         {
             Spacing = 8,
-            Children = { connectRow, _search, _azStrip, actionRow, _status },
+            Children = { connectRow, _search, _azStrip, actionRow },
         };
         DockPanel.SetDock(top, Dock.Top);
 
@@ -220,7 +235,7 @@ public sealed class LibraryView : UserControl
             Spacing = 8,
             Children =
             {
-                new Border { Height = 150, Background = new SolidColorBrush(Color.FromRgb(26, 30, 36)) },
+                new Border { Height = 150, Background = new SolidColorBrush(Color.FromRgb(26, 30, 36)), Child = _detailCover },
                 _detailName,
                 _detailMeta,
                 variantsNote,
@@ -238,14 +253,69 @@ public sealed class LibraryView : UserControl
         };
         DockPanel.SetDock(detailPanel, Dock.Right);
 
-        var root = new DockPanel { Margin = new Thickness(10) };
-        root.Children.Add(top);
-        root.Children.Add(detailPanel);
-        root.Children.Add(_list);
+        var allGames = new Button { Content = "All games", HorizontalAlignment = HorizontalAlignment.Stretch };
+        allGames.Click += async (_, _) => await RunRailActionAsync(async () =>
+        {
+            _search.Text = string.Empty;
+            if (_viewModel.Browse is { } browse) await browse.ReloadAsync();
+            BindList();
+            UpdateRecentsChrome();
+        });
+        _collectionsList = new ListBox { ItemTemplate = CollectionTemplate() };
+        _collectionsList.SelectionChanged += async (_, _) => await RunRailActionAsync(async () =>
+        {
+            if (_collectionsList.SelectedItem is LibraryCollection collection)
+            {
+                // The Lists rail owns selection and destructive actions. Do not create a second
+                // writer that can disagree with its highlighted row.
+                _collectionsList.SelectedItem = null;
+                if (NavigateToTab<ListsView>() is { } lists) await lists.SelectCollectionAsync(collection.Id);
+            }
+        });
+        var csdb = new Button { Content = "CSDb discovery", HorizontalAlignment = HorizontalAlignment.Stretch };
+        csdb.Click += (_, _) => NavigateToTab<CsdbView>();
+        var newList = new TextBox { Name = "RomMNewList", PlaceholderText = "+ New list (type + Enter)" };
+        newList.KeyDown += async (_, e) =>
+        {
+            if (e.Key != Key.Enter || string.IsNullOrWhiteSpace(newList.Text) || !newList.IsEnabled) return;
+            e.Handled = true;
+            await RunRailActionAsync(async () =>
+            {
+                if (_viewModel.Collections is not { } collections) return;
+                newList.IsEnabled = false;
+                try { await collections.CreateAsync(newList.Text.Trim()); newList.Text = string.Empty; }
+                finally { newList.IsEnabled = true; }
+            });
+        };
+        var rail = new Border
+        {
+            Name = "RomMLibraryRail", Width = 200, Padding = new Thickness(10),
+            Background = new SolidColorBrush(Color.FromRgb(24, 27, 33)),
+            Child = new StackPanel { Spacing = 8, Children =
+            {
+                new TextBlock { Text = "Collections", FontWeight = FontWeight.SemiBold },
+                allGames, _collectionsList, csdb, newList,
+            } },
+        };
+        DockPanel.SetDock(rail, Dock.Left);
+        var details = new Border
+        {
+            Padding = new Thickness(12), Background = new SolidColorBrush(Color.FromRgb(30, 34, 41)),
+            Child = new ScrollViewer { Content = detailPanel },
+        };
+        DockPanel.SetDock(details, Dock.Right);
+        var body = new DockPanel { Children = { rail, details, _list } };
+        var statusBar = new Border { Padding = new Thickness(12, 6), Child = _status };
+        DockPanel.SetDock(statusBar, Dock.Bottom);
+        var root = new DockPanel { Margin = new Thickness(10), Children = { top, statusBar, body } };
         Content = root;
 
-        _viewModel.PropertyChanged += OnViewModelChanged;
-        _ = _viewModel.TryAutoConnectAsync();
+        Subscribe();
+        BindList();
+        BindCollections();
+        UpdateDetail();
+        UpdateRecentsChrome();
+        UpdateButtons();
     }
 
     private static FuncDataTemplate<LibraryCollection> CollectionTemplate() =>
@@ -253,9 +323,11 @@ public sealed class LibraryView : UserControl
 
     private async Task AddSelectedToListAsync()
     {
-        if (_viewModel.SelectedDetail is { } detail && _listPicker.SelectedItem is LibraryCollection target && !target.ReadOnly)
+        if (_viewModel.SelectedDetail is { } detail && _list.SelectedItem is GameGroup group
+            && detail.Detail.Id == group.Primary.Id
+            && _listPicker.SelectedItem is LibraryCollection target && !target.ReadOnly)
         {
-            await detail.AddToCollectionAsync(target.Id);
+            await RunRailActionAsync(() => detail.AddToCollectionAsync(target.Id));
         }
     }
 
@@ -271,13 +343,14 @@ public sealed class LibraryView : UserControl
                      or nameof(RomMLibraryViewModel.IsConnected)
                      or nameof(RomMLibraryViewModel.IsShowingRecents))
             {
+                RebuildCoverLoader();
                 BindList();
                 UpdateRecentsChrome();
                 UpdateButtons();
             }
             else if (e.PropertyName == nameof(RomMLibraryViewModel.Collections))
             {
-                _listPicker.ItemsSource = _viewModel.Collections?.Collections;
+                BindCollections();
             }
             else if (e.PropertyName == nameof(RomMLibraryViewModel.SelectedDetail))
             {
@@ -297,8 +370,21 @@ public sealed class LibraryView : UserControl
 
     private void BindList()
     {
-        _list.ItemsSource = null;
-        _list.ItemsSource = _viewModel.Browse?.Items;
+        if (!ReferenceEquals(_list.ItemsSource, _viewModel.Browse?.Items))
+            _list.ItemsSource = _viewModel.Browse?.Items;
+        // GameGrouper merges page-boundary variants into existing group objects. Refresh only
+        // realized presentation; clearing ItemsSource would lose selection and restart all covers.
+        foreach (var container in _list.GetRealizedContainers())
+        {
+            int index = _list.IndexFromContainer(container);
+            if (index < 0 || index >= _list.ItemCount || _list.Items[index] is not GameGroup group) continue;
+            var visuals = container.GetVisualDescendants().ToArray();
+            if (visuals.OfType<TextBlock>().FirstOrDefault(t => t.Name == "RomMTileSubtitle") is { } subtitle)
+                subtitle.Text = group.Subtitle;
+            if (visuals.OfType<LibraryCoverImage>().FirstOrDefault() is { } image && !Equals(image.Tag, group.Cover))
+                LoadTileCover(image, group);
+        }
+        UpdateButtons();
     }
 
     private void UpdateRecentsChrome()
@@ -313,10 +399,14 @@ public sealed class LibraryView : UserControl
     private void UpdateDetail()
     {
         RomDetail? detail = _viewModel.SelectedDetail?.Detail;
+        if (_list.SelectedItem is not GameGroup group || detail?.Id != group.Primary.Id) detail = null;
         _detailName.Text = detail?.Name ?? string.Empty;
         _detailMeta.Text = detail?.PlatformSlug is { Length: > 0 } slug ? slug.ToUpperInvariant() : string.Empty;
         _detailSummary.Text = string.IsNullOrWhiteSpace(detail?.Summary) ? "(no description)" : detail!.Summary;
         _detailFiles.ItemsSource = detail?.Files;
+        var loader = _coverLoader;
+        _ = _detailCover.LoadAsync(ct => loader?.LoadCoverAsync(detail?.Cover, ct)
+            ?? Task.FromResult<global::Avalonia.Media.Imaging.Bitmap?>(null));
     }
 
     private void UpdateButtons()
@@ -325,5 +415,115 @@ public sealed class LibraryView : UserControl
         _attach.IsEnabled = canAttach;
         _attachPlay.IsEnabled = canAttach;
         _more.IsEnabled = !_viewModel.IsShowingRecents && _viewModel.Browse?.HasMore == true;
+    }
+
+    private Control BuildTile(GameGroup? group)
+    {
+        var image = new LibraryCoverImage { Width = 86, Height = 96, Stretch = Stretch.Uniform };
+        image.AttachedToVisualTree += (_, _) => LoadTileCover(image, group);
+        return new StackPanel
+        {
+            Width = 110, Margin = new Thickness(6), Spacing = 4,
+            Children =
+            {
+                new Border { Width = 86, Height = 96, CornerRadius = new CornerRadius(6),
+                    Background = new SolidColorBrush(Color.FromRgb(40, 45, 54)),
+                    Child = new Panel { Children =
+                    {
+                        new TextBlock { Text = group?.Name ?? string.Empty, TextWrapping = TextWrapping.Wrap,
+                            TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center }, image,
+                    } } },
+                new TextBlock { Text = group?.Name ?? string.Empty, FontWeight = FontWeight.SemiBold,
+                    TextTrimming = TextTrimming.CharacterEllipsis },
+                new TextBlock { Name = "RomMTileSubtitle", Text = group?.Subtitle ?? string.Empty, FontSize = 11,
+                    TextWrapping = TextWrapping.Wrap, MaxLines = 2, TextTrimming = TextTrimming.CharacterEllipsis },
+            },
+        };
+    }
+
+    private void LoadTileCover(LibraryCoverImage image, GameGroup? group)
+    {
+        var loader = _coverLoader;
+        image.Tag = group?.Cover;
+        _ = image.LoadAsync(ct => loader?.LoadCoverAsync(group?.Cover, ct)
+            ?? Task.FromResult<global::Avalonia.Media.Imaging.Bitmap?>(null));
+    }
+
+    private void BindCollections()
+    {
+        _collectionsList.ItemsSource = _viewModel.Collections?.Collections;
+        _listPicker.ItemsSource = _viewModel.Collections?.Collections;
+    }
+
+    private void RebuildCoverLoader()
+    {
+        if (ReferenceEquals(_boundBrowse, _viewModel.Browse)) return;
+        _boundBrowse = _viewModel.Browse;
+        _detailCover.Clear();
+        _coverLoader?.Dispose();
+        _coverLoader = _viewModel.ConnectedServerUrl is { } server
+            ? new AvaloniaCoverImageLoader(server, _viewModel.ConnectedToken) : null;
+    }
+
+    private async Task RunRailActionAsync(Func<Task> action)
+    {
+        try { await action(); }
+        catch (Exception ex) { _status.Text = $"Library operation failed: {ex.Message}"; }
+    }
+
+    private T? NavigateToTab<T>() where T : Control
+    {
+        var tabs = this.GetVisualAncestors().OfType<TabControl>().FirstOrDefault();
+        if (tabs?.Items.OfType<TabItem>().FirstOrDefault(t => t.Content is T) is { } tab)
+        {
+            tabs.SelectedItem = tab;
+            return (T)tab.Content!;
+        }
+        else
+            _status.Text = "Open the corresponding library tab to continue.";
+        return null;
+    }
+
+    private void Subscribe()
+    {
+        if (_subscribed) return;
+        _viewModel.PropertyChanged += OnViewModelChanged;
+        _subscribed = true;
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        Subscribe();
+        RebuildCoverLoader();
+        BindList();
+        BindCollections();
+        UpdateDetail();
+        UpdateButtons();
+        if (TopLevel.GetTopLevel(this) is Window owner && !ReferenceEquals(_owner, owner))
+        {
+            if (_owner is not null) _owner.Closed -= OnOwnerClosed;
+            _owner = owner;
+            owner.Closed += OnOwnerClosed;
+        }
+        _status.Text = _viewModel.Status;
+        _ = _viewModel.TryAutoConnectAsync();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        _viewModel.PropertyChanged -= OnViewModelChanged;
+        _subscribed = false;
+        _detailCover.Clear();
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    private void OnOwnerClosed(object? sender, EventArgs e)
+    {
+        if (_owner is not null) _owner.Closed -= OnOwnerClosed;
+        _owner = null;
+        _coverLoader?.Dispose();
+        _coverLoader = null;
+        _boundBrowse = null;
     }
 }

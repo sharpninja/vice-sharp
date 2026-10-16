@@ -29,6 +29,7 @@ public sealed class ListsView : UserControl
     private readonly Button _listMode;
     private readonly Button _gridMode;
     private bool _grid;
+    private Task _selectionTask = Task.CompletedTask;
 
     public ListsView(RomMLibraryViewModel host)
     {
@@ -45,19 +46,7 @@ public sealed class ListsView : UserControl
                     : $"{collection.Name}  ({collection.Count}){(collection.ReadOnly ? "  ·  ro" : string.Empty)}",
             }),
         };
-        _collectionsList.SelectionChanged += async (_, _) =>
-        {
-            if (_collectionsList.SelectedItem is LibraryCollection col)
-            {
-                if (_host.Collections is not null && col.Id != -1)
-                {
-                    _host.Collections.SelectedCollection = col;
-                }
-
-                await _host.LoadListMembersAsync(col);
-                BindMembers();
-            }
-        };
+        _collectionsList.SelectionChanged += (_, _) => _selectionTask = LoadSelectedCollectionAsync();
 
         _membersList = new ListBox
         {
@@ -174,7 +163,8 @@ public sealed class ListsView : UserControl
         var delete = new Button { Content = "Delete" };
         delete.Click += async (_, _) =>
         {
-            if (_host.Collections?.SelectedCollection is { ReadOnly: false, Id: not -1 } selected)
+            if (_collectionsList.SelectedItem is LibraryCollection { ReadOnly: false, Id: not -1 } selected
+                && _host.Collections?.SelectedCollection?.Id == selected.Id)
             {
                 await _host.Collections.DeleteAsync(selected.Id);
                 await RefreshRailAsync();
@@ -236,6 +226,34 @@ public sealed class ListsView : UserControl
 
     private bool _refreshingRail;
 
+    /// <summary>
+    /// FR-ROMM-AVUI-001 AC-AUI-04: navigates through the visible rail, the single authority
+    /// for collection selection. A missing or removed collection cannot become a delete target.
+    /// </summary>
+    public async Task SelectCollectionAsync(int collectionId)
+    {
+        await RefreshRailAsync();
+        var target = _collectionsList.Items.OfType<LibraryCollection>().FirstOrDefault(c => c.Id == collectionId);
+        if (ReferenceEquals(_collectionsList.SelectedItem, target))
+            _selectionTask = LoadSelectedCollectionAsync();
+        else
+            _collectionsList.SelectedItem = target;
+        await _selectionTask;
+    }
+
+    private async Task LoadSelectedCollectionAsync()
+    {
+        var selected = _collectionsList.SelectedItem as LibraryCollection;
+        if (_host.Collections is { } collections)
+            collections.SelectedCollection = selected is { Id: not -1 } ? selected : null;
+        try
+        {
+            await _host.LoadListMembersAsync(selected);
+            BindMembers();
+        }
+        catch (Exception ex) { _status.Text = $"List operation failed: {ex.Message}"; }
+    }
+
     private async Task RefreshRailAsync()
     {
         // GetListsRailAsync assigns RecentGames (new list instance every load). Listening for
@@ -248,7 +266,10 @@ public sealed class ListsView : UserControl
         _refreshingRail = true;
         try
         {
+            int? selectedId = (_collectionsList.SelectedItem as LibraryCollection)?.Id;
             _collectionsList.ItemsSource = await _host.GetListsRailAsync();
+            if (selectedId is not null)
+                _collectionsList.SelectedItem = _collectionsList.Items.OfType<LibraryCollection>().FirstOrDefault(c => c.Id == selectedId);
             BindMembers();
             UpdateSelectionChrome();
             _status.Text = _host.Status;

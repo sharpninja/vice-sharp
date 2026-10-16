@@ -1,0 +1,97 @@
+{
+  "recordedAtLocal": "2026-10-16T12:14:55",
+  "scope": "Non-Xbox RomM Windows desktop integration",
+  "operatorInstruction": "no more HV.",
+  "furtherHvWaived": true,
+  "hvAcceptanceClaimed": false,
+  "mockGate": {
+    "observationsCaptured": 19,
+    "assertionHelperControls": 21,
+    "productionBoundScenarios": 25,
+    "passed": 46,
+    "failed": 0,
+    "skipped": 0
+  },
+  "productionGate": {
+    "observationsCaptured": 19,
+    "linuxOnlyCasesExcluded": 13,
+    "failed": 0,
+    "skipped": 0,
+    "libraryPassed": 201,
+    "headsPassed": 61
+  },
+  "nativeRecheck": {
+    "head": "cc67418cba58e71d8e70fd353e9de47199ad2075",
+    "files": 6374,
+    "hashDifferences": 0,
+    "atLocal": "2026-10-16T12:13:48"
+  },
+  "r2": {
+    "reviewerSessionId": "ClaudeCode-20261016T163559Z-plugin-session",
+    "correctedByLocalTests": true,
+    "completeness": 93,
+    "parentReadbackSha256": "1E29B19942F97328C8F26FF3D2A6F3E42DC1E4D4D21F41BAA07F6FE7F71C1DDB",
+    "fail": 2,
+    "verdict": "DISAGREE",
+    "parentReadbackCharacters": 59315,
+    "parentPersistedParts": 10,
+    "accuracy": 92,
+    "findings": [
+      "N-01 keyboard focus after scroll",
+      "N-02 missing observation receipts"
+    ],
+    "pass": 22,
+    "unknown": 0,
+    "reviewerRequestId": "req-20261016T163602Z-prompt-669a",
+    "processCanceledByOperator": true
+  },
+  "parentSessionId": "Codex-20261007T135626Z-plugin-session",
+  "parentRequestId": "req-20261016T150502Z-turn-2379",
+  "receipts": [
+    {
+      "name": "20261016T120357-mocks-ViceSharp.Heads.Tests.trx",
+      "bytes": 70981,
+      "sha256": "E26C76BC6CEE14BCDD762ABC8F07EA4EAF21AA38AB77EB00F1AD8E63450BD993"
+    },
+    {
+      "name": "20261016T120658-real-ViceSharp.Heads.Tests.trx",
+      "bytes": 92102,
+      "sha256": "1CE46C886EDEAE9EEDCBABB746B9253176EC285CC07DF07B259A74329A4B1872"
+    },
+    {
+      "name": "20261016T120719-real-ViceSharp.Library.Tests.trx",
+      "bytes": 284915,
+      "sha256": "12C5FD3C49A082CC3A234320C6E74C44BF44EC41E60036E624AF5C41A22FCBCF"
+    },
+    {
+      "name": "romm-final-mocks-console.log",
+      "bytes": 13759,
+      "sha256": "D4AB375F176358DA9EB64A976E63CC0958B7D54AA8DBF382A0C93D351A247932"
+    },
+    {
+      "name": "romm-final-mocks2-console.log",
+      "bytes": 13615,
+      "sha256": "3150ECC15BCCE5A41573ED6A22CA2995CE2C372DEA308E7802A55A976E69A698"
+    },
+    {
+      "name": "romm-final-mocks3-console.log",
+      "bytes": 9510,
+      "sha256": "89F5620D95C8DA2A848EB7C892611CE040B2BBE05E4002E2917E4EC7D255A355"
+    },
+    {
+      "name": "romm-final-real-console.log",
+      "bytes": 13324,
+      "sha256": "1B6AB12A62DA7301AF276CDF102DC5028877CF6089599D1E8D3DC3E9A9F795CC"
+    },
+    {
+      "name": "romm-final-real2-console.log",
+      "bytes": 13267,
+      "sha256": "51554E455E819FF65BD336A1CB2E73EA12465D6AEB9698565FC7ADE0378ABBB7"
+    },
+    {
+      "name": "romm-final-real3-console.log",
+      "bytes": 11274,
+      "sha256": "D36C6F09316EB6095308E3E2895E608ECA4014189A62C35B6D5CFF78EB6527C5"
+    }
+  ]
+}

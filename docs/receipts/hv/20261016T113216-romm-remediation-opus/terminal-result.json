@@ -1,0 +1,31 @@
+{
+  "observedAtLocal": "2026-10-16T12:07:54",
+  "status": "canceled_by_operator",
+  "operatorInstruction": "no more HV.",
+  "pid": 40824,
+  "exitCode": -1,
+  "streamsClosed": true,
+  "cliSessionId": "0811d877-c1c8-483f-95f3-89d066d5594b",
+  "model": "claude-opus-5-5",
+  "effort": "max",
+  "finalVerdictPresent": true,
+  "accepted": false,
+  "capture": [
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T113216-romm-remediation-opus\\launch-result.json",
+      "bytes": 216,
+      "sha256": "53AE02D21C7056A3229BEDFD6413F8CF2EF0D5F86DE84EB39AF133C49EB45ED5"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T113216-romm-remediation-opus\\request.jsonl",
+      "bytes": 8743,
+      "sha256": "70082D28F458809204B79D6EC658BC77D7FCD82677B7FCCAA71E8F43057DD954"
+    },
+    {
+      "path": "F:\\GitHub\\vice-sharp\\docs\\receipts\\hv\\20261016T113216-romm-remediation-opus\\response.jsonl",
+      "bytes": 1501088,
+      "sha256": "A00248D7F88C2DCD121EC5C6580BB8B268864B84CC92AEFE3CBEC4ECA4CDE824"
+    }
+  ],
+  "note": "Partial review retained. No final acceptance, no replacement review. Parent proceeds under explicit operator waiver with local tests."
+}

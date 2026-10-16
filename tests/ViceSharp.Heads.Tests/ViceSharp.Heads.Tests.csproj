@@ -29,6 +29,7 @@
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Avalonia.Headless.XUnit" />
   </ItemGroup>
 
 </Project>

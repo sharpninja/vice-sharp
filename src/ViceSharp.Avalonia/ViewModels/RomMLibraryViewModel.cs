@@ -32,6 +32,8 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
     private IRomMLibraryGateway? _gateway;
     private IRomMCollectionsGateway? _collectionsGateway;
     private RomDetailViewModel? _selectedDetail;
+    private int _detailRequest;
+    private int _listRequest;
     private IReadOnlyList<RecentGame> _recentGames = Array.Empty<RecentGame>();
     private IReadOnlyList<RomTile> _listMemberTiles = Array.Empty<RomTile>();
     private RomTile? _selectedListTile;
@@ -115,6 +117,11 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
     }
 
     public bool IsConnected => _browse is not null;
+
+    // Capture successful connection credentials, not editable connection-form values.
+    // Covers must continue using the active server when the form is edited or reconnect fails.
+    internal Uri? ConnectedServerUrl { get; private set; }
+    internal string? ConnectedToken { get; private set; }
 
     public bool IsShowingRecents => _browse?.IsShowingRecents == true;
 
@@ -315,6 +322,8 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
 
             await browse.InitializeAsync(cancellationToken).ConfigureAwait(true);
 
+            ConnectedServerUrl = uri;
+            ConnectedToken = token;
             Browse = browse;
             Token = token ?? string.Empty;
             BaseUrl = uri.ToString();
@@ -367,19 +376,24 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
 
     public async Task ShowDetailAsync(int romId, CancellationToken cancellationToken = default)
     {
-        if (_gateway is null || _collectionsGateway is null)
+        int request = Interlocked.Increment(ref _detailRequest);
+        var gateway = _gateway;
+        var collections = _collectionsGateway;
+        if (gateway is null || collections is null)
         {
             return;
         }
 
         try
         {
-            RomDetail detail = await _gateway.GetRomAsync(romId, cancellationToken).ConfigureAwait(true);
-            SelectedDetail = new RomDetailViewModel(detail, _collectionsGateway);
+            RomDetail detail = await gateway.GetRomAsync(romId, cancellationToken).ConfigureAwait(true);
+            if (request == _detailRequest && ReferenceEquals(gateway, _gateway))
+                SelectedDetail = new RomDetailViewModel(detail, collections);
         }
         catch (Exception ex)
         {
-            Status = $"Details unavailable: {ex.Message}";
+            if (request == _detailRequest && ReferenceEquals(gateway, _gateway))
+                Status = $"Details unavailable: {ex.Message}";
         }
     }
 
@@ -462,6 +476,8 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
     /// <summary>Loads members for a collection (or Recents) into <see cref="ListMemberTiles"/>.</summary>
     public async Task LoadListMembersAsync(LibraryCollection? collection, CancellationToken cancellationToken = default)
     {
+        int request = Interlocked.Increment(ref _listRequest);
+        var gateway = _gateway;
         SelectedListTile = null;
         if (collection is null)
         {
@@ -471,13 +487,15 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
 
         if (collection.Id == -1)
         {
-            RecentGames = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+            var recent = await _recentsStore.LoadAsync(cancellationToken).ConfigureAwait(true);
+            if (request != _listRequest || !ReferenceEquals(gateway, _gateway)) return;
+            RecentGames = recent;
             ListMemberTiles = RecentGames.Select(g => g.ToTile()).ToList();
             Status = $"Recents: {ListMemberTiles.Count} game(s).";
             return;
         }
 
-        if (_gateway is null)
+        if (gateway is null)
         {
             ListMemberTiles = Array.Empty<RomTile>();
             return;
@@ -489,7 +507,8 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
         {
             try
             {
-                RomDetail detail = await _gateway.GetRomAsync(romId, cancellationToken).ConfigureAwait(true);
+                RomDetail detail = await gateway.GetRomAsync(romId, cancellationToken).ConfigureAwait(true);
+                if (request != _listRequest || !ReferenceEquals(gateway, _gateway)) return;
                 RomFile? file = detail.Files.FirstOrDefault(f => f.Launchable) ?? detail.Files.FirstOrDefault();
                 string fileName = file?.FileName ?? detail.Name;
                 tiles.Add(new RomTile(
@@ -507,6 +526,7 @@ public sealed class RomMLibraryViewModel : INotifyPropertyChanged
             }
         }
 
+        if (request != _listRequest || !ReferenceEquals(gateway, _gateway)) return;
         ListMemberTiles = tiles;
         Status = $"{collection.Name}: {tiles.Count} title(s).";
     }

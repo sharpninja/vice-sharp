@@ -1,0 +1,3 @@
+<Project>
+  <!-- Empty on purpose: stops MSBuild from importing unrelated parent props/targets. -->
+</Project>

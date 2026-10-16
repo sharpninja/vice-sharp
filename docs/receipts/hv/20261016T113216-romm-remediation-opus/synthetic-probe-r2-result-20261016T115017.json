@@ -1,0 +1,127 @@
+{
+  "P1_gridRealization": {
+    "itemsPanel": "ViceSharp.Avalonia.Views.LibraryTilePanel",
+    "itemsPanelIsVirtualizing": true,
+    "initialItems": 60,
+    "initialRealizedTileImages": 9,
+    "itemsAfterTwoLoadMore": 180,
+    "realizedAfterTwoLoadMore": 9
+  },
+  "P1b_scrollAwayCancelsRealHttpCoverRequests": {
+    "realizedBefore": 9,
+    "acceptedBefore": 4,
+    "closedBefore": 0,
+    "firstRequestPaths": [
+      "GET /covers/4.png HTTP/1.1",
+      "GET /covers/2.png HTTP/1.1",
+      "GET /covers/3.png HTTP/1.1",
+      "GET /covers/1.png HTTP/1.1"
+    ],
+    "realizedAfterScroll": 9,
+    "closedByClientAfterScroll": 4,
+    "acceptedAfterScroll": 8,
+    "laterRequestPaths": [
+      "GET /covers/53.png HTTP/1.1",
+      "GET /covers/52.png HTTP/1.1",
+      "GET /covers/54.png HTTP/1.1",
+      "GET /covers/55.png HTTP/1.1"
+    ],
+    "lastIndexRealized": true
+  },
+  "P2_tabReturnAndWindowClose": {
+    "before": {
+      "selected": 3,
+      "group": "Game 0004",
+      "canAttach": true
+    },
+    "detachedOnOtherTab": true,
+    "loaderAliveWhileAway": true,
+    "after": {
+      "selected": 3,
+      "group": "Game 0004",
+      "canAttach": true,
+      "sameLoader": true,
+      "detailName": "Game 0004"
+    },
+    "loaderDisposedAfterWindowClose": true,
+    "viewLoaderNullAfterClose": true
+  },
+  "P2c_reconnectDisposesOldLoader": {
+    "replaced": true,
+    "oldDisposed": true,
+    "newBase": "http://127.0.0.2:9/",
+    "gridBoundToNewItems": true
+  },
+  "P3_listsDeleteTarget": {
+    "afterNavigation": {
+      "selectedTab": 1,
+      "listsRailHighlightedId": 1,
+      "collectionsSelectedId": 1,
+      "members": [
+        1,
+        2
+      ],
+      "libraryRailSelectionCleared": true
+    },
+    "deletesAfterForcedMismatch": [],
+    "deletesAfterConsistentDelete": [
+      1
+    ],
+    "listsRailAfterDelete": null,
+    "sharedAfterDelete": null
+  },
+  "P6_keyboardAfterScrollAway_new": {
+    "view": "remediated LibraryView (LibraryTilePanel grid)",
+    "key": "Right",
+    "focusedBefore": "ListBoxItem",
+    "selectedContainerRealizedAfterScroll": false,
+    "focusedAfterScroll": "null",
+    "keyRaisedOn": "ListBox",
+    "selectedIndexAfterKey": 0,
+    "expectedIfRelativeToSelection": 4
+  },
+  "P6_keyboardAfterScrollAway_mainBaseline": {
+    "view": "main fa259f2 LibraryView (VirtualizingStackPanel, vertical list)",
+    "key": "Down",
+    "focusedBefore": "ListBoxItem",
+    "selectedContainerRealizedAfterScroll": true,
+    "focusedAfterScroll": "ListBoxItem",
+    "keyRaisedOn": "ListBoxItem",
+    "selectedIndexAfterKey": 4,
+    "expectedIfRelativeToSelection": 4
+  },
+  "P6r_routedKeysAfterScrollAway_new": {
+    "view": "remediated LibraryView",
+    "key": "Right",
+    "controlNoScroll_selectedAfterKey": 4,
+    "offsetAfterScroll": 3063,
+    "focusedAfterScroll": "null",
+    "afterScroll_selectedAfterRoutedKey": 3,
+    "afterScroll_offsetAfterKey": 3063,
+    "focusedAfterKey": "TextBox"
+  },
+  "P6r_routedKeysAfterScrollAway_mainBaseline": {
+    "view": "main fa259f2 LibraryView",
+    "key": "Down",
+    "controlNoScroll_selectedAfterKey": 4,
+    "offsetAfterScroll": 2639,
+    "focusedAfterScroll": "ListBoxItem",
+    "afterScroll_selectedAfterRoutedKey": 4,
+    "afterScroll_offsetAfterKey": 204,
+    "focusedAfterKey": "ListBoxItem"
+  },
+  "P7_tileSizeVersusPanelSlot": {
+    "slotWidth": 136,
+    "slotHeight": 174,
+    "naturalWidth": 146,
+    "naturalHeight": 177,
+    "fitsWidth": false,
+    "fitsHeight": false,
+    "itemPadding": "12,9,12,12"
+  },
+  "P8_verticalNavigationUsesColumns": {
+    "columns": 3,
+    "selectedAfterDown": 3,
+    "expected": 3
+  }
+}

@@ -1,5 +1,27 @@
 # ViceSharp handoff
 
+## 2026-10-16T12:07:39 operational update
+
+The later operator request authorizes integrating the remaining non-Xbox RomM work,
+validating it on Windows, committing/pushing main to origin, then removing both linked
+worktrees after preserving excluded work. Latest correction: **"no more HV."** The
+running review was stopped. Do not launch another reviewer for this integration.
+
+The [integration receipt](docs/receipts/worktree-integration/20261016T102915-review.md)
+records scope, rejected/partial review history, corrected regressions, chronological
+mock-first evidence and preservation/recovery instructions. Latest Nuke validation:
+46 mock-contract tests; then 61 Heads plus 201 Library tests, zero failures/skips.
+The operator approved exclusion of the 13 explicitly Linux-only tests on Windows.
+R2 was canceled, not AGREE. No native VICE edits, broader emulator gate or requirement
+done-state change is authorized. The original R0 work below remains paused.
+
+Private verified snapshots and incremental bundles for both worktrees are retained at
+`F:\GitHub\vice-sharp\.local-preservation\worktrees-20261016T101333`.
+Keep the branches and backups after worktree removal. Do not delete excluded Xbox work.
+Commit/push/removal results are recorded separately after execution, not predicted here.
+
+## Earlier R0/checkpoint handoff (preserved scope and history)
+
 Updated by Codex on PAYTON-LEGION2, 2026-10-16T09:45:45. Operational handoff and Git checkpoint requested and approved by the operator. Development remains paused after accepted R0 remediation HV. The full goal remains incomplete. No requirement application or implementation is authorized by the handoff, review result or commit.
 
 ## Current checkpoint and authority
