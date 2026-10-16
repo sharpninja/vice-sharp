@@ -6,6 +6,22 @@
 
 ViceSharp requires Commodore ROM images to boot emulated machines. ROMs are copyrighted by Commodore/Tulip and are NOT included in the ViceSharp distribution.
 
+## Desktop First Run
+
+The local Avalonia desktop host reuses a complete C64 ROM set from the configured VICE data roots or a development checkout. If none is available, it downloads the three default C64 ROMs from the VICE GitHub mirror using the built-in URLs and pinned SHA256 hashes:
+
+- `C64/basic-901226-01.bin`
+- `C64/kernal-901227-03.bin`
+- `C64/chargen-901225-01.bin`
+
+Downloads go to `ViceSharp/roms` beneath the current user's local application-data directory: normally `~/.local/share/ViceSharp/roms` on Linux (`XDG_DATA_HOME` is honored), or `%LOCALAPPDATA%\ViceSharp\roms` on Windows. Configured roots take priority over this fallback cache. Verified cached files are reused offline; the host does not write to the system installation directory.
+
+The Linux [user-local installer](../README.md#linux-install-for-your-user) keeps application releases in the separate lowercase `vicesharp` directory. Redeployment preserves the uppercase `ViceSharp` ROM cache and other user data.
+
+Acquisition failure or cancellation produces an actionable startup error instead of starting the video-less minimal host. This bootstrap supplies only the default C64 BASIC, KERNAL, and character ROMs. Other machine variants and true-drive DOS ROMs still need their own resources.
+
+Automatic C64 acquisition is enabled by local desktop startup for the default or explicitly selected C64 profile. Explicit non-C64 profiles keep their existing provisioning path. Connecting to a remote host bypasses local provisioning; generic runtime factories and headless hosts do not initiate downloads.
+
 ## Legal ROM Options
 
 ### 1. VICE ROM Distribution
@@ -32,7 +48,7 @@ If you own original Commodore hardware, you may legally extract ROM contents usi
 
 ## Environment Variable
 
-Set `VICESHARP_ROM_PATH` to point to your VICE data root. You can also use `VICE_DATA_PATH` or `VICE_HOME`, and on Windows the test/runtime resolver can derive the data root from `x64sc.exe` on `PATH`.
+Set `VICESHARP_ROM_PATH` to use an existing VICE data root. You can also use `VICE_DATA_PATH` or `VICE_HOME`, and on Windows the test/runtime resolver can derive the data root from `x64sc.exe` on `PATH`. The per-user desktop ROM cache is the final fallback.
 
 ```bash
 # Linux/macOS
@@ -94,18 +110,18 @@ Copied from the descriptors in `C64RomLoader.cs`:
 What the library provides today:
 
 - `C64RomLoader` - loads C64 ROM images into the bus with strict MD5 validation (see [ROM Validation](#rom-validation) above).
-- `RomProvider` - resolves ROM files from one or more base paths and can download known ROMs from a user-supplied URL database, verifying each download against a pinned SHA256 hash before writing it to disk.
-- `ViceDataPathResolver` - locates the VICE data root from `VICESHARP_ROM_PATH`, `VICE_DATA_PATH`, `VICE_HOME`, or (on Windows) `x64sc.exe` on `PATH`, and normalizes a `C64/` subdirectory to its parent root.
+- `RomProvider` - resolves ROM files from one or more base paths and downloads known ROMs from its built-in GitHub URL database, verifying each download against a pinned SHA256 hash before writing it to disk.
+- `ViceDataPathResolver` - locates the VICE data root from `VICESHARP_ROM_PATH`, `VICE_DATA_PATH`, `VICE_HOME`, or (on Windows) `x64sc.exe` on `PATH`, then the per-user cache, and normalizes a `C64/` subdirectory to its parent root.
 
 CI uses the same hash-pinning approach: the `CiTest` Nuke target stages the required ROM dumps via `EnsureCiRomRoot` in `build/Build.cs`, downloading them SHA256-pinned when they are not already present on the agent.
 
 ## Fallback Behavior
 
 When ROMs are missing or invalid:
-- `VICESHARP_ROM_PATH` / `VICE_DATA_PATH` unset and no `x64sc.exe` found on `PATH` → error with setup instructions
-- ROM directory exists but files missing → error listing missing files
+- Local desktop has no complete C64 ROM set → acquire the default set into the per-user cache
+- Acquisition fails, is cancelled, or cannot produce a valid set → actionable startup error; no minimal-machine fallback
 - Known ROM name but MD5 checksum mismatch → load fails
 - Unrecognized ROM file name → checksum validation skipped, loads as-is
 - ROM loads and checksum matches → normal operation
 
-ViceSharp will NOT attempt to download ROMs automatically without explicit user action via the RomFetch APIs.
+Headless callers remain responsible for providing ROMs or explicitly invoking the RomFetch APIs.

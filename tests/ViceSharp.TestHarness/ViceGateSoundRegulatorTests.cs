@@ -1,9 +1,13 @@
 namespace ViceSharp.TestHarness;
 
 using System;
+using System.Buffers.Binary;
+using System.IO;
 using ViceSharp.Abstractions;
 using ViceSharp.Chips.Audio;
+using ViceSharp.Chips.Vic;
 using ViceSharp.Core;
+using ViceSharp.Core.Media;
 using ViceSharp.Host.Runtime;
 using ViceSharp.Host.Services;
 using ViceSharp.Protocol;
@@ -173,6 +177,128 @@ public sealed class ViceGateSoundRegulatorTests
         Assert.True(sid.IsAudioTimingSource);
     }
 
+    /// <summary>
+    /// FR-SNDREG-001 / FR-MED-003 / TEST-SNDREG-001. Losing a playback device through
+    /// either recording wrapper must select vsync pacing without disabling recording
+    /// or modifying samples forwarded to the backend. No real audio device is opened.
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Tick_RecordingWrapperDeviceLost_SelectsVsyncAndKeepsRecording(bool fixedRecorder)
+    {
+        using var stream = new MemoryStream();
+        using var recorder = new WavAudioRecorder(stream);
+        var backend = new SwitchableAudioBackend();
+        var wrapper = CreateRecordingWrapper(fixedRecorder, recorder, backend);
+        var sid = new Sid6581(new BasicBus(), wrapper);
+        sid.ConfigureAudioClock(PalMasterClockHz);
+        var (registry, session) = BuildSession(sid, limiterEnabled: true);
+        using var gate = new ViceEmulationGate();
+        gate.Start();
+
+        Assert.True(gate.Tick(registry, Advance));
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
+
+        backend.IsAvailable = false;
+        var before = session.Machine.Clock.TotalCycles;
+        Assert.True(gate.Tick(registry, Advance));
+        Assert.True(session.Machine.Clock.TotalCycles > before);
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
+        Assert.False(sid.IsAudioTimingSource);
+
+        wrapper.SubmitSamples(new float[] { 0.25f, -0.5f });
+        Assert.Equal(new float[] { 0.25f, -0.5f }, backend.Received);
+        for (var cycle = 0; cycle < 6000; cycle++) sid.Tick();
+        sid.FlushAudioBuffer();
+        recorder.Stop();
+        Assert.True(backend.Received.Count > 2, "device availability must not disable SID sample generation");
+        Assert.Equal(backend.Received.Count * 2,
+            BinaryPrimitives.ReadInt32LittleEndian(stream.ToArray().AsSpan(40, 4)));
+        Assert.Equal((short)(0.25f * 32767f),
+            BinaryPrimitives.ReadInt16LittleEndian(stream.ToArray().AsSpan(WavAudioRecorder.HeaderSize, 2)));
+    }
+
+    /// <summary>
+    /// FR-SNDREG-001 / FR-MED-003 / TEST-SNDREG-001. A recorder-only wrapper captures
+    /// samples but cannot supply device pacing, so an armed SID must use vsync.
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Tick_RecordingWrapperWithoutDevice_SelectsVsyncAndStillRecords(bool fixedRecorder)
+    {
+        using var stream = new MemoryStream();
+        using var recorder = new WavAudioRecorder(stream);
+        var wrapper = CreateRecordingWrapper(fixedRecorder, recorder, downstream: null);
+        var sid = new Sid6581(new BasicBus(), wrapper);
+        sid.ConfigureAudioClock(PalMasterClockHz);
+        var (registry, _) = BuildSession(sid, limiterEnabled: true);
+        using var gate = new ViceEmulationGate();
+        gate.Start();
+
+        Assert.True(gate.Tick(registry, Advance));
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
+        Assert.False(sid.IsAudioTimingSource);
+        wrapper.SubmitSamples(new float[] { -0.5f });
+        for (var cycle = 0; cycle < 6000; cycle++) sid.Tick();
+        sid.FlushAudioBuffer();
+        recorder.Stop();
+        Assert.True(BinaryPrimitives.ReadInt32LittleEndian(stream.ToArray().AsSpan(40, 4)) > 2,
+            "recorder-only output must retain the SID sample stream");
+        Assert.Equal((short)(-0.5f * 32767f),
+            BinaryPrimitives.ReadInt16LittleEndian(stream.ToArray().AsSpan(WavAudioRecorder.HeaderSize, 2)));
+    }
+
+    /// <summary>
+    /// FR-SNDREG-001 / TEST-SNDREG-001. Backends implementing the original interface
+    /// remain timing sources through both recording wrappers without an availability override.
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Sid_RecordingWrapperWithLegacyBackend_RemainsTimingSource(bool fixedRecorder)
+    {
+        using var stream = new MemoryStream();
+        using var recorder = new WavAudioRecorder(stream);
+        var wrapper = CreateRecordingWrapper(fixedRecorder, recorder, new FakeAudioBackend());
+        var sid = new Sid6581(new BasicBus(), wrapper);
+        sid.ConfigureAudioClock(PalMasterClockHz);
+
+        Assert.True(sid.IsAudioTimingSource);
+        Assert.Equal(ViceEmulationGate.SoundAction.Advance, ViceEmulationGate.EvaluateSound(sid));
+        recorder.Stop();
+    }
+
+    /// <summary>
+    /// FR-SNDREG-001 / FR-VIC20-SOUND-001 / TEST-SNDREG-001. VIC-I shares the
+    /// playback backend and must fall back to vsync when it fails, while leaving
+    /// its generated sample stream available to the recording tap.
+    /// </summary>
+    [Fact]
+    public void Tick_Vic20PlaybackDeviceLost_SelectsVsyncAndKeepsSubmittingSamples()
+    {
+        var backend = new SwitchableAudioBackend();
+        var vic = new Mos6561(audioBackend: new CaptureAudioTap(backend));
+        var (registry, session) = BuildSession(vic, limiterEnabled: true);
+        using var gate = new ViceEmulationGate();
+        gate.Start();
+
+        Assert.True(gate.Tick(registry, Advance));
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Sound, gate.LastRegulator);
+
+        backend.IsAvailable = false;
+        var before = session.Machine.Clock.TotalCycles;
+        Assert.True(gate.Tick(registry, Advance));
+        Assert.True(session.Machine.Clock.TotalCycles > before);
+        Assert.Equal(ViceEmulationGate.PacingRegulator.Vsync, gate.LastRegulator);
+        Assert.False(vic.IsAudioTimingSource);
+
+        for (var cycle = 0; cycle < 7000; cycle++) vic.Tick();
+        vic.FlushAudioBuffer();
+        Assert.NotEmpty(backend.Received);
+    }
+
     /// <summary>FR-SNDREG-001 / TR-SNDREG-GATE-001. Use case: the SID still surfaces the
     /// backend's queued samples for diagnostics. Acceptance: QueuedSampleCount mirrors the backend.</summary>
     [Fact]
@@ -195,6 +321,31 @@ public sealed class ViceGateSoundRegulatorTests
     }
 
     // ---- helpers ----
+
+    private static IAudioBackend CreateRecordingWrapper(
+        bool fixedRecorder, WavAudioRecorder recorder, IAudioBackend? downstream)
+    {
+        if (fixedRecorder)
+            return new RecordingAudioBackend(recorder, downstream);
+
+        var tap = new CaptureAudioTap(downstream);
+        tap.AttachRecorder(recorder);
+        return tap;
+    }
+
+    private sealed class SwitchableAudioBackend : IAudioBackend
+    {
+        public bool IsAvailable { get; set; } = true;
+        public List<float> Received { get; } = new();
+        public int QueuedSampleCount => 0;
+        public void SubmitSamples(ReadOnlySpan<float> samples)
+        {
+            foreach (var sample in samples) Received.Add(sample);
+        }
+        public void Pause() { }
+        public void Resume() { }
+        public void Stop() { }
+    }
 
     private static long Advance(EmulatorRuntimeSession session, long cycles)
     {

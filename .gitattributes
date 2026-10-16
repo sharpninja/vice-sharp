@@ -42,6 +42,8 @@
 docs/grok/**                              -whitespace
 docs/Project/**                           -whitespace
 docs/receipts/**                          -whitespace
+# Raw emulator logs are retained evidence; preserve their original whitespace.
+validation-output/**/*.log               -whitespace
 docs/*.log                                -whitespace
 docs/receipts-*.txt                       -whitespace
 docs/*-dump.txt                           -whitespace

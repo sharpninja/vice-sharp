@@ -81,5 +81,12 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- FR-INP-006: share the vendored GPL VICE maps with the desktop head.
+         Keep them as files so the host can enumerate layouts and resolve includes. -->
+    <Content Include="..\ViceSharp.Xbox\Assets\vice-data\C64\*.vkm">
+      <Link>data\C64\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 </Project>

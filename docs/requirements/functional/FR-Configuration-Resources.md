@@ -59,6 +59,10 @@ The emulator shall load machine ROM images and named romsets needed by the selec
 3. Named romsets can be selected for a session.
 4. Missing or invalid ROMs produce actionable diagnostics.
 5. ROM selection does not require UI code to access emulator runtime internals.
+6. Local desktop startup reuses a complete configured or development C64 ROM set; otherwise it acquires the default BASIC, KERNAL, and character ROMs from the built-in VICE GitHub URLs with pinned SHA256 verification.
+7. Acquired ROMs are cached in the current user's local application-data directory, with configured roots taking priority; a verified complete cache supports offline startup without system installation-directory writes.
+8. Acquisition failure or cancellation reports an actionable startup error instead of silently selecting the video-less minimal host. Remote-host connections and generic/headless runtime factories do not trigger local C64 acquisition.
+9. Automatic acquisition covers the default C64 core ROMs only; additional machine variants and drive DOS ROMs remain separately supplied resources.
 
 ### Source References
 
@@ -68,7 +72,8 @@ The emulator shall load machine ROM images and named romsets needed by the selec
 
 - **Interfaces:** `IArchitectureDescriptor`, `IRomProvider`, `HostControlService`
 - **Technical Requirements:** TR-LIB-001, TR-STATE-001
-- **Test Suite:** `RomProviderTests`, `MachineProfileRomValidationTests`
+- **Test Requirements:** TEST-CFG-001
+- **Test Suite:** `RomProviderTests`, `MachineProfileRomValidationTests`, desktop C64 ROM bootstrap and startup regression tests
 
 ---
 

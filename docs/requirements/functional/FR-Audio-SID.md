@@ -393,6 +393,8 @@ The emulator shall wire SID sample production through the host audio backend wit
 1. SID sample production is delivered to the selected `IAudioBackend` implementation.
 2. Host audio backend writes preserve stream order and do not duplicate samples.
 3. Backend tests prove pause, resume, mute, and disposal paths do not leave stale SID audio buffers active.
+4. Interactive Linux desktop sessions select an available SDL2 output device, preserve bounded PCM queue order and master volume/mute, and retain the explicit audio-disable override. Headless and unit-test hosts do not open a real audio device by default.
+5. Missing libraries/devices and device failure do not terminate the emulator or leave it waiting indefinitely for audio capacity. An unavailable device stops acting as the emulator timing source.
 
 ### Source References
 
@@ -401,7 +403,7 @@ The emulator shall wire SID sample production through the host audio backend wit
 ### Traceability
 
 - **Interfaces:** `IAudioChip`, `IAudioBackend`
-- **Test Suite:** `SidAudioBackendTests`, `SidAudioWiringTests`
+- **Test Suite:** `SidAudioBackendTests`, `SidAudioWiringTests`, `LinuxSdlAudioBackendTests`, `ViceGateSoundRegulatorTests`
 
 ---
 

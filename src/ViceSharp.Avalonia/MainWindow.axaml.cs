@@ -447,7 +447,7 @@ public partial class MainWindow : Window
 
         try
         {
-            var localHost = InProcessGrpcHost.StartAsync().GetAwaiter().GetResult();
+            var localHost = InProcessGrpcHost.StartAsync(provisionDefaultRoms: true).GetAwaiter().GetResult();
             return new HostConnection(new GrpcHostProtocolClient(localHost.Endpoint), localHost, localHost.VideoFrameSource);
         }
         catch (Exception ex)
@@ -874,6 +874,18 @@ public partial class MainWindow : Window
 
     private void OnMenuAbout(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
     {
+        var closeButton = new Button
+        {
+            Content = "Close",
+            MinWidth = 80,
+            Margin = new global::Avalonia.Thickness(16),
+            HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Right,
+            IsDefault = true,
+            IsCancel = true
+        };
+        DockPanel.SetDock(closeButton, Dock.Bottom);
+        var content = new DockPanel();
+        content.Children.Add(closeButton);
         // Legal text shared with the Xbox About surface (AboutInfo) so attributions
         // cannot drift between heads.
         var about = new Window
@@ -882,6 +894,10 @@ public partial class MainWindow : Window
             Width = 520,
             Height = 360,
             CanResize = true,
+            Content = content
+        };
+        content.Children.Add(new ScrollViewer
+        {
             Content = new TextBlock
             {
                 Margin = new global::Avalonia.Thickness(16),
@@ -894,7 +910,8 @@ public partial class MainWindow : Window
                     global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceOfferText + "\n" +
                     global::ViceSharp.Xbox.ViewModels.AboutInfo.SourceUrl
             }
-        };
+        });
+        closeButton.Click += (_, _) => about.Close();
         about.ShowDialog(this);
     }
 

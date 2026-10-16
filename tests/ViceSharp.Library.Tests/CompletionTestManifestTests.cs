@@ -712,6 +712,187 @@ public sealed class CompletionTestManifestTests
         AssertValid(fixture.Manifest, fixture.Run);
     }
 
+    [Theory]
+    [InlineData("discovery", "discovery_missing")]
+    [InlineData("partition", "partition_missing")]
+    [InlineData("command", "command_missing")]
+    [InlineData("live", "live_evidence_missing")]
+    [InlineData("ai", "ai_evidence_missing")]
+    public void Validate_FailsWhenRequiredEvidenceIsOmitted(string kind, string expectedCode)
+    {
+        var fixture = CompleteFixture();
+        var run = kind switch
+        {
+            "discovery" => fixture.Run with { Discoveries = fixture.Run.Discoveries.Skip(1).ToArray() },
+            "partition" => fixture.Run with { TestPartitions = fixture.Run.TestPartitions.Skip(1).ToArray() },
+            "command" => fixture.Run with { Commands = fixture.Run.Commands.Skip(1).ToArray() },
+            "live" => fixture.Run with { LiveRuntimePasses = fixture.Run.LiveRuntimePasses.Skip(1).ToArray() },
+            _ => fixture.Run with { AiReviews = fixture.Run.AiReviews.Skip(1).ToArray() },
+        };
+
+        AssertIssue(expectedCode, fixture.Manifest, run);
+    }
+
+    [Theory]
+    [InlineData("invocation", "invocation_mismatch")]
+    [InlineData("assembly", "test_assembly_provenance")]
+    [InlineData("product", "product_binary_provenance")]
+    [InlineData("native", "native_binary_provenance")]
+    public void Validate_FailsWhenDiscoveryProvenanceIsStale(string kind, string expectedCode)
+    {
+        var fixture = CompleteFixture();
+        var discovery = fixture.Run.Discoveries.First();
+        var changed = kind switch
+        {
+            "invocation" => discovery with { InvocationId = "old-run" },
+            "assembly" => discovery with { TestAssemblyHash = "old-assembly" },
+            "product" => discovery with { ProductBinaryHash = "old-product" },
+            _ => discovery with { NativeLibraryHashes = new Dictionary<string, string>() },
+        };
+        var run = fixture.Run with { Discoveries = [changed, .. fixture.Run.Discoveries.Skip(1)] };
+
+        AssertIssue(expectedCode, fixture.Manifest, run);
+    }
+
+    [Theory]
+    [InlineData("exit", "command_failed")]
+    [InlineData("stdout", "command_artifact_missing")]
+    [InlineData("stderr", "command_artifact_missing")]
+    [InlineData("output", "command_artifact_missing")]
+    public void Validate_FailsWhenCommandDidNotProduceSuccessfulEvidence(string kind, string expectedCode)
+    {
+        var fixture = CompleteFixture();
+        var command = fixture.Run.Commands.First();
+        var changed = kind switch
+        {
+            "exit" => command with { ExitCode = 1 },
+            "stdout" => command with { StandardOutput = command.StandardOutput with { Exists = false } },
+            "stderr" => command with { StandardError = command.StandardError with { IsValid = false } },
+            _ => command with { OutputArtifact = null },
+        };
+        var run = fixture.Run with { Commands = [changed, .. fixture.Run.Commands.Skip(1)] };
+
+        AssertIssue(expectedCode, fixture.Manifest, run);
+    }
+
+    [Theory]
+    [InlineData("passed")]
+    [InlineData("total")]
+    [InlineData("negative")]
+    public void Validate_FailsWhenCountersDisagreeWithExecutedCases(string kind)
+    {
+        var fixture = CompleteFixture();
+        var run = WithCounters(fixture.Run, ManagedPartition, counters => kind switch
+        {
+            "passed" => counters with { Passed = counters.Passed - 1 },
+            "total" => counters with { Total = counters.Total + 1 },
+            _ => counters with { Failed = -1 },
+        });
+
+        AssertIssue("test_counter_mismatch", fixture.Manifest, run);
+    }
+
+    [Fact]
+    public void Validate_FailsWhenPaidPartitionAlreadyRanInCurrentInvocation()
+    {
+        var fixture = CompleteFixture();
+        var run = fixture.Run with
+        {
+            PriorPartitionExecutions = [new CompletionPriorPartitionExecution(InvocationId, PaidAiPartition)],
+        };
+
+        AssertIssue("partition_duplicate", fixture.Manifest, run);
+    }
+
+    [Theory]
+    [InlineData(false, "test_process_failed")]
+    [InlineData(true, "test_artifact_invalid")]
+    public void Validate_FailsWhenTestProcessFailedOrStderrWasNotCaptured(bool missingLog, string expectedCode)
+    {
+        var fixture = CompleteFixture();
+        var execution = fixture.Run.TestPartitions.First();
+        var changed = missingLog
+            ? execution with { StandardError = execution.StandardError with { Exists = false } }
+            : execution with { ExitCode = 1 };
+        var run = fixture.Run with { TestPartitions = [changed, .. fixture.Run.TestPartitions.Skip(1)] };
+
+        AssertIssue(expectedCode, fixture.Manifest, run);
+    }
+
+    [Fact]
+    public void Validate_AcceptsMatchingRepeatedCaseIdentitiesAsMultiset()
+    {
+        var fixture = CompleteFixture();
+        var discovery = fixture.Run.Discoveries.First();
+        var execution = fixture.Run.TestPartitions.First();
+        var run = fixture.Run with
+        {
+            Discoveries = [discovery with { Cases = [.. discovery.Cases, discovery.Cases.Single()] }, .. fixture.Run.Discoveries.Skip(1)],
+            TestPartitions = [WithExecutedCases(execution, [.. execution.ExecutedCaseIdentities, execution.ExecutedCaseIdentities.Single()]), .. fixture.Run.TestPartitions.Skip(1)],
+        };
+
+        AssertValid(fixture.Manifest, run);
+    }
+
+    [Theory]
+    [InlineData("release-build", "native/vice_x64.dll")]
+    [InlineData("xbox-publish", "artifacts/release/ViceSharp.dll")]
+    public void Validate_FailsWhenCommandCitesAnotherCommandsArtifact(string commandId, string wrongPath)
+    {
+        var fixture = CompleteFixture();
+        var wrongArtifact = fixture.Run.FinalArtifacts.Files.Single(file => file.Path == wrongPath);
+        var run = fixture.Run with
+        {
+            Commands = Replace(fixture.Run.Commands, command => command.Id == commandId,
+                command => command with { OutputArtifact = wrongArtifact }),
+        };
+
+        AssertIssue("command_artifact_mismatch", fixture.Manifest, run);
+    }
+
+    [Fact]
+    public void Validate_FailsWhenRequiredMethodIsReplacedBySimilarlyNamedMethod()
+    {
+        var fixture = CompleteFixture();
+        string lookalike = SnapshotCase.Replace("(case-1)", "Extra(case-1)", StringComparison.Ordinal);
+        var run = fixture.Run with
+        {
+            Discoveries = Replace(fixture.Run.Discoveries, discovery => discovery.ProjectPath == HarnessProject,
+                discovery => discovery with
+                {
+                    Cases = Replace(discovery.Cases, test => test.Identity == SnapshotCase,
+                        test => test with { Identity = lookalike }),
+                }),
+            TestPartitions = Replace(fixture.Run.TestPartitions, execution => execution.PartitionId == ManagedPartition,
+                execution => WithExecutedCases(execution,
+                    execution.ExecutedCaseIdentities.Select(identity => identity == SnapshotCase ? lookalike : identity).ToArray())),
+        };
+
+        AssertIssue("required_case_missing", fixture.Manifest, run);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Validate_FailsWhenDistinctPartitionsReuseTrxEvidence(bool copiedToDifferentPath)
+    {
+        var fixture = CompleteFixture();
+        var first = fixture.Run.TestPartitions[0];
+        var second = fixture.Run.TestPartitions[1];
+        var run = fixture.Run with
+        {
+            TestPartitions = Replace(fixture.Run.TestPartitions, execution => execution.PartitionId == second.PartitionId,
+                execution => execution with
+                {
+                    Trx = copiedToDifferentPath
+                        ? execution.Trx with { Hash = first.Trx.Hash }
+                        : first.Trx,
+                }),
+        };
+
+        AssertIssue("test_artifact_reused", fixture.Manifest, run);
+    }
+
     private static void AssertIssue(
         string expectedCode,
         CompletionManifest manifest,
@@ -968,7 +1149,9 @@ public sealed class CompletionTestManifestTests
             File($"TestResults/{partitionId}.stdout.log"),
             File($"TestResults/{partitionId}.diag.log"),
             new CompletionTestCounters(count, count, count, 0, 0, 0, 0, 0, 0, 0),
-            cases);
+            cases,
+            ExitCode: 0,
+            File($"TestResults/{partitionId}.stderr.log"));
     }
 
     private static CompletionTestPartitionEvidence WithExecutedCases(

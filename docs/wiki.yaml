@@ -212,6 +212,12 @@ documents:
     target: TR-Host-Prg.md
     platforms:
       - github
+  - id: romm-library
+    title: RomM Library
+    source: src/ViceSharp.RomM/README.md
+    target: RomM-Library.md
+    platforms:
+      - github
 navigation:
   - title: Home
     path: Home
@@ -231,6 +237,7 @@ navigation:
       - document: vice-migration
       - document: rom-setup
       - document: privacy
+      - document: romm-library
   - title: Architecture
     path: Architecture
     children:

@@ -42,18 +42,23 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
 
     public bool TrueDrive => _trueDrive;
 
-    public ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
+    public async ValueTask SetTrueDriveAsync(bool enabled, int driveDevice = 8, string? diskImagePath = null, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var disk = diskImagePath ?? string.Empty;
         if (_trueDrive == enabled && _trueDriveDevice == driveDevice && _trueDriveDiskImagePath == disk)
-            return ValueTask.CompletedTask;
+        {
+            // A prior transport failure may have left this selection without a session.
+            await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
+            return;
+        }
 
         _trueDrive = enabled;
         _trueDriveDevice = driveDevice;
         _trueDriveDiskImagePath = disk;
 
-        // True-drive is a machine-config choice: drop the current session so the
-        // next EnsureSessionAsync rebuilds the rig with the new selection.
+        // True-drive is a machine-config choice: recreate the rig as part of the
+        // awaited user action so attach-only reports creation errors immediately.
         if (!string.IsNullOrWhiteSpace(_sessionId))
         {
             try
@@ -68,7 +73,7 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             SetSessionId(string.Empty);
         }
 
-        return ValueTask.CompletedTask;
+        await EnsureSessionAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public async ValueTask<GetEmulatorStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
@@ -611,19 +616,28 @@ public sealed class GrpcHostProtocolClient : IHostProtocolClient, IDisposable
             if (!string.IsNullOrWhiteSpace(_sessionId))
                 return _sessionId;
 
+            var diskImagePath = _trueDriveDiskImagePath;
             var response = await _hostClient.CreateSessionAsync(
                 new GrpcContracts.CreateEmulatorSessionRequest
                 {
                     ArchitectureId = Environment.GetEnvironmentVariable("VICESHARP_ARCHITECTURE") ?? string.Empty,
                     TrueDrive = _trueDrive,
                     TrueDriveDevice = _trueDriveDevice,
-                    TrueDriveDiskImagePath = _trueDriveDiskImagePath
+                    TrueDriveDiskImagePath = diskImagePath
                 },
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 
             var status = MapStatus(response.Status);
             if (!status.IsSuccess)
+            {
+                // FR-DRVTRUE-001 / FR-ROMM-LAUNCH-001: reject this disk once, then permit
+                // an empty rig for the next attach. Keep TrueDrive intent and never discard
+                // media on a transport error/cancellation or overwrite a newer selection.
+                if (status.Code == RpcStatusCode.InvalidArgument
+                    && string.Equals(_trueDriveDiskImagePath, diskImagePath, StringComparison.Ordinal))
+                    _trueDriveDiskImagePath = string.Empty;
                 throw new InvalidOperationException(status.Message);
+            }
 
             SetSessionId(response.SessionId);
             var started = await _hostClient.StartAsync(

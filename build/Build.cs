@@ -252,7 +252,7 @@ sealed partial class Build : NukeBuild
                 .SetFilter("Category=Parity"));
         });
 
-    [Parameter("Override the ViceSharp.Core NuGet package version. Default: GitVersion {Major}.{Minor}.{CommitsSinceVersionSource} (same scheme as the MSI).")]
+    [Parameter("Override the NuGet/Arch package version. Default: release tag or GitVersion {Major}.{Minor}.{CommitsSinceVersionSource} (same scheme as the MSI).")]
     readonly string PackageVersionOverride = null!;
 
     AbsolutePath PackageProject => RootDirectory / "src" / "ViceSharp.Core.Package" / "ViceSharp.Core.Package.csproj";

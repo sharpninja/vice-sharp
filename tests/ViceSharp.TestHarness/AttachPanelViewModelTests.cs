@@ -7,6 +7,9 @@ using ViceSharp.Avalonia.Host;
 using ViceSharp.Avalonia.Persistence;
 using ViceSharp.Avalonia.ViewModels;
 using ViceSharp.Abstractions;
+using ViceSharp.Chips.IEC;
+using ViceSharp.Core;
+using ViceSharp.Library.ViewModels;
 using ViceSharp.Protocol;
 using Xunit;
 
@@ -20,6 +23,145 @@ using Xunit;
 /// </summary>
 public sealed class AttachPanelViewModelTests
 {
+    /// <summary>
+    /// FR-ROMM-LAUNCH-001 / FR-DRVTRUE-001: a synthetic cached T64 traverses the
+    /// real desktop launcher, panel, gRPC attachment and True Drive recreation.
+    /// Autostart must queue keyboard automation against the recreated rig. The
+    /// test drive firmware only exercises media/session wiring, not DOS execution.
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Launch_SyntheticT64_RecreatesTrueDriveAndQueuesAutostart(bool autostart)
+    {
+        var ct = TestContext.Current.CancellationToken;
+        byte[] program = [0x0c, 0x08, 0x0a, 0x00, 0x99, 0x22, 0x54, 0x36, 0x34, 0x22, 0x00, 0x00, 0x00];
+        var source = new byte[96 + program.Length];
+        "C64S tape image file"u8.CopyTo(source);
+        source[0x20] = 1;
+        source[0x21] = 1;
+        source[0x22] = 1;
+        source[0x24] = 1;
+        source[0x40] = 1;
+        source[0x41] = 0x82;
+        source[0x42] = 0x01;
+        source[0x43] = 0x08;
+        source[0x44] = (byte)(1 + program.Length);
+        source[0x45] = 0x08;
+        source[0x48] = 96;
+        "SYNTHETIC"u8.CopyTo(source.AsSpan(0x50));
+        program.CopyTo(source.AsSpan(96));
+        var sourcePath = Path.Combine(Path.GetTempPath(), $"synthetic-{Guid.NewGuid():N}.t64");
+        await File.WriteAllBytesAsync(sourcePath, source, ct);
+        string? convertedPath = null;
+        try
+        {
+            await using var host = await C64MediaTestHost.StartAsync(ct);
+            using var client = new GrpcHostProtocolClient(host.Endpoint);
+            Assert.True((await client.GetStatusAsync(ct)).Status.IsSuccess);
+            var originalSessionId = client.SessionId;
+            var panel = new AttachPanelViewModel(client);
+            var launcher = new AvaloniaGameLauncher(new ShellViewModel(client, panel));
+
+            var outcome = await launcher.LaunchAsync(
+                new AcquiredGame(sourcePath, "Synthetic.t64", MediaKind.Tape), MediaSlot.Drive8, autostart, ct);
+            var slot = panel.Slots.Single(item => item.Slot == MediaSlot.Drive8);
+            convertedPath = slot.FilePath;
+
+            Assert.True(outcome.Success, outcome.Message);
+            Assert.True(slot.TrueDrive);
+            Assert.True(slot.IsAttached);
+            Assert.Equal(sourcePath, Assert.Single(slot.RecentFiles));
+            Assert.NotEqual(sourcePath, convertedPath);
+            Assert.Equal(".d64", Path.GetExtension(convertedPath));
+            Assert.NotEmpty(client.SessionId);
+            Assert.NotEqual(originalSessionId, client.SessionId);
+            Assert.False(host.Registry.TryGet(originalSessionId, out _));
+            Assert.True(host.Registry.TryGet(client.SessionId, out var session));
+            Assert.IsType<CoordinatorMachine>(session.Machine);
+            lock (session.SyncRoot)
+            {
+                Assert.Equal(convertedPath, session.MediaAttachments[MediaSlot.Drive8].FilePath);
+                Assert.True(session.MediaAttachments[MediaSlot.Drive8].AppliedToRuntime);
+                Assert.Equal(autostart, session.HostKeyboardAutomation is not null);
+            }
+            var disk = new D64FileSystem(new D64Image(await File.ReadAllBytesAsync(convertedPath, ct)));
+            Assert.True(disk.TryFindFile("*"u8, out var entry));
+            Assert.Equal(new byte[] { 0x01, 0x08 }.Concat(program), disk.ReadFileStream(entry.StartTrack, entry.StartSector));
+            Assert.Equal(source, await File.ReadAllBytesAsync(sourcePath, ct));
+        }
+        finally
+        {
+            if (!string.IsNullOrEmpty(convertedPath) && convertedPath != sourcePath)
+                File.Delete(convertedPath);
+            File.Delete(sourcePath);
+        }
+    }
+
+    /// <summary>
+    /// FR-ROMM-LAUNCH-001 / FR-DRVTRUE-001: recreation uses the host's converted
+    /// D64 path while the user's original T64 remains the recent-file entry.
+    /// </summary>
+    [Fact]
+    public async Task AttachAsync_ConvertedT64_RecreatesFromD64AndRemembersSource()
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        var source = Path.Combine(Path.GetTempPath(), $"source-{Guid.NewGuid():N}.t64");
+        var converted = Path.ChangeExtension(source, ".d64");
+        host.AttachMediaAsync(MediaSlot.Drive8, source, Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<AttachMediaResponse>(new AttachMediaResponse(RpcStatus.Ok(),
+                new MediaAttachmentDto(MediaSlot.Drive8, converted, "Synthetic.t64", true, true, true))));
+        var panel = new AttachPanelViewModel(host);
+        var slot = panel.Slots.Single(item => item.Slot == MediaSlot.Drive8);
+
+        await panel.AttachAsync(slot, source, TestContext.Current.CancellationToken);
+
+        Assert.True(slot.IsAttached);
+        Assert.Equal(converted, slot.FilePath);
+        Assert.Equal(source, Assert.Single(slot.RecentFiles));
+        Assert.Contains("Synthetic.t64", slot.StatusText);
+        await host.Received(1).SetTrueDriveAsync(true, 8, converted, Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// FR-ROMM-LAUNCH-001 / AC-LAUNCH-06: malformed media after a successful
+    /// attachment must report its error instead of starting the previous disk.
+    /// A later valid attachment must clear the error and launch successfully.
+    /// </summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Launch_MalformedAfterAttachment_ReturnsErrorAndAllowsRetry(bool autostart)
+    {
+        var host = Substitute.For<IHostProtocolClient>();
+        var path = Path.Combine(Path.GetTempPath(), $"synthetic-{Guid.NewGuid():N}.t64");
+        var disk = Path.ChangeExtension(path, ".d64");
+        var valid = new AttachMediaResponse(RpcStatus.Ok(),
+            new MediaAttachmentDto(MediaSlot.Drive8, disk, "Synthetic.t64", true, true, true));
+        host.AttachMediaAsync(MediaSlot.Drive8, path, Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<AttachMediaResponse>(valid),
+                new ValueTask<AttachMediaResponse>(new AttachMediaResponse(
+                    RpcStatus.InvalidArgument("T64 directory is truncated."), null)),
+                new ValueTask<AttachMediaResponse>(valid));
+        host.ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>())
+            .Returns(new ValueTask<EmulatorCommandResponse>(new EmulatorCommandResponse(RpcStatus.Ok(), null)));
+        var panel = new AttachPanelViewModel(host);
+        var shell = new ShellViewModel(host, panel);
+        var ct = TestContext.Current.CancellationToken;
+        Assert.True((await shell.AttachFileAsync(MediaSlot.Drive8, path, ct)).IsSuccess);
+
+        var failed = autostart
+            ? await shell.DropAndStartFileAsync(path, ct)
+            : await shell.AttachFileAsync(MediaSlot.Drive8, path, ct);
+
+        Assert.False(failed.IsSuccess);
+        Assert.Contains("truncated", failed.Message);
+        await host.DidNotReceive().ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
+        Assert.True((await shell.DropAndStartFileAsync(path, ct)).IsSuccess);
+        await host.Received(1).ResetAndAutostartDrive8Async(Arg.Any<CancellationToken>());
+        Assert.False(panel.Slots.Single(item => item.Slot == MediaSlot.Drive8).HasValidationError);
+    }
+
     /// <summary>
     /// FR: FR-Host-UI-Boundary, TR: TR-MVVM-001
     /// (BACKFILL-HOSTUI-001 AttachPanelViewModel).

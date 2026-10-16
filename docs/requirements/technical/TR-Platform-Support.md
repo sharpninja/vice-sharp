@@ -6,7 +6,7 @@
 |----------------|--------------------------------|
 | Quality Area   | Portability                    |
 | Version        | 0.1.0-draft                    |
-| Last Updated   | 2026-07-08                     |
+| Last Updated   | 2026-10-15                     |
 
 ---
 
@@ -33,10 +33,11 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
    - `linux-x64`, `linux-arm64`
    - `osx-x64`, `osx-arm64`
 3. **Platform Abstraction Layer:**
-   - `IAudioOutput`: Platform-specific audio output (WASAPI on Windows, PulseAudio/ALSA on Linux, CoreAudio on macOS).
+   - `IAudioBackend`: Platform-specific audio output (WinMM on Windows and SDL2 on Linux). A macOS live-output backend remains pending.
    - `IVideoOutput`: Platform-specific window/surface management.
    - `IInputSource`: Platform-specific input device enumeration and event handling.
 4. **Native Dependency Discovery:**
+   - Linux desktop audio uses the SDL2 ABI (`libSDL2-2.0.so.0`) behind `IAudioBackend`, with 44.1 kHz mono PCM16 and bounded device-queue back-pressure. `AudioBackendFactory` preserves the explicit `VICESHARP_AUDIO` opt-in for headless hosts and returns no backend when initialization fails. Device failure releases pending writes and falls back to non-audio pacing. This Linux implementation does not establish macOS live-audio support.
    - The external `ffmpeg` executable is discovered per-platform via `PATH` or `VICESHARP_FFMPEG` (no native library loading; see TR-MEDIA-001).
    - SIMD capability detection uses `System.Runtime.Intrinsics` which is platform-aware.
 5. **File System:**
@@ -48,16 +49,17 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 ### Acceptance Criteria
 
 1. The emulation core library (`ViceSharp.Core`) compiles and runs on all 6 target RIDs without conditional compilation (`#if`).
-2. The CI pipeline (Azure DevOps `VICE-Sharp-CI` on the self-hosted `Default` pool, Windows) builds and tests every push; a multi-OS CI matrix (Ubuntu x64, macOS ARM64) is future work.
+2. Build and test validation uses the operator-run Nuke gates defined by TR-BUILD-001, with retained evidence for each tested platform. GitHub `origin` is the source of truth; Azure DevOps is retired. Automated multi-OS CI remains future work.
 3. Release publish succeeds on all supported target RIDs.
 4. Audio output plays correctly on all three OS platforms (verified by manual testing and automated A/V sync tests).
 5. Input devices (keyboard, gamepad) are recognized on all platforms.
 6. The Lorenz test suite passes on all platforms (same pass rate).
 7. No `PlatformNotSupportedException` is thrown during normal operation on any supported platform.
+8. Linux audio tests use an injected device to verify PCM order, gain/mute, queue capacity, lifecycle interruption and failure without playing sound. A separate local smoke check verifies the actual installed library/device path. User-local installation never installs native system packages.
 
 ### Verification Method
 
-- Azure DevOps pipelines (`VICE-Sharp-CI` / `VICE-Sharp-Release`) on the self-hosted `Default` pool (Windows). No GitHub Actions workflows exist; a multi-platform CI matrix remains future work.
+- Operator-run Nuke build/test gates from the GitHub-backed repository, with exact commands, platform details, logs and pass/fail/skip counts. Historical Azure pipeline files are not active validation; no multi-platform CI coverage is claimed.
 - Cross-platform integration tests running a subset of the Lorenz test suite.
 - Release publish smoke test on each target RID.
 
@@ -70,6 +72,6 @@ The Commodore 64 community spans all major desktop platforms. A library-first de
 ### Design Decisions
 
 - The core library targets `net10.0` without any `-windows`, `-linux`, or `-macos` suffix.
-- Platform-specific audio/video/input implementations are in separate assemblies (e.g., `ViceSharp.Platform.Windows`, `ViceSharp.Platform.Linux`, `ViceSharp.Platform.MacOS`).
-- The platform assembly is selected at application startup via a factory, not compile-time conditionals.
+- Desktop audio implementations live in `ViceSharp.Host.InProcess` behind the shared `IAudioBackend` abstraction.
+- `AudioBackendFactory` selects the Windows or Linux audio implementation at runtime when audio is enabled; unavailable Linux output falls back to silent emulation.
 - ARM64 Windows (Surface Pro X, Snapdragon laptops) is a supported target from the start.

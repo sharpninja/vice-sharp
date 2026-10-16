@@ -27,13 +27,27 @@ public sealed class AvaloniaGameLauncher : IGameLauncher
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        // Stay on the UI SynchronizationContext: DropAndStart/Attach update AttachPanelView
-        // controls. ConfigureAwait(false) caused InvalidOperationException (cross-thread) on
-        // attach + autoplay after gRPC resumed on a thread-pool thread.
-        RpcStatus status = autostart
-            ? await _target.DropAndStartFileAsync(game.LocalPath, cancellationToken).ConfigureAwait(true)
-            : await _target.AttachFileAsync(slot, game.LocalPath, cancellationToken).ConfigureAwait(true);
+        try
+        {
+            // Stay on the UI SynchronizationContext: DropAndStart/Attach update AttachPanelView
+            // controls. ConfigureAwait(false) caused InvalidOperationException (cross-thread) on
+            // attach + autoplay after gRPC resumed on a thread-pool thread.
+            RpcStatus status = autostart
+                ? await _target.DropAndStartFileAsync(game.LocalPath, cancellationToken).ConfigureAwait(true)
+                : await _target.AttachFileAsync(slot, game.LocalPath, cancellationToken).ConfigureAwait(true);
 
-        return new LaunchOutcome(status.IsSuccess, status.Message);
+            return new LaunchOutcome(status.IsSuccess, status.Message);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            return new LaunchOutcome(false, "Launch canceled.");
+        }
+        catch (Exception ex)
+        {
+            // FR-ROMM-LAUNCH-001 / AC-LAUNCH-06: host/media failures must not escape
+            // an async UI event handler and terminate the desktop application.
+            string action = autostart ? "Launch" : "Attach";
+            return new LaunchOutcome(false, $"{action} failed for {game.FileName}: {ex.Message}");
+        }
     }
 }

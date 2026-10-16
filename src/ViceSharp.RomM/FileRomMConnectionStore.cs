@@ -20,11 +20,25 @@ public sealed class FileRomMConnectionStore : IRomMConnectionStore
 
     private static readonly byte[] Entropy = Encoding.UTF8.GetBytes("ViceSharp.RomM.Connection.v1");
     private readonly string _path;
+    private readonly Func<string, string> _protectToken;
+    private readonly Func<string, string> _unprotectToken;
 
     /// <summary>Creates the store.</summary>
     /// <param name="path">The file path where protected connection metadata is persisted.</param>
-    public FileRomMConnectionStore(string path) =>
+    public FileRomMConnectionStore(string path)
+        : this(path, Protect, Unprotect)
+    {
+    }
+
+    internal FileRomMConnectionStore(
+        string path,
+        Func<string, string> protectToken,
+        Func<string, string> unprotectToken)
+    {
         _path = string.IsNullOrWhiteSpace(path) ? throw new ArgumentException("Path is required.", nameof(path)) : path;
+        _protectToken = protectToken ?? throw new ArgumentNullException(nameof(protectToken));
+        _unprotectToken = unprotectToken ?? throw new ArgumentNullException(nameof(unprotectToken));
+    }
 
     /// <inheritdoc />
     public async Task<RomMConnection?> LoadAsync(CancellationToken cancellationToken = default)
@@ -41,7 +55,7 @@ public sealed class FileRomMConnectionStore : IRomMConnectionStore
             StoredRomMConnection? stored = JsonSerializer.Deserialize(json, StoredInfo);
             return stored is null
                 ? null
-                : new RomMConnection(stored.BaseUrl, stored.AuthMode, Unprotect(stored.ProtectedToken), stored.Username);
+                : new RomMConnection(stored.BaseUrl, stored.AuthMode, _unprotectToken(stored.ProtectedToken), stored.Username);
         }
 
         // Secure migration for the pre-protection shape. Rewriting completes before the
@@ -70,7 +84,7 @@ public sealed class FileRomMConnectionStore : IRomMConnectionStore
         var stored = new StoredRomMConnection(
             connection.BaseUrl,
             connection.AuthMode,
-            Protect(connection.Token),
+            _protectToken(connection.Token),
             connection.Username);
         string json = JsonSerializer.Serialize(stored, StoredInfo);
         string temp = _path + "." + Guid.NewGuid().ToString("N") + ".tmp";

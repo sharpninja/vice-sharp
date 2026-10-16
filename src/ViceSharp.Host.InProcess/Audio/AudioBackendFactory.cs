@@ -4,27 +4,37 @@ namespace ViceSharp.Host.Audio;
 
 /// <summary>
 /// Creates the platform-default real-time audio backend for live SID playback,
-/// or null when no real-time output is available (non-Windows hosts and
-/// headless/test contexts fall back to silent emulation). The returned backend
+/// or null when no real-time output is available. Windows uses WinMM; Linux
+/// uses SDL2. Headless/test contexts fall back to silent emulation. The returned backend
 /// is wired into the SID at machine-build time; when it is null the SID never
 /// touches the audio path.
 /// </summary>
 public static class AudioBackendFactory
 {
     public static IAudioBackend? CreateDefault()
+        => SelectBackend(IsAudioEnabled(), OperatingSystem.IsWindows(), OperatingSystem.IsLinux(),
+            CreateWindowsBackend, LinuxSdlAudioBackend.TryCreate);
+
+    internal static IAudioBackend? SelectBackend(bool enabled, bool windows, bool linux,
+        Func<IAudioBackend?> createWindows, Func<IAudioBackend?> createLinux)
     {
         // Opt-in: only the interactive app enables live audio (it sets
         // VICESHARP_AUDIO=1 at startup). Test/headless contexts leave the
         // variable unset and run silently, so the suite never opens an audio
         // device. Users can force-disable with VICESHARP_AUDIO=0.
-        if (!IsAudioEnabled())
+        if (!enabled)
             return null;
 
-        if (OperatingSystem.IsWindows())
-            return new WinMmAudioBackend();
+        if (windows)
+            return createWindows();
+        if (linux)
+            return createLinux();
 
         return null;
     }
+
+    private static IAudioBackend? CreateWindowsBackend() => OperatingSystem.IsWindows()
+        ? new WinMmAudioBackend() : null;
 
     /// <summary>
     /// The shared VICESHARP_AUDIO opt-in gate. Exposed to the assembly so the

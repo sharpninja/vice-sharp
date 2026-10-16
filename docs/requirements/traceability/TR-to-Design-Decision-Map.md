@@ -27,16 +27,21 @@ This map links Technical Requirements to Vice-Sharp architecture decisions and s
 
 ---
 
-## TR-BUILD-001: Nuke Build System with Dual CI/CD Pipelines
+## TR-BUILD-001: Nuke Build System with GitHub origin
 
 | Decision ID | Decision |
 |-------------|----------|
 | DD-BLD-001 | Build/test validation uses the solution and repository conventions. |
+| DD-BLD-002 | `PackYay` publishes only the Avalonia project in self-contained Release form and creates a local Arch package with `makepkg`; installation and AUR publication remain separate actions. |
+| DD-BLD-003 | `DeployUser` installs self-contained Release payloads only below the user's home, retains earlier releases and data, and activates atomically. `DeployYay` is a compatibility alias; neither target invokes a package manager or sudo, or modifies an existing system installation. |
 
 **Architecture Sources**
 
 - `docs/Architecture.md`
 - `docs/requirements/technical/TR-Build-System.md`
+- `build/Build.Yay.cs`; `build/UserLocalDeployment.cs`; `packaging/arch/PKGBUILD.in`
+- `tests/packaging/Verify-ArchPackage.ps1` (package metadata, runtime, launchers, permissions, notices, and source checksum validation)
+- `TR-BUILD-001` deployment verification uses `UserLocalDeploymentTests` and `tests/packaging/Verify-DeployYay.ps1` for isolated payloads, actual desktop launch, path guards, retained data/releases and failed-update recovery. Real deployment compares the existing system package before and after without changing it.
 
 ---
 
@@ -167,6 +172,7 @@ This map links Technical Requirements to Vice-Sharp architecture decisions and s
 | Decision ID | Decision |
 |-------------|----------|
 | DD-PLAT-001 | Supported shell/core targets remain Windows/Linux/macOS on x64/ARM64. |
+| DD-PLAT-002 | Linux desktop audio uses SDL2 queued PCM behind `IAudioBackend`, with bounded back-pressure, shared master gain, lifecycle interruption and unavailable-device pacing fallback. Unit tests inject a device; installed-device evidence is separate. User-local deployment does not install system audio dependencies. |
 
 **Architecture Sources**
 

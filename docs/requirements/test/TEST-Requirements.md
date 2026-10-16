@@ -74,9 +74,12 @@ Raster timing, display modes, sprites, collisions, badlines, borders, FLI/AFLI, 
 
 Oscillator, waveform, filter, ADSR, modulation, sync, noise, digi, external input, and multi-SID behavior are verified with deterministic audio/register tests.
 
+For Linux host output, fake-device regressions verify platform selection, opt-out/headless silence, ordered PCM conversion, master volume/mute, bounded queues, pause/resume/stop/disposal, and missing or failed devices. Device loss must stop audio-driven pacing without changing SID synthesis. Unit tests do not open a real Linux audio device; installed-device smoke evidence is retained separately.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-SID
+- **Linux output mappings:** FR-SID-013, TR-PLAT-001; `LinuxSdlAudioBackendTests` and `ViceGateSoundRegulatorTests`.
 
 ---
 
@@ -188,6 +191,8 @@ Standard, Ocean, EasyFlash, Action Replay, Retro Replay, and Final Cartridge map
 ### Condition
 
 Keyboard, joystick, mouse, lightpen, paddle, and VICE VKM behavior is verified with parser, matrix, protocol, and machine integration tests.
+
+Desktop packaging verification checks every vendored C64 `.vkm` file in the installable archive against its source content. `BundledKeyboardMapTests` verifies host discovery of the packaged alternate layouts without an external VICE installation and preserves configured data-root priority (FR-INP-006, TR-INPUT-VKM-001).
 
 ### Traceability
 
@@ -417,9 +422,13 @@ Sidebar, status bar, attach panel, settings, keyboard map selection, monitor doc
 
 Resource files, ROM/romset selection, palettes, hotkeys, autostart, peripherals, RAM init, debug resources, and limiter settings are verified with configuration and host service tests.
 
+Desktop C64 bootstrap coverage verifies complete local-set reuse, configured-root precedence over the per-user cache, acquisition of only missing default ROMs, canonical filenames, pinned-hash rejection, offline cache reuse, and actionable acquisition failure/cancellation. Startup coverage verifies a ROM-backed C64 with video after provisioning and no silent minimal-machine fallback. Generic/headless factories and remote-host connections must not trigger local downloads; UI/runtime boundary tests remain applicable.
+
 ### Traceability
 
 - **Related FR Area(s):** FR-CFG
+- **Related FR:** FR-CFG-002
+- **Related TRs:** TR-LIB-001, TR-MVVM-001
 
 ---
 
@@ -530,7 +539,7 @@ Two fresh final-binary RemoteControl passes exercise every applicable VIC-20 Set
 
 ### Condition
 
-`RomMCoverImageSourceTests` verifies anonymous public covers and rejection of absolute authenticated-path inputs. `RomMGatewayDownloadTests` verifies filename containment and that truncated content never publishes a partial cache entry. `FileRomMConnectionStoreTests` verifies current-user DPAPI round-trip and immediate migration of legacy plaintext tokens.
+`RomMCoverImageSourceTests` verifies anonymous public covers and rejection of absolute authenticated-path inputs. `RomMGatewayDownloadTests` verifies filename containment and that truncated content never publishes a partial cache entry. `FileRomMConnectionStoreTests` verifies current-user DPAPI round-trip and immediate migration of legacy plaintext tokens. `LinuxSecretServiceRomMConnectionStoreTests` uses an injected command runner to verify Linux keyring round-trip, secret-free metadata and arguments, unavailable/locked keyring failures, cancellation, legacy migration, atomic replacement rollback, and successful replacement despite old-item cleanup failure. Deployment validation additionally performs a real Secret Service round-trip without logging credential values.
 
 ### Traceability
 

@@ -6,6 +6,7 @@ namespace ViceSharp.RomFetch;
 public class RomProvider : IRomProvider
 {
     private readonly IReadOnlyList<string> _romBasePaths;
+    private readonly HttpClient? _httpClient;
 
     public string RomBasePath { get; }
 
@@ -15,8 +16,21 @@ public class RomProvider : IRomProvider
     }
 
     public RomProvider(string romBasePath, IEnumerable<string> fallbackRomBasePaths)
+        : this(romBasePath, fallbackRomBasePaths, null)
+    {
+    }
+
+    /// <summary>
+    /// FR-CFG-002: resolves ROMs from configured roots and optionally uses a
+    /// caller-owned HTTP client for verified downloads.
+    /// </summary>
+    /// <param name="romBasePath">Primary root and destination for downloaded ROMs.</param>
+    /// <param name="fallbackRomBasePaths">Additional roots searched for existing ROMs.</param>
+    /// <param name="httpClient">Optional download client; the caller retains ownership.</param>
+    public RomProvider(string romBasePath, IEnumerable<string> fallbackRomBasePaths, HttpClient? httpClient)
     {
         RomBasePath = romBasePath;
+        _httpClient = httpClient;
         Directory.CreateDirectory(RomBasePath);
         _romBasePaths = new[] { RomBasePath }
             .Concat(fallbackRomBasePaths.Where(path => !string.IsNullOrWhiteSpace(path)))
@@ -43,13 +57,11 @@ public class RomProvider : IRomProvider
 
     public async Task<ReadOnlyMemory<byte>> DownloadRom(string romName, string architecture, CancellationToken cancellationToken)
     {
-        var archPath = Path.Combine(RomBasePath, architecture);
-        Directory.CreateDirectory(archPath);
-        var path = Path.Combine(archPath, romName);
+        cancellationToken.ThrowIfCancellationRequested();
 
-        if (IsAvailable(romName, architecture))
+        if (TryResolvePath(romName, architecture, out var availablePath) && VerifyHash(availablePath, romName))
         {
-            return await File.ReadAllBytesAsync(path, cancellationToken);
+            return await File.ReadAllBytesAsync(availablePath, cancellationToken).ConfigureAwait(false);
         }
 
         if (!RomDatabase.TryGetValue(romName, out var entry))
@@ -57,17 +69,24 @@ public class RomProvider : IRomProvider
             throw new InvalidOperationException($"Unknown ROM: {romName}");
         }
 
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("ViceSharp/1.0");
+        using var ownedClient = _httpClient is null ? new HttpClient() : null;
+        var client = _httpClient ?? ownedClient!;
+        using var request = new HttpRequestMessage(HttpMethod.Get, entry.Url);
+        request.Headers.UserAgent.ParseAdd("ViceSharp/1.0");
 
-        var data = await client.GetByteArrayAsync(entry.Url, cancellationToken);
+        using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+        var data = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
         
         if (!SHA256.HashData(data).AsSpan().SequenceEqual(entry.Sha256))
         {
             throw new InvalidOperationException($"ROM hash verification failed for {romName}");
         }
 
-        await File.WriteAllBytesAsync(path, data, cancellationToken);
+        var archPath = Path.Combine(RomBasePath, architecture);
+        Directory.CreateDirectory(archPath);
+        var path = Path.Combine(archPath, romName);
+        await File.WriteAllBytesAsync(path, data, cancellationToken).ConfigureAwait(false);
         return data;
     }
 
@@ -146,6 +165,15 @@ public class RomProvider : IRomProvider
             "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/VIC20/chargen-901460-03.bin",
             Convert.FromHexString("BDA280726CFE069CA70EF5E2F2D95A29F69D3950C859A12E6979464963FCF502")),
     };
+
+    static RomProvider()
+    {
+        // FR-CFG-002: desktop startup writes the same canonical names consumed by
+        // C64RomSet. Share the pinned entries with the existing short download keys.
+        RomDatabase["basic-901226-01.bin"] = RomDatabase["basic"];
+        RomDatabase["kernal-901227-03.bin"] = RomDatabase["kernal"];
+        RomDatabase["chargen-901225-01.bin"] = RomDatabase["characters"];
+    }
 
     private sealed record RomEntry(string Url, byte[] Sha256);
 }

@@ -253,7 +253,7 @@ public sealed class Mos6561 : IVideoChip, IAudioChip, IAddressSpace, IInterruptS
     public int QueuedSampleCount => _audioBackend?.QueuedSampleCount ?? 0;
     public int AvailableSampleCount => _audioBackend?.AvailableSampleCount ?? int.MaxValue;
     public int AudioFragmentSampleCount => _audioSampleBuffer.Length;
-    public bool IsAudioTimingSource => _audioBackend is not null;
+    public bool IsAudioTimingSource => _audioBackend is { IsAvailable: true };
 
     public float GenerateSample() => _lastAudioSample / 32768.0f;
 

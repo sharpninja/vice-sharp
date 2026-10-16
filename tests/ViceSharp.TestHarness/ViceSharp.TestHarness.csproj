@@ -68,7 +68,10 @@
   <Target Name="BuildViceNative"
           BeforeTargets="Build"
           Condition="'$(DesignTimeBuild)' != 'true' and Exists('$(ViceNativeProject)')">
-    <MSBuild Projects="$(ViceNativeProject)" Targets="BuildNative" />
+    <!-- The hosted oracle uses Win32 APIs; managed tests do not require its build on Unix. -->
+    <MSBuild Projects="$(ViceNativeProject)" Targets="BuildNative" Condition="'$(OS)' == 'Windows_NT'" />
+    <Message Condition="'$(OS)' != 'Windows_NT'" Importance="high"
+             Text="The native VICE oracle build is Windows-only; building the managed test harness." />
   </Target>
 
 </Project>

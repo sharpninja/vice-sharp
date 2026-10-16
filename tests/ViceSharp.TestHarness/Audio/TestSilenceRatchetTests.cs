@@ -3,6 +3,7 @@ namespace ViceSharp.TestHarness.Audio;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Xunit;
 
 /// <summary>
@@ -15,8 +16,68 @@ using Xunit;
 /// fixtures remain as harmless nesting for single-class runs.
 /// </summary>
 [Trait("Category", "Xbox")]
-public sealed class TestSilenceRatchetTests
+public sealed partial class TestSilenceRatchetTests
 {
+    /// <summary>TR-QA-TESTSILENCE-001: native SDL must see a dummy driver before any Linux device test.</summary>
+    [Fact]
+    public void LinuxAssemblyFixture_SelectsDummyInManagedAndNativeEnvironment()
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            foreach (string name in new[] { "SDL_AUDIODRIVER", "SDL_AUDIO_DRIVER" })
+            {
+                Assert.Equal("dummy", Environment.GetEnvironmentVariable(name));
+                Assert.Equal("dummy", Marshal.PtrToStringUTF8(GetNativeEnvironment(name)));
+            }
+        }
+        else
+        {
+            Assert.Contains(typeof(TestSilenceRatchetTests).Assembly.GetCustomAttributes(typeof(AssemblyFixtureAttribute), false),
+                value => ((AssemblyFixtureAttribute)value).AssemblyFixtureType == typeof(AssemblyAudioSilence));
+        }
+    }
+
+    /// <summary>TR-QA-TESTSILENCE-001: a nested guard restores distinct prior managed/native values exactly.</summary>
+    [Fact]
+    public void LinuxFixture_RestoresPriorDriverValuesOnDispose()
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            const string name = "SDL_AUDIODRIVER";
+            string? managed = Environment.GetEnvironmentVariable(name);
+            string? native = Marshal.PtrToStringUTF8(GetNativeEnvironment(name));
+            try
+            {
+                Environment.SetEnvironmentVariable(name, "prior-managed-driver");
+                Assert.Equal(0, SetNativeEnvironment(name, "prior-native-driver", 1));
+                var nested = new AssemblyAudioSilence();
+                Assert.Equal("dummy", Environment.GetEnvironmentVariable(name));
+                Assert.Equal("dummy", Marshal.PtrToStringUTF8(GetNativeEnvironment(name)));
+                nested.Dispose();
+                nested.Dispose();
+                Assert.Equal("prior-managed-driver", Environment.GetEnvironmentVariable(name));
+                Assert.Equal("prior-native-driver", Marshal.PtrToStringUTF8(GetNativeEnvironment(name)));
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable(name, managed);
+                Assert.Equal(0, native is null ? UnsetNativeEnvironment(name) : SetNativeEnvironment(name, native, 1));
+            }
+        }
+        else
+        {
+            using var nested = new AssemblyAudioSilence();
+            Assert.NotNull(nested);
+        }
+    }
+
+    [LibraryImport("libc", EntryPoint = "getenv", StringMarshalling = StringMarshalling.Utf8)]
+    private static partial IntPtr GetNativeEnvironment(string name);
+    [LibraryImport("libc", EntryPoint = "setenv", StringMarshalling = StringMarshalling.Utf8)]
+    private static partial int SetNativeEnvironment(string name, string value, int overwrite);
+    [LibraryImport("libc", EntryPoint = "unsetenv", StringMarshalling = StringMarshalling.Utf8)]
+    private static partial int UnsetNativeEnvironment(string name);
+
     [Fact]
     public void EveryRealAudioDeviceTestClass_AttachesTheMuteFixture()
     {

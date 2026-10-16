@@ -28,6 +28,7 @@ ViceSharp machine keyboard input shall resolve normalized host key events throug
 3. Custom uploaded keymaps are validated before becoming active.
 4. The machine keyboard translator is abstracted so other machine profiles can provide different matrix/key handling.
 5. Real-time key state changes update CIA keyboard matrix lines through machine input abstractions, not UI runtime references.
+6. The desktop publishes the shared vendored C64 keymaps under `data/C64`. The data resolver searches this application-relative directory after configured VICE roots and the per-user ROM cache.
 
 ### Acceptance Criteria
 
@@ -41,6 +42,7 @@ ViceSharp machine keyboard input shall resolve normalized host key events throug
 - VKM parser unit tests with VICE C64 maps.
 - Input integration tests against C64 keyboard matrix/CIA behavior.
 - gRPC input service tests for selected-map behavior.
+- `BundledKeyboardMapTests` for application-relative discovery and `tests/packaging/Verify-ArchPackage.ps1` for complete, unmodified VKM payloads in the Linux installation archive.
 
 ### Architecture Sources
 

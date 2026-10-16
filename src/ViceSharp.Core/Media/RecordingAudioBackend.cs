@@ -38,6 +38,9 @@ public sealed class RecordingAudioBackend : IAudioBackend
         _scratch = new short[scratchSize];
     }
 
+    /// <summary>Playback pacing is available only while the downstream device is usable.</summary>
+    public bool IsAvailable => _downstream?.IsAvailable ?? false;
+
     /// <inheritdoc/>
     public int QueuedSampleCount => _downstream?.QueuedSampleCount ?? 0;
 

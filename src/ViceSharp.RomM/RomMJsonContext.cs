@@ -23,6 +23,7 @@ namespace ViceSharp.RomM;
 [JsonSerializable(typeof(RomMBridgeIngestResponse))]
 [JsonSerializable(typeof(RomMConnection))]
 [JsonSerializable(typeof(StoredRomMConnection))]
+[JsonSerializable(typeof(LinuxStoredRomMConnection))]
 [JsonSerializable(typeof(CoverRef))]
 [JsonSerializable(typeof(RecentGame))]
 [JsonSerializable(typeof(List<RecentGame>))]
