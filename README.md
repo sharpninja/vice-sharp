@@ -130,6 +130,7 @@ build.cmd Compile     # Windows
 | `Compile` | Build with TreatWarningsAsErrors |
 | `Test` | Run tests with filter `Category!=Determinism&Category!=AiReview&Category!=ParityPending&Category!=ParityLegacy&Category!=Integration` (separate determinism, paid AI, quarantined parity, and external integration gates) |
 | `DeterminismTest` | Run determinism verification tests |
+| `RommDesktopTest` | Run the managed Heads/Library desktop checks without the native harness; `--romm-contract-mocks` selects the contract mock gate |
 | `RunConsole` | Run the console reference shell |
 | `RunAvalonia` | Run the Avalonia desktop UI |
 | `DeployUser` | Publish Release and install the Linux desktop app in the current user's home |
@@ -143,6 +144,27 @@ build.cmd Compile     # Windows
 | `ParityTest` | Run the whole VICE-parity suite (`Category=Parity`), including quarantined `ParityPending` tests (remediation burn-down) |
 | `PackNuget` | Pack the `ViceSharp.Core` bundle and the individual NuGet packages into `artifacts/packages`, verifying package contents |
 | `PublishNuget` | Tag-gated release publish: pack from the tagged checkout and push to nuget.org; requires `NUGET_API_KEY` |
+
+## RomM desktop library
+
+The Avalonia Library tab connects to a RomM server, browses grouped cover tiles,
+searches or jumps by letter, and attaches cached games with optional autostart.
+The tile grid virtualizes off-screen items and retains selection-relative keyboard
+navigation while scrolling. The Collections rail opens the selected collection
+in the Lists tab. See the [RomM guide](src/ViceSharp.RomM/README.md) and
+[desktop validation guide](docs/testing/RomM-Desktop.md) for behavior and scope.
+
+Run the managed desktop checks without invoking the native emulator harness:
+
+```powershell
+./build.ps1 RommDesktopTest --configuration Release --romm-contract-mocks
+./build.ps1 RommDesktopTest --configuration Release
+```
+
+The first command validates contract assertions with mocks and negative controls.
+The second runs Heads and Library tests. On Windows it excludes only the 13
+Linux-only deployment cases approved for this scope. Neither command establishes
+whole-emulator parity or live RomM interoperability.
 
 ## Architecture
 
@@ -198,6 +220,6 @@ Local copies and ShareAlike notes live under `docs/xbox/store-screenshots/` (`Co
 ## Contributing
 
 1. Fork the GitHub repository (`github.com/sharpninja/vice-sharp`)
-2. Follow the Byrd Development Process: tests first, then implementation
+2. Follow BDPv4: cover each acceptance criterion with tests, prove their assertions with correct mocks and expected negative controls in a passing harness, then bind the same cases to production implementation
 3. All tests must pass before submitting a PR
 4. Optional: run the aiUnit AI Code Review / Project Review before a PR (see [docs/AI-Review.md](docs/AI-Review.md))

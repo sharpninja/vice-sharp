@@ -1,4 +1,4 @@
-# Functional Requirements (MCP Server)
+# Functional Requirements (QBrain.AI)
 
 ## FR-AIREVIEW-ROUTING-001 Auditable Astra xhigh AI review routing
 

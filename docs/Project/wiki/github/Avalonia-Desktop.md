@@ -1,0 +1,31 @@
+# ViceSharp.Avalonia
+
+The ViceSharp Avalonia desktop GUI for the Commodore 64, packaged as a .NET global tool.
+
+## What it is
+
+ViceSharp.Avalonia is the cross-platform desktop front end for ViceSharp, a C#/.NET 10 port of the VICE `x64sc` emulator. It boots a full C64 host in-process: attach and detach disk, tape, and cartridge media, drive with True Drive emulation, pause/resume, step and rewind by cycle or frame, cold/warm reset and autostart, and inspect state through the built-in monitor. It also captures screenshots (PNG/BMP), sound (WAV), and video (mp4/mkv/avi via ffmpeg, or a numbered BMP sequence). The UI talks to the emulation core over an in-process gRPC host (ViceSharp.Host / ViceSharp.Protocol), so nothing pokes the chips directly.
+
+## Install
+
+```
+dotnet tool install --global ViceSharp.Avalonia
+```
+
+Then run the tool by its command name:
+
+```
+vicesharp
+```
+
+## Notes
+
+ViceSharp ships no Commodore ROMs. Local desktop startup downloads and verifies the default C64 ROMs when no complete local set is available, then reuses its per-user cache offline. To supply ROMs explicitly, point `VICESHARP_ROM_PATH` at a VICE data root (or put `x64sc.exe` on PATH). Other variants and drive ROMs require separate resources; see the [ROM guide](../../docs/ROMs.md). Live SID audio is on by default; set `VICESHARP_AUDIO=0` to run silently. Muxed video capture requires `ffmpeg` on PATH (or `VICESHARP_FFMPEG`).
+
+The **Library** tab provides a RomM catalog with virtualized cover tiles, grouped variants, search, letter jumps, collections and cached game attachment. See the [RomM guide](../ViceSharp.RomM/README.md) and [managed desktop test commands](../../docs/testing/RomM-Desktop.md). These desktop checks do not establish full C64/VIC-20 parity or canonical VICE snapshot acceptance.
+
+License: GPL-2.0-or-later (derivative of VICE). Part of the ViceSharp project: https://github.com/sharpninja/vice-sharp
+
+### Commodore C= logo (CC BY-SA 4.0)
+
+The Commodore C= logo used in ViceSharp product branding (where present) is from Wikimedia Commons ([Commodore C= logo.svg](https://commons.wikimedia.org/wiki/File:Commodore_C%3D_logo.svg)) by Alien426, licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). See the repository `THIRD_PARTY_NOTICES.md` for full third-party attribution.

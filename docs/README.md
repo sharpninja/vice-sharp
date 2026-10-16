@@ -7,6 +7,7 @@
 - [VICE-MIGRATION.md](VICE-MIGRATION.md) - swap classic VICE for ViceSharp: binary + flag mapping, behaviour caveats, bug compatibility
 - [ROMs.md](ROMs.md) - legal ROM options, environment variable, expected directory layout
 - [RomM Library](../src/ViceSharp.RomM/README.md) - connect, browse, cache and launch library images, with platform credential storage
+- [Avalonia desktop](../src/ViceSharp.Avalonia/README.md) - desktop tool installation, ROM startup and library entry points
 - [PRIVACY.md](PRIVACY.md) - privacy policy (historical Store listing source; Microsoft Store track cancelled)
 
 ## Archival (cancelled tracks)
@@ -22,6 +23,8 @@ Microsoft Store and Xbox/UWP were removed from product scope (`PLAN-XBOXUWP-END-
 - [PubSub.md](PubSub.md) - Pool, arena, handle lifecycle, refcount, hot-path cost
 
 ## Reference
+
+- [RomM desktop validation](testing/RomM-Desktop.md) - mock-first contract checks, production-bound Heads/Library suites, Windows exclusions and retained evidence
 
 - [ROMs.md](ROMs.md) - Legal ROM options, environment variable setup
 - [ROL.md](ROL.md) - Registry of Lore (122+ entries)

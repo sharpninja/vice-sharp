@@ -16,6 +16,8 @@ navigation:
   - document: vice-migration
   - document: rom-setup
   - document: privacy
+  - document: romm-library
+  - document: avalonia-desktop
   title: Getting Started
   path: Getting-Started
 - children:
@@ -48,6 +50,8 @@ navigation:
   - document: machine-architecture-schema
   - document: cross-platform-wireframes
   - document: desktop-windows-ui
+  - document: romm-desktop-testing
+  - document: documentation-index
   title: Reference
   path: Reference
 - children:
@@ -284,5 +288,23 @@ documents:
   platforms:
   - github
   id: romm-library
+- id: avalonia-desktop
+  title: Avalonia Desktop
+  source: src/ViceSharp.Avalonia/README.md
+  target: Avalonia-Desktop.md
+  platforms:
+  - github
+- id: romm-desktop-testing
+  title: RomM Desktop Validation
+  source: docs/testing/RomM-Desktop.md
+  target: RomM-Desktop-Validation.md
+  platforms:
+  - github
+- id: documentation-index
+  title: Documentation Index
+  source: docs/README.md
+  target: Documentation-Index.md
+  platforms:
+  - github
 home:
   document: home

@@ -1,4 +1,4 @@
-# Technical Requirements (MCP Server)
+# Technical Requirements (QBrain.AI)
 
 ## TR-AIREVIEW-ROUTING-001
 

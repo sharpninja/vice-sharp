@@ -1,4 +1,4 @@
-# Requirements Matrix (MCP Server)
+# Requirements Matrix (QBrain.AI)
 
 Traceability policy: see `Requirements-Traceability-Policy.md`.
 

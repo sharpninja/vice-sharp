@@ -1,4 +1,4 @@
-# Testing Requirements (MCP Server)
+# Testing Requirements (QBrain.AI)
 
 ## TEST-AIREVIEW-ROUTING
 

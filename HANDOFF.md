@@ -1,5 +1,16 @@
 # ViceSharp handoff
 
+## 2026-10-16T12:36:10 documentation refresh
+
+The operator requested refresh-docs followed by wrap-up. Current RomM desktop
+guides, test commands and wiki navigation were refreshed. The supported MCP wiki
+export and checks are recorded in
+[the documentation receipt](docs/receipts/docs-refresh/20261016T123233/README.md).
+No further HV, requirement application, product code or native VICE edits were
+performed. R0 remains paused. The receipt records the exporter-relative-link
+limitation and failed Nuke help probe without hiding either behind the successful
+46-test mock command. Commit and origin push results are recorded in the MCP turn.
+
 ## 2026-10-16T12:07:39 operational update
 
 The later operator request authorizes integrating the remaining non-Xbox RomM work,

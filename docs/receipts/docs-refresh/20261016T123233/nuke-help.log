@@ -1,0 +1,77 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 10.1.0 (Windows,.NETCoreApp,Version=v10.0)
+​
+Targets (with their direct dependencies):
+
+  CiGitHub             -> Clean, Restore, Compile, Test, DeterminismTest
+    Full GitHub Actions CI pipeline
+  CiAzure              -> Clean, Restore, Compile, Test, DeterminismTest
+    Full Azure DevOps CI pipeline
+  Commit              
+    Stage changes and create a git commit
+  SyncAzure           
+    Retired: Azure DevOps is not used. Do not push azure.
+  SyncGithub          
+    Push current branch to origin (GitHub; primary for CI/release)
+  RebuildAzure        
+    Trigger a full rebuild on Azure DevOps pipeline (no commit)
+  RebuildGithub       
+    Trigger a full rebuild on GitHub Actions (no commit)
+  Clean               
+  Restore             
+  Compile (default)    -> Restore
+  GitCommit            -> Compile
+  Test                 -> Compile
+  CiTest              
+  DeterminismTest      -> Compile
+  ParityTest           -> Compile
+  PackNuget            -> Compile
+  PublishNuget        
+  RomFetch            
+  Pack                 -> Compile
+  RunConsole           -> Compile
+  RunAvalonia          -> Compile
+  PublishWiki         
+  PublishGitHubRelease
+    Create/update the GitHub release for the HEAD vX.Y.Z tag with the MSI + NuGet packages.
+  DeployXboxLocal     
+  ValidateStorePackage
+  PublishMsi           -> Restore
+  InstallMsi           -> PublishMsi
+  PublishWinget        -> PublishGitHubRelease
+  PublishChocolatey    -> PublishGitHubRelease
+  PublishScoop         -> PublishGitHubRelease
+  PublishXbox         
+    DEV-PC/MANUAL (never CI): publish the ViceSharp.Xbox head as a Release Native-AOT MSIX. Requires the windows-app / UWP workload.
+  DeployXbox          
+    DEV-PC/MANUAL (never CI): sideload the ViceSharp.Xbox MSIX to a Dev-Mode console via WinAppDeployCmd. Params: --xbox-console-ip, --xbox-pairing-pin, [--xbox-msix-path].
+  ValidateXbox         -> Compile
+    OFF-CONSOLE, workload-free Xbox gate (plain net10.0 agent): solution build + Category=Xbox tests + Native-AOT link of the ViceSharpXboxUwp=false fallback head.
+  RommDesktopTest     
+    Build and test managed RomM desktop/library projects without the native harness
+  PackYay             
+    Create a self-contained Release desktop package for Arch Linux/yay.
+  DeployUser          
+    Build and install a self-contained Linux desktop release in user space only.
+  DeployYay            -> DeployUser
+    Compatibility alias for DeployUser; installs only in the current user's home.
+
+The handle is invalid.
+​
+═══════════════════════════════════════
+Target             Status      Duration
+───────────────────────────────────────
+Restore            NotRun              
+Compile            NotRun              
+───────────────────────────────────────
+Total                            < 1sec
+═══════════════════════════════════════
+​
+Build failed on 10/16/2026 12:34:12 PM. (╯°□°）╯︵ ┻━┻

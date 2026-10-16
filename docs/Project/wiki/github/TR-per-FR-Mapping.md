@@ -1,4 +1,4 @@
-# TR per FR Mapping (MCP Server)
+# TR per FR Mapping (QBrain.AI)
 
 | FR | Primary TRs | Tests |
 | --- | --- | --- |

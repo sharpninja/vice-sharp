@@ -20,7 +20,9 @@ vicesharp
 
 ## Notes
 
-ViceSharp ships no Commodore ROMs. Point `VICESHARP_ROM_PATH` at a VICE data root (or put `x64sc.exe` on PATH) before launching. Live SID audio is on by default; set `VICESHARP_AUDIO=0` to run silently. Muxed video capture requires `ffmpeg` on PATH (or `VICESHARP_FFMPEG`).
+ViceSharp ships no Commodore ROMs. Local desktop startup downloads and verifies the default C64 ROMs when no complete local set is available, then reuses its per-user cache offline. To supply ROMs explicitly, point `VICESHARP_ROM_PATH` at a VICE data root (or put `x64sc.exe` on PATH). Other variants and drive ROMs require separate resources; see the [ROM guide](../../docs/ROMs.md). Live SID audio is on by default; set `VICESHARP_AUDIO=0` to run silently. Muxed video capture requires `ffmpeg` on PATH (or `VICESHARP_FFMPEG`).
+
+The **Library** tab provides a RomM catalog with virtualized cover tiles, grouped variants, search, letter jumps, collections and cached game attachment. See the [RomM guide](../ViceSharp.RomM/README.md) and [managed desktop test commands](../../docs/testing/RomM-Desktop.md). These desktop checks do not establish full C64/VIC-20 parity or canonical VICE snapshot acceptance.
 
 License: GPL-2.0-or-later (derivative of VICE). Part of the ViceSharp project: https://github.com/sharpninja/vice-sharp
 

@@ -8,6 +8,14 @@ In the Avalonia **Library** tab, enter the RomM URL and **Client API token**, th
 
 Download, attachment, and session-creation failures become visible Library status messages. A rejected disk can be corrected or replaced and retried without restarting the app. T64 archives use a separate converted D64 for True Drive session recreation; the original archive and recent-file identity are preserved. See the [desktop user guide](../../docs/USER-GUIDE.md#6c-romm-library) for the user workflow and [Linux installation](../../README.md#linux-install-for-your-user) for user-local deployment.
 
+The desktop grid uses virtualized cover tiles, grouped variants, letter jumps and 60-record paging. A selected group's primary ROM supplies details and attachment. Page-boundary variants update the existing tile without clearing selection. Keyboard navigation remains relative to the selected tile after scrolling. Selecting a collection in the Library rail opens and selects the same collection in Lists, including repeat selections.
+
+`LibraryCoverImage` owns its displayed bitmap and cancels stale loads on replacement or visual detachment. One `AvaloniaCoverImageLoader` and shared byte cache belong to each successful browse connection, survive tab switches, and are disposed on replacement or window close. The loader uses the connected URL/token, not uncommitted edits in the connection form. Stale detail or collection responses cannot replace the current selection after a newer request.
+
+## Desktop validation
+
+Use Nuke `RommDesktopTest` for the managed Heads and Library suites, and add `--romm-contract-mocks` for the pre-implementation mock gate. See [commands, scope and retained evidence](../../docs/testing/RomM-Desktop.md). These checks do not build or modify native VICE and are not proof of full emulator parity or a live server session.
+
 ## Security and persistence
 
 - Public `url_cover` CDN assets use an anonymous client. Authenticated cover requests accept only server-relative `path_cover_*` paths, preventing bearer-token forwarding to another origin.

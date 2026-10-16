@@ -1,0 +1,45 @@
+{
+  "checkedAtLocal": "2026-10-16T12:33:53",
+  "documents": 41,
+  "localSourceLinksChecked": 72,
+  "zipEntriesCompared": 46,
+  "zipSha256": "72831F7E8276C9167D123D25E74A9C6E1B90C1C71AA89817D9447C6547B0EC77",
+  "requirementBodiesUnchanged": 5,
+  "nativeBaselineFiles": 6374,
+  "nativeHashDifferences": 0,
+  "errors": [],
+  "wikiRelativeLinkLimitation": "triage-report-9af6dae387364ba296240585a2cd3110",
+  "scriptParserErrors": 0,
+  "scriptAnalyzerIssues": 0,
+  "mockCommand": {
+    "command": "./build.ps1 RommDesktopTest --configuration Release --romm-contract-mocks",
+    "exitCode": 0,
+    "total": 46,
+    "passed": 46,
+    "failed": 0,
+    "notExecuted": 0,
+    "receipt": "mock-command-check.trx",
+    "sha256": "79DDA3826BC0DF2A61AC6FEC8995593D69F398CB198062DA9DCEC575792F7F1B"
+  },
+  "nukeHelp": {
+    "exitCode": -1,
+    "error": "The handle is invalid.",
+    "triageReport": "triage-report-02bc9f2423514b57a697af8ad089370e"
+  },
+  "requirements": {
+    "functional": 235,
+    "technical": 139,
+    "tests": 142,
+    "mappings": 747,
+    "created": 0,
+    "updated": 0
+  },
+  "previousWikiFilesRemoved": 0,
+  "sessionId": "Codex-20261007T135626Z-plugin-session",
+  "requestId": "req-20261016T172317Z-turn-0d59",
+  "hv": "Not run: operator no more HV",
+  "warnings": [
+    "Nuke suppressed MSBuild NuGet.Frameworks 7.9.0.0 assembly mismatch during project metadata evaluation. Test command still exited 0.",
+    "Avalonia AVLN5001: SettingsView.axaml TextBox.Watermark obsolete. No source changes in this docs task."
+  ]
+}

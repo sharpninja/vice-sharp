@@ -14,6 +14,8 @@
   - [Migrating from Classic VICE](VICE-Migration)
   - [ROM Setup and Legal Sources](ROM-Setup)
   - [Privacy Policy](Privacy-Policy)
+  - [RomM Library](RomM-Library)
+  - [Avalonia Desktop](Avalonia-Desktop)
 - Architecture
   - [Architecture](Architecture)
   - [Public API Reference](Public-API)
@@ -40,6 +42,8 @@
   - [Ad-Hoc Machine Architecture YAML Schema (v1)](Machine-Architecture-Schema)
   - [Cross-Platform UI Wireframes](Cross-Platform-Wireframes)
   - [Desktop UI Reference (Windows, Avalonia)](Desktop-Windows-UI)
+  - [RomM Desktop Validation](RomM-Desktop-Validation)
+  - [Documentation Index](Documentation-Index)
 - Current Plans
   - [Immutable Native VICE Remediation Plan](Plan-Immutable-Native-VICE)
   - [Native VICE VSF Lockstep Plan](Plan-Native-VICE-VSF-Lockstep)
