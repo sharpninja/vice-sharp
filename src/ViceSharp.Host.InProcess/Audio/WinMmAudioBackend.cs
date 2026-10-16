@@ -59,6 +59,9 @@ public sealed unsafe partial class WinMmAudioBackend : IAudioBackend, IDisposabl
     private bool _paused;
     private bool _disposed;
 
+    /// <inheritdoc />
+    public bool IsAvailable => !Volatile.Read(ref _disabled) && !Volatile.Read(ref _disposed);
+
     public WinMmAudioBackend()
     {
         if (!OperatingSystem.IsWindows())

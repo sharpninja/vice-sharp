@@ -363,6 +363,21 @@ public sealed class SystemClock : IClock
         RebuildDispatchArrays();
     }
 
+    /// <summary>
+    /// Rewinds or advances the master-clock position to a captured value (snapshot restore).
+    /// Cycle-relative interrupt bookkeeping is shifted by the same delta so IRQ delay
+    /// accounting stays consistent with the restored position.
+    /// </summary>
+    /// <param name="cycle">The master cycle recorded at capture time.</param>
+    public void RestoreCycle(long cycle)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(cycle);
+        var delta = cycle - _cycle;
+        _cycle = cycle;
+        if (_irqAssertCycle != long.MaxValue)
+            _irqAssertCycle += delta;
+    }
+
     public void Reset()
     {
         _cycle = 0;

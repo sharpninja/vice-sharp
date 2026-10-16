@@ -323,6 +323,9 @@ public sealed class SettingsServiceHost : ISettingsService
                         "Resource settings were applied by restarting the host session."));
                 }
 
+                // Finalize any active WAV/BMP/ffmpeg capture on the outgoing session; the replacement
+                // has no handle to it, so it would otherwise leak its writer, file, and process.
+                session.EndAllCaptures();
                 _registry.Replace(restarted);
                 restarted.PublishWarpModeStatus();
                 return ValueTask.FromResult(new UpdateSettingsResponse(
@@ -503,11 +506,33 @@ public sealed class SettingsServiceHost : ISettingsService
             }
         }
 
+        // Keep the true-drive topology: a CoordinatorMachine session is a C64 host plus an
+        // emulated 1541, so rebuild it as one (the factory only builds the rig for C64 profiles).
+        var keepTrueDrive = current.Machine is ViceSharp.Core.CoordinatorMachine;
+        var trueDriveDevice = 8;
+        var trueDriveDisk = string.Empty;
+        if (keepTrueDrive)
+        {
+            var driveSlot = current.MediaAttachments.ContainsKey(MediaSlot.Drive9) && !current.MediaAttachments.ContainsKey(MediaSlot.Drive8)
+                ? MediaSlot.Drive9
+                : MediaSlot.Drive8;
+            trueDriveDevice = driveSlot == MediaSlot.Drive9 ? 9 : 8;
+            if (current.MediaAttachments.TryGetValue(driveSlot, out var driveMedia)
+                && driveMedia.IsAttached
+                && !string.IsNullOrWhiteSpace(driveMedia.FilePath))
+                trueDriveDisk = driveMedia.FilePath;
+        }
+
         var created = _runtimeFactory.Create(new CreateEmulatorSessionRequest(
             profileId,
+            TrueDrive: keepTrueDrive,
+            TrueDriveDevice: trueDriveDevice,
+            TrueDriveDiskImagePath: trueDriveDisk,
             Vic20MemorySpec: Vic20MachineProfiles.TryResolve(profileId, out _) ? vic20MemorySpec : string.Empty));
-        return new EmulatorRuntimeSession(current.SessionId, created.Architecture, created.Machine)
+        var restartedSession = new EmulatorRuntimeSession(current.SessionId, created.Architecture, created.Machine)
         {
+            // Carry the factory live-audio tap so WAV capture and warp audio pausing keep working.
+            AudioCaptureTap = created.AudioCaptureTap,
             PowerState = current.PowerState,
             // Preserve the prior run state across the restart. The video frame
             // source only advances the machine (RunFrame) while Running, so
@@ -532,6 +557,12 @@ public sealed class SettingsServiceHost : ISettingsService
             Vic20ExpansionWriteBack = current.Vic20ExpansionWriteBack,
             Vic20ExpansionConfigPreset = current.Vic20ExpansionConfigPreset,
         };
+
+        // A rebuilt true-drive rig boots with its disk inserted; mirror that into the session media list.
+        foreach (var (slot, attachment) in created.MediaAttachments)
+            restartedSession.MediaAttachments[slot] = attachment;
+
+        return restartedSession;
     }
 
     // Apply a requested pacing strategy to the global emulation pump (live) and mirror it

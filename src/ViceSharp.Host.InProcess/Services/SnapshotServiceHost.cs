@@ -82,6 +82,10 @@ public sealed class SnapshotServiceHost : ISnapshotService
                 }
 
                 _stager.Restore(session.Machine, request.Snapshot.Payload);
+                // The stager injects chip state but cannot move the master clock; rewind it to the
+                // captured position so GetState().Cycle and cycle-relative scheduling continue deterministically.
+                if (session.Machine.Clock is ViceSharp.Core.SystemClock systemClock)
+                    systemClock.RestoreCycle(checked((long)request.Snapshot.Cycle));
                 return ValueTask.FromResult(new RestoreSnapshotResponse(RpcStatus.Ok(), HostProtocolMapper.ToStatusDto(session)));
             }
 
